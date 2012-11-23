@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migrations
         protected override void MainDbUpgrade()
         {
             Database.ExecuteNonQuery("UPDATE Config SET [KEY] = 'SabBacklogTvPriority' WHERE [KEY] = 'SabTvPriority'");
-            Database.ExecuteNonQuery("UPDATE Config SET [KEY] = 'SabTvDropDirectory ' WHERE [KEY] = 'DownloadClientTvDirectory'");
+            Database.ExecuteNonQuery("UPDATE Config SET [KEY] = 'DownloadClientTvDirectory' WHERE [KEY] = 'SabTvDropDirectory'");
 
             var priority = Database.ExecuteScalar("SELECT [Value] FROM Config WHERE [Key] = 'SabBacklogTvPriority'");
 
