@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Providers
 {
     public class SearchProvider
     {
-        //Season and Episode Searching
         private readonly EpisodeProvider _episodeProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly SeriesProvider _seriesProvider;
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.Providers
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         private readonly SearchHistoryProvider _searchHistoryProvider;
 
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public SearchProvider(EpisodeProvider episodeProvider, DownloadProvider downloadProvider, SeriesProvider seriesProvider,
@@ -60,22 +59,22 @@ namespace NzbDrone.Core.Providers
 
             if (series == null)
             {
-                _logger.Error("Unable to find an series {0} in database", seriesId);
+                logger.Error("Unable to find an series {0} in database", seriesId);
                 return new List<int>();
             }
 
             if (series.IsDaily)
             {
-                _logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
+                logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
                 return new List<int>();
             }
 
-            _logger.Debug("Getting episodes from database for series: {0} and season: {1}", seriesId, seasonNumber);
+            logger.Debug("Getting episodes from database for series: {0} and season: {1}", seriesId, seasonNumber);
             var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {
-                _logger.Warn("No episodes in database found for series: {0} and season: {1}.", seriesId, seasonNumber);
+                logger.Warn("No episodes in database found for series: {0} and season: {1}.", seriesId, seasonNumber);
                 return new List<int>();
             }
 
@@ -90,7 +89,7 @@ namespace NzbDrone.Core.Providers
 
                 if (sceneSeasonNumbers.Distinct().Count() > 1)
                 {
-                    _logger.Trace("Uses scene numbering, but multiple seasons found, skipping.");
+                    logger.Trace("Uses scene numbering, but multiple seasons found, skipping.");
                     return new List<int>();
                 }
 
@@ -110,7 +109,7 @@ namespace NzbDrone.Core.Providers
                 );
             }
             
-            _logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
+            logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
 
             if (reports.Count == 0)
                 return new List<int>();
@@ -136,13 +135,13 @@ namespace NzbDrone.Core.Providers
 
             if (series == null)
             {
-                _logger.Error("Unable to find an series {0} in database", seriesId);
+                logger.Error("Unable to find an series {0} in database", seriesId);
                 return new List<int>();
             }
 
             if (series.IsDaily)
             {
-                _logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
+                logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
                 return new List<int>();
             }
 
@@ -158,7 +157,7 @@ namespace NzbDrone.Core.Providers
 
                 if (sceneSeasonNumbers.Distinct().Count() > 1)
                 {
-                    _logger.Trace("Uses scene numbering, but multiple seasons found, skipping.");
+                    logger.Trace("Uses scene numbering, but multiple seasons found, skipping.");
                     return new List<int>();
                 }
 
@@ -170,7 +169,7 @@ namespace NzbDrone.Core.Providers
                 reports = PerformPartialSeasonSearch(series, seasonNumber, GetEpisodeNumberPrefixes(episodes.Select(e => e.EpisodeNumber)));
             }
             
-            _logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
+            logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
 
             if (reports.Count == 0)
                 return new List<int>();
@@ -188,14 +187,13 @@ namespace NzbDrone.Core.Providers
 
             if (episode == null)
             {
-                _logger.Error("Unable to find an episode {0} in database", episodeId);
+                logger.Error("Unable to find an episode {0} in database", episodeId);
                 return false;
             }
 
-            //Check to see if an upgrade is possible before attempting
             if (!_upgradePossibleSpecification.IsSatisfiedBy(episode))
             {
-                _logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
+                logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
                 notification.CurrentMessage = String.Format("Skipping search for {0}, the file you have is already at cutoff", episode);
                 return false;
             }
@@ -214,14 +212,14 @@ namespace NzbDrone.Core.Providers
             {
                 if (!episode.AirDate.HasValue)
                 {
-                    _logger.Warn("AirDate is not Valid for: {0}", episode);
+                    logger.Warn("AirDate is not Valid for: {0}", episode);
                     notification.CurrentMessage = String.Format("Search for {0} Failed, AirDate is invalid", episode);
                     return false;
                 }
 
                 reports = PerformDailyEpisodeSearch(episode.Series, episode);
 
-                _logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
+                logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
                 notification.CurrentMessage = "Processing search results";
 
                 searchResult.SearchHistoryItems = ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value);
@@ -270,7 +268,7 @@ namespace NzbDrone.Core.Providers
                     return true;
             }
 
-            _logger.Warn("Unable to find {0} in any of indexers.", episode);
+            logger.Warn("Unable to find {0} in any of indexers.", episode);
 
             notification.CurrentMessage = reports.Any() ? String.Format("Sorry, couldn't find {0}, that matches your preferences.", episode)
                                                         : String.Format("Sorry, couldn't find {0} in any of indexers.", episode);
@@ -289,7 +287,7 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    _logger.Trace("Analysing report " + episodeParseResult);
+                    logger.Trace("Analysing report " + episodeParseResult);
 
                     var item = new SearchHistoryItem
                     {
@@ -311,7 +309,7 @@ namespace NzbDrone.Core.Providers
                     //If series is null or doesn't match the series we're looking for return
                     if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
                     {
-                        _logger.Trace("Unexpected series for search: {0}. Skipping.", episodeParseResult.CleanTitle);
+                        logger.Trace("Unexpected series for search: {0}. Skipping.", episodeParseResult.CleanTitle);
                         item.SearchError = ReportRejectionType.WrongSeries;
                         continue;
                     }
@@ -319,7 +317,7 @@ namespace NzbDrone.Core.Providers
                     //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip the report.
                     if (episodeParseResult.SeasonNumber != seasonNumber)
                     {
-                        _logger.Trace("Season number does not match searched season number, skipping.");
+                        logger.Trace("Season number does not match searched season number, skipping.");
                         item.SearchError = ReportRejectionType.WrongSeason;
                         continue;
                     }
@@ -327,7 +325,7 @@ namespace NzbDrone.Core.Providers
                     //If the EpisodeNumber was passed in and it is not contained in the parseResult, skip the report.
                     if (episodeNumber.HasValue && !episodeParseResult.EpisodeNumbers.Contains(episodeNumber.Value))
                     {
-                        _logger.Trace("Searched episode number is not contained in post, skipping.");
+                        logger.Trace("Searched episode number is not contained in post, skipping.");
                         item.SearchError = ReportRejectionType.WrongEpisode;
                         continue;
                     }
@@ -335,7 +333,7 @@ namespace NzbDrone.Core.Providers
                     //Make sure we haven't already downloaded a report with this episodenumber, if we have, skip the report.
                     if (searchResult.Successes.Intersect(episodeParseResult.EpisodeNumbers).Any())
                     {
-                        _logger.Trace("Episode has already been downloaded in this search, skipping.");
+                        logger.Trace("Episode has already been downloaded in this search, skipping.");
                         item.SearchError = ReportRejectionType.Skipped;
                         continue;
                     }
@@ -345,7 +343,7 @@ namespace NzbDrone.Core.Providers
                     item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
                     if (item.SearchError == ReportRejectionType.None)
                     {
-                        _logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
+                        logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
                         {
                             if (_downloadProvider.DownloadReport(episodeParseResult))
@@ -363,7 +361,7 @@ namespace NzbDrone.Core.Providers
                         }
                         catch (Exception e)
                         {
-                            _logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
+                            logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
                             notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
                             item.SearchError = ReportRejectionType.DownloadClientFailure;
                         }
@@ -371,7 +369,7 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
+                    logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
                 }
             }
 
@@ -407,7 +405,7 @@ namespace NzbDrone.Core.Providers
                         continue;
                     }
 
-                    _logger.Trace("Analysing report " + episodeParseResult);
+                    logger.Trace("Analysing report " + episodeParseResult);
 
                     //Get the matching series
                     episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
@@ -431,7 +429,7 @@ namespace NzbDrone.Core.Providers
                     item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
                     if (item.SearchError == ReportRejectionType.None)
                     {
-                        _logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
+                        logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
                         {
                             if (_downloadProvider.DownloadReport(episodeParseResult))
@@ -450,7 +448,7 @@ namespace NzbDrone.Core.Providers
                         }
                         catch (Exception e)
                         {
-                            _logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
+                            logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
                             notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
                             item.SearchError = ReportRejectionType.DownloadClientFailure;
                         }
@@ -458,7 +456,7 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
+                    logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
                 }
             }
 
@@ -491,7 +489,7 @@ namespace NzbDrone.Core.Providers
 
                 catch (Exception e)
                 {
-                    _logger.ErrorException(String.Format("An error has occurred while searching for {0}-S{1:00}E{2:00} from: {3}",
+                    logger.ErrorException(String.Format("An error has occurred while searching for {0}-S{1:00}E{2:00} from: {3}",
                                                          series.Title, seasonNumber, episodeNumber, indexer.Name), e);
                 }
             });
@@ -508,13 +506,13 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    _logger.Trace("Episode {0} is a daily episode, searching as daily", episode);
+                    logger.Trace("Episode {0} is a daily episode, searching as daily", episode);
                     reports.AddRange(indexer.FetchDailyEpisode(title, episode.AirDate.Value));
                 }
 
                 catch (Exception e)
                 {
-                    _logger.ErrorException(String.Format("An error has occurred while searching for {0}-{1} from: {2}",
+                    logger.ErrorException(String.Format("An error has occurred while searching for {0}-{1} from: {2}",
                                                          series.Title, episode.AirDate, indexer.Name), e);
                 }
             });
@@ -539,7 +537,7 @@ namespace NzbDrone.Core.Providers
 
                 catch (Exception e)
                 {
-                    _logger.ErrorException(String.Format("An error has occurred while searching for {0}-S{1:00} from: {2}",
+                    logger.ErrorException(String.Format("An error has occurred while searching for {0}-S{1:00} from: {2}",
                                                          series.Title, seasonNumber, indexer.Name), e);
                 }
             });
@@ -561,7 +559,7 @@ namespace NzbDrone.Core.Providers
 
                 catch (Exception e)
                 {
-                    _logger.ErrorException("An error has occurred while searching for items from: " + indexer.Name, e);
+                    logger.ErrorException("An error has occurred while searching for items from: " + indexer.Name, e);
                 }
             });
 
