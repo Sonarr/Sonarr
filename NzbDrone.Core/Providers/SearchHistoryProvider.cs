@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Providers
                         ON Series.SeriesId = SearchHistory.SeriesId
                         LEFT JOIN Episodes
                         ON Episodes.EpisodeId = SearchHistory.EpisodeId
-                        INNER JOIN SearchHistoryItems
+                        LEFT JOIN SearchHistoryItems
                         ON SearchHistoryItems.SearchHistoryId = SearchHistory.Id
                         GROUP BY SearchHistory.Id, SearchHistory.SeriesId, SearchHistory.SeasonNumber,
                         SearchHistory.EpisodeId, SearchHistory.SearchTime,
