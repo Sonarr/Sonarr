@@ -122,7 +122,16 @@
     <script id="QualityProfileTemplate" type="text/template">
         <%= Name %>
         <%= Cutoff %>
-        <%= Allowed %>
+        <% _.each(Qualities, function(quality) { %>
+            <input id="<%= Id %>_<%= quality.Id %>"
+                   class="quality-selectee"
+                   type="checkbox"
+                   value="<%= quality.Allowed %>"
+                   data-quality-id="<%= quality.Id %>"
+                   <%= quality.Allowed ? 'checked="checked"' : '' %>
+            />
+            <label for="<%= Id %>_<%= quality.Id %>"><%= quality.Name %></label>
+        <% }); %>
     </script>
     
     <script id="QualityProfileCollectionTemplate" type="text/template">

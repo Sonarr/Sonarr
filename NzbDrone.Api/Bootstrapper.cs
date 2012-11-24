@@ -16,14 +16,17 @@ namespace NzbDrone.Api
             //Mapper.CreateMap<QualityTypes, Int32>()
             //      .ForMember(dest => dest, opt => opt.ResolveUsing<QualityTypesToIntResolver>());
 
-            Mapper.CreateMap<Int32, QualityTypes>()
-                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src));
+            //Mapper.CreateMap<Int32, QualityTypes>()
+            //      .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src));
 
-            Mapper.CreateMap<QualityProfile, QualityProfileModel>()
-                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityProfileId));
+            //Mapper.CreateMap<QualityProfile, QualityProfileModel>()
+            //      .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityProfileId));
 
-            Mapper.CreateMap<QualityProfileModel, QualityProfile>()
-                  .ForMember(dest => dest.QualityProfileId, opt => opt.MapFrom(src => src.Id));
+            //Mapper.CreateMap<QualityProfileModel, QualityProfile>()
+            //      .ForMember(dest => dest.QualityProfileId, opt => opt.MapFrom(src => src.Id));
+
+            Mapper.CreateMap<QualityTypes, QualityProfileType>()
+                  .ForMember(dest => dest.Allowed, opt => opt.Ignore());
         }
     }
 }

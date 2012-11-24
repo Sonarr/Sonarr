@@ -2,7 +2,7 @@
 
     urlRoot: '/api/qualityprofiles',
 
-    idAttribute: 'id',
+    idAttribute: 'Id',
 
     initialize: function () {
         this.validators = {};
@@ -11,9 +11,9 @@
             return value.length > 0 ? { isValid: true } : { isValid: false, message: 'You must enter a name' };
         };
 
-        this.validators.allowed = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: 'You must have allowed qualities' };
-        };
+        //this.validators.allowed = function (value) {
+        //    return value.length > 0 ? { isValid: true } : { isValid: false, message: 'You must have allowed qualities' };
+        //};
         
         this.validators.cutoff = function (value) {
             return value != null ? { isValid: true } : { isValid: false, message: 'You must have a valid cutoff' };
@@ -42,9 +42,9 @@
     },
 
     defaults: {
-        id: null,
-        name: '',
-        allowed: {},
-        cutoff: null
+        Id: null,
+        Name: '',
+        //allowed: {},
+        Cutoff: null
     }
 });

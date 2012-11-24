@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Api.QualityProfiles
 {
-    public class QualityProfileModel
+    public class QualityProfileType
     {
         public Int32 Id { get; set; }
+        public Int32 Weight { get; set; }
         public String Name { get; set; }
-        public Int32 Cutoff { get; set; }
-        public List<QualityProfileType> Qualities { get; set; }
+        public Boolean Allowed { get; set; }
     }
 }

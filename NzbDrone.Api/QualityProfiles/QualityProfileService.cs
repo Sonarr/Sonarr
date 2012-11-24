@@ -29,11 +29,14 @@ namespace NzbDrone.Api.QualityProfiles
             if (request.Id == 0)
             {
                 var profiles = _qualityProvider.All();
-                return Mapper.Map<IEnumerable<QualityProfile>, IEnumerable<QualityProfileModel>>(profiles);
+                var models = new List<QualityProfileModel>();
+
+                profiles.ForEach(p => models.Add(ToModel(p)));
+                return models;
             }
 
             var profile = _qualityProvider.Get(request.Id);
-            return Mapper.Map<QualityProfile, QualityProfileModel>(profile);
+            return ToModel(profile);
         }
 
         public override object OnPost(QualityProfileModel data)
@@ -57,6 +60,22 @@ namespace NzbDrone.Api.QualityProfiles
             _qualityProvider.Delete(data.Id);
 
             return "ok";
+        }
+
+        public QualityProfileModel ToModel(QualityProfile profile)
+        {
+            var model = new QualityProfileModel();
+            model.Id = profile.QualityProfileId;
+            model.Name = profile.Name;
+            model.Cutoff = (int)profile.Cutoff;
+            model.Qualities = Mapper.Map<List<QualityTypes>, List<QualityProfileType>>(QualityTypes.All());
+
+            model.Qualities.ForEach(quality =>
+                                        {
+                                            quality.Allowed = profile.Allowed.SingleOrDefault(q => q.Id == quality.Id) != null;
+                                        });
+
+            return model;
         }
     }
 }
