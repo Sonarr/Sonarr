@@ -13,8 +13,8 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserFixture
 {
-    [TestFixture]
     // ReSharper disable InconsistentNaming
+    [TestFixture]
     public class ParserTest : CoreTest
     {
         /*Fucked-up hall of shame,
@@ -189,6 +189,7 @@ namespace NzbDrone.Core.Test.ParserFixture
         [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
         [TestCase(@"Sons.of.Anarchy.S03.720p.BluRay-CLUE\REWARD", "Sons.of.Anarchy", 3)]
+        [TestCase("Adventure Time S02 720p HDTV x264 CRON", "Adventure Time", 2)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
             var result = Parser.ParseTitle(postTitle);
@@ -285,6 +286,7 @@ namespace NzbDrone.Core.Test.ParserFixture
         [TestCase("The Daily Show With Jon Stewart -", "dailyshowwithjonstewart")]
         [TestCase("The Venture Bros. (2004)", "venturebros2004")]
         [TestCase("Castle (2011)", "castle2011")]
+        [TestCase("Adventure Time S02 720p HDTV x264 CRON", "adventuretime")]
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.ParseSeriesName(postTitle);
