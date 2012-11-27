@@ -236,20 +236,12 @@ namespace NzbDrone.Core
         {
             Logger.Trace("Parsing string '{0}'", title);
 
-            foreach (var regex in ReportTitleRegex)
-            {
-                var match = regex.Matches(title);
+            var parseResult = ParseTitle(title);
 
-                if (match.Count != 0)
-                {
-                    var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
+            if(parseResult == null)
+                return NormalizeTitle(title);
 
-                    Logger.Trace("Series Parsed. {0}", seriesName);
-                    return seriesName;
-                }
-            }
-
-            return NormalizeTitle(title);
+            return parseResult.CleanTitle;
         }
 
         internal static QualityModel ParseQuality(string name)

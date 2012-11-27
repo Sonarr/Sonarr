@@ -208,6 +208,8 @@
     <Content Include="Content\font-awesome-ie7.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font\fontawesome-webfont.svg" />
+    <Content Include="Content\Images\apple-touch-icon-114.png" />
+    <Content Include="Content\Images\apple-touch-icon-144.png" />
     <Content Include="Content\SeriesEditor.css" />
     <Content Include="Content\DataTables-NzbDrone\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-NzbDrone\media\images\back.png" />
