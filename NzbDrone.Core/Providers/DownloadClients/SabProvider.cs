@@ -33,18 +33,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
         }
 
-        private static string GetNzbName(string urlString)
-        {
-            var url = new Uri(urlString);
-            if (url.Host.ToLower().Contains("newzbin"))
-            {
-                var postId = Regex.Match(urlString, @"\d{5,10}").Value;
-                return postId;
-            }
-
-            return urlString.Replace("&", "%26");
-        }
-
         public virtual bool IsInQueue(EpisodeParseResult newParseResult)
         {
             try
@@ -85,16 +73,11 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 string cat = _configProvider.SabTvCategory;
                 int priority = recentlyAired ? (int)_configProvider.SabRecentTvPriority : (int)_configProvider.SabBacklogTvPriority;
 
-                string name = GetNzbName(url);
+                string name = url.Replace("&", "%26");
                 string nzbName = HttpUtility.UrlEncode(title);
 
                 string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
                     name, priority, cat, nzbName);
-
-                if (url.ToLower().Contains("newzbin"))
-                {
-                    action = action.Replace("mode=addurl", "mode=addid");
-                }
 
                 string request = GetSabRequest(action);
                 logger.Info("Adding report [{0}] to the queue.", title);

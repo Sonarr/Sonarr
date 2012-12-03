@@ -27,7 +27,6 @@ namespace NzbDrone.Core.Test
     public class IndexerTests : CoreTest
     {
         [TestCase("nzbsrus.xml")]
-        [TestCase("newzbin.xml")]
         [TestCase("nzbmatrix.xml")]
         [TestCase("newznab.xml")]
         [TestCase("wombles.xml")]
