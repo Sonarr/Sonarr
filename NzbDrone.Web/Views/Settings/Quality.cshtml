@@ -120,8 +120,22 @@
     @*@Html.IncludeScript("backbone/bootstrapper.js")*@
 
     <script id="QualityProfileTemplate" type="text/template">
-        <%= Name %>
-        <%= Cutoff %>
+        <div>
+            <strong>Name</strong>
+            <input type="text" value="<%= Name %>" class="name" />
+        </div>
+        <div>
+            <strong>Cutoff</strong>
+            <select id="<%= Id %>" class="cutoff">
+            <% _.each(Qualities, function(quality) { %>
+                <% if (quality.Allowed === true) { %>
+                    <option value="<%= quality.Id %>" <%= quality.Id === Cutoff ? 'selected="selected"' : '' %>><%= quality.Name %></option>
+                <% } %>
+            
+            <% }); %>
+            </select>
+        </div>
+
         <% _.each(Qualities, function(quality) { %>
             <input id="<%= Id %>_<%= quality.Id %>"
                    class="quality-selectee"
@@ -138,7 +152,7 @@
     </script>
     
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             QualityProfileApp.App.start();
         });
     </script>

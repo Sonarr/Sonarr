@@ -29,28 +29,27 @@ namespace NzbDrone.Api.QualityProfiles
             if (request.Id == 0)
             {
                 var profiles = _qualityProvider.All();
-                var models = new List<QualityProfileModel>();
-
-                profiles.ForEach(p => models.Add(ToModel(p)));
-                return models;
+                return Mapper.Map<List<QualityProfile>, List<QualityProfileModel>>(profiles);
             }
 
             var profile = _qualityProvider.Get(request.Id);
-            return ToModel(profile);
+            return Mapper.Map<QualityProfile, QualityProfileModel>(profile);
         }
 
         public override object OnPost(QualityProfileModel data)
         {
+            //Create
             var profile = Mapper.Map<QualityProfileModel, QualityProfile>(data);
-            _qualityProvider.Update(profile);
+            _qualityProvider.Add(profile);
 
             return data;
         }
 
         public override object OnPut(QualityProfileModel data)
         {
+            //Update
             var profile = Mapper.Map<QualityProfileModel, QualityProfile>(data);
-            data.Id = _qualityProvider.Add(profile);
+            _qualityProvider.Update(profile);
 
             return data;
         }
@@ -60,22 +59,6 @@ namespace NzbDrone.Api.QualityProfiles
             _qualityProvider.Delete(data.Id);
 
             return "ok";
-        }
-
-        public QualityProfileModel ToModel(QualityProfile profile)
-        {
-            var model = new QualityProfileModel();
-            model.Id = profile.QualityProfileId;
-            model.Name = profile.Name;
-            model.Cutoff = (int)profile.Cutoff;
-            model.Qualities = Mapper.Map<List<QualityTypes>, List<QualityProfileType>>(QualityTypes.All());
-
-            model.Qualities.ForEach(quality =>
-                                        {
-                                            quality.Allowed = profile.Allowed.SingleOrDefault(q => q.Id == quality.Id) != null;
-                                        });
-
-            return model;
         }
     }
 }

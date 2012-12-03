@@ -104,6 +104,8 @@
     <Compile Include="QualityProfiles\QualityProfileModel.cs" />
     <Compile Include="QualityProfiles\QualityProfileService.cs" />
     <Compile Include="QualityProfiles\QualityProfileType.cs" />
+    <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
+    <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />
   </ItemGroup>
   <ItemGroup>
