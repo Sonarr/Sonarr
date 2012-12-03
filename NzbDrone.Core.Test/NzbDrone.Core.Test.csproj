@@ -300,9 +300,6 @@
     <Content Include="Files\RSS\newznab.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\newbin_none_english.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Files\Categories_json.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
