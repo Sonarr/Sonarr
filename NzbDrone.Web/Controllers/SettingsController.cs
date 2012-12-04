@@ -101,15 +101,11 @@ namespace NzbDrone.Web.Controllers
                                 NzbsrusUId = _configProvider.NzbsrusUId,
                                 NzbsrusHash = _configProvider.NzbsrusHash,
 
-                                NewzbinUsername = _configProvider.NewzbinUsername,
-                                NewzbinPassword = _configProvider.NewzbinPassword,
-
                                 FileSharingTalkUid = _configProvider.FileSharingTalkUid,
                                 FileSharingTalkSecret = _configProvider.FileSharingTalkSecret,
 
                                 NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
-                                NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
                                 NewznabEnabled = _indexerProvider.GetSettings(typeof(Newznab)).Enable,
                                 WomblesEnabled = _indexerProvider.GetSettings(typeof(Wombles)).Enable,
                                 FileSharingTalkEnabled = _indexerProvider.GetSettings(typeof(FileSharingTalk)).Enable,
@@ -387,10 +383,6 @@ namespace NzbDrone.Web.Controllers
                 nzbsRUsSettings.Enable = data.NzbsRUsEnabled;
                 _indexerProvider.SaveSettings(nzbsRUsSettings);
 
-                var newzbinSettings = _indexerProvider.GetSettings(typeof(Newzbin));
-                newzbinSettings.Enable = data.NewzbinEnabled;
-                _indexerProvider.SaveSettings(newzbinSettings);
-
                 var newznabSettings = _indexerProvider.GetSettings(typeof(Newznab));
                 newznabSettings.Enable = data.NewznabEnabled;
                 _indexerProvider.SaveSettings(newznabSettings);
@@ -416,9 +408,6 @@ namespace NzbDrone.Web.Controllers
 
                 _configProvider.NzbsrusUId = data.NzbsrusUId;
                 _configProvider.NzbsrusHash = data.NzbsrusHash;
-
-                _configProvider.NewzbinUsername = data.NewzbinUsername;
-                _configProvider.NewzbinPassword = data.NewzbinPassword;
 
                 _configProvider.FileSharingTalkUid = data.FileSharingTalkUid;
                 _configProvider.FileSharingTalkSecret = data.FileSharingTalkSecret;

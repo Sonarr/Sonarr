@@ -27,7 +27,6 @@ namespace NzbDrone.Core.Test
     public class IndexerTests : CoreTest
     {
         [TestCase("nzbsrus.xml")]
-        [TestCase("newzbin.xml")]
         [TestCase("nzbmatrix.xml")]
         [TestCase("newznab.xml")]
         [TestCase("wombles.xml")]
@@ -65,9 +64,6 @@ namespace NzbDrone.Core.Test
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbMatrixApiKey).Returns("MockedConfigValue");
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbMatrixUsername).Returns("MockedConfigValue");
 
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NewzbinUsername).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NewzbinPassword).Returns("MockedConfigValue");
-
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
 
@@ -76,66 +72,6 @@ namespace NzbDrone.Core.Test
 
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
-        }
-
-        [Test]
-        public void newzbin_parses_languae()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\newbin_none_english.xml"));
-
-
-
-            var newzbin = Mocker.Resolve<Newzbin>();
-            var parseResults = newzbin.FetchRss();
-
-            foreach (var episodeParseResult in parseResults)
-            {
-                var Uri = new Uri(episodeParseResult.NzbUrl);
-                Uri.PathAndQuery.Should().NotContain("//");
-            }
-
-
-            parseResults.Should().NotBeEmpty();
-            parseResults.Should().NotContain(e => e.Language == LanguageType.English);
-        }
-
-        [Test]
-        public void newzbin_rss_fetch()
-        {
-            Mocker.Resolve<HttpProvider>();
-            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            Mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            Mocker.GetMock<ConfigProvider>()
-             .SetupGet(c => c.NewzbinUsername)
-             .Returns("nzbdrone");
-
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NewzbinPassword)
-                .Returns("smartar39865");
-
-            var newzbinProvider = Mocker.Resolve<Newzbin>();
-            var parseResults = newzbinProvider.FetchRss();
-
-            foreach (var episodeParseResult in parseResults)
-            {
-                var Uri = new Uri(episodeParseResult.NzbUrl);
-                Uri.PathAndQuery.Should().NotContain("//");
-            }
-
-
-            parseResults.Should().NotBeEmpty();
-            parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
-            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
-
-            Mark500Inconclusive();
-            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
@@ -205,27 +141,6 @@ namespace NzbDrone.Core.Test
         }
 
         [TestCase("simpsons", 21, 23)]
-        [TestCase("Hawaii Five-0 (2010)", 1, 1)]
-        [TestCase("In plain Sight", 1, 11, Ignore = true)]
-        public void newzbin_search_returns_valid_results(string title, int season, int episode)
-        {
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NewzbinUsername)
-                .Returns("nzbdrone");
-
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NewzbinPassword)
-                .Returns("smartar39865");
-
-            Mocker.Resolve<HttpProvider>();
-
-            var result = Mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
-
-            Mark500Inconclusive();
-            result.Should().NotBeEmpty();
-        }
-
-        [TestCase("simpsons", 21, 23)]
         [TestCase("The walking dead", 2, 10)]
         public void nzbmatrix_search_returns_valid_results(string title, int season, int episode)
         {
@@ -275,22 +190,6 @@ namespace NzbDrone.Core.Test
         {
             var result = Mocker.Resolve<NzbMatrix>().GetQueryTitle(raw);
             result.Should().Be(clean);
-        }
-
-        [Test]
-        public void size_newzbin()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
-
-            //Act
-            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
-
-            parseResults.Should().HaveCount(1);
-            parseResults[0].Size.Should().Be(1295620506);
         }
 
         [Test]
@@ -524,26 +423,6 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void Newzbin_NzbInfoUrl_should_contain_information_string()
-        {
-            WithConfiguredIndexers();
-
-            const string fileName = "newzbin.xml";
-            const string expectedString = "browse";
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
-
-            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
-
-            foreach (var episodeParseResult in parseResults)
-            {
-                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
-            }
-        }
-
-        [Test]
         public void NzbMatrix_NzbInfoUrl_should_contain_information_string()
         {
             WithConfiguredIndexers();
@@ -674,22 +553,6 @@ namespace NzbDrone.Core.Test
             {
                 episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
             }
-        }
-
-        [Test]
-        public void releaseGroup_should_use_nfo_filename_for_newzbin()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
-
-            //Act
-            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
-
-            parseResults.Should().HaveCount(1);
-            parseResults[0].ReleaseGroup.Should().Be("tvp");
         }
 
         [TestCase("30 Rock", "30%20Rock")]

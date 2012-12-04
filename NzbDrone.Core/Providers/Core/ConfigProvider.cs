@@ -75,20 +75,6 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("NzbsrusHash", value); }
         }
 
-        public virtual String NewzbinUsername
-        {
-            get { return GetValue("NewzbinUsername"); }
-
-            set { SetValue("NewzbinUsername", value); }
-        }
-
-        public virtual String NewzbinPassword
-        {
-            get { return GetValue("NewzbinPassword"); }
-
-            set { SetValue("NewzbinPassword", value); }
-        }
-
         public virtual String FileSharingTalkUid
         {
             get { return GetValue("FileSharingTalkUid"); }

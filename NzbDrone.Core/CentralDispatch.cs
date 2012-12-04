@@ -87,7 +87,6 @@ namespace NzbDrone.Core
             logger.Debug("Initializing Indexers...");
             Kernel.Bind<IndexerBase>().To<NzbMatrix>();
             Kernel.Bind<IndexerBase>().To<NzbsRUs>();
-            Kernel.Bind<IndexerBase>().To<Newzbin>();
             Kernel.Bind<IndexerBase>().To<Newznab>();
             Kernel.Bind<IndexerBase>().To<Wombles>();
             Kernel.Bind<IndexerBase>().To<FileSharingTalk>();

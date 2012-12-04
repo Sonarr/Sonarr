@@ -59,21 +59,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         }
 
         [Test]
-        public void newzbin_add_url_should_format_request_properly()
-        {
-            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addid&name=6107863&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns("{ \"status\": true }");
-
-
-            //Act
-            bool result = Mocker.Resolve<SabProvider>().DownloadNzb("http://www.newzbin.com/browse/post/6107863/nzb", title, false);
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [Test]
         public void add_by_url_should_detect_and_handle_sab_errors()
         {
             WithFailResponse();

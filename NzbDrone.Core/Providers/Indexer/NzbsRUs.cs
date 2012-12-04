@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 return new[]
                            {
                                string.Format(
-                                   "http://www.nzbsrus.com/rssfeed.php?cat=91,75&i={0}&h={1}",
+                                   "https://www.nzbsrus.com/rssfeed.php?cat=91,75&i={0}&h={1}",
                                    _configProvider.NzbsrusUId,
                                    _configProvider.NzbsrusHash)
                            };

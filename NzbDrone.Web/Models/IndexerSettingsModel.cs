@@ -38,20 +38,6 @@ namespace NzbDrone.Web.Models
         public String NzbsrusHash { get; set; }
 
         [DataType(DataType.Text)]
-        [DisplayName("Username")]
-        [Description("Username for Newzbin")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NewzbinEnabled", true, ErrorMessage = "Username Required when Newzbin is enabled")]
-        public String NewzbinUsername { get; set; }
-
-        [DataType(DataType.Text)]
-        [DisplayName("Password")]
-        [Description("Password for Newzbin")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NewzbinEnabled", true, ErrorMessage = "Password Required when Newzbin is enabled")]
-        public String NewzbinPassword { get; set; }
-
-        [DataType(DataType.Text)]
         [DisplayName("UID")]
         [Description("UserID for File Sharing Talk")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
@@ -72,10 +58,6 @@ namespace NzbDrone.Web.Models
         [DisplayName("NZBsRUs")]
         [Description("Enable downloading episodes from NZBsRus")]
         public bool NzbsRUsEnabled { get; set; }
-
-        [DisplayName("Newzbin")]
-        [Description("Enable downloading episodes from Newzbin")]
-        public bool NewzbinEnabled { get; set; }
 
         [DisplayName("Newznab")]
         [Description("Enable downloading episodes from Newznab Providers")]

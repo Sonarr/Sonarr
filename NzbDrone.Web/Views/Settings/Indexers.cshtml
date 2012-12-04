@@ -18,9 +18,6 @@
     @Html.CheckBox("nzbsRusStatus", @Model.NzbsRUsEnabled, new { @class = "indexerStatusButton" })
     <label for="nzbsRusStatus">NZBsRus</label>
     
-    @Html.CheckBox("newzbinStatus", @Model.NewzbinEnabled, new { @class = "indexerStatusButton" })
-    <label for="newzbinStatus">Newzbin</label>
-    
     @Html.CheckBox("newznabStatus", @Model.NewznabEnabled, new { @class = "indexerStatusButton" })
     <label for="newznabStatus">Newznab</label>
 
@@ -75,24 +72,6 @@
                     <span class="small">@Html.ValidationMessageFor(m => m.NzbsrusHash)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbsrusHash, new { @class = "inputClass" })
-            </div>
-
-            <h3><a href="#">Newzbin</a></h3>
-            <div class="indexerPanel">
-                <label class="labelClass">
-                    Enable <span class="small">@Html.DescriptionFor(m => m.NewzbinEnabled)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.NewzbinEnabled, new { @class = "inputClass checkClass enabledCheck" })
-                <label class="labelClass">@Html.LabelFor(m => m.NewzbinUsername)
-                    <span class="small">@Html.DescriptionFor(m => m.NewzbinUsername)</span>
-                    <span class="small">@Html.ValidationMessageFor(m => m.NewzbinUsername)</span>
-                </label>
-                @Html.TextBoxFor(m => m.NewzbinUsername, new { @class = "inputClass" })
-                <label class="labelClass">@Html.LabelFor(m => m.NewzbinPassword)
-                    <span class="small">@Html.DescriptionFor(m => m.NewzbinPassword)</span>
-                    <span class="small">@Html.ValidationMessageFor(m => m.NewzbinPassword)</span>
-                </label>
-                @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass", type = "password" })
             </div>
 
             <h3><a href="#">Newznab</a></h3>
@@ -222,9 +201,6 @@
         if (id == 'NzbsRUsEnabled')
             $('#nzbsRusStatus').prop('checked', checked);
 
-        if (id == 'NewzbinEnabled')
-            $('#newzbinStatus').prop('checked', checked);
-
         if (id == 'NewznabEnabled')
             $('#newznabStatus').prop('checked', checked);
         
@@ -253,9 +229,6 @@
 
         if (id == 'nzbsRusStatus')
             $('#NzbsRUsEnabled').prop('checked', checked);
-
-        if (id == 'newzbinStatus')
-            $('#NewzbinEnabled').prop('checked', checked);
 
         if (id == 'newznabStatus')
             $('#NewznabEnabled').prop('checked', checked);
