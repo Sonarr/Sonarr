@@ -114,12 +114,13 @@
     @*@Html.IncludeScript("backbone/bootstrapper.js")*@
 
     <script id="QualityProfileTemplate" type="text/template">
-        <div>
-            <strong>Name</strong>
+        <a href="#" class="remove-profile"><i class="icon-remove"></i></a>
+        <div class="quality-profile-setting">
+            <label>Name</label>
             <input type="text" value="<%= Name %>" class="name" />
         </div>
-        <div>
-            <strong>Cutoff</strong>
+        <div class="quality-profile-setting">
+            <label>Cutoff</label>
             <select id="<%= Id %>" class="cutoff">
             <% _.each(Qualities, function(quality) { %>
                 <% if (quality.Allowed === true) { %>
@@ -132,14 +133,16 @@
 
         <% _.each(Qualities, function(quality) { %>
             <input id="<%= Id %>_<%= quality.Id %>"
-                   class="quality-selectee"
-                   type="checkbox"
-                   value="<%= quality.Allowed %>"
-                   data-quality-id="<%= quality.Id %>"
-                   <%= quality.Allowed ? 'checked="checked"' : '' %>
+                    class="quality-selectee"
+                    type="checkbox"
+                    value="<%= quality.Allowed %>"
+                    data-quality-id="<%= quality.Id %>"
+                    <%= quality.Allowed ? 'checked="checked"' : '' %>
             />
             <label for="<%= Id %>_<%= quality.Id %>"><%= quality.Name %></label>
         <% }); %>
+    
+    
     </script>
     
     <script id="QualityProfileCollectionTemplate" type="text/template">

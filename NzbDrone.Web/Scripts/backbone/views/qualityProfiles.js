@@ -2,10 +2,14 @@
     tagName: "div",
     className: "quality-profile",
     template: "#QualityProfileTemplate",
+    initialize: function() {
+        this.model.on('destroy', this.remove, this)
+    },
     events: {
         'click .quality-selectee': 'toggleAllowed',
         'change .cutoff': 'changeCutoff',
-        'change .name': 'changeName'
+        'change .name': 'changeName',
+        'click .remove-profile': 'destroy'
     },
     toggleAllowed: function (e) {
         //Add to cutoff
@@ -54,6 +58,17 @@
 
         this.model.set({ "Name": name });
         this.model.save();
+    },
+    destroy: function (e) {
+        if (e === undefined)
+            return;
+
+        e.preventDefault();
+        this.model.destroy();
+        e.stopPropagation();
+    },
+    remove: function (e) {
+        $(this.el).remove();
     }
 });
 
@@ -78,6 +93,7 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
     },
     addProfile: function (e) {
         //Add new profile to collection
+        //Todo: How will we get the list of qualities (they would all be NOT allowed) - it all comes from the server side...
         this.collection.add(new QualityProfile());
         e.preventDefault();
     }

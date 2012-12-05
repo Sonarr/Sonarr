@@ -36,29 +36,29 @@ namespace NzbDrone.Api.QualityProfiles
             return Mapper.Map<QualityProfile, QualityProfileModel>(profile);
         }
 
-        public override object OnPost(QualityProfileModel data)
+        //Create
+        public override object OnPost(QualityProfileModel request)
         {
-            //Create
-            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(data);
+            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
             _qualityProvider.Add(profile);
 
-            return data;
+            return request;
         }
 
-        public override object OnPut(QualityProfileModel data)
+        //Update
+        public override object OnPut(QualityProfileModel request)
         {
-            //Update
-            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(data);
+            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
             _qualityProvider.Update(profile);
 
-            return data;
+            return request;
         }
 
-        public override object OnDelete(QualityProfileModel data)
+        public override object OnDelete(QualityProfileModel request)
         {
-            _qualityProvider.Delete(data.Id);
+            _qualityProvider.Delete(request.Id);
 
-            return "ok";
+            return request.Id.ToString();
         }
     }
 }

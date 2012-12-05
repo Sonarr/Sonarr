@@ -38,8 +38,7 @@
 }
 
 /* QualityProfileItem */
-.quality-selectee
-{
+.quality-selectee {
     border-color: #065EFE;
     border-style: solid;
     border-width: 1px;
@@ -51,73 +50,50 @@
     float: left;
     cursor: default;
 }
-.quality-selecting
-{
+.quality-selecting {
     background: #85AEF9;
 }
-.quality-selected
-{
+
+.quality-selected {
     background: #065EFE;
     color: white;
 }
     
-.profileSection
-{
+.quality-profile {
     float: left;
-    width: 265px;
+    width: 260px;
     margin: 2px;
     border:solid 1px #CCCCCD;
     display: inline-block;
     overflow: hidden;
     padding: 5px 5px 5px 5px;
+    position: relative;
 }
-    
-.profileOptions label
-{
-    margin-top: 10px;
-    margin-left: 7px;
-    margin-right: 20px;
-    font-weight: bold;
+
+.quality-profile-setting label {
+    width: 45px;
     display: inline-block;
-    width: 40px;
-}
-    
-.profileOptions input, .profileOptions select
-{
-    font-size:12px;
-    padding:4px 2px;
-    border:solid 1px #aacfe4;
-    width:170px;
-    margin-right: 2px;
 }
 
-.profileOptions input
-{
+.quality-profile-setting input {
     margin-left: 10px;
-    margin-bottom: 2px;
+    width: 160px;
 }
 
-.profileOptions select
-{
-    width: 176px;
-    margin-bottom: 7px;
+.quality-profile-setting select {
+    width: 166px;
 }
     
-.qualitySelector
-{
-    padding-left: 5px;
-}
-    
-.delete-profile {
+.remove-profile {
     position: absolute;
     top: 0px;
-    right: 0px;
-    font-size: 16px;
+    right: 4px;
+    font-size: 20px;
     color: #000000;
     text-decoration: none;
 }
 
-.delete-profile > i[class*="icon-"]:hover {
+.remove-profile > i[class*="icon-"]:hover {
     cursor: pointer !important;
 }
     
