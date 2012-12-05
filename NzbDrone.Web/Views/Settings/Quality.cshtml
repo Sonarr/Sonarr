@@ -20,12 +20,6 @@
             <h3>
                 <a href="#">Profiles</a></h3>
             <div id="profileContainer">
-                <div id="profileHeader">
-                    <a id="addProfile" href="@Url.Action("AddProfile", "Settings")">
-                        <i class="icon-plus icon-large"></i>
-                        Add New Profile
-                    </a>
-                </div>
                 <div id="profiles">
                 </div>
             </div>
@@ -149,6 +143,14 @@
     </script>
     
     <script id="QualityProfileCollectionTemplate" type="text/template">
+        <div id="profileHeader">
+            <button id="add-profile">Add New Profile</button>
+
+            @*<a id="add-profile" href="@Url.Action("AddProfile", "Settings")">
+                <i class="icon-plus icon-large"></i>
+                Add New Profile
+            </a>*@
+        </div> 
     </script>
     
     <script>

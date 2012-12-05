@@ -1,17 +1,5 @@
 ﻿var deleteQualityProfileUrl = '../../Settings/DeleteQualityProfile';
 
-$(document).on("click", "#addProfile", function (event) {
-    $.ajax({
-        url: this.href,
-        cache: false,
-        success: function (html) {
-            $("#profiles").append(html);
-        }
-    });
-
-    event.preventDefault();
-});
-
 $(document).on('click', '.delete-profile', function (e) {
     var container = $(this).closest('.profileSection');
     var id = $(container).attr('data-profile-id');

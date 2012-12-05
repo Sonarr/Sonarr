@@ -82,8 +82,20 @@
         <member name="P:Ninject.Web.Mvc.Fakes.ShimNinjectDependencyResolver.ConstructorIResolutionRoot">
             <summary>Sets the shim of NinjectDependencyResolver.NinjectDependencyResolver(IResolutionRoot resolutionRoot)</summary>
         </member>
+        <member name="P:Ninject.Web.Mvc.Fakes.ShimNinjectDependencyResolver.GetServiceType">
+            <summary>Sets the shim of NinjectDependencyResolver.GetService(Type serviceType)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.Fakes.ShimNinjectDependencyResolver.GetServicesType">
+            <summary>Sets the shim of NinjectDependencyResolver.GetServices(Type serviceType)</summary>
+        </member>
         <member name="T:Ninject.Web.Mvc.Fakes.ShimNinjectDependencyResolver.AllInstances">
             <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.Fakes.ShimNinjectDependencyResolver.AllInstances.GetServiceType">
+            <summary>Sets the shim of NinjectDependencyResolver.GetService(Type serviceType)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.Fakes.ShimNinjectDependencyResolver.AllInstances.GetServicesType">
+            <summary>Sets the shim of NinjectDependencyResolver.GetServices(Type serviceType)</summary>
         </member>
         <member name="T:Ninject.Web.Mvc.Fakes.ShimNinjectMvcHttpApplicationPlugin">
             <summary>Shim type of Ninject.Web.Mvc.NinjectMvcHttpApplicationPlugin</summary>
@@ -709,6 +721,9 @@
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.NamedString">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.Named(String name)</summary>
         </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.NinjectSyntaxIFluentSyntaxGetType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.Ninject.Syntax.IFluentSyntax.GetType()</summary>
+        </member>
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.OnActivationActionOfIContextControllerContextActionDescriptorT0">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.OnActivation(Action`4&lt;IContext,ControllerContext,ActionDescriptor,!0&gt; action)</summary>
         </member>
@@ -723,6 +738,15 @@
         </member>
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.OnDeactivationActionOfT0">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.OnDeactivation(Action`1&lt;!0&gt; action)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.WhenActionMethodHasType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.WhenActionMethodHas(Type attributeType)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.WhenControllerHasType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.WhenControllerHas(Type attributeType)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.WhenControllerTypeType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.WhenControllerType(Type controllerType)</summary>
         </member>
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.WhenFuncOfControllerContextActionDescriptorBoolean">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.When(Func`3&lt;ControllerContext,ActionDescriptor,Boolean&gt; condition)</summary>
@@ -805,6 +829,9 @@
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.NamedString">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.Named(String name)</summary>
         </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.NinjectSyntaxIFluentSyntaxGetType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.Ninject.Syntax.IFluentSyntax.GetType()</summary>
+        </member>
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.OnActivationActionOfIContextControllerContextActionDescriptorT0">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.OnActivation(Action`4&lt;IContext,ControllerContext,ActionDescriptor,!0&gt; action)</summary>
         </member>
@@ -819,6 +846,15 @@
         </member>
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.OnDeactivationActionOfT0">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.OnDeactivation(Action`1&lt;!0&gt; action)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.WhenActionMethodHasType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.WhenActionMethodHas(Type attributeType)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.WhenControllerHasType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.WhenControllerHas(Type attributeType)</summary>
+        </member>
+        <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.WhenControllerTypeType">
+            <summary>Sets the shim of FilterFilterBindingBuilder`1.WhenControllerType(Type controllerType)</summary>
         </member>
         <member name="P:Ninject.Web.Mvc.FilterBindingSyntax.Fakes.ShimFilterFilterBindingBuilder`1.AllInstances.WhenFuncOfControllerContextActionDescriptorBoolean">
             <summary>Sets the shim of FilterFilterBindingBuilder`1.When(Func`3&lt;ControllerContext,ActionDescriptor,Boolean&gt; condition)</summary>

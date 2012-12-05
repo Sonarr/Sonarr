@@ -72,5 +72,13 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
         this.collection = new QualityProfileCollection();
         this.collection.fetch();
         this.collection.bind('reset', this.render);
+    },
+    events: {
+        'click #add-profile': 'addProfile'
+    },
+    addProfile: function (e) {
+        //Add new profile to collection
+        this.collection.add(new QualityProfile());
+        e.preventDefault();
     }
 });

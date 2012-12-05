@@ -13,7 +13,7 @@
     overflow: auto;
 }
         
-#addProfile
+#add-profile
 {
     text-decoration: none;
     font-size:16px;
@@ -22,7 +22,7 @@
     vertical-align: middle;
 }
 
-#addProfile > i {
+#add-profile > i {
     color: green;
     font-size: 20px;
 }
