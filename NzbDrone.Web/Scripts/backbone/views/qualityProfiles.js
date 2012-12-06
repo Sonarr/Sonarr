@@ -37,6 +37,11 @@
                 else {
                     $(cutoff).find('option[value="' + qualityId + '"]').remove();
                 }
+
+                //Todo: auto-sort by weight (which is not the value)
+                //$(cutoff).html($($(cutoff).children("option")).sort(function(a, b) {
+                //    return a.value == b.value ? 0 : a.value < b.value ? -1 : 1;
+                //}));
             }
         });
 

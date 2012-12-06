@@ -14,7 +14,7 @@
         //this.validators.allowed = function (value) {
         //    return value.length > 0 ? { isValid: true } : { isValid: false, message: 'You must have allowed qualities' };
         //};
-        
+        //Todo: Cutoff should be something that is allowed (double check)
         this.validators.cutoff = function (value) {
             return value != null ? { isValid: true } : { isValid: false, message: 'You must have a valid cutoff' };
         };
