@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Web.Mvc;
@@ -45,7 +46,7 @@ namespace NzbDrone.Web.Controllers
                 Quality = h.Quality.ToString(),
                 IsProper = h.IsProper,
                 Date = h.Date.ToString(),
-                DateSorter = h.Date.ToString("MM/dd/yyyy h:mm:ss tt"),
+                DateSorter = h.Date.ToString("o", CultureInfo.InvariantCulture),
                 Indexer = h.Indexer,
                 EpisodeId = h.EpisodeId,
                 NzbInfoUrl = h.NzbInfoUrl,

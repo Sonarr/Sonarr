@@ -49,10 +49,10 @@
         function airDate (source, type, val) {
             // 'display' and 'filter' use our fancy naming
             if (type === 'display' || type === 'filter') {
-                return source["AirDateString"];
+                return source["AirDate"];
             }
             // 'sort' and 'type' both just use the raw data
-            return source["AirDate"];
+            return source["AirDateSorter"];
         }
         
         function actions(row) {

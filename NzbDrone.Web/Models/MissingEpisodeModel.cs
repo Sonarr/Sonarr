@@ -12,8 +12,8 @@ namespace NzbDrone.Web.Models
         public string SeriesTitleSorter { get; set; }
         public string EpisodeNumbering { get; set; }
         public string EpisodeTitle { get; set; }
+        public string AirDateSorter { get; set; }
         public string AirDate { get; set; }
-        public string AirDateString { get; set; }
         public string Overview { get; set; }
         public string Details { get; set; }
     }
