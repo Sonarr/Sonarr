@@ -165,5 +165,34 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
             Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.Is<string>(s => s.Contains("banners")), It.IsRegex(@"season-specials.tbn")), Times.Exactly(1));
         }
+
+        [Test]
+        public void should_not_try_to_download_fanart_if_fanart_path_is_empty()
+        {
+            WithUseBanners();
+            tvdbSeries.FanartPath = String.Empty;
+
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.IsAny<String>(), Path.Combine(series.Path, "fanart.jpg")), Times.Never());
+        }
+
+        [Test]
+        public void should_not_try_to_download_banner_if_banner_path_is_empty()
+        {
+            WithUseBanners();
+            tvdbSeries.BannerPath = String.Empty;
+
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.IsAny<String>(), Path.Combine(series.Path, "folder.jpg")), Times.Never());
+        }
+
+        [Test]
+        public void should_not_try_to_download_poster_if_poster_path_is_empty()
+        {
+            tvdbSeries.PosterPath = String.Empty;
+
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.IsAny<String>(), Path.Combine(series.Path, "folder.jpg")), Times.Never());
+        }
     }
 }

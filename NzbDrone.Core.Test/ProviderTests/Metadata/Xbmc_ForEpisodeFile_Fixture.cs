@@ -131,6 +131,11 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
             tvdbSeries.Episodes.ForEach(e => e.Writer = new List<string>());
         }
 
+        private void WithoutThumbnails()
+        {
+            tvdbSeries.Episodes.ForEach(e => e.BannerPath = String.Empty);
+        }
+
         [Test]
         public void should_not_blowup()
         {
@@ -176,6 +181,16 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
             WithSingleEpisodeFile();
             WithNoWriters();
             Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+        }
+
+        [Test]
+        public void should_download_nfo_even_if_thumbnail_is_missing()
+        {
+            WithSingleEpisodeFile();
+            WithoutThumbnails();
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+
+            Mocker.GetMock<DiskProvider>().Verify(v => v.WriteAllText(It.IsAny<String>(), It.IsAny<String>()), Times.Once());
         }
     }
 }

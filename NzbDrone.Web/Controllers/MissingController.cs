@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -34,8 +35,8 @@ namespace NzbDrone.Web.Controllers
                 Overview = e.Overview,
                 SeriesTitle = e.Series.Title,
                 SeriesTitleSorter = SortHelper.SkipArticles(e.Series.Title),
-                AirDate = e.AirDate.Value.ToString("MM/dd/yyyy"),
-                AirDateString = e.AirDate.Value.ToBestDateString()
+                AirDateSorter = e.AirDate.Value.ToString("o", CultureInfo.InvariantCulture),
+                AirDate = e.AirDate.Value.ToBestDateString()
             });
 
             JsConfig.IncludeNullValues = true;
