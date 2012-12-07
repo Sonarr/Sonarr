@@ -120,3 +120,19 @@
 {
     background-color: #616161;
 }
+
+.remove-newznab
+{
+    padding: 3px 1px;
+    vertical-align: top;
+    border: none;
+    display: inline-block !important;
+    text-decoration: none !important;
+    color: #000000;
+    font-size: 19px;
+    line-height: 10px;
+}
+
+.remove-newznab:before {
+    cursor: pointer;
+}
