@@ -136,3 +136,7 @@
 .remove-newznab:before {
     cursor: pointer;
 }
+
+.add-newznab:before {
+    color: green;
+}
