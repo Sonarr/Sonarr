@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
     [TestFixture]
     public class LogProviderFixture : CoreTest
     {
-
         private const string LOGGER_NAME = "Core.Test.ProviderTests.LogProviderTests.LogProviderFixture";
 
         private static LogDbContext dbContext;
