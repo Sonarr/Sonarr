@@ -15,8 +15,8 @@
             </span>
             @if(!Model.BuiltIn)
             {
-                <a href="#" id="@Model.Id" class="deleteProvider" onclick="deleteProvider('@(Model.Id)'); return false;">
-                    <img src="../../Content/Images/close.png" alt="Delete" width="22px" height="22px" /></a>
+                <a href="/settings/deletenewznabprovider?providerId=@Model.Id" id="@Model.Id" class="deleteProvider" onclick="deleteProvider('@(Model.Id)'); return false;">
+                    <i class="icon-remove remove-newznab"></i></a>
             }
         </div>
         <div class="providerOptions">
