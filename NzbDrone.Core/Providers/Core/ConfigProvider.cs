@@ -33,20 +33,6 @@ namespace NzbDrone.Core.Providers.Core
             return _database.Fetch<Config>();
         }
 
-        public virtual String NzbMatrixUsername
-        {
-            get { return GetValue("NzbMatrixUsername"); }
-
-            set { SetValue("NzbMatrixUsername", value); }
-        }
-
-        public virtual String NzbMatrixApiKey
-        {
-            get { return GetValue("NzbMatrixApiKey"); }
-
-            set { SetValue("NzbMatrixApiKey", value); }
-        }
-
         public virtual String NzbsOrgUId
         {
             get { return GetValue("NzbsOrgUId"); }

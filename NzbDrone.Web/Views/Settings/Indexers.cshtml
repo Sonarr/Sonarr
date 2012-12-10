@@ -11,10 +11,7 @@
     }
 </style>
 
-<div class="indexerStatusContainer">
-    @Html.CheckBox("nzbMatrixStatus", @Model.NzbMatrixEnabled, new { @class = "indexerStatusButton" })
-    <label for="nzbMatrixStatus">NZBMatrix</label>
-    
+<div class="indexerStatusContainer">   
     @Html.CheckBox("nzbsRusStatus", @Model.NzbsRUsEnabled, new { @class = "indexerStatusButton" })
     <label for="nzbsRusStatus">NZBsRus</label>
     
@@ -37,24 +34,6 @@
     @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "IndexersForm", name = "IndexersForm", @class = "settingsForm" }))
     {     
         <div class="jquery-accordion jquery-accordion-collapse-all">
-            <h3><a href="#">NZBMatrix</a></h3>
-            <div class="indexerPanel">
-                <label class="labelClass">
-                    Enable <span class="small">@Html.DescriptionFor(m => m.NzbMatrixEnabled)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.NzbMatrixEnabled, new { @class = "inputClass checkClass enabledCheck" })
-                <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixUsername)
-                    <span class="small">@Html.DescriptionFor(m => m.NzbMatrixUsername)</span>
-                    <span class="small">@Html.ValidationMessageFor(m => m.NzbMatrixUsername)</span>
-                </label>
-                @Html.TextBoxFor(m => m.NzbMatrixUsername, new { @class = "inputClass" })
-                <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixApiKey)
-                    <span class="small">@Html.DescriptionFor(m => m.NzbMatrixApiKey)</span>
-                    <span class="small">@Html.ValidationMessageFor(m => m.NzbMatrixApiKey)</span>
-                </label>
-                @Html.TextBoxFor(m => m.NzbMatrixApiKey, new { @class = "inputClass" })
-            </div>
-
             <h3><a href="#">NZBsRus</a></h3>
             <div class="indexerPanel">
                 <div class="warningBox">NZBsRus does not support backlog searching</div>
@@ -195,9 +174,6 @@
         var id = $(this).prop('id');
         var checked = $(this).prop('checked');
 
-        if (id == 'NzbMatrixEnabled')
-            $('#nzbMatrixStatus').prop('checked', checked);
-
         if (id == 'NzbsRUsEnabled')
             $('#nzbsRusStatus').prop('checked', checked);
 
@@ -223,9 +199,6 @@
     $(document).on('change', '.indexerStatusButton', function () {
         var id = $(this).prop('id');
         var checked = $(this).prop('checked');
-        
-        if (id == 'nzbMatrixStatus')
-            $('#NzbMatrixEnabled').prop('checked', checked);
 
         if (id == 'nzbsRusStatus')
             $('#NzbsRUsEnabled').prop('checked', checked);

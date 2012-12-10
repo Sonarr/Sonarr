@@ -10,20 +10,6 @@ namespace NzbDrone.Web.Models
     public class IndexerSettingsModel
     {
         [DataType(DataType.Text)]
-        [DisplayName("Username")]
-        [Description("Username for NZB Matrix")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbMatrixEnabled", true, ErrorMessage = "Username Required when NZBMatrix is enabled")]
-        public String NzbMatrixUsername { get; set; }
-
-        [DataType(DataType.Text)]
-        [DisplayName("API Key")]
-        [Description("API Key for NZB Matrix")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbMatrixEnabled", true, ErrorMessage = "API Key Required when NZBMatrix is enabled")]
-        public String NzbMatrixApiKey { get; set; }
-
-        [DataType(DataType.Text)]
         [DisplayName("User ID")]
         [Description("User ID for NZBsRus")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
@@ -50,10 +36,6 @@ namespace NzbDrone.Web.Models
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         [RequiredIf("FileSharingTalkEnabled", true, ErrorMessage = "Password Secret Required when File Sharing Talk is enabled")]
         public String FileSharingTalkSecret { get; set; }
-
-        [DisplayName("NZB Matrix")]
-        [Description("Enable downloading episodes from NZB Matrix")]
-        public bool NzbMatrixEnabled { get; set; }
 
         [DisplayName("NZBsRUs")]
         [Description("Enable downloading episodes from NZBsRus")]

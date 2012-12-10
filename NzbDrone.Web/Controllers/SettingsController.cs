@@ -95,16 +95,12 @@ namespace NzbDrone.Web.Controllers
                             {
                                 Retention = _configProvider.Retention,
 
-                                NzbMatrixUsername = _configProvider.NzbMatrixUsername,
-                                NzbMatrixApiKey = _configProvider.NzbMatrixApiKey,
-
                                 NzbsrusUId = _configProvider.NzbsrusUId,
                                 NzbsrusHash = _configProvider.NzbsrusHash,
 
                                 FileSharingTalkUid = _configProvider.FileSharingTalkUid,
                                 FileSharingTalkSecret = _configProvider.FileSharingTalkSecret,
 
-                                NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
                                 NewznabEnabled = _indexerProvider.GetSettings(typeof(Newznab)).Enable,
                                 WomblesEnabled = _indexerProvider.GetSettings(typeof(Wombles)).Enable,
@@ -375,10 +371,6 @@ namespace NzbDrone.Web.Controllers
             {
                 _configProvider.Retention = data.Retention;
 
-                var nzbMatrixSettings = _indexerProvider.GetSettings(typeof(NzbMatrix));
-                nzbMatrixSettings.Enable = data.NzbMatrixEnabled;
-                _indexerProvider.SaveSettings(nzbMatrixSettings);
-
                 var nzbsRUsSettings = _indexerProvider.GetSettings(typeof(NzbsRUs));
                 nzbsRUsSettings.Enable = data.NzbsRUsEnabled;
                 _indexerProvider.SaveSettings(nzbsRUsSettings);
@@ -402,9 +394,6 @@ namespace NzbDrone.Web.Controllers
                 var nzbClubSettings = _indexerProvider.GetSettings(typeof(NzbClub));
                 nzbClubSettings.Enable = data.NzbClubEnabled;
                 _indexerProvider.SaveSettings(nzbClubSettings);
-
-                _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
-                _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;
 
                 _configProvider.NzbsrusUId = data.NzbsrusUId;
                 _configProvider.NzbsrusHash = data.NzbsrusHash;
