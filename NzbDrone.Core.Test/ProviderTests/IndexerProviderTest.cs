@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
         protected override string[] Urls
         {
-            get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
+            get { return new[] { "http://rss.nzbs.com/rss.php?cat=TV" }; }
         }
 
         public override bool IsConfigured
@@ -279,7 +279,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
         protected override string[] Urls
         {
-            get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
+            get { return new[] { "http://rss.nzbs.com/rss.php?cat=TV" }; }
         }
 
         public override bool IsConfigured

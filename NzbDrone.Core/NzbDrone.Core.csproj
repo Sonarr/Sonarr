@@ -227,6 +227,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121209.cs" />
     <Compile Include="Datastore\Migrations\Migration20121202.cs" />
     <Compile Include="Datastore\Migrations\Migration20121122.cs" />
     <Compile Include="Datastore\Migrations\Migration20121016.cs" />
@@ -452,9 +453,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\Indexer\Newznab.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Providers\Indexer\NzbMatrix.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\Indexer\NzbsRUs.cs">

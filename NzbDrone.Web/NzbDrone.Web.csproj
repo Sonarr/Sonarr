@@ -273,8 +273,6 @@
     <Content Include="Content\QualitySettings.css" />
     <Content Include="Content\Overrides.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
-    <Content Include="Content\Images\Indexers\Newzbin.png" />
-    <Content Include="Content\Images\Indexers\NzbMatrix.png" />
     <Content Include="Content\Images\Indexers\NzbsRus.png" />
     <Content Include="Content\Images\Indexers\Unknown.png" />
     <Content Include="Content\Settings.css" />

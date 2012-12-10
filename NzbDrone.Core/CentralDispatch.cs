@@ -86,7 +86,6 @@ namespace NzbDrone.Core
         private void InitIndexers()
         {
             logger.Debug("Initializing Indexers...");
-            Kernel.Bind<IndexerBase>().To<NzbMatrix>();
             Kernel.Bind<IndexerBase>().To<NzbsRUs>();
             Kernel.Bind<IndexerBase>().To<Newznab>();
             Kernel.Bind<IndexerBase>().To<Wombles>();
