@@ -57,16 +57,27 @@
     changeName: function(e) {
         var name = $(e.target).val();
 
-        $('#DefaultQualityProfileId option[value="' + this.model.get("Id") + '"]').html(name);
-
         this.model.set({ "Name": name });
-        this.model.save();
+        this.model.save(this.model, {
+            success: function (model) {
+                var id = model.get('Id');
+                var name = model.get('Name');
+
+                var exists = $('#DefaultQualityProfileId option[value="' + id + '"]');
+
+                if (exists.length == 0) 
+                    $('#DefaultQualityProfileId').append($('\<option\> \</option\>').val(id).html(name));
+
+                else
+                    $('#DefaultQualityProfileId option[value="' + id + '"]').html(name);
+            }
+        });
     },
     destroy: function (e) {
-        //if (e === undefined)
-        //    return;
-
         e.preventDefault();
+        
+        $("#DefaultQualityProfileId option[value='" + this.model.get('Id') + "']").remove();
+
         this.model.destroy();
         e.stopPropagation();
     },
@@ -81,10 +92,6 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
     itemView: QualityProfileView,
     template: QualityProfileApp.Constants.Templates.QualityProfileCollection,
     
-    //appendHtml: function (collectionView, itemView) {
-    //    collectionView.$('#collection').append(itemView.el);
-    //},
-    
     initialize: function () {
         _.bindAll(this, 'render');
         this.collection = new QualityProfileCollection();
@@ -96,8 +103,8 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
     },
     addProfile: function (e) {
         e.preventDefault();
-        //Add new profile to collection
-        //Todo: How will we get the list of qualities (they would all be NOT allowed) - it all comes from the server side...
+        
+        //Todo: Need to get the default profile from the server, instead of creating it manually...
         var newProfile = new QualityProfile({
             Name: '', Cutoff: 0, Qualities: [
                 { "Id": 0, "Weight": 0, "Name": "Unknown", "Allowed": false },

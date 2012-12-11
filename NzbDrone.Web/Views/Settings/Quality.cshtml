@@ -130,16 +130,18 @@
             <% }); %>
             </select>
         </div>
+        
+        <% var guid = createGuid(); %>
 
         <% _.each(Qualities, function(quality) { %>
-            <input id="<%= Id %>_<%= quality.Id %>"
+            <input id="<%= guid %>_<%= quality.Id %>"
                     class="quality-selectee"
                     type="checkbox"
                     value="<%= quality.Allowed %>"
                     data-quality-id="<%= quality.Id %>"
                     <%= quality.Allowed ? 'checked="checked"' : '' %>
             />
-            <label for="<%= Id %>_<%= quality.Id %>"><%= quality.Name %></label>
+            <label for="<%= guid %>_<%= quality.Id %>"><%= quality.Name %></label>
         <% }); %>
     
     
@@ -147,8 +149,6 @@
     
     <script id="QualityProfileCollectionTemplate" type="text/template">
         <div id="profileHeader">
-            @*<button id="add-profile"><i class="icon-plus icon-large"></i> Add New Profile</button>*@
-
             <a id="add-profile" href="@Url.Action("AddProfile", "Settings")">
                 <i class="icon-plus icon-large"></i>
                 Add New Profile
