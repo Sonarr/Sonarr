@@ -21,7 +21,7 @@
         <PackageOutputDir Condition="$(PackageOutputDir) == ''">$(TargetDir.Trim('\\'))</PackageOutputDir>
 
         <!-- Package sources used to restore packages. By default will used the registered sources under %APPDATA%\NuGet\NuGet.Config -->
-        <PackageSources>""</PackageSources>
+        <PackageSources>"http://build.nzbdrone.com/guestAuth/app/nuget/v1/FeedService.svc";"https://nuget.org/api/v2/"</PackageSources>
 
         <!-- Enable the restore command to run before builds -->
         <RestorePackages Condition="$(RestorePackages) == ''">false</RestorePackages>
