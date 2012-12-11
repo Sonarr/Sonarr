@@ -15,6 +15,7 @@
         //Add to cutoff
         //Update model
         var target = $(e.target);
+        var el = $(this.el);
 
         var checked = $(target).attr('checked') != undefined;
         var id = this.model.get("Id");
@@ -25,10 +26,9 @@
 
             if (qualityType.Id == qualityId) {
                 qualityType.Allowed = checked;
-                
-                //Todo: Add/Remove from cutoff
+               
                 //Find cutoff dropdown
-                var cutoff = ('select#' + id);
+                var cutoff = $(el).find('.cutoff');
 
                 if (checked) {
                     $('<option>' + qualityType.Name + '</option>').val(qualityId).appendTo(cutoff);
@@ -49,7 +49,6 @@
         this.model.save();
     },
     changeCutoff: function(e) {
-        //Todo: save change
         var cutoff = $(e.target).val();
         
         this.model.set({ "Cutoff": cutoff });
@@ -58,15 +57,14 @@
     changeName: function(e) {
         var name = $(e.target).val();
 
-        //Todo: update default quality dropdown
         $('#DefaultQualityProfileId option[value="' + this.model.get("Id") + '"]').html(name);
 
         this.model.set({ "Name": name });
         this.model.save();
     },
     destroy: function (e) {
-        if (e === undefined)
-            return;
+        //if (e === undefined)
+        //    return;
 
         e.preventDefault();
         this.model.destroy();
@@ -97,9 +95,22 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
         'click #add-profile': 'addProfile'
     },
     addProfile: function (e) {
+        e.preventDefault();
         //Add new profile to collection
         //Todo: How will we get the list of qualities (they would all be NOT allowed) - it all comes from the server side...
-        this.collection.add(new QualityProfile());
-        e.preventDefault();
+        var newProfile = new QualityProfile({
+            Name: '', Cutoff: 0, Qualities: [
+                { "Id": 0, "Weight": 0, "Name": "Unknown", "Allowed": false },
+                { "Id": 1, "Weight": 1, "Name": "SDTV", "Allowed": false },
+                { "Id": 2, "Weight": 2, "Name": "DVD", "Allowed": false },
+                { "Id": 4, "Weight": 4, "Name": "HDTV", "Allowed": false },
+                { "Id": 5, "Weight": 5, "Name": "WEBDL-720p", "Allowed": false },
+                { "Id": 3, "Weight": 7, "Name": "WEBDL-1080p", "Allowed": false },
+                { "Id": 6, "Weight": 6, "Name": "Bluray720p", "Allowed": false },
+                { "Id": 7, "Weight": 8, "Name": "Bluray1080p", "Allowed": false }
+            ]
+        });
+
+        this.collection.add(newProfile);      
     }
 });

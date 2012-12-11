@@ -40,8 +40,8 @@ namespace NzbDrone.Api.QualityProfiles
         public override object OnPost(QualityProfileModel request)
         {
             var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
-            _qualityProvider.Add(profile);
-
+            request.Id = _qualityProvider.Add(profile);
+            
             return request;
         }
 
