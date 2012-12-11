@@ -19,7 +19,6 @@ using PetaPoco;
 using SignalR;
 using SignalR.Hosting.AspNet;
 using SignalR.Infrastructure;
-using SignalR.Ninject;
 using Connection = NzbDrone.Core.Datastore.Connection;
 using Xbmc = NzbDrone.Core.Providers.ExternalNotification.Xbmc;
 

@@ -31,7 +31,7 @@ _ReSharper*/
 [Bb]uild/
 [Ll]ogs/
 [Aa]pp_Data/
-/[Pp]ackage/
+packages/
 /FakesAssemblies/
 #NZBDrone specific
 *.db
