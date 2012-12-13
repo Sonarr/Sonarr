@@ -299,6 +299,8 @@
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
+    <Compile Include="Model\Xbmc\XbmcJsonResult.cs" />
+    <Compile Include="Model\Xbmc\XbmcVersion.cs" />
     <Compile Include="Model\Xem\XemResult.cs" />
     <Compile Include="Model\Xem\XemSceneTvdbMapping.cs" />
     <Compile Include="Model\Xem\XemValues.cs" />

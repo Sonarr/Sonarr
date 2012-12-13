@@ -241,6 +241,7 @@
     <Compile Include="ProviderTests\SceneMappingProviderTest.cs" />
     <Compile Include="ProviderTests\SeriesProviderTest.cs" />
     <Compile Include="ProviderTests\TvDbProviderTest.cs" />
+    <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">

@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
                 var version = GetJsonVersion(host, username, password);
 
                 //If Dharma
-                if (version == 2)
+                if (version == new XbmcVersion(2))
                 {
                     //Check for active player only when we should skip updates when playing
                     if (!_configProvider.XbmcUpdateWhenPlaying)
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //If Eden or newer (attempting to make it future compatible)
-                else if (version >= 3)
+                else if (version == new XbmcVersion(3) || version == new XbmcVersion(4))
                 {
                     //Check for active player only when we should skip updates when playing
                     if (!_configProvider.XbmcUpdateWhenPlaying)
@@ -90,6 +90,25 @@ namespace NzbDrone.Core.Providers
 
                         //If video is currently playing, then skip update
                         if(activePlayers.Any(a => a.Type.Equals("video")))
+                        {
+                            Logger.Debug("Video is currently playing, skipping library update");
+                            continue;
+                        }
+                    }
+
+                    UpdateWithJson(series, host, username, password);
+                }
+
+                else if (version >= new XbmcVersion(5))
+                {
+                    //Check for active player only when we should skip updates when playing
+                    if (!_configProvider.XbmcUpdateWhenPlaying)
+                    {
+                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                        var activePlayers = GetActivePlayersEden(host, username, password);
+
+                        //If video is currently playing, then skip update
+                        if (activePlayers.Any(a => a.Type.Equals("video")))
                         {
                             Logger.Debug("Video is currently playing, skipping library update");
                             continue;
@@ -239,12 +258,11 @@ namespace NzbDrone.Core.Providers
             return field.Value;
         }
 
-        public virtual int GetJsonVersion(string host, string username, string password)
+        public virtual XbmcVersion GetJsonVersion(string host, string username, string password)
         {
             //2 = Dharma
-            //3 = Eden/Nightly (as of July 2011)
-
-            var version = 0;
+            //3 & 4 = Eden
+            //5 & 6 = Frodo
 
             try
             {
@@ -256,11 +274,20 @@ namespace NzbDrone.Core.Providers
                 var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
 
                 if (CheckForJsonError(response))
-                    return version;
+                    return new XbmcVersion();
 
                 Logger.Trace("Getting version from response");
-                var result = JsonConvert.DeserializeObject<VersionResult>(response);
-                result.Result.TryGetValue("version", out version);
+                var result = JsonConvert.DeserializeObject<XbmcJsonResult<JObject>>(response);
+
+                var versionObject = result.Result.Property("version");
+
+                if (versionObject.Value.Type == JTokenType.Integer)
+                    return new XbmcVersion((int)versionObject.Value);
+
+                if(versionObject.Value.Type == JTokenType.Object)
+                    return JsonConvert.DeserializeObject<XbmcVersion>(versionObject.Value.ToString());
+
+                throw new InvalidCastException("Unknown Version structure!: " + versionObject);
             }
 
             catch (Exception ex)
@@ -268,7 +295,7 @@ namespace NzbDrone.Core.Providers
                 Logger.DebugException(ex.Message, ex);
             }
 
-            return version;
+            return new XbmcVersion();
         }
 
         public virtual Dictionary<string, bool> GetActivePlayersDharma(string host, string username, string password)
@@ -391,7 +418,7 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
                 var version = GetJsonVersion(host, username, password);
-                if (version == 0)
+                if (version == new XbmcVersion())
                     throw new Exception("Failed to get JSON version in test");
             }
         }

@@ -93,11 +93,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(3)]
         [TestCase(2)]
         [TestCase(0)]
-        public void GetJsonVersion(int number)
+        public void GetJsonVersionIntOnly(int number)
         {
-            //Setup
-            
-
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":" + number + "}}";
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
@@ -108,15 +105,32 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<XbmcProvider>().GetJsonVersion("localhost:8080", "xbmc", "xbmc");
 
             //Assert
-            Assert.AreEqual(number, result);
+            result.Should().Be(new XbmcVersion(number));
+        }
+
+        [TestCase(5, 0, 0)]
+        [TestCase(6, 0, 0)]
+        [TestCase(6, 1, 0)]
+        [TestCase(6, 0, 23)]
+        [TestCase(0, 0, 0)]
+        public void GetJsonVersionFrodo(int major, int minor, int patch)
+        {
+            var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":{\"major\":" + major + ",\"minor\":" + minor + ",\"patch\":" + patch + "}}}";
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
+                .Returns(message);
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().GetJsonVersion("localhost:8080", "xbmc", "xbmc");
+
+            //Assert
+            result.Should().Be(new XbmcVersion(major, minor, patch));
         }
 
         [Test]
         public void GetJsonVersion_error()
         {
-            //Setup
-            
-
             var message = "{\"error\":{\"code\":-32601,\"message\":\"Method not found.\"},\"id\":10,\"jsonrpc\":\"2.0\"}";
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
@@ -127,7 +141,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<XbmcProvider>().GetJsonVersion("localhost:8080", "xbmc", "xbmc");
 
             //Assert
-            Assert.AreEqual(0, result);
+            result.Should().Be(new XbmcVersion(0));
         }
 
         [TestCase(false, false, false)]
