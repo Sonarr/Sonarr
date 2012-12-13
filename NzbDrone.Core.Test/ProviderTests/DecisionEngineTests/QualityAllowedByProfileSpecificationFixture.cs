@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityAllowedByProfileSpecificationFixtrue : CoreTest
+    public class QualityAllowedByProfileSpecificationFixture : CoreTest
     {
         private QualityAllowedByProfileSpecification _qualityAllowedByProfile;
         private EpisodeParseResult parseResult;

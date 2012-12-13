@@ -70,6 +70,7 @@ namespace NzbDrone.Core.Test.ParserFixture
             new object[] { "Criminal.Minds.S08E01.1080p.WEB-DL.DD5.1.H264-NFHD", QualityTypes.WEBDL1080p, false },
             new object[] { "Its.Always.Sunny.in.Philadelphia.S08E01.1080p.WEB-DL.proper.AAC2.0.H.264", QualityTypes.WEBDL1080p, true },
             new object[] { "Two and a Half Men S10E03 1080p WEB DL DD5 1 H 264 REPACK NFHD", QualityTypes.WEBDL1080p, true },
+            new object[] { "Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", QualityTypes.WEBDL1080p, false }
         };
 
         public static object[] SelfQualityParserCases =

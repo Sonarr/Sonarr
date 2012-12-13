@@ -23,7 +23,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             new object[] { QualityTypes.WEBDL720p, false, QualityTypes.HDTV, true, QualityTypes.Bluray720p, false },
             new object[] { QualityTypes.WEBDL720p, false, QualityTypes.HDTV, true, QualityTypes.WEBDL720p, false },
             new object[] { QualityTypes.WEBDL720p, false, QualityTypes.WEBDL720p, false, QualityTypes.WEBDL720p, false },
-            new object[] { QualityTypes.SDTV, false, QualityTypes.SDTV, true, QualityTypes.SDTV, true }
+            new object[] { QualityTypes.SDTV, false, QualityTypes.SDTV, true, QualityTypes.SDTV, true },
+            new object[] { QualityTypes.WEBDL1080p, false, QualityTypes.WEBDL1080p, false, QualityTypes.WEBDL1080p, false }
         };
 
         [Test, TestCaseSource("IsUpgradeTestCases")]
