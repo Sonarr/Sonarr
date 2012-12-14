@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Providers
                         }
                     }
 
-                    UpdateWithJson(series, host, username, password);
+                    UpdateWithJsonExecBuiltIn(series, host, username, password);
                 }
 
                 else if (version >= new XbmcVersion(5))
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Providers
                         }
                     }
 
-                    UpdateWithJson(series, host, username, password);
+                    UpdateWithJsonVideoLibraryScan(series, host, username, password);
                 }
 
                 //Log Version zero if check failed
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual bool UpdateWithJson(Series series, string host, string username, string password)
+        public virtual bool UpdateWithJsonExecBuiltIn(Series series, string host, string username, string password)
         {
             try
             {
@@ -145,8 +145,6 @@ namespace NzbDrone.Core.Providers
                 if (path != null)
                 {
                     Logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, path.File, host);
-                    //var command = String.Format("ExecBuiltIn(UpdateLibrary(video, {0}))", path.File);
-                    //_eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
                     var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path.File);
                     SendCommand(host, command, username, password);
                 }
@@ -154,10 +152,59 @@ namespace NzbDrone.Core.Providers
                 else
                 {
                     Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
-                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video))");
-                    //_eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
                     SendCommand(host, "ExecBuiltIn(UpdateLibrary(video))", username, password);
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        public virtual bool UpdateWithJsonVideoLibraryScan(Series series, string host, string username, string password)
+        {
+            try
+            {
+                //Use Json!
+                var xbmcShows = GetTvShowsJson(host, username, password);
+
+                TvShow path = null;
+
+                //Log if response is null, otherwise try to find XBMC's path for series
+                if (xbmcShows == null)
+                    Logger.Trace("Failed to get TV Shows from XBMC");
+
+                else
+                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.SeriesId || s.Label == series.Title);
+
+                var postJson = new JObject();
+                postJson.Add(new JProperty("jsonrpc", "2.0"));
+                postJson.Add(new JProperty("method", "VideoLibrary.Scan"));
+                postJson.Add(new JProperty("id", 55));
+
+                if (path != null)
+                {
+                    Logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, path.File, host);
+                    postJson.Add(new JProperty("params", new JObject(new JObject(new JProperty("directory", path.File)))));
+                }
+
+                else
+                    Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
+
+                var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
+
+                if (CheckForJsonError(response))
+                    return false;
+
+                Logger.Trace(" from response");
+                var result = JsonConvert.DeserializeObject<XbmcJsonResult<String>>(response);
+
+                if(!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
+                    return false;
             }
 
             catch (Exception ex)

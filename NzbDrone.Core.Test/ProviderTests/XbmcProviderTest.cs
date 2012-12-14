@@ -505,7 +505,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void UpdateWithJson_Single()
+        public void UpdateWithJsonBuiltIn_Single()
         {
             //Setup
             
@@ -530,18 +530,15 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             fakeHttp.Setup(s => s.DownloadString(url, username, password)).Returns("<html><li>OK</html>");
 
-            //var fakeEventClient = Mocker.GetMock<EventClientProvider>();
-            //fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video,smb://HOMESERVER/TV/30 Rock/))"));
-
             //Act
-            var result = Mocker.Resolve<XbmcProvider>().UpdateWithJson(fakeSeries, host, username, password);
+            var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonExecBuiltIn(fakeSeries, host, username, password);
 
             //Assert
             result.Should().BeTrue();
         }
 
         [Test]
-        public void UpdateWithJson_All()
+        public void UpdateWithJsonBuiltIn_All()
         {
             //Setup
             
@@ -570,7 +567,71 @@ namespace NzbDrone.Core.Test.ProviderTests
             //fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video))"));
 
             //Act
-            var result = Mocker.Resolve<XbmcProvider>().UpdateWithJson(fakeSeries, host, username, password);
+            var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonExecBuiltIn(fakeSeries, host, username, password);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void UpdateWithJsonVideoLibraryScan_Single()
+        {
+            var host = "localhost:8080";
+            var username = "xbmc";
+            var password = "xbmc";
+            var expectedJson = "{\"jsonrpc\":\"2.0\",\"method\":\"VideoLibrary.GetTvShows\",\"params\":{\"properties\":[\"file\",\"imdbnumber\"]},\"id\":10}";
+            var tvshows = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\",\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1},{\"file\":\"smb://HOMESERVER/TV/30 Rock/\",\"imdbnumber\":\"79488\",\"label\":\"30 Rock\",\"tvshowid\":2},{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 79488)
+                .With(s => s.Title = "30 Rock")
+                .Build();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
+                .Returns(tvshows);
+
+            fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<String>(
+                e => e.Replace(" ", "")
+                      .Replace("\r\n", "")
+                      .Replace("\t", "")
+                      .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))))
+                      .Returns("{\"id\":55,\"jsonrpc\":\"2.0\",\"result\":\"OK\"}");
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonVideoLibraryScan(fakeSeries, host, username, password);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void UpdateWithJsonVideoLibraryScan_All()
+        {
+            var host = "localhost:8080";
+            var username = "xbmc";
+            var password = "xbmc";
+            var expectedJson = "{\"jsonrpc\":\"2.0\",\"method\":\"VideoLibrary.GetTvShows\",\"params\":{\"properties\":[\"file\",\"imdbnumber\"]},\"id\":10}";
+            var tvshows = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\",\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1},{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 79488)
+                .With(s => s.Title = "30 Rock")
+                .Build();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
+                .Returns(tvshows);
+
+            fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<String>(
+                e => !e.Replace(" ", "")
+                      .Replace("\r\n", "")
+                      .Replace("\t", "")
+                      .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))))
+                      .Returns("{\"id\":55,\"jsonrpc\":\"2.0\",\"result\":\"OK\"}");
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonVideoLibraryScan(fakeSeries, host, username, password);
 
             //Assert
             result.Should().BeTrue();

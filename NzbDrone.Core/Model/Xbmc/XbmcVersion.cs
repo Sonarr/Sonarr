@@ -119,5 +119,10 @@ namespace NzbDrone.Core.Model.Xbmc
             if (obj.GetType() != typeof(XbmcVersion)) return false;
             return Equals((XbmcVersion)obj);
         }
+
+        public static XbmcVersion NONE = new XbmcVersion(0, 0, 0);
+        public static XbmcVersion DHARMA = new XbmcVersion(2, 0, 0);
+        public static XbmcVersion EDEN = new XbmcVersion(4, 0, 0);
+        public static XbmcVersion FRODO = new XbmcVersion(6, 0, 0);
     }
 }
