@@ -295,7 +295,20 @@ namespace NzbDrone.Core
                     result.Quality = QualityTypes.WEBDL1080p;
                     return result;
                 }
-                result.Quality = QualityTypes.WEBDL720p;
+
+                if (normalizedName.Contains("720p"))
+                {
+                    result.Quality = QualityTypes.WEBDL720p;
+                    return result;
+                }
+
+                if(name.Contains("[WEBDL]"))
+                {
+                    result.Quality = QualityTypes.WEBDL720p;
+                    return result;
+                }
+
+                result.Quality = QualityTypes.WEBDL480p;
                 return result;
             }
             if (normalizedName.Contains("x264") || normalizedName.Contains("h264") || normalizedName.Contains("720p"))

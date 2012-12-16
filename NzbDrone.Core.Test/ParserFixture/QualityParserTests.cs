@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.ParserFixture
             new object[] { "Pawn Stars S04E87 REPACK 720p HDTV x264 aAF", QualityTypes.HDTV, true },
             new object[] { "The Real Housewives of Vancouver S01E04 DSR x264 2HD", QualityTypes.SDTV, false },
             new object[] { "Vanguard S01E04 Mexicos Death Train DSR x264 MiNDTHEGAP", QualityTypes.SDTV, false },
-            new object[] { "Vanguard S01E04 Mexicos Death Train 720 WEB DL", QualityTypes.WEBDL720p, false },
+            new object[] { "Vanguard S01E04 Mexicos Death Train 720p WEB DL", QualityTypes.WEBDL720p, false },
             new object[] { "Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", QualityTypes.WEBDL720p, false },
             new object[] { "Castle S04E22 720p WEB DL DD5 1 H 264 NFHD", QualityTypes.WEBDL720p, false },
             new object[] { "Fringe S04E22 720p WEB-DL DD5.1 H264-EbP.mkv", QualityTypes.WEBDL720p, false },
@@ -70,15 +70,20 @@ namespace NzbDrone.Core.Test.ParserFixture
             new object[] { "Criminal.Minds.S08E01.1080p.WEB-DL.DD5.1.H264-NFHD", QualityTypes.WEBDL1080p, false },
             new object[] { "Its.Always.Sunny.in.Philadelphia.S08E01.1080p.WEB-DL.proper.AAC2.0.H.264", QualityTypes.WEBDL1080p, true },
             new object[] { "Two and a Half Men S10E03 1080p WEB DL DD5 1 H 264 REPACK NFHD", QualityTypes.WEBDL1080p, true },
-            new object[] { "Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", QualityTypes.WEBDL1080p, false }
+            new object[] { "Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", QualityTypes.WEBDL1080p, false },
+            new object[] { "Elementary.S01E10.The.Leviathan.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false },
+            new object[] { "Glee.S04E10.Glee.Actually.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false },
+            new object[] { "The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false }
         };
 
         public static object[] SelfQualityParserCases =
         {
             new object[] { QualityTypes.SDTV },
             new object[] { QualityTypes.DVD },
+            new object[] { QualityTypes.WEBDL480p },
             new object[] { QualityTypes.HDTV },
             new object[] { QualityTypes.WEBDL720p },
+            new object[] { QualityTypes.WEBDL1080p },
             new object[] { QualityTypes.Bluray720p },
             new object[] { QualityTypes.Bluray1080p }
         };
