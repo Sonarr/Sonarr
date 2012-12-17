@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class UpgradeHistorySpecificationFixtrue : CoreTest
+    public class UpgradeHistorySpecificationFixture : CoreTest
     {
         private UpgradeHistorySpecification _upgradeHistory;
 
@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         private EpisodeParseResult parseResultSingle;
         private QualityModel firstQuality;
         private QualityModel secondQuality;
+        private Series fakeSeries;
 
         [SetUp]
         public void Setup()
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                                                             new Episode { SeasonNumber = 12, EpisodeNumber = 5 }
                                                        };
 
-            var fakeSeries = Builder<Series>.CreateNew()
+            fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = QualityTypes.Bluray1080p })
                          .Build();
 
@@ -112,6 +113,18 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithSecondReportUpgradable();
             _upgradeHistory.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_be_upgradable_if_episode_is_of_same_quality_as_existing()
+        {
+            fakeSeries.QualityProfile = new QualityProfile { Cutoff = QualityTypes.WEBDL1080p };
+            parseResultSingle.Quality = new QualityModel(QualityTypes.WEBDL1080p, false);
+            firstQuality = new QualityModel(QualityTypes.WEBDL1080p, false);
+
+            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
+
+            _upgradeHistory.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }
     }
 }

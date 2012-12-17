@@ -71,6 +71,7 @@ namespace NzbDrone.Core.Test.ParserFixture
         [TestCase("Falling_Skies_-_1x1_-_Live_and_Learn_[HDTV]", "Falling Skies", 1, 1)]
         [TestCase("Top Gear - 07x03 - 2005.11.70", "Top Gear", 7, 3)]
         [TestCase("Hatfields and McCoys 2012 Part 1 REPACK 720p HDTV x264 2HD", "Hatfields and McCoys 2012", 1, 1)]
+        [TestCase("Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", "Glee", 4, 9)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);

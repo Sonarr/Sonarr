@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test
             WithConfiguredIndexers();
 
             Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee%40EFNet", It.IsAny<NetworkCredential>()))
+                          .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbindex.xml"));
 
             Mocker.GetMock<HttpProvider>()
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test
             WithConfiguredIndexers();
 
             Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee%40EFNet", It.IsAny<NetworkCredential>()))
+                          .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbclub.xml"));
 
             Mocker.GetMock<HttpProvider>()
@@ -402,7 +402,7 @@ namespace NzbDrone.Core.Test
             const string expectedString = "release";
 
             Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee%40EFNet", It.IsAny<NetworkCredential>()))
+                          .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\nzbindex.xml"));
 
             Mocker.GetMock<HttpProvider>()
@@ -426,7 +426,7 @@ namespace NzbDrone.Core.Test
             const string expectedString = "nzb_view";
 
             Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee%40EFNet", It.IsAny<NetworkCredential>()))
+                          .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
 
             Mocker.GetMock<HttpProvider>()

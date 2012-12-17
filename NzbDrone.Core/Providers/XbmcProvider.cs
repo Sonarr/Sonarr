@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
                 var version = GetJsonVersion(host, username, password);
 
                 //If Dharma
-                if (version == 2)
+                if (version == new XbmcVersion(2))
                 {
                     //Check for active player only when we should skip updates when playing
                     if (!_configProvider.XbmcUpdateWhenPlaying)
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //If Eden or newer (attempting to make it future compatible)
-                else if (version >= 3)
+                else if (version == new XbmcVersion(3) || version == new XbmcVersion(4))
                 {
                     //Check for active player only when we should skip updates when playing
                     if (!_configProvider.XbmcUpdateWhenPlaying)
@@ -96,7 +96,26 @@ namespace NzbDrone.Core.Providers
                         }
                     }
 
-                    UpdateWithJson(series, host, username, password);
+                    UpdateWithJsonExecBuiltIn(series, host, username, password);
+                }
+
+                else if (version >= new XbmcVersion(5))
+                {
+                    //Check for active player only when we should skip updates when playing
+                    if (!_configProvider.XbmcUpdateWhenPlaying)
+                    {
+                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                        var activePlayers = GetActivePlayersEden(host, username, password);
+
+                        //If video is currently playing, then skip update
+                        if (activePlayers.Any(a => a.Type.Equals("video")))
+                        {
+                            Logger.Debug("Video is currently playing, skipping library update");
+                            continue;
+                        }
+                    }
+
+                    UpdateWithJsonVideoLibraryScan(series, host, username, password);
                 }
 
                 //Log Version zero if check failed
@@ -105,7 +124,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual bool UpdateWithJson(Series series, string host, string username, string password)
+        public virtual bool UpdateWithJsonExecBuiltIn(Series series, string host, string username, string password)
         {
             try
             {
@@ -126,8 +145,6 @@ namespace NzbDrone.Core.Providers
                 if (path != null)
                 {
                     Logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, path.File, host);
-                    //var command = String.Format("ExecBuiltIn(UpdateLibrary(video, {0}))", path.File);
-                    //_eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
                     var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path.File);
                     SendCommand(host, command, username, password);
                 }
@@ -135,10 +152,59 @@ namespace NzbDrone.Core.Providers
                 else
                 {
                     Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
-                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video))");
-                    //_eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
                     SendCommand(host, "ExecBuiltIn(UpdateLibrary(video))", username, password);
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        public virtual bool UpdateWithJsonVideoLibraryScan(Series series, string host, string username, string password)
+        {
+            try
+            {
+                //Use Json!
+                var xbmcShows = GetTvShowsJson(host, username, password);
+
+                TvShow path = null;
+
+                //Log if response is null, otherwise try to find XBMC's path for series
+                if (xbmcShows == null)
+                    Logger.Trace("Failed to get TV Shows from XBMC");
+
+                else
+                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.SeriesId || s.Label == series.Title);
+
+                var postJson = new JObject();
+                postJson.Add(new JProperty("jsonrpc", "2.0"));
+                postJson.Add(new JProperty("method", "VideoLibrary.Scan"));
+                postJson.Add(new JProperty("id", 55));
+
+                if (path != null)
+                {
+                    Logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, path.File, host);
+                    postJson.Add(new JProperty("params", new JObject(new JObject(new JProperty("directory", path.File)))));
+                }
+
+                else
+                    Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
+
+                var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
+
+                if (CheckForJsonError(response))
+                    return false;
+
+                Logger.Trace(" from response");
+                var result = JsonConvert.DeserializeObject<XbmcJsonResult<String>>(response);
+
+                if(!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
+                    return false;
             }
 
             catch (Exception ex)
@@ -239,12 +305,11 @@ namespace NzbDrone.Core.Providers
             return field.Value;
         }
 
-        public virtual int GetJsonVersion(string host, string username, string password)
+        public virtual XbmcVersion GetJsonVersion(string host, string username, string password)
         {
             //2 = Dharma
-            //3 = Eden/Nightly (as of July 2011)
-
-            var version = 0;
+            //3 & 4 = Eden
+            //5 & 6 = Frodo
 
             try
             {
@@ -256,11 +321,20 @@ namespace NzbDrone.Core.Providers
                 var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
 
                 if (CheckForJsonError(response))
-                    return version;
+                    return new XbmcVersion();
 
                 Logger.Trace("Getting version from response");
-                var result = JsonConvert.DeserializeObject<VersionResult>(response);
-                result.Result.TryGetValue("version", out version);
+                var result = JsonConvert.DeserializeObject<XbmcJsonResult<JObject>>(response);
+
+                var versionObject = result.Result.Property("version");
+
+                if (versionObject.Value.Type == JTokenType.Integer)
+                    return new XbmcVersion((int)versionObject.Value);
+
+                if(versionObject.Value.Type == JTokenType.Object)
+                    return JsonConvert.DeserializeObject<XbmcVersion>(versionObject.Value.ToString());
+
+                throw new InvalidCastException("Unknown Version structure!: " + versionObject);
             }
 
             catch (Exception ex)
@@ -268,7 +342,7 @@ namespace NzbDrone.Core.Providers
                 Logger.DebugException(ex.Message, ex);
             }
 
-            return version;
+            return new XbmcVersion();
         }
 
         public virtual Dictionary<string, bool> GetActivePlayersDharma(string host, string username, string password)
@@ -391,7 +465,7 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
                 var version = GetJsonVersion(host, username, password);
-                if (version == 0)
+                if (version == new XbmcVersion())
                     throw new Exception("Failed to get JSON version in test");
             }
         }

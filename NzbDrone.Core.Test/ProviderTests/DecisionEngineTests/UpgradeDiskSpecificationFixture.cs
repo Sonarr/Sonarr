@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class UpgradeDiskSpecificationFixtrue : CoreTest
+    public class UpgradeDiskSpecificationFixture : CoreTest
     {
         private UpgradeDiskSpecification _upgradeDisk;
 
@@ -111,6 +111,15 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithSecondFileUpgradable();
             _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_be_upgradable_if_qualities_are_the_same()
+        {
+            firstFile.Quality = QualityTypes.WEBDL1080p;
+            firstFile.Proper = false;
+            parseResultSingle.Quality = new QualityModel(QualityTypes.WEBDL1080p, false);
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }
     }
 }

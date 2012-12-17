@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -304,10 +305,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        [ExpectedException("System.Net.Sockets.SocketException")]  
         public void CheckHostname_should_log_error_and_throw_exception_if_dnsHostname_is_invalid()
         {
-            Mocker.Resolve<NewznabProvider>().CheckHostname("http://BadName");
+            Assert.Throws<SocketException>(() => Mocker.Resolve<NewznabProvider>().CheckHostname("http://BadName"));
+
             ExceptionVerification.ExpectedErrors(1);
         }
     }

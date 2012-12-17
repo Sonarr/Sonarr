@@ -175,9 +175,9 @@
     <Compile Include="ProviderTests\PlexProviderTest.cs" />
     <Compile Include="ProviderTests\SeasonProviderTest.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\RetentionSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DecisionEngineTests\QualityAllowedByProfileSpecificationFixtrue.cs" />
-    <Compile Include="ProviderTests\DecisionEngineTests\UpgradeHistorySpecificationFixtrue.cs" />
-    <Compile Include="ProviderTests\DecisionEngineTests\UpgradeDiskSpecificationFixtrue.cs" />
+    <Compile Include="ProviderTests\DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
+    <Compile Include="ProviderTests\DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
+    <Compile Include="ProviderTests\DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\UpgradePossibleSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\BlackholeProviderFixture.cs" />
@@ -246,6 +246,7 @@
     <Compile Include="ProviderTests\SceneMappingProviderTest.cs" />
     <Compile Include="ProviderTests\SeriesProviderTest.cs" />
     <Compile Include="ProviderTests\TvDbProviderTest.cs" />
+    <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
