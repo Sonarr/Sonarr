@@ -101,12 +101,16 @@ namespace NzbDrone.Web.Controllers
                                 FileSharingTalkUid = _configProvider.FileSharingTalkUid,
                                 FileSharingTalkSecret = _configProvider.FileSharingTalkSecret,
 
+                                OmgwtfnzbsUsername = _configProvider.OmgwtfnzbsUsername,
+                                OmgwtfnzbsApiKey = _configProvider.OmgwtfnzbsApiKey,
+
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
                                 NewznabEnabled = _indexerProvider.GetSettings(typeof(Newznab)).Enable,
                                 WomblesEnabled = _indexerProvider.GetSettings(typeof(Wombles)).Enable,
                                 FileSharingTalkEnabled = _indexerProvider.GetSettings(typeof(FileSharingTalk)).Enable,
                                 NzbIndexEnabled = _indexerProvider.GetSettings(typeof(NzbIndex)).Enable,
                                 NzbClubEnabled = _indexerProvider.GetSettings(typeof(NzbClub)).Enable,
+                                OmgwtfnzbsEnabled = _indexerProvider.GetSettings(typeof(Omgwtfnzbs)).Enable,
 
                                 RssSyncInterval = _configProvider.RssSyncInterval,
 
@@ -395,11 +399,18 @@ namespace NzbDrone.Web.Controllers
                 nzbClubSettings.Enable = data.NzbClubEnabled;
                 _indexerProvider.SaveSettings(nzbClubSettings);
 
+                var omgwtfnzbsSettings = _indexerProvider.GetSettings(typeof(Omgwtfnzbs));
+                omgwtfnzbsSettings.Enable = data.OmgwtfnzbsEnabled;
+                _indexerProvider.SaveSettings(omgwtfnzbsSettings);
+
                 _configProvider.NzbsrusUId = data.NzbsrusUId;
                 _configProvider.NzbsrusHash = data.NzbsrusHash;
 
                 _configProvider.FileSharingTalkUid = data.FileSharingTalkUid;
                 _configProvider.FileSharingTalkSecret = data.FileSharingTalkSecret;
+
+                _configProvider.OmgwtfnzbsUsername = data.OmgwtfnzbsUsername;
+                _configProvider.OmgwtfnzbsApiKey = data.OmgwtfnzbsApiKey;
 
                 //Save the interval to config and immediately apply it the the job (to avoid a restart)
                 _configProvider.RssSyncInterval = data.RssSyncInterval;

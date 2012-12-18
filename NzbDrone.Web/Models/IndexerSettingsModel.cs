@@ -37,6 +37,20 @@ namespace NzbDrone.Web.Models
         [RequiredIf("FileSharingTalkEnabled", true, ErrorMessage = "Password Secret Required when File Sharing Talk is enabled")]
         public String FileSharingTalkSecret { get; set; }
 
+        [DataType(DataType.Text)]
+        [DisplayName("Username")]
+        [Description("Username for omgwtfnzbs")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("OmgwtfnzbsEnabled", true, ErrorMessage = "Username is required when omgwtfnzbs is enabled")]
+        public String OmgwtfnzbsUsername { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("API Key")]
+        [Description("API Key for omgwtfnzbs")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("OmgwtfnzbsEnabled", true, ErrorMessage = "API Key is required when omgwtfnzbs is enabled")]
+        public String OmgwtfnzbsApiKey { get; set; }
+
         [DisplayName("NZBsRUs")]
         [Description("Enable downloading episodes from NZBsRus")]
         public bool NzbsRUsEnabled { get; set; }
@@ -60,6 +74,10 @@ namespace NzbDrone.Web.Models
         [DisplayName("NzbClub")]
         [Description("Enable downloading episodes from NzbClub")]
         public bool NzbClubEnabled { get; set; }
+
+        [DisplayName("omgwtfnzbs")]
+        [Description("Enable downloading episodes from omgwtfnzbs")]
+        public bool OmgwtfnzbsEnabled { get; set; }
 
         [Required(ErrorMessage = "Please enter a valid number of days")]
         [DataType(DataType.Text)]

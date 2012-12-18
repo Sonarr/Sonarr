@@ -311,6 +311,7 @@
     <Compile Include="Providers\Indexer\NzbClub.cs" />
     <Compile Include="Providers\Indexer\NzbIndex.cs" />
     <Compile Include="Providers\Indexer\FileSharingTalk.cs" />
+    <Compile Include="Providers\Indexer\Omgwtfnzbs.cs" />
     <Compile Include="Providers\Indexer\Wombles.cs" />
     <Compile Include="Providers\MetadataProvider.cs" />
     <Compile Include="Providers\Metadata\MetadataBase.cs" />
