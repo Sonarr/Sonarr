@@ -139,6 +139,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProviderTests\TvRageProviderTests\GetUtcOffsetFixture.cs" />
+    <Compile Include="ProviderTests\TvRageProviderTests\SearchSeriesFixture.cs" />
     <Compile Include="QualityTypesTest.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="Integeration\ServiceIntegerationFixture.cs" />
