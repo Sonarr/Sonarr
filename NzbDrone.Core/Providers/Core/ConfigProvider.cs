@@ -517,6 +517,18 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("RssSyncInterval", value); }
         }
 
+        public virtual string OmgwtfnzbsUsername
+        {
+            get { return GetValue("OmgwtfnzbsUsername", String.Empty); }
+            set { SetValue("OmgwtfnzbsUsername", value); }
+        }
+
+        public virtual string OmgwtfnzbsApiKey
+        {
+            get { return GetValue("OmgwtfnzbsApiKey", String.Empty); }
+            set { SetValue("OmgwtfnzbsApiKey", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
