@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Ninject;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Model.Notification;
 
@@ -9,6 +10,7 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly LogProvider _logProvider;
 
+        [Inject]
         public TrimLogsJob(LogProvider logProvider)
         {
             _logProvider = logProvider;

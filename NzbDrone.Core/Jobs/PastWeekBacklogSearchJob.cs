@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public PastWeekBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob,
                                             ConfigProvider configProvider)
         {

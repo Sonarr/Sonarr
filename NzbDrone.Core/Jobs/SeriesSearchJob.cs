@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using Ninject;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public SeriesSearchJob(SeasonSearchJob seasonSearchJob,
                                 SeasonProvider seasonProvider)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Ninject;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
@@ -9,6 +10,7 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly SceneMappingProvider _sceneNameMappingProvider;
 
+        [Inject]
         public UpdateSceneMappingsJob(SceneMappingProvider sceneNameMappingProvider)
         {
             _sceneNameMappingProvider = sceneNameMappingProvider;
