@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Test
         [TestCase("filesharingtalk.xml")]
         [TestCase("nzbindex.xml")]
         [TestCase("nzbclub.xml")]
+        [TestCase("omgwtfnzbs.xml")]
         public void parse_feed_xml(string fileName)
         {
             Mocker.GetMock<HttpProvider>()
@@ -68,6 +69,9 @@ namespace NzbDrone.Core.Test
 
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
         }
 
         [Test]
@@ -207,6 +211,22 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(2);
             parseResults[0].Size.Should().Be(2652142305);
+        }
+
+        [Test]
+        public void size_omgwtfnzbs()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream("http://rss.omgwtfnzbs.com/rss-search.php?catid=19,20&user=MockedConfigValue&api=MockedConfigValue&eng=1", It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\omgwtfnzbs.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Omgwtfnzbs>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(236820890);
         }
 
         [Test]
@@ -451,6 +471,22 @@ namespace NzbDrone.Core.Test
         public void newznab_GetQueryTitle_should_return_expected_result(string seriesTitle, string expected)
         {
             Mocker.Resolve<Newznab>().GetQueryTitle(seriesTitle).Should().Be(expected);
+        }
+
+        [Test]
+        public void should_get_nzbInfoUrl_for_omgwtfnzbs()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream("http://rss.omgwtfnzbs.com/rss-search.php?catid=19,20&user=MockedConfigValue&api=MockedConfigValue&eng=1", It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\omgwtfnzbs.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Omgwtfnzbs>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].NzbInfoUrl.Should().Be("http://omgwtfnzbs.com/details.php?id=OAl4g");
         }
     }
 }
