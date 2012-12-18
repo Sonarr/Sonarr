@@ -1,0 +1,24 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <generator>omgwtfnzbs.com rss feeds generator</generator>
+    <language>en-us</language>
+    <title>Search NZB Download Feed</title>
+    <link>http://rss.omgwtfnzbs.com</link>
+    <description>auto-dl feed for omgwtfnzbs.com</description>
+    <copyright>2010 - 2012 omgwtfnzbs</copyright>
+    <atom:link href="http://rss.omgwtfnzbs.com/rss-search.php?catid=19,20&amp;eng=1" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 17 Dec 2012 23:30:16 +0000</pubDate>
+
+    <item>
+      <title>Stephen.Fry.Gadget.Man.S01E05.HDTV.x264-C4TV</title>
+      <pubDate>Mon, 17 Dec 2012 23:30:13 +0000</pubDate>
+      <guid>http://api.omgwtfnzbs.com/sn.php?id=OAl4g&amp;user=nzbdrone&amp;api=nzbdrone</guid>
+      <link>http://api.omgwtfnzbs.com/sn.php?id=OAl4g&amp;user=nzbdrone&amp;api=nzbdrone</link>
+      <description><![CDATA[<b>Category:</b> TV: STD<br /><b>Size:</b> 225.85 MB<br /><b>Group:</b> alt.binaries.teevee<br /><b>Added to index:</b> 17/12/2012 23:30:04<br /><b>Added to usenet:</b> 17/12/2012 23:30:13<br /><b>Weblink:</b> <a href="http://www.tvrage.com/shows/id-33431" target="_blank">http://www.tvrage.com/shows/id-33431</a><br /><b>View NZB:</b> <a href="http://omgwtfnzbs.com/details.php?id=OAl4g" target="_blank">http://omgwtfnzbs.com/details.php?id=OAl4g</a>]]></description>
+      <category>TV: STD</category>
+      <cattext>tv.sd</cattext>
+      <categoryid>19</categoryid>
+      <enclosure url="http://api.omgwtfnzbs.com/sn.php?id=OAl4g&amp;user=nzbdrone&amp;api=nzbdrone" length="236822906" type="application/x-nzb" />
+    </item>
+  </channel>
+</rss>
