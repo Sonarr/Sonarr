@@ -66,10 +66,10 @@ function reloadGrid() {
 //SignalR
 $(function () {
     // Proxy created on the fly
-    var signalRProvider = $.connection.signalRProvider;
+    var episodeHub = $.connection.episodeHub;
 
     // Declare a function on the chat hub so the server can invoke it
-    signalRProvider.updatedStatus = function (data) {
+    episodeHub.updatedStatus = function (data) {
         var row = $('[data-episode-id="' + data.EpisodeId + '"]');
 
         if (row.length == 0)

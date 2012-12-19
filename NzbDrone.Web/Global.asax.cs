@@ -19,6 +19,7 @@ using ServiceStack.CacheAccess.Providers;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Helpers.Binders;
 using ServiceStack.ServiceInterface;
+using SignalR;
 
 namespace NzbDrone.Web
 {
@@ -70,6 +71,9 @@ namespace NzbDrone.Web
             dispatch.DedicateToHost();
 
             dispatch.Kernel.Load(Assembly.GetExecutingAssembly());
+
+            //SignalR
+            RouteTable.Routes.MapHubs();
 
             //ServiceStack
             dispatch.Kernel.Bind<ICacheClient>().To<MemoryCacheClient>().InSingletonScope();
