@@ -22,6 +22,10 @@ namespace NzbDrone.Core.Providers
             _httpProvider = httpProvider;
         }
 
+        public TvRageProvider()
+        {
+        }
+
         public virtual IList<TvRageSearchResult> SearchSeries(string title)
         {
             var searchResults = new List<TvRageSearchResult>();
@@ -56,7 +60,7 @@ namespace NzbDrone.Core.Providers
                     show.Status = s.Element("status").Value;
                     show.RunTime = Int32.Parse(s.Element("runtime").Value);
                     show.AirTime = DateTime.Parse(s.Element("airtime").Value);
-                    show.AirDay = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), s.Element("airday").Value);
+                    show.AirDay = ParseDayOfWeek(s.Element("airday"));
 
                     searchResults.Add(show);
                 }
@@ -72,12 +76,18 @@ namespace NzbDrone.Core.Providers
 
         public virtual TvRageSeries GetSeries(int id)
         {
-            var url = string.Format("http://services.tvrage.com/feeds/showinfo.php?key={0}sid={1}", TVRAGE_APIKEY, id);
+            var url = string.Format("http://services.tvrage.com/feeds/showinfo.php?key={0}&sid={1}", TVRAGE_APIKEY, id);
             var xmlStream = _httpProvider.DownloadStream(url, null);
             var xml = XDocument.Load(xmlStream);
             var s = xml.Descendants("Showinfo").First();
             try
             {
+                if(s.Element("showid") == null)
+                {
+                    logger.Warn("TvRage did not return valid series info for id: {0}", id);
+                    return null;
+                }
+
                 var show = new TvRageSeries();
                 show.ShowId = Int32.Parse(s.Element("showid").Value);
                 show.Name = s.Element("showname").Value;
@@ -98,7 +108,7 @@ namespace NzbDrone.Core.Providers
                 show.RunTime = Int32.Parse(s.Element("runtime").Value);
                 show.Network = s.Element("network").Value;
                 show.AirTime = DateTime.Parse(s.Element("airtime").Value);
-                show.AirDay = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), s.Element("airday").Value);
+                show.AirDay = ParseDayOfWeek(s.Element("airday"));
                 show.UtcOffset = GetUtcOffset(s.Element("timezone").Value);
                 return show;
             }
@@ -112,7 +122,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<TvRageEpisode> GetEpisodes(int id)
         {
-            var url = String.Format("http://services.tvrage.com/feeds/episode_list.php?key={0}sid={1}", TVRAGE_APIKEY, id);
+            var url = String.Format("http://services.tvrage.com/feeds/episode_list.php?key={0}&sid={1}", TVRAGE_APIKEY, id);
             var xmlStream = _httpProvider.DownloadStream(url, null);
             var xml = XDocument.Load(xmlStream);
             var show = xml.Descendants("Show");
@@ -163,6 +173,25 @@ namespace NzbDrone.Core.Providers
                 offset++;
 
             return offset;
+        }
+
+        internal DayOfWeek? ParseDayOfWeek(XElement element)
+        {
+            if(element == null)
+                return null;
+
+            if(String.IsNullOrWhiteSpace(element.Value))
+                return null;
+
+            try
+            {
+                return (DayOfWeek)Enum.Parse(typeof(DayOfWeek), element.Value);
+            }
+            catch(Exception)
+            {
+            }
+
+            return null;
         }
     }
 }

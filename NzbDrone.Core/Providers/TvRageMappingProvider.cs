@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NLog;
+using Ninject;
+using NzbDrone.Core.Model.TvRage;
+using NzbDrone.Core.Repository;
+
+namespace NzbDrone.Core.Providers
+{
+    public class TvRageMappingProvider
+    {
+        private readonly SceneMappingProvider _sceneMappingProvider;
+        private readonly TvRageProvider _tvRageProvider;
+        private readonly EpisodeProvider _episodeProvider;
+
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        [Inject]
+        public TvRageMappingProvider(SceneMappingProvider sceneMappingProvider,
+                                TvRageProvider tvRageProvider, EpisodeProvider episodeProvider)
+        {
+            _sceneMappingProvider = sceneMappingProvider;
+            _tvRageProvider = tvRageProvider;
+            _episodeProvider = episodeProvider;
+        }
+
+        public TvRageMappingProvider()
+        {
+        }
+
+        public Series FindMatchingTvRageSeries(Series series)
+        {
+            var firstEpisode = _episodeProvider.GetEpisode(series.SeriesId, 1, 1);
+
+            var cleanName = _sceneMappingProvider.GetCleanName(series.SeriesId);
+            var results = _tvRageProvider.SearchSeries(series.Title);
+            var result = ProcessResults(results, series, cleanName, firstEpisode);
+
+            if (result != null)
+            {
+                logger.Trace("TV Rage: {0} matches TVDB: {1}", result.Name, series.Title);
+                series.TvRageId = result.ShowId;
+                series.TvRageTitle = result.Name;
+                series.UtcOffset = _tvRageProvider.GetSeries(result.ShowId).UtcOffset;
+            }
+
+            return series;
+        }
+
+        public TvRageSearchResult ProcessResults(IList<TvRageSearchResult> searchResults, Series series, string sceneCleanName, Episode firstEpisode)
+        {
+            foreach (var result in searchResults)
+            {
+                if (Parser.NormalizeTitle(result.Name).Equals(series.CleanTitle))
+                    return result;
+
+                if (!String.IsNullOrWhiteSpace(sceneCleanName) && Parser.NormalizeTitle(result.Name).Equals(sceneCleanName))
+                    return result;
+
+                if (firstEpisode.AirDate.HasValue && result.Started == firstEpisode.AirDate.Value)
+                    return result;
+            }
+
+            return null;
+        }
+    }
+}

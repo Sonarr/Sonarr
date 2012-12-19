@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Model.TvRage
         public int RunTime { get; set; }
         public string Network { get; set; }
         public DateTime AirTime { get; set; }
-        public DayOfWeek AirDay { get; set; }
+        public DayOfWeek? AirDay { get; set; }
         public int UtcOffset { get; set; }
     }
 }

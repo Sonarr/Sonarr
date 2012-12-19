@@ -21,11 +21,13 @@ namespace NzbDrone.Core.Providers
         private readonly SceneMappingProvider _sceneNameMappingProvider;
         private readonly BannerProvider _bannerProvider;
         private readonly MetadataProvider _metadataProvider;
+        private readonly TvRageMappingProvider _tvRageMappingProvider;
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
-                                BannerProvider bannerProvider, MetadataProvider metadataProvider)
+                                BannerProvider bannerProvider, MetadataProvider metadataProvider,
+                                TvRageMappingProvider tvRageMappingProvider)
         {
             _database = database;
             _configProvider = configProviderProvider;
@@ -33,6 +35,7 @@ namespace NzbDrone.Core.Providers
             _sceneNameMappingProvider = sceneNameMappingProvider;
             _bannerProvider = bannerProvider;
             _metadataProvider = metadataProvider;
+            _tvRageMappingProvider = tvRageMappingProvider;
         }
 
         public SeriesProvider()
@@ -103,6 +106,9 @@ namespace NzbDrone.Core.Providers
             series.Runtime = (int)tvDbSeries.Runtime;
             series.BannerUrl = tvDbSeries.BannerPath;
             series.Network = tvDbSeries.Network;
+
+            if (series.TvRageId == 0)
+                series = _tvRageMappingProvider.FindMatchingTvRageSeries(series);
 
             UpdateSeries(series);
             _metadataProvider.CreateForSeries(series, tvDbSeries);

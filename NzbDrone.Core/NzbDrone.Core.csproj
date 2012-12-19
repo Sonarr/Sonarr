@@ -228,6 +228,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121218.cs" />
     <Compile Include="Datastore\Migrations\Migration20121209.cs" />
     <Compile Include="Datastore\Migrations\Migration20121202.cs" />
     <Compile Include="Datastore\Migrations\Migration20121122.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
+    <Compile Include="Providers\TvRageMappingProvider.cs" />
     <Compile Include="Providers\TvRageProvider.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
