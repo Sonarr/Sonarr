@@ -139,6 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\GetSeriesTitleFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\ProcessResultsFixture.cs" />

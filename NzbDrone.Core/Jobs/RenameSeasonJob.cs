@@ -85,12 +85,20 @@ namespace NzbDrone.Core.Jobs
                 }
             }
 
+            if(!oldEpisodeFiles.Any())
+            {
+                logger.Trace("No episodes were renamed for: {0} Season {1}, no changes were made", series.Title,
+                             options.SeasonNumber);
+                notification.CurrentMessage = String.Format("Rename completed for: {0} Season {1}, no changes were made", series.Title, options.SeasonNumber);
+                return;
+            }
+
             //Remove & Create Metadata for episode files
+            //Todo: Add a metadata manager to avoid this hack
             _metadataProvider.RemoveForEpisodeFiles(oldEpisodeFiles);
             _metadataProvider.CreateForEpisodeFiles(newEpisodeFiles);
 
             //Start AfterRename
-
             var message = String.Format("Renamed: Series {0}, Season: {1}", series.Title, options.SeasonNumber);
             _externalNotificationProvider.AfterRename(message, series);
 
