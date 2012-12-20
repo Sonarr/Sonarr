@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<Showinfo>
+  <showid>29999</showid>
+  <showname>Anger Management</showname>
+  <showlink>http://tvrage.com/shows/id-29999</showlink>
+  <seasons>2</seasons>
+  <started>2012</started>
+  <startdate>Jun/28/2012</startdate>
+  <ended></ended>
+  <origin_country>US</origin_country>
+  <status>Returning Series</status>
+  <classification>Scripted</classification>
+  <genres>
+    <genre>Comedy</genre>
+  </genres>
+  <runtime>30</runtime>
+  <network  country="US">FX</network>
+  <airtime>21:30</airtime>
+  <airday>Thursday</airday>
+  <timezone>GMT-5 -DST</timezone>
+</Showinfo>

@@ -52,6 +52,12 @@ namespace NzbDrone.Core.Repository
 
         public bool UseSceneNumbering { get; set; }
 
+        public int TvRageId { get; set; }
+
+        public string TvRageTitle { get; set; }
+
+        public int UtcOffset { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.
         /// </summary>
