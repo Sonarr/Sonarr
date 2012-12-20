@@ -140,7 +140,8 @@ namespace NzbDrone.Core
             }
             catch (Exception e)
             {
-                Logger.ErrorException("An error has occurred while trying to parse " + title, e);
+                if (!title.ToLower().Contains("password") && !title.ToLower().Contains("yenc"))
+                    Logger.ErrorException("An error has occurred while trying to parse " + title, e);
             }
 
             Logger.Trace("Unable to parse {0}", title);

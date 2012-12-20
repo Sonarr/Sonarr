@@ -396,5 +396,12 @@ namespace NzbDrone.Core.Test.ParserFixture
         {
             Parser.ParseHeader(title).Should().Be(expected);
         }
+
+        [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]
+        public void should_not_parse_encypted_posts(string title)
+        {
+            Parser.ParseTitle(title).Should().BeNull();
+            ExceptionVerification.IgnoreWarns();
+        }
     }
 }
