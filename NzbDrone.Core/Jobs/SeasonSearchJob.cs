@@ -51,8 +51,9 @@ namespace NzbDrone.Core.Jobs
             //3 searches should guarentee results, (24 eps) versus, a potential 4 to get the same eps.
             List<int> successes = _searchProvider.PartialSeasonSearch(notification, options.SeriesId, options.SeasonNumber);
 
-            if (successes.Count == 0)
-                return;
+            //This causes issues with Newznab
+            //if (successes.Count == 0)
+            //    return;
 
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
             List<Episode> episodes = _episodeProvider.GetEpisodesBySeason(options.SeriesId, options.SeasonNumber);
