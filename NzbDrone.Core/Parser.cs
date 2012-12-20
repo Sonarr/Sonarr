@@ -150,7 +150,7 @@ namespace NzbDrone.Core
 
         private static EpisodeParseResult ParseMatchCollection(MatchCollection matchCollection)
         {
-            var seriesName = matchCollection[0].Groups["title"].Value;
+            var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
 
             int airyear;
             Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airyear);
