@@ -139,6 +139,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
+    <Compile Include="ProviderTests\TvRageMappingProviderTests\ProcessResultsFixture.cs" />
+    <Compile Include="ProviderTests\TvRageProviderTests\GetSeriesFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\ParseDayOfWeekFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\GetUtcOffsetFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\SearchSeriesFixture.cs" />
@@ -331,6 +334,12 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Files\TvRage\SeriesInfo_empty.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TvRage\SeriesInfo_one.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\TvRage\SearchResults_one.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
