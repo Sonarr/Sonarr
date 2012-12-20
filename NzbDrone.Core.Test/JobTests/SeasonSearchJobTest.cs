@@ -12,6 +12,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Search;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests
@@ -20,12 +21,25 @@ namespace NzbDrone.Core.Test.JobTests
     // ReSharper disable InconsistentNaming
     public class SeasonSearchJobTest : CoreTest
     {
+        private IList<Episode> _episodes; 
+
         private ProgressNotification notification;
 
         [SetUp]
         public void Setup()
         {
              notification = new ProgressNotification("Search");
+
+             _episodes = Builder<Episode>.CreateListOfSize(5)
+                 .All()
+                 .With(e => e.SeriesId = 1)
+                 .With(e => e.SeasonNumber = 1)
+                 .With(e => e.Ignored = false)
+                 .With(e => e.AirDate = DateTime.Today.AddDays(-1))
+                 .Build();
+
+             Mocker.GetMock<EpisodeProvider>()
+                 .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(_episodes);
         }
 
         [Test]
@@ -37,18 +51,9 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.Success = true)
                 .Build();
 
-            var episodes = Builder<Episode>.CreateListOfSize(5)
-                .All()
-                .With(e => e.SeasonNumber = 1)
-                .With(e => e.SeriesId = 5)
-                .Build();
-
-            Mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
-
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(episodes.Select(e => e.EpisodeNumber).ToList());
+                .Returns(_episodes.Select(e => e.EpisodeNumber).ToList());
 
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 1 });
@@ -62,14 +67,6 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void SeasonSearch_partial_season_failure()
         {
-            var episodes = Builder<Episode>.CreateListOfSize(5)
-                .All()
-                .With(e => e.SeriesId = 1)
-                .With(e => e.SeasonNumber = 1)
-                .With(e => e.Ignored = false)
-                .With(e => e.AirDate = DateTime.Today.AddDays(-1))
-                .Build();
-
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(new List<int>());
@@ -78,7 +75,6 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 1 });
 
             //Assert
-            Mocker.VerifyAllMocks();
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
         }
 
@@ -123,6 +119,8 @@ namespace NzbDrone.Core.Test.JobTests
             //Assert
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Never());
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, new { EpisodeId = It.IsAny<int>() }), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
