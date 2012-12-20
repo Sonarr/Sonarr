@@ -42,6 +42,8 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         {
             WithEmptyResults();
             Mocker.Resolve<TvRageProvider>().GetSeries(100).Should().BeNull();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
