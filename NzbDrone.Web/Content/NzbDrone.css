@@ -262,3 +262,9 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
 i[class*="icon-"]:not(.gridAction):hover {
     cursor: default;
 }
+
+/* Donate */
+#donate a {
+    background-color: #065EFE;
+    color: #191919;
+}
