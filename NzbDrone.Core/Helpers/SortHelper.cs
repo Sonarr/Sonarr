@@ -5,9 +5,9 @@ using System.Text;
 
 namespace NzbDrone.Core.Helpers
 {
-    public class SortHelper
+    public static class SortHelper
     {
-        public static string SkipArticles(string input)
+        public static string IgnoreArticles(this string input)
         {
             if (String.IsNullOrEmpty(input))
                 return String.Empty;

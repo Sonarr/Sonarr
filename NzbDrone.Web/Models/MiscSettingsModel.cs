@@ -20,5 +20,9 @@ namespace NzbDrone.Web.Models
         [Description("Comma separated list of release groups to download episodes (leave empty for all groups)")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AllowedReleaseGroups { get; set; }
+
+        [DisplayName("Ignore Articles")]
+        [Description("Ignore articles when sorting by series title?")]
+        public bool IgnoreArticlesWhenSortingSeries { get; set; }
     }
 }

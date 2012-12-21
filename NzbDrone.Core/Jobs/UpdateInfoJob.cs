@@ -6,6 +6,7 @@ using Ninject;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
@@ -15,15 +16,17 @@ namespace NzbDrone.Core.Jobs
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly ReferenceDataProvider _referenceDataProvider;
+        private readonly ConfigProvider _configProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-                            ReferenceDataProvider referenceDataProvider)
+                            ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _referenceDataProvider = referenceDataProvider;
+            _configProvider = configProvider;
         }
 
         public UpdateInfoJob()
@@ -46,7 +49,11 @@ namespace NzbDrone.Core.Jobs
             IList<Series> seriesToUpdate;
             if (options == null || options.SeriesId == 0)
             {
-                seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
+                if (_configProvider.IgnoreArticlesWhenSortingSeries)
+                    seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+
+                else
+                    seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => o.Title).ToList();
             }
             else
             {

@@ -18,10 +18,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class SortHelperTest : CoreTest
     {
-        //American Gladiators
-        //Ancient Apocalypse
-        //There Will Be Brawl
-
         [TestCase("The Office (US)", "Office (US)")]
         [TestCase("A Man in Anger", "Man in Anger")]
         [TestCase("An Idiot Abroad", "Idiot Abroad")]
@@ -32,7 +28,7 @@ namespace NzbDrone.Core.Test
         [TestCase(null, "")]
         public void SkipArticles(string title, string expected)
         {
-            var result = SortHelper.SkipArticles(title);
+            var result = title.IgnoreArticles();
             result.Should().Be(expected);
         }
     }

@@ -27,6 +27,11 @@
         </label>
         @Html.TextBoxFor(m => m.AllowedReleaseGroups, new { @class = "inputClass" })
 
+        <label class="labelClass">@Html.LabelFor(m => m.IgnoreArticlesWhenSortingSeries)
+            <span class="small">@Html.DescriptionFor(m => m.IgnoreArticlesWhenSortingSeries)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.IgnoreArticlesWhenSortingSeries, new { @class = "inputClass checkClass" })
+
         <div style="overflow: hidden; height: 50px;">
         </div>
         
