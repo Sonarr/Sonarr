@@ -139,6 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IndexerTests\NzbxFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\GetSeriesTitleFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
@@ -231,7 +232,7 @@
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="JobTests\ImportNewSeriesJobTest.cs" />
     <Compile Include="JobTests\DiskScanJobTest.cs" />
-    <Compile Include="IndexerTests.cs" />
+    <Compile Include="IndexerTests\IndexerFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\JobProviderFixture.cs" />
     <Compile Include="QualityTest.cs" />

@@ -20,12 +20,27 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.ProviderTests;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerTests : CoreTest
+    public class IndexerFixture : CoreTest
     {
+        private void WithConfiguredIndexers()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
+        }
+
         [TestCase("nzbsrus.xml")]
         [TestCase("newznab.xml")]
         [TestCase("wombles.xml")]
@@ -57,21 +72,6 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
             parseResults.Should().OnlyContain(s => s.Age >= 0);
-        }
-
-        private void WithConfiguredIndexers()
-        {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
-
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
-
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
-
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
         }
 
         [Test]
@@ -227,38 +227,6 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(236820890);
-        }
-
-        [Test]
-        public void size_nzbx_recent()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_recent.json"));
-
-            //Act
-            var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
-
-            parseResults.Should().HaveCount(1);
-            parseResults[0].Size.Should().Be(890190951);
-        }
-
-        [Test]
-        public void size_nzbx_search()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadString("https://nzbx.co/api/search?q=30+Rock+S01E01", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_search.json"));
-
-            //Act
-            var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
-
-            parseResults.Should().HaveCount(1);
-            parseResults[0].Size.Should().Be(418067671);
         }
 
         [Test]
@@ -519,40 +487,6 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].NzbInfoUrl.Should().Be("http://omgwtfnzbs.com/details.php?id=OAl4g");
-        }
-
-        [Test]
-        public void nzbx_parse_recent()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\nzbx_recent.json"));
-
-            var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
-
-            parseResults.Should().NotBeEmpty();
-            parseResults.Should().OnlyContain(s => s.Indexer == "nzbx");
-            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
-            parseResults.Should().OnlyContain(s => s.Age >= 0);
-        }
-
-        [Test]
-        public void nzbx_parse_search()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\nzbx_search.json"));
-
-            var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
-
-            parseResults.Should().NotBeEmpty();
-            parseResults.Should().OnlyContain(s => s.Indexer == "nzbx");
-            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
-            parseResults.Should().OnlyContain(s => s.Age >= 0);
         }
     }
 }
