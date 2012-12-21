@@ -230,6 +230,38 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void size_nzbx_recent()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
+                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_recent.json"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(890190951);
+        }
+
+        [Test]
+        public void size_nzbx_search()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadString("https://nzbx.co/api/search?q=30+Rock+S01E01", It.IsAny<NetworkCredential>()))
+                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_search.json"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(418067671);
+        }
+
+        [Test]
         public void Server_Unavailable_503_should_not_log_exception()
         {
             Mocker.GetMock<HttpProvider>()
@@ -487,6 +519,40 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].NzbInfoUrl.Should().Be("http://omgwtfnzbs.com/details.php?id=OAl4g");
+        }
+
+        [Test]
+        public void nzbx_parse_recent()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.ReadAllText(".\\Files\\Rss\\nzbx_recent.json"));
+
+            var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
+
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == "nzbx");
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
+            parseResults.Should().OnlyContain(s => s.Age >= 0);
+        }
+
+        [Test]
+        public void nzbx_parse_search()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.ReadAllText(".\\Files\\Rss\\nzbx_search.json"));
+
+            var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
+
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == "nzbx");
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
+            parseResults.Should().OnlyContain(s => s.Age >= 0);
         }
     }
 }

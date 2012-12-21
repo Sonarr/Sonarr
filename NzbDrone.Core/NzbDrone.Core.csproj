@@ -258,6 +258,7 @@
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
+    <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
@@ -277,6 +278,9 @@
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\BacklogSettingType.cs" />
+    <Compile Include="Model\Nzbx\NzbxSearchItem.cs" />
+    <Compile Include="Model\Nzbx\NzbxRecentItem.cs" />
+    <Compile Include="Model\Nzbx\NzbxVotesModel.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
@@ -312,6 +316,7 @@
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
+    <Compile Include="Providers\Indexer\Nzbx.cs" />
     <Compile Include="Providers\Indexer\NzbClub.cs" />
     <Compile Include="Providers\Indexer\NzbIndex.cs" />
     <Compile Include="Providers\Indexer\FileSharingTalk.cs" />
