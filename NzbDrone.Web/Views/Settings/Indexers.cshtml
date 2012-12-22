@@ -25,13 +25,16 @@
     <label for="fileSharingTalkStatus">File Sharing Talk</label>
 
     @Html.CheckBox("nzbIndexStatus", @Model.NzbIndexEnabled, new { @class = "indexerStatusButton" })
-        <label for="nzbIndexStatus">NzbIndex</label>
+    <label for="nzbIndexStatus">NzbIndex</label>
 
     @Html.CheckBox("nzbClubStatus", @Model.NzbClubEnabled, new { @class = "indexerStatusButton" })
     <label for="nzbClubStatus">Nzb Club</label>
     
     @Html.CheckBox("omgwtfnzbsStatus", @Model.OmgwtfnzbsEnabled, new { @class = "indexerStatusButton" })
-        <label for="omgwtfnzbsStatus">omgwtfnzbs</label>
+    <label for="omgwtfnzbsStatus">omgwtfnzbs</label>
+    
+    @Html.CheckBox("nzbxStatus", @Model.NzbxEnabled, new { @class = "indexerStatusButton" })
+    <label for="nzbxStatus">nzbx</label>
 </div>
 <div id="stylized">
     @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "IndexersForm", name = "IndexersForm", @class = "settingsForm" }))
@@ -139,6 +142,14 @@
                 </label>
                 @Html.TextBoxFor(m => m.OmgwtfnzbsApiKey, new { @class = "inputClass" })
             </div>
+            
+            <h3><a href="#">nzbx</a></h3>
+            <div class="indexerPanel">
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.NzbxEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.NzbxEnabled, new { @class = "inputClass checkClass enabledCheck" })
+            </div>
         </div>
         
         <div class="indexer-global-settings">
@@ -216,6 +227,9 @@
         
         if (id == 'OmgwtfnzbsEnabled')
             $('#omgwtfnzbsStatus').prop('checked', checked);
+        
+        if (id == 'NzbxEnabled')
+            $('#nzbxStatus').prop('checked', checked);
 
         $('.indexerStatusButton').button("refresh");
         reValidate();
@@ -245,6 +259,9 @@
         
         if (id == 'omgwtfnzbsStatus')
             $('#OmgwtfnzbsEnabled').prop('checked', checked);
+        
+        if (id == 'nzbxStatus')
+            $('#NzbxEnabled').prop('checked', checked);
 
         reValidate();
     });
