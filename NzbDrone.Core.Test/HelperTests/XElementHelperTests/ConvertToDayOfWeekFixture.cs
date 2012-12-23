@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.HelperTests.XElementHelperTests
         [Test]
         public void should_return_null_if_value_is_weekdays()
         {
-            Mocker.Resolve<TvRageProvider>().ParseDayOfWeek(new XElement("airday", "Weekdays")).Should().Be(null);
+            new XElement("airday", "Weekdays").ConvertToDayOfWeek().Should().Be(null);
         }
 
         [TestCase("Sunday", DayOfWeek.Sunday)]
