@@ -111,6 +111,7 @@ namespace NzbDrone.Web.Controllers
                                 NzbIndexEnabled = _indexerProvider.GetSettings(typeof(NzbIndex)).Enable,
                                 NzbClubEnabled = _indexerProvider.GetSettings(typeof(NzbClub)).Enable,
                                 OmgwtfnzbsEnabled = _indexerProvider.GetSettings(typeof(Omgwtfnzbs)).Enable,
+                                NzbxEnabled = _indexerProvider.GetSettings(typeof(Nzbx)).Enable,
 
                                 RssSyncInterval = _configProvider.RssSyncInterval,
 
@@ -403,6 +404,10 @@ namespace NzbDrone.Web.Controllers
                 var omgwtfnzbsSettings = _indexerProvider.GetSettings(typeof(Omgwtfnzbs));
                 omgwtfnzbsSettings.Enable = data.OmgwtfnzbsEnabled;
                 _indexerProvider.SaveSettings(omgwtfnzbsSettings);
+
+                var nzbxSettings = _indexerProvider.GetSettings(typeof(Nzbx));
+                nzbxSettings.Enable = data.NzbxEnabled;
+                _indexerProvider.SaveSettings(nzbxSettings);
 
                 _configProvider.NzbsrusUId = data.NzbsrusUId;
                 _configProvider.NzbsrusHash = data.NzbsrusHash;

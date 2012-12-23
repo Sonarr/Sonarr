@@ -79,6 +79,10 @@ namespace NzbDrone.Web.Models
         [Description("Enable downloading episodes from omgwtfnzbs")]
         public bool OmgwtfnzbsEnabled { get; set; }
 
+        [DisplayName("nzbx")]
+        [Description("Enable downloading episodes from nzbx")]
+        public bool NzbxEnabled { get; set; }
+
         [Required(ErrorMessage = "Please enter a valid number of days")]
         [DataType(DataType.Text)]
         [DisplayName("Retention")]

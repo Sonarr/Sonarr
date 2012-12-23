@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         public override bool EnabledByDefault
         {
-            get { return true; }
+            get { return false; }
         }
 
         protected override string TitlePreParser(SyndicationItem item)
