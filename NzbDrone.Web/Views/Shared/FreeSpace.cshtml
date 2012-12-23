@@ -1,0 +1,15 @@
+﻿@using NzbDrone.Core
+@model IEnumerable<NzbDrone.Core.Repository.RootDir>
+@{
+    Layout = null;
+}
+
+
+@{
+    foreach(var rootDir in Model)
+    {
+        <div class="free-space" title="@rootDir.Path">
+            @rootDir.FreeSpace.ToBestFileSize(1) <span>Free</span>
+        </div>
+    }
+}

@@ -139,13 +139,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HelperTests\XElementHelperFixture.cs" />
+    <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\GetSeriesTitleFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\ProcessResultsFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\GetSeriesFixture.cs" />
-    <Compile Include="ProviderTests\TvRageProviderTests\ParseDayOfWeekFixture.cs" />
+    <Compile Include="HelperTests\XElementHelperTests\ConvertToDayOfWeekFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\GetUtcOffsetFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\SearchSeriesFixture.cs" />
     <Compile Include="QualityTypesTest.cs" />

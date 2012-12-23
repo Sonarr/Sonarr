@@ -113,6 +113,12 @@ namespace NzbDrone.Core
 
         public static string ToBestFileSize(this long bytes, int precision = 0)
         {
+            var ulongBytes = (ulong)bytes;
+            return ulongBytes.ToBestFileSize(precision);
+        }
+
+        public static string ToBestFileSize(this ulong bytes, int precision = 0)
+        {
             if (bytes == 0)
                 return "0B";
 
