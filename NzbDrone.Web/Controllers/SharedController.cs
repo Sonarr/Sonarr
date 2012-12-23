@@ -29,7 +29,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [ChildActionOnly]
-        //[OutputCache(Duration = 600)]
+        [OutputCache(Duration = 600)]
         public ActionResult FreeSpace()
         {
             var rootDirs = _rootDirProvider.AllWithFreeSpace();
