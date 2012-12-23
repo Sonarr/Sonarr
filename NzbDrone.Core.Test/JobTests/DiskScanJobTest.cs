@@ -27,8 +27,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.SeriesId = 12)
                 .Build();
 
-            WithStrictMocker();
-
             Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetSeries(series.SeriesId))
                 .Returns(series);
@@ -53,8 +51,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .TheFirst(1).With(s => s.SeriesId = 12)
                 .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
-
-            WithStrictMocker();
 
             Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
@@ -82,8 +78,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
-            WithStrictMocker();
-
             Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
@@ -110,8 +104,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .TheFirst(1).With(s => s.SeriesId = 12)
                 .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
-
-            WithStrictMocker();
 
             Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())

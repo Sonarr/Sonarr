@@ -211,19 +211,6 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     cursor: pointer !important;
 }
 
-/* Local Series Search */
-#localSeriesLookup
-{
-    width: 220px;
-    float: right;
-    margin-top: 7px;
-    margin-bottom: 0px;
-    border: 0px;
-    background: rgb(75, 75, 75);
-    color: rgb(169, 169, 169);
-    padding: 4px;
-}
-
 .ui-dialog-buttonset .ui-delete-button
 {
     background: url("jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
@@ -261,4 +248,55 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
 /* Font-Awesome */
 i[class*="icon-"]:not(.gridAction):hover {
     cursor: default;
+}
+
+/* Donate */
+#donate a {
+    background-color: #065EFE;
+    color: #191919;
+}
+
+/* Right Menu */
+#right-menu {
+    float: right;
+    display: inline-block;
+    height: 60px;
+}
+
+#right-menu ul {
+    list-style: none;
+    overflow: hidden;
+}
+
+#right-menu li
+{
+    display: block;
+    float: left;
+    padding: 0px 0px 10px 15px;
+}
+
+#localSeriesLookup
+{
+    width: 220px;
+    border: 0px;
+    background: rgb(75, 75, 75);
+    color: rgb(169, 169, 169);
+    padding: 4px;
+}
+
+.free-space {
+    display: inline-block;
+    margin-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 28px;
+    line-height: 28px;
+    background-color: #6e6e6e;
+    color: #d0d0d0;
+    /*color: #FFFFFF;*/
+    cursor: default;
+}
+
+.free-space span {
+    color: #191919;
 }

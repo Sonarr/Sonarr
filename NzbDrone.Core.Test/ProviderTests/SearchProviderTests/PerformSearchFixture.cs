@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .Returns(parseResults);
             _episodeIndexer1.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(parseResults);
-
+            _episodeIndexer1.Setup(s => s.Name).Returns("Episode Indexer 1");
 
             _episodeIndexer2 = new Mock<IndexerBase>();
             _episodeIndexer2.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -74,14 +74,17 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .Returns(parseResults);
             _episodeIndexer2.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(parseResults);
+            _episodeIndexer2.Setup(s => s.Name).Returns("Episode Indexer 2");
 
             _brokenIndexer = new Mock<IndexerBase>();
             _brokenIndexer.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Throws(new Exception());
+            _brokenIndexer.Setup(s => s.Name).Returns("Broken Indexer");
 
             _nullIndexer = new Mock<IndexerBase>();
             _nullIndexer.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<List<EpisodeParseResult>>(null);
+            _nullIndexer.Setup(s => s.Name).Returns("Null Indexer");
         }
 
         private void WithTwoGoodOneBrokenIndexer()

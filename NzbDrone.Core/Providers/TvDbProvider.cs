@@ -37,6 +37,12 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Debug("Searching TVDB for '{0}'", title);
 
+                if(title.Contains(" & "))
+                {
+                    Logger.Debug("Removing ampersand before searching");
+                    title = title.Replace(" & ", " ");
+                }
+
                 var result = _handler.SearchSeries(title);
 
                 Logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);

@@ -101,5 +101,15 @@ namespace NzbDrone.Core.Providers
 
             return false;
         }
+
+        public virtual string GetCleanName(int seriesId)
+        {
+            var item = _database.FirstOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
+
+            if (item == null)
+                return null;
+
+            return item.CleanTitle;
+        }
     }
 }

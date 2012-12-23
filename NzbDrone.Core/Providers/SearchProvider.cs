@@ -570,8 +570,11 @@ namespace NzbDrone.Core.Providers
         {
             var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
 
-            if (String.IsNullOrWhiteSpace(title))
+            if(String.IsNullOrWhiteSpace(title))
+            {
                 title = series.Title;
+                title = title.Replace("&", "and");
+            }
 
             return title;
         }

@@ -30,9 +30,16 @@
             @MvcHtmlString.Create(Html.CurrentControllerLink("Missing", "Index", "Missing"))
             @MvcHtmlString.Create(Html.CurrentControllerLink("Settings", "Index", "Settings"))
             @MvcHtmlString.Create(Html.CurrentControllerLink("Logs", "Index", "Log"))
+            <li id="donate" title="Donate to support the development of NzbDrone"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank">Donate</a></li>
         </ul>
-        <input id="localSeriesLookup" type="text" />
     </div>
+    <div id="right-menu">
+        <ul>
+            <li>@{ Html.RenderAction("FreeSpace", "Shared"); }</li>
+            <li><input id="localSeriesLookup" type="text" /></li>
+        </ul>
+    </div>
+
     <div id="logo">
         <span>@ViewBag.Title</span>
     </div>

@@ -8,6 +8,7 @@ using DataTables.Mvc.Core.Models;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -16,11 +17,14 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly HistoryProvider _historyProvider;
         private readonly JobProvider _jobProvider;
+        private readonly ConfigProvider _configProvider;
 
-        public HistoryController(HistoryProvider historyProvider, JobProvider jobProvider)
+        public HistoryController(HistoryProvider historyProvider, JobProvider jobProvider,
+                                    ConfigProvider configProvider)
         {
             _historyProvider = historyProvider;
             _jobProvider = jobProvider;
+            _configProvider = configProvider;
         }
 
         public ActionResult Index()
@@ -32,6 +36,7 @@ namespace NzbDrone.Web.Controllers
         {
             var pageResult = _historyProvider.GetPagedItems(pageRequest);
             var totalItems = _historyProvider.Count();
+            var ignoreArticles = _configProvider.IgnoreArticlesWhenSortingSeries;
 
             var items = pageResult.Items.Select(h => new HistoryModel
             {
@@ -41,7 +46,7 @@ namespace NzbDrone.Web.Controllers
                 EpisodeTitle = h.EpisodeTitle,
                 EpisodeOverview = h.EpisodeOverview,
                 SeriesTitle = h.SeriesTitle,
-                SeriesTitleSorter = SortHelper.SkipArticles(h.SeriesTitle),
+                SeriesTitleSorter = ignoreArticles ? h.SeriesTitle.IgnoreArticles() : h.SeriesTitle,
                 NzbTitle = h.NzbTitle,
                 Quality = h.Quality.ToString(),
                 IsProper = h.IsProper,

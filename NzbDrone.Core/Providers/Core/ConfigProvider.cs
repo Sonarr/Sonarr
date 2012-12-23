@@ -529,6 +529,13 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("OmgwtfnzbsApiKey", value); }
         }
 
+        public virtual Boolean IgnoreArticlesWhenSortingSeries
+        {
+            get { return GetValueBoolean("IgnoreArticlesWhenSortingSeries", true); }
+
+            set { SetValue("IgnoreArticlesWhenSortingSeries", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

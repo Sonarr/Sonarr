@@ -1,6 +1,7 @@
 ﻿#menu
 {
     height: 60px;
+    display: inline-block;
 }
 
 #menu ul
@@ -9,6 +10,7 @@
     padding: 5px 0px 5px 0px;
     list-style: none;
     line-height: normal;
+    overflow: hidden;
 }
 
 #menu li

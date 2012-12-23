@@ -229,6 +229,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121218.cs" />
     <Compile Include="Datastore\Migrations\Migration20121209.cs" />
     <Compile Include="Datastore\Migrations\Migration20121202.cs" />
     <Compile Include="Datastore\Migrations\Migration20121122.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\XemUpdateJob.cs" />
     <Compile Include="Jobs\EmptyRecycleBinJob.cs" />
@@ -292,6 +294,9 @@
     <Compile Include="Model\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Model\Sabnzbd\SabVersionModel.cs" />
     <Compile Include="Model\StatsModel.cs" />
+    <Compile Include="Model\TvRage\TvRageEpisode.cs" />
+    <Compile Include="Model\TvRage\TvRageSearchResult.cs" />
+    <Compile Include="Model\TvRage\TvRageSeries.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
@@ -346,6 +351,8 @@
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
+    <Compile Include="Providers\TvRageMappingProvider.cs" />
+    <Compile Include="Providers\TvRageProvider.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />

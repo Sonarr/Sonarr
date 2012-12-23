@@ -15,19 +15,24 @@ namespace NzbDrone.Core.Providers
 {
     public class SeriesProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
         private readonly SceneMappingProvider _sceneNameMappingProvider;
         private readonly BannerProvider _bannerProvider;
         private readonly MetadataProvider _metadataProvider;
+        private readonly TvRageMappingProvider _tvRageMappingProvider;
+
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         [Inject]
         public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
-                                BannerProvider bannerProvider, MetadataProvider metadataProvider)
+                                BannerProvider bannerProvider, MetadataProvider metadataProvider,
+                                TvRageMappingProvider tvRageMappingProvider)
         {
             _database = database;
             _configProvider = configProviderProvider;
@@ -35,6 +40,7 @@ namespace NzbDrone.Core.Providers
             _sceneNameMappingProvider = sceneNameMappingProvider;
             _bannerProvider = bannerProvider;
             _metadataProvider = metadataProvider;
+            _tvRageMappingProvider = tvRageMappingProvider;
         }
 
         public SeriesProvider()
@@ -106,6 +112,17 @@ namespace NzbDrone.Core.Providers
             series.BannerUrl = tvDbSeries.BannerPath;
             series.Network = tvDbSeries.Network;
 
+            try
+            {
+                if(series.TvRageId == 0)
+                    series = _tvRageMappingProvider.FindMatchingTvRageSeries(series);
+            }
+
+            catch(Exception ex)
+            {
+                logger.ErrorException("Error getting TvRage information for series: " + series.Title, ex);
+            }
+
             UpdateSeries(series);
             _metadataProvider.CreateForSeries(series, tvDbSeries);
 
@@ -114,7 +131,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
         {
-            Logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
+            logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
             if (tvDbSeriesId <=0)
             {
@@ -175,33 +192,33 @@ namespace NzbDrone.Core.Providers
         public virtual void DeleteSeries(int seriesId)
         {
             var series = GetSeries(seriesId);
-            Logger.Warn("Deleting Series [{0}]", series.Title);
+            logger.Warn("Deleting Series [{0}]", series.Title);
 
             using (var tran = _database.GetTransaction())
             {
                 //Delete History, Files, Episodes, Seasons then the Series
 
-                Logger.Debug("Deleting History Items from DB for Series: {0}", series.Title);
+                logger.Debug("Deleting History Items from DB for Series: {0}", series.Title);
                 _database.Delete<History>("WHERE SeriesId=@0", seriesId);
 
-                Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.Title);
+                logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.Title);
                 _database.Delete<EpisodeFile>("WHERE SeriesId=@0", seriesId);
 
-                Logger.Debug("Deleting Seasons from DB for Series: {0}", series.Title);
+                logger.Debug("Deleting Seasons from DB for Series: {0}", series.Title);
                 _database.Delete<Season>("WHERE SeriesId=@0", seriesId);
 
-                Logger.Debug("Deleting Episodes from DB for Series: {0}", series.Title);
+                logger.Debug("Deleting Episodes from DB for Series: {0}", series.Title);
                 _database.Delete<Episode>("WHERE SeriesId=@0", seriesId);
 
-                Logger.Debug("Deleting Series from DB {0}", series.Title);
+                logger.Debug("Deleting Series from DB {0}", series.Title);
                 _database.Delete<Series>("WHERE SeriesId=@0", seriesId);
 
-                Logger.Info("Successfully deleted Series [{0}]", series.Title);
+                logger.Info("Successfully deleted Series [{0}]", series.Title);
 
                 tran.Complete();
             }
 
-            Logger.Trace("Beginning deletion of banner for SeriesID: ", seriesId);
+            logger.Trace("Beginning deletion of banner for SeriesID: ", seriesId);
             _bannerProvider.Delete(seriesId);
         }
 

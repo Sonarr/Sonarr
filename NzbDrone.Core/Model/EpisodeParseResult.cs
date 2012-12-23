@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Model
     public class EpisodeParseResult
     {
         public string SeriesTitle { get; set; }
+
         public string CleanTitle
         {
             get

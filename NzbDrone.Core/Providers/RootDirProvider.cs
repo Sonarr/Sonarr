@@ -4,6 +4,7 @@ using System.IO;
 using Ninject;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -24,8 +25,6 @@ namespace NzbDrone.Core.Providers
             _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
         }
-
-        #region IRootDirProvider
 
         public virtual List<RootDir> GetAll()
         {
@@ -51,7 +50,7 @@ namespace NzbDrone.Core.Providers
             _database.Delete<RootDir>(rootDirId);
         }
 
-        public List<String> GetUnmappedFolders(string path)
+        public virtual List<String> GetUnmappedFolders(string path)
         {
             Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(path))
@@ -77,26 +76,16 @@ namespace NzbDrone.Core.Providers
             return results;
         }
 
-        public virtual string GetMostFreeRootDir()
+        public virtual List<RootDir> AllWithFreeSpace()
         {
-            ulong maxSize = 0;
-            var maxPath = String.Empty;
-
             var rootDirs = GetAll();
 
             foreach (var rootDir in rootDirs)
             {
                 rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
-                if (rootDir.FreeSpace > maxSize)
-                {
-                    maxPath = rootDir.Path;
-                    maxSize = rootDir.FreeSpace;
-                }
             }
 
-            return maxPath;
+            return rootDirs;
         }
-
-        #endregion
     }
 }

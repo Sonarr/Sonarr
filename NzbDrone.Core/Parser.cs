@@ -30,7 +30,7 @@ namespace NzbDrone.Core
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
-                                    new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex])(?<episode>\d{2}(?!\d+)))+\W*)+\W?(?!\\)",
+                                    new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
@@ -140,7 +140,8 @@ namespace NzbDrone.Core
             }
             catch (Exception e)
             {
-                Logger.ErrorException("An error has occurred while trying to parse " + title, e);
+                if (!title.ToLower().Contains("password") && !title.ToLower().Contains("yenc"))
+                    Logger.ErrorException("An error has occurred while trying to parse " + title, e);
             }
 
             Logger.Trace("Unable to parse {0}", title);
@@ -150,7 +151,7 @@ namespace NzbDrone.Core
 
         private static EpisodeParseResult ParseMatchCollection(MatchCollection matchCollection)
         {
-            var seriesName = matchCollection[0].Groups["title"].Value;
+            var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
 
             int airyear;
             Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airyear);

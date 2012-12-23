@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<Results>
+  <show>
+    <showid>27518</showid>
+    <name>Suits</name>
+    <link>http://www.tvrage.com/Suits</link>
+    <country>US</country>
+    <started>Jun/23/2011</started>
+    <ended></ended>
+    <seasons>2</seasons>
+    <status>Returning Series</status>
+    <runtime>60</runtime>
+    <classification>Scripted</classification>
+    <genres>
+      <genre>Drama</genre>
+      <genre>Financial/Business</genre>
+    </genres>
+    <network country="US">USA</network>
+    <airtime>22:00</airtime>
+    <airday>Thursday</airday>
+    <akas>
+      <aka attr="Working title" country="US">A Legal Mind</aka>
+    </akas>
+  </show>
+</Results>

@@ -144,6 +144,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
+    <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
+    <Compile Include="ProviderTests\SearchProviderTests\GetSeriesTitleFixture.cs" />
+    <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
+    <Compile Include="ProviderTests\TvRageMappingProviderTests\ProcessResultsFixture.cs" />
+    <Compile Include="ProviderTests\TvRageProviderTests\GetSeriesFixture.cs" />
+    <Compile Include="HelperTests\XElementHelperTests\ConvertToDayOfWeekFixture.cs" />
+    <Compile Include="ProviderTests\TvRageProviderTests\GetUtcOffsetFixture.cs" />
+    <Compile Include="ProviderTests\TvRageProviderTests\SearchSeriesFixture.cs" />
     <Compile Include="QualityTypesTest.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="Integeration\ServiceIntegerationFixture.cs" />
@@ -204,7 +213,7 @@
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
-    <Compile Include="SortHelperTest.cs" />
+    <Compile Include="HelperTests\SortHelperFixture.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
@@ -333,6 +342,21 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Files\TvRage\SeriesInfo_empty.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TvRage\SeriesInfo_one.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TvRage\SearchResults_one.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TvRage\SearchResults_many.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TvRage\SearchResults_empty.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\Xem\Ids.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

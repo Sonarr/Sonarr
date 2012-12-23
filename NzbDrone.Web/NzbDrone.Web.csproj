@@ -526,6 +526,7 @@
     <Content Include="Views\System\Indexers.cshtml" />
     <Content Include="Views\System\Config.cshtml" />
     <Content Include="Views\Settings\_SettingsLayout.cshtml" />
+    <Content Include="Views\Shared\FreeSpace.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

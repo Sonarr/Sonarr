@@ -1,6 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
@@ -88,6 +89,7 @@ namespace NzbDrone.Common.Test
         public void ToString_on_new_processInfo()
         {
             Console.WriteLine(new ProcessInfo().ToString());
+            ExceptionVerification.MarkInconclusive(typeof(Win32Exception));
         }
 
     }

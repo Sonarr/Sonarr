@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase("The Simpsons")]
         [TestCase("Family Guy")]
         [TestCase("South Park")]
+        [TestCase("Franklin & Bash")]
         public void successful_search(string title)
         {
             var result = tvDbProvider.SearchSeries(title);

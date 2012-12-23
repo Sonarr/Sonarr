@@ -15,13 +15,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly DiskScanProvider _diskScanProvider;
+        private readonly ConfigProvider _configProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider)
+        public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider,
+                            ConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
             _diskScanProvider = diskScanProvider;
+            _configProvider = configProvider;
         }
 
         public DiskScanJob()
@@ -43,7 +46,11 @@ namespace NzbDrone.Core.Jobs
             IList<Series> seriesToScan;
             if (options == null || options.SeriesId == 0)
             {
-                seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
+                if (_configProvider.IgnoreArticlesWhenSortingSeries)
+                    seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+
+                else
+                    seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => o.Title).ToList();
             }
             else
             {
