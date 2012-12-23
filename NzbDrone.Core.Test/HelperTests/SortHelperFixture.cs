@@ -12,7 +12,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.Core.Test.HelperTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

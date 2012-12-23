@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.TvRage;
 
 namespace NzbDrone.Core.Providers
@@ -40,27 +41,22 @@ namespace NzbDrone.Core.Providers
                 try
                 {
                     var show = new TvRageSearchResult();
-                    show.ShowId = Int32.Parse(s.Element("showid").Value);
+                    show.ShowId = s.Element("showid").ConvertTo<Int32>();
                     show.Name = s.Element("name").Value;
                     show.Link = s.Element("link").Value;
                     show.Country = s.Element("country").Value;
 
-                    DateTime started;
-                    if (DateTime.TryParse(s.Element("started").Value, out started)) ;
-                    show.Started = started;
-
-                    DateTime ended;
-                    if (DateTime.TryParse(s.Element("ended").Value, out ended)) ;
-                    show.Ended = ended;
+                    show.Started = s.Element("started").ConvertTo<DateTime>();
+                    show.Ended = s.Element("ended").ConvertTo<DateTime>();
 
                     if (show.Ended < new DateTime(1900, 1, 1))
                         show.Ended = null;
 
-                    show.Seasons = Int32.Parse(s.Element("seasons").Value);
+                    show.Seasons = s.Element("seasons").ConvertTo<Int32>();
                     show.Status = s.Element("status").Value;
-                    show.RunTime = Int32.Parse(s.Element("runtime").Value);
-                    show.AirTime = DateTime.Parse(s.Element("airtime").Value);
-                    show.AirDay = ParseDayOfWeek(s.Element("airday"));
+                    show.RunTime = s.Element("seasons").ConvertTo<Int32>();
+                    show.AirTime = s.Element("seasons").ConvertTo<DateTime>();
+                    show.AirDay = s.Element("airday").ConvertToDayOfWeek();
 
                     searchResults.Add(show);
                 }
@@ -89,26 +85,21 @@ namespace NzbDrone.Core.Providers
                 }
 
                 var show = new TvRageSeries();
-                show.ShowId = Int32.Parse(s.Element("showid").Value);
+                show.ShowId = s.Element("showid").ConvertTo<Int32>();
                 show.Name = s.Element("showname").Value;
                 show.Link = s.Element("showlink").Value;
-                show.Seasons = Int32.Parse(s.Element("seasons").Value);
-                show.Started = Int32.Parse(s.Element("started").Value);
+                show.Seasons = s.Element("seasons").ConvertTo<Int32>();
+                show.Started = s.Element("started").ConvertTo<Int32>();
 
-                DateTime startDate;
-                if (DateTime.TryParse(s.Element("startdate").Value, out startDate)) ;
-                show.StartDate = startDate;
-
-                DateTime ended;
-                if (DateTime.TryParse(s.Element("ended").Value, out ended)) ;
-                show.Ended = ended;
+                show.StartDate = s.Element("startdate").ConvertTo<DateTime>();
+                show.Ended = s.Element("ended").ConvertTo<DateTime>();
 
                 show.OriginCountry = s.Element("origin_country").Value;
                 show.Status = s.Element("status").Value;
-                show.RunTime = Int32.Parse(s.Element("runtime").Value);
+                show.RunTime = s.Element("runtime").ConvertTo<Int32>();
                 show.Network = s.Element("network").Value;
-                show.AirTime = DateTime.Parse(s.Element("airtime").Value);
-                show.AirDay = ParseDayOfWeek(s.Element("airday"));
+                show.AirTime = s.Element("airtime").ConvertTo<DateTime>();
+                show.AirDay = s.Element("airday").ConvertToDayOfWeek();
                 show.UtcOffset = GetUtcOffset(s.Element("timezone").Value);
                 return show;
             }
@@ -139,10 +130,10 @@ namespace NzbDrone.Core.Providers
                     try
                     {
                         var episode = new TvRageEpisode();
-                        episode.EpisodeNumber = Int32.Parse(e.Element("epnum").Value);
-                        episode.SeasonNumber = Int32.Parse(e.Element("seasonnum").Value);
+                        episode.EpisodeNumber = e.Element("epnum").ConvertTo<Int32>();
+                        episode.SeasonNumber = e.Element("seasonnum").ConvertTo<Int32>();
                         episode.ProductionCode = e.Element("prodnum").Value;
-                        episode.AirDate = DateTime.Parse(e.Element("airdate").Value);
+                        episode.AirDate = e.Element("airdate").ConvertTo<DateTime>();
                         episode.Link = e.Element("link").Value;
                         episode.Title = e.Element("title").Value;
                         episodes.Add(episode);
@@ -173,25 +164,6 @@ namespace NzbDrone.Core.Providers
                 offset++;
 
             return offset;
-        }
-
-        internal DayOfWeek? ParseDayOfWeek(XElement element)
-        {
-            if(element == null)
-                return null;
-
-            if(String.IsNullOrWhiteSpace(element.Value))
-                return null;
-
-            try
-            {
-                return (DayOfWeek)Enum.Parse(typeof(DayOfWeek), element.Value);
-            }
-            catch(Exception)
-            {
-            }
-
-            return null;
         }
     }
 }

@@ -262,6 +262,7 @@
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\XemUpdateJob.cs" />
     <Compile Include="Jobs\EmptyRecycleBinJob.cs" />

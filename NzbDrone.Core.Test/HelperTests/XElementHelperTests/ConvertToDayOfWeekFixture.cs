@@ -8,13 +8,14 @@ using FluentAssertions;
 using NUnit.Framework;
 using Ninject;
 using NzbDrone.Common;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using TvdbLib.Data;
 using TvdbLib.Exceptions;
 
-namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
+namespace NzbDrone.Core.Test.HelperTests.XElementHelperTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
@@ -23,25 +24,26 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         [Test]
         public void should_return_null_if_xelement_is_null()
         {
-            Mocker.Resolve<TvRageProvider>().ParseDayOfWeek(null).Should().Be(null);
+            XElement test = null;
+            test.ConvertToDayOfWeek().Should().Be(null);
         }
 
         [Test]
         public void should_return_null_if_value_is_null()
         {
-            Mocker.Resolve<TvRageProvider>().ParseDayOfWeek(new XElement("airday", null)).Should().Be(null);
+            new XElement("airday", null).ConvertToDayOfWeek().Should().Be(null);
         }
 
         [Test]
         public void should_return_null_if_value_is_empty()
         {
-            Mocker.Resolve<TvRageProvider>().ParseDayOfWeek(new XElement("airday", "")).Should().Be(null);
+            new XElement("airday", "").ConvertToDayOfWeek().Should().Be(null);
         }
 
         [Test]
         public void should_return_null_if_value_is_daily()
         {
-            Mocker.Resolve<TvRageProvider>().ParseDayOfWeek(new XElement("airday", "Daily")).Should().Be(null);
+            new XElement("airday", "Daily").ConvertToDayOfWeek().Should().Be(null);
         }
 
         [Test]
@@ -59,7 +61,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         [TestCase("Saturday", DayOfWeek.Saturday)]
         public void should_return_dayOfWeek_when_it_is_valid(string value, DayOfWeek expected)
         {
-            Mocker.Resolve<TvRageProvider>().ParseDayOfWeek(new XElement("airday", value)).Should().Be(expected);
+            new XElement("airday", value).ConvertToDayOfWeek().Should().Be(expected);
         }
     }
 }

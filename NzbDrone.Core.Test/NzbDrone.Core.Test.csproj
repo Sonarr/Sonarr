@@ -139,6 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelperTests\XElementHelperFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\GetSeriesTitleFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
@@ -207,7 +208,7 @@
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
-    <Compile Include="SortHelperTest.cs" />
+    <Compile Include="HelperTests\SortHelperFixture.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
