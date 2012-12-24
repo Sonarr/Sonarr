@@ -16,7 +16,7 @@ body
     margin-right: auto;
     width: 85%;
     margin-left: auto;
-    min-width: 850px;
+    min-width: 1050px;
     max-width: 1400px;
 }
 
@@ -101,8 +101,6 @@ hr
     text-align: center;
     text-decoration: none;
 }
-
-
 
 .sub-field
 {
@@ -299,4 +297,28 @@ i[class*="icon-"]:not(.gridAction):hover {
 
 .free-space span {
     color: #191919;
+}
+
+#free-space-small {
+    font-size: 18px;
+    display: none;
+    width: 23px;
+    margin-top: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
+    height: 28px;
+    line-height: 24px;
+    background-color: #6e6e6e;
+    color: #d0d0d0;
+    cursor: default;
+}
+
+@media all and (max-width: 1500px) {
+    .free-space {
+        display: none;
+    }
+
+    #free-space-small {
+        display: inline-block;
+    }
 }

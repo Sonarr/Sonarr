@@ -32,7 +32,7 @@ namespace NzbDrone.Web.Controllers
         [OutputCache(Duration = 600)]
         public ActionResult FreeSpace()
         {
-            var rootDirs = _rootDirProvider.AllWithFreeSpace();
+            var rootDirs = _rootDirProvider.FreeSpaceOnDrives();
 
             return PartialView(rootDirs);
         }

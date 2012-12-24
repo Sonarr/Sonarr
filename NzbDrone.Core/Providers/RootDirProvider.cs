@@ -87,5 +87,22 @@ namespace NzbDrone.Core.Providers
 
             return rootDirs;
         }
+
+        public virtual Dictionary<string, ulong> FreeSpaceOnDrives()
+        {
+            var freeSpace = new Dictionary<string, ulong>();
+
+            var rootDirs = GetAll();
+
+            foreach (var rootDir in rootDirs)
+            {
+                var pathRoot = _diskProvider.GetPathRoot(rootDir.Path);
+
+                if (!freeSpace.ContainsKey(pathRoot))
+                    freeSpace.Add(pathRoot, _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path)));
+            }
+
+            return freeSpace;
+        }
     }
 }
