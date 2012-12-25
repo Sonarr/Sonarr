@@ -46,12 +46,12 @@ namespace NzbDrone.Core.Jobs
 
         public string Name
         {
-            get { return "New Series Update"; }
+            get { return "Import New Series"; }
         }
 
         public TimeSpan DefaultInterval
         {
-            get { return TimeSpan.FromMinutes(1); }
+            get { return TimeSpan.FromHours(6); }
         }
 
         public void Start(ProgressNotification notification, dynamic options)
