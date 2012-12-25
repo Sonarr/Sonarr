@@ -280,6 +280,7 @@
     <Compile Include="Helpers\HtmlIncludeExtentions.cs" />
     <Compile Include="Migrations\Migration20120226.cs" />
     <Compile Include="Migrations\Migration20120229.cs" />
+    <Compile Include="Migrations\Migration20121223.cs" />
     <Compile Include="Services.PetaPoco.cs" />
     <Compile Include="Datastore\Connection.cs" />
     <Compile Include="Controllers\DailySeriesController.cs" />

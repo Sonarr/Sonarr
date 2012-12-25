@@ -254,6 +254,7 @@
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Datastore\DbProviderFactory.cs" />
     <Compile Include="Datastore\Migrations\Migration20120707.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121223.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
