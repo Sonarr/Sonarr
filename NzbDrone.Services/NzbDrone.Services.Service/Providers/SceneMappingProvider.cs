@@ -69,7 +69,8 @@ namespace NzbDrone.Services.Service.Providers
                 {
                     CleanTitle = pendingItem.CleanTitle,
                     Id = pendingItem.Id,
-                    Title = pendingItem.Title
+                    Title = pendingItem.Title,
+                    Season = -1
                 };
 
                 Insert(mapping);

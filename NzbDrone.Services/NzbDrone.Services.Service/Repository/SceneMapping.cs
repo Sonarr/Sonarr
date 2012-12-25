@@ -13,5 +13,6 @@ namespace NzbDrone.Services.Service.Repository
         public string CleanTitle { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
+        public int Season { get; set; }
     }
 }
