@@ -9,6 +9,11 @@ namespace NzbDrone.Core
 {
     public static class Fluent
     {
+        private const Decimal ONE_KILOBYTE = 1024M;
+        private const Decimal ONE_MEGABYTE = ONE_KILOBYTE * 1024M;
+        private const Decimal ONE_GIGABYTE = ONE_MEGABYTE * 1024M;
+        private const Decimal ONE_TERABYTE = ONE_GIGABYTE * 1024M;
+
         public static string WithDefault(this string actual, object defaultValue)
         {
             if (defaultValue == null)
@@ -107,10 +112,6 @@ namespace NzbDrone.Core
             return newText.ToString();
         }
 
-        private const Decimal ONE_KILOBYTE = 1024M;
-        private const Decimal ONE_MEGABYTE = ONE_KILOBYTE * 1024M;
-        private const Decimal ONE_GIGABYTE = ONE_MEGABYTE * 1024M;
-
         public static string ToBestFileSize(this long bytes, int precision = 0)
         {
             var ulongBytes = (ulong)bytes;
@@ -126,7 +127,13 @@ namespace NzbDrone.Core
 
             string suffix;
 
-            if (size > ONE_GIGABYTE)
+            if (size > ONE_TERABYTE)
+            {
+                size /= ONE_TERABYTE;
+                suffix = "TB";
+            }
+
+            else if (size > ONE_GIGABYTE)
             {
                 size /= ONE_GIGABYTE;
                 suffix = "GB";

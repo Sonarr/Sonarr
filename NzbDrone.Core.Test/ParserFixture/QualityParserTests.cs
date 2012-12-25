@@ -73,7 +73,8 @@ namespace NzbDrone.Core.Test.ParserFixture
             new object[] { "Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", QualityTypes.WEBDL1080p, false },
             new object[] { "Elementary.S01E10.The.Leviathan.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false },
             new object[] { "Glee.S04E10.Glee.Actually.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false },
-            new object[] { "The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false }
+            new object[] { "The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD", QualityTypes.WEBDL480p, false },
+            new object[] { "The.Big.Bang.Theory.S06E11.The.Santa.Simulation.1080p.WEB-DL.DD5.1.H.264", QualityTypes.WEBDL1080p, false }
         };
 
         public static object[] SelfQualityParserCases =

@@ -20,12 +20,27 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.ProviderTests;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerTests : CoreTest
+    public class IndexerFixture : CoreTest
     {
+        private void WithConfiguredIndexers()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
+        }
+
         [TestCase("nzbsrus.xml")]
         [TestCase("newznab.xml")]
         [TestCase("wombles.xml")]
@@ -57,21 +72,6 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
             parseResults.Should().OnlyContain(s => s.Age >= 0);
-        }
-
-        private void WithConfiguredIndexers()
-        {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
-
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
-
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
-
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
         }
 
         [Test]

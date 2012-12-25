@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers.Indexer
     public abstract class IndexerBase
     {
         protected readonly Logger _logger;
-        private readonly HttpProvider _httpProvider;
+        protected readonly HttpProvider _httpProvider;
         protected readonly ConfigProvider _configProvider;
 
         protected static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         }
 
-        private List<EpisodeParseResult> Fetch(IEnumerable<string> urls)
+        protected virtual List<EpisodeParseResult> Fetch(IEnumerable<string> urls)
         {
             var result = new List<EpisodeParseResult>();
 

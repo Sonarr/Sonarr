@@ -275,5 +275,10 @@ namespace NzbDrone.Common
 
             return false;
         }
+
+        public virtual string GetPathRoot(string path)
+        {
+            return Path.GetPathRoot(path);
+        }
     }
 }
