@@ -100,6 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        [Ignore("No longer clean newznab URLs")]
         public void SaveAll_should_clean_urls_before_updating()
         {
             //Setup
