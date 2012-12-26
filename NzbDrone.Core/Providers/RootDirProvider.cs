@@ -98,8 +98,17 @@ namespace NzbDrone.Core.Providers
             {
                 var pathRoot = _diskProvider.GetPathRoot(rootDir.Path);
 
-                if (!freeSpace.ContainsKey(pathRoot))
-                    freeSpace.Add(pathRoot, _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path)));
+                if(!freeSpace.ContainsKey(pathRoot))
+                {
+                    try
+                    {
+                        freeSpace.Add(pathRoot, _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path)));
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.WarnException("Error getting fromm space for: " + pathRoot, ex);
+                    }
+                }
             }
 
             return freeSpace;

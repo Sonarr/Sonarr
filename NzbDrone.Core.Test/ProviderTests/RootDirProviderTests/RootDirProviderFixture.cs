@@ -14,11 +14,11 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RootDirProviderTest : CoreTest
+    public class RootDirProviderFixture : CoreTest
     {
         [SetUp]
         public void Setup()
@@ -35,7 +35,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(false);
         }
 
-
         [Test]
         public void GetRootDir_should_return_all_existing_roots()
         {
@@ -47,7 +46,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<RootDirProvider>().GetAll();
             result.Should().HaveCount(2);
         }
-
 
         [TestCase("D:\\TV Shows\\")]
         [TestCase("//server//folder")]
@@ -74,7 +72,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             Assert.Throws<DirectoryNotFoundException>(() => rootDirProvider.Add(new RootDir { Path = "C:\\TEST" }));
         }
 
-
         [Test]
         public void should_be_able_to_remove_root_dir()
         {
@@ -90,7 +87,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             var rootDirs = rootDirProvider.GetAll();
             rootDirs.Should().HaveCount(1);
         }
-
 
         [Test]
         public void None_existing_folder_returns_empty_list()
@@ -132,6 +128,5 @@ namespace NzbDrone.Core.Test.ProviderTests
             rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
             Assert.Throws<InvalidOperationException>(() => rootDirProvider.Add(new RootDir { Path = @"C:\TV" }));
         }
-
     }
 }
