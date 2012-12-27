@@ -160,4 +160,15 @@
             data: clickInfo.concat($(this).serializeArray())
         });
     });
+    
+    //Custom Extensions
+    $(document).ready(function () {
+        $("div[data-ajax-action-link=true]").each(function () {
+            asyncRequest(this, {
+                url: $(this).attr('data-href'),
+                type: "GET",
+                data: []
+            });
+        });
+    });
 }(jQuery));
