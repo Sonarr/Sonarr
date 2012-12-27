@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers.Indexer
             { 
                 return new string[]
                 {
-                    String.Format("http://rss.omgwtfnzbs.com/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
+                    String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
                                     _configProvider.OmgwtfnzbsUsername, _configProvider.OmgwtfnzbsApiKey)
                 };
             }
