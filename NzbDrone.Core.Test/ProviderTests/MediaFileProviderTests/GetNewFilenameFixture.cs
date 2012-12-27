@@ -1,7 +1,9 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -747,6 +749,93 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
 
             //Assert
             result.Should().Be("30 Rock - S06E06-E07-E08 - Hello + World");
+        }
+
+        [Test]
+        public void should_use_airDate_if_series_isDaily()
+        {
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+
+            var series = Builder<Series>
+                    .CreateNew()
+                    .With(s => s.IsDaily = true)
+                    .With(s => s.Title = "The Daily Show with Jon Stewart")
+                    .Build();
+
+            var episodes = Builder<Episode>
+                    .CreateListOfSize(1)
+                    .All()
+                    .With(e => e.AirDate = new DateTime(2012, 12, 13))
+                    .With(e => e.Title = "Kristen Stewart")
+                    .Build();
+
+            var result = Mocker.Resolve<MediaFileProvider>()
+                               .GetNewFilename(episodes, series, QualityTypes.HDTV, false, new EpisodeFile());
+            result.Should().Be("The Daily Show with Jon Stewart - 2012-12-13 - Kristen Stewart [HDTV]");
+        }
+
+        [Test]
+        public void should_use_airDate_if_series_isDaily_no_episode_title()
+        {
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+
+            var series = Builder<Series>
+                    .CreateNew()
+                    .With(s => s.IsDaily = true)
+                    .With(s => s.Title = "The Daily Show with Jon Stewart")
+                    .Build();
+
+            var episodes = Builder<Episode>
+                    .CreateListOfSize(1)
+                    .All()
+                    .With(e => e.AirDate = new DateTime(2012, 12, 13))
+                    .With(e => e.Title = "Kristen Stewart")
+                    .Build();
+
+            var result = Mocker.Resolve<MediaFileProvider>()
+                               .GetNewFilename(episodes, series, QualityTypes.HDTV, false, new EpisodeFile());
+            result.Should().Be("The Daily Show with Jon Stewart - 2012-12-13");
+        }
+
+        [Test]
+        public void should_set_airdate_to_unknown_if_not_available()
+        {
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+
+            var series = Builder<Series>
+                    .CreateNew()
+                    .With(s => s.IsDaily = true)
+                    .With(s => s.Title = "The Daily Show with Jon Stewart")
+                    .Build();
+
+            var episodes = Builder<Episode>
+                    .CreateListOfSize(1)
+                    .All()
+                    .With(e => e.AirDate = null)
+                    .With(e => e.Title = "Kristen Stewart")
+                    .Build();
+
+            var result = Mocker.Resolve<MediaFileProvider>()
+                               .GetNewFilename(episodes, series, QualityTypes.HDTV, false, new EpisodeFile());
+            result.Should().Be("The Daily Show with Jon Stewart - Unknown - Kristen Stewart");
         }
     }
 }

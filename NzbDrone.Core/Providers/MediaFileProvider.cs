@@ -174,33 +174,47 @@ namespace NzbDrone.Core.Providers
                 result += series.Title + separatorStyle.Pattern;
             }
 
-            result += numberStyle.Pattern.Replace("%0e", String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));
-
-            if (episodes.Count > 1)
+            if(!series.IsDaily)
             {
-                var multiEpisodeStyle = EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.SortingMultiEpisodeStyle);
+                result += numberStyle.Pattern.Replace("%0e",
+                                                      String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));
 
-                foreach (var episode in sortedEpisodes.Skip(1))
+                if(episodes.Count > 1)
                 {
-                    if (multiEpisodeStyle.Name == "Duplicate")
-                    {
-                        result += separatorStyle.Pattern + numberStyle.Pattern;
-                    }
-                    else
-                    {
-                        result += multiEpisodeStyle.Pattern;
-                    }
+                    var multiEpisodeStyle =
+                            EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.SortingMultiEpisodeStyle);
 
-                    result = result.Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber));
-                    episodeNames.Add(Parser.CleanupEpisodeTitle(episode.Title));
+                    foreach(var episode in sortedEpisodes.Skip(1))
+                    {
+                        if(multiEpisodeStyle.Name == "Duplicate")
+                        {
+                            result += separatorStyle.Pattern + numberStyle.Pattern;
+                        }
+                        else
+                        {
+                            result += multiEpisodeStyle.Pattern;
+                        }
+
+                        result = result.Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber));
+                        episodeNames.Add(Parser.CleanupEpisodeTitle(episode.Title));
+                    }
                 }
+
+                result = result
+                        .Replace("%s", String.Format("{0}", episodes.First().SeasonNumber))
+                        .Replace("%0s", String.Format("{0:00}", episodes.First().SeasonNumber))
+                        .Replace("%x", numberStyle.EpisodeSeparator)
+                        .Replace("%p", separatorStyle.Pattern);
             }
 
-            result = result
-                .Replace("%s", String.Format("{0}", episodes.First().SeasonNumber))
-                .Replace("%0s", String.Format("{0:00}", episodes.First().SeasonNumber))
-                .Replace("%x", numberStyle.EpisodeSeparator)
-                .Replace("%p", separatorStyle.Pattern);
+            else
+            {
+                if(episodes.First().AirDate.HasValue)
+                    result += episodes.First().AirDate.Value.ToString("yyyy-MM-dd");
+
+                else
+                    result += "Unknown";
+            }
 
             if (_configProvider.SortingIncludeEpisodeTitle)
             {
