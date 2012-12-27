@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Providers
             var misnamedFilesSelect = episodesWithFiles.AsParallel().Where(
                 w =>
                 w.First().EpisodeFile.Path !=
-                _mediaFileProvider.GetNewFilename(w.Select(e => e).ToList(), w.First().Series.Title,
+                _mediaFileProvider.GetNewFilename(w.Select(e => e).ToList(), w.First().Series,
                                                   w.First().EpisodeFile.Quality, w.First().EpisodeFile.Proper, w.First().EpisodeFile)).Skip(Math.Max(pageSize * (pageNumber - 1), 0)).Take(pageSize);
 
             //Process the episodes
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers
                                                           var episodes = f.Select(e => e).ToList();
                                                           var firstEpisode = episodes[0];
                                                           var properName = _mediaFileProvider.GetNewFilename(episodes,
-                                                                                                             firstEpisode.Series.Title,
+                                                                                                             firstEpisode.Series,
                                                                                                              firstEpisode.EpisodeFile.Quality, firstEpisode.EpisodeFile.Proper, firstEpisode.EpisodeFile);
 
                                                           var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Path);

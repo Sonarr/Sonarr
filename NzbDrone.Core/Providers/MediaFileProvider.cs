@@ -142,7 +142,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality, bool proper, EpisodeFile episodeFile)
+        public virtual string GetNewFilename(IList<Episode> episodes, Series series, QualityTypes quality, bool proper, EpisodeFile episodeFile)
         {
             if (_configProvider.SortingUseSceneName)
             {
@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Providers
 
             if (_configProvider.SortingIncludeSeriesName)
             {
-                result += seriesTitle + separatorStyle.Pattern;
+                result += series.Title + separatorStyle.Pattern;
             }
 
             result += numberStyle.Pattern.Replace("%0e", String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));

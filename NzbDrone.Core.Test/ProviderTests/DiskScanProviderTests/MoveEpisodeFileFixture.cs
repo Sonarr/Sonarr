@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()
