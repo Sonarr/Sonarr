@@ -229,6 +229,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121226.cs" />
     <Compile Include="Datastore\Migrations\Migration20121218.cs" />
     <Compile Include="Datastore\Migrations\Migration20121209.cs" />
     <Compile Include="Datastore\Migrations\Migration20121202.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Datastore\DbProviderFactory.cs" />
     <Compile Include="Datastore\Migrations\Migration20120707.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121223.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />

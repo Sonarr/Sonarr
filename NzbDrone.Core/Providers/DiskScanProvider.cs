@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Providers
 
             var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
-            string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality, episodeFile.Proper, episodeFile);
+            string newFileName = _mediaFileProvider.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Only rename if existing and new filenames don't match

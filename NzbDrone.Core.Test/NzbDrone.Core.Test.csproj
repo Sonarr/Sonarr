@@ -147,6 +147,7 @@
     <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerTests\NzbxFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
+    <Compile Include="ProviderTests\RootDirProviderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\GetSeriesTitleFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\FindMatchingTvRageSeriesFixture.cs" />
     <Compile Include="ProviderTests\TvRageMappingProviderTests\ProcessResultsFixture.cs" />
@@ -242,7 +243,7 @@
     <Compile Include="ProviderTests\DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\JobProviderFixture.cs" />
     <Compile Include="QualityTest.cs" />
-    <Compile Include="ProviderTests\RootDirProviderTest.cs" />
+    <Compile Include="ProviderTests\RootDirProviderTests\RootDirProviderFixture.cs" />
     <Compile Include="ProviderTests\IndexerProviderTest.cs" />
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />

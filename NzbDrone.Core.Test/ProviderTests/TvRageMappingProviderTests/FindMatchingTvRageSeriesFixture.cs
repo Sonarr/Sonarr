@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                     .With(s => s.TvRageId = 0)
                     .With(s => s.TvRageTitle = null)
                     .With(s => s.UtcOffset = 0)
+                    .With(s => s.FirstAired = DateTime.Today.AddDays(-180))
                     .Build();
 
             _episode = Builder<Episode>

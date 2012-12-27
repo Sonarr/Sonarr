@@ -14,5 +14,8 @@ namespace NzbDrone.Core.Repository
 
         [JsonProperty(PropertyName = "Title")]
         public string SceneName { get; set; }
+
+        [JsonProperty(PropertyName = "Season")]
+        public int SeasonNumber { get; set; }
     }
 }

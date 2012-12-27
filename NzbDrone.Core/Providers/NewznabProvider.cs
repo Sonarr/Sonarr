@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
             foreach(var newznabDefinition in definitionsList)
             {
                 CheckHostname(newznabDefinition.Url);
-                newznabDefinition.Url = new Uri(newznabDefinition.Url).ParentUriString();
+                //newznabDefinition.Url = new Uri(newznabDefinition.Url).ParentUriString();
             }
 
             _database.UpdateMany(definitionsList);

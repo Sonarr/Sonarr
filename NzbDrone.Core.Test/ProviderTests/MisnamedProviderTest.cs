@@ -49,11 +49,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("Title1");
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
             //Act
@@ -98,11 +98,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("New Title 1");
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("New Title 2");
 
             //Act
@@ -147,11 +147,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("New Title 1");
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
             //Act
@@ -198,11 +198,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("New Title 1");
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
             //Act
@@ -249,11 +249,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("Title1");
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle", It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, It.IsAny<Series>(), It.IsAny<QualityTypes>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
             //Act
