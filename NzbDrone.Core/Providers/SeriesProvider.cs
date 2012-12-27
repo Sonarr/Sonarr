@@ -110,6 +110,11 @@ namespace NzbDrone.Core.Providers
             series.BannerUrl = tvDbSeries.BannerPath;
             series.Network = tvDbSeries.Network;
 
+            if (tvDbSeries.FirstAired.Year > 1900)
+                series.FirstAired = tvDbSeries.FirstAired.Date;
+            else
+                series.FirstAired = null;
+
             try
             {
                 if(series.TvRageId == 0)

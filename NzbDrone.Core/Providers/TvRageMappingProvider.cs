@@ -59,7 +59,10 @@ namespace NzbDrone.Core.Providers
                 if (!String.IsNullOrWhiteSpace(sceneCleanName) && Parser.NormalizeTitle(result.Name).Equals(sceneCleanName))
                     return result;
 
-                if (firstEpisode.AirDate.HasValue && result.Started == firstEpisode.AirDate.Value)
+                if (series.FirstAired.HasValue && result.Started == series.FirstAired.Value)
+                    return result;
+
+                if (firstEpisode != null && firstEpisode.AirDate.HasValue && result.Started == firstEpisode.AirDate.Value)
                     return result;
             }
 

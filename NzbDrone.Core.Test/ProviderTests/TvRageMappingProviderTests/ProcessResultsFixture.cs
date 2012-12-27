@@ -25,7 +25,10 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                     .CreateListOfSize(5)
                     .Build();
 
-            _series = Builder<Series>.CreateNew().Build();
+            _series = Builder<Series>
+                .CreateNew()
+                .With(s => s.FirstAired = DateTime.Today.AddDays(-180))
+                .Build();
 
             _episode = Builder<Episode>
                 .CreateNew()
@@ -63,7 +66,18 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
         }
 
         [Test]
-        public void should_return_result_if_firstAired_matches()
+        public void should_return_result_if_series_firstAired_matches()
+        {
+            _series.FirstAired = _searchResults.Last().Started;
+
+            Mocker.Resolve<TvRageMappingProvider>()
+                  .ProcessResults(_searchResults, _series, "nomatchhere", _episode)
+                  .Should()
+                  .Be(_searchResults.Last());
+        }
+
+        [Test]
+        public void should_return_result_if_episode_firstAired_matches()
         {
             _episode.AirDate = _searchResults.Last().Started;
 
