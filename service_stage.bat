@@ -26,6 +26,6 @@ cd ..
 
 rd C:\inetpub\services_stage /S /Q
 
-xcopy _rawPackage_service\*.*  C:\inetpub\services_stage /E /V /I /Y
+xcopy _rawPackage_service\*.*  C:\inetpub\stage-services.nzbdrone.com /E /V /I /Y
 
 
