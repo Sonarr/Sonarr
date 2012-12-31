@@ -122,5 +122,16 @@ namespace NzbDrone.Core.Test.JobTests
 
             ExceptionVerification.ExpectedWarns(1);
         }
+
+        [Test]
+        public void should_search_for_individual_episodes_when_no_partial_results_are_returned()
+        {
+            Mocker.GetMock<SearchProvider>()
+                .Setup(c => c.PartialSeasonSearch(notification, 1, 1)).Returns(new List<int>());
+            
+            Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 1 });
+
+            Mocker.GetMock<EpisodeSearchJob>().Verify(v => v.Start(notification, It.Is<object>(o => o.GetPropertyValue<Int32>("EpisodeId") > 0)), Times.Exactly(_episodes.Count));
+        }
     }
 }
