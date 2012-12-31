@@ -548,7 +548,7 @@ namespace NzbDrone.Core.Providers.Core
 
         private int GetValueInt(string key, int defaultValue = 0)
         {
-            return Convert.ToInt16(GetValue(key, defaultValue));
+            return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
         public virtual string GetValue(string key, object defaultValue, bool persist = false)
