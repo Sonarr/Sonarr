@@ -8,7 +8,7 @@ namespace NzbDrone.Core
         {
             get
             {
-                return 40.Megabytes();
+                return 70.Megabytes();
             }
         }
     }
