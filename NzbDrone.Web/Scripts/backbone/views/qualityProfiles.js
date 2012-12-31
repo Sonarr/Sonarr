@@ -118,7 +118,7 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
                 { "Id": 7, "Weight": 8, "Name": "Bluray1080p", "Allowed": false }
             ]
         });
-        //Todo: Would be nice
+        //Todo: It would be nice to not have to save this on add (via create)
         this.collection.create(newProfile);
     }
 });
