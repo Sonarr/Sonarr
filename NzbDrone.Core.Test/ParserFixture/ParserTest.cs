@@ -319,6 +319,9 @@ namespace NzbDrone.Core.Test.ParserFixture
         [TestCase("Castle.2009.S01E14.Turkish.HDTV.XviD-LOL", LanguageType.Turkish)]
         [TestCase("Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL", LanguageType.Portuguese)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD-LOL", LanguageType.English)]
+        [TestCase("person.of.interest.1x19.ita.720p.bdmux.x264-novarip", LanguageType.Italian)]
+        [TestCase("Salamander.S01E01.FLEMISH.HDTV.x264-BRiGAND", LanguageType.Flemish)]
+        [TestCase("H.Polukatoikia.S03E13.Greek.PDTV.XviD-Ouzo", LanguageType.Greek)]
         public void parse_language(string postTitle, LanguageType language)
         {
             var result = Parser.ParseLanguage(postTitle);
