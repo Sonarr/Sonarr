@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using NLog;
 using Ninject;
@@ -19,11 +21,13 @@ namespace NzbDrone
         private readonly ProcessProvider _processProvider;
         private readonly MonitoringProvider _monitoringProvider;
         private readonly SecurityProvider _securityProvider;
+        private readonly DiskProvider _diskProvider;
 
         [Inject]
         public ApplicationServer(ConfigFileProvider configFileProvider, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnvironmentProvider environmentProvider,
-                           ProcessProvider processProvider, MonitoringProvider monitoringProvider, SecurityProvider securityProvider)
+                           ProcessProvider processProvider, MonitoringProvider monitoringProvider,
+                           SecurityProvider securityProvider, DiskProvider diskProvider)
         {
             _configFileProvider = configFileProvider;
             _iisProvider = iisProvider;
@@ -32,6 +36,7 @@ namespace NzbDrone
             _processProvider = processProvider;
             _monitoringProvider = monitoringProvider;
             _securityProvider = securityProvider;
+            _diskProvider = diskProvider;
         }
 
         public ApplicationServer()
@@ -48,6 +53,14 @@ namespace NzbDrone
         {
             _iisProvider.StopServer();
             _securityProvider.MakeAccessible();
+
+            if(_securityProvider.IsCurrentUserAdmin())
+            {
+                var tempFiles = Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "Temporary ASP.NET Files");
+                logger.Debug("Creating Temporary ASP.Net folder: {0}", tempFiles);
+                _diskProvider.CreateDirectory(tempFiles);
+            }
+
             _iisProvider.StartServer();
 
             _debuggerProvider.Attach();

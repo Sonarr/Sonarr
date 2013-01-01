@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -84,6 +84,8 @@ namespace NzbDrone.Core
                                                           };
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
+
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)(?:\W|_)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         internal static EpisodeParseResult ParsePath(string path)
         {
@@ -312,9 +314,16 @@ namespace NzbDrone.Core
                 result.Quality = QualityTypes.WEBDL480p;
                 return result;
             }
+
             if (normalizedName.Contains("x264") || normalizedName.Contains("h264") || normalizedName.Contains("720p"))
             {
-                result.Quality = QualityTypes.HDTV;
+                if(normalizedName.Contains("1080p"))
+                {
+                    result.Quality = QualityTypes.HDTV1080p;
+                    return result;
+                }
+
+                result.Quality = QualityTypes.HDTV720p;
                 return result;
             }
             //Based on extension
@@ -346,7 +355,7 @@ namespace NzbDrone.Core
                         case ".mkv":
                         case ".ts":
                             {
-                                result.Quality = QualityTypes.HDTV;
+                                result.Quality = QualityTypes.HDTV720p;
                                 break;
                             }
                     }
@@ -360,7 +369,13 @@ namespace NzbDrone.Core
 
             if (name.Contains("[HDTV]"))
             {
-                result.Quality = QualityTypes.HDTV;
+                result.Quality = QualityTypes.HDTV720p;
+                return result;
+            }
+
+            if (normalizedName.Contains("hdtv") && normalizedName.Contains("1080p"))
+            {
+                result.Quality = QualityTypes.HDTV1080p;
                 return result;
             }
 
@@ -387,16 +402,6 @@ namespace NzbDrone.Core
 
             if (lowerTitle.Contains("spanish"))
                 return LanguageType.Spanish;
-
-            if (lowerTitle.Contains("german"))
-            {
-                //Make sure it doesn't contain Germany (Since we're not using REGEX for all this)
-                if (!lowerTitle.Contains("germany"))
-                    return LanguageType.German;
-            }
-
-            if (lowerTitle.Contains("italian"))
-                return LanguageType.Italian;
 
             if (lowerTitle.Contains("danish"))
                 return LanguageType.Danish;
@@ -439,6 +444,20 @@ namespace NzbDrone.Core
 
             if (lowerTitle.Contains("portuguese"))
                 return LanguageType.Portuguese;
+
+            var match = LanguageRegex.Match(title);
+
+            if (match.Groups["italian"].Captures.Cast<Capture>().Any())
+                return LanguageType.Italian;
+
+            if (match.Groups["german"].Captures.Cast<Capture>().Any())
+                return LanguageType.German;
+
+            if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
+                return LanguageType.Flemish;
+
+            if (match.Groups["greek"].Captures.Cast<Capture>().Any())
+                return LanguageType.Greek;
 
             return LanguageType.English;
         }

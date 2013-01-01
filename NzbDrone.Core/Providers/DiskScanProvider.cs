@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Providers
 
             long size = _diskProvider.GetSize(filePath);
 
-            //Skip any file under 40MB - New samples don't even have sample in the name...
+            //Skip any file under 70MB - New samples don't even have sample in the name...
             if (size < Constants.IgnoreFileSize)
             {
                 Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);

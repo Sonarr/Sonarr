@@ -20,6 +20,8 @@
         Norwegian = 15,
         Finnish = 16,
         Turkish = 17,
-        Portuguese = 18
+        Portuguese = 18,
+        Flemish = 19,
+        Greek = 20
     }
 }

@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             new object[] { 1, new[] { 6 }, "Some other show", QualityTypes.Bluray1080p, true }, //Different series, same season, episode
             new object[] { 1, new[] { 5 }, "Rock", QualityTypes.Bluray1080p, true }, //Similar series, same season, episodes
             new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.Bluray720p, false }, //Same series, higher quality
-            new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.HDTV, true } //Same series, higher quality
+            new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.HDTV720p, true } //Same series, higher quality
         };
 
         [Test, TestCaseSource("DifferentEpisodeCases")]
@@ -209,9 +209,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.SDTV, false }, //Same Series, lower quality
             new object[] { 1, new[] { 5 }, "30 rocK", QualityTypes.SDTV, false }, //Same Series, different casing
-            new object[] { 1, new[] { 5 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality
-            new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality, one different episode
-            new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality, one different episode
+            new object[] { 1, new[] { 5 }, "30 RocK", QualityTypes.HDTV720p, false }, //Same Series, same quality
+            new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV720p, false }, //Same Series, same quality, one different episode
+            new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV720p, false }, //Same Series, same quality, one different episode
             new object[] { 4, new[] { 8 }, "Parks and Recreation", QualityTypes.WEBDL720p, false }, //Same Series, same quality
         };
 
@@ -237,9 +237,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         public static object[] DuplicateItemsCases =
         {
             new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.SDTV, false }, //Same Series, lower quality
-            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, false }, //Same Series, same quality
-            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, true }, //Same Series, same quality
-            new object[] { 5, new[] { 13, 14 }, "The Big Bang Theory", QualityTypes.HDTV, false } //Same Series, same quality, one diffrent episode
+            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV720p, false }, //Same Series, same quality
+            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV720p, true }, //Same Series, same quality
+            new object[] { 5, new[] { 13, 14 }, "The Big Bang Theory", QualityTypes.HDTV720p, false } //Same Series, same quality, one diffrent episode
         };
 
         [Test, TestCaseSource("DuplicateItemsCases")]
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             new object[] { 3, new[] { 14, 15 }, "My Name Is Earl", QualityTypes.Bluray720p, false },
             new object[] { 3, new[] { 15 }, "My Name Is Earl", QualityTypes.DVD, false },
-            new object[] { 3, new[] { 14 }, "My Name Is Earl", QualityTypes.HDTV, false },
+            new object[] { 3, new[] { 14 }, "My Name Is Earl", QualityTypes.HDTV720p, false },
             new object[] { 3, new[] { 15, 16 }, "My Name Is Earl", QualityTypes.SDTV, false }
         };
 

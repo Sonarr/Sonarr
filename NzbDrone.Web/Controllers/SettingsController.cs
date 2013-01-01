@@ -283,7 +283,7 @@ namespace NzbDrone.Web.Controllers
             model.Allowed = profile.Allowed;
             model.Sdtv = profile.Allowed.Contains(QualityTypes.SDTV);
             model.Dvd = profile.Allowed.Contains(QualityTypes.DVD);
-            model.Hdtv = profile.Allowed.Contains(QualityTypes.HDTV);
+            model.Hdtv = profile.Allowed.Contains(QualityTypes.HDTV720p);
             model.Webdl720p = profile.Allowed.Contains(QualityTypes.WEBDL720p);
             model.Webdl1080p = profile.Allowed.Contains(QualityTypes.WEBDL1080p);
             model.Bluray720p = profile.Allowed.Contains(QualityTypes.Bluray720p);
@@ -292,7 +292,7 @@ namespace NzbDrone.Web.Controllers
 
             model.SdtvId = QualityTypes.SDTV.Id;
             model.DvdId = QualityTypes.DVD.Id;
-            model.HdtvId = QualityTypes.HDTV.Id;
+            model.HdtvId = QualityTypes.HDTV720p.Id;
             model.Webdl720pId = QualityTypes.WEBDL720p.Id;
             model.Webdl1080pId = QualityTypes.WEBDL1080p.Id;
             model.Bluray720pId = QualityTypes.Bluray720p.Id;
@@ -494,7 +494,7 @@ namespace NzbDrone.Web.Controllers
                         profile.Allowed.Add(QualityTypes.DVD);
 
                     if (profileModel.Hdtv)
-                        profile.Allowed.Add(QualityTypes.HDTV);
+                        profile.Allowed.Add(QualityTypes.HDTV720p);
 
                     if (profileModel.Webdl720p)
                         profile.Allowed.Add(QualityTypes.WEBDL720p);

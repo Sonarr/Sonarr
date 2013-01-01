@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test
                                   {
                                       Name = Guid.NewGuid().ToString(),
                                       Cutoff = QualityTypes.SDTV,
-                                      Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.DVD },
+                                      Allowed = new List<QualityTypes> { QualityTypes.HDTV720p, QualityTypes.DVD },
                                   };
 
             //Act
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test
                                   {
                                       Name = Guid.NewGuid().ToString(),
                                       Cutoff = QualityTypes.SDTV,
-                                      Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.DVD },
+                                      Allowed = new List<QualityTypes> { QualityTypes.HDTV720p, QualityTypes.DVD },
                                   };
 
 
