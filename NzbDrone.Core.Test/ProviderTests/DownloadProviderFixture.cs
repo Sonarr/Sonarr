@@ -25,9 +25,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x02 - My Episode Title [DVD]" },
             new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x02 - My Episode Title [DVD] [Proper]" },
             new object[] { 1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x02 -  [DVD] [Proper]" },
-            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV]" },
-            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV] [Proper]" },
-            new object[] { 1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x02-1x04 -  [HDTV] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 -  [HDTV-720p] [Proper]" },
         };
 
         private void SetDownloadClient(DownloadClientType clientType)
@@ -281,13 +281,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 AirDate = DateTime.Now,
                 EpisodeNumbers = new List<int>{ 10, 11 },
-                Quality = new QualityModel(QualityTypes.HDTV, false),
+                Quality = new QualityModel(QualityTypes.HDTV720p, false),
                 SeasonNumber = 35,
                 Series = series,
                 Episodes = fakeEpisodes
             };
 
-            Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult).Should().Be("My Series Name - 5x01-5x02 - My Episode Title [HDTV]");
+            Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult).Should().Be("My Series Name - 5x01-5x02 - My Episode Title [HDTV-720p]");
         }
     }
 }

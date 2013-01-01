@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             new object[] { QualityTypes.SDTV, false },
             new object[] { QualityTypes.DVD, true },
-            new object[] { QualityTypes.HDTV, false }
+            new object[] { QualityTypes.HDTV720p, false }
         };
 
         private readonly long SIZE = 80.Megabytes();

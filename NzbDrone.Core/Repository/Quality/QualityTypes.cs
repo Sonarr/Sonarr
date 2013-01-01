@@ -96,11 +96,12 @@ namespace NzbDrone.Core.Repository.Quality
         public static QualityTypes SDTV = new QualityTypes {Id = 1, Name = "SDTV", Weight = 1};
         public static QualityTypes WEBDL480p = new QualityTypes { Id = 8, Name = "WEBDL-480p", Weight = 2 };
         public static QualityTypes DVD = new QualityTypes { Id = 2, Name = "DVD", Weight = 3 };
-        public static QualityTypes HDTV = new QualityTypes { Id = 4, Name = "HDTV", Weight = 4 };
-        public static QualityTypes WEBDL720p = new QualityTypes { Id = 5, Name = "WEBDL-720p", Weight = 5 };
-        public static QualityTypes Bluray720p = new QualityTypes { Id = 6, Name = "Bluray720p", Weight = 6 };
-        public static QualityTypes WEBDL1080p = new QualityTypes { Id = 3, Name = "WEBDL-1080p", Weight = 7 };
-        public static QualityTypes Bluray1080p = new QualityTypes { Id = 7, Name = "Bluray1080p", Weight = 8 };
+        public static QualityTypes HDTV720p = new QualityTypes { Id = 4, Name = "HDTV-720p", Weight = 4 };
+        public static QualityTypes HDTV1080p = new QualityTypes { Id = 9, Name = "HDTV-1080p", Weight = 5 };
+        public static QualityTypes WEBDL720p = new QualityTypes { Id = 5, Name = "WEBDL-720p", Weight = 6 };
+        public static QualityTypes Bluray720p = new QualityTypes { Id = 6, Name = "Bluray720p", Weight = 7 };
+        public static QualityTypes WEBDL1080p = new QualityTypes { Id = 3, Name = "WEBDL-1080p", Weight = 8 };
+        public static QualityTypes Bluray1080p = new QualityTypes { Id = 7, Name = "Bluray1080p", Weight = 9 };
 
         public static List<QualityTypes> All()
         {
@@ -110,7 +111,8 @@ namespace NzbDrone.Core.Repository.Quality
                                SDTV,
                                WEBDL480p,
                                DVD,
-                               HDTV,
+                               HDTV720p,
+                               HDTV1080p,
                                WEBDL720p,
                                WEBDL1080p,
                                Bluray720p,

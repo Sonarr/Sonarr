@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         public static object[] AllowedTestCases =
         {
             new object[] { QualityTypes.DVD },
-            new object[] { QualityTypes.HDTV },
+            new object[] { QualityTypes.HDTV720p },
             new object[] { QualityTypes.Bluray1080p }
         };
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         public void should_allow_if_quality_is_defined_in_profile(QualityTypes qualityType)
         {
             parseResult.Quality.Quality = qualityType;
-            parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV, QualityTypes.Bluray1080p };
+            parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV720p, QualityTypes.Bluray1080p };
 
             _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeTrue();
         }
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         public void should_not_allow_if_quality_is_not_defined_in_profile(QualityTypes qualityType)
         {
             parseResult.Quality.Quality = qualityType;
-            parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV, QualityTypes.Bluray1080p };
+            parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV720p, QualityTypes.Bluray1080p };
 
             _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeFalse();
         }

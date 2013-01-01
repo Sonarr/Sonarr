@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episode = Builder<Episode>.CreateNew().Build();
 
-            QualityTypes quality = QualityTypes.HDTV;
+            QualityTypes quality = QualityTypes.HDTV720p;
             const bool proper = true;
 
             var history = new History

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test
                 {
                         new object[] {1, QualityTypes.SDTV},
                         new object[] {2, QualityTypes.DVD},
-                        new object[] {4, QualityTypes.HDTV},
+                        new object[] {4, QualityTypes.HDTV720p},
                         new object[] {5, QualityTypes.WEBDL720p},
                         new object[] {6, QualityTypes.Bluray720p},
                         new object[] {7, QualityTypes.Bluray1080p}
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test
                 {
                         new object[] {QualityTypes.SDTV, 1},
                         new object[] {QualityTypes.DVD, 2},
-                        new object[] {QualityTypes.HDTV, 4},
+                        new object[] {QualityTypes.HDTV720p, 4},
                         new object[] {QualityTypes.WEBDL720p, 5},
                         new object[] {QualityTypes.Bluray720p, 6},
                         new object[] {QualityTypes.Bluray1080p, 7}

@@ -314,9 +314,16 @@ namespace NzbDrone.Core
                 result.Quality = QualityTypes.WEBDL480p;
                 return result;
             }
+
             if (normalizedName.Contains("x264") || normalizedName.Contains("h264") || normalizedName.Contains("720p"))
             {
-                result.Quality = QualityTypes.HDTV;
+                if(normalizedName.Contains("1080p"))
+                {
+                    result.Quality = QualityTypes.HDTV1080p;
+                    return result;
+                }
+
+                result.Quality = QualityTypes.HDTV720p;
                 return result;
             }
             //Based on extension
@@ -348,7 +355,7 @@ namespace NzbDrone.Core
                         case ".mkv":
                         case ".ts":
                             {
-                                result.Quality = QualityTypes.HDTV;
+                                result.Quality = QualityTypes.HDTV720p;
                                 break;
                             }
                     }
@@ -362,7 +369,13 @@ namespace NzbDrone.Core
 
             if (name.Contains("[HDTV]"))
             {
-                result.Quality = QualityTypes.HDTV;
+                result.Quality = QualityTypes.HDTV720p;
+                return result;
+            }
+
+            if (normalizedName.Contains("hdtv") && normalizedName.Contains("1080p"))
+            {
+                result.Quality = QualityTypes.HDTV1080p;
                 return result;
             }
 
