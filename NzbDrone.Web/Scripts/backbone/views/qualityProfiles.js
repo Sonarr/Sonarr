@@ -106,7 +106,7 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
         
         //Todo: Need to get the default profile from the server, instead of creating it manually...
         var newProfile = new QualityProfile({
-            Name: '', Cutoff: 0, Qualities: [
+            Name: 'New Profile', Cutoff: 0, Qualities: [
                 { "Id": 1, "Weight": 1, "Name": "SDTV", "Allowed": false },
                 { "Id": 8, "Weight": 2, "Name": "WEBDL-480p", "Allowed": false },
                 { "Id": 2, "Weight": 3, "Name": "DVD", "Allowed": false },
