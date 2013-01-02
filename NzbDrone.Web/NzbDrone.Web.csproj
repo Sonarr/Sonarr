@@ -398,13 +398,14 @@
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.marionette.min.js" />
     <Content Include="Scripts\backbone.min.js" />
+    <Content Include="Scripts\backbone\apps\qualityTypeApp.js" />
     <Content Include="Scripts\backbone\apps\qualityProfileApp.js" />
-    <Content Include="Scripts\backbone\bootstrapper.js" />
     <Content Include="Scripts\backbone\constants.js" />
-    <Content Include="Scripts\backbone\controller.js" />
+    <Content Include="Scripts\backbone\models\qualityType.js" />
+    <Content Include="Scripts\backbone\models\qualityTypeCollection.js" />
     <Content Include="Scripts\backbone\models\qualityProfileCollection.js" />
     <Content Include="Scripts\backbone\models\qualityProfile.js" />
-    <Content Include="Scripts\backbone\utils.js" />
+    <Content Include="Scripts\backbone\views\qualityTypes.js" />
     <Content Include="Scripts\backbone\views\qualityProfiles.js" />
     <Content Include="Scripts\conditional-validation.js" />
     <Content Include="Scripts\DataTables-1.9.4\media\js\FixedHeader.js" />
@@ -531,7 +532,6 @@
     <Content Include="Views\Upcoming\Index.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Settings\QualityProfileItem.cshtml" />
     <Content Include="Views\System\Indexers.cshtml" />
     <Content Include="Views\System\Config.cshtml" />
     <Content Include="Views\Settings\_SettingsLayout.cshtml" />

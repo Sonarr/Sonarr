@@ -123,6 +123,18 @@
     width: 600px;
 }
 
+.quality-type {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 4px 10px 4px 10px;
+    border: 1px solid lightgray;
+}
+
+.quality-type .slider {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
 #QualityForm .ui-accordion .ui-accordion-content {
     padding: 1em 2em;
 }

@@ -107,15 +107,15 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
         //Todo: Need to get the default profile from the server, instead of creating it manually...
         var newProfile = new QualityProfile({
             Name: '', Cutoff: 0, Qualities: [
-                { "Id": 0, "Weight": 0, "Name": "Unknown", "Allowed": false },
                 { "Id": 1, "Weight": 1, "Name": "SDTV", "Allowed": false },
                 { "Id": 8, "Weight": 2, "Name": "WEBDL-480p", "Allowed": false },
                 { "Id": 2, "Weight": 3, "Name": "DVD", "Allowed": false },
-                { "Id": 4, "Weight": 4, "Name": "HDTV", "Allowed": false },
-                { "Id": 5, "Weight": 5, "Name": "WEBDL-720p", "Allowed": false },
+                { "Id": 4, "Weight": 4, "Name": "HDTV-720p", "Allowed": false },
+                { "Id": 9, "Weight": 5, "Name": "HDTV-1080p", "Allowed": false },
+                { "Id": 5, "Weight": 6, "Name": "WEBDL-720p", "Allowed": false },
                 { "Id": 3, "Weight": 6, "Name": "WEBDL-1080p", "Allowed": false },
-                { "Id": 6, "Weight": 7, "Name": "Bluray720p", "Allowed": false },
-                { "Id": 7, "Weight": 8, "Name": "Bluray1080p", "Allowed": false }
+                { "Id": 6, "Weight": 8, "Name": "Bluray720p", "Allowed": false },
+                { "Id": 7, "Weight": 9, "Name": "Bluray1080p", "Allowed": false }
             ]
         });
         //Todo: It would be nice to not have to save this on add (via create)

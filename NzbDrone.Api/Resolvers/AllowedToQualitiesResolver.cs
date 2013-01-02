@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Resolvers
     {
         protected override List<QualityProfileType> ResolveCore(List<QualityTypes> source)
         {
-            var qualities = Mapper.Map<List<QualityTypes>, List<QualityProfileType>>(QualityTypes.All());
+            var qualities = Mapper.Map<List<QualityTypes>, List<QualityProfileType>>(QualityTypes.All().Where(q => q.Id > 0).ToList());
 
             qualities.ForEach(quality =>
             {

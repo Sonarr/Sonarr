@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
 
     //All forms are ajax forms
-    $("form").livequery(function () {
+        $("form").livequery(function () {
 
         var options = {
             type: 'post',
@@ -15,7 +15,6 @@
     $('Form button').livequery(function () {
         $(this).removeAttr('disabled');
     });
-
 
     //All buttons are jQueryUI buttons
     $('button, input[type="button"], input[type="submit"], input[type="reset"]').livequery(function () {

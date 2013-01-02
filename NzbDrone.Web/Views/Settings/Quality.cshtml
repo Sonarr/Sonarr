@@ -14,104 +14,41 @@
                 <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
             </label>
             @Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList, new { @class = "inputClass" })
+            
+            <br />
+            <button type="submit" class="save_button" disabled="disabled">Save</button>
         </div>
         
         <div class="jquery-accordion">
-            <h3>
-                <a href="#">Profiles</a></h3>
+            <h3><a href="#">Profiles</a></h3>
             <div id="profileContainer">
                 <div id="profiles">
                 </div>
             </div>
-            <h3>
-                <a href="#">Size Limits</a></h3>
+
+            <h3><a href="#">Size Limits</a></h3>
             <div class="sliders">
                 <div class="infoBox">
                     Size Limits specify the maximum download size NzbDrone will send to your download client.
                 </div>
-                <div class="slider-container">
-                    <b>SDTV</b>
-                    <div id="sdtv-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.SdtvMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
-                <div class="slider-container">
-                    <b>DVD</b>
-                    <div id="dvd-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.DvdMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
-                <div class="slider-container">
-                    <b>HDTV</b>
-                    <div id="hdtv-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.HdtvMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
-                <div class="slider-container">
-                    <b>WEBDL-720p</b>
-                    <div id="webdl-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.Webdl720pMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
-                <div class="slider-container">
-                    <b>Bluray 720p</b>
-                    <div id="bluray720p-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.Bluray720pMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
-                <div class="slider-container">
-                    <b>WEBDL-1080p</b>
-                    <div id="webdl-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.Webdl1080pMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
-                <div class="slider-container">
-                    <b>Bluray 1080p</b>
-                    <div id="bluray1080p-slider" class="slider">
-                    </div>
-                    @Html.HiddenFor(m => m.Bluray1080pMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                        </span>MB
-                </div>
+                <div id="sliders"></div>
             </div>
         </div>
-        <br />
-        <button type="submit" class="save_button" disabled="disabled">
-            Save</button>
     }
 </div>
 
 @section Scripts {
     @Html.IncludeScript("NzbDrone/qualitySettings.js")
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            setupSliders();
-        });
-
-        $('.quality-selectee').livequery(function() {
-            $(this).button();
-        });
-    </script>
     
     @Html.IncludeScript("backbone/apps/qualityProfileApp.js")
+    @Html.IncludeScript("backbone/apps/qualityTypeApp.js")
     @Html.IncludeScript("backbone/constants.js")
     @Html.IncludeScript("backbone/models/qualityProfile.js")
     @Html.IncludeScript("backbone/models/qualityProfileCollection.js")
     @Html.IncludeScript("backbone/views/qualityProfiles.js")
-    @*@Html.IncludeScript("backbone/bootstrapper.js")*@
+    @Html.IncludeScript("backbone/models/qualityType.js")
+    @Html.IncludeScript("backbone/models/qualityTypeCollection.js")
+    @Html.IncludeScript("backbone/views/qualityTypes.js")
 
     <script id="QualityProfileTemplate" type="text/template">
         <a href="#" class="remove-profile"><i class="icon-remove"></i></a>
@@ -143,8 +80,6 @@
             />
             <label for="<%= guid %>_<%= quality.Id %>"><%= quality.Name %></label>
         <% }); %>
-    
-    
     </script>
     
     <script id="QualityProfileCollectionTemplate" type="text/template">
@@ -156,9 +91,20 @@
         </div> 
     </script>
     
+    <script id="QualityTypeTemplate" type="text/template">
+        <b><%= Name %></b>
+        <div class="slider"></div>
+        <input type="hidden" value="<%= MaxSize %>" class="slider-value">
+        30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute"></span>MB
+    </script>
+    
+    <script id="QualityTypeCollectionTemplate" type="text/template">    
+    </script>
+    
     <script>
         $(document).ready(function() {
             QualityProfileApp.App.start();
+            QualityTypeApp.App.start();
         });
     </script>
 }

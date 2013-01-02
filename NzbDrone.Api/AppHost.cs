@@ -6,8 +6,10 @@ using System.Web;
 using Funq;
 using Ninject;
 using NzbDrone.Api.QualityProfiles;
+using NzbDrone.Api.QualityType;
 using ServiceStack.ContainerAdapter.Ninject;
 using ServiceStack.WebHost.Endpoints;
+using QualityProfileService = NzbDrone.Api.QualityProfiles.QualityProfileService;
 
 namespace NzbDrone.Api
 {
@@ -28,7 +30,9 @@ namespace NzbDrone.Api
 
             Routes
                 .Add<QualityProfileModel>("/qualityprofiles")
-                .Add<QualityProfileModel>("/qualityprofiles/{Id}");
+                .Add<QualityProfileModel>("/qualityprofiles/{Id}")
+                .Add<QualityTypeModel>("/qualitytypes")
+                .Add<QualityTypeModel>("/qualitytypes/{Id}");
 
             Bootstrapper.Initialize();
         }

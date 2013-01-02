@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using AutoMapper;
 using NzbDrone.Api.QualityProfiles;
+using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
 using NzbDrone.Core.Repository.Quality;
 
@@ -13,15 +14,7 @@ namespace NzbDrone.Api
     {
         public static void Initialize()
         {
-            //Mapper.CreateMap<QualityTypes, Int32>()
-            //      .ForMember(dest => dest, opt => opt.ResolveUsing<QualityTypesToIntResolver>());
-
-            //Mapper.CreateMap<Int32, QualityTypes>()
-            //      .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src));
-
-            //Mapper.CreateMap<QualityProfile, QualityProfileModel>()
-            //      .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityProfileId));
-
+            //QualityProfiles
             Mapper.CreateMap<QualityProfileModel, QualityProfile>()
                   .ForMember(dest => dest.QualityProfileId, opt => opt.MapFrom(src => src.Id))
                   .ForMember(dest => dest.Allowed, opt => opt.ResolveUsing<QualitiesToAllowedResolver>().FromMember(src => src.Qualities));
@@ -32,6 +25,13 @@ namespace NzbDrone.Api
 
             Mapper.CreateMap<QualityTypes, QualityProfileType>()
                   .ForMember(dest => dest.Allowed, opt => opt.Ignore());
+
+            //QualityTypes
+            Mapper.CreateMap<QualityTypeModel, Core.Repository.Quality.QualityType>()
+                  .ForMember(dest => dest.QualityTypeId, opt => opt.MapFrom(src => src.Id));
+
+            Mapper.CreateMap<Core.Repository.Quality.QualityType, QualityTypeModel>()
+                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityTypeId));
         }
     }
 }
