@@ -75,7 +75,7 @@ namespace NzbDrone.Web
 
             MVCRegistration(dispatch.ContainerBuilder);
 
-            var container = dispatch.ContainerBuilder.Build();
+            var container = dispatch.BuildContainer();
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 

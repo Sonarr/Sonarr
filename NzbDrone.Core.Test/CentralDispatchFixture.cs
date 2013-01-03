@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test
         {
             InitLogging();
             var dispatch = new CentralDispatch();
-            kernel = dispatch.Build();
+            kernel = dispatch.BuildContainer();
 
             WebTimer.Stop();
         }

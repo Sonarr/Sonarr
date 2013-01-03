@@ -29,6 +29,7 @@ namespace NzbDrone
         private static void BindKernel(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(DiskProvider).Assembly).SingleInstance();
+            builder.RegisterType<Router>();
 
             builder.RegisterType<ApplicationServer>().SingleInstance();
             builder.RegisterType<ConfigFileProvider>().SingleInstance();

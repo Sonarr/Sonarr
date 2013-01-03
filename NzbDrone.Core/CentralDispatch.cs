@@ -165,7 +165,7 @@ namespace NzbDrone.Core
             }
         }
 
-        public IContainer Build()
+        public IContainer BuildContainer()
         {
             var container = ContainerBuilder.Build();
 
