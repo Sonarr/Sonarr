@@ -45,9 +45,9 @@ namespace NzbDrone.Core
             ContainerBuilder.RegisterType<EnvironmentProvider>();
 
             InitDatabase();
-            InitExternalNotifications();
-            InitMetadataProviders();
-            InitIndexers();
+            RegisterExternalNotifications();
+            RegisterMetadataProviders();
+            RegisterIndexers();
             RegisterJobs();         
         }
 
@@ -76,22 +76,13 @@ namespace NzbDrone.Core
             ContainerBuilder.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }
 
-        private void InitIndexers()
+        private void RegisterIndexers()
         {
             logger.Debug("Registering Indexers...");
 
             ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
                    .Where(t => t.BaseType == typeof(IndexerBase))
                    .As<IndexerBase>();
-
-            //ContainerBuilder.Bind<IndexerBase>().To<NzbsRUs>();
-            //ContainerBuilder.Bind<IndexerBase>().To<Newznab>();
-            //ContainerBuilder.Bind<IndexerBase>().To<Wombles>();
-            //ContainerBuilder.Bind<IndexerBase>().To<FileSharingTalk>();
-            //ContainerBuilder.Bind<IndexerBase>().To<NzbIndex>();
-            //ContainerBuilder.Bind<IndexerBase>().To<NzbClub>();
-            //ContainerBuilder.Bind<IndexerBase>().To<Omgwtfnzbs>();
-            //ContainerBuilder.Bind<IndexerBase>().To<Nzbx>();
         }
 
         private void RegisterJobs()
@@ -100,40 +91,47 @@ namespace NzbDrone.Core
 
             ContainerBuilder.RegisterType<JobProvider>().SingleInstance();
 
-            ContainerBuilder.RegisterType<Xbmc>().As<ExternalNotificationBase>().SingleInstance();
-
             ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
                    .Where(t => t.GetInterfaces().Contains(typeof(IJob)))
                    .As<IJob>()
                    .SingleInstance();
         }
 
-        private void InitExternalNotifications()
+        private void RegisterExternalNotifications()
         {
             logger.Debug("Registering External Notifications...");
-            ContainerBuilder.RegisterType<Xbmc>().As<ExternalNotificationBase>().SingleInstance();
-            ContainerBuilder.RegisterType<Smtp>().As<ExternalNotificationBase>().SingleInstance();
-            ContainerBuilder.RegisterType<Twitter>().As<ExternalNotificationBase>().SingleInstance();
-            ContainerBuilder.RegisterType<Providers.ExternalNotification.Growl>().As<ExternalNotificationBase>().SingleInstance();
-            ContainerBuilder.RegisterType<Prowl>().As<ExternalNotificationBase>().SingleInstance();
-            ContainerBuilder.RegisterType<Plex>().As<ExternalNotificationBase>().SingleInstance();        
+
+            ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
+                   .Where(t => t.BaseType == typeof(ExternalNotificationBase))
+                   .As<ExternalNotificationBase>();
+
+            //ContainerBuilder.RegisterType<Xbmc>().As<ExternalNotificationBase>().SingleInstance();
+            //ContainerBuilder.RegisterType<Smtp>().As<ExternalNotificationBase>().SingleInstance();
+            //ContainerBuilder.RegisterType<Twitter>().As<ExternalNotificationBase>().SingleInstance();
+            //ContainerBuilder.RegisterType<Providers.ExternalNotification.Growl>().As<ExternalNotificationBase>().SingleInstance();
+            //ContainerBuilder.RegisterType<Prowl>().As<ExternalNotificationBase>().SingleInstance();
+            //ContainerBuilder.RegisterType<Plex>().As<ExternalNotificationBase>().SingleInstance();        
         }
 
-        private void InitMetadataProviders()
+        private void RegisterMetadataProviders()
         {
             logger.Debug("Registering Metadata Providers...");
 
-            ContainerBuilder.RegisterType<Providers.Metadata.Xbmc>().As<MetadataBase>().SingleInstance();
+            ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
+                   .Where(t => t.IsSubclassOf(typeof(MetadataBase)))
+                   .As<MetadataBase>();
+
+            //ContainerBuilder.RegisterType<Providers.Metadata.Xbmc>().As<MetadataBase>().SingleInstance();
         }
 
-        private void InitReporting(IContainer container)
+        private void RegisterReporting(IContainer container)
         {
             EnvironmentProvider.UGuid = container.Resolve<ConfigProvider>().UGuid;
             ReportingService.RestProvider = container.Resolve<RestProvider>();
             ReportingService.SetupExceptronDriver();
         }
 
-        private void InitQuality(IContainer container)
+        private void RegisterQuality(IContainer container)
         {
             logger.Debug("Initializing Quality...");
             container.Resolve<QualityProvider>().SetupDefaultProfiles();
@@ -174,8 +172,8 @@ namespace NzbDrone.Core
             container.Resolve<DatabaseTarget>().Register();
             LogConfiguration.Reload();
 
-            InitReporting(container);
-            InitQuality(container);
+            RegisterReporting(container);
+            RegisterQuality(container);
 
             var indexers = container.Resolve<IEnumerable<IndexerBase>>();
             container.Resolve<IndexerProvider>().InitializeIndexers(indexers.ToList());
