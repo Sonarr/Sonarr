@@ -6,10 +6,10 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
 using LowercaseRoutesMVC;
 using NLog.Config;
-using Ninject;
-using Ninject.Web.Common;
 using NLog;
 using NzbDrone.Api;
 using NzbDrone.Common;
@@ -23,7 +23,7 @@ using SignalR;
 
 namespace NzbDrone.Web
 {
-    public class MvcApplication : NinjectHttpApplication
+    public class MvcApplication : HttpApplication
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -46,9 +46,9 @@ namespace NzbDrone.Web
             );
         }
 
-        protected override void OnApplicationStarted()
+        protected void Application_Start()
         {
-            base.OnApplicationStarted();
+            InitContainer();
 
             RegisterRoutes(RouteTable.Routes);
             AreaRegistration.RegisterAllAreas();
@@ -64,23 +64,38 @@ namespace NzbDrone.Web
             Logger.Info("Fully initialized and ready.");
         }
 
-        protected override IKernel CreateKernel()
+        private void InitContainer()
         {
             Logger.Info("NzbDrone Starting up.");
             var dispatch = new CentralDispatch();
             dispatch.DedicateToHost();
 
-            dispatch.Kernel.Load(Assembly.GetExecutingAssembly());
+            dispatch.ContainerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).SingleInstance();
+            dispatch.ContainerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).AsImplementedInterfaces().SingleInstance();
+
+            MVCRegistration(dispatch.ContainerBuilder);
+
+            var container = dispatch.ContainerBuilder.Build();
+
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
             //SignalR
             RouteTable.Routes.MapHubs();
 
             //ServiceStack
-            dispatch.Kernel.Bind<ICacheClient>().To<MemoryCacheClient>().InSingletonScope();
-            dispatch.Kernel.Bind<ISessionFactory>().To<SessionFactory>().InSingletonScope();
-            new AppHost(dispatch.Kernel).Init();
+            dispatch.ContainerBuilder.RegisterType<MemoryCacheClient>().As<ICacheClient>().SingleInstance();
+            dispatch.ContainerBuilder.RegisterType<SessionFactory>().As<ISessionFactory>().SingleInstance();
+            new AppHost(container).Init();
+        }
 
-            return dispatch.Kernel;
+        private static void MVCRegistration(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new AutofacWebTypesModule());
+
+            builder.RegisterControllers(typeof(MvcApplication).Assembly).InjectActionInvoker();
+            builder.RegisterModelBinders(typeof(MvcApplication).Assembly).SingleInstance();
+
+            builder.RegisterType<ControllerActionInvoker>().As<IActionInvoker>();
         }
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)

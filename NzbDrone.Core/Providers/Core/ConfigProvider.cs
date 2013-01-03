@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Sabnzbd;
@@ -18,7 +17,6 @@ namespace NzbDrone.Core.Providers.Core
 
         private readonly IDatabase _database;
 
-        [Inject]
         public ConfigProvider(IDatabase database)
         {
             _database = database;

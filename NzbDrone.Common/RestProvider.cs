@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using NLog;
 using Newtonsoft.Json;
-using Ninject;
 using NzbDrone.Common.Contract;
 
 namespace NzbDrone.Common
@@ -19,7 +18,6 @@ namespace NzbDrone.Common
         private readonly EnvironmentProvider _environmentProvider;
 
 
-        [Inject]
         public RestProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;

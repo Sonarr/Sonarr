@@ -3,7 +3,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Providers;
 
@@ -23,7 +22,6 @@ namespace NzbDrone
         private readonly SecurityProvider _securityProvider;
         private readonly DiskProvider _diskProvider;
 
-        [Inject]
         public ApplicationServer(ConfigFileProvider configFileProvider, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnvironmentProvider environmentProvider,
                            ProcessProvider processProvider, MonitoringProvider monitoringProvider,

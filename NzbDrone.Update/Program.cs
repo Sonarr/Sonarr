@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Autofac;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Update.Providers;
 
@@ -12,7 +12,7 @@ namespace NzbDrone.Update
     {
         private readonly UpdateProvider _updateProvider;
         private readonly ProcessProvider _processProvider;
-        private static StandardKernel _kernel;
+        private static IContainer _kernel;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -27,13 +27,11 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
-                _kernel = new StandardKernel();
+                _kernel = new ContainerBuilder().Build();
                 InitLoggers();
 
-   
-
-                logger.Info("Updating NzbDrone to version {0}", _kernel.Get<EnvironmentProvider>().Version);
-                _kernel.Get<Program>().Start(args);
+                logger.Info("Updating NzbDrone to version {0}", _kernel.Resolve<EnvironmentProvider>().Version);
+                _kernel.Resolve<Program>().Start(args);
             }
             catch (Exception e)
             {
@@ -48,8 +46,8 @@ namespace NzbDrone.Update
         {
             try
             {
-                var environmentProvider = _kernel.Get<EnvironmentProvider>();
-                var diskProvider = _kernel.Get<DiskProvider>();
+                var environmentProvider = _kernel.Resolve<EnvironmentProvider>();
+                var diskProvider = _kernel.Resolve<DiskProvider>();
                 logger.Info("Copying log files to application directory.");
                 diskProvider.CopyDirectory(environmentProvider.GetSandboxLogFolder(), environmentProvider.GetUpdateLogFolder());
             }
@@ -61,7 +59,7 @@ namespace NzbDrone.Update
 
         private static void InitLoggers()
         {
-            ReportingService.RestProvider = _kernel.Get<RestProvider>();
+            ReportingService.RestProvider = _kernel.Resolve<RestProvider>();
             ReportingService.SetupExceptronDriver();
 
             LogConfiguration.RegisterRemote();

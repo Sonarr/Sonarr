@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 
 namespace NzbDrone.Core.Providers.Core

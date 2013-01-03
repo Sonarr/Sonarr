@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.DecisionEngine;
@@ -26,7 +25,6 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public SearchProvider(EpisodeProvider episodeProvider, DownloadProvider downloadProvider, SeriesProvider seriesProvider,
                                 IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
                                 UpgradePossibleSpecification upgradePossibleSpecification, AllowedDownloadSpecification allowedDownloadSpecification,

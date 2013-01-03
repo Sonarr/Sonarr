@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers.Core;
 
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public RecycleBinProvider(DiskProvider diskProvider, ConfigProvider configProvider)
         {
             _diskProvider = diskProvider;

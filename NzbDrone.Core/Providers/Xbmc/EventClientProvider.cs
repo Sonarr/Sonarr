@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Ninject;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Model.Xbmc;
 
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.Providers.Xbmc
     {
         private readonly UdpProvider _udpProvider;
 
-        [Inject]
         public EventClientProvider(UdpProvider udpProvider)
         {
             _udpProvider = udpProvider;

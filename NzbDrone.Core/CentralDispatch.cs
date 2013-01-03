@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using Autofac;
+using Autofac.Core;
 using DeskMetrics;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
@@ -29,140 +31,113 @@ namespace NzbDrone.Core
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly EnvironmentProvider _environmentProvider;
 
-        public StandardKernel Kernel { get; private set; }
+        public ContainerBuilder ContainerBuilder { get; private set; }
 
         public CentralDispatch()
         {
             _environmentProvider = new EnvironmentProvider();
 
-            logger.Debug("Initializing Kernel:");
-            Kernel = new StandardKernel();
+            logger.Debug("Initializing ContainerBuilder:");
+            ContainerBuilder = new ContainerBuilder();
 
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(Kernel);
+            ContainerBuilder.RegisterAssemblyTypes(typeof(DiskProvider).Assembly).SingleInstance();
+            ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly).SingleInstance();
+            ContainerBuilder.RegisterType<EnvironmentProvider>();
 
             InitDatabase();
-            InitReporting();
-
-            InitQuality();
             InitExternalNotifications();
             InitMetadataProviders();
             InitIndexers();
-            InitJobs();         
+            RegisterJobs();         
         }
 
         private void InitDatabase()
         {
-            logger.Info("Initializing Database...");
+            logger.Info("Registering Database...");
 
             var appDataPath = _environmentProvider.GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            var connection = Kernel.Get<Connection>();
-            Kernel.Bind<IDatabase>().ToMethod(c => connection.GetMainPetaPocoDb()).InTransientScope();
-            Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb(false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
-            Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb()).WhenInjectedInto<LogProvider>();
-            Kernel.Bind<LogDbContext>().ToMethod(c => connection.GetLogEfContext()).WhenInjectedInto<LogProvider>().InSingletonScope();
+            ContainerBuilder.Register(c => c.Resolve<Connection>().GetMainPetaPocoDb())
+                            .As<IDatabase>();
 
-            Kernel.Get<DatabaseTarget>().Register();
-            LogConfiguration.Reload();
-        }
+            ContainerBuilder.Register(c => c.Resolve<Connection>().GetLogPetaPocoDb(false))
+                            .SingleInstance()
+                            .Named<IDatabase>("DatabaseTarget");
 
-        private void InitReporting()
-        {
-            EnvironmentProvider.UGuid = Kernel.Get<ConfigProvider>().UGuid;
-            ReportingService.RestProvider = Kernel.Get<RestProvider>();
-            ReportingService.SetupExceptronDriver();
-        }
+            ContainerBuilder.Register(c => c.Resolve<Connection>().GetLogPetaPocoDb())
+                            .Named<IDatabase>("LogProvider");
 
-        private void InitQuality()
-        {
-            logger.Debug("Initializing Quality...");
-            Kernel.Get<QualityProvider>().SetupDefaultProfiles();
-            Kernel.Get<QualityTypeProvider>().SetupDefault();
+            ContainerBuilder.Register(c => c.Resolve<Connection>().GetLogEfContext())
+                            .As<LogDbContext>()
+                            .SingleInstance();
+
+            ContainerBuilder.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
+            ContainerBuilder.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }
 
         private void InitIndexers()
         {
-            logger.Debug("Initializing Indexers...");
-            Kernel.Bind<IndexerBase>().To<NzbsRUs>();
-            Kernel.Bind<IndexerBase>().To<Newznab>();
-            Kernel.Bind<IndexerBase>().To<Wombles>();
-            Kernel.Bind<IndexerBase>().To<FileSharingTalk>();
-            Kernel.Bind<IndexerBase>().To<NzbIndex>();
-            Kernel.Bind<IndexerBase>().To<NzbClub>();
-            Kernel.Bind<IndexerBase>().To<Omgwtfnzbs>();
-            Kernel.Bind<IndexerBase>().To<Nzbx>();
+            logger.Debug("Registering Indexers...");
 
-            var indexers = Kernel.GetAll<IndexerBase>();
-            Kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
+            ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
+                   .Where(t => t.BaseType == typeof(IndexerBase))
+                   .As<IndexerBase>();
 
-            var newznabIndexers = new List<NewznabDefinition>
-                                      {
-                                              new NewznabDefinition { Enable = false, Name = "Nzbs.org", Url = "http://nzbs.org", BuiltIn = true },
-                                              new NewznabDefinition { Enable = false, Name = "Nzb.su", Url = "https://nzb.su", BuiltIn = true },
-                                              new NewznabDefinition { Enable = false, Name = "Dognzb.cr", Url = "https://dognzb.cr", BuiltIn = true }
-                                      };
-
-            Kernel.Get<NewznabProvider>().InitializeNewznabIndexers(newznabIndexers);
+            //ContainerBuilder.Bind<IndexerBase>().To<NzbsRUs>();
+            //ContainerBuilder.Bind<IndexerBase>().To<Newznab>();
+            //ContainerBuilder.Bind<IndexerBase>().To<Wombles>();
+            //ContainerBuilder.Bind<IndexerBase>().To<FileSharingTalk>();
+            //ContainerBuilder.Bind<IndexerBase>().To<NzbIndex>();
+            //ContainerBuilder.Bind<IndexerBase>().To<NzbClub>();
+            //ContainerBuilder.Bind<IndexerBase>().To<Omgwtfnzbs>();
+            //ContainerBuilder.Bind<IndexerBase>().To<Nzbx>();
         }
 
-        private void InitJobs()
+        private void RegisterJobs()
         {
-            logger.Debug("Initializing Background Jobs...");
+            logger.Debug("Registering Background Jobs...");
 
-            Kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
+            ContainerBuilder.RegisterType<JobProvider>().SingleInstance();
 
-            Kernel.Bind<IJob>().To<RssSyncJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<ImportNewSeriesJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<UpdateInfoJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<DiskScanJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<DeleteSeriesJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<EpisodeSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<PostDownloadScanJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<SeasonSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<RenameSeasonJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<SeriesSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<RenameSeriesJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<BacklogSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<BannerDownloadJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<ConvertEpisodeJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<AppUpdateJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<TrimLogsJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<SearchHistoryCleanupJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<PastWeekBacklogSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<RefreshEpisodeMetadata>().InSingletonScope();
-            Kernel.Bind<IJob>().To<CleanupRecycleBinJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<EmptyRecycleBinJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<XemUpdateJob>().InSingletonScope();
+            ContainerBuilder.RegisterType<Xbmc>().As<ExternalNotificationBase>().SingleInstance();
 
-            Kernel.Get<JobProvider>().Initialize();
-            Kernel.Get<WebTimer>().StartTimer(30);
+            ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
+                   .Where(t => t.GetInterfaces().Contains(typeof(IJob)))
+                   .As<IJob>()
+                   .SingleInstance();
         }
 
         private void InitExternalNotifications()
         {
-            logger.Debug("Initializing External Notifications...");
-            Kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
-            Kernel.Bind<ExternalNotificationBase>().To<Smtp>();
-            Kernel.Bind<ExternalNotificationBase>().To<Twitter>();
-            Kernel.Bind<ExternalNotificationBase>().To<Providers.ExternalNotification.Growl>();
-            Kernel.Bind<ExternalNotificationBase>().To<Prowl>();
-            Kernel.Bind<ExternalNotificationBase>().To<Plex>();
-
-            var notifiers = Kernel.GetAll<ExternalNotificationBase>();
-            Kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
+            logger.Debug("Registering External Notifications...");
+            ContainerBuilder.RegisterType<Xbmc>().As<ExternalNotificationBase>().SingleInstance();
+            ContainerBuilder.RegisterType<Smtp>().As<ExternalNotificationBase>().SingleInstance();
+            ContainerBuilder.RegisterType<Twitter>().As<ExternalNotificationBase>().SingleInstance();
+            ContainerBuilder.RegisterType<Providers.ExternalNotification.Growl>().As<ExternalNotificationBase>().SingleInstance();
+            ContainerBuilder.RegisterType<Prowl>().As<ExternalNotificationBase>().SingleInstance();
+            ContainerBuilder.RegisterType<Plex>().As<ExternalNotificationBase>().SingleInstance();        
         }
 
         private void InitMetadataProviders()
         {
-            logger.Debug("Initializing Metadata Providers...");
+            logger.Debug("Registering Metadata Providers...");
 
-            Kernel.Bind<MetadataBase>().To<Providers.Metadata.Xbmc>().InSingletonScope();
+            ContainerBuilder.RegisterType<Providers.Metadata.Xbmc>().As<MetadataBase>().SingleInstance();
+        }
 
-            var providers = Kernel.GetAll<MetadataBase>();
-            Kernel.Get<MetadataProvider>().Initialize(providers.ToList());
+        private void InitReporting(IContainer container)
+        {
+            EnvironmentProvider.UGuid = container.Resolve<ConfigProvider>().UGuid;
+            ReportingService.RestProvider = container.Resolve<RestProvider>();
+            ReportingService.SetupExceptronDriver();
+        }
+
+        private void InitQuality(IContainer container)
+        {
+            logger.Debug("Initializing Quality...");
+            container.Resolve<QualityProvider>().SetupDefaultProfiles();
+            container.Resolve<QualityTypeProvider>().SetupDefault();
         }
 
         public void DedicateToHost()
@@ -188,6 +163,45 @@ namespace NzbDrone.Core
             {
                 logger.FatalException("An error has occurred while dedicating to host.", e);
             }
+        }
+
+        public IContainer Build()
+        {
+            var container = ContainerBuilder.Build();
+
+            logger.Debug("Initializing Components");
+
+            container.Resolve<DatabaseTarget>().Register();
+            LogConfiguration.Reload();
+
+            InitReporting(container);
+            InitQuality(container);
+
+            var indexers = container.Resolve<IEnumerable<IndexerBase>>();
+            container.Resolve<IndexerProvider>().InitializeIndexers(indexers.ToList());
+
+            var newznabIndexers = new List<NewznabDefinition>
+                                      {
+                                              new NewznabDefinition { Enable = false, Name = "Nzbs.org", Url = "http://nzbs.org", BuiltIn = true },
+                                              new NewznabDefinition { Enable = false, Name = "Nzb.su", Url = "https://nzb.su", BuiltIn = true },
+                                              new NewznabDefinition { Enable = false, Name = "Dognzb.cr", Url = "https://dognzb.cr", BuiltIn = true }
+                                      };
+
+            container.Resolve<NewznabProvider>().InitializeNewznabIndexers(newznabIndexers);
+
+            container.Resolve<JobProvider>().Initialize();
+            container.Resolve<WebTimer>().StartTimer(30);
+
+            var notifiers = container.Resolve<IEnumerable<ExternalNotificationBase>>();
+            container.Resolve<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
+
+            var providers = container.Resolve<IEnumerable<MetadataBase>>();
+            container.Resolve<MetadataProvider>().Initialize(providers.ToList());
+
+            //SignalR
+            GlobalHost.DependencyResolver = new AutofacSignalrDependencyResolver(container.BeginLifetimeScope("SignalR"));
+
+            return container;
         }
 
         private static void ShutDown()

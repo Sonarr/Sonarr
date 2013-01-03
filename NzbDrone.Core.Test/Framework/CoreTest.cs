@@ -54,7 +54,6 @@ namespace NzbDrone.Core.Test.Framework
             Mocker.SetConstant(Db);
         }
 
-
         protected static ProgressNotification MockNotification
         {
             get

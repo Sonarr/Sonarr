@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Providers.DecisionEngine

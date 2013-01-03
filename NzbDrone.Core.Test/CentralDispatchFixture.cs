@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -9,7 +10,6 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Test.Framework;
-using Ninject;
 
 namespace NzbDrone.Core.Test
 {
@@ -19,12 +19,14 @@ namespace NzbDrone.Core.Test
         readonly IList<Type> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).ToList();
         readonly IList<Type> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).ToList();
 
-        private IKernel kernel;
+        private IContainer kernel;
 
         public CentralDispatchFixture()
         {
             InitLogging();
-            kernel = new CentralDispatch().Kernel;
+            var dispatch = new CentralDispatch();
+            kernel = dispatch.Build();
+
             WebTimer.Stop();
         }
 
@@ -44,7 +46,7 @@ namespace NzbDrone.Core.Test
             foreach (var provider in providers)
             {
                 Console.WriteLine("Resolving " + provider.Name);
-                kernel.Get(provider).Should().NotBeNull();
+                kernel.Resolve(provider).Should().NotBeNull();
             }
         }
 
@@ -54,7 +56,7 @@ namespace NzbDrone.Core.Test
         {
             //Assert
 
-            var registeredJobs = kernel.GetAll<IJob>();
+            var registeredJobs = kernel.Resolve<IEnumerable<IJob>>();
 
             jobs.Should().NotBeEmpty();
 
@@ -67,7 +69,7 @@ namespace NzbDrone.Core.Test
         {
             //Assert
 
-            var registeredIndexers = kernel.GetAll<IndexerBase>();
+            var registeredIndexers = kernel.Resolve<IEnumerable<IndexerBase>>();
 
             indexers.Should().NotBeEmpty();
 
@@ -78,26 +80,26 @@ namespace NzbDrone.Core.Test
         [Test]
         public void jobs_are_initialized()
         {
-            kernel.Get<JobProvider>().All().Should().HaveSameCount(jobs);
+            kernel.Resolve<JobProvider>().All().Should().HaveSameCount(jobs);
         }
 
         [Test]
         public void indexers_are_initialized()
         {
-            kernel.Get<IndexerProvider>().All().Should().HaveSameCount(indexers);
+            kernel.Resolve<IndexerProvider>().All().Should().HaveSameCount(indexers);
         }
 
         [Test]
         public void quality_profile_initialized()
         {
-            kernel.Get<QualityProvider>().All().Should().HaveCount(2);
+            kernel.Resolve<QualityProvider>().All().Should().HaveCount(2);
         }
 
         [Test]
         public void JobProvider_should_be_singletone()
         {
-            var first = kernel.Get<JobProvider>();
-            var second = kernel.Get<JobProvider>();
+            var first = kernel.Resolve<JobProvider>();
+            var second = kernel.Resolve<JobProvider>();
 
             first.Should().BeSameAs(second);
         }

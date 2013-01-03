@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
@@ -25,7 +24,6 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly RecycleBinProvider _recycleBinProvider;
 
-        [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
                                 SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,

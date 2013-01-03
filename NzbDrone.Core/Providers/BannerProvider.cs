@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -20,7 +19,6 @@ namespace NzbDrone.Core.Providers
 
         private const string BANNER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
-        [Inject]
         public BannerProvider(HttpProvider httpProvider, EnvironmentProvider environmentProvider,
                                 DiskProvider diskProvider)
         {

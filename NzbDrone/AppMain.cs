@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using Ninject;
 using NzbDrone.Providers;
+using Autofac;
 
 namespace NzbDrone
 {
@@ -38,14 +38,12 @@ namespace NzbDrone
                 }
 
 
-                CentralDispatch.Kernel.Get<Router>().Route(args);
+                CentralDispatch.Container.Resolve<Router>().Route(args);
             }
             catch (Exception e)
             {
                 MonitoringProvider.AppDomainException(e);
             }
         }
-
-
     }
 }

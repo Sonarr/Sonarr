@@ -2,7 +2,6 @@
 using System.Linq;
 using Ionic.Zip;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 
 namespace NzbDrone.Core.Providers
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.Providers
         private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
       
-        [Inject]
         public BackupProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.DecisionEngine
@@ -10,7 +9,6 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly QualityProvider _qualityProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public UpgradePossibleSpecification(QualityProvider qualityProvider)
         {
             _qualityProvider = qualityProvider;

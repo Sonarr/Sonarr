@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using NLog;
-using Ninject;
 
 namespace NzbDrone.Core.Providers.Core
 {
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.Providers.Core
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public UdpProvider()
         {
             

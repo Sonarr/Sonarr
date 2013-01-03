@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System;
-using Ninject;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
@@ -10,7 +9,6 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly SearchProvider _searchProvider;
 
-        [Inject]
         public EpisodeSearchJob(SearchProvider searchProvider)
         {
             _searchProvider = searchProvider;

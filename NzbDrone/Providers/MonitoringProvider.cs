@@ -4,7 +4,6 @@ using System.Net;
 using System.Runtime.Remoting;
 using System.Threading;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
 
@@ -23,7 +22,6 @@ namespace NzbDrone.Providers
         private Timer _pingTimer;
         private Timer _processPriorityCheckTimer;
 
-        [Inject]
         public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
                                   HttpProvider httpProvider, ConfigFileProvider configFileProvider)
         {

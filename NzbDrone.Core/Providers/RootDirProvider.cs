@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
@@ -18,7 +17,6 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
 
-        [Inject]
         public RootDirProvider(IDatabase database, SeriesProvider seriesProvider, DiskProvider diskProvider)
         {
             _database = database;

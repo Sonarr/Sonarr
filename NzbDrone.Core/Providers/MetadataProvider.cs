@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -20,7 +19,6 @@ namespace NzbDrone.Core.Providers
         private IEnumerable<MetadataBase> _metadataProviders;
         private readonly TvDbProvider _tvDbProvider;
 
-        [Inject]
         public MetadataProvider(IDatabase database, IEnumerable<MetadataBase> metadataProviders,
                                 TvDbProvider tvDbProvider)
         {

@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using NLog;
-using Ninject;
 
 namespace NzbDrone.Common
 {
@@ -15,7 +14,6 @@ namespace NzbDrone.Common
         private readonly EnvironmentProvider _environmentProvider;
 
 
-        [Inject]
         public IISProvider(ConfigFileProvider configFileProvider, ProcessProvider processProvider, EnvironmentProvider environmentProvider)
         {
             _configFileProvider = configFileProvider;

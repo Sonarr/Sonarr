@@ -4,7 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
 using NLog;
+using NzbDrone.Core;
 
 namespace NzbDrone.Services.Service
 {
@@ -41,6 +44,8 @@ namespace NzbDrone.Services.Service
             ViewEngines.Engines.Add(razor);
 
             ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
+
+            InitContainer();
         }
 
         // ReSharper disable InconsistentNaming
@@ -65,5 +70,30 @@ namespace NzbDrone.Services.Service
         {
         }
 
+        private void InitContainer()
+        {
+            logger.Info("NzbDrone Starting up.");
+            var dispatch = new CentralDispatch();
+            
+
+            dispatch.ContainerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).SingleInstance();
+            dispatch.ContainerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).AsImplementedInterfaces().SingleInstance();
+
+            MVCRegistration(dispatch.ContainerBuilder);
+
+            var container = dispatch.ContainerBuilder.Build();
+
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+        }
+
+        private static void MVCRegistration(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new AutofacWebTypesModule());
+
+            builder.RegisterControllers(typeof(MvcApplication).Assembly).InjectActionInvoker();
+            builder.RegisterModelBinders(typeof(MvcApplication).Assembly).SingleInstance();
+
+            builder.RegisterType<ControllerActionInvoker>().As<IActionInvoker>();
+        }
     }
 }

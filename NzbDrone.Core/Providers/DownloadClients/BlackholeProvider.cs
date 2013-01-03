@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -20,7 +19,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public BlackholeProvider(ConfigProvider configProvider, HttpProvider httpProvider,
                                     DiskProvider diskProvider, UpgradeHistorySpecification upgradeHistorySpecification)
         {

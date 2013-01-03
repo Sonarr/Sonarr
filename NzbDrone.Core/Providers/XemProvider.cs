@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -16,7 +15,6 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public XemProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
                             XemCommunicationProvider xemCommunicationProvider)
         {

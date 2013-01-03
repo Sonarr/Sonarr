@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.Jobs
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
         private readonly NotificationProvider _notificationProvider;
-        private readonly IList<IJob> _jobs;
+        private readonly IEnumerable<IJob> _jobs;
 
         private Thread _jobThread;
         public Stopwatch StopWatch { get; private set; }
@@ -36,8 +35,7 @@ namespace NzbDrone.Core.Jobs
         private ProgressNotification _notification;
 
 
-        [Inject]
-        public JobProvider(IDatabase database, NotificationProvider notificationProvider, IList<IJob> jobs)
+                public JobProvider(IDatabase database, NotificationProvider notificationProvider, IEnumerable<IJob> jobs)
         {
             StopWatch = new Stopwatch();
             _database = database;

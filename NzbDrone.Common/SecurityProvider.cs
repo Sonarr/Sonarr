@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Principal;
 using NLog;
 using NetFwTypeLib;
-using Ninject;
 
 namespace NzbDrone.Common
 {
@@ -16,7 +15,6 @@ namespace NzbDrone.Common
         private readonly EnvironmentProvider _environmentProvider;
         private readonly ProcessProvider _processProvider;
 
-        [Inject]
         public SecurityProvider(ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
                                     ProcessProvider processProvider)
         {

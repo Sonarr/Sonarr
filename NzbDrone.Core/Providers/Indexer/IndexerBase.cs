@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
@@ -21,7 +20,6 @@ namespace NzbDrone.Core.Providers.Indexer
         protected static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         protected static readonly Regex RemoveThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        [Inject]
         protected IndexerBase(HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _httpProvider = httpProvider;

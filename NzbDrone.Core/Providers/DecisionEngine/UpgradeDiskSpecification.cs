@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Providers.DecisionEngine
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly QualityUpgradeSpecification _qualityUpgradeSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public UpgradeDiskSpecification(EpisodeProvider episodeProvider, QualityUpgradeSpecification qualityUpgradeSpecification)
         {
             _episodeProvider = episodeProvider;

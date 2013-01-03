@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -18,7 +17,6 @@ namespace NzbDrone.Core.Jobs
         private readonly ConfigProvider _configProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider,
                             ConfigProvider configProvider)
         {

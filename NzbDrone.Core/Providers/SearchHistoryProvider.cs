@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Search;
 using PetaPoco;
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public SearchHistoryProvider(IDatabase database, SeriesProvider seriesProvider,
                                         DownloadProvider downloadProvider, EpisodeProvider episodeProvider)
         {

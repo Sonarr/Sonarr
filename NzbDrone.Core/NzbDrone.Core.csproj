@@ -123,6 +123,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
@@ -166,10 +172,6 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
@@ -316,7 +318,7 @@
     <Compile Include="Model\Xem\XemResult.cs" />
     <Compile Include="Model\Xem\XemSceneTvdbMapping.cs" />
     <Compile Include="Model\Xem\XemValues.cs" />
-    <Compile Include="NinjectDependencyResolver.cs" />
+    <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Providers.DecisionEngine
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly EpisodeProvider _episodeProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public AcceptableSizeSpecification(QualityTypeProvider qualityTypeProvider, EpisodeProvider episodeProvider)
         {
             _qualityTypeProvider = qualityTypeProvider;

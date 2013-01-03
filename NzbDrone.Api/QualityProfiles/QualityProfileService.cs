@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Ninject;
 using NzbDrone.Api.Filters;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
@@ -14,7 +13,6 @@ namespace NzbDrone.Api.QualityProfiles
     {
         private readonly QualityProvider _qualityProvider;
 
-        [Inject]
         public QualityProfileService(QualityProvider qualityProvider)
         {
             _qualityProvider = qualityProvider;

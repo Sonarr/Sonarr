@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -26,7 +25,6 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public RssSyncJob(DownloadProvider downloadProvider, IndexerProvider indexerProvider,
             MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, 
             UpgradeHistorySpecification upgradeHistorySpecification, ConfigProvider configProvider)

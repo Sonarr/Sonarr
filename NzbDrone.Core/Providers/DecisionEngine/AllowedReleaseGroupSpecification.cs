@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly ConfigProvider _configProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public AllowedReleaseGroupSpecification(ConfigProvider configProvider)
         {
             _configProvider = configProvider;

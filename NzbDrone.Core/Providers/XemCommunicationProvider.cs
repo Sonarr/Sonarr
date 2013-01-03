@@ -5,7 +5,6 @@ using System.Text;
 using NLog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Xem;
 
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Providers
 
         private const string XEM_BASE_URL = "http://thexem.de/map/";
 
-        [Inject]
         public XemCommunicationProvider(HttpProvider httpProvider)
         {
             _httpProvider = httpProvider;

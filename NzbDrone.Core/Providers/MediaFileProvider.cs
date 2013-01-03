@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
@@ -20,7 +19,6 @@ namespace NzbDrone.Core.Providers
         private readonly IDatabase _database;
         private readonly EpisodeProvider _episodeProvider;
 
-        [Inject]
         public MediaFileProvider(EpisodeProvider episodeProvider, ConfigProvider configProvider, IDatabase database)
         {
             _episodeProvider = episodeProvider;

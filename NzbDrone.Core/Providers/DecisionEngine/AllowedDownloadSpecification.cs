@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Search;
 
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly CustomStartDateSpecification _customStartDateSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public AllowedDownloadSpecification(QualityAllowedByProfileSpecification qualityAllowedByProfileSpecification,
             UpgradeDiskSpecification upgradeDiskSpecification, AcceptableSizeSpecification acceptableSizeSpecification,
             AlreadyInQueueSpecification alreadyInQueueSpecification, RetentionSpecification retentionSpecification,

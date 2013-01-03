@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
@@ -15,7 +14,6 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public DeleteSeriesJob(SeriesProvider seriesProvider, RecycleBinProvider recycleBinProvider)
         {
             _seriesProvider = seriesProvider;

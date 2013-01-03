@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -20,7 +19,6 @@ namespace NzbDrone.Core.Providers
         private readonly SeasonProvider _seasonProvider;
         private readonly IDatabase _database;
 
-        [Inject]
         public EpisodeProvider(IDatabase database, TvDbProvider tvDbProviderProvider,
                 SeasonProvider seasonProvider)
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class Wombles : IndexerBase
     {
-        [Inject]
         public Wombles(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
         {
         }
