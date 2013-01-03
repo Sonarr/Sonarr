@@ -103,14 +103,7 @@ namespace NzbDrone.Core
 
             ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
                    .Where(t => t.BaseType == typeof(ExternalNotificationBase))
-                   .As<ExternalNotificationBase>();
-
-            //ContainerBuilder.RegisterType<Xbmc>().As<ExternalNotificationBase>().SingleInstance();
-            //ContainerBuilder.RegisterType<Smtp>().As<ExternalNotificationBase>().SingleInstance();
-            //ContainerBuilder.RegisterType<Twitter>().As<ExternalNotificationBase>().SingleInstance();
-            //ContainerBuilder.RegisterType<Providers.ExternalNotification.Growl>().As<ExternalNotificationBase>().SingleInstance();
-            //ContainerBuilder.RegisterType<Prowl>().As<ExternalNotificationBase>().SingleInstance();
-            //ContainerBuilder.RegisterType<Plex>().As<ExternalNotificationBase>().SingleInstance();        
+                   .As<ExternalNotificationBase>();     
         }
 
         private void RegisterMetadataProviders()
@@ -120,8 +113,6 @@ namespace NzbDrone.Core
             ContainerBuilder.RegisterAssemblyTypes(typeof(CentralDispatch).Assembly)
                    .Where(t => t.IsSubclassOf(typeof(MetadataBase)))
                    .As<MetadataBase>();
-
-            //ContainerBuilder.RegisterType<Providers.Metadata.Xbmc>().As<MetadataBase>().SingleInstance();
         }
 
         private void RegisterReporting(IContainer container)

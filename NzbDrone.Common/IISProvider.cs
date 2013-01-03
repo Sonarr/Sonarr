@@ -13,23 +13,6 @@ namespace NzbDrone.Common
         private readonly ProcessProvider _processProvider;
         private readonly EnvironmentProvider _environmentProvider;
 
-
-        public IISProvider(ConfigFileProvider configFileProvider, ProcessProvider processProvider, EnvironmentProvider environmentProvider)
-        {
-            _configFileProvider = configFileProvider;
-            _processProvider = processProvider;
-            _environmentProvider = environmentProvider;
-        }
-
-        public IISProvider()
-        {
-        }
-
-        public string AppUrl
-        {
-            get { return string.Format("http://localhost:{0}/", _configFileProvider.Port); }
-        }
-
         public int IISProcessId { get; private set; }
 
         public bool ServerStarted { get; private set; }
@@ -74,6 +57,22 @@ namespace NzbDrone.Common
             ServerStarted = true;
         }
 
+        public IISProvider(ConfigFileProvider configFileProvider, ProcessProvider processProvider, EnvironmentProvider environmentProvider)
+        {
+            _configFileProvider = configFileProvider;
+            _processProvider = processProvider;
+            _environmentProvider = environmentProvider;
+        }
+
+        public IISProvider()
+        {
+        }
+
+        public string AppUrl
+        {
+            get { return string.Format("http://localhost:{0}/", _configFileProvider.Port); }
+        }
+
         private static void OnErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (e == null || String.IsNullOrWhiteSpace(e.Data))
@@ -82,7 +81,6 @@ namespace NzbDrone.Common
             IISLogger.Error(e.Data);
         }
 
-
         public void RestartServer()
         {
             ServerStarted = false;
@@ -90,7 +88,6 @@ namespace NzbDrone.Common
             StopServer();
             StartServer();
         }
-
 
         public virtual void StopServer()
         {
@@ -112,7 +109,6 @@ namespace NzbDrone.Common
             }
         }
 
-
         private void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
             if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
@@ -121,6 +117,5 @@ namespace NzbDrone.Common
 
             Console.WriteLine(e.Data);
         }
-
     }
 }

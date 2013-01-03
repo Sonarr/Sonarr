@@ -49,7 +49,6 @@ namespace NzbDrone.Providers
             _pingTimer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(1));
         }
 
-
         public virtual void EnsurePriority(object sender)
         {
             try
@@ -98,8 +97,8 @@ namespace NzbDrone.Providers
             catch (Exception ex)
             {
                 _pingFailCounter++;
-                logger.Error("Application pool is not responding. Count " + _pingFailCounter + ex.Message);
-                if (_pingFailCounter > 10)
+                logger.Error("Application pool is not responding. Count: {0} - {1}", _pingFailCounter, ex.Message);
+                if (_pingFailCounter >= 10)
                 {
                     _pingFailCounter = 0;
                     _iisProvider.RestartServer();
@@ -111,7 +110,6 @@ namespace NzbDrone.Providers
         {
             _iisProvider.StopServer();
         }
-
 
         public static void AppDomainException(Exception excepion)
         {

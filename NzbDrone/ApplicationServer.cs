@@ -60,6 +60,7 @@ namespace NzbDrone
             }
 
             _iisProvider.StartServer();
+            //Todo: verify that IIS is actually started
 
             _debuggerProvider.Attach();
 
