@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Autofac;
 using Autofac.Core;
-using DeskMetrics;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
@@ -19,10 +17,7 @@ using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Repository;
 using PetaPoco;
 using SignalR;
-using SignalR.Hosting.AspNet;
-using SignalR.Infrastructure;
 using Connection = NzbDrone.Core.Datastore.Connection;
-using Xbmc = NzbDrone.Core.Providers.ExternalNotification.Xbmc;
 
 namespace NzbDrone.Core
 {
