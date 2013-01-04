@@ -29,6 +29,7 @@ namespace NzbDrone.Update
                 Console.WriteLine("Starting NzbDrone Update Client");
                 var builder = new ContainerBuilder();
                 builder.RegisterAssemblyTypes(typeof(UpdateProvider).Assembly).SingleInstance();
+                builder.RegisterAssemblyTypes(typeof(RestProvider).Assembly).SingleInstance();
                 _container = builder.Build();
                 InitLoggers();
 
