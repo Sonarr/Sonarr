@@ -83,22 +83,6 @@ namespace NzbDrone
 
                         break;
                     }
-                case ApplicationMode.Silent:
-                    {
-                        var startInfo = new ProcessStartInfo();
-                        startInfo.FileName = _environmentProvider.GetNzbDroneExe();
-                        startInfo.WorkingDirectory = _environmentProvider.ApplicationPath;
-
-                        startInfo.UseShellExecute = false;
-                        startInfo.RedirectStandardOutput = true;
-                        startInfo.RedirectStandardError = true;
-                        startInfo.CreateNoWindow = true;
-
-                        _processProvider.Start(startInfo);
-
-                        Environment.Exit(0);
-                        break;
-                    }
                 default:
                     {
                         _consoleProvider.PrintHelp();
@@ -119,7 +103,6 @@ namespace NzbDrone
 
             if (arg == "i") return ApplicationMode.InstallService;
             if (arg == "u") return ApplicationMode.UninstallService;
-            if (arg == "s") return ApplicationMode.Silent;
 
             return ApplicationMode.Help;
         }

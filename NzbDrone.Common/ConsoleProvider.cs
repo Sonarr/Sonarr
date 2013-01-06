@@ -20,7 +20,6 @@ namespace NzbDrone.Common
             Console.WriteLine("     Commands:");
             Console.WriteLine("                 /i  Install the application as a Windows Service ({0}).", ServiceProvider.NZBDRONE_SERVICE_NAME);
             Console.WriteLine("                 /u  Uninstall already installed Windows Service ({0}).", ServiceProvider.NZBDRONE_SERVICE_NAME);
-            Console.WriteLine("                 /s  Run NzbDrone without a Console Window.");
             Console.WriteLine("                 <No Arguments>  Run application in console mode.");
         }
 

@@ -31,12 +31,6 @@ namespace NzbDrone.App.Test
         [TestCase("/u", ApplicationMode.UninstallService)]
         [TestCase("-U", ApplicationMode.UninstallService)]
         [TestCase("-u", ApplicationMode.UninstallService)]
-        [TestCase("s", ApplicationMode.Silent)]
-        [TestCase("S", ApplicationMode.Silent)]
-        [TestCase("/S", ApplicationMode.Silent)]
-        [TestCase("/s", ApplicationMode.Silent)]
-        [TestCase("-S", ApplicationMode.Silent)]
-        [TestCase("-s", ApplicationMode.Silent)]
         public void GetApplicationMode_single_arg(string arg, ApplicationMode mode)
         {
             Router.GetApplicationMode(new[] { arg }).Should().Be(mode);
