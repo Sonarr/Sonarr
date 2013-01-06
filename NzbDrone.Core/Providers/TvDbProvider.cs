@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using TvdbLib;
 using TvdbLib.Cache;
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Providers
 
         private readonly TvdbHandler _handler;
 
-        [Inject]
         public TvDbProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;

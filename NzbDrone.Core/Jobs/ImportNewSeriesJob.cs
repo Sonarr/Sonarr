@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -28,7 +27,6 @@ namespace NzbDrone.Core.Jobs
 
         private List<int> _attemptedSeries;
 
-        [Inject]
         public ImportNewSeriesJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
                                     MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob,
                                     DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob,

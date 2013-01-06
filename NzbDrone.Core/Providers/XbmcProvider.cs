@@ -6,7 +6,6 @@ using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Xbmc;
@@ -23,7 +22,6 @@ namespace NzbDrone.Core.Providers
         private readonly HttpProvider _httpProvider;
         private readonly EventClientProvider _eventClientProvider;
 
-        [Inject]
         public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider, EventClientProvider eventClientProvider)
         {
             _configProvider = configProvider;

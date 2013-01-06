@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public ConvertEpisodeJob(HandbrakeProvider handbrakeProvider, AtomicParsleyProvider atomicParsleyProvider,
                                     EpisodeProvider episodeProvider)
         {

@@ -7,7 +7,6 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;

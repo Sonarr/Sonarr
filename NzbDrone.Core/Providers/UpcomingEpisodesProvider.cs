@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.Providers
     {
         private readonly IDatabase _database;
 
-        [Inject]
         public UpcomingEpisodesProvider(IDatabase database)
         {
             _database = database;

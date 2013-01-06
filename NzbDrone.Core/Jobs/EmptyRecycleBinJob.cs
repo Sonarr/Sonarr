@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly RecycleBinProvider _recycleBinProvider;
 
-        [Inject]
         public EmptyRecycleBinJob(RecycleBinProvider recycleBinProvider)
         {
             _recycleBinProvider = recycleBinProvider;

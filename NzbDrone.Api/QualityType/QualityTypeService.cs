@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Ninject;
 using NzbDrone.Api.Filters;
 using NzbDrone.Core.Providers;
 using ServiceStack.ServiceInterface;
@@ -14,7 +13,6 @@ namespace NzbDrone.Api.QualityType
     {
         private readonly QualityTypeProvider _qualityTypeProvider;
 
-        [Inject]
         public QualityTypeService(QualityTypeProvider qualityTypeProvider)
         {
             _qualityTypeProvider = qualityTypeProvider;

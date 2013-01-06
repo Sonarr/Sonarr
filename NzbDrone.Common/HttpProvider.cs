@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Text;
 using NLog;
-using Ninject;
 
 namespace NzbDrone.Common
 {
@@ -14,7 +13,6 @@ namespace NzbDrone.Common
         private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public HttpProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;

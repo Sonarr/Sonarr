@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
@@ -16,7 +15,6 @@ namespace NzbDrone.Core.Providers
 
         private IEnumerable<IndexerBase> _indexers;
 
-        [Inject]
         public IndexerProvider(IDatabase database, IEnumerable<IndexerBase> indexers)
         {
             _database = database;

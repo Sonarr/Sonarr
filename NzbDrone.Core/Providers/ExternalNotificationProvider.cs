@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Providers
 
         private IEnumerable<ExternalNotificationBase> _notifiers;
 
-        [Inject]
         public ExternalNotificationProvider(IDatabase database, IEnumerable<ExternalNotificationBase> notifiers)
         {
             _database = database;

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using Autofac;
 using Funq;
-using Ninject;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
-using ServiceStack.ContainerAdapter.Ninject;
 using ServiceStack.WebHost.Endpoints;
 using QualityProfileService = NzbDrone.Api.QualityProfiles.QualityProfileService;
 
@@ -15,17 +14,17 @@ namespace NzbDrone.Api
 {
     public class AppHost : AppHostBase
     {
-        private IKernel _kernel;
+        private IContainer _container;
 
-        public AppHost(IKernel kernel) //Tell ServiceStack the name and where to find your web services
+        public AppHost(IContainer container) //Tell ServiceStack the name and where to find your web services
             : base("NzbDrone API", typeof(QualityProfileService).Assembly)
         {
-            _kernel = kernel;
+            _container = container;
         }
 
         public override void Configure(Container container)
         {
-            container.Adapter = new NinjectContainerAdapter(_kernel);
+            container.Adapter = new AutofacIocAdapter(_container);
             SetConfig(new EndpointHostConfig { ServiceStackHandlerFactoryPath = "api" });
 
             Routes

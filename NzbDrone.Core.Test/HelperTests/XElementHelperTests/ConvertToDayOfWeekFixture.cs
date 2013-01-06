@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;

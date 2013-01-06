@@ -3,11 +3,8 @@ using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -19,7 +16,6 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public AppShutdownJob(EnvironmentProvider environmentProvider, ProcessProvider processProvider, ServiceProvider serviceProvider)
         {
             _environmentProvider = environmentProvider;

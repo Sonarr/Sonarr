@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
-using Ninject;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -16,7 +15,6 @@ namespace NzbDrone.Common
 
         private readonly string _configFile;
         
-        [Inject]
         public ConfigFileProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;

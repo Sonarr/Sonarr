@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Jobs
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
 
-        [Inject]
         public PostDownloadScanJob(PostDownloadProvider postDownloadProvider,ConfigProvider configProvider, DiskProvider diskProvider)
         {
             _postDownloadProvider = postDownloadProvider;

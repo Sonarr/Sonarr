@@ -1,6 +1,5 @@
 ﻿using System;
 using NLog.Config;
-using Ninject;
 using NLog;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
@@ -14,7 +13,6 @@ namespace NzbDrone.Core.Instrumentation
     {
         private readonly IDatabase _database;
 
-        [Inject]
         public DatabaseTarget(IDatabase database)
         {
             _database = database;

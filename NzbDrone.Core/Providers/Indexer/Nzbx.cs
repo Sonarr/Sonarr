@@ -6,7 +6,6 @@ using System.ServiceModel.Syndication;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Nzbx;
@@ -16,7 +15,6 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     class Nzbx : IndexerBase
     {
-        [Inject]
         public Nzbx(HttpProvider httpProvider, ConfigProvider configProvider)
             : base(httpProvider, configProvider)
         {

@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
@@ -15,7 +14,6 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
 
-        [Inject]
         public SmtpProvider(ConfigProvider configProvider)
         {
             _configProvider = configProvider;

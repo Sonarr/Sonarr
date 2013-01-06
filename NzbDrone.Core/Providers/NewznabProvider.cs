@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
@@ -15,7 +14,6 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-        [Inject]
         public NewznabProvider(IDatabase database)
         {
             _database = database;

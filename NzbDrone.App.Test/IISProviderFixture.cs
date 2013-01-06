@@ -3,8 +3,7 @@
 //using FluentAssertions;
 //using Moq;
 //using NUnit.Framework;
-//using Ninject;
-//using NzbDrone.Common;
+////using NzbDrone.Common;
 //using NzbDrone.Common.Model;
 //using NzbDrone.Providers;
 //using NzbDrone.Test.Common;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Jobs
         private readonly ConfigProvider _configProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
                             ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider)
         {

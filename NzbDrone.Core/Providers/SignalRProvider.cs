@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Hubs;
 using SignalR;

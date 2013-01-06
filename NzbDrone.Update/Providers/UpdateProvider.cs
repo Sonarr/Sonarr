@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 
 namespace NzbDrone.Update.Providers
@@ -17,7 +16,6 @@ namespace NzbDrone.Update.Providers
         private readonly IISProvider _iisProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public UpdateProvider(DiskProvider diskProvider, ServiceProvider serviceProvider,
             ProcessProvider processProvider, EnvironmentProvider environmentProvider, IISProvider iisProvider)
         {

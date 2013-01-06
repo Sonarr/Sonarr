@@ -4,7 +4,6 @@ using System.Net;
 using System.Runtime.Remoting;
 using System.Threading;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
 
@@ -23,7 +22,6 @@ namespace NzbDrone.Providers
         private Timer _pingTimer;
         private Timer _processPriorityCheckTimer;
 
-        [Inject]
         public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
                                   HttpProvider httpProvider, ConfigFileProvider configFileProvider)
         {
@@ -50,7 +48,6 @@ namespace NzbDrone.Providers
             _pingTimer = new Timer(PingServer);
             _pingTimer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(1));
         }
-
 
         public virtual void EnsurePriority(object sender)
         {
@@ -100,8 +97,8 @@ namespace NzbDrone.Providers
             catch (Exception ex)
             {
                 _pingFailCounter++;
-                logger.Error("Application pool is not responding. Count " + _pingFailCounter + ex.Message);
-                if (_pingFailCounter > 10)
+                logger.Error("Application pool is not responding. Count: {0} - {1}", _pingFailCounter, ex.Message);
+                if (_pingFailCounter >= 10)
                 {
                     _pingFailCounter = 0;
                     _iisProvider.RestartServer();
@@ -113,7 +110,6 @@ namespace NzbDrone.Providers
         {
             _iisProvider.StopServer();
         }
-
 
         public static void AppDomainException(Exception excepion)
         {

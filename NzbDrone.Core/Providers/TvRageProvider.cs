@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.TvRage;
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Providers
         private const string TVRAGE_APIKEY = "NW4v0PSmQIoVmpbASLdD";
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public TvRageProvider(HttpProvider httpProvider)
         {
             _httpProvider = httpProvider;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Twitter;
 using NzbDrone.Core.Providers.Core;
@@ -20,7 +19,6 @@ namespace NzbDrone.Core.Providers
         private const string ConsumerKey = "umKU6jBWpFbHTuqQbW2VlQ";
         private const string ConsumerSecret = "e30OXkI6qrZWS35hbUUnrQQ8J2R9XNpccQNWAVK10";
 
-        [Inject]
         public TwitterProvider(ConfigProvider configProvider)
         {
             _configProvider = configProvider;

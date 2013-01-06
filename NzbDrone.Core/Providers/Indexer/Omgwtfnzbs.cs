@@ -4,7 +4,6 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Text.RegularExpressions;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -13,7 +12,6 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     class Omgwtfnzbs : IndexerBase
     {
-        [Inject]
         public Omgwtfnzbs(HttpProvider httpProvider, ConfigProvider configProvider)
             : base(httpProvider, configProvider)
         {

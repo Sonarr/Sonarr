@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ninject;
 using NzbDrone.Api.Exceptions;
 using NzbDrone.Api.Helpers;
 using NzbDrone.Core.Providers.Core;
@@ -16,7 +15,6 @@ namespace NzbDrone.Api.Filters
         public ApplyTo ApplyTo { get; set; }
         public int Priority { get; set; }
 
-        [Inject]
         public ConfigProvider _configProvider;
 
         public void RequestFilter(IHttpRequest req, IHttpResponse res, object requestDto)

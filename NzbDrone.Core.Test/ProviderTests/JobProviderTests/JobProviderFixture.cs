@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void running_scheduled_jobs_should_updates_last_execution_time()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             //Act
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void failing_scheduled_job_should_mark_job_as_failed()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { brokenJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { brokenJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             //Act
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void scheduler_skips_jobs_that_arent_mature_yet()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             //Act
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         //after execution so the job can successfully run.
         public void can_run_async_job_again()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void no_concurent_jobs()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { slowJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { slowJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void can_run_broken_job_again()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { brokenJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { brokenJob };
 
             Mocker.SetConstant(BaseFakeJobs);
 
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void schedule_hit_should_be_ignored_if_queue_is_running()
         {
-            IList<IJob> fakeJobs = new List<IJob> { slowJob, fakeJob };
+            IEnumerable<IJob> fakeJobs = new List<IJob> { slowJob, fakeJob };
 
             Mocker.SetConstant(fakeJobs);
 
@@ -210,8 +210,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void can_queue_jobs_at_the_same_time()
         {
-
-            IList<IJob> BaseFakeJobs = new List<IJob> { slowJob, fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { slowJob, fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -238,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void Init_Jobs()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
 
             Mocker.SetConstant(BaseFakeJobs);
 
@@ -265,7 +264,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             for (int i = 0; i < 2; i++)
             {
                 var fakeTimer = new FakeJob();
-                IList<IJob> BaseFakeJobs = new List<IJob> { fakeTimer };
+                IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeTimer };
 
                 Mocker.SetConstant(BaseFakeJobs);
 
@@ -287,7 +286,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void inti_should_removed_jobs_that_no_longer_exist()
         {
-            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> fakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(fakeJobs);
 
             WithRealDb();
@@ -307,7 +306,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void inti_should_removed_jobs_that_no_longer_exist_even_with_same_name()
         {
-            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> fakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(fakeJobs);
 
             WithRealDb();
@@ -329,7 +328,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void init_should_update_existing_job()
         {
-            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> fakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(fakeJobs);
 
             WithRealDb();
@@ -364,7 +363,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void jobs_with_zero_interval_are_registered_as_disabled()
         {
-            IList<IJob> fakeJobs = new List<IJob> { disabledJob };
+            IEnumerable<IJob> fakeJobs = new List<IJob> { disabledJob };
             Mocker.SetConstant(fakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -378,7 +377,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void disabled_jobs_arent_run_by_scheduler()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { disabledJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { disabledJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -394,7 +393,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void job_with_specific_target_should_not_update_last_execution()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             //Act
@@ -412,7 +411,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void job_with_specific_target_should_not_set_success_flag()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             //Act
@@ -430,7 +429,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void duplicated_queue_item_should_start_queue_if_its_not_running()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             var stuckQueueItem = new JobQueueItem
@@ -456,7 +455,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void Item_added_to_queue_while_scheduler_runs_should_be_executed()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { slowJob, disabledJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { slowJob, disabledJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             ResetLastExecution();
@@ -477,7 +476,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void trygin_to_queue_unregistered_job_should_fail()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { slowJob, disabledJob };
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { slowJob, disabledJob };
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -492,7 +491,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [Test]
         public void scheduled_job_should_have_scheduler_as_source()
         {
-            IList<IJob> BaseFakeJobs = new List<IJob> { slowJob, fakeJob};
+            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { slowJob, fakeJob};
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
@@ -504,8 +503,5 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             WaitForQueue();
         }
-
     }
-
-
 }

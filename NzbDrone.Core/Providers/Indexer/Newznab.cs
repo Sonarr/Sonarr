@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -13,7 +12,6 @@ namespace NzbDrone.Core.Providers.Indexer
     {
         private readonly NewznabProvider _newznabProvider;
 
-        [Inject]
         public Newznab(HttpProvider httpProvider, ConfigProvider configProvider, NewznabProvider newznabProvider)
             : base(httpProvider, configProvider)
         {

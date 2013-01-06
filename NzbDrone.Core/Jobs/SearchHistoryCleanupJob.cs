@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -16,7 +15,6 @@ namespace NzbDrone.Core.Jobs
         private readonly SearchHistoryProvider _searchHistoryProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public SearchHistoryCleanupJob(SearchHistoryProvider searchHistoryProvider)
         {
             _searchHistoryProvider = searchHistoryProvider;

@@ -1,5 +1,5 @@
-﻿using NLog;
-using Ninject;
+﻿using Autofac;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Providers;
 
@@ -7,45 +7,47 @@ namespace NzbDrone
 {
     public static class CentralDispatch
     {
-        private static StandardKernel _kernel;
+        private static IContainer _container;
         private static readonly Logger Logger = LogManager.GetLogger("Host.CentralDispatch");
 
         static CentralDispatch()
         {
-            _kernel = new StandardKernel();
-            BindKernel();
+            var builder = new ContainerBuilder();
+            BindKernel(builder);
+            _container = builder.Build();
             InitilizeApp();
         }
 
-        public static StandardKernel Kernel
+        public static IContainer Container
         {
             get
             {
-                return _kernel;
+                return _container;
             }
         }
 
-        private static void BindKernel()
+        private static void BindKernel(ContainerBuilder builder)
         {
-            _kernel = new StandardKernel();
-            _kernel.Bind<ApplicationServer>().ToSelf().InSingletonScope();
-            _kernel.Bind<ConfigFileProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<ConsoleProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<DebuggerProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<EnvironmentProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<IISProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<MonitoringProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<ProcessProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<ServiceProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
+            builder.RegisterAssemblyTypes(typeof(DiskProvider).Assembly).SingleInstance();
+            builder.RegisterType<Router>();
 
+            builder.RegisterType<ApplicationServer>().SingleInstance();
+            builder.RegisterType<ConfigFileProvider>().SingleInstance();
+            builder.RegisterType<ConsoleProvider>().SingleInstance();
+            builder.RegisterType<DebuggerProvider>().SingleInstance();
+            builder.RegisterType<EnvironmentProvider>().SingleInstance();
+            builder.RegisterType<IISProvider>().SingleInstance();
+            builder.RegisterType<MonitoringProvider>().SingleInstance();
+            builder.RegisterType<ProcessProvider>().SingleInstance();
+            builder.RegisterType<ServiceProvider>().SingleInstance();
+            builder.RegisterType<HttpProvider>().SingleInstance();
         }
 
         private static void InitilizeApp()
         {
-            var environmentProvider = _kernel.Get<EnvironmentProvider>();
+            var environmentProvider = _container.Resolve<EnvironmentProvider>();
             
-            ReportingService.RestProvider = _kernel.Get<RestProvider>();
+            ReportingService.RestProvider = _container.Resolve<RestProvider>();
             ReportingService.SetupExceptronDriver();
 
             LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);

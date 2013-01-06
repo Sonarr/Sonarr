@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Providers
         private readonly SeriesProvider _seriesProvider;
         private readonly MetadataProvider _metadataProvider;
 
-        [Inject]
         public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider,
                                     SeriesProvider seriesProvider, MetadataProvider metadataProvider)
         {

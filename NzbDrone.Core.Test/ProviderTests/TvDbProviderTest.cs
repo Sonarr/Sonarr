@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using FluentAssertions;
 using NUnit.Framework;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
@@ -24,7 +24,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void Setup()
         {
-            tvDbProvider = new StandardKernel().Get<TvDbProvider>();
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<EnvironmentProvider>();
+            builder.RegisterType<TvDbProvider>();
+
+            var container = builder.Build();
+
+            tvDbProvider = container.Resolve<TvDbProvider>();
         }
 
         [TearDown]

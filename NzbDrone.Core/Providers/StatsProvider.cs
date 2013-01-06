@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -13,7 +12,6 @@ namespace NzbDrone.Core.Providers
     {
         private readonly IDatabase _database;
 
-        [Inject]
         public StatsProvider(IDatabase database)
         {
             _database = database;

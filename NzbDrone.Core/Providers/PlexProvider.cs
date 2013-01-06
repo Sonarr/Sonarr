@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using NLog;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers.Core;
 
@@ -17,7 +16,6 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        [Inject]
         public PlexProvider(HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _httpProvider = httpProvider;

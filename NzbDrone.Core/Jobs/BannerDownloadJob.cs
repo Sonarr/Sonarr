@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Jobs
 
         private const string BANNER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
-        [Inject]
         public BannerDownloadJob(SeriesProvider seriesProvider, BannerProvider bannerProvider)
         {
             _seriesProvider = seriesProvider;

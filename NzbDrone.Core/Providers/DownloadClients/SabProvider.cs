@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
@@ -21,7 +20,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
         private readonly ConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
 
-        [Inject]
         public SabProvider(ConfigProvider configProvider, HttpProvider httpProvider)
         {
             _configProvider = configProvider;
