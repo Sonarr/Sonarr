@@ -13,7 +13,7 @@ namespace ServiceUninstall
         {
             get
             {
-                return Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName, "nzbdrone.exe");
+                return Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName, "NzbDrone.Console.exe");
             }
         }
 

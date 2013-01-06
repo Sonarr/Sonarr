@@ -74,7 +74,7 @@ namespace NzbDrone.Common
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
-                applicationPath = CrawlToRoot(NzbDronePathFromEnviroment);
+                applicationPath = CrawlToRoot(NzbDronePathFromEnvironment);
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
@@ -146,7 +146,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual string NzbDronePathFromEnviroment
+        public virtual string NzbDronePathFromEnvironment
         {
             get
             {

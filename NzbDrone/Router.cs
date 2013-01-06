@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -15,73 +16,94 @@ namespace NzbDrone
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly EnvironmentProvider _environmentProvider;
+        private readonly ProcessProvider _processProvider;
 
-        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider)
+        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider,
+                        ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider,
+                        ProcessProvider processProvider)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
             _environmentProvider = environmentProvider;
+            _processProvider = processProvider;
         }
 
         public void Route(IEnumerable<string> args)
         {
-
             Route(GetApplicationMode(args));
         }
 
         public void Route(ApplicationMode applicationMode)
         {
-            logger.Info("Application mode: {0}", applicationMode);    
+            logger.Info("Application mode: {0}", applicationMode);
 
-            //TODO:move this outside, it should be one of application modes (ApplicationMode.Service?)
-            if (!_environmentProvider.IsUserInteractive)
+            if(!_environmentProvider.IsUserInteractive)
             {
-                _serviceProvider.Run(_applicationServer);
+                applicationMode = ApplicationMode.Service;
             }
-            else
-            {
+
                 switch (applicationMode)
-                {
+            {
+                case ApplicationMode.Service:
+                    {
+                        _serviceProvider.Run(_applicationServer);
+                        break;
+                    }
 
-                    case ApplicationMode.Console:
+                case ApplicationMode.Console:
+                    {
+                        _applicationServer.Start();
+                        _consoleProvider.WaitForClose();
+                        break;
+                    }
+                case ApplicationMode.InstallService:
+                    {
+                        if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
-                            _applicationServer.Start();
-                            _consoleProvider.WaitForClose();
-                            break;
+                            _consoleProvider.PrintServiceAlreadyExist();
                         }
-                    case ApplicationMode.InstallService:
+                        else
                         {
-                            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
-                            {
-                                _consoleProvider.PrintServiceAlreadyExist();
-                            }
-                            else
-                            {
-                                _serviceProvider.Install(ServiceProvider.NZBDRONE_SERVICE_NAME);
-                                _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
-                            }
-                            break;
+                            _serviceProvider.Install(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                            _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
                         }
-                    case ApplicationMode.UninstallService:
+                        break;
+                    }
+                case ApplicationMode.UninstallService:
+                    {
+                        if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
-                            if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
-                            {
-                                _consoleProvider.PrintServiceDoestExist();
-                            }
-                            else
-                            {
-                                _serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
-                            }
+                            _consoleProvider.PrintServiceDoestExist();
+                        }
+                        else
+                        {
+                            _serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                        }
 
-                            break;
-                        }
-                    default:
-                        {
-                            _consoleProvider.PrintHelp();
-                            break;
-                        }
-                }
+                        break;
+                    }
+                case ApplicationMode.Silent:
+                    {
+                        var startInfo = new ProcessStartInfo();
+                        startInfo.FileName = _environmentProvider.GetNzbDroneExe();
+                        startInfo.WorkingDirectory = _environmentProvider.ApplicationPath;
+
+                        startInfo.UseShellExecute = false;
+                        startInfo.RedirectStandardOutput = true;
+                        startInfo.RedirectStandardError = true;
+                        startInfo.CreateNoWindow = true;
+
+                        _processProvider.Start(startInfo);
+
+                        Environment.Exit(0);
+                        break;
+                    }
+                default:
+                    {
+                        _consoleProvider.PrintHelp();
+                        break;
+                    }
             }
         }
 
@@ -97,6 +119,7 @@ namespace NzbDrone
 
             if (arg == "i") return ApplicationMode.InstallService;
             if (arg == "u") return ApplicationMode.UninstallService;
+            if (arg == "s") return ApplicationMode.Silent;
 
             return ApplicationMode.Help;
         }

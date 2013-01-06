@@ -9,11 +9,11 @@ namespace NzbDrone.Common
         private const string APP_DATA = "App_Data\\";
         public const string IIS_FOLDER = "IISExpress";
         public const string IIS_EXE = "iisexpress.exe";
-
-
+        
         private const string LOG_CONFIG_FILE = "log.config";
         private const string APP_CONFIG_FILE = "config.xml";
 
+        public const string NZBDRONE_EXE = "NzbDrone.exe";
         public const string NZBDRONE_DB_FILE = "nzbdrone.sdf";
         public const string LOG_DB_FILE = "log.sdf";
 
@@ -155,6 +155,11 @@ namespace NzbDrone.Common
         public static string GetConfigBackupFile(this EnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), BACKUP_ZIP_FILE);
+        }
+
+        public static string GetNzbDroneExe(this EnvironmentProvider environmentProvider)
+        {
+            return Path.Combine(environmentProvider.ApplicationPath, NZBDRONE_EXE);
         }
     }
 }

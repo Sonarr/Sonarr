@@ -51,7 +51,6 @@ namespace NzbDrone.Common
             startInfo.RedirectStandardError = true;
             startInfo.CreateNoWindow = true;
 
-
             startInfo.EnvironmentVariables[EnvironmentProvider.NZBDRONE_PATH] = _environmentProvider.ApplicationPath;
             startInfo.EnvironmentVariables[EnvironmentProvider.NZBDRONE_PID] = Process.GetCurrentProcess().Id.ToString();
 
@@ -74,6 +73,9 @@ namespace NzbDrone.Common
             iisProcess.BeginOutputReadLine();
 
             ServerStarted = true;
+
+            iisProcess.EnableRaisingEvents = true;
+            iisProcess.Exited += IIS_EXITED;
         }
 
         private static void OnErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -84,7 +86,6 @@ namespace NzbDrone.Common
             IISLogger.Error(e.Data);
         }
 
-
         public void RestartServer()
         {
             ServerStarted = false;
@@ -92,7 +93,6 @@ namespace NzbDrone.Common
             StopServer();
             StartServer();
         }
-
 
         public virtual void StopServer()
         {
@@ -114,6 +114,10 @@ namespace NzbDrone.Common
             }
         }
 
+        public void IIS_EXITED(object obj, EventArgs args)
+        {
+            RestartServer();
+        }
 
         private void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
@@ -123,6 +127,5 @@ namespace NzbDrone.Common
 
             Console.WriteLine(e.Data);
         }
-
     }
 }

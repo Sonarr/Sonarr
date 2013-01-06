@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NzbDrone</RootNamespace>
-    <AssemblyName>NzbDrone</AssemblyName>
+    <AssemblyName>NzbDrone.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

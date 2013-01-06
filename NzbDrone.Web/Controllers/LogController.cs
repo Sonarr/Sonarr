@@ -26,11 +26,6 @@ namespace NzbDrone.Web.Controllers
             _diskProvider = diskProvider;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public FileContentResult File()
         {
             string log = string.Empty;

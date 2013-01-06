@@ -36,6 +36,16 @@ namespace NzbDrone.Web.Controllers
             _statsProvider = statsProvider;
         }
 
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Logs()
+        {
+            return View();
+        }
+
         public ActionResult Jobs()
         {
             var queue = _jobProvider.Queue.Select(c => new JobQueueItemModel
@@ -78,32 +88,6 @@ namespace NzbDrone.Web.Controllers
             var serialized = new JavaScriptSerializer().Serialize(config);
 
             return View((object)serialized);
-        }
-
-        public JsonResult SelectConfigAjax()
-        {
-            var config = _configProvider.All();
-
-            return Json(new
-                            {
-                                iTotalRecords = config.Count(),
-                                iTotalDisplayRecords = config.Count(),
-                                aaData = config
-                            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public string SaveConfigAjax(string id, string value)
-        {
-            _configProvider.SetValue(id, value);
-            return value;
-        }
-
-        [HttpPost]
-        public string InsertConfigAjax(string key, string value)
-        {
-            _configProvider.SetValue(key, value);
-            return key;
         }
 
         //PostDownloadView
@@ -183,6 +167,44 @@ namespace NzbDrone.Web.Controllers
             var model = _statsProvider.GetStats();
 
             return View(model);
+        }
+
+        public JsonResult Restart()
+        {
+            _jobProvider.QueueJob(typeof(AppRestartJob));
+            return JsonNotificationResult.Info("NzbDrone will restart shortly");
+        }
+
+        public JsonResult Shutdown()
+        {
+            _jobProvider.QueueJob(typeof(AppShutdownJob));
+            return JsonNotificationResult.Info("NzbDrone will shutdown shortly");
+        }
+
+        public JsonResult SelectConfigAjax()
+        {
+            var config = _configProvider.All();
+
+            return Json(new
+            {
+                iTotalRecords = config.Count(),
+                iTotalDisplayRecords = config.Count(),
+                aaData = config
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public string SaveConfigAjax(string id, string value)
+        {
+            _configProvider.SetValue(id, value);
+            return value;
+        }
+
+        [HttpPost]
+        public string InsertConfigAjax(string key, string value)
+        {
+            _configProvider.SetValue(key, value);
+            return key;
         }
     }
 }

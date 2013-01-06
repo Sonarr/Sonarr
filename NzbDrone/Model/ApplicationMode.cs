@@ -5,6 +5,7 @@
         Console,
         Help,
         InstallService,
-        UninstallService
+        UninstallService,
+        Service
     }
 }

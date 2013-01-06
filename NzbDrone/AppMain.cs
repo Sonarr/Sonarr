@@ -45,7 +45,5 @@ namespace NzbDrone
                 MonitoringProvider.AppDomainException(e);
             }
         }
-
-
     }
 }

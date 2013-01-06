@@ -11,6 +11,7 @@ namespace NzbDrone.Common
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static readonly string NzbDroneProccessName = "NzbDrone";
+        public static readonly string NzbDroneConsoleProccessName = "NzbDrone.Console";
 
         public virtual ProcessInfo GetCurrentProcess()
         {
@@ -107,6 +108,5 @@ namespace NzbDrone.Common
                            Name = process.ProcessName
                        };
         }
-
     }
 }

@@ -312,6 +312,8 @@
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
     <Compile Include="Models\UpdateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Views\System\Index.cshtml" />
+    <Content Include="Views\System\Logs.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -528,7 +530,6 @@
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\History\Index.cshtml" />
-    <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Upcoming\Index.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />

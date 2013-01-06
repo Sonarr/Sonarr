@@ -136,6 +136,8 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<CleanupRecycleBinJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<EmptyRecycleBinJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<XemUpdateJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<AppShutdownJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<AppRestartJob>().InSingletonScope();
 
             Kernel.Get<JobProvider>().Initialize();
             Kernel.Get<WebTimer>().StartTimer(30);

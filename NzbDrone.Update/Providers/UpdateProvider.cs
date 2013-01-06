@@ -45,20 +45,19 @@ namespace NzbDrone.Update.Providers
             logger.Info("Verifying Update Folder");
             if (!_diskProvider.FolderExists(_environmentProvider.GetUpdatePackageFolder()))
                 throw new DirectoryNotFoundException("Update folder doesn't exist " + _environmentProvider.GetUpdatePackageFolder());
-
         }
 
         public virtual void Start(string targetFolder)
         {
             Verify(targetFolder);
-            bool isService = false;
+            AppType appType = AppType.Normal;
 
             logger.Info("Stopping all running services");
 
             if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
                && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
-                isService = true;
+                appType = AppType.Service;
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
 
@@ -68,6 +67,14 @@ namespace NzbDrone.Update.Providers
             var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
             foreach (var processInfo in processes)
             {
+                appType = AppType.Normal;
+                _processProvider.Kill(processInfo.Id);
+            }
+
+            var consoleProcesses = _processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProccessName);
+            foreach (var processInfo in consoleProcesses)
+            {
+                appType = AppType.Console;
                 _processProvider.Kill(processInfo.Id);
             }
 
@@ -76,7 +83,6 @@ namespace NzbDrone.Update.Providers
 
             logger.Info("Creating backup of existing installation");
             _diskProvider.CopyDirectory(targetFolder, _environmentProvider.GetUpdateBackUpFolder());
-
 
             logger.Info("Moving update package to target");
 
@@ -100,7 +106,7 @@ namespace NzbDrone.Update.Providers
             }
             finally
             {
-                StartNzbDrone(isService, targetFolder);
+                StartNzbDrone(appType, targetFolder);
             }
         }
 
@@ -112,15 +118,19 @@ namespace NzbDrone.Update.Providers
         }
 
 
-        private void StartNzbDrone(bool isService, string targetFolder)
+        private void StartNzbDrone(AppType appType, string targetFolder)
         {
-            if (isService)
+            if (appType == AppType.Service)
             {
                 _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
+            else if(appType == AppType.Console)
+            {
+                _processProvider.Start(Path.Combine(targetFolder, "NzbDrone.Console.exe"));
+            }
             else
             {
-                _processProvider.Start(Path.Combine(targetFolder, "nzbdrone.exe"));
+                _processProvider.Start(Path.Combine(targetFolder, "NzbDrone.exe"));
             }
         }
     }
