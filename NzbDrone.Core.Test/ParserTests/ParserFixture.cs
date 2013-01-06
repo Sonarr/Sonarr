@@ -75,6 +75,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Cheers S08E20 50-50 Carla [DVD]", "Cheers", 8, 20)]
         [TestCase("S02E10 6-50 to SLC [SDTV]", "", 2, 10)]
         [TestCase("Franklin & Bash S02E10 6-50 to SLC [SDTV]", "Franklin & Bash", 2, 10)]
+        [TestCase("The_Big_Bang_Theory_-_6x12_-_The_Egg_Salad_Equivalency_[HDTV-720p]", "The Big Bang Theory", 6, 12)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
