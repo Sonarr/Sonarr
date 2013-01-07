@@ -4,6 +4,7 @@ SET TARGET=%PACKAGEROOT%\NzbDrone
 rd %PACKAGEROOT% /S /Q
 del nzbdrone*.zip /Q /F
 
+echo ##teamcity[progressMessage 'Packaging release']
 
 xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
 
@@ -52,3 +53,5 @@ del *-vsdoc.js /Q /F /S
 ..\Libraries\7zip\7za.exe a -tzip ..\NzbDrone.zip *
 
 CD ..
+
+echo ##teamcity[progressMessage 'Release packaged']
