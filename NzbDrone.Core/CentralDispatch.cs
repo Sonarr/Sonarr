@@ -63,10 +63,6 @@ namespace NzbDrone.Core
             ContainerBuilder.Register(c => c.Resolve<Connection>().GetLogPetaPocoDb())
                             .Named<IDatabase>("LogProvider");
 
-            ContainerBuilder.Register(c => c.Resolve<Connection>().GetLogEfContext())
-                            .As<LogDbContext>()
-                            .SingleInstance();
-
             ContainerBuilder.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
             ContainerBuilder.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }

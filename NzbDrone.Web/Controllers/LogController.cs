@@ -49,53 +49,26 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AjaxBinding(DataTablesPageRequest pageRequest)
         {
-            var logs = _logProvider.GetAllLogs();
-            var totalCount = logs.Count();
+            var pageResult = _logProvider.GetPagedItems(pageRequest);
+            var totalItems = _logProvider.Count();
 
-            IQueryable<Log> q = logs;
-            if (!string.IsNullOrEmpty(pageRequest.Search))
+            var items = pageResult.Items.Select(l => new LogModel
             {
-                q = q.Where(b => b.Logger.Contains(pageRequest.Search)
-                    || b.Exception.Contains(pageRequest.Search)
-                    || b.Message.Contains(pageRequest.Search));
-            }
-
-            int filteredCount = q.Count();
-
-            IQueryable<Log> sorted = q;
-
-            for (int i = 0; i < pageRequest.SortingCols; i++)
-            {
-                int sortCol = pageRequest.SortCol[i];
-                var sortColName = sortCol == 0 ? "Time" : sortCol == 1 ? "Level" : "Logger";
-                var sortExpression = String.Format("{0} {1}", sortColName, pageRequest.SortDir[i]);
-
-                sorted = sorted.OrderBy(sortExpression);
-            }
-
-            IQueryable<Log> filteredAndSorted = sorted;
-            if (filteredCount > pageRequest.DisplayLength)
-            {
-                filteredAndSorted = sorted.Skip(pageRequest.DisplayStart).Take(pageRequest.DisplayLength);
-            }
-
-            var logModels = filteredAndSorted.ToList().Select(s => new LogModel
-                                                 {
-                                                         Time = s.Time.ToString(),
-                                                         Level = s.Level,
-                                                         Source = s.Logger,
-                                                         Message = s.Message,
-                                                         Method = s.Method,
-                                                         ExceptionType = s.ExceptionType,
-                                                         Exception = s.Exception
-                                                 });
+                Time = l.Time.ToString(),
+                Level = l.Level,
+                Source = l.Logger,
+                Message = l.Message,
+                Method = l.Method,
+                ExceptionType = l.ExceptionType,
+                Exception = l.Exception
+            });
 
             return Json(new
             {
                 sEcho = pageRequest.Echo,
-                iTotalRecords = totalCount,
-                iTotalDisplayRecords = filteredCount,
-                aaData = logModels
+                iTotalRecords = totalItems,
+                iTotalDisplayRecords = pageResult.TotalItems,
+                aaData = items
             },
             JsonRequestBehavior.AllowGet);
         }

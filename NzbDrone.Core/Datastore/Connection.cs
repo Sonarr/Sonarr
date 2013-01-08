@@ -59,11 +59,6 @@ namespace NzbDrone.Core.Datastore
             return GetPetaPocoDb(LogConnectionString, profiled);
         }
 
-        public LogDbContext GetLogEfContext()
-        {
-            return GetLogDbContext(LogConnectionString);
-        }
-
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             MigrationsHelper.Run(connectionString, true);
@@ -81,13 +76,5 @@ namespace NzbDrone.Core.Datastore
 
             return db;
         }
-
-        public static LogDbContext GetLogDbContext(string connectionString)
-        {
-            MigrationsHelper.Run(connectionString, true);
-            DbConnection connection = new SqlCeConnection(connectionString);
-            return new LogDbContext(connection);
-        }
-
     }
 }
