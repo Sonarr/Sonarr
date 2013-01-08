@@ -63,7 +63,7 @@
                                         // 'display' and 'filter' use the image
                                         if (type === 'display' || type === 'filter') {
                                             if (source['Indexer'].indexOf("Newznab") === 0)
-                                                return "<img src='/Content/Images/Indexers/" + source['Indexer'] + ".png' alt='" + source["Indexer"].replace('_', ' - ') + "' title='" + source["Indexer"].replace('_', ' - ') + "' onerror='this.src=\"/Content/Images/Indexers/Newznab.png\"'>";
+                                                return '<img src="/Image/Newznab?name=' + source['Indexer'] + '" alt="' + source['Indexer'].replace('_', ' - ') + '" title="' + source['Indexer'].replace('_', ' - ') + '">';
 
                                             return "<img src='/Content/Images/Indexers/" + source['Indexer'] + ".png' alt='" + source["Indexer"] + "' title='" + source["Indexer"] + "'>";
                                         }
