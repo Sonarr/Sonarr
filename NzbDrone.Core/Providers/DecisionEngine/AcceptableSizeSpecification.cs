@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Providers.DecisionEngine
 {
@@ -24,13 +25,15 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
             logger.Trace("Beginning size check for: {0}", subject);
+
+            if(subject.Quality.Quality == QualityTypes.RAWHD)
+            {
+                logger.Trace("Raw-HD release found, skipping size check.");
+                return true;
+            }
+
             var qualityType = _qualityTypeProvider.Get((int)subject.Quality.Quality);
 
-            //Need to determine if this is a 30 or 60 minute episode
-            //Is it a multi-episode release?
-            //Is it the first or last series of a season?
-
-            //0 will be treated as unlimited
             if (qualityType.MaxSize == 0)
             {
                 logger.Trace("Max size is 0 (unlimited) - skipping check.");

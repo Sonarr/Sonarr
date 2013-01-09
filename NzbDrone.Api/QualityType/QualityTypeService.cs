@@ -26,8 +26,8 @@ namespace NzbDrone.Api.QualityType
         {
             if (request.Id == 0)
             {
-                var profiles = _qualityTypeProvider.All().Where(qualityProfile => qualityProfile.QualityTypeId > 0).ToList();
-                return Mapper.Map<List<Core.Repository.Quality.QualityType>, List<QualityTypeModel>>(profiles);
+                var types = _qualityTypeProvider.All().Where(qualityType => qualityType.QualityTypeId != 0 && qualityType.QualityTypeId != 10).ToList();
+                return Mapper.Map<List<Core.Repository.Quality.QualityType>, List<QualityTypeModel>>(types);
             }
 
             var type = _qualityTypeProvider.Get(request.Id);

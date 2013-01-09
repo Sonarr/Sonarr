@@ -98,10 +98,12 @@ namespace NzbDrone.Core.Repository.Quality
         public static QualityTypes DVD = new QualityTypes { Id = 2, Name = "DVD", Weight = 3 };
         public static QualityTypes HDTV720p = new QualityTypes { Id = 4, Name = "HDTV-720p", Weight = 4 };
         public static QualityTypes HDTV1080p = new QualityTypes { Id = 9, Name = "HDTV-1080p", Weight = 5 };
-        public static QualityTypes WEBDL720p = new QualityTypes { Id = 5, Name = "WEBDL-720p", Weight = 6 };
-        public static QualityTypes Bluray720p = new QualityTypes { Id = 6, Name = "Bluray720p", Weight = 7 };
-        public static QualityTypes WEBDL1080p = new QualityTypes { Id = 3, Name = "WEBDL-1080p", Weight = 8 };
-        public static QualityTypes Bluray1080p = new QualityTypes { Id = 7, Name = "Bluray1080p", Weight = 9 };
+        public static QualityTypes RAWHD = new QualityTypes { Id = 10, Name = "Raw-HD", Weight = 6 };
+        public static QualityTypes WEBDL720p = new QualityTypes { Id = 5, Name = "WEBDL-720p", Weight = 7 };
+        public static QualityTypes Bluray720p = new QualityTypes { Id = 6, Name = "Bluray720p", Weight = 8 };
+        public static QualityTypes WEBDL1080p = new QualityTypes { Id = 3, Name = "WEBDL-1080p", Weight = 9 };
+        public static QualityTypes Bluray1080p = new QualityTypes { Id = 7, Name = "Bluray1080p", Weight = 10 };
+
 
         public static List<QualityTypes> All()
         {
@@ -113,6 +115,7 @@ namespace NzbDrone.Core.Repository.Quality
                                DVD,
                                HDTV720p,
                                HDTV1080p,
+                               RAWHD,
                                WEBDL720p,
                                WEBDL1080p,
                                Bluray720p,

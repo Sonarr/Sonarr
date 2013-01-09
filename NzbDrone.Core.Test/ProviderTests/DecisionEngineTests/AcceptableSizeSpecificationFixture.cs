@@ -387,5 +387,16 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             //Assert
             result.Should().BeTrue();
         }
+
+        [Test]
+        public void should_return_true_if_RAWHD()
+        {
+            var parseResult = new EpisodeParseResult
+                {
+                        Quality = new QualityModel(QualityTypes.RAWHD, false)
+                };
+
+            Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResult).Should().BeTrue();
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "S07E23 .avi ", QualityTypes.SDTV, false },
             new object[] { "WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.DVD, false },
             new object[] { "WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.Bluray720p, false },
-            new object[] { "The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.Unknown, false },
+            new object[] { "The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.RAWHD, false },
             new object[] { "Nikita S02E01 HDTV XviD 2HD", QualityTypes.SDTV, false },
             new object[] { "Gossip Girl S05E11 PROPER HDTV XviD 2HD", QualityTypes.SDTV, true },
             new object[] { "The Jonathan Ross Show S02E08 HDTV x264 FTP", QualityTypes.SDTV, false },
@@ -76,7 +76,9 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "DEXTER.S07E01.ARE.YOU.1080P.HDTV.proper.X264-QCF", QualityTypes.HDTV1080p, true },
             new object[] { "Dexter - S01E01 - Title [HDTV]", QualityTypes.HDTV720p, false },
             new object[] { "Dexter - S01E01 - Title [HDTV-720p]", QualityTypes.HDTV720p, false },
-            new object[] { "Dexter - S01E01 - Title [HDTV-1080p]", QualityTypes.HDTV1080p, false }
+            new object[] { "Dexter - S01E01 - Title [HDTV-1080p]", QualityTypes.HDTV1080p, false },
+            new object[] { "POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.RAWHD, false },
+            new object[] { "How I Met Your Mother S01E18 Nothing Good Happens After 2 A.M. 720p HDTV DD5.1 MPEG2-TrollHD", QualityTypes.RAWHD, false }
         };
 
         public static object[] SelfQualityParserCases =

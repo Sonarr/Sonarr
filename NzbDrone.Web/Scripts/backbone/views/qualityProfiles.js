@@ -112,10 +112,11 @@ QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
                 { "Id": 2, "Weight": 3, "Name": "DVD", "Allowed": false },
                 { "Id": 4, "Weight": 4, "Name": "HDTV-720p", "Allowed": false },
                 { "Id": 9, "Weight": 5, "Name": "HDTV-1080p", "Allowed": false },
-                { "Id": 5, "Weight": 6, "Name": "WEBDL-720p", "Allowed": false },
-                { "Id": 3, "Weight": 6, "Name": "WEBDL-1080p", "Allowed": false },
-                { "Id": 6, "Weight": 8, "Name": "Bluray720p", "Allowed": false },
-                { "Id": 7, "Weight": 9, "Name": "Bluray1080p", "Allowed": false }
+                { "Id": 10, "Weight": 6, "Name": "Raw-HD", "Allowed": false },
+                { "Id": 5, "Weight": 7, "Name": "WEBDL-720p", "Allowed": false },
+                { "Id": 3, "Weight": 7, "Name": "WEBDL-1080p", "Allowed": false },
+                { "Id": 6, "Weight": 9, "Name": "Bluray720p", "Allowed": false },
+                { "Id": 7, "Weight": 10, "Name": "Bluray1080p", "Allowed": false }
             ]
         });
         //Todo: It would be nice to not have to save this on add (via create)
