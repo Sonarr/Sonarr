@@ -29,12 +29,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var types = Mocker.Resolve<QualityTypeProvider>().All();
 
-            types.Should().HaveCount(9);
+            types.Should().HaveCount(10);
             types.Should().Contain(e => e.Name == "SDTV" && e.QualityTypeId == 1);
             types.Should().Contain(e => e.Name == "DVD" && e.QualityTypeId == 2);
             types.Should().Contain(e => e.Name == "WEBDL-480p" && e.QualityTypeId == 8);
             types.Should().Contain(e => e.Name == "HDTV-720p" && e.QualityTypeId == 4);
             types.Should().Contain(e => e.Name == "HDTV-1080p" && e.QualityTypeId == 9);
+            types.Should().Contain(e => e.Name == "Raw-HD" && e.QualityTypeId == 10);
             types.Should().Contain(e => e.Name == "WEBDL-720p" && e.QualityTypeId == 5);
             types.Should().Contain(e => e.Name == "WEBDL-1080p" && e.QualityTypeId == 3);
             types.Should().Contain(e => e.Name == "Bluray720p" && e.QualityTypeId == 6);
