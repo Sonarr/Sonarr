@@ -328,6 +328,7 @@
     <Compile Include="Providers\Metadata\Xbmc.cs" />
     <Compile Include="Providers\RecycleBinProvider.cs" />
     <Compile Include="Providers\SearchHistoryProvider.cs" />
+    <Compile Include="Providers\Search\SearchBase.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
