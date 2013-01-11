@@ -60,17 +60,16 @@ namespace NzbDrone.Core.Providers
 
         public virtual QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
         {
-            var quality = _database.SingleOrDefault<dynamic>(@"SELECT TOP 1 History.Quality , History.IsProper FROM History 
-                                                    INNER JOIN Episodes ON History.EpisodeId = Episodes.EpisodeId 
-                                                    WHERE Episodes.seriesId = @0 AND 
+            var quality = _database.Fetch<QualityModel>(@"SELECT History.Quality , History.IsProper as Proper FROM History 
+                                                          INNER JOIN Episodes ON History.EpisodeId = Episodes.EpisodeId 
+                                                          WHERE Episodes.seriesId = @0 AND 
                                                           Episodes.SeasonNumber = @1 AND  
-                                                          Episodes.EpisodeNumber = @2
-                                                    ORDER BY History.Quality DESC, History.IsProper DESC"
+                                                          Episodes.EpisodeNumber = @2"
                                                     , seriesId, seasonNumber, episodeNumber);
 
-            if (quality == null) return null;
+            var best = quality.OrderByDescending(q => q).FirstOrDefault();
 
-            return new QualityModel((QualityTypes)quality.Quality, quality.IsProper);
+            return best;
         }
 
         public virtual void Delete(int historyId)

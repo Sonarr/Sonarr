@@ -158,41 +158,29 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodes = Builder<Episode>.CreateListOfSize(10).Build();
             var historyEpisode = episodes[6];
 
-            var history0 = Builder<History>.CreateNew()
-                .With(h => h.Quality = QualityTypes.DVD)
-                .With(h => h.IsProper = true)
-                .With(h => h.EpisodeId = historyEpisode.EpisodeId)
-                .Build();
+            var history = Builder<History>
+                    .CreateListOfSize(5)
+                    .All()
+                    .With(h => h.EpisodeId = historyEpisode.EpisodeId)
+                    .With(h => h.SeriesId = historyEpisode.SeriesId)
+                    .TheFirst(1)
+                    .With(h => h.Quality = QualityTypes.DVD)
+                    .With(h => h.IsProper = true)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.Bluray720p)
+                    .With(h => h.IsProper = false)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.Bluray720p)
+                    .With(h => h.IsProper = true)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.Bluray720p)
+                    .With(h => h.IsProper = false)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.SDTV)
+                    .With(h => h.IsProper = true)
+                    .Build();
 
-            var history1 = Builder<History>.CreateNew()
-                .With(h => h.Quality = QualityTypes.Bluray720p)
-                .With(h => h.IsProper = false)
-                .With(h => h.EpisodeId = historyEpisode.EpisodeId)
-                .Build();
-
-            var history2 = Builder<History>.CreateNew()
-                .With(h => h.Quality = QualityTypes.Bluray720p)
-                .With(h => h.IsProper = true)
-                .With(h => h.EpisodeId = historyEpisode.EpisodeId)
-                .Build();
-
-            var history3 = Builder<History>.CreateNew()
-                .With(h => h.Quality = QualityTypes.Bluray720p)
-                .With(h => h.IsProper = false)
-                .With(h => h.EpisodeId = historyEpisode.EpisodeId)
-                .Build();
-
-            var history4 = Builder<History>.CreateNew()
-                .With(h => h.Quality = QualityTypes.SDTV)
-                .With(h => h.IsProper = true)
-                .With(h => h.EpisodeId = historyEpisode.EpisodeId)
-                .Build();
-
-            Db.Insert(history0);
-            Db.Insert(history1);
-            Db.Insert(history2);
-            Db.Insert(history2);
-            Db.Insert(history4);
+            Db.InsertMany(history);
             Db.InsertMany(episodes);
 
             //Act
@@ -203,6 +191,49 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().NotBeNull();
             result.Quality.Should().Be(QualityTypes.Bluray720p);
             result.Proper.Should().BeTrue();
+        }
+
+        [Test]
+        public void GetBestQualityInHistory_should_return_highest_weighted_result()
+        {
+            WithRealDb();
+
+            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
+            var historyEpisode = episodes[6];
+
+            var history = Builder<History>
+                    .CreateListOfSize(5)
+                    .All()
+                    .With(h => h.EpisodeId = historyEpisode.EpisodeId)
+                    .With(h => h.SeriesId = historyEpisode.SeriesId)
+                    .TheFirst(1)
+                    .With(h => h.Quality = QualityTypes.DVD)
+                    .With(h => h.IsProper = true)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.WEBDL720p)
+                    .With(h => h.IsProper = false)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.WEBDL720p)
+                    .With(h => h.IsProper = true)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.WEBDL1080p)
+                    .With(h => h.IsProper = false)
+                    .TheNext(1)
+                    .With(h => h.Quality = QualityTypes.SDTV)
+                    .With(h => h.IsProper = true)
+                    .Build();
+
+            Db.InsertMany(history);
+            Db.InsertMany(episodes);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>()
+                .GetBestQualityInHistory(historyEpisode.SeriesId, historyEpisode.SeasonNumber, historyEpisode.EpisodeNumber);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Quality.Should().Be(QualityTypes.WEBDL1080p);
+            result.Proper.Should().BeFalse();
         }
 
         [Test]

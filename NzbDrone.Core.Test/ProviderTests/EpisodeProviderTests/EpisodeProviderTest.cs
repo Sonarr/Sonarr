@@ -120,7 +120,6 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
             //Act
             Mocker.Resolve<EpisodeProvider>().GetEpisode(1);
         }
-
      
         [Test]
         public void GetEpisodesBySeason_success()
@@ -180,7 +179,6 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
             Mocker.GetMock<TvDbProvider>().VerifyAll();
             actualCount.Should().Be(episodeCount);
         }
-
 
         [Test]
         public void RefreshEpisodeInfo_should_set_older_than_1900_to_null()
@@ -1517,6 +1515,27 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
             result.Should().HaveCount(episodeCount);
             result.Where(e => e.Ignored).Should().HaveCount(episodeCount - 1);
             result.Single(e => e.SeasonNumber == 1).Ignored.Should().BeFalse();
+        }
+
+        [Test]
+        public void GetEpisode_with_EpisodeFile_should_have_quality_set_properly()
+        {
+            WithRealDb();
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.WEBDL1080p).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
+
+            Db.Insert(fakeSeries);
+            Db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeFile);
+
+            //Act
+            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+
+            //Assert
+            episode.EpisodeFile.Quality.Should().Be(QualityTypes.WEBDL1080p);
         }
     }
 }
