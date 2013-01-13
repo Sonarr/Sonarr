@@ -24,6 +24,10 @@ namespace NzbDrone.Core.Providers.Search
             {
         }
 
+        public EpisodeSearch()
+        {
+        }
+
         public override List<EpisodeParseResult> PerformSearch(Series series, dynamic options, ProgressNotification notification)
         {
             //Todo: Daily and Anime or separate them out?

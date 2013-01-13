@@ -205,7 +205,7 @@
     <Compile Include="ProviderTests\GrowlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\GetFolderNameWithStatusFixture.cs" />
-    <Compile Include="JobTests\SearchJobTest.cs" />
+    <Compile Include="JobTests\EpisodeSearchJobTest.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\TestJobs.cs" />
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />

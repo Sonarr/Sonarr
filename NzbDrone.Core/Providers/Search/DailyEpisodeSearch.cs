@@ -24,6 +24,10 @@ namespace NzbDrone.Core.Providers.Search
             {
         }
 
+        public DailyEpisodeSearch()
+        {
+        }
+
         public override List<EpisodeParseResult> PerformSearch(Series series, dynamic options, ProgressNotification notification)
         {
             if (options.Episode == null)

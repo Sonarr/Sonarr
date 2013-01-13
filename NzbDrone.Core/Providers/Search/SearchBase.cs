@@ -37,6 +37,10 @@ namespace NzbDrone.Core.Providers.Search
             _searchHistoryProvider = searchHistoryProvider;
         }
 
+        protected SearchBase()
+        {
+        }
+
         public abstract List<EpisodeParseResult> PerformSearch(Series series, dynamic options, ProgressNotification notification);
         public abstract SearchHistoryItem CheckReport(Series series, dynamic options, EpisodeParseResult episodeParseResult,
                                                                 SearchHistoryItem item);
