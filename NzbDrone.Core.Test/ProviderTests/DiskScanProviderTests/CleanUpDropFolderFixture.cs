@@ -111,6 +111,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<MediaFileProvider>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Returns(new FileInfo(newFilePath));
 
+            Mocker.GetMock<DiskProvider>()
+                  .Setup(s => s.FileExists(filename))
+                  .Returns(true);
+
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveFile(episodeFile.Path, newFilePath));
 
             //Act
