@@ -191,6 +191,12 @@ namespace NzbDrone.Core.Providers
                 return null;
             }
 
+            if(!_diskProvider.FileExists(episodeFile.Path))
+            {
+                Logger.Error("Episode file path does not exist, {0}", episodeFile.Path);
+                return null;
+            }
+
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
             Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
