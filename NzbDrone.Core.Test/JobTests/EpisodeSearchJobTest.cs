@@ -10,7 +10,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    public class SearchJobTest:CoreTest
+    public class EpisodeSearchJobTest:CoreTest
     {
         [TestCase(0)]
         [TestCase(-1)]

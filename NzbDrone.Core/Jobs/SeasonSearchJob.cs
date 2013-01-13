@@ -67,9 +67,9 @@ namespace NzbDrone.Core.Jobs
             if (episodes.Count == successes.Count)
                 return;
 
-            var missingEpisodes = episodes.Select(e => e.EpisodeNumber).Except(successes).ToList();
+            var missingEpisodes = episodes.Select(e => e.EpisodeId).Except(successes).ToList();
 
-            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
+            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeId)).OrderBy(o => o.EpisodeNumber))
             {
                 _episodeSearchJob.Start(notification, new { EpisodeId = episode.EpisodeId });
             }
