@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Jobs
         private ProgressNotification _notification;
 
 
-                public JobProvider(IDatabase database, NotificationProvider notificationProvider, IEnumerable<IJob> jobs)
+        public JobProvider(IDatabase database, NotificationProvider notificationProvider, IEnumerable<IJob> jobs)
         {
             StopWatch = new Stopwatch();
             _database = database;
@@ -96,7 +96,6 @@ namespace NzbDrone.Core.Jobs
                 jobDefinition.Name = job.Name;
 
                 jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
-                //Todo: Need to have a way for users to change this and not have it overwritten on start-up.
 
                 SaveDefinition(jobDefinition);
             }
@@ -136,7 +135,7 @@ namespace NzbDrone.Core.Jobs
             var pendingJobTypes = All().Where(
                 t => t.Enable &&
                      (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
-                ).Select(c => _jobs.Where(t => t.GetType().ToString() == c.TypeName).Single().GetType()).ToList();
+                ).Select(c => _jobs.Single(t => t.GetType().ToString() == c.TypeName).GetType()).ToList();
 
 
             pendingJobTypes.ForEach(jobType => QueueJob(jobType, source: JobQueueItem.JobSourceType.Scheduler));
@@ -256,7 +255,7 @@ namespace NzbDrone.Core.Jobs
 
         private void Execute(JobQueueItem queueItem)
         {
-            var jobImplementation = _jobs.Where(t => t.GetType() == queueItem.JobType).SingleOrDefault();
+            var jobImplementation = _jobs.SingleOrDefault(t => t.GetType() == queueItem.JobType);
             if (jobImplementation == null)
             {
                 logger.Error("Unable to locate implementation for '{0}'. Make sure it is properly registered.", queueItem.JobType);
