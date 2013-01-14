@@ -32,7 +32,6 @@ namespace NzbDrone.Common
             return service != null && service.Status == ServiceControllerStatus.Running;
         }
 
-
         public virtual void Install(string serviceName)
         {
             Logger.Info("Installing service '{0}'", serviceName);
@@ -77,7 +76,6 @@ namespace NzbDrone.Common
 
             Logger.Info("{0} successfully uninstalled", serviceName);
         }
-
 
         public virtual void Run(ServiceBase service)
         {
@@ -131,6 +129,7 @@ namespace NzbDrone.Common
             if (service == null)
             {
                 Logger.Warn("Unable to start '{0}' no service with that name exists.", serviceName);
+                return;
             }
 
             if (service.Status != ServiceControllerStatus.Paused && service.Status != ServiceControllerStatus.Stopped)

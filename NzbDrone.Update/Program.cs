@@ -42,7 +42,6 @@ namespace NzbDrone.Update
             }
 
             TransferUpdateLogs();
-
         }
 
         private static void TransferUpdateLogs()

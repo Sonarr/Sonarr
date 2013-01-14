@@ -115,19 +115,22 @@ namespace NzbDrone.Update.Providers
             _diskProvider.CopyDirectory(_environmentProvider.GetUpdateBackUpFolder(), targetFolder);
         }
 
-
         private void StartNzbDrone(AppType appType, string targetFolder)
         {
+            logger.Info("Starting NzbDrone");
             if (appType == AppType.Service)
             {
+                logger.Info("Starting NzbDrone service");
                 _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
             else if(appType == AppType.Console)
             {
+                logger.Info("Starting NzbDrone with Console");
                 _processProvider.Start(Path.Combine(targetFolder, "NzbDrone.Console.exe"));
             }
             else
             {
+                logger.Info("Starting NzbDrone without Console");
                 _processProvider.Start(Path.Combine(targetFolder, "NzbDrone.exe"));
             }
         }
