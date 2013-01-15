@@ -36,29 +36,32 @@ namespace NzbDrone
 
         public void Route(ApplicationMode applicationMode)
         {
-            logger.Info("Application mode: {0}", applicationMode);
-
             if(!_environmentProvider.IsUserInteractive)
             {
                 applicationMode = ApplicationMode.Service;
             }
 
-                switch (applicationMode)
+            logger.Info("Application mode: {0}", applicationMode);
+
+            switch (applicationMode)
             {
                 case ApplicationMode.Service:
                     {
+                        logger.Trace("Service selected");
                         _serviceProvider.Run(_applicationServer);
                         break;
                     }
 
                 case ApplicationMode.Console:
                     {
+                        logger.Trace("Console selected");
                         _applicationServer.Start();
                         _consoleProvider.WaitForClose();
                         break;
                     }
                 case ApplicationMode.InstallService:
                     {
+                        logger.Trace("Install Service selected");
                         if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
                             _consoleProvider.PrintServiceAlreadyExist();
@@ -72,6 +75,7 @@ namespace NzbDrone
                     }
                 case ApplicationMode.UninstallService:
                     {
+                        logger.Trace("Uninstall Service selected");
                         if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
                             _consoleProvider.PrintServiceDoestExist();
