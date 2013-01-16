@@ -141,6 +141,7 @@
     <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerTests\NzbxFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
+    <Compile Include="ProviderTests\DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="ProviderTests\RootDirProviderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\ProcessResultsFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\DailyEpisodeSearchTests\CheckReportFixture.cs" />

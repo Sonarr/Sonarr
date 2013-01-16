@@ -313,6 +313,7 @@
     <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
+    <Compile Include="Providers\DecisionEngine\LanguageSpecification.cs" />
     <Compile Include="Providers\SearchProvider2.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
