@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Model
         Skipped = 11,
         Failure = 12,
         ReleaseGroupNotWanted = 13,
-        AiredAfterCustomStartDate = 14
+        AiredAfterCustomStartDate = 14,
+        LanguageNotWanted = 15
     }
 }

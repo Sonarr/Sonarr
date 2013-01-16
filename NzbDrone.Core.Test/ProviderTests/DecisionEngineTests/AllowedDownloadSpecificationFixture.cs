@@ -56,6 +56,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.GetMock<CustomStartDateSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
+
+            Mocker.GetMock<LanguageSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(true);
         }
 
         private void WithProfileNotAllowed()
@@ -96,6 +100,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         private void WithAiredBeforeCustomStartDateCutoff()
         {
             Mocker.GetMock<CustomStartDateSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(false);
+        }
+
+        private void WithLanguageNotWanted()
+        {
+            Mocker.GetMock<LanguageSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(false);
         }
@@ -157,6 +168,14 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             WithOverRetention();
 
             spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.QualityNotWanted);
+        }
+
+        [Test]
+        public void should_not_be_allowed_if_language_is_not_wanted()
+        {
+            WithLanguageNotWanted();
+
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.LanguageNotWanted);
         }
     }
 }
