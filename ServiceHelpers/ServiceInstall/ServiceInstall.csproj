@@ -69,7 +69,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\mt.exe" -manifest "$(ProjectDir)app.manifest"  –outputresource:"$(TargetDir)$(TargetFileName)";#1</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Libraries\Manifest Tool\mt.exe" -manifest "$(ProjectDir)app.manifest"  –outputresource:"$(TargetDir)$(TargetFileName)";#1</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
