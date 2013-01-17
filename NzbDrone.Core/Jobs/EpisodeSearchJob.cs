@@ -5,6 +5,7 @@ using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Providers.Search;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.EpisodeId <= 0)
                 throw new ArgumentException("options");
 
-            var episode = _episodeProvider.GetEpisode(options.EpisodeId);
+            Episode episode = _episodeProvider.GetEpisode(options.EpisodeId);
 
             if (episode == null)
             {
