@@ -7,8 +7,7 @@
     font-size: 13px;
 }
 
-body
-{
+body {
     background: #191919 url(images/background.jpg) no-repeat right top;
     font-size: 13px;
     color: #3C3C3C;
@@ -34,6 +33,14 @@ body
 }
 
 
-body {
-    
+#footer {
+    text-align: center;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: lighter;
+    margin: 20px 0 30px 0;
 }
+
+    #footer a:hover {
+        text-decoration: underline;
+    }

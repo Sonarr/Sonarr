@@ -10,15 +10,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    @if (string.IsNullOrWhiteSpace(ViewBag.Title) || String.Equals(ViewBag.Title, "NzbDrone", StringComparison.InvariantCultureIgnoreCase))
-    {
-        ViewBag.Title = "NzbDrone";
-    }
-    else
-    {
-        ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
-    }
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - NzbDrone</title>
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <!-- Standard iPhone -->
     <link rel="apple-touch-icon" sizes="57x57" href="../../Content/Images/apple-touch-icon-114.png" />
@@ -54,7 +46,7 @@
         </div>
         <div id="logo" class="row">
             <div class="span12">
-                Hello bootstrap
+                @ViewBag.Title
             </div>
         </div>
         <div id="content" class="row">
@@ -63,6 +55,11 @@
                     @RenderSection("ActionMenu", required: false)
                 </div>
                 @RenderBody()
+            </div>
+        </div>
+        <div id="footer" class="row">
+            <div class="span12">
+                @{Html.RenderAction("Footer", "Shared");}
             </div>
         </div>
     </div>
