@@ -77,8 +77,8 @@ namespace NzbDrone.Core.Repository
         {
             string seriesTitle = Series == null ? "[NULL]" : Series.Title;
 
-            //if (IsDailyEpisode)
-            //    return string.Format("{0} - {1}", seriesTitle, AirDate.Date);
+            if (Series != null && Series.IsDaily && AirDate.HasValue)
+                return string.Format("{0} - {1:yyyy-MM-dd}", seriesTitle, AirDate.Value);
 
             return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);
         }

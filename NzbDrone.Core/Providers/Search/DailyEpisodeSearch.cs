@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Providers.Search
         {
             logger.Warn("Unable to find {0} in any of indexers.", options.Episode);
 
-            notification.CurrentMessage = reportsFound ? String.Format("Sorry, couldn't find {0}, that matches your preferences.", options.Episode)
+            notification.CurrentMessage = reportsFound ? String.Format("Sorry, couldn't find {0}, that matches your preferences.", options.Episode.AirDate)
                                                         : String.Format("Sorry, couldn't find {0} in any of indexers.", options.Episode);
         }
     }
