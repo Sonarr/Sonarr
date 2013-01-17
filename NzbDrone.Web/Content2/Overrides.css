@@ -1,0 +1,69 @@
+﻿/*jQuery UI*/
+.ui-widget-header
+{
+    font-weight: normal;
+}
+
+.t-combobox .t-input
+{
+    line-height: 25px;
+}
+
+.ui-autocomplete
+{
+    border-color: #333333;
+    background: #333333;
+}
+
+.ui-autocomplete .ui-state-hover
+{
+    background: #333333;
+    border-color: lightgrey;
+}
+
+
+.ui-progressbar-value
+{
+    background: #065EFE url(./jQueryUI/images/ui-bg_flat_30_065efe_40x100.png) 50% 50% repeat-x;
+}
+
+.ui-dialog .ui-dialog-titlebar, .ui-dialog-title
+{
+    color: #3C3C3C;
+    font-size: 30px;
+    font-family: "Open Sans" , "Segoe UI Light" , "Segoe UI" , sans-serif;
+    font-weight: 300;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+}
+
+.ui-autocomplete-loading
+{
+    background: white url('/Content/Images/ajax-loader.gif') 99% center no-repeat;
+    background-size: 18px 18px;
+}
+
+.ui-menu-item .ui-corner-all
+{
+    font-size: 110%;
+    font-family: "Segoe UI" , "Open Sans" , "Segoe UI" , sans-serif;
+    color: lightgrey;
+}
+
+.jquery-tabs
+{
+    margin-top: 10px;
+}
+
+.ui-button .ui-state-default
+{
+    background: none;
+}
+
+/*MiniProfiler*/
+
+.profiler-button
+{
+    opacity: 0.6;
+}

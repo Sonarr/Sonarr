@@ -49,6 +49,13 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
+        public ActionResult Bt()
+        {
+
+            return View();
+        }
+
+
         public ActionResult AddNew()
         {
             ViewData["RootDirs"] = _rootFolderProvider.GetAll().Select(c => c.Path).OrderBy(e => e).ToList();

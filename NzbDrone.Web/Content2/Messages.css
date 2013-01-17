@@ -1,0 +1,53 @@
+﻿/*Pinned messages*/
+
+.infoBox, .successBox, .warningBox, .errorBox, .validationBox {
+    border: 0px solid;
+    margin: 10px 0px;
+    padding: 10px 10px 10px 10px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    line-height: 20px;
+}
+.infoBox {
+    color: #00529B;
+    background-color: #f4f7f9;
+}
+.successBox {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+.warningBox {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+.errorBox {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+
+.infoBox i, .successBox i, .warningBox i, .errorBox i, .validationBox i {
+    font-size: 2.33em;
+    vertical-align: text-bottom;
+    padding-right: 8px;
+}
+
+/*Progress Notification*/
+#msgBox
+{
+    display: none;
+    height: 30px;
+    background-color: #272525;
+    opacity: .9;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=85);
+    padding: 10px;
+    text-align: left;
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    right: 0;
+    font-size: 20px;
+    color: White;
+    text-align: center;
+    white-space:nowrap;
+}

@@ -1,0 +1,90 @@
+﻿@using Cassette.Scripts
+@using Cassette.Stylesheets
+@using NzbDrone.Web
+@using NzbDrone.Web.Helpers
+@{   
+    Bundles.Reference<StylesheetBundle>(CassetteBundleConfiguration.BASE_STYLE);
+    Bundles.Reference<ScriptBundle>(CassetteBundleConfiguration.BASE_SCRIPT);
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    @if (string.IsNullOrWhiteSpace(ViewBag.Title) || String.Equals(ViewBag.Title, "NzbDrone", StringComparison.InvariantCultureIgnoreCase))
+    {
+        ViewBag.Title = "NzbDrone";
+    }
+    else
+    {
+        ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
+    }
+    <title>@ViewBag.Title</title>
+    <link rel="SHORTCUT ICON" href="../../favicon.ico" />
+    <!-- Standard iPhone -->
+    <link rel="apple-touch-icon" sizes="57x57" href="../../Content/Images/apple-touch-icon-114.png" />
+    <!-- Retina iPhone -->
+    <link rel="apple-touch-icon" sizes="114x114" href="../../Content/Images/apple-touch-icon-114.png" />
+    <!-- Standard iPad -->
+    <link rel="apple-touch-icon" sizes="72x72" href="../../Content/Images/apple-touch-icon-144.png" />
+    <!-- Retina iPad -->
+    <link rel="apple-touch-icon" sizes="144x144" href="../../Content/Images/apple-touch-icon-144.png" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    @Bundles.RenderStylesheets()
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="/">Series</a></li>
+                        <li><a href="/upcoming">Upcoming</a></li>
+                        <li><a href="/history">History</a></li>
+                        <li><a href="/missing">Missing</a></li>
+                        <li><a href="/settings">Settings</a></li>
+                        <li><a href="/system">System</a></li>
+                        <li id="donate" title="Donate to support the development of NzbDrone"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank">Donate</a></li>
+                    </ul>
+                    <form class="navbar-form pull-right">
+                        <input id="localSeriesLookup" type="text" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="centered">
+        <div id="right-menu">
+            <ul>
+                <li>@{ Html.RenderAction("FreeSpace", "Shared"); }</li>
+                <li>
+                   </li>
+            </ul>
+        </div>
+
+        <div id="logo">
+            <span>@ViewBag.Title</span>
+        </div>
+        <div id="page">
+            @RenderSection("ActionMenu", required: false)
+            @RenderBody()
+        </div>
+        <div id="footer">
+            @{Html.RenderAction("Footer", "Shared");}
+        </div>
+    </div>
+    <div id="msgBox">
+        <span id="msgText">background notification</span>
+    </div>
+    @Bundles.RenderScripts()
+
+</body>
+</html>

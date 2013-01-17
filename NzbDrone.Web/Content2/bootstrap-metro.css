@@ -1,0 +1,833 @@
+﻿/* === UTILS ==={ */
+/* }=== UTILS === */
+/* === COLOR - AZURE ==={ */
+/* }=== COLOR - AZURE === */
+/* === MADMIN MENU ==={ */
+/* general setup & list styles reset */
+.sidebar-menu,
+.sidebar-menu ul,
+.sidebar-menu li
+{
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .sidebar-menu > li,
+    .sidebar-menu > li > div
+    {
+        width: 220px;
+    }
+
+    .sidebar-menu li > a
+    {
+        white-space: nowrap;
+    }
+/* drop sub-menu mix-in */
+/* main menu styles */
+.sidebar-menu
+{
+    /* level 0 */
+    /* levels 1+ */
+}
+
+    .sidebar-menu > li > div
+    {
+        position: relative;
+    }
+
+        .sidebar-menu > li > div > a
+        {
+            display: block;
+            height: 30px;
+            padding: 10px;
+            color: #ffffff;
+        }
+
+            .sidebar-menu > li > div > a > i
+            {
+                position: relative;
+                top: 5px;
+                margin-right: 10px;
+                font-size: 30px;
+                font-weight: normal;
+            }
+
+    .sidebar-menu > li:hover > div > a,
+    .sidebar-menu > li.open > div > a
+    {
+        background: #6bbef6;
+    }
+
+    .sidebar-menu > li.parent > div > a > span:before
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #61b0e9 #61b0e9 #61b0e9 #ffffff;
+        margin-right: 5px;
+    }
+
+    .sidebar-menu > li.parent:hover > div > a > span:before,
+    .sidebar-menu > li.parent.open > div > a > span:before
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #6bbef6 #6bbef6 #6bbef6 #ffffff;
+    }
+
+    .sidebar-menu > li.active > div > a
+    {
+        background: #ffffff;
+        color: #20202f;
+    }
+
+    .sidebar-menu > li.parent.active > div > a > span:before
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #20202f #ffffff #ffffff #ffffff;
+        position: relative;
+        top: 1px;
+    }
+
+    .sidebar-menu ul
+    {
+        display: none;
+    }
+
+        .sidebar-menu ul > li > a
+        {
+            display: block;
+            height: 20px;
+            padding: 5px;
+        }
+    /* drop-right */
+    .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul,
+    .sidebar-menu > li.parent.inactive.open > div > ul
+    {
+        display: block;
+        position: absolute;
+        top: 0 !important;
+        left: 100% !important;
+        padding: 10px 0;
+        background: #6bbef6;
+    }
+
+        .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul > li a,
+        .sidebar-menu > li.parent.inactive.open > div > ul > li a
+        {
+            padding: 5px 16px;
+            height: 20px;
+            color: #ffffff;
+        }
+
+        .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul > li:hover a,
+        .sidebar-menu > li.parent.inactive.open > div > ul > li:hover a,
+        .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul > li.active a,
+        .sidebar-menu > li.parent.inactive.open > div > ul > li.active a,
+        .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul > li.active a:hover,
+        .sidebar-menu > li.parent.inactive.open > div > ul > li.active a:hover
+        {
+            padding-left: 8px;
+            border-left: 8px solid #aedcfb;
+        }
+
+            .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul > li.active a,
+            .sidebar-menu > li.parent.inactive.open > div > ul > li.active a,
+            .sidebar-menu.on-hover > li.parent.inactive:hover > div > ul > li.active a:hover,
+            .sidebar-menu > li.parent.inactive.open > div > ul > li.active a:hover
+            {
+                color: #20202f;
+                border-color: #20202f;
+            }
+/* maximized sidebar - active's item submenu */
+.sidebar-max .sidebar-menu .active ul
+{
+    display: block;
+    padding-bottom: 10px;
+    background: #ffffff;
+}
+
+    .sidebar-max .sidebar-menu .active ul > li > a
+    {
+        margin-left: 72px;
+        color: #61b0e9;
+        border-color: #61b0e9;
+    }
+
+        .sidebar-max .sidebar-menu .active ul > li > a:hover,
+        .sidebar-max .sidebar-menu .active ul > li.active > a
+        {
+            border-left: 8px solid;
+            padding-left: 7px;
+            margin-left: 62px;
+        }
+
+    .sidebar-max .sidebar-menu .active ul > li.active > a
+    {
+        color: #20202f;
+        border-color: #20202f;
+    }
+/* minimized sidebar */
+.sidebar-min .sidebar-menu > li
+{
+    width: 60px;
+    overflow: hidden;
+}
+
+    .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul,
+    .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul
+    {
+        display: block;
+        position: absolute;
+        top: 50px !important;
+        left: 60px !important;
+        padding: 10px 0;
+        background: #6bbef6;
+        min-width: 160px;
+        padding-top: 0 !important;
+    }
+
+        .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul > li a,
+        .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul > li a
+        {
+            padding: 5px 16px;
+            height: 20px;
+            color: #ffffff;
+        }
+
+        .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul > li:hover a,
+        .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul > li:hover a,
+        .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul > li.active a,
+        .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul > li.active a,
+        .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul > li.active a:hover,
+        .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul > li.active a:hover
+        {
+            padding-left: 8px;
+            border-left: 8px solid #aedcfb;
+        }
+
+            .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul > li.active a,
+            .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul > li.active a,
+            .sidebar-min .sidebar-menu > li.parent > div.sidebar-menu-item-wrapper > ul > li.active a:hover,
+            .sidebar-min .sidebar-menu > li.parent.active > div.sidebar-menu-item-wrapper > ul > li.active a:hover
+            {
+                color: #20202f;
+                border-color: #20202f;
+            }
+
+    .sidebar-min .sidebar-menu.on-hover > li:hover,
+    .sidebar-min .sidebar-menu > li.open
+    {
+        overflow: visible;
+    }
+
+        .sidebar-min .sidebar-menu.on-hover > li:hover > div > a,
+        .sidebar-min .sidebar-menu > li.open > div > a
+        {
+            background: #6bbef6;
+        }
+
+    .sidebar-min .sidebar-menu.on-hover > li.parent.active:hover > div > a > span:before,
+    .sidebar-min .sidebar-menu > li.parent.active.open > div > a > span:before
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #20202f #6bbef6 #6bbef6 #6bbef6;
+        position: relative;
+        top: 1px;
+    }
+
+    .sidebar-min .sidebar-menu.on-hover > li.parent:hover > div > a > span:before,
+    .sidebar-min .sidebar-menu > li.parent.open > div > a > span:before
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #ffffff #6bbef6 #6bbef6 #6bbef6;
+        position: relative;
+        top: 1px;
+    }
+/* }=== MADMIN MENU === */
+/* === LAYOUT ==={ */
+body
+{
+    padding: 30px 0 40px 0;
+}
+
+    body.help-page
+    {
+        padding: 0;
+    }
+
+.row-fluid
+{
+    position: relative;
+}
+
+#topbar
+{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 30px;
+    padding: 0 3px;
+    border: 0;
+    margin: 0;
+    text-align: center;
+    z-index: 5000;
+}
+
+    #topbar > li
+    {
+        display: inline-block;
+        position: relative;
+    }
+
+#sidebar
+{
+    position: absolute;
+    width: 220px;
+    padding: 10px 0 70px 0;
+    z-index: 1000;
+}
+
+    #sidebar.fixed
+    {
+        position: fixed !important;
+        top: 30px;
+        left: 0;
+        bottom: 0;
+    }
+
+.sidebar-min #sidebar
+{
+    width: 60px;
+}
+
+.sidebar-min #content
+{
+    left: 0;
+    margin-left: 80px;
+}
+
+#container
+{
+    padding: 0;
+}
+
+#content
+{
+    position: absolute;
+    top: 20px;
+    left: 240px;
+    right: 20px;
+    width: auto;
+    min-width: 600px;
+    margin: 0;
+}
+
+.page.hidden
+{
+    position: absolute;
+    left: -10000px;
+    top: -10000px;
+}
+
+.panel
+{
+    margin: 0 auto 20px auto;
+}
+
+    .panel header
+    {
+        padding: 0 10px;
+        height: 30px;
+    }
+
+        .panel header i
+        {
+            position: relative;
+            top: 5px;
+            margin-right: 5px;
+        }
+
+        .panel header span
+        {
+            position: relative;
+            top: 5px;
+        }
+
+    .panel .content
+    {
+        padding: 10px;
+    }
+
+#panel-login
+{
+    width: 345px;
+}
+
+    #panel-login .content
+    {
+        padding: 30px;
+    }
+/* }=== LAYOUT === */
+/* === LOOKS ==={ */
+body.help-page
+{
+    background-color: #FDFCE4;
+}
+
+.hero-unit,
+input,
+button,
+select,
+textarea
+{
+    border-radius: 0 !important;
+}
+/* Top Bar */
+#topbar
+{
+    background: #3a4450;
+    color: #ffffff;
+}
+
+    #topbar h1
+    {
+        position: relative;
+        top: -6px;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+        #topbar h1 i
+        {
+            position: relative;
+            top: 3px;
+            margin-right: 5px;
+            font-size: 20px;
+            color: #6ac8fb;
+        }
+
+        #topbar h1 a
+        {
+            color: #ffffff;
+        }
+
+            #topbar h1 a:hover
+            {
+                text-decoration: none;
+            }
+
+    #topbar > li > a
+    {
+        display: inline-block;
+        padding: 6px 10px 0 10px;
+        font-size: 11px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #ffffff;
+        height: 24px;
+        line-height: 20px;
+    }
+
+        #topbar > li > a:hover
+        {
+            text-decoration: none;
+            background: #4b5867;
+        }
+
+    #topbar > li.pull-right > a
+    {
+        margin-left: 10px;
+    }
+
+    #topbar > li.parent > a > span:after
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #ffffff #3a4450 #3a4450 #3a4450;
+        position: relative;
+        top: 1px;
+        position: relative;
+        top: 2px;
+        margin-left: 5px;
+    }
+
+    #topbar > li.parent > a:hover > span:after
+    {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #ffffff #4b5867 #4b5867 #4b5867;
+        position: relative;
+        top: 1px;
+        position: relative;
+        top: 2px;
+        margin-left: 5px;
+    }
+
+    #topbar .dropdown-menu
+    {
+        top: 98%;
+        right: 0;
+        padding: 0 0 0 0;
+        background: #3a4450;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        text-align: left;
+    }
+
+        #topbar .dropdown-menu *
+        {
+            color: #ffffff;
+        }
+
+        #topbar .dropdown-menu > li > a
+        {
+            height: 24px;
+        }
+
+            #topbar .dropdown-menu > li > a:hover
+            {
+                background: #4b5867;
+            }
+
+        #topbar .dropdown-menu > li.divider
+        {
+            background: none;
+            border-bottom-color: #4b5867;
+        }
+/* Bootstrap drop-downs behavior enhancement */
+ul.on-hover > li.parent:hover > .dropdown-menu
+{
+    display: block;
+}
+/* Sidebar Resizer */
+#sidebar-resizer
+{
+    display: block;
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+    width: 200px;
+    height: 30px;
+    text-align: center;
+    font-size: 32px;
+    color: #20202f;
+    margin: 10px 0 10px 0;
+}
+
+    #sidebar-resizer:hover
+    {
+        text-decoration: none;
+    }
+
+    #sidebar-resizer i.max
+    {
+        display: none;
+    }
+
+.sidebar-min #sidebar-resizer
+{
+    width: 40px;
+}
+
+    .sidebar-min #sidebar-resizer i.max
+    {
+        display: inline-block;
+    }
+
+    .sidebar-min #sidebar-resizer i.min
+    {
+        display: none;
+    }
+/* Sidebar Mini-Search */
+.search-mini
+{
+    position: relative;
+    margin: 10px 0 20px 0;
+}
+
+    .search-mini input
+    {
+        border: 0;
+        margin: 0 10px;
+        width: 192px;
+        height: 22px;
+        background: #3a4450;
+        color: #ffffff;
+    }
+
+    .search-mini button
+    {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border: 0;
+        margin: 0;
+        background: #3a4450;
+        color: #ffffff;
+        top: 0;
+        right: 10px;
+        font-size: 18px;
+    }
+
+.sidebar-min .search-mini input
+{
+    width: 32px;
+}
+
+.sidebar-min .search-mini :-webkit-input-placeholder,
+.sidebar-min .search-mini :-moz-placeholder
+{
+    display: none;
+}
+
+.sidebar-min .search-mini button
+{
+    right: 24.5%;
+}
+
+.sidebar-min .search-mini:hover input
+{
+    width: 162px;
+}
+
+.sidebar-min .search-mini:hover button
+{
+    left: 162px;
+}
+/* Panels */
+.panel header,
+.accordion-heading
+{
+    background: #3a4450;
+}
+
+    .panel header *,
+    .accordion-heading *,
+    .panel header a:hover,
+    .accordion-heading a:hover
+    {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+.panel .content
+{
+    background: #f7f7fd;
+    color: #3a4450;
+    border: 1px solid #f0f0fb;
+}
+
+.hero-unit,
+.form-actions
+{
+    background: #f7f7fd;
+}
+/* Table of Key Numbers */
+.table-key-numbers
+{
+    width: 100%;
+    text-align: center;
+}
+
+    .table-key-numbers td
+    {
+        font-size: 30px;
+        font-weight: bold;
+        line-height: 1.6em;
+        color: #20202f;
+    }
+
+    .table-key-numbers th
+    {
+        color: #666;
+        font-weight: normal;
+        color: #8b9198;
+    }
+/* Demo Charts */
+#stats-area-chart,
+#dashboard-dynamic-chart,
+#stats-pie-chart
+{
+    margin: 10px;
+    height: 200px;
+}
+
+#stats-pie-chart
+{
+    margin: 10px auto 10px auto;
+    width: 400px;
+    overflow: hidden;
+}
+/* Sidebar */
+#sidebar
+{
+    background: #61b0e9;
+}
+/* Tablesorter Plugin */
+table.tablesorter thead tr .headerSortDown,
+table.tablesorter thead tr .headerSortUp
+{
+    background-color: #aedcfb;
+}
+
+table.tablesorter thead tr th,
+table.tablesorter tfoot tr th
+{
+    background-color: #61b0e9;
+}
+
+table.tablesorter
+{
+    background-color: #f7f7fd;
+}
+/* Accordions */
+.accordion-group,
+.accordion-inner
+{
+    border: 0;
+}
+
+.sidebar-menu a:hover
+{
+    text-decoration: none;
+}
+
+.sidebar-menu > li > div > a
+{
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.hero-unit h1
+{
+    margin-bottom: 0.15em;
+}
+/* }=== TYPO === */
+/* === FORMS ==={ */
+/* }=== FORMS === */
+/* === BUTTONS ==={ */
+.btn
+{
+    filter: none;
+    border-radius: 0;
+}
+
+.btn-madmin.btn.btn-primary
+{
+    background: #61b0e9;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 14px;
+    border-color: #389ae2;
+    text-shadow: none;
+}
+
+    .btn-madmin.btn.btn-primary:hover
+    {
+        border-color: #6bbef6;
+        background: #6bbef6;
+        color: #ffffff;
+    }
+
+    .btn-madmin.btn.btn-primary.btn-large
+    {
+        font-size: 16px;
+    }
+
+    .btn-madmin.btn.btn-primary.btn-small
+    {
+        font-size: 12px;
+    }
+
+    .btn-madmin.btn.btn-primary.btn-mini
+    {
+        font-size: 10px;
+    }
+
+.btn-madmin.btn
+{
+    background: #DCE0F1;
+    text-shadow: none;
+    border-color: #C1C1E3;
+}
+
+    .btn-madmin.btn:hover
+    {
+        background: #E3EAF9;
+        border-color: #CECEF4;
+    }
+/* Tile buttons */
+.tile-btn
+{
+    display: inline-block;
+    width: 105px;
+    height: 85px;
+    margin: 5px;
+    background: #61b0e9;
+    color: #ffffff;
+    text-align: center;
+}
+
+    .tile-btn:hover
+    {
+        text-decoration: none;
+        background: #6bbef6;
+        color: #ffffff;
+    }
+
+    .tile-btn i
+    {
+        display: block;
+        font-size: 32px;
+        margin-top: 20px;
+    }
+
+    .tile-btn span
+    {
+        display: block;
+        margin-top: 10px;
+    }
+
+.tiles-container
+{
+    text-align: center;
+}
+/* }=== BUTTONS === */
+/* === FIXES ==={ */
+/* }=== FIXES === */

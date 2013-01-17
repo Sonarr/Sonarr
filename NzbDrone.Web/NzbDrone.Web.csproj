@@ -53,6 +53,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxMin">
+      <HintPath>..\packages\AjaxMin.4.60.4609.17023\lib\net20\AjaxMin.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac">
       <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
     </Reference>
@@ -62,9 +65,24 @@
     <Reference Include="Autofac.Integration.Mvc">
       <HintPath>..\packages\Autofac.Mvc3.2.6.3.862\lib\NET40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Cassette">
+      <HintPath>..\packages\Cassette.2.0.0\lib\net40-client\Cassette.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassette.Aspnet">
+      <HintPath>..\packages\Cassette.Aspnet.2.0.0\lib\net40\Cassette.Aspnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassette.Less">
+      <HintPath>..\packages\Cassette.Less.2.0.0\lib\net40-client\Cassette.Less.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassette.Views">
+      <HintPath>..\packages\Cassette.Views.2.0.0\lib\net40\Cassette.Views.dll</HintPath>
+    </Reference>
     <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="dotless.ClientOnly">
+      <HintPath>..\packages\DotlessClientOnly.1.3.1.0\lib\dotless.ClientOnly.dll</HintPath>
     </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
@@ -189,12 +207,160 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
+    <Compile Include="CassetteConfiguration.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\Binders\QualityTypesBinder.cs" />
     <Compile Include="Helpers\RenderActionHelper.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
+    <Content Include="Content2\ActionButton.css" />
+    <Content Include="Content2\base.css" />
+    <Content Include="Content2\bootstrap-metro.css" />
+    <Content Include="Content2\bootstrap-overrides.css" />
+    <Content Include="Content2\Bootstrap\bundle.txt" />
+    <Content Include="Content2\Bootstrap\mixins.css" />
+    <Content Include="Content2\Bootstrap\variables.css">
+      <DependentUpon>variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content2\Bootstrap\variables.min.css">
+      <DependentUpon>variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content2\DataTables-NzbDrone\media\css\jquery.dataTables.css" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\back.png" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\forward.png" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\sort_asc.png" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\sort_asc_disabled.png" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\sort_both.png" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\sort_desc.png" />
+    <Content Include="Content2\DataTables-NzbDrone\media\images\sort_desc_disabled.png" />
+    <Content Include="Content2\FancyBox\jquery.fancybox.css" />
+    <Content Include="Content2\FancyBox\jquery.fancybox.js" />
+    <Content Include="Content2\file-browser.css" />
+    <Content Include="Content2\font-awesome-ie7.css" />
+    <Content Include="Content2\font-awesome.css" />
+    <Content Include="Content2\font\fontawesome-webfont.eot" />
+    <Content Include="Content2\font\fontawesome-webfont.svg" />
+    <Content Include="Content2\font\fontawesome-webfont.ttf" />
+    <Content Include="Content2\font\fontawesome-webfont.woff" />
+    <Content Include="Content2\Grid.css" />
+    <Content Include="Content2\Images\ajax-loader.gif" />
+    <Content Include="Content2\Images\apple-touch-icon-114.png" />
+    <Content Include="Content2\Images\apple-touch-icon-144.png" />
+    <Content Include="Content2\Images\azure.gif" />
+    <Content Include="Content2\Images\background.jpg" />
+    <Content Include="Content2\Images\gritter.png" />
+    <Content Include="Content2\Images\icons.png" />
+    <Content Include="Content2\Images\icon_source.url" />
+    <Content Include="Content2\Images\Indexers\FileSharingTalk.png" />
+    <Content Include="Content2\Images\Indexers\Newznab.png" />
+    <Content Include="Content2\Images\Indexers\Newznab_dognzb.cr.png" />
+    <Content Include="Content2\Images\Indexers\Newznab_nzb.su.png" />
+    <Content Include="Content2\Images\Indexers\Newznab_Nzbs.org.png" />
+    <Content Include="Content2\Images\Indexers\NzbClub.png" />
+    <Content Include="Content2\Images\Indexers\NzbIndex.png" />
+    <Content Include="Content2\Images\Indexers\NzbsRus.png" />
+    <Content Include="Content2\Images\Indexers\nzbx.png" />
+    <Content Include="Content2\Images\Indexers\omgwtfnzbs.png" />
+    <Content Include="Content2\Images\Indexers\Unknown.png" />
+    <Content Include="Content2\Images\Indexers\WomblesIndex.png" />
+    <Content Include="Content2\Images\logo.png" />
+    <Content Include="Content2\Images\logo_small.png" />
+    <Content Include="Content2\Images\spinner.gif" />
+    <Content Include="Content2\Images\thetvdb.png" />
+    <Content Include="Content2\IndexerSettings.css" />
+    <Content Include="Content2\Intelisense\bootstrap-responsive.css" />
+    <Content Include="Content2\Intelisense\bootstrap.css" />
+    <Content Include="Content2\jquery.gritter.css" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_diagonals-thick_30_a32d00_40x40.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_0_ffffff_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_100__40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_20_ffffff_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_30_065efe_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_30_616161_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_30_b40404_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_flat_40_065efe_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-bg_white-lines_10_000000_40x100.png" />
+    <Content Include="Content2\jQueryUI\images\ui-icons_98d2fb_256x240.png" />
+    <Content Include="Content2\jQueryUI\images\ui-icons_9ccdfc_256x240.png" />
+    <Content Include="Content2\jQueryUI\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content2\jQueryUI\jquery-ui-1.8.16.custom.css" />
+    <Content Include="Content2\Menu.css" />
+    <Content Include="Content2\Messages.css" />
+    <Content Include="Content2\metro.blue.css" />
+    <Content Include="Content2\metro.css" />
+    <Content Include="Content2\New folder\jquery.lhpMegaImgViewer.1.1.js" />
+    <Content Include="Content2\New folder\jquery.lhpMegaImgViewer.2.0.js" />
+    <Content Include="Content2\NzbDrone.css" />
+    <Content Include="Content2\Overrides.css" />
+    <Content Include="Content2\QualitySettings.css" />
+    <Content Include="Content2\SeriesEditor.css" />
+    <Content Include="Content2\Settings.css" />
+    <Content Include="Content2\SmothZoomPan\smothzoompan.js" />
+    <Content Include="Content2\stats.css" />
+    <Content Include="Content2\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content2\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content2\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content2\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content2\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content2\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content2\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content2\themes\base\jquery-ui.css" />
+    <Content Include="Content2\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content2\themes\base\jquery.ui.all.css" />
+    <Content Include="Content2\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content2\themes\base\jquery.ui.base.css" />
+    <Content Include="Content2\themes\base\jquery.ui.button.css" />
+    <Content Include="Content2\themes\base\jquery.ui.core.css" />
+    <Content Include="Content2\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content2\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content2\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content2\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content2\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content2\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content2\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content2\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content2\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content2\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content2\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content2\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content2\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.all.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.base.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content2\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_both.png" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_desc_disabled.png" />
     <Content Include="Content\font-awesome-ie7.css" />
@@ -303,9 +469,72 @@
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
     <Compile Include="Models\UpdateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts2\bootstrap-mvc.js" />
+    <Content Include="Scripts2\bootstrap.js" />
+    <None Include="Scripts2\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts2\jquery-1.8.2.js" />
+    <Content Include="Scripts2\jquery-ui-1.8.23.js" />
+    <Content Include="Scripts2\jquery.livequery.js" />
+    <Content Include="Scripts2\jquery.unobtrusive-ajax.js" />
+    <None Include="Scripts2\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts2\jquery.validate.js" />
+    <Content Include="Scripts2\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts2\Metro\jquery.metro.js" />
+    <Content Include="Scripts2\Metro\tilt.js" />
+    <Content Include="Scripts2\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts2\MicrosoftAjax.js" />
+    <Content Include="Scripts2\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts2\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts2\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts2\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts2\modernizr-2.6.2.js" />
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Logs.cshtml" />
     <Content Include="Views\Settings\Nzbget.cshtml" />
+    <Content Include="Views\Shared\_Bootstrap.cshtml" />
+    <Content Include="Views\AddSeries\bt.cshtml" />
+    <Content Include="Content2\Bootstrap\accordion.less" />
+    <Content Include="Content2\Bootstrap\alerts.less" />
+    <Content Include="Content2\Bootstrap\bootstrap.less" />
+    <Content Include="Content2\Bootstrap\breadcrumbs.less" />
+    <Content Include="Content2\Bootstrap\button-groups.less" />
+    <Content Include="Content2\Bootstrap\buttons.less" />
+    <Content Include="Content2\Bootstrap\carousel.less" />
+    <Content Include="Content2\Bootstrap\close.less" />
+    <Content Include="Content2\Bootstrap\code.less" />
+    <Content Include="Content2\Bootstrap\component-animations.less" />
+    <Content Include="Content2\Bootstrap\dropdowns.less" />
+    <Content Include="Content2\Bootstrap\font-awesome-ie7.less" />
+    <Content Include="Content2\Bootstrap\font-awesome.less" />
+    <Content Include="Content2\Bootstrap\forms.less" />
+    <Content Include="Content2\Bootstrap\grid.less" />
+    <Content Include="Content2\Bootstrap\hero-unit.less" />
+    <Content Include="Content2\Bootstrap\labels-badges.less" />
+    <Content Include="Content2\Bootstrap\layouts.less" />
+    <Content Include="Content2\Bootstrap\mixins.less" />
+    <Content Include="Content2\Bootstrap\modals.less" />
+    <Content Include="Content2\Bootstrap\navbar.less" />
+    <Content Include="Content2\Bootstrap\navs.less" />
+    <Content Include="Content2\Bootstrap\pager.less" />
+    <Content Include="Content2\Bootstrap\pagination.less" />
+    <Content Include="Content2\Bootstrap\popovers.less" />
+    <Content Include="Content2\Bootstrap\progress-bars.less" />
+    <Content Include="Content2\Bootstrap\reset.less" />
+    <Content Include="Content2\Bootstrap\responsive-1200px-min.less" />
+    <Content Include="Content2\Bootstrap\responsive-767px-max.less" />
+    <Content Include="Content2\Bootstrap\responsive-768px-979px.less" />
+    <Content Include="Content2\Bootstrap\responsive-navbar.less" />
+    <Content Include="Content2\Bootstrap\responsive-utilities.less" />
+    <Content Include="Content2\Bootstrap\responsive.less" />
+    <Content Include="Content2\Bootstrap\scaffolding.less" />
+    <Content Include="Content2\Bootstrap\sprites.less" />
+    <Content Include="Content2\Bootstrap\tables.less" />
+    <Content Include="Content2\Bootstrap\thumbnails.less" />
+    <Content Include="Content2\Bootstrap\tooltip.less" />
+    <Content Include="Content2\Bootstrap\type.less" />
+    <Content Include="Content2\Bootstrap\utilities.less" />
+    <Content Include="Content2\Bootstrap\variables.less" />
+    <Content Include="Content2\Bootstrap\wells.less" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

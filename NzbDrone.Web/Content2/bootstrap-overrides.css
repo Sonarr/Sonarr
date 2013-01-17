@@ -1,0 +1,88 @@
+﻿body {
+    padding-top: 0px;
+    color: #57606b;
+}
+
+div, table, ul {
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+
+table {
+    font-size: 16px;
+}
+
+    table th, .table th {
+        font-size: 20px;
+        font-weight: 100;
+        text-transform: lowercase;
+    }
+
+h1 {
+    font-size: 60px;
+    padding-bottom: 50px;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+h3 {
+    font-size: 30px;
+}
+
+h1, h2, h3 {
+    text-transform: lowercase;
+}
+
+input,
+textarea,
+.uneditable-input {
+    width: 400px;
+}
+
+.navbar a {
+    color: white;
+    font-weight: 100;
+}
+
+.field-validation-error {
+    color: rgb(207, 27, 27);
+}
+
+.alert-error ul {
+    margin: 0px;
+    list-style-type: none;
+}
+
+:not([class^="alert-"]:before),
+:not([class*="alert-"]:before),
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+    color: #57606b;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+    margin-right: 7px;
+}
+
+
+form input[type=submit] {
+    margin-top: 30px;
+}
+
+.btn {
+    margin-right: 10px;
+}
+
+.btn-hover {
+    padding: 7px 15px;
+}
+
+    .btn-hover:hover {
+        background: white;
+        color: #57606b;
+        text-decoration: none;
+    }
