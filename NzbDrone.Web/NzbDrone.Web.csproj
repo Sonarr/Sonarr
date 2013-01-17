@@ -238,6 +238,9 @@
     <Content Include="Content2\Bootstrap\layouts.less" />
     <Content Include="Content2\Bootstrap\mixins.css" />
     <Content Include="Content2\Bootstrap\mixins.less" />
+    <Content Include="Content2\Bootstrap\mixins.min.css">
+      <DependentUpon>mixins.less</DependentUpon>
+    </Content>
     <Content Include="Content2\Bootstrap\modals.less" />
     <Content Include="Content2\Bootstrap\navbar.less" />
     <Content Include="Content2\Bootstrap\navs.less" />
