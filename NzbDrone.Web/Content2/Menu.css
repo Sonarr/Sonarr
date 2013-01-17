@@ -10,20 +10,16 @@
     padding: 5px 0px 5px 0px;
     list-style: none;
     line-height: normal;
-    overflow: hidden;
 }
 
 #menu li
 {
-    display: block;
     float: left;
     padding: 5px 15px 2px 10px;
 }
 
 #menu a
 {
-    display: block;
-    float: left;
     height: 26px;
     padding: 0px 5px 7px 5px;
     text-decoration: none;
@@ -32,7 +28,6 @@
     font-size: 21px;
     font-weight: normal;
     vertical-align: middle;
-    font-family: "Segoe UI" , "Open Sans" , "Segoe UI Light" , sans-serif;
 }
 
 #menu a:hover

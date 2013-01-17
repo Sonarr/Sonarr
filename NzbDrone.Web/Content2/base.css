@@ -1,20 +1,38 @@
-﻿#footer {
-    background: #41B1E1;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    padding: 5px;
-    font-size: 15px;
-    opacity: 0.7;
+﻿#localSeriesLookup {
+    width: 220px;
+    border: 0px;
+    background: rgb(75, 75, 75);
+    color: rgb(169, 169, 169);
+    padding: 4px;
 }
 
-    #footer .pull-right {
-        padding-right: 20px;
-    }
+body
+{
+    background: #191919 url(images/background.jpg) no-repeat right top;
+    font-size: 13px;
+    color: #3C3C3C;
+    background-attachment: fixed;
+}
 
-    #footer a {
-        color: white;
-        padding-left: 20px;
-    }
+#logo {
+    height: 135px;
+    background: url(images/logo.png) no-repeat left top;
+    background-color: #065EFE;
+    color: white; /**color: rgb(40, 40, 40);**/
+    text-transform: lowercase;
+    letter-spacing: -1px;
+    line-height: 110px;
+    padding-left: 140px;
+    font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
+    font-weight: 100;
+    font-size: 110px;
+}
 
+#content {
+    background: white;
+}
+
+
+body {
+    
+}

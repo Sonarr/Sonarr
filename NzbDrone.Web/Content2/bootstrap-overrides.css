@@ -42,11 +42,6 @@ textarea,
     width: 400px;
 }
 
-.navbar a {
-    color: white;
-    font-weight: 100;
-}
-
 .field-validation-error {
     color: rgb(207, 27, 27);
 }

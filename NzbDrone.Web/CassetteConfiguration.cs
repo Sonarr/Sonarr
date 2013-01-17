@@ -26,8 +26,9 @@ namespace NzbDrone.Web
             bundles.Add<StylesheetBundle>(BASE_STYLE, new[]{
                 "content2\\Bootstrap\\bootstrap.less",
                 "content2\\Bootstrap\\responsive.less",
-                "content2\\bootstrap-metro.css",
+                //"content2\\bootstrap-metro.css",
                 "content2\\base.css",
+                "content2\\menu.css",
                 "content2\\bootstrap-overrides.css"},
                 bundle => bundle.AddReference("/" + FONTS));
 

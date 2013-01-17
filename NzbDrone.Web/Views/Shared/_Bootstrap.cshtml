@@ -34,56 +34,35 @@
     @Bundles.RenderStylesheets()
 </head>
 <body>
+    <div class="container">
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li><a href="/">Series</a></li>
-                        <li><a href="/upcoming">Upcoming</a></li>
-                        <li><a href="/history">History</a></li>
-                        <li><a href="/missing">Missing</a></li>
-                        <li><a href="/settings">Settings</a></li>
-                        <li><a href="/system">System</a></li>
-                        <li id="donate" title="Donate to support the development of NzbDrone"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank">Donate</a></li>
-                    </ul>
-                    <form class="navbar-form pull-right">
-                        <input id="localSeriesLookup" type="text" />
-                    </form>
-                </div>
+        <div id="menu" class="row">
+            <div class="span12">
+                <ul>
+                    @MvcHtmlString.Create(Html.CurrentControllerLink("Series", "Index", "Series"))
+                    @MvcHtmlString.Create(Html.CurrentControllerLink("Upcoming", "Index", "Upcoming"))
+                    @MvcHtmlString.Create(Html.CurrentControllerLink("History", "Index", "History"))
+                    @MvcHtmlString.Create(Html.CurrentControllerLink("Missing", "Index", "Missing"))
+                    @MvcHtmlString.Create(Html.CurrentControllerLink("Settings", "Index", "Settings"))
+                    @MvcHtmlString.Create(Html.CurrentControllerLink("System", "Index", "System"))
+                    <li id="donate" title="Donate to support the development of NzbDrone"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank">Donate</a></li>
+                </ul>
+                <input id="localSeriesLookup" type="text" class="pull-right" />
+            </div>
+        </div>
+        <div id="logo" class="row">
+            <div class="span12">
+                Hello bootstrap
+            </div>
+        </div>
+        <div id="content" class="row">
+            <div class="span12">
+
+                @RenderBody()
             </div>
         </div>
     </div>
 
-    <div id="centered">
-        <div id="right-menu">
-            <ul>
-                <li>@{ Html.RenderAction("FreeSpace", "Shared"); }</li>
-                <li>
-                   </li>
-            </ul>
-        </div>
-
-        <div id="logo">
-            <span>@ViewBag.Title</span>
-        </div>
-        <div id="page">
-            @RenderSection("ActionMenu", required: false)
-            @RenderBody()
-        </div>
-        <div id="footer">
-            @{Html.RenderAction("Footer", "Shared");}
-        </div>
-    </div>
-    <div id="msgBox">
-        <span id="msgText">background notification</span>
-    </div>
     @Bundles.RenderScripts()
 
 </body>
