@@ -127,7 +127,8 @@ namespace NzbDrone.Core.Providers.Indexer
                                 episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PostDate).Days;
                                 episodeParseResult.OriginalString = item.Name;
                                 episodeParseResult.SceneSource = true;
-                                episodeParseResult.NzbUrl = String.Format("http://nzbx.co/nzb?{0}", item.Guid);
+                                episodeParseResult.NzbUrl = String.Format("http://nzbx.co/nzb?{0}*|*{1}", item.Guid, item.Name);
+                                episodeParseResult.NzbInfoUrl = String.Format("http://nzbx.co/d?{0}", item.Guid);
                                 episodeParseResult.Indexer = Name;
                                 episodeParseResult.Size = item.Size;
 
@@ -178,6 +179,7 @@ namespace NzbDrone.Core.Providers.Indexer
                                 episodeParseResult.OriginalString = item.Name;
                                 episodeParseResult.SceneSource = true;
                                 episodeParseResult.NzbUrl = item.Nzb;
+                                episodeParseResult.NzbInfoUrl = String.Format("http://nzbx.co/d?{0}", item.Guid);
                                 episodeParseResult.Indexer = Name;
                                 episodeParseResult.Size = item.Size;
 

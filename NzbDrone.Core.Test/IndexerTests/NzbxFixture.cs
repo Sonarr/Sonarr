@@ -115,5 +115,19 @@ namespace NzbDrone.Core.Test.IndexerTests
             parseResults.Should().HaveCount(1);
             parseResults[0].Age.Should().Be(expectedAge);
         }
+
+        [Test]
+        public void should_name_nzb_properly()
+        {
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
+                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_recent.json"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].NzbUrl.Should().EndWith(parseResults[0].OriginalString);
+        }
     }
 }
