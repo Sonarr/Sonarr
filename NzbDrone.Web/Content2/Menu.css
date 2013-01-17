@@ -6,7 +6,7 @@
 
 #menu ul
 {
-    margin: 10 0 0 -30;
+    margin: 10px 0 0 -30px;
     padding: 5px 0 5px 0;
     list-style: none;
     line-height: normal;
@@ -17,6 +17,8 @@
     float: left;
     padding: 5px 15px 2px 10px;
 }
+
+
 
 #menu a
 {
@@ -45,7 +47,7 @@
 .sub-menu
 {
     padding-left: 5px;
-    margin-top: 0px;
+    margin: 10px 0 10px 0;
 }
 
 .sub-menu li
@@ -74,4 +76,10 @@
 {
     margin-left: -10px;
     margin-bottom: 0px;
+}
+
+
+#donate a {
+    background-color: #065EFE;
+    color: #191919;
 }

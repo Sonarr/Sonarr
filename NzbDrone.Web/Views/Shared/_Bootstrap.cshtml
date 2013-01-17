@@ -59,7 +59,9 @@
         </div>
         <div id="content" class="row">
             <div class="span12">
-
+                <div class="row sub-menu">
+                    @RenderSection("ActionMenu", required: false)
+                </div>
                 @RenderBody()
             </div>
         </div>
