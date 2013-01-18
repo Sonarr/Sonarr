@@ -38,7 +38,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="AddSeries\Views\addSeriesView.js" />
     <Content Include="app.js" />
+    <Content Include="bootstrap.js" />
+    <Content Include="index.html" />
     <Content Include="JsLibraries\backbone.js" />
     <None Include="JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="JsLibraries\backbone.marionette.js" />
@@ -64,6 +67,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
