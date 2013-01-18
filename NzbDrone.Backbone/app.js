@@ -3,18 +3,15 @@
 NzbDrone.Controller = {
 
     AddSeries: function () {
-
-        var view = new NzbDrone.AddSeriesView();
-        NzbDrone.mainRegion.show(view);
+        NzbDrone.mainRegion.show(new NzbDrone.AddSeriesView());
     },
 
     AddNewSeries: function () {
-        alert("AddNewSeries");
+        NzbDrone.mainRegion.show(new NzbDrone.AddNewSeriesView());
     },
-
-
+    
     AddExistingSeries: function () {
-        alert("AddExistingSeries");
+        NzbDrone.mainRegion.show(new NzbDrone.AddExistingSeriesView());
     }
 };
 
