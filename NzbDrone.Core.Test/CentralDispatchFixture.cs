@@ -1,5 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
@@ -17,6 +16,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     [ExclusivelyUses("REAL_LOG_FILE")]
+    [Serial]
     class CentralDispatchFixture : CoreTest
     {
         readonly IList<string> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();

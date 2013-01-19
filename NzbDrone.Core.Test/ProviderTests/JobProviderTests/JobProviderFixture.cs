@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using NCrunch.Framework;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
@@ -17,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    [ExclusivelyUses("JOB_PROVIDER")]
     public class JobProviderFixture : CoreTest
     {
 
