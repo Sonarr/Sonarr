@@ -90,6 +90,9 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
+            //Todo: Find the "best" episode file for all found episodes and import that one
+            //Todo: Move the episode linking to here, instead of import (or rename import)
+
             series.LastDiskSync = DateTime.Now;
             _seriesProvider.UpdateSeries(series);
 
@@ -107,7 +110,8 @@ namespace NzbDrone.Core.Providers
             }
 
             long size = _diskProvider.GetSize(filePath);
-
+            
+            //Todo: We shouldn't skip on file size alone, 64MB Family Guy episodes are skipped...
             //Skip any file under 70MB - New samples don't even have sample in the name...
             if (size < Constants.IgnoreFileSize)
             {
@@ -159,6 +163,9 @@ namespace NzbDrone.Core.Providers
             episodeFile.SeasonNumber = parseResult.SeasonNumber;
             episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.NormalizePath());
             episodeFile.ReleaseGroup = parseResult.ReleaseGroup;
+
+            //Todo: We shouldn't actually import the file until we confirm its the only one we want.
+            //Todo: Separate episodeFile creation from importing (pass file to import to import)
             var fileId = _mediaFileProvider.Add(episodeFile);
 
             //Link file to all episodes
@@ -169,7 +176,6 @@ namespace NzbDrone.Core.Providers
                 _episodeProvider.UpdateEpisode(ep);
                 Logger.Debug("Linking [{0}] > [{1}]", filePath, ep);
             }
-
 
             return episodeFile;
         }
