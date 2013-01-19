@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Common;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -9,16 +8,10 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using LowercaseRoutesMVC;
-using NLog.Config;
 using NLog;
-using NzbDrone.Api;
-using NzbDrone.Common;
 using NzbDrone.Core;
-using ServiceStack.CacheAccess;
-using ServiceStack.CacheAccess.Providers;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Helpers.Binders;
-using ServiceStack.ServiceInterface;
 using SignalR;
 
 namespace NzbDrone.Web
@@ -82,9 +75,6 @@ namespace NzbDrone.Web
             //SignalR
             RouteTable.Routes.MapHubs();
 
-            //ServiceStack
-            dispatch.ContainerBuilder.RegisterType<MemoryCacheClient>().As<ICacheClient>().SingleInstance();
-            dispatch.ContainerBuilder.RegisterType<SessionFactory>().As<ISessionFactory>().SingleInstance();
         }
 
         private static void MVCRegistration(ContainerBuilder builder)

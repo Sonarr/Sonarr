@@ -17,6 +17,15 @@ namespace NzbDrone.Core.Providers
         public NewznabProvider(IDatabase database)
         {
             _database = database;
+
+            var newznabIndexers = new List<NewznabDefinition>
+                                      {
+                                              new NewznabDefinition { Enable = false, Name = "Nzbs.org", Url = "http://nzbs.org", BuiltIn = true },
+                                              new NewznabDefinition { Enable = false, Name = "Nzb.su", Url = "https://nzb.su", BuiltIn = true },
+                                              new NewznabDefinition { Enable = false, Name = "Dognzb.cr", Url = "https://dognzb.cr", BuiltIn = true }
+                                      };
+            
+            InitializeNewznabIndexers(newznabIndexers);
         }
 
         public NewznabProvider()
@@ -55,7 +64,7 @@ namespace NzbDrone.Core.Providers
             var definitionsList = definitions.ToList();
 
             //Cleanup the URL for each definition
-            foreach(var newznabDefinition in definitionsList)
+            foreach (var newznabDefinition in definitionsList)
             {
                 CheckHostname(newznabDefinition.Url);
                 //newznabDefinition.Url = new Uri(newznabDefinition.Url).ParentUriString();
@@ -64,7 +73,7 @@ namespace NzbDrone.Core.Providers
             _database.UpdateMany(definitionsList);
         }
 
-        public virtual void InitializeNewznabIndexers(IList<NewznabDefinition> indexers)
+        private void InitializeNewznabIndexers(IList<NewznabDefinition> indexers)
         {
             Logger.Debug("Initializing Newznab indexers. Count {0}", indexers.Count);
 
@@ -78,7 +87,7 @@ namespace NzbDrone.Core.Providers
 
                 currentIndexers = All();
 
-                foreach(var feedProvider in indexers)
+                foreach (var feedProvider in indexers)
                 {
                     try
                     {
@@ -115,7 +124,7 @@ namespace NzbDrone.Core.Providers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.ErrorException("An Error occurred while initializing Newznab Indexers", ex);
             }

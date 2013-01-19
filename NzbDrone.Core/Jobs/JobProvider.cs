@@ -1,5 +1,3 @@
-//https://github.com/kayone/NzbDrone/blob/master/NzbDrone.Core/Providers/Jobs/JobProvider.cs
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,7 +27,7 @@ namespace NzbDrone.Core.Jobs
         private Thread _jobThread;
         public Stopwatch StopWatch { get; private set; }
 
-        private readonly object executionLock = new object();
+        private readonly object _executionLock = new object();
         private readonly List<JobQueueItem> _queue = new List<JobQueueItem>();
 
         private ProgressNotification _notification;
@@ -42,6 +40,7 @@ namespace NzbDrone.Core.Jobs
             _notificationProvider = notificationProvider;
             _jobs = jobs;
             ResetThread();
+            Initialize();
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace NzbDrone.Core.Jobs
             return _database.Fetch<JobDefinition>().ToList();
         }
 
-        public virtual void Initialize()
+        private void Initialize()
         {
             var currentJobs = All();
             logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count);
@@ -121,7 +120,7 @@ namespace NzbDrone.Core.Jobs
 
         public virtual void QueueScheduled()
         {
-            lock (executionLock)
+            lock (_executionLock)
             {
                 VerifyThreadTime();
 
@@ -153,7 +152,7 @@ namespace NzbDrone.Core.Jobs
 
             logger.Debug("Attempting to queue {0}", queueItem);
 
-            lock (executionLock)
+            lock (_executionLock)
             {
                 VerifyThreadTime();
 
@@ -215,7 +214,7 @@ namespace NzbDrone.Core.Jobs
                             {
                                 if (Queue.Count != 0)
                                 {
-                                    job = Queue.OrderBy(c=>c.Source).First();
+                                    job = Queue.OrderBy(c => c.Source).First();
                                     logger.Trace("Popping {0} from the queue.", job);
                                     Queue.Remove(job);
                                 }

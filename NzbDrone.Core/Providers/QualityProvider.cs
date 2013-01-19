@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Providers
         public QualityProvider(IDatabase database)
         {
             _database = database;
+            SetupDefaultProfiles();
         }
 
         public virtual int Add(QualityProfile profile)
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Providers
             return _database.Single<QualityProfile>(profileId);
         }
 
-        public virtual void SetupDefaultProfiles()
+        private void SetupDefaultProfiles()
         {
             if (All().Count != 0)
                 return;

@@ -222,6 +222,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Constants.cs" />
+    <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Datastore\Connection.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
@@ -613,6 +614,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
   </ItemGroup>

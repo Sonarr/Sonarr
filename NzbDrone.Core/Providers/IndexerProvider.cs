@@ -13,12 +13,14 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-        private IEnumerable<IndexerBase> _indexers;
+        private IList<IndexerBase> _indexers;
 
         public IndexerProvider(IDatabase database, IEnumerable<IndexerBase> indexers)
         {
             _database = database;
-            _indexers = indexers;
+            _indexers = indexers.ToList();
+            InitializeIndexers();
+           
         }
 
         public IndexerProvider()
@@ -56,15 +58,14 @@ namespace NzbDrone.Core.Providers
             return _database.Single<IndexerDefinition>("WHERE IndexProviderType = @0", type.ToString());
         }
 
-        public virtual void InitializeIndexers(IList<IndexerBase> indexers)
+       private void InitializeIndexers()
         {
-            Logger.Debug("Initializing indexers. Count {0}", indexers.Count);
+            Logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
 
-            _indexers = indexers;
 
             var currentIndexers = All();
 
-            foreach (var feedProvider in indexers)
+            foreach (var feedProvider in _indexers)
             {
                 IndexerBase indexerLocal = feedProvider;
                 if (!currentIndexers.Exists(c => c.IndexProviderType == indexerLocal.GetType().ToString()))

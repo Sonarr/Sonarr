@@ -17,11 +17,12 @@ namespace NzbDrone.Core.Providers
         public QualityTypeProvider(IDatabase database)
         {
             _database = database;
+            SetupDefault();
         }
 
         public QualityTypeProvider()
         {
-            
+
         }
 
         public virtual void Update(QualityType qualityType)
@@ -52,13 +53,13 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<QualityType>(query);
         }
 
-        public virtual void SetupDefault()
+        private void SetupDefault()
         {
             var inDb = All();
 
             Logger.Debug("Setting up default quality types");
 
-            foreach(var qualityType in QualityTypes.All())
+            foreach (var qualityType in QualityTypes.All())
             {
                 //Skip UNKNOWN
                 if (qualityType.Id == 0) continue;

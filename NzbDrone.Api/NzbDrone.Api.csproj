@@ -72,6 +72,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -81,7 +85,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ErrorManagment\ApiException.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="ErrorManagment\ErrorHandler.cs" />
+    <Compile Include="ErrorManagment\ErrorModel.cs" />
+    <Compile Include="ErrorManagment\ErrorPipeline.cs" />
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfiles\QualityProfileModel.cs" />

@@ -14,12 +14,14 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-        private IEnumerable<ExternalNotificationBase> _notifiers;
+        private IList<ExternalNotificationBase> _notifiers;
 
         public ExternalNotificationProvider(IDatabase database, IEnumerable<ExternalNotificationBase> notifiers)
         {
             _database = database;
-            _notifiers = notifiers;
+            _notifiers = notifiers.ToList();
+
+            InitializeNotifiers(_notifiers);
         }
 
         public ExternalNotificationProvider()
@@ -58,7 +60,7 @@ namespace NzbDrone.Core.Providers
             return _notifiers.Where(i => all.Exists(c => c.ExternalNotificationProviderType == i.GetType().ToString() && c.Enable)).ToList();
         }
 
-        public virtual void InitializeNotifiers(IList<ExternalNotificationBase> notifiers)
+        private void InitializeNotifiers(IList<ExternalNotificationBase> notifiers)
         {
             Logger.Debug("Initializing notifiers. Count {0}", notifiers.Count);
 

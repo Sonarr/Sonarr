@@ -16,15 +16,17 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-        private IEnumerable<MetadataBase> _metadataProviders;
+        private IList<MetadataBase> _metadataProviders;
         private readonly TvDbProvider _tvDbProvider;
 
         public MetadataProvider(IDatabase database, IEnumerable<MetadataBase> metadataProviders,
                                 TvDbProvider tvDbProvider)
         {
             _database = database;
-            _metadataProviders = metadataProviders;
+            _metadataProviders = metadataProviders.ToList();
             _tvDbProvider = tvDbProvider;
+
+            Initialize(_metadataProviders);
         }
 
         public MetadataProvider()
@@ -63,7 +65,7 @@ namespace NzbDrone.Core.Providers
             return _metadataProviders.Where(i => all.Exists(c => c.MetadataProviderType == i.GetType().ToString() && c.Enable)).ToList();
         }
 
-        public virtual void Initialize(IList<MetadataBase> metabaseProviders)
+        private void Initialize(IList<MetadataBase> metabaseProviders)
         {
             Logger.Debug("Initializing metabases. Count {0}", metabaseProviders.Count);
 

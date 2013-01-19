@@ -21,10 +21,10 @@ namespace NzbDrone.Api.QualityType
             });
         }
 
-        public static Response AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)
+        public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             ISerializer serializer = new DefaultJsonSerializer();
-            var jsonResponse = new JsonResponse<TModel>(model, serializer) {StatusCode = statusCode};
+            var jsonResponse = new JsonResponse<TModel>(model, serializer) { StatusCode = statusCode };
             return jsonResponse;
         }
     }
