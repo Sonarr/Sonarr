@@ -16,14 +16,15 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class QualityTypeProviderTest : CoreTest
     {
+        [SetUp]
+        public void SetuUp()
+        {
+            WithRealDb();
+        }
+
         [Test]
         public void SetupDefault_should_add_all_profiles()
         {
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            
             Mocker.Resolve<QualityTypeProvider>();
 
             
@@ -45,11 +46,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SetupDefault_already_exists_should_insert_missing()
         {
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
+            Db.Insert(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
 
             
             Mocker.Resolve<QualityTypeProvider>();
@@ -63,16 +61,12 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetList_single_quality_type()
         {
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
             var fakeQualityTypes = Builder<QualityType>.CreateListOfSize(6)
                 .Build();
 
             var ids = new List<int> { 1 };
 
-            db.InsertMany(fakeQualityTypes);
+            Db.InsertMany(fakeQualityTypes);
 
             
             var result = Mocker.Resolve<QualityTypeProvider>().GetList(ids);
@@ -84,16 +78,12 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetList_multiple_quality_type()
         {
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
             var fakeQualityTypes = Builder<QualityType>.CreateListOfSize(6)
                 .Build();
 
             var ids = new List<int> { 1, 2 };
 
-            db.InsertMany(fakeQualityTypes);
+            Db.InsertMany(fakeQualityTypes);
 
             
             var result = Mocker.Resolve<QualityTypeProvider>().GetList(ids);

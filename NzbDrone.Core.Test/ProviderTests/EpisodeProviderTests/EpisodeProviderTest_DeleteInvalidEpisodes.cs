@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
                                                All()
                                                .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build();
-                
+
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = seriesId)
@@ -38,19 +38,18 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
                 .With(e => e.TvDbEpisodeId = tvDbSeries.First().Id)
                 .Build();
 
-            
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeEpisode);
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeEpisode);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
-            var result = db.Fetch<Episode>();
+            var result = Db.Fetch<Episode>();
             result.Should().HaveCount(1);
         }
 
@@ -75,19 +74,18 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
                 .With(e => e.TvDbEpisodeId = 0)
                 .Build();
 
-            
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeEpisode);
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeEpisode);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
-            var result = db.Fetch<Episode>();
+            var result = Db.Fetch<Episode>();
             result.Should().HaveCount(1);
         }
 
@@ -112,19 +110,16 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
                 .With(e => e.TvDbEpisodeId = null)
                 .Build();
 
-            
+            WithRealDb();
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            db.Insert(fakeSeries);
-            db.Insert(fakeEpisode);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeEpisode);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
-            var result = db.Fetch<Episode>();
+            var result = Db.Fetch<Episode>();
             result.Should().HaveCount(1);
         }
 
@@ -151,19 +146,18 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
                 .With(e => e.TvDbEpisodeId = 300)
                 .Build();
 
-            
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeEpisode);
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeEpisode);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
-            var result = db.Fetch<Episode>();
+            var result = Db.Fetch<Episode>();
             result.Should().HaveCount(0);
         }
 
@@ -203,24 +197,23 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
                 .With(e => e.TvDbEpisodeId = 300)
                 .Build();
 
-            
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeEpisode);
-            db.Insert(otherFakeSeries);
-            db.Insert(otherFakeEpisode);
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeEpisode);
+            Db.Insert(otherFakeSeries);
+            Db.Insert(otherFakeEpisode);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
-            var result = db.Fetch<Episode>();
+            var result = Db.Fetch<Episode>();
             result.Should().HaveCount(1);
         }
-        
+
         [Test]
         public void should_not_do_anything_if_episode_list_is_empty()
         {

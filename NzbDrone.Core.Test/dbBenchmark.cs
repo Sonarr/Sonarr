@@ -32,7 +32,8 @@ namespace NzbDrone.Core.Test
         [TestFixtureSetUp]
         public void Setup()
         {
-            db = TestDbHelper.GetEmptyDatabase();
+            WithRealDb();
+
             int currentFileId = 0;
 
 
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Test
                                         Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.Bluray1080p },
                                         Cutoff = QualityTypes.DVD
                                     };
-            db.Insert(qulityProfile);
+            Db.Insert(qulityProfile);
 
             foreach (var _seriesId in seriesIds)
             {
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Test
                     .With(s => s.Monitored = true)
                     .Build();
 
-                db.Insert(series);
+                Db.Insert(series);
 
                 foreach (var _seasonNumber in seasonsNumbers)
                 {
@@ -94,8 +95,8 @@ namespace NzbDrone.Core.Test
 
             }
 
-            db.InsertMany(episodes);
-            db.InsertMany(files);
+            Db.InsertMany(episodes);
+            Db.InsertMany(files);
         }
 
 

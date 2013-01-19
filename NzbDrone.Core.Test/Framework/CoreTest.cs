@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
-using NzbDrone.Common;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Test.Common;
@@ -11,29 +11,45 @@ namespace NzbDrone.Core.Test.Framework
 {
     public class CoreTest : TestBase
     {
-        static CoreTest()
+        private string _dbTemplateName;
+
+        [SetUp]
+        public void CoreTestSetup()
         {
-            //Delete old db files
-            var oldDbFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
-            foreach (var file in oldDbFiles)
+            _dbTemplateName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".sdf";
+            CreateDataBaseTemplate();
+        }
+
+        private IDatabase GetEmptyDatabase(string fileName = "")
+        {
+            Console.WriteLine("====================DataBase====================");
+            Console.WriteLine("Cloning database from template.");
+
+            if (String.IsNullOrWhiteSpace(fileName))
             {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch { }
+                fileName = Guid.NewGuid() + ".sdf";
             }
 
-/*            //Delete App_data folder
-            var appData = new EnvironmentProvider().GetAppDataPath();
+            File.Copy(_dbTemplateName, fileName);
 
-            if (Directory.Exists(appData))
-            {
-                //Directory.Delete(appData, true);
-            }*/
+            var connectionString = ConnectionFactory.GetConnectionString(fileName);
+            var database = ConnectionFactory.GetPetaPocoDb(connectionString);
 
-            TestDbHelper.CreateDataBaseTemplate();
+            Console.WriteLine("====================DataBase====================");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            return database;
         }
+
+        private void CreateDataBaseTemplate()
+        {
+            Console.WriteLine("Creating an empty PetaPoco database");
+            var connectionString = ConnectionFactory.GetConnectionString(_dbTemplateName);
+            var database = ConnectionFactory.GetPetaPocoDb(connectionString);
+            database.Dispose();
+        }
+
 
 
         private IDatabase _db;
@@ -50,7 +66,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected void WithRealDb()
         {
-            _db = TestDbHelper.GetEmptyDatabase();
+            _db = GetEmptyDatabase();
             Mocker.SetConstant(Db);
         }
 
@@ -71,6 +87,18 @@ namespace NzbDrone.Core.Test.Framework
         public void CoreTestTearDown()
         {
             ConfigProvider.ClearCache();
+
+            if (_db != null && _db.Connection != null && File.Exists(_db.Connection.Database))
+            {
+                var file = _db.Connection.Database;
+                _db.Dispose();
+                try
+                {
+                    File.Delete(file);
+
+                }
+                catch (IOException) { }
+            }
         }
     }
 }

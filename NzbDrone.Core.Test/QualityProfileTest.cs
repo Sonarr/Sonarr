@@ -17,11 +17,16 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class QualityProfileTest : CoreTest<QualityProvider>
     {
+        [SetUp]
+        public void SetUp()
+        {
+            WithRealDb();
+        }
+
         [Test]
         public void Test_Storage()
         {
             //Arrange
-            var database = TestDbHelper.GetEmptyDatabase();
             var testProfile = new QualityProfile
                                   {
                                       Name = Guid.NewGuid().ToString(),
@@ -30,8 +35,8 @@ namespace NzbDrone.Core.Test
                                   };
 
 
-            var id = Convert.ToInt32(database.Insert(testProfile));
-            var fetch = database.SingleOrDefault<QualityProfile>(id);
+            var id = Convert.ToInt32(Db.Insert(testProfile));
+            var fetch = Db.SingleOrDefault<QualityProfile>(id);
 
 
             Assert.AreEqual(id, fetch.QualityProfileId);
@@ -45,7 +50,6 @@ namespace NzbDrone.Core.Test
         public void Test_Storage_no_allowed()
         {
             //Arrange
-            var database = TestDbHelper.GetEmptyDatabase();
             var testProfile = new QualityProfile
             {
                 Name = Guid.NewGuid().ToString(),
@@ -53,8 +57,8 @@ namespace NzbDrone.Core.Test
             };
 
 
-            var id = Convert.ToInt32(database.Insert(testProfile));
-            var fetch = database.SingleOrDefault<QualityProfile>(id);
+            var id = Convert.ToInt32(Db.Insert(testProfile));
+            var fetch = Db.SingleOrDefault<QualityProfile>(id);
 
 
             Assert.AreEqual(id, fetch.QualityProfileId);
@@ -67,11 +71,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Update_Success()
         {
-            //Arrange
-
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
             var testProfile = new QualityProfile
             {
                 Name = Guid.NewGuid().ToString(),
@@ -79,8 +78,8 @@ namespace NzbDrone.Core.Test
             };
 
 
-            var id = Convert.ToInt32(db.Insert(testProfile));
-            var currentProfile = db.SingleOrDefault<QualityProfile>(id);
+            var id = Convert.ToInt32(Db.Insert(testProfile));
+            var currentProfile = Db.SingleOrDefault<QualityProfile>(id);
 
 
             //Update
@@ -99,9 +98,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Test_Series_Quality()
         {
-            //Arrange
-            var database = TestDbHelper.GetEmptyDatabase();
-
             var testProfile = new QualityProfile
                                   {
                                       Name = Guid.NewGuid().ToString(),
@@ -110,18 +106,18 @@ namespace NzbDrone.Core.Test
                                   };
 
 
-            var profileId = Convert.ToInt32(database.Insert(testProfile));
+            var profileId = Convert.ToInt32(Db.Insert(testProfile));
 
             var series = Builder<Series>.CreateNew().Build();
             series.QualityProfileId = profileId;
 
-            database.Insert(testProfile);
-            database.Insert(series);
+            Db.Insert(testProfile);
+            Db.Insert(series);
 
-            var result = database.Fetch<Series>();
+            var result = Db.Fetch<Series>();
 
             result.Should().HaveCount(1);
-            var profile = database.SingleOrDefault<QualityProfile>(result[0].QualityProfileId);
+            var profile = Db.SingleOrDefault<QualityProfile>(result[0].QualityProfileId);
             Assert.AreEqual(profileId, result[0].QualityProfileId);
             Assert.AreEqual(testProfile.Name, profile.Name);
         }
@@ -130,10 +126,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void SetupInitial_should_add_two_profiles()
         {
-
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
 
             Mocker.Resolve<QualityProvider>();
 
@@ -152,8 +144,6 @@ namespace NzbDrone.Core.Test
         //We don't want to keep adding them back if a user deleted them on purpose.
         public void SetupInitial_should_skip_if_any_profile_exists()
         {
-            WithRealDb();
-
             InitiateSubject();
 
             var profiles = Subject.All();

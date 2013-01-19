@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             Mocker.GetMock<ConfigProvider>().SetupGet(s => s.ServiceRootUrl)
                     .Returns("http://services.nzbdrone.com");
+
+            WithRealDb();
         }
 
         private void WithValidJson()
@@ -75,6 +77,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
+
             Db.Insert(fakeMap);
 
             //Act
@@ -95,6 +98,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "Law and Order")
                 .With(f => f.SceneName = "laworder")
                 .Build();
+
 
             Db.Insert(fakeMap);
 
@@ -147,6 +151,8 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SeasonNumber = -1)
                 .Build();
 
+
+
             Db.Insert(fakeMap);
             Db.Insert(fakeMap2);
 
@@ -177,8 +183,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void UpdateMappings_should_add_all_mappings_to_database()
         {
-            //Setup
-            WithRealDb();
             WithValidJson();
 
             //Act
@@ -200,7 +204,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            WithRealDb();
             WithValidJson();
             Db.Insert(fakeMap);
 
@@ -223,7 +226,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            WithRealDb();
             WithErrorDownloadingJson();
             Db.Insert(fakeMap);
 
@@ -246,7 +248,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            WithRealDb();
             Db.Insert(fakeMap);
 
             //Act
@@ -260,7 +261,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void UpdateIfEmpty_should_update_if_count_is_zero()
         {
             //Setup
-            WithRealDb();
             WithValidJson();
 
             //Act

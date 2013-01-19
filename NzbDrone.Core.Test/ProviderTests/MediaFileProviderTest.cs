@@ -37,13 +37,11 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
 
-            var database = TestDbHelper.GetEmptyDatabase();
+            WithRealDb();
 
 
-            database.InsertMany(firstSeriesFiles);
-            database.InsertMany(secondSeriesFiles);
-
-            Mocker.SetConstant(database);
+            Db.InsertMany(firstSeriesFiles);
+            Db.InsertMany(secondSeriesFiles);
 
             var result = Mocker.Resolve<MediaFileProvider>().GetSeriesFiles(12);
 
@@ -69,13 +67,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
 
+            WithRealDb();
 
-            var database = TestDbHelper.GetEmptyDatabase();
-
-            database.InsertMany(firstSeriesFiles);
-            database.InsertMany(secondSeriesFiles);
-
-            Mocker.SetConstant(database);
+            Db.InsertMany(firstSeriesFiles);
+            Db.InsertMany(secondSeriesFiles);
 
             var result = Mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12, 1);
 
@@ -157,13 +152,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
 
-            var database = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(database);
-            database.InsertMany(episodeFiles);
+            WithRealDb();
+            Db.InsertMany(episodeFiles);
 
             //Act
             Mocker.Resolve<MediaFileProvider>().Delete(1);
-            var result = database.Fetch<EpisodeFile>();
+            var result = Db.Fetch<EpisodeFile>();
 
             //Assert
             result.Should().HaveCount(9);

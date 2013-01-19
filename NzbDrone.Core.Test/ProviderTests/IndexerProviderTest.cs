@@ -24,9 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_test()
         {
-
-
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
@@ -46,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_with_disabled_job()
         {
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
@@ -65,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_should_enable_indexer_that_is_enabled_by_default()
         {
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<DefaultEnabledIndexer>() });
 
@@ -82,7 +80,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_should_not_enable_indexer_that_is_not_enabled_by_default()
         {
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
