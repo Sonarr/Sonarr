@@ -85,7 +85,6 @@ namespace NzbDrone.Web
             //ServiceStack
             dispatch.ContainerBuilder.RegisterType<MemoryCacheClient>().As<ICacheClient>().SingleInstance();
             dispatch.ContainerBuilder.RegisterType<SessionFactory>().As<ISessionFactory>().SingleInstance();
-            new AppHost(container).Init();
         }
 
         private static void MVCRegistration(ContainerBuilder builder)

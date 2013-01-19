@@ -46,6 +46,7 @@
     <None Include="JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="JsLibraries\backbone.marionette.js" />
     <Content Include="JsLibraries\jquery-1.8.2.js" />
+    <Content Include="JsLibraries\jquery-ui-1.9.0.js" />
     <Content Include="JsLibraries\underscore.js" />
     <Content Include="Web.config" />
   </ItemGroup>

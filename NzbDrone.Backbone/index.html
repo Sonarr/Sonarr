@@ -5,19 +5,36 @@
 </head>
 <body>
     <div style="display: none">
-        <div id="add-series-template">
-            <h1>Add</h1>
+        <div id="add-series">
+            <h1 id="add-new">New</h1>
+            <h1 id="add-existing">Existing</h1>
         </div>
-        <div id="add-existing-series-template">
+
+        <div id="add-existing-series">
             <h1>Add Existing</h1>
+            <h2 id="single">Single Series</h2>
+            <h2 id="multiple">All of my series</h2>
         </div>
-        <div id="add-new-series-template">
+
+        <div id="add-new-series">
             <h1>Add New</h1>
+            <div class="well">
+                <input type="text" id="series-search" name="series-search" placeholder="Search for a series to add ..." class="span12" autocomplete="off" />
+            </div>
+        </div>
+
+        <div id="add-existing-series-single">
+            <h1>single
+            </h1>
+        </div>
+        <div id="add-existing-series-multiple">
+            <h1>multiple</h1>
         </div>
     </div>
 
     <div id="main-region"></div>
     <script src="JsLibraries/jquery-1.8.2.js" type="text/javascript"></script>
+    <script src="JsLibraries/jquery-ui-1.9.0.js" type="text/javascript"></script>
     <script src="JsLibraries/underscore.js" type="text/javascript"></script>
     <script src="JsLibraries/backbone.js" type="text/javascript"></script>
     <script src="JsLibraries/backbone.marionette.js" type="text/javascript"></script>
