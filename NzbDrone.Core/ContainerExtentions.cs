@@ -18,7 +18,7 @@ namespace NzbDrone.Core
     public static class ContainerExtentions
     {
 
-        private static Logger _logger = LogManager.GetLogger("ServiceRegistration");
+        private static readonly Logger _logger = LogManager.GetLogger("ServiceRegistration");
 
         public static void RegisterCoreServices(this ContainerBuilder container)
         {

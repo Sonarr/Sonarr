@@ -14,93 +14,64 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class NewznabProviderTest : CoreTest
+    public class NewznabProviderTest : CoreTest<NewznabProvider>
     {
+        [SetUp]
+        public void SetUp()
+        {
+            WithRealDb();
+            InitiateSubject();
+        }
+
+
         [Test]
         public void Save_should_clean_url_before_inserting()
         {
-            //Setup
+
             var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world" };
-            var expectedUrl = "http://www.nzbdrone.com";
+            const string expectedUrl = "http://www.nzbdrone.com";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            //Act
-            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
+            var result = Subject.Save(newznab);
 
-            //Assert
-            db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
+            Db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
         }
 
         [Test]
         public void Save_should_clean_url_before_updating()
         {
-            //Setup
-            var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "http://www.nzbdrone.com" };
-            var expectedUrl = "http://www.nzbdrone.com";
-            var newUrl = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world";
-
+            var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world" };
             
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
+            var result = Subject.Save(newznab);
 
-            newznab.Id = Convert.ToInt32(db.Insert(newznab));
-            newznab.Url = newUrl;
-
-            //Act
-            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
-
-            //Assert
-            db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
+            Subject.All().Single(c => c.Id == result).Url.Should().Be("http://www.nzbdrone.com");
         }
 
         [Test]
         public void Save_should_clean_url_before_inserting_when_url_is_not_empty()
         {
-            //Setup
             var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "" };
-            var expectedUrl = "";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
+            var result = Subject.Save(newznab);
 
-            //Act
-            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
 
-            //Assert
-            db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
+            Subject.All().Single(c => c.Id == result).Url.Should().Be("");
         }
 
         [Test]
         public void Save_should_clean_url_before_updating_when_url_is_not_empty()
         {
-            //Setup
-            var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "http://www.nzbdrone.com" };
-            var expectedUrl = "";
-            var newUrl = "";
-
+            var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "" };
+            var result = Subject.Save(newznab);
             
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            newznab.Id = Convert.ToInt32(db.Insert(newznab));
-            newznab.Url = newUrl;
-
-            //Act
-            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
-
-            //Assert
-            db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
+            Db.Single<NewznabDefinition>(result).Url.Should().Be("");
         }
 
         [Test]
         [Ignore("No longer clean newznab URLs")]
         public void SaveAll_should_clean_urls_before_updating()
         {
-            //Setup
+
             var definitions = Builder<NewznabDefinition>.CreateListOfSize(5)
                 .All()
                 .With(d => d.Url = "http://www.nzbdrone.com")
@@ -108,25 +79,22 @@ namespace NzbDrone.Core.Test.ProviderTests
             var expectedUrl = "http://www.nzbdrone.com";
             var newUrl = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.InsertMany(definitions);
+            Db.InsertMany(definitions);
 
             definitions.ToList().ForEach(d => d.Url = newUrl);
 
-            //Act
-            Mocker.Resolve<NewznabProvider>().SaveAll(definitions);
 
-            //Assert
-            db.Fetch<NewznabDefinition>().Where(d => d.Url == expectedUrl).Should().HaveCount(5);
+            Subject.SaveAll(definitions);
+
+
+            Db.Fetch<NewznabDefinition>().Where(d => d.Url == expectedUrl).Should().HaveCount(5);
         }
 
         [Test]
         public void Enabled_should_return_all_enabled_newznab_providers()
         {
-            //Setup
+
             var definitions = Builder<NewznabDefinition>.CreateListOfSize(5)
                 .TheFirst(2)
                 .With(d => d.Enable = false)
@@ -134,16 +102,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Enable = true)
                 .Build();
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.InsertMany(definitions);
+            Db.InsertMany(definitions);
 
-            //Act
-            var result = Mocker.Resolve<NewznabProvider>().Enabled();
 
-            //Assert
+            var result = Subject.Enabled();
+
+
             result.Should().HaveCount(3);
             result.All(d => d.Enable).Should().BeTrue();
         }
@@ -151,81 +116,54 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void All_should_return_all_newznab_providers()
         {
-            //Setup
-            var definitions = Builder<NewznabDefinition>.CreateListOfSize(5)
-                .TheFirst(2)
-                .With(d => d.Enable = false)
-                .TheLast(3)
-                .With(d => d.Enable = true)
+
+            var userIndexers = Builder<NewznabDefinition>.CreateListOfSize(5)
+                .All().With(c => c.Url = "http://www.host.com/12")
                 .Build();
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.InsertMany(definitions);
+            Db.InsertMany(userIndexers);
 
-            //Act
-            var result = Mocker.Resolve<NewznabProvider>().All();
+            var result = Subject.All();
 
-            //Assert
-            result.Should().HaveCount(5);
+            result.Should().HaveCount(8);
+        }
+
+
+        [Test]
+        public void All_should_return_empty_list_when_no_indexers_exist()
+        {
+            Db.Delete<NewznabDefinition>("");
+
+            Subject.All().Should().NotBeNull();
+            Subject.All().Should().BeEmpty();
+
         }
 
         [Test]
         public void Delete_should_delete_newznab_provider()
         {
-            //Setup
-            var definitions = Builder<NewznabDefinition>.CreateListOfSize(5)
-                .TheFirst(2)
-                .With(d => d.Enable = false)
-                .TheLast(3)
-                .With(d => d.Enable = true)
-                .Build();
+            var toBeDelete = Subject.All()[2];
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
+            Subject.Delete(toBeDelete.Id);
 
-            db.InsertMany(definitions);
-
-            //Act
-            Mocker.Resolve<NewznabProvider>().Delete(1);
-
-            //Assert
-            var result = db.Fetch<NewznabDefinition>();
-            result.Should().HaveCount(4);
-            result.Any(d => d.Id == 1).Should().BeFalse();
+            Subject.All().Should().NotBeEmpty();
+            Subject.All().Should().NotContain(c => c.Id == toBeDelete.Id);
         }
 
         [Test]
-        public void InitializeNewznabIndexers_should_initialize_new_indexers()
+        public void InitializeNewznabIndexers_should_initialize_build_in_indexers()
         {
-            //Setup
-            var definitions = Builder<NewznabDefinition>.CreateListOfSize(5)
-                .All()
-                .With(d => d.Url = "http://www.nzbdrone.com")
-                .Build();
+            var indexers = Subject.All();
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            Mocker.SetConstant<IEnumerable<NewznabDefinition>>(definitions);
-
-            //Act
-            Mocker.Resolve<NewznabProvider>();
-
-            //Assert
-            var result = db.Fetch<NewznabDefinition>();
-            result.Should().HaveCount(5);
-            result.Should().OnlyContain(i => i.BuiltIn);
+            indexers.Should().NotBeEmpty();
+            indexers.Should().OnlyContain(i => i.BuiltIn);
         }
 
         [Test]
         public void InitializeNewznabIndexers_should_initialize_new_indexers_only()
         {
-            //Setup
+
             var definitions = Builder<NewznabDefinition>.CreateListOfSize(5)
                 .All()
                 .With(d => d.Id = 0)
@@ -235,88 +173,46 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Url = "http://www.nzbdrone.com")
                 .Build();
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(definitions[0]);
-            db.Insert(definitions[2]);
+            Db.Insert(definitions[0]);
+            Db.Insert(definitions[2]);
 
             Mocker.SetConstant<IEnumerable<NewznabDefinition>>(definitions);
 
 
-            //Act
-            Mocker.Resolve<NewznabProvider>();
-
-            //Assert
-            var result = db.Fetch<NewznabDefinition>();
-            result.Should().HaveCount(2);
+            var result = Db.Fetch<NewznabDefinition>();
             result.Where(d => d.Url == "http://www.nzbdrone.com").Should().HaveCount(1);
             result.Where(d => d.Url == "http://www.nzbdrone2.com").Should().HaveCount(1);
         }
 
         [Test]
-        public void InitializeNewznabIndexers_should_update_matching_indexer_to_be_builtin()
-        {
-            //Setup
-            var definition = Builder<NewznabDefinition>.CreateNew()
-                .With(d => d.Url = "http://www.nzbdrone2.com")
-                .With(d => d.BuiltIn = false)
-                .Build();
-
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            db.Insert(definition);
-
-            Mocker.SetConstant<IEnumerable<NewznabDefinition>>(new List<NewznabDefinition> { definition });
-
-            //Act
-            Mocker.Resolve<NewznabProvider>();
-
-            //Assert
-            var result = db.Fetch<NewznabDefinition>();
-            result.Should().HaveCount(1);
-            result.First().BuiltIn.Should().BeTrue();
-        }
-
-        [Test]
         public void InitializeNewznabIndexers_should_not_blow_up_if_more_than_one_indexer_with_the_same_url_is_found()
         {
-            //Setup
             var definition = Builder<NewznabDefinition>.CreateNew()
                 .With(d => d.Url = "http://www.nzbdrone2.com")
                 .With(d => d.BuiltIn = false)
                 .Build();
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            db.Insert(definition);
-            db.Insert(definition);
+            Db.Insert(definition);
+            Db.Insert(definition);
 
 
             Mocker.SetConstant<IEnumerable<NewznabDefinition>>(new List<NewznabDefinition> { definition });
 
-
-            //Act
-            Mocker.Resolve<NewznabProvider>();
-
-            //Assert
-            var result = db.Fetch<NewznabDefinition>();
+            var result = Db.Fetch<NewznabDefinition>().Where(c => c.BuiltIn == false);
             result.Should().HaveCount(2);
         }
 
         [Test]
         public void CheckHostname_should_do_nothing_if_hostname_is_valid()
         {
-            Mocker.Resolve<NewznabProvider>().CheckHostname("http://www.google.com");
+            Subject.CheckHostname("http://www.google.com");
         }
 
         [Test]
         public void CheckHostname_should_log_error_and_throw_exception_if_dnsHostname_is_invalid()
         {
-            Assert.Throws<SocketException>(() => Mocker.Resolve<NewznabProvider>().CheckHostname("http://BadName"));
+            Assert.Throws<SocketException>(() => Subject.CheckHostname("http://BadName"));
 
             ExceptionVerification.ExpectedErrors(1);
         }

@@ -29,11 +29,11 @@ namespace NzbDrone.Core.Test
                                       Allowed = new List<QualityTypes> { QualityTypes.HDTV720p, QualityTypes.DVD },
                                   };
 
-            //Act
+            
             var id = Convert.ToInt32(database.Insert(testProfile));
             var fetch = database.SingleOrDefault<QualityProfile>(id);
 
-            //Assert
+            
             Assert.AreEqual(id, fetch.QualityProfileId);
             Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
@@ -52,11 +52,11 @@ namespace NzbDrone.Core.Test
                 Cutoff = QualityTypes.SDTV
             };
 
-            //Act
+            
             var id = Convert.ToInt32(database.Insert(testProfile));
             var fetch = database.SingleOrDefault<QualityProfile>(id);
 
-            //Assert
+            
             Assert.AreEqual(id, fetch.QualityProfileId);
             Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test
                 Cutoff = QualityTypes.SDTV
             };
 
-            //Act
+            
             var id = Convert.ToInt32(db.Insert(testProfile));
             var currentProfile = db.SingleOrDefault<QualityProfile>(id);
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test
 
             var updated = Mocker.Resolve<QualityProvider>().Get(currentProfile.QualityProfileId);
 
-            //Assert
+            
             updated.Name.Should().Be(currentProfile.Name);
             updated.Cutoff.Should().Be(QualityTypes.Bluray720p);
             updated.AllowedString.Should().Be(currentProfile.AllowedString);
@@ -134,10 +134,10 @@ namespace NzbDrone.Core.Test
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
 
-            //Act
+            
             Mocker.Resolve<QualityProvider>();
 
-            //Assert
+            
             var profiles = Mocker.Resolve<QualityProvider>().All();
 
 
@@ -157,10 +157,10 @@ namespace NzbDrone.Core.Test
             Mocker.SetConstant(db);
             var fakeProfile = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
-            //Act
+            
             Mocker.Resolve<QualityProvider>().Add(fakeProfile);
 
-            //Assert
+            
             var profiles = Mocker.Resolve<QualityProvider>().All();
 
 

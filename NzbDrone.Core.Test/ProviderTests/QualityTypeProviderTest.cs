@@ -23,10 +23,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
 
-            //Act
+            
             Mocker.Resolve<QualityTypeProvider>();
 
-            //Assert
+            
             var types = Mocker.Resolve<QualityTypeProvider>().All();
 
             types.Should().HaveCount(10);
@@ -51,10 +51,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             db.Insert(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
 
-            //Act
+            
             Mocker.Resolve<QualityTypeProvider>();
 
-            //Assert
+            
             var types = Mocker.Resolve<QualityTypeProvider>().All();
 
             types.Should().HaveCount(QualityTypes.All().Count - 1);
@@ -74,10 +74,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             db.InsertMany(fakeQualityTypes);
 
-            //Act
+            
             var result = Mocker.Resolve<QualityTypeProvider>().GetList(ids);
 
-            //Assert
+            
             result.Should().HaveCount(ids.Count);
         }
 
@@ -95,10 +95,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             db.InsertMany(fakeQualityTypes);
 
-            //Act
+            
             var result = Mocker.Resolve<QualityTypeProvider>().GetList(ids);
 
-            //Assert
+            
             result.Should().HaveCount(ids.Count);
         }
     }

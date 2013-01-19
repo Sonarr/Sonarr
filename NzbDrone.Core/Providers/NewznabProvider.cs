@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Providers
 {
     public class NewznabProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
         public NewznabProvider(IDatabase database)
@@ -51,11 +51,11 @@ namespace NzbDrone.Core.Providers
 
             if (definition.Id == 0)
             {
-                Logger.Debug("Adding Newznab definitions for {0}", definition.Name);
+                logger.Debug("Adding Newznab definitions for {0}", definition.Name);
                 return Convert.ToInt32(_database.Insert(definition));
             }
 
-            Logger.Debug("Updating Newznab definitions for {0}", definition.Name);
+            logger.Debug("Updating Newznab definitions for {0}", definition.Name);
             return _database.Update(definition);
         }
 
@@ -75,13 +75,13 @@ namespace NzbDrone.Core.Providers
 
         private void InitializeNewznabIndexers(IList<NewznabDefinition> indexers)
         {
-            Logger.Debug("Initializing Newznab indexers. Count {0}", indexers.Count);
+            logger.Debug("Initializing Newznab indexers. Count {0}", indexers.Count);
 
             try
             {
                 var currentIndexers = All();
 
-                Logger.Debug("Deleting broken Newznab indexer");
+                logger.Debug("Deleting broken Newznab indexer");
                 var brokenIndexers = currentIndexers.Where(i => String.IsNullOrEmpty(i.Name) || String.IsNullOrWhiteSpace(i.Url)).ToList();
                 brokenIndexers.ForEach(e => _database.Delete<NewznabDefinition>(e.Id));
 
@@ -120,13 +120,13 @@ namespace NzbDrone.Core.Providers
                     }
                     catch (Exception ex)
                     {
-                        Logger.ErrorException("An error occurred while setting up indexer: " + feedProvider.Name, ex);
+                        logger.ErrorException("An error occurred while setting up indexer: " + feedProvider.Name, ex);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.ErrorException("An Error occurred while initializing Newznab Indexers", ex);
+                logger.ErrorException("An Error occurred while initializing Newznab Indexers", ex);
             }
         }
 
@@ -146,8 +146,8 @@ namespace NzbDrone.Core.Providers
             }
             catch (Exception ex)
             {
-                Logger.Error("Invalid address {0}, please correct the site URL.", url);
-                Logger.TraceException(ex.Message, ex);
+                logger.Error("Invalid address {0}, please correct the site URL.", url);
+                logger.TraceException(ex.Message, ex);
                 throw;
             }
 

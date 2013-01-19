@@ -24,13 +24,13 @@ namespace NzbDrone.Core.Test.Framework
                 catch { }
             }
 
-            //Delete App_data folder
+/*            //Delete App_data folder
             var appData = new EnvironmentProvider().GetAppDataPath();
 
             if (Directory.Exists(appData))
             {
-                Directory.Delete(appData, true);
-            }
+                //Directory.Delete(appData, true);
+            }*/
 
             TestDbHelper.CreateDataBaseTemplate();
         }

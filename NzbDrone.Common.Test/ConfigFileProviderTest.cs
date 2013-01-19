@@ -31,10 +31,10 @@ namespace NzbDrone.Common.Test
             const string key = "Port";
             const string value = "8989";
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
 
-            //Assert
+            
             result.Should().Be(value);
         }
 
@@ -44,10 +44,10 @@ namespace NzbDrone.Common.Test
             const string key = "Port";
             const int value = 8989;
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().GetValueInt(key, value);
 
-            //Assert
+            
             result.Should().Be(value);
         }
 
@@ -57,20 +57,20 @@ namespace NzbDrone.Common.Test
             const string key = "LaunchBrowser";
             const bool value = true;
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().GetValueBoolean(key, value);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void GetLaunchBrowser_Success()
         {
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
 
-            //Assert
+            
             result.Should().Be(true);
         }
 
@@ -79,10 +79,10 @@ namespace NzbDrone.Common.Test
         {
             const int value = 8989;
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().Port;
 
-            //Assert
+            
             result.Should().Be(value);
         }
 
@@ -92,10 +92,10 @@ namespace NzbDrone.Common.Test
             const string key = "LaunchBrowser";
             const bool value = false;
 
-            //Act
+            
             Mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
 
-            //Assert
+            
             var result = Mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
             result.Should().Be(value);
         }
@@ -106,10 +106,10 @@ namespace NzbDrone.Common.Test
             const string key = "Port";
             const int value = 12345;
 
-            //Act
+            
             Mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
 
-            //Assert
+            
             var result = Mocker.Resolve<ConfigFileProvider>().Port;
             result.Should().Be(value);
         }
@@ -120,10 +120,10 @@ namespace NzbDrone.Common.Test
             const string key = "Hello";
             const string value = "World";
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
 
-            //Assert
+            
             result.Should().Be(value);
         }
 
@@ -131,10 +131,10 @@ namespace NzbDrone.Common.Test
         public void GetAuthenticationType_No_Existing_Value()
         {
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().AuthenticationType;
 
-            //Assert
+            
             result.Should().Be(AuthenticationType.Anonymous);
         }
 
@@ -144,22 +144,22 @@ namespace NzbDrone.Common.Test
 
             Mocker.Resolve<ConfigFileProvider>().SetValue("AuthenticationType", 1);
 
-            //Act
+            
             var result = Mocker.Resolve<ConfigFileProvider>().AuthenticationType;
 
-            //Assert
+            
             result.Should().Be(AuthenticationType.Windows);
         }
 
         [Test]
         public void Guid_should_return_the_same_every_time()
         {
-            //Act
+            
             var firstResponse = Mocker.Resolve<ConfigFileProvider>().Guid;
             var secondResponse = Mocker.Resolve<ConfigFileProvider>().Guid;
 
 
-            //Assert
+            
             secondResponse.Should().Be(firstResponse);
         }
     }

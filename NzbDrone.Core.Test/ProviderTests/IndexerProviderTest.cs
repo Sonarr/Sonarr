@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             settings.Enable = true;
             indexerProvider.SaveSettings(settings);
 
-            //Assert
+            
             indexerProvider.All();
 
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             settings.Enable = false;
             indexerProvider.SaveSettings(settings);
 
-            //Assert
+            
 
             indexerProvider.All().Should().HaveCount(1);
             indexerProvider.GetEnabledIndexers().Should().BeEmpty();
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var indexerProvider = Mocker.Resolve<IndexerProvider>();
 
 
-            //Assert
+            
             indexerProvider.All();
             indexerProvider.All().Should().HaveCount(1);
             indexerProvider.GetEnabledIndexers().Should().HaveCount(1);
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var indexerProvider = Mocker.Resolve<IndexerProvider>();
 
 
-            //Assert
+            
             indexerProvider.All();
             indexerProvider.All().Should().HaveCount(1);
             indexerProvider.GetEnabledIndexers().Should().HaveCount(0);
