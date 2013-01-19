@@ -18,13 +18,12 @@ namespace NzbDrone.Core
     public static class ContainerExtentions
     {
 
-        private static readonly Logger _logger = LogManager.GetLogger("ServiceRegistration");
+        private static readonly Logger logger = LogManager.GetLogger("ServiceRegistration");
 
         public static void RegisterCoreServices(this ContainerBuilder container)
         {
             var core = Assembly.Load("NzbDrone.Core");
             var common = Assembly.Load("NzbDrone.Common");
-
 
             container.RegisterAssembly(core);
             container.RegisterAssembly(common);
@@ -44,27 +43,25 @@ namespace NzbDrone.Core
                      .SingleInstance();
 
             container.RegisterAssemblyTypes(assembly)
-                     .Where(t => t.BaseType == typeof(IndexerBase))
+                     .Where(t => t.IsSubclassOf(typeof(IndexerBase)))
                      .As<IndexerBase>().SingleInstance();
 
             container.RegisterAssemblyTypes(assembly)
-                     .Where(t => t.BaseType == typeof(SearchBase))
+                      .Where(t => t.IsSubclassOf(typeof(SearchBase)))
                      .As<SearchBase>().SingleInstance();
 
             container.RegisterAssemblyTypes(assembly)
-                     .Where(t => t.BaseType == typeof(ExternalNotificationBase))
+                      .Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase)))
                      .As<ExternalNotificationBase>().SingleInstance();
 
             container.RegisterAssemblyTypes(assembly)
-                     .Where(t => t.BaseType == typeof(MetadataBase))
+                     .Where(t => t.IsSubclassOf(typeof(MetadataBase)))
                      .As<MetadataBase>().SingleInstance();
         }
-
-
-
+        
         private static void InitDatabase(this ContainerBuilder container)
         {
-            _logger.Info("Registering Database...");
+            logger.Info("Registering Database...");
 
             var appDataPath = new EnvironmentProvider().GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);

@@ -252,30 +252,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         }
 
         [Test]
-        public void Init_Timers_only_registers_once()
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                var fakeTimer = new FakeJob();
-                IEnumerable<IJob> BaseFakeJobs = new List<IJob> { fakeTimer };
-
-                Mocker.SetConstant(BaseFakeJobs);
-
-                Mocker.Resolve<JobProvider>();
-            }
-
-            var Mocker2 = new AutoMoqer();
-
-            Mocker2.SetConstant(Db);
-            var assertjobProvider = Mocker2.Resolve<JobProvider>();
-            var timers = assertjobProvider.All();
-
-            
-            timers.Should().HaveCount(1);
-            timers[0].Enable.Should().BeTrue();
-        }
-
-        [Test]
         public void inti_should_removed_jobs_that_no_longer_exist()
         {
             IEnumerable<IJob> fakeJobs = new List<IJob> { fakeJob };

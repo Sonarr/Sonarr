@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityProfileTest : CoreTest
+    public class QualityProfileTest : CoreTest<QualityProvider>
     {
         [Test]
         public void Test_Storage()
@@ -29,11 +29,11 @@ namespace NzbDrone.Core.Test
                                       Allowed = new List<QualityTypes> { QualityTypes.HDTV720p, QualityTypes.DVD },
                                   };
 
-            
+
             var id = Convert.ToInt32(database.Insert(testProfile));
             var fetch = database.SingleOrDefault<QualityProfile>(id);
 
-            
+
             Assert.AreEqual(id, fetch.QualityProfileId);
             Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
@@ -52,11 +52,11 @@ namespace NzbDrone.Core.Test
                 Cutoff = QualityTypes.SDTV
             };
 
-            
+
             var id = Convert.ToInt32(database.Insert(testProfile));
             var fetch = database.SingleOrDefault<QualityProfile>(id);
 
-            
+
             Assert.AreEqual(id, fetch.QualityProfileId);
             Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test
         public void Update_Success()
         {
             //Arrange
-            
+
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
 
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test
                 Cutoff = QualityTypes.SDTV
             };
 
-            
+
             var id = Convert.ToInt32(db.Insert(testProfile));
             var currentProfile = db.SingleOrDefault<QualityProfile>(id);
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test
 
             var updated = Mocker.Resolve<QualityProvider>().Get(currentProfile.QualityProfileId);
 
-            
+
             updated.Name.Should().Be(currentProfile.Name);
             updated.Cutoff.Should().Be(QualityTypes.Bluray720p);
             updated.AllowedString.Should().Be(currentProfile.AllowedString);
@@ -130,14 +130,14 @@ namespace NzbDrone.Core.Test
         [Test]
         public void SetupInitial_should_add_two_profiles()
         {
-            
+
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
 
-            
+
             Mocker.Resolve<QualityProvider>();
 
-            
+
             var profiles = Mocker.Resolve<QualityProvider>().All();
 
 
@@ -152,19 +152,16 @@ namespace NzbDrone.Core.Test
         //We don't want to keep adding them back if a user deleted them on purpose.
         public void SetupInitial_should_skip_if_any_profile_exists()
         {
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-            var fakeProfile = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
+            WithRealDb();
 
-            
-            Mocker.Resolve<QualityProvider>().Add(fakeProfile);
+            InitiateSubject();
 
-            
-            var profiles = Mocker.Resolve<QualityProvider>().All();
+            var profiles = Subject.All();
+            Subject.Delete(profiles[0].QualityProfileId);
 
+            InitiateSubject();
 
-            profiles.Should().HaveCount(1);
+            Subject.All().Should().HaveCount(profiles.Count - 1);
         }
     }
 }
