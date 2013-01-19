@@ -5,7 +5,6 @@ using System.Linq;
 using Autofac;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -18,12 +17,12 @@ namespace NzbDrone.Core.Test
     [TestFixture]
     class CentralDispatchFixture : CoreTest
     {
-        readonly IList<Type> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).ToList();
-        readonly IList<Type> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).ToList();
+        readonly IList<string> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();
+        readonly IList<string> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).Select(c=>c.ToString()).ToList();
         readonly IList<Type> extNotifications = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase))).ToList();
         readonly IList<Type> metadata = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(MetadataBase))).ToList();
 
-        private IContainer kernel;
+        private readonly IContainer kernel;
 
         public CentralDispatchFixture()
         {
@@ -57,8 +56,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void All_jobs_should_be_registered()
         {
-            //Assert
-
             var registeredJobs = kernel.Resolve<IEnumerable<IJob>>();
 
             jobs.Should().NotBeEmpty();
@@ -69,8 +66,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void All_indexers_should_be_registered()
         {
-            //Assert
-
             var registeredIndexers = kernel.Resolve<IEnumerable<IndexerBase>>();
 
             indexers.Should().NotBeEmpty();
@@ -81,8 +76,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void All_externalNotifiers_should_be_registered()
         {
-            //Assert
-
             var externalNotificationBases = kernel.Resolve<IEnumerable<ExternalNotificationBase>>();
 
             extNotifications.Should().NotBeEmpty();
@@ -93,8 +86,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void All_metadata_clients_should_be_registered()
         {
-            //Assert
-
             var metadataBases = kernel.Resolve<IEnumerable<MetadataBase>>();
 
             metadata.Should().NotBeEmpty();
@@ -111,7 +102,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void indexers_are_initialized()
         {
-            kernel.Resolve<IndexerProvider>().All().Should().HaveSameCount(indexers);
+            kernel.Resolve<IndexerProvider>().All().Select(c => c.IndexProviderType).Should().BeEquivalentTo(indexers);
         }
 
         [Test]
@@ -129,7 +120,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void quality_profile_initialized()
         {
-            kernel.Resolve<QualityProvider>().All().Should().HaveCount(2);
+            kernel.Resolve<QualityProvider>().All().Should().HaveCount(4);
         }
 
         [Test]

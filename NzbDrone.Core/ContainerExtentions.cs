@@ -34,6 +34,8 @@ namespace NzbDrone.Core
 
         private static void RegisterAssembly(this ContainerBuilder container, Assembly assembly)
         {
+            logger.Info("Registering Services from {0}", assembly.FullName);
+
             container.RegisterAssemblyTypes(assembly)
                      .AsSelf()
                      .SingleInstance();
@@ -58,7 +60,7 @@ namespace NzbDrone.Core
                      .Where(t => t.IsSubclassOf(typeof(MetadataBase)))
                      .As<MetadataBase>().SingleInstance();
         }
-        
+
         private static void InitDatabase(this ContainerBuilder container)
         {
             logger.Info("Registering Database...");
@@ -66,14 +68,14 @@ namespace NzbDrone.Core
             var appDataPath = new EnvironmentProvider().GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            container.Register(c => c.Resolve<Connection>().GetMainPetaPocoDb())
+            container.Register(c => c.Resolve<ConnectionFactory>().GetMainPetaPocoDb())
                      .As<IDatabase>();
 
-            container.Register(c => c.Resolve<Connection>().GetLogPetaPocoDb(false))
+            container.Register(c => c.Resolve<ConnectionFactory>().GetLogPetaPocoDb(false))
                      .SingleInstance()
                      .Named<IDatabase>("DatabaseTarget");
 
-            container.Register(c => c.Resolve<Connection>().GetLogPetaPocoDb())
+            container.Register(c => c.Resolve<ConnectionFactory>().GetLogPetaPocoDb())
                      .Named<IDatabase>("LogProvider");
 
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));

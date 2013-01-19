@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Test.Framework
 
             File.Copy(DB_TEMPLATE_NAME, fileName);
 
-            ConnectionString = Connection.GetConnectionString(fileName);
+            ConnectionString = ConnectionFactory.GetConnectionString(fileName);
 
-            var database = Connection.GetPetaPocoDb(ConnectionString);
+            var database = ConnectionFactory.GetPetaPocoDb(ConnectionString);
 
             Console.WriteLine("====================DataBase====================");
             Console.WriteLine();
@@ -46,8 +46,8 @@ namespace NzbDrone.Core.Test.Framework
         internal static void CreateDataBaseTemplate()
         {
             Console.WriteLine("Creating an empty PetaPoco database");
-            var connectionString = Connection.GetConnectionString(DB_TEMPLATE_NAME);
-            var database = Connection.GetPetaPocoDb(connectionString);
+            var connectionString = ConnectionFactory.GetConnectionString(DB_TEMPLATE_NAME);
+            var database = ConnectionFactory.GetPetaPocoDb(connectionString);
             database.Dispose();
         }
     }

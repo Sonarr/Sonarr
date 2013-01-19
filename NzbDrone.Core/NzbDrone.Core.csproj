@@ -223,7 +223,7 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
-    <Compile Include="Datastore\Connection.cs" />
+    <Compile Include="Datastore\ConnectionFactory.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />

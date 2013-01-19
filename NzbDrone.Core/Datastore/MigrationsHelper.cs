@@ -11,13 +11,9 @@ namespace NzbDrone.Core.Datastore
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static readonly Dictionary<String, String> _migrated = new Dictionary<string, string>();
 
         public static void Run(string connetionString, bool trace)
         {
-            if (_migrated.ContainsKey(connetionString)) return;
-            _migrated.Add(connetionString, string.Empty);
-
             EnsureDatabase(connetionString);
 
             Logger.Trace("Preparing to run database migration");
@@ -37,9 +33,6 @@ namespace NzbDrone.Core.Datastore
 
 
                 migrator.MigrateToLastVersion();
-
-                //ForceSubSonicMigration(Connection.CreateSimpleRepository(connetionString));
-
                 Logger.Info("Database migration completed");
 
 
@@ -47,6 +40,7 @@ namespace NzbDrone.Core.Datastore
             catch (Exception e)
             {
                 Logger.FatalException("An error has occurred while migrating database", e);
+                throw;
             }
         }
 
