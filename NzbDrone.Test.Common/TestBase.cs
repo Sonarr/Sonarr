@@ -31,7 +31,7 @@ namespace NzbDrone.Test.Common
         protected Mock<RestProvider> MockedRestProvider { get; private set; }
 
 
-        protected string VirtualPath
+        private string VirtualPath
         {
             get
             {
@@ -42,9 +42,15 @@ namespace NzbDrone.Test.Common
             }
         }
 
+
+        protected string TempFolder { get; private set; }
+
         [SetUp]
         public void TestBaseSetup()
         {
+
+            TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
+
             MockedRestProvider = new Mock<RestProvider>();
             ReportingService.RestProvider = MockedRestProvider.Object;
             ReportingService.SetupExceptronDriver();
@@ -62,6 +68,18 @@ namespace NzbDrone.Test.Common
         public void TestBaseTearDown()
         {
             _mocker = null;
+
+            try
+            {
+                if (Directory.Exists(TempFolder))
+                {
+                    Directory.Delete(TempFolder, true);
+                }
+            }
+            catch (Exception)
+            {
+            }
+
         }
 
         protected void WithStrictMocker()
@@ -78,12 +96,6 @@ namespace NzbDrone.Test.Common
             Mocker.GetMock<EnvironmentProvider>()
                 .SetupGet(c => c.ApplicationPath)
                 .Returns(VirtualPath);
-        }
-
-
-        protected string TempFolder
-        {
-            get { return Path.Combine(Directory.GetCurrentDirectory(), "temp"); }
         }
 
         protected string GetTestFilePath(string fileName)

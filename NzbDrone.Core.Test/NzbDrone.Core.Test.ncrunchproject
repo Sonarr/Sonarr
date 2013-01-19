@@ -14,6 +14,7 @@
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
   <DefaultTestTimeout>60000</DefaultTestTimeout>
   <UseBuildConfiguration></UseBuildConfiguration>
+  <UseBuildPlatform></UseBuildPlatform>
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <IgnoredTests>
@@ -26,5 +27,9 @@
     <NamedTestSelector>
       <TestName>NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests.ImportFileFixture.import_unparsable_file_should_skip</TestName>
     </NamedTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.Integeration\.ServiceIntegerationFixture\..*</RegularExpression>
+    </RegexTestSelector>
   </IgnoredTests>
+  <HiddenWarnings>PostBuildEventDisabled</HiddenWarnings>
 </ProjectConfiguration>

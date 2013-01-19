@@ -1,8 +1,8 @@
 <SolutionConfiguration>
   <FileVersion>1</FileVersion>
   <AutoEnableOnStartup>True</AutoEnableOnStartup>
-  <AllowParallelTestExecution>false</AllowParallelTestExecution>
-  <AllowTestsToRunInParallelWithThemselves>false</AllowTestsToRunInParallelWithThemselves>
+  <AllowParallelTestExecution>true</AllowParallelTestExecution>
+  <AllowTestsToRunInParallelWithThemselves>true</AllowTestsToRunInParallelWithThemselves>
   <FrameworkUtilisationTypeForNUnit>UseDynamicAnalysis</FrameworkUtilisationTypeForNUnit>
   <FrameworkUtilisationTypeForGallio>Disabled</FrameworkUtilisationTypeForGallio>
   <FrameworkUtilisationTypeForMSpec>Disabled</FrameworkUtilisationTypeForMSpec>

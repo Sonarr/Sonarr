@@ -16,7 +16,12 @@ namespace NzbDrone.Core.Test.Framework
 {
     internal static class TestDbHelper
     {
-        private const string DB_TEMPLATE_NAME = "_dbtemplate.sdf";
+        private static readonly string dbTemplateName;
+
+        static TestDbHelper()
+        {
+            dbTemplateName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".sdf";
+        }
 
         internal static string ConnectionString { get; private set; }
 
@@ -30,7 +35,7 @@ namespace NzbDrone.Core.Test.Framework
                 fileName = Guid.NewGuid() + ".sdf";
             }
 
-            File.Copy(DB_TEMPLATE_NAME, fileName);
+            File.Copy(dbTemplateName, fileName);
 
             ConnectionString = ConnectionFactory.GetConnectionString(fileName);
 
@@ -46,7 +51,7 @@ namespace NzbDrone.Core.Test.Framework
         internal static void CreateDataBaseTemplate()
         {
             Console.WriteLine("Creating an empty PetaPoco database");
-            var connectionString = ConnectionFactory.GetConnectionString(DB_TEMPLATE_NAME);
+            var connectionString = ConnectionFactory.GetConnectionString(dbTemplateName);
             var database = ConnectionFactory.GetPetaPocoDb(connectionString);
             database.Dispose();
         }

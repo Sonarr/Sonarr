@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using FluentAssertions;
+using NCrunch.Framework;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -15,6 +16,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    [ExclusivelyUses("REAL_LOG_FILE")]
     class CentralDispatchFixture : CoreTest
     {
         readonly IList<string> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();
@@ -120,7 +122,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void quality_profile_initialized()
         {
-            kernel.Resolve<QualityProvider>().All().Should().HaveCount(4);
+            kernel.Resolve<QualityProvider>().All().Should().HaveCount(2);
         }
 
         [Test]
