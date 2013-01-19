@@ -4,14 +4,11 @@ using System.Linq;
 using System.Net.Sockets;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -214,8 +211,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
 
+            Mocker.SetConstant<IEnumerable<NewznabDefinition>>(definitions);
+
             //Act
-            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
+            Mocker.Resolve<NewznabProvider>();
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();
@@ -243,8 +242,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(definitions[0]);
             db.Insert(definitions[2]);
 
+            Mocker.SetConstant<IEnumerable<NewznabDefinition>>(definitions);
+
+
             //Act
-            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
+            Mocker.Resolve<NewznabProvider>();
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();
@@ -267,8 +269,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             db.Insert(definition);
 
+            Mocker.SetConstant<IEnumerable<NewznabDefinition>>(new List<NewznabDefinition> { definition });
+
             //Act
-            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(new List<NewznabDefinition>{ definition });
+            Mocker.Resolve<NewznabProvider>();
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();
@@ -291,8 +295,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(definition);
             db.Insert(definition);
 
+
+            Mocker.SetConstant<IEnumerable<NewznabDefinition>>(new List<NewznabDefinition> { definition });
+
+
             //Act
-            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(new List<NewznabDefinition> { definition });
+            Mocker.Resolve<NewznabProvider>();
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.SetConstant(db);
 
             //Act
-            Mocker.Resolve<QualityTypeProvider>().SetupDefault();
+            Mocker.Resolve<QualityTypeProvider>();
 
             //Assert
             var types = Mocker.Resolve<QualityTypeProvider>().All();
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
 
             //Act
-            Mocker.Resolve<QualityTypeProvider>().SetupDefault();
+            Mocker.Resolve<QualityTypeProvider>();
 
             //Assert
             var types = Mocker.Resolve<QualityTypeProvider>().All();

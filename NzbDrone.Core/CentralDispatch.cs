@@ -27,7 +27,7 @@ namespace NzbDrone.Core
 
         }
 
-        private void RegisterReporting(IContainer container)
+        private void RegisterReporting(IComponentContext container)
         {
             EnvironmentProvider.UGuid = container.Resolve<ConfigProvider>().UGuid;
             ReportingService.RestProvider = container.Resolve<RestProvider>();

@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         private void ResetLastExecution()
         {
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
 
             var jobs = jobProvider.All();
             foreach (var jobDefinition in jobs)
@@ -130,7 +129,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
+
 
             //Act
             jobProvider.QueueJob(typeof(FakeJob));
@@ -150,7 +149,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
             jobProvider.QueueJob(typeof(SlowJob), 1);
             jobProvider.QueueJob(typeof(SlowJob), 2);
             jobProvider.QueueJob(typeof(SlowJob), 3);
@@ -171,7 +169,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
 
             //Act
             jobProvider.QueueJob(typeof(BrokenJob));
@@ -193,7 +190,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(fakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
 
 
             //Act
@@ -214,7 +210,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
 
 
             jobProvider.QueueJob(typeof(SlowJob));
@@ -243,8 +238,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             var jobProvider = Mocker.Resolve<JobProvider>();
 
-            //Act
-            jobProvider.Initialize();
 
             //assert
             var timers = jobProvider.All();
@@ -269,7 +262,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
                 Mocker.SetConstant(BaseFakeJobs);
 
                 var jobProvider = Mocker.Resolve<JobProvider>();
-                jobProvider.Initialize();
             }
 
             var Mocker2 = new AutoMoqer();
@@ -294,10 +286,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Db.Insert(deletedJob);
             var jobProvider = Mocker.Resolve<JobProvider>();
 
-            //Act
-            jobProvider.Initialize();
-
-            //Assert
             var registeredJobs = Db.Fetch<JobDefinition>();
             registeredJobs.Should().HaveCount(1);
             registeredJobs.Should().NotContain(c => c.TypeName == deletedJob.TypeName);
@@ -316,10 +304,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Db.Insert(deletedJob);
             var jobProvider = Mocker.Resolve<JobProvider>();
 
-            //Act
-            jobProvider.Initialize();
-
-            //Assert
             var registeredJobs = Db.Fetch<JobDefinition>();
             registeredJobs.Should().HaveCount(1);
             registeredJobs.Should().NotContain(c => c.TypeName == deletedJob.TypeName);
@@ -343,10 +327,8 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             var id = Convert.ToInt32(Db.Insert(initialFakeJob));
 
-            var jobProvider = Mocker.Resolve<JobProvider>();
+            Mocker.Resolve<JobProvider>();
 
-            //Act
-            jobProvider.Initialize();
 
             //Assert
             var registeredJobs = Db.Fetch<JobDefinition>();
@@ -367,7 +349,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(fakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
 
             //Assert
             jobProvider.All().Should().HaveCount(1);
@@ -381,7 +362,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
             jobProvider.QueueScheduled();
 
             WaitForQueue();
@@ -398,7 +378,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             //Act
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
             ResetLastExecution();
             jobProvider.QueueJob(typeof(FakeJob), 10);
 
@@ -416,7 +395,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             //Act
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
             jobProvider.QueueJob(typeof(FakeJob), 10);
 
             WaitForQueue();
@@ -440,7 +418,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             //Act
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
             jobProvider.Queue.Add(stuckQueueItem);
 
             WaitForQueue();
@@ -481,7 +458,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             var jobProvider = Mocker.Resolve<JobProvider>();
 
-            jobProvider.Initialize();
             jobProvider.QueueJob(typeof(string));
 
             WaitForQueue();
@@ -495,7 +471,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             Mocker.SetConstant(BaseFakeJobs);
 
             var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
             ResetLastExecution();
             jobProvider.QueueScheduled();
 

@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test
             Mocker.SetConstant(db);
 
             //Act
-            Mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
+            Mocker.Resolve<QualityProvider>();
 
             //Assert
             var profiles = Mocker.Resolve<QualityProvider>().All();
@@ -159,7 +159,6 @@ namespace NzbDrone.Core.Test
 
             //Act
             Mocker.Resolve<QualityProvider>().Add(fakeProfile);
-            Mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
 
             //Assert
             var profiles = Mocker.Resolve<QualityProvider>().All();

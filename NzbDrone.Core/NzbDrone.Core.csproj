@@ -614,7 +614,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
   </ItemGroup>

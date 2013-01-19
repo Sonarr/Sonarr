@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
-            //Act
+            Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
+
             var indexerProvider = Mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
             var settings = indexerProvider.GetSettings(typeof(MockIndexer));
             settings.Enable = true;
             indexerProvider.SaveSettings(settings);
@@ -48,9 +48,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
-            //Act
+            Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
+
             var indexerProvider = Mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
+
             var settings = indexerProvider.GetSettings(typeof(MockIndexer));
             settings.Enable = false;
             indexerProvider.SaveSettings(settings);
@@ -66,9 +67,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
-            //Act
+            Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<DefaultEnabledIndexer>() });
+
             var indexerProvider = Mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<DefaultEnabledIndexer>() });
+
 
             //Assert
             indexerProvider.All();
@@ -82,9 +84,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
-            //Act
+            Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
+
             var indexerProvider = Mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
+
 
             //Assert
             indexerProvider.All();
