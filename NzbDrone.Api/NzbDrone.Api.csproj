@@ -83,8 +83,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="ErrorManagment\ApiException.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ErrorManagment\ErrorHandler.cs" />
@@ -92,9 +97,9 @@
     <Compile Include="ErrorManagment\ErrorPipeline.cs" />
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QualityProfiles\NzbDroneApiModule.cs" />
+    <Compile Include="NzbDroneApiModule.cs" />
     <Compile Include="QualityProfiles\QualityProfileModel.cs" />
-    <Compile Include="QualityProfiles\QualityProfileModule.cs" />
+    <Compile Include="QualityProfiles\QualityProfilesModule.cs" />
     <Compile Include="QualityType\QualityTypeModel.cs" />
     <Compile Include="QualityType\QualityTypeModule.cs" />
     <Compile Include="QualityType\RequestExtensions.cs" />

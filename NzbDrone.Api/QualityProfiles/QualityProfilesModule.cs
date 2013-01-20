@@ -8,12 +8,12 @@ using NzbDrone.Api.QualityType;
 
 namespace NzbDrone.Api.QualityProfiles
 {
-    public class QualityProfileModule : NzbDroneApiModule
+    public class QualityProfilesModule : NzbDroneApiModule
     {
         private readonly QualityProvider _qualityProvider;
 
-        public QualityProfileModule(QualityProvider qualityProvider)
-            : base("/QualityProfile")
+        public QualityProfilesModule(QualityProvider qualityProvider)
+            : base("/QualityProfiles")
         {
             _qualityProvider = qualityProvider;
             Get["/"] = x => OnGet();

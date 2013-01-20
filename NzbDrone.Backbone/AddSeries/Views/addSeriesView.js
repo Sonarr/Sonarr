@@ -31,7 +31,7 @@ NzbDrone.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
 
         this.ui.seriesSearch
             .autocomplete({
-                source: "http://kayone.nzbdrone.com:8989/AddSeries/LookupSeries",
+                source: "http://localhost:1232/api/series/lookup",
                 minLength: 1,
                 delay: 500,
                 select: function (event, ui) {
@@ -51,7 +51,7 @@ NzbDrone.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
 
                 return $("<li></li>")
                .data("item.autocomplete", item)
-               .append("<a>" + item.DisplayedTitle + "<img src='../../Content/Images/thetvdb.png' class='tvDbLink' title='Click to see series details from TheTVDB' rel='" + item.Url + "' /></a>")
+               .append("<a>" + item.SeriesName + "<img src='../../Content/Images/thetvdb.png' class='tvDbLink' title='Click to see series details from TheTVDB' rel='" + item.Url + "' /></a>")
                .appendTo(ul);
             };
     },
