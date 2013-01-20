@@ -16,7 +16,14 @@ namespace NzbDrone.Core.Test.Framework
         [SetUp]
         public void CoreTestSetup()
         {
-            _dbTemplateName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".sdf";
+            if(NCrunch.Framework.NCrunchEnvironment.NCrunchIsResident())
+            {
+                _dbTemplateName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".sdf";
+            }
+            else
+            {
+                _dbTemplateName = "db_template.sdf";
+            }
             CreateDataBaseTemplate();
         }
 
