@@ -23,7 +23,12 @@ namespace NzbDrone.Api
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public static void Initialize()
+        protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
+        {
+            InitializeAutomapper();
+        }
+
+        public static void InitializeAutomapper()
         {
             //QualityProfiles
             Mapper.CreateMap<QualityProfileModel, QualityProfile>()

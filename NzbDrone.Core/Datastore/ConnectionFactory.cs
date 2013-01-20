@@ -131,6 +131,11 @@ namespace NzbDrone.Core.Datastore
                 }
                 catch (SqlCeException e)
                 {
+                    if (e.Message.Contains("file sharing violation"))
+                    {
+                        logger.WarnException("file is in use. skipping.", e);
+                        return;
+                    }
                     logger.WarnException(
                                          "Safe recovery failed. will attempts a more aggressive strategy. might case loss of data.",
                                          e);
