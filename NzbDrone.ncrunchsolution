@@ -1,6 +1,6 @@
 <SolutionConfiguration>
   <FileVersion>1</FileVersion>
-  <AutoEnableOnStartup>True</AutoEnableOnStartup>
+  <AutoEnableOnStartup>False</AutoEnableOnStartup>
   <AllowParallelTestExecution>true</AllowParallelTestExecution>
   <AllowTestsToRunInParallelWithThemselves>true</AllowTestsToRunInParallelWithThemselves>
   <FrameworkUtilisationTypeForNUnit>UseDynamicAnalysis</FrameworkUtilisationTypeForNUnit>

@@ -8,18 +8,14 @@ using NzbDrone.Api.QualityType;
 
 namespace NzbDrone.Api.QualityProfiles
 {
-    public class QualityProfileModule : NancyModule
+    public class QualityProfileModule : NzbDroneApiModule
     {
         private readonly QualityProvider _qualityProvider;
 
         public QualityProfileModule(QualityProvider qualityProvider)
-        {
-            _qualityProvider = qualityProvider;
-        }
-
-        public QualityProfileModule()
             : base("/QualityProfile")
         {
+            _qualityProvider = qualityProvider;
             Get["/"] = x => OnGet();
             Get["/{Id}"] = x => OnGet((int)x.Id);
             Put["/"] = x => OnPut();
@@ -44,7 +40,7 @@ namespace NzbDrone.Api.QualityProfiles
             var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
             request.Id = _qualityProvider.Add(profile);
 
-            return request.AsResponse(); 
+            return request.AsResponse();
         }
 
         //Update
@@ -54,7 +50,7 @@ namespace NzbDrone.Api.QualityProfiles
             var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
             _qualityProvider.Update(profile);
 
-            return request.AsResponse(); 
+            return request.AsResponse();
         }
 
         private Response OnDelete(int id)

@@ -265,6 +265,7 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Helpers\XElementHelper.cs" />
+    <Compile Include="Instrumentation\LogInjectionModule.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\AppShutdownJob.cs" />
     <Compile Include="Jobs\AppRestartJob.cs" />

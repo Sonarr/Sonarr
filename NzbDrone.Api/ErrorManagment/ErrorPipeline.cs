@@ -16,11 +16,14 @@ namespace NzbDrone.Api.ErrorManagment
 
         public Response HandleException(NancyContext context, Exception exception)
         {
-            if (exception is ApiException)
+            var apiException = exception as ApiException;
+            
+            if (apiException != null)
             {
-                _logger.WarnException("API Error", exception);
-                return ((ApiException)exception).ToErrorResponse();
+                _logger.WarnException("API Error", apiException);
+                return apiException.ToErrorResponse();
             }
+            
             _logger.ErrorException("Unexpected error", exception);
             return null;
         }

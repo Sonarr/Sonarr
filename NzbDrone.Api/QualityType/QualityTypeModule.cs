@@ -2,22 +2,19 @@
 using System.Linq;
 using AutoMapper;
 using Nancy;
+using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Api.QualityType
 {
-    public class QualityTypeModule : NancyModule
+    public class QualityTypeModule : NzbDroneApiModule
     {
         private readonly QualityTypeProvider _qualityTypeProvider;
 
         public QualityTypeModule(QualityTypeProvider qualityTypeProvider)
-        {
-            _qualityTypeProvider = qualityTypeProvider;
-        }
-
-        public QualityTypeModule()
             : base("/QualityTypes")
         {
+            _qualityTypeProvider = qualityTypeProvider;
 
             Get["/"] = x => GetQualityType();
             Get["/{id}"] = x => GetQualityType(x.Id);

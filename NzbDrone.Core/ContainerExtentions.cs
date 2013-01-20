@@ -20,15 +20,17 @@ namespace NzbDrone.Core
 
         private static readonly Logger logger = LogManager.GetLogger("ServiceRegistration");
 
-        public static void RegisterCoreServices(this ContainerBuilder container)
+        public static void RegisterCoreServices(this ContainerBuilder containerBuilder)
         {
             var core = Assembly.Load("NzbDrone.Core");
             var common = Assembly.Load("NzbDrone.Common");
 
-            container.RegisterAssembly(core);
-            container.RegisterAssembly(common);
+            containerBuilder.RegisterAssembly(core);
+            containerBuilder.RegisterAssembly(common);
 
-            container.InitDatabase();
+            containerBuilder.InitDatabase();
+
+            containerBuilder.RegisterModule<LogInjectionModule>();
         }
 
 

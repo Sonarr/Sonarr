@@ -18,7 +18,10 @@ namespace NzbDrone.Api
     {
         private readonly Logger _logger;
 
-
+        public Bootstrapper()
+        {
+            _logger = LogManager.GetCurrentClassLogger();
+        }
 
         public static void Initialize()
         {
