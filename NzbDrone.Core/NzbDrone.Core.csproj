@@ -319,7 +319,6 @@
     <Compile Include="Providers\BannerProvider.cs" />
     <Compile Include="Providers\DecisionEngine\LanguageSpecification.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />
-    <Compile Include="Providers\SearchProvider2.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
