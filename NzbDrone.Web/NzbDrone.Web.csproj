@@ -190,6 +190,7 @@
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="AddSeries\Views\addSeriesView.js" />
+    <Content Include="AddSeries\Views\addSeries.css" />
     <Content Include="app.js" />
     <Content Include="Content2\base.css" />
     <Content Include="Content2\bootstrap-metro.css" />

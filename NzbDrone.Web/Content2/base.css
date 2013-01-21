@@ -33,6 +33,7 @@ body {
 
 #main-region {
     min-height: 600px;
+    text-align: center;
 }
 
 #footer {

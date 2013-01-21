@@ -47,8 +47,8 @@ namespace NzbDrone.Web
                     "AddSeries\\Views\\addSeriesView.js"},
                     bundle => bundle.AddReference("/" + BASE_SCRIPT));
 
-         
 
+            bundles.AddPerSubDirectory<StylesheetBundle>("AddSeries", bundle => bundle.AddReference("/" + BASE_STYLE));
 
 
             bundles.Add<StylesheetBundle>(FILEBROWSER_STYLE, new[]{

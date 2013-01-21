@@ -1,0 +1,14 @@
+﻿.search {
+    margin-top: 20px;
+}
+
+    .search input {
+        height: 40px;
+    }
+
+    .search .add-on {
+        font-size: 30px;
+        height: 30px;
+        width: 40px;
+        padding-top: 14px;
+    }

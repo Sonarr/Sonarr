@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Cassette.Stylesheets
+@{
     ViewBag.Title = "Add Series";
     Layout = "~/Views/Shared/_Bootstrap.cshtml";
+    Bundles.Reference<StylesheetBundle>("AddSeries\\Views\\");
 }
 
 
@@ -9,10 +11,17 @@
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#add-new">Add New Series</a></li>
         <li><a href="#import-existing">Import Existing Series</a></li>
+        <li><a href="#root-folders">Root Folders</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="add-new"> Add new series!</div>
-        <div class="tab-pane" id="import-existing">Import exisintg.</div>
+        <div class="tab-pane active" id="add-new">
+            <div class="input-prepend search">
+                <i class="add-on icon-search"></i>
+                <input type="text" class="span7" placeholder="Start typing the name of series you want to add ...">
+            </div>
+        </div>
+        <div class="tab-pane" id="import-existing">Import existing.</div>
+        <div class="tab-pane" id="root-folders">Manage root folders</div>
     </div>
 </div>
 @*
