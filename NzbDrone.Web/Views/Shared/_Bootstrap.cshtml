@@ -28,9 +28,8 @@
 <body>
     @RenderBody()
     <div class="container">
-
         <div id="menu" class="row">
-            <div class="span12">
+            <div class="span20">
                 <ul>
                     @MvcHtmlString.Create(Html.CurrentControllerLink("Series", "Index", "Series"))
                     @MvcHtmlString.Create(Html.CurrentControllerLink("Upcoming", "Index", "Upcoming"))
@@ -46,22 +45,22 @@
             </div>
         </div>
         <div id="logo" class="row">
-            <div class="span10 offset1">
+            <div class="span18 offset2">
                 @ViewBag.Title
             </div>
         </div>
         <div id="content" class="row">
-            <div class="span12">
+            <div class="span20">
                 <div class="row sub-menu">
                     @RenderSection("ActionMenu", required: false)
                 </div>
                 <div class="row">
-                    <div id="main-region" class="span12"></div>
+                    <div id="main-region" class="span20 nz-center"></div>
                 </div>
             </div>
         </div>
-        <div id="footer" class="row">
-            <div class="span12">
+        <div id="footer" class="row nz-center">
+            <div class="span20">
                 @{Html.RenderAction("Footer", "Shared");}
             </div>
         </div>

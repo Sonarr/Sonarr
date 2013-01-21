@@ -33,11 +33,13 @@ body {
 
 #main-region {
     min-height: 600px;
+}
+
+.nz-center {
     text-align: center;
 }
 
 #footer {
-    text-align: center;
     font-size: 16px;
     text-decoration: none;
     font-weight: lighter;
