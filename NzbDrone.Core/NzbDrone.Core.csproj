@@ -145,6 +145,9 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="MediaInfoDotNet">
+      <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -277,6 +280,7 @@
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\BacklogSettingType.cs" />
+    <Compile Include="Model\MediaInfoModel.cs" />
     <Compile Include="Model\Nzbx\NzbxSearchItem.cs" />
     <Compile Include="Model\Nzbx\NzbxRecentItem.cs" />
     <Compile Include="Model\Nzbx\NzbxVotesModel.cs" />
@@ -314,6 +318,7 @@
     <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
     <Compile Include="Providers\DecisionEngine\LanguageSpecification.cs" />
+    <Compile Include="Providers\MediaInfoProvider.cs" />
     <Compile Include="Providers\SearchProvider2.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
@@ -618,6 +623,9 @@
   <ItemGroup>
     <Content Include="GettingStarted.txt" />
     <Content Include="Json.NET.license.txt" />
+    <Content Include="MediaInfo.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="NzbDrone.ico" />
     <Content Include="license.txt" />
   </ItemGroup>

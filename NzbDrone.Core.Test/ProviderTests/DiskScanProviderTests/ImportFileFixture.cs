@@ -324,7 +324,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         }
 
         [Test]
-        public void import_new_episode_no_existing_episode_file()
+        public void should_import_new_episode_no_existing_episode_file()
         {
             const string fileName = "WEEDS.S03E01E02.DUAL.bluray.x264.AC3.-HELLYWOOD.mkv";
 
@@ -351,48 +351,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             //Assert
             VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
-            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public void should_return_null_if_file_size_is_under_40MB()
-        {
-            var series = Builder<Series>
-                    .CreateNew()
-                    .Build();
-
-            const string path = @"C:\Test\TV\30.rock.s01e01.pilot.avi";
-
-            Mocker.GetMock<MediaFileProvider>()
-                    .Setup(m => m.Exists(path))
-                    .Returns(false);
-
-            Mocker.GetMock<DiskProvider>()
-                    .Setup(d => d.GetSize(path))
-                    .Returns(20.Megabytes());
-
-            Mocker.Resolve<DiskScanProvider>().ImportFile(series, path).Should().BeNull();
-        }
-
-        private static void VerifyFileImport(EpisodeFile result, AutoMoqer Mocker, Episode fakeEpisode, long size)
-        {
-            result.Should().NotBeNull();
-            result.SeriesId.Should().Be(fakeEpisode.SeriesId);
-            result.Size.Should().Be(size);
-            result.DateAdded.Should().HaveDay(DateTime.Now.Day);
-            Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Once());
-
-            //Get the count of episodes linked
-            var count = Mocker.GetMock<EpisodeProvider>().Object.GetEpisodesByParseResult(null).Count;
-
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.UpdateEpisode(It.Is<Episode>(e => e.EpisodeFileId == result.EpisodeFileId)), Times.Exactly(count));
-        }
-
-        private static void VerifySkipImport(EpisodeFile result, AutoMoqer Mocker)
-        {
-            result.Should().BeNull();
-            Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Never());
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
             Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
         }
 
@@ -440,6 +398,116 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.Resolve<DiskScanProvider>().ImportFile(series, path);
 
             Mocker.Verify<EpisodeProvider>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource == false)), Times.Once());
+        }
+
+        [Test]
+        public void should_return_null_if_file_size_is_under_70MB_and_runTime_under_8_minutes()
+        {
+            var series = Builder<Series>
+                    .CreateNew()
+                    .Build();
+
+            const string path = @"C:\Test\TV\30.rock.s01e01.pilot.avi";
+
+            Mocker.GetMock<MediaFileProvider>()
+                    .Setup(m => m.Exists(path))
+                    .Returns(false);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(d => d.GetSize(path))
+                    .Returns(20.Megabytes());
+
+            Mocker.GetMock<MediaInfoProvider>()
+                  .Setup(s => s.GetRunTime(path))
+                  .Returns(300);
+
+            Mocker.Resolve<DiskScanProvider>().ImportFile(series, path).Should().BeNull();
+        }
+
+        [Test]
+        public void should_import_if_file_size_is_under_70MB_but_runTime_over_8_minutes()
+        {
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                .With(e => e.EpisodeFileId = 0)
+                .With(e => e.EpisodeFile = null)
+                .Build();
+
+            const string path = @"C:\Test\TV\30.rock.s01e01.pilot.avi";
+
+            Mocker.GetMock<MediaFileProvider>()
+                    .Setup(m => m.Exists(path))
+                    .Returns(false);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(d => d.GetSize(path))
+                    .Returns(20.Megabytes());
+
+            Mocker.GetMock<MediaInfoProvider>()
+                  .Setup(s => s.GetRunTime(path))
+                  .Returns(600);
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
+
+            var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, path);
+
+            VerifyFileImport(result, Mocker, fakeEpisode, 20.Megabytes());
+            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void should_import_if_file_size_is_over_70MB_but_runTime_under_8_minutes()
+        {
+            With80MBFile();
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                .With(e => e.EpisodeFileId = 0)
+                .With(e => e.EpisodeFile = null)
+                .Build();
+
+            const string path = @"C:\Test\TV\30.rock.s01e01.pilot.avi";
+
+            Mocker.GetMock<MediaFileProvider>()
+                    .Setup(m => m.Exists(path))
+                    .Returns(false);
+
+            Mocker.GetMock<MediaInfoProvider>()
+                  .Setup(s => s.GetRunTime(path))
+                  .Returns(600);
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
+
+            var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, path);
+
+            VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
+            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
+        }
+
+        private static void VerifyFileImport(EpisodeFile result, AutoMoqer Mocker, Episode fakeEpisode, long size)
+        {
+            result.Should().NotBeNull();
+            result.SeriesId.Should().Be(fakeEpisode.SeriesId);
+            result.Size.Should().Be(size);
+            result.DateAdded.Should().HaveDay(DateTime.Now.Day);
+            Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Once());
+
+            //Get the count of episodes linked
+            var count = Mocker.GetMock<EpisodeProvider>().Object.GetEpisodesByParseResult(null).Count;
+
+            Mocker.GetMock<EpisodeProvider>().Verify(p => p.UpdateEpisode(It.Is<Episode>(e => e.EpisodeFileId == result.EpisodeFileId)), Times.Exactly(count));
+        }
+
+        private static void VerifySkipImport(EpisodeFile result, AutoMoqer Mocker)
+        {
+            result.Should().BeNull();
+            Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Never());
+            Mocker.GetMock<EpisodeProvider>().Verify(p => p.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
+            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
         }
     }
 }
