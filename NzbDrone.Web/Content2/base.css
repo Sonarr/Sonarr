@@ -22,7 +22,6 @@ body {
     text-transform: lowercase;
     letter-spacing: -1px;
     line-height: 110px;
-    padding-left: 140px;
     font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
     font-weight: 100;
     font-size: 110px;
@@ -32,6 +31,9 @@ body {
     background: white;
 }
 
+#main-region {
+    min-height: 600px;
+}
 
 #footer {
     text-align: center;

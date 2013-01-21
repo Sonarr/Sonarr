@@ -973,7 +973,9 @@ var Marionette = (function (Backbone, _, $) {
         // this method to provide your own template retrieval,
         // such as asynchronous loading from a server.
         loadTemplate: function (templateId) {
-            var template = $(templateId).html();
+
+            var templateEl = $(templateId);
+            var template = templateEl.html();
 
             if (!template || template.length === 0) {
                 var msg = "Could not find template: '" + templateId + "'";
@@ -982,6 +984,7 @@ var Marionette = (function (Backbone, _, $) {
                 throw err;
             }
 
+            templateEl.remove();
             return template;
         },
 

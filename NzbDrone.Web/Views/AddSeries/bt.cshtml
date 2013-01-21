@@ -3,25 +3,24 @@
     Layout = "~/Views/Shared/_Bootstrap.cshtml";
 }
 
-<script type="text/template" id="add-series-template">
 
-<div id="add-series" class="row">
+
+<div id="add-series-tmpl" class="row">
     <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a href="#home">Home</a></li>
-        <li><a href="#profile">Profile</a></li>
-        <li><a href="#messages">Messages</a></li>
-        <li><a href="#settings">Settings</a></li>
+        <li class="active"><a href="#add-new">Add New Series</a></li>
+        <li><a href="#import-existing">Import Existing Series</a></li>
     </ul>
-
     <div class="tab-content">
-        <div class="tab-pane active" id="home">.eeeeee..</div>
-        <div class="tab-pane" id="profile">...ddddd</div>
-        <div class="tab-pane" id="messages">..dddd.</div>
-        <div class="tab-pane" id="settings">..ggggggggggggggggggggggg.</div>
+        <div class="tab-pane active" id="add-new"> Add new series!</div>
+        <div class="tab-pane" id="import-existing">Import exisintg.</div>
     </div>
 </div>
-</script>
 @*
+
+@section Templates
+{
+
+}
 <div id="add-existing-series">
     <h1>Add Existing</h1>
     <h2 id="single">Single Series</h2>

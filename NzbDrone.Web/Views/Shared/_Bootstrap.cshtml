@@ -26,9 +26,7 @@
     @Bundles.RenderStylesheets()
 </head>
 <body>
-    <script type="text/template" id="search_template">
-        @RenderBody()
-    </script>
+    @RenderBody()
     <div class="container">
 
         <div id="menu" class="row">
@@ -48,7 +46,7 @@
             </div>
         </div>
         <div id="logo" class="row">
-            <div class="span12">
+            <div class="span10 offset1">
                 @ViewBag.Title
             </div>
         </div>
@@ -58,7 +56,7 @@
                     @RenderSection("ActionMenu", required: false)
                 </div>
                 <div class="row">
-                    <div id="main-region"></div>
+                    <div id="main-region" class="span12"></div>
                 </div>
             </div>
         </div>

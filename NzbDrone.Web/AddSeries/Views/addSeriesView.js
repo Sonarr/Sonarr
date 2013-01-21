@@ -1,16 +1,16 @@
 ﻿NzbDrone.AddSeriesView = Backbone.Marionette.ItemView.extend({
-    template: "#add-series-template",
+    template: "#add-series-tmpl",
 
     initialise: function () {
     },
-    
+
     onRender: function () {
-       this.$el.find('#myTab a').click(function (e) {
+        this.$el.find('#myTab a').click(function (e) {
             e.preventDefault();
             $(this).tab('show');
         });
     },
-    
+
 });
 
 NzbDrone.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
