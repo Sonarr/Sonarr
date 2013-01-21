@@ -4,7 +4,7 @@
 @using NzbDrone.Web.Helpers
 @{   
     Bundles.Reference<StylesheetBundle>(CassetteBundleConfiguration.BASE_STYLE);
-    Bundles.Reference<ScriptBundle>(CassetteBundleConfiguration.BASE_SCRIPT);
+    Bundles.Reference<ScriptBundle>(CassetteBundleConfiguration.BACKBONE);
 }
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -26,6 +26,9 @@
     @Bundles.RenderStylesheets()
 </head>
 <body>
+    <script type="text/template" id="search_template">
+        @RenderBody()
+    </script>
     <div class="container">
 
         <div id="menu" class="row">
@@ -54,7 +57,9 @@
                 <div class="row sub-menu">
                     @RenderSection("ActionMenu", required: false)
                 </div>
-                @RenderBody()
+                <div class="row">
+                    <div id="main-region"></div>
+                </div>
             </div>
         </div>
         <div id="footer" class="row">
@@ -65,6 +70,11 @@
     </div>
 
     @Bundles.RenderScripts()
+
+
+    <script type="text/javascript">
+        NzbDrone.start();
+    </script>
 
 </body>
 </html>

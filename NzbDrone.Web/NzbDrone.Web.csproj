@@ -189,6 +189,8 @@
     <Compile Include="Helpers\RenderActionHelper.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
+    <Content Include="AddSeries\Views\addSeriesView.js" />
+    <Content Include="app.js" />
     <Content Include="Content2\base.css" />
     <Content Include="Content2\bootstrap-metro.css" />
     <Content Include="Content2\bootstrap-overrides.css" />
@@ -390,6 +392,12 @@
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
     <Compile Include="Models\UpdateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="JsLibraries\backbone.js" />
+    <Content Include="JsLibraries\backbone.marionette.js" />
+    <None Include="JsLibraries\jquery-1.8.2.intellisense.js" />
+    <Content Include="JsLibraries\jquery-1.8.2.js" />
+    <Content Include="JsLibraries\jquery-ui-1.9.0.js" />
+    <Content Include="JsLibraries\underscore.js" />
     <Content Include="Scripts2\bootstrap-mvc.js" />
     <Content Include="Scripts2\bootstrap.js" />
     <None Include="Scripts2\jquery-1.8.2.intellisense.js" />

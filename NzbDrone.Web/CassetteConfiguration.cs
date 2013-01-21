@@ -9,9 +9,9 @@ namespace NzbDrone.Web
     /// </summary>
     public class CassetteBundleConfiguration : IConfiguration<BundleCollection>
     {
-        public const string JQUERY_BUNDLE = "jquery";
         public const string BASE_STYLE = "BASE_STYLE";
         public const string BASE_SCRIPT = "BASE_SCRIPT";
+        public const string BACKBONE = "BACKBONE";
         public const string FONTS = "FONTS";
         public const string VALIDATION_SCRIPTS = "VALIDATION_SCRIPTS";
         public const string FILEBROWSER_SCRIPT = "FILEBROWSER_SCRIPT";
@@ -20,7 +20,6 @@ namespace NzbDrone.Web
         public void Configure(BundleCollection bundles)
         {
             bundles.AddUrlWithAlias<StylesheetBundle>("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300'", FONTS);
-            bundles.AddUrlWithAlias<ScriptBundle>("//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", JQUERY_BUNDLE);
 
 
             bundles.Add<StylesheetBundle>(BASE_STYLE, new[]{
@@ -33,10 +32,23 @@ namespace NzbDrone.Web
                 bundle => bundle.AddReference("/" + FONTS));
 
             bundles.Add<ScriptBundle>(BASE_SCRIPT, new[]{
+                "scripts2\\jquery-1.8.2.js",
                 "scripts2\\jquery.livequery.js",
                 "scripts2\\bootstrap-mvc.js",
-                "scripts2\\metro\\jquery.metro.js"},
-                bundle => bundle.AddReference("/" + JQUERY_BUNDLE));
+                "scripts2\\bootstrap.js",
+                "scripts2\\metro\\jquery.metro.js"});
+
+            bundles.Add<ScriptBundle>(BACKBONE, new[]{
+                    "JsLibraries\\underscore.js",
+                    "JsLibraries\\backbone.js",
+                    "JsLibraries\\backbone.marionette.js",
+            
+                    "app.js",
+                    "AddSeries\\Views\\addSeriesView.js"},
+                    bundle => bundle.AddReference("/" + BASE_SCRIPT));
+
+         
+
 
 
             bundles.Add<StylesheetBundle>(FILEBROWSER_STYLE, new[]{

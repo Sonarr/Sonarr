@@ -1,26 +1,48 @@
 ﻿@{
-    ViewBag.Title = "Bootstrap Page";
+    ViewBag.Title = "Add Series";
     Layout = "~/Views/Shared/_Bootstrap.cshtml";
 }
 
+<script type="text/template" id="add-series-template">
 
-Hello World
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<div id="add-series" class="row">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#home">Home</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#messages">Messages</a></li>
+        <li><a href="#settings">Settings</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="home">.eeeeee..</div>
+        <div class="tab-pane" id="profile">...ddddd</div>
+        <div class="tab-pane" id="messages">..dddd.</div>
+        <div class="tab-pane" id="settings">..ggggggggggggggggggggggg.</div>
+    </div>
+</div>
+</script>
+@*
+<div id="add-existing-series">
+    <h1>Add Existing</h1>
+    <h2 id="single">Single Series</h2>
+    <h2 id="multiple">All of my series</h2>
+</div>
+
+
+<div id="add-new-series">
+    <h1>Add New</h1>
+    <div class="well">
+        <input type="text" id="series-search" name="series-search" placeholder="Search for a series to add ..." class="span12" autocomplete="off" />
+    </div>
+</div>
+
+
+<div id="add-existing-series-single">
+    <h1>single
+    </h1>
+</div>
+
+<div id="add-existing-series-multiple">
+    <h1>multiple</h1>
+</div>
+*@
