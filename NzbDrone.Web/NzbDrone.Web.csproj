@@ -239,13 +239,7 @@
     <Content Include="Content2\Bootstrap\tooltip.less" />
     <Content Include="Content2\Bootstrap\type.less" />
     <Content Include="Content2\Bootstrap\utilities.less" />
-    <Content Include="Content2\Bootstrap\variables.css">
-      <DependentUpon>variables.less</DependentUpon>
-    </Content>
     <Content Include="Content2\Bootstrap\variables.less" />
-    <Content Include="Content2\Bootstrap\variables.min.css">
-      <DependentUpon>variables.less</DependentUpon>
-    </Content>
     <Content Include="Content2\Bootstrap\wells.less" />
     <Content Include="Content2\FancyBox\jquery.fancybox.css" />
     <Content Include="Content2\FancyBox\jquery.fancybox.js" />
