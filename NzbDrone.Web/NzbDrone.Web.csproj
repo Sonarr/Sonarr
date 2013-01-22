@@ -185,7 +185,9 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
-    <Content Include="_backboneApp\AddSeries\addNewSeriesTemplate.html" />
+    <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesTemplate.html" />
+    <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesView.js" />
+    <Content Include="_backboneApp\AddSeries\SeriesSearchModel.js" />
     <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.extend.js" />
     <Compile Include="_backboneApp\CassetteConfiguration.cs" />
@@ -196,7 +198,7 @@
     <Compile Include="Helpers\RenderActionHelper.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
-    <Content Include="_backboneApp\AddSeries\addSeriesView.js" />
+    <Content Include="_backboneApp\AddSeries\AddSeriesLayout.js" />
     <Content Include="_backboneApp\AddSeries\addSeries.css" />
     <Content Include="_backboneApp\app.js" />
     <Content Include="_backboneApp\Content\base.css" />

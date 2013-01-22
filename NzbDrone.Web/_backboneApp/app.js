@@ -1,4 +1,14 @@
-﻿NzbDrone = new Backbone.Marionette.Application();
+﻿/// <reference path="JsLibraries/jquery-1.8.2.js" />
+/// <reference path="JsLibraries/underscore.js" />
+/// <reference path="JsLibraries/backbone.js" />
+/// <reference path="JsLibraries/backbone.marionette.js" />
+/// <reference path="JsLibraries/backbone.marionette.extend.js" />
+/// <reference path="JsLibraries/bootstrap.js" />
+
+
+
+NzbDrone = new Backbone.Marionette.Application();
+NzbDrone.AddSeries = NzbDrone.module("AddSeries");
 
 NzbDrone.Constants = {
 
@@ -21,7 +31,7 @@ NzbDrone.Routes = {
 NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
     addSeries: function () {
-        NzbDrone.mainRegion.show(new NzbDrone.AddSeriesLayout());
+        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddNewSeriesView());
     },
 
 

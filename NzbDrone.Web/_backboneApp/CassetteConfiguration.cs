@@ -18,7 +18,7 @@ namespace NzbDrone.Web.Backbone.NzbDrone
         {
             bundles.AddUrlWithAlias<StylesheetBundle>("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300'", FONTS);
 
-            //bundles.AddPerSubDirectory<StylesheetBundle>("Backbone.NzbDrone");
+            bundles.AddPerIndividualFile<ScriptBundle>(APP_PATH);
 
             bundles.Add<StylesheetBundle>(BASE_STYLE, new[]{
                 APP_PATH + "\\Content\\Bootstrap\\bootstrap.less",
@@ -28,20 +28,20 @@ namespace NzbDrone.Web.Backbone.NzbDrone
             },
                 bundle => bundle.AddReference("/" + FONTS));
 
-            bundles.Add<ScriptBundle>(BACKBONE, new[]{
-                      APP_PATH + "\\JsLibraries\\jquery-1.8.2.js",
-                      APP_PATH + "\\JsLibraries\\bootstrap.js",
-                      APP_PATH + "\\JsLibraries\\underscore.js",
-                      APP_PATH + "\\JsLibraries\\backbone.js",
-                      APP_PATH + "\\JsLibraries\\backbone.marionette.js",
-                      APP_PATH + "\\JsLibraries\\backbone.marionette.extend.js",
+
+
+            bundles.Add<ScriptBundle>(NZBDRONE, new[]{
+                      APP_PATH + "\\AddSeries\\AddSeriesLayout.js",
+
             
             });
 
-            bundles.Add<ScriptBundle>(NZBDRONE, new[]{
-                     APP_PATH + "\\app.js",
-                     APP_PATH + "\\AddSeries\\addSeriesView.js"},
-                 bundle => bundle.AddReference("/" + BACKBONE));
+/*            bundles.Add<ScriptBundle>(NZBDRONE, new[]{
+     
+                 },
+               bundle => bundle.AddReference("/" + BACKBONE));*/
+
+
         }
     }
 }
