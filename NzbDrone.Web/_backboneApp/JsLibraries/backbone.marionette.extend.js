@@ -2,7 +2,7 @@
 
     loadTemplate: function (templateId) {
 
-        var template = "<div class='alert alert-error'>TEMPLATE [" + templateId + "] NOT FOUND</div>";
+        var template;
 
         jQuery.ajax({
             url: 'Backbone.NzbDrone//' + templateId + '.html',
@@ -13,6 +13,7 @@
 
         }).fail(function (data) {
             console.log("couldn't load template " + this.templateId + " Error: " + data.statusText);
+            template = "<div class='alert alert-error'>Couldn't load template '" + templateId + "'. Status: " + data.statusText + "</div>";
         });
 
         return template;
