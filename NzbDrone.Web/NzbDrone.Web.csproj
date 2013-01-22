@@ -74,6 +74,9 @@
     <Reference Include="Cassette.Less">
       <HintPath>..\packages\Cassette.Less.2.0.0\lib\net40-client\Cassette.Less.dll</HintPath>
     </Reference>
+    <Reference Include="Cassette.MSBuild">
+      <HintPath>..\packages\Cassette.MSBuild.2.0.0\lib\net40\Cassette.MSBuild.dll</HintPath>
+    </Reference>
     <Reference Include="Cassette.Views">
       <HintPath>..\packages\Cassette.Views.2.0.0\lib\net40\Cassette.Views.dll</HintPath>
     </Reference>
@@ -378,6 +381,7 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesTemplate.html" />
+    <Content Include="Cassette.targets" />
     <None Include="_backboneApp\JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="_backboneApp\JsLibraries\jquery-1.8.2.js" />
     <Content Include="_backboneApp\JsLibraries\jquery-ui-1.9.0.js" />
@@ -782,4 +786,5 @@
 xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="Cassette.targets" />
 </Project>

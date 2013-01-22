@@ -127,3 +127,4 @@ NzbDrone.Web/MediaCover
 UpdateLogs/
 */Bootstrap/*.css
 *//Bootstrap/*.css
+NzbDrone.Web/cassette-cache/*
