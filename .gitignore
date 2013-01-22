@@ -125,3 +125,5 @@ config.xml
 nzbdrone.log*txt
 NzbDrone.Web/MediaCover
 UpdateLogs/
+*/Bootstrap/*.css
+*//Bootstrap/*.css

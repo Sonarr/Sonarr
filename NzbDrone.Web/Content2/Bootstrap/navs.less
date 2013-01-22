@@ -21,6 +21,12 @@
   background-color: @grayLighter;
 }
 
+// Prevent IE8 from misplacing imgs
+// See https://github.com/h5bp/html5-boilerplate/issues/984#issuecomment-3985989
+.nav > li > a > img {
+  max-width: none;
+}
+
 // Redeclare pull classes because of specifity
 .nav > .pull-right {
   float: right;
@@ -63,10 +69,12 @@
 }
 .nav-list > .active > a,
 .nav-list > .active > a:hover {
-  color: @blue;
+  color: @white;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
   background-color: @linkColor;
 }
-.nav-list [class^="icon-"] {
+.nav-list [class^="icon-"],
+.nav-list [class*=" icon-"] {
   margin-right: 2px;
 }
 // Dividers (basically an hr) within the dropdown
@@ -122,7 +130,7 @@
 .nav-tabs > .active > a,
 .nav-tabs > .active > a:hover {
   color: @gray;
-  background-color: @white;
+  background-color: @bodyBackground;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -144,7 +152,7 @@
 // Active state
 .nav-pills > .active > a,
 .nav-pills > .active > a:hover {
-  color: @blue;
+  color: @white;
   background-color: @linkColor;
 }
 
@@ -239,7 +247,7 @@
 .nav-tabs .open .dropdown-toggle,
 .nav-pills .open .dropdown-toggle,
 .nav > li.dropdown.open.active > a:hover {
-  color: @blue;
+  color: @white;
   background-color: @grayLight;
   border-color: @grayLight;
 }

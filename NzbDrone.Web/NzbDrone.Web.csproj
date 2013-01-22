@@ -214,7 +214,6 @@
     <Content Include="Content2\Bootstrap\hero-unit.less" />
     <Content Include="Content2\Bootstrap\labels-badges.less" />
     <Content Include="Content2\Bootstrap\layouts.less" />
-    <Content Include="Content2\Bootstrap\mixins.css" />
     <Content Include="Content2\Bootstrap\mixins.less" />
     <Content Include="Content2\Bootstrap\mixins.min.css">
       <DependentUpon>mixins.less</DependentUpon>
