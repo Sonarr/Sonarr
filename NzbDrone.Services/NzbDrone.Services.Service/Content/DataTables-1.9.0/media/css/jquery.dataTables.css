@@ -15,7 +15,7 @@ table.dataTable {
 
 table.dataTable thead th {
 	font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
-    border-width: 300;
+    border-width: 300px;
     font-size: 17px;
     padding: 2px;
     border-style: none;

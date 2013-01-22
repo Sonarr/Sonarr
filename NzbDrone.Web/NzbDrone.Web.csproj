@@ -185,6 +185,7 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
+    <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.extend.js" />
     <Compile Include="_backboneApp\CassetteConfiguration.cs" />
     <Compile Include="Controllers\ImageController.cs" />
@@ -226,12 +227,6 @@
     <Content Include="_backboneApp\Content\Bootstrap\popovers.less" />
     <Content Include="_backboneApp\Content\Bootstrap\progress-bars.less" />
     <Content Include="_backboneApp\Content\Bootstrap\reset.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\responsive-1200px-min.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\responsive-767px-max.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\responsive-768px-979px.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\responsive-navbar.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\responsive-utilities.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\responsive.less" />
     <Content Include="_backboneApp\Content\Bootstrap\scaffolding.less" />
     <Content Include="_backboneApp\Content\Bootstrap\sprites.less" />
     <Content Include="_backboneApp\Content\Bootstrap\tables.less" />
@@ -266,8 +261,6 @@
     <Content Include="_backboneApp\Content\Images\logo_small.png" />
     <Content Include="_backboneApp\Content\Images\spinner.gif" />
     <Content Include="_backboneApp\Content\Images\thetvdb.png" />
-    <Content Include="_backboneApp\Content\Intelisense\bootstrap-responsive.css" />
-    <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
     <Content Include="_backboneApp\Content\Menu.css" />
     <Content Include="_backboneApp\JsLibraries\bootstrap.js" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_both.png" />

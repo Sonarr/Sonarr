@@ -51,7 +51,7 @@ NzbDrone.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
                .append("<a>" + item.SeriesName + "<img src='../../Content/Images/thetvdb.png' class='tvDbLink' title='Click to see series details from TheTVDB' rel='" + item.Url + "' /></a>")
                .appendTo(ul);
             };
-    },
+    }
 });
 
 NzbDrone.AddExistingSeriesView = Backbone.Marionette.ItemView.extend({
