@@ -1,5 +1,5 @@
 ﻿NzbDrone.AddSeriesView = Backbone.Marionette.ItemView.extend({
-    template: "#add-series-tmpl",
+    template: "AddSeries/addSeriesTemplate",
 
     initialise: function () {
     },

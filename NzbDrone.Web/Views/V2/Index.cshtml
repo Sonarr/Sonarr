@@ -1,11 +1,15 @@
-﻿@using Cassette.Scripts
+﻿@{
+    Layout = null;
+}
+
+@using Cassette.Scripts
 @using Cassette.Stylesheets
 @using NzbDrone.Web
 @using NzbDrone.Web.Backbone.NzbDrone
 @using NzbDrone.Web.Helpers
 @{   
     Bundles.Reference<StylesheetBundle>(CassetteBundleConfiguration.BASE_STYLE);
-    Bundles.Reference<ScriptBundle>(CassetteBundleConfiguration.BACKBONE);
+    Bundles.Reference<ScriptBundle>(CassetteBundleConfiguration.NZBDRONE);
 }
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -13,21 +17,15 @@
 <head runat="server">
     <title>@ViewBag.Title - NzbDrone</title>
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
-    <!-- Standard iPhone -->
     <link rel="apple-touch-icon" sizes="57x57" href="../../Content/Images/apple-touch-icon-114.png" />
-    <!-- Retina iPhone -->
     <link rel="apple-touch-icon" sizes="114x114" href="../../Content/Images/apple-touch-icon-114.png" />
-    <!-- Standard iPad -->
     <link rel="apple-touch-icon" sizes="72x72" href="../../Content/Images/apple-touch-icon-144.png" />
-    <!-- Retina iPad -->
     <link rel="apple-touch-icon" sizes="144x144" href="../../Content/Images/apple-touch-icon-144.png" />
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
     @Bundles.RenderStylesheets()
 </head>
 <body>
-    @RenderBody()
     <div class="container">
         <div id="menu" class="row">
             <div class="span20">
@@ -47,32 +45,26 @@
         </div>
         <div id="logo" class="row">
             <div class="span18 offset2">
-                @ViewBag.Title
+               Single page
             </div>
         </div>
         <div id="content" class="row">
             <div class="span20">
-                <div class="row sub-menu">
-                    @RenderSection("ActionMenu", required: false)
+                <div id="sub-menu-region" class="row">
                 </div>
                 <div class="row">
-                    <div id="main-region" class="span20 nz-center"></div>
+                    <div id="main-region" class="span20 nz-center">
+                    </div>
                 </div>
             </div>
         </div>
         <div id="footer" class="row nz-center">
-            <div class="span20">
-                @{Html.RenderAction("Footer", "Shared");}
-            </div>
+            <div id="footer-region" class="span20"></div>
         </div>
     </div>
-
     @Bundles.RenderScripts()
-
-
     <script type="text/javascript">
         NzbDrone.start();
     </script>
-
 </body>
 </html>

@@ -32,6 +32,7 @@ body {
 }
 
 #main-region {
+    margin-top: 20px;
     min-height: 600px;
 }
 
