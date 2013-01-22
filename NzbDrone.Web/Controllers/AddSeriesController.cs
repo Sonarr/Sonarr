@@ -49,13 +49,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult Bt()
-        {
-
-            return View();
-        }
-
-
         public ActionResult AddNew()
         {
             ViewData["RootDirs"] = _rootFolderProvider.GetAll().Select(c => c.Path).OrderBy(e => e).ToList();
@@ -103,7 +96,7 @@ namespace NzbDrone.Web.Controllers
 
                     result.ExistingSeries.Add(new Tuple<string, string, int>(folder, title, seriesId));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.WarnException("Failed to connect to TheTVDB to search for: " + foldername, ex);
                     return View();
@@ -120,8 +113,8 @@ namespace NzbDrone.Web.Controllers
         [JsonErrorFilter]
         public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId, string startDate)
         {
-            if (string.IsNullOrWhiteSpace(path) || String.Equals(path,"null",StringComparison.InvariantCultureIgnoreCase)) 
-                return JsonNotificationResult.Error("Couldn't add " + seriesName, "You need a valid root folder"); 
+            if (string.IsNullOrWhiteSpace(path) || String.Equals(path, "null", StringComparison.InvariantCultureIgnoreCase))
+                return JsonNotificationResult.Error("Couldn't add " + seriesName, "You need a valid root folder");
 
             path = Path.Combine(path, MediaFileProvider.CleanFilename(seriesName));
 
@@ -140,11 +133,11 @@ namespace NzbDrone.Web.Controllers
                 return JsonNotificationResult.Error("Add Existing series failed.", "Invalid Series information");
 
             DateTime? date = null;
-            
+
             if (!String.IsNullOrWhiteSpace(startDate))
                 date = DateTime.Parse(startDate, null, DateTimeStyles.RoundtripKind);
 
-            _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId, date);
+            _seriesProvider.AddSeries(seriesName, path, seriesId, qualityProfileId, date);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return JsonNotificationResult.Info(seriesName, "Was added successfully");
@@ -170,18 +163,18 @@ namespace NzbDrone.Web.Controllers
                 return Json(tvDbResults, JsonRequestBehavior.AllowGet);
             }
 
-            catch(TvdbNotAvailableException ex)
+            catch (TvdbNotAvailableException ex)
             {
                 logger.WarnException("Unable to lookup series on TheTVDB", ex);
                 return JsonNotificationResult.Info("Lookup Failed", "TheTVDB is not available at this time.");
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.WarnException("Unknown Error when looking up series on TheTVDB", ex);
                 return JsonNotificationResult.Info("Lookup Failed", "Unknown error while connecting to TheTVDB");
             }
-            
+
         }
 
         public ActionResult RootList()

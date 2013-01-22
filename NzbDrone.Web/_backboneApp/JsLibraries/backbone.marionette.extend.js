@@ -2,10 +2,13 @@
 
     loadTemplate: function (templateId) {
 
+
         var template;
 
+        console.log("Loading template '" + templateId + "'");
+
         jQuery.ajax({
-            url: 'Backbone.NzbDrone//' + templateId + '.html',
+            url: '_backboneApp//' + templateId + '.html',
             async: false
 
         }).done(function (data) {
