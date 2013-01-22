@@ -21,7 +21,7 @@ NzbDrone.Routes = {
 NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
     addSeries: function () {
-        NzbDrone.mainRegion.show(new NzbDrone.AddSeriesView());
+        NzbDrone.mainRegion.show(new NzbDrone.AddSeriesLayout());
     },
 
 

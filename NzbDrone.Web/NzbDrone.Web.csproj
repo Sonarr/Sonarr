@@ -185,6 +185,7 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
+    <Content Include="_backboneApp\AddSeries\addNewSeriesTemplate.html" />
     <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.extend.js" />
     <Compile Include="_backboneApp\CassetteConfiguration.cs" />
@@ -373,7 +374,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
-    <Content Include="_backboneApp\AddSeries\addSeriesTemplate.html" />
+    <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
     <Content Include="Cassette.targets" />
     <None Include="_backboneApp\JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="_backboneApp\JsLibraries\jquery-1.8.2.js" />

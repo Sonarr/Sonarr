@@ -1,80 +1,56 @@
-﻿NzbDrone.AddSeriesView = Backbone.Marionette.ItemView.extend({
-    template: "AddSeries/addSeriesTemplate",
-
-    initialise: function () {
-    },
-
-    onRender: function () {
-        this.$el.find('#myTab a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
-    },
-
-});
-
-NzbDrone.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
-    template: "#add-new-series",
+﻿NzbDrone.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
+    template: "AddSeries/addNewSeriesTemplate",
 
     ui: {
-        seriesSearch: '#series-search'
+        seriesSearch: '.search input'
     },
 
     onRender: function () {
-
 
         console.log('binding auto complete');
         var self = this;
 
         this.ui.seriesSearch
-            .autocomplete({
-                source: "http://localhost:1232/api/series/lookup",
-                minLength: 1,
-                delay: 500,
-                select: function (event, ui) {
-                    $(this).val(ui.item.Title);
-                    $(this).siblings('.seriesId').val(ui.item.Id);
-                    return false;
-                },
-                open: function (event, ui) {
-                    $('.ui-autocomplete').addClass('seriesLookupResults');
-                },
-                close: function (event, ui) {
-                    $('.ui-autocomplete').removeClass('seriesLookupResults');
-                }
-
-            })
-            .data("autocomplete")._renderItem = function (ul, item) {
-
-                return $("<li></li>")
-               .data("item.autocomplete", item)
-               .append("<a>" + item.SeriesName + "<img src='../../Content/Images/thetvdb.png' class='tvDbLink' title='Click to see series details from TheTVDB' rel='" + item.Url + "' /></a>")
-               .appendTo(ul);
-            };
-    }
-});
-
-NzbDrone.AddExistingSeriesView = Backbone.Marionette.ItemView.extend({
-    template: "#add-existing-series",
-
-    events: {
-        'click #single': 'single',
-        'click #multiple': 'multiple'
+            .data('timeout', null)
+            .keyup(function () {
+                clearTimeout(self.$el.data('timeout'));
+                self.$el.data('timeout', setTimeout(self.search, 500, self));
+            });
     },
 
-    single: function () {
-        NzbDrone.Router.navigate(NzbDrone.Routes.Series.AddExistingSingle, { trigger: true });
+    search: function (context) {
+        console.log(context.ui.seriesSearch.val());
+    },
+});
+
+NzbDrone.ImportExistingView = Backbone.Marionette.ItemView.extend({
+    template: "AddSeries/ImportExistingTemplate",
+
+});
+
+NzbDrone.RootFoldersView = Backbone.Marionette.ItemView.extend({
+    template: "AddSeries/RootFoldersTemplate",
+
+});
+
+NzbDrone.AddSeriesLayout = Backbone.Marionette.Layout.extend({
+    template: "AddSeries/addSeriesLayoutTemplate",
+
+    regions: {
+        addNew: "#add-new",
+        importExisting: "#import-existing",
+        rootFolders: "#root-folders"
     },
 
-    multiple: function () {
-        NzbDrone.Router.navigate(NzbDrone.Routes.Series.AddExistingMultiple, { trigger: true });
-    }
-});
+    onRender: function () {
+        this.$('#myTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
 
-NzbDrone.AddExistingSeriesSingleView = Backbone.Marionette.ItemView.extend({
-    template: "#add-existing-series-single"
-});
+        this.addNew.show(new NzbDrone.AddNewSeriesView());
+        this.importExisting.show(new NzbDrone.ImportExistingView());
+        this.rootFolders.show(new NzbDrone.RootFoldersView());
+    },
 
-NzbDrone.AddExistingSeriesMultipleView = Backbone.Marionette.ItemView.extend({
-    template: "#add-existing-series-multiple"
-})
+});
