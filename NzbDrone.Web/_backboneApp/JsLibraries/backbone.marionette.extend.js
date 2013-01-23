@@ -22,3 +22,10 @@
         return template;
     }
 });
+
+
+_.extend(Marionette.View.prototype, {
+  
+    
+
+});
