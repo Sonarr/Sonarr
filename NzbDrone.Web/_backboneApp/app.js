@@ -5,7 +5,9 @@
 /// <reference path="JsLibraries/backbone.marionette.extend.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
 
-
+if (typeof console == "undefined") {
+    window.console = { log: function () { } };
+}
 
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
