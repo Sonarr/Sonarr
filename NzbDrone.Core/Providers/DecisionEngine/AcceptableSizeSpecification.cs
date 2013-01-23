@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
             //If the parsed size is greater than maxSize we don't want it
             if (subject.Size > maxSize)
             {
-                logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({1}), rejecting.", subject, subject.Size, maxSize);
+                logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Size, maxSize);
                 return false;
             }
                 
