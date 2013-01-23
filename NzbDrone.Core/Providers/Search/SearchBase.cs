@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -174,6 +175,7 @@ namespace NzbDrone.Core.Providers.Search
             {
                 title = series.Title;
                 title = title.Replace("&", "and");
+                title = Regex.Replace(title, @"[^\w\d\s\-]", "");
             }
 
             return title;

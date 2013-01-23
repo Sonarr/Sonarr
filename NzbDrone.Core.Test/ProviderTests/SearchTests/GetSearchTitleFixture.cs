@@ -56,5 +56,20 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
                   .Should().Be("Franklin and Bash");
         }
+
+        [TestCase("Betty White's Off Their Rockers", "Betty Whites Off Their Rockers")]
+        [TestCase("Star Wars: The Clone Wars", "Star Wars The Clone Wars")]
+        [TestCase("Hawaii Five-0", "Hawaii Five-0")]
+        public void should_replace_some_special_characters(string input, string expected)
+        {
+            _series.Title = input;
+
+            Mocker.GetMock<SceneMappingProvider>()
+                  .Setup(s => s.GetSceneName(_series.SeriesId))
+                  .Returns("");
+
+            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
+                  .Should().Be(expected);
+        }
     }
 }
