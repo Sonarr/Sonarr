@@ -1,10 +1,11 @@
 ﻿/// <reference path="../app.js" />
 
-NzbDrone.AddSeries.SeriesSearchResultModel = Backbone.Model.extend({
+NzbDrone.AddSeries.SearchResultModel = Backbone.Model.extend({
 
 });
 
-NzbDrone.AddSeries.SeriesSearchResultCollection = Backbone.Collection.extend({
-
+NzbDrone.AddSeries.SearchResultCollection = Backbone.Collection.extend({
+    model: NzbDrone.AddSeries.SearchResultModel,
+    url: "http://localhost/api/v1/series/lookup"
 });
 

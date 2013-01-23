@@ -187,6 +187,7 @@
     <Compile Include="App_Start\MiniProfiler.cs" />
     <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesTemplate.html" />
     <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesView.js" />
+    <Content Include="_backboneApp\AddSeries\AddNewSeries\SearchResultTemplate.html" />
     <Content Include="_backboneApp\AddSeries\SeriesSearchModel.js" />
     <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.extend.js" />

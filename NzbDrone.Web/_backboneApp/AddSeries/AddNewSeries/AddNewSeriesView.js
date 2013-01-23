@@ -1,27 +1,68 @@
 ﻿/// <reference path="../../app.js" />
 /// <reference path="../SeriesSearchModel.js" />
 
-NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.ItemView.extend({
+NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
+
+    tagName: 'li',
+    template: "AddSeries/AddNewSeries/SearchResultTemplate",
+    itemView: NzbDrone.AddSeries.SearchResultModel,
+
+
+    initialize: function () {
+
+        this.collection = new NzbDrone.AddSeries.SearchResultCollection();
+        this.bindTo(this.collection, 'reset', this.render);
+    },
+
+});
+
+NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
+
+    tagName: 'ul',
+    className: 'result',
+    itemView: NzbDrone.AddSeries.SearchResultModel,
+
+    collection :  new NzbDrone.AddSeries.SearchResultCollection(),
+
+    initialize: function () {
+        //this.collection = new NzbDrone.AddSeries.SearchResultCollection();
+        this.listenTo(this.collection, 'reset', this.render);
+    },
+
+});
+
+NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     template: "AddSeries/AddNewSeries/AddNewSeriesTemplate",
 
     ui: {
         seriesSearch: '.search input'
     },
 
-    onRender: function() {
+    regions: {
+        searchResult: "#search-result",
+    },
+
+    collection: new NzbDrone.AddSeries.SearchResultCollection(),
+
+    onRender: function () {
 
         console.log('binding auto complete');
         var self = this;
 
         this.ui.seriesSearch
             .data('timeout', null)
-            .keyup(function() {
+            .keyup(function () {
                 clearTimeout(self.$el.data('timeout'));
                 self.$el.data('timeout', setTimeout(self.search, 500, self));
             });
+        
+        this.searchResult.show(new NzbDrone.AddSeries.SearchResultView());
     },
+    
+    search: function (context) {
 
-    search: function(context) {
-        console.log(context.ui.seriesSearch.val());
+        var term = context.ui.seriesSearch.val();
+        console.log(term);
+        context.collection.fetch({ data: $.param({ term: term }) });
     },
 });
