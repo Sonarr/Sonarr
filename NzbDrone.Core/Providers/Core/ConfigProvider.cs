@@ -534,6 +534,13 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("IgnoreArticlesWhenSortingSeries", value); }
         }
 
+        public virtual Boolean DownloadClientUseSceneName
+        {
+            get { return GetValueBoolean("DownloadClientUseSceneName", false); }
+
+            set { SetValue("DownloadClientUseSceneName", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

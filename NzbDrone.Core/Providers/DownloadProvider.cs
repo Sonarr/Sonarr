@@ -97,6 +97,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual String GetDownloadTitle(EpisodeParseResult parseResult)
         {
+            if(_configProvider.DownloadClientUseSceneName)
+            {
+                logger.Trace("Using scene name: {0}", parseResult.OriginalString);
+                return parseResult.OriginalString;
+            }
+
             var seriesTitle = MediaFileProvider.CleanFilename(parseResult.Series.Title);
 
             //Handle Full Naming

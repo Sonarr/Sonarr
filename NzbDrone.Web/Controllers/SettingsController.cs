@@ -144,7 +144,8 @@ namespace NzbDrone.Web.Controllers
                                 DownloadClient = (int)_configProvider.DownloadClient,
                                 BlackholeDirectory = _configProvider.BlackholeDirectory,
                                 DownloadClientSelectList = new SelectList(downloadClientTypes, "Key", "Value"),
-                                PneumaticDirectory = _configProvider.PneumaticDirectory
+                                PneumaticDirectory = _configProvider.PneumaticDirectory,
+                                UseSceneName = _configProvider.DownloadClientUseSceneName
                             };
 
             return View(model);
@@ -458,6 +459,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.BlackholeDirectory = data.BlackholeDirectory;
                 _configProvider.DownloadClient = (DownloadClientType)data.DownloadClient;
                 _configProvider.PneumaticDirectory = data.PneumaticDirectory;
+                _configProvider.DownloadClientUseSceneName = data.UseSceneName;
 
                 return GetSuccessResult();
             }

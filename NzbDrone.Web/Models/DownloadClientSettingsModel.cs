@@ -81,6 +81,10 @@ namespace NzbDrone.Web.Models
         [RequiredIf("DownloadClient", (int)DownloadClientType.Pneumatic, ErrorMessage = "Required when Download Client is Blackhole")]
         public string PneumaticDirectory { get; set; }
 
+        [DisplayName("Use Scene Name")]
+        [Description("Use Scene name when adding NZB to queue?")]
+        public Boolean UseSceneName { get; set; }
+
         public SelectList SabTvCategorySelectList { get; set; }
         public SelectList DownloadClientSelectList { get; set; }
     }

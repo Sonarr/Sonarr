@@ -37,11 +37,17 @@
                 <span class="small">@Html.DescriptionFor(m => m.DownloadClient)</span>
             </label>
             @Html.DropDownListFor(m => m.DownloadClient, Model.DownloadClientSelectList, new { @class = "inputClass selectClass" })
+
             <label class="labelClass">@Html.LabelFor(m => m.DownloadClientDropDirectory)
                 <span class="small">@Html.DescriptionFor(m => m.DownloadClientDropDirectory)</span>
                 <span class="small">@Html.ValidationMessageFor(m => m.DownloadClientDropDirectory)</span>
             </label>
             @Html.TextBoxFor(m => m.DownloadClientDropDirectory, new { @class = "inputClass folderLookup" })
+            
+            <label class="labelClass">@Html.LabelFor(m => m.UseSceneName)
+                <span class="small">@Html.DescriptionFor(m => m.UseSceneName)</span>
+            </label>
+            @Html.CheckBoxFor(m => m.UseSceneName, new { @class = "inputClass checkClass" })
         </div>
         
         <div class="jquery-accordion" id="downloadClientAccordion">
