@@ -4,29 +4,24 @@
 
 NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
 
-    tagName: 'li',
     template: "AddSeries/AddNewSeries/SearchResultTemplate",
-    itemView: NzbDrone.AddSeries.SearchResultModel,
-
-
+    className: 'row',
     initialize: function () {
-
-        this.collection = new NzbDrone.AddSeries.SearchResultCollection();
-        this.bindTo(this.collection, 'reset', this.render);
+        this.listenTo(this.model, 'reset', function () { alert('model'); });
     },
+
+    onRender: function () {
+        NzbDrone.ModelBinder.bind(this.model, this.el);
+    }
 
 });
 
 NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
 
-    tagName: 'ul',
     className: 'result',
-    itemView: NzbDrone.AddSeries.SearchResultModel,
-
-    collection :  new NzbDrone.AddSeries.SearchResultCollection(),
+    itemView: NzbDrone.AddSeries.SearchItemView,
 
     initialize: function () {
-        //this.collection = new NzbDrone.AddSeries.SearchResultCollection();
         this.listenTo(this.collection, 'reset', this.render);
     },
 
@@ -56,10 +51,10 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
                 clearTimeout(self.$el.data('timeout'));
                 self.$el.data('timeout', setTimeout(self.search, 500, self));
             });
-        
-        this.searchResult.show(new NzbDrone.AddSeries.SearchResultView());
+
+        this.searchResult.show(new NzbDrone.AddSeries.SearchResultView({ collection: this.collection }));
     },
-    
+
     search: function (context) {
 
         var term = context.ui.seriesSearch.val();

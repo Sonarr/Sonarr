@@ -1,8 +1,10 @@
 ﻿/// <reference path="JsLibraries/jquery.js" />
 /// <reference path="JsLibraries/underscore.js" />
 /// <reference path="JsLibraries/backbone.js" />
+/// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/backbone.marionette.js" />
 /// <reference path="JsLibraries/backbone.marionette.extend.js" />
+/// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
 /// <reference path="errorHandler.js" />
 
@@ -13,7 +15,7 @@ if (typeof console == "undefined") {
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
 
-
+NzbDrone.ModelBinder = new Backbone.ModelBinder();
 
 
 NzbDrone.Constants = {
