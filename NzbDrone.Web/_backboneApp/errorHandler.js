@@ -9,3 +9,7 @@ window.onerror = function (msg, url, line) {
     // Internet Explorer) will be suppressed.
     return suppressErrorAlert;
 };
+
+$(document).ajaxSuccess(function (event, XMLHttpRequest, ajaxOptionsa) {
+    console.log(ajaxOptionsa);
+});

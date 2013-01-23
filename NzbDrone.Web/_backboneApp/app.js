@@ -13,8 +13,11 @@ if (typeof console == "undefined") {
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
 
+
+
+
 NzbDrone.Constants = {
-    ApiRoot: 'http://localhost:8080/api/v1/'
+    ApiRoot: '/api/'
 };
 
 NzbDrone.Events = {
