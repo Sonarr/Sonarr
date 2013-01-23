@@ -1,9 +1,10 @@
-﻿/// <reference path="JsLibraries/jquery-1.8.2.js" />
+﻿/// <reference path="JsLibraries/jquery.js" />
 /// <reference path="JsLibraries/underscore.js" />
 /// <reference path="JsLibraries/backbone.js" />
 /// <reference path="JsLibraries/backbone.marionette.js" />
 /// <reference path="JsLibraries/backbone.marionette.extend.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
+/// <reference path="errorHandler.js" />
 
 if (typeof console == "undefined") {
     window.console = { log: function () { } };
@@ -13,8 +14,7 @@ NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
 
 NzbDrone.Constants = {
-
-
+    ApiRoot: 'http://localhost:8080/api/v1/'
 };
 
 NzbDrone.Events = {
@@ -25,7 +25,6 @@ NzbDrone.Events = {
 NzbDrone.Routes = {
     Series: {
         Add: 'series/add',
-
     },
 };
 
@@ -33,7 +32,7 @@ NzbDrone.Routes = {
 NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
     addSeries: function () {
-        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddNewSeriesView());
+        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout());
     },
 
 

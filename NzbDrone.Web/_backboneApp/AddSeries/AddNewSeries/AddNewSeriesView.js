@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../app.js" />
-/// <reference path="../SeriesSearchModel.js" />
+/// <reference path="../SearchResultModel.js" />
+/// <reference path="../SearchResultCollection.js" />
 
 NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
 

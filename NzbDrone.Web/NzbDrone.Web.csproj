@@ -188,8 +188,10 @@
     <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesTemplate.html" />
     <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesView.js" />
     <Content Include="_backboneApp\AddSeries\AddNewSeries\SearchResultTemplate.html" />
-    <Content Include="_backboneApp\AddSeries\SeriesSearchModel.js" />
+    <Content Include="_backboneApp\AddSeries\SearchResultModel.js" />
+    <Content Include="_backboneApp\AddSeries\SearchResultCollection.js" />
     <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
+    <Content Include="_backboneApp\errorHandler.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.extend.js" />
     <Compile Include="_backboneApp\CassetteConfiguration.cs" />
     <Compile Include="Controllers\ImageController.cs" />
@@ -380,7 +382,7 @@
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
     <Content Include="Cassette.targets" />
     <None Include="_backboneApp\JsLibraries\jquery-1.8.2.intellisense.js" />
-    <Content Include="_backboneApp\JsLibraries\jquery-1.8.2.js" />
+    <Content Include="_backboneApp\JsLibraries\jquery.js" />
     <Content Include="_backboneApp\JsLibraries\jquery-ui-1.9.0.js" />
     <Content Include="_backboneApp\JsLibraries\underscore.js" />
     <Content Include="Views\System\Index.cshtml" />
