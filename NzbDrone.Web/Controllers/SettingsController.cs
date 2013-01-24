@@ -8,6 +8,7 @@ using NzbDrone.Common.Model;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Nzbget;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -145,8 +146,24 @@ namespace NzbDrone.Web.Controllers
                                 BlackholeDirectory = _configProvider.BlackholeDirectory,
                                 DownloadClientSelectList = new SelectList(downloadClientTypes, "Key", "Value"),
                                 PneumaticDirectory = _configProvider.PneumaticDirectory,
-                                UseSceneName = _configProvider.DownloadClientUseSceneName
+                                UseSceneName = _configProvider.DownloadClientUseSceneName,
+                                NzbgetHost = _configProvider.NzbgetHost,
+                                NzbgetPort = _configProvider.NzbgetPort,
+                                NzbgetUsername = _configProvider.NzbgetUsername,
+                                NzbgetPassword = _configProvider.NzbgetPassword,
+                                NzbgetTvCategory = _configProvider.NzbgetTvCategory,
+                                NzbgetBacklogTvPriority = (Int32)_configProvider.NzbgetBacklogTvPriority,
+                                NzbgetRecentTvPriority = (Int32)_configProvider.NzbgetRecentTvPriority
                             };
+
+             model.NzbgetPrioritySelectList = new SelectList(new List<dynamic>
+                    {
+                        new { Key = "Very Low", Value = "-100" },
+                        new { Key = "Low", Value = "-50" },
+                        new { Key = "Normal", Value = "0" },
+                        new { Key = "High", Value = "-50" },
+                        new { Key = "Very High", Value = "100" }
+                    }, "Value", "Key");
 
             return View(model);
         }
@@ -460,6 +477,13 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.DownloadClient = (DownloadClientType)data.DownloadClient;
                 _configProvider.PneumaticDirectory = data.PneumaticDirectory;
                 _configProvider.DownloadClientUseSceneName = data.UseSceneName;
+                _configProvider.NzbgetHost = data.NzbgetHost;
+                _configProvider.NzbgetPort = data.NzbgetPort;
+                _configProvider.NzbgetUsername = data.NzbgetUsername;
+                _configProvider.NzbgetPassword = data.NzbgetPassword;
+                _configProvider.NzbgetTvCategory = data.NzbgetTvCategory;
+                _configProvider.NzbgetBacklogTvPriority = (PriorityType)data.NzbgetBacklogTvPriority;
+                _configProvider.NzbgetRecentTvPriority = (PriorityType)data.NzbgetRecentTvPriority;
 
                 return GetSuccessResult();
             }

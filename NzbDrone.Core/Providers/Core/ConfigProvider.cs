@@ -558,7 +558,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual String NzbgetHost
         {
-            get { return GetValue("NzbgetHost", "nzbget"); }
+            get { return GetValue("NzbgetHost", "localhost"); }
 
             set { SetValue("NzbgetHost", value); }
         }

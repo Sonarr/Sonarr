@@ -48,12 +48,12 @@
     <label class="labelClass">@Html.LabelFor(m => m.SabBacklogTvPriority)
         <span class="small">@Html.DescriptionFor(m => m.SabBacklogTvPriority)</span>
     </label>
-    @Html.DropDownListFor(m => m.SabBacklogTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
+    @Html.DropDownListFor(m => m.SabBacklogTvPriority, Model.SabPrioritySelectList, new { @class = "inputClass selectClass" })
     
     <label class="labelClass">@Html.LabelFor(m => m.SabRecentTvPriority)
         <span class="small">@Html.DescriptionFor(m => m.SabRecentTvPriority)</span>
     </label>
-    @Html.DropDownListFor(m => m.SabRecentTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
+    @Html.DropDownListFor(m => m.SabRecentTvPriority, Model.SabPrioritySelectList, new { @class = "inputClass selectClass" })
 
     <label class="labelClass">Test SABnzbd
         <span class="small">Test SABnzbd settings</span>

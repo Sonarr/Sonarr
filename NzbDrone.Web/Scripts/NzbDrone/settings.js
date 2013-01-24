@@ -8,6 +8,7 @@ $('#MultiEpisodeStyle').live('change', function () { createExamples(); });
 
 var testProwlUrl = '../Command/TestProwl';
 var testSabUrl = '../Command/TestSabnzbd';
+var testNzbgetUrl = '../Command/TestNzbget';
 var testEmailUrl = '../Command/TestEmail';
 var testXbmcNotificationUrl = '../Command/TestXbmcNotification';
 var testXbmcJsonApiUrl = '../Command/TestXbmcJsonApi';
@@ -143,6 +144,19 @@ function testSabnzbd(event) {
     });
 
     event.preventDefault();
+}
+
+function testNzbget() {
+    var host = $('#NzbgetHost').val();
+    var port = $('#NzbgetPort').val();
+    var username = $('#NzbgetUsername').val();
+    var password = $('#NzbgetPassword').val();
+
+    $.ajax({
+        type: "GET",
+        url: testNzbgetUrl,
+        data: jQuery.param({ host: host, port: port, username: username, password: password })
+    });
 }
 
 //Twitter

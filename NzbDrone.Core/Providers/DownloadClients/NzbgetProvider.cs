@@ -131,15 +131,15 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 Params = null
             };
 
-            var url = String.Format(@"http://{0}:{1}/jsonrpc", host, port);
-            var response = _httpProvider.PostCommand(url, username, password, JsonConvert.SerializeObject(command));
+            var address = String.Format(@"{0}:{1}", host, port);
+            var response = _httpProvider.PostCommand(address, username, password, JsonConvert.SerializeObject(command));
 
             CheckForError(response);
 
             return JsonConvert.DeserializeObject<VersionModel>(response);
         }
 
-        public virtual string Test(string host, int port, string apiKey, string username, string password)
+        public virtual string Test(string host, int port, string username, string password)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
 
         private string PostCommand(string command)
         {
-            var url = String.Format(@"http://{0}:{1}/jsonrpc",
+            var url = String.Format(@"{0}:{1}",
                                  _configProvider.NzbgetHost,
                                  _configProvider.NzbgetPort);
 

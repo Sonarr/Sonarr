@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Nzbget;
 using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Web.Helpers.Validation;
 
@@ -10,8 +12,10 @@ namespace NzbDrone.Web.Models
 {
     public class DownloadClientSettingsModel
     {
-        public SelectList PrioritySelectList =
+        public SelectList SabPrioritySelectList =
             new SelectList(new[] {"Default", "Paused", "Low", "Normal", "High", "Force"});
+
+        public SelectList NzbgetPrioritySelectList { get; set; }
 
         [DataType(DataType.Text)]
         [DisplayName("SABnzbd Host")]
@@ -84,6 +88,46 @@ namespace NzbDrone.Web.Models
         [DisplayName("Use Scene Name")]
         [Description("Use Scene name when adding NZB to queue?")]
         public Boolean UseSceneName { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Nzbget Host")]
+        [Description("Hostname or IP Address running Nzbget")]
+        [RequiredIf("DownloadClient", (int)DownloadClientType.Nzbget, ErrorMessage = "Required when Download Client is Nzbget")]
+        public String NzbgetHost { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Nzbget Port")]
+        [Description("Port for Nzbget web interface")]
+        [RequiredIf("DownloadClient", (int)DownloadClientType.Nzbget, ErrorMessage = "Required when Download Client is Nzbget")]
+        public int NzbgetPort { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Nzbget Username")]
+        [Description("Username for Nzbget")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public String NzbgetUsername { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Nzbget Password")]
+        [Description("Password for Nzbget")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public String NzbgetPassword { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [DisplayName("Nzbget TV Category")]
+        [Description("Category to use when sending NZBs to Nzbget")]
+        public String NzbgetTvCategory { get; set; }
+
+        [Required(ErrorMessage = "Please select a valid priority")]
+        [DisplayName("Nzbget Backlog Priority")]
+        [Description("Priority to use when sending episodes older than 7 days to Nzbget")]
+        public Int32 NzbgetBacklogTvPriority { get; set; }
+
+        [Required(ErrorMessage = "Please select a valid priority")]
+        [DisplayName("Nzbget Recent Priority")]
+        [Description("Priority to use when sending episodes newer than 7 days to Nzbget")]
+        public Int32 NzbgetRecentTvPriority { get; set; }
 
         public SelectList SabTvCategorySelectList { get; set; }
         public SelectList DownloadClientSelectList { get; set; }

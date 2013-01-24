@@ -21,6 +21,7 @@ namespace NzbDrone.Web.Controllers
         private readonly ProwlProvider _prowlProvider;
         private readonly XbmcProvider _xbmcProvider;
         private readonly PlexProvider _plexProvider;
+        private readonly NzbgetProvider _nzbgetProvider;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -28,7 +29,8 @@ namespace NzbDrone.Web.Controllers
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
                                     EpisodeProvider episodeProvider, GrowlProvider growlProvider,
                                     SeasonProvider seasonProvider, ProwlProvider prowlProvider,
-                                    XbmcProvider xbmcProvider, PlexProvider plexProvider)
+                                    XbmcProvider xbmcProvider, PlexProvider plexProvider,
+                                    NzbgetProvider nzbgetProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
@@ -40,6 +42,7 @@ namespace NzbDrone.Web.Controllers
             _prowlProvider = prowlProvider;
             _xbmcProvider = xbmcProvider;
             _plexProvider = plexProvider;
+            _nzbgetProvider = nzbgetProvider;
         }
 
         public JsonResult RssSync()
@@ -172,6 +175,17 @@ namespace NzbDrone.Web.Controllers
                 return JsonNotificationResult.Oops("Failed to connect to SABnzbd, please check your settings");
 
             return JsonNotificationResult.Info("Success!", "SABnzbd settings have been verified successfully! Version: " + version);
+        }
+
+        public JsonResult TestNzbget(string host, int port, string username, string password)
+        {
+            //_prowlProvider.TestNotification(apiKeys);
+            var version = _nzbgetProvider.Test(host, port, username, password);
+
+            if (String.IsNullOrWhiteSpace(version))
+                return JsonNotificationResult.Oops("Failed to connect to Nzbget, please check your settings");
+
+            return JsonNotificationResult.Info("Success!", "Nzbget settings have been verified successfully! Version: " + version);
         }
 
         public JsonResult TestXbmcNotification(string hosts)

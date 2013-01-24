@@ -19,13 +19,15 @@ namespace NzbDrone.Core.Providers
         private readonly BlackholeProvider _blackholeProvider;
         private readonly SignalRProvider _signalRProvider;
         private readonly PneumaticProvider _pneumaticProvider;
+        private readonly NzbgetProvider _nzbgetProvider;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
             EpisodeProvider episodeProvider, ExternalNotificationProvider externalNotificationProvider,
             ConfigProvider configProvider, BlackholeProvider blackholeProvider,
-            SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider)
+            SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider,
+            NzbgetProvider nzbgetProvider)
         {
             _sabProvider = sabProvider;
             _historyProvider = historyProvider;
@@ -35,6 +37,7 @@ namespace NzbDrone.Core.Providers
             _blackholeProvider = blackholeProvider;
             _signalRProvider = signalRProvider;
             _pneumaticProvider = pneumaticProvider;
+            _nzbgetProvider = nzbgetProvider;
         }
 
         public DownloadProvider()
@@ -89,6 +92,9 @@ namespace NzbDrone.Core.Providers
 
                 case DownloadClientType.Pneumatic:
                     return _pneumaticProvider;
+
+                case DownloadClientType.Nzbget:
+                    return _nzbgetProvider;
 
                 default:
                     return _sabProvider;
