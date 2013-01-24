@@ -8,7 +8,6 @@ namespace NzbDrone.Web.Backbone.NzbDrone
     public class CassetteBundleConfiguration : IConfiguration<BundleCollection>
     {
         public const string BASE_STYLE = "BASE_STYLE";
-        public const string BACKBONE = "BACKBONE";
         public const string NZBDRONE = "NZBDRONE";
         internal const string FONTS = "FONTS";
 
@@ -28,7 +27,7 @@ namespace NzbDrone.Web.Backbone.NzbDrone
             },
                 bundle => bundle.AddReference("/" + FONTS));
 
-
+            bundles.Add<ScriptBundle>("~/_backboneApp/JsLibraries/backbone.js");
 
             bundles.Add<ScriptBundle>(NZBDRONE, new[]{
                       APP_PATH + "\\AddSeries\\AddSeriesLayout.js",

@@ -58,7 +58,14 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     search: function (context) {
 
         var term = context.ui.seriesSearch.val();
-        console.log(term);
-        context.collection.fetch({ data: $.param({ term: term }) });
+
+        if (term == "") {
+            context.collection.reset();
+        } else {
+            console.log(term);
+            context.collection.fetch({ data: $.param({ term: term }) });
+        }
+
+
     },
 });
