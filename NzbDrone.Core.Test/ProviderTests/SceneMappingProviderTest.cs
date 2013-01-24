@@ -44,18 +44,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public  void GetSceneName_exists()
         {
+            WithRealDb();
+
             //Setup
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.CleanTitle = "laworder")
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "Law and Order")
+                .With(f => f.SeasonNumber = -1)
                 .Build();
 
-            
-
-            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(emptyDatabase);
-            emptyDatabase.Insert(fakeMap);
+            Db.Insert(fakeMap);
 
             //Act
             var sceneName = Mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
@@ -67,6 +66,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public  void GetSeriesId_exists()
         {
+            WithRealDb();
+
             //Setup
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.SeriesId = 12345)
@@ -74,11 +75,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            
-
-            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(emptyDatabase);
-            emptyDatabase.Insert(fakeMap);
+            Db.Insert(fakeMap);
 
             //Act
             var seriesId = Mocker.Resolve<SceneMappingProvider>().GetSeriesId(fakeMap.CleanTitle);
@@ -90,6 +87,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetSceneName_null()
         {
+            WithRealDb();
+
             //Setup
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.SeriesId = 12345)
@@ -97,11 +96,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            
-
-            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(emptyDatabase);
-            emptyDatabase.Insert(fakeMap);
+            Db.Insert(fakeMap);
 
             //Act
             var sceneName = Mocker.Resolve<SceneMappingProvider>().GetSceneName(54321);
@@ -113,6 +108,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetSeriesId_null()
         {
+            WithRealDb();
+
             //Setup
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.SeriesId = 12345)
@@ -120,11 +117,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.CleanTitle = "laworder")
                 .Build();
 
-            
-
-            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(emptyDatabase);
-            emptyDatabase.Insert(fakeMap);
+            Db.Insert(fakeMap);
 
             //Act
             var seriesId = Mocker.Resolve<SceneMappingProvider>().GetSeriesId("notlaworder");
@@ -136,6 +129,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetSceneName_multiple_clean_names()
         {
+            WithRealDb();
             //Test that ensures a series with clean names (office, officeus) can be looked up by seriesId
 
             //Setup
@@ -143,27 +137,41 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.CleanTitle = "office")
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "The Office")
+                .With(f => f.SeasonNumber = -1)
                 .Build();
 
             var fakeMap2 = Builder<SceneMapping>.CreateNew()
                 .With(f => f.CleanTitle = "officeus")
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "The Office")
+                .With(f => f.SeasonNumber = -1)
                 .Build();
 
-            
-
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            db.Insert(fakeMap);
-            db.Insert(fakeMap2);
+            Db.Insert(fakeMap);
+            Db.Insert(fakeMap2);
 
             //Act
             var sceneName = Mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
 
             //Assert
             Assert.AreEqual(fakeMap.SceneName, sceneName);
+        }
+
+        [Test]
+        public void GetSceneName_should_be_null_when_seasonNumber_does_not_match()
+        {
+            WithRealDb();
+
+            var fakeMap = Builder<SceneMapping>.CreateNew()
+                .With(f => f.SeriesId = 12345)
+                .With(f => f.SceneName = "Law and Order")
+                .With(f => f.SceneName = "laworder")
+                .With(f => f.SeasonNumber = 10)
+                .Build();
+
+            Db.Insert(fakeMap);
+
+            Mocker.Resolve<SceneMappingProvider>().GetSceneName(54321, 5).Should().BeNull();
         }
 
         [Test]

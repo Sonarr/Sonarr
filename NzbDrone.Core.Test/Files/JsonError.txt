@@ -1,8 +1,4 @@
 ﻿{
-  "version": "1.1",
-  "error": {
-    "name": "JSONRPCError",
-    "code": 1,
-    "message": "Invalid procedure"
-  }
+    "status": false,
+    "error": "API Key Incorrect"
 }
