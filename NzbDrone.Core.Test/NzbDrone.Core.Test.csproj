@@ -144,6 +144,7 @@
     <Compile Include="ProviderTests\DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
+    <Compile Include="ProviderTests\DownloadProviderTests\ContainsRecentEpisode.cs" />
     <Compile Include="ProviderTests\RootDirProviderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\ProcessResultsFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\DailyEpisodeSearchTests\CheckReportFixture.cs" />
@@ -237,7 +238,7 @@
     <Compile Include="dbBenchmark.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DownloadProviderFixture.cs" />
+    <Compile Include="ProviderTests\DownloadProviderTests\DownloadProviderFixture.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="JobTests\ImportNewSeriesJobTest.cs" />
     <Compile Include="JobTests\DiskScanJobTest.cs" />

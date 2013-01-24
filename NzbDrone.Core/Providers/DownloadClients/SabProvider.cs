@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
             _httpProvider = httpProvider;
         }
 
-
         public SabProvider()
         {
         }
@@ -40,7 +39,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 var matchigTitle = queue.Where(q => String.Equals(q.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
 
                 var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
-
 
                 if (newParseResult.Series.IsDaily)
                 {

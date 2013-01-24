@@ -15,7 +15,7 @@ using NzbDrone.Core.Test.Framework;
 
 // ReSharper disable InconsistentNaming
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 {
     [TestFixture]
     public class DownloadProviderFixture : CoreTest
