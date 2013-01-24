@@ -32,21 +32,21 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTes
         private void WithFullQueue()
         {
             Mocker.GetMock<HttpProvider>()
-                    .Setup(s => s.PostCommand("http://192.168.5.55:6789/jsonrpc", "nzbget", "pass", It.IsAny<String>()))
+                    .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
                     .Returns(File.ReadAllText(@".\Files\Nzbget\Queue.txt"));
         }
 
         private void WithEmptyQueue()
         {
             Mocker.GetMock<HttpProvider>()
-                    .Setup(s => s.PostCommand("http://192.168.5.55:6789/jsonrpc", "nzbget", "pass", It.IsAny<String>()))
+                    .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
                     .Returns(File.ReadAllText(@".\Files\Nzbget\Queue_empty.txt"));
         }
 
         private void WithFailResponse()
         {
             Mocker.GetMock<HttpProvider>()
-                    .Setup(s => s.PostCommand("http://192.168.5.55:6789/jsonrpc", "nzbget", "pass", It.IsAny<String>()))
+                    .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
                     .Returns(File.ReadAllText(@".\Files\Nzbget\JsonError.txt"));
         }
 
