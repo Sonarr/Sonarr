@@ -1,6 +1,7 @@
 ﻿/// <reference path="JsLibraries/jquery.js" />
 /// <reference path="JsLibraries/underscore.js" />
 /// <reference path="JsLibraries/backbone.js" />
+/// <reference path="JsLibraries/backbone.debug.js" />
 /// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/backbone.marionette.js" />
 /// <reference path="JsLibraries/backbone.marionette.extend.js" />
