@@ -6,9 +6,6 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
 
     template: "AddSeries/AddNewSeries/SearchResultTemplate",
     className: 'row',
-    initialize: function () {
-        this.listenTo(this.model, 'reset', function () { alert('model'); });
-    },
 
     onRender: function () {
         NzbDrone.ModelBinder.bind(this.model, this.el);

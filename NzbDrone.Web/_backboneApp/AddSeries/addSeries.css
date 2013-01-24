@@ -1,15 +1,18 @@
-﻿.search {
+﻿.nz-input-large {
     margin-top: 20px;
 }
 
-    .search input {
+    .nz-input-large input {
         height: 40px;
     }
 
-    .search .add-on {
+    .nz-input-large *[class*='icon-'] {
         font-size: 30px;
         height: 30px;
         width: 40px;
         padding-top: 14px;
         padding-left: 10px;
     }
+
+
+   

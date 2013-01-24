@@ -89,6 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QualityProfiles\RootFolderModule.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="ErrorManagment\ApiException.cs" />
     <Compile Include="Bootstrapper.cs" />

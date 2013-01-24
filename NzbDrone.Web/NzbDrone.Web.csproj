@@ -182,6 +182,11 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
+    <Content Include="_backboneApp\AddSeries\RootDir\RootDirTemplate.html" />
+    <Content Include="_backboneApp\AddSeries\RootDir\RootDirView.js" />
+    <Content Include="_backboneApp\AddSeries\RootDir\RootDirItemTemplate.html" />
+    <Content Include="_backboneApp\AddSeries\RootDir\RootDirModel.js" />
+    <Content Include="_backboneApp\AddSeries\RootDir\RootDirCollection.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.modelbinder.js" />
     <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesTemplate.html" />
     <Content Include="_backboneApp\AddSeries\AddNewSeries\AddNewSeriesView.js" />

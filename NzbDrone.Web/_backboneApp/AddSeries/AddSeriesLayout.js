@@ -1,5 +1,6 @@
 ﻿/// <reference path="../app.js" />
 /// <reference path="AddNewSeries/AddNewSeriesView.js" />
+/// <reference path="RootDir/RootDirView.js" />
 
 NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     template: "AddSeries/addSeriesLayoutTemplate",
@@ -18,7 +19,7 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
 
         this.addNew.show(new NzbDrone.AddSeries.AddNewSeriesView());
         //this.importExisting.show(new NzbDrone.ImportExistingView());
-        //this.rootFolders.show(new NzbDrone.RootFoldersView());
+        this.rootFolders.show(new NzbDrone.AddSeries.RootDirView());
     },
 
 });
