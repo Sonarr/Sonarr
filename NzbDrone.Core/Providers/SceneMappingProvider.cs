@@ -51,11 +51,11 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public virtual string GetSceneName(int seriesId)
+        public virtual string GetSceneName(int seriesId, int seasonNumber = -1)
         {
             UpdateIfEmpty();
 
-            var item = _database.FirstOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
+            var item = _database.FirstOrDefault<SceneMapping>("WHERE SeriesId = @0 AND SeasonNumber = @1", seriesId, seasonNumber);
 
             if (item == null)
                 return null;

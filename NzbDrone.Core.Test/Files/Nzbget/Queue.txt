@@ -1,0 +1,33 @@
+﻿{
+  "version": "1.1",
+  "result": [
+    {
+      "FirstID": 1,
+      "LastID": 26,
+      "FileSizeLo": 350152055,
+      "FileSizeHi": 0,
+      "FileSizeMB": 333,
+      "RemainingSizeLo": 350152055,
+      "RemainingSizeHi": 0,
+      "RemainingSizeMB": 333,
+      "PausedSizeLo": 33317835,
+      "PausedSizeHi": 0,
+      "PausedSizeMB": 31,
+      "FileCount": 26,
+      "RemainingFileCount": 26,
+      "RemainingParCount": 7,
+      "MinPostTime": 1358913959,
+      "MaxPostTime": 1358913965,
+      "NZBID": 1,
+      "NZBName": "White.Collar.S04E11.HDTV.x264-2HD",
+      "NZBNicename": "White.Collar.S04E11.HDTV.x264-2HD",
+      "NZBFilename": "C:\\Test\\Blackhole\\White.Collar.S04E11.HDTV.x264-2HD.nzb",
+      "DestDir": "C:\\test\\NzbGet\\\\dst\\TV\\White.Collar.S04E11.HDTV.x264-2HD",
+      "Category": "TV",
+      "MinPriority": 0,
+      "MaxPriority": 0,
+      "ActiveDownloads": 4,
+      "Parameters": []
+    }
+  ]
+}

@@ -142,6 +142,8 @@
     <Compile Include="IndexerTests\NzbxFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\LanguageSpecificationFixture.cs" />
+    <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
+    <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="ProviderTests\RootDirProviderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\ProcessResultsFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\DailyEpisodeSearchTests\CheckReportFixture.cs" />
@@ -275,6 +277,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Nzbget\JsonError.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Nzbget\Queue_empty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Nzbget\Queue.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\QueueUnknownPriority.txt">

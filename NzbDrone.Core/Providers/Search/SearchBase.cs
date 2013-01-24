@@ -57,7 +57,8 @@ namespace NzbDrone.Core.Providers.Search
             {
                 SearchTime = DateTime.Now,
                 SeriesId = series.SeriesId,
-                EpisodeId = options.GetType().GetProperty("Episode") != null ? options.Episode.EpisodeId : null
+                EpisodeId = options.GetType().GetProperty("Episode") != null ? options.Episode.EpisodeId : null,
+                SeasonNumber = options.GetType().GetProperty("SeasonNumber") != null ? options.SeasonNumber : null
             };
 
             List<EpisodeParseResult> reports = PerformSearch(series, options, notification);
@@ -166,9 +167,12 @@ namespace NzbDrone.Core.Providers.Search
         }
 
         public virtual string GetSearchTitle(Series series, int seasonNumber = -1)
-        {           
-            //Todo: Add support for per season lookup (used for anime)
-            //Todo: Add support for multiple names
+        {
+            var seasonTitle = _sceneMappingProvider.GetSceneName(series.SeriesId, seasonNumber);
+
+            if(!String.IsNullOrWhiteSpace(seasonTitle))
+                return seasonTitle;
+
             var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
 
             if (String.IsNullOrWhiteSpace(title))

@@ -4,6 +4,7 @@
     {
         Sabnzbd = 0,
         Blackhole = 1,
-        Pneumatic = 2
+        Pneumatic = 2,
+        Nzbget = 3
     }
 }

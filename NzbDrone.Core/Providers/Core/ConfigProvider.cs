@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Nzbget;
 using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -539,6 +540,62 @@ namespace NzbDrone.Core.Providers.Core
             get { return GetValueBoolean("DownloadClientUseSceneName", false); }
 
             set { SetValue("DownloadClientUseSceneName", value); }
+        }
+
+        public virtual String NzbgetUsername
+        {
+            get { return GetValue("NzbgetUsername", "nzbget"); }
+
+            set { SetValue("NzbgetUsername", value); }
+        }
+
+        public virtual String NzbgetPassword
+        {
+            get { return GetValue("NzbgetPassword", ""); }
+
+            set { SetValue("NzbgetPassword", value); }
+        }
+
+        public virtual String NzbgetHost
+        {
+            get { return GetValue("NzbgetHost", "nzbget"); }
+
+            set { SetValue("NzbgetHost", value); }
+        }
+
+        public virtual Int32 NzbgetPort
+        {
+            get { return GetValueInt("NzbgetPort", 6789); }
+
+            set { SetValue("NzbgetPort", value); }
+        }
+
+        public virtual String NzbgetTvCategory
+        {
+            get { return GetValue("NzbgetTvCategory", "nzbget"); }
+
+            set { SetValue("NzbgetTvCategory", value); }
+        }
+
+        public virtual Int32 NzbgetPriority
+        {
+            get { return GetValueInt("NzbgetPriority", 0); }
+
+            set { SetValue("NzbgetPriority", value); }
+        }
+
+        public virtual PriorityType NzbgetBacklogTvPriority
+        {
+            get { return (PriorityType)GetValueInt("NzbgetBacklogTvPriority"); }
+
+            set { SetValue("NzbgetBacklogTvPriority", (int)value); }
+        }
+
+        public virtual PriorityType NzbgetRecentTvPriority
+        {
+            get { return (PriorityType)GetValueInt("NzbgetRecentTvPriority"); }
+
+            set { SetValue("NzbgetRecentTvPriority", (int)value); }
         }
 
         private string GetValue(string key)

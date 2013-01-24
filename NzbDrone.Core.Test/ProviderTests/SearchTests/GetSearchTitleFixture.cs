@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         private void WithSceneMapping()
         {
             Mocker.GetMock<SceneMappingProvider>()
-                  .Setup(s => s.GetSceneName(_series.SeriesId))
+                  .Setup(s => s.GetSceneName(_series.SeriesId, -1))
                   .Returns("Hawaii Five 0 2010");
         }
 
@@ -41,6 +41,26 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
         [Test]
         public void should_return_scene_mapping_when_one_exists()
+        {
+            WithSceneMapping();
+
+            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
+                  .Should().Be("Hawaii Five 0 2010");
+        }
+
+        [Test]
+        public void should_return_season_scene_name_when_one_exists()
+        {
+            Mocker.GetMock<SceneMappingProvider>()
+                  .Setup(s => s.GetSceneName(_series.SeriesId, 5))
+                  .Returns("Hawaii Five 0 2010 - Season 5");
+
+            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
+                  .Should().Be("Hawaii Five 0 2010 - Season 5");
+        }
+
+        [Test]
+        public void should_return_series_scene_name_when_one_for_season_does_not_exist()
         {
             WithSceneMapping();
 
@@ -65,7 +85,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             _series.Title = input;
 
             Mocker.GetMock<SceneMappingProvider>()
-                  .Setup(s => s.GetSceneName(_series.SeriesId))
+                  .Setup(s => s.GetSceneName(_series.SeriesId, -1))
                   .Returns("");
 
             Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
