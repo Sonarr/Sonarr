@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Nancy;
 using Nancy.Responses;
 using Newtonsoft.Json;
 
-namespace NzbDrone.Api.QualityType
+namespace NzbDrone.Api.Extentions
 {
     public static class JsonExtensions
     {
@@ -14,17 +13,12 @@ namespace NzbDrone.Api.QualityType
             var reader = new StreamReader(body, true);
             body.Position = 0;
             var value = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<T>(value, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore
-            });
+            return JsonConvert.DeserializeObject<T>(value, Serializer.Settings);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            ISerializer serializer = new DefaultJsonSerializer();
-            var jsonResponse = new JsonResponse<TModel>(model, serializer) { StatusCode = statusCode };
+            var jsonResponse = new JsonResponse<TModel>(model, new NancyJsonSerializer()) { StatusCode = statusCode };
             return jsonResponse;
         }
     }

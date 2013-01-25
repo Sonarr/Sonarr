@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Nancy;
 using Nancy.ErrorHandling;
+using NzbDrone.Api.Extentions;
 using NzbDrone.Api.QualityType;
 
 namespace NzbDrone.Api.ErrorManagment

@@ -1,4 +1,5 @@
 ﻿using Nancy;
+using NzbDrone.Api.Extentions;
 using NzbDrone.Core.Providers;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Core.Repository;

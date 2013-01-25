@@ -89,6 +89,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extentions\NancyJsonSerializer.cs" />
+    <Compile Include="Extentions\Serializer.cs" />
     <Compile Include="QualityProfiles\RootFolderModule.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="ErrorManagment\ApiException.cs" />
@@ -103,7 +105,7 @@
     <Compile Include="QualityProfiles\QualityProfilesModule.cs" />
     <Compile Include="QualityType\QualityTypeModel.cs" />
     <Compile Include="QualityType\QualityTypeModule.cs" />
-    <Compile Include="QualityType\RequestExtensions.cs" />
+    <Compile Include="Extentions\RequestExtensions.cs" />
     <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />

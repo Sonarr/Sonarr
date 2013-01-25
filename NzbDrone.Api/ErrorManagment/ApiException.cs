@@ -3,6 +3,7 @@ using System.Linq;
 using Nancy;
 using Nancy.Responses;
 using Newtonsoft.Json;
+using NzbDrone.Api.Extentions;
 using NzbDrone.Api.QualityType;
 
 namespace NzbDrone.Api.ErrorManagment

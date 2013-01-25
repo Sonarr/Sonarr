@@ -5,6 +5,7 @@ using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
 using NzbDrone.Api.ErrorManagment;
+using NzbDrone.Api.Extentions;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
@@ -83,6 +84,7 @@ namespace NzbDrone.Api
                 var internalConfig = NancyInternalConfiguration.Default;
 
                 internalConfig.StatusCodeHandlers.Add(typeof(ErrorHandler));
+                internalConfig.Serializers.Add(typeof(NancyJsonSerializer));
 
 
                 return internalConfig;
