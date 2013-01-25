@@ -5,12 +5,12 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Api.QualityProfiles
 {
-    public class RootFolderModule : NzbDroneApiModule
+    public class RootDirModule : NzbDroneApiModule
     {
         private readonly RootDirProvider _rootDirProvider;
 
-        public RootFolderModule(RootDirProvider rootDirProvider)
-            : base("//rootfolders")
+        public RootDirModule(RootDirProvider rootDirProvider)
+            : base("//rootdir")
         {
             _rootDirProvider = rootDirProvider;
 

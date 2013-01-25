@@ -26,6 +26,7 @@ NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend(
 
 NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     template: "AddSeries/AddNewSeries/AddNewSeriesTemplate",
+    route : "Series/add/new",
 
     ui: {
         seriesSearch: '.search input'
@@ -39,6 +40,7 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     onRender: function () {
 
+        //NzbDrone.Router.navigate(this.route, { trigger: true });
         console.log('binding auto complete');
         var self = this;
 

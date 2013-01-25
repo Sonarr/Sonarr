@@ -47,7 +47,7 @@ NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 });
 
 
-NzbDrone.MyRouter = Backbone.Marionette.AppRouter.extend({
+NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
     controller: new NzbDrone.Controller(),
     // "someMethod" must exist at controller.someMethod
@@ -68,7 +68,7 @@ NzbDrone.addInitializer(function (options) {
         mainRegion: "#main-region",
     });
 
-    NzbDrone.Router = new NzbDrone.MyRouter();
+    NzbDrone.Router = new NzbDrone.Router();
     Backbone.history.start();
 
 

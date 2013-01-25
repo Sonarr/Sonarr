@@ -5,21 +5,32 @@
 NzbDrone.AddSeries.RootDirItemView = Backbone.Marionette.ItemView.extend({
 
     template: "AddSeries/RootDir/RootDirItemTemplate",
-    className: 'row',
+    tagName: 'tr',
+
+    events: {
+        'click #remove-dir': 'removeDir',
+    },
 
     onRender: function () {
         NzbDrone.ModelBinder.bind(this.model, this.el);
-    }
+    },
+
+    removeDir: function () {
+        this.model.destroy({ wait: true });
+    },
 
 });
 
 NzbDrone.AddSeries.RootDirListView = Backbone.Marionette.CollectionView.extend({
-    className: 'result',
     itemView: NzbDrone.AddSeries.RootDirItemView,
+
+    tagName: 'table',
+    className: 'table table-hover',
 });
 
 NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
     template: "AddSeries/RootDir/RootDirTemplate",
+    route: "series/add/rootdir",
 
     ui: {
         pathInput: '.path input'
@@ -29,21 +40,41 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
         currentDirs: "#current-dirs",
     },
 
+    events: {
+        'click #add-dir': 'addDir',
+    },
+
+
     collection: new NzbDrone.AddSeries.RootDirCollection(),
 
     onRender: function () {
         var self = this;
 
-/*
-        this.ui.seriesSearch
-            .data('timeout', null)
-            .keyup(function () {
-                clearTimeout(self.$el.data('timeout'));
-                self.$el.data('timeout', setTimeout(self.search, 500, self));
-            });
-*/
+        //NzbDrone.Router.navigate(this.route, { trigger: true });
+
+        /*
+                this.ui.seriesSearch
+                    .data('timeout', null)
+                    .keyup(function () {
+                        clearTimeout(self.$el.data('timeout'));
+                        self.$el.data('timeout', setTimeout(self.search, 500, self));
+                    });
+        */
 
         this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
+
+        this.collection.fetch();
+    },
+
+
+    addDir: function () {
+        var newDir = new NzbDrone.AddSeries.RootDirModel(
+        {
+            Path: this.ui.pathInput.val()
+        });
+
+        this.collection.create(newDir, { wait: true });
+        this.fetch();
     },
 
     search: function (context) {

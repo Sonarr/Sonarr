@@ -1,5 +1,6 @@
 ﻿.nz-input-large {
     margin-top: 20px;
+    margin-bottom: 40px;
 }
 
     .nz-input-large input {
@@ -13,6 +14,12 @@
         padding-top: 14px;
         padding-left: 10px;
     }
+
+.result-list {
+    font-size: 18px;
+    text-align: left;
+
+}
 
 
    
