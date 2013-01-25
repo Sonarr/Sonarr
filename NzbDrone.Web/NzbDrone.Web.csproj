@@ -271,6 +271,8 @@
     <Content Include="_backboneApp\Content\Images\spinner.gif" />
     <Content Include="_backboneApp\Content\Images\thetvdb.png" />
     <Content Include="_backboneApp\Content\Menu.css" />
+    <Content Include="_backboneApp\JsLibraries\backbone.mutators.js" />
+    <Content Include="_backboneApp\JsLibraries\backbone.shortcuts.js" />
     <Content Include="_backboneApp\JsLibraries\bootstrap.js" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_both.png" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_desc_disabled.png" />
@@ -388,6 +390,7 @@
     <Content Include="_backboneApp\JsLibraries\backbone.debug.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.js" />
     <Content Include="_backboneApp\JsLibraries\jquery-ui-1.9.0.js" />
+    <Content Include="_backboneApp\JsLibraries\sugar.js" />
     <Content Include="_backboneApp\JsLibraries\underscore.js" />
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Logs.cshtml" />

@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Datastore
                         return;
                     }
                     logger.WarnException(
-                                         "Safe recovery failed. will attempts a more aggressive strategy. might case loss of data.",
+                                         "Safe recovery failed. will attempts a more aggressive strategy. might cause loss of data.",
                                          e);
                     sqlEngine.Repair(connectionString, RepairOption.DeleteCorruptedRows);
                     logger.Warn("Database was recovered. some data might have been lost");

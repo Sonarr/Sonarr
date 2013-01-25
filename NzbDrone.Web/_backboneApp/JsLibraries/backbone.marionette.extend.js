@@ -9,6 +9,7 @@
 
         jQuery.ajax({
             url: '_backboneApp//' + templateId + '.html',
+            cache:false,
             async: false
 
         }).done(function (data) {

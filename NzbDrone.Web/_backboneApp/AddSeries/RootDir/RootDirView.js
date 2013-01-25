@@ -45,6 +45,10 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
         'click #add-dir': 'addDir',
     },
 
+    shortcuts: {
+        'enter': 'addDir'
+    },
+
 
     collection: new NzbDrone.AddSeries.RootDirCollection(),
 

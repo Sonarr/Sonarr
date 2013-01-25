@@ -23,6 +23,7 @@ xcopy NzbDrone.Web\App_GlobalResources\*.*  %TARGET%\NzbDrone.Web\App_GlobalReso
 xcopy NzbDrone.Web\Content\*.*  %TARGET%\NzbDrone.Web\Content\ /E /V /I /Y
 xcopy NzbDrone.Web\Scripts\*.*  %TARGET%\NzbDrone.Web\Scripts\ /E /V /I /Y
 xcopy NzbDrone.Web\Views\*.*  %TARGET%\NzbDrone.Web\Views\ /E /V /I /Y
+xcopy NzbDrone.Web\_backboneApp\*.*  %TARGET%\NzbDrone.Web\_backboneApp\ /E /V /I /Y
 
 del %TARGET%\NzbDrone.Web\bin\*.xml /Q /F
 
