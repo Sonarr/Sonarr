@@ -13,13 +13,26 @@
         width: 40px;
         padding-top: 14px;
         padding-left: 10px;
+        margin-left: 30px;
     }
 
 .result-list {
     font-size: 18px;
     text-align: left;
-
 }
 
+    .result-list .well:hover {
+        background-color: #fcf8e3;
+    }
 
-   
+.result-item {
+    padding-left: 20px;
+}
+
+.result-list .result-item a {
+    font-size: 20px;
+}
+
+    .result-list .result-item a:hover {
+        text-decoration: none;
+    }
