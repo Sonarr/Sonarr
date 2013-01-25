@@ -392,8 +392,6 @@
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Logs.cshtml" />
     <Content Include="Views\Settings\Nzbget.cshtml" />
-    <Content Include="Views\Shared\_Bootstrap.cshtml" />
-    <Content Include="Views\AddSeries\bt.cshtml" />
     <Content Include="Views\V2\Index.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
