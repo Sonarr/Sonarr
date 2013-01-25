@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
 
@@ -6,13 +7,11 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 {
     public class UpgradeDiskSpecification
     {
-        private readonly EpisodeProvider _episodeProvider;
         private readonly QualityUpgradeSpecification _qualityUpgradeSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpgradeDiskSpecification(EpisodeProvider episodeProvider, QualityUpgradeSpecification qualityUpgradeSpecification)
+        public UpgradeDiskSpecification(QualityUpgradeSpecification qualityUpgradeSpecification)
         {
-            _episodeProvider = episodeProvider;
             _qualityUpgradeSpecification = qualityUpgradeSpecification;
         }
 
@@ -27,6 +26,12 @@ namespace NzbDrone.Core.Providers.DecisionEngine
                 logger.Trace("Comparing file quality with report. Existing file is {0} proper:{1}", file.Quality, file.Proper);
                 if (!_qualityUpgradeSpecification.IsSatisfiedBy(new QualityModel { Quality = file.Quality, Proper = file.Proper }, subject.Quality, subject.Series.QualityProfile.Cutoff))
                     return false;
+
+                if(subject.Quality.Proper && file.DateAdded < DateTime.Today.AddDays(-7))
+                {
+                    logger.Trace("Proper for old file, skipping: {0}", subject);
+                    return false;
+                }
             }
 
             return true;

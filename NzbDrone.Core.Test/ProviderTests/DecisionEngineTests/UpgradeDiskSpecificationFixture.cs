@@ -1,5 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -31,8 +32,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.Resolve<QualityUpgradeSpecification>();
             _upgradeDisk = Mocker.Resolve<UpgradeDiskSpecification>();
 
-            firstFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true };
-            secondFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true };
+            firstFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
+            secondFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
 
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = null } };
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = secondFile }, new Episode { EpisodeFile = null } };
@@ -120,6 +121,27 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             firstFile.Proper = false;
             parseResultSingle.Quality = new QualityModel(QualityTypes.WEBDL1080p, false);
             _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_when_episodeFile_was_added_more_than_7_days_ago()
+        {
+            firstFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_when_first_episodeFile_was_added_more_than_7_days_ago()
+        {
+            firstFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_when_second_episodeFile_was_added_more_than_7_days_ago()
+        {
+            secondFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
         }
     }
 }
