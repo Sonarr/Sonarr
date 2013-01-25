@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<RootDir>();
         }
 
-        public virtual void Add(RootDir rootDir)
+        public virtual RootDir Add(RootDir rootDir)
         {
             if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
                 throw new ArgumentException("Invalid path");
@@ -40,7 +40,11 @@ namespace NzbDrone.Core.Providers
             if (GetAll().Exists(r => DiskProvider.PathEquals(r.Path, rootDir.Path)))
                 throw new InvalidOperationException("Root directory already exist.");
 
-            _database.Insert(rootDir);
+            var id = _database.Insert(rootDir);
+            rootDir.Id = Convert.ToInt32(id);
+            rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
+
+            return rootDir;
         }
 
         public virtual void Remove(int rootDirId)
@@ -96,13 +100,13 @@ namespace NzbDrone.Core.Providers
             {
                 var pathRoot = _diskProvider.GetPathRoot(rootDir.Path);
 
-                if(!freeSpace.ContainsKey(pathRoot))
+                if (!freeSpace.ContainsKey(pathRoot))
                 {
                     try
                     {
                         freeSpace.Add(pathRoot, _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path)));
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.WarnException("Error getting fromm space for: " + pathRoot, ex);
                     }

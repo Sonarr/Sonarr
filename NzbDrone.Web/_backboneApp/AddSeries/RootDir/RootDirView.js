@@ -17,6 +17,7 @@ NzbDrone.AddSeries.RootDirItemView = Backbone.Marionette.ItemView.extend({
 
     removeDir: function () {
         this.model.destroy({ wait: true });
+        this.model.collection.remove(this.model);
     },
 
 });
@@ -74,7 +75,7 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
         });
 
         this.collection.create(newDir, { wait: true });
-        this.fetch();
+        this.collection.fetch();
     },
 
     search: function (context) {

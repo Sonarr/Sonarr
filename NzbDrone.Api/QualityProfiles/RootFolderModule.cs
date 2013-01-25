@@ -16,17 +16,24 @@ namespace NzbDrone.Api.QualityProfiles
 
             Get["/"] = x => GetRootFolders();
             Post["/"] = x => AddRootFolder();
+            Delete["/{id}"] = x => DeleteRootFolder((int)x.id);
         }
 
         private Response AddRootFolder()
         {
-            _rootDirProvider.Add(Request.Body.FromJson<RootDir>());
-            return new Response { StatusCode = HttpStatusCode.Created };
+            var dir = _rootDirProvider.Add(Request.Body.FromJson<RootDir>());
+            return dir.AsResponse(HttpStatusCode.Created);
         }
 
         private Response GetRootFolders()
         {
             return _rootDirProvider.AllWithFreeSpace().AsResponse();
+        }
+
+        private Response DeleteRootFolder(int folderId)
+        {
+            _rootDirProvider.Remove(folderId);
+            return new Response { StatusCode = HttpStatusCode.OK };
         }
     }
 }
