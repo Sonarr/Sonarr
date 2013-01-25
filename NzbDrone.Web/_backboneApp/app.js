@@ -2,6 +2,7 @@
 /// <reference path="JsLibraries/underscore.js" />
 /// <reference path="JsLibraries/sugar.js" />
 /// <reference path="JsLibraries/backbone.js" />
+/// <reference path="JsLibraries/handlebars.js" />
 /// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/backbone.mutators.js" />
 /// <reference path="JsLibraries/backbone.shortcuts.js" />
@@ -17,6 +18,10 @@ if (typeof console == "undefined") {
 
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
+
+_.templateSettings = {
+    interpolate: /\{\{([\s\S]+?)\}\}/g
+};
 
 NzbDrone.ModelBinder = new Backbone.ModelBinder();
 
@@ -36,18 +41,18 @@ NzbDrone.Routes = {
     },
 };
 
+http://localhost:65079/_backboneApp/Content
+    NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
-NzbDrone.Controller = Backbone.Marionette.Controller.extend({
-
-    addSeries: function () {
-        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout());
-    },
+        addSeries: function () {
+            NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout());
+        },
 
 
-    notFound: function () {
-        alert('route not found');
-    },
-});
+        notFound: function () {
+            alert('route not found');
+        },
+    });
 
 
 NzbDrone.Router = Backbone.Marionette.AppRouter.extend({

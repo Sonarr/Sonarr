@@ -1,14 +1,13 @@
 /// <reference path="../../app.js" />
 NzbDrone.AddSeries.RootDirModel = Backbone.Model.extend({
-    idAttribute: 'Id',
 
     mutators: {
-        FreeSpaceString: function () {
-        	return this.get('FreeSpace').bytes(2) + " Free";
+        freeSpaceString: function () {
+        	return this.get('freeSpace').bytes(2) + " Free";
         }
     },
 
     defaults: {
-        FreeSpace: 0,
+        freeSpace: 0,
     }
 });
