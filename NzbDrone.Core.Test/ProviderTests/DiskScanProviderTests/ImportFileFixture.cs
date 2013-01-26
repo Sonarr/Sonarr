@@ -401,7 +401,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         }
 
         [Test]
-        public void should_return_null_if_file_size_is_under_70MB_and_runTime_under_8_minutes()
+        public void should_return_null_if_file_size_is_under_70MB_and_runTime_under_3_minutes()
         {
             var series = Builder<Series>
                     .CreateNew()
@@ -419,13 +419,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Mocker.GetMock<MediaInfoProvider>()
                   .Setup(s => s.GetRunTime(path))
-                  .Returns(300);
+                  .Returns(60);
 
             Mocker.Resolve<DiskScanProvider>().ImportFile(series, path).Should().BeNull();
         }
 
         [Test]
-        public void should_import_if_file_size_is_under_70MB_but_runTime_over_8_minutes()
+        public void should_import_if_file_size_is_under_70MB_but_runTime_over_3_minutes()
         {
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
@@ -458,7 +458,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         }
 
         [Test]
-        public void should_import_if_file_size_is_over_70MB_but_runTime_under_8_minutes()
+        public void should_import_if_file_size_is_over_70MB_but_runTime_under_3_minutes()
         {
             With80MBFile();
 
@@ -477,7 +477,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Mocker.GetMock<MediaInfoProvider>()
                   .Setup(s => s.GetRunTime(path))
-                  .Returns(600);
+                  .Returns(60);
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });

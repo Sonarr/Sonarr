@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Providers
             long size = _diskProvider.GetSize(filePath);
             var runTime = _mediaInfoProvider.GetRunTime(filePath);
 
-            if(size < Constants.IgnoreFileSize && runTime < 480)
+            if(size < Constants.IgnoreFileSize && runTime < 180)
             {
                 Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
                 return null;
