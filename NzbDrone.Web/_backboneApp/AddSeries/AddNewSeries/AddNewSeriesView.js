@@ -5,7 +5,7 @@
 NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
 
     template: "AddSeries/AddNewSeries/SearchResultTemplate",
-    className: 'well',
+    className: 'search-item-view well',
     onRender: function () {
         NzbDrone.ModelBinder.bind(this.model, this.el);
     }
@@ -24,7 +24,7 @@ NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend(
 
 NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     template: "AddSeries/AddNewSeries/AddNewSeriesTemplate",
-    route : "Series/add/new",
+    route: "Series/add/new",
 
     ui: {
         seriesSearch: '.search input'
@@ -36,9 +36,8 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     collection: new NzbDrone.AddSeries.SearchResultCollection(),
 
-    onRender: function () {
 
-        //NzbDrone.Router.navigate(this.route, { trigger: true });
+    onRender: function () {
         console.log('binding auto complete');
         var self = this;
 
@@ -49,20 +48,27 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
                 self.$el.data('timeout', setTimeout(self.search, 500, self));
             });
 
-        this.searchResult.show(new NzbDrone.AddSeries.SearchResultView({ collection: this.collection }));
+        this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
+
     },
 
     search: function (context) {
 
         var term = context.ui.seriesSearch.val();
+        context.collection.reset();
 
-        if (term == "") {
-            context.collection.reset();
+        if (term != "") {
+            context.searchResult.show(new NzbDrone.Shared.SpinnerView());
+
+            context.collection.fetch({
+                data: $.param({ term: term }),
+                success: function () {
+                    context.searchResult.show(context.resultView);
+                }
+                
+            });
         } else {
-            console.log(term);
-            context.collection.fetch({ data: $.param({ term: term }) });
+            context.searchResult.close();
         }
-
-
     },
 });

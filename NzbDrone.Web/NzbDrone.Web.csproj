@@ -385,6 +385,8 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
+    <Content Include="_backboneApp\Shared\SpinnerView.js" />
     <None Include="_backboneApp\JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.collectionbinder.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.debug.js" />

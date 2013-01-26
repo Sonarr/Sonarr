@@ -29,6 +29,10 @@
     padding-left: 20px;
 }
 
+.result-item *[class*='icon-'] {
+    padding-right: 10px;
+}
+
 .result-list .result-item a {
     font-size: 20px;
 }

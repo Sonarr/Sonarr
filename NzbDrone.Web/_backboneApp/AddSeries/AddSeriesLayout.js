@@ -1,6 +1,7 @@
 ﻿/// <reference path="../app.js" />
 /// <reference path="AddNewSeries/AddNewSeriesView.js" />
 /// <reference path="RootDir/RootDirView.js" />
+/// <reference path="../Shared/SpinnerView.js" />
 
 NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     template: "AddSeries/addSeriesLayoutTemplate",

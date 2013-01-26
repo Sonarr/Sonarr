@@ -18,6 +18,7 @@ if (typeof console == "undefined") {
 
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
+NzbDrone.Shared = NzbDrone.module("Shared");
 
 _.templateSettings = {
     interpolate: /\{\{([\s\S]+?)\}\}/g
@@ -41,18 +42,17 @@ NzbDrone.Routes = {
     },
 };
 
-http://localhost:65079/_backboneApp/Content
-    NzbDrone.Controller = Backbone.Marionette.Controller.extend({
+NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
-        addSeries: function () {
-            NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout());
-        },
+    addSeries: function () {
+        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout());
+    },
 
 
-        notFound: function () {
-            alert('route not found');
-        },
-    });
+    notFound: function () {
+        alert('route not found');
+    },
+});
 
 
 NzbDrone.Router = Backbone.Marionette.AppRouter.extend({

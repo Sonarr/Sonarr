@@ -51,3 +51,10 @@ body {
     #footer a:hover {
         text-decoration: underline;
     }
+
+
+.nz-spinner {
+    font-size: 56px;
+    text-align: center;
+    padding: 30px;
+}
