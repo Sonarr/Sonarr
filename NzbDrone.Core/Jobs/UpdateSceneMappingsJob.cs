@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Jobs
 
         public TimeSpan DefaultInterval
         {
-            get { return TimeSpan.FromHours(12); }
+            get { return TimeSpan.FromHours(6); }
         }
 
         public virtual void Start(ProgressNotification notification, dynamic options)
