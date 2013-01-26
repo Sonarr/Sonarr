@@ -58,3 +58,12 @@ body {
     text-align: center;
     padding: 30px;
 }
+
+
+#error-region .alert {
+    margin: 10px;
+}
+
+#error-region .alert .icon-warning-sign {
+    padding-right: 10px;
+}

@@ -10,7 +10,7 @@
 /// <reference path="JsLibraries/backbone.marionette.extend.js" />
 /// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
-/// <reference path="errorHandler.js" />
+/// <reference path="nzbdrone.logging.js" />
 
 if (typeof console == "undefined") {
     window.console = { log: function () { } };
@@ -74,6 +74,7 @@ NzbDrone.addInitializer(function (options) {
 
     NzbDrone.addRegions({
         mainRegion: "#main-region",
+        errorRegion: "#error-region",
     });
 
     NzbDrone.Router = new NzbDrone.Router();
