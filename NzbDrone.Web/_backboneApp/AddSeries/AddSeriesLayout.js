@@ -28,7 +28,7 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
             $(this).tab('show');
         });
 
-        this.addNew.show(new NzbDrone.AddSeries.AddNewSeriesView());
+        this.addNew.show(new NzbDrone.AddSeries.AddNewSeriesView({ rootFolders: this.rootFolderCollection }));
         //this.importExisting.show(new NzbDrone.ImportExistingView());
         this.rootFolders.show(new NzbDrone.AddSeries.RootDirView({ collection: this.rootFolderCollection }));
 

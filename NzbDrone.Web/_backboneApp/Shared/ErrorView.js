@@ -47,22 +47,20 @@ window.onerror = function (msg, url, line) {
     }
 
     var suppressErrorAlert = false;
-    // If you return true, then error alerts (like in older versions of 
-    // Internet Explorer) will be suppressed.
     return suppressErrorAlert;
 };
 
-$(document).ajaxError(function (event, XMLHttpRequest, ajaxOptionsa) {
+$(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
+
+    if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) return;
 
     var errorView = NzbDrone.Shared.ErrorView.instance;
 
     var model = new NzbDrone.Shared.ErrorModel();
-    model.set('title', ajaxOptionsa.url + " : " + XMLHttpRequest.statusText);
-    model.set('message', XMLHttpRequest.responseText);
+    model.set('title', ajaxOptions.url + " : " + xmlHttpRequest.statusText);
+    model.set('message', xmlHttpRequest.responseText);
     errorView.collection.add(model);
 
     var suppressErrorAlert = false;
-    // If you return true, then error alerts (like in older versions of 
-    // Internet Explorer) will be suppressed.
     return suppressErrorAlert;
 });

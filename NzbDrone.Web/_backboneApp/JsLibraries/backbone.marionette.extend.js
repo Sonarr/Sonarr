@@ -1,4 +1,6 @@
-﻿_.extend(Marionette.TemplateCache.prototype, {
+﻿/// <reference path="handlebars.js" />
+
+_.extend(Marionette.TemplateCache.prototype, {
 
     loadTemplate: function (templateId) {
 
@@ -24,9 +26,9 @@
     }
 });
 
+_.extend(Marionette.TemplateCache.prototype, {
 
-_.extend(Marionette.View.prototype, {
-  
-    
-
+    compileTemplate: function (rawTemplate) {
+        return Handlebars.compile(rawTemplate);
+    }
 });

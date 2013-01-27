@@ -8,6 +8,7 @@
 /// <reference path="JsLibraries/backbone.shortcuts.js" />
 /// <reference path="JsLibraries/backbone.marionette.js" />
 /// <reference path="JsLibraries/backbone.marionette.extend.js" />
+/// <reference path="JsLibraries/backbone.marionette.viewswapper.js" />
 /// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
 /// <reference path="nzbdrone.logging.js" />
@@ -20,9 +21,11 @@ NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
 NzbDrone.Shared = NzbDrone.module("Shared");
 
+/*
 _.templateSettings = {
     interpolate: /\{\{([\s\S]+?)\}\}/g
 };
+*/
 
 NzbDrone.ModelBinder = new Backbone.ModelBinder();
 

@@ -182,6 +182,7 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
+    <Content Include="_backboneApp\AddSeries\AddNewSeries\SearchResultView.js" />
     <Content Include="_backboneApp\AddSeries\RootDir\RootDirTemplate.html" />
     <Content Include="_backboneApp\AddSeries\RootDir\RootDirView.js" />
     <Content Include="_backboneApp\AddSeries\RootDir\RootDirItemTemplate.html" />
@@ -396,7 +397,7 @@
     <Content Include="_backboneApp\JsLibraries\handlebars.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.js" />
     <Content Include="_backboneApp\JsLibraries\jquery-ui-1.9.0.js" />
-    <Content Include="_backboneApp\JsLibraries\marionette.viewswapper.js" />
+    <Content Include="_backboneApp\JsLibraries\backbone.marionette.viewswapper.js" />
     <Content Include="_backboneApp\JsLibraries\sugar.js" />
     <Content Include="_backboneApp\JsLibraries\underscore.js" />
     <Content Include="Views\System\Index.cshtml" />

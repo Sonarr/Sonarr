@@ -8,7 +8,7 @@
     }
 
     .nz-input-large *[class*='icon-'] {
-        font-size: 30px;
+        font-size: 28px;
         height: 30px;
         width: 40px;
         padding-top: 14px;
@@ -23,20 +23,29 @@
 
     .result-list .well:hover {
         background-color: #fcf8e3;
+        cursor: pointer;
     }
 
-.result-item {
-    padding-left: 20px;
-}
 
-.result-item *[class*='icon-'] {
-    padding-right: 10px;
+.search-item .accordion-heading *[class*='icon-'] {
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 .result-list .result-item a {
     font-size: 20px;
 }
 
-    .result-list .result-item a:hover {
-        text-decoration: none;
-    }
+.search-item a:hover {
+    text-decoration: none;
+}
+
+.search-item a {
+    color: #343434;
+}
+
+
+.search-item select {
+    font-size: 16px;
+}

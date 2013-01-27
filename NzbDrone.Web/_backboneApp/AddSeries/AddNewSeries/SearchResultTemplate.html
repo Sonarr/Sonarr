@@ -1,5 +1,22 @@
-﻿<div class="result-item row">
-    <div>
-        <a href="http://thetvdb.com/?tab=series&id={{id}}" target="_blank" class="icon-info-sign"></a>{{seriesName}} {{seriesYear}}
+﻿<div class="accordion-heading">
+    <a href="http://thetvdb.com/?tab=series&id={{id}}" target="_blank" class="icon-info-sign pull-left"></a>
+    <a class="accordion-toggle" data-toggle="collapse" href="#{{id}}">{{seriesName}} {{seriesYear}}</a>
+</div>
+<div id="{{id}}" class="accordion-body collapse">
+    <div class="accordion-inner">
+        <select class="root-dir-input span7" name="rootFolders">
+            {{#each rootFolders}}
+                <option value="{{id}}">{{attributes.path}}</option>
+            {{/each}}
+        </select>
+        <select class="quality-profile-input span2">
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+        </select>
+        <div class="btn btn-success pull-right icon-plus">
+        </div>
     </div>
+    <div name="overview"></div>
 </div>

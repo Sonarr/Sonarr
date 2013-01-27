@@ -1,26 +1,5 @@
 ﻿/// <reference path="../../app.js" />
-/// <reference path="../SearchResultModel.js" />
-/// <reference path="../SearchResultCollection.js" />
-
-NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
-
-    template: "AddSeries/AddNewSeries/SearchResultTemplate",
-    className: 'search-item-view well',
-    onRender: function () {
-        NzbDrone.ModelBinder.bind(this.model, this.el);
-    }
-
-});
-
-NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
-
-    itemView: NzbDrone.AddSeries.SearchItemView,
-
-    initialize: function () {
-        this.listenTo(this.collection, 'reset', this.render);
-    },
-
-});
+/// <reference path="SearchResultView.js" />
 
 NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     template: "AddSeries/AddNewSeries/AddNewSeriesTemplate",
@@ -36,6 +15,13 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     collection: new NzbDrone.AddSeries.SearchResultCollection(),
 
+    initialize: function (rootFolders) {
+        if (rootFolders === undefined) {
+            throw "rootFolder arg is required.";
+        }
+
+        this.rootFoldersCollection = rootFolders;
+    },
 
     onRender: function () {
         console.log('binding auto complete');
@@ -62,13 +48,22 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
             context.collection.fetch({
                 data: $.param({ term: term }),
-                success: function () {
-                    context.searchResult.show(context.resultView);
+                success: function (model) {
+                    context.resultUpdated(model, context);
                 }
-                
             });
+
         } else {
             context.searchResult.close();
         }
     },
+
+
+    resultUpdated: function (options, context) {
+        _.each(options.models, function (model) {
+            model.set('rootFolders', context.rootFoldersCollection.rootFolders.models);
+        });
+
+        context.searchResult.show(context.resultView);
+    }
 });
