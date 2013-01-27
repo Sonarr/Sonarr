@@ -4,16 +4,15 @@
 </div>
 <div id="{{id}}" class="accordion-body collapse">
     <div class="accordion-inner">
-        <select class="root-dir-input span7" name="rootFolders">
+        <select class="root-dir-input span7">
             {{#each rootFolders}}
                 <option value="{{id}}">{{attributes.path}}</option>
             {{/each}}
         </select>
         <select class="quality-profile-input span2">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
+               {{#each qualityProfiles}}
+                <option value="{{id}}">{{attributes.name}}</option>
+            {{/each}}
         </select>
         <div class="btn btn-success pull-right icon-plus">
         </div>

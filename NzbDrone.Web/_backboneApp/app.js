@@ -19,6 +19,7 @@ if (typeof console == "undefined") {
 
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
+NzbDrone.Quality = NzbDrone.module("Quality");
 NzbDrone.Shared = NzbDrone.module("Shared");
 
 /*
@@ -31,7 +32,7 @@ NzbDrone.ModelBinder = new Backbone.ModelBinder();
 
 
 NzbDrone.Constants = {
-    ApiRoot: '/api/'
+    ApiRoot: '/api'
 };
 
 NzbDrone.Events = {

@@ -1,4 +1,6 @@
 ﻿/// <reference path="../app.js" />
+/// <reference path="RootDir/RootDirCollection.js" />
+/// <reference path="../Quality/qualityProfileCollection.js" />
 NzbDrone.AddSeries.SearchResultModel = Backbone.Model.extend({
     mutators: {
         seriesYear: function () {
@@ -11,5 +13,11 @@ NzbDrone.AddSeries.SearchResultModel = Backbone.Model.extend({
                 return date;
             }
         }
+    },
+
+    defaults: {
+        qualityProfiles: new NzbDrone.Quality.QualityProfileCollection(),
+        rootFolders: new NzbDrone.AddSeries.RootDirCollection()
     }
+
 });

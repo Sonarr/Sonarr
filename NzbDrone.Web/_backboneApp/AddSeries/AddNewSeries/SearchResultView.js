@@ -8,6 +8,8 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
     className: 'search-item accordion-group',
     onRender: function () {
         this.listenTo(this.model, 'change', this.render);
+        //this.listenTo(this.model.get('rootFolders'), 'reset', this.render);
+        //this.listenTo(this.model.get('qualityProfiles'), 'reset', this.render);
     }
 
 });

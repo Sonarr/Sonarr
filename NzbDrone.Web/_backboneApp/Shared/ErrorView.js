@@ -57,7 +57,7 @@ $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
     var errorView = NzbDrone.Shared.ErrorView.instance;
 
     var model = new NzbDrone.Shared.ErrorModel();
-    model.set('title', ajaxOptions.url + " : " + xmlHttpRequest.statusText);
+    model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
     model.set('message', xmlHttpRequest.responseText);
     errorView.collection.add(model);
 

@@ -15,12 +15,17 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     collection: new NzbDrone.AddSeries.SearchResultCollection(),
 
-    initialize: function (rootFolders) {
-        if (rootFolders === undefined) {
+    initialize: function (options) {
+        if (options.rootFolders === undefined) {
             throw "rootFolder arg is required.";
         }
 
-        this.rootFoldersCollection = rootFolders;
+        if (options.qualityProfiles === undefined) {
+            throw "qualityProfiles arg is required.";
+        }
+
+        this.rootFoldersCollection = options.rootFolders;
+        this.qualityProfilesCollection = options.qualityProfiles;
     },
 
     onRender: function () {
@@ -61,7 +66,8 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     resultUpdated: function (options, context) {
         _.each(options.models, function (model) {
-            model.set('rootFolders', context.rootFoldersCollection.rootFolders.models);
+            model.set('rootFolders', context.rootFoldersCollection.models);
+            model.set('qualityProfiles', context.qualityProfilesCollection.models);
         });
 
         context.searchResult.show(context.resultView);
