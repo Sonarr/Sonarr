@@ -390,6 +390,7 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="_backboneApp\Series\SeriesModel.js" />
     <Content Include="_backboneApp\Shared\ErrorModel.js" />
     <Content Include="_backboneApp\Shared\ErrorTemplate.html" />
     <Content Include="_backboneApp\Shared\ErrorView.js" />

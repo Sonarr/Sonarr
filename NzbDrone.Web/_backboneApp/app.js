@@ -18,6 +18,7 @@ if (typeof console == "undefined") {
 }
 
 NzbDrone = new Backbone.Marionette.Application();
+NzbDrone.Series = NzbDrone.module("Series");
 NzbDrone.AddSeries = NzbDrone.module("AddSeries");
 NzbDrone.Quality = NzbDrone.module("Quality");
 NzbDrone.Shared = NzbDrone.module("Shared");
@@ -36,14 +37,14 @@ NzbDrone.Constants = {
 };
 
 NzbDrone.Events = {
-    DisplayInMainRegion: "DisplayInMainRegion",
+    DisplayInMainRegion: "DisplayInMainRegion"
 };
 
 
 NzbDrone.Routes = {
     Series: {
-        Add: 'series/add',
-    },
+        Add: 'series/add'
+    }
 };
 
 NzbDrone.Controller = Backbone.Marionette.Controller.extend({
@@ -55,7 +56,7 @@ NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
     notFound: function () {
         alert('route not found');
-    },
+    }
 });
 
 
@@ -78,7 +79,7 @@ NzbDrone.addInitializer(function (options) {
 
     NzbDrone.addRegions({
         mainRegion: "#main-region",
-        errorRegion: "#error-region",
+        errorRegion: "#error-region"
     });
 
     NzbDrone.Router = new NzbDrone.Router();

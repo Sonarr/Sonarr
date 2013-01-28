@@ -66,8 +66,8 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     resultUpdated: function (options, context) {
         _.each(options.models, function (model) {
-            model.set('rootFolders', context.rootFoldersCollection.models);
-            model.set('qualityProfiles', context.qualityProfilesCollection.models);
+            model.set('rootFolders', context.rootFoldersCollection);
+            model.set('qualityProfiles', context.qualityProfilesCollection);
         });
 
         context.searchResult.show(context.resultView);

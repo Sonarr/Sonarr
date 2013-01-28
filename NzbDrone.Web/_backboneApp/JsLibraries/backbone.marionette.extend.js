@@ -9,7 +9,7 @@ _.extend(Marionette.TemplateCache.prototype, {
 
         console.log("Loading template '" + templateId + "'");
 
-        jQuery.ajax({
+        $.ajax({
             url: '_backboneApp//' + templateId + '.html',
             cache:false,
             async: false

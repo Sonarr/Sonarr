@@ -59,6 +59,9 @@
     <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.2.2.0\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.3.4.6.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.0.15.3\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -93,6 +96,7 @@
     <Compile Include="Extentions\Serializer.cs" />
     <Compile Include="QualityProfiles\RootFolderModule.cs" />
     <Compile Include="Series\SeriesModule.cs" />
+    <Compile Include="Series\SeriesLookupModule.cs" />
     <Compile Include="ErrorManagment\ApiException.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ErrorManagment\ErrorHandler.cs" />
