@@ -78,8 +78,13 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
             Path: this.ui.pathInput.val()
         });
 
-        this.collection.create(newDir, { wait: true });
-        this.collection.fetch();
+        var self = this;
+
+        this.collection.create(newDir, {
+            wait: true, success: function () {
+                self.collection.fetch();
+            }
+        });
     },
 
     search: function (context) {

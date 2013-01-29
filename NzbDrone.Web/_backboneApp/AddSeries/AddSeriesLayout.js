@@ -22,14 +22,49 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     },
 
 
+    events: {
+        "click .nav-tabs a[href='#add-new']": 'showAddNew',
+        "click .nav-tabs a[href='#import-existing']": 'showImport',
+        "click .nav-tabs a[href='#root-folders']": 'showRootFolders',
+    },
+
+    showAddNew: function (e) {
+        if (e) e.preventDefault();
+
+        this.ui.addNewTab.tab('show');
+        NzbDrone.Router.navigate('series/add/new');
+
+    },
+
+    showImport: function (e) {
+        if (e) e.preventDefault();
+
+        this.ui.importTab.tab('show');
+        NzbDrone.Router.navigate('series/add/import');
+    },
+
+    showRootFolders: function (e) {
+        if (e) e.preventDefault();
+
+        this.ui.rootDirTab.tab('show');
+        NzbDrone.Router.navigate('series/add/rootfolders');
+    },
+
     rootFolderCollection: new NzbDrone.AddSeries.RootDirCollection(),
     qualityProfileCollection: new NzbDrone.Quality.QualityProfileCollection(),
 
+
+    initialize: function (context, action, query) {
+        if (action) {
+            this.action = action.toLowerCase();
+        }
+
+        if (query) {
+            this.query = query.toLowerCase();
+        }
+    },
+
     onRender: function () {
-        this.$('#myTab a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
 
         this.qualityProfileCollection.fetch();
 
@@ -42,11 +77,24 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
         NzbDrone.vent.listenTo(this.rootFolderCollection, 'reset', this.evaluateActions, this);
     },
 
+    onShow: function () {
+        switch (this.action) {
+            case 'import':
+                this.showImport();
+                break;
+            case 'rootfolders':
+                this.showRootFolders();
+                break;
+            default:
+                this.showAddNew();
+        }
+    },
+
     evaluateActions: function () {
         if (this.rootFolderCollection.length == 0) {
             this.ui.addNewTab.hide();
             this.ui.importTab.hide();
-            this.ui.rootDirTab.tab('show');
+            this.showRootFolders();
         } else {
             this.ui.addNewTab.show();
             this.ui.importTab.show();

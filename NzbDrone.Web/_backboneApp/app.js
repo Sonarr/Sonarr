@@ -41,16 +41,10 @@ NzbDrone.Events = {
 };
 
 
-NzbDrone.Routes = {
-    Series: {
-        Add: 'series/add'
-    }
-};
-
 NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
-    addSeries: function () {
-        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout());
+    addSeries: function (action, query) {
+        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
     },
 
 
@@ -66,6 +60,7 @@ NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
     // "someMethod" must exist at controller.someMethod
     appRoutes: {
         "series/add": "addSeries",
+        "series/add/:action(/:query)": "addSeries",
         ":whatever": "notFound"
 
     }
