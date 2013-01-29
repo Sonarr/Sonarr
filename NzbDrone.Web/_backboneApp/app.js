@@ -11,7 +11,6 @@
 /// <reference path="JsLibraries/backbone.marionette.viewswapper.js" />
 /// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
-/// <reference path="nzbdrone.logging.js" />
 
 if (typeof console == "undefined") {
     window.console = { log: function () { } };

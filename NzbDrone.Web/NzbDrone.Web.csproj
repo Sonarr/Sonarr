@@ -201,7 +201,6 @@
     <Content Include="_backboneApp\Quality\qualityProfileCollection.js" />
     <Content Include="_backboneApp\Quality\qualityTypeModel.js" />
     <Content Include="_backboneApp\Quality\qualityTypeCollection.js" />
-    <Content Include="_backboneApp\nzbdrone.logging.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.extend.js" />
     <Compile Include="_backboneApp\CassetteConfiguration.cs" />
     <Compile Include="Controllers\ImageController.cs" />

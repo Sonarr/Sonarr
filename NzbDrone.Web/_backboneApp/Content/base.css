@@ -41,14 +41,14 @@ body {
     text-align: center;
 }
 
-#footer {
+#footer-region {
     font-size: 16px;
     text-decoration: none;
     font-weight: lighter;
     margin: 20px 0 30px 0;
 }
 
-    #footer a:hover {
+    #footer-region a:hover {
         text-decoration: underline;
     }
 

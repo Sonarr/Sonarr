@@ -15,17 +15,16 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     },
 
     ui: {
-        addNewTab: ".nav-tabs a[href='#add-new']",
-        importTab: ".nav-tabs a[href='#import-existing']",
-        rootDirTab: ".nav-tabs a[href='#root-folders']",
-        rootTabRequiredMessage: "",
+        addNewTab: ".x-add-new-tab",
+        importExistingTab: ".x-import-existing-tab",
+        rootFoldersTab: ".x-root-folders-tab",
     },
 
 
     events: {
-        "click .nav-tabs a[href='#add-new']": 'showAddNew',
-        "click .nav-tabs a[href='#import-existing']": 'showImport',
-        "click .nav-tabs a[href='#root-folders']": 'showRootFolders',
+        "click .x-add-new-tab": 'showAddNew',
+        "click .x-import-existing-tab": 'showImport',
+        "click .x-root-folders-tab": 'showRootFolders',
     },
 
     showAddNew: function (e) {
@@ -39,14 +38,14 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     showImport: function (e) {
         if (e) e.preventDefault();
 
-        this.ui.importTab.tab('show');
+        this.ui.importExistingTab.tab('show');
         NzbDrone.Router.navigate('series/add/import');
     },
 
     showRootFolders: function (e) {
         if (e) e.preventDefault();
 
-        this.ui.rootDirTab.tab('show');
+        this.ui.rootFoldersTab.tab('show');
         NzbDrone.Router.navigate('series/add/rootfolders');
     },
 
@@ -93,11 +92,11 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     evaluateActions: function () {
         if (this.rootFolderCollection.length == 0) {
             this.ui.addNewTab.hide();
-            this.ui.importTab.hide();
+            this.ui.importExistingTab.hide();
             this.showRootFolders();
         } else {
             this.ui.addNewTab.show();
-            this.ui.importTab.show();
+            this.ui.importExistingTab.show();
         }
     },
 

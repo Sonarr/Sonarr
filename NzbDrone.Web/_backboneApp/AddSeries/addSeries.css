@@ -21,9 +21,8 @@
     text-align: left;
 }
 
-    .result-list .well:hover {
+    .result-list .accordion-heading:hover {
         background-color: #fcf8e3;
-        cursor: pointer;
     }
 
 
@@ -31,6 +30,10 @@
     padding-right: 5px;
     padding-top: 10px;
     padding-left: 10px;
+}
+
+.search-item .accordion-body .in {
+    background-color: #fcf8e3;
 }
 
 .result-list .result-item a {

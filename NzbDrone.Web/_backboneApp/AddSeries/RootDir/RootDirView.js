@@ -8,14 +8,14 @@ NzbDrone.AddSeries.RootDirItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
 
     events: {
-        'click #remove-dir': 'removeDir',
+        'click .x-remove': 'removeFolder',
     },
 
     onRender: function () {
         NzbDrone.ModelBinder.bind(this.model, this.el);
     },
 
-    removeDir: function () {
+    removeFolder: function () {
         this.model.destroy({ wait: true });
         this.model.collection.remove(this.model);
     },
@@ -34,7 +34,7 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
     route: "series/add/rootdir",
 
     ui: {
-        pathInput: '.path input'
+        pathInput: '.x-path input'
     },
 
     regions: {
@@ -42,37 +42,20 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
     },
 
     events: {
-        'click #add-dir': 'addDir',
-    },
-
-    shortcuts: {
-        'enter': 'addDir'
+        'click .x-add': 'addFolder',
     },
 
 
     collection: new NzbDrone.AddSeries.RootDirCollection(),
 
     onRender: function () {
-        var self = this;
-
-        //NzbDrone.Router.navigate(this.route, { trigger: true });
-
-        /*
-                this.ui.seriesSearch
-                    .data('timeout', null)
-                    .keyup(function () {
-                        clearTimeout(self.$el.data('timeout'));
-                        self.$el.data('timeout', setTimeout(self.search, 500, self));
-                    });
-        */
 
         this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
-
         this.collection.fetch();
     },
 
 
-    addDir: function () {
+    addFolder: function () {
         var newDir = new NzbDrone.AddSeries.RootDirModel(
         {
             Path: this.ui.pathInput.val()
