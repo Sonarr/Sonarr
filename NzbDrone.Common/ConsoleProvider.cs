@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace NzbDrone.Common
 {
@@ -10,6 +11,7 @@ namespace NzbDrone.Common
             while (true)
             {
                 Console.ReadLine();
+                Thread.Sleep(250);
             }
         }
 
