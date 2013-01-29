@@ -1,0 +1,9 @@
+﻿<div class="alert alert-{{level}}">
+    <button type="button" class="close x-close">×</button>
+    <i class="{{iconClass}}" /><strong>{{title}}</strong>
+    {{#if preFormatted}}
+        <pre> {{message}}</pre>
+    {{else}}
+        {{message}}
+    {{/if}}
+</div>

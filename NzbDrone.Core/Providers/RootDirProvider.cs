@@ -85,6 +85,7 @@ namespace NzbDrone.Core.Providers
             foreach (var rootDir in rootDirs)
             {
                 rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
+                rootDir.UnmappedFolders = GetUnmappedFolders(rootDir.Path);
             }
 
             return rootDirs;

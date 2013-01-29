@@ -3,6 +3,7 @@
 /// <reference path="RootDir/RootDirView.js" />
 /// <reference path="../Quality/qualityProfileCollection.js" />
 /// <reference path="../Shared/SpinnerView.js" />
+/// <reference path="ImportExistingSeries/ImportSeriesView.js" />
 
 NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     template: "AddSeries/addSeriesLayoutTemplate",
@@ -33,14 +34,14 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
         this.qualityProfileCollection.fetch();
 
         this.addNew.show(new NzbDrone.AddSeries.AddNewSeriesView({ rootFolders: this.rootFolderCollection, qualityProfiles: this.qualityProfileCollection }));
-        //this.importExisting.show(new NzbDrone.ImportExistingView());
+        this.importExisting.show(new NzbDrone.AddSeries.ExistingFolderListView({ collection: this.rootFolderCollection }));
         this.rootFolders.show(new NzbDrone.AddSeries.RootDirView({ collection: this.rootFolderCollection }));
 
         NzbDrone.vent.listenTo(this.rootFolderCollection, 'add', this.evaluateActions, this);
         NzbDrone.vent.listenTo(this.rootFolderCollection, 'remove', this.evaluateActions, this);
         NzbDrone.vent.listenTo(this.rootFolderCollection, 'reset', this.evaluateActions, this);
     },
-            
+
     evaluateActions: function () {
         if (this.rootFolderCollection.length == 0) {
             this.ui.addNewTab.hide();

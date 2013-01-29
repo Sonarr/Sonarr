@@ -1,10 +1,10 @@
-﻿using Nancy;
+﻿using System.Linq;
+using Nancy;
 using NzbDrone.Api.Extentions;
 using NzbDrone.Core.Providers;
-using NzbDrone.Api.QualityType;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Api.QualityProfiles
+namespace NzbDrone.Api.RootFolders
 {
     public class RootDirModule : NzbDroneApiModule
     {

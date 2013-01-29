@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using System.Collections.Generic;
+using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
@@ -12,5 +13,8 @@ namespace NzbDrone.Core.Repository
 
         [ResultColumn]
         public ulong FreeSpace { get; set; }
+
+        [Ignore]
+        public List<string> UnmappedFolders { get; set; }
     }
 }

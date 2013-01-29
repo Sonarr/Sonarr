@@ -31,7 +31,7 @@ namespace NzbDrone.Web.Backbone.NzbDrone
 
             bundles.Add<ScriptBundle>(NZBDRONE, new[]{
                       APP_PATH + "\\AddSeries\\AddSeriesLayout.js",
-                      APP_PATH + "\\Shared\\ErrorView.js",
+                      APP_PATH + "\\Shared\\NotificationView.js",
 
             
             });
