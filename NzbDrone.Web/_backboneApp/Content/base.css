@@ -60,10 +60,10 @@ body {
 }
 
 
-#error-region .alert {
+#notification-region .alert {
     margin: 10px;
 }
 
-#error-region .alert .icon-warning-sign {
+#notification-region i {
     padding-right: 10px;
 }

@@ -38,7 +38,17 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
             path: path
         });
 
-        model.save();
+        model.save(undefined, {
+            success: function () {
+                var notificationModel = new NzbDrone.Shared.NotificationModel({
+                    title: 'Added',
+                    message: title,
+                    level: 'success'
+                });
+
+                NzbDrone.Shared.NotificationCollectionView.Instance.collection.add(notificationModel);
+            }
+        });
     }
 
 
@@ -53,7 +63,7 @@ NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend(
     initialize: function () {
         this.listenTo(this.collection, 'reset', this.render);
     },
-    
-    
+
+
 
 });

@@ -74,7 +74,7 @@ NzbDrone.addInitializer(function (options) {
 
     NzbDrone.addRegions({
         mainRegion: "#main-region",
-        errorRegion: "#error-region"
+        notificationRegion: "#notification-region"
     });
 
     NzbDrone.Router = new NzbDrone.Router();

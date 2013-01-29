@@ -32,7 +32,7 @@ NzbDrone.Shared.NotificationCollectionView = Backbone.Marionette.CollectionView.
 });
 
 NzbDrone.addInitializer(function (options) {
-    NzbDrone.errorRegion.show(NzbDrone.Shared.NotificationCollectionView.Instance);
+    NzbDrone.notificationRegion.show(NzbDrone.Shared.NotificationCollectionView.Instance);
 });
 
 
