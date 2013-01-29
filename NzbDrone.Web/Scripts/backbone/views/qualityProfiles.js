@@ -18,7 +18,6 @@
         var el = $(this.el);
 
         var checked = $(target).attr('checked') != undefined;
-        var id = this.model.get("Id");
         
         var qualities = _.clone(this.model.get("Qualities"));
         _.each(qualities, function (qualityType) {
@@ -28,14 +27,14 @@
                 qualityType.Allowed = checked;
                
                 //Find cutoff dropdown
-                var cutoff = $(el).find('.cutoff');
+                var cutoffLocal = $(el).find('.cutoff');
 
                 if (checked) {
-                    $('<option>' + qualityType.Name + '</option>').val(qualityId).appendTo(cutoff);
+                    $('<option>' + qualityType.Name + '</option>').val(qualityId).appendTo(cutoffLocal);
                 }
                 
                 else {
-                    $(cutoff).find('option[value="' + qualityId + '"]').remove();
+                    $(cutoffLocal).find('option[value="' + qualityId + '"]').remove();
                 }
 
                 //Todo: auto-sort by weight (which is not the value)
@@ -44,6 +43,13 @@
                 //}));
             }
         });
+
+        var cutoff = $(el).find('.cutoff');
+        if (cutoff[0].length === 0)
+            this.model.set({ "Cutoff": 0 });
+
+        if (cutoff[0].length === 1)
+            this.model.set({ "Cutoff": cutoff.val() });
 
         this.model.set({ "Qualities": qualities });
         this.model.save();
