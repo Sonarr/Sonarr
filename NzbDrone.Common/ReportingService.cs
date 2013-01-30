@@ -109,14 +109,11 @@ namespace NzbDrone.Common
         {
             var config = new ExceptronConfiguration
                              {
-                                     ApiKey = "CB230C312E5C4FF38B4FB9644B05E60G",
-                                     ThrowExceptions = !EnvironmentProvider.IsProduction,
+                                 ApiKey = "CB230C312E5C4FF38B4FB9644B05E60G",
+                                 ThrowExceptions = !EnvironmentProvider.IsProduction,
                              };
 
-            ExceptronClient = new ExceptronClient(config)
-                                  {
-                                      ApplicationVersion = new EnvironmentProvider().Version.ToString()
-                                  };
+            ExceptronClient = new ExceptronClient(config, new EnvironmentProvider().Version);
         }
 
         private static void VerifyDependencies()
