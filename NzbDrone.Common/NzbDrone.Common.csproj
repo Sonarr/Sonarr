@@ -74,7 +74,9 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -100,6 +102,10 @@
     <Compile Include="RestProvider.cs" />
     <Compile Include="SecurityProvider.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="SysTray\SysTrayApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SysTray\SysTrayProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

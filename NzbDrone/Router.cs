@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mime;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.SysTray;
 using NzbDrone.Model;
+using NzbDrone.Providers;
 
 namespace NzbDrone
 {
@@ -17,16 +20,18 @@ namespace NzbDrone
         private readonly ConsoleProvider _consoleProvider;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly SysTrayProvider _sysTrayProvider;
 
         public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider,
                         ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider,
-                        ProcessProvider processProvider)
+                        ProcessProvider processProvider, SysTrayProvider sysTrayProvider)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
             _environmentProvider = environmentProvider;
             _processProvider = processProvider;
+            _sysTrayProvider = sysTrayProvider;
         }
 
         public void Route(IEnumerable<string> args)
@@ -56,7 +61,14 @@ namespace NzbDrone
                     {
                         logger.Trace("Console selected");
                         _applicationServer.Start();
-                        _consoleProvider.WaitForClose();
+                        if(ConsoleProvider.IsConsoleApplication)
+                            _consoleProvider.WaitForClose();
+
+                        else
+                        {
+                            _sysTrayProvider.Start();
+                        }
+
                         break;
                     }
                 case ApplicationMode.InstallService:

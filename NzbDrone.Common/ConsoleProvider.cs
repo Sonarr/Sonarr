@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 
 namespace NzbDrone.Common
 {
     public class ConsoleProvider
     {
+        public static bool IsConsoleApplication
+        {
+            get { return Console.In != StreamReader.Null; }
+        }
+
         public virtual void WaitForClose()
         {
             while (true)
             {
                 Console.ReadLine();
-                Thread.Sleep(250);
             }
         }
 
