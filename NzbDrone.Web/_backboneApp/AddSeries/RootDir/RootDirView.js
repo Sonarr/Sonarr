@@ -1,10 +1,11 @@
-﻿/// <reference path="../../app.js" />
+﻿'use strict;'
+/// <reference path="../../app.js" />
 /// <reference path="RootDirModel.js" />
 /// <reference path="RootDirCollection.js" />
 
 NzbDrone.AddSeries.RootDirItemView = Backbone.Marionette.ItemView.extend({
 
-    template: "AddSeries/RootDir/RootDirItemTemplate",
+    template: 'AddSeries/RootDir/RootDirItemTemplate',
     tagName: 'tr',
 
     events: {
@@ -30,15 +31,15 @@ NzbDrone.AddSeries.RootDirListView = Backbone.Marionette.CollectionView.extend({
 });
 
 NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
-    template: "AddSeries/RootDir/RootDirTemplate",
-    route: "series/add/rootdir",
+    template: 'AddSeries/RootDir/RootDirTemplate',
+    route: 'series/add/rootdir',
 
     ui: {
         pathInput: '.x-path input'
     },
 
     regions: {
-        currentDirs: "#current-dirs",
+        currentDirs: '#current-dirs',
     },
 
     events: {
@@ -74,7 +75,7 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
 
         var term = context.ui.seriesSearch.val();
 
-        if (term == "") {
+        if (term === "") {
             context.collection.reset();
         } else {
             console.log(term);

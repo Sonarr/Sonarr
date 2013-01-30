@@ -46,12 +46,12 @@ window.onerror = function (msg, url, line) {
         var a = document.createElement('a');
         a.href = url;
 
-        model.set('title', a.pathname.split('/').pop() + " : " + line);
+        model.set('title', a.pathname.split('/').pop() + ' : ' + line);
         model.set('message', msg);
         model.set('level', 'error');
         NzbDrone.Shared.NotificationCollectionView.Instance.collection.add(model);
     } catch (error) {
-        alert("Couldn't report JS error. " + error);
+        alert('Couldn\'t report JS error. ' + error);
     }
 
     var suppressErrorAlert = false;
@@ -60,7 +60,9 @@ window.onerror = function (msg, url, line) {
 
 $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
 
-    if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) return;
+    if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {
+        return;
+    }
     var model = new NzbDrone.Shared.NotificationModel();
     model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
     model.set('message', xmlHttpRequest.responseText);

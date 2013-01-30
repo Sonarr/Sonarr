@@ -12,15 +12,15 @@
 /// <reference path="JsLibraries/backbone.modelbinder.js" />
 /// <reference path="JsLibraries/bootstrap.js" />
 
-if (typeof console == "undefined") {
+if (typeof console === undefined) {
     window.console = { log: function () { } };
 }
 
 NzbDrone = new Backbone.Marionette.Application();
-NzbDrone.Series = NzbDrone.module("Series");
-NzbDrone.AddSeries = NzbDrone.module("AddSeries");
-NzbDrone.Quality = NzbDrone.module("Quality");
-NzbDrone.Shared = NzbDrone.module("Shared");
+NzbDrone.Series = NzbDrone.module('Series');
+NzbDrone.AddSeries = NzbDrone.module('AddSeries');
+NzbDrone.Quality = NzbDrone.module('Quality');
+NzbDrone.Shared = NzbDrone.module('Shared');
 
 /*
 _.templateSettings = {
@@ -36,7 +36,7 @@ NzbDrone.Constants = {
 };
 
 NzbDrone.Events = {
-    DisplayInMainRegion: "DisplayInMainRegion"
+    DisplayInMainRegion: 'DisplayInMainRegion'
 };
 
 
@@ -58,9 +58,9 @@ NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
     controller: new NzbDrone.Controller(),
     // "someMethod" must exist at controller.someMethod
     appRoutes: {
-        "series/add": "addSeries",
-        "series/add/:action(/:query)": "addSeries",
-        ":whatever": "notFound"
+        'series/add': 'addSeries',
+        'series/add/:action(/:query)': 'addSeries',
+        ':whatever': 'notFound'
 
     }
 
@@ -68,12 +68,12 @@ NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
 NzbDrone.addInitializer(function (options) {
 
-    console.log("starting application");
+    console.log('starting application');
 
 
     NzbDrone.addRegions({
-        mainRegion: "#main-region",
-        notificationRegion: "#notification-region"
+        mainRegion: '#main-region',
+        notificationRegion: '#notification-region'
     });
 
     NzbDrone.Router = new NzbDrone.Router();

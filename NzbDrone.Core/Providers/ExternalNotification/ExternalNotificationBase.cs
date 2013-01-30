@@ -1,6 +1,4 @@
-﻿using System;
-using NLog;
-using NzbDrone.Core.Model;
+﻿using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 

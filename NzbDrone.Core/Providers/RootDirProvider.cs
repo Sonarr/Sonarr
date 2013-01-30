@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
 
@@ -70,7 +68,7 @@ namespace NzbDrone.Core.Providers
             {
                 if (!_seriesProvider.SeriesPathExists(seriesFolder))
                 {
-                    results.Add(seriesFolder.Normalize());
+                    results.Add(new DirectoryInfo(seriesFolder.Normalize()).Name);
                 }
             }
 

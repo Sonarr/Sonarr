@@ -6,29 +6,31 @@
 /// <reference path="ImportExistingSeries/ImportSeriesView.js" />
 
 NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
-    template: "AddSeries/addSeriesLayoutTemplate",
+    template: 'AddSeries/addSeriesLayoutTemplate',
 
     regions: {
-        addNew: "#add-new",
-        importExisting: "#import-existing",
-        rootFolders: "#root-folders"
+        addNew: '#add-new',
+        importExisting: '#import-existing',
+        rootFolders: '#root-folders'
     },
 
     ui: {
-        addNewTab: ".x-add-new-tab",
-        importExistingTab: ".x-import-existing-tab",
-        rootFoldersTab: ".x-root-folders-tab",
+        addNewTab: '.x-add-new-tab',
+        importExistingTab: '.x-import-existing-tab',
+        rootFoldersTab: '.x-root-folders-tab'
     },
 
 
     events: {
-        "click .x-add-new-tab": 'showAddNew',
-        "click .x-import-existing-tab": 'showImport',
-        "click .x-root-folders-tab": 'showRootFolders',
+        'click .x-add-new-tab': 'showAddNew',
+        'click .x-import-existing-tab': 'showImport',
+        'click .x-root-folders-tab': 'showRootFolders'
     },
 
     showAddNew: function (e) {
-        if (e) e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
 
         this.ui.addNewTab.tab('show');
         NzbDrone.Router.navigate('series/add/new');
@@ -36,14 +38,18 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     },
 
     showImport: function (e) {
-        if (e) e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
 
         this.ui.importExistingTab.tab('show');
         NzbDrone.Router.navigate('series/add/import');
     },
 
     showRootFolders: function (e) {
-        if (e) e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
 
         this.ui.rootFoldersTab.tab('show');
         NzbDrone.Router.navigate('series/add/rootfolders');
@@ -90,7 +96,7 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     },
 
     evaluateActions: function () {
-        if (this.rootFolderCollection.length == 0) {
+        if (this.rootFolderCollection.length === 0) {
             this.ui.addNewTab.hide();
             this.ui.importExistingTab.hide();
             this.showRootFolders();

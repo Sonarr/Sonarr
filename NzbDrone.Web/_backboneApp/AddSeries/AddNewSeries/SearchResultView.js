@@ -1,4 +1,6 @@
-﻿/// <reference path="../../app.js" />
+﻿'use strict';
+/*global NzbDrone, Backbone*/
+/// <reference path="../../app.js" />
 /// <reference path="../SearchResultModel.js" />
 /// <reference path="../../Series/SeriesModel.js" />
 /// <reference path="../SearchResultCollection.js" />
@@ -6,11 +8,12 @@
 NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
 
     template: "AddSeries/AddNewSeries/SearchResultTemplate",
-    className: 'search-item accordion-group',
+    className: 'search-item',
 
     ui: {
         qualityProfile: '.x-quality-profile',
-        rootFolder: '.x-root-folder'
+        rootFolder: '.x-root-folder',
+        addButton: '.x-add'
     },
 
     events: {
@@ -38,6 +41,8 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
             path: path
         });
 
+        var self = this;
+
         model.save(undefined, {
             success: function () {
                 var notificationModel = new NzbDrone.Shared.NotificationModel({
@@ -47,6 +52,7 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
                 });
 
                 NzbDrone.Shared.NotificationCollectionView.Instance.collection.add(notificationModel);
+                self.close();
             }
         });
     }
@@ -62,8 +68,5 @@ NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend(
 
     initialize: function () {
         this.listenTo(this.collection, 'reset', this.render);
-    },
-
-
-
+    }
 });

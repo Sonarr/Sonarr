@@ -13,7 +13,7 @@ NzbDrone.Quality.QualityProfileModel = Backbone.Model.extend({
         //};
         //Todo: Cutoff should be something that is allowed (double check)
         this.validators.cutoff = function (value) {
-            return value != null ? { isValid: true } : { isValid: false, message: 'You must have a valid cutoff' };
+            return value !== null ? { isValid: true } : { isValid: false, message: 'You must have a valid cutoff' };
         };
     },
 

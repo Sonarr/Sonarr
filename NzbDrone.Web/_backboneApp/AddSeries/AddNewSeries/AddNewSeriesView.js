@@ -1,27 +1,28 @@
-﻿/// <reference path="../../app.js" />
+﻿'use strict;'
+/// <reference path="../../app.js" />
 /// <reference path="SearchResultView.js" />
 
 NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
-    template: "AddSeries/AddNewSeries/AddNewSeriesTemplate",
-    route: "Series/add/new",
+    template: 'AddSeries/AddNewSeries/AddNewSeriesTemplate',
+    route: 'Series/add/new',
 
     ui: {
         seriesSearch: '.search input'
     },
 
     regions: {
-        searchResult: "#search-result",
+        searchResult: '#search-result',
     },
 
     collection: new NzbDrone.AddSeries.SearchResultCollection(),
 
     initialize: function (options) {
         if (options.rootFolders === undefined) {
-            throw "rootFolder arg is required.";
+            throw 'rootFolder arg. is required.';
         }
 
         if (options.qualityProfiles === undefined) {
-            throw "qualityProfiles arg is required.";
+            throw 'qualityProfiles arg. is required.';
         }
 
         this.rootFoldersCollection = options.rootFolders;
@@ -31,12 +32,12 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     onRender: function () {
         console.log('binding auto complete');
         var self = this;
-
+        
         this.ui.seriesSearch
             .data('timeout', null)
             .keyup(function () {
-                clearTimeout(self.$el.data('timeout'));
-                self.$el.data('timeout', setTimeout(self.search, 500, self));
+                window.clearTimeout(self.$el.data('timeout'));
+                self.$el.data('timeout', window.setTimeout(self.search, 500, self));
             });
 
         this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
@@ -48,7 +49,7 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         var term = context.ui.seriesSearch.val();
         context.collection.reset();
 
-        if (term != "") {
+        if (term !== '') {
             context.searchResult.show(new NzbDrone.Shared.SpinnerView());
 
             context.collection.fetch({

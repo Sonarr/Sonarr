@@ -1,21 +1,22 @@
-﻿<div class="accordion-heading">
-    <a href="http://thetvdb.com/?tab=series&id={{id}}" target="_blank" class="icon-info-sign pull-left"></a>
-    <a class="accordion-toggle" data-toggle="collapse" href="#{{id}}">{{seriesName}} {{seriesYear}}</a>
-</div>
-<div id="{{id}}" class="accordion-body collapse">
-    <div class="accordion-inner">
-        <select class="span7 x-root-folder">
-            {{#each rootFolders.models}}
+﻿<div class="accordion-group">
+    <div class="accordion-heading">
+        <a href="http://thetvdb.com/?tab=series&id={{id}}" target="_blank" class="icon-info-sign pull-left"></a>
+        <a class="accordion-toggle" data-toggle="collapse" href="#{{id}}">{{seriesName}} {{seriesYear}}</a>
+    </div>
+    <div id="{{id}}" class="accordion-body collapse">
+        <div class="accordion-inner">
+            <select class="span7 x-root-folder">
+                {{#each rootFolders.models}}
                 <option value="{{id}}">{{attributes.path}}</option>
-            {{/each}}
-        </select>
-        <select class="span2 x-quality-profile">
-            {{#each qualityProfiles.models}}
+                {{/each}}
+            </select>
+            <select class="span2 x-quality-profile">
+                {{#each qualityProfiles.models}}
                 <option value="{{id}}">{{attributes.name}}</option>
-            {{/each}}
-        </select>
-        <div class="btn btn-success pull-right icon-plus x-add">
+                {{/each}}
+            </select>
+            <div class="btn btn-success pull-right icon-plus x-add">
+            </div>
         </div>
     </div>
-    <div name="overview"></div>
 </div>
