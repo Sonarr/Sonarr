@@ -17,10 +17,13 @@ if (typeof console === undefined) {
 }
 
 NzbDrone = new Backbone.Marionette.Application();
-NzbDrone.Series = NzbDrone.module('Series');
-NzbDrone.AddSeries = NzbDrone.module('AddSeries');
-NzbDrone.Quality = NzbDrone.module('Quality');
-NzbDrone.Shared = NzbDrone.module('Shared');
+NzbDrone.Series = {};
+NzbDrone.AddSeries = {};
+NzbDrone.AddSeries.New = {};
+NzbDrone.AddSeries.Existing = {};
+NzbDrone.AddSeries.RootFolders = {};
+NzbDrone.Quality = {};
+NzbDrone.Shared = {};
 
 /*
 _.templateSettings = {

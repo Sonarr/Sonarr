@@ -2,7 +2,7 @@
 /// <reference path="NotificationModel.js" />
 
 NzbDrone.Shared.NotificationItemView = Backbone.Marionette.ItemView.extend({
-    template: "Shared/NotificationTemplate",
+    template: 'Shared/NotificationTemplate',
 
     events: {
         'click .x-close': 'kill'
@@ -67,7 +67,7 @@ $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
     model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
     model.set('message', xmlHttpRequest.responseText);
     model.set('level', 'error');
-    NzbDrone.Shared.NotificationCollectionView.Instance.collection.add(model);
+    NzbDrone.Shared.NotificationCollectionView.Instance.collection.push(model);
 
     var suppressErrorAlert = false;
     return suppressErrorAlert;

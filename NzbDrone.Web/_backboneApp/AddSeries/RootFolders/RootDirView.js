@@ -5,7 +5,7 @@
 
 NzbDrone.AddSeries.RootDirItemView = Backbone.Marionette.ItemView.extend({
 
-    template: 'AddSeries/RootDir/RootDirItemTemplate',
+    template: 'AddSeries/RootFolders/RootDirItemTemplate',
     tagName: 'tr',
 
     events: {
@@ -31,7 +31,7 @@ NzbDrone.AddSeries.RootDirListView = Backbone.Marionette.CollectionView.extend({
 });
 
 NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
-    template: 'AddSeries/RootDir/RootDirTemplate',
+    template: 'AddSeries/RootFolders/RootDirTemplate',
     route: 'series/add/rootdir',
 
     ui: {

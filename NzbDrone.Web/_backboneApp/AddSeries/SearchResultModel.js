@@ -1,5 +1,5 @@
 ﻿/// <reference path="../app.js" />
-/// <reference path="RootDir/RootDirCollection.js" />
+/// <reference path="RootFolders/RootDirCollection.js" />
 /// <reference path="../Quality/qualityProfileCollection.js" />
 NzbDrone.AddSeries.SearchResultModel = Backbone.Model.extend({
     mutators: {

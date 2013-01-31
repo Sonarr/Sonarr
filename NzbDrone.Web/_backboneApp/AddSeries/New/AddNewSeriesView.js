@@ -3,7 +3,7 @@
 /// <reference path="SearchResultView.js" />
 
 NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
-    template: 'AddSeries/AddNewSeries/AddNewSeriesTemplate',
+    template: 'AddSeries/New/AddNewSeriesTemplate',
     route: 'Series/add/new',
 
     ui: {
@@ -16,6 +16,8 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
     collection: new NzbDrone.AddSeries.SearchResultCollection(),
 
+
+
     initialize: function (options) {
         if (options.rootFolders === undefined) {
             throw 'rootFolder arg. is required.';
@@ -24,6 +26,7 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         if (options.qualityProfiles === undefined) {
             throw 'qualityProfiles arg. is required.';
         }
+
 
         this.rootFoldersCollection = options.rootFolders;
         this.qualityProfilesCollection = options.qualityProfiles;

@@ -1,12 +1,4 @@
 ﻿/// <reference path="../app.js" />
-
-NzbDrone.Shared.NotificationCollection = Backbone.Collection.extend({
-
-    model: NzbDrone.Shared.NotificationModel,
-
-});
-
-
 NzbDrone.Shared.NotificationModel = Backbone.Model.extend({
 
     mutators: {
@@ -39,4 +31,11 @@ NzbDrone.Shared.NotificationModel = Backbone.Model.extend({
         "title": "",
         "message": "",
     }
+});
+
+
+NzbDrone.Shared.NotificationCollection = Backbone.Collection.extend({
+
+    model: NzbDrone.Shared.NotificationModel,
+
 });

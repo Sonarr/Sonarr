@@ -1,9 +1,9 @@
 ﻿/// <reference path="../app.js" />
-/// <reference path="AddNewSeries/AddNewSeriesView.js" />
-/// <reference path="RootDir/RootDirView.js" />
+/// <reference path="New/AddNewSeriesView.js" />
+/// <reference path="RootFolders/RootDirView.js" />
 /// <reference path="../Quality/qualityProfileCollection.js" />
 /// <reference path="../Shared/SpinnerView.js" />
-/// <reference path="ImportExistingSeries/ImportSeriesView.js" />
+/// <reference path="Existing/ImportSeriesView.js" />
 
 NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     template: 'AddSeries/addSeriesLayoutTemplate',
@@ -74,12 +74,12 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
         this.qualityProfileCollection.fetch();
 
         this.addNew.show(new NzbDrone.AddSeries.AddNewSeriesView({ rootFolders: this.rootFolderCollection, qualityProfiles: this.qualityProfileCollection }));
-        this.importExisting.show(new NzbDrone.AddSeries.ExistingFolderListView({ collection: this.rootFolderCollection }));
+        this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView({ collection: this.rootFolderCollection }));
         this.rootFolders.show(new NzbDrone.AddSeries.RootDirView({ collection: this.rootFolderCollection }));
 
-        NzbDrone.vent.listenTo(this.rootFolderCollection, 'add', this.evaluateActions, this);
-        NzbDrone.vent.listenTo(this.rootFolderCollection, 'remove', this.evaluateActions, this);
-        NzbDrone.vent.listenTo(this.rootFolderCollection, 'reset', this.evaluateActions, this);
+        this.listenTo(this.rootFolderCollection, 'add', this.evaluateActions, this);
+        this.listenTo(this.rootFolderCollection, 'remove', this.evaluateActions, this);
+        this.listenTo(this.rootFolderCollection, 'reset', this.evaluateActions, this);
     },
 
     onShow: function () {

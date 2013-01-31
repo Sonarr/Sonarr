@@ -7,7 +7,7 @@
 
 NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
 
-    template: "AddSeries/AddNewSeries/SearchResultTemplate",
+    template: "AddSeries/New/SearchResultTemplate",
     className: 'search-item',
 
     ui: {
