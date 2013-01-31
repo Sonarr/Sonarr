@@ -181,6 +181,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="SignalR">
       <HintPath>..\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
     </Reference>
@@ -587,6 +590,21 @@
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tvdb\Tvdb.cs" />
+    <Compile Include="Tvdb\Tvdb.Sync.cs" />
+    <Compile Include="Tvdb\TvdbActor.cs" />
+    <Compile Include="Tvdb\TvdbAsyncResult.cs" />
+    <Compile Include="Tvdb\TvdbBanner.cs" />
+    <Compile Include="Tvdb\TvdbEpisodes.cs" />
+    <Compile Include="Tvdb\TvdbLanguages.cs" />
+    <Compile Include="Tvdb\TvdbMirrors.cs" />
+    <Compile Include="Tvdb\TvdbSeriesBase.cs" />
+    <Compile Include="Tvdb\TvdbSeriesFull.cs" />
+    <Compile Include="Tvdb\TvdbSeriesSearch.cs" />
+    <Compile Include="Tvdb\TvdbSeriesSearchItem.cs" />
+    <Compile Include="Tvdb\TvdbServerTime.cs" />
+    <Compile Include="Tvdb\TvdbUpdate.cs" />
+    <Compile Include="Tvdb\TvdbUpdateItems.cs" />
     <Compile Include="WebTimer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -91,7 +91,7 @@ namespace NzbDrone.Web.Controllers
                     if (tvdbResult != null)
                     {
                         title = tvdbResult.SeriesName;
-                        seriesId = tvdbResult.Id;
+                        seriesId = tvdbResult.id;
                     }
 
                     result.ExistingSeries.Add(new Tuple<string, string, int>(folder, title, seriesId));
@@ -147,33 +147,8 @@ namespace NzbDrone.Web.Controllers
         [JsonErrorFilter]
         public JsonResult LookupSeries(string term)
         {
-            try
-            {
-                var tvDbResults = _tvDbProvider.SearchSeries(term).Select(r => new TvDbSearchResultModel
-                {
-                    Id = r.Id,
-                    Title = r.SeriesName,
-                    DisplayedTitle = r.FirstAired.Year > 1900 && !r.SeriesName.EndsWith("(" + r.FirstAired.Year + ")")
-                                                    ? string.Format("{0} ({1})", r.SeriesName, r.FirstAired.Year)
-                                                    : r.SeriesName,
-                    Banner = r.Banner.BannerPath,
-                    Url = String.Format("http://www.thetvdb.com/?tab=series&id={0}", r.Id)
-                }).ToList();
 
-                return Json(tvDbResults, JsonRequestBehavior.AllowGet);
-            }
-
-            catch (TvdbNotAvailableException ex)
-            {
-                logger.WarnException("Unable to lookup series on TheTVDB", ex);
-                return JsonNotificationResult.Info("Lookup Failed", "TheTVDB is not available at this time.");
-            }
-
-            catch (Exception ex)
-            {
-                logger.WarnException("Unknown Error when looking up series on TheTVDB", ex);
-                return JsonNotificationResult.Info("Lookup Failed", "Unknown error while connecting to TheTVDB");
-            }
+            return JsonNotificationResult.Info("Lookup Failed", "Unknown error while connecting to TheTVDB");
 
         }
 
