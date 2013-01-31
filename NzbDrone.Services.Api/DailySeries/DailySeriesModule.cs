@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Nancy;
-using NzbDrone.Services.Api.NancyExtensions;
+using NzbDrone.Services.Api.Extensions;
 
 namespace NzbDrone.Services.Api.DailySeries
 {
     public class DailySeriesModule : NancyModule
     {
-        private readonly DailySeriesProvider _dailySeriesProvider;
+        private readonly DailySeriesRepository _dailySeriesProvider;
 
-        public DailySeriesModule(DailySeriesProvider dailySeriesProvider)
+        public DailySeriesModule(DailySeriesRepository dailySeriesProvider)
             : base("/dailyseries")
         {
             _dailySeriesProvider = dailySeriesProvider;

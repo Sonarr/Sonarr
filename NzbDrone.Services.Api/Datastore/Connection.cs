@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using MongoDB.Driver;
@@ -10,7 +11,7 @@ namespace NzbDrone.Services.Api.Datastore
     {
         public MongoDatabase GetMainDb()
         {
-            var db = GetMongoDb("mongodb://nzbdrone:h53huDrAzufRe8a3@ds035147.mongolab.com:35147/?safe=true;wtimeoutMS=2000", "services-dev");
+            var db = GetMongoDb(ConfigurationManager.ConnectionStrings["MongoLab"].ConnectionString, "services-dev");
             return db;
         }
 

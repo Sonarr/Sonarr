@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Web;
 using Nancy;
 using Nancy.Responses;
-using ServiceStack.Text;
+using Newtonsoft.Json;
 
-namespace NzbDrone.Services.Api.NancyExtensions
+namespace NzbDrone.Services.Api.Extensions
 {
     public static class JsonExtensions
     {
         public static T FromJson<T>(this Stream body)
         {
             var reader = new StreamReader(body, true);
-            return JsonSerializer.DeserializeFromReader<T>(reader);
+            body.Position = 0;
+            var value = reader.ReadToEnd();
+            return JsonConvert.DeserializeObject<T>(value, Serializer.Settings);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            var jsonResponse = new JsonResponse<TModel>(model, new ServiceStackSerializer()) { StatusCode = statusCode };
+            var jsonResponse = new JsonResponse<TModel>(model, new NancyJsonSerializer()) { StatusCode = statusCode };
             return jsonResponse;
         }
     }

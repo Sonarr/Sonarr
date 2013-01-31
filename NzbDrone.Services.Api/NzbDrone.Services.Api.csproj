@@ -62,11 +62,11 @@
     <Reference Include="Nancy.Hosting.Aspnet">
       <HintPath>..\packages\Nancy.Hosting.Aspnet.0.15.3\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text">
-      <HintPath>..\packages\ServiceStack.Text.3.9.33\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -93,11 +93,13 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="DailySeries\DailySeriesModel.cs" />
     <Compile Include="DailySeries\DailySeriesModule.cs" />
-    <Compile Include="DailySeries\DailySeriesProvider.cs" />
+    <Compile Include="DailySeries\DailySeriesRepository.cs" />
     <Compile Include="Datastore\Connection.cs" />
-    <Compile Include="NancyExtensions\JsonExtensions.cs" />
-    <Compile Include="NancyExtensions\ServiceStackSerializer.cs" />
+    <Compile Include="Extensions\NancyJsonSerializer.cs" />
+    <Compile Include="Extensions\RequestExtensions.cs" />
+    <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneMapping\SceneMappingModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -5,6 +5,8 @@
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=5C7F3FB135E52A44B9447C48B2EEEE92/AbsolutePath/@EntryValue">C:\Dropbox\Git\NzbDrone\NzbDrone.sln.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/RelativePriority/@EntryValue">1</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003AC_003A_005CDropbox_005CGit_005CNzbDrone_005CNzbDrone_002Esln_002EDotSettings/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003AC_003A_005CDropbox_005CGit_005CNzbDrone_005CNzbDrone_002Esln_002EDotSettings/RelativePriority/@EntryValue">2</s:Double>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=26E712D4B91E2E49A0E92C0AFE6FF57E/Entry/=38860059D7978D4DAF1997C7CBC46A78/EntryName/@EntryValue">Backbone model</s:String>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=26E712D4B91E2E49A0E92C0AFE6FF57E/Entry/=38860059D7978D4DAF1997C7CBC46A78/Position/@EntryValue">5</s:Int64>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4F6A0CA32FE60746A73308F7E39A63C1/@KeyIndexDefined">True</s:Boolean>

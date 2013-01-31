@@ -7,16 +7,16 @@ using MongoDB.Driver.Builders;
 
 namespace NzbDrone.Services.Api.DailySeries
 {
-    public class DailySeriesProvider
+    public class DailySeriesRepository
     {
         private readonly MongoDatabase _mongoDb;
 
-        public DailySeriesProvider(MongoDatabase mongoDb)
+        public DailySeriesRepository(MongoDatabase mongoDb)
         {
             _mongoDb = mongoDb;
         }
 
-        public DailySeriesProvider()
+        public DailySeriesRepository()
         {
         }
 
@@ -35,6 +35,24 @@ namespace NzbDrone.Services.Api.DailySeries
         {
             var query = Query<DailySeriesModel>.EQ(d => d.Id, seriesId);
             return _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).Count(query) > 0;
+        }
+
+        public void Insert(DailySeriesModel dailySeries)
+        {
+            _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).Insert(dailySeries);
+        }
+
+        public void Delete(int seriesId)
+        {
+            var query = Query<DailySeriesModel>.EQ(d => d.Id, seriesId);
+            _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).Remove(query);
+        }
+
+        public void TogglePublic(int seriesId, bool status)
+        {
+            var query = Query<DailySeriesModel>.EQ(d => d.Id, seriesId);
+            var update = Update<DailySeriesModel>.Set(d => d.Public, status);
+            _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).Update(query, update);
         }
     }
 }

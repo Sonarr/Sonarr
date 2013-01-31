@@ -7,7 +7,7 @@ using Autofac;
 using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
-using NzbDrone.Services.Api.NancyExtensions;
+using NzbDrone.Services.Api.Extensions;
 
 namespace NzbDrone.Services.Api
 {
@@ -34,7 +34,7 @@ namespace NzbDrone.Services.Api
         {
             get
             {
-                return NancyInternalConfiguration.WithOverrides(c => c.Serializers.Add(typeof(ServiceStackSerializer)));
+                return NancyInternalConfiguration.WithOverrides(c => c.Serializers.Add(typeof(NancyJsonSerializer)));
             }
         }
     }
