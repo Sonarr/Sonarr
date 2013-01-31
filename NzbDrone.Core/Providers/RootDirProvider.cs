@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Providers
             var id = _database.Insert(rootDir);
             rootDir.Id = Convert.ToInt32(id);
             rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
+            rootDir.UnmappedFolders = GetUnmappedFolders(rootDir.Path);
 
             return rootDir;
         }
