@@ -1,23 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
+using System.Net;
 using System.Xml.Linq;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NLog;
 using NLog.Config;
-using SubSonic.DataProviders;
-using SubSonic.Repository;
 
 namespace NzbDrone.Tvdb.Offline
 {
-    class Program
+
+    public class TVDbService
     {
-        static Logger _logger = LogManager.GetLogger("Main");
+        public List<string> GetSeriesId()
+        {
+            var startYear = 1900;
+
+            var xml = new WebClient().DownloadString("http://www.thetvdb.com/api/Updates.php?type=all&time=" + startYear);
+
+
+            var Ids = XElement.Load("http://www.thetvdb.com/api/Updates.php?type=all&time=1990")
+                .Descendants("Items").Select(i=>i.Elements(""))
+
+
+
+        }
+    }
+
+
+
+    public class Program
+    {
+        static readonly Logger _logger = LogManager.GetLogger("Main");
         private static DirectoryInfo _target;
         private static DirectoryInfo _temp;
         private static bool _cleanDb;
@@ -27,21 +43,10 @@ namespace NzbDrone.Tvdb.Offline
         {
             SetupLogger();
             _logger.Info("Starting TVDB Offline...");
-            ProcessArguments(args);
-
-            if (_cleanDb)
-            {
-                CleanUpDb();
-            }
-            else
-            {
-                CreateNewDb();
-            }
-
 
             if (!String.IsNullOrWhiteSpace(dbPath))
             {
-                using (ZipFile zip = new ZipFile())
+                using (var zip = new ZipFile())
                 {
                     _logger.Info("Compressing database file");
                     zip.CompressionLevel = CompressionLevel.BestCompression;
@@ -142,150 +147,11 @@ namespace NzbDrone.Tvdb.Offline
 
         }
 
-        private static IRepository InitSubsonic(bool purge, string name = "")
-        {
-            dbPath = Path.Combine(_temp.FullName, "series_data" + name + ".db");
-            _logger.Info("Loading Database file at {0}", dbPath);
-
-            if (purge && File.Exists(dbPath))
-            {
-                File.Delete(dbPath);
-            }
-
-            string logConnectionString = String.Format("Data Source={0};Version=3;", dbPath);
-            var provider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
-
-            return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
-        }
-
-        private static void ProcessArguments(string[] args)
-        {
-            if (args == null || args.Count() == 0 || string.IsNullOrWhiteSpace(args[0]))
-            {
-                _logger.Warn("Please provide a valid target path");
-                Environment.Exit(0);
-            }
-
-            _target = new DirectoryInfo(args[0]);
-
-            if (!_target.Exists)
-            {
-                _logger.Warn("Directory '{0}' doesn't exist.", _target.FullName);
-                Environment.Exit(0);
-            }
-
-            if (args.Count() > 1 && !string.IsNullOrWhiteSpace(args[1]) && args[1].Trim().ToLower() == "/clean")
-            {
-                _cleanDb = true;
-            }
-            _logger.Info("Target Path '[{0}]'", _target.FullName);
-
-            _logger.Debug("Creating temporary folder");
-            _temp = _target.CreateSubdirectory("temp");
-        }
 
         private static void SetupLogger()
         {
-
             LogManager.ThrowExceptions = true;
-
-            try
-            {
-                LogManager.Configuration = new XmlLoggingConfiguration("log.config", false);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
-        }
-
-        private static void CleanUpDb()
-        {
-            _logger.Info("Cleaning up database");
-            var repo = InitSubsonic(false);
-            var series = repo.All<Series>().ToList();
-            var cleanSeries = new List<Series>();
-            decimal progress = 0;
-
-            foreach (var item in series)
-            {
-                Console.Write("\r{0:0.0}%", progress * 100 / series.Count());
-
-                var clean = CleanSeries(item);
-
-                if (clean != null)
-                {
-                    cleanSeries.Add(clean);
-                }
-
-
-                progress++;
-            }
-
-            repo = InitSubsonic(true, "_cleanTitle");
-            _logger.Info("Writing clean list to database");
-            repo.AddMany(cleanSeries);
-        }
-
-
-        private static Series CleanSeries(Series series)
-        {
-            if (String.IsNullOrWhiteSpace(series.Title))
-            {
-                return null;
-            }
-
-            if (String.IsNullOrWhiteSpace(series.AirsDayOfWeek))
-            {
-                series.AirsDayOfWeek = null;
-            }
-            else
-            {
-                //if (series.AirsDayOfWeek.ToLower() == "daily")
-                //{
-                //    series.WeekDay = 8;
-                //}
-                //else
-                //{
-                //    DayOfWeek weekdayEnum;
-                //    if (Enum.TryParse(series.AirsDayOfWeek, true, out weekdayEnum))
-                //    {
-                //        series.WeekDay = (int)weekdayEnum;
-                //    }
-                //    else
-                //    {
-                //        _logger.Warn("Can't parse weekday enum " + series.AirsDayOfWeek);
-                //    }
-                //}
-                if (String.IsNullOrWhiteSpace(series.AirsDayOfWeek))
-                {
-                    series.AirsDayOfWeek = null;
-                }
-            }
-
-            if (String.IsNullOrWhiteSpace(series.Status))
-            {
-                series.Active = null;
-            }
-            else if (series.Status == "Ended")
-            {
-                series.Active = false;
-            }
-            else if (series.Status == "Continuing")
-            {
-                series.Active = true;
-            }
-            else
-            {
-                _logger.Warn("Can't parse status " + series.Status);
-            }
-
-            series.Status = null;
-            series.Overview = null;
-            series.CleanTitle = null;
-
-            return series;
+            LogManager.Configuration = new XmlLoggingConfiguration("nlog.config", false);
         }
     }
 }
