@@ -9,12 +9,9 @@ using Newtonsoft.Json;
 
 namespace NzbDrone.Services.Api.SceneMapping
 {
-    public class SceneMappingModel
+    public class SceneMappingJsonModel
     {
-        public const string CollectionName = "SceneMappings";
-
-        [BsonId]
-        public ObjectId MapId { get; set; }
+        public String MapId { get; set; }
 
         public string CleanTitle { get; set; }
 

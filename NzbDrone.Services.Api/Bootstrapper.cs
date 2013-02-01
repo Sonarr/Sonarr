@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using AutoMapper;
 using Autofac;
+using MongoDB.Bson;
 using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
 using NzbDrone.Services.Api.Extensions;
+using NzbDrone.Services.Api.SceneMapping;
 
 namespace NzbDrone.Services.Api
 {
@@ -36,6 +39,20 @@ namespace NzbDrone.Services.Api
             {
                 return NancyInternalConfiguration.WithOverrides(c => c.Serializers.Add(typeof(NancyJsonSerializer)));
             }
+        }
+
+        protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
+        {
+            InitializeAutomapper();
+        }
+
+        public static void InitializeAutomapper()
+        {
+            Mapper.CreateMap<SceneMappingModel, SceneMappingJsonModel>()
+                  .ForMember(dest => dest.MapId, opt => opt.MapFrom(src => src.MapId.ToString()));
+
+            Mapper.CreateMap<SceneMappingJsonModel, SceneMappingModel>()
+                  .ForMember(dest => dest.MapId, opt => opt.MapFrom(src => ObjectId.Parse(src.MapId)));
         }
     }
 }

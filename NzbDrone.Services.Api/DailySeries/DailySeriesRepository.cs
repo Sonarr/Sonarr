@@ -31,10 +31,10 @@ namespace NzbDrone.Services.Api.DailySeries
             return _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).Find(query).ToList();
         }
 
-        public Boolean IsDaily(int seriesId)
+        public DailySeriesModel Find(int seriesId)
         {
             var query = Query<DailySeriesModel>.EQ(d => d.Id, seriesId);
-            return _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).Count(query) > 0;
+            return _mongoDb.GetCollection<DailySeriesModel>(DailySeriesModel.CollectionName).FindOne(query);
         }
 
         public void Insert(DailySeriesModel dailySeries)

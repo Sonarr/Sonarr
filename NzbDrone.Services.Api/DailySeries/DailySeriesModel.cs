@@ -14,10 +14,8 @@ namespace NzbDrone.Services.Api.DailySeries
         [BsonId]
         public Int32 Id { get; set; }
 
-        [BsonElement("t")]
         public String Title { get; set; }
 
-        [BsonElement("p")]
         public Boolean Public { get; set; }
     }
 }

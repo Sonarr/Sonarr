@@ -9,12 +9,12 @@ namespace NzbDrone.Services.Api.DailySeries
 {
     public class DailySeriesModule : NancyModule
     {
-        private readonly DailySeriesRepository _dailySeriesProvider;
+        private readonly DailySeriesRepository _dailySeriesRepository;
 
-        public DailySeriesModule(DailySeriesRepository dailySeriesProvider)
+        public DailySeriesModule(DailySeriesRepository dailySeriesRepository)
             : base("/dailyseries")
         {
-            _dailySeriesProvider = dailySeriesProvider;
+            _dailySeriesRepository = dailySeriesRepository;
 
             Get["/"] = x => OnGet();
             Get["/all"] = x => OnGet();
@@ -24,12 +24,14 @@ namespace NzbDrone.Services.Api.DailySeries
 
         private Response OnGet()
         {
-            return _dailySeriesProvider.Public().AsResponse();
+            return _dailySeriesRepository.Public().AsResponse();
         }
 
         private Response OnGet(int seriesId)
         {
-            return _dailySeriesProvider.IsDaily(seriesId).AsResponse();
+            var result = _dailySeriesRepository.Find(seriesId) != null;
+
+            return result.AsResponse();
         }
     }
 }
