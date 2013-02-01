@@ -187,7 +187,6 @@
     <Content Include="_backboneApp\AddSeries\Existing\UnmappedFolderCompositeViewTemplatate.html" />
     <Content Include="_backboneApp\AddSeries\New\SearchResultView.js" />
     <Content Include="_backboneApp\AddSeries\Existing\ImportSeriesView.js" />
-    <Content Include="_backboneApp\AddSeries\Existing\RootFoldersCompositeView.html" />
     <Content Include="_backboneApp\AddSeries\Existing\UnmappedFolderModel.js" />
     <Content Include="_backboneApp\AddSeries\Existing\RootFolderCompositeViewTemplate.html" />
     <Content Include="_backboneApp\AddSeries\RootFolders\RootDirTemplate.html" />

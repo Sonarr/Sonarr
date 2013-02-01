@@ -3,7 +3,9 @@ NzbDrone.Shared.NotificationModel = Backbone.Model.extend({
 
     mutators: {
         pre: function () {
-            return this.get('message').lines().lenght > 1;
+            if (this.get('message')) {
+                return this.get('message').lines().lenght > 1;
+            }
         },
         iconClass: function () {
 

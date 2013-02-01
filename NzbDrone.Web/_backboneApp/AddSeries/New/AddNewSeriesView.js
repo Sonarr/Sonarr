@@ -35,7 +35,7 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     onRender: function () {
         console.log('binding auto complete');
         var self = this;
-        
+
         this.ui.seriesSearch
             .data('timeout', null)
             .keyup(function () {
@@ -48,14 +48,16 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
     },
 
     search: function (context) {
-
+        
+        context.abortExistingRequest();
+        
         var term = context.ui.seriesSearch.val();
         context.collection.reset();
-
+        
         if (term !== '') {
             context.searchResult.show(new NzbDrone.Shared.SpinnerView());
 
-            context.collection.fetch({
+            context.currentSearchRequest = context.collection.fetch({
                 data: $.param({ term: term }),
                 success: function (model) {
                     context.resultUpdated(model, context);
@@ -64,6 +66,13 @@ NzbDrone.AddSeries.AddNewSeriesView = Backbone.Marionette.Layout.extend({
 
         } else {
             context.searchResult.close();
+        }
+    },
+
+    abortExistingRequest : function () {
+        if (this.currentSearchRequest && this.currentSearchRequest.readyState > 0 && this.currentSearchRequest.readyState < 4) {
+            console.log('aborting previous pending search request.');
+            this.currentSearchRequest.abort();
         }
     },
 

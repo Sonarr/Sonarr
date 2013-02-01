@@ -67,3 +67,17 @@ body {
 #notification-region i {
     padding-right: 10px;
 }
+
+
+.line {
+    height: 4em;
+    line-height: 4em;
+}
+
+    .line > [class^="icon-"], .line > [class*=" icon-"] {
+        margin-top: 1em;
+        height: 1em;
+        line-height: 1em;
+    }
+
+

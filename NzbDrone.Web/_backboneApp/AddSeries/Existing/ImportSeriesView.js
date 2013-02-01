@@ -21,14 +21,30 @@ NzbDrone.AddSeries.Existing.UnmappedFolderCompositeView = Backbone.Marionette.Co
         'click .x-search': 'search'
     },
 
+    ui: {
+        searchButton: '.x-search'
+    },
+
     initialize: function () {
         this.collection = new NzbDrone.AddSeries.SearchResultCollection();
     },
 
     search: function () {
 
+        var icon = this.ui.searchButton.find('icon');
+
+        icon.removeClass('icon-search').addClass('icon-spin icon-spinner disabled');
+
+
+
         this.collection.fetch({
-            data: $.param({ term: 'simpsons' })
+            data: $.param({ term: this.model.get('folder') }),
+            success: function () {
+                icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+            },
+            fail:function() {
+                icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+            }
         });
     }
 

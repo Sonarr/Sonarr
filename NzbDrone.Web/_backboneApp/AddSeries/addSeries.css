@@ -52,3 +52,20 @@
 .search-item select {
     font-size: 16px;
 }
+
+/*Existing*/
+.unmapped-folder-view {
+    background: #fcf8e3;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+    .unmapped-folder-view .folder-header {
+        font-size: 30px;
+        font-weight:300
+
+    }
+
+.existing-root-folder-view, h1 {
+    padding: 10px 0px 20px 0px;
+}
