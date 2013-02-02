@@ -62,9 +62,17 @@
 
     .unmapped-folder-view .folder-header {
         font-size: 30px;
-        font-weight:300
-
+        font-weight: 300;
     }
+
+        .unmapped-folder-view .folder-header input {
+            margin-bottom: 0;
+        }
+
+        .unmapped-folder-view .folder-header select {
+            margin-bottom: 0;
+            font-size: 16px;
+        }
 
 .existing-root-folder-view, h1 {
     padding: 10px 0px 20px 0px;

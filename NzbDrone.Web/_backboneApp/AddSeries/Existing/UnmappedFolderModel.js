@@ -9,14 +9,23 @@ NzbDrone.AddSeries.Existing.UnmappedFolderCollection = Backbone.Collection.exten
     model: NzbDrone.AddSeries.Existing.UnmappedFolderModel,
 
 
-    importArray: function (unmappedFolderArray) {
+    importItems: function (rootFolderModel, quality) {
 
-        if (!unmappedFolderArray) {
+        if (!rootFolderModel) {
             throw "folder array is required";
         }
 
-        _.each(unmappedFolderArray, function (folder) {
-            this.push(new NzbDrone.AddSeries.Existing.UnmappedFolderModel({ folder: folder }));
+        if (!quality) {
+            throw "quality is required";
+        }
+
+        this.reset();
+
+        var qualityCollection = quality;
+        var rootFolder = rootFolderModel.get('path');
+
+        _.each(rootFolderModel.get('unmappedFolders'), function (folder) {
+            this.push(new NzbDrone.AddSeries.Existing.UnmappedFolderModel({rootFolder:rootFolder,  folder: folder, quality: qualityCollection }));
         }, this);
     }
 });

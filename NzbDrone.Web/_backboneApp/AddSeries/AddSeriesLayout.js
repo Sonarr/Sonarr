@@ -72,9 +72,10 @@ NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
     onRender: function () {
 
         this.qualityProfileCollection.fetch();
+        this.rootFolderCollection.fetch();
 
         this.addNew.show(new NzbDrone.AddSeries.AddNewSeriesView({ rootFolders: this.rootFolderCollection, qualityProfiles: this.qualityProfileCollection }));
-        this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView({ collection: this.rootFolderCollection }));
+        this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView({ collection: this.rootFolderCollection, quality: this.qualityProfileCollection }));
         this.rootFolders.show(new NzbDrone.AddSeries.RootDirView({ collection: this.rootFolderCollection }));
 
         this.listenTo(this.rootFolderCollection, 'add', this.evaluateActions, this);
