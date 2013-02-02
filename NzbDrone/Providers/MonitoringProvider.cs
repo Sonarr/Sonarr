@@ -9,7 +9,7 @@ using NzbDrone.Common.Model;
 
 namespace NzbDrone.Providers
 {
-    public class MonitoringProvider
+    public class MonitoringProvider : IDisposable
     {
         private static readonly Logger logger = LogManager.GetLogger("Host.MonitoringProvider");
 
@@ -117,6 +117,25 @@ namespace NzbDrone.Providers
 
            
             logger.FatalException("EPIC FAIL: " + excepion.Message, excepion);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_pingTimer != null) _pingTimer.Dispose();
+                if (_processPriorityCheckTimer != null) _processPriorityCheckTimer.Dispose();
+            }
         }
     }
 }
