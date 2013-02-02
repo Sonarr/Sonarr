@@ -65,6 +65,15 @@
     <Reference Include="AutoMoq">
       <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
     </Reference>
+    <Reference Include="Db4objects.Db4o">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.dll</HintPath>
+    </Reference>
+    <Reference Include="Db4objects.Db4o.Data.Services">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Data.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Db4objects.Db4o.Linq">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="DeskMetrics.NET, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
@@ -87,6 +96,9 @@
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration">
       <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Reflection">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
@@ -134,6 +146,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Framework\CoreTestTSubject.cs" />
     <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerTests\NzbxFixture.cs" />

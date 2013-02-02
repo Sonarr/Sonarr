@@ -133,6 +133,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Db4objects.Db4o">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.dll</HintPath>
+    </Reference>
+    <Reference Include="Db4objects.Db4o.Data.Services">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Data.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Db4objects.Db4o.Linq">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="DeskMetrics.NET">
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
     </Reference>
@@ -167,6 +176,9 @@
     </Reference>
     <Reference Include="MiniProfiler">
       <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Reflection">
+      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -223,6 +235,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Datastore\ConnectionFactory.cs" />
+    <Compile Include="Datastore\NoCahceRefrenceSystem.cs" />
+    <Compile Include="Datastore\IObjectDbSession.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />

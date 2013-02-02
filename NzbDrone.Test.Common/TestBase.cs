@@ -8,9 +8,8 @@ using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
 {
-    public class TestBase : LoggingTest
+    public abstract class TestBase : LoggingTest
     {
-
         protected const string INTEGRATION_TEST = "Integration Test";
 
 

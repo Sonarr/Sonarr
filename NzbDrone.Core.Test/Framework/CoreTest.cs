@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Db4objects.Db4o.IO;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model.Notification;
@@ -9,14 +10,14 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Test.Framework
 {
-    public class CoreTest : TestBase
+    public abstract class CoreTest : TestBase
     {
         private string _dbTemplateName;
 
         [SetUp]
         public void CoreTestSetup()
         {
-            if(NCrunch.Framework.NCrunchEnvironment.NCrunchIsResident())
+            if (NCrunch.Framework.NCrunchEnvironment.NCrunchIsResident())
             {
                 _dbTemplateName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".sdf";
             }
@@ -24,6 +25,7 @@ namespace NzbDrone.Core.Test.Framework
             {
                 _dbTemplateName = "db_template.sdf";
             }
+
             CreateDataBaseTemplate();
         }
 
@@ -71,10 +73,30 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
+        private IObjectDbSession _objDb;
+        protected IObjectDbSession ObjDb
+        {
+            get
+            {
+                if (_objDb == null)
+                    throw new InvalidOperationException("Test object database doesn't exists. Make sure you call WithRealDb() if you intend to use an actual database.");
+
+                return _objDb;
+            }
+        }
+
+
+
         protected void WithRealDb()
         {
             _db = GetEmptyDatabase();
             Mocker.SetConstant(Db);
+        }
+
+        protected void WithObjectDb()
+        {
+            _objDb = new ObjectDbSessionFactory().Create(new PagingMemoryStorage());
+            Mocker.SetConstant(ObjDb);
         }
 
         protected static ProgressNotification MockNotification
@@ -105,6 +127,11 @@ namespace NzbDrone.Core.Test.Framework
 
                 }
                 catch (IOException) { }
+            }
+
+            if (_objDb != null)
+            {
+                _objDb.Dispose();
             }
         }
     }
