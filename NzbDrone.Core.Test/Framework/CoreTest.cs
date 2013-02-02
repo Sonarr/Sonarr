@@ -93,9 +93,17 @@ namespace NzbDrone.Core.Test.Framework
             Mocker.SetConstant(Db);
         }
 
-        protected void WithObjectDb()
+        protected void WithObjectDb(bool memory = true)
         {
-            _objDb = new ObjectDbSessionFactory().Create(new PagingMemoryStorage());
+            if (memory)
+            {
+                _objDb = new ObjectDbSessionFactory().Create(new PagingMemoryStorage());
+            }
+            else
+            {
+                _objDb = new ObjectDbSessionFactory().Create(dbName: Guid.NewGuid().ToString());
+            }
+
             Mocker.SetConstant(ObjDb);
         }
 

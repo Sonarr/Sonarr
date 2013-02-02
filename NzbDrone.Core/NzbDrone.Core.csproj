@@ -235,8 +235,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Datastore\ConnectionFactory.cs" />
-    <Compile Include="Datastore\NoCahceRefrenceSystem.cs" />
-    <Compile Include="Datastore\IObjectDbSession.cs" />
+    <Compile Include="Datastore\NoCacheReferenceSystem.cs" />
+    <Compile Include="Datastore\ObjectDbSession.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
@@ -270,6 +270,7 @@
     <Compile Include="Datastore\Migrations\Migration20121223.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
+    <Compile Include="Datastore\ObjectDbSessionFactory.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />

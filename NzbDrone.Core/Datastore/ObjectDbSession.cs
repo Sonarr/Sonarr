@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Db4objects.Db4o;
 using Db4objects.Db4o.Internal;
-using Db4objects.Db4o.Internal.References;
 
 namespace NzbDrone.Core.Datastore
 {
     public interface IObjectDbSession : IObjectContainer
     {
-        void Save(object obj);
-        void Save(object obj, int depth);
+        void Create(object obj);
+        void Create(object obj, int depth);
         void SaveAll<T>(Transaction transaction, IEnumerator<T> objects);
 
         void Update(object obj);
@@ -22,54 +21,47 @@ namespace NzbDrone.Core.Datastore
 
     public class ObjectDbSession : ObjectContainerSession, IObjectDbSession
     {
-        private NoCahceRefrenceSystem _noCacheRefSystem;
 
         public ObjectDbSession(ObjectContainerBase server)
-            : base(server, server.NewTransaction(server.SystemTransaction(), new NoCahceRefrenceSystem(), false))
+            : base(server, server.NewTransaction(server.SystemTransaction(), new NoCacheReferenceSystem(), false))
         {
             _transaction.SetOutSideRepresentation(this);
-            _noCacheRefSystem = (NoCahceRefrenceSystem)_transaction.ReferenceSystem();
         }
 
         public override void Store(object obj)
         {
-            throw new InvalidOperationException("Store is not supported. please use Save() or Update()");
+            throw new InvalidOperationException("Store is not supported. please use Create() or Update()");
         }
 
         public override void StoreAll(Transaction transaction, IEnumerator objects)
         {
-            throw new InvalidOperationException("Store is not supported. please use Save() or Update()");
+            throw new InvalidOperationException("Store is not supported. please use Create() or Update()");
 
         }
 
         public override void Store(object obj, int depth)
         {
-            throw new InvalidOperationException("Store is not supported. please use Save() or Update()");
+            throw new InvalidOperationException("Store is not supported. please use Create() or Update()");
         }
 
-        public void Save(object obj)
+        public void Create(object obj)
         {
-            ValidateSave(obj);
+            ValidateCreate(obj);
             base.Store(obj);
-            Commit();
         }
 
-        public void Save(object obj, int depth)
+        public void Create(object obj, int depth)
         {
-            ValidateSave(obj);
+            ValidateCreate(obj);
             base.Store(obj, depth);
-            Commit();
-
         }
 
         public void SaveAll<T>(Transaction transaction, IEnumerator<T> objects)
         {
             var obj = objects.ToIEnumerable().ToList();
-            obj.ForEach(c => ValidateSave(c));
+            obj.ForEach(c => ValidateCreate(c));
 
             base.StoreAll(transaction, obj.GetEnumerator());
-            Commit();
-
         }
 
 
@@ -77,14 +69,12 @@ namespace NzbDrone.Core.Datastore
         {
             ValidateUpdate(obj);
             base.Store(obj);
-            Commit();
         }
 
         public void Update(object obj, int depth)
         {
             ValidateUpdate(obj);
             base.Store(obj, depth);
-            Commit();
         }
 
         public void UpdateAll<T>(Transaction transaction, IEnumerator<T> objects)
@@ -93,7 +83,6 @@ namespace NzbDrone.Core.Datastore
             obj.ForEach(c => ValidateUpdate(c));
 
             base.StoreAll(transaction, obj.GetEnumerator());
-            Commit();
         }
 
         public void UpdateAll(Transaction transaction, IEnumerator objects)
@@ -101,12 +90,8 @@ namespace NzbDrone.Core.Datastore
             throw new NotImplementedException();
         }
 
-        public new void Purge()
-        {
-            _noCacheRefSystem.Reset();
-        }
 
-        private void ValidateSave(object obj)
+        private void ValidateCreate(object obj)
         {
             if (IsAttached(obj))
             {
