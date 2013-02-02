@@ -7,7 +7,7 @@ using System.IO;
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
     [TestFixture]
-    public class ExtractArchiveFixture : CoreTest
+    public class ExtractArchiveFixture : SqlCeTest
     {
         [Test]
         public void Should_extract_to_correct_folder()

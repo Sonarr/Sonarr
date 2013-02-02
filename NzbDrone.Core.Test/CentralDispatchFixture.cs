@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test
     [TestFixture]
     [ExclusivelyUses("REAL_LOG_FILE")]
     [Serial]
-    class CentralDispatchFixture : CoreTest
+    class CentralDispatchFixture : SqlCeTest
     {
         readonly IList<string> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();
         readonly IList<string> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).Select(c=>c.ToString()).ToList();

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Test.ProviderTests.ConfigProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ConfigProviderFixture : CoreTest
+    public class ConfigProviderFixture : SqlCeTest
     {
         [SetUp]
         public void SetUp()

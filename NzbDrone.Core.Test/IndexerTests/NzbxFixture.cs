@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class NzbxFixture : CoreTest
+    public class NzbxFixture : SqlCeTest
     {
         [Test]
         public void should_get_size_when_parsing_recent_feed()

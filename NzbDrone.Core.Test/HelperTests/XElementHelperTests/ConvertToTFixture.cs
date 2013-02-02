@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.HelperTests.XElementHelperTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class XElementHelperTest : CoreTest
+    public class XElementHelperTest : SqlCeTest
     {
         [Test]
         public void Int32_should_return_zero_when_xelement_is_null()

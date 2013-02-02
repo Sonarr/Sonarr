@@ -13,7 +13,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 {
     [TestFixture]
-    public class ContainsRecentEpisode : CoreTest
+    public class ContainsRecentEpisode : SqlCeTest
     {
         private Episode _recentEpisode;
         private Episode _oldEpisode;

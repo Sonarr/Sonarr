@@ -15,7 +15,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
     [TestFixture]
-    public class FreeDiskSpaceTest : CoreTest
+    public class FreeDiskSpaceTest : SqlCeTest
     {
         [Test]
         public void should_return_free_disk_space()

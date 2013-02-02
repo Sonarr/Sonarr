@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [Explicit]
     [TestFixture]
-    public class GrowlProviderTest : CoreTest
+    public class GrowlProviderTest : SqlCeTest
     {
         [Test]
         public void Register_should_add_new_application_to_local_growl_instance()

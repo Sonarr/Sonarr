@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeriesSearchJobTest : CoreTest
+    public class SeriesSearchJobTest : SqlCeTest
     {
         [Test]
         public void SeriesSearch_success()

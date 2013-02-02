@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 {
     [TestFixture]
     [ExclusivelyUses("JOB_PROVIDER")]
-    public class JobProviderFixture : CoreTest
+    public class JobProviderFixture : SqlCeTest
     {
 
         FakeJob fakeJob;

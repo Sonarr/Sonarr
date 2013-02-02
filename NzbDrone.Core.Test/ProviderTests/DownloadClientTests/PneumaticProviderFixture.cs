@@ -16,7 +16,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
 {
     [TestFixture]
-    public class PneumaticProviderFixture : CoreTest
+    public class PneumaticProviderFixture : SqlCeTest
     {
         private const string nzbUrl = "http://www.nzbs.com/url";
         private const string title = "30.Rock.S01E05.hdtv.xvid-LoL";

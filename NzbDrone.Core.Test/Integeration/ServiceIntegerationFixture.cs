@@ -16,7 +16,7 @@ using PetaPoco;
 namespace NzbDrone.Core.Test.Integeration
 {
     [TestFixture(Category = "ServiceIngeneration")]
-    public class ServiceIntegerationFixture : CoreTest
+    public class ServiceIntegerationFixture : SqlCeTest
     {
         private IContainer _container;
 

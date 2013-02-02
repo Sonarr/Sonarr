@@ -1,6 +1,6 @@
 ﻿namespace NzbDrone.Core.Test.Framework
 {
-    public abstract class CoreTest<TSubject> : CoreTest where TSubject : class
+    public abstract class SqlCeTest<TSubject> : SqlCeTest where TSubject : class
     {
 
         private TSubject _subject;

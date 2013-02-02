@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class HistoryProviderTest : CoreTest
+    public class HistoryProviderTest : SqlCeTest
     {
         [Test]
         public void AllItems()

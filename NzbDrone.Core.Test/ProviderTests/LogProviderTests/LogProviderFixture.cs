@@ -15,7 +15,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
 {
     [TestFixture]
-    public class LogProviderFixture : CoreTest
+    public class LogProviderFixture : SqlCeTest
     {
         private const string LOGGER_NAME = "Core.Test.ProviderTests.LogProviderTests.LogProviderFixture";
 

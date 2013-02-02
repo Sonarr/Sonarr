@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ReferenceDataProviderTest : CoreTest
+    public class ReferenceDataProviderTest : SqlCeTest
     {
         private const string validSeriesIds = "[1,2,3,4,5]";
         private const string invalidSeriesIds = "[1,2,NaN,4,5]";

@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeasonProviderTest : CoreTest
+    public class SeasonProviderTest : SqlCeTest
     {
         [SetUp]
         public void Setup()

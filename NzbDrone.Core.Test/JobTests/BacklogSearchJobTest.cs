@@ -18,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    public class BacklogSearchJobTest : CoreTest
+    public class BacklogSearchJobTest : SqlCeTest
     {
         private void WithEnableBacklogSearching()
         {

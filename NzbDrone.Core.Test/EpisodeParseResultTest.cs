@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeParseResultTest : CoreTest
+    public class EpisodeParseResultTest : SqlCeTest
     {
         [Test]
         public void tostring_single_season_episode()

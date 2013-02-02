@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeProviderTest_DeleteInvalidEpisodes : CoreTest
+    public class EpisodeProviderTest_DeleteInvalidEpisodes : SqlCeTest
     {
         [Test]
         public void Delete_None_Valid_TvDbEpisodeId()

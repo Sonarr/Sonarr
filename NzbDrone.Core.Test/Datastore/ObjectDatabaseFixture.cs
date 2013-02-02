@@ -9,7 +9,7 @@ using Db4objects.Db4o.Linq;
 namespace NzbDrone.Core.Test.Datastore
 {
     [TestFixture]
-    public class ObjectDatabaseFixture : CoreTest
+    public class ObjectDatabaseFixture : ObjectDbTest
     {
         [SetUp]
         public void SetUp()
@@ -23,11 +23,11 @@ namespace NzbDrone.Core.Test.Datastore
 
             var series = Builder<Series>.CreateNew().Build();
 
-            ObjDb.Create(series);
+            Db.Create(series);
 
-            ObjDb.Ext().Purge();
+            Db.Ext().Purge();
 
-            ObjDb.AsQueryable<Series>().Should().HaveCount(1);
+            Db.AsQueryable<Series>().Should().HaveCount(1);
 
         }
 
@@ -35,15 +35,15 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_not_store_dirty_data_in_cache()
         {
             var episode = Builder<Episode>.CreateNew().Build();
-            
+
             //Save series without episode attached
-            ObjDb.Create(episode);
-            
-            ObjDb.AsQueryable<Episode>().Single().Series.Should().BeNull();
-            
+            Db.Create(episode);
+
+            Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
+
             episode.Series = Builder<Series>.CreateNew().Build();
 
-            ObjDb.AsQueryable<Episode>().Single().Series.Should().BeNull();
+            Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
         }
 
 
@@ -51,14 +51,14 @@ namespace NzbDrone.Core.Test.Datastore
         public void rollback_should_reset_state()
         {
             var episode = Builder<Episode>.CreateNew().Build();
-            
-            ObjDb.Create(episode);
 
-            ObjDb.AsQueryable<Episode>().Should().HaveCount(1);
+            Db.Create(episode);
 
-            ObjDb.Rollback();
+            Db.AsQueryable<Episode>().Should().HaveCount(1);
 
-            ObjDb.AsQueryable<Episode>().Should().HaveCount(0);
+            Db.Rollback();
+
+            Db.AsQueryable<Episode>().Should().HaveCount(0);
         }
 
         [Test]
@@ -67,16 +67,16 @@ namespace NzbDrone.Core.Test.Datastore
             var episode = Builder<Episode>.CreateNew().Build();
             var series = Builder<Series>.CreateNew().Build();
 
-            ObjDb.Create(episode);
+            Db.Create(episode);
 
-            ObjDb.Commit();
+            Db.Commit();
 
-            ObjDb.Create(series);
+            Db.Create(series);
 
-            ObjDb.Rollback();
+            Db.Rollback();
 
-            ObjDb.AsQueryable<Episode>().Should().HaveCount(1);
-            ObjDb.AsQueryable<Series>().Should().HaveCount(0);
+            Db.AsQueryable<Episode>().Should().HaveCount(1);
+            Db.AsQueryable<Series>().Should().HaveCount(0);
         }
 
 
@@ -86,10 +86,10 @@ namespace NzbDrone.Core.Test.Datastore
             var episode = Builder<Episode>.CreateNew().Build();
             episode.Series = Builder<Series>.CreateNew().Build();
 
-            ObjDb.Create(episode);
+            Db.Create(episode);
 
-            ObjDb.AsQueryable<Episode>().Should().HaveCount(1);
-            ObjDb.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
+            Db.AsQueryable<Episode>().Should().HaveCount(1);
+            Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
         }
 
         [Test]
@@ -98,15 +98,15 @@ namespace NzbDrone.Core.Test.Datastore
             var episode = Builder<Episode>.CreateNew().Build();
             episode.Series = Builder<Series>.CreateNew().Build();
 
-            ObjDb.Create(episode);
+            Db.Create(episode);
 
             episode.Series.Title = "UpdatedTitle";
 
-            ObjDb.Update(episode,2);
+            Db.Update(episode, 2);
 
-            ObjDb.AsQueryable<Episode>().Should().HaveCount(1);
-            ObjDb.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
-            ObjDb.AsQueryable<Episode>().Single().Series.Title.Should().Be("UpdatedTitle");
+            Db.AsQueryable<Episode>().Should().HaveCount(1);
+            Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
+            Db.AsQueryable<Episode>().Single().Series.Title.Should().Be("UpdatedTitle");
         }
     }
 }

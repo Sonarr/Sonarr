@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SearchSeriesFixture : CoreTest
+    public class SearchSeriesFixture : SqlCeTest
     {
         private const string search = "http://services.tvrage.com/feeds/full_search.php?show=";
 

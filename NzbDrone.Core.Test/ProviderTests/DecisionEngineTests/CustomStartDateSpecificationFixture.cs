@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class CustomStartDateSpecificationFixture : CoreTest
+    public class CustomStartDateSpecificationFixture : SqlCeTest
     {
         private CustomStartDateSpecification _customStartDateSpecification;
 

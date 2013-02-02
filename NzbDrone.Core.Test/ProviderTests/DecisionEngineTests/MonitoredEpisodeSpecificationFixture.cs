@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class MonitoredEpisodeSpecificationFixture : CoreTest
+    public class MonitoredEpisodeSpecificationFixture : SqlCeTest
     {
         private MonitoredEpisodeSpecification monitoredEpisodeSpecification;
 

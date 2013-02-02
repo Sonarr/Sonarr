@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RootDirProviderFixture : CoreTest
+    public class RootDirProviderFixture : SqlCeTest
     {
         [SetUp]
         public void Setup()

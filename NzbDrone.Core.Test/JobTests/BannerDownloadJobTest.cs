@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class BannerDownloadJobTest : CoreTest
+    public class BannerDownloadJobTest : SqlCeTest
     {
         private ProgressNotification _notification;
 

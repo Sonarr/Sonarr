@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RssSyncJobTest : CoreTest
+    public class RssSyncJobTest : SqlCeTest
     {
         public void WithMinutes(int minutes)
         {

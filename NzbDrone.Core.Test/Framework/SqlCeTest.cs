@@ -10,7 +10,66 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Test.Framework
 {
+
     public abstract class CoreTest : TestBase
+    {
+        protected static ProgressNotification MockNotification
+        {
+            get
+            {
+                return new ProgressNotification("Mock notification");
+            }
+        }
+
+        protected static void ThrowException()
+        {
+            throw new ApplicationException("This is a message for test exception");
+        }
+
+
+    }
+
+
+    public abstract class ObjectDbTest : CoreTest
+    {
+        private IObjectDbSession _db;
+        protected IObjectDbSession Db
+        {
+            get
+            {
+                if (_db == null)
+                    throw new InvalidOperationException("Test object database doesn't exists. Make sure you call WithRealDb() if you intend to use an actual database.");
+
+                return _db;
+            }
+        }
+
+        protected void WithObjectDb(bool memory = true)
+        {
+            if (memory)
+            {
+                _db = new ObjectDbSessionFactory().Create(new PagingMemoryStorage());
+            }
+            else
+            {
+                _db = new ObjectDbSessionFactory().Create(dbName: Guid.NewGuid().ToString());
+            }
+
+            Mocker.SetConstant(Db);
+        }
+
+        [TearDown]
+        public void ObjectDbTearDown()
+        {
+            if (_db != null)
+            {
+                _db.Dispose();
+            }
+        }
+    }
+
+
+    public abstract class SqlCeTest : CoreTest
     {
         private string _dbTemplateName;
 
@@ -73,18 +132,6 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
-        private IObjectDbSession _objDb;
-        protected IObjectDbSession ObjDb
-        {
-            get
-            {
-                if (_objDb == null)
-                    throw new InvalidOperationException("Test object database doesn't exists. Make sure you call WithRealDb() if you intend to use an actual database.");
-
-                return _objDb;
-            }
-        }
-
 
 
         protected void WithRealDb()
@@ -93,32 +140,6 @@ namespace NzbDrone.Core.Test.Framework
             Mocker.SetConstant(Db);
         }
 
-        protected void WithObjectDb(bool memory = true)
-        {
-            if (memory)
-            {
-                _objDb = new ObjectDbSessionFactory().Create(new PagingMemoryStorage());
-            }
-            else
-            {
-                _objDb = new ObjectDbSessionFactory().Create(dbName: Guid.NewGuid().ToString());
-            }
-
-            Mocker.SetConstant(ObjDb);
-        }
-
-        protected static ProgressNotification MockNotification
-        {
-            get
-            {
-                return new ProgressNotification("Mock notification");
-            }
-        }
-
-        protected static void ThrowException()
-        {
-            throw new ApplicationException("This is a message for test exception");
-        }
 
         [TearDown]
         public void CoreTestTearDown()
@@ -135,11 +156,6 @@ namespace NzbDrone.Core.Test.Framework
 
                 }
                 catch (IOException) { }
-            }
-
-            if (_objDb != null)
-            {
-                _objDb.Dispose();
             }
         }
     }

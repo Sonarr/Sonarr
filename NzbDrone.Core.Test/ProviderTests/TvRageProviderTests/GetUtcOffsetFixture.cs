@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class GetUtcOffsetFixture : CoreTest
+    public class GetUtcOffsetFixture : SqlCeTest
     {
         [Test]
         public void should_return_zero_if_timeZone_is_empty()

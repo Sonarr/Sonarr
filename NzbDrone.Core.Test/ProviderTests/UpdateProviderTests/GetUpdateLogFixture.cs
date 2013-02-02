@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {
-    class GetUpdateLogFixture : CoreTest
+    class GetUpdateLogFixture : SqlCeTest
     {
         String UpdateLogFolder;
 

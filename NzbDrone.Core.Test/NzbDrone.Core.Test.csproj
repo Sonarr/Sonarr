@@ -246,7 +246,7 @@
     <Compile Include="ProviderTests\UpcomingEpisodesProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTests\GetNewFilenameFixture.cs" />
     <Compile Include="dbBenchmark.cs" />
-    <Compile Include="Framework\CoreTest.cs" />
+    <Compile Include="Framework\SqlCeTest.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\DownloadProviderFixture.cs" />
     <Compile Include="EpisodeStatusTest.cs" />

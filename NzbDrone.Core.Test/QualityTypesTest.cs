@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityTypesTest : CoreTest
+    public class QualityTypesTest : SqlCeTest
     {
         public static object[] FromIntCases =
                 {

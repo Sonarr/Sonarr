@@ -15,7 +15,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    public class SeriesProviderTest : CoreTest
+    public class SeriesProviderTest : SqlCeTest
     {
         private IList<QualityProfile> _qualityProfiles;
             

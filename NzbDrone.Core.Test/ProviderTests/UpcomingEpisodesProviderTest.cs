@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
 
-    public class UpcomingEpisodesProviderTest : CoreTest
+    public class UpcomingEpisodesProviderTest : SqlCeTest
     {
         private IList<Episode> episodes;
         private Series series;

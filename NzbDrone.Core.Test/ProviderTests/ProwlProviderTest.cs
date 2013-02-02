@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [Explicit]
     [TestFixture]
-    public class ProwlProviderTest : CoreTest
+    public class ProwlProviderTest : SqlCeTest
     {
         private const string _apiKey = "c3bdc0f48168f72d546cc6872925b160f5cbffc1";
         private const string _apiKey2 = "46a710a46b111b0b8633819b0d8a1e0272a3affa";

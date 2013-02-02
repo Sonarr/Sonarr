@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class DeleteDirectoryFixture : CoreTest
+    public class DeleteDirectoryFixture : SqlCeTest
     {
         private void WithRecycleBin()
         {

@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SearchHistoryProviderTest : CoreTest
+    public class SearchHistoryProviderTest : SqlCeTest
     {
         private SearchHistory _searchHistory;
         private Series _series;

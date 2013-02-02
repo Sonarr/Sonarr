@@ -15,7 +15,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
 {
     [TestFixture]
-    public class CleanUpDatabaseFixture : CoreTest
+    public class CleanUpDatabaseFixture : SqlCeTest
     {
 
         [SetUp]

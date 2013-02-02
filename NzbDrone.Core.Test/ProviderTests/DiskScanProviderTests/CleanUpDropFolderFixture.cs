@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class CleanUpDropFolderFixture : CoreTest
+    public class CleanUpDropFolderFixture : SqlCeTest
     {
         [Test]
         public void should_do_nothing_if_no_files_are_found()

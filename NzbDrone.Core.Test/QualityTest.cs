@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityTest : CoreTest
+    public class QualityTest : SqlCeTest
     {
         [Test]
         public void Icomparer_greater_test()

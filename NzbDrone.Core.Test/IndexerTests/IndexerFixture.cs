@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerFixture : CoreTest
+    public class IndexerFixture : SqlCeTest
     {
         private void WithConfiguredIndexers()
         {

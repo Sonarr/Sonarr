@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class UpgradePossibleSpecificationFixture : CoreTest
+    public class UpgradePossibleSpecificationFixture : SqlCeTest
     {
         private void WithWebdlCutoff()
         {

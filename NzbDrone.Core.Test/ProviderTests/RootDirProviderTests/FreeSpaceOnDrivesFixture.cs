@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class FreeSpaceOnDrivesFixture : CoreTest
+    public class FreeSpaceOnDrivesFixture : SqlCeTest
     {
         [Test]
         public void should_return_one_drive_when_only_one_root_dir_exists()

@@ -11,7 +11,7 @@ using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {
-    class GetAvilableUpdateFixture : CoreTest
+    class GetAvilableUpdateFixture : SqlCeTest
     {
         private static Version _latestsTestVersion = new Version("0.6.0.3");
         private static string _latestsTestUrl = "http://update.nzbdrone.com/_test/NzbDrone.master.0.6.0.3.zip";

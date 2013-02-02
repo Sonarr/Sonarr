@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QueueFixture : CoreTest
+    public class QueueFixture : SqlCeTest
     {
         [SetUp]
         public void Setup()

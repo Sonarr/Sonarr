@@ -18,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class ImportFileFixture : CoreTest
+    public class ImportFileFixture : SqlCeTest
     {
         public static object[] ImportTestCases =
         {

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class Xbmc_ForEpisoddeFile_Fixture : CoreTest
+    public class Xbmc_ForEpisoddeFile_Fixture : SqlCeTest
     {
         private Series series;
         private EpisodeFile episodeFile;

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class MediaFileProvider_GetNewFilenameTest : CoreTest
+    public class MediaFileProvider_GetNewFilenameTest : SqlCeTest
     {
         private Series _series;
 

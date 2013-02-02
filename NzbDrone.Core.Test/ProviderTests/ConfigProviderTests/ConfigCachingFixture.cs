@@ -11,7 +11,7 @@ using PetaPoco;
 namespace NzbDrone.Core.Test.ProviderTests.ConfigProviderTests
 {
     [TestFixture]
-    public class ConfigCachingFixture : CoreTest
+    public class ConfigCachingFixture : SqlCeTest
     {
         [SetUp]
         public void Setup()

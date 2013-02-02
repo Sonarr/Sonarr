@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SceneMappingProviderTest : CoreTest
+    public class SceneMappingProviderTest : SqlCeTest
     {
         private const string SceneMappingUrl = "http://services.nzbdrone.com/SceneMapping/Active";
 

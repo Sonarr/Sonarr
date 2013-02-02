@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Test.ParserTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityParserFixture : CoreTest
+    public class QualityParserFixture : SqlCeTest
     {
         public static object[] QualityParserCases =
         {
