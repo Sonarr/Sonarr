@@ -78,6 +78,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
     </Reference>
+    <Reference Include="Eloquera.Client">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Common">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Server">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Server.exe</HintPath>
+    </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -317,6 +326,7 @@
     <Content Include="Files\JsonError.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Eloquera.config" />
     <None Include="Files\RSS\nzbx_search.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

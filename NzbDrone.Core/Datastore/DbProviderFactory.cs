@@ -1,7 +1,6 @@
 using System;
 using System.Data.Common;
 using System.Data.SqlServerCe;
-using Db4objects.Db4o.Internal.Config;
 using StackExchange.Profiling;
 using StackExchange.Profiling.Data;
 

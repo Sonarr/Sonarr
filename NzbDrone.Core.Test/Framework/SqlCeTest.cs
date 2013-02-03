@@ -32,8 +32,8 @@ namespace NzbDrone.Core.Test.Framework
 
     public abstract class ObjectDbTest : CoreTest
     {
-        private IObjectDbSession _db;
-        protected IObjectDbSession Db
+        private EloqueraDb _db;
+        protected EloqueraDb Db
         {
             get
             {
@@ -48,11 +48,12 @@ namespace NzbDrone.Core.Test.Framework
         {
             if (memory)
             {
-                _db = new ObjectDbSessionFactory().Create(new PagingMemoryStorage());
+                //Todo: Actually use memory: http://www.eloquera.com/sites/default/files/filepicker/1/Help/Documentation/HTML/In-memory%20database.htm
+                _db = new EloqueraDbFactory().Create();
             }
             else
             {
-                _db = new ObjectDbSessionFactory().Create(dbName: Guid.NewGuid().ToString());
+                _db = new EloqueraDbFactory().Create(dbFilename: Guid.NewGuid().ToString());
             }
 
             Mocker.SetConstant(Db);

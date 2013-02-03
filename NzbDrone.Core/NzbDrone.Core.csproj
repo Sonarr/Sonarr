@@ -133,17 +133,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Db4objects.Db4o">
-      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.dll</HintPath>
-    </Reference>
-    <Reference Include="Db4objects.Db4o.Data.Services">
-      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Data.Services.dll</HintPath>
-    </Reference>
-    <Reference Include="Db4objects.Db4o.Linq">
-      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Linq.dll</HintPath>
-    </Reference>
     <Reference Include="DeskMetrics.NET">
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Client">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Common">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Server">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Server.exe</HintPath>
     </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
@@ -176,9 +176,6 @@
     </Reference>
     <Reference Include="MiniProfiler">
       <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Reflection">
-      <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -235,8 +232,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Datastore\ConnectionFactory.cs" />
-    <Compile Include="Datastore\NoCacheReferenceSystem.cs" />
-    <Compile Include="Datastore\ObjectDbSession.cs" />
+    <Compile Include="Datastore\EloqueraDb.cs" />
+    <Compile Include="Datastore\EloqueraDbFactory.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
@@ -270,7 +267,6 @@
     <Compile Include="Datastore\Migrations\Migration20121223.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
-    <Compile Include="Datastore\ObjectDbSessionFactory.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
@@ -644,6 +640,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Eloquera.config" />
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
   </ItemGroup>
