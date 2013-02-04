@@ -10,20 +10,25 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class ObjectDatabaseFixture : ObjectDbTest
     {
+        private Series testSeries;
+        private Episode testEpisode;
+
+
         [SetUp]
         public void SetUp()
         {
             WithObjectDb();
+
+            testSeries = Builder<Series>.CreateNew().Build();
+            testEpisode = Builder<Episode>.CreateNew().Build();
+
+
         }
 
         [Test]
         public void should_be_able_to_write_to_database()
         {
-
-            var series = Builder<Series>.CreateNew().Build();
-
-            Db.Create(series);
-
+            Db.Insert(testSeries);
 
             Db.AsQueryable<Series>().Should().HaveCount(1);
 
@@ -32,14 +37,11 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_not_store_dirty_data_in_cache()
         {
-            var episode = Builder<Episode>.CreateNew().Build();
-
-            //Save series without episode attached
-            Db.Create(episode);
+            Db.Insert(testEpisode);
 
             Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
 
-            episode.Series = Builder<Series>.CreateNew().Build();
+            testEpisode.Series = Builder<Series>.CreateNew().Build();
 
             Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
         }
@@ -49,10 +51,9 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_store_nested_objects()
         {
-            var episode = Builder<Episode>.CreateNew().Build();
-            episode.Series = Builder<Series>.CreateNew().Build();
+            testEpisode.Series = testSeries;
 
-            Db.Create(episode);
+            Db.Insert(testEpisode);
 
             Db.AsQueryable<Episode>().Should().HaveCount(1);
             Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
@@ -61,18 +62,26 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_update_nested_objects()
         {
-            var episode = Builder<Episode>.CreateNew().Build();
-            episode.Series = Builder<Series>.CreateNew().Build();
+            testEpisode.Series = Builder<Series>.CreateNew().Build();
 
-            Db.Create(episode);
+            Db.Insert(testEpisode);
 
-            episode.Series.Title = "UpdatedTitle";
+            testEpisode.Series.Title = "UpdatedTitle";
 
-            Db.Update(episode);
+            Db.Update(testEpisode);
 
             Db.AsQueryable<Episode>().Should().HaveCount(1);
             Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
             Db.AsQueryable<Episode>().Single().Series.Title.Should().Be("UpdatedTitle");
         }
+
+
+        [Test]
+        public void new_objects_should_get_id()
+        {
+            Db.Insert(testSeries);
+            testSeries.Id.Should().NotBe(0);
+        }
     }
 }
+

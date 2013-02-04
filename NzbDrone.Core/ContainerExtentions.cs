@@ -80,6 +80,12 @@ namespace NzbDrone.Core
             container.Register(c => c.Resolve<ConnectionFactory>().GetLogPetaPocoDb())
                      .Named<IDatabase>("LogProvider");
 
+            container.Register(c =>
+                      {
+                          var env = c.Resolve<EnvironmentProvider>();
+                          return c.Resolve<EloqueraDbFactory>().Create(env.GetElqMainDbPath());
+                      }).As<EloqueraDb>().SingleInstance();
+
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
             container.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }

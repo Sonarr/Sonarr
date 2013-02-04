@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(_environmentProvider.GetNzbDroneDbFile());
+                return GetConnectionString(_environmentProvider.GetSqlCeMainDbPath());
             }
         }
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(_environmentProvider.GetLogDbFileDbFile());
+                return GetConnectionString(_environmentProvider.GetSqlCeLogDbPath());
             }
         }
 

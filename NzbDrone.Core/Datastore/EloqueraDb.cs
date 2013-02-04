@@ -20,15 +20,15 @@ namespace NzbDrone.Core.Datastore
         }
 
 
-        public T Create<T>(T obj)
+        public T Insert<T>(T obj)
         {
             _db.Store(obj);
             return obj;
         }
 
-        public IList<T> CreateMany<T>(IEnumerable<T> objects)
+        public IList<T> InsertMany<T>(IEnumerable<T> objects)
         {
-            return DoMany(objects, Create);
+            return DoMany(objects, Insert);
         }
 
         public T Update<T>(T obj)

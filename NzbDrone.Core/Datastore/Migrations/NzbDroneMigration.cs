@@ -17,11 +17,11 @@ namespace NzbDrone.Core.Datastore.Migrations
 
         public override void Up()
         {
-            if (Database.ConnectionString.Contains(PathExtentions.NZBDRONE_DB_FILE))
+            if (Database.ConnectionString.Contains(PathExtentions.NZBDRONE_SQLCE_DB_FILE))
             {
                 MainDbUpgrade();
             }
-            else if (Database.ConnectionString.Contains(PathExtentions.LOG_DB_FILE))
+            else if (Database.ConnectionString.Contains(PathExtentions.LOG_SQLCE_DB_FILE))
             {
                 LogDbUpgrade();
             }
