@@ -1,4 +1,5 @@
 using System.Linq;
+using Eloquera.Client;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -82,6 +83,19 @@ namespace NzbDrone.Core.Test.Datastore
             Db.Insert(testSeries);
             testSeries.Id.Should().NotBe(0);
         }
+
+        [Test]
+        public void should_be_able_to_read_unknow_type()
+        {
+            Db.AsQueryable<UnKnowType>().ToList().Should().BeEmpty();
+        }
+    }
+
+    public class UnKnowType
+    {
+        [ID]
+        public string Id;
+        public string Field1 { get; set; }
     }
 }
 

@@ -9,37 +9,37 @@ namespace NzbDrone.Core.Datastore
 {
     public class MigrationsHelper
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 
-        public static void Run(string connetionString, bool trace)
+        public static void Run(string connectionString, bool trace)
         {
-            EnsureDatabase(connetionString);
+            EnsureDatabase(connectionString);
 
-            Logger.Trace("Preparing to run database migration");
+            logger.Trace("Preparing to run database migration");
 
             try
             {
                 Migrator.Migrator migrator;
                 if (trace)
                 {
-                    migrator = new Migrator.Migrator("sqlserverce", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true, new MigrationLogger());
+                    migrator = new Migrator.Migrator("sqlserverce", connectionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true, new MigrationLogger());
                 }
                 else
                 {
-                    migrator = new Migrator.Migrator("sqlserverce", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
+                    migrator = new Migrator.Migrator("sqlserverce", connectionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
                 }
 
 
 
                 migrator.MigrateToLastVersion();
-                Logger.Info("Database migration completed");
+                logger.Info("Database migration completed");
 
 
             }
             catch (Exception e)
             {
-                Logger.FatalException("An error has occurred while migrating database", e);
+                logger.FatalException("An error has occurred while migrating database", e);
                 throw;
             }
         }

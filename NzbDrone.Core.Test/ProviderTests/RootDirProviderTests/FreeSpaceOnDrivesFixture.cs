@@ -12,6 +12,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Setup(s => s.FreeDiskSpace(new DirectoryInfo(@"C:\")))
                   .Returns(123456);
 
-            var result = Mocker.Resolve<RootDirProvider>().FreeSpaceOnDrives();
+            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
 
             result.Should().HaveCount(1);
         }
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Setup(s => s.FreeDiskSpace(new DirectoryInfo(@"C:\")))
                   .Returns(123456);
 
-            var result = Mocker.Resolve<RootDirProvider>().FreeSpaceOnDrives();
+            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
 
             result.Should().HaveCount(1);
         }
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
                   .Returns(123456);
 
-            var result = Mocker.Resolve<RootDirProvider>().FreeSpaceOnDrives();
+            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
 
             result.Should().HaveCount(2);
         }
@@ -104,7 +105,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
                   .Throws(new DirectoryNotFoundException());
 
-            var result = Mocker.Resolve<RootDirProvider>().FreeSpaceOnDrives();
+            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
 
             result.Should().HaveCount(0);
 

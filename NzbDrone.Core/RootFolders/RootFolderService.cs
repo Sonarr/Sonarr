@@ -1,30 +1,40 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
-using PetaPoco;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.RootFolders
 {
-    public class RootDirProvider
+    public interface IRootFolderService
     {
-        private readonly IDatabase _database;
+        List<RootDir> All();
+        RootDir Add(RootDir rootDir);
+        void Remove(int rootDirId);
+        List<String> GetUnmappedFolders(string path);
+        Dictionary<string, ulong> FreeSpaceOnDrives();
+    }
+
+    public class RootFolderService : IRootFolderService
+    {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IRootFolderRepository _rootFolderRepository;
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
 
-        public RootDirProvider(IDatabase database, SeriesProvider seriesProvider, DiskProvider diskProvider)
+        public RootFolderService(IRootFolderRepository rootFolderRepository, SeriesProvider seriesProvider, DiskProvider diskProvider)
         {
-            _database = database;
+            _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
         }
 
-        public virtual List<RootDir> GetAll()
+        public virtual List<RootDir> All()
         {
-            return _database.Fetch<RootDir>();
+            return _rootFolderRepository.All();
         }
 
         public virtual RootDir Add(RootDir rootDir)
@@ -35,20 +45,19 @@ namespace NzbDrone.Core.Providers
             if (!_diskProvider.FolderExists(rootDir.Path))
                 throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
 
-            if (GetAll().Exists(r => DiskProvider.PathEquals(r.Path, rootDir.Path)))
+            if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootDir.Path)))
                 throw new InvalidOperationException("Root directory already exist.");
 
-            var id = _database.Insert(rootDir);
-            rootDir.Id = Convert.ToInt32(id);
+            _rootFolderRepository.Add(rootDir);
+
             rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
             rootDir.UnmappedFolders = GetUnmappedFolders(rootDir.Path);
-
             return rootDir;
         }
 
         public virtual void Remove(int rootDirId)
         {
-            _database.Delete<RootDir>(rootDirId);
+            _rootFolderRepository.Delete(rootDirId);
         }
 
         public virtual List<String> GetUnmappedFolders(string path)
@@ -77,24 +86,12 @@ namespace NzbDrone.Core.Providers
             return results;
         }
 
-        public virtual List<RootDir> AllWithFreeSpace()
-        {
-            var rootDirs = GetAll();
-
-            foreach (var rootDir in rootDirs)
-            {
-                rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
-                rootDir.UnmappedFolders = GetUnmappedFolders(rootDir.Path);
-            }
-
-            return rootDirs;
-        }
 
         public virtual Dictionary<string, ulong> FreeSpaceOnDrives()
         {
             var freeSpace = new Dictionary<string, ulong>();
 
-            var rootDirs = GetAll();
+            var rootDirs = All();
 
             foreach (var rootDir in rootDirs)
             {

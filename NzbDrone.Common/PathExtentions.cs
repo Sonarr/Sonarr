@@ -7,6 +7,7 @@ namespace NzbDrone.Common
     {
         private const string WEB_FOLDER = "NzbDrone.Web\\";
         private const string APP_DATA = "App_Data\\";
+        private const string WEB_BIN = "bin\\";
         public const string IIS_FOLDER = "IISExpress";
         public const string IIS_EXE = "iisexpress.exe";
 
@@ -68,6 +69,11 @@ namespace NzbDrone.Common
         public static string GetAppDataPath(this EnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetWebRoot(), APP_DATA);
+        }
+
+        public static string GetWebBinPath(this EnvironmentProvider environmentProvider)
+        {
+            return Path.Combine(environmentProvider.GetWebRoot(), WEB_BIN);
         }
 
         public static string GetNlogConfigPath(this EnvironmentProvider environmentProvider)

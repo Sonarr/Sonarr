@@ -3,17 +3,18 @@ using Nancy;
 using NzbDrone.Api.Extentions;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Api.RootFolders
 {
     public class RootDirModule : NzbDroneApiModule
     {
-        private readonly RootDirProvider _rootDirProvider;
+        private readonly RootFolderService _rootFolderService;
 
-        public RootDirModule(RootDirProvider rootDirProvider)
+        public RootDirModule(RootFolderService rootFolderService)
             : base("//rootdir")
         {
-            _rootDirProvider = rootDirProvider;
+            _rootFolderService = rootFolderService;
 
             Get["/"] = x => GetRootFolders();
             Post["/"] = x => AddRootFolder();
@@ -22,18 +23,18 @@ namespace NzbDrone.Api.RootFolders
 
         private Response AddRootFolder()
         {
-            var dir = _rootDirProvider.Add(Request.Body.FromJson<RootDir>());
+            var dir = _rootFolderService.Add(Request.Body.FromJson<RootDir>());
             return dir.AsResponse(HttpStatusCode.Created);
         }
 
         private Response GetRootFolders()
         {
-            return _rootDirProvider.AllWithFreeSpace().AsResponse();
+            return _rootFolderService.All().AsResponse();
         }
 
         private Response DeleteRootFolder(int folderId)
         {
-            _rootDirProvider.Remove(folderId);
+            _rootFolderService.Remove(folderId);
             return new Response { StatusCode = HttpStatusCode.OK };
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Test.Framework
@@ -23,11 +24,11 @@ namespace NzbDrone.Core.Test.Framework
         {
             if (memory)
             {
-                _db = new EloqueraDbFactory().CreateMemoryDb();
+                _db = new EloqueraDbFactory(new EnvironmentProvider()).CreateMemoryDb();
             }
             else
             {
-                _db = new EloqueraDbFactory().Create(Guid.NewGuid().ToString());
+                _db = new EloqueraDbFactory(new EnvironmentProvider()).Create();
             }
 
             Mocker.SetConstant(Db);

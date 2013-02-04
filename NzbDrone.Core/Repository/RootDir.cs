@@ -3,9 +3,21 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
+    public interface IRootDir
+    {
+        int Id { get; set; }
+        string Path { get; set; }
+
+        [ResultColumn]
+        ulong FreeSpace { get; set; }
+
+        [Ignore]
+        List<string> UnmappedFolders { get; set; }
+    }
+
     [TableName("RootDirs")]
     [PrimaryKey("Id", autoIncrement = true)]
-    public class RootDir
+    public class RootDir : IRootDir
     {
         public virtual int Id { get; set; }
 

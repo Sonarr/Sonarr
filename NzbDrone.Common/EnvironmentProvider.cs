@@ -107,7 +107,15 @@ namespace NzbDrone.Common
         {
             get
             {
-                return new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+                var path = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+
+                if (path.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+                                   StringComparison.InvariantCultureIgnoreCase))
+                {
+                    path = Directory.GetCurrentDirectory();
+                }
+
+                return path;
             }
         }
 

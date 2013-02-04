@@ -17,7 +17,7 @@
     <MvcBuildViews>true</MvcBuildViews>
     <EnableUpdateable>false</EnableUpdateable>
     <TargetFrameworkProfile />
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -26,6 +26,10 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <JSLintSkip>\_backboneApp\JsLibraries\|\Scripts\</JSLintSkip>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -87,6 +91,17 @@
     </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Eloquera.Server">
+      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Server.exe</HintPath>
     </Reference>
     <Reference Include="LowercaseRoutesMVC">
       <HintPath>..\packages\LowercaseRoutesMVC.1.0.3\lib\LowercaseRoutesMVC.dll</HintPath>
@@ -341,7 +356,6 @@
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />
-    <Compile Include="Controllers\AddSeriesController.cs" />
     <Compile Include="Controllers\MissingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
@@ -401,6 +415,7 @@
     <Content Include="_backboneApp\Shared\NotificationView.js" />
     <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
     <Content Include="_backboneApp\Shared\SpinnerView.js" />
+    <Content Include="Eloquera.config" />
     <None Include="_backboneApp\JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.collectionbinder.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.debug.js" />
@@ -606,8 +621,6 @@
     <Content Include="Scripts\jquery.watermark.min.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
-    <Content Include="Views\AddSeries\Index.cshtml" />
-    <Content Include="Views\AddSeries\AddNew.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -624,7 +637,6 @@
     <Content Include="Views\Settings\Naming.cshtml" />
     <Content Include="Views\Settings\Notifications.cshtml" />
     <Content Include="Views\Settings\Quality.cshtml" />
-    <Content Include="Views\AddSeries\RootDir.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -667,13 +679,7 @@
     <Content Include="Views\Missing\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\AddSeries\ExistingSeries.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\System\PendingProcessing.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddSeries\RootList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\System.cshtml" />

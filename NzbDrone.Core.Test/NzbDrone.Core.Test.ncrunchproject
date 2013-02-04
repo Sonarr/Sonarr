@@ -31,5 +31,6 @@
       <RegularExpression>NzbDrone\.Core\.Test\.Integeration\.ServiceIntegerationFixture\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
+  <AdditionalFilesToInclude>..\NzbDrone.Core\bin\Debug\Eloquera.Server.exe</AdditionalFilesToInclude>
   <HiddenWarnings>PostBuildEventDisabled</HiddenWarnings>
 </ProjectConfiguration>

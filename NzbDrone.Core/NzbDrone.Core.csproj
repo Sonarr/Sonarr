@@ -237,6 +237,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20130203.cs" />
     <Compile Include="Datastore\Migrations\Migration20121226.cs" />
     <Compile Include="Datastore\Migrations\Migration20121218.cs" />
     <Compile Include="Datastore\Migrations\Migration20121209.cs" />
@@ -536,7 +537,7 @@
     <Compile Include="Providers\ReferenceDataProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\RootDirProvider.cs">
+    <Compile Include="RootFolders\RootFolderService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\SceneMappingProvider.cs">
@@ -599,6 +600,7 @@
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="Tvdb\Tvdb.cs" />
     <Compile Include="Tvdb\Tvdb.Sync.cs" />
     <Compile Include="Tvdb\TvdbActor.cs" />

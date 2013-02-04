@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -8,12 +9,12 @@ namespace NzbDrone.Web.Controllers
     public class SharedController : Controller
     {
         private readonly EnvironmentProvider _environmentProvider;
-        private readonly RootDirProvider _rootDirProvider;
+        private readonly RootFolderService _rootFolderService;
 
-        public SharedController(EnvironmentProvider environmentProvider, RootDirProvider rootDirProvider)
+        public SharedController(EnvironmentProvider environmentProvider, RootFolderService rootFolderService)
         {
             _environmentProvider = environmentProvider;
-            _rootDirProvider = rootDirProvider;
+            _rootFolderService = rootFolderService;
         }
 
         public ActionResult Index()
@@ -32,7 +33,7 @@ namespace NzbDrone.Web.Controllers
         [OutputCache(Duration = 600)]
         public ActionResult FreeSpace()
         {
-            var rootDirs = _rootDirProvider.FreeSpaceOnDrives();
+            var rootDirs = _rootFolderService.FreeSpaceOnDrives();
 
             return PartialView(rootDirs);
         }

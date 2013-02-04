@@ -43,12 +43,12 @@ namespace NzbDrone.Core.Datastore
         }
 
 
-        public void Delete<T>(T obj)
+        public void Delete<T>(T obj) where T : new()
         {
             _db.Delete(obj);
         }
 
-        public void DeleteMany<T>(IEnumerable<T> objects)
+        public void DeleteMany<T>(IEnumerable<T> objects) where T: new()
         {
             foreach (var o in objects)
             {

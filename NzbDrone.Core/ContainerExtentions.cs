@@ -82,8 +82,7 @@ namespace NzbDrone.Core
 
             container.Register(c =>
                       {
-                          var env = c.Resolve<EnvironmentProvider>();
-                          return c.Resolve<EloqueraDbFactory>().Create(env.GetElqMainDbPath());
+                          return c.Resolve<EloqueraDbFactory>().Create();
                       }).As<EloqueraDb>().SingleInstance();
 
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
