@@ -1,45 +1,73 @@
 ﻿using System.Collections.Generic;
+using Eloquera.Client;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Repository;
 using System.Linq;
 
 namespace NzbDrone.Core.RootFolders
 {
-    public interface IRootFolderRepository
+
+    public abstract class BaseModel
     {
-        List<RootDir> All();
-        RootDir Get(int rootFolderId);
-        RootDir Add(RootDir rootFolder);
+        [ID]
+        public int Id;
+    }
+
+    public interface IBasicRepository<TModel>
+    {
+        List<TModel> All();
+        TModel Get(int rootFolderId);
+        TModel Add(TModel rootFolder);
         void Delete(int rootFolderId);
     }
 
-    public class RootFolderRepository : IRootFolderRepository
+
+    public abstract class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseModel, new()
     {
-        private readonly EloqueraDb _db;
 
-        public RootFolderRepository(EloqueraDb db)
+
+        public BasicRepository(EloqueraDb eloqueraDb)
         {
-            _db = db;
+            EloqueraDb = eloqueraDb;
         }
 
-        public List<RootDir> All()
+        protected EloqueraDb EloqueraDb { get; private set; }
+
+
+        public List<TModel> All()
         {
-            return _db.AsQueryable<RootDir>().ToList();
+            return EloqueraDb.AsQueryable<TModel>().ToList();
         }
 
-        public RootDir Get(int rootFolderId)
+        public TModel Get(int rootFolderId)
         {
-            return _db.AsQueryable<RootDir>().Single(c => c.Id == rootFolderId);
+            return EloqueraDb.AsQueryable<TModel>().Single(c => c.Id == rootFolderId);
         }
 
-        public RootDir Add(RootDir rootFolder)
+        public TModel Add(TModel rootFolder)
         {
-            return _db.Insert(rootFolder);
+            return EloqueraDb.Insert(rootFolder);
         }
 
         public void Delete(int rootFolderId)
         {
-            _db.Delete(Get(rootFolderId));
+            var itemToDelete = Get(rootFolderId);
+            EloqueraDb.Delete(itemToDelete);
+        }
+    }
+
+    public interface IRootFolderRepository : IBasicRepository<RootDir>
+    {
+
+    }
+
+
+    //This way we only need to implement none_custom methods for repos, like custom queries etc... rest is done automagically.
+    public class RootFolderRepository : BasicRepository<RootDir>, IRootFolderRepository
+    {
+        public RootFolderRepository(EloqueraDb eloqueraDb)
+            : base(eloqueraDb)
+        {
         }
     }
 
