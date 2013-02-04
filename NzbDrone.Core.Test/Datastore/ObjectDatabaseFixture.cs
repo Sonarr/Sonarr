@@ -4,7 +4,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using Db4objects.Db4o.Linq;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -14,7 +13,7 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void SetUp()
         {
-            WithObjectDb(false);
+            WithObjectDb();
         }
 
         [Test]
@@ -25,7 +24,6 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.Create(series);
 
-            Db.Ext().Purge();
 
             Db.AsQueryable<Series>().Should().HaveCount(1);
 
@@ -46,38 +44,6 @@ namespace NzbDrone.Core.Test.Datastore
             Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
         }
 
-
-        [Test]
-        public void rollback_should_reset_state()
-        {
-            var episode = Builder<Episode>.CreateNew().Build();
-
-            Db.Create(episode);
-
-            Db.AsQueryable<Episode>().Should().HaveCount(1);
-
-            Db.Rollback();
-
-            Db.AsQueryable<Episode>().Should().HaveCount(0);
-        }
-
-        [Test]
-        public void roolback_should_only_roll_back_what_is_not_commited()
-        {
-            var episode = Builder<Episode>.CreateNew().Build();
-            var series = Builder<Series>.CreateNew().Build();
-
-            Db.Create(episode);
-
-            Db.Commit();
-
-            Db.Create(series);
-
-            Db.Rollback();
-
-            Db.AsQueryable<Episode>().Should().HaveCount(1);
-            Db.AsQueryable<Series>().Should().HaveCount(0);
-        }
 
 
         [Test]
@@ -102,7 +68,7 @@ namespace NzbDrone.Core.Test.Datastore
 
             episode.Series.Title = "UpdatedTitle";
 
-            Db.Update(episode, 2);
+            Db.Update(episode);
 
             Db.AsQueryable<Episode>().Should().HaveCount(1);
             Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();

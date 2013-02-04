@@ -1,84 +1,64 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Eloquera.Client;
 
 namespace NzbDrone.Core.Datastore
 {
     public class EloqueraDb : IDisposable
     {
-        private DB _db;
+        private readonly DB _db;
 
         public EloqueraDb(DB db)
         {
             _db = db;
         }
 
-        public int Create(object obj)
-        {
-            return Convert.ToInt32(_db.Store(obj));
-        }
-
-        public void Update(object obj)
-        {
-            _db.Store(obj);
-        }
-
-        public void Delete(object obj)
-        {
-            _db.Delete(obj);
-        }
-
-        public void DeleteAll(object obj)
-        {
-            _db.DeleteAll(obj);
-        }
-
-        public IEnumerable<T> Query<T>()
+        public IEnumerable<T> AsQueryable<T>()
         {
             return _db.Query<T>();
         }
 
-        public IEnumerable ExecuteQuery(string query)
+
+        public T Create<T>(T obj)
         {
-            return _db.ExecuteQuery(query);
+            _db.Store(obj);
+            return obj;
         }
 
-        public IEnumerable ExecuteQuery(string query, int depth)
+        public IList<T> CreateMany<T>(IEnumerable<T> objects)
         {
-            return _db.ExecuteQuery(query, depth);
+            return DoMany(objects, Create);
         }
 
-        public IEnumerable ExecuteQuery(string query, int depth, Parameters parameters)
+        public T Update<T>(T obj)
         {
-            return _db.ExecuteQuery(query, depth, parameters);
+            _db.Store(obj);
+            return obj;
         }
 
-        public IEnumerable ExecuteQuery(string query, Parameters parameters)
+        public IList<T> UpdateMany<T>(IEnumerable<T> objects)
         {
-            return _db.ExecuteQuery(query, parameters);
+            return DoMany(objects, Update);
         }
 
-        public object ExecutScalar(string query)
+
+        public void Delete<T>(T obj)
         {
-            return _db.ExecuteQuery(query);
+            _db.Delete(obj);
         }
 
-        public object ExecuteScalar(string query, int depth)
+        public void DeleteMany<T>(IEnumerable<T> objects)
         {
-            return _db.ExecuteQuery(query, depth);
+            foreach (var o in objects)
+            {
+                Delete(o);
+            }
         }
 
-        public object ExecuteScalar(string query, int depth, Parameters parameters)
+        private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function)
         {
-            return _db.ExecuteQuery(query, depth, parameters);
-        }
-
-        public object ExecuteScalar(string query, Parameters parameters)
-        {
-            return _db.ExecuteQuery(query, parameters);
+            return objects.Select(function).ToList();
         }
 
         public void Dispose()

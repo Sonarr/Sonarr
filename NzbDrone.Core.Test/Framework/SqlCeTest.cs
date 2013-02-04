@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Db4objects.Db4o.IO;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model.Notification;
@@ -27,46 +26,6 @@ namespace NzbDrone.Core.Test.Framework
         }
 
 
-    }
-
-
-    public abstract class ObjectDbTest : CoreTest
-    {
-        private EloqueraDb _db;
-        protected EloqueraDb Db
-        {
-            get
-            {
-                if (_db == null)
-                    throw new InvalidOperationException("Test object database doesn't exists. Make sure you call WithRealDb() if you intend to use an actual database.");
-
-                return _db;
-            }
-        }
-
-        protected void WithObjectDb(bool memory = true)
-        {
-            if (memory)
-            {
-                //Todo: Actually use memory: http://www.eloquera.com/sites/default/files/filepicker/1/Help/Documentation/HTML/In-memory%20database.htm
-                _db = new EloqueraDbFactory().Create();
-            }
-            else
-            {
-                _db = new EloqueraDbFactory().Create(dbFilename: Guid.NewGuid().ToString());
-            }
-
-            Mocker.SetConstant(Db);
-        }
-
-        [TearDown]
-        public void ObjectDbTearDown()
-        {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
-        }
     }
 
 

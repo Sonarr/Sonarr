@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Eloquera.Client;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
@@ -9,6 +10,10 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("SeriesId", autoIncrement = false)]
     public class Series
     {
+
+        [ID]
+        public  int Id;
+
         public virtual int SeriesId { get; set; }
 
         public string Title { get; set; }
@@ -66,7 +71,7 @@ namespace NzbDrone.Core.Repository
         /// <value><c>true</c> if hidden; otherwise, <c>false</c>.</value>
         /// <remarks>This field will be used for shows that are pending delete or 
         /// new series that haven't been successfully imported</remarks>
-        [Ignore]
+        [PetaPoco.Ignore]
         public bool Hidden { get; set; }
 
         [ResultColumn]

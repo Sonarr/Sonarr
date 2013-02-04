@@ -1,31 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Eloquera.Client;
-using NzbDrone.Common;
 
 namespace NzbDrone.Core.Datastore
 {
     public class EloqueraDbFactory
     {
-        private readonly EnvironmentProvider _environmentProvider;
-
-        public EloqueraDbFactory()
+        public EloqueraDb CreateMemoryDb()
         {
-            _environmentProvider = new EnvironmentProvider();
+            return InternalCreate("server=(local);password=;options=inmemory;",Guid.NewGuid().ToString());
         }
 
-        public EloqueraDb Create(string dbName = "NzbDrone", string dbFilename = "nzbdrone.eloq")
+        public EloqueraDb Create(string dbPath)
         {
-            DB db = new DB();
-            DB.Configuration.ServerSettings.DatabasePath = Path.Combine(_environmentProvider.GetAppDataPath(), dbName);
-            db.CreateDatabase(dbName);
-            db.OpenDatabase(dbName);
-            db.RefreshMode = ObjectRefreshMode.AlwaysReturnUpdatedValues;
+            var file = new FileInfo(dbPath).Name;
+            return InternalCreate(string.Format("server=(local);database={0};usedatapath={1};password=;", file, dbPath),file);
+        }
 
+        private EloqueraDb InternalCreate(string connectionString, string databaseName)
+        {
+            var db = new DB(connectionString);
+            db.CreateDatabase(databaseName);
+            db.OpenDatabase(databaseName);
             return new EloqueraDb(db);
         }
+
+
     }
 }
