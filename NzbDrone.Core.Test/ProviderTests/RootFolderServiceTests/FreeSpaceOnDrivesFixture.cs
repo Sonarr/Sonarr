@@ -22,14 +22,14 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class FreeSpaceOnDrivesFixture : SqlCeTest
+    public class FreeSpaceOnDrivesFixture : CoreTest
     {
         [Test]
         public void should_return_one_drive_when_only_one_root_dir_exists()
         {
-            Mocker.GetMock<IDatabase>()
-                  .Setup(s => s.Fetch<RootDir>())
-                  .Returns(new List<RootDir> { new RootDir { Id = 1, Path = @"C:\Test\TV" } });
+            Mocker.GetMock<IRootFolderRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" } });
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
@@ -47,10 +47,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         [Test]
         public void should_return_one_drive_when_two_rootDirs_on_the_same_drive_exist()
         {
-            Mocker.GetMock<IDatabase>()
-                  .Setup(s => s.Fetch<RootDir>())
-                  .Returns(new List<RootDir> { new RootDir { Id = 1, Path = @"C:\Test\TV" },
-                                             new RootDir { Id = 2, Path = @"C:\Test\TV2" }});
+            Mocker.GetMock<IRootFolderRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" },
+                                             new RootFolder { Id = 2, Path = @"C:\Test\TV2" }});
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(It.IsAny<String>()))
@@ -68,10 +68,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         [Test]
         public void should_return_two_drives_when_two_rootDirs_on_the_different_drive_exist()
         {
-            Mocker.GetMock<IDatabase>()
-                  .Setup(s => s.Fetch<RootDir>())
-                  .Returns(new List<RootDir> { new RootDir { Id = 1, Path = @"C:\Test\TV" },
-                                             new RootDir { Id = 2, Path = @"D:\Test\TV" }});
+            Mocker.GetMock<IRootFolderRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" },
+                                             new RootFolder { Id = 2, Path = @"D:\Test\TV" }});
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
@@ -93,9 +93,9 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         [Test]
         public void should_skip_rootDir_if_not_found_on_disk()
         {
-            Mocker.GetMock<IDatabase>()
-                  .Setup(s => s.Fetch<RootDir>())
-                  .Returns(new List<RootDir> { new RootDir { Id = 1, Path = @"C:\Test\TV" } });
+            Mocker.GetMock<IRootFolderRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" } });
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))

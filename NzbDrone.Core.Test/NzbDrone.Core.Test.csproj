@@ -114,9 +114,9 @@
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Prowlin, Version=0.9.4456.26422, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -147,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
-    <Compile Include="Framework\CoreTestTSubject.cs" />
+    <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\ObjectDbTest.cs" />
     <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerTests\NzbxFixture.cs" />
@@ -156,7 +156,7 @@
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\ContainsRecentEpisode.cs" />
-    <Compile Include="ProviderTests\RootDirProviderTests\FreeSpaceOnDrivesFixture.cs" />
+    <Compile Include="ProviderTests\RootFolderServiceTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\ProcessResultsFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\DailyEpisodeSearchTests\CheckReportFixture.cs" />
     <Compile Include="ProviderTests\SearchTests\EpisodeSearchTests\CheckReportFixture.cs" />
@@ -257,7 +257,7 @@
     <Compile Include="ProviderTests\DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\JobProviderFixture.cs" />
     <Compile Include="QualityTest.cs" />
-    <Compile Include="ProviderTests\RootDirProviderTests\RootDirProviderFixture.cs" />
+    <Compile Include="ProviderTests\RootFolderServiceTests\RootFolderServiceFixture.cs" />
     <Compile Include="ProviderTests\IndexerProviderTest.cs" />
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />

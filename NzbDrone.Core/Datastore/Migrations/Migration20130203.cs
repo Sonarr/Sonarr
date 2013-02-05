@@ -18,10 +18,10 @@ namespace NzbDrone.Core.Datastore.Migrations
 
             using (var dataReader = Database.ExecuteQuery("SELECT * from RootDirs"))
             {
-                var dirs = new List<RootDir>();
+                var dirs = new List<RootFolder>();
                 while (dataReader.Read())
                 {
-                    var rootFolder = new RootDir { Path = dataReader["Path"].ToString() };
+                    var rootFolder = new RootFolder { Path = dataReader["Path"].ToString() };
                     dirs.Add(rootFolder);
                 }
                                 objectDb.InsertMany(dirs);

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Core.RootFolders;
+using NzbDrone.Core.Datastore;
 using PetaPoco;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.RootFolders
 {
 
     [TableName("RootDirs")]
     [PrimaryKey("Id", autoIncrement = true)]
-    public class RootDir : BaseModel
+    public class RootFolder : BaseRepositoryModel
     {
         public string Path { get; set; }
 

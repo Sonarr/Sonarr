@@ -87,11 +87,11 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_read_unknow_type()
         {
-            Db.AsQueryable<UnKnowType>().ToList().Should().BeEmpty();
+            Db.AsQueryable<UnknownType>().ToList().Should().BeEmpty();
         }
     }
 
-    public class UnKnowType
+    public class UnknownType
     {
         [ID]
         public string Id;

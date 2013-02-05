@@ -23,7 +23,7 @@ namespace NzbDrone.Api.RootFolders
 
         private Response AddRootFolder()
         {
-            var dir = _rootFolderService.Add(Request.Body.FromJson<RootDir>());
+            var dir = _rootFolderService.Add(Request.Body.FromJson<RootFolder>());
             return dir.AsResponse(HttpStatusCode.Created);
         }
 

@@ -231,6 +231,8 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
+    <Compile Include="Datastore\BaseRepositoryModel.cs" />
+    <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ConnectionFactory.cs" />
     <Compile Include="Datastore\EloqueraDb.cs" />
     <Compile Include="Datastore\EloqueraDbFactory.cs" />
@@ -595,7 +597,7 @@
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityType.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
-    <Compile Include="Repository\RootDir.cs" />
+    <Compile Include="RootFolders\RootFolder.cs" />
     <Compile Include="Repository\SceneMapping.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />

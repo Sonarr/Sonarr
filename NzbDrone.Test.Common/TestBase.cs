@@ -12,7 +12,6 @@ namespace NzbDrone.Test.Common
     {
         protected const string INTEGRATION_TEST = "Integration Test";
 
-
         private AutoMoqer _mocker;
         protected AutoMoqer Mocker
         {
@@ -29,7 +28,6 @@ namespace NzbDrone.Test.Common
 
         protected Mock<RestProvider> MockedRestProvider { get; private set; }
 
-
         private string VirtualPath
         {
             get
@@ -40,7 +38,6 @@ namespace NzbDrone.Test.Common
                 return virtualPath;
             }
         }
-
 
         protected string TempFolder { get; private set; }
 
@@ -82,7 +79,6 @@ namespace NzbDrone.Test.Common
 
             _mocker = new AutoMoqer(MockBehavior.Strict);
         }
-
 
         protected void WithTempAsAppPath()
         {

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -16,18 +15,22 @@ using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.RootFolderServiceTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RootDirProviderFixture : CoreTest<RootFolderService>
+    public class RootFolderServiceFixture : CoreTest<RootFolderService>
     {
         [SetUp]
         public void Setup()
         {
             Mocker.GetMock<DiskProvider>()
-                .Setup(m => m.FolderExists(It.IsAny<string>()))
-                .Returns(true);
+                  .Setup(m => m.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IRootFolderRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<RootFolder>());
         }
 
         private void WithNoneExistingFolder()
@@ -37,12 +40,12 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                 .Returns(false);
         }
 
-
         [TestCase("D:\\TV Shows\\")]
         [TestCase("//server//folder")]
         public void should_be_able_to_add_root_dir(string path)
         {
-            var root = new RootDir { Path = path };
+            var root = new RootFolder { Path = path };
+            
             Subject.Add(root);
 
             Mocker.GetMock<IRootFolderRepository>().Verify(c => c.Add(root), Times.Once());
@@ -53,7 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         {
             WithNoneExistingFolder();
 
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.Add(new RootDir { Path = "C:\\TEST" }));
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.Add(new RootFolder { Path = "C:\\TEST" }));
         }
 
         [Test]
@@ -67,7 +70,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         {
             WithNoneExistingFolder();
 
-            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootDir>());
+            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder>());
 
             const string path = "d:\\bad folder";
 
@@ -90,17 +93,16 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         public void invalid_folder_path_throws_on_add(string path)
         {
             Assert.Throws<ArgumentException>(() =>
-                    Mocker.Resolve<RootFolderService>().Add(new RootDir { Id = 0, Path = path })
+                    Mocker.Resolve<RootFolderService>().Add(new RootFolder { Id = 0, Path = path })
                 );
         }
 
         [Test]
         public void adding_duplicated_root_folder_should_throw()
         {
-            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootDir> { new RootDir { Path = "C:\\TV" } });
+            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV" } });
 
-            Subject.Add(new RootDir { Path = @"C:\TV" });
-            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootDir { Path = @"C:\TV" }));
+            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV" }));
         }
     }
 }

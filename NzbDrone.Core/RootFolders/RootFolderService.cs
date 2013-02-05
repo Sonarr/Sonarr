@@ -11,8 +11,8 @@ namespace NzbDrone.Core.RootFolders
 {
     public interface IRootFolderService
     {
-        List<RootDir> All();
-        RootDir Add(RootDir rootDir);
+        List<RootFolder> All();
+        RootFolder Add(RootFolder rootDir);
         void Remove(int rootDirId);
         List<String> GetUnmappedFolders(string path);
         Dictionary<string, ulong> FreeSpaceOnDrives();
@@ -32,12 +32,12 @@ namespace NzbDrone.Core.RootFolders
             _seriesProvider = seriesProvider;
         }
 
-        public virtual List<RootDir> All()
+        public virtual List<RootFolder> All()
         {
             return _rootFolderRepository.All();
         }
 
-        public virtual RootDir Add(RootDir rootDir)
+        public virtual RootFolder Add(RootFolder rootDir)
         {
             if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
                 throw new ArgumentException("Invalid path");
