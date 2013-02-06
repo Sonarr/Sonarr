@@ -22,25 +22,24 @@ namespace NzbDrone.Core.Datastore
 
         protected EloqueraDb EloqueraDb { get; private set; }
 
-
         public List<TModel> All()
         {
             return EloqueraDb.AsQueryable<TModel>().ToList();
         }
 
-        public TModel Get(int rootFolderId)
+        public TModel Get(int id)
         {
-            return EloqueraDb.AsQueryable<TModel>().Single(c => c.Id == rootFolderId);
+            return EloqueraDb.AsQueryable<TModel>().Single(c => c.Id == id);
         }
 
-        public TModel Add(TModel rootFolder)
+        public TModel Add(TModel model)
         {
-            return EloqueraDb.Insert(rootFolder);
+            return EloqueraDb.Insert(model);
         }
 
-        public void Delete(int rootFolderId)
+        public void Delete(int id)
         {
-            var itemToDelete = Get(rootFolderId);
+            var itemToDelete = Get(id);
             EloqueraDb.Delete(itemToDelete);
         }
     }

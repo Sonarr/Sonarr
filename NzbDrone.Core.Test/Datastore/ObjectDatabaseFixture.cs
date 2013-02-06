@@ -14,14 +14,19 @@ namespace NzbDrone.Core.Test.Datastore
         private Series testSeries;
         private Episode testEpisode;
 
-
         [SetUp]
         public void SetUp()
         {
             WithObjectDb();
 
-            testSeries = Builder<Series>.CreateNew().Build();
-            testEpisode = Builder<Episode>.CreateNew().Build();
+            testSeries = Builder<Series>
+                    .CreateNew()
+                    .With(s => s.Id = 0)
+                    .Build();
+
+            testEpisode = Builder<Episode>
+                    .CreateNew()
+                    .Build();
 
 
         }
@@ -46,8 +51,6 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
         }
-
-
 
         [Test]
         public void should_store_nested_objects()
@@ -76,7 +79,6 @@ namespace NzbDrone.Core.Test.Datastore
             Db.AsQueryable<Episode>().Single().Series.Title.Should().Be("UpdatedTitle");
         }
 
-
         [Test]
         public void new_objects_should_get_id()
         {
@@ -85,7 +87,28 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void should_be_able_to_read_unknow_type()
+        public void should_have_id_when_returned_from_database()
+        {
+            Db.Insert(testSeries);
+            var item = Db.AsQueryable<Series>();
+
+            item.Should().HaveCount(1);
+            item.First().Id.Should().NotBe(0);
+            item.First().Id.Should().Be(testSeries.Id);
+        }
+
+        [Test]
+        public void should_be_able_to_find_object_by_id()
+        {
+            Db.Insert(testSeries);
+            var item = Db.AsQueryable<Series>().Single(c => c.Id == testSeries.Id);
+
+            item.Id.Should().NotBe(0);
+            item.Id.Should().Be(testSeries.Id);
+        }
+
+        [Test]
+        public void should_be_able_to_read_unknown_type()
         {
             Db.AsQueryable<UnknownType>().ToList().Should().BeEmpty();
         }

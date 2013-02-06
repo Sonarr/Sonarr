@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Repository
     {
 
         [ID]
-        public  int Id;
+        public long Id;
 
         public virtual int SeriesId { get; set; }
 
