@@ -128,3 +128,4 @@ UpdateLogs/
 */Bootstrap/*.css
 *//Bootstrap/*.css
 NzbDrone.Web/cassette-cache/*
+*.eq
