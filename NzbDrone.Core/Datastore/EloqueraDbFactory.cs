@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Eloquera.Client;
 using NzbDrone.Common;
+using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -48,9 +49,23 @@ namespace NzbDrone.Core.Datastore
                 db.OpenDatabase(databaseName);
             }
 
+            RegisterTypeRules();
+            RegisterTypes(db);
+
             return new EloqueraDb(db);
         }
 
+        private void RegisterTypeRules()
+        {
+            RootFolder rootFolder = null;
+            DB.TypeRules
+              .IgnoreProperty(() => rootFolder.FreeSpace)
+              .IgnoreProperty(() => rootFolder.UnmappedFolders);
+        }
 
+        private void RegisterTypes(DB db)
+        {
+            db.RegisterType(typeof(RootFolder));
+        }
     }
 }
