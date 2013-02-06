@@ -410,6 +410,7 @@
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
     <Content Include="_backboneApp\Series\SeriesModel.js" />
+    <Content Include="_backboneApp\Shared\AutoComplete.js" />
     <Content Include="_backboneApp\Shared\NotificationModel.js" />
     <Content Include="_backboneApp\Shared\NotificationTemplate.html" />
     <Content Include="_backboneApp\Shared\NotificationView.js" />

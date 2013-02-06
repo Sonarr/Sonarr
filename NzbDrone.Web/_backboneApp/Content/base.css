@@ -41,6 +41,10 @@ body {
     text-align: center;
 }
 
+.nz-center .typeahead {
+    text-align: left;
+}
+
 #footer-region {
     font-size: 16px;
     text-decoration: none;

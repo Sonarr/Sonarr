@@ -2,6 +2,7 @@
 /// <reference path="../../app.js" />
 /// <reference path="RootDirModel.js" />
 /// <reference path="RootDirCollection.js" />
+/// <reference path="../../Shared/AutoComplete.js" />
 
 NzbDrone.AddSeries.RootDirItemView = Backbone.Marionette.ItemView.extend({
 
@@ -53,6 +54,8 @@ NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
 
         this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
         this.collection.fetch();
+
+        this.ui.pathInput.folderAutoComplete();
     },
 
 
