@@ -111,19 +111,22 @@ namespace NzbDrone.Core.Providers
                 return null;
             }
 
-            long size = _diskProvider.GetSize(filePath);
-            var runTime = _mediaInfoProvider.GetRunTime(filePath);
-
-            if(size < Constants.IgnoreFileSize && runTime < 180)
-            {
-                Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
-                return null;
-            }
-
             var parseResult = Parser.ParsePath(filePath);
 
             if (parseResult == null)
                 return null;
+
+            var size = _diskProvider.GetSize(filePath);
+            var runTime = _mediaInfoProvider.GetRunTime(filePath);
+
+            if(series.IsDaily || parseResult.SeasonNumber > 0)
+            {
+                if (size < Constants.IgnoreFileSize && runTime < 180)
+                {
+                    Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
+                    return null;
+                }
+            }
 
             if (!_diskProvider.IsChildOfPath(filePath, series.Path))
                 parseResult.SceneSource = true;
