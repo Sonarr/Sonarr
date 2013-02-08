@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Test.Datastore
 
             testEpisode = Builder<Episode>
                     .CreateNew()
+                    .With(e => e.Id = 0)
                     .Build();
 
 
@@ -35,9 +36,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_write_to_database()
         {
             Db.Insert(testSeries);
-
             Db.AsQueryable<Series>().Should().HaveCount(1);
-
         }
 
         [Test]
@@ -66,7 +65,10 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_update_nested_objects()
         {
-            testEpisode.Series = Builder<Series>.CreateNew().Build();
+            testEpisode.Series = Builder<Series>
+                                    .CreateNew()
+                                    .With(s => s.Id = 0)
+                                    .Build();
 
             Db.Insert(testEpisode);
 
@@ -82,14 +84,14 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void new_objects_should_get_id()
         {
-            Db.Insert(testSeries);
+            testSeries.Id = Db.InsertAndGetId(testSeries);
             testSeries.Id.Should().NotBe(0);
         }
 
         [Test]
         public void should_have_id_when_returned_from_database()
         {
-            Db.Insert(testSeries);
+            testSeries.Id = Db.InsertAndGetId(testSeries);
             var item = Db.AsQueryable<Series>();
 
             item.Should().HaveCount(1);
@@ -100,7 +102,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_find_object_by_id()
         {
-            Db.Insert(testSeries);
+            testSeries.Id = Db.InsertAndGetId(testSeries);
             var item = Db.AsQueryable<Series>().Single(c => c.Id == testSeries.Id);
 
             item.Id.Should().NotBe(0);

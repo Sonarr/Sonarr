@@ -8,9 +8,9 @@ namespace NzbDrone.Core.Datastore
     public interface IBasicRepository<TModel>
     {
         List<TModel> All();
-        TModel Get(int rootFolderId);
+        TModel Get(long rootFolderId);
         TModel Add(TModel rootFolder);
-        void Delete(int rootFolderId);
+        void Delete(long rootFolderId);
     }
 
     public abstract class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseRepositoryModel, new()
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Datastore
             return EloqueraDb.AsQueryable<TModel>().ToList();
         }
 
-        public TModel Get(int id)
+        public TModel Get(long id)
         {
             return EloqueraDb.AsQueryable<TModel>().Single(c => c.Id == id);
         }
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Datastore
             return EloqueraDb.Insert(model);
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             var itemToDelete = Get(id);
             EloqueraDb.Delete(itemToDelete);

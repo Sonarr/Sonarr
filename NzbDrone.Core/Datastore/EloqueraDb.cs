@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Eloquera.Client;
@@ -19,11 +20,16 @@ namespace NzbDrone.Core.Datastore
             return _db.Query<T>();
         }
 
-
         public T Insert<T>(T obj)
         {
+            //Todo: need to verify that this is properly setting the ID of T
             _db.Store(obj);
             return obj;
+        }
+
+        public long InsertAndGetId<T>(T obj)
+        {
+            return _db.Store(obj);
         }
 
         public IList<T> InsertMany<T>(IEnumerable<T> objects)
@@ -41,7 +47,6 @@ namespace NzbDrone.Core.Datastore
         {
             return DoMany(objects, Update);
         }
-
 
         public void Delete<T>(T obj) where T : new()
         {

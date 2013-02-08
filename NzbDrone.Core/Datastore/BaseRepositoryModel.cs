@@ -9,6 +9,6 @@ namespace NzbDrone.Core.Datastore
     public abstract class BaseRepositoryModel
     {
         [ID]
-        public int Id;
+        public long Id;
     }
 }

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.RootFolders
     {
         List<RootFolder> All();
         RootFolder Add(RootFolder rootDir);
-        void Remove(int rootDirId);
+        void Remove(long rootDirId);
         List<String> GetUnmappedFolders(string path);
         Dictionary<string, ulong> FreeSpaceOnDrives();
     }
@@ -34,28 +34,36 @@ namespace NzbDrone.Core.RootFolders
 
         public virtual List<RootFolder> All()
         {
-            return _rootFolderRepository.All();
+            var rootFolders = _rootFolderRepository.All();
+
+            rootFolders.ForEach(folder =>
+                {
+                    folder.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(folder.Path));
+                    folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
+                });
+
+            return rootFolders;
         }
 
-        public virtual RootFolder Add(RootFolder rootDir)
+        public virtual RootFolder Add(RootFolder rootFolder)
         {
-            if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
+            if (String.IsNullOrWhiteSpace(rootFolder.Path) || !Path.IsPathRooted(rootFolder.Path))
                 throw new ArgumentException("Invalid path");
 
-            if (!_diskProvider.FolderExists(rootDir.Path))
+            if (!_diskProvider.FolderExists(rootFolder.Path))
                 throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
 
-            if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootDir.Path)))
+            if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
                 throw new InvalidOperationException("Root directory already exist.");
 
-            _rootFolderRepository.Add(rootDir);
+            _rootFolderRepository.Add(rootFolder);
 
-            rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
-            rootDir.UnmappedFolders = GetUnmappedFolders(rootDir.Path);
-            return rootDir;
+            rootFolder.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootFolder.Path));
+            rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
+            return rootFolder;
         }
 
-        public virtual void Remove(int rootDirId)
+        public virtual void Remove(long rootDirId)
         {
             _rootFolderRepository.Delete(rootDirId);
         }
@@ -85,7 +93,6 @@ namespace NzbDrone.Core.RootFolders
             Logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
         }
-
 
         public virtual Dictionary<string, ulong> FreeSpaceOnDrives()
         {

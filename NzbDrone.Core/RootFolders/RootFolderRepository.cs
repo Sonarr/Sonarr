@@ -11,14 +11,19 @@ namespace NzbDrone.Core.RootFolders
 
     }
 
-
     //This way we only need to implement none_custom methods for repos, like custom queries etc... rest is done automagically.
     public class RootFolderRepository : BasicRepository<RootFolder>, IRootFolderRepository
     {
         public RootFolderRepository(EloqueraDb eloqueraDb)
             : base(eloqueraDb)
         {
+
+        }
+
+        public RootFolder Add(RootFolder rootFolder)
+        {
+            rootFolder.Id = EloqueraDb.InsertAndGetId(rootFolder);
+            return rootFolder;
         }
     }
-
 }

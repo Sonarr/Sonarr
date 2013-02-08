@@ -1,4 +1,5 @@
 ﻿using System;
+using Eloquera.Client;
 using NzbDrone.Core.Model;
 using PetaPoco;
 
@@ -8,6 +9,9 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("EpisodeId", autoIncrement = true)]
     public class Episode
     {
+        [ID]
+        public long Id;
+
         public int EpisodeId { get; set; }
 
         public int? TvDbEpisodeId { get; set; }

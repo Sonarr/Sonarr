@@ -10,7 +10,6 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("SeriesId", autoIncrement = false)]
     public class Series
     {
-
         [ID]
         public long Id;
 

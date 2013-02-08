@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Eloquera.Client;
 using NzbDrone.Common;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Core.Datastore
@@ -39,6 +40,7 @@ namespace NzbDrone.Core.Datastore
         private EloqueraDb InternalCreate(string connectionString, string databaseName)
         {
             var db = new DB(connectionString);
+
             try
             {
                 db.OpenDatabase(databaseName);
@@ -49,6 +51,9 @@ namespace NzbDrone.Core.Datastore
                 db.OpenDatabase(databaseName);
             }
 
+            //This seemse to cause Invalid Cast Exceptions... WTF
+            //db.RefreshMode = ObjectRefreshMode.AlwaysReturnUpdatedValues;
+            
             RegisterTypeRules();
             RegisterTypes(db);
 
@@ -59,13 +64,20 @@ namespace NzbDrone.Core.Datastore
         {
             RootFolder rootFolder = null;
             DB.TypeRules
+              //.SetIDField(() => rootFolder.Id)
               .IgnoreProperty(() => rootFolder.FreeSpace)
               .IgnoreProperty(() => rootFolder.UnmappedFolders);
+
+            //Series series = null;
+            //DB.TypeRules
+            //  .SetIDField(() => series.Id);
         }
 
         private void RegisterTypes(DB db)
         {
             db.RegisterType(typeof(RootFolder));
+            db.RegisterType(typeof(Series));
+            db.RegisterType(typeof(Episode));
         }
     }
 }
