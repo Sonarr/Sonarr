@@ -18,6 +18,7 @@ if (typeof console === undefined) {
 
 NzbDrone = new Backbone.Marionette.Application();
 NzbDrone.Series = {};
+NzbDrone.Series.Index = {};
 NzbDrone.AddSeries = {};
 NzbDrone.AddSeries.New = {};
 NzbDrone.AddSeries.Existing = {};
@@ -33,7 +34,6 @@ _.templateSettings = {
 
 NzbDrone.ModelBinder = new Backbone.ModelBinder();
 
-
 NzbDrone.Constants = {
     ApiRoot: '/api'
 };
@@ -42,37 +42,36 @@ NzbDrone.Events = {
     DisplayInMainRegion: 'DisplayInMainRegion'
 };
 
-
 NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
     addSeries: function (action, query) {
         NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
     },
 
+    series: function (action, query) {
+        NzbDrone.mainRegion.show(new NzbDrone.Series.IndexLayout(this, action, query));
+    },
 
     notFound: function () {
         alert('route not found');
     }
 });
 
-
 NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
     controller: new NzbDrone.Controller(),
     // "someMethod" must exist at controller.someMethod
     appRoutes: {
+        'series/index': 'series',
         'series/add': 'addSeries',
         'series/add/:action(/:query)': 'addSeries',
         ':whatever': 'notFound'
-
     }
-
 });
 
 NzbDrone.addInitializer(function (options) {
 
     console.log('starting application');
-
 
     NzbDrone.addRegions({
         mainRegion: '#main-region',
@@ -81,6 +80,4 @@ NzbDrone.addInitializer(function (options) {
 
     NzbDrone.Router = new NzbDrone.Router();
     Backbone.history.start();
-
-
 });

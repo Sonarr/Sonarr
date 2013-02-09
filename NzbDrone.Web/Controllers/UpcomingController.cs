@@ -52,9 +52,9 @@ namespace NzbDrone.Web.Controllers
                 EpisodeNumbering = String.Format("{0}x{1:00}", u.SeasonNumber, u.EpisodeNumber),
                 Title = u.Title,
                 Overview = u.Overview,
-                AirDateTime = GetDateTime(u.AirDate.Value, u.Series.AirTimes),
+                AirDateTime = GetDateTime(u.AirDate.Value, u.Series.AirTime),
                 AirDate = u.AirDate.Value.ToBestDateString(),
-                AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
+                AirTime = String.IsNullOrEmpty(u.Series.AirTime) ? "?" : Convert.ToDateTime(u.Series.AirTime).ToShortTimeString(),
                 Status = u.Status.ToString()
             }).OrderBy(e => e.AirDateTime).ToList();
         }

@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extentions;
+using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Api.Series
 {
@@ -12,15 +16,26 @@ namespace NzbDrone.Api.Series
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly JobProvider _jobProvider;
+        private readonly ConfigProvider _configProvider;
 
-        public SeriesModule(SeriesProvider seriesProvider, JobProvider jobProvider)
+        public SeriesModule(SeriesProvider seriesProvider, JobProvider jobProvider,
+                            ConfigProvider configProvider)
             : base("/Series")
         {
             _seriesProvider = seriesProvider;
             _jobProvider = jobProvider;
+            _configProvider = configProvider;
+            Get["/"] = x => AllSeries();
             Post["/"] = x => AddSeries();
         }
 
+        private Response AllSeries()
+        {
+            var series = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
+            var seriesModels = Mapper.Map<List<Core.Repository.Series>, List<SeriesModel>>(series);
+
+            return seriesModels.AsResponse();
+        }
 
         private Response AddSeries()
         {
@@ -29,8 +44,7 @@ namespace NzbDrone.Api.Series
             //Todo: Alert the user if this series already exists
             //Todo: We need to create the folder if the user is adding a new series
             //(we can just create the folder and it won't blow up if it already exists)
-            //We also need to remove any special characters from the filename before attempting to create it
-            
+            //We also need to remove any special characters from the filename before attempting to create it           
 
             _seriesProvider.AddSeries("", request.Path, request.SeriesId, request.QualityProfileId, null);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
@@ -38,7 +52,6 @@ namespace NzbDrone.Api.Series
             return new Response { StatusCode = HttpStatusCode.Created };
         }
     }
-
 
     public class SeriesValidator : AbstractValidator<Core.Repository.Series>
     {
@@ -58,7 +71,5 @@ namespace NzbDrone.Api.Series
                     RuleFor(s => s.QualityProfileId).GreaterThan(0);
                 });
         }
-
-
     }
 }

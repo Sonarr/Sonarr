@@ -237,7 +237,7 @@ namespace NzbDrone.Web.Controllers
                                                         EpisodeFileCount = s.EpisodeFileCount,
                                                         NextAiring = s.NextAiring == null ? String.Empty : s.NextAiring.Value.ToBestDateString(),
                                                         NextAiringSorter = s.NextAiring == null ? new DateTime(9999, 12, 31).ToString("o", CultureInfo.InvariantCulture) : s.NextAiring.Value.ToString("o", CultureInfo.InvariantCulture),
-                                                        AirTime = s.AirTimes,
+                                                        AirTime = s.AirTime,
                                                         CustomStartDate = s.CustomStartDate.HasValue ? s.CustomStartDate.Value.ToString("yyyy-MM-dd") : String.Empty
                                                     }).ToList();
 

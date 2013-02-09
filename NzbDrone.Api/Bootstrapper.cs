@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Autofac;
 using NLog;
@@ -9,7 +10,9 @@ using NzbDrone.Api.Extentions;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
+using NzbDrone.Api.Series;
 using NzbDrone.Core;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Api
@@ -32,25 +35,30 @@ namespace NzbDrone.Api
         public static void InitializeAutomapper()
         {
             //QualityProfiles
-            Mapper.CreateMap<QualityProfileModel, QualityProfile>()
-                  .ForMember(dest => dest.QualityProfileId, opt => opt.MapFrom(src => src.Id))
-                  .ForMember(dest => dest.Allowed,
-                             opt => opt.ResolveUsing<QualitiesToAllowedResolver>().FromMember(src => src.Qualities));
-
             Mapper.CreateMap<QualityProfile, QualityProfileModel>()
                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityProfileId))
                   .ForMember(dest => dest.Qualities,
                              opt => opt.ResolveUsing<AllowedToQualitiesResolver>().FromMember(src => src.Allowed));
 
+            Mapper.CreateMap<QualityProfileModel, QualityProfile>()
+                  .ForMember(dest => dest.QualityProfileId, opt => opt.MapFrom(src => src.Id))
+                  .ForMember(dest => dest.Allowed,
+                             opt => opt.ResolveUsing<QualitiesToAllowedResolver>().FromMember(src => src.Qualities));
+
             Mapper.CreateMap<QualityTypes, QualityProfileType>()
                   .ForMember(dest => dest.Allowed, opt => opt.Ignore());
 
             //QualityTypes
+            Mapper.CreateMap<Core.Repository.Quality.QualityType, QualityTypeModel>()
+                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityTypeId));
+
             Mapper.CreateMap<QualityTypeModel, Core.Repository.Quality.QualityType>()
                   .ForMember(dest => dest.QualityTypeId, opt => opt.MapFrom(src => src.Id));
 
-            Mapper.CreateMap<Core.Repository.Quality.QualityType, QualityTypeModel>()
-                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityTypeId));
+            //Series
+            Mapper.CreateMap<Core.Repository.Series, SeriesModel>()
+                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SeriesId));
+            //.ForMember(dest => dest.BacklogSetting, opt => opt.MapFrom(src => Convert.ToInt32(src.BacklogSetting)));
         }
 
         protected override ILifetimeScope GetApplicationContainer()

@@ -30,6 +30,7 @@ namespace NzbDrone.Web.Backbone.NzbDrone
             bundles.Add<ScriptBundle>("~/_backboneApp/JsLibraries/backbone.js");
 
             bundles.Add<ScriptBundle>(NZBDRONE, new[]{
+                      APP_PATH + "\\Series\\Index\\IndexLayout.js",
                       APP_PATH + "\\AddSeries\\AddSeriesLayout.js",
                       APP_PATH + "\\Shared\\NotificationView.js",
 

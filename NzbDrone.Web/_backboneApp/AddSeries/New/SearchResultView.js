@@ -56,8 +56,6 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
             }
         });
     }
-
-
 });
 
 NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({

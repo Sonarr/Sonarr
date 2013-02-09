@@ -26,7 +26,8 @@ namespace NzbDrone.Core.Repository
         [DisplayName("Air on")]
         public DayOfWeek? AirsDayOfWeek { get; set; }
 
-        public String AirTimes { get; set; }
+        [Column("AirTimes")]
+        public String AirTime { get; set; }
 
         public string Language { get; set; }
 

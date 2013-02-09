@@ -409,6 +409,12 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="_backboneApp\Series\Index\SeriesCollectionTemplate.html" />
+    <Content Include="_backboneApp\Series\Index\IndexLayoutTemplate.html" />
+    <Content Include="_backboneApp\Series\Index\IndexLayout.js" />
+    <Content Include="_backboneApp\Series\Index\SeriesItemTemplate.html" />
+    <Content Include="_backboneApp\Series\Index\SeriesItemView.js" />
+    <Content Include="_backboneApp\Series\SeriesCollection.js" />
     <Content Include="_backboneApp\Series\SeriesModel.js" />
     <Content Include="_backboneApp\Shared\AutoComplete.js" />
     <Content Include="_backboneApp\Shared\NotificationModel.js" />
