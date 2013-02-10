@@ -16,23 +16,30 @@ namespace NzbDrone.Api.Series
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly JobProvider _jobProvider;
-        private readonly ConfigProvider _configProvider;
 
-        public SeriesModule(SeriesProvider seriesProvider, JobProvider jobProvider,
-                            ConfigProvider configProvider)
+        public SeriesModule(SeriesProvider seriesProvider, JobProvider jobProvider)
             : base("/Series")
         {
             _seriesProvider = seriesProvider;
             _jobProvider = jobProvider;
-            _configProvider = configProvider;
             Get["/"] = x => AllSeries();
+            Get["/{id}"] = x => GetSeries((int)x.id);
             Post["/"] = x => AddSeries();
+            Delete["/{id}"] = x => DeleteSeries((int)x.id);
         }
 
         private Response AllSeries()
         {
             var series = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
             var seriesModels = Mapper.Map<List<Core.Repository.Series>, List<SeriesModel>>(series);
+
+            return seriesModels.AsResponse();
+        }
+
+        private Response GetSeries(int id)
+        {
+            var series = _seriesProvider.GetSeries(id);
+            var seriesModels = Mapper.Map<Core.Repository.Series, SeriesModel>(series);
 
             return seriesModels.AsResponse();
         }
@@ -50,6 +57,12 @@ namespace NzbDrone.Api.Series
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };
+        }
+
+        private Response DeleteSeries(int id)
+        {
+            //_seriesProvider.DeleteSeries(id);
+            return new Response { StatusCode = HttpStatusCode.OK };
         }
     }
 

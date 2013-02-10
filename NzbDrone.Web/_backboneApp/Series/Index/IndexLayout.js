@@ -13,7 +13,7 @@ NzbDrone.Series.IndexLayout = Backbone.Marionette.Layout.extend({
     },
 
     regions: {
-        main: '#series',
+        seriesRegion: '#series'
     },
 
     collection: new NzbDrone.Series.SeriesCollection(),
@@ -26,8 +26,7 @@ NzbDrone.Series.IndexLayout = Backbone.Marionette.Layout.extend({
         console.log('binding auto complete');
         
         this.collection.fetch();
-        //Show things
         
-        this.main.show(new NzbDrone.Series.Index.SeriesCollectionView({ collection: this.collection }));
+        this.seriesRegion.show(new NzbDrone.Series.Index.SeriesCollectionView({ collection: this.collection }));
     },
 });

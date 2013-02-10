@@ -17,8 +17,6 @@ NzbDrone.Shared.NotificationItemView = Backbone.Marionette.ItemView.extend({
         }).done(function () {
             self.model.destroy();
         });
-
-
     }
 });
 

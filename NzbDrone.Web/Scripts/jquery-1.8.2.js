@@ -7985,8 +7985,8 @@ jQuery.extend({
 
 	// Last-Modified header cache for next request
 	lastModified: {},
-	etag: {}
-
+	etag: {},
+	destroy: function(p) { throw new Error("Not implemented"); }
 });
 
 /* Handles responses to an ajax request:

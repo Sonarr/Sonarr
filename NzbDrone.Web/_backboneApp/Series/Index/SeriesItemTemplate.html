@@ -1,15 +1,10 @@
-﻿<td name="status"></td>
-<td name="title"></td>
+﻿<td>{{{formatStatus status monitored}}}</td>
+<td><a href="/series/details/{{id}}">{{title}}</a></td>
 <td name="seasonCount"></td>
 <td name="qualityProfileName"></td>
 <td name="network"></td>
-<td name="nextAiring"></td>
-<td name="EpisodeCount">
-{{#if episodeFileCount}}
-    {{episodeFileCount}}
-{{else}}
-    0
-{{/if}}
- / {{episodeCount}}
+<td>{{formatBestDate nextAiring}}</td>
 <td>
-<td>Edit/Delete</td>
+{{{formatProgress episodeFileCount episodeCount}}}
+<td>
+<td>Edit/<i class="icon-remove x-remove" title="Delete Series"></i></td>

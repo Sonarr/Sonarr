@@ -78,10 +78,32 @@ body {
     line-height: 4em;
 }
 
-    .line > [class^="icon-"], .line > [class*=" icon-"] {
-        margin-top: 1em;
-        height: 1em;
-        line-height: 1em;
-    }
+.line > [class^="icon-"], .line > [class*=" icon-"] {
+    margin-top: 1em;
+    height: 1em;
+    line-height: 1em;
+}
 
+.progress {
+    width: 125px;
+    position: relative;
+    margin-bottom: 2px;
+}
 
+.progress .bar {
+    position: absolute;
+    overflow: hidden;
+}
+.progress .progressbar-back-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    text-align: center;
+}
+.progress .progressbar-front-text {
+    display: block;
+    width: 125px;
+    font-size: 12px;
+    text-align: center;
+}
