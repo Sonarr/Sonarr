@@ -1,0 +1,73 @@
+﻿<div class="modal-header">
+    <h3>Edit: {{title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal">
+        
+        <div class="control-group">
+            <label class="control-label" for="inputMonitored">Monitored</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" id ="inputMonitored" name="monitored">
+                    Should NzbDrone download episodes for this series?
+                </label>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="inputSeasonFolder">Use Season Folder</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" id ="inputSeasonFolder" name="seasonFolder">
+                    Should downloaded episodes be stored in season folders?
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="inputQualityProfile">Quality Profile</label>
+            <div class="controls">
+                
+                <select class="x-quality-profile" name="qualityProfileId">
+                    {{#each qualityProfiles.models}}
+                    <option value="{{id}}">{{attributes.name}}</option>
+                    {{/each}}
+                </select>
+                <span class="help-inline">Which Quality Profile should NzbDrone use to download episodes?</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="inputPath">Path</label>
+            <div class="controls">
+                <input type="text" id="inputPath" placeholder="Path" name="path">
+                <span class="help-inline">Where should NzbDrone store episodes for this series?</span>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="inputBacklogSetting">Backlog Setting</label>
+            <div class="controls">
+                <select id="inputBacklogSetting" class="inputClass x-backlog-setting" name="backlogSetting">
+                    <option value="0">Inherit</option>
+                    <option value="1">Enable</option>
+                    <option value="2">Disable</option>
+                </select>
+                <span class="help-inline">Should NzbDrone search for missing episodes every 30 days?</span>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="inputCustomStartDate">Custom Start Date</label>
+            <div class="controls">
+                <input type="date" id="inputCustomStartDate"  name="customStartDate">
+                <span class="help-inline">Should NzbDrone only download episodes after your preferred start date?</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-left x-remove" >delete</button>
+    <button class="btn" data-dismiss="modal">cancel</button>
+    <button class="btn btn-primary x-save">save</button>
+</div>

@@ -9,7 +9,7 @@
 
 body {
     background: #191919 url(images/background.jpg) no-repeat right top;
-    font-size: 13px;
+    font-size: 14px;
     color: #3C3C3C;
     background-attachment: fixed;
 }
@@ -84,6 +84,7 @@ body {
     line-height: 1em;
 }
 
+/* Progress Bar Text */
 .progress {
     width: 125px;
     position: relative;
@@ -106,4 +107,23 @@ body {
     width: 125px;
     font-size: 12px;
     text-align: center;
+}
+
+/* Todo: Should move this to somehting modal/form specific */
+
+label.checkbox {
+    font-size: 14px;
+    line-height: normal;
+    color: #595959;
+}
+
+label, .form-horizontal input, .form-horizontal select {
+    font-size: 14px;
+    line-height: 14px;
+}
+
+label.control-label {
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: bold;
 }

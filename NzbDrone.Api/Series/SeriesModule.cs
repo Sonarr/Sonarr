@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using FluentValidation;
@@ -7,6 +9,7 @@ using NzbDrone.Api.Extentions;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 
@@ -25,7 +28,10 @@ namespace NzbDrone.Api.Series
             Get["/"] = x => AllSeries();
             Get["/{id}"] = x => GetSeries((int)x.id);
             Post["/"] = x => AddSeries();
-            Delete["/{id}"] = x => DeleteSeries((int)x.id);
+            Put["/"] = x => UpdateSeries();
+
+            //Todo: Backbone failing and not sending the id properly... wtf
+            Delete["/"] = x => DeleteSeries(0);
         }
 
         private Response AllSeries()
@@ -59,9 +65,43 @@ namespace NzbDrone.Api.Series
             return new Response { StatusCode = HttpStatusCode.Created };
         }
 
+        private Response UpdateSeries()
+        {
+            var request = Request.Body.FromJson<SeriesModel>();
+
+            var series = _seriesProvider.GetSeries(request.Id);
+
+            series.Monitored = request.Monitored;
+            series.SeasonFolder = request.SeasonFolder;
+            series.QualityProfileId = request.QualityProfileId;
+
+            var oldPath = series.Path;
+
+            series.Path = request.Path;
+            series.BacklogSetting = (BacklogSettingType)request.BacklogSetting;
+
+            if (!String.IsNullOrWhiteSpace(request.CustomStartDate))
+                series.CustomStartDate = DateTime.Parse(request.CustomStartDate, null, DateTimeStyles.RoundtripKind);
+
+            else
+                series.CustomStartDate = null;
+
+            _seriesProvider.UpdateSeries(series);
+
+            if (oldPath != series.Path)
+                _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.SeriesId });
+
+            _seriesProvider.UpdateSeries(series);
+
+            return request.AsResponse();
+        }
+
         private Response DeleteSeries(int id)
         {
-            //_seriesProvider.DeleteSeries(id);
+            var seriesId = Convert.ToInt32(Request.Headers["id"].FirstOrDefault());
+            var deleteFiles = Convert.ToBoolean(Request.Headers["deleteFiles"].FirstOrDefault());
+
+            _jobProvider.QueueJob(typeof(DeleteSeriesJob), new {SeriesId = seriesId, DeleteFiles = deleteFiles});
             return new Response { StatusCode = HttpStatusCode.OK };
         }
     }

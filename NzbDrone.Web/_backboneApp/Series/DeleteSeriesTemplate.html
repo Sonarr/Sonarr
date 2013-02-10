@@ -1,10 +1,16 @@
 ﻿<div class="modal-header">
-    <h2>Delete {{title}}</h2>
+    <h3>Delete: {{title}}</h3>
 </div>
 <div class="modal-body">
-    <p>Are you sure you want to delete '{{title}}'? </p>
+    <p>Are you sure you want to delete '{{title}}'?</p>
+    <div class="series-delete-files">
+        <label class="checkbox">
+            <input id="delete-from-disk" type="checkbox" value="true">
+            Delete all files from disk?
+        </label>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn" data-dismiss="modal">cancel</button>
-    <button class="btn btn-danger x-confirm-delete">Ok</button>
+    <button class="btn btn-danger x-confirm-delete">delete</button>
 </div>

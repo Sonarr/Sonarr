@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Api.Series
@@ -12,6 +13,7 @@ namespace NzbDrone.Api.Series
 
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
+        //Todo: We should get the entire QualityProfile instead of ID and Name separately
 
         //View Only
         public String Title { get; set; }
@@ -41,6 +43,6 @@ namespace NzbDrone.Api.Series
         public Boolean SeasonFolder { get; set; }
         public Boolean Monitored { get; set; }
         public BacklogSettingType BacklogSetting { get; set; }
-        public DateTime? CustomStartDate { get; set; }
+        public String CustomStartDate { get; set; }
     }
 }

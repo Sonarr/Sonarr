@@ -21,7 +21,8 @@ NzbDrone.Series.DeleteSeriesView = Backbone.Marionette.ItemView.extend({
     },
     
     removeSeries: function () {
-        this.model.destroy({ wait: true });
+        //Todo: why the fuck doesn't destroy send the ID?
+        this.model.destroy({ wait: true, headers: { id: this.model.get('id'), deleteFiles: $('#delete-from-disk').prop('checked') } });
         this.model.collection.remove(this.model);
         this.$el.parent().modal('hide');
     },

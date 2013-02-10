@@ -409,6 +409,8 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="_backboneApp\Series\EditSeriesTemplate.html" />
+    <Content Include="_backboneApp\Series\EditSeriesView.js" />
     <Content Include="_backboneApp\Shared\ModalRegion.js" />
     <Content Include="_backboneApp\Series\DeleteSeriesTemplate.html" />
     <Content Include="_backboneApp\Series\Index\SeriesCollectionTemplate.html" />

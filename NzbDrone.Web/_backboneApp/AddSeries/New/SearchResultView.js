@@ -31,6 +31,7 @@ NzbDrone.AddSeries.SearchItemView = Backbone.Marionette.ItemView.extend({
         var quality = this.ui.qualityProfile.val();
         var rootFolderId = this.ui.rootFolder.val();
 
+        //Todo: This wiil create an invalid path on linux...
         var rootPath = this.model.get('rootFolders').get(rootFolderId).get('path');
         var path = rootPath + "\\" + title;
 

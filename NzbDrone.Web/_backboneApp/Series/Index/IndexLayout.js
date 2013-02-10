@@ -8,8 +8,7 @@ NzbDrone.Series.IndexLayout = Backbone.Marionette.Layout.extend({
     route: 'Series/index',
 
     ui: {
-        edit: '.edit-series',
-        delele: '.delete-series'
+        
     },
 
     regions: {
