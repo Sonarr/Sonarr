@@ -42,7 +42,7 @@ namespace NzbDrone.Api.Series
         //Editing Only
         public Boolean SeasonFolder { get; set; }
         public Boolean Monitored { get; set; }
-        public BacklogSettingType BacklogSetting { get; set; }
+        public Int32 BacklogSetting { get; set; }
         public String CustomStartDate { get; set; }
     }
 }
