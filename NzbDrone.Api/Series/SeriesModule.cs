@@ -37,7 +37,7 @@ namespace NzbDrone.Api.Series
         private Response AllSeries()
         {
             var series = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
-            var seriesModels = Mapper.Map<List<Core.Repository.Series>, List<SeriesModel>>(series);
+            var seriesModels = Mapper.Map<List<Core.Repository.Series>, List<SeriesResource>>(series);
 
             return seriesModels.AsResponse();
         }
@@ -45,7 +45,7 @@ namespace NzbDrone.Api.Series
         private Response GetSeries(int id)
         {
             var series = _seriesProvider.GetSeries(id);
-            var seriesModels = Mapper.Map<Core.Repository.Series, SeriesModel>(series);
+            var seriesModels = Mapper.Map<Core.Repository.Series, SeriesResource>(series);
 
             return seriesModels.AsResponse();
         }
@@ -67,7 +67,7 @@ namespace NzbDrone.Api.Series
 
         private Response UpdateSeries()
         {
-            var request = Request.Body.FromJson<SeriesModel>();
+            var request = Request.Body.FromJson<SeriesResource>();
 
             var series = _seriesProvider.GetSeries(request.Id);
 

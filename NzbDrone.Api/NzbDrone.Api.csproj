@@ -97,7 +97,7 @@
     <Compile Include="Extentions\Serializer.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
-    <Compile Include="Series\SeriesModel.cs" />
+    <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />
     <Compile Include="ErrorManagment\ApiException.cs" />

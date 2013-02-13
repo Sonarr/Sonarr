@@ -3,10 +3,14 @@
 <td name="seasonCount"></td>
 <td name="qualityProfileName"></td>
 <td name="network"></td>
-<td>{{formatBestDate nextAiring}}</td>
+<!-- If only DT could access the backbone model -->
+<td><span data-date="{{nextAiring}}">{{bestDateString}}</span></td>
 <td>
-{{{formatProgress episodeFileCount episodeCount}}}
-<td>
+    <div class="progress">
+        <span class="progressbar-back-text">{{episodeFileCount}} / {{episodeCount}}</span>
+        <div class="bar" style="width:{{percentOfEpisodes}}%"><span class="progressbar-front-text">{{episodeFileCount}} / {{episodeCount}}</span></div>
+        </div>
+</td>
 <td>
     <i class="icon-cog x-edit" title="Edit Series"></i>
     <i class="icon-remove x-remove" title="Delete Series"></i>

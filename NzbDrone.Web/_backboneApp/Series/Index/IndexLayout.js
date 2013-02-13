@@ -2,9 +2,11 @@
 /// <reference path="../../app.js" />
 /// <reference path="../SeriesCollection.js" />
 /// <reference path="SeriesItemView.js" />
+/// <reference path="../../JsLibraries/jquery.dataTables.bootstrap.pagination.js" />
 
 NzbDrone.Series.IndexLayout = Backbone.Marionette.Layout.extend({
     template: 'Series/Index/IndexLayoutTemplate',
+    className: "row",
     route: 'Series/index',
 
     ui: {

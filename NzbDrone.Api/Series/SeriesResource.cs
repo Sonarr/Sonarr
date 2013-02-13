@@ -7,7 +7,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesModel
+    public class SeriesResource
     {
         public Int32 Id { get; set; }
 

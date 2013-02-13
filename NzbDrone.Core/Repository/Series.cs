@@ -61,6 +61,7 @@ namespace NzbDrone.Core.Repository
 
         public string TvRageTitle { get; set; }
 
+        //Todo: This should be a double since there are timezones that aren't on a full hour offset
         public int UtcOffset { get; set; }
 
         public DateTime? FirstAired { get; set; }

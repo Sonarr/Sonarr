@@ -56,5 +56,42 @@ NzbDrone.Series.Index.SeriesCollectionView = Backbone.Marionette.CompositeView.e
     initialize: function() {
         this.qualityProfileCollection.fetch();
         this.itemViewOptions = { qualityProfiles: this.qualityProfileCollection };
+    },
+    
+    onRender: function() {
+        $('.table').dataTable({
+            sDom: "<'row'<'span14'l><'span6'f>r>t<'row'<'span14'i><'span6'p>>",
+            sPaginationType: "bootstrap",
+            bLengthChange: false,
+            bPaginate: false,
+            bFilter: false,
+            aaSorting: [[1, 'asc']],
+            bStateSave: true,
+            iCookieDuration: 60 * 60 * 24 * 365, //1 year
+            oLanguage: {
+                sInfo: "_TOTAL_ series",
+                sEmptyTable: "No series have been added"
+            },
+            aoColumns: [
+                {
+                    sType: "title-string"
+                },
+                null,
+                null,
+                null,
+                null,
+                {
+                    sType: "best-date"
+                },
+                {
+                    bSortable: false,
+                    sWidth: "125px"
+                },
+                {
+                    bSortable: false,
+                    sWidth: "50px"
+                }
+            ]
+        });
     }
 });
