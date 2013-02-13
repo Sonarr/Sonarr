@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -13,7 +11,7 @@ namespace NzbDrone.Core.Datastore
         void Delete(long rootFolderId);
     }
 
-    public abstract class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseRepositoryModel, new()
+    public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseRepositoryModel, new()
     {
         public BasicRepository(EloqueraDb eloqueraDb)
         {

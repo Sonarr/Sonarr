@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Eloquera.Client;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
@@ -8,11 +9,8 @@ using PetaPoco;
 namespace NzbDrone.Core.Repository
 {
     [PrimaryKey("SeriesId", autoIncrement = false)]
-    public class Series
+    public class Series:BaseRepositoryModel
     {
-        [ID]
-        public long Id;
-
         public virtual int SeriesId { get; set; }
 
         public string Title { get; set; }

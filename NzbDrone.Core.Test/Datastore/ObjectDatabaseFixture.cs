@@ -3,6 +3,7 @@ using Eloquera.Client;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 
@@ -84,25 +85,26 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void new_objects_should_get_id()
         {
-            testSeries.Id = Db.InsertAndGetId(testSeries);
+            Db.Insert(testSeries);
             testSeries.Id.Should().NotBe(0);
         }
 
         [Test]
         public void should_have_id_when_returned_from_database()
         {
-            testSeries.Id = Db.InsertAndGetId(testSeries);
+            Db.Insert(testSeries);
             var item = Db.AsQueryable<Series>();
 
             item.Should().HaveCount(1);
             item.First().Id.Should().NotBe(0);
+            item.First().Id.Should().BeLessThan(100);
             item.First().Id.Should().Be(testSeries.Id);
         }
 
         [Test]
         public void should_be_able_to_find_object_by_id()
         {
-            testSeries.Id = Db.InsertAndGetId(testSeries);
+            Db.Insert(testSeries);
             var item = Db.AsQueryable<Series>().Single(c => c.Id == testSeries.Id);
 
             item.Id.Should().NotBe(0);
@@ -116,10 +118,8 @@ namespace NzbDrone.Core.Test.Datastore
         }
     }
 
-    public class UnknownType
+    public class UnknownType : BaseRepositoryModel
     {
-        [ID]
-        public string Id;
         public string Field1 { get; set; }
     }
 }

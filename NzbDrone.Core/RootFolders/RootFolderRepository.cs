@@ -22,8 +22,7 @@ namespace NzbDrone.Core.RootFolders
 
         public RootFolder Add(RootFolder rootFolder)
         {
-            rootFolder.Id = EloqueraDb.InsertAndGetId(rootFolder);
-            return rootFolder;
+            return EloqueraDb.Insert(rootFolder);
         }
     }
 }
