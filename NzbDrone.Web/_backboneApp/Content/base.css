@@ -39,6 +39,7 @@ body {
 
 .nz-center {
     text-align: center;
+    overflow: hidden;
 }
 
 .nz-center .typeahead {
