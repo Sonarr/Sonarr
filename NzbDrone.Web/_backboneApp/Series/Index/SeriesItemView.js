@@ -74,7 +74,8 @@ NzbDrone.Series.Index.SeriesCollectionView = Backbone.Marionette.CompositeView.e
             },
             aoColumns: [
                 {
-                    sType: "title-string"
+                    sType: "title-string",
+                    sWidth: "13px"
                 },
                 null,
                 null,
