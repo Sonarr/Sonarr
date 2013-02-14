@@ -8,7 +8,7 @@ namespace NzbDrone.Web.Backbone.NzbDrone
     public class CassetteBundleConfiguration : IConfiguration<BundleCollection>
     {
         public const string BASE_STYLE = "BASE_STYLE";
-        public const string NZBDRONE = "NZBDRONE";
+        //public const string NZBDRONE = "NZBDRONE";
         internal const string FONTS = "FONTS";
 
         private const string APP_PATH = "_backboneApp";
@@ -17,7 +17,7 @@ namespace NzbDrone.Web.Backbone.NzbDrone
         {
             bundles.AddUrlWithAlias<StylesheetBundle>("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300'", FONTS);
 
-            bundles.AddPerIndividualFile<ScriptBundle>(APP_PATH);
+           //bundles.AddPerIndividualFile<ScriptBundle>(APP_PATH);
 
             bundles.Add<StylesheetBundle>(BASE_STYLE, new[]{
                 APP_PATH + "\\Content\\Bootstrap\\bootstrap.less",
@@ -28,15 +28,17 @@ namespace NzbDrone.Web.Backbone.NzbDrone
             },
                 bundle => bundle.AddReference("/" + FONTS));
 
-            bundles.Add<ScriptBundle>("~/_backboneApp/JsLibraries/backbone.js");
+          /*  bundles.Add<ScriptBundle>("~/_backboneApp/JsLibraries/backbone.js");
 
             bundles.Add<ScriptBundle>(NZBDRONE, new[]{
+                      APP_PATH + "\\app.js",
+                      APP_PATH + "\\routing.js",
                       APP_PATH + "\\Series\\Index\\IndexLayout.js",
                       APP_PATH + "\\AddSeries\\AddSeriesLayout.js",
                       APP_PATH + "\\Shared\\NotificationView.js",
 
             
-            });
+            });*/
 
 /*            bundles.Add<ScriptBundle>(NZBDRONE, new[]{
      

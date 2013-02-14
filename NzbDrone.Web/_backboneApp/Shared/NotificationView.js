@@ -1,4 +1,4 @@
-﻿/// <reference path="../app.js" />
+﻿
 /// <reference path="NotificationModel.js" />
 
 NzbDrone.Shared.NotificationItemView = Backbone.Marionette.ItemView.extend({

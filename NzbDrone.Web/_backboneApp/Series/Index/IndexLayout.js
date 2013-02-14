@@ -1,5 +1,5 @@
 ﻿'use strict;'
-/// <reference path="../../app.js" />
+
 /// <reference path="../SeriesCollection.js" />
 /// <reference path="SeriesItemView.js" />
 /// <reference path="../../JsLibraries/jquery.dataTables.bootstrap.pagination.js" />

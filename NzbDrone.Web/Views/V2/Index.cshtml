@@ -4,12 +4,10 @@
 
 @using Cassette.Scripts
 @using Cassette.Stylesheets
-@using NzbDrone.Web
 @using NzbDrone.Web.Backbone.NzbDrone
 @using NzbDrone.Web.Helpers
 @{   
     Bundles.Reference<StylesheetBundle>(CassetteBundleConfiguration.BASE_STYLE);
-    Bundles.Reference<ScriptBundle>(CassetteBundleConfiguration.NZBDRONE);
 }
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -45,7 +43,7 @@
         </div>
         <div id="logo" class="row">
             <div class="span18 offset2">
-               Single page
+                Single page
             </div>
         </div>
         <div id="content" class="row">
@@ -65,9 +63,7 @@
             <div id="footer-region" class="span20"></div>
         </div>
     </div>
-    @Bundles.RenderScripts()
-    <script type="text/javascript">
-        NzbDrone.start();
-    </script>
+    <script data-main="/_backboneApp/app" src="/_backboneApp/JsLibraries/require-jquery.js"></script>
+    <script src="/_backboneApp/Routing.js"></script>
 </body>
 </html>

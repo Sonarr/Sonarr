@@ -1,97 +1,85 @@
-﻿/// <reference path="JsLibraries/jquery.js" />
-/// <reference path="JsLibraries/underscore.js" />
-/// <reference path="JsLibraries/sugar.js" />
-/// <reference path="JsLibraries/backbone.js" />
-/// <reference path="JsLibraries/handlebars.js" />
-/// <reference path="JsLibraries/backbone.modelbinder.js" />
-/// <reference path="JsLibraries/backbone.mutators.js" />
-/// <reference path="JsLibraries/backbone.shortcuts.js" />
-/// <reference path="JsLibraries/backbone.marionette.js" />
-/// <reference path="JsLibraries/backbone.marionette.extend.js" />
-/// <reference path="JsLibraries/backbone.marionette.viewswapper.js" />
-/// <reference path="JsLibraries/backbone.modelbinder.js" />
-/// <reference path="JsLibraries/bootstrap.js" />
-/// <reference path="Shared/ModalRegion.js" />
+﻿require.config({
 
-if (typeof console === undefined) {
-    window.console = { log: function () { } };
-}
-
-NzbDrone = new Backbone.Marionette.Application();
-NzbDrone.Series = {};
-NzbDrone.Series.Index = {};
-NzbDrone.AddSeries = {};
-NzbDrone.AddSeries.New = {};
-NzbDrone.AddSeries.Existing = {};
-NzbDrone.AddSeries.RootFolders = {};
-NzbDrone.Quality = {};
-NzbDrone.Shared = {};
-
-/*
-_.templateSettings = {
-    interpolate: /\{\{([\s\S]+?)\}\}/g
-};
-*/
-
-NzbDrone.ModelBinder = new Backbone.ModelBinder();
-
-NzbDrone.Constants = {
-    ApiRoot: '/api'
-};
-
-NzbDrone.Events = {
-    DisplayInMainRegion: 'DisplayInMainRegion'
-};
-
-NzbDrone.Controller = Backbone.Marionette.Controller.extend({
-
-    addSeries: function (action, query) {
-        NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
+    paths: {
+        'backbone': 'JsLibraries/backbone',
+        'underscore': 'JsLibraries/underscore',
+        'marionette': 'JsLibraries/backbone.marionette',
+        'handlebars': 'JsLibraries/handlebars',
+        'bootstrap': 'JsLibraries/bootstrap',
     },
 
-    series: function (action, query) {
-        NzbDrone.mainRegion.show(new NzbDrone.Series.IndexLayout(this, action, query));
-    },
-
-    notFound: function () {
-        alert('route not found');
+    shim: {
+        bootstrap: {
+            deps: ["jquery"],
+        },
+        underscore: {
+            exports: '_'
+        },
+        backbone: {
+            deps: ["underscore", "jquery"],
+            exports: "Backbone"
+        },
+        marionette: {
+            deps: ["backbone"],
+            exports: "Marionette"
+        },
+        handlebars: {
+            exports: "Handlebars"
+        }
     }
 });
 
-NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
+define('app', ['jquery', 'JsLibraries/backbone.modelbinder', 'marionette', 'handlebars', 'JsLibraries/backbone.marionette.extend'],
+    function (jquery, modelBinder, marionette, handlebars) {
 
-    controller: new NzbDrone.Controller(),
-    // "someMethod" must exist at controller.someMethod
-    appRoutes: {
-        'series': 'series',
-        'series/index': 'series',
-        'series/add': 'addSeries',
-        'series/add/:action(/:query)': 'addSeries',
-        ':whatever': 'notFound'
-    }
-});
 
-NzbDrone.addInitializer(function (options) {
+        window.$ = jquery;
+        window.jquery = jquery;
 
-    console.log('starting application');
+        window.Backbone.ModelBinder = modelBinder;
+        window.Backbone.Marionette = marionette;
+        window.Handlebars = handlebars;
 
-    NzbDrone.registerHelpers();
+        window.NzbDrone = new Backbone.Marionette.Application();
+        window.NzbDrone.Series = {};
+        window.NzbDrone.Series.Index = {};
+        window.NzbDrone.AddSeries = {};
+        window.NzbDrone.AddSeries.New = {};
+        window.NzbDrone.AddSeries.Existing = {};
+        window.NzbDrone.AddSeries.RootFolders = {};
+        window.NzbDrone.Quality = {};
+        window.NzbDrone.Shared = {};
 
-    NzbDrone.addRegions({
-        mainRegion: '#main-region',
-        notificationRegion: '#notification-region',
-        modalRegion: ModalRegion
+        window.NzbDrone.Constants = {
+            ApiRoot: '/api'
+        };
+
+
+        window.NzbDrone.addInitializer(function (options) {
+
+            console.log('starting application');
+
+            NzbDrone.ModelBinder = new Backbone.ModelBinder();
+
+            //TODO: move this out of here
+            Handlebars.registerHelper("formatStatus", function (status, monitored) {
+                if (!monitored) return '<i class="icon-pause grid-icon" title="Not Monitored"></i>';
+                if (status === 'Continuing') return '<i class="icon-play grid-icon" title="Continuing"></i>';
+
+                return '<i class="icon-stop grid-icon" title="Ended"></i>';
+            });
+
+            NzbDrone.addRegions({
+                mainRegion: '#main-region',
+                notificationRegion: '#notification-region',
+                modalRegion: '#modal-region'
+            });
+        });
+
+        window.NzbDrone.start();
     });
 
-    NzbDrone.Router = new NzbDrone.Router();
-    Backbone.history.start();
-});
 
-NzbDrone.registerHelpers = function() {
-    Handlebars.registerHelper("formatStatus", function (status, monitored) {
-        if (!monitored) return '<i class="icon-pause grid-icon" title="Not Monitored"></i>';
-        if (status === 'Continuing') return '<i class="icon-play grid-icon" title="Continuing"></i>';
 
-        return '<i class="icon-stop grid-icon" title="Ended"></i>';
-    });
-}
+
+

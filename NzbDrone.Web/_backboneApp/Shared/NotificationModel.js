@@ -1,4 +1,5 @@
-﻿/// <reference path="../app.js" />
+﻿
+
 NzbDrone.Shared.NotificationModel = Backbone.Model.extend({
 
     mutators: {

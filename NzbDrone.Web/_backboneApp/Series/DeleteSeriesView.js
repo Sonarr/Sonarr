@@ -1,6 +1,6 @@
 ﻿'use strict';
 /*global NzbDrone, Backbone*/
-/// <reference path="../app.js" />
+
 /// <reference path="SeriesModel.js" />
 
 NzbDrone.Series.DeleteSeriesView = Backbone.Marionette.ItemView.extend({

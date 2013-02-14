@@ -1,6 +1,6 @@
 ﻿'use strict';
 /*global NzbDrone, Backbone*/
-/// <reference path="../app.js" />
+
 /// <reference path="SeriesModel.js" />
 /// <reference path="DeleteSeriesView.js" />
 /// <reference path="../Quality/qualityProfileCollection.js" />
