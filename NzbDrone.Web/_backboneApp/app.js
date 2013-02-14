@@ -6,6 +6,9 @@
         'marionette': 'JsLibraries/backbone.marionette',
         'handlebars': 'JsLibraries/handlebars',
         'bootstrap': 'JsLibraries/bootstrap',
+        'datatablesBase': 'JsLibraries/jquery.dataTables',
+        'datatablesExt': 'JsLibraries/jquery.dataTables.extensions',
+        'datatables': 'JsLibraries/jquery.dataTables.bootstrap.pagination',
     },
 
     shim: {
@@ -25,7 +28,20 @@
         },
         handlebars: {
             exports: "Handlebars"
+        },
+        dataTable: {
+            deps: ['jquery']
+        },
+        datatablesBase: {
+            depts: ['jquery']
+        },
+        datatablesExt: {
+            deps: ['datatablesBase'],
+        },
+        datatables: {
+            deps: ['datatablesExt']
         }
+
     }
 });
 
@@ -42,7 +58,8 @@ define('app', ['jquery', 'JsLibraries/backbone.modelbinder', 'marionette', 'hand
 
         window.NzbDrone = new Backbone.Marionette.Application();
         window.NzbDrone.Series = {};
-        window.NzbDrone.Series.Index = {};
+        window.NzbDrone.Series.Edit = {};
+        window.NzbDrone.Series.Delete = {};
         window.NzbDrone.AddSeries = {};
         window.NzbDrone.AddSeries.New = {};
         window.NzbDrone.AddSeries.Existing = {};

@@ -1,4 +1,4 @@
-﻿require(['app','Shared/NotificationView', 'AddSeries/AddSeriesLayout'], function () {
+﻿require(['app','Shared/NotificationView', 'AddSeries/AddSeriesLayout','Series/SeriesLayout'], function () {
 
     NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 
@@ -7,7 +7,7 @@
         },
 
         series: function (action, query) {
-            NzbDrone.mainRegion.show(new NzbDrone.Series.IndexLayout(this, action, query));
+            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesLayout(this, action, query));
         },
 
         notFound: function () {
