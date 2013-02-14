@@ -18,6 +18,16 @@
             return date.format('{MM}/{dd}/{yyyy}');
         },
         
+        formatedDateString: function () {
+            var dateSource = this.get('nextAiring');
+
+            if (!dateSource) return '';
+
+            var date = Date.create(dateSource);
+
+            return date.format('{Weekday} {Month} {dd}, {yyyy} {12hr}:{mm} {TT}');
+        },
+        
         percentOfEpisodes: function () {
             var episodeCount = this.get('episodeCount');
             var episodeFileCount = this.get('episodeFileCount');

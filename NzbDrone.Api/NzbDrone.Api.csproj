@@ -95,6 +95,7 @@
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Extentions\NancyJsonSerializer.cs" />
     <Compile Include="Extentions\Serializer.cs" />
+    <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
     <Compile Include="Series\SeriesResource.cs" />
