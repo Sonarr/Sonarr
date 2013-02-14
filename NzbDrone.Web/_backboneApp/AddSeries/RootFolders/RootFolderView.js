@@ -1,6 +1,6 @@
 ﻿'use strict;'
 
-define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplete'], function () {
+define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplete'], function (app,rootFolders) {
 
 
     NzbDrone.AddSeries.RootFolderItemView = Backbone.Marionette.ItemView.extend({
@@ -47,13 +47,10 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
         },
 
 
-        collection: new NzbDrone.AddSeries.RootFolders.RootFolderCollection(),
-
         onRender: function () {
 
+            this.collection = rootFolders,
             this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
-            this.collection.fetch();
-
             this.ui.pathInput.folderAutoComplete();
         },
 

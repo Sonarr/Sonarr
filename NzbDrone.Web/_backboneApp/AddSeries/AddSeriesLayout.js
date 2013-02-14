@@ -1,12 +1,12 @@
 ﻿define([
         'app',
-        'AddSeries/RootFolders/RootFolderView',
         'AddSeries/RootFolders/RootFolderCollection',
+        'AddSeries/RootFolders/RootFolderView',
         'AddSeries/New/AddNewSeriesView',
         'AddSeries/Existing/ImportSeriesView',
         'Quality/QualityProfileCollection'
 ],
-    function () {
+    function (app, rootFolderCollection) {
         NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
             template: 'AddSeries/addSeriesLayoutTemplate',
 
@@ -35,7 +35,6 @@
 
                 this.ui.addNewTab.tab('show');
                 NzbDrone.Router.navigate('series/add/new');
-
             },
 
             showImport: function (e) {
@@ -56,7 +55,7 @@
                 NzbDrone.Router.navigate('series/add/rootfolders');
             },
 
-            rootFolderCollection: new NzbDrone.AddSeries.RootFolders.RootFolderCollection(),
+            //rootFolderCollection: new NzbDrone.AddSeries.RootFolders.RootFolderCollection(),
             qualityProfileCollection: new NzbDrone.Quality.QualityProfileCollection(),
 
             initialize: function (context, action, query) {
@@ -71,16 +70,15 @@
 
             onRender: function () {
 
-                this.qualityProfileCollection.fetch();
-                this.rootFolderCollection.fetch();
+                rootFolderCollection.fetch();
 
-                this.addNew.show(new NzbDrone.AddSeries.New.AddNewSeriesView({ rootFolders: this.rootFolderCollection, qualityProfiles: this.qualityProfileCollection }));
-                this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView({ collection: this.rootFolderCollection, quality: this.qualityProfileCollection }));
+                this.addNew.show(new NzbDrone.AddSeries.New.AddNewSeriesView({ qualityProfiles: this.qualityProfileCollection }));
+                this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView({ quality: this.qualityProfileCollection }));
                 this.rootFolders.show(new NzbDrone.AddSeries.RootDirView({ collection: this.rootFolderCollection }));
 
-                this.listenTo(this.rootFolderCollection, 'add', this.evaluateActions, this);
-                this.listenTo(this.rootFolderCollection, 'remove', this.evaluateActions, this);
-                this.listenTo(this.rootFolderCollection, 'reset', this.evaluateActions, this);
+                this.listenTo(rootFolderCollection, 'add', this.evaluateActions, this);
+                this.listenTo(rootFolderCollection, 'remove', this.evaluateActions, this);
+                this.listenTo(rootFolderCollection, 'reset', this.evaluateActions, this);
             },
 
             onShow: function () {
@@ -97,7 +95,7 @@
             },
 
             evaluateActions: function () {
-                if (this.rootFolderCollection.length === 0) {
+                if (rootFolderCollection.length === 0) {
                     this.ui.addNewTab.hide();
                     this.ui.importExistingTab.hide();
                     this.showRootFolders();

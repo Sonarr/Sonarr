@@ -1,4 +1,4 @@
-﻿define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection'], function () {
+﻿define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection'], function (RootFolderCollection) {
 
 
     NzbDrone.AddSeries.SearchResultModel = Backbone.Model.extend({
@@ -17,7 +17,7 @@
 
         defaults: {
             qualityProfiles: new NzbDrone.Quality.QualityProfileCollection(),
-            rootFolders: new NzbDrone.AddSeries.RootFolders.RootFolderModel()
+            rootFolders: RootFolderCollection
         }
 
     });

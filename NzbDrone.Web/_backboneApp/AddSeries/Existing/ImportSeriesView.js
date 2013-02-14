@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-define(['app', 'AddSeries/Existing/UnmappedFolderModel', 'AddSeries/SearchResultCollection', 'Series/SeriesModel'], function () {
+define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/Existing/UnmappedFolderModel', 'AddSeries/SearchResultCollection', 'Series/SeriesModel'], function (app,rootFolders) {
 
 
     NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
@@ -127,13 +127,9 @@ define(['app', 'AddSeries/Existing/UnmappedFolderModel', 'AddSeries/SearchResult
 
         itemView: NzbDrone.AddSeries.Existing.RootFolderCompositeView,
 
-
-
         initialize: function () {
 
-            if (!this.collection) {
-                throw "root folder collection is required.";
-            }
+            this.collection = rootFolders;
 
             if (!this.options.quality) {
                 throw "quality collection is required.";

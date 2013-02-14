@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-define(['app', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesModel'], function () {
+define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesModel'], function (app,notificationCollection) {
     
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
@@ -49,7 +49,7 @@ define(['app', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel'
                         level: 'success'
                     });
 
-                    NzbDrone.Shared.NotificationCollectionView.Instance.collection.add(notificationModel);
+                    notificationCollection.push(notificationModel);
                     self.close();
                 }
             });
@@ -58,7 +58,7 @@ define(['app', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel'
 
     NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
 
-        itemView: NzbDrone.AddSeries.SearchItemView,
+        itemView: NzbDrone.AddSeries.New.SearchItemView,
 
         className: 'accordion',
 

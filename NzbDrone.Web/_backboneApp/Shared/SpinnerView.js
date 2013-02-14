@@ -1,6 +1,12 @@
-﻿NzbDrone.Shared.SpinnerView = Backbone.Marionette.ItemView.extend({
+﻿define(['app'],function () {
 
-    template: 'Shared/SpinnerTemplate',
-    className: 'nz-spinner row',
-   
+    NzbDrone.Shared.SpinnerView = Backbone.Marionette.ItemView.extend({
+
+        template: 'Shared/SpinnerTemplate',
+        className: 'nz-spinner row',
+
+    });
+
 });
+
+

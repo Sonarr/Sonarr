@@ -1,4 +1,4 @@
-﻿define(['app', 'AddSeries/New/SearchResultView'], function () {
+﻿define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView'], function (app, rootFolders) {
 
     NzbDrone.AddSeries.New.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/New/AddNewSeriesTemplate',
@@ -15,15 +15,11 @@
         collection: new NzbDrone.AddSeries.SearchResultCollection(),
 
         initialize: function (options) {
-            if (options.rootFolders === undefined) {
-                throw 'rootFolder arg. is required.';
-            }
 
             if (options.qualityProfiles === undefined) {
                 throw 'qualityProfiles arg. is required.';
             }
 
-            this.rootFoldersCollection = options.rootFolders;
             this.qualityProfileCollection = options.qualityProfiles;
         },
 
@@ -73,7 +69,7 @@
 
         resultUpdated: function (options, context) {
             _.each(options.models, function (model) {
-                model.set('rootFolders', context.rootFoldersCollection);
+                model.set('rootFolders', rootFolders);
                 model.set('qualityProfiles', context.qualityProfileCollection);
             });
 

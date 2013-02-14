@@ -1,4 +1,4 @@
-﻿require(['app', 'AddSeries/AddSeriesLayout'], function () {
+﻿require(['app','Shared/NotificationView', 'AddSeries/AddSeriesLayout'], function () {
 
     NzbDrone.Controller = Backbone.Marionette.Controller.extend({
 

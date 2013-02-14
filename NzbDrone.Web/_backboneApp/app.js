@@ -77,6 +77,8 @@ define('app', ['jquery', 'JsLibraries/backbone.modelbinder', 'marionette', 'hand
         });
 
         window.NzbDrone.start();
+
+        return NzbDrone;
     });
 
 
