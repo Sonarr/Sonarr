@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Extentions
                 {
                         DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                         NullValueHandling = NullValueHandling.Ignore,
-                        Formatting = Formatting.None,
+                        Formatting = Formatting.Indented,
                         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate
                 };
 
@@ -20,7 +20,7 @@ namespace NzbDrone.Api.Extentions
                 {
                         DateTimeZoneHandling = Settings.DateTimeZoneHandling,
                         NullValueHandling = NullValueHandling.Ignore,
-                        Formatting = Formatting.None,
+                        Formatting = Formatting.Indented,
                         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
                         ContractResolver =  new CamelCasePropertyNamesContractResolver()
                 };

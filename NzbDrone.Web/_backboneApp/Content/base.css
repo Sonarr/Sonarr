@@ -73,6 +73,10 @@ body {
     padding-right: 10px;
 }
 
+#notification-region pre{
+    font-size: 12px;
+}
+
 
 .line {
     height: 4em;

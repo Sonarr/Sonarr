@@ -1,14 +1,7 @@
 ﻿'use strict';
 
 define([
-    'app',
-    'AddSeries/RootFolders/RootFolderCollection',
-    'Quality/QualityProfileCollection',
-    'Shared/NotificationCollection',
-    'AddSeries/Existing/UnmappedFolderModel',
-    'AddSeries/SearchResultCollection',
-    'Series/SeriesModel'],
-    function (app, rootFolders, qualityProfileCollection, notificationCollection) {
+    'app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection', 'Shared/NotificationCollection', 'AddSeries/Existing/UnmappedFolderModel', 'AddSeries/SearchResultCollection', 'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection, notificationCollection) {
 
 
         NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
@@ -34,6 +27,21 @@ define([
 
                 var self = this;
 
+                var seriesCollection = new NzbDrone.Series.SeriesCollection();
+
+                seriesCollection.add(model, {success:function () {
+                    var notificationModel = new NzbDrone.Shared.NotificationModel({
+                        title:'Added',
+                        message:title,
+                        level:'success'
+                    });
+
+                    notificationCollection.push(notificationModel);
+                    self.close();
+                }
+                });
+
+                return;
                 model.save(undefined, {
                     success:function () {
                         var notificationModel = new NzbDrone.Shared.NotificationModel({

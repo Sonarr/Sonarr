@@ -130,3 +130,4 @@ UpdateLogs/
 NzbDrone.Web/cassette-cache/*
 *.eq
 NzbDrone.Web/_backboneApp/.idea/workspace.xml
+*/.idea/workspace.xml

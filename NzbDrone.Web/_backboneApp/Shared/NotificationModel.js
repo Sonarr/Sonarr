@@ -2,16 +2,15 @@
 
     NzbDrone.Shared.NotificationModel = Backbone.Model.extend({
         mutators:{
-            pre:function () {
-                try {
-                    if (this.get('message')) {
-                        return this.get('message').lines().lenght > 1;
-                    }
-                } catch (error) {
-                    return false;
-                }
 
+            preFormattedMessage:function () {
+                return  this.get('message').replace(/\\r\\n/g, '<br>');
             },
+
+            isPreFormatted:function () {
+                return this.get('message').indexOf('\\r\\n') !== -1;
+            },
+
             iconClass:function () {
 
                 if (this.has('icon')) {
