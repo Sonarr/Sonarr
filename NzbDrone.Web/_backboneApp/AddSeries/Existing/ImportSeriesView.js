@@ -13,6 +13,8 @@ define([
 
             addSeries:function () {
 
+                var self = this;
+
                 var seriesId = this.model.get('id');
                 var title = this.model.get('seriesName');
                 var quality = this.options.qualityProfile.val();
@@ -25,23 +27,10 @@ define([
                     path:path
                 });
 
-                var self = this;
 
                 var seriesCollection = new NzbDrone.Series.SeriesCollection();
+                seriesCollection.add(model);
 
-                seriesCollection.add(model, {success:function () {
-                    var notificationModel = new NzbDrone.Shared.NotificationModel({
-                        title:'Added',
-                        message:title,
-                        level:'success'
-                    });
-
-                    notificationCollection.push(notificationModel);
-                    self.close();
-                }
-                });
-
-                return;
                 model.save(undefined, {
                     success:function () {
                         var notificationModel = new NzbDrone.Shared.NotificationModel({

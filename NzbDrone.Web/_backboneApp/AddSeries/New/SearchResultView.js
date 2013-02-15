@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesModel'], function (app,notificationCollection) {
+define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesCollection'], function (app,notificationCollection) {
     
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
@@ -40,6 +40,9 @@ define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection
             });
 
             var self = this;
+
+            var seriesCollection  = new NzbDrone.Series.SeriesCollection();
+            seriesCollection.push(model);
 
             model.save(undefined, {
                 success: function () {
