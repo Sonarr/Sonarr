@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0cbf2b6b-882a-4616-9f96-93499c5aeb89" name="Default" comment="" />
+    <list default="true" id="0cbf2b6b-882a-4616-9f96-93499c5aeb89" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shared/NotificationView.js" afterPath="$PROJECT_DIR$/Shared/NotificationView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shared/SpinnerView.js" afterPath="$PROJECT_DIR$/Shared/SpinnerView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    </list>
+    <list id="13d0a6e3-eaae-43a8-afd1-c89334b72900" name="Rejected commit: Default" comment="">
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\NzbDrone.Web\_backboneApp\JsLibraries\require.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\NzbDrone.Web\_backboneApp\Mixins\backbone.marionette.templates.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\NzbDrone.Web\_backboneApp\Mixins\backbone.xhr.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../.gitignore" afterPath="$PROJECT_DIR$/../../.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/New/AddNewSeriesView.js" afterPath="$PROJECT_DIR$/AddSeries/New/AddNewSeriesView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/AddSeriesLayout.js" afterPath="$PROJECT_DIR$/AddSeries/AddSeriesLayout.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shared/AutoComplete.js" afterPath="$PROJECT_DIR$/Shared/AutoComplete.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/Delete/DeleteSeriesTemplate.html" afterPath="$PROJECT_DIR$/Series/Delete/DeleteSeriesTemplate.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/Delete/DeleteSeriesView.js" afterPath="$PROJECT_DIR$/Series/Delete/DeleteSeriesView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/Edit/EditSeriesView.js" afterPath="$PROJECT_DIR$/Series/Edit/EditSeriesView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/Existing/ImportSeriesView.js" afterPath="$PROJECT_DIR$/AddSeries/Existing/ImportSeriesView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Views/V2/Index.cshtml" afterPath="$PROJECT_DIR$/../Views/V2/Index.cshtml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Keivan.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Keivan.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shared/NotificationCollection.js" afterPath="$PROJECT_DIR$/Shared/NotificationCollection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shared/NotificationModel.js" afterPath="$PROJECT_DIR$/Shared/NotificationModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shared/NotificationTemplate.html" afterPath="$PROJECT_DIR$/Shared/NotificationTemplate.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../NzbDrone.Web.csproj" afterPath="$PROJECT_DIR$/../NzbDrone.Web.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderCollection.js" afterPath="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderCollection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderView.js" afterPath="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Routing.js" afterPath="$PROJECT_DIR$/Routing.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/SearchResultModel.js" afterPath="$PROJECT_DIR$/AddSeries/SearchResultModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/New/SearchResultView.js" afterPath="$PROJECT_DIR$/AddSeries/New/SearchResultView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../NzbDrone.Api/Extentions/Serializer.cs" afterPath="$PROJECT_DIR$/../../NzbDrone.Api/Extentions/Serializer.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/SeriesCollection.js" afterPath="$PROJECT_DIR$/Series/SeriesCollection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/SeriesCollectionView.js" afterPath="$PROJECT_DIR$/Series/SeriesCollectionView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/SeriesItemView.js" afterPath="$PROJECT_DIR$/Series/SeriesItemView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Series/SeriesModel.js" afterPath="$PROJECT_DIR$/Series/SeriesModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../NzbDrone.Api/Series/SeriesModule.cs" afterPath="$PROJECT_DIR$/../../NzbDrone.Api/Series/SeriesModule.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/Existing/UnmappedFolderModel.js" afterPath="$PROJECT_DIR$/AddSeries/Existing/UnmappedFolderModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AddSeries/addSeries.css" afterPath="$PROJECT_DIR$/AddSeries/addSeries.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JsLibraries/backbone.js" afterPath="$PROJECT_DIR$/JsLibraries/backbone.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Content/base.css" afterPath="$PROJECT_DIR$/Content/base.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JsLibraries/jquery.dataTables.bootstrap.pagination.js" afterPath="$PROJECT_DIR$/JsLibraries/jquery.dataTables.bootstrap.pagination.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Quality/qualityProfileCollection.js" afterPath="$PROJECT_DIR$/Quality/qualityProfileCollection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="_backboneApp.iws" />
     <ignored path=".idea/workspace.xml" />
+    <file path="/bootstrap.less" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360914381334" ignored="false" />
+    <file path="/a.js" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360914930292" ignored="false" />
+    <file path="/Dummy.txt" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360915363342" ignored="false" />
+    <file path="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderView.js" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360915751430" ignored="false" />
+    <file path="/RootFolderView.js" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360915516498" ignored="false" />
+    <file path="$PROJECT_DIR$/AddSeries/Existing/ImportSeriesView.js" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360915858882" ignored="false" />
+    <file path="$PROJECT_DIR$/Series/SeriesItemView.js" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360915955196" ignored="false" />
+    <file path="$PROJECT_DIR$/app.js" changelist="0cbf2b6b-882a-4616-9f96-93499c5aeb89" time="1360916122415" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,21 +71,60 @@
     <disable_hints />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="_backboneApp" />
+  </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="backbone.debug.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/JsLibraries/backbone.debug.js">
+      <file leaf-file-name="AutoComplete.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shared/AutoComplete.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="3" column="11" selection-start="81" selection-end="81" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AddSeriesLayout.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AddSeries/AddSeriesLayout.js">
+      <file leaf-file-name="ModalRegion.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shared/ModalRegion.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="8" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0">
+            <state line="11" column="23" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NotificationCollection.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shared/NotificationCollection.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="12" selection-start="1041" selection-end="1041" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NotificationModel.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shared/NotificationModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="17" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NotificationView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shared/NotificationView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="28" column="7" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SpinnerView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Shared/SpinnerView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="0" selection-start="101" selection-end="101" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -41,43 +133,34 @@
       <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="37" selection-start="1460" selection-end="1460" vertical-scroll-proportion="0.0">
+            <state line="52" column="49" selection-start="1396" selection-end="1396" vertical-scroll-proportion="-27.04">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Routing.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Routing.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Routing.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="0" selection-start="1012" selection-end="1012" vertical-scroll-proportion="0.6536697">
+            <state line="34" column="12" selection-start="1067" selection-end="1067" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RootFolderCompositeViewTemplate.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AddSeries/Existing/RootFolderCompositeViewTemplate.html">
+      <file leaf-file-name="CassetteConfiguration.cs" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CassetteConfiguration.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="154" selection-end="154" vertical-scroll-proportion="-2.5">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IndexLayout.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Series/Index/IndexLayout.js">
+      <file leaf-file-name="jquery-1.8.2.intellisense.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/JsLibraries/jquery-1.8.2.intellisense.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="192" selection-end="192" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="backbone.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/JsLibraries/backbone.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="975" column="8" selection-start="39777" selection-end="39777" vertical-scroll-proportion="0.0">
+            <state line="2464" column="2" selection-start="147589" selection-end="147589" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -90,14 +173,32 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.txt" root0="SKIP_INSPECTION" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/AddSeries/AddSeriesLayout.js" />
+        <option value="$PROJECT_DIR$/Series/SeriesCollectionView.js" />
+        <option value="$PROJECT_DIR$/Content/base.css" />
+        <option value="$PROJECT_DIR$/Shared/NotificationModel.js" />
+        <option value="$PROJECT_DIR$/Shared/NotificationTemplate.html" />
+        <option value="$PROJECT_DIR$/AddSeries/New/SearchResultView.js" />
+        <option value="$PROJECT_DIR$/JsLibraries/backbone.js" />
+        <option value="$PROJECT_DIR$/AddSeries/addSeries.css" />
+        <option value="$PROJECT_DIR$/Series/Edit/EditSeriesView.js" />
+        <option value="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderView.js" />
+        <option value="$PROJECT_DIR$/AddSeries/Existing/ImportSeriesView.js" />
+        <option value="$PROJECT_DIR$/Series/SeriesItemView.js" />
+        <option value="$PROJECT_DIR$/Shared/NotificationView.js" />
+        <option value="$PROJECT_DIR$/Shared/SpinnerView.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -115,18 +216,84 @@
             <id />
           </State>
           <State>
+            <id>AnonymousFunctionJS</id>
+          </State>
+          <State>
+            <id>BlockStatementJS</id>
+          </State>
+          <State>
+            <id>CallerJS</id>
+          </State>
+          <State>
+            <id>CommaExpressionJS</id>
+          </State>
+          <State>
+            <id>ConditionalExpressionJS</id>
+          </State>
+          <State>
+            <id>ConfusingFloatingPointLiteralJS</id>
+          </State>
+          <State>
+            <id>ConfusingPlusesOrMinusesJS</id>
+          </State>
+          <State>
+            <id>DynamicallyGeneratedCodeJS</id>
+          </State>
+          <State>
+            <id>EmptyStatementBodyJS</id>
+          </State>
+          <State>
+            <id>IncrementDecrementResultUsedJS</id>
+          </State>
+          <State>
             <id>JavaScript</id>
+          </State>
+          <State>
+            <id>MagicNumberJS</id>
+          </State>
+          <State>
+            <id>NegatedConditionalExpressionJS</id>
+          </State>
+          <State>
+            <id>NegatedIfStatementJS</id>
+          </State>
+          <State>
+            <id>NestedConditionalExpressionJS</id>
+          </State>
+          <State>
+            <id>NestedFunctionJS</id>
+          </State>
+          <State>
+            <id>OctalIntegerJS</id>
+          </State>
+          <State>
+            <id>OverlyComplexArithmeticExpressionJS</id>
+          </State>
+          <State>
+            <id>OverlyComplexBooleanExpressionJS</id>
+          </State>
+          <State>
+            <id>PointlessArithmeticExpressionJS</id>
+          </State>
+          <State>
+            <id>Potentially confusing code constructsJavaScript</id>
+          </State>
+          <State>
+            <id>VoidExpressionJS</id>
+          </State>
+          <State>
+            <id>WithStatementJS</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>ActionScript specificJavaScript</id>
+            <id>CommaExpressionJS</id>
           </State>
         </selected-state>
       </profile-state>
     </entry>
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -152,7 +319,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -181,7 +347,21 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="JsLibraries" />
+              <option name="myItemId" value="Shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_backboneApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_backboneApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Series" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -199,24 +379,52 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_backboneApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_backboneApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AddSeries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Existing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="settings.nodejs" />
+    <property name="options.lastSelected" value="Settings.JavaScript.Linters.JSHint" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/JsLibraries/jquery.js" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
-    <property name="options.searchVisible" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false">
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
     <option name="USER" value="" />
     <option name="PASSWORD" value="" />
     <option name="mySSHConnectionTimeout" value="30000" />
@@ -226,42 +434,44 @@
     <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
     <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
     <option name="IGNORE_SPACES_IN_MERGE" value="false" />
-    <option name="DETECT_NESTED_COPIES" value="true" />
     <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
     <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
     <option name="FORCE_UPDATE" value="false" />
     <option name="IGNORE_EXTERNALS" value="false" />
+    <configuration useDefault="true">C:\Users\Keivan\AppData\Roaming\Subversion</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+      <changelist id="0cbf2b6b-882a-4616-9f96-93499c5aeb89" name="Default" comment="" />
       <created>1360855538312</created>
       <updated>1360855538312</updated>
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32924107" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.68303573" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32955715" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26687765" sideWeight="0.6707589" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -297,9 +507,15 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
+    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
+    <option name="LIMIT_HISTORY" value="true" />
+    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
+    <option name="UPDATE_FILTER_SCOPE_NAME" />
+    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
+    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -310,6 +526,7 @@
     <option name="ACTIVE_VCS_NAME" />
     <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
+    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
   </component>
@@ -329,65 +546,114 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/JsLibraries/backbone.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="975" column="8" selection-start="39777" selection-end="39777" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Quality/qualityProfileCollection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="31" selection-start="93" selection-end="93" vertical-scroll-proportion="0.03440367">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/JsLibraries/backbone.debug.js">
+    <entry file="file://$PROJECT_DIR$/AddSeries/AddSeriesLayout.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/AddSeries/SearchResultCollection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AddSeries/SearchResultModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Series/SeriesCollection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Series/SeriesCollectionView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="18" selection-start="1358" selection-end="1358" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Series/SeriesItemView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="9" selection-start="1173" selection-end="1173" vertical-scroll-proportion="-7.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shared/AutoComplete.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="11" selection-start="81" selection-end="81" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shared/ModalRegion.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="23" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JsLibraries/jquery-1.8.2.intellisense.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2464" column="2" selection-start="147589" selection-end="147589" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shared/NotificationCollection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="12" selection-start="1041" selection-end="1041" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shared/NotificationModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="17" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shared/NotificationView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="7" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Shared/SpinnerView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="101" selection-end="101" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="37" selection-start="1460" selection-end="1460" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AddSeries/AddSeriesLayout.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="8" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/JsLibraries/backbone.marionette.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="749" column="7" selection-start="23191" selection-end="23191" vertical-scroll-proportion="0.1261468">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Series/Index/IndexLayout.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="192" selection-end="192" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AddSeries/Existing/RootFolderCompositeViewTemplate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="154" selection-end="154" vertical-scroll-proportion="-2.5">
+        <state line="52" column="49" selection-start="1396" selection-end="1396" vertical-scroll-proportion="-27.04">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Routing.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="1012" selection-end="1012" vertical-scroll-proportion="0.6536697">
+        <state line="34" column="12" selection-start="1067" selection-end="1067" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CassetteConfiguration.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -397,13 +663,17 @@
     <states>
       <state key="ScopeChooserConfigurable.UI">
         <settings>
+          <last-edited>jsLibraries</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.39215687" />
               </list>
             </option>
           </splitter-proportions>
+          <order>
+            <scope name="jsLibraries" />
+          </order>
         </settings>
       </state>
     </states>

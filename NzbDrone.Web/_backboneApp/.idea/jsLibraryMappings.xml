@@ -2,12 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{jQuery}" />
-    <excludedPredefinedLibrary name="AJAX" />
-    <excludedPredefinedLibrary name="DHTML" />
-    <excludedPredefinedLibrary name="DOM Core" />
-    <excludedPredefinedLibrary name="DOM Events" />
-    <excludedPredefinedLibrary name="DOM Traversal And Range" />
-    <excludedPredefinedLibrary name="DOM XPath" />
   </component>
 </project>
 

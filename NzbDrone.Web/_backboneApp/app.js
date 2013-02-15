@@ -50,7 +50,7 @@ define('app',  function () {
         };
 
 
-        window.NzbDrone.addInitializer(function (options) {
+        window.NzbDrone.addInitializer(function () {
 
             console.log('starting application');
 

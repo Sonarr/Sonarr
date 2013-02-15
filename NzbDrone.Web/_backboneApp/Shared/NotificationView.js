@@ -25,10 +25,10 @@
 
         initialize: function () {
             this.collection = notificationCollection;
-        },
+        }
     });
 
-    NzbDrone.addInitializer(function (options) {
+    NzbDrone.addInitializer(function () {
         NzbDrone.notificationRegion.show(new collectionView());
     });
     

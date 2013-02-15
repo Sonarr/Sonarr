@@ -9,7 +9,7 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         ui: {
             progressbar: '.progress .bar',
             qualityProfile: '.x-quality-profile',
-            backlogSettings: '.x-backlog-setting',
+            backlogSettings: '.x-backlog-setting'
         },
 
         events: {

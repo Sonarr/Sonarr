@@ -27,7 +27,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
         itemView: NzbDrone.AddSeries.RootFolderItemView,
 
         tagName: 'table',
-        className: 'table table-hover',
+        className: 'table table-hover'
     });
 
     NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
@@ -39,17 +39,17 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
         },
 
         regions: {
-            currentDirs: '#current-dirs',
+            currentDirs: '#current-dirs'
         },
 
         events: {
-            'click .x-add': 'addFolder',
+            'click .x-add': 'addFolder'
         },
 
 
         onRender: function () {
 
-            this.collection = rootFolders,
+            this.collection = rootFolders;
             this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
             this.ui.pathInput.folderAutoComplete();
         },
@@ -78,11 +78,11 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
                 context.collection.reset();
             } else {
                 console.log(term);
-                context.collection.fetch({ data: $.param({ term: term }) });
+                context.collection.fetch({ data: { term: term } });
             }
 
 
-        },
+        }
     });
 
 });

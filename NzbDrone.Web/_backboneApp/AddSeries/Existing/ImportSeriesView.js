@@ -73,11 +73,9 @@ define([
 
                 icon.removeClass('icon-search').addClass('icon-spin icon-spinner disabled');
 
-                var self = this;
-
                 this.collection.fetch({
-                    data:$.param({ term:this.ui.searchText.val() }),
-                    success:function (model) {
+                    data:{ term:this.ui.searchText.val() },
+                    success:function () {
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
 
                     },
@@ -116,8 +114,7 @@ define([
             },
 
             refreshItems:function () {
-                this.collection.importItems(this.model, qualityProfileCollection);
-
+                this.collection.importItems(this.model);
             }
 
 
