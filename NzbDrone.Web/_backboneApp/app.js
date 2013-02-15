@@ -4,19 +4,15 @@
         'backbone': 'JsLibraries/backbone',
         'underscore': 'JsLibraries/underscore',
         'marionette': 'JsLibraries/backbone.marionette',
-        'handlebars': 'JsLibraries/handlebars',
-        'jquery': 'JsLibraries/jquery'
+        'handlebars': 'JsLibraries/handlebars'
     },
 
     shim: {
-        jquery:{
-            exports:'$'
-        },
         underscore: {
             exports: '_'
         },
         backbone: {
-            deps: ['underscore', 'jquery'],
+            deps: ['underscore'],
             exports: 'Backbone'
         },
         marionette: {
@@ -25,23 +21,18 @@
         },
         handlebars: {
             exports: 'Handlebars'
-        },
-        dataTable: {
-            deps: ['jquery']
         }
+
     }
 });
 
-define('app', ['jquery', 'JsLibraries/backbone.modelbinder', 'marionette', 'handlebars', 'JsLibraries/backbone.marionette.extend'],
-    function (jquery, modelBinder, marionette, handlebars) {
+define('app',  function () {
+        //window.$ = jquery;
+        //window.jquery = jquery;
 
-
-        window.$ = jquery;
-        window.jquery = jquery;
-
-        window.Backbone.ModelBinder = modelBinder;
-        window.Backbone.Marionette = marionette;
-        window.Handlebars = handlebars;
+        //window.Backbone.ModelBinder = modelBinder;
+        //window.Backbone.Marionette = marionette;
+        //window.Handlebars = handlebars;
 
         window.NzbDrone = new Backbone.Marionette.Application();
         window.NzbDrone.Series = {};

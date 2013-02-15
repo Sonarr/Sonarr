@@ -1,16 +1,21 @@
 ﻿define(['app'], function () {
 
     NzbDrone.Shared.NotificationModel = Backbone.Model.extend({
-        mutators: {
-            pre: function () {
-                if (this.get('message')) {
-                    return this.get('message').lines().lenght > 1;
+        mutators:{
+            pre:function () {
+                try {
+                    if (this.get('message')) {
+                        return this.get('message').lines().lenght > 1;
+                    }
+                } catch (error) {
+                    return false;
                 }
+
             },
-            iconClass: function () {
+            iconClass:function () {
 
                 if (this.has('icon')) {
-                    return "icon";
+                    return 'icon';
                 }
 
                 if (this.get('level') === 'info') {
@@ -25,10 +30,10 @@
             }
         },
 
-        defaults: {
-            "level": "info",
-            "title": "",
-            "message": "",
+        defaults:{
+            "level":'info',
+            "title":'',
+            "message":''
         }
     });
 });
