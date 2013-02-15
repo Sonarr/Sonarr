@@ -24,7 +24,8 @@ namespace NzbDrone.Web.Backbone.NzbDrone
                 APP_PATH + "\\Content\\base.css",
                 APP_PATH + "\\Content\\menu.css",
                 APP_PATH + "\\AddSeries\\addSeries.css",
-                APP_PATH + "\\Content\\jquery.dataTables.bootstrap.css"
+                APP_PATH + "\\Content\\jquery.dataTables.bootstrap.css",
+                APP_PATH + "\\Content\\tablesorter.bootstrap.css"
             },
                 bundle => bundle.AddReference("/" + FONTS));
 

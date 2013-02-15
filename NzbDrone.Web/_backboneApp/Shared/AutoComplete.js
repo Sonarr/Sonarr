@@ -1,15 +1,15 @@
-﻿define([], function () {
+﻿define(['app'], function () {
 
-    $.fn.folderAutoComplete = function () {
+    $.fn.autoComplete = function (resource) {
         $(this).typeahead({
-            source: function (query, process) {
+            source: function (filter, callback) {
                 $.ajax({
-                    url: '/api/directories',
+                    url: NzbDrone.Constants.ApiRoot + resource,
                     dataType: "json",
-                    type: "POST",
-                    data: { query: query },
+                    type: "GET",
+                    data: { query: filter },
                     success: function (data) {
-                        process(data);
+                        callback(data);
                     }
                 });
             },

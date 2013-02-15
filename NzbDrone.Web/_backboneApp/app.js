@@ -65,6 +65,7 @@ define('app',  function () {
             });
 
             NzbDrone.addRegions({
+                titleRegion: '#title-region',
                 mainRegion: '#main-region',
                 notificationRegion: '#notification-region',
                 modalRegion: '#modal-region'

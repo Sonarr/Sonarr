@@ -210,10 +210,13 @@
     <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderModel.js" />
     <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderCollection.js" />
     <Content Include="_backboneApp\Content\jquery.dataTables.bootstrap.css" />
+    <Content Include="_backboneApp\Content\tablesorter.bootstrap.css" />
     <Content Include="_backboneApp\JsLibraries\jquery.js" />
+    <Content Include="_backboneApp\JsLibraries\jquery.tablesorter.bootstrap.js" />
+    <Content Include="_backboneApp\JsLibraries\jquery.tablesorter.js" />
     <Content Include="_backboneApp\JsLibraries\require.js" />
+    <Content Include="_backboneApp\Mixins\backbone.ajax.js" />
     <Content Include="_backboneApp\Mixins\backbone.marionette.templates.js" />
-    <Content Include="_backboneApp\Mixins\backbone.xhr.js" />
     <Content Include="_backboneApp\Routing.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.modelbinder.js" />
     <Content Include="_backboneApp\AddSeries\New\AddNewSeriesTemplate.html" />
@@ -424,8 +427,6 @@
     <Content Include="_backboneApp\Shared\ModalRegion.js" />
     <Content Include="_backboneApp\Series\Delete\DeleteSeriesTemplate.html" />
     <Content Include="_backboneApp\Series\SeriesCollectionTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesLayoutTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesLayout.js" />
     <Content Include="_backboneApp\Series\SeriesItemTemplate.html" />
     <Content Include="_backboneApp\Series\SeriesItemView.js" />
     <Content Include="_backboneApp\Series\SeriesCollection.js" />
@@ -439,7 +440,6 @@
     <Content Include="_backboneApp\Shared\SpinnerView.js" />
     <Content Include="Eloquera.config" />
     <Content Include="ClassDiagram1.cd" />
-    <None Include="_backboneApp\JsLibraries\jquery-1.8.2.intellisense.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.collectionbinder.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.debug.js" />
     <Content Include="_backboneApp\JsLibraries\handlebars.js" />

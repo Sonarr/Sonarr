@@ -16,15 +16,15 @@ namespace NzbDrone.Api.Directories
             : base("/directories")
         {
             _diskProvider = diskProvider;
-            Post["/"] = x => GetDirectories();
+            Get["/"] = x => GetDirectories();
         }
 
         private Response GetDirectories()
         {
-            if (!Request.Form.query.HasValue)
+            if (!Request.Query.query.HasValue)
                 return new List<string>().AsResponse();
 
-            string query = Request.Form.query.Value;
+            string query = Request.Query.query.Value;
 
             IEnumerable<String> dirs = null;
             try

@@ -51,7 +51,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
 
             this.collection = rootFolders;
             this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
-            this.ui.pathInput.folderAutoComplete();
+            this.ui.pathInput.autoComplete('/directories');
         },
 
 

@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="backbone.marionette" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/JsLibraries/backbone.js" />
+        <item url="file://$PROJECT_DIR$/JsLibraries/backbone.marionette.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/JsLibraries/backbone.js" />
+      <root url="file://$PROJECT_DIR$/JsLibraries/backbone.marionette.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

@@ -1,23 +1,8 @@
-﻿require(['app','Shared/NotificationView', 'AddSeries/AddSeriesLayout','Series/SeriesCollectionView'], function () {
-
-    NzbDrone.Controller = Backbone.Marionette.Controller.extend({
-
-        addSeries: function (action, query) {
-            NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
-        },
-
-        series: function (action, query) {
-            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView(this, action, query));
-        },
-
-        notFound: function () {
-            alert('route not found');
-        }
-    });
+﻿require(['app','Controller'], function (app, controller) {
 
     NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
-        controller: new NzbDrone.Controller(),
+        controller: controller,
         appRoutes: {
             '': 'series',
             'series': 'series',

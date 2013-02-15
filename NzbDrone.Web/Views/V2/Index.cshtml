@@ -13,7 +13,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>@ViewBag.Title - NzbDrone</title>
+    <title>NzbDrone</title>
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <link rel="apple-touch-icon" sizes="57x57" href="../../Content/Images/apple-touch-icon-114.png" />
     <link rel="apple-touch-icon" sizes="114x114" href="../../Content/Images/apple-touch-icon-114.png" />
@@ -42,8 +42,8 @@
             </div>
         </div>
         <div id="logo" class="row">
-            <div class="span18 offset2">
-                Single page
+            <div id="title-region" class="span18 offset2">
+                NzbDrone
             </div>
         </div>
         <div id="content" class="row">
@@ -74,11 +74,14 @@
     <script src="/_backboneApp/JsLibraries/backbone.modelbinder.js"></script>
     <script src="/_backboneApp/JsLibraries/backbone.mutators.js"></script>
     <script src="/_backboneApp/JsLibraries/backbone.marionette.js"></script>
-    
+    <script src="/_backboneApp/JsLibraries/jquery.tablesorter.js"></script>
+@*
+    <script src="/_backboneApp/JsLibraries/jquery.tablesorter.bootstrap.js"></script>
+*@
     <script src="/_backboneApp/JsLibraries/sugar.js"></script>
 
     <script src="/_backboneApp/Mixins/backbone.marionette.templates.js"></script>
-    <script src="/_backboneApp/Mixins/backbone.xhr.js"></script>
+    <script src="/_backboneApp/Mixins/backbone.ajax.js"></script>
     
     <script data-main="/_backboneApp/app" src="/_backboneApp/JsLibraries/require.js"></script>
     <script src="/_backboneApp/Routing.js"></script>
