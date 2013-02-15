@@ -9,19 +9,10 @@
         },
 
         regions: {
-            searchResult: '#search-result',
+            searchResult: '#search-result'
         },
 
         collection: new NzbDrone.AddSeries.SearchResultCollection(),
-
-        initialize: function (options) {
-
-            if (options.qualityProfiles === undefined) {
-                throw 'qualityProfiles arg. is required.';
-            }
-
-            this.qualityProfileCollection = options.qualityProfiles;
-        },
 
         onRender: function () {
             console.log('binding auto complete');
@@ -48,9 +39,9 @@
                 context.searchResult.show(new NzbDrone.Shared.SpinnerView());
 
                 context.currentSearchRequest = context.collection.fetch({
-                    data: $.param({ term: term }),
+                    data: { term: term },
                     success: function (model) {
-                        context.resultUpdated(model, context);
+                        context.searchResult.show(context.resultView);
                     }
                 });
 
@@ -64,16 +55,6 @@
                 console.log('aborting previous pending search request.');
                 this.currentSearchRequest.abort();
             }
-        },
-
-
-        resultUpdated: function (options, context) {
-            _.each(options.models, function (model) {
-                model.set('rootFolders', rootFolders);
-                model.set('qualityProfiles', context.qualityProfileCollection);
-            });
-
-            context.searchResult.show(context.resultView);
         }
     });
 });

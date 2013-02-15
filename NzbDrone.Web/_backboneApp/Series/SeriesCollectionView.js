@@ -1,21 +1,24 @@
 ﻿'use strict';
 
-define(['app', 'Series/SeriesItemView', 'Quality/QualityProfileCollection','datatables'], function () {
+define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], function (app, qualityProfileCollection) {
     NzbDrone.Series.SeriesCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView: NzbDrone.Series.SeriesItemView,
         itemViewOptions: {},
         template: 'Series/SeriesCollectionTemplate',
         tagName: 'table',
         className: 'table table-hover',
-        qualityProfileCollection: new NzbDrone.Quality.QualityProfileCollection(),
+        qualityProfileCollection: qualityProfileCollection,
 
         initialize: function () {
+            this.collection = new NzbDrone.Series.SeriesCollection();
+            this.collection.fetch();
             this.qualityProfileCollection.fetch();
+
             this.itemViewOptions = { qualityProfiles: this.qualityProfileCollection };
         },
 
-        onRender: function () {
-            $('.table').dataTable({
+        onShow: function () {
+            this.$el.dataTable({
                 sDom: "<'row'<'span14'l><'span6'f>r>t<'row'<'span14'i><'span6'p>>",
                 sPaginationType: "bootstrap",
                 bLengthChange: false,

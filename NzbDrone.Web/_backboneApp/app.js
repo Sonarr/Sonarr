@@ -5,43 +5,30 @@
         'underscore': 'JsLibraries/underscore',
         'marionette': 'JsLibraries/backbone.marionette',
         'handlebars': 'JsLibraries/handlebars',
-        'bootstrap': 'JsLibraries/bootstrap',
-        'datatablesBase': 'JsLibraries/jquery.dataTables',
-        'datatablesExt': 'JsLibraries/jquery.dataTables.extensions',
-        'datatables': 'JsLibraries/jquery.dataTables.bootstrap.pagination',
+        'jquery': 'JsLibraries/jquery'
     },
 
     shim: {
-        bootstrap: {
-            deps: ["jquery"],
+        jquery:{
+            exports:'$'
         },
         underscore: {
             exports: '_'
         },
         backbone: {
-            deps: ["underscore", "jquery"],
-            exports: "Backbone"
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
         },
         marionette: {
-            deps: ["backbone"],
-            exports: "Marionette"
+            deps: ['backbone'],
+            exports: 'Marionette'
         },
         handlebars: {
-            exports: "Handlebars"
+            exports: 'Handlebars'
         },
         dataTable: {
             deps: ['jquery']
-        },
-        datatablesBase: {
-            depts: ['jquery']
-        },
-        datatablesExt: {
-            deps: ['datatablesBase'],
-        },
-        datatables: {
-            deps: ['datatablesExt']
         }
-
     }
 });
 

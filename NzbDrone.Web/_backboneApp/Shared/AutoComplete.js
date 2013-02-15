@@ -1,4 +1,4 @@
-﻿define(['bootstrap'], function () {
+﻿define([], function () {
 
     $.fn.folderAutoComplete = function () {
         $(this).typeahead({

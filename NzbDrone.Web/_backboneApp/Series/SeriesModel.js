@@ -1,8 +1,7 @@
-define(['app'], function () {
+﻿define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfileCollection) {
 
 
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
-        url: NzbDrone.Constants.ApiRoot + '/series',
 
         mutators: {
             bestDateString: function () {
@@ -34,9 +33,12 @@ define(['app'], function () {
             }
         },
 
+
+
         defaults: {
             episodeFileCount: 0,
-            episodeCount: 0
+            episodeCount: 0,
+            qualityProfiles: qualityProfileCollection
         }
     });
 

@@ -1,6 +1,3 @@
-/// <reference path="jquery.dataTables-1.10.0-dev.js" />
-/// <reference path="jquery.dataTables.extensions.js" />
-
 /* Default class modification */
 $.extend($.fn.dataTableExt.oStdClasses, {
     "sWrapper": "dataTables_wrapper form-horizontal"

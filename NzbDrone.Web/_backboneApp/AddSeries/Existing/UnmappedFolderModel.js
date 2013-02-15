@@ -1,10 +1,13 @@
 ﻿'use strict';
 
-define(['app'], function () {
+define(['app','Quality/QualityProfileCollection'], function (app, qualityProfiles) {
 
 
     NzbDrone.AddSeries.Existing.UnmappedFolderModel = Backbone.Model.extend({
 
+        defaults :{
+            quality: qualityProfiles
+        }
 
     });
 
@@ -12,23 +15,14 @@ define(['app'], function () {
         model: NzbDrone.AddSeries.Existing.UnmappedFolderModel,
 
 
-        importItems: function (rootFolderModel, quality) {
 
-            if (!rootFolderModel) {
-                throw "folder array is required";
-            }
-
-            if (!quality) {
-                throw "quality is required";
-            }
+        importItems: function (rootFolderModel) {
 
             this.reset();
-
-            var qualityCollection = quality;
             var rootFolder = rootFolderModel.get('path');
 
             _.each(rootFolderModel.get('unmappedFolders'), function (folder) {
-                this.push(new NzbDrone.AddSeries.Existing.UnmappedFolderModel({ rootFolder: rootFolder, folder: folder, quality: qualityCollection }));
+                this.push(new NzbDrone.AddSeries.Existing.UnmappedFolderModel({ rootFolder: rootFolder, folder: folder}));
             }, this);
         }
     });

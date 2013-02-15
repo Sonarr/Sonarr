@@ -19,7 +19,7 @@
                     model.set('title', a.pathname.split('/').pop() + ' : ' + line);
                     model.set('message', msg);
                     model.set('level', 'error');
-                    self.add(model);
+                    self.push(model);
                 } catch (error) {
 
                     console.log("An error occurred while reporting error. " + error);
@@ -46,7 +46,7 @@
                 model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
                 model.set('message', xmlHttpRequest.responseText);
                 model.set('level', 'error');
-                self.add(model);
+                self.push(model);
 
                 return false;
             });

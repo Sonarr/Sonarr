@@ -6,12 +6,10 @@ using AutoMapper;
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extentions;
-using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Api.Series
 {
@@ -30,8 +28,7 @@ namespace NzbDrone.Api.Series
             Post["/"] = x => AddSeries();
             Put["/"] = x => UpdateSeries();
 
-            //Todo: Backbone failing and not sending the id properly... wtf
-            Delete["/"] = x => DeleteSeries(0);
+            Delete["/{id}"] = x => DeleteSeries((int)x.id);
         }
 
         private Response AllSeries()
@@ -98,10 +95,8 @@ namespace NzbDrone.Api.Series
 
         private Response DeleteSeries(int id)
         {
-            var seriesId = Convert.ToInt32(Request.Headers["id"].FirstOrDefault());
             var deleteFiles = Convert.ToBoolean(Request.Headers["deleteFiles"].FirstOrDefault());
-
-            _jobProvider.QueueJob(typeof(DeleteSeriesJob), new {SeriesId = seriesId, DeleteFiles = deleteFiles});
+            _jobProvider.QueueJob(typeof(DeleteSeriesJob), new { SeriesId = id, DeleteFiles = deleteFiles });
             return new Response { StatusCode = HttpStatusCode.OK };
         }
     }

@@ -9,7 +9,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
         tagName: 'tr',
 
         events: {
-            'click .x-remove': 'removeFolder',
+            'click .x-remove': 'removeFolder'
         },
 
         onRender: function () {
@@ -19,7 +19,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Shared/AutoComplet
         removeFolder: function () {
             this.model.destroy({ wait: true });
             this.model.collection.remove(this.model);
-        },
+        }
 
     });
 

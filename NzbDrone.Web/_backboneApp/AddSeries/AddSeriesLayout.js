@@ -1,12 +1,12 @@
 ﻿define([
         'app',
         'AddSeries/RootFolders/RootFolderCollection',
+        'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/RootFolderView',
         'AddSeries/New/AddNewSeriesView',
-        'AddSeries/Existing/ImportSeriesView',
-        'Quality/QualityProfileCollection'
+        'AddSeries/Existing/ImportSeriesView'
 ],
-    function (app, rootFolderCollection) {
+    function (app, rootFolderCollection, qualityProfileCollection) {
         NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
             template: 'AddSeries/addSeriesLayoutTemplate',
 
@@ -55,8 +55,6 @@
                 NzbDrone.Router.navigate('series/add/rootfolders');
             },
 
-            //rootFolderCollection: new NzbDrone.AddSeries.RootFolders.RootFolderCollection(),
-            qualityProfileCollection: new NzbDrone.Quality.QualityProfileCollection(),
 
             initialize: function (context, action, query) {
                 if (action) {
@@ -71,10 +69,11 @@
             onRender: function () {
 
                 rootFolderCollection.fetch();
+                qualityProfileCollection.fetch();
 
-                this.addNew.show(new NzbDrone.AddSeries.New.AddNewSeriesView({ qualityProfiles: this.qualityProfileCollection }));
-                this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView({ quality: this.qualityProfileCollection }));
-                this.rootFolders.show(new NzbDrone.AddSeries.RootDirView({ collection: this.rootFolderCollection }));
+                this.addNew.show(new NzbDrone.AddSeries.New.AddNewSeriesView());
+                this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView());
+                this.rootFolders.show(new NzbDrone.AddSeries.RootDirView());
 
                 this.listenTo(rootFolderCollection, 'add', this.evaluateActions, this);
                 this.listenTo(rootFolderCollection, 'remove', this.evaluateActions, this);
@@ -103,7 +102,7 @@
                     this.ui.addNewTab.show();
                     this.ui.importExistingTab.show();
                 }
-            },
+            }
         });
     });
 

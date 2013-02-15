@@ -17,16 +17,10 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
             'click .x-remove': 'removeSeries'
         },
 
-        initialize: function (options) {
-            this.qualityProfileCollection = options.qualityProfiles;
-            this.model.set('qualityProfiles', this.qualityProfileCollection);
-        },
-
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
         },
 
-        qualityProfileCollection: new NzbDrone.Quality.QualityProfileCollection(),
 
         saveSeries: function () {
             //Todo: Get qualityProfile + backlog setting from UI

@@ -211,6 +211,7 @@
     <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderCollection.js" />
     <Content Include="_backboneApp\Content\jquery.dataTables.bootstrap.css" />
     <Content Include="_backboneApp\JsLibraries\jquery.js" />
+    <Content Include="_backboneApp\JsLibraries\require.js" />
     <Content Include="_backboneApp\Routing.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.modelbinder.js" />
     <Content Include="_backboneApp\AddSeries\New\AddNewSeriesTemplate.html" />
@@ -222,7 +223,6 @@
     <Content Include="_backboneApp\JsLibraries\jquery.dataTables.extensions.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.dataTables.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.dataTables.bootstrap.pagination.js" />
-    <Content Include="_backboneApp\JsLibraries\require-jquery.js" />
     <Content Include="_backboneApp\Quality\qualityProfileModel.js" />
     <Content Include="_backboneApp\Quality\qualityProfileCollection.js" />
     <Content Include="_backboneApp\Quality\qualityTypeModel.js" />
