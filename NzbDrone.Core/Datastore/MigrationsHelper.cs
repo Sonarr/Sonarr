@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System;
-using System.IO;
 using System.Reflection;
 using NLog;
 
@@ -13,7 +12,7 @@ namespace NzbDrone.Core.Datastore
 
         public static void Run(string connectionString, bool trace)
         {
-            EnsureDatabase(connectionString);
+            SqlCeProxy.EnsureDatabase(connectionString);
 
             logger.Trace("Preparing to run database migration");
 
@@ -29,8 +28,6 @@ namespace NzbDrone.Core.Datastore
                     migrator = new Migrator.Migrator("sqlserverce", connectionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
                 }
 
-
-
                 migrator.MigrateToLastVersion();
                 logger.Info("Database migration completed");
 
@@ -43,10 +40,7 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        private static void EnsureDatabase(string constr)
-        {
-           
-        }
+
 
         public static string GetIndexName(string tableName, params string[] columns)
         {

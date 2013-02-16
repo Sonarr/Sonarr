@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
-using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Reflection;
 using NLog;
 using NzbDrone.Common;
@@ -21,22 +19,16 @@ namespace NzbDrone.Core.Datastore
         {
             Database.Mapper = new CustomeMapper();
 
-
-#if __MonoCS__
-#else
+            if (EnvironmentProvider.IsMono) return;
 
             var dataSet = (System.Data.DataSet)ConfigurationManager.GetSection("system.data");
             dataSet.Tables[0].Rows.Add("Microsoft SQL Server Compact Data Provider 4.0"
-            , "System.Data.SqlServerCe.4.0"
-            , ".NET Framework Data Provider for Microsoft SQL Server Compact"
-            , "System.Data.SqlServerCe.SqlCeProviderFactory, System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91");
+                                       , "System.Data.SqlServerCe.4.0"
+                                       , ".NET Framework Data Provider for Microsoft SQL Server Compact"
+                                       ,
+                                       "System.Data.SqlServerCe.SqlCeProviderFactory, System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91");
 
-            var proxyType = Assembly.Load("NzbDrone.SqlCe").GetExportedTypes()[0];
-            var instance = Activator.CreateInstance(proxyType);
-            var factoryMethod = proxyType.GetMethod("GetSqlCeProviderFactory");
-            _factory = (DbProviderFactory)factoryMethod.Invoke(instance, null);
-#endif
-
+            _factory = SqlCeProxy.GetSqlCeProviderFactory();
         }
 
 
@@ -83,9 +75,10 @@ namespace NzbDrone.Core.Datastore
 
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
-#if __MonoCS__
-                throw new NotSupportedException("SqlCe is not supported in mono");            
-#endif
+            if (EnvironmentProvider.IsMono)
+            {
+                throw new NotSupportedException("SqlCe is not supported in mono");
+            }
 
             lock (initilized)
             {
