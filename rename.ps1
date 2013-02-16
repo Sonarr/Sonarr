@@ -7,7 +7,7 @@ Param(
 
 if ($branch -eq "<default>")
 {
-    $branch = "teamcity";
+    $branch = "master";
 }
 
 Write-Host $branch;
