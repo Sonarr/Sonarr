@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 using Migrator.Framework;
 using NzbDrone.Common;
 
@@ -37,8 +35,8 @@ namespace NzbDrone.Core.Datastore.Migrations
 
         protected EloqueraDb GetObjectDb()
         {
-            var sqlCeConnection = SqlCeProxy.EnsureDatabase(Database.ConnectionString);
-            
+            var sqlCeConnection = new SqlConnection(Database.ConnectionString);
+
             var eqPath = sqlCeConnection.Database.Replace(".sdf", ".eq");
             return new EloqueraDbFactory(new EnvironmentProvider()).Create(eqPath);
         }

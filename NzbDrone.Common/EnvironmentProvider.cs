@@ -36,11 +36,6 @@ namespace NzbDrone.Common
             }
         }
 
-        public static bool IsMono
-        {
-            get { return Type.GetType("Mono.Runtime") != null; }
-        }
-
         public static bool IsDebug
         {
             get
