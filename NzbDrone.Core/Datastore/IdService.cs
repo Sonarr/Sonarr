@@ -35,25 +35,20 @@ namespace NzbDrone.Core.Datastore
                 modelBase.Id = _indexProvider.Next(obj.GetType());
             }
 
+            var list = obj as IEnumerable;
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+                    EnsureIds(item, context);
+                }
+                return;
+            }
+
             foreach (var propertyInfo in GetPotentialProperties(obj.GetType()))
             {
                 var propValue = propertyInfo.GetValue(obj, null);
-
-                var list = propValue as IEnumerable;
-
-                if (list != null)
-                {
-                    foreach (var item in list)
-                    {
-                        EnsureIds(item, context);
-                    }
-                }
-                else
-                {
-                    EnsureIds(propValue, context);
-
-                }
-
+                EnsureIds(propValue, context);
             }
         }
 
