@@ -36,6 +36,11 @@ namespace NzbDrone.Common
             }
         }
 
+        public static bool IsMono
+        {
+            get { return Type.GetType("Mono.Runtime") != null; }
+        }
+
         public static bool IsDebug
         {
             get
@@ -60,6 +65,12 @@ namespace NzbDrone.Common
         {
             get
             {
+
+                if(IsMono)
+                {
+                    return AppDomain.CurrentDomain.BaseDirectory;
+                }
+
                 string applicationPath;
 
                 applicationPath = CrawlToRoot(StartUpPath);

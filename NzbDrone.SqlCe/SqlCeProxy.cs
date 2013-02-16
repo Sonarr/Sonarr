@@ -6,15 +6,17 @@ namespace NzbDrone.SqlCe
 {
     public class SqlCeProxy
     {
-        public void EnsureDatabase(string constr)
+        public SqlCeConnection EnsureDatabase(string connectionString)
         {
-            var connection = new SqlCeConnection(constr);
+            var connection = new SqlCeConnection(connectionString);
 
             if (!File.Exists(connection.Database))
             {
-                var engine = new SqlCeEngine(constr);
+                var engine = new SqlCeEngine(connectionString);
                 engine.CreateDatabase();
             }
+
+            return connection;
         }
 
         public DbProviderFactory GetSqlCeProviderFactory()
