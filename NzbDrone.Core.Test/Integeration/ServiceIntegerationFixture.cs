@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using Autofac;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;

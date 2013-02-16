@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test
     class CentralDispatchFixture : SqlCeTest
     {
         readonly IList<string> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();
-        readonly IList<string> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).Select(c=>c.ToString()).ToList();
+        readonly IList<string> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).Select(c => c.ToString()).ToList();
         readonly IList<Type> extNotifications = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase))).ToList();
         readonly IList<Type> metadata = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(MetadataBase))).ToList();
 
@@ -28,6 +28,10 @@ namespace NzbDrone.Core.Test
 
         public CentralDispatchFixture()
         {
+#if __MonoCS__
+            throw new IgnoreException("SqlCe is not supported");
+#endif
+
             InitLogging();
             var dispatch = new CentralDispatch();
             kernel = dispatch.BuildContainer();

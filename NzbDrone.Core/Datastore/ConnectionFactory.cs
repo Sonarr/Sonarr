@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlServerCe;
-using System.IO;
+using System.Data.Common;
+using System.Reflection;
 using NLog;
 using NzbDrone.Common;
 using PetaPoco;
@@ -14,6 +13,7 @@ namespace NzbDrone.Core.Datastore
     {
         private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetLogger("ConnectionFactory");
+        private static readonly DbProviderFactory _factory;
 
         static ConnectionFactory()
         {
@@ -24,7 +24,14 @@ namespace NzbDrone.Core.Datastore
             , "System.Data.SqlServerCe.4.0"
             , ".NET Framework Data Provider for Microsoft SQL Server Compact"
             , "System.Data.SqlServerCe.SqlCeProviderFactory, System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91");
+
+            var proxyType = Assembly.Load("NzbDrone.SqlCe").GetExportedTypes()[0];
+            var instance = Activator.CreateInstance(proxyType);
+            var factoryMethod = proxyType.GetMethod("GetSqlCeProviderFactory");
+            _factory = (DbProviderFactory)factoryMethod.Invoke(instance, null);
+
         }
+
 
         public ConnectionFactory(EnvironmentProvider environmentProvider)
         {
@@ -66,24 +73,22 @@ namespace NzbDrone.Core.Datastore
         static readonly HashSet<String> initilized = new HashSet<string>();
 
 
+
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             lock (initilized)
             {
                 if (!initilized.Contains(connectionString))
                 {
-                    VerifyDatabase(connectionString);
+                    //VerifyDatabase(connectionString);
                     MigrationsHelper.Run(connectionString, true);
                     initilized.Add(connectionString);
                 }
             }
 
-            var factory = new DbProviderFactory
-                              {
-                                  IsProfiled = profiled
-                              };
 
-            var db = new Database(connectionString, factory, Database.DBType.SqlServerCE)
+
+            var db = new Database(connectionString, _factory, Database.DBType.SqlServerCE)
                          {
                              KeepConnectionAlive = true,
                              ForceDateTimesToUtc = false,
@@ -92,7 +97,7 @@ namespace NzbDrone.Core.Datastore
             return db;
         }
 
-        private static void VerifyDatabase(string connectionString)
+        /*private static void VerifyDatabase(string connectionString)
         {
             logger.Debug("Verifying database {0}", connectionString);
 
@@ -145,6 +150,6 @@ namespace NzbDrone.Core.Datastore
                     //TODO: do db cleanup to avoid broken relationships.
                 }
             }
-        }
+        }*/
     }
 }

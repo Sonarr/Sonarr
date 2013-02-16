@@ -9,7 +9,6 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Providers.Indexer;
-using StackExchange.Profiling;
 
 namespace NzbDrone.Core.Jobs
 {

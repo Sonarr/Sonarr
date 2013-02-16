@@ -16,6 +16,11 @@ namespace NzbDrone.Core.Test.Framework
         [SetUp]
         public void CoreTestSetup()
         {
+
+#if __MonoCS__
+            throw new IgnoreException("SqlCe is not supported in mono.");
+#endif
+
             if (NCrunch.Framework.NCrunchEnvironment.NCrunchIsResident())
             {
                 _dbTemplateName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()) + ".sdf";
