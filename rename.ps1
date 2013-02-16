@@ -5,7 +5,7 @@ Param(
     [string]$version
 )
 
-if ($branch -eq "<default branch>")
+if ($branch -eq "<default>")
 {
     $branch = "teamcity";
 }
