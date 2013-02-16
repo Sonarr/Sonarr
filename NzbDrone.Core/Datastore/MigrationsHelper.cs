@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlServerCe;
+﻿using System.Linq;
+using System;
 using System.IO;
 using System.Reflection;
 using NLog;
@@ -46,13 +45,7 @@ namespace NzbDrone.Core.Datastore
 
         private static void EnsureDatabase(string constr)
         {
-            var connection = new SqlCeConnection(constr);
-
-            if (!File.Exists(connection.Database))
-            {
-                var engine = new SqlCeEngine(constr);
-                engine.CreateDatabase();
-            }
+           
         }
 
         public static string GetIndexName(string tableName, params string[] columns)

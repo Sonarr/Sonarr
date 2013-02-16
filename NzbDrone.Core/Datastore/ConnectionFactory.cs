@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
+using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Reflection;
 using NLog;
 using NzbDrone.Common;
@@ -19,6 +21,10 @@ namespace NzbDrone.Core.Datastore
         {
             Database.Mapper = new CustomeMapper();
 
+
+#if __MonoCS__
+#else
+
             var dataSet = (System.Data.DataSet)ConfigurationManager.GetSection("system.data");
             dataSet.Tables[0].Rows.Add("Microsoft SQL Server Compact Data Provider 4.0"
             , "System.Data.SqlServerCe.4.0"
@@ -29,6 +35,7 @@ namespace NzbDrone.Core.Datastore
             var instance = Activator.CreateInstance(proxyType);
             var factoryMethod = proxyType.GetMethod("GetSqlCeProviderFactory");
             _factory = (DbProviderFactory)factoryMethod.Invoke(instance, null);
+#endif
 
         }
 
@@ -76,6 +83,10 @@ namespace NzbDrone.Core.Datastore
 
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
+#if __MonoCS__
+                throw new NotSupportedException("SqlCe is not supported in mono");            
+#endif
+
             lock (initilized)
             {
                 if (!initilized.Contains(connectionString))

@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;Mono</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisLogFile>bin\Debug\SABSync.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
@@ -174,9 +174,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Migrator.NET\Migrator.Providers.dll</HintPath>
     </Reference>
-    <Reference Include="MiniProfiler">
-      <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -206,10 +203,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -238,41 +231,41 @@
     <Compile Include="Datastore\EloqueraDbFactory.cs" />
     <Compile Include="Datastore\IdService.cs" />
     <Compile Include="Datastore\IndexProvider.cs" />
+    <Compile Include="Datastore\CustomeMapper.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
-    <Compile Include="Datastore\CustomeMapper.cs" />
-    <Compile Include="Datastore\Migrations\Migration20130203.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121226.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121218.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121209.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121202.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121122.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121016.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121012.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120919.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120918.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120802.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120727.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120504.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120430.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120420.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120228.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120227.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120220.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120123.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120118.cs" />
-    <Compile Include="Datastore\Migrations\Migration20111125.cs" />
-    <Compile Include="Datastore\Migrations\Migration20111112.cs" />
-    <Compile Include="Datastore\Migrations\Migration20111011.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110909.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
-    <Compile Include="Datastore\DbProviderFactory.cs" />
+    <Compile Include="Datastore\Migrations\Migration20110726.cs" />
+    <Compile Include="Datastore\Migrations\Migration20110909.cs" />
+    <Compile Include="Datastore\Migrations\Migration20111011.cs" />
+    <Compile Include="Datastore\Migrations\Migration20111112.cs" />
+    <Compile Include="Datastore\Migrations\Migration20111125.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120118.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120123.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120220.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120227.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120228.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120420.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120430.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120504.cs" />
     <Compile Include="Datastore\Migrations\Migration20120707.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120727.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120802.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120918.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120919.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121012.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121016.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121122.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121202.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121209.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121218.cs" />
     <Compile Include="Datastore\Migrations\Migration20121223.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121226.cs" />
+    <Compile Include="Datastore\Migrations\Migration20130203.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
+    <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
@@ -293,7 +286,6 @@
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
-    <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\BacklogSettingType.cs" />
@@ -675,12 +667,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-xcopy /s /y "$(SolutionDir)packages\SqlServerCompact.4.0.8482.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
-    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
-    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
