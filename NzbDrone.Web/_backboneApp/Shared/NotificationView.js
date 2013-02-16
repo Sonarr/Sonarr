@@ -29,6 +29,7 @@
     });
 
     NzbDrone.addInitializer(function () {
+        console.log('initializing notification view');
         NzbDrone.notificationRegion.show(new collectionView());
     });
     

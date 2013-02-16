@@ -6,6 +6,13 @@
         
         initialize: function () {
 
+          /*  var model = new NzbDrone.Shared.NotificationModel();
+            model.set('title','test notification');
+            model.set('message','test message');
+            model.set('level', 'error');
+            this.push(model);
+          */
+
             var self = this;
 
             window.onerror = function (msg, url, line) {

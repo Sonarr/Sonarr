@@ -1,5 +1,5 @@
-﻿define('modalRegion', ['Marionette'], function (Marionette) {
-    return Marionette.Region.extend({
+﻿define(['app'], function () {
+    return Backbone.Marionette.Region.extend({
         el: "#modal-region",
 
         constructor: function () {

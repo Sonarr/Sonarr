@@ -33,13 +33,17 @@ define([
 
         editSeries: function () {
             var view = new NzbDrone.Series.EditSeriesView({ model: this.model});
-            view.on('saved', this.render, this);
-            NzbDrone.modalRegion.show(view);
+
+           NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
+                view: view
+            });
         },
 
         removeSeries: function () {
             var view = new NzbDrone.Series.DeleteSeriesView({ model: this.model });
-            NzbDrone.modalRegion.show(view);
+            NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
+                view: view
+            });
         }
     });
 });

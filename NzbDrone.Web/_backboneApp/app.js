@@ -27,12 +27,6 @@
 });
 
 define('app',  function () {
-        //window.$ = jquery;
-        //window.jquery = jquery;
-
-        //window.Backbone.ModelBinder = modelBinder;
-        //window.Backbone.Marionette = marionette;
-        //window.Handlebars = handlebars;
 
         window.NzbDrone = new Backbone.Marionette.Application();
         window.NzbDrone.Series = {};
@@ -44,6 +38,11 @@ define('app',  function () {
         window.NzbDrone.AddSeries.RootFolders = {};
         window.NzbDrone.Quality = {};
         window.NzbDrone.Shared = {};
+
+        window.NzbDrone.Events = {
+            OpenModalDialog :'openModal',
+            CloseModalDialog : 'closeModal'
+        },
 
         window.NzbDrone.Constants = {
             ApiRoot: '/api'
@@ -68,7 +67,6 @@ define('app',  function () {
                 titleRegion: '#title-region',
                 mainRegion: '#main-region',
                 notificationRegion: '#notification-region',
-                modalRegion: '#modal-region'
             });
         });
 
