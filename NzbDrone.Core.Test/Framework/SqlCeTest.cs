@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
@@ -17,10 +16,10 @@ namespace NzbDrone.Core.Test.Framework
         [SetUp]
         public void CoreTestSetup()
         {
-            if (EnvironmentProvider.IsMono)
-            {
-                throw new IgnoreException("SqlCe is not supported in mono.");
-            }
+
+#if __MonoCS__
+            throw new IgnoreException("SqlCe is not supported in mono.");
+#endif
 
             if (NCrunch.Framework.NCrunchEnvironment.NCrunchIsResident())
             {

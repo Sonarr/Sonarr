@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System;
+using System.IO;
 using System.Reflection;
 using NLog;
 
@@ -27,7 +28,9 @@ namespace NzbDrone.Core.Datastore
                 {
                     migrator = new Migrator.Migrator("sqlserverce", connectionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
                 }
-                
+
+
+
                 migrator.MigrateToLastVersion();
                 logger.Info("Database migration completed");
 
@@ -42,10 +45,7 @@ namespace NzbDrone.Core.Datastore
 
         private static void EnsureDatabase(string constr)
         {
-            var proxyType = Assembly.Load("NzbDrone.SqlCe").GetExportedTypes()[0];
-            var instance = Activator.CreateInstance(proxyType);
-            var factoryMethod = proxyType.GetMethod("EnsureDatabase");
-            factoryMethod.Invoke(instance, new object[] { constr });
+           
         }
 
         public static string GetIndexName(string tableName, params string[] columns)

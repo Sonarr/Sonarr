@@ -5,7 +5,6 @@ using Autofac;
 using FluentAssertions;
 using NCrunch.Framework;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -29,10 +28,9 @@ namespace NzbDrone.Core.Test
 
         public CentralDispatchFixture()
         {
-            if (EnvironmentProvider.IsMono)
-            {
-                throw new IgnoreException("SqlCe is not supported");
-            }
+#if __MonoCS__
+            throw new IgnoreException("SqlCe is not supported");
+#endif
 
             InitLogging();
             var dispatch = new CentralDispatch();
