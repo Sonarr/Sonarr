@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Datastore
         [ID]
         private long _eqId;
 
+        [PetaPoco.Ignore]
         public int Id { get; set; }
     }
 }

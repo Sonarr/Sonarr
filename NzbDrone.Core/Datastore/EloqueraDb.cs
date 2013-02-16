@@ -25,6 +25,23 @@ namespace NzbDrone.Core.Datastore
 
         public T Insert<T>(T obj) where T : BaseRepositoryModel
         {
+            if (obj.Id != 0)
+            {
+                throw new InvalidOperationException("Attempted to insert object with existing ID as new object");
+            }
+
+            _idService.EnsureIds(obj, new HashSet<object>());
+            Db.Store(obj);
+            return obj;
+        }
+
+        public T Update<T>(T obj) where T : BaseRepositoryModel
+        {
+            if (obj.Id == 0)
+            {
+                throw new InvalidOperationException("Attempted to update object without ID");
+            }
+
             _idService.EnsureIds(obj, new HashSet<object>());
             Db.Store(obj);
             return obj;
@@ -35,25 +52,24 @@ namespace NzbDrone.Core.Datastore
             _idService.EnsureIds(objects, new HashSet<object>());
             return DoMany(objects, Insert);
         }
-
-        public T Update<T>(T obj)
-        {
-            Db.Store(obj);
-            return obj;
-        }
-
-        public IList<T> UpdateMany<T>(IList<T> objects)
+        
+        public IList<T> UpdateMany<T>(IList<T> objects) where T : BaseRepositoryModel
         {
             _idService.EnsureIds(objects, new HashSet<object>());
             return DoMany(objects, Update);
         }
 
-        public void Delete<T>(T obj) where T : new()
+        public void Delete<T>(T obj) where T : BaseRepositoryModel
         {
+            if (obj.Id == 0)
+            {
+                throw new InvalidOperationException("Attempted to delete an object without an ID");
+            }
+
             Db.Delete(obj);
         }
 
-        public void DeleteMany<T>(IEnumerable<T> objects) where T : new()
+        public void DeleteMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel
         {
             foreach (var o in objects)
             {
@@ -61,7 +77,7 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function)
+        private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : BaseRepositoryModel
         {
             return objects.Select(function).ToList();
         }

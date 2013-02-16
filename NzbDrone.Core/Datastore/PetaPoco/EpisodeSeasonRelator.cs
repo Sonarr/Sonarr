@@ -2,7 +2,7 @@
 using System.Linq;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Datastore.PetaPoco
+namespace PetaPoco
 {
     public class EpisodeSeasonRelator
     {

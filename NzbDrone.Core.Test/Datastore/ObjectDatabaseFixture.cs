@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Eloquera.Client;
@@ -39,6 +40,20 @@ namespace NzbDrone.Core.Test.Datastore
         {
             Db.Insert(testSeries);
             Db.AsQueryable<Series>().Should().HaveCount(1);
+        }
+
+        [Test]
+        public void double_insert_should_fail()
+        {
+            Db.Insert(testSeries);
+            Assert.Throws<InvalidOperationException>(() => Db.Insert(testSeries));
+        }
+
+        [Test]
+        public void update_item_with_root_index_0_should_faile()
+        {
+            testSeries.Id = 0;
+            Assert.Throws<InvalidOperationException>(() => Db.Update(testSeries));
         }
 
         [Test]
@@ -92,10 +107,9 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void new_existing_object_should_get_new_id()
+        public void new_object_should_get_new_id()
         {
             testSeries.Id = 0;
-            Db.Insert(testSeries);
             Db.Insert(testSeries);
 
             Db.AsQueryable<Series>().Should().HaveCount(1);
