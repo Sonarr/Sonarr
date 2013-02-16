@@ -56,6 +56,15 @@ namespace NzbDrone.Core.Test.Datastore
             Assert.Throws<InvalidOperationException>(() => Db.Update(testSeries));
         }
 
+
+        [Test]
+        public void should_be_able_to_store_empty_list()
+        {
+            var series = new List<Series>();
+
+            Db.InsertMany(series);
+        }
+
         [Test]
         public void should_not_store_dirty_data_in_cache()
         {
