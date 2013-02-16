@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Eloquera.Client;
 using FizzWare.NBuilder;
@@ -85,13 +86,40 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void new_objects_should_get_id()
         {
+            testSeries.Id = 0;
             Db.Insert(testSeries);
             testSeries.Id.Should().NotBe(0);
         }
 
         [Test]
+        public void new_existing_object_should_get_new_id()
+        {
+            testSeries.Id = 0;
+            Db.Insert(testSeries);
+            Db.Insert(testSeries);
+
+            Db.AsQueryable<Series>().Should().HaveCount(1);
+            testSeries.Id.Should().Be(1);
+        }
+
+
+        [Test]
+        public void should_be_able_to_assign_ids_to_nested_objects()
+        {
+            var nested = new NestedModel();
+
+            nested.List.Add(new NestedModel());
+
+            Db.Insert(nested);
+
+            nested.Id.Should().Be(1);
+            nested.List.Should().OnlyContain(c => c.Id > 0);
+        }
+
+        [Test]
         public void should_have_id_when_returned_from_database()
         {
+            testSeries.Id = 0;
             Db.Insert(testSeries);
             var item = Db.AsQueryable<Series>();
 
@@ -121,6 +149,16 @@ namespace NzbDrone.Core.Test.Datastore
     public class UnknownType : BaseRepositoryModel
     {
         public string Field1 { get; set; }
+    }
+
+    public class NestedModel : BaseRepositoryModel
+    {
+        public NestedModel()
+        {
+            List = new List<NestedModel> { this };
+        }
+
+        public IList<NestedModel> List { get; set; }
     }
 }
 

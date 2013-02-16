@@ -53,18 +53,18 @@ namespace NzbDrone.Core.Datastore
 
             //This seemse to cause Invalid Cast Exceptions... WTF
             //db.RefreshMode = ObjectRefreshMode.AlwaysReturnUpdatedValues;
-            
+
             RegisterTypeRules();
             RegisterTypes(db);
 
-            return new EloqueraDb(db);
+            return new EloqueraDb(db, new IdService(new IndexProvider(db)));
         }
 
         private void RegisterTypeRules()
         {
             RootFolder rootFolder = null;
             DB.TypeRules
-              //.SetIDField(() => rootFolder.Id)
+                //.SetIDField(() => rootFolder.Id)
               .IgnoreProperty(() => rootFolder.FreeSpace)
               .IgnoreProperty(() => rootFolder.UnmappedFolders);
 

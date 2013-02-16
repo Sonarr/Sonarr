@@ -18,7 +18,7 @@ namespace NzbDrone.Api.RootFolders
 
             Get["/"] = x => GetRootFolders();
             Post["/"] = x => AddRootFolder();
-            Delete["/{id}"] = x => DeleteRootFolder((long)x.id);
+            Delete["/{id}"] = x => DeleteRootFolder((int)x.id);
         }
 
         private Response AddRootFolder()
@@ -32,7 +32,7 @@ namespace NzbDrone.Api.RootFolders
             return _rootFolderService.All().AsResponse();
         }
 
-        private Response DeleteRootFolder(long folderId)
+        private Response DeleteRootFolder(int folderId)
         {
             _rootFolderService.Remove(folderId);
             return new Response { StatusCode = HttpStatusCode.OK };

@@ -30,6 +30,30 @@
     <RegexTestSelector>
       <RegularExpression>NzbDrone\.Core\.Test\.Integeration\.ServiceIntegerationFixture\..*</RegularExpression>
     </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.QualityProfileTest\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ProviderTests\.TvDbProviderTest\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ProviderTests\.MediaFileProviderTest\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ProviderTests\.EpisodeProviderTests\.EpisodeProviderTest_DeleteInvalidEpisodes\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ProviderTests\.DecisionEngineTests\.UpgradeHistorySpecificationFixture\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ProviderTests\.DecisionEngineTests\.QualityAllowedByProfileSpecificationFixture\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ParserTests\.QualityParserFixture\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.ParserTests\.ParserFixture\..*</RegularExpression>
+    </RegexTestSelector>
   </IgnoredTests>
   <AdditionalFilesToInclude>..\NzbDrone.Core\bin\Debug\Eloquera.Server.exe</AdditionalFilesToInclude>
   <HiddenWarnings>PostBuildEventDisabled</HiddenWarnings>

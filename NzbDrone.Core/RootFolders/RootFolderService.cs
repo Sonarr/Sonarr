@@ -13,7 +13,7 @@ namespace NzbDrone.Core.RootFolders
     {
         List<RootFolder> All();
         RootFolder Add(RootFolder rootDir);
-        void Remove(long rootDirId);
+        void Remove(int rootDirId);
         List<String> GetUnmappedFolders(string path);
         Dictionary<string, ulong> FreeSpaceOnDrives();
     }
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.RootFolders
             return rootFolder;
         }
 
-        public virtual void Remove(long rootDirId)
+        public virtual void Remove(int rootDirId)
         {
             _rootFolderRepository.Delete(rootDirId);
         }

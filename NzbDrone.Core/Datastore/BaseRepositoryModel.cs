@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Eloquera.Client;
 
 namespace NzbDrone.Core.Datastore
@@ -9,6 +6,8 @@ namespace NzbDrone.Core.Datastore
     public abstract class BaseRepositoryModel
     {
         [ID]
-        public long Id;
+        private long _eqId;
+
+        public int Id { get; set; }
     }
 }

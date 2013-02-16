@@ -6,8 +6,35 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Test.Framework
 {
+
+    public abstract class ObjectDbTest<TSubject> : ObjectDbTest where TSubject : class
+    {
+        private TSubject _subject;
+
+        [SetUp]
+        public void CoreTestSetup()
+        {
+            _subject = null;
+        }
+
+        protected TSubject Subject
+        {
+            get
+            {
+                if (_subject == null)
+                {
+                    _subject = Mocker.Resolve<TSubject>();
+                }
+
+                return _subject;
+            }
+
+        }
+    }
+
     public abstract class ObjectDbTest : CoreTest
     {
+
         private EloqueraDb _db;
         protected EloqueraDb Db
         {
@@ -32,6 +59,7 @@ namespace NzbDrone.Core.Test.Framework
             }
 
             Mocker.SetConstant(Db);
+            Mocker.SetConstant(Db.Db);
         }
 
         [TearDown]

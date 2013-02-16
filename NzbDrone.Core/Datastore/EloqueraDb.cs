@@ -1,49 +1,56 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Eloquera.Client;
 
 namespace NzbDrone.Core.Datastore
 {
     public class EloqueraDb : IDisposable
     {
-        private readonly DB _db;
+        private readonly IdService _idService;
+        public DB Db { get; private set; }
 
-        public EloqueraDb(DB db)
+        public EloqueraDb(DB db, IdService idService)
         {
-            _db = db;
+            _idService = idService;
+            Db = db;
         }
 
         public IEnumerable<T> AsQueryable<T>()
         {
-            return _db.Query<T>();
+            return Db.Query<T>();
         }
 
         public T Insert<T>(T obj) where T : BaseRepositoryModel
         {
-            obj.Id = _db.Store(obj);
+            _idService.EnsureIds(obj, new HashSet<object>());
+            Db.Store(obj);
             return obj;
         }
 
-        public IList<T> InsertMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel
+        public IList<T> InsertMany<T>(IList<T> objects) where T : BaseRepositoryModel
         {
+            _idService.EnsureIds(objects, new HashSet<object>());
             return DoMany(objects, Insert);
         }
 
         public T Update<T>(T obj)
         {
-            _db.Store(obj); 
+            Db.Store(obj);
             return obj;
         }
 
-        public IList<T> UpdateMany<T>(IEnumerable<T> objects)
+        public IList<T> UpdateMany<T>(IList<T> objects)
         {
+            _idService.EnsureIds(objects, new HashSet<object>());
             return DoMany(objects, Update);
         }
 
         public void Delete<T>(T obj) where T : new()
         {
-            _db.Delete(obj);
+            Db.Delete(obj);
         }
 
         public void DeleteMany<T>(IEnumerable<T> objects) where T : new()
@@ -59,9 +66,10 @@ namespace NzbDrone.Core.Datastore
             return objects.Select(function).ToList();
         }
 
+
         public void Dispose()
         {
-            _db.Dispose();
+            Db.Dispose();
         }
     }
 }

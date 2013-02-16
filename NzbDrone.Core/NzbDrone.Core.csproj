@@ -236,6 +236,8 @@
     <Compile Include="Datastore\ConnectionFactory.cs" />
     <Compile Include="Datastore\EloqueraDb.cs" />
     <Compile Include="Datastore\EloqueraDbFactory.cs" />
+    <Compile Include="Datastore\IdService.cs" />
+    <Compile Include="Datastore\IndexProvider.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
