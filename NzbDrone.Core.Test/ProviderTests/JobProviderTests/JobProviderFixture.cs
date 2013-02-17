@@ -8,6 +8,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NCrunch.Framework;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -40,7 +41,10 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         [TearDown]
         public void TearDown()
         {
-            Mocker.Resolve<JobProvider>().Queue.Should().BeEmpty();
+            if(!EnvironmentProvider.IsMono)
+            {
+                Mocker.Resolve<JobProvider>().Queue.Should().BeEmpty();
+            }
         }
 
         private void ResetLastExecution()

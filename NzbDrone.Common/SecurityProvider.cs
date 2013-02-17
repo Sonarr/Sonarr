@@ -3,225 +3,216 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using NLog;
+#if __MonoCS__
+#else
 using NetFwTypeLib;
+#endif
 
 namespace NzbDrone.Common
 {
-    public class SecurityProvider
-    {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+	public class SecurityProvider
+	{
+		private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
 
-        private readonly ConfigFileProvider _configFileProvider;
-        private readonly EnvironmentProvider _environmentProvider;
-        private readonly ProcessProvider _processProvider;
+		private readonly ConfigFileProvider _configFileProvider;
+		private readonly EnvironmentProvider _environmentProvider;
+		private readonly ProcessProvider _processProvider;
 
-        public SecurityProvider(ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
+		public SecurityProvider (ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
                                     ProcessProvider processProvider)
-        {
-            _configFileProvider = configFileProvider;
-            _environmentProvider = environmentProvider;
-            _processProvider = processProvider;
-        }
+		{
+			_configFileProvider = configFileProvider;
+			_environmentProvider = environmentProvider;
+			_processProvider = processProvider;
+		}
 
-        public SecurityProvider()
-        {
-        }
+		public SecurityProvider ()
+		{
+		}
 
-        public virtual void MakeAccessible()
-        {
-            if (!IsCurrentUserAdmin())
-            {
-                Logger.Trace("User is not an admin, skipping.");
-                return;
-            }
+		public virtual void MakeAccessible ()
+		{
+			if (!IsCurrentUserAdmin ()) {
+				Logger.Trace ("User is not an admin, skipping.");
+				return;
+			}
 
-            int port = 0;
+			int port = 0;
 
-            if (IsFirewallEnabled())
-            {
-                if(IsNzbDronePortOpen())
-                {
-                    Logger.Trace("NzbDrone port is already open, skipping.");
-                    return;
-                }
+			if (IsFirewallEnabled ()) {
+				if (IsNzbDronePortOpen ()) {
+					Logger.Trace ("NzbDrone port is already open, skipping.");
+					return;
+				}
 
-                //Close any old ports
-                port = CloseFirewallPort();
+				//Close any old ports
+				port = CloseFirewallPort ();
 
-                //Open the new port
-                OpenFirewallPort(_configFileProvider.Port);
-            }
+				//Open the new port
+				OpenFirewallPort (_configFileProvider.Port);
+			}
 
-            //Skip Url Register if not Vista or 7
-            if (_environmentProvider.GetOsVersion().Major < 6)
-                return;
+			//Skip Url Register if not Vista or 7
+			if (_environmentProvider.GetOsVersion ().Major < 6)
+				return;
 
-            //Unregister Url (if port != 0)
-            if (port != 0)
-                UnregisterUrl(port);
+			//Unregister Url (if port != 0)
+			if (port != 0)
+				UnregisterUrl (port);
 
-            //Register Url
-            RegisterUrl(_configFileProvider.Port);
-        }
+			//Register Url
+			RegisterUrl (_configFileProvider.Port);
+		}
 
-        public virtual bool IsCurrentUserAdmin()
-        {
-            try
-            {
-                var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-            catch(Exception ex)
-            {
-                Logger.WarnException("Error checking if the current user is an administrator.", ex);
-                return false;
-            }
-        }
+		public virtual bool IsCurrentUserAdmin ()
+		{
+			try {
+				var principal = new WindowsPrincipal (WindowsIdentity.GetCurrent ());
+				return principal.IsInRole (WindowsBuiltInRole.Administrator);
+			} catch (Exception ex) {
+				Logger.WarnException ("Error checking if the current user is an administrator.", ex);
+				return false;
+			}
+		}
 
-        public virtual bool IsNzbDronePortOpen()
-        {
-            try
-            {
-                var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
-                var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
+		public virtual bool IsNzbDronePortOpen ()
+		{
+#if __MonoCS__
+#else
 
-                if (!mgr.LocalPolicy.CurrentProfile.FirewallEnabled)
-                    return false;
+			try {
+				var netFwMgrType = Type.GetTypeFromProgID ("HNetCfg.FwMgr", false);
 
-                var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+		
+				var mgr = (INetFwMgr)Activator.CreateInstance (netFwMgrType);
 
-                foreach (INetFwOpenPort p in ports)
-                {
-                    if (p.Port == _configFileProvider.Port)
-                        return true;
-                }
-            }
-            catch(Exception ex)
-            {
-                Logger.WarnException("Failed to check for open port in firewall", ex);
-            }
-            return false;
-        }
+				if (!mgr.LocalPolicy.CurrentProfile.FirewallEnabled)
+					return false;
 
-        private bool OpenFirewallPort(int portNumber)
-        {
-            try
-            {
-                var type = Type.GetTypeFromProgID("HNetCfg.FWOpenPort", false);
-                var port = Activator.CreateInstance(type) as INetFwOpenPort;
+				var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
-                port.Port = portNumber;
-                port.Name = "NzbDrone";
-                port.Protocol = NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
-                port.Enabled = true;
+				foreach (INetFwOpenPort p in ports) {
+					if (p.Port == _configFileProvider.Port)
+						return true;
+				}
+			} catch (Exception ex) {
+				Logger.WarnException ("Failed to check for open port in firewall", ex);
+			}
+#endif
+			return false;
+		}
 
-                var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
-                var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-                var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+		private bool OpenFirewallPort (int portNumber)
+		{
+#if __MonoCS__
+			return true;
+#else
+			try {
+				var type = Type.GetTypeFromProgID ("HNetCfg.FWOpenPort", false);
+				var port = Activator.CreateInstance (type) as INetFwOpenPort;
 
-                ports.Add(port);
-                return true;
-            }
-            catch(Exception ex)
-            {
-                Logger.WarnException("Failed to open port in firewall for NzbDrone " + portNumber, ex);
-                return false;
-            }
-        }
+				port.Port = portNumber;
+				port.Name = "NzbDrone";
+				port.Protocol = NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP;
+				port.Enabled = true;
 
-        private int CloseFirewallPort()
-        {
-            try
-            {
-                var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
-                var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-                var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+				var netFwMgrType = Type.GetTypeFromProgID ("HNetCfg.FwMgr", false);
+				var mgr = (INetFwMgr)Activator.CreateInstance (netFwMgrType);
+				var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
-                var portNumber = 8989;
+				ports.Add (port);
+				return true;
+			} catch (Exception ex) {
+				Logger.WarnException ("Failed to open port in firewall for NzbDrone " + portNumber, ex);
+				return false;
+			}
+#endif
+		}
 
-                foreach (INetFwOpenPort p in ports)
-                {
-                    if (p.Name == "NzbDrone")
-                    {
-                        portNumber = p.Port;
-                        break;
-                    }
-                }
+		private int CloseFirewallPort ()
+		{
 
-                if (portNumber != _configFileProvider.Port)
-                {
-                    ports.Remove(portNumber, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
-                    return portNumber;
-                }
-            }
-            catch(Exception ex)
-            {
-                Logger.WarnException("Failed to close port in firewall for NzbDrone", ex);
-            }
+#if __MonoCS__
+#else
 
-            return 0;
-        }
+			try {
+				var netFwMgrType = Type.GetTypeFromProgID ("HNetCfg.FwMgr", false);
+				var mgr = (INetFwMgr)Activator.CreateInstance (netFwMgrType);
+				var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
-        private bool IsFirewallEnabled()
-        {
-            try
-            {
-                var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
-                var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-                return mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
-            }
+				var portNumber = 8989;
 
-            catch(Exception ex)
-            {
-                Logger.WarnException("Failed to check if the firewall is enabled", ex);
-                return false;
-            }
-        }
+				foreach (INetFwOpenPort p in ports) {
+					if (p.Name == "NzbDrone") {
+						portNumber = p.Port;
+						break;
+					}
+				}
 
-        private bool RegisterUrl(int portNumber)
-        {
-            try
-            {
-                var startInfo = new ProcessStartInfo()
+				if (portNumber != _configFileProvider.Port) {
+					ports.Remove (portNumber, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
+					return portNumber;
+				}
+			} catch (Exception ex) {
+				Logger.WarnException ("Failed to close port in firewall for NzbDrone", ex);
+			}
+#endif
+			return 0;
+		}
+
+		private bool IsFirewallEnabled ()
+		{
+#if __MonoCS__
+			return true;
+#else
+
+			try {
+				var netFwMgrType = Type.GetTypeFromProgID ("HNetCfg.FwMgr", false);
+				var mgr = (INetFwMgr)Activator.CreateInstance (netFwMgrType);
+				return mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
+			} catch (Exception ex) {
+				Logger.WarnException ("Failed to check if the firewall is enabled", ex);
+				return false;
+			}
+#endif
+		}
+
+		private bool RegisterUrl (int portNumber)
+		{
+			try {
+				var startInfo = new ProcessStartInfo ()
                 {
                     FileName = "netsh.exe",
                     Arguments = string.Format("http add urlacl http://*:{0}/ user=EVERYONE", portNumber)
                 };
 
-                var process = _processProvider.Start(startInfo);
-                process.WaitForExit(5000);
-                return true;
-            }
+				var process = _processProvider.Start (startInfo);
+				process.WaitForExit (5000);
+				return true;
+			} catch (Exception ex) {
+				Logger.WarnException ("Error registering URL", ex);
+			}
 
-            catch(Exception ex)
-            {
-                Logger.WarnException("Error registering URL", ex);
-            }
+			return false;
+		}
 
-            return false;
-        }
-
-        private bool UnregisterUrl(int portNumber)
-        {
-            try
-            {
-                var startInfo = new ProcessStartInfo()
+		private bool UnregisterUrl (int portNumber)
+		{
+			try {
+				var startInfo = new ProcessStartInfo ()
                 {
                     FileName = "netsh.exe",
                     Arguments = string.Format("http delete urlacl http://*:{0}/", portNumber)
                 };
 
-                var process = _processProvider.Start(startInfo);
-                process.WaitForExit(5000);
-                return true;
-            }
+				var process = _processProvider.Start (startInfo);
+				process.WaitForExit (5000);
+				return true;
+			} catch (Exception ex) {
+				Logger.WarnException ("Error registering URL", ex);
+			}
 
-            catch (Exception ex)
-            {
-                Logger.WarnException("Error registering URL", ex);
-            }
-
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 }
