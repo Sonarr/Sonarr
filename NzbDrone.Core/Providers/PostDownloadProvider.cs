@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Providers
             }
 
             var size = _diskProvider.GetDirectorySize(subfolderInfo.FullName);
-            var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
+            var freeSpace = _diskProvider.FreeDiskSpace(series.Path);
 
             if (Convert.ToUInt64(size) > freeSpace)
             {
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Providers
             }
 
             var size = _diskProvider.GetSize(videoFile);
-            var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
+            var freeSpace = _diskProvider.FreeDiskSpace(series.Path);
 
             if (Convert.ToUInt64(size) > freeSpace)
             {

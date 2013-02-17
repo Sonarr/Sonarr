@@ -27,7 +27,14 @@ namespace NzbDrone.Core.Test.Integeration
             builder.Register(c => Db)
                             .As<IDatabase>();
 
+            builder.RegisterType<ReferenceDataProvider>().AsSelf();
+            builder.RegisterType<SceneMappingProvider>().AsSelf();
+            builder.RegisterType<HttpProvider>().AsSelf();
+            builder.RegisterType<ConfigProvider>().AsSelf();
+
             _container = builder.Build();
+
+
 
             Mocker.GetMock<ConfigProvider>().SetupGet(s => s.ServiceRootUrl)
                     .Returns("http://services.nzbdrone.com");
@@ -53,31 +60,6 @@ namespace NzbDrone.Core.Test.Integeration
 
             dailySeries.Should().NotBeEmpty();
             dailySeries.Should().OnlyContain(c => c > 0);
-        }
-
-
-        [Test]
-        public void should_be_able_to_submit_exceptions()
-        {
-            ReportingService.SetupExceptronDriver();
-
-            try
-            {
-                ThrowException();
-            }
-            catch (Exception e)
-            {
-                var log = new LogEventInfo
-                              {
-                                  LoggerName = "LoggerName.LoggerName.LoggerName.LoggerName",
-                                  Exception = e,
-                                  Message = "New message string. New message string.",
-                              };
-
-                var hash = ReportingService.ReportException(log);
-
-                hash.Should().HaveLength(8);
-            }
         }
     }
 }

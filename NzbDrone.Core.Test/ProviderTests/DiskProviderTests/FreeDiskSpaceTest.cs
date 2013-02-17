@@ -15,23 +15,20 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
     [TestFixture]
-    public class FreeDiskSpaceTest : SqlCeTest
+    public class FreeDiskSpaceTest : CoreTest<DiskProvider>
     {
         [Test]
         public void should_return_free_disk_space()
         {
-            var di = new DirectoryInfo(Directory.GetCurrentDirectory());
-            var result = Mocker.Resolve<DiskProvider>().FreeDiskSpace(di);
+            var result = Subject.FreeDiskSpace(Directory.GetCurrentDirectory());
 
             //Checks to ensure that the free space on the first is greater than 0 (It should be in 99.99999999999999% of cases... I hope)
             result.Should().BeGreaterThan(0);
         }
-
         [Test]
-        public void should_throw_if_directoy_does_not_exist()
+        public void should_throw_if_drive_doesnt_exist()
         {
-            var di = new DirectoryInfo(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST");
-            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<DiskProvider>().FreeDiskSpace(di));
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.FreeDiskSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST"));
         }
     }
 }

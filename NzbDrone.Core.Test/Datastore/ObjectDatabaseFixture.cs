@@ -13,20 +13,20 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class ObjectDatabaseFixture : ObjectDbTest
     {
-        private Series testSeries;
-        private Episode testEpisode;
+        private ChildModel childModel;
+        private ParentModel ParentModel;
 
         [SetUp]
         public void SetUp()
         {
             WithObjectDb(memory:false);
 
-            testSeries = Builder<Series>
+            childModel = Builder<ChildModel>
                     .CreateNew()
                     .With(s => s.OID = 0)
                     .Build();
 
-            testEpisode = Builder<Episode>
+            ParentModel = Builder<ParentModel>
                     .CreateNew()
                     .With(e => e.OID = 0)
                     .Build();
@@ -37,29 +37,29 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_write_to_database()
         {
-            Db.Insert(testSeries);
-            Db.AsQueryable<Series>().Should().HaveCount(1);
+            Db.Insert(childModel);
+            Db.AsQueryable<ChildModel>().Should().HaveCount(1);
         }
 
         [Test]
         public void double_insert_should_fail()
         {
-            Db.Insert(testSeries);
-            Assert.Throws<InvalidOperationException>(() => Db.Insert(testSeries));
+            Db.Insert(childModel);
+            Assert.Throws<InvalidOperationException>(() => Db.Insert(childModel));
         }
 
         [Test]
         public void update_item_with_root_index_0_should_faile()
         {
-            testSeries.OID = 0;
-            Assert.Throws<InvalidOperationException>(() => Db.Update(testSeries));
+            childModel.OID = 0;
+            Assert.Throws<InvalidOperationException>(() => Db.Update(childModel));
         }
 
 
         [Test]
         public void should_be_able_to_store_empty_list()
         {
-            var series = new List<Series>();
+            var series = new List<ParentModel>();
 
             Db.InsertMany(series);
         }
@@ -67,61 +67,61 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_not_store_dirty_data_in_cache()
         {
-            Db.Insert(testEpisode);
+            Db.Insert(ParentModel);
 
-            Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
+            Db.AsQueryable<ParentModel>().Single().Child.Should().BeNull();
 
-            testEpisode.Series = Builder<Series>.CreateNew().Build();
+            ParentModel.Child = Builder<ChildModel>.CreateNew().Build();
 
-            Db.AsQueryable<Episode>().Single().Series.Should().BeNull();
+            Db.AsQueryable<ParentModel>().Single().Child.Should().BeNull();
         }
 
         [Test]
         public void should_store_nested_objects()
         {
-            testEpisode.Series = testSeries;
+            ParentModel.Child = childModel;
 
-            Db.Insert(testEpisode);
+            Db.Insert(ParentModel);
 
-            Db.AsQueryable<Episode>().Should().HaveCount(1);
-            Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
+            Db.AsQueryable<ParentModel>().Should().HaveCount(1);
+            Db.AsQueryable<ParentModel>().Single().Child.Should().NotBeNull();
         }
 
         [Test]
         public void should_update_nested_objects()
         {
-            testEpisode.Series = Builder<Series>
+            ParentModel.Child = Builder<ChildModel>
                                     .CreateNew()
                                     .With(s => s.OID = 0)
                                     .Build();
 
-            Db.Insert(testEpisode);
+            Db.Insert(ParentModel);
 
-            testEpisode.Series.Title = "UpdatedTitle";
+            ParentModel.Child.A = "UpdatedTitle";
 
-            Db.Update(testEpisode);
+            Db.Update(ParentModel);
 
-            Db.AsQueryable<Episode>().Should().HaveCount(1);
-            Db.AsQueryable<Episode>().Single().Series.Should().NotBeNull();
-            Db.AsQueryable<Episode>().Single().Series.Title.Should().Be("UpdatedTitle");
+            Db.AsQueryable<ParentModel>().Should().HaveCount(1);
+            Db.AsQueryable<ParentModel>().Single().Child.Should().NotBeNull();
+            Db.AsQueryable<ParentModel>().Single().Child.A.Should().Be("UpdatedTitle");
         }
 
         [Test]
         public void new_objects_should_get_id()
         {
-            testSeries.OID = 0;
-            Db.Insert(testSeries);
-            testSeries.OID.Should().NotBe(0);
+            childModel.OID = 0;
+            Db.Insert(childModel);
+            childModel.OID.Should().NotBe(0);
         }
 
         [Test]
         public void new_object_should_get_new_id()
         {
-            testSeries.OID = 0;
-            Db.Insert(testSeries);
+            childModel.OID = 0;
+            Db.Insert(childModel);
 
-            Db.AsQueryable<Series>().Should().HaveCount(1);
-            testSeries.OID.Should().Be(1);
+            Db.AsQueryable<ChildModel>().Should().HaveCount(1);
+            childModel.OID.Should().Be(1);
         }
 
 
@@ -141,24 +141,24 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_have_id_when_returned_from_database()
         {
-            testSeries.OID = 0;
-            Db.Insert(testSeries);
-            var item = Db.AsQueryable<Series>();
+            childModel.OID = 0;
+            Db.Insert(childModel);
+            var item = Db.AsQueryable<ChildModel>();
 
             item.Should().HaveCount(1);
             item.First().OID.Should().NotBe(0);
             item.First().OID.Should().BeLessThan(100);
-            item.First().OID.Should().Be(testSeries.OID);
+            item.First().OID.Should().Be(childModel.OID);
         }
 
         [Test]
         public void should_be_able_to_find_object_by_id()
         {
-            Db.Insert(testSeries);
-            var item = Db.AsQueryable<Series>().Single(c => c.OID == testSeries.OID);
+            Db.Insert(childModel);
+            var item = Db.AsQueryable<ChildModel>().Single(c => c.OID == childModel.OID);
 
             item.OID.Should().NotBe(0);
-            item.OID.Should().Be(testSeries.OID);
+            item.OID.Should().Be(childModel.OID);
         }
 
         [Test]
@@ -181,6 +181,19 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         public List<NestedModel> List { get; set; }
+    }
+
+    public class ParentModel : BaseRepositoryModel
+    {
+        public ChildModel Child { get; set; }
+    }
+
+    public class ChildModel : BaseRepositoryModel
+    {
+
+        public String A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
     }
 }
 

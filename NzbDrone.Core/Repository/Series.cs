@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
@@ -8,7 +7,7 @@ using PetaPoco;
 namespace NzbDrone.Core.Repository
 {
     [PrimaryKey("SeriesId", autoIncrement = false)]
-    public class Series:BaseRepositoryModel
+    public class Series
     {
         public virtual int SeriesId { get; set; }
 

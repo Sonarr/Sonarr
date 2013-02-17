@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
         private void WithLotsOfFreeDiskSpace()
         {
-            Mocker.GetMock<DiskProvider>().Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>())).Returns(1000000000);
+            Mocker.GetMock<DiskProvider>().Setup(s => s.FreeDiskSpace(It.IsAny<string>())).Returns(1000000000);
         }
 
         private void WithImportedFiles(string droppedFolder)
@@ -357,7 +357,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Returns(true);
 
             Mocker.GetMock<DiskProvider>()
-                    .Setup(s => s.FreeDiskSpace(new DirectoryInfo(series.Path)))
+                    .Setup(s => s.FreeDiskSpace(series.Path))
                     .Returns(9);
 
             //Act
@@ -408,7 +408,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Returns(10);
 
             Mocker.GetMock<DiskProvider>()
-                    .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
+                    .Setup(s => s.FreeDiskSpace(It.IsAny<string>()))
                     .Returns(10);
 
             //Act

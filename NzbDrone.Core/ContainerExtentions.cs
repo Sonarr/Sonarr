@@ -83,7 +83,7 @@ namespace NzbDrone.Core
             container.Register(c =>
                       {
                           return c.Resolve<IObjectDbFactory>().Create("");
-                      }).As<SiaqodbProxy>().SingleInstance();
+                      }).As<IObjectDatabase>().SingleInstance();
 
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
             container.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));

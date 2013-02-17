@@ -4,25 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
-using PetaPoco;
 
-namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
+namespace NzbDrone.Core.Test.RootFolderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class FreeSpaceOnDrivesFixture : CoreTest
+    public class FreeSpaceOnDrivesFixture : CoreTest<RootFolderService>
     {
         [Test]
         public void should_return_one_drive_when_only_one_root_dir_exists()
@@ -36,10 +30,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Returns(@"C:\");
 
             Mocker.GetMock<DiskProvider>()
-                  .Setup(s => s.FreeDiskSpace(new DirectoryInfo(@"C:\")))
+                  .Setup(s => s.FreeDiskSpace(@"C:\"))
                   .Returns(123456);
 
-            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
+            var result = Subject.FreeSpaceOnDrives();
 
             result.Should().HaveCount(1);
         }
@@ -57,10 +51,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Returns(@"C:\");
 
             Mocker.GetMock<DiskProvider>()
-                  .Setup(s => s.FreeDiskSpace(new DirectoryInfo(@"C:\")))
+                  .Setup(s => s.FreeDiskSpace(@"C:\"))
                   .Returns(123456);
 
-            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
+            var result = Subject.FreeSpaceOnDrives();
 
             result.Should().HaveCount(1);
         }
@@ -82,10 +76,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Returns(@"D:\");
 
             Mocker.GetMock<DiskProvider>()
-                  .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
+                  .Setup(s => s.FreeDiskSpace(It.IsAny<string>()))
                   .Returns(123456);
 
-            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
+            var result = Subject.FreeSpaceOnDrives();
 
             result.Should().HaveCount(2);
         }
@@ -102,10 +96,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
                   .Returns(@"C:\");
 
             Mocker.GetMock<DiskProvider>()
-                  .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
+                  .Setup(s => s.FreeDiskSpace(It.IsAny<string>()))
                   .Throws(new DirectoryNotFoundException());
 
-            var result = Mocker.Resolve<RootFolderService>().FreeSpaceOnDrives();
+            var result = Subject.FreeSpaceOnDrives();
 
             result.Should().HaveCount(0);
 

@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Attempted to insert object with existing ID as new object");
             }
 
-             _db.StoreObject(obj);
+            _db.StoreObject(obj);
             return obj;
         }
 
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Datastore
 
         public IList<T> InsertMany<T>(IList<T> objects) where T : BaseRepositoryModel
         {
-            return DoMany(objects,Insert);
+            return DoMany(objects, Insert);
         }
 
         public IList<T> UpdateMany<T>(IList<T> objects) where T : BaseRepositoryModel
@@ -70,12 +70,15 @@ namespace NzbDrone.Core.Datastore
 
         public void Delete<T>(T obj) where T : BaseRepositoryModel
         {
-            throw new NotImplementedException();
+            _db.Delete(obj);
         }
 
         public void DeleteMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel
         {
-            throw new NotImplementedException();
+            foreach (var o in objects)
+            {
+                Delete(o);
+            }
         }
 
         private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : BaseRepositoryModel

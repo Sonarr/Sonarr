@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Repository
 {
     [TableName("Episodes")]
     [PrimaryKey("EpisodeId", autoIncrement = true)]
-    public class Episode:BaseRepositoryModel
+    public class Episode
     {
         public int EpisodeId { get; set; }
 

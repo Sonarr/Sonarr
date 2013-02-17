@@ -191,16 +191,16 @@ namespace NzbDrone.Common
             File.SetAccessControl(filename, fs);
         }
 
-        public virtual ulong FreeDiskSpace(DirectoryInfo directoryInfo)
+        public virtual ulong FreeDiskSpace(string path)
         {
-            if(!directoryInfo.Exists)
-                throw new DirectoryNotFoundException(directoryInfo.FullName);
+            if (!FolderExists(path))
+                throw new DirectoryNotFoundException(path);
 
             ulong freeBytesAvailable;
             ulong totalNumberOfBytes;
             ulong totalNumberOfFreeBytes;
 
-            bool success = GetDiskFreeSpaceEx(directoryInfo.FullName, out freeBytesAvailable, out totalNumberOfBytes,
+            bool success = GetDiskFreeSpaceEx(path, out freeBytesAvailable, out totalNumberOfBytes,
                                out totalNumberOfFreeBytes);
             if (!success)
                 throw new System.ComponentModel.Win32Exception();
