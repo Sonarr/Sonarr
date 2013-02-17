@@ -92,6 +92,11 @@ namespace NzbDrone.Core.Test.Framework
         {
             ConfigProvider.ClearCache();
 
+            if (EnvironmentProvider.IsMono)
+            {
+                return;
+            }
+
             if (_db != null && _db.Connection != null && File.Exists(_db.Connection.Database))
             {
                 var file = _db.Connection.Database;
