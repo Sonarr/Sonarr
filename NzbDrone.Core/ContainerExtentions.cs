@@ -82,8 +82,8 @@ namespace NzbDrone.Core
 
             container.Register(c =>
                       {
-                          return c.Resolve<EloqueraDbFactory>().Create();
-                      }).As<EloqueraDb>().SingleInstance();
+                          return c.Resolve<IObjectDbFactory>().Create("");
+                      }).As<SiaqodbProxy>().SingleInstance();
 
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
             container.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));

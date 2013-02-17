@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootFolderServiceTests
         public void invalid_folder_path_throws_on_add(string path)
         {
             Assert.Throws<ArgumentException>(() =>
-                    Mocker.Resolve<RootFolderService>().Add(new RootFolder { Id = 0, Path = path })
+                    Mocker.Resolve<RootFolderService>().Add(new RootFolder { OID = 0, Path = path })
                 );
         }
 

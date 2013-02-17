@@ -13,32 +13,32 @@ namespace NzbDrone.Core.Datastore
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseRepositoryModel, new()
     {
-        public BasicRepository(EloqueraDb eloqueraDb)
+        public BasicRepository(IObjectDatabase objectDatabase)
         {
-            EloqueraDb = eloqueraDb;
+            ObjectDatabase = objectDatabase;
         }
 
-        protected EloqueraDb EloqueraDb { get; private set; }
+        protected IObjectDatabase ObjectDatabase { get; private set; }
 
         public List<TModel> All()
         {
-            return EloqueraDb.AsQueryable<TModel>().ToList();
+            return ObjectDatabase.AsQueryable<TModel>().ToList();
         }
 
         public TModel Get(int id)
         {
-            return EloqueraDb.AsQueryable<TModel>().Single(c => c.Id == id);
+            return ObjectDatabase.AsQueryable<TModel>().Single(c => c.OID == id);
         }
 
         public TModel Add(TModel model)
         {
-            return EloqueraDb.Insert(model);
+            return ObjectDatabase.Insert(model);
         }
 
         public void Delete(int id)
         {
             var itemToDelete = Get(id);
-            EloqueraDb.Delete(itemToDelete);
+            ObjectDatabase.Delete(itemToDelete);
         }
     }
 }

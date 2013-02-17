@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Eloquera.Client;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;

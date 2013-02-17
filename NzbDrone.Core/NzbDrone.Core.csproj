@@ -167,15 +167,6 @@
     <Reference Include="DeskMetrics.NET">
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
     </Reference>
-    <Reference Include="Eloquera.Client">
-      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Eloquera.Common">
-      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Eloquera.Server">
-      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Server.exe</HintPath>
-    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>
@@ -219,6 +210,9 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="siaqodb">
+      <HintPath>..\Libraries\Siaqodb\siaqodb.dll</HintPath>
+    </Reference>
     <Reference Include="SignalR">
       <HintPath>..\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
     </Reference>
@@ -258,10 +252,8 @@
     <Compile Include="Datastore\BaseRepositoryModel.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ConnectionFactory.cs" />
-    <Compile Include="Datastore\EloqueraDb.cs" />
-    <Compile Include="Datastore\EloqueraDbFactory.cs" />
-    <Compile Include="Datastore\IdService.cs" />
-    <Compile Include="Datastore\IndexProvider.cs" />
+    <Compile Include="Datastore\ObjectDbFactory.cs" />
+    <Compile Include="Datastore\SiaqodbProxy.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
@@ -670,7 +662,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Eloquera.config" />
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
   </ItemGroup>

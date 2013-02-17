@@ -35,12 +35,12 @@ namespace NzbDrone.Core.Datastore.Migrations
             }
         }
 
-        protected EloqueraDb GetObjectDb()
+        protected IObjectDatabase GetObjectDb()
         {
             var sqlCeConnection = SqlCeProxy.EnsureDatabase(Database.ConnectionString);
             
             var eqPath = sqlCeConnection.Database.Replace(".sdf", ".eq");
-            return new EloqueraDbFactory(new EnvironmentProvider()).Create(eqPath);
+            return new SiaqoDbFactory(new DiskProvider()).Create(eqPath);
         }
 
         public override void Down()

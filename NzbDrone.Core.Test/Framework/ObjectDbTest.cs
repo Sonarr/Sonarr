@@ -36,8 +36,8 @@ namespace NzbDrone.Core.Test.Framework
     public abstract class ObjectDbTest : CoreTest
     {
 
-        private EloqueraDb _db;
-        protected EloqueraDb Db
+        private IObjectDatabase _db;
+        protected IObjectDatabase Db
         {
             get
             {
@@ -52,15 +52,14 @@ namespace NzbDrone.Core.Test.Framework
         {
             if (memory)
             {
-                _db = new EloqueraDbFactory(new EnvironmentProvider()).CreateMemoryDb();
+                _db = new SiaqoDbFactory(new DiskProvider()).CreateMemoryDb();
             }
             else
             {
-                _db = new EloqueraDbFactory(new EnvironmentProvider()).Create(Path.Combine(Environment.CurrentDirectory,Guid.NewGuid().ToString()+ ".elq"));
+                _db = new SiaqoDbFactory(new DiskProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
             }
 
             Mocker.SetConstant(Db);
-            Mocker.SetConstant(Db.Db);
         }
 
         [TearDown]

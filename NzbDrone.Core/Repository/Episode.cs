@@ -1,5 +1,4 @@
 ﻿using System;
-using Eloquera.Client;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using PetaPoco;

@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         {
             Mocker.GetMock<IRootFolderRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" } });
+                  .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" } });
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
@@ -49,8 +49,8 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         {
             Mocker.GetMock<IRootFolderRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" },
-                                             new RootFolder { Id = 2, Path = @"C:\Test\TV2" }});
+                  .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" },
+                                             new RootFolder { OID = 2, Path = @"C:\Test\TV2" }});
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(It.IsAny<String>()))
@@ -70,8 +70,8 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         {
             Mocker.GetMock<IRootFolderRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" },
-                                             new RootFolder { Id = 2, Path = @"D:\Test\TV" }});
+                  .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" },
+                                             new RootFolder { OID = 2, Path = @"D:\Test\TV" }});
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RootDirProviderTests
         {
             Mocker.GetMock<IRootFolderRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" } });
+                  .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" } });
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))

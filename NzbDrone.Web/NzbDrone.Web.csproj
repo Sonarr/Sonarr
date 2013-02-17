@@ -92,17 +92,6 @@
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
     </Reference>
-    <Reference Include="Eloquera.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Eloquera.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=170cadcdba67be6c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Eloquera.Server">
-      <HintPath>..\packages\EloqueraDB.5.0.0\lib\net40\Eloquera.Server.exe</HintPath>
-    </Reference>
     <Reference Include="LowercaseRoutesMVC">
       <HintPath>..\packages\LowercaseRoutesMVC.1.0.3\lib\LowercaseRoutesMVC.dll</HintPath>
     </Reference>
@@ -435,7 +424,6 @@
     <Content Include="_backboneApp\Shared\NotificationView.js" />
     <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
     <Content Include="_backboneApp\Shared\SpinnerView.js" />
-    <Content Include="Eloquera.config" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="_backboneApp\JsLibraries\backbone.collectionbinder.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.debug.js" />

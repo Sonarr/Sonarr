@@ -1,80 +1,81 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Eloquera.Client;
+using Sqo;
 
 namespace NzbDrone.Core.Datastore
 {
-    public class EloqueraDb : IDisposable
+    public interface IObjectDatabase : IDisposable
     {
-        private readonly IdService _idService;
-        public DB Db { get; private set; }
+        IEnumerable<T> AsQueryable<T>();
+        T Insert<T>(T obj) where T : BaseRepositoryModel;
+        T Update<T>(T obj) where T : BaseRepositoryModel;
+        IList<T> InsertMany<T>(IList<T> objects) where T : BaseRepositoryModel;
+        IList<T> UpdateMany<T>(IList<T> objects) where T : BaseRepositoryModel;
+        void Delete<T>(T obj) where T : BaseRepositoryModel;
+        void DeleteMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel;
+    }
 
-        public EloqueraDb(DB db, IdService idService)
+    public class SiaqodbProxy : IObjectDatabase
+    {
+        private readonly Siaqodb _db;
+
+        public SiaqodbProxy(Siaqodb db)
         {
-            _idService = idService;
-            Db = db;
+            _db = db;
+        }
+
+        public void Dispose()
+        {
+
         }
 
         public IEnumerable<T> AsQueryable<T>()
         {
-            return Db.Query<T>();
+            return _db.Cast<T>();
         }
 
         public T Insert<T>(T obj) where T : BaseRepositoryModel
         {
-            if (obj.Id != 0)
+            if (obj.OID != 0)
             {
                 throw new InvalidOperationException("Attempted to insert object with existing ID as new object");
             }
 
-            _idService.EnsureIds(obj, new HashSet<object>());
-            Db.Store(obj);
+             _db.StoreObject(obj);
             return obj;
         }
 
         public T Update<T>(T obj) where T : BaseRepositoryModel
         {
-            if (obj.Id == 0)
+            if (obj.OID == 0)
             {
-                throw new InvalidOperationException("Attempted to update object without ID");
+                throw new InvalidOperationException("Attempted to update object without an ID");
             }
 
-            _idService.EnsureIds(obj, new HashSet<object>());
-            Db.Store(obj);
+            _db.StoreObject(obj);
             return obj;
         }
 
         public IList<T> InsertMany<T>(IList<T> objects) where T : BaseRepositoryModel
         {
-            _idService.EnsureIds(objects, new HashSet<object>());
-            return DoMany(objects, Insert);
+            return DoMany(objects,Insert);
         }
-        
+
         public IList<T> UpdateMany<T>(IList<T> objects) where T : BaseRepositoryModel
         {
-            _idService.EnsureIds(objects, new HashSet<object>());
             return DoMany(objects, Update);
+
         }
 
         public void Delete<T>(T obj) where T : BaseRepositoryModel
         {
-            if (obj.Id == 0)
-            {
-                throw new InvalidOperationException("Attempted to delete an object without an ID");
-            }
-
-            Db.Delete(obj);
+            throw new NotImplementedException();
         }
 
         public void DeleteMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel
         {
-            foreach (var o in objects)
-            {
-                Delete(o);
-            }
+            throw new NotImplementedException();
         }
 
         private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : BaseRepositoryModel
@@ -82,10 +83,5 @@ namespace NzbDrone.Core.Datastore
             return objects.Select(function).ToList();
         }
 
-
-        public void Dispose()
-        {
-            Db.Dispose();
-        }
     }
 }

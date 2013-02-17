@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Eloquera.Client;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -20,16 +19,16 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void SetUp()
         {
-            WithObjectDb(false);
+            WithObjectDb(memory:false);
 
             testSeries = Builder<Series>
                     .CreateNew()
-                    .With(s => s.Id = 0)
+                    .With(s => s.OID = 0)
                     .Build();
 
             testEpisode = Builder<Episode>
                     .CreateNew()
-                    .With(e => e.Id = 0)
+                    .With(e => e.OID = 0)
                     .Build();
 
 
@@ -52,7 +51,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void update_item_with_root_index_0_should_faile()
         {
-            testSeries.Id = 0;
+            testSeries.OID = 0;
             Assert.Throws<InvalidOperationException>(() => Db.Update(testSeries));
         }
 
@@ -93,7 +92,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             testEpisode.Series = Builder<Series>
                                     .CreateNew()
-                                    .With(s => s.Id = 0)
+                                    .With(s => s.OID = 0)
                                     .Build();
 
             Db.Insert(testEpisode);
@@ -110,19 +109,19 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void new_objects_should_get_id()
         {
-            testSeries.Id = 0;
+            testSeries.OID = 0;
             Db.Insert(testSeries);
-            testSeries.Id.Should().NotBe(0);
+            testSeries.OID.Should().NotBe(0);
         }
 
         [Test]
         public void new_object_should_get_new_id()
         {
-            testSeries.Id = 0;
+            testSeries.OID = 0;
             Db.Insert(testSeries);
 
             Db.AsQueryable<Series>().Should().HaveCount(1);
-            testSeries.Id.Should().Be(1);
+            testSeries.OID.Should().Be(1);
         }
 
 
@@ -135,31 +134,31 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.Insert(nested);
 
-            nested.Id.Should().Be(1);
-            nested.List.Should().OnlyContain(c => c.Id > 0);
+            nested.OID.Should().Be(1);
+            nested.List.Should().OnlyContain(c => c.OID > 0);
         }
 
         [Test]
         public void should_have_id_when_returned_from_database()
         {
-            testSeries.Id = 0;
+            testSeries.OID = 0;
             Db.Insert(testSeries);
             var item = Db.AsQueryable<Series>();
 
             item.Should().HaveCount(1);
-            item.First().Id.Should().NotBe(0);
-            item.First().Id.Should().BeLessThan(100);
-            item.First().Id.Should().Be(testSeries.Id);
+            item.First().OID.Should().NotBe(0);
+            item.First().OID.Should().BeLessThan(100);
+            item.First().OID.Should().Be(testSeries.OID);
         }
 
         [Test]
         public void should_be_able_to_find_object_by_id()
         {
             Db.Insert(testSeries);
-            var item = Db.AsQueryable<Series>().Single(c => c.Id == testSeries.Id);
+            var item = Db.AsQueryable<Series>().Single(c => c.OID == testSeries.OID);
 
-            item.Id.Should().NotBe(0);
-            item.Id.Should().Be(testSeries.Id);
+            item.OID.Should().NotBe(0);
+            item.OID.Should().Be(testSeries.OID);
         }
 
         [Test]
@@ -181,7 +180,7 @@ namespace NzbDrone.Core.Test.Datastore
             List = new List<NestedModel> { this };
         }
 
-        public IList<NestedModel> List { get; set; }
+        public List<NestedModel> List { get; set; }
     }
 }
 
