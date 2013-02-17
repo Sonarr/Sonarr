@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests.XemCommunicationProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class GetSceneTvdbMappingsFixture : SqlCeTest
+    public class GetSceneTvdbMappingsFixture : CoreTest
     {
         private void WithFailureJson()
         {

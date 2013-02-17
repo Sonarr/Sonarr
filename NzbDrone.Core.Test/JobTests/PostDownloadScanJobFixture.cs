@@ -17,7 +17,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    internal class PostDownloadScanJobFixture : SqlCeTest
+    internal class PostDownloadScanJobFixture : CoreTest
     {
         [SetUp]
         public void Setup()

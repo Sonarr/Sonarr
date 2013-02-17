@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class AllowedReleaseGroupSpecificationFixture : SqlCeTest
+    public class AllowedReleaseGroupSpecificationFixture : CoreTest
     {
         private EpisodeParseResult parseResult;
 

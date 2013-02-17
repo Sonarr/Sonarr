@@ -16,7 +16,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
 {
     [TestFixture]
-    public class BlackholeProviderFixture : SqlCeTest
+    public class BlackholeProviderFixture : CoreTest
     {
         private const string nzbUrl = "http://www.nzbs.com/url";
         private const string title = "some_nzb_title";

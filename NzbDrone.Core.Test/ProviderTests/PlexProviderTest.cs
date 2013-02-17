@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class PlexProviderTest : SqlCeTest
+    public class PlexProviderTest : CoreTest
     {
         private void WithSingleClient()
         {

@@ -18,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
-    public class ProcessDownloadFixture : SqlCeTest
+    public class ProcessDownloadFixture : CoreTest
     {
         Series fakeSeries;
 

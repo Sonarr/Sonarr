@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class TvDbProviderTest : SqlCeTest
+    public class TvDbProviderTest : CoreTest
     {
         private TvDbProvider tvDbProvider;
 

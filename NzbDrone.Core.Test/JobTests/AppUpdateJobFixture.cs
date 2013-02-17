@@ -17,7 +17,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    internal class AppUpdateJobFixture : SqlCeTest
+    internal class AppUpdateJobFixture : CoreTest
     {
         private const string SANDBOX_FOLDER = @"C:\Temp\nzbdrone_update\";
 

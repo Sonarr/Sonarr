@@ -7,7 +7,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Services
 {
     [TestFixture]
-    public class ParseErrorServiceFixture : SqlCeTest
+    public class ParseErrorServiceFixture : CoreTest
     {
 
         public ParseErrorServiceFixture()

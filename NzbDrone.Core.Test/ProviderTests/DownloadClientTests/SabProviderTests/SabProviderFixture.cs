@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SabProviderFixture : SqlCeTest
+    public class SabProviderFixture : CoreTest
     {
         private const string url = "http://www.nzbclub.com/nzb_download.aspx?mid=1950232";
         private const string title = "My Series Name - 5x2-5x3 - My title [Bluray720p] [Proper]";

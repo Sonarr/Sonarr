@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class MoveEpisodeFileFixture : SqlCeTest
+    public class MoveEpisodeFileFixture : CoreTest
     {
         [Test]
         public void should_not_move_file_if_source_and_destination_are_the_same_path()

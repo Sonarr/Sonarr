@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.HelperTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SortHelperTest : SqlCeTest
+    public class SortHelperTest : CoreTest
     {
         [TestCase("The Office (US)", "Office (US)")]
         [TestCase("A Man in Anger", "Man in Anger")]

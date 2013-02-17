@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeasonSearchJobTest : SqlCeTest
+    public class SeasonSearchJobTest : CoreTest
     {
         private IList<Episode> _episodes; 
 

@@ -18,7 +18,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 {
     [TestFixture]
-    public class DownloadProviderFixture : SqlCeTest
+    public class DownloadProviderFixture : CoreTest
     {
         public static object[] SabNamingCases =
         {

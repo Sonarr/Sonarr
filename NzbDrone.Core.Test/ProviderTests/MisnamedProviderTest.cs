@@ -13,7 +13,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    public class MisnamedProviderTest : SqlCeTest
+    public class MisnamedProviderTest : CoreTest
     {
         [Test]
         public void no_misnamed_files()

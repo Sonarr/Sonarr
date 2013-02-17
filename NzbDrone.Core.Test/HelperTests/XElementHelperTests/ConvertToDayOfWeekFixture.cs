@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.HelperTests.XElementHelperTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ParseDayOfWeekFixture : SqlCeTest
+    public class ParseDayOfWeekFixture : CoreTest
     {
         [Test]
         public void should_return_null_if_xelement_is_null()

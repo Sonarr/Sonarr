@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class ScanFixture : SqlCeTest
+    public class ScanFixture : CoreTest
     {
         [Test]
         public void series_should_update_the_last_scan_date()

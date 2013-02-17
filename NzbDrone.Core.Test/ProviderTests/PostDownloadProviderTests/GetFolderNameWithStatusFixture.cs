@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class GetFolderNameWithStatusFixture : SqlCeTest
+    public class GetFolderNameWithStatusFixture : CoreTest
     {
         [TestCase(@"c:\_NzbDrone_InvalidEpisode_Title", @"c:\_UnknownSeries_Title", PostDownloadStatusType.UnknownSeries)]
         [TestCase(@"c:\Title", @"c:\_Failed_Title", PostDownloadStatusType.Failed)]

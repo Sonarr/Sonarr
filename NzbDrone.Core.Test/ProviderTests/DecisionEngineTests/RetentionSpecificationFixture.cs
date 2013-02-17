@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RetentionSpecificationFixture : SqlCeTest
+    public class RetentionSpecificationFixture : CoreTest
     {
         private RetentionSpecification retentionSpecification;
 

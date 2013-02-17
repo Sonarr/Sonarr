@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class UpgradeHistorySpecificationFixture : SqlCeTest
+    public class UpgradeHistorySpecificationFixture : CoreTest
     {
         private UpgradeHistorySpecification _upgradeHistory;
 

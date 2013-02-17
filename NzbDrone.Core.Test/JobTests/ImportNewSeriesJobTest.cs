@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.JobTests
 { 
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ImportNewSeriesJobTest : SqlCeTest
+    public class ImportNewSeriesJobTest : CoreTest
     {
         [Test]
         public void import_new_series_succesful()

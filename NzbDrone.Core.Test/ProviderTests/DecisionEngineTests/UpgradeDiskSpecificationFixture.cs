@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class UpgradeDiskSpecificationFixture : SqlCeTest
+    public class UpgradeDiskSpecificationFixture : CoreTest
     {
         private UpgradeDiskSpecification _upgradeDisk;
 

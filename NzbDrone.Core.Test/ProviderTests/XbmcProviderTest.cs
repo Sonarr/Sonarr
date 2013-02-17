@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class XbmcProviderTest : SqlCeTest
+    public class XbmcProviderTest : CoreTest
     {
         private string EdenActivePlayers;
 

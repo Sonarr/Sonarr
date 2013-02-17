@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class CleanupFixture : SqlCeTest
+    public class CleanupFixture : CoreTest
     {
         private const string RecycleBin = @"C:\Test\RecycleBin";
 

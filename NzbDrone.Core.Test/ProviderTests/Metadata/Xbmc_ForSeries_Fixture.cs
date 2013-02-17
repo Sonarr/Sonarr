@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class Xbmc_ForSeries_Fixture : SqlCeTest
+    public class Xbmc_ForSeries_Fixture : CoreTest
     {
         private Series series;
         private TvdbSeries tvdbSeries;

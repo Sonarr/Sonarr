@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class CleanUpFixture : SqlCeTest
+    public class CleanUpFixture : CoreTest
     {
         [Test]
         public void should_skip_existing_files()

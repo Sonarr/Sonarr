@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class GetVideoFilesFixture : SqlCeTest
+    public class GetVideoFilesFixture : CoreTest
     {
         private string[] _files;
 

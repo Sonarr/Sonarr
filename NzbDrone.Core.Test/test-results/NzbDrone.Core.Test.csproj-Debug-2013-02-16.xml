@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestRecord xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Tests>
+    <TestRecord Name="NzbDrone">
+      <Tests>
+        <TestRecord Name="Core">
+          <Tests>
+            <TestRecord Name="Test">
+              <Tests>
+                <TestRecord Name="ProviderTests">
+                  <Tests>
+                    <TestRecord Name="ReferenceDataProviderTest">
+                      <Results>
+                        <UnitTestResult>
+                          <TestDate>2013-02-16T21:37:42</TestDate>
+                          <Passed>0</Passed>
+                          <Errors>0</Errors>
+                          <Failures>0</Failures>
+                          <Inconclusive>0</Inconclusive>
+                          <NotRunnable>0</NotRunnable>
+                          <Skipped>0</Skipped>
+                          <Ignored>9</Ignored>
+                          <Time />
+                          <Message>Test successful
+
+Execution time: 0.47ms</Message>
+                        </UnitTestResult>
+                      </Results>
+                      <Tests>
+                        <TestRecord Name="broken_service_should_not_cause_this_call_to_fail">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="GetDailySeriesIds_should_return_empty_list_of_int_when_server_is_unavailable">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="GetDailySeriesIds_should_return_empty_list_when_unable_to_parse">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="GetDailySeriesIds_should_return_list_of_int_when_all_are_valid">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="IsDailySeries_should_return_false">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="IsDailySeries_should_return_true">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="UpdateDailySeries_should_update_series_should_not_overwrite_existing_isDaily">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="UpdateDailySeries_should_update_series_should_skip_series_that_dont_match">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                        <TestRecord Name="UpdateDailySeries_should_update_series_that_match_daily_series_list">
+                          <Results>
+                            <UnitTestResult>
+                              <TestDate>2013-02-16T21:37:42</TestDate>
+                              <Passed>0</Passed>
+                              <Errors>0</Errors>
+                              <Failures>0</Failures>
+                              <Inconclusive>0</Inconclusive>
+                              <NotRunnable>0</NotRunnable>
+                              <Skipped>0</Skipped>
+                              <Ignored>1</Ignored>
+                              <Time />
+                              <Message>SetUp : SqlCe is not supported in mono.</Message>
+                              <StackTrace>  at NzbDrone.Core.Test.Framework.SqlCeTest.CoreTestSetup () [0x00000] in &lt;filename unknown&gt;:0 
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&amp;)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x000d5] in C:\cygwin\tmp\monobuild\build\BUILD\mono-2.10.9\mcs\class\corlib\System.Reflection\MonoMethod.cs:226 </StackTrace>
+                              <ConsoleOutput />
+                              <ConsoleError />
+                            </UnitTestResult>
+                          </Results>
+                        </TestRecord>
+                      </Tests>
+                    </TestRecord>
+                  </Tests>
+                </TestRecord>
+              </Tests>
+            </TestRecord>
+          </Tests>
+        </TestRecord>
+      </Tests>
+    </TestRecord>
+  </Tests>
+</TestRecord>

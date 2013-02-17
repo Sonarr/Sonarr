@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class FluentTest : SqlCeTest
+    public class FluentTest : CoreTest
     {
         [TestCase(null, "def", "def")]
         [TestCase("", "def", "def")]

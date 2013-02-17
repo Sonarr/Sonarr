@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityUpgradeSpecificationFixture : SqlCeTest
+    public class QualityUpgradeSpecificationFixture : CoreTest
     {
         public static object[] IsUpgradeTestCases =
         {

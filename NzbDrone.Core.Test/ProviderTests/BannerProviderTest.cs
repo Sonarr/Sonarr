@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class BannerProviderTest : SqlCeTest
+    public class BannerProviderTest : CoreTest
     {
         private Series _series;
 
