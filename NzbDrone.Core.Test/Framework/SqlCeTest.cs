@@ -82,6 +82,11 @@ namespace NzbDrone.Core.Test.Framework
 
         protected void WithRealDb()
         {
+            if (EnvironmentProvider.IsMono)
+            {
+                throw new IgnoreException("SqlCe is not supported in mono.");
+            }
+
             _db = GetEmptyDatabase();
             Mocker.SetConstant(Db);
         }

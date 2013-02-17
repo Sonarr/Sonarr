@@ -261,7 +261,7 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            var settings = All().Where(j => j.TypeName == queueItem.JobType.ToString()).Single();
+            var settings = All().Single(j => j.TypeName == queueItem.JobType.ToString());
 
             using (_notification = new ProgressNotification(jobImplementation.Name))
             {
