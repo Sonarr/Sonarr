@@ -47,14 +47,13 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration">
-      <HintPath>..\..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Integration.Mvc">
-      <HintPath>..\..\packages\Autofac.Mvc3.2.6.3.862\lib\NET40\Autofac.Integration.Mvc.dll</HintPath>
+    <Reference Include="Autofac.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2.1\lib\Elmah.dll</HintPath>
@@ -313,6 +312,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Autofac.Integration.Mvc\Autofac.Integration.Mvc.csproj">
+      <Project>{dd874e64-c7ec-464d-925f-cf4a709edeef}</Project>
+      <Name>Autofac.Integration.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>

@@ -6,6 +6,7 @@
         Help,
         InstallService,
         UninstallService,
-        Service
+        Service,
+        Nancy
     }
 }

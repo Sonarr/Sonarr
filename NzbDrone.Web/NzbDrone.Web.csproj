@@ -61,14 +61,13 @@
     <Reference Include="AjaxMin">
       <HintPath>..\packages\AjaxMin.4.60.4609.17023\lib\net20\AjaxMin.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration">
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Integration.Mvc">
-      <HintPath>..\packages\Autofac.Mvc3.2.6.3.862\lib\NET40\Autofac.Integration.Mvc.dll</HintPath>
+    <Reference Include="Autofac.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Cassette">
       <HintPath>..\packages\Cassette.2.0.0\lib\net40-client\Cassette.dll</HintPath>
@@ -105,12 +104,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy, Version=0.15.3.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.0.15.3\lib\net40\Nancy.dll</HintPath>
+      <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Hosting.Aspnet">
-      <HintPath>..\packages\Nancy.Hosting.Aspnet.0.15.3\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
+    <Reference Include="Nancy.Hosting.Aspnet, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Hosting.Aspnet.0.16.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -650,6 +650,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Autofac.Integration.Mvc\Autofac.Integration.Mvc.csproj">
+      <Project>{dd874e64-c7ec-464d-925f-cf4a709edeef}</Project>
+      <Name>Autofac.Integration.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
       <Project>{fd286df8-2d3a-4394-8ad5-443fade55fb2}</Project>
       <Name>NzbDrone.Api</Name>

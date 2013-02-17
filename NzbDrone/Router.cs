@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Mime;
 using NLog;
+using Nancy.Hosting.Self;
+using NzbDrone.Api;
 using NzbDrone.Common;
 using NzbDrone.Common.SysTray;
 using NzbDrone.Model;
-using NzbDrone.Providers;
 
 namespace NzbDrone
 {
@@ -19,19 +18,18 @@ namespace NzbDrone
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly EnvironmentProvider _environmentProvider;
-        private readonly ProcessProvider _processProvider;
         private readonly SysTrayProvider _sysTrayProvider;
+        private readonly ProcessProvider _processProvider;
 
         public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider,
-                        ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider,
-                        ProcessProvider processProvider, SysTrayProvider sysTrayProvider)
+                        ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider, SysTrayProvider sysTrayProvider, ProcessProvider processProvider)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
             _environmentProvider = environmentProvider;
-            _processProvider = processProvider;
             _sysTrayProvider = sysTrayProvider;
+            _processProvider = processProvider;
         }
 
         public void Route(IEnumerable<string> args)
@@ -41,7 +39,7 @@ namespace NzbDrone
 
         public void Route(ApplicationMode applicationMode)
         {
-            if(!_environmentProvider.IsUserInteractive)
+            if (!_environmentProvider.IsUserInteractive)
             {
                 applicationMode = ApplicationMode.Service;
             }
@@ -50,6 +48,20 @@ namespace NzbDrone
 
             switch (applicationMode)
             {
+                case ApplicationMode.Nancy:
+                    {
+
+                        var nancyHost = new NancyHost(new Uri("http://localhost:8282"), new Bootstrapper());
+                        nancyHost.Start();
+
+
+                        _processProvider.Start("http://localhost:8282");
+
+                        _consoleProvider.WaitForClose();
+
+                        break;
+                    }
+
                 case ApplicationMode.Service:
                     {
                         logger.Trace("Service selected");
@@ -61,7 +73,7 @@ namespace NzbDrone
                     {
                         logger.Trace("Console selected");
                         _applicationServer.Start();
-                        if(ConsoleProvider.IsConsoleApplication)
+                        if (ConsoleProvider.IsConsoleApplication)
                             _consoleProvider.WaitForClose();
 
                         else
@@ -119,6 +131,7 @@ namespace NzbDrone
 
             if (arg == "i") return ApplicationMode.InstallService;
             if (arg == "u") return ApplicationMode.UninstallService;
+            if (arg == "n") return ApplicationMode.Nancy;
 
             return ApplicationMode.Help;
         }

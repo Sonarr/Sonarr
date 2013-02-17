@@ -136,3 +136,4 @@ NzbDrone.Web/_backboneApp/.idea/.
 *.test-cache
 *.sqo
 *.userprefs
+*/test-results/*

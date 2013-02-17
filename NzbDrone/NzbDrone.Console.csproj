@@ -88,6 +88,18 @@
     <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Nancy, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Bootstrappers.Autofac, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Bootstrappers.Autofac.0.16.1\lib\net40\Nancy.Bootstrappers.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Self, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Hosting.Self.0.16.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -141,6 +153,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
+      <Project>{fd286df8-2d3a-4394-8ad5-443fade55fb2}</Project>
+      <Name>NzbDrone.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
@@ -152,8 +168,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+
+xcopy /s /y "$(SolutionDir)\SqlCe\*.*"   "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

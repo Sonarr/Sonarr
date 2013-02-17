@@ -9,7 +9,7 @@ namespace NzbDrone.Common
     {
         public const string NZBDRONE_PATH = "NZBDRONE_PATH";
         public const string NZBDRONE_PID = "NZBDRONE_PID";
-        public const string ROOT_MARKER = "NzbDrone.Web";
+        public const string ROOT_MARKER = "IISExpress";
 
         public static readonly char[] NewLineChars = Environment.NewLine.ToCharArray();
 
@@ -38,7 +38,10 @@ namespace NzbDrone.Common
 
         public static bool IsMono
         {
-            get { return Type.GetType("Mono.Runtime") != null; }
+            get
+            {
+                return Type.GetType("Mono.Runtime") != null;
+            }
         }
 
         public static bool IsDebug

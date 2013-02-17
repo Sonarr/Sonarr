@@ -74,19 +74,29 @@
     <IntermediateOutputPath>C:\Users\Mark\AppData\Local\Temp\vs167E.tmp\x86\Mono\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=2.6.3.862, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration, Version=2.6.3.862, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+    <Reference Include="Autofac.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Nancy">
+      <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Bootstrappers.Autofac, Version=0.15.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NzbDrone.Services.Api\bin\Nancy.Bootstrappers.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Self">
+      <HintPath>..\packages\Nancy.Hosting.Self.0.16.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
@@ -141,6 +151,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
+      <Project>{FD286DF8-2D3A-4394-8AD5-443FADE55FB2}</Project>
+      <Name>NzbDrone.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
@@ -152,8 +166,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+
+xcopy /s /y "$(SolutionDir)\SqlCe\*.*"   "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

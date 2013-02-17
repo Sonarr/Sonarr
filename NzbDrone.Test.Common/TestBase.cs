@@ -89,12 +89,7 @@ namespace NzbDrone.Test.Common
 
         protected string GetTestFilePath(string fileName)
         {
-            return Path.Combine(@".\Files\", fileName);
-        }
-
-        protected string ReadTestFile(string fileName)
-        {
-            return File.ReadAllText(GetTestFilePath(fileName));
+            return Path.Combine(Directory.GetCurrentDirectory(), "Files", fileName);
         }
     }
 }

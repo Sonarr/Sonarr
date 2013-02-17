@@ -71,11 +71,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration">
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+    <Reference Include="Autofac.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Exceptron.Client, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -99,6 +101,26 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnsureThat\Ensure.cs" />
+    <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureDateTimeExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureDecimalExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureDoubleExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureGuidExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureIntExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureLongExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureNullableValueTypeExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureObjectExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureShortExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureStringExtensions.cs" />
+    <Compile Include="EnsureThat\EnsureTypeExtensions.cs" />
+    <Compile Include="EnsureThat\ExceptionFactory.cs" />
+    <Compile Include="EnsureThat\ExpressionExtensions.cs" />
+    <Compile Include="EnsureThat\Param.cs" />
+    <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="EnsureThat\StringExtensions.cs" />
+    <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
@@ -126,6 +148,7 @@
     <Compile Include="SysTray\SysTrayProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EnsureThat\ve-3BAF.tmp" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +161,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EnsureThat\Resources\ExceptionMessages.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
