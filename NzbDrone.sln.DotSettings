@@ -10,6 +10,38 @@
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003AC_003A_005CDropbox_005CGit_005CNzbDrone_005CNzbDrone_002Esln_002EDotSettings/RelativePriority/@EntryValue">2</s:Double>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=26E712D4B91E2E49A0E92C0AFE6FF57E/Entry/=38860059D7978D4DAF1997C7CBC46A78/EntryName/@EntryValue">Backbone model</s:String>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/QuickList/=26E712D4B91E2E49A0E92C0AFE6FF57E/Entry/=38860059D7978D4DAF1997C7CBC46A78/Position/@EntryValue">5</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Description/@EntryValue">Nunit Test</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Field/=testname/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Field/=testname/Expression/@EntryValue">spacestounderstrokes(testname)</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Field/=testname/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Scope/=CE6825B6B50BCB44A4991BEC7FBA3363/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Scope/=CE6825B6B50BCB44A4991BEC7FBA3363/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">4.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Scope/=CE6825B6B50BCB44A4991BEC7FBA3363/Type/@EntryValue">InCSharpQuery</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Shortcut/@EntryValue">test</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=09B531154963914B9AB9E2A05E1F2B44/Text/@EntryValue">[Test]&#xD;
+public void $testname$()&#xD;
+{&#xD;
+&#xD;
+            &#xD;
+}</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Description/@EntryValue">Nunit Setup</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Shortcut/@EntryValue">Setup</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4BC8C4E3B166924493A3914451281686/Text/@EntryValue"> [SetUp]&#xD;
+ public void Setup()&#xD;
+ {&#xD;
+ &#xD;
+ }</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4F6A0CA32FE60746A73308F7E39A63C1/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4F6A0CA32FE60746A73308F7E39A63C1/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=4F6A0CA32FE60746A73308F7E39A63C1/CustomProperties/=Extension/@EntryIndexedValue">js</s:String>
@@ -136,6 +168,40 @@ $ModelName$Collection = Backbone.Collection.extend({&#xD;
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D02CEEFCB5BA1E4C8660DD8D7D09D183/Text/@EntryValue">  initialize: function () {&#xD;
   &#xD;
 	},</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Applicability/=File/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/CustomProperties/=FileName/@EntryIndexedValue">$ServiceName$Fixture</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Description/@EntryValue">TestFixture</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Field/=ServiceName/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Field/=ServiceName/Expression/@EntryValue">completeType()</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Field/=ServiceName/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Field/=TestBase/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Field/=TestBase/Expression/@EntryValue">list("CoreTest, ObjectDbTest")</s:String>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Field/=TestBase/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Scope/=E8F0594528C33E45BBFEC6CFE851095D/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Scope/=E8F0594528C33E45BBFEC6CFE851095D/Type/@EntryValue">InCSharpProjectFile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=DFB2B8E186019749B105D91A01D4D269/Text/@EntryValue">using System;&#xD;
+using System.Collections.Generic;&#xD;
+using System.Linq;&#xD;
+using FizzWare.NBuilder;&#xD;
+using FluentAssertions;&#xD;
+using NUnit.Framework;&#xD;
+using NzbDrone.Core.Datastore;&#xD;
+using NzbDrone.Core.Repository;&#xD;
+using NzbDrone.Core.Test.Framework;&#xD;
+&#xD;
+namespace NzbDrone.Core.Test.Datastore&#xD;
+{&#xD;
+    [TestFixture]&#xD;
+    public class $ServiceName$Fixture: $TestBase$&lt;$ServiceName$&gt;&#xD;
+    {&#xD;
+&#xD;
+	}&#xD;
+}</s:String>
 	
 	
 	

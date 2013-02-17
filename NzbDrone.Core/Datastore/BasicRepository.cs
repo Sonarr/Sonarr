@@ -6,9 +6,9 @@ namespace NzbDrone.Core.Datastore
     public interface IBasicRepository<TModel>
     {
         List<TModel> All();
-        TModel Get(int rootFolderId);
-        TModel Add(TModel rootFolder);
-        void Delete(int rootFolderId);
+        TModel Get(int id);
+        TModel Add(TModel model);
+        void Delete(int id);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseRepositoryModel, new()

@@ -151,6 +151,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Datastore\SimpleRepositoryFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\ObjectDbTest.cs" />
