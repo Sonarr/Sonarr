@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NzbDrone.Common;
 using Sqo;
 
@@ -7,27 +6,28 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IObjectDbFactory
     {
-        IObjectDatabase CreateMemoryDb();
-        IObjectDatabase Create(string dbPath);
+        IObjectDatabase Create(string dbPath = null);
     }
 
     public class SiaqoDbFactory : IObjectDbFactory
     {
         private readonly DiskProvider _diskProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
-        public SiaqoDbFactory(DiskProvider diskProvider)
+        public SiaqoDbFactory(DiskProvider diskProvider, EnvironmentProvider environmentProvider)
         {
             _diskProvider = diskProvider;
+            _environmentProvider = environmentProvider;
         }
 
-        public IObjectDatabase CreateMemoryDb()
+        public IObjectDatabase Create(string dbPath = null)
         {
-            throw new NotImplementedException();
-        }
+            if (string.IsNullOrWhiteSpace(dbPath))
+            {
+                dbPath = _environmentProvider.GetObjectDbFolder();
+            }
 
-        public IObjectDatabase Create(string dbPath)
-        {
-            if(!_diskProvider.FolderExists(dbPath))
+            if (!_diskProvider.FolderExists(dbPath))
             {
                 _diskProvider.CreateDirectory(dbPath);
             }

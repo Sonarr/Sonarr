@@ -82,7 +82,7 @@ namespace NzbDrone.Core
 
             container.Register(c =>
                       {
-                          return c.Resolve<IObjectDbFactory>().Create("");
+                          return c.Resolve<IObjectDbFactory>().Create();
                       }).As<IObjectDatabase>().SingleInstance();
 
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));

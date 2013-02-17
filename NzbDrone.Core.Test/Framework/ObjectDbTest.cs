@@ -52,11 +52,11 @@ namespace NzbDrone.Core.Test.Framework
         {
             if (memory)
             {
-                _db = new SiaqoDbFactory(new DiskProvider()).CreateMemoryDb();
+                _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).CreateMemoryDb();
             }
             else
             {
-                _db = new SiaqoDbFactory(new DiskProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
+                _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
             }
 
             Mocker.SetConstant(Db);

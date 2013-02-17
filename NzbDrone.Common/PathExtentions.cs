@@ -16,10 +16,9 @@ namespace NzbDrone.Common
 
         public const string NZBDRONE_EXE = "NzbDrone.exe";
         public const string NZBDRONE_SQLCE_DB_FILE = "nzbdrone.sdf";
-        public const string NZBDRONE_ELQ_DB_FILE = "nzbdrone.eq";
 
         public const string LOG_SQLCE_DB_FILE = "log.sdf";
-        public const string LOG_ELQ_DB_FILE = "log.eq";
+        public const string OBJ_DB_FOLDER = "objDb";
 
         private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
 
@@ -96,15 +95,11 @@ namespace NzbDrone.Common
             return Path.Combine(environmentProvider.GetAppDataPath(), LOG_SQLCE_DB_FILE);
         }
 
-        public static string GetElqMainDbPath(this EnvironmentProvider environmentProvider)
+        public static string GetObjectDbFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_ELQ_DB_FILE);
+            return Path.Combine(environmentProvider.GetAppDataPath(), OBJ_DB_FOLDER);
         }
 
-        public static string GetElqLogDbPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetAppDataPath(), LOG_ELQ_DB_FILE);
-        }
 
         public static string GetMediaCoverPath(this EnvironmentProvider environmentProvider)
         {

@@ -133,3 +133,6 @@ NzbDrone.Web/_backboneApp/.idea/workspace.xml
 */.idea/workspace.xml
 *workspace.xml
 NzbDrone.Web/_backboneApp/.idea/.
+*.test-cache
+*.sqo
+*.userprefs

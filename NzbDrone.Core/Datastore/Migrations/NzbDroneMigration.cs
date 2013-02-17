@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore.Migrations
             var sqlCeConnection = SqlCeProxy.EnsureDatabase(Database.ConnectionString);
             
             var eqPath = sqlCeConnection.Database.Replace(".sdf", ".eq");
-            return new SiaqoDbFactory(new DiskProvider()).Create(eqPath);
+            return new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).Create(eqPath);
         }
 
         public override void Down()
