@@ -22,13 +22,7 @@ namespace NzbDrone.Core.Datastore
 
         public EloqueraDb CreateMemoryDb()
         {
-            if (EnvironmentProvider.IsMono)
-            {
-                return InternalCreate("server=(local);password=;options=inmemory", Guid.NewGuid().ToString());
-
-            }
             return InternalCreate("server=(local);password=;options=inmemory;uselocalpath=" + dllPath, Guid.NewGuid().ToString());
-
         }
 
         public EloqueraDb Create(string dbPath = null)
@@ -40,15 +34,7 @@ namespace NzbDrone.Core.Datastore
 
             var file = new FileInfo(dbPath);
 
-            if (EnvironmentProvider.IsMono)
-            {
-                return InternalCreate(string.Format("server=(local);password=;usedatapath={0}", file.Directory.FullName), file.Name);
-            }
-            else
-            {
-                return InternalCreate(string.Format("server=(local);password=;usedatapath={0};uselocalpath={1}", file.Directory.FullName, dllPath), file.Name);
-            }
-
+            return InternalCreate(string.Format("server=(local);password=;usedatapath={0};uselocalpath={1}", file.Directory.FullName, dllPath), file.Name);
         }
 
         private EloqueraDb InternalCreate(string connectionString, string databaseName)

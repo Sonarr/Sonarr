@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void SetUp()
         {
-            WithObjectDb();
+            WithObjectDb(false);
 
             testSeries = Builder<Series>
                     .CreateNew()
