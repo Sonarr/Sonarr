@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_return_one_drive_when_only_one_root_dir_exists()
         {
-            Mocker.GetMock<IRootFolderRepository>()
+            Mocker.GetMock<IBasicRepository<RootFolder>>()
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" } });
 
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_return_one_drive_when_two_rootDirs_on_the_same_drive_exist()
         {
-            Mocker.GetMock<IRootFolderRepository>()
+            Mocker.GetMock<IBasicRepository<RootFolder>>()
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" },
                                              new RootFolder { OID = 2, Path = @"C:\Test\TV2" }});
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_return_two_drives_when_two_rootDirs_on_the_different_drive_exist()
         {
-            Mocker.GetMock<IRootFolderRepository>()
+            Mocker.GetMock<IBasicRepository<RootFolder>>()
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" },
                                              new RootFolder { OID = 2, Path = @"D:\Test\TV" }});
@@ -87,7 +88,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_skip_rootDir_if_not_found_on_disk()
         {
-            Mocker.GetMock<IRootFolderRepository>()
+            Mocker.GetMock<IBasicRepository<RootFolder>>()
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder> { new RootFolder { OID = 1, Path = @"C:\Test\TV" } });
 

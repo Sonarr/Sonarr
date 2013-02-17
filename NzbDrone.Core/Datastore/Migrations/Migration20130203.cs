@@ -12,10 +12,6 @@ namespace NzbDrone.Core.Datastore.Migrations
         {
             var objectDb = GetObjectDb();
 
-
-            var rootFolderRepo = new RootFolderRepository(objectDb);
-
-
             using (var dataReader = Database.ExecuteQuery("SELECT * from RootDirs"))
             {
                 var dirs = new List<RootFolder>();
@@ -26,6 +22,7 @@ namespace NzbDrone.Core.Datastore.Migrations
                 }
                                 objectDb.InsertMany(dirs);
             }
+
             //Database.RemoveTable("RootDirs");
 
         }

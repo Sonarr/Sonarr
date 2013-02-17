@@ -50,14 +50,14 @@ namespace NzbDrone.Core.Test.Framework
 
         protected void WithObjectDb(bool memory = true)
         {
-            if (memory)
-            {
-                _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).CreateMemoryDb();
-            }
-            else
-            {
+            //if (memory)
+            //{
+            //    _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).CreateMemoryDb();
+            //}
+            //else
+            //{
                 _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
-            }
+            //}
 
             Mocker.SetConstant(Db);
         }

@@ -85,6 +85,8 @@ namespace NzbDrone.Core
                           return c.Resolve<IObjectDbFactory>().Create();
                       }).As<IObjectDatabase>().SingleInstance();
 
+            container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
+
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
             container.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }

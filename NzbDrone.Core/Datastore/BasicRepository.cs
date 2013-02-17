@@ -20,14 +20,16 @@ namespace NzbDrone.Core.Datastore
 
         protected IObjectDatabase ObjectDatabase { get; private set; }
 
+        protected IEnumerable<TModel> Queryable { get { return ObjectDatabase.AsQueryable<TModel>(); } }
+
         public List<TModel> All()
         {
-            return ObjectDatabase.AsQueryable<TModel>().ToList();
+            return Queryable.ToList();
         }
 
         public TModel Get(int id)
         {
-            return ObjectDatabase.AsQueryable<TModel>().Single(c => c.OID == id);
+            return Queryable.Single(c => c.OID == id);
         }
 
         public TModel Add(TModel model)

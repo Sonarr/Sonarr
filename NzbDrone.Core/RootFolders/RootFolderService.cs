@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.RootFolders
 {
@@ -21,11 +21,11 @@ namespace NzbDrone.Core.RootFolders
     public class RootFolderService : IRootFolderService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRootFolderRepository _rootFolderRepository;
+        private readonly IBasicRepository<RootFolder> _rootFolderRepository;
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
 
-        public RootFolderService(IRootFolderRepository rootFolderRepository, SeriesProvider seriesProvider, DiskProvider diskProvider)
+        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, SeriesProvider seriesProvider, DiskProvider diskProvider)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
