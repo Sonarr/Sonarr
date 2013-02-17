@@ -31,12 +31,42 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
 
             if(!this.tableSorter && this.collection.length > 0)
             {
+                this.tableSorter = this.ui.table.tablesorter({
+                    textExtraction: function (node) {
+                        return node.innerHTML;
+                    },
+                    sortList: [[1,0]],
+                    headers: {
+                        0: {
+                            sorter: 'title'
+                        },
+                        1: {
+                            sorter: 'innerHtml'
+                        },
+                        5: {
+                            sorter: 'date'
+                        },
+                        6: {
+                            sorter: false
+                        },
+                        7: {
+                            sorter: false
+                        }
+                    }
+                });
 
-                this.tableSorter = this.ui.table.tablesorter();
+                this.ui.table.find('th.header').each(function(){
+                    $(this).append('<i class="icon-sort pull-right">');
+                });
 
-                this.ui.table.bind("sortEnd",function() {
+                this.ui.table.bind("sortEnd", function() {
                     $(this).find('th.header i').each(function(){
                         $(this).remove();
+                    });
+
+                    $(this).find('th.header').each(function () {
+                        if (!$(this).hasClass('headerSortDown') && !$(this).hasClass('headerSortUp'))
+                            $(this).append('<i class="icon-sort pull-right">');
                     });
 
                     $(this).find('th.headerSortDown').each(function(){
@@ -47,7 +77,7 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
                         $(this).append('<i class="icon-sort-up pull-right">');
                     });
                 });
-                }
+            }
             else
             {
                 this.ui.table.trigger('update');

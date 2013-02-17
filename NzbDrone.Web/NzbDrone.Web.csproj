@@ -213,6 +213,7 @@
     <Content Include="_backboneApp\JsLibraries\require.js" />
     <Content Include="_backboneApp\Mixins\backbone.ajax.js" />
     <Content Include="_backboneApp\Mixins\backbone.marionette.templates.js" />
+    <Content Include="_backboneApp\Mixins\tablesorter.extensions.js" />
     <Content Include="_backboneApp\Routing.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.modelbinder.js" />
     <Content Include="_backboneApp\AddSeries\New\AddNewSeriesTemplate.html" />

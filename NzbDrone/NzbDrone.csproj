@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\Mark.McDowall\AppData\Local\Temp\vs8003.tmp\x86\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Mark\AppData\Local\Temp\vs167E.tmp\x86\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -52,7 +52,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\Mark.McDowall\AppData\Local\Temp\vs8003.tmp\x86\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Mark\AppData\Local\Temp\vs167E.tmp\x86\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>NzbDrone.ico</ApplicationIcon>
@@ -71,6 +71,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <IntermediateOutputPath>C:\Users\Mark\AppData\Local\Temp\vs167E.tmp\x86\Mono\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=2.6.3.862, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
