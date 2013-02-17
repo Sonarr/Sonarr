@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -56,7 +55,7 @@ namespace NzbDrone.Core.Test.Framework
             }
             else
             {
-                _db = new EloqueraDbFactory(new EnvironmentProvider()).Create(Path.Combine(Environment.CurrentDirectory,Guid.NewGuid().ToString()+ ".elq");
+                _db = new EloqueraDbFactory(new EnvironmentProvider()).Create();
             }
 
             Mocker.SetConstant(Db);
