@@ -18,7 +18,7 @@
 </head>
 <script type="text/html" id="notification-template">
     <div class="alert alert-{{level}}">
-        <button type="button" class="close x-close">×</button>
+        <button type="button" class="close x-close icon-remove-sign"></button>
         <i class="{{iconClass}}" /><strong>{{title}}</strong>
         {{#if isPreFormatted}}
         <pre>{{{preFormattedMessage}}}</pre>
@@ -70,9 +70,6 @@
     </div>
     <script src="/static/JsLibraries/jquery.js"></script>
     <script src="/static/JsLibraries/bootstrap.js"></script>
-    <script src="/static/JsLibraries/jquery.dataTables.js"></script>
-    <script src="/static/JsLibraries/jquery.dataTables.extensions.js"></script>
-    <script src="/static/JsLibraries/jquery.dataTables.bootstrap.pagination.js"></script>
     <script src="/static/JsLibraries/underscore.js"></script>
     <script src="/static/JsLibraries/handlebars.js"></script>
     <script src="/static/JsLibraries/backbone.js"></script>
@@ -80,10 +77,7 @@
     <script src="/static/JsLibraries/backbone.mutators.js"></script>
     <script src="/static/JsLibraries/backbone.marionette.js"></script>
     <script src="/static/JsLibraries/jquery.tablesorter.js"></script>
-
-    @*
     <script src="/static/JsLibraries/jquery.tablesorter.bootstrap.js"></script>
-    *@
     <script src="/static/JsLibraries/sugar.js"></script>
 
     <script src="/static/Mixins/backbone.marionette.templates.js"></script>

@@ -59,7 +59,6 @@
     <Content Include="AddSeries\SearchResultModel.js" />
     <Content Include="app.js" />
     <Content Include="Content\base.css" />
-    <Content Include="Content\Bootstrap\bundle.txt" />
     <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\apple-touch-icon-114.png" />
@@ -83,7 +82,6 @@
     <Content Include="Content\Images\spinner.gif" />
     <Content Include="Content\Images\thetvdb.png" />
     <Content Include="Content\Intelisense\bootstrap.css" />
-    <Content Include="Content\jquery.dataTables.bootstrap.css" />
     <Content Include="Content\Menu.css" />
     <Content Include="Content\tablesorter.bootstrap.css" />
     <Content Include="Controller.js" />
@@ -97,9 +95,6 @@
     <Content Include="JsLibraries\backbone.shortcuts.js" />
     <Content Include="JsLibraries\bootstrap.js" />
     <Content Include="JsLibraries\handlebars.js" />
-    <Content Include="JsLibraries\jquery.dataTables.bootstrap.pagination.js" />
-    <Content Include="JsLibraries\jquery.dataTables.extensions.js" />
-    <Content Include="JsLibraries\jquery.dataTables.js" />
     <Content Include="JsLibraries\jquery.js" />
     <Content Include="JsLibraries\jquery.tablesorter.bootstrap.js" />
     <Content Include="JsLibraries\jquery.tablesorter.js" />
