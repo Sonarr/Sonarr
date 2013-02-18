@@ -8,12 +8,12 @@ namespace NzbDrone.Core.Datastore
     public interface IObjectDatabase : IDisposable
     {
         IEnumerable<T> AsQueryable<T>();
-        T Insert<T>(T obj) where T : BaseRepositoryModel;
-        T Update<T>(T obj) where T : BaseRepositoryModel;
-        IList<T> InsertMany<T>(IList<T> objects) where T : BaseRepositoryModel;
-        IList<T> UpdateMany<T>(IList<T> objects) where T : BaseRepositoryModel;
-        void Delete<T>(T obj) where T : BaseRepositoryModel;
-        void DeleteMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel;
+        T Insert<T>(T obj) where T : ModelBase;
+        T Update<T>(T obj) where T : ModelBase;
+        IList<T> InsertMany<T>(IList<T> objects) where T : ModelBase;
+        IList<T> UpdateMany<T>(IList<T> objects) where T : ModelBase;
+        void Delete<T>(T obj) where T : ModelBase;
+        void DeleteMany<T>(IEnumerable<T> objects) where T : ModelBase;
     }
 
     public class SiaqodbProxy : IObjectDatabase
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Datastore
             return _db.Cast<T>();
         }
 
-        public T Insert<T>(T obj) where T : BaseRepositoryModel
+        public T Insert<T>(T obj) where T : ModelBase
         {
             if (obj.OID != 0)
             {
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Datastore
             return obj;
         }
 
-        public T Update<T>(T obj) where T : BaseRepositoryModel
+        public T Update<T>(T obj) where T : ModelBase
         {
             if (obj.OID == 0)
             {
@@ -57,23 +57,23 @@ namespace NzbDrone.Core.Datastore
             return obj;
         }
 
-        public IList<T> InsertMany<T>(IList<T> objects) where T : BaseRepositoryModel
+        public IList<T> InsertMany<T>(IList<T> objects) where T : ModelBase
         {
             return DoMany(objects, Insert);
         }
 
-        public IList<T> UpdateMany<T>(IList<T> objects) where T : BaseRepositoryModel
+        public IList<T> UpdateMany<T>(IList<T> objects) where T : ModelBase
         {
             return DoMany(objects, Update);
 
         }
 
-        public void Delete<T>(T obj) where T : BaseRepositoryModel
+        public void Delete<T>(T obj) where T : ModelBase
         {
             _db.Delete(obj);
         }
 
-        public void DeleteMany<T>(IEnumerable<T> objects) where T : BaseRepositoryModel
+        public void DeleteMany<T>(IEnumerable<T> objects) where T : ModelBase
         {
             foreach (var o in objects)
             {
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : BaseRepositoryModel
+        private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : ModelBase
         {
             return objects.Select(function).ToList();
         }

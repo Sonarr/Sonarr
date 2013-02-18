@@ -168,12 +168,12 @@ namespace NzbDrone.Core.Test.Datastore
         }
     }
 
-    public class UnknownType : BaseRepositoryModel
+    public class UnknownType : ModelBase
     {
         public string Field1 { get; set; }
     }
 
-    public class NestedModel : BaseRepositoryModel
+    public class NestedModel : ModelBase
     {
         public NestedModel()
         {
@@ -183,12 +183,12 @@ namespace NzbDrone.Core.Test.Datastore
         public List<NestedModel> List { get; set; }
     }
 
-    public class ParentModel : BaseRepositoryModel
+    public class ParentModel : ModelBase
     {
         public ChildModel Child { get; set; }
     }
 
-    public class ChildModel : BaseRepositoryModel
+    public class ChildModel : ModelBase
     {
 
         public String A { get; set; }

@@ -4,7 +4,7 @@ using Sqo.Attributes;
 
 namespace NzbDrone.Core.RootFolders
 {
-    public class RootFolder : BaseRepositoryModel
+    public class RootFolder : ModelBase
     {
         public string Path { get; set; }
 

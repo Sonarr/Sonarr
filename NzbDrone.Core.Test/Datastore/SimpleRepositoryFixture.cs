@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Datastore
 {
 
-    public class SampleType : BaseRepositoryModel
+    public class SampleType : ModelBase
     {
         public string Name { get; set; }
         public string Tilte { get; set; }

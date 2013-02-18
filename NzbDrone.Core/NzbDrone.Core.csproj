@@ -251,7 +251,7 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
-    <Compile Include="Datastore\BaseRepositoryModel.cs" />
+    <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ConnectionFactory.cs" />
     <Compile Include="Datastore\ObjectDbFactory.cs" />

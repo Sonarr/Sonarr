@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore
         void Delete(int id);
     }
 
-    public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseRepositoryModel, new()
+    public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
         public BasicRepository(IObjectDatabase objectDatabase)
         {
