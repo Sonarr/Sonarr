@@ -58,9 +58,6 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxMin">
-      <HintPath>..\packages\AjaxMin.4.60.4609.17023\lib\net20\AjaxMin.dll</HintPath>
-    </Reference>
     <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
@@ -69,24 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Cassette">
-      <HintPath>..\packages\Cassette.2.0.0\lib\net40-client\Cassette.dll</HintPath>
-    </Reference>
-    <Reference Include="Cassette.Aspnet">
-      <HintPath>..\packages\Cassette.Aspnet.2.0.0\lib\net40\Cassette.Aspnet.dll</HintPath>
-    </Reference>
-    <Reference Include="Cassette.Less">
-      <HintPath>..\packages\Cassette.Less.2.0.0\lib\net40-client\Cassette.Less.dll</HintPath>
-    </Reference>
-    <Reference Include="Cassette.Views">
-      <HintPath>..\packages\Cassette.Views.2.0.0\lib\net40\Cassette.Views.dll</HintPath>
-    </Reference>
     <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="dotless.ClientOnly">
-      <HintPath>..\packages\DotlessClientOnly.1.3.1.0\lib\dotless.ClientOnly.dll</HintPath>
     </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
@@ -103,14 +85,6 @@
     <Reference Include="MiniProfiler, Version=2.0.2.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Hosting.Aspnet, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Hosting.Aspnet.0.16.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -183,120 +157,12 @@
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
-    <Content Include="_backboneApp\AddSeries\Existing\FolderMatchResultViewTemplatate.html" />
-    <Content Include="_backboneApp\AddSeries\Existing\UnmappedFolderCompositeViewTemplatate.html" />
-    <Content Include="_backboneApp\AddSeries\New\SearchResultView.js" />
-    <Content Include="_backboneApp\AddSeries\Existing\ImportSeriesView.js" />
-    <Content Include="_backboneApp\AddSeries\Existing\UnmappedFolderModel.js" />
-    <Content Include="_backboneApp\AddSeries\Existing\RootFolderCompositeViewTemplate.html" />
-    <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderTemplate.html" />
-    <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderView.js" />
-    <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderItemTemplate.html" />
-    <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderModel.js" />
-    <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderCollection.js" />
-    <Content Include="_backboneApp\Content\jquery.dataTables.bootstrap.css" />
-    <Content Include="_backboneApp\Content\tablesorter.bootstrap.css" />
-    <Content Include="_backboneApp\Controller.js" />
-    <Content Include="_backboneApp\JsLibraries\jquery.js" />
-    <Content Include="_backboneApp\JsLibraries\jquery.tablesorter.bootstrap.js" />
-    <Content Include="_backboneApp\JsLibraries\jquery.tablesorter.js" />
-    <Content Include="_backboneApp\JsLibraries\require.js" />
-    <Content Include="_backboneApp\Mixins\backbone.ajax.js" />
-    <Content Include="_backboneApp\Mixins\backbone.marionette.templates.js" />
-    <Content Include="_backboneApp\Mixins\tablesorter.extensions.js" />
-    <Content Include="_backboneApp\Routing.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.modelbinder.js" />
-    <Content Include="_backboneApp\AddSeries\New\AddNewSeriesTemplate.html" />
-    <Content Include="_backboneApp\AddSeries\New\AddNewSeriesView.js" />
-    <Content Include="_backboneApp\AddSeries\New\SearchResultTemplate.html" />
-    <Content Include="_backboneApp\AddSeries\SearchResultModel.js" />
-    <Content Include="_backboneApp\AddSeries\SearchResultCollection.js" />
-    <Content Include="_backboneApp\Content\Intelisense\bootstrap.css" />
-    <Content Include="_backboneApp\JsLibraries\jquery.dataTables.extensions.js" />
-    <Content Include="_backboneApp\JsLibraries\jquery.dataTables.js" />
-    <Content Include="_backboneApp\JsLibraries\jquery.dataTables.bootstrap.pagination.js" />
-    <Content Include="_backboneApp\Quality\qualityProfileModel.js" />
-    <Content Include="_backboneApp\Quality\qualityProfileCollection.js" />
-    <Content Include="_backboneApp\Quality\qualityTypeModel.js" />
-    <Content Include="_backboneApp\Quality\qualityTypeCollection.js" />
-    <Compile Include="_backboneApp\CassetteConfiguration.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\SearchHistoryController.cs" />
-    <Compile Include="Controllers\V2Controller.cs" />
     <Compile Include="Helpers\Binders\QualityTypesBinder.cs" />
     <Compile Include="Helpers\RenderActionHelper.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
-    <Content Include="_backboneApp\AddSeries\AddSeriesLayout.js" />
-    <Content Include="_backboneApp\AddSeries\addSeries.css" />
-    <Content Include="_backboneApp\app.js" />
-    <Content Include="_backboneApp\Content\base.css" />
-    <Content Include="_backboneApp\Content\Bootstrap\accordion.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\alerts.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\bootstrap.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\breadcrumbs.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\bundle.txt" />
-    <Content Include="_backboneApp\Content\Bootstrap\button-groups.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\buttons.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\carousel.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\close.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\code.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\component-animations.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\dropdowns.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\font-awesome-ie7.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\font-awesome.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\forms.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\grid.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\hero-unit.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\labels-badges.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\layouts.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\mixins.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\modals.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\navbar.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\navs.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\pager.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\pagination.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\popovers.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\progress-bars.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\reset.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\scaffolding.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\sprites.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\tables.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\thumbnails.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\tooltip.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\type.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\utilities.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\variables.less" />
-    <Content Include="_backboneApp\Content\Bootstrap\wells.less" />
-    <Content Include="_backboneApp\Content\font\fontawesome-webfont.eot" />
-    <Content Include="_backboneApp\Content\font\fontawesome-webfont.svg" />
-    <Content Include="_backboneApp\Content\font\fontawesome-webfont.ttf" />
-    <Content Include="_backboneApp\Content\font\fontawesome-webfont.woff" />
-    <Content Include="_backboneApp\Content\Images\ajax-loader.gif" />
-    <Content Include="_backboneApp\Content\Images\apple-touch-icon-114.png" />
-    <Content Include="_backboneApp\Content\Images\apple-touch-icon-144.png" />
-    <Content Include="_backboneApp\Content\Images\azure.gif" />
-    <Content Include="_backboneApp\Content\Images\background.jpg" />
-    <Content Include="_backboneApp\Content\Images\gritter.png" />
-    <Content Include="_backboneApp\Content\Images\icons.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\FileSharingTalk.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\Newznab.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\Newznab_dognzb.cr.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\Newznab_nzb.su.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\Newznab_Nzbs.org.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\NzbClub.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\NzbIndex.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\NzbsRus.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\Unknown.png" />
-    <Content Include="_backboneApp\Content\Images\Indexers\WomblesIndex.png" />
-    <Content Include="_backboneApp\Content\Images\logo.png" />
-    <Content Include="_backboneApp\Content\Images\logo_small.png" />
-    <Content Include="_backboneApp\Content\Images\spinner.gif" />
-    <Content Include="_backboneApp\Content\Images\thetvdb.png" />
-    <Content Include="_backboneApp\Content\Menu.css" />
-    <Content Include="_backboneApp\JsLibraries\backbone.mutators.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.shortcuts.js" />
-    <Content Include="_backboneApp\JsLibraries\bootstrap.js" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_both.png" />
     <Content Include="Content\DataTables-NzbDrone\media\images\sort_desc_disabled.png" />
     <Content Include="Content\font-awesome-ie7.css" />
@@ -407,6 +273,27 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="_backboneApp\Series\SeriesCollectionView.js" />
+    <Content Include="_backboneApp\Series\Edit\EditSeriesTemplate.html" />
+    <Content Include="_backboneApp\Series\Edit\EditSeriesView.js" />
+    <Content Include="_backboneApp\Shared\NotificationCollection.js" />
+    <Content Include="_backboneApp\Shared\ModalRegion.js" />
+    <Content Include="_backboneApp\Series\Delete\DeleteSeriesTemplate.html" />
+    <Content Include="_backboneApp\Series\SeriesCollectionTemplate.html" />
+    <Content Include="_backboneApp\Series\SeriesItemTemplate.html" />
+    <Content Include="_backboneApp\Series\SeriesItemView.js" />
+    <Content Include="_backboneApp\Series\SeriesCollection.js" />
+    <Content Include="_backboneApp\Series\Delete\DeleteSeriesView.js" />
+    <Content Include="_backboneApp\Series\SeriesModel.js" />
+    <Content Include="_backboneApp\Shared\AutoComplete.js" />
+    <Content Include="_backboneApp\Shared\NotificationModel.js" />
+    <Content Include="_backboneApp\Shared\NotificationTemplate.html" />
+    <Content Include="_backboneApp\Shared\NotificationView.js" />
+    <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
+    <Content Include="_backboneApp\Shared\SpinnerView.js" />
+    <Content Include="_backboneApp\JsLibraries\backbone.js" />
+    <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
+    <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
     <Content Include="_backboneApp\Series\EmptySeriesCollectionTemplate.html" />
     <Content Include="_backboneApp\Series\SeriesCollectionView.js" />
     <Content Include="_backboneApp\Series\Edit\EditSeriesTemplate.html" />
@@ -427,16 +314,9 @@
     <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
     <Content Include="_backboneApp\Shared\SpinnerView.js" />
     <Content Include="ClassDiagram1.cd" />
-    <Content Include="_backboneApp\JsLibraries\backbone.collectionbinder.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.debug.js" />
-    <Content Include="_backboneApp\JsLibraries\handlebars.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.marionette.viewswapper.js" />
-    <Content Include="_backboneApp\JsLibraries\sugar.js" />
-    <Content Include="_backboneApp\JsLibraries\underscore.js" />
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Logs.cshtml" />
     <Content Include="Views\Settings\Nzbget.cshtml" />
-    <Content Include="Views\V2\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\ActionButton.css" />

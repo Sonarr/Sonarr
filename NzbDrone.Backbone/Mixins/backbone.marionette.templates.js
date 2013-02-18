@@ -8,7 +8,7 @@
         console.log("Loading template '" + templateId + "'");
 
         $.ajax({
-            url:'_backboneApp//' + templateId + '.html',
+            url:'static//' + templateId + '.html',
             cache:false,
             async:false
 

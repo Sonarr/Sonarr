@@ -5,6 +5,8 @@ using Autofac;
 using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
+using Nancy.Conventions;
+using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagment;
 using NzbDrone.Api.Extentions;
 using NzbDrone.Api.QualityProfiles;
@@ -14,6 +16,7 @@ using NzbDrone.Api.Series;
 using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Repository.Quality;
+using ErrorPipeline = NzbDrone.Api.ErrorManagment.ErrorPipeline;
 
 namespace NzbDrone.Api
 {
@@ -25,6 +28,14 @@ namespace NzbDrone.Api
         public Bootstrapper()
         {
             _logger = LogManager.GetCurrentClassLogger();
+        }
+
+        protected override Nancy.IRootPathProvider RootPathProvider
+        {
+            get
+            {
+                return new RootPathProvider();
+            }
         }
 
         protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
@@ -99,6 +110,19 @@ namespace NzbDrone.Api
 
                 return internalConfig;
             }
+        }
+
+
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+        {
+            get { return new DiagnosticsConfiguration { Password = @"password" }; }
+        }
+
+
+        protected override void ConfigureConventions(Nancy.Conventions.NancyConventions nancyConventions)
+        {
+            base.ConfigureConventions(nancyConventions);
+            Conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("static", @"NzbDrone.Backbone",new string[]{".css",".js",".html",".htm",".jpg",".jpeg",".icon",".gif",".png",".woff",".ttf"}));
         }
     }
 }

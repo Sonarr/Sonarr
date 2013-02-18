@@ -38,26 +38,223 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
+    <Content Include="AddSeries\addSeries.css" />
+    <Content Include="AddSeries\AddSeriesLayout.js" />
+    <Content Include="AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="AddSeries\Existing\FolderMatchResultViewTemplatate.html" />
+    <Content Include="AddSeries\Existing\ImportSeriesView.js" />
+    <Content Include="AddSeries\Existing\RootFolderCompositeViewTemplate.html" />
+    <Content Include="AddSeries\Existing\UnmappedFolderCompositeViewTemplatate.html" />
+    <Content Include="AddSeries\Existing\UnmappedFolderModel.js" />
+    <Content Include="AddSeries\New\AddNewSeriesTemplate.html" />
+    <Content Include="AddSeries\New\AddNewSeriesView.js" />
+    <Content Include="AddSeries\New\SearchResultTemplate.html" />
+    <Content Include="AddSeries\New\SearchResultView.js" />
+    <Content Include="AddSeries\RootFolders\RootFolderCollection.js" />
+    <Content Include="AddSeries\RootFolders\RootFolderItemTemplate.html" />
+    <Content Include="AddSeries\RootFolders\RootFolderModel.js" />
+    <Content Include="AddSeries\RootFolders\RootFolderTemplate.html" />
+    <Content Include="AddSeries\RootFolders\RootFolderView.js" />
+    <Content Include="AddSeries\SearchResultCollection.js" />
+    <Content Include="AddSeries\SearchResultModel.js" />
+    <Content Include="app.js" />
+    <Content Include="Content\base.css" />
+    <Content Include="Content\Bootstrap\bundle.txt" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\apple-touch-icon-114.png" />
+    <Content Include="Content\Images\apple-touch-icon-144.png" />
+    <Content Include="Content\Images\azure.gif" />
+    <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\Images\gritter.png" />
+    <Content Include="Content\Images\icons.png" />
+    <Content Include="Content\Images\Indexers\FileSharingTalk.png" />
+    <Content Include="Content\Images\Indexers\Newznab.png" />
+    <Content Include="Content\Images\Indexers\Newznab_dognzb.cr.png" />
+    <Content Include="Content\Images\Indexers\Newznab_nzb.su.png" />
+    <Content Include="Content\Images\Indexers\Newznab_Nzbs.org.png" />
+    <Content Include="Content\Images\Indexers\NzbClub.png" />
+    <Content Include="Content\Images\Indexers\NzbIndex.png" />
+    <Content Include="Content\Images\Indexers\NzbsRus.png" />
+    <Content Include="Content\Images\Indexers\Unknown.png" />
+    <Content Include="Content\Images\Indexers\WomblesIndex.png" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\logo_small.png" />
+    <Content Include="Content\Images\spinner.gif" />
+    <Content Include="Content\Images\thetvdb.png" />
+    <Content Include="Content\Intelisense\bootstrap.css" />
+    <Content Include="Content\jquery.dataTables.bootstrap.css" />
+    <Content Include="Content\Menu.css" />
+    <Content Include="Content\tablesorter.bootstrap.css" />
+    <Content Include="Controller.js" />
+    <Content Include="JsLibraries\backbone.collectionbinder.js" />
+    <Content Include="JsLibraries\backbone.debug.js" />
+    <Content Include="JsLibraries\backbone.js" />
+    <Content Include="JsLibraries\backbone.marionette.js" />
+    <Content Include="JsLibraries\backbone.marionette.viewswapper.js" />
+    <Content Include="JsLibraries\backbone.modelbinder.js" />
+    <Content Include="JsLibraries\backbone.mutators.js" />
+    <Content Include="JsLibraries\backbone.shortcuts.js" />
+    <Content Include="JsLibraries\bootstrap.js" />
+    <Content Include="JsLibraries\handlebars.js" />
+    <Content Include="JsLibraries\jquery.dataTables.bootstrap.pagination.js" />
+    <Content Include="JsLibraries\jquery.dataTables.extensions.js" />
+    <Content Include="JsLibraries\jquery.dataTables.js" />
+    <Content Include="JsLibraries\jquery.js" />
+    <Content Include="JsLibraries\jquery.tablesorter.bootstrap.js" />
+    <Content Include="JsLibraries\jquery.tablesorter.js" />
+    <Content Include="JsLibraries\require.js" />
+    <Content Include="JsLibraries\sugar.js" />
+    <Content Include="JsLibraries\underscore.js" />
+    <Content Include="Mixins\backbone.ajax.js" />
+    <Content Include="Mixins\backbone.marionette.templates.js" />
+    <Content Include="Mixins\tablesorter.extensions.js" />
+    <Content Include="Quality\qualityProfileCollection.js" />
+    <Content Include="Quality\qualityProfileModel.js" />
+    <Content Include="Quality\qualityTypeCollection.js" />
+    <Content Include="Quality\qualityTypeModel.js" />
+    <Content Include="Routing.js" />
+    <Content Include="Series\Delete\DeleteSeriesTemplate.html" />
+    <Content Include="Series\Delete\DeleteSeriesView.js" />
+    <Content Include="Series\Edit\EditSeriesTemplate.html" />
+    <Content Include="Series\Edit\EditSeriesView.js" />
+    <Content Include="Series\SeriesCollection.js" />
+    <Content Include="Series\SeriesCollectionTemplate.html" />
+    <Content Include="Series\SeriesCollectionView.js" />
+    <Content Include="Series\SeriesItemTemplate.html" />
+    <Content Include="Series\SeriesItemView.js" />
+    <Content Include="Series\SeriesModel.js" />
+    <Content Include="Shared\AutoComplete.js" />
+    <Content Include="Shared\ModalRegion.js" />
+    <Content Include="Shared\NotificationCollection.js" />
+    <Content Include="Shared\NotificationModel.js" />
+    <Content Include="Shared\NotificationTemplate.html" />
+    <Content Include="Shared\NotificationView.js" />
+    <Content Include="Shared\SpinnerTemplate.html" />
+    <Content Include="Shared\SpinnerView.js" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\Bootstrap\accordion.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\alerts.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\bootstrap.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\breadcrumbs.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\button-groups.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\buttons.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\carousel.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\close.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\code.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\component-animations.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\dropdowns.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\font-awesome-ie7.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\font-awesome.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\forms.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\grid.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\hero-unit.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\labels-badges.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\layouts.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\mixins.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\modals.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\navbar.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\navs.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\pager.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\pagination.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\popovers.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\progress-bars.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\reset.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\scaffolding.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\sprites.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\tables.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\thumbnails.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\tooltip.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\type.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\utilities.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\variables.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Bootstrap\wells.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Index.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -72,7 +269,9 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerPort>55352</DevelopmentServerPort>
+          <DevelopmentServerPort>14256</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:55352/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
