@@ -270,49 +270,6 @@
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
     <Compile Include="Models\UpdateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="_backboneApp\JsLibraries\backbone.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
-    <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesCollectionView.js" />
-    <Content Include="_backboneApp\Series\Edit\EditSeriesTemplate.html" />
-    <Content Include="_backboneApp\Series\Edit\EditSeriesView.js" />
-    <Content Include="_backboneApp\Shared\NotificationCollection.js" />
-    <Content Include="_backboneApp\Shared\ModalRegion.js" />
-    <Content Include="_backboneApp\Series\Delete\DeleteSeriesTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesCollectionTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesItemTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesItemView.js" />
-    <Content Include="_backboneApp\Series\SeriesCollection.js" />
-    <Content Include="_backboneApp\Series\Delete\DeleteSeriesView.js" />
-    <Content Include="_backboneApp\Series\SeriesModel.js" />
-    <Content Include="_backboneApp\Shared\AutoComplete.js" />
-    <Content Include="_backboneApp\Shared\NotificationModel.js" />
-    <Content Include="_backboneApp\Shared\NotificationTemplate.html" />
-    <Content Include="_backboneApp\Shared\NotificationView.js" />
-    <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
-    <Content Include="_backboneApp\Shared\SpinnerView.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.js" />
-    <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
-    <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
-    <Content Include="_backboneApp\Series\EmptySeriesCollectionTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesCollectionView.js" />
-    <Content Include="_backboneApp\Series\Edit\EditSeriesTemplate.html" />
-    <Content Include="_backboneApp\Series\Edit\EditSeriesView.js" />
-    <Content Include="_backboneApp\Shared\NotificationCollection.js" />
-    <Content Include="_backboneApp\Shared\ModalRegion.js" />
-    <Content Include="_backboneApp\Series\Delete\DeleteSeriesTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesCollectionTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesItemTemplate.html" />
-    <Content Include="_backboneApp\Series\SeriesItemView.js" />
-    <Content Include="_backboneApp\Series\SeriesCollection.js" />
-    <Content Include="_backboneApp\Series\Delete\DeleteSeriesView.js" />
-    <Content Include="_backboneApp\Series\SeriesModel.js" />
-    <Content Include="_backboneApp\Shared\AutoComplete.js" />
-    <Content Include="_backboneApp\Shared\NotificationModel.js" />
-    <Content Include="_backboneApp\Shared\NotificationTemplate.html" />
-    <Content Include="_backboneApp\Shared\NotificationView.js" />
-    <Content Include="_backboneApp\Shared\SpinnerTemplate.html" />
-    <Content Include="_backboneApp\Shared\SpinnerView.js" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="Views\System\Index.cshtml" />
     <Content Include="Views\System\Logs.cshtml" />
@@ -530,7 +487,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="_backboneApp\Upcoming\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Autofac.Integration.Mvc\Autofac.Integration.Mvc.csproj">

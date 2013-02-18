@@ -118,6 +118,7 @@
     <Content Include="Series\Delete\DeleteSeriesView.js" />
     <Content Include="Series\Edit\EditSeriesTemplate.html" />
     <Content Include="Series\Edit\EditSeriesView.js" />
+    <Content Include="Series\EmptySeriesCollectionTemplate.html" />
     <Content Include="Series\SeriesCollection.js" />
     <Content Include="Series\SeriesCollectionTemplate.html" />
     <Content Include="Series\SeriesCollectionView.js" />
@@ -269,8 +270,6 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
-          <DevelopmentServerPort>55352</DevelopmentServerPort>
           <DevelopmentServerPort>14256</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:55352/</IISUrl>
