@@ -80,6 +80,7 @@
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo_small.png" />
     <Content Include="Content\Images\spinner.gif" />
+    <Content Include="Content\Images\404.png" />
     <Content Include="Content\Images\thetvdb.png" />
     <Content Include="Content\Intelisense\bootstrap.css" />
     <Content Include="Content\Menu.css" />
@@ -121,6 +122,8 @@
     <Content Include="Series\SeriesItemView.js" />
     <Content Include="Series\SeriesModel.js" />
     <Content Include="Shared\AutoComplete.js" />
+    <Content Include="Shared\NotFoundTemplate.html" />
+    <Content Include="Shared\NotFoundView.js" />
     <Content Include="Shared\ModalRegion.js" />
     <Content Include="Shared\NotificationCollection.js" />
     <Content Include="Shared\NotificationModel.js" />

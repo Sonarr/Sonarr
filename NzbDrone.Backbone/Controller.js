@@ -1,31 +1,29 @@
-﻿define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout','Series/SeriesCollectionView', 'Shared/NotificationView'], function (app, modalRegion) {
+﻿define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout', 'Series/SeriesCollectionView', 'Shared/NotificationView', 'Shared/NotFoundView'], function (app, modalRegion) {
 
-   var  controller = Backbone.Marionette.Controller.extend({
+    var controller = Backbone.Marionette.Controller.extend({
 
         addSeries: function (action, query) {
-            NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
             this.setTitle('Add Series');
+            NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
         },
 
         series: function (action, query) {
-            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView(this, action, query));
             this.setTitle('NzbDrone');
+            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView(this, action, query));
         },
 
         notFound: function () {
             this.setTitle('Not Found');
+            NzbDrone.mainRegion.show(new NzbDrone.Shared.NotFoundView(this));
         },
 
-        setTitle: function(title)
-        {
+        setTitle: function (title) {
             $('#title-region').html(title);
 
-            if(title.toLocaleLowerCase() === 'nzbdrone')
-            {
+            if (title.toLocaleLowerCase() === 'nzbdrone') {
                 window.document.title = 'NzbDrone';
             }
-            else
-            {
+            else {
                 window.document.title = title + ' - NzbDrone';
             }
         }
@@ -34,10 +32,10 @@
 
     NzbDrone.addInitializer(function () {
 
-        NzbDrone.addRegions({modalRegion: modalRegion});
+        NzbDrone.addRegions({ modalRegion: modalRegion });
 
         NzbDrone.vent.on(NzbDrone.Events.OpenModalDialog, function (options) {
-            console.log('opening modal dialog ' + options.view.template );
+            console.log('opening modal dialog ' + options.view.template);
             NzbDrone.modalRegion.show(options.view);
         });
 
