@@ -270,13 +270,15 @@
     <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
-    <Compile Include="Jobs\AppShutdownJob.cs" />
-    <Compile Include="Jobs\AppRestartJob.cs" />
+    <Compile Include="Jobs\JobRepository.cs" />
+    <Compile Include="Lifecycle\AppShutdownJob.cs" />
+    <Compile Include="Lifecycle\AppRestartJob.cs" />
     <Compile Include="Jobs\XemUpdateJob.cs" />
     <Compile Include="Jobs\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
+    <Compile Include="Lifecycle\IInitilizable.cs" />
     <Compile Include="Model\HistoryQueryModel.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
@@ -353,11 +355,11 @@
     <Compile Include="Providers\Search\SearchBase.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
-    <Compile Include="Jobs\TrimLogsJob.cs" />
-    <Compile Include="Jobs\JobProvider.cs" />
+    <Compile Include="Instrumentation\TrimLogsJob.cs" />
+    <Compile Include="Jobs\JobController.cs" />
     <Compile Include="Jobs\RenameSeasonJob.cs" />
     <Compile Include="Jobs\RenameSeriesJob.cs" />
-    <Compile Include="Jobs\AppUpdateJob.cs" />
+    <Compile Include="Lifecycle\AppUpdateJob.cs" />
     <Compile Include="Jobs\BacklogSearchJob.cs" />
     <Compile Include="Jobs\BannerDownloadJob.cs" />
     <Compile Include="Jobs\ConvertEpisodeJob.cs" />
@@ -570,7 +572,7 @@
     </Compile>
     <Compile Include="Repository\NewznabDefinition.cs" />
     <Compile Include="Repository\ExternalNotificationDefinition.cs" />
-    <Compile Include="Repository\JobDefinition.cs" />
+    <Compile Include="Jobs\JobDefinition.cs" />
     <Compile Include="Repository\IndexerDefinition.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />

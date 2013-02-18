@@ -11,7 +11,7 @@ namespace NzbDrone.Web.Controllers
 {
     public class CommandController : Controller
     {
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
         private readonly SabProvider _sabProvider;
         private readonly SmtpProvider _smtpProvider;
         private readonly TwitterProvider _twitterProvider;
@@ -25,7 +25,7 @@ namespace NzbDrone.Web.Controllers
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public CommandController(JobProvider jobProvider, SabProvider sabProvider,
+        public CommandController(JobController jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
                                     EpisodeProvider episodeProvider, GrowlProvider growlProvider,
                                     SeasonProvider seasonProvider, ProwlProvider prowlProvider,

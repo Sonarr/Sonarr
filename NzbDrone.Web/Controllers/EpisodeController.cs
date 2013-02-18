@@ -9,10 +9,10 @@ namespace NzbDrone.Web.Controllers
 {
     public class EpisodeController : Controller
     {
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
         private readonly MediaFileProvider _mediaFileProvider;
 
-        public EpisodeController(JobProvider jobProvider, MediaFileProvider mediaFileProvider)
+        public EpisodeController(JobController jobProvider, MediaFileProvider mediaFileProvider)
         {
             _jobProvider = jobProvider;
             _mediaFileProvider = mediaFileProvider;

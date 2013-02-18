@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;

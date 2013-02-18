@@ -8,6 +8,23 @@ using NzbDrone.Core.Datastore;
 namespace NzbDrone.Core.Test.Framework
 {
 
+
+    public abstract class RepositoryTest<TRepository, TModel> : ObjectDbTest<TRepository>
+        where TRepository : class, IBasicRepository<TModel>
+        where TModel : ModelBase, new()
+    {
+
+        protected BasicRepository<TModel> Storage { get; private set; }
+
+        [SetUp]
+        public void RepositoryTestSetup()
+        {
+            WithObjectDb();
+            Storage = Mocker.Resolve<BasicRepository<TModel>>();
+        }
+
+    }
+
     public abstract class ObjectDbTest<TSubject> : ObjectDbTest where TSubject : class
     {
         private TSubject _subject;
@@ -56,7 +73,7 @@ namespace NzbDrone.Core.Test.Framework
             //}
             //else
             //{
-                _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
+            _db = new SiaqoDbFactory(new DiskProvider(), new EnvironmentProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
             //}
 
             Mocker.SetConstant(Db);

@@ -16,10 +16,10 @@ namespace NzbDrone.Web.Controllers
     public class HistoryController : Controller
     {
         private readonly HistoryProvider _historyProvider;
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
         private readonly ConfigProvider _configProvider;
 
-        public HistoryController(HistoryProvider historyProvider, JobProvider jobProvider,
+        public HistoryController(HistoryProvider historyProvider, JobController jobProvider,
                                     ConfigProvider configProvider)
         {
             _historyProvider = historyProvider;

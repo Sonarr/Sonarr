@@ -141,6 +141,7 @@
     <Compile Include="Framework\ObjectDbTest.cs" />
     <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerTests\NzbxFixture.cs" />
+    <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
@@ -212,7 +213,7 @@
     <Compile Include="ProviderTests\PostDownloadProviderTests\GetFolderNameWithStatusFixture.cs" />
     <Compile Include="JobTests\EpisodeSearchJobTest.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
-    <Compile Include="ProviderTests\JobProviderTests\TestJobs.cs" />
+    <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetUpdateLogFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
@@ -245,7 +246,7 @@
     <Compile Include="JobTests\DiskScanJobTest.cs" />
     <Compile Include="IndexerTests\IndexerFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\JobProviderTests\JobProviderFixture.cs" />
+    <Compile Include="JobTests\JobControllerFixture.cs" />
     <Compile Include="QualityTest.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="ProviderTests\IndexerProviderTest.cs" />

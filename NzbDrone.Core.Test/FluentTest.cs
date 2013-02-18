@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
@@ -215,7 +216,7 @@ namespace NzbDrone.Core.Test
             var resultString = str.Truncate(1000);
 
             //Resolve
-            var result =  new System.Text.UTF8Encoding().GetBytes(resultString);
+            var result =  new UTF8Encoding().GetBytes(resultString);
             result.Length.Should().BeLessOrEqualTo(1000);
         }
 
@@ -229,7 +230,7 @@ namespace NzbDrone.Core.Test
             var resultString = str.Truncate(1000);
 
             //Resolve
-            var result = new System.Text.UTF8Encoding().GetBytes(resultString);
+            var result = new UTF8Encoding().GetBytes(resultString);
             result.Length.Should().Be(11);
         }
 

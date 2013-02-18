@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Lifecycle
 {
     public class AppUpdateJob : IJob
     {

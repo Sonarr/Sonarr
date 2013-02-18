@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void jobs_are_initialized()
         {
-            kernel.Resolve<JobProvider>().All().Should().HaveSameCount(jobs);
+            kernel.Resolve<IJobRepository>().All().Should().HaveSameCount(jobs);
         }
 
         [Test]
@@ -134,8 +134,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void JobProvider_should_be_singletone()
         {
-            var first = kernel.Resolve<JobProvider>();
-            var second = kernel.Resolve<JobProvider>();
+            var first = kernel.Resolve<JobController>();
+            var second = kernel.Resolve<JobController>();
 
             first.Should().BeSameAs(second);
         }

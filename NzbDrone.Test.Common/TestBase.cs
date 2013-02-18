@@ -2,6 +2,7 @@
 using System.Linq;
 using System.IO;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -44,6 +45,8 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
+
+            Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
 
             TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -8,21 +7,24 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
-using PetaPoco;
 
 namespace NzbDrone.Core.Jobs
 {
-    /// <summary>
-    /// Provides a background task runner, tasks could be queue either by the scheduler using QueueScheduled()
-    /// or by explicitly calling QueueJob(type,int)
-    /// </summary>
-    public class JobProvider
+    public interface IJobController
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly IDatabase _database;
+        Stopwatch StopWatch { get; }
+        List<JobQueueItem> Queue { get; }
+        void QueueScheduled();
+        void QueueJob(Type jobType, dynamic options = null, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User);
+        bool QueueJob(string jobTypeString);
+    }
+
+    public class JobController : IJobController
+    {
         private readonly NotificationProvider _notificationProvider;
         private readonly IEnumerable<IJob> _jobs;
+        private readonly IJobRepository _jobRepository;
+        private readonly Logger logger;
 
         private Thread _jobThread;
         public Stopwatch StopWatch { get; private set; }
@@ -33,26 +35,16 @@ namespace NzbDrone.Core.Jobs
         private ProgressNotification _notification;
 
 
-        public JobProvider(IDatabase database, NotificationProvider notificationProvider, IEnumerable<IJob> jobs)
+        public JobController(NotificationProvider notificationProvider, IEnumerable<IJob> jobs, IJobRepository jobRepository, Logger logger)
         {
             StopWatch = new Stopwatch();
-            _database = database;
             _notificationProvider = notificationProvider;
             _jobs = jobs;
+            _jobRepository = jobRepository;
+            this.logger = logger;
             ResetThread();
-            Initialize();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JobProvider"/> class. by AutoMoq
-        /// </summary>
-        /// <remarks>Should only be used by AutoMoq</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public JobProvider() { }
-
-        /// <summary>
-        /// Gets the active queue.
-        /// </summary>
         public List<JobQueueItem> Queue
         {
             get
@@ -61,62 +53,6 @@ namespace NzbDrone.Core.Jobs
             }
         }
 
-        public virtual List<JobDefinition> All()
-        {
-            return _database.Fetch<JobDefinition>().ToList();
-        }
-
-        private void Initialize()
-        {
-            var currentJobs = All();
-            logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count);
-
-            foreach (var currentJob in currentJobs)
-            {
-                if (!_jobs.Any(c => c.GetType().ToString() == currentJob.TypeName))
-                {
-                    logger.Debug("Removing job from database '{0}'", currentJob.Name);
-                    _database.Delete(currentJob);
-                }
-            }
-
-            foreach (var job in _jobs)
-            {
-                var jobDefinition = currentJobs.SingleOrDefault(c => c.TypeName == job.GetType().ToString());
-
-                if (jobDefinition == null)
-                {
-                    jobDefinition = new JobDefinition();
-                    jobDefinition.TypeName = job.GetType().ToString();
-                    jobDefinition.LastExecution = DateTime.Now;
-                }
-
-                jobDefinition.Enable = job.DefaultInterval.TotalSeconds > 0;
-                jobDefinition.Name = job.Name;
-
-                jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
-
-                SaveDefinition(jobDefinition);
-            }
-        }
-
-        /// <summary>
-        /// Adds/Updates definitions for a job
-        /// </summary>
-        /// <param name="definitions">Settings to be added/updated</param>
-        public virtual void SaveDefinition(JobDefinition definitions)
-        {
-            if (definitions.Id == 0)
-            {
-                logger.Trace("Adding job definitions for {0}", definitions.Name);
-                _database.Insert(definitions);
-            }
-            else
-            {
-                logger.Trace("Updating job definitions for {0}", definitions.Name);
-                _database.Update(definitions);
-            }
-        }
 
         public virtual void QueueScheduled()
         {
@@ -131,14 +67,13 @@ namespace NzbDrone.Core.Jobs
                 }
             }
 
-            var pendingJobTypes = All().Where(
-                t => t.Enable &&
-                     (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
-                ).Select(c => _jobs.Single(t => t.GetType().ToString() == c.TypeName).GetType()).ToList();
+            var pendingJobs = _jobRepository.GetPendingJobs()
+                .Select(c => _jobs.Single(t => t.GetType().ToString() == c.TypeName)
+                .GetType()).ToList();
 
 
-            pendingJobTypes.ForEach(jobType => QueueJob(jobType, source: JobQueueItem.JobSourceType.Scheduler));
-            logger.Trace("{0} Scheduled tasks have been added to the queue", pendingJobTypes.Count);
+            pendingJobs.ForEach(jobType => QueueJob(jobType, source: JobQueueItem.JobSourceType.Scheduler));
+            logger.Trace("{0} Scheduled tasks have been added to the queue", pendingJobs.Count);
         }
 
         public virtual void QueueJob(Type jobType, dynamic options = null, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User)
@@ -191,11 +126,6 @@ namespace NzbDrone.Core.Jobs
 
             QueueJob(type);
             return true;
-        }
-
-        public virtual JobDefinition GetDefinition(Type type)
-        {
-            return _database.Single<JobDefinition>("WHERE TypeName = @0", type.ToString());
         }
 
         private void ProcessQueue()
@@ -261,13 +191,12 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            var settings = All().Single(j => j.TypeName == queueItem.JobType.ToString());
-
+            var jobDefinition = _jobRepository.GetDefinition(queueItem.JobType);
             using (_notification = new ProgressNotification(jobImplementation.Name))
             {
                 try
                 {
-                    logger.Debug("Starting {0}. Last execution {1}", queueItem, settings.LastExecution);
+                    logger.Debug("Starting {0}. Last execution {1}", queueItem, jobDefinition.LastExecution);
 
                     var sw = Stopwatch.StartNew();
 
@@ -275,8 +204,8 @@ namespace NzbDrone.Core.Jobs
                     jobImplementation.Start(_notification, queueItem.Options);
                     _notification.Status = ProgressNotificationStatus.Completed;
 
-                    settings.LastExecution = DateTime.Now;
-                    settings.Success = true;
+                    jobDefinition.LastExecution = DateTime.Now;
+                    jobDefinition.Success = true;
 
                     sw.Stop();
                     logger.Debug("Job {0} successfully completed in {1:0}.{2} seconds.", queueItem, sw.Elapsed.TotalSeconds, sw.Elapsed.Milliseconds / 100,
@@ -292,15 +221,15 @@ namespace NzbDrone.Core.Jobs
                     _notification.Status = ProgressNotificationStatus.Failed;
                     _notification.CurrentMessage = jobImplementation.Name + " Failed.";
 
-                    settings.LastExecution = DateTime.Now;
-                    settings.Success = false;
+                    jobDefinition.LastExecution = DateTime.Now;
+                    jobDefinition.Success = false;
                 }
             }
 
             //Only update last execution status if was triggered by the scheduler
             if (queueItem.Options == null)
             {
-                SaveDefinition(settings);
+                _jobRepository.Update(jobDefinition);
             }
         }
 

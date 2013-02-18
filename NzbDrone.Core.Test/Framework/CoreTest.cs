@@ -28,14 +28,28 @@ namespace NzbDrone.Core.Test.Framework
         }
     }
 
-    public abstract class CoreTest<TSubject> : CoreTest
+    public abstract class CoreTest<TSubject> : CoreTest where TSubject: class
     {
+        private TSubject _subject;
+
         [SetUp]
         public void CoreTestSetup()
         {
-            Subject = Mocker.Resolve<TSubject>();
+            _subject = null;
         }
 
-        protected TSubject Subject { get; set; }
+        protected TSubject Subject
+        {
+            get
+            {
+                if (_subject == null)
+                {
+                    _subject = Mocker.Resolve<TSubject>();
+                }
+
+                return _subject;
+            }
+
+        }
     }
 }

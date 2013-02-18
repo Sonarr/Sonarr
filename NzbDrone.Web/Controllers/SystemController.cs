@@ -8,6 +8,7 @@ using NzbDrone.Common;
 using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
@@ -17,16 +18,17 @@ namespace NzbDrone.Web.Controllers
 {
     public class SystemController : Controller
     {
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
         private readonly IndexerProvider _indexerProvider;
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
         private readonly BackupProvider _backupProvider;
         private readonly StatsProvider _statsProvider;
+        private readonly IJobRepository _jobRepository;
 
-        public SystemController(JobProvider jobProvider, IndexerProvider indexerProvider,
+        public SystemController(JobController jobProvider, IndexerProvider indexerProvider,
                                     ConfigProvider configProvider, DiskProvider diskProvider,
-                                    BackupProvider backupProvider, StatsProvider statsProvider)
+                                    BackupProvider backupProvider, StatsProvider statsProvider,IJobRepository jobRepository)
         {
             _jobProvider = jobProvider;
             _indexerProvider = indexerProvider;
@@ -34,6 +36,7 @@ namespace NzbDrone.Web.Controllers
             _diskProvider = diskProvider;
             _backupProvider = backupProvider;
             _statsProvider = statsProvider;
+            _jobRepository = jobRepository;
         }
 
         public ActionResult Index()
@@ -58,9 +61,9 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["Queue"] = serializedQueue;
 
-            var jobs = _jobProvider.All().Select(j => new JobModel
+            var jobs = _jobRepository.All().Select(j => new JobModel
                                                           {
-                                                              Id = j.Id,
+                                                              Id = j.OID,
                                                               Enable = j.Enable,
                                                               TypeName = j.TypeName,
                                                               Name = j.Name,

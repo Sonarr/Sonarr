@@ -4,7 +4,7 @@ using System.Threading;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 
-namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
+namespace NzbDrone.Core.Test.JobTests
 {
 
     public class FakeJob : IJob

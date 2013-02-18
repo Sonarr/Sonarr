@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Common;
 using System.Reflection;
 using NLog;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Datastore
 
             if (EnvironmentProvider.IsMono) return;
 
-            var dataSet = (System.Data.DataSet)ConfigurationManager.GetSection("system.data");
+            var dataSet = (DataSet)ConfigurationManager.GetSection("system.data");
             dataSet.Tables[0].Rows.Add("Microsoft SQL Server Compact Data Provider 4.0"
                                        , "System.Data.SqlServerCe.4.0"
                                        , ".NET Framework Data Provider for Microsoft SQL Server Compact"

@@ -2,6 +2,7 @@
 using System.Linq;
 using NzbDrone.Core.Repository;
 
+// ReSharper disable CheckNamespace
 namespace PetaPoco
 {
     public class EpisodeSeasonRelator

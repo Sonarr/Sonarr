@@ -1,14 +1,11 @@
-﻿using System;
-using PetaPoco;
+﻿using System.Linq;
+using System;
+using NzbDrone.Core.Datastore;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Jobs
 {
-    [TableName("JobDefinitions")]
-    [PrimaryKey("Id", autoIncrement = true)]
-    public class JobDefinition
+    public class JobDefinition : ModelBase
     {
-        public Int32 Id { get; set; }
-
         public Boolean Enable { get; set; }
 
         public String TypeName { get; set; }

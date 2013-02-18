@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Instrumentation
 {
     public class TrimLogsJob : IJob
     {

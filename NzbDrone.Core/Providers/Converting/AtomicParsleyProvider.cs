@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Providers.Converting
             throw new NotImplementedException();
 
             var atomicParsleyLocation = _configProvider.GetValue("AtomicParsleyLocation", "");
-            var atomicParsleyTitleType = (AtomicParsleyTitleType) System.Convert.ToInt32(_configProvider.GetValue("AtomicParsley", 0));
+            var atomicParsleyTitleType = (AtomicParsleyTitleType) Convert.ToInt32(_configProvider.GetValue("AtomicParsley", 0));
 
             var atomicParsleyCommand = String.Format("\"{0}\" --overWrite --title \"{1}\" --genre \"TV Shows\" --stik \"TV Show\" --TVShowName \"{2}\" --TVEpisodeNum \"{3}\" --TVSeason \"{4}\"",
                                         outputFile, episode.Title, episode.Series.Title, episode.EpisodeNumber, episode.SeasonNumber);

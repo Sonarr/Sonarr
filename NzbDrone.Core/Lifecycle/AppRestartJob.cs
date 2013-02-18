@@ -2,9 +2,10 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Lifecycle
 {
     public class AppRestartJob : IJob
     {

@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Providers.Converting
                 _currentEpisode.SeasonNumber,
                 _currentEpisode.EpisodeNumber);
 
-            var percent = System.Convert.ToDecimal(match[0].Groups["percent"].Value);
+            var percent = Convert.ToDecimal(match[0].Groups["percent"].Value);
             int hours;
             int minutes;
             int seconds;

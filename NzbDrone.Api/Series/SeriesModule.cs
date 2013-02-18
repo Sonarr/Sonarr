@@ -16,9 +16,9 @@ namespace NzbDrone.Api.Series
     public class SeriesModule : NzbDroneApiModule
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
 
-        public SeriesModule(SeriesProvider seriesProvider, JobProvider jobProvider)
+        public SeriesModule(SeriesProvider seriesProvider, JobController jobProvider)
             : base("/Series")
         {
             _seriesProvider = seriesProvider;

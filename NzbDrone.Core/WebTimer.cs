@@ -8,7 +8,7 @@ namespace NzbDrone.Core
 {
     public class WebTimer
     {
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
 
         private static CacheItemRemovedCallback _onCacheRemove;
         private static bool _stop;
@@ -17,7 +17,7 @@ namespace NzbDrone.Core
 
 
 
-        public WebTimer(JobProvider jobProvider)
+        public WebTimer(JobController jobProvider)
         {
             _jobProvider = jobProvider;
         }

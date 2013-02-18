@@ -24,14 +24,14 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly QualityProvider _qualityProvider;
         private readonly SeriesProvider _seriesProvider;
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
         private readonly SeasonProvider _seasonProvider;
         private readonly ConfigProvider _configProvider;
         //
         // GET: /Series/
 
         public SeriesController(SeriesProvider seriesProvider, QualityProvider qualityProvider, 
-                                    JobProvider jobProvider, SeasonProvider seasonProvider,
+                                    JobController jobProvider, SeasonProvider seasonProvider,
                                     ConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;

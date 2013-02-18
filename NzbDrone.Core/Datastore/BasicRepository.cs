@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Datastore
         List<TModel> All();
         TModel Get(int id);
         TModel Add(TModel model);
+        TModel Update(TModel model);
+        TModel Upsert(TModel model);
         void Delete(int id);
     }
 
@@ -18,7 +20,7 @@ namespace NzbDrone.Core.Datastore
             ObjectDatabase = objectDatabase;
         }
 
-        protected IObjectDatabase ObjectDatabase { get; private set; }
+        public IObjectDatabase ObjectDatabase { get; private set; }
 
         protected IEnumerable<TModel> Queryable { get { return ObjectDatabase.AsQueryable<TModel>(); } }
 
@@ -35,6 +37,20 @@ namespace NzbDrone.Core.Datastore
         public TModel Add(TModel model)
         {
             return ObjectDatabase.Insert(model);
+        }
+
+        public TModel Update(TModel model)
+        {
+            return ObjectDatabase.Update(model);
+        }
+
+        public TModel Upsert(TModel model)
+        {
+           if(model.OID == 0)
+           {
+               return ObjectDatabase.Insert(model);
+           }
+           return ObjectDatabase.Update(model);
         }
 
         public void Delete(int id)

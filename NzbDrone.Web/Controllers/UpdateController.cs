@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 
@@ -11,11 +12,11 @@ namespace NzbDrone.Web.Controllers
     public class UpdateController : Controller
     {
         private readonly UpdateProvider _updateProvider;
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly DiskProvider _diskProvider;
 
-        public UpdateController(UpdateProvider updateProvider, JobProvider jobProvider,
+        public UpdateController(UpdateProvider updateProvider, JobController jobProvider,
             EnvironmentProvider environmentProvider, DiskProvider diskProvider)
         {
             _updateProvider = updateProvider;

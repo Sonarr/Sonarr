@@ -34,7 +34,7 @@ namespace NzbDrone.Web.Controllers
         private readonly ConfigFileProvider _configFileProvider;
         private readonly NewznabProvider _newznabProvider;
         private readonly MetadataProvider _metadataProvider;
-        private readonly JobProvider _jobProvider;
+        private readonly JobController _jobProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Web.Controllers
                                     SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
                                     QualityTypeProvider qualityTypeProvider, ConfigFileProvider configFileProvider, 
                                     NewznabProvider newznabProvider, MetadataProvider metadataProvider,
-                                    JobProvider jobProvider)
+                                    JobController jobProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
@@ -439,9 +439,9 @@ namespace NzbDrone.Web.Controllers
                 //Save the interval to config and immediately apply it the the job (to avoid a restart)
                 _configProvider.RssSyncInterval = data.RssSyncInterval;
 
-                var rssSyncJob = _jobProvider.GetDefinition(typeof(RssSyncJob));
+ /*               var rssSyncJob = _jobProvider.GetDefinition(typeof(RssSyncJob));
                 rssSyncJob.Interval = data.RssSyncInterval;
-                _jobProvider.SaveDefinition(rssSyncJob);
+                _jobProvider.SaveDefinition(rssSyncJob);*/
 
                 try
                 {
