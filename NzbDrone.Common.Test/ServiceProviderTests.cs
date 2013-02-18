@@ -18,6 +18,11 @@ namespace NzbDrone.Common.Test
         [SetUp]
         public void Setup()
         {
+            if(EnvironmentProvider.IsLinux)
+            {
+                throw new IgnoreException("Windows services aren't available in none-windows environments.");
+            }
+
             serviceProvider = new ServiceProvider();
 
             if (serviceProvider.ServiceExist(TEMP_SERVICE_NAME))
