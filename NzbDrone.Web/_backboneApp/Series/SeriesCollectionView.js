@@ -6,7 +6,7 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
         itemViewContainer: 'tbody',
         template: 'Series/SeriesCollectionTemplate',
         qualityProfileCollection: qualityProfileCollection,
-        emptyView: NzbDrone.Series.EmptySeriesCollectionView,
+        //emptyView: NzbDrone.Series.EmptySeriesCollectionView,
 
         initialize: function () {
             this.collection = new NzbDrone.Series.SeriesCollection();

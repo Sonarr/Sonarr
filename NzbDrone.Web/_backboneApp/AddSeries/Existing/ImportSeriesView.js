@@ -18,7 +18,10 @@ define([
                 var seriesId = this.model.get('id');
                 var title = this.model.get('seriesName');
                 var quality = this.options.qualityProfile.val();
-                var path = this.options.rootFolder + "\\" + title;
+
+                //Todo: WTF - Why are we changing the series path if the path already exists on disk?
+                //Todo: This wiil create an invalid path on linux...
+                var path = this.options.folder.path;
 
                 var model = new NzbDrone.Series.SeriesModel({
                     seriesId:seriesId,
@@ -88,7 +91,8 @@ define([
             itemViewOptions:function () {
                 return {
                     qualityProfile:this.ui.profileList,
-                    rootFolder:this.model.get('rootFolder')
+                    rootFolder: this.model.get('rootFolder'),
+                    folder: this.model.get('folder')
                 };
             }
 

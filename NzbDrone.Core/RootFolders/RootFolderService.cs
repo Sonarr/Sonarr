@@ -14,7 +14,7 @@ namespace NzbDrone.Core.RootFolders
         List<RootFolder> All();
         RootFolder Add(RootFolder rootDir);
         void Remove(int rootDirId);
-        List<String> GetUnmappedFolders(string path);
+        List<UnmappedFolder> GetUnmappedFolders(string path);
         Dictionary<string, ulong> FreeSpaceOnDrives();
     }
 
@@ -71,13 +71,13 @@ namespace NzbDrone.Core.RootFolders
             _rootFolderRepository.Delete(rootDirId);
         }
 
-        public virtual List<String> GetUnmappedFolders(string path)
+        public virtual List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(path))
                 throw new ArgumentException("Invalid path provided", "path");
 
-            var results = new List<String>();
+            var results = new List<UnmappedFolder>();
 
             if (!_diskProvider.FolderExists(path))
             {
@@ -89,7 +89,8 @@ namespace NzbDrone.Core.RootFolders
             {
                 if (!_seriesProvider.SeriesPathExists(seriesFolder))
                 {
-                    results.Add(new DirectoryInfo(seriesFolder.Normalize()).Name);
+                    var di = new DirectoryInfo(seriesFolder.Normalize());
+                    results.Add(new UnmappedFolder{ Name = di.Name, Path = di.FullName });
                 }
             }
 

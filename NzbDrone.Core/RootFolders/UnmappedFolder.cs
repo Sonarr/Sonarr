@@ -4,13 +4,9 @@ using Sqo.Attributes;
 
 namespace NzbDrone.Core.RootFolders
 {
-    public class RootFolder : BaseRepositoryModel
+    public class UnmappedFolder
     {
+        public string Name { get; set; }
         public string Path { get; set; }
-
-        [Ignore]
-        public ulong FreeSpace { get; set; }
-
-        public List<UnmappedFolder> UnmappedFolders { get; set; }
     }
 }

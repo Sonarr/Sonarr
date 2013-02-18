@@ -14,8 +14,6 @@ define(['app','Quality/QualityProfileCollection'], function (app, qualityProfile
     NzbDrone.AddSeries.Existing.UnmappedFolderCollection = Backbone.Collection.extend({
         model: NzbDrone.AddSeries.Existing.UnmappedFolderModel,
 
-
-
         importItems: function (rootFolderModel) {
 
             this.reset();

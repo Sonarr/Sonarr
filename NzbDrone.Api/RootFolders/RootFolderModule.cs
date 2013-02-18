@@ -7,12 +7,12 @@ using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Api.RootFolders
 {
-    public class RootDirModule : NzbDroneApiModule
+    public class RootFolderModule : NzbDroneApiModule
     {
         private readonly RootFolderService _rootFolderService;
 
-        public RootDirModule(RootFolderService rootFolderService)
-            : base("//rootdir")
+        public RootFolderModule(RootFolderService rootFolderService)
+            : base("/rootfolder")
         {
             _rootFolderService = rootFolderService;
 
