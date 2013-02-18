@@ -6,9 +6,12 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
         itemViewContainer: 'tbody',
         template: 'Series/SeriesCollectionTemplate',
         qualityProfileCollection: qualityProfileCollection,
+        emptyView: NzbDrone.Series.EmptySeriesCollectionView,
 
         initialize: function () {
             this.collection = new NzbDrone.Series.SeriesCollection();
+            //Todo: This caused the onRendered event to be trigger twice, which displays two empty collection messages
+            //http://stackoverflow.com/questions/13065176/backbone-marionette-composit-view-onrender-executing-twice
             this.collection.fetch();
             this.qualityProfileCollection.fetch();
 
@@ -18,7 +21,6 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
         ui:{
             table : '.x-series-table'
         },
-
 
         onItemRemoved: function()
         {
@@ -84,5 +86,9 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
             }
         }
     });
+});
 
+NzbDrone.Series.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
+    template: 'Series/EmptySeriesCollectionTemplate',
+    tagName: 'tr'
 });

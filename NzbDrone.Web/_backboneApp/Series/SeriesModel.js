@@ -1,6 +1,4 @@
 ﻿define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfileCollection) {
-
-
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
 
         mutators: {
@@ -32,8 +30,6 @@
                 return percent;
             }
         },
-
-
 
         defaults: {
             episodeFileCount: 0,

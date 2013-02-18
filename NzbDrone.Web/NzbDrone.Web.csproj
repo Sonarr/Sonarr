@@ -196,6 +196,7 @@
     <Content Include="_backboneApp\AddSeries\RootFolders\RootFolderCollection.js" />
     <Content Include="_backboneApp\Content\jquery.dataTables.bootstrap.css" />
     <Content Include="_backboneApp\Content\tablesorter.bootstrap.css" />
+    <Content Include="_backboneApp\Controller.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.tablesorter.bootstrap.js" />
     <Content Include="_backboneApp\JsLibraries\jquery.tablesorter.js" />
@@ -406,6 +407,7 @@
     <Content Include="_backboneApp\JsLibraries\backbone.js" />
     <Content Include="_backboneApp\JsLibraries\backbone.marionette.js" />
     <Content Include="_backboneApp\AddSeries\addSeriesLayoutTemplate.html" />
+    <Content Include="_backboneApp\Series\EmptySeriesCollectionTemplate.html" />
     <Content Include="_backboneApp\Series\SeriesCollectionView.js" />
     <Content Include="_backboneApp\Series\Edit\EditSeriesTemplate.html" />
     <Content Include="_backboneApp\Series\Edit\EditSeriesView.js" />
@@ -648,6 +650,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="_backboneApp\Upcoming\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Autofac.Integration.Mvc\Autofac.Integration.Mvc.csproj">

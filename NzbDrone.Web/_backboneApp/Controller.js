@@ -10,7 +10,6 @@
         series: function (action, query) {
             NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView(this, action, query));
             this.setTitle('NzbDrone');
-
         },
 
         notFound: function () {

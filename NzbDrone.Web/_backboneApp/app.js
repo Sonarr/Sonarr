@@ -48,7 +48,6 @@ define('app',  function () {
             ApiRoot: '/api'
         };
 
-
         window.NzbDrone.addInitializer(function () {
 
             console.log('starting application');

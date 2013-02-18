@@ -13,7 +13,6 @@
         }
     });
 
-
     NzbDrone.addInitializer(function () {
 
         NzbDrone.Router = new NzbDrone.Router();
