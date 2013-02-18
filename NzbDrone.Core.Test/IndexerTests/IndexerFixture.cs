@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", fileName));
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             Mocker.GetMock<IndexerProvider>()
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbsrus.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbsrus.xml"));
 
             //Act
             var parseResults = Mocker.Resolve<NzbsRUs>().FetchRss();
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newznab.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "newznab.xml"));
 
             //Act
             var parseResults = Mocker.Resolve<Newznab>().FetchRss();
@@ -181,11 +181,11 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbindex.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbindex.xml"));
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.hdtv/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbindex.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbindex.xml"));
 
             //Act
             var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
@@ -200,11 +200,11 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbclub.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbclub.xml"));
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=5542&st=1&ns=1&q=", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbclub.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbclub.xml"));
 
             //Act
             var parseResults = Mocker.Resolve<NzbClub>().FetchRss();
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user=MockedConfigValue&api=MockedConfigValue&eng=1", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\omgwtfnzbs.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "omgwtfnzbs.xml"));
 
             //Act
             var parseResults = Mocker.Resolve<Omgwtfnzbs>().FetchRss();
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\newznab.xml"));
+                          .Returns(OpenRead("Files", "Rss", "newznab.xml"));
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             Mocker.GetMock<IndexerProvider>()
@@ -304,7 +304,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             Mocker.GetMock<IndexerProvider>()
@@ -338,7 +338,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             var parseResults = Mocker.Resolve<NzbsRUs>().FetchRss();
 
@@ -365,7 +365,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             var parseResults = Mocker.Resolve<Newznab>().FetchRss();
 
@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             var parseResults = Mocker.Resolve<Wombles>().FetchRss();
 
@@ -404,7 +404,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             var parseResults = Mocker.Resolve<FileSharingTalk>().FetchRss();
 
@@ -423,11 +423,11 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\nzbindex.xml"));
+                          .Returns(OpenRead("Files", "Rss", "nzbindex.xml"));
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.hdtv/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\nzbindex.xml"));
+                          .Returns(OpenRead("Files", "Rss", "nzbindex.xml"));
 
             var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
 
@@ -447,11 +447,11 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=5542&st=1&ns=1&q=", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+                          .Returns(OpenRead("Files", "Rss", "" + fileName));
 
             var parseResults = Mocker.Resolve<NzbClub>().FetchRss();
 
@@ -480,7 +480,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user=MockedConfigValue&api=MockedConfigValue&eng=1", It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\omgwtfnzbs.xml"));
+                          .Returns(OpenRead("Files", "Rss", "SizeParsing", "omgwtfnzbs.xml"));
 
             //Act
             var parseResults = Mocker.Resolve<Omgwtfnzbs>().FetchRss();

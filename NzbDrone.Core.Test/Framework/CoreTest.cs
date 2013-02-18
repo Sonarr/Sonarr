@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Test.Common;
@@ -18,6 +19,12 @@ namespace NzbDrone.Core.Test.Framework
         protected static void ThrowException()
         {
             throw new ApplicationException("This is a message for test exception");
+        }
+
+
+        protected FileStream OpenRead(params string[] path)
+        {
+            return File.OpenRead(Path.Combine(path));
         }
     }
 
