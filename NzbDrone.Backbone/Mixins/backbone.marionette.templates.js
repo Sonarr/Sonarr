@@ -6,9 +6,13 @@
         var template;
 
         console.log("Loading template '" + templateId + "'");
+        
+        if (templateId.startsWith('#')) {
+            return $(templateId).html();
+        }
 
         $.ajax({
-            url:'static//' + templateId + '.html',
+            url:'/static/' + templateId + '.html',
             cache:false,
             async:false
 

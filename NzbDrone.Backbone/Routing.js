@@ -16,7 +16,7 @@
     NzbDrone.addInitializer(function () {
 
         NzbDrone.Router = new NzbDrone.Router();
-        Backbone.history.start();
+        Backbone.history.start({ pushState: true });
 
     });
 });

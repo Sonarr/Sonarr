@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Nancy;
+using Nancy.Responses.Negotiation;
 
 namespace NzbDrone.Api.FrontendModule
 {
@@ -7,7 +9,22 @@ namespace NzbDrone.Api.FrontendModule
     {
         public IndexModule()
         {
-            Get[@"/"] = x => View["NzbDrone.Backbone/index.html"];
+            //Serve anything that doesn't have an extension
+            Get[@"/(.*)"] = x => Index();
+        }
+
+        private object Index()
+        {
+            if(
+                Request.Path.Contains(".")
+                || Request.Path.StartsWith("/static", StringComparison.CurrentCultureIgnoreCase) 
+                || Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return new NotFoundResponse();
+            }
+
+
+            return View["NzbDrone.Backbone/index.html"];
         }
     }
 }
