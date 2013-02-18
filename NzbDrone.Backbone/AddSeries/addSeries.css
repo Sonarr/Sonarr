@@ -3,28 +3,27 @@
     margin-bottom: 40px;
 }
 
-    .nz-input-large input {
-        height: 40px;
-    }
+.nz-input-large input {
+    height: 40px;
+}
 
-    .nz-input-large *[class*='icon-'] {
-        font-size: 28px;
-        height: 30px;
-        width: 40px;
-        padding-top: 14px;
-        padding-left: 10px;
-        margin-left: 30px;
-    }
+.nz-input-large *[class*='icon-'] {
+    font-size: 28px;
+    height: 30px;
+    width: 40px;
+    padding-top: 14px;
+    padding-left: 10px;
+    margin-left: 30px;
+}
 
 .result-list {
     font-size: 18px;
     text-align: left;
 }
 
-    .result-list .accordion-heading:hover {
-        background-color: #fcf8e3;
-    }
-
+.result-list .accordion-heading:hover {
+    background-color: #fcf8e3;
+}
 
 .search-item .accordion-heading *[class*='icon-'] {
     padding-right: 5px;
@@ -48,7 +47,6 @@
     color: #343434;
 }
 
-
 .search-item select {
     font-size: 16px;
 }
@@ -60,19 +58,19 @@
     padding: 20px;
 }
 
-    .unmapped-folder-view .folder-header {
-        font-size: 30px;
-        font-weight: 300;
-    }
+.unmapped-folder-view .folder-header {
+    font-size: 30px;
+    font-weight: 300;
+}
 
-        .unmapped-folder-view .folder-header input {
-            margin-bottom: 0;
-        }
+.unmapped-folder-view .folder-header input {
+    margin-bottom: 0;
+}
 
-        .unmapped-folder-view .folder-header select {
-            margin-bottom: 0;
-            font-size: 16px;
-        }
+.unmapped-folder-view .folder-header select {
+    margin-bottom: 0;
+    font-size: 16px;
+}
 
 .existing-root-folder-view, h1 {
     padding: 10px 0 20px 0;
