@@ -10,14 +10,14 @@ namespace NzbDrone.Common.SysTray
     {
         private readonly ConfigFileProvider _configFileProvider;
         private readonly ProcessProvider _processProvider;
-        private readonly HostController _hostController;
+        private readonly IHostController _hostController;
         private readonly EnvironmentProvider _environmentProvider;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
         public SysTrayApp(ConfigFileProvider configFileProvider, ProcessProvider processProvider,
-                          HostController hostController, EnvironmentProvider environmentProvider)
+                          IHostController hostController, EnvironmentProvider environmentProvider)
         {
             _configFileProvider = configFileProvider;
             _processProvider = processProvider;

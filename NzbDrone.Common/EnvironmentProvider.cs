@@ -75,34 +75,7 @@ namespace NzbDrone.Common
 
         public virtual string ApplicationPath
         {
-            get
-            {
-
-                if(IsMono)
-                {
-                    return AppDomain.CurrentDomain.BaseDirectory;
-                }
-
-                string applicationPath;
-
-                applicationPath = CrawlToRoot(StartUpPath);
-                if (!string.IsNullOrWhiteSpace(applicationPath))
-                    return applicationPath;
-
-                applicationPath = CrawlToRoot(Environment.CurrentDirectory);
-                if (!string.IsNullOrWhiteSpace(applicationPath))
-                    return applicationPath;
-
-                applicationPath = CrawlToRoot(AppDomain.CurrentDomain.BaseDirectory);
-                if (!string.IsNullOrWhiteSpace(applicationPath))
-                    return applicationPath;
-
-                applicationPath = CrawlToRoot(NzbDronePathFromEnvironment);
-                if (!string.IsNullOrWhiteSpace(applicationPath))
-                    return applicationPath;
-
-                throw new ApplicationException("Can't finds IISExpress folder.");
-            }
+            get { return Directory.GetCurrentDirectory(); }
         }
 
         public string CrawlToRoot(string dir)

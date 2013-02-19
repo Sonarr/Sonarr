@@ -9,11 +9,11 @@ namespace NzbDrone.Core.Lifecycle
 {
     public class AppRestartJob : IJob
     {
-        private readonly HostController _hostController;
+        private readonly IHostController _hostController;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AppRestartJob(HostController hostController)
+        public AppRestartJob(IHostController hostController)
         {
             _hostController = hostController;
         }

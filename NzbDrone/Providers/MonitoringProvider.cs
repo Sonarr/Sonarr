@@ -12,7 +12,7 @@ namespace NzbDrone.Providers
     {
         private static readonly Logger logger = LogManager.GetLogger("Host.MonitoringProvider");
 
-        private readonly HostController _hostController;
+        private readonly IHostController _hostController;
         private readonly ProcessProvider _processProvider;
         private readonly HttpProvider _httpProvider;
         private readonly ConfigFileProvider _configFileProvider;
@@ -21,7 +21,7 @@ namespace NzbDrone.Providers
         private Timer _pingTimer;
         private Timer _processPriorityCheckTimer;
 
-        public MonitoringProvider(ProcessProvider processProvider, HostController hostController,
+        public MonitoringProvider(ProcessProvider processProvider, IHostController hostController,
                                   HttpProvider httpProvider, ConfigFileProvider configFileProvider)
         {
             _processProvider = processProvider;

@@ -9,7 +9,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class EnviromentProviderTest : TestBase
+    public class EnvironmentProviderTest : TestBase
     {
         readonly EnvironmentProvider environmentProvider = new EnvironmentProvider();
 

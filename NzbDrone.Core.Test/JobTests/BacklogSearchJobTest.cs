@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -13,12 +12,11 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    public class BacklogSearchJobTest : CoreTest
+    public class BacklogSearchJobTest : CoreTest<BacklogSearchJob>
     {
         private void WithEnableBacklogSearching()
         {
@@ -40,7 +38,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
-            Mocker.Resolve<BacklogSearchJob>().Start(notification, null);
+            Subject.Start(notification, null);
 
             //Assert
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, new { SeriesId = It.IsAny<int>(), SeasonNumber = It.IsAny<int>() }),
@@ -75,7 +73,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") == 1)));
 
             //Act
-            Mocker.Resolve<BacklogSearchJob>().Start(notification, null);
+            Subject.Start(notification, null);
 
             //Assert
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)),
@@ -104,7 +102,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
-            Mocker.Resolve<BacklogSearchJob>().Start(notification, null);
+            Subject.Start(notification, null);
 
             //Assert
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)),
@@ -137,7 +135,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
             //Act
-            Mocker.Resolve<BacklogSearchJob>().Start(notification, null);
+            Subject.Start(notification, null);
 
             //Assert
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)),
@@ -171,10 +169,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
             //Act
-            Mocker.Resolve<BacklogSearchJob>().Start(notification, null);
+            Subject.Start(notification, null);
 
             //Assert
-            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") >= 0 && 
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") >= 0 &&
                                                                                                    d.GetPropertyValue<int>("SeasonNumber") >= 0)),
                                                        Times.Once());
         }
@@ -213,7 +211,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5 });
 
             //Act
-            Mocker.Resolve<BacklogSearchJob>().Start(notification, null);
+            Subject.Start(notification, null);
 
             //Assert
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") >= 0 &&
@@ -251,7 +249,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
-            var result = Mocker.Resolve<BacklogSearchJob>().GetMissingForEnabledSeries();
+            var result = Subject.GetMissingForEnabledSeries();
 
             //Assert
             result.Should().NotBeEmpty();
@@ -290,7 +288,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
-            var result = Mocker.Resolve<BacklogSearchJob>().GetMissingForEnabledSeries();
+            var result = Subject.GetMissingForEnabledSeries();
 
             //Assert
             result.Should().NotBeEmpty();
@@ -330,7 +328,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
-            var result = Mocker.Resolve<BacklogSearchJob>().GetMissingForEnabledSeries();
+            var result = Subject.GetMissingForEnabledSeries();
 
             //Assert
             result.Should().NotBeEmpty();

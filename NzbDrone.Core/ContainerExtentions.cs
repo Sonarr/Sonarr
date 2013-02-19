@@ -22,11 +22,7 @@ namespace NzbDrone.Core
 
         public static void RegisterCoreServices(this ContainerBuilder containerBuilder)
         {
-            var core = Assembly.Load("NzbDrone.Core");
-            var common = Assembly.Load("NzbDrone.Common");
-
-            containerBuilder.RegisterAssembly(core);
-            containerBuilder.RegisterAssembly(common);
+            containerBuilder.RegisterAssembly("NzbDrone.Core");
 
             containerBuilder.InitDatabase();
 
@@ -34,17 +30,12 @@ namespace NzbDrone.Core
         }
 
 
-        private static void RegisterAssembly(this ContainerBuilder container, Assembly assembly)
+        private static void RegisterAssembly(this ContainerBuilder container, string assemblyName)
         {
-            logger.Info("Registering Services from {0}", assembly.FullName);
 
-            container.RegisterAssemblyTypes(assembly)
-                     .AsSelf()
-                     .SingleInstance();
+            container.RegisterAssemblyTypes(assemblyName);
 
-            container.RegisterAssemblyTypes(assembly)
-                     .AsImplementedInterfaces()
-                     .SingleInstance();
+            var assembly = Assembly.Load(assemblyName);
 
             container.RegisterAssemblyTypes(assembly)
                      .Where(t => t.IsSubclassOf(typeof(IndexerBase)))

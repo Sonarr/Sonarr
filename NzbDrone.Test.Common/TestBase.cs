@@ -75,8 +75,13 @@ namespace NzbDrone.Test.Common
 
         }
 
+        [Obsolete("Use Mock.Verify() instead")]
         protected void WithStrictMocker()
         {
+            return;
+
+            //TODO: Remove dependency on restrict mocks!
+
             if (_mocker != null)
                 throw new InvalidOperationException("Can not switch to a strict container after container has been used. make sure this is the first call in your test.");
 

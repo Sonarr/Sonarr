@@ -15,13 +15,13 @@ namespace NzbDrone
 
         private readonly ConfigFileProvider _configFileProvider;
         private readonly EnvironmentProvider _environmentProvider;
-        private readonly HostController _hostController;
+        private readonly IHostController _hostController;
         private readonly ProcessProvider _processProvider;
         private readonly MonitoringProvider _monitoringProvider;
         private readonly SecurityProvider _securityProvider;
         private readonly DiskProvider _diskProvider;
 
-        public ApplicationServer(ConfigFileProvider configFileProvider, HostController hostController,
+        public ApplicationServer(ConfigFileProvider configFileProvider, IHostController hostController,
                           EnvironmentProvider environmentProvider,
                            ProcessProvider processProvider, MonitoringProvider monitoringProvider,
                            SecurityProvider securityProvider, DiskProvider diskProvider)

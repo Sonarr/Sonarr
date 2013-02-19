@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomapperBootstraper.cs" />
-    <Compile Include="ContainerExtentions.cs" />
+    <Compile Include="ApiContainerExtensions.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Extentions\NancyJsonSerializer.cs" />
     <Compile Include="Extentions\Serializer.cs" />

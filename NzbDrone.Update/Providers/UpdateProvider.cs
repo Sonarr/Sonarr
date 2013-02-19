@@ -12,11 +12,11 @@ namespace NzbDrone.Update.Providers
         private readonly ServiceProvider _serviceProvider;
         private readonly ProcessProvider _processProvider;
         private readonly EnvironmentProvider _environmentProvider;
-        private readonly HostController _hostController;
+        private readonly IHostController _hostController;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public UpdateProvider(DiskProvider diskProvider, ServiceProvider serviceProvider,
-            ProcessProvider processProvider, EnvironmentProvider environmentProvider, HostController hostController)
+            ProcessProvider processProvider, EnvironmentProvider environmentProvider, IHostController hostController)
         {
             _diskProvider = diskProvider;
             _serviceProvider = serviceProvider;

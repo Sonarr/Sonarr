@@ -1,23 +1,21 @@
 ﻿using Autofac;
 using NLog;
-using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Providers;
 
 namespace NzbDrone
 {
     public static class CentralDispatch
     {
-        private static IContainer _container;
-        private static readonly Logger Logger = LogManager.GetLogger("Host.CentralDispatch");
+        private static readonly IContainer container;
+        private static readonly Logger logger = LogManager.GetLogger("Host.CentralDispatch");
 
         static CentralDispatch()
         {
             var builder = new ContainerBuilder();
             BindKernel(builder);
-            _container = builder.Build();
+            container = builder.Build();
             InitilizeApp();
         }
 
@@ -25,35 +23,24 @@ namespace NzbDrone
         {
             get
             {
-                return _container;
+                return container;
             }
         }
 
         private static void BindKernel(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(DiskProvider).Assembly).SingleInstance();
-            builder.RegisterType<Router>();
-
             builder.RegisterModule<LogInjectionModule>();
 
-
-            builder.RegisterType<NancyBootstrapper>().As<INancyBootstrapper>().SingleInstance();
-            builder.RegisterType<ApplicationServer>().SingleInstance();
-            builder.RegisterType<ConfigFileProvider>().SingleInstance();
-            builder.RegisterType<ConsoleProvider>().SingleInstance();
-            builder.RegisterType<EnvironmentProvider>().SingleInstance();
-            builder.RegisterType<HostController>().SingleInstance();
-            builder.RegisterType<MonitoringProvider>().SingleInstance();
-            builder.RegisterType<ProcessProvider>().SingleInstance();
-            builder.RegisterType<ServiceProvider>().SingleInstance();
-            builder.RegisterType<HttpProvider>().SingleInstance();
+            builder.RegisterCommonServices();
+            builder.RegisterApiServices();
+            builder.RegisterAssemblyTypes("NzbDrone");
         }
 
         private static void InitilizeApp()
         {
-            var environmentProvider = _container.Resolve<EnvironmentProvider>();
-            
-            ReportingService.RestProvider = _container.Resolve<RestProvider>();
+            var environmentProvider = container.Resolve<EnvironmentProvider>();
+
+            ReportingService.RestProvider = container.Resolve<RestProvider>();
             ReportingService.SetupExceptronDriver();
 
             LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);
@@ -61,7 +48,7 @@ namespace NzbDrone
             LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterRemote();
             LogConfiguration.Reload();
-            Logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
+            logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
         }
     }
 }
