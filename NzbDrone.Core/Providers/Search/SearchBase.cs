@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Providers.Search
     public abstract class SearchBase
     {
         protected readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesRepository _seriesRepository;
         protected readonly EpisodeProvider _episodeProvider;
         protected readonly DownloadProvider _downloadProvider;
         protected readonly IndexerProvider _indexerProvider;
@@ -25,12 +26,13 @@ namespace NzbDrone.Core.Providers.Search
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected SearchBase(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, DownloadProvider downloadProvider,
+        protected SearchBase(SeriesProvider seriesProvider,ISeriesRepository seriesRepository, EpisodeProvider episodeProvider, DownloadProvider downloadProvider,
                              IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
                              AllowedDownloadSpecification allowedDownloadSpecification,
                              SearchHistoryProvider searchHistoryProvider)
         {
             _seriesProvider = seriesProvider;
+            _seriesRepository = seriesRepository;
             _episodeProvider = episodeProvider;
             _downloadProvider = downloadProvider;
             _indexerProvider = indexerProvider;
@@ -105,7 +107,7 @@ namespace NzbDrone.Core.Providers.Search
                     items.Add(item);
 
                     logger.Trace("Analysing report " + episodeParseResult);
-                    episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
+                    episodeParseResult.Series = _seriesRepository.Get(episodeParseResult.CleanTitle);
 
                     if(episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
                     {

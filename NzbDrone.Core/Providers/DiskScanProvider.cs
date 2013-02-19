@@ -25,12 +25,13 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
                                 SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
                                 SignalRProvider signalRProvider, ConfigProvider configProvider,
-                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider)
+                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider,ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
@@ -42,6 +43,7 @@ namespace NzbDrone.Core.Providers
             _configProvider = configProvider;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public DiskScanProvider()
@@ -97,7 +99,7 @@ namespace NzbDrone.Core.Providers
             //Todo: Move the episode linking to here, instead of import (or rename import)
 
             series.LastDiskSync = DateTime.Now;
-            _seriesProvider.UpdateSeries(series);
+            _seriesRepository.Update(series);
 
             return importedFiles;
         }
@@ -190,7 +192,7 @@ namespace NzbDrone.Core.Providers
             if (episodeFile == null)
                 throw new ArgumentNullException("episodeFile");
 
-            var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
+            var series = _seriesRepository.Get(episodeFile.SeriesId);
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
             string newFileName = _mediaFileProvider.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));

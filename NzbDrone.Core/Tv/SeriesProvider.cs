@@ -15,10 +15,9 @@ namespace NzbDrone.Core.Tv
 {
     public class SeriesProvider
     {
-        
+        private readonly ISeriesRepository _seriesRepository;
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
-        private readonly IDatabase _database;
         private readonly SceneMappingProvider _sceneNameMappingProvider;
         private readonly BannerProvider _bannerProvider;
         private readonly MetadataProvider _metadataProvider;
@@ -28,12 +27,12 @@ namespace NzbDrone.Core.Tv
 
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
+        public SeriesProvider(ISeriesRepository seriesRepository, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
                                 BannerProvider bannerProvider, MetadataProvider metadataProvider,
                                 TvRageMappingProvider tvRageMappingProvider)
         {
-            _database = database;
+            _seriesRepository = seriesRepository;
             _configProvider = configProviderProvider;
             _tvDbProvider = tvDbProviderProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
@@ -42,62 +41,16 @@ namespace NzbDrone.Core.Tv
             _tvRageMappingProvider = tvRageMappingProvider;
         }
 
-        public SeriesProvider()
+
+        public bool IsMonitored(int id)
         {
-        }
-
-        public virtual IList<Series> GetAllSeries()
-        {
-            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series 
-                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId");
-
-            return series;
-        }
-
-        public virtual IList<Series> GetAllSeriesWithEpisodeCount()
-        {
-            var series = _database
-          .Fetch<Series, QualityProfile>(@"SELECT Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek, Series.AirTimes,
-                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting, Series.Network,
-                                            Series.UtcOffset, Series.CustomStartDate, SUM(CASE WHEN Ignored = 0 AND Airdate <= @0 THEN 1 ELSE 0 END) AS EpisodeCount,
-                                            SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 AND Episodes.AirDate <= @0 THEN 1 ELSE 0 END) as EpisodeFileCount,
-                                            MAX(Episodes.SeasonNumber) as SeasonCount, MIN(CASE WHEN AirDate < @0 OR Ignored = 1 THEN NULL ELSE AirDate END) as NextAiring,
-                                            QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed
-                                            FROM Series
-                                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                                            LEFT JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
-                                            WHERE Series.LastInfoSync IS NOT NULL
-                                            GROUP BY Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek, Series.AirTimes,
-                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting, Series.Network,
-                                            Series.UtcOffset, Series.CustomStartDate,
-                                            QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed",DateTime.Today);
-
-            return series;
-        }
-
-        public virtual Series GetSeries(int seriesId)
-        {
-            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
-                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                            WHERE seriesId= @0", seriesId).Single();
-
-            return series;
-        }
-
-        /// <summary>
-        ///   Determines if a series is being actively watched.
-        /// </summary>
-        /// <param name = "id">The TVDB ID of the series</param>
-        /// <returns>Whether or not the show is monitored</returns>
-        public virtual bool IsMonitored(long id)
-        {
-            return GetAllSeries().Any(c => c.SeriesId == id && c.Monitored);
+            return _seriesRepository.Get(id).Monitored;
         }
 
         public virtual Series UpdateSeriesInfo(int seriesId)
         {
             var tvDbSeries = _tvDbProvider.GetSeries(seriesId, false, true);
-            var series = GetSeries(seriesId);
+            var series = _seriesRepository.Get(seriesId);
 
             series.SeriesId = tvDbSeries.Id;
             series.Title = tvDbSeries.SeriesName;
@@ -119,26 +72,26 @@ namespace NzbDrone.Core.Tv
 
             try
             {
-                if(series.TvRageId == 0)
+                if (series.TvRageId == 0)
                     series = _tvRageMappingProvider.FindMatchingTvRageSeries(series);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.ErrorException("Error getting TvRage information for series: " + series.Title, ex);
             }
 
-            UpdateSeries(series);
+            _seriesRepository.Update(series);
             _metadataProvider.CreateForSeries(series, tvDbSeries);
 
             return series;
         }
 
-        public virtual void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
+        public void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
         {
             logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
-            if (tvDbSeriesId <=0)
+            if (tvDbSeriesId <= 0)
             {
                 throw new ArgumentOutOfRangeException("tvDbSeriesId", tvDbSeriesId.ToString());
             }
@@ -158,96 +111,15 @@ namespace NzbDrone.Core.Tv
             if (airedAfter.HasValue)
                 repoSeries.CustomStartDate = airedAfter;
 
-            _database.Insert(repoSeries);
+            _seriesRepository.Insert(repoSeries);
         }
 
-        public virtual Series FindSeries(string title)
-        {
-            try
-            {
-                var normalizeTitle = Parser.NormalizeTitle(title);
-
-                var seriesId = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
-                if (seriesId != null)
-                {
-                    return GetSeries(seriesId.Value);
-                }
-
-                var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
-                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                            WHERE CleanTitle = @0", normalizeTitle).SingleOrDefault();
-
-                return series;
-            }
-
-
-            catch (InvalidOperationException)
-            {
-                //This will catch InvalidOperationExceptions(Sequence contains no element) 
-                //that may be thrown for GetSeries due to the series being in SceneMapping, but not in the users Database
-                return null;
-            }
-        }
-
-        public virtual void UpdateSeries(Series series)
-        {
-            _database.Update(series);
-        }
-
-        public virtual void DeleteSeries(int seriesId)
-        {
-            var series = GetSeries(seriesId);
-            logger.Warn("Deleting Series [{0}]", series.Title);
-
-            using (var tran = _database.GetTransaction())
-            {
-                //Delete History, Files, Episodes, Seasons then the Series
-
-                logger.Debug("Deleting History Items from DB for Series: {0}", series.Title);
-                _database.Delete<History>("WHERE SeriesId=@0", seriesId);
-
-                logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.Title);
-                _database.Delete<EpisodeFile>("WHERE SeriesId=@0", seriesId);
-
-                logger.Debug("Deleting Seasons from DB for Series: {0}", series.Title);
-                _database.Delete<Season>("WHERE SeriesId=@0", seriesId);
-
-                logger.Debug("Deleting Episodes from DB for Series: {0}", series.Title);
-                _database.Delete<Episode>("WHERE SeriesId=@0", seriesId);
-
-                logger.Debug("Deleting Series from DB {0}", series.Title);
-                _database.Delete<Series>("WHERE SeriesId=@0", seriesId);
-
-                logger.Info("Successfully deleted Series [{0}]", series.Title);
-
-                tran.Complete();
-            }
-
-            logger.Trace("Beginning deletion of banner for SeriesID: ", seriesId);
-            _bannerProvider.Delete(seriesId);
-        }
-
-        public virtual bool SeriesPathExists(string path)
-        {
-            return GetAllSeries().Any(s => DiskProvider.PathEquals(s.Path, path));
-        }
-
-        public virtual List<Series> SearchForSeries(string title)
-        {
-            var query = String.Format("%{0}%", title);
-
-            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
-                                INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                                WHERE Title LIKE @0", query);
-
-            return series;
-        }
 
         public virtual void UpdateFromSeriesEditor(IList<Series> editedSeries)
         {
-            var allSeries = GetAllSeries();
+            var allSeries = _seriesRepository.All();
 
-            foreach(var series in allSeries)
+            foreach (var series in allSeries)
             {
                 //Only update parameters that can be changed in MassEdit
                 var edited = editedSeries.Single(s => s.SeriesId == series.SeriesId);
@@ -257,9 +129,10 @@ namespace NzbDrone.Core.Tv
                 series.BacklogSetting = edited.BacklogSetting;
                 series.Path = edited.Path;
                 series.CustomStartDate = edited.CustomStartDate;
+
+                _seriesRepository.Update(series);
             }
 
-            _database.UpdateMany(allSeries);
         }
 
         /// <summary>

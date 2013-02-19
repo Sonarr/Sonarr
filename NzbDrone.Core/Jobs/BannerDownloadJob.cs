@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Jobs
 
             if (options != null)
             {
-                Series series = _seriesProvider.GetSeries(options.SeriesId);
+                Series series = _seriesProvider.Get(options.SeriesId);
 
                 if (series != null && !String.IsNullOrEmpty(series.BannerUrl))
                 {
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            var seriesInDb = _seriesProvider.GetAllSeries();
+            var seriesInDb = _seriesProvider.All();
 
             foreach (var series in seriesInDb.Where(s => !String.IsNullOrEmpty(s.BannerUrl)))
             {

@@ -40,10 +40,10 @@ namespace NzbDrone.Core.Jobs
             List<Series> seriesToRefresh;
 
             if (options == null || options.SeriesId <= 0)
-                seriesToRefresh = _seriesProvider.GetAllSeries().ToList();
+                seriesToRefresh = _seriesProvider.All().ToList();
 
             else
-                seriesToRefresh = new List<Series> { _seriesProvider.GetSeries(options.SeriesId) };
+                seriesToRefresh = new List<Series> { _seriesProvider.Get(options.SeriesId) };
 
             foreach(var series in seriesToRefresh)
             {

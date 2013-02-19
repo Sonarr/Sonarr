@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -16,18 +15,20 @@ namespace NzbDrone.Core.Jobs
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly MetadataProvider _metadataProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
                                 ExternalNotificationProvider externalNotificationProvider, SeriesProvider seriesProvider,
-                                MetadataProvider metadataProvider)
+                                MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
             _externalNotificationProvider = externalNotificationProvider;
             _seriesProvider = seriesProvider;
             _metadataProvider = metadataProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public string Name
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Jobs
             if (options.SeasonNumber < 0)
                 throw new ArgumentException("options.SeasonNumber");
 
-            var series = _seriesProvider.GetSeries(options.SeriesId);
+            var series = _seriesRepository.Get(options.SeriesId);
 
             notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, options.SeasonNumber);
 

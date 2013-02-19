@@ -47,8 +47,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
         private void WithValidSeries()
         {
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<string>()))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Get(It.IsAny<string>()))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskProvider>()
@@ -96,11 +96,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var file = Path.Combine(TempFolder, "test.avi");
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null).Verifiable();
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<String>())).Returns<Series>(null).Verifiable();
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
             //Assert
-            Mocker.GetMock<SeriesProvider>().Verify(s => s.FindSeries(It.IsAny<String>()), Times.Once());
+            Mocker.GetMock<ISeriesRepository>().Verify(s => s.Get(It.IsAny<String>()), Times.Once());
             ExceptionVerification.IgnoreWarns();
         }
 
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var file = Path.Combine(TempFolder, "test.avi");
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<String>())).Returns<Series>(null);
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
             //Assert
@@ -149,8 +149,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .With(s => s.Path = @"C:\Test\TV\30 Rock")
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries("rock"))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Get("rock"))
                 .Returns(series);
 
             Mocker.GetMock<DiskProvider>()
@@ -182,8 +182,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var downloadName = @"C:\Test\Drop\30.Rock.S01E01.Pilot.mkv";
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries("rock"))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Get("rock"))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskProvider>()

@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.TvTests
             seriesProvider.AddSeries(title, path, tvDbId, qualityProfileId, null);
 
             //Assert
-            var series = seriesProvider.GetAllSeries();
+            var series = seriesProvider.All();
             series.Should().HaveCount(1);
             Assert.AreEqual(path, series.First().Path);
             Assert.AreEqual(tvDbId, series.First().SeriesId);
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             //Act
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
-            var series = seriesProvider.FindSeries("My Title");
+            var series = seriesProvider.Get("My Title");
 
             //Assert
             Assert.IsNull(series);
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             //Act
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
-            var series = seriesProvider.GetSeries(2);
+            var series = seriesProvider.Get(2);
 
 
             //Assert
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             //Act
             Mocker.Resolve<QualityProvider>();
-            var series = Mocker.Resolve<SeriesProvider>().GetSeries(1);
+            var series = Mocker.Resolve<SeriesProvider>().Get(1);
 
             //Assert
             series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId, s => s.NextAiring).EqualTo(fakeSeries);
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.TvTests
             Mocker.Resolve<QualityProvider>();
             Mocker.GetMock<SceneMappingProvider>().Setup(s => s.GetSeriesId("laworder")).Returns(1);
 
-            var series = Mocker.Resolve<SeriesProvider>().FindSeries("laworder");
+            var series = Mocker.Resolve<SeriesProvider>().Get("laworder");
 
             //Assert
             series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId);
@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Test.TvTests
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
 
             //Assert
-            seriesProvider.FindSeries("WrongTitle").Should().BeNull();
+            seriesProvider.Get("WrongTitle").Should().BeNull();
         }
 
         [TestCase("The Test", "Test")]
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Test.TvTests
             Db.Insert(fakeQuality);
 
             //Act
-            var series = Mocker.Resolve<SeriesProvider>().FindSeries(searchTitle);
+            var series = Mocker.Resolve<SeriesProvider>().Get(searchTitle);
 
             //Assert
             series.Should().NotBeNull();
@@ -405,7 +405,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             //Act
             Mocker.Resolve<QualityProvider>();
-            var series = Mocker.Resolve<SeriesProvider>().GetSeries(1);
+            var series = Mocker.Resolve<SeriesProvider>().Get(1);
 
             //Assert
             series.QualityProfile.Should().NotBeNull();

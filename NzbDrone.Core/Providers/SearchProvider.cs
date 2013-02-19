@@ -19,15 +19,17 @@ namespace NzbDrone.Core.Providers
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly PartialSeasonSearch _partialSeasonSearch;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public SearchProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-                              PartialSeasonSearch partialSeasonSearch)
+                              PartialSeasonSearch partialSeasonSearch,ISeriesRepository seriesRepository)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _partialSeasonSearch = partialSeasonSearch;
+            _seriesRepository = seriesRepository;
         }
 
         public SearchProvider()
@@ -36,7 +38,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<int> SeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
+            var series = _seriesRepository.Get(seriesId);
 
             if (series == null)
             {
@@ -65,7 +67,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
+            var series = _seriesRepository.Get(seriesId);
 
             if (series == null)
             {

@@ -828,7 +828,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             seriesProvider.AddSeries("Test Series","c:\\test\\", tvDbSeriesId, 1, null);
 
             var episodeProvider = Mocker.Resolve<EpisodeProvider>();
-            episodeProvider.RefreshEpisodeInfo(seriesProvider.GetSeries(tvDbSeriesId));
+            episodeProvider.RefreshEpisodeInfo(seriesProvider.ge(tvDbSeriesId));
 
             //assert
             var episodes = episodeProvider.GetEpisodeBySeries(tvDbSeriesId);
@@ -1422,7 +1422,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("officeus")).Returns(fakeSeries);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.EpisodeId).ToList(), postDownloadStatus);
@@ -1454,7 +1454,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("officeus")).Returns(fakeSeries);
 
             //Act
             Mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int> { 300 }, postDownloadStatus);

@@ -16,18 +16,20 @@ namespace NzbDrone.Core.Jobs
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly MetadataProvider _metadataProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RenameSeriesJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
                                 ExternalNotificationProvider externalNotificationProvider, SeriesProvider seriesProvider,
-                                MetadataProvider metadataProvider)
+                                MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
             _externalNotificationProvider = externalNotificationProvider;
             _seriesProvider = seriesProvider;
             _metadataProvider = metadataProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public string Name
@@ -46,12 +48,12 @@ namespace NzbDrone.Core.Jobs
 
             if (options == null || options.SeriesId <= 0)
             {
-                seriesToRename = _seriesProvider.GetAllSeries().ToList();
+                seriesToRename = _seriesRepository.All().ToList();
             }
 
             else
             {
-                seriesToRename = new List<Series>{  _seriesProvider.GetSeries(options.SeriesId) };
+                seriesToRename = new List<Series>{  _seriesRepository.Get(options.SeriesId) };
             }
 
             foreach(var series in seriesToRename)

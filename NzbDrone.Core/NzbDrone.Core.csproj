@@ -302,6 +302,7 @@
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
+    <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\QualityModel.cs" />
     <Compile Include="Model\Sabnzbd\SabAddResponse.cs" />
     <Compile Include="Model\Sabnzbd\SabHistoryItem.cs" />

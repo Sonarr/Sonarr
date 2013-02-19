@@ -47,8 +47,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
         private void WithValidSeries()
         {
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<string>()))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Get(It.IsAny<string>()))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskProvider>()
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             droppedFolder.Create();
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null).Verifiable();
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<String>())).Returns<Series>(null).Verifiable();
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
             //Assert
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\_unpack_The Office - S01E01 - Episode Title");
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns<Series>(null).Verifiable();
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("office")).Returns<Series>(null).Verifiable();
 
             //Act
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var taggedFolder = @"C:\Test\Unsorted TV\_UnknownSeries_The Office - S01E01 - Episode Title";
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns<Series>(null);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("office")).Returns<Series>(null);
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(droppedFolder.FullName, taggedFolder));
 
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Build();
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("office")).Returns(fakeSeries);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder.FullName)).Returns(new List<EpisodeFile>());
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(droppedFolder.FullName, taggedFolder));
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectorySize(droppedFolder.FullName)).Returns(Constants.IgnoreFileSize + 10.Megabytes());
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Build().ToList();
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("office")).Returns(fakeSeries);
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(droppedFolder.FullName, taggedFolder));
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectorySize(droppedFolder.FullName)).Returns(Constants.IgnoreFileSize + 10.Megabytes());
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder.FullName)).Returns(fakeEpisodeFiles);
@@ -254,7 +254,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             WithOldWrite();
 
             //Act
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<String>())).Returns<Series>(null);
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
             //Assert
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var taggedFolder = TempFolder + @"\_UnknownSeries_The Office - S01E01 - Episode Title";
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<String>())).Returns<Series>(null);
 
             //Act
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             WithImportedFiles(droppedFolder.FullName);
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get("office")).Returns(fakeSeries);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.CleanUpDropFolder(droppedFolder.FullName));
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true)).Returns(new EpisodeFile());
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectorySize(droppedFolder.FullName)).Returns(Constants.IgnoreFileSize - 1.Megabytes());
@@ -322,7 +322,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .Build().ToList();
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<string>())).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<string>())).Returns(fakeSeries);
             Mocker.GetMock<DiskProvider>().Setup(s => s.FolderExists(fakeSeries.Path)).Returns(true);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder.FullName)).Returns(fakeEpisodeFiles);
 
@@ -345,8 +345,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .With(s => s.Path = @"C:\Test\TV\30 Rock")
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries("rock"))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Get("rock"))
                 .Returns(series);
 
             Mocker.GetMock<DiskProvider>()
@@ -380,8 +380,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             WithImportedFiles(downloadName.FullName);
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries("rock"))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Get("rock"))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskProvider>()

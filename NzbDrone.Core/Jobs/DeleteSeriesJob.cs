@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Jobs
         {
             Logger.Trace("Deleting Series [{0}]", seriesId);
 
-            var series = _seriesProvider.GetSeries(seriesId);
+            var series = _seriesProvider.Get(seriesId);
             var title = series.Title;
 
             notification.CurrentMessage = String.Format("Deleting '{0}' from database", title);

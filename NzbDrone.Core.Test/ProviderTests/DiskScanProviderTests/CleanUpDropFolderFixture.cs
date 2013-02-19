@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             //Assert
             Mocker.GetMock<MediaFileProvider>().Verify(v => v.GetFileByPath(filename), Times.Once());
-            Mocker.GetMock<SeriesProvider>().Verify(v => v.GetSeries(It.IsAny<int>()), Times.Never());
+            Mocker.GetMock<ISeriesRepository>().Verify(v => v.Get(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetFileByPath(filename))
                     .Returns(episodeFile);
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetSeries(It.IsAny<int>()))
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(series);
 
             Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))

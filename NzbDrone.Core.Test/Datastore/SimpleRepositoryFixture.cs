@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_add()
         {
-            Subject.Add(sampleType);
+            Subject.Insert(sampleType);
             Subject.All().Should().HaveCount(1);
         }
 
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_delete_model()
         {
-            Subject.Add(sampleType);
+            Subject.Insert(sampleType);
             Subject.All().Should().HaveCount(1);
 
             Subject.Delete(sampleType.OID);
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_find_by_id()
         {
-            Subject.Add(sampleType);
+            Subject.Insert(sampleType);
             Subject.Get(sampleType.OID)
                 .ShouldHave()
                 .AllProperties()

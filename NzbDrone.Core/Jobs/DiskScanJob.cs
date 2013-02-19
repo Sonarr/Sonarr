@@ -46,14 +46,14 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.SeriesId == 0)
             {
                 if (_configProvider.IgnoreArticlesWhenSortingSeries)
-                    seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+                    seriesToScan = _seriesProvider.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
 
                 else
-                    seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => o.Title).ToList();
+                    seriesToScan = _seriesProvider.All().OrderBy(o => o.Title).ToList();
             }
             else
             {
-                seriesToScan = new List<Series>() { _seriesProvider.GetSeries(options.SeriesId) };
+                seriesToScan = new List<Series>() { _seriesProvider.Get(options.SeriesId) };
             }
 
             foreach (var series in seriesToScan)

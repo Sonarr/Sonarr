@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Tv
 {
-    public class Series
+    public class Series : ModelBase
     {
         public virtual int SeriesId { get; set; }
 

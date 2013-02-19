@@ -17,15 +17,17 @@ namespace NzbDrone.Core.Jobs
         private readonly EpisodeProvider _episodeProvider;
         private readonly ReferenceDataProvider _referenceDataProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-                            ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider)
+                            ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider, ISeriesRepository seriesRepository)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _referenceDataProvider = referenceDataProvider;
             _configProvider = configProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public UpdateInfoJob()
@@ -49,14 +51,14 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.SeriesId == 0)
             {
                 if (_configProvider.IgnoreArticlesWhenSortingSeries)
-                    seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+                    seriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
 
                 else
-                    seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => o.Title).ToList();
+                    seriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title).ToList();
             }
             else
             {
-                seriesToUpdate = new List<Series> { _seriesProvider.GetSeries(options.SeriesId) };
+                seriesToUpdate = new List<Series> { _seriesRepository.Get(options.SeriesId) };
             }
 
             //Update any Daily Series in the DB with the IsDaily flag

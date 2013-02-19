@@ -13,15 +13,17 @@ namespace NzbDrone.Core.Providers
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public XemProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-                            XemCommunicationProvider xemCommunicationProvider)
+                            XemCommunicationProvider xemCommunicationProvider,ISeriesRepository seriesRepository)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _xemCommunicationProvider = xemCommunicationProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public XemProvider()
@@ -34,7 +36,7 @@ namespace NzbDrone.Core.Providers
             try
             {
                 var ids = _xemCommunicationProvider.GetXemSeriesIds();
-                var series = _seriesProvider.GetAllSeries();
+                var series = _seriesRepository.All();
                 var wantedSeries = series.Where(s => ids.Contains(s.SeriesId)).ToList();
 
                 foreach(var ser in wantedSeries)
@@ -62,7 +64,7 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
-            var series = _seriesProvider.GetSeries(seriesId);
+            var series = _seriesRepository.Get(seriesId);
 
             if (series == null)
             {
@@ -112,7 +114,7 @@ namespace NzbDrone.Core.Providers
 
                 _logger.Trace("Setting UseSceneMapping for {0}", series.Title);
                 series.UseSceneNumbering = true;
-                _seriesProvider.UpdateSeries(series);
+                _seriesRepository.Update(series);
             }
 
             catch (Exception ex)

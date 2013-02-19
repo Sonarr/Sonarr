@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using FizzWare.NBuilder;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
@@ -27,9 +18,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void series_should_update_the_last_scan_date()
         {
 
-            
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.UpdateSeries(It.Is<Series>(s => s.LastDiskSync != null))).Verifiable();
+
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.Update(It.Is<Series>(s => s.LastDiskSync != null))).Verifiable();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))

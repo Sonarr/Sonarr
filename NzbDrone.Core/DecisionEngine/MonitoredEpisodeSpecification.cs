@@ -10,12 +10,14 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public MonitoredEpisodeSpecification(SeriesProvider seriesProvider, EpisodeProvider episodeProvider)
+        public MonitoredEpisodeSpecification(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, ISeriesRepository seriesRepository)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public MonitoredEpisodeSpecification()
@@ -25,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
-            var series = _seriesProvider.FindSeries(subject.CleanTitle);
+            var series = _seriesRepository.Get(subject.CleanTitle);
 
             if (series == null)
             {

@@ -16,16 +16,18 @@ namespace NzbDrone.Core.Providers
         private readonly SeriesProvider _seriesProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public SearchHistoryProvider(IDatabase database, SeriesProvider seriesProvider,
-                                        DownloadProvider downloadProvider, EpisodeProvider episodeProvider)
+                                        DownloadProvider downloadProvider, EpisodeProvider episodeProvider, ISeriesRepository seriesRepository)
         {
             _database = database;
             _seriesProvider = seriesProvider;
             _downloadProvider = downloadProvider;
             _episodeProvider = episodeProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public SearchHistoryProvider()
@@ -105,7 +107,7 @@ namespace NzbDrone.Core.Providers
             var item = _database.Single<SearchHistoryItem>(itemId);
             logger.Info("Starting Force Download of: {0}", item.ReportTitle);
             var searchResult = _database.Single<SearchHistory>(item.SearchHistoryId);
-            var series = _seriesProvider.GetSeries(searchResult.SeriesId);
+            var series = _seriesRepository.Get(searchResult.SeriesId);
             
             var parseResult = Parser.ParseTitle(item.ReportTitle);
             parseResult.NzbUrl = item.NzbUrl;

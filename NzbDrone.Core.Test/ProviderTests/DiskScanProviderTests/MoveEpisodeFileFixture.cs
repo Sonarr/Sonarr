@@ -46,8 +46,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(f => f.Path = fi.FullName)
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(e => e.GetSeries(fakeSeries.SeriesId))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(e => e.Get(fakeSeries.SeriesId))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<EpisodeProvider>()
@@ -96,8 +96,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(f => f.Proper = false)
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                  .Setup(e => e.GetSeries(fakeSeries.SeriesId))
+            Mocker.GetMock<ISeriesRepository>()
+                  .Setup(e => e.Get(fakeSeries.SeriesId))
                   .Returns(fakeSeries);
 
             Mocker.GetMock<EpisodeProvider>()
@@ -159,8 +159,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(f => f.Proper = false)
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(e => e.GetSeries(fakeSeries.SeriesId))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(e => e.Get(fakeSeries.SeriesId))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<EpisodeProvider>()

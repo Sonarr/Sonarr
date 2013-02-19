@@ -19,8 +19,8 @@ namespace NzbDrone.Core.Providers.Search
 
         public PartialSeasonSearch(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
                              SceneMappingProvider sceneMappingProvider, AllowedDownloadSpecification allowedDownloadSpecification,
-                             SearchHistoryProvider searchHistoryProvider)
-                        : base(seriesProvider, episodeProvider, downloadProvider, indexerProvider, sceneMappingProvider, 
+                             SearchHistoryProvider searchHistoryProvider,ISeriesRepository seriesRepository)
+                        : base(seriesProvider, seriesRepository, episodeProvider, downloadProvider, indexerProvider, sceneMappingProvider, 
                                allowedDownloadSpecification, searchHistoryProvider)
             {
         }

@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Jobs
 
         private void ScanSeries(ProgressNotification notification)
         {
-            var syncList = _seriesProvider.GetAllSeries().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.SeriesId)).ToList();
+            var syncList = _seriesProvider.All().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.SeriesId)).ToList();
             if (syncList.Count == 0)
             {
                 return;
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Jobs
                     _updateInfoJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
                     _diskScanJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
 
-                    var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
+                    var updatedSeries = _seriesProvider.Get(currentSeries.SeriesId);
                     AutoIgnoreSeasons(updatedSeries.SeriesId);
 
                     //Download the banner for the new series
