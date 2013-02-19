@@ -4,6 +4,7 @@ using System.Linq;
 using DataTables.Mvc.Core.Helpers;
 using DataTables.Mvc.Core.Models;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Model

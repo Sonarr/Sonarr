@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using NzbDrone.Core.Repository.Quality;
 
-namespace NzbDrone.Core.Model
+namespace NzbDrone.Core.Tv
 {
     public class QualityModel : IComparable<QualityModel>
     {

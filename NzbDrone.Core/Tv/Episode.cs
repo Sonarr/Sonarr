@@ -1,12 +1,9 @@
-﻿using System;
-using NzbDrone.Core.Datastore;
+﻿using System.Linq;
+using System;
 using NzbDrone.Core.Model;
-using PetaPoco;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Tv
 {
-    [TableName("Episodes")]
-    [PrimaryKey("EpisodeId", autoIncrement = true)]
     public class Episode
     {
         public int EpisodeId { get; set; }
@@ -23,20 +20,11 @@ namespace NzbDrone.Core.Repository
         public Boolean Ignored { get; set; }
         public PostDownloadStatusType PostDownloadStatus { get; set; }
         public int AbsoluteEpisodeNumber { get; set; }
-        public int SceneAbsoluteEpisodeNumber { get; set; }
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
 
-        /// <summary>
-        /// Gets or sets the grab date.
-        /// </summary>
-        /// <remarks>
-        /// Used to specify when the episode was grapped.
-        /// this filed is used by status as an expirable "Grabbed" status.
-        /// </remarks>
         public DateTime? GrabDate { get; set; }
 
-        [ResultColumn]
         public EpisodeStatusType Status
         {
             get
@@ -68,10 +56,8 @@ namespace NzbDrone.Core.Repository
             }
         }
 
-        [ResultColumn]
         public Series Series { get; set; }
 
-        [ResultColumn]
         public EpisodeFile EpisodeFile { get; set; }
 
         public override string ToString()

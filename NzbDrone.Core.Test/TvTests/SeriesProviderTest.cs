@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 // ReSharper disable InconsistentNaming
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.TvTests
 {
     [TestFixture]
     public class SeriesProviderTest : SqlCeTest

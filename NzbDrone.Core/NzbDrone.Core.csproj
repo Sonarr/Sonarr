@@ -302,7 +302,7 @@
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
-    <Compile Include="Model\QualityModel.cs" />
+    <Compile Include="Tv\QualityModel.cs" />
     <Compile Include="Model\Sabnzbd\SabAddResponse.cs" />
     <Compile Include="Model\Sabnzbd\SabHistoryItem.cs" />
     <Compile Include="Model\Sabnzbd\SabHistory.cs" />
@@ -353,7 +353,7 @@
     <Compile Include="Providers\Search\PartialSeasonSearch.cs" />
     <Compile Include="Providers\Search\EpisodeSearch.cs" />
     <Compile Include="Providers\Search\SearchBase.cs" />
-    <Compile Include="Providers\SeasonProvider.cs" />
+    <Compile Include="Tv\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
     <Compile Include="Jobs\JobController.cs" />
@@ -387,7 +387,7 @@
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />
     <Compile Include="Model\ReportRejectionType.cs" />
-    <Compile Include="Repository\Season.cs" />
+    <Compile Include="Tv\Season.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -454,7 +454,7 @@
     <Compile Include="Providers\DownloadProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\EpisodeProvider.cs">
+    <Compile Include="Tv\EpisodeProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\ExternalNotificationProvider.cs">
@@ -540,7 +540,7 @@
     <Compile Include="Providers\SearchProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\SeriesProvider.cs">
+    <Compile Include="Tv\SeriesProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\SignalRProvider.cs">
@@ -579,11 +579,11 @@
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
-    <Compile Include="Repository\EpisodeFile.cs" />
+    <Compile Include="Tv\EpisodeFile.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />
-    <Compile Include="Repository\Episode.cs" />
+    <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\History.cs" />
     <Compile Include="Repository\Config.cs" />
@@ -591,7 +591,7 @@
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="RootFolders\RootFolder.cs" />
     <Compile Include="Repository\SceneMapping.cs" />
-    <Compile Include="Repository\Series.cs" />
+    <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tvdb\Tvdb.cs" />
     <Compile Include="Tvdb\Tvdb.Sync.cs" />

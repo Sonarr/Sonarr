@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Search;
 using NzbDrone.Core.Repository;

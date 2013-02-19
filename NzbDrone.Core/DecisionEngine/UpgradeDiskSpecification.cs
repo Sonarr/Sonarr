@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine

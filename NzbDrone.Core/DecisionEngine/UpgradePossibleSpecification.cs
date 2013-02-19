@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 

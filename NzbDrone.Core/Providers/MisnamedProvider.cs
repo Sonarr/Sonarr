@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 

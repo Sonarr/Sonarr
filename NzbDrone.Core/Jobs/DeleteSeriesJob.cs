@@ -2,6 +2,7 @@
 using System;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 

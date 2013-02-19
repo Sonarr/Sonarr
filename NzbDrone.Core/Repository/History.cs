@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 

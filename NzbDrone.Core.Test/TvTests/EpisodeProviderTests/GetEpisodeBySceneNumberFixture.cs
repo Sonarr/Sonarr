@@ -4,11 +4,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
+namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

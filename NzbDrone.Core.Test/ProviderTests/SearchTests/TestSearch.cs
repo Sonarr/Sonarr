@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         {
         }
 
-        public override List<EpisodeParseResult> PerformSearch(Repository.Series series, dynamic options, Model.Notification.ProgressNotification notification)
+        public override List<EpisodeParseResult> PerformSearch(Series series, dynamic options, Model.Notification.ProgressNotification notification)
         {
             if (options.Episode == null)
                 throw new ArgumentException("Episode is invalid");
@@ -54,12 +55,12 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             return reports;
         }
 
-        public override SearchHistoryItem CheckReport(Repository.Series series, dynamic options, EpisodeParseResult episodeParseResult, Repository.Search.SearchHistoryItem item)
+        public override SearchHistoryItem CheckReport(Series series, dynamic options, EpisodeParseResult episodeParseResult, Repository.Search.SearchHistoryItem item)
         {
             return item;
         }
 
-        protected override void FinalizeSearch(Repository.Series series, dynamic options, bool reportsFound, Model.Notification.ProgressNotification notification)
+        protected override void FinalizeSearch(Series series, dynamic options, bool reportsFound, Model.Notification.ProgressNotification notification)
         {
             logger.Warn("Unable to find {0} in any of indexers.", series.Title);
         }

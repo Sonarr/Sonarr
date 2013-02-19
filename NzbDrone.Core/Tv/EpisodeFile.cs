@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
+using System;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Tv
 {
-    [TableName("EpisodeFiles")]
-    [PrimaryKey("EpisodeFileId", autoIncrement = true)]
     public class EpisodeFile
     {
         public EpisodeFile()
@@ -37,12 +35,11 @@ namespace NzbDrone.Core.Repository
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
 
-        [Ignore]
-        public Model.QualityModel QualityWrapper
+        public QualityModel QualityWrapper
         {
             get
             {
-                return new Model.QualityModel(Quality, Proper);
+                return new QualityModel(Quality, Proper);
             }
             set
             {

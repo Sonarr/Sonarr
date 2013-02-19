@@ -1,24 +1,15 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
-using PetaPoco;
-using TvdbLib.Data;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.TvTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

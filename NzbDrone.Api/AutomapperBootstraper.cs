@@ -35,7 +35,7 @@ namespace NzbDrone.Api
                   .ForMember(dest => dest.QualityTypeId, opt => opt.MapFrom(src => src.Id));
 
             //Series
-            Mapper.CreateMap<Core.Repository.Series, SeriesResource>()
+            Mapper.CreateMap<Core.Episodes.Series, SeriesResource>()
                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SeriesId))
                   .ForMember(dest => dest.CustomStartDate, opt => opt.ResolveUsing<NullableDatetimeToString>().FromMember(src => src.CustomStartDate))
                   .ForMember(dest => dest.BacklogSetting, opt => opt.MapFrom(src => (Int32)src.BacklogSetting))

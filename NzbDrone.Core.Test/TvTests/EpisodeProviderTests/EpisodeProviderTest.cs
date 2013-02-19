@@ -7,16 +7,16 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using PetaPoco;
 using TvdbLib.Data;
 
-namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
+namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

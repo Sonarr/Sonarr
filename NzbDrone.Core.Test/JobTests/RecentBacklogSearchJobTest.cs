@@ -6,6 +6,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;

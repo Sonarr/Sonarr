@@ -5,12 +5,13 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Tv
 {
     public class SeriesProvider
     {

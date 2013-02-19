@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 

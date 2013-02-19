@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;

@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using Prowlin;

@@ -7,9 +7,9 @@ using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extentions;
 using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Api.Series
 {
@@ -34,7 +34,7 @@ namespace NzbDrone.Api.Series
         private Response AllSeries()
         {
             var series = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
-            var seriesModels = Mapper.Map<List<Core.Repository.Series>, List<SeriesResource>>(series);
+            var seriesModels = Mapper.Map<List<Core.Tv.Series>, List<SeriesResource>>(series);
 
             return seriesModels.AsResponse();
         }
@@ -42,14 +42,14 @@ namespace NzbDrone.Api.Series
         private Response GetSeries(int id)
         {
             var series = _seriesProvider.GetSeries(id);
-            var seriesModels = Mapper.Map<Core.Repository.Series, SeriesResource>(series);
+            var seriesModels = Mapper.Map<Core.Tv.Series, SeriesResource>(series);
 
             return seriesModels.AsResponse();
         }
 
         private Response AddSeries()
         {
-            var request = Request.Body.FromJson<Core.Repository.Series>();
+            var request = Request.Body.FromJson<Core.Tv.Series>();
 
             //Todo: Alert the user if this series already exists
             //Todo: We need to create the folder if the user is adding a new series
@@ -101,7 +101,7 @@ namespace NzbDrone.Api.Series
         }
     }
 
-    public class SeriesValidator : AbstractValidator<Core.Repository.Series>
+    public class SeriesValidator : AbstractValidator<Core.Tv.Series>
     {
         private readonly DiskProvider _diskProvider;
 

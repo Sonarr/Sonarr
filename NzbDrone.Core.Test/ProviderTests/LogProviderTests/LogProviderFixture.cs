@@ -7,6 +7,7 @@ using FluentAssertions;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;

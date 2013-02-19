@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Core.Model
+﻿using NzbDrone.Core.Tv;
+
+namespace NzbDrone.Core.Model
 {
     public class SeasonParseResult
     {

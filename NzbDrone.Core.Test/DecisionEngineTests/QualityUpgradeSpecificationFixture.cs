@@ -3,6 +3,7 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository.Quality;

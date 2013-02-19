@@ -7,9 +7,9 @@ using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Api.Resolvers
 {
-    public class NextAiringResolver : ValueResolver<Core.Repository.Series, DateTime?>
+    public class NextAiringResolver : ValueResolver<Core.Episodes.Series, DateTime?>
     {
-        protected override DateTime? ResolveCore(Core.Repository.Series source)
+        protected override DateTime? ResolveCore(Core.Episodes.Series source)
         {
             if(String.IsNullOrWhiteSpace(source.AirTime) || !source.NextAiring.HasValue)
                 return source.NextAiring;

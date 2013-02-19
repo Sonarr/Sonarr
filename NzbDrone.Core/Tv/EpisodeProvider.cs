@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Providers;
 using PetaPoco;
 using TvdbLib.Data;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Tv
 {
     public class EpisodeProvider
     {

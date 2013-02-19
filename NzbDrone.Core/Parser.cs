@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Model;
+    using NzbDrone.Core.Tv;
+    using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core
