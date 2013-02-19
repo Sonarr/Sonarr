@@ -1,7 +1,4 @@
-﻿
-using System.IO;
-
-namespace NzbDrone.Common
+﻿namespace NzbDrone.Common
 {
     public static class StringExtention
     {

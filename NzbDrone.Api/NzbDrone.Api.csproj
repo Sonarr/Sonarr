@@ -86,6 +86,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="SignalR, Version=0.5.1.10822, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.Common, Version=0.5.1.10822, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SignalR.Hosting.Common.0.5.3\lib\net40\SignalR.Hosting.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,6 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutomapperBootstraper.cs" />
+    <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Extentions\NancyJsonSerializer.cs" />
     <Compile Include="Extentions\Serializer.cs" />
@@ -112,11 +122,11 @@
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />
-    <Compile Include="ErrorManagment\ApiException.cs" />
-    <Compile Include="Bootstrapper.cs" />
-    <Compile Include="ErrorManagment\ErrorHandler.cs" />
-    <Compile Include="ErrorManagment\ErrorModel.cs" />
-    <Compile Include="ErrorManagment\ErrorPipeline.cs" />
+    <Compile Include="ErrorManagement\ApiException.cs" />
+    <Compile Include="NancyBootstrapper.cs" />
+    <Compile Include="ErrorManagement\ErrorHandler.cs" />
+    <Compile Include="ErrorManagement\ErrorModel.cs" />
+    <Compile Include="ErrorManagement\ErrorPipeline.cs" />
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NzbDroneApiModule.cs" />

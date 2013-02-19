@@ -166,7 +166,6 @@
     <Compile Include="ProviderTests\TvRageProviderTests\SearchSeriesFixture.cs" />
     <Compile Include="QualityTypesTest.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
-    <Compile Include="Integeration\ServiceIntegerationFixture.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RssSyncJobTest.cs" />

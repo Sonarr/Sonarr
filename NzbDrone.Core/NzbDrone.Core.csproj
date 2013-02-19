@@ -592,7 +592,6 @@
     <Compile Include="RootFolders\RootFolder.cs" />
     <Compile Include="Repository\SceneMapping.cs" />
     <Compile Include="Repository\Series.cs" />
-    <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tvdb\Tvdb.cs" />
     <Compile Include="Tvdb\Tvdb.Sync.cs" />
@@ -609,7 +608,6 @@
     <Compile Include="Tvdb\TvdbServerTime.cs" />
     <Compile Include="Tvdb\TvdbUpdate.cs" />
     <Compile Include="Tvdb\TvdbUpdateItems.cs" />
-    <Compile Include="WebTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

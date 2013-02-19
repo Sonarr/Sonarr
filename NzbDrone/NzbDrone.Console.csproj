@@ -106,8 +106,6 @@
     </Compile>
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Model\ApplicationMode.cs" />
-    <Compile Include="Providers\DebuggerProvider.cs" />
-    <Compile Include="ProcessAttacher.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\MonitoringProvider.cs" />
@@ -150,6 +148,10 @@
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
+      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
+      <Name>NzbDrone.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

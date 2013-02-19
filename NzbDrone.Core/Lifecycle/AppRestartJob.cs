@@ -9,13 +9,13 @@ namespace NzbDrone.Core.Lifecycle
 {
     public class AppRestartJob : IJob
     {
-        private readonly IISProvider _iisProvider;
+        private readonly HostController _hostController;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AppRestartJob(IISProvider iisProvider)
+        public AppRestartJob(HostController hostController)
         {
-            _iisProvider = iisProvider;
+            _hostController = hostController;
         }
 
         public string Name
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Lifecycle
             notification.CurrentMessage = "Restarting NzbDrone";
             logger.Info("Restarting NzbDrone");
 
-            _iisProvider.StopServer();
+            _hostController.StopServer();
         }
     }
 }

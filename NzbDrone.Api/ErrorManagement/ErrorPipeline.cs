@@ -4,7 +4,7 @@ using NLog;
 using Nancy;
 using NzbDrone.Api.Extentions;
 
-namespace NzbDrone.Api.ErrorManagment
+namespace NzbDrone.Api.ErrorManagement
 {
     public class ErrorPipeline
     {

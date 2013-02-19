@@ -51,7 +51,7 @@ namespace NzbDrone
                 case ApplicationMode.Nancy:
                     {
 
-                        var nancyHost = new NancyHost(new Uri("http://localhost:8282"), new Bootstrapper());
+                        var nancyHost = new NancyHost(new Uri("http://localhost:8282"), new NancyBootstrapper());
                         nancyHost.Start();
 
 

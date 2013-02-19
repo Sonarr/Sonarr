@@ -14,22 +14,20 @@ namespace NzbDrone
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly ConfigFileProvider _configFileProvider;
-        private readonly DebuggerProvider _debuggerProvider;
         private readonly EnvironmentProvider _environmentProvider;
-        private readonly IISProvider _iisProvider;
+        private readonly HostController _hostController;
         private readonly ProcessProvider _processProvider;
         private readonly MonitoringProvider _monitoringProvider;
         private readonly SecurityProvider _securityProvider;
         private readonly DiskProvider _diskProvider;
 
-        public ApplicationServer(ConfigFileProvider configFileProvider, IISProvider iisProvider,
-                           DebuggerProvider debuggerProvider, EnvironmentProvider environmentProvider,
+        public ApplicationServer(ConfigFileProvider configFileProvider, HostController hostController,
+                          EnvironmentProvider environmentProvider,
                            ProcessProvider processProvider, MonitoringProvider monitoringProvider,
                            SecurityProvider securityProvider, DiskProvider diskProvider)
         {
             _configFileProvider = configFileProvider;
-            _iisProvider = iisProvider;
-            _debuggerProvider = debuggerProvider;
+            _hostController = hostController;
             _environmentProvider = environmentProvider;
             _processProvider = processProvider;
             _monitoringProvider = monitoringProvider;
@@ -49,7 +47,7 @@ namespace NzbDrone
 
         public virtual void Start()
         {
-            _iisProvider.StopServer();
+            _hostController.StopServer();
             _securityProvider.MakeAccessible();
 
             if(_securityProvider.IsCurrentUserAdmin())
@@ -59,17 +57,16 @@ namespace NzbDrone
                 _diskProvider.CreateDirectory(tempFiles);
             }
 
-            _iisProvider.StartServer();
+            _hostController.StartServer();
             //Todo: verify that IIS is actually started
 
-            _debuggerProvider.Attach();
 
             if (_environmentProvider.IsUserInteractive && _configFileProvider.LaunchBrowser)
             {
                 try
                 {
-                    logger.Info("Starting default browser. {0}", _iisProvider.AppUrl);
-                    _processProvider.Start(_iisProvider.AppUrl);
+                    logger.Info("Starting default browser. {0}", _hostController.AppUrl);
+                    _processProvider.Start(_hostController.AppUrl);
                 }
                 catch (Exception e)
                 {
@@ -83,7 +80,7 @@ namespace NzbDrone
         protected override void OnStop()
         {
             logger.Info("Attempting to stop application.");
-            _iisProvider.StopServer();
+            _hostController.StopServer();
             logger.Info("Application has finished stop routine.");
         }
     }

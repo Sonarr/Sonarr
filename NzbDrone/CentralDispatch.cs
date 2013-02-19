@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using NLog;
+using Nancy.Bootstrapper;
+using NzbDrone.Api;
 using NzbDrone.Common;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Providers;
 
 namespace NzbDrone
@@ -31,12 +34,15 @@ namespace NzbDrone
             builder.RegisterAssemblyTypes(typeof(DiskProvider).Assembly).SingleInstance();
             builder.RegisterType<Router>();
 
+            builder.RegisterModule<LogInjectionModule>();
+
+
+            builder.RegisterType<NancyBootstrapper>().As<INancyBootstrapper>().SingleInstance();
             builder.RegisterType<ApplicationServer>().SingleInstance();
             builder.RegisterType<ConfigFileProvider>().SingleInstance();
             builder.RegisterType<ConsoleProvider>().SingleInstance();
-            builder.RegisterType<DebuggerProvider>().SingleInstance();
             builder.RegisterType<EnvironmentProvider>().SingleInstance();
-            builder.RegisterType<IISProvider>().SingleInstance();
+            builder.RegisterType<HostController>().SingleInstance();
             builder.RegisterType<MonitoringProvider>().SingleInstance();
             builder.RegisterType<ProcessProvider>().SingleInstance();
             builder.RegisterType<ServiceProvider>().SingleInstance();

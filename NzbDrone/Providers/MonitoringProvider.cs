@@ -5,7 +5,6 @@ using System.Runtime.Remoting;
 using System.Threading;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Model;
 
 namespace NzbDrone.Providers
 {
@@ -13,7 +12,7 @@ namespace NzbDrone.Providers
     {
         private static readonly Logger logger = LogManager.GetLogger("Host.MonitoringProvider");
 
-        private readonly IISProvider _iisProvider;
+        private readonly HostController _hostController;
         private readonly ProcessProvider _processProvider;
         private readonly HttpProvider _httpProvider;
         private readonly ConfigFileProvider _configFileProvider;
@@ -22,11 +21,11 @@ namespace NzbDrone.Providers
         private Timer _pingTimer;
         private Timer _processPriorityCheckTimer;
 
-        public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
+        public MonitoringProvider(ProcessProvider processProvider, HostController hostController,
                                   HttpProvider httpProvider, ConfigFileProvider configFileProvider)
         {
             _processProvider = processProvider;
-            _iisProvider = iisProvider;
+            _hostController = hostController;
             _httpProvider = httpProvider;
             _configFileProvider = configFileProvider;
         }
@@ -59,7 +58,7 @@ namespace NzbDrone.Providers
                     _processProvider.SetPriority(currentProcess.Id, ProcessPriorityClass.Normal);
                 }
 
-                var iisProcess = _processProvider.GetProcessById(_iisProvider.IISProcessId);
+                var iisProcess = _processProvider.GetProcessById(_processProvider.GetCurrentProcess().Id);
                 if (iisProcess != null && iisProcess.Priority != ProcessPriorityClass.Normal &&
                     iisProcess.Priority != ProcessPriorityClass.AboveNormal)
                 {
@@ -74,13 +73,13 @@ namespace NzbDrone.Providers
 
         public virtual void PingServer(object sender)
         {
-            if (!_iisProvider.ServerStarted) return;
+            if (!_hostController.ServerStarted) return;
 
             try
             {
                 ICredentials identity = CredentialCache.DefaultCredentials;
-                _httpProvider.DownloadString(_iisProvider.AppUrl, identity); //This should preload the home page, making the first load faster.
-                string response = _httpProvider.DownloadString(_iisProvider.AppUrl + "/health", identity);
+                _httpProvider.DownloadString(_hostController.AppUrl, identity); //This should preload the home page, making the first load faster.
+                string response = _httpProvider.DownloadString(_hostController.AppUrl + "/health", identity);
 
                 if (!response.Contains("OK"))
                 {
@@ -101,14 +100,14 @@ namespace NzbDrone.Providers
                 if (_pingFailCounter >= 10)
                 {
                     _pingFailCounter = 0;
-                    _iisProvider.RestartServer();
+                    _hostController.RestartServer();
                 }
             }
         }
 
         private void ProgramExited(object sender, EventArgs e)
         {
-            _iisProvider.StopServer();
+            _hostController.StopServer();
         }
 
         public static void AppDomainException(Exception excepion)

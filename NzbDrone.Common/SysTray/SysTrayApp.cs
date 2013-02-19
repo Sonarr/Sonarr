@@ -10,18 +10,18 @@ namespace NzbDrone.Common.SysTray
     {
         private readonly ConfigFileProvider _configFileProvider;
         private readonly ProcessProvider _processProvider;
-        private readonly IISProvider _iisProvider;
+        private readonly HostController _hostController;
         private readonly EnvironmentProvider _environmentProvider;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
         public SysTrayApp(ConfigFileProvider configFileProvider, ProcessProvider processProvider,
-                          IISProvider iisProvider, EnvironmentProvider environmentProvider)
+                          HostController hostController, EnvironmentProvider environmentProvider)
         {
             _configFileProvider = configFileProvider;
             _processProvider = processProvider;
-            _iisProvider = iisProvider;
+            _hostController = hostController;
             _environmentProvider = environmentProvider;
         }
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Common.SysTray
 
         private void LaunchBrowser(object sender, EventArgs e)
         {
-            _processProvider.Start(_iisProvider.AppUrl);
+            _processProvider.Start(_hostController.AppUrl);
         }
     }
 }

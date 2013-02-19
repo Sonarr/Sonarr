@@ -45,7 +45,6 @@ namespace NzbDrone.Services.Service
 
             ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
 
-            InitContainer();
         }
 
         // ReSharper disable InconsistentNaming
@@ -72,7 +71,7 @@ namespace NzbDrone.Services.Service
 
         private void InitContainer()
         {
-            logger.Info("NzbDrone Starting up.");
+/*/*            logger.Info("NzbDrone Starting up.");
             var dispatch = new CentralDispatch();
             
 
@@ -81,9 +80,9 @@ namespace NzbDrone.Services.Service
 
             MVCRegistration(dispatch.ContainerBuilder);
 
-            var container = dispatch.ContainerBuilder.Build();
+            var container = dispatch.ContainerBuilder.Build();#1#
 
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));*/
         }
 
         private static void MVCRegistration(ContainerBuilder builder)

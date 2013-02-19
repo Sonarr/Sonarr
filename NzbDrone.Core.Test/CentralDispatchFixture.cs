@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autofac;
 using FluentAssertions;
 using NCrunch.Framework;
@@ -15,15 +16,20 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
+    [Ignore]
     [TestFixture]
     [ExclusivelyUses("REAL_LOG_FILE")]
     [Serial]
     class CentralDispatchFixture : CoreTest
     {
-        readonly IList<string> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();
-        readonly IList<string> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).Select(c => c.ToString()).ToList();
-        readonly IList<Type> extNotifications = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase))).ToList();
-        readonly IList<Type> metadata = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(MetadataBase))).ToList();
+        static readonly Assembly NzbDroneCore = Assembly.Load("NzbDrone.Core");
+
+        readonly IList<string> indexers = NzbDroneCore.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).Select(c => c.ToString()).ToList();
+        readonly IList<string> jobs = NzbDroneCore.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).Select(c => c.ToString()).ToList();
+        readonly IList<Type> extNotifications = NzbDroneCore.GetTypes().Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase))).ToList();
+        readonly IList<Type> metadata = NzbDroneCore.GetTypes().Where(t => t.IsSubclassOf(typeof(MetadataBase))).ToList();
+
+
 
         private readonly IContainer kernel;
 
@@ -35,10 +41,6 @@ namespace NzbDrone.Core.Test
             }
 
             InitLogging();
-            var dispatch = new CentralDispatch();
-            kernel = dispatch.BuildContainer();
-
-            WebTimer.Stop();
         }
 
         [Test]
@@ -50,7 +52,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Resolve_all_providers()
         {
-            var providers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.Name.EndsWith("Provider")).ToList();
+            var providers = NzbDroneCore.GetTypes().Where(t => t.Name.EndsWith("Provider")).ToList();
 
             providers.Should().NotBeEmpty();
 

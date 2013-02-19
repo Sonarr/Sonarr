@@ -125,7 +125,7 @@ namespace NzbDrone.Update.Test
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
             //Assert
-            Mocker.GetMock<IISProvider>().Verify(c => c.StopServer(), Times.Once());
+            Mocker.GetMock<HostController>().Verify(c => c.StopServer(), Times.Once());
         }
 
         [Test]
