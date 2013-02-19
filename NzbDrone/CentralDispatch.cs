@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using NLog;
 using NzbDrone.Api;
 using NzbDrone.Common;
@@ -33,7 +34,7 @@ namespace NzbDrone
 
             builder.RegisterCommonServices();
             builder.RegisterApiServices();
-            builder.RegisterAssemblyTypes("NzbDrone");
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly());
         }
 
         private static void InitilizeApp()

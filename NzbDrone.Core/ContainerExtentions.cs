@@ -22,6 +22,7 @@ namespace NzbDrone.Core
 
         public static void RegisterCoreServices(this ContainerBuilder containerBuilder)
         {
+            containerBuilder.RegisterAssembly("NzbDrone.Common");
             containerBuilder.RegisterAssembly("NzbDrone.Core");
 
             containerBuilder.InitDatabase();
