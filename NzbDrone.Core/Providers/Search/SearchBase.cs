@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.DecisionEngine;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Search;
 

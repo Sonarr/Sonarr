@@ -3,29 +3,29 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine
 {
-    public class LanguageSpecification
+    public class RetentionSpecification
     {
         private readonly ConfigProvider _configProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public LanguageSpecification(ConfigProvider configProvider)
+        public RetentionSpecification(ConfigProvider configProvider)
         {
             _configProvider = configProvider;
         }
 
-        public LanguageSpecification()
+        public RetentionSpecification()
         {
             
         }
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
-            logger.Trace("Checking if report meets language requirements. {0}", subject.Language);
-            if (subject.Language != LanguageType.English)
+            logger.Trace("Checking if report meets retention requirements. {0}", subject.Age);
+            if (_configProvider.Retention > 0 && subject.Age > _configProvider.Retention)
             {
-                logger.Trace("Report Language: {0} rejected because it is not english", subject.Language);
+                logger.Trace("Report age: {0} rejected by user's retention limit", subject.Age);
                 return false;
             }
 

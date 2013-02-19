@@ -3,7 +3,7 @@ using System;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.DecisionEngine;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Providers.Search;
 using NzbDrone.Core.Repository;
 

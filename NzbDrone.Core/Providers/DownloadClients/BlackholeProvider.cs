@@ -5,7 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.DecisionEngine;
+using NzbDrone.Core.DecisionEngine;
 
 namespace NzbDrone.Core.Providers.DownloadClients
 {

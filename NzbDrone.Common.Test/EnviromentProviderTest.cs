@@ -43,12 +43,6 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void should_go_up_the_tree_to_find_iis()
-        {
-            environmentProvider.ApplicationPath.Should().NotBe(Environment.CurrentDirectory);
-            environmentProvider.ApplicationPath.Should().NotBe(environmentProvider.StartUpPath);
-        }
-        [Test]
         public void IsProduction_should_return_false_when_run_within_nunit()
         {
             EnvironmentProvider.IsProduction.Should().BeFalse();

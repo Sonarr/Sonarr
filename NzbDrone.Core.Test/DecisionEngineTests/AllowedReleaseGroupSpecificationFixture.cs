@@ -10,12 +10,12 @@ using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.DecisionEngine;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
+namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

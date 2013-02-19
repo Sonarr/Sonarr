@@ -3,7 +3,7 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Search;
 
-namespace NzbDrone.Core.Providers.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine
 {
     public class AllowedDownloadSpecification
     {

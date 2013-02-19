@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
 
-namespace NzbDrone.Core.Providers.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine
 {
     public class AcceptableSizeSpecification
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core.Providers.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine
 {
     public class UpgradeDiskSpecification
     {

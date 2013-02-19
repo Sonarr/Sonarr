@@ -331,11 +331,11 @@
     <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
-    <Compile Include="Providers\DecisionEngine\LanguageSpecification.cs" />
+    <Compile Include="DecisionEngine\LanguageSpecification.cs" />
     <Compile Include="Providers\DownloadClients\NzbgetProvider.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />
-    <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
+    <Compile Include="DecisionEngine\AllowedReleaseGroupSpecification.cs" />
+    <Compile Include="DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
     <Compile Include="Providers\Indexer\Nzbx.cs" />
     <Compile Include="Providers\Hubs\EpisodeHub.cs" />
@@ -409,34 +409,34 @@
     <Compile Include="Providers\Core\UdpProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\AcceptableSizeSpecification.cs">
+    <Compile Include="DecisionEngine\AcceptableSizeSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\AllowedDownloadSpecification.cs">
+    <Compile Include="DecisionEngine\AllowedDownloadSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\AlreadyInQueueSpecification.cs">
+    <Compile Include="DecisionEngine\AlreadyInQueueSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\MonitoredEpisodeSpecification.cs">
+    <Compile Include="DecisionEngine\MonitoredEpisodeSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\QualityAllowedByProfileSpecification.cs">
+    <Compile Include="DecisionEngine\QualityAllowedByProfileSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\QualityUpgradeSpecification.cs">
+    <Compile Include="DecisionEngine\QualityUpgradeSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\RetentionSpecification.cs">
+    <Compile Include="DecisionEngine\RetentionSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\UpgradeDiskSpecification.cs">
+    <Compile Include="DecisionEngine\UpgradeDiskSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\UpgradeHistorySpecification.cs">
+    <Compile Include="DecisionEngine\UpgradeHistorySpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DecisionEngine\UpgradePossibleSpecification.cs">
+    <Compile Include="DecisionEngine\UpgradePossibleSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\DiskScanProvider.cs">

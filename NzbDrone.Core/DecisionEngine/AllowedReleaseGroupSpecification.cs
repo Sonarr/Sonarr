@@ -4,7 +4,7 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine
 {
     public class AllowedReleaseGroupSpecification
     {
