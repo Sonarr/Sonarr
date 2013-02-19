@@ -110,6 +110,9 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
+    <Compile Include="Eventing\EventAggregator.cs" />
+    <Compile Include="Eventing\IEventAggregator.cs" />
+    <Compile Include="Eventing\IHandle.cs" />
     <Compile Include="HostController.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
