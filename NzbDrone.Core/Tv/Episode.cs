@@ -1,17 +1,15 @@
 ﻿using System.Linq;
 using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Tv
 {
-    public class Episode
+    public class Episode : ModelBase
     {
-        public int EpisodeId { get; set; }
-
         public int? TvDbEpisodeId { get; set; }
 
         public int SeriesId { get; set; }
-        public int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
@@ -24,6 +22,23 @@ namespace NzbDrone.Core.Tv
         public int SceneEpisodeNumber { get; set; }
 
         public DateTime? GrabDate { get; set; }
+
+
+        public bool HasFile
+        {
+            get { return EpisodeFile != null; }
+        }
+
+        public int EpisodeFileId
+        {
+            get
+            {
+                if (!HasFile) return 0;
+                return EpisodeFile.EpisodeFileId;
+            }
+        }
+
+
 
         public EpisodeStatusType Status
         {
@@ -64,7 +79,7 @@ namespace NzbDrone.Core.Tv
         {
             string seriesTitle = Series == null ? "[NULL]" : Series.Title;
 
-            if (Series != null && Series.IsDaily && AirDate.HasValue)
+            if (Series != null && Series.SeriesType == SeriesType.Daily && AirDate.HasValue)
                 return string.Format("{0} - {1:yyyy-MM-dd}", seriesTitle, AirDate.Value);
 
             return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);

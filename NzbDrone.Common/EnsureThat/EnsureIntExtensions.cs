@@ -33,6 +33,15 @@ namespace NzbDrone.Common.EnsureThat
         }
 
         [DebuggerStepThrough]
+        public static Param<int> IsGreaterThanZero(this Param<int> param)
+        {
+            if (param.Value <= 0)
+                throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotGt.Inject(param.Value, 0));
+
+            return param;
+        }
+
+        [DebuggerStepThrough]
         public static Param<int> IsGreaterOrEqualTo(this Param<int> param, int limit)
         {
             if (!(param.Value >= limit))

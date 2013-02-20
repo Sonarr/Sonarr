@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                     .CreateListOfSize(1)
                     .Build();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                   .Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                   .Returns(_episodes);
         }
@@ -59,19 +59,19 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         private void WithMatchingSeries()
         {
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(s => s.Get(It.IsAny<string>())).Returns(_matchingSeries);
+                .Setup(s => s.GetByTitle(It.IsAny<string>())).Returns(_matchingSeries);
         }
 
         private void WithMisMatchedSeries()
         {
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(s => s.Get(It.IsAny<string>())).Returns(_mismatchedSeries);
+                .Setup(s => s.GetByTitle(It.IsAny<string>())).Returns(_mismatchedSeries);
         }
 
         private void WithNullSeries()
         {
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(s => s.Get(It.IsAny<string>())).Returns(_nullSeries);
+                .Setup(s => s.GetByTitle(It.IsAny<string>())).Returns(_nullSeries);
         }
 
         private void WithSuccessfulDownload()

@@ -13,16 +13,16 @@ namespace NzbDrone.Core.Providers
     {
         private readonly SceneMappingProvider _sceneMappingProvider;
         private readonly TvRageProvider _tvRageProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public TvRageMappingProvider(SceneMappingProvider sceneMappingProvider,
-                                TvRageProvider tvRageProvider, EpisodeProvider episodeProvider)
+                                TvRageProvider tvRageProvider, EpisodeService episodeService)
         {
             _sceneMappingProvider = sceneMappingProvider;
             _tvRageProvider = tvRageProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
         }
 
         public TvRageMappingProvider()
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers
 
         public Series FindMatchingTvRageSeries(Series series)
         {
-            var firstEpisode = _episodeProvider.GetEpisode(series.SeriesId, 1, 1);
+            var firstEpisode = _episodeService.GetEpisode(series.SeriesId, 1, 1);
 
             var cleanName = _sceneMappingProvider.GetCleanName(series.SeriesId);
             var results = _tvRageProvider.SearchSeries(series.Title);

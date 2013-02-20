@@ -96,7 +96,6 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                 .All().With(c => c.GrabDate = DateTime.Now)
                       .And(c => c.Ignored = false)
                       .And(c => c.PostDownloadStatus = PostDownloadStatusType.NoError)
-                      .And(c => c.EpisodeFileId = 0)
                 .Build();
 
             Db.InsertMany(episodes);

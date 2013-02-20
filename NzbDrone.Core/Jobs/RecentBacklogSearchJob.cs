@@ -13,16 +13,16 @@ namespace NzbDrone.Core.Jobs
 {
     public class RecentBacklogSearchJob : IJob
     {
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
         private readonly EpisodeSearchJob _episodeSearchJob;
         private readonly ConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RecentBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob,
+        public RecentBacklogSearchJob(EpisodeService episodeService, EpisodeSearchJob episodeSearchJob,
                                             ConfigProvider configProvider)
         {
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
             _episodeSearchJob = episodeSearchJob;
             _configProvider = configProvider;
         }
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Jobs
             Logger.Debug("Processing missing episodes from the last 30 days, count: {0}", missingEpisodes.Count);
             foreach (var episode in missingEpisodes)
             {
-                _episodeSearchJob.Start(notification,  new { EpisodeId = episode.EpisodeId });
+                _episodeSearchJob.Start(notification,  new { EpisodeId = episode.OID });
             }
         }
 
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Jobs
             if (!_configProvider.EnableBacklogSearching)
             {
                 Logger.Trace("Backlog searching is not enabled, only running for explicitly enabled series.");
-                return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+                return _episodeService.EpisodesWithoutFiles(true).Where(e =>
                                                                                 e.AirDate >= DateTime.Today.AddDays(-30) &&
                                                                                 e.Series.BacklogSetting == BacklogSettingType.Enable &&
                                                                                 e.Series.Monitored
@@ -62,8 +62,8 @@ namespace NzbDrone.Core.Jobs
 
             else
             {
-                Logger.Trace("Backlog searching is enabled, skipping explicity disabled series.");
-                return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+                Logger.Trace("Backlog searching is enabled, skipping explicitly disabled series.");
+                return _episodeService.EpisodesWithoutFiles(true).Where(e =>
                                                                                 e.AirDate >= DateTime.Today.AddDays(-30) &&
                                                                                 e.Series.BacklogSetting != BacklogSettingType.Disable &&
                                                                                 e.Series.Monitored

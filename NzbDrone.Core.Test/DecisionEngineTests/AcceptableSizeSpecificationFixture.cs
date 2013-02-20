@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
@@ -248,7 +248,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
@@ -269,7 +269,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
@@ -290,7 +290,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
@@ -333,7 +333,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
@@ -355,7 +355,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
@@ -378,7 +378,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            Mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 

@@ -10,13 +10,13 @@ namespace NzbDrone.Core.DecisionEngine
     public class AcceptableSizeSpecification
     {
         private readonly QualityTypeProvider _qualityTypeProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AcceptableSizeSpecification(QualityTypeProvider qualityTypeProvider, EpisodeProvider episodeProvider)
+        public AcceptableSizeSpecification(QualityTypeProvider qualityTypeProvider, EpisodeService episodeService)
         {
             _qualityTypeProvider = qualityTypeProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
         }
 
         public AcceptableSizeSpecification()
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.DecisionEngine
             //Check if there was only one episode parsed
             //and it is the first or last episode of the season
             if (subject.EpisodeNumbers != null && subject.EpisodeNumbers.Count == 1 &&
-                _episodeProvider.IsFirstOrLastEpisodeOfSeason(series.SeriesId,
+                _episodeService.IsFirstOrLastEpisodeOfSeason(series.SeriesId,
                 subject.SeasonNumber, subject.EpisodeNumbers[0]))
             {
                 maxSize = maxSize * 2;

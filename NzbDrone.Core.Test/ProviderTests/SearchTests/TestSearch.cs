@@ -17,10 +17,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public TestSearch(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, DownloadProvider downloadProvider, 
+        public TestSearch(ISeriesService seriesService, EpisodeService episodeService, DownloadProvider downloadProvider, 
                           IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
                           AllowedDownloadSpecification allowedDownloadSpecification, SearchHistoryProvider searchHistoryProvider,ISeriesRepository seriesRepository)
-                          : base(seriesProvider, seriesRepository, episodeProvider, downloadProvider, indexerProvider, sceneMappingProvider, 
+                          : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerProvider, sceneMappingProvider, 
                                  allowedDownloadSpecification, searchHistoryProvider)
         {
         }

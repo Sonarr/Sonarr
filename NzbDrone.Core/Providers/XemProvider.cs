@@ -10,18 +10,18 @@ namespace NzbDrone.Core.Providers
 {
     public class XemProvider
     {
-        private readonly SeriesProvider _seriesProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly ISeriesService _seriesService;
+        private readonly EpisodeService _episodeService;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
+        public XemProvider(ISeriesService seriesService, EpisodeService episodeService,
                             XemCommunicationProvider xemCommunicationProvider,ISeriesRepository seriesRepository)
         {
-            _seriesProvider = seriesProvider;
-            _episodeProvider = episodeProvider;
+            _seriesService = seriesService;
+            _episodeService = episodeService;
             _xemCommunicationProvider = xemCommunicationProvider;
             _seriesRepository = seriesRepository;
         }
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Providers
                     return;
                 }
 
-                var episodes = _episodeProvider.GetEpisodeBySeries(series.SeriesId);
+                var episodes = _episodeService.GetEpisodeBySeries(series.SeriesId);
 
                 foreach (var mapping in mappings)
                 {
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 _logger.Trace("Committing scene numbering mappings to database for: {0}", series.Title);
-                _episodeProvider.UpdateEpisodes(episodesToUpdate);
+                _episodeService.UpdateEpisodes(episodesToUpdate);
 
                 _logger.Trace("Setting UseSceneMapping for {0}", series.Title);
                 series.UseSceneNumbering = true;

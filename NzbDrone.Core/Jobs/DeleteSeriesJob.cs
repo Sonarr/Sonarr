@@ -10,15 +10,17 @@ namespace NzbDrone.Core.Jobs
 {
     public class DeleteSeriesJob : IJob
     {
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly RecycleBinProvider _recycleBinProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DeleteSeriesJob(SeriesProvider seriesProvider, RecycleBinProvider recycleBinProvider)
+        public DeleteSeriesJob(ISeriesService seriesService, RecycleBinProvider recycleBinProvider, ISeriesRepository seriesRepository)
         {
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _recycleBinProvider = recycleBinProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public string Name
@@ -46,12 +48,12 @@ namespace NzbDrone.Core.Jobs
         {
             Logger.Trace("Deleting Series [{0}]", seriesId);
 
-            var series = _seriesProvider.Get(seriesId);
+            var series = _seriesRepository.Get(seriesId);
             var title = series.Title;
 
             notification.CurrentMessage = String.Format("Deleting '{0}' from database", title);
 
-            _seriesProvider.DeleteSeries(seriesId);
+            _seriesRepository.Delete(seriesId);
 
             notification.CurrentMessage = String.Format("Successfully deleted '{0}' from database", title);
 

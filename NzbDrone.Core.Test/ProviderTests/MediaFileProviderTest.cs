@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithStrictMocker();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.GetEpisodeBySeries(12))
                 .Returns(new List<Episode>());
 

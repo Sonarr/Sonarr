@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Tv
     {
         bool SeriesPathExists(string path);
         List<Series> Search(string title);
-        Series Get(string cleanTitle);
+        Series GetByTitle(string cleanTitle);
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Tv
             return Queryable.Where(s => s.Title.Contains(title)).ToList();
         }
 
-        public Series Get(string cleanTitle)
+        public Series GetByTitle(string cleanTitle)
         {
             return Queryable.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
         }

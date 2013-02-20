@@ -16,9 +16,9 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] mediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
         private readonly DiskProvider _diskProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly SignalRProvider _signalRProvider;
@@ -27,15 +27,15 @@ namespace NzbDrone.Core.Providers
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
 
-        public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
-                                SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
+        public DiskScanProvider(DiskProvider diskProvider, EpisodeService episodeService,
+                                ISeriesService seriesService, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
                                 SignalRProvider signalRProvider, ConfigProvider configProvider,
-                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider,ISeriesRepository seriesRepository)
+                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
-            _episodeProvider = episodeProvider;
-            _seriesProvider = seriesProvider;
+            _episodeService = episodeService;
+            _seriesService = seriesService;
             _mediaFileProvider = mediaFileProvider;
             _externalNotificationProvider = externalNotificationProvider;
             _downloadProvider = downloadProvider;
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Providers
                 return new List<EpisodeFile>();
             }
 
-            if (_episodeProvider.GetEpisodeBySeries(series.SeriesId).Count == 0)
+            if (_episodeService.GetEpisodeBySeries(series.SeriesId).Count == 0)
             {
                 Logger.Debug("Series {0} has no episodes. skipping", series.Title);
                 return new List<EpisodeFile>();
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Providers
             var size = _diskProvider.GetSize(filePath);
             var runTime = _mediaInfoProvider.GetRunTime(filePath);
 
-            if(series.IsDaily || parseResult.SeasonNumber > 0)
+            if (series.SeriesType == SeriesType.Daily || parseResult.SeasonNumber > 0)
             {
                 if (size < Constants.IgnoreFileSize && runTime < 180)
                 {
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Providers
             parseResult.SeriesTitle = series.Title; //replaces the nasty path as title to help with logging
             parseResult.Series = series;
 
-            var episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);
+            var episodes = _episodeService.GetEpisodesByParseResult(parseResult);
 
             if (episodes.Count <= 0)
             {
@@ -173,14 +173,14 @@ namespace NzbDrone.Core.Providers
 
             //Todo: We shouldn't actually import the file until we confirm its the only one we want.
             //Todo: Separate episodeFile creation from importing (pass file to import to import)
-            var fileId = _mediaFileProvider.Add(episodeFile);
+             _mediaFileProvider.Add(episodeFile);
 
             //Link file to all episodes
             foreach (var ep in episodes)
             {
-                ep.EpisodeFileId = fileId;
+                ep.EpisodeFile = episodeFile;
                 ep.PostDownloadStatus = PostDownloadStatusType.NoError;
-                _episodeProvider.UpdateEpisode(ep);
+                _episodeService.UpdateEpisode(ep);
                 Logger.Debug("Linking [{0}] > [{1}]", filePath, ep);
             }
 
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Providers
                 throw new ArgumentNullException("episodeFile");
 
             var series = _seriesRepository.Get(episodeFile.SeriesId);
-            var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
+            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId);
             string newFileName = _mediaFileProvider.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Providers
                 return null;
             }
 
-            if(!_diskProvider.FileExists(episodeFile.Path))
+            if (!_diskProvider.FileExists(episodeFile.Path))
             {
                 Logger.Error("Episode file path does not exist, {0}", episodeFile.Path);
                 return null;
@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Providers
 
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
-            parseResult.Quality = new QualityModel{ Quality = episodeFile.Quality, Proper = episodeFile.Proper };
+            parseResult.Quality = new QualityModel { Quality = episodeFile.Quality, Proper = episodeFile.Proper };
             parseResult.Episodes = episodes;
 
             var message = _downloadProvider.GetDownloadTitle(parseResult);
@@ -239,9 +239,9 @@ namespace NzbDrone.Core.Providers
             if (newDownload)
             {
                 _externalNotificationProvider.OnDownload(message, series);
-                
-                foreach(var episode in episodes)
-                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Ready, parseResult.Quality);
+
+                foreach (var episode in episodes)
+                    _signalRProvider.UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Ready, parseResult.Quality);
             }
             else
             {
@@ -261,19 +261,19 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    if(!_diskProvider.FileExists(episodeFile.Path))
+                    if (!_diskProvider.FileExists(episodeFile.Path))
                     {
                         Logger.Trace("File [{0}] no longer exists on disk. removing from db", episodeFile.Path);
 
                         //Set the EpisodeFileId for each episode attached to this file to 0
-                        foreach(var episode in _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+                        foreach (var episode in _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                         {
-                            Logger.Trace("Setting EpisodeFileId for Episode: [{0}] to 0", episode.EpisodeId);
-                            episode.EpisodeFileId = 0;
+                            Logger.Trace("Detaching episode {0} from file.", episode.OID);
+                            episode.EpisodeFile = null;
                             episode.Ignored = _configProvider.AutoIgnorePreviouslyDownloadedEpisodes;
                             episode.GrabDate = null;
                             episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
-                            _episodeProvider.UpdateEpisode(episode);
+                            _episodeService.UpdateEpisode(episode);
                         }
 
                         //Delete it from the DB
@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Providers
 
             var filesOnDisk = GetVideoFiles(path);
 
-            foreach(var file in filesOnDisk)
+            foreach (var file in filesOnDisk)
             {
                 try
                 {

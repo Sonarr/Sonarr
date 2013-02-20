@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.JobTests
                  .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                  .Build();
 
-             Mocker.GetMock<EpisodeProvider>()
+             Mocker.GetMock<EpisodeService>()
                  .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(_episodes);
         }
 
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(2))
                 .Build();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
 
             Mocker.GetMock<SearchProvider>()

@@ -13,16 +13,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly HandbrakeProvider _handbrakeProvider;
         private readonly AtomicParsleyProvider _atomicParsleyProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public ConvertEpisodeJob(HandbrakeProvider handbrakeProvider, AtomicParsleyProvider atomicParsleyProvider,
-                                    EpisodeProvider episodeProvider)
+                                    EpisodeService episodeService)
         {
             _handbrakeProvider = handbrakeProvider;
             _atomicParsleyProvider = atomicParsleyProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
         }
 
         public string Name
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.EpisodeId <= 0)
                 throw new ArgumentNullException(options);
 
-            Episode episode = _episodeProvider.GetEpisode(options.EpisodeId);
+            Episode episode = _episodeService.GetEpisode(options.EpisodeId);
             notification.CurrentMessage = String.Format("Starting Conversion for {0}", episode);
             var outputFile = _handbrakeProvider.ConvertFile(episode, notification);
 

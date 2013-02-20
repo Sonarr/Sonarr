@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Returns(true);
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(c => c.Get(It.IsAny<String>()))
+                .Setup(c => c.GetByTitle(It.IsAny<String>()))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskScanProvider>()
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Returns(files);
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(c => c.Get(It.IsAny<String>()))
+                .Setup(c => c.GetByTitle(It.IsAny<String>()))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskScanProvider>()

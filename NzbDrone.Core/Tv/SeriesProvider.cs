@@ -3,40 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
-using PetaPoco;
 
 namespace NzbDrone.Core.Tv
 {
-    public class SeriesProvider
+    public interface ISeriesService
+    {
+        bool IsMonitored(int id);
+        Series UpdateSeriesInfo(int seriesId);
+        Series FindSeries(string title);
+        void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter);
+        void UpdateFromSeriesEditor(IList<Series> editedSeries);
+    }
+
+    public class SeriesService : ISeriesService
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
-        private readonly SceneMappingProvider _sceneNameMappingProvider;
-        private readonly BannerProvider _bannerProvider;
         private readonly MetadataProvider _metadataProvider;
         private readonly TvRageMappingProvider _tvRageMappingProvider;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly SceneMappingProvider _sceneNameMappingProvider;
 
-        public SeriesProvider(ISeriesRepository seriesRepository, ConfigProvider configProviderProvider,
-                                TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
-                                BannerProvider bannerProvider, MetadataProvider metadataProvider,
+        public SeriesService(ISeriesRepository seriesRepository, ConfigProvider configProviderProvider,
+                                TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider, MetadataProvider metadataProvider,
                                 TvRageMappingProvider tvRageMappingProvider)
         {
             _seriesRepository = seriesRepository;
             _configProvider = configProviderProvider;
             _tvDbProvider = tvDbProviderProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
-            _bannerProvider = bannerProvider;
             _metadataProvider = metadataProvider;
             _tvRageMappingProvider = tvRageMappingProvider;
         }
@@ -47,7 +49,8 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.Get(id).Monitored;
         }
 
-        public virtual Series UpdateSeriesInfo(int seriesId)
+
+        public Series UpdateSeriesInfo(int seriesId)
         {
             var tvDbSeries = _tvDbProvider.GetSeries(seriesId, false, true);
             var series = _seriesRepository.Get(seriesId);
@@ -87,19 +90,32 @@ namespace NzbDrone.Core.Tv
             return series;
         }
 
+        public Series FindSeries(string title)
+        {
+            var normalizeTitle = Parser.NormalizeTitle(title);
+
+            var mapping = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
+            if (mapping.HasValue)
+            {
+                var sceneSeries = _seriesRepository.Get(mapping.Value);
+                return sceneSeries;
+            }
+
+            return _seriesRepository.GetByTitle(normalizeTitle);
+        }
+
         public void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
         {
             logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
-            if (tvDbSeriesId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("tvDbSeriesId", tvDbSeriesId.ToString());
-            }
+            Ensure.That(() => tvDbSeriesId).IsGreaterThan(0);
+            Ensure.That(() => title).IsNotNullOrWhiteSpace();
+            Ensure.That(() => path).IsNotNullOrWhiteSpace();
 
             var repoSeries = new Series();
             repoSeries.SeriesId = tvDbSeriesId;
             repoSeries.Path = path;
-            repoSeries.Monitored = true; //New shows should be monitored
+            repoSeries.Monitored = true;
             repoSeries.QualityProfileId = qualityProfileId;
             repoSeries.Title = title;
             if (qualityProfileId == 0)
@@ -115,7 +131,7 @@ namespace NzbDrone.Core.Tv
         }
 
 
-        public virtual void UpdateFromSeriesEditor(IList<Series> editedSeries)
+        public void UpdateFromSeriesEditor(IList<Series> editedSeries)
         {
             var allSeries = _seriesRepository.All();
 
@@ -140,9 +156,11 @@ namespace NzbDrone.Core.Tv
         /// </summary>
         /// <param name = "rawTime">The TVDB AirsTime</param>
         /// <returns>String that contains the AirTimes</returns>
+        
+        private static readonly Regex timeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static string CleanAirsTime(string rawTime)
         {
-            var match = TimeRegex.Match(rawTime);
+            var match = timeRegex.Match(rawTime);
             var time = match.Groups["time"].Value;
             var meridiem = match.Groups["meridiem"].Value;
 

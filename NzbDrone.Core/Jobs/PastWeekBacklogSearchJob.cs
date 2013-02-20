@@ -13,16 +13,16 @@ namespace NzbDrone.Core.Jobs
 {
     public class PastWeekBacklogSearchJob : IJob
     {
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
         private readonly EpisodeSearchJob _episodeSearchJob;
         private readonly ConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public PastWeekBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob,
+        public PastWeekBacklogSearchJob(EpisodeService episodeService, EpisodeSearchJob episodeSearchJob,
                                             ConfigProvider configProvider)
         {
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
             _episodeSearchJob = episodeSearchJob;
             _configProvider = configProvider;
         }
@@ -44,13 +44,13 @@ namespace NzbDrone.Core.Jobs
             Logger.Debug("Processing missing episodes from the past week, count: {0}", missingEpisodes.Count);
             foreach (var episode in missingEpisodes)
             {
-                _episodeSearchJob.Start(notification, new { EpisodeId = episode.EpisodeId });
+                _episodeSearchJob.Start(notification, new { EpisodeId = episode.OID });
             }
         }
 
         public List<Episode> GetMissingForEnabledSeries()
         {
-            return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+            return _episodeService.EpisodesWithoutFiles(true).Where(e =>
                                                                                 e.AirDate >= DateTime.Today.AddDays(-7) &&
                                                                                 e.Series.Monitored
                                                                             ).ToList();

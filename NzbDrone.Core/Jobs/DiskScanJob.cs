@@ -13,17 +13,19 @@ namespace NzbDrone.Core.Jobs
 {
     public class DiskScanJob : IJob
     {
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider,
-                            ConfigProvider configProvider)
+        public DiskScanJob(ISeriesService seriesService, DiskScanProvider diskScanProvider,
+                            ConfigProvider configProvider, ISeriesRepository seriesRepository)
         {
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _diskScanProvider = diskScanProvider;
             _configProvider = configProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public DiskScanJob()
@@ -46,14 +48,14 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.SeriesId == 0)
             {
                 if (_configProvider.IgnoreArticlesWhenSortingSeries)
-                    seriesToScan = _seriesProvider.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+                    seriesToScan = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
 
                 else
-                    seriesToScan = _seriesProvider.All().OrderBy(o => o.Title).ToList();
+                    seriesToScan = _seriesRepository.All().OrderBy(o => o.Title).ToList();
             }
             else
             {
-                seriesToScan = new List<Series>() { _seriesProvider.Get(options.SeriesId) };
+                seriesToScan = new List<Series>() { _seriesRepository.Get(options.SeriesId) };
             }
 
             foreach (var series in seriesToScan)

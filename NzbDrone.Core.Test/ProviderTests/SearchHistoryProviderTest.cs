@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .Build().ToList();
 
             _searchHistory = Builder<SearchHistory>.CreateNew()
-                    .With(h => h.EpisodeId = _episode.EpisodeId)
+                    .With(h => h.EpisodeId = _episode.OID)
                     .With(h => h.SeriesId - _series.SeriesId)
                     .With(h => h.SearchHistoryItems = items)
                     .Build();

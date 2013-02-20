@@ -12,18 +12,18 @@ namespace NzbDrone.Core.Jobs
 {
     public class EpisodeSearchJob : IJob
     {
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
         private readonly UpgradePossibleSpecification _upgradePossibleSpecification;
         private readonly EpisodeSearch _episodeSearch;
         private readonly DailyEpisodeSearch _dailyEpisodeSearch;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeSearchJob(EpisodeProvider episodeProvider, UpgradePossibleSpecification upgradePossibleSpecification,
+        public EpisodeSearchJob(EpisodeService episodeService, UpgradePossibleSpecification upgradePossibleSpecification,
                                 EpisodeSearch episodeSearch, DailyEpisodeSearch dailyEpisodeSearch)
         {
             if(dailyEpisodeSearch == null) throw new ArgumentNullException("dailyEpisodeSearch");
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
             _upgradePossibleSpecification = upgradePossibleSpecification;
             _episodeSearch = episodeSearch;
             _dailyEpisodeSearch = dailyEpisodeSearch;
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.EpisodeId <= 0)
                 throw new ArgumentException("options");
 
-            Episode episode = _episodeProvider.GetEpisode(options.EpisodeId);
+            Episode episode = _episodeService.GetEpisode(options.EpisodeId);
 
             if (episode == null)
             {
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            if (episode.Series.IsDaily)
+            if (episode.Series.SeriesType == SeriesType.Daily)
             {
                 if (!episode.AirDate.HasValue)
                 {

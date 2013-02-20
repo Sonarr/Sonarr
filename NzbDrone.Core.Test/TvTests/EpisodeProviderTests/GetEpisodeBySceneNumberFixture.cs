@@ -52,14 +52,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void should_return_null_if_no_episodes_in_db()
         {
-            Mocker.Resolve<EpisodeProvider>().GetEpisodeBySceneNumbering(_series.SeriesId, 1, 1).Should().BeNull();
+            Mocker.Resolve<EpisodeService>().GetEpisodeBySceneNumbering(_series.SeriesId, 1, 1).Should().BeNull();
         }
 
         [Test]
         public void should_return_null_if_no_matching_episode_is_found()
         {
             WithNullSceneNumbering();
-            Mocker.Resolve<EpisodeProvider>().GetEpisodeBySceneNumbering(_series.SeriesId, 1, 1).Should().BeNull();
+            Mocker.Resolve<EpisodeService>().GetEpisodeBySceneNumbering(_series.SeriesId, 1, 1).Should().BeNull();
         }
 
         [Test]
@@ -67,10 +67,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             WithSceneNumbering();
 
-            var result = Mocker.Resolve<EpisodeProvider>()
+            var result = Mocker.Resolve<EpisodeService>()
                 .GetEpisodeBySceneNumbering(_series.SeriesId, _episode.SceneSeasonNumber, _episode.SceneEpisodeNumber);
             
-            result.EpisodeId.Should().Be(_episode.EpisodeId);
+            result.OID.Should().Be(_episode.OID);
         }
     }
 }

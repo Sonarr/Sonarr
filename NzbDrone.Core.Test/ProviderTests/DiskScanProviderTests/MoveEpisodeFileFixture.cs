@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.Get(fakeSeries.SeriesId))
                 .Returns(fakeSeries);
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(e => e.GetEpisodesByFileId(file.EpisodeFileId))
                 .Returns(fakeEpisode);
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(e => e.Get(fakeSeries.SeriesId))
                   .Returns(fakeSeries);
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                   .Setup(e => e.GetEpisodesByFileId(file.EpisodeFileId))
                   .Returns(fakeEpisode);
 
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.Get(fakeSeries.SeriesId))
                 .Returns(fakeSeries);
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(e => e.GetEpisodesByFileId(file.EpisodeFileId))
                 .Returns(fakeEpisode);
 

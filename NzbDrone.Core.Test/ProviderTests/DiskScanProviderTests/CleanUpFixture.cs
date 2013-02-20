@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.FileExists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(e => e.GetEpisodesByFileId(It.IsAny<int>()))
                 .Returns(new List<Episode>());
 
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             //Assert
             Mocker.VerifyAllMocks();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                .Verify(e => e.GetEpisodesByFileId(It.IsAny<int>()), Times.Exactly(10));
 
             Mocker.GetMock<MediaFileProvider>()
@@ -80,11 +80,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.FileExists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(e => e.GetEpisodesByFileId(It.IsAny<int>()))
-                .Returns(new List<Episode> { new Episode { EpisodeFileId = 10 }, new Episode { EpisodeFileId = 10 } });
+                .Returns(new List<Episode> { new Episode { EpisodeFile = new EpisodeFile { EpisodeFileId = 10 } }, new Episode { EpisodeFile = new EpisodeFile { EpisodeFileId = 10 } } });
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(e => e.UpdateEpisode(It.IsAny<Episode>()));
 
             Mocker.GetMock<MediaFileProvider>()
@@ -100,11 +100,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             //Assert
             Mocker.VerifyAllMocks();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                .Verify(e => e.GetEpisodesByFileId(It.IsAny<int>()), Times.Exactly(10));
 
-            Mocker.GetMock<EpisodeProvider>()
-                .Verify(e => e.UpdateEpisode(It.Is<Episode>(g=>g.EpisodeFileId == 0)), Times.Exactly(20));
+            Mocker.GetMock<EpisodeService>()
+                .Verify(e => e.UpdateEpisode(It.Is<Episode>(g => g.EpisodeFileId == 0)), Times.Exactly(20));
 
             Mocker.GetMock<MediaFileProvider>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));

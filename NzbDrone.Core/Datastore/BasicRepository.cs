@@ -11,6 +11,8 @@ namespace NzbDrone.Core.Datastore
         TModel Update(TModel model);
         TModel Upsert(TModel model);
         void Delete(int id);
+        IList<TModel> InsertMany(IList<TModel> model);
+        IList<TModel> UpdateMany(IList<TModel> model);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -42,6 +44,16 @@ namespace NzbDrone.Core.Datastore
         public TModel Update(TModel model)
         {
             return ObjectDatabase.Update(model);
+        }
+
+        public IList<TModel> InsertMany(IList<TModel> model)
+        {
+            return ObjectDatabase.InsertMany(model);
+        }
+
+        public IList<TModel> UpdateMany(IList<TModel> model)
+        {
+            return ObjectDatabase.UpdateMany(model);
         }
 
         public TModel Upsert(TModel model)

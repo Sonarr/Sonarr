@@ -15,14 +15,14 @@ namespace NzbDrone.Api.Series
 {
     public class SeriesModule : NzbDroneApiModule
     {
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly ISeriesRepository _seriesRepository;
         private readonly JobController _jobProvider;
 
-        public SeriesModule(SeriesProvider seriesProvider,ISeriesRepository seriesRepository, JobController jobProvider)
+        public SeriesModule(ISeriesService seriesService,ISeriesRepository seriesRepository, JobController jobProvider)
             : base("/Series")
         {
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _seriesRepository = seriesRepository;
             _jobProvider = jobProvider;
             Get["/"] = x => AllSeries();
@@ -58,7 +58,7 @@ namespace NzbDrone.Api.Series
             //(we can just create the folder and it won't blow up if it already exists)
             //We also need to remove any special characters from the filename before attempting to create it           
 
-            _seriesProvider.AddSeries("", request.Path, request.SeriesId, request.QualityProfileId, null);
+            _seriesService.AddSeries("", request.Path, request.SeriesId, request.QualityProfileId, null);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };

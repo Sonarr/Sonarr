@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeEpisode);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
+            Mocker.Resolve<EpisodeService>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeEpisode);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
+            Mocker.Resolve<EpisodeService>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeEpisode);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
+            Mocker.Resolve<EpisodeService>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeEpisode);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
+            Mocker.Resolve<EpisodeService>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(otherFakeEpisode);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
+            Mocker.Resolve<EpisodeService>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
-            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, new List<TvdbEpisode>());
+            Mocker.Resolve<EpisodeService>().DeleteEpisodesNotInTvdb(fakeSeries, new List<TvdbEpisode>());
         }
     }
 }

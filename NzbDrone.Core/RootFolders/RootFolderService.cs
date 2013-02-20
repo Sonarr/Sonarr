@@ -25,14 +25,14 @@ namespace NzbDrone.Core.RootFolders
         private readonly IBasicRepository<RootFolder> _rootFolderRepository;
         private readonly DiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
 
-        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, SeriesProvider seriesProvider, DiskProvider diskProvider,ISeriesRepository seriesRepository)
+        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, ISeriesService seriesService, DiskProvider diskProvider,ISeriesRepository seriesRepository)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
         }
 
         public virtual List<RootFolder> All()

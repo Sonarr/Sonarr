@@ -13,18 +13,18 @@ namespace NzbDrone.Core.Jobs
 {
     public class UpdateInfoJob : IJob
     {
-        private readonly SeriesProvider _seriesProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly ISeriesService _seriesService;
+        private readonly EpisodeService _episodeService;
         private readonly ReferenceDataProvider _referenceDataProvider;
         private readonly ConfigProvider _configProvider;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
+        public UpdateInfoJob(ISeriesService seriesService, EpisodeService episodeService,
                             ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider, ISeriesRepository seriesRepository)
         {
-            _seriesProvider = seriesProvider;
-            _episodeProvider = episodeProvider;
+            _seriesService = seriesService;
+            _episodeService = episodeService;
             _referenceDataProvider = referenceDataProvider;
             _configProvider = configProvider;
             _seriesRepository = seriesRepository;
@@ -69,8 +69,8 @@ namespace NzbDrone.Core.Jobs
                 try
                 {
                     notification.CurrentMessage = "Updating " + series.Title;
-                    _seriesProvider.UpdateSeriesInfo(series.SeriesId);
-                    _episodeProvider.RefreshEpisodeInfo(series);
+                    _seriesService.UpdateSeriesInfo(series.SeriesId);
+                    _episodeService.RefreshEpisodeInfo(series);
                     notification.CurrentMessage = "Update completed for " + series.Title;
                 }
 

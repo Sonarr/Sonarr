@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Providers.Metadata
     public class Xbmc : MetadataBase
     {
         public Xbmc(ConfigProvider configProvider, DiskProvider diskProvider, 
-                    BannerProvider bannerProvider, EpisodeProvider episodeProvider)
-            : base(configProvider, diskProvider, bannerProvider, episodeProvider)
+                    BannerProvider bannerProvider, EpisodeService episodeService)
+            : base(configProvider, diskProvider, bannerProvider, episodeService)
         {
         }
 
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers.Metadata
         public override void CreateForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries)
         {
             //Create filename.tbn and filename.nfo
-            var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
+            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId);
 
             if (!episodes.Any())
             {

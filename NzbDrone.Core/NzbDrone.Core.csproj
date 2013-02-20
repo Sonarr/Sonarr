@@ -302,6 +302,8 @@
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
+    <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\SeasonRepository.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\QualityModel.cs" />
     <Compile Include="Model\Sabnzbd\SabAddResponse.cs" />
@@ -354,7 +356,7 @@
     <Compile Include="Providers\Search\PartialSeasonSearch.cs" />
     <Compile Include="Providers\Search\EpisodeSearch.cs" />
     <Compile Include="Providers\Search\SearchBase.cs" />
-    <Compile Include="Tv\SeasonProvider.cs" />
+    <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
     <Compile Include="Jobs\JobController.cs" />
@@ -455,7 +457,7 @@
     <Compile Include="Providers\DownloadProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tv\EpisodeProvider.cs">
+    <Compile Include="Tv\EpisodeRepository.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\ExternalNotificationProvider.cs">

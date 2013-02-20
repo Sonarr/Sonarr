@@ -17,10 +17,10 @@ namespace NzbDrone.Core.Providers.Search
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeSearch(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
+        public EpisodeSearch(ISeriesService seriesService, EpisodeService episodeService, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
                              SceneMappingProvider sceneMappingProvider, AllowedDownloadSpecification allowedDownloadSpecification,
                              SearchHistoryProvider searchHistoryProvider, ISeriesRepository seriesRepository)
-                        : base(seriesProvider,seriesRepository, episodeProvider, downloadProvider, indexerProvider, sceneMappingProvider, 
+                        : base(seriesService,seriesRepository, episodeService, downloadProvider, indexerProvider, sceneMappingProvider, 
                                allowedDownloadSpecification, searchHistoryProvider)
             {
         }
