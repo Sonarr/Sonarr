@@ -16,16 +16,18 @@ namespace NzbDrone.Core.Providers
         private static readonly Regex StatusRegex = new Regex(@"^_[\w_]*_", RegexOptions.Compiled);
         private readonly DiskProvider _diskProvider;
         private readonly DiskScanProvider _diskScanProvider;
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly MetadataProvider _metadataProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider,
-                                    SeriesProvider seriesProvider, MetadataProvider metadataProvider)
+                                    ISeriesService seriesService, MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
             _diskScanProvider = diskScanProvider;
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _metadataProvider = metadataProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public PostDownloadProvider()
@@ -38,7 +40,7 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    if (!_seriesProvider.SeriesPathExists(subfolder))
+                    if (!_seriesRepository.SeriesPathExists(subfolder))
                     {
                         ProcessDownload(new DirectoryInfo(subfolder));
                     }
@@ -77,7 +79,7 @@ namespace NzbDrone.Core.Providers
             }
 
             string seriesName = Parser.ParseSeriesName(RemoveStatusFromFolderName(subfolderInfo.Name));
-            var series = _seriesProvider.FindSeries(seriesName);
+            var series = _seriesRepository.GetByTitle(seriesName);
 
             if (series == null)
             {
@@ -147,7 +149,7 @@ namespace NzbDrone.Core.Providers
             }
 
             var seriesName = Parser.ParseSeriesName(Path.GetFileNameWithoutExtension(videoFile));
-            var series = _seriesProvider.FindSeries(seriesName);
+            var series = _seriesRepository.GetByTitle(seriesName);
 
             if (series == null)
             {

@@ -11,6 +11,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Providers.DownloadClients
 {
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
 
                 var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
 
-                if (newParseResult.Series.IsDaily)
+                if (newParseResult.Series.SeriesType == SeriesType.Daily)
                 {
                     return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
                 }

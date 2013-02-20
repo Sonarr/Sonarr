@@ -1,12 +1,23 @@
 ﻿using System.Linq;
 using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
 namespace NzbDrone.Core.Tv
 {
-    public class Series
+
+
+    public enum  SeriesType
+    {
+        Standard =0,
+        Daily =1,
+        Anime = 2,
+    }
+
+
+    public class Series : ModelBase
     {
         public virtual int SeriesId { get; set; }
 
@@ -41,7 +52,7 @@ namespace NzbDrone.Core.Tv
 
         public string BannerUrl { get; set; }
 
-        public bool IsDaily { get; set; }
+        public SeriesType SeriesType { get; set; }
 
         public BacklogSettingType BacklogSetting { get; set; }
 

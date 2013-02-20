@@ -14,21 +14,21 @@ namespace NzbDrone.Core.Providers
     public class MisnamedProvider
     {
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public MisnamedProvider(MediaFileProvider mediaFileProvider, EpisodeProvider episodeProvider)
+        public MisnamedProvider(MediaFileProvider mediaFileProvider, EpisodeService episodeService)
         {
             _mediaFileProvider = mediaFileProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
         }
 
         public virtual List<MisnamedEpisodeModel> MisnamedFiles(int pageNumber, int pageSize, out int totalItems)
         {       
             var misnamedFiles = new List<MisnamedEpisodeModel>();
 
-            var episodesWithFiles = _episodeProvider.EpisodesWithFiles().GroupBy(e => e.EpisodeFileId).ToList();
+            var episodesWithFiles = _episodeService.EpisodesWithFiles().GroupBy(e => e.EpisodeFileId).ToList();
             totalItems = episodesWithFiles.Count();
             var stopwatch = new Stopwatch();
             stopwatch.Start();

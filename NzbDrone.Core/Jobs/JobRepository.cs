@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Jobs
         public void Init()
         {
             var currentJobs = All();
-            _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count);
+            _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count());
 
             foreach (var currentJob in currentJobs)
             {

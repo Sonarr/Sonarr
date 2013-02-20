@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var history = Builder<History>.CreateNew()
                 .With(h => h.Quality = QualityTypes.Bluray720p)
                 .With(h => h.IsProper = true)
-                .With(h => h.EpisodeId = historyEpisode.EpisodeId)
+                .With(h => h.EpisodeId = historyEpisode.OID)
                 .Build();
 
             Db.Insert(history);
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var history = Builder<History>
                     .CreateListOfSize(5)
                     .All()
-                    .With(h => h.EpisodeId = historyEpisode.EpisodeId)
+                    .With(h => h.EpisodeId = historyEpisode.OID)
                     .With(h => h.SeriesId = historyEpisode.SeriesId)
                     .TheFirst(1)
                     .With(h => h.Quality = QualityTypes.DVD)
@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var history = Builder<History>
                     .CreateListOfSize(5)
                     .All()
-                    .With(h => h.EpisodeId = historyEpisode.EpisodeId)
+                    .With(h => h.EpisodeId = historyEpisode.OID)
                     .With(h => h.SeriesId = historyEpisode.SeriesId)
                     .TheFirst(1)
                     .With(h => h.Quality = QualityTypes.DVD)
@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var history = new History
                               {
                                   Date = DateTime.Now,
-                                  EpisodeId = episode.EpisodeId,
+                                  EpisodeId = episode.OID,
                                   SeriesId = episode.SeriesId,
                                   NzbTitle = "my title",
                                   Indexer = "Fake Indexer",

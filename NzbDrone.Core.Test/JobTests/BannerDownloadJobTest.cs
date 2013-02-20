@@ -1,17 +1,12 @@
-﻿using System.IO;
-using System.Net;
-
-using FizzWare.NBuilder;
+﻿using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
+using System.Linq;
 
 namespace NzbDrone.Core.Test.JobTests
 {
@@ -53,9 +48,9 @@ namespace NzbDrone.Core.Test.JobTests
             WithSuccessfulDownload();
 
             var series = Builder<Series>.CreateListOfSize(5)
-                    .Build();
+                    .Build().ToList();
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.All())
                     .Returns(series);
 
             Mocker.Resolve<BannerDownloadJob>().Start(_notification, null);
@@ -70,9 +65,9 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(5)
                     .TheFirst(2)
                     .With(s => s.BannerUrl = null)
-                    .Build();
+                    .Build().ToList();
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.All())
                     .Returns(series);
 
             Mocker.Resolve<BannerDownloadJob>().Start(_notification, null);
@@ -87,7 +82,7 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateNew()
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetSeries(series.SeriesId))
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(series.SeriesId))
                     .Returns(series);
 
             Mocker.Resolve<BannerDownloadJob>().Start(_notification, new { SeriesId = series.SeriesId });

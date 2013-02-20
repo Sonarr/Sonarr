@@ -5,12 +5,14 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IBasicRepository<TModel>
     {
-        List<TModel> All();
+        IEnumerable<TModel> All();
         TModel Get(int id);
-        TModel Add(TModel model);
+        TModel Insert(TModel model);
         TModel Update(TModel model);
         TModel Upsert(TModel model);
         void Delete(int id);
+        IList<TModel> InsertMany(IList<TModel> model);
+        IList<TModel> UpdateMany(IList<TModel> model);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -24,7 +26,7 @@ namespace NzbDrone.Core.Datastore
 
         protected IEnumerable<TModel> Queryable { get { return ObjectDatabase.AsQueryable<TModel>(); } }
 
-        public List<TModel> All()
+        public IEnumerable<TModel> All()
         {
             return Queryable.ToList();
         }
@@ -34,7 +36,7 @@ namespace NzbDrone.Core.Datastore
             return Queryable.Single(c => c.OID == id);
         }
 
-        public TModel Add(TModel model)
+        public TModel Insert(TModel model)
         {
             return ObjectDatabase.Insert(model);
         }
@@ -42,6 +44,16 @@ namespace NzbDrone.Core.Datastore
         public TModel Update(TModel model)
         {
             return ObjectDatabase.Update(model);
+        }
+
+        public IList<TModel> InsertMany(IList<TModel> model)
+        {
+            return ObjectDatabase.InsertMany(model);
+        }
+
+        public IList<TModel> UpdateMany(IList<TModel> model)
+        {
+            return ObjectDatabase.UpdateMany(model);
         }
 
         public TModel Upsert(TModel model)

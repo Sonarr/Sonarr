@@ -14,6 +14,7 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
+using System.Linq;
 
 namespace NzbDrone.Core.Test.JobTests
 {
@@ -28,9 +29,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.SeriesId = 12)
                 .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(series.SeriesId))
-                .Returns(series);
+
+            Mocker.GetMock<ISeriesRepository>()
+                  .Setup(p => p.Get(series.SeriesId));
+
 
             Mocker.GetMock<DiskScanProvider>()
                 .Setup(p => p.Scan(series))
@@ -51,10 +53,10 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(2)
                 .TheFirst(1).With(s => s.SeriesId = 12)
                 .TheNext(1).With(s => s.SeriesId = 15)
-                .Build();
+                .Build().ToList();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(p => p.All())
                 .Returns(series);
 
             Mocker.GetMock<DiskScanProvider>()
@@ -77,10 +79,10 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(2)
                 .TheFirst(1).With(s => s.SeriesId = 12)
                 .TheNext(1).With(s => s.SeriesId = 15)
-                .Build();
+                .Build().ToList();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(p => p.All())
                 .Returns(series);
 
             Mocker.GetMock<DiskScanProvider>()
@@ -104,10 +106,10 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(2)
                 .TheFirst(1).With(s => s.SeriesId = 12)
                 .TheNext(1).With(s => s.SeriesId = 15)
-                .Build();
+                .Build().ToList();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(p => p.All())
                 .Returns(series);
 
             Mocker.GetMock<DiskScanProvider>()

@@ -15,15 +15,15 @@ namespace NzbDrone.Core.Providers.Metadata
         protected readonly ConfigProvider _configProvider;
         protected readonly DiskProvider _diskProvider;
         protected readonly BannerProvider _bannerProvider;
-        protected readonly EpisodeProvider _episodeProvider;
+        protected readonly EpisodeService _episodeService;
 
         protected MetadataBase(ConfigProvider configProvider, DiskProvider diskProvider,
-                                BannerProvider bannerProvider, EpisodeProvider episodeProvider)
+                                BannerProvider bannerProvider, EpisodeService episodeService)
         {
             _configProvider = configProvider;
             _diskProvider = diskProvider;
             _bannerProvider = bannerProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
             _logger = LogManager.GetLogger(GetType().ToString());
         }
 

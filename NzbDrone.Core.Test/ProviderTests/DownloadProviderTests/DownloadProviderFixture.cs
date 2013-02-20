@@ -41,12 +41,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
         private EpisodeParseResult SetupParseResult()
         {
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                            .TheFirst(1).With(s => s.EpisodeId = 12)
-                            .TheNext(1).With(s => s.EpisodeId = 99)
+                            .TheFirst(1).With(s => s.OID = 12)
+                            .TheNext(1).With(s => s.OID = 99)
                             .All().With(s => s.SeriesId = 5)
                             .Build().ToList();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                     .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(episodes);
 
             return Builder<EpisodeParseResult>.CreateNew()
@@ -104,10 +104,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<HistoryProvider>()
                 .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)), Times.Once());
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(12));
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(99));
 
             Mocker.GetMock<ExternalNotificationProvider>()
@@ -139,10 +139,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<HistoryProvider>()
                 .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)), Times.Once());
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(12));
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(99));
 
             Mocker.GetMock<ExternalNotificationProvider>()
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
                 .Verify(s => s.Add(It.IsAny<History>()), Times.Never());
 
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(It.IsAny<int>()), Times.Never());
 
             Mocker.GetMock<ExternalNotificationProvider>()
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
         public string create_proper_sab_daily_titles(bool proper)
         {
             var series = Builder<Series>.CreateNew()
-                    .With(c => c.IsDaily = true)
+                    .With(c => c.SeriesType = SeriesType.Daily)
                     .With(c => c.Title = "My Series Name")
                     .Build();
 

@@ -24,18 +24,20 @@ namespace NzbDrone.Core.RootFolders
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IBasicRepository<RootFolder> _rootFolderRepository;
         private readonly DiskProvider _diskProvider;
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesRepository _seriesRepository;
+        private readonly ISeriesService _seriesService;
 
-        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, SeriesProvider seriesProvider, DiskProvider diskProvider)
+        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, ISeriesService seriesService, DiskProvider diskProvider,ISeriesRepository seriesRepository)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
-            _seriesProvider = seriesProvider;
+            _seriesRepository = seriesRepository;
+            _seriesService = seriesService;
         }
 
         public virtual List<RootFolder> All()
         {
-            var rootFolders = _rootFolderRepository.All();
+            var rootFolders = _rootFolderRepository.All().ToList();
 
             rootFolders.ForEach(folder =>
                 {
@@ -60,7 +62,7 @@ namespace NzbDrone.Core.RootFolders
             if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
                 throw new InvalidOperationException("Root directory already exist.");
 
-            _rootFolderRepository.Add(rootFolder);
+            _rootFolderRepository.Insert(rootFolder);
 
             rootFolder.FreeSpace = _diskProvider.FreeDiskSpace(rootFolder.Path);
             rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
@@ -88,7 +90,7 @@ namespace NzbDrone.Core.RootFolders
 
             foreach (string seriesFolder in _diskProvider.GetDirectories(path))
             {
-                if (!_seriesProvider.SeriesPathExists(seriesFolder))
+                if (!_seriesRepository.SeriesPathExists(seriesFolder))
                 {
                     var di = new DirectoryInfo(seriesFolder.Normalize());
                     results.Add(new UnmappedFolder{ Name = di.Name, Path = di.FullName });

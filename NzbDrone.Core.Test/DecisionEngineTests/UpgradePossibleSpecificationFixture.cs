@@ -39,10 +39,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     .Build();
 
             _episode = Builder<Episode>.CreateNew()
-                    .With(e => e.EpisodeFileId = 0)
                     .With(e => e.SeriesId = _series.SeriesId)
                     .With(e => e.Series = _series)
-                    .With(e => e.EpisodeFileId = _episodeFile.EpisodeFileId)
                     .With(e => e.EpisodeFile = _episodeFile)
                     .Build();
         }
@@ -51,7 +49,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsUpgradePossible_should_return_true_if_no_episode_file_exists()
         {
             var episode = Builder<Episode>.CreateNew()
-                    .With(e => e.EpisodeFileId = 0)
+                    .With(e => e.EpisodeFile = null)
                     .Build();
 
             //Act

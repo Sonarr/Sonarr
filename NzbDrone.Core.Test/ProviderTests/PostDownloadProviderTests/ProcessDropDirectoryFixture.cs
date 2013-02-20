@@ -57,12 +57,12 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Setup(c => c.GetDirectories(It.IsAny<String>()))
                 .Returns(subFolders);
 
-            Mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<ISeriesRepository>()
                 .Setup(c => c.SeriesPathExists(subFolders[1]))
                 .Returns(true);
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<String>()))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.GetByTitle(It.IsAny<String>()))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskScanProvider>()
@@ -104,8 +104,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Setup(c => c.GetVideoFiles(It.IsAny<String>(), false))
                 .Returns(files);
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<String>()))
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(c => c.GetByTitle(It.IsAny<String>()))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskScanProvider>()

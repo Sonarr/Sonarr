@@ -34,8 +34,8 @@ namespace NzbDrone.Core.Test.JobTests
 
             WithStrictMocker();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(p => p.All())
                 .Returns(series);
 
 
@@ -61,11 +61,11 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)))
                 .Callback(() => series[1].LastInfoSync = DateTime.Now);
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(s => s.GetSeries(series[0].SeriesId)).Returns(series[0]);
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(s => s.Get(series[0].SeriesId)).Returns(series[0]);
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(s => s.GetSeries(series[1].SeriesId)).Returns(series[1]);
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(s => s.Get(series[1].SeriesId)).Returns(series[1]);
 
             Mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
@@ -99,8 +99,8 @@ namespace NzbDrone.Core.Test.JobTests
 
             WithStrictMocker();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetAllSeries())
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(p => p.All())
                 .Returns(series);
 
             Mocker.GetMock<UpdateInfoJob>()
@@ -118,8 +118,8 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<BannerDownloadJob>()
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)));
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(s => s.GetSeries(series[0].SeriesId)).Returns(series[0]);
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(s => s.Get(series[0].SeriesId)).Returns(series[0]);
 
             Mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
@@ -152,14 +152,14 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.GetSeriesFiles(seriesId))
                 .Returns(new List<EpisodeFile>());
 
-            Mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetSeasons(seriesId))
+            Mocker.GetMock<ISeasonRepository>()
+                .Setup(p => p.GetSeasonNumbers(seriesId))
                 .Returns(new List<int> { 0, 1, 2, 3, 4 });
 
             Mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
 
 
-            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, It.IsAny<int>(), It.IsAny<Boolean>()), Times.Never());
+            Mocker.GetMock<ISeasonService>().Verify(p => p.SetIgnore(seriesId, It.IsAny<int>(), It.IsAny<Boolean>()), Times.Never());
         }
 
         [Test]
@@ -180,13 +180,13 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.GetSeriesFiles(seriesId))
                 .Returns(episodesFiles);
 
-            Mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetSeasons(seriesId))
+            Mocker.GetMock<ISeasonRepository>()
+                .Setup(p => p.GetSeasonNumbers(seriesId))
                 .Returns(new List<int> { 0, 1, 2 });
 
             Mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
 
-            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
+            Mocker.GetMock<ISeasonService>().Verify(p => p.SetIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
         }
 
         [Test]
@@ -206,15 +206,15 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.GetSeriesFiles(seriesId))
                 .Returns(episodesFiles);
 
-            Mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetSeasons(seriesId))
+            Mocker.GetMock<ISeasonRepository>()
+                .Setup(p => p.GetSeasonNumbers(seriesId))
                 .Returns(new List<int> { 0, 1, 2 });
 
             Mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
 
-            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 0, true), Times.Once());
-            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 1, true), Times.Never());
-            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
+            Mocker.GetMock<ISeasonService>().Verify(p => p.SetIgnore(seriesId, 0, true), Times.Once());
+            Mocker.GetMock<ISeasonService>().Verify(p => p.SetIgnore(seriesId, 1, true), Times.Never());
+            Mocker.GetMock<ISeasonService>().Verify(p => p.SetIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
         }
     }
 

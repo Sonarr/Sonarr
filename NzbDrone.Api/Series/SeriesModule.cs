@@ -15,13 +15,15 @@ namespace NzbDrone.Api.Series
 {
     public class SeriesModule : NzbDroneApiModule
     {
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
+        private readonly ISeriesRepository _seriesRepository;
         private readonly JobController _jobProvider;
 
-        public SeriesModule(SeriesProvider seriesProvider, JobController jobProvider)
+        public SeriesModule(ISeriesService seriesService,ISeriesRepository seriesRepository, JobController jobProvider)
             : base("/Series")
         {
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
+            _seriesRepository = seriesRepository;
             _jobProvider = jobProvider;
             Get["/"] = x => AllSeries();
             Get["/{id}"] = x => GetSeries((int)x.id);
@@ -33,7 +35,7 @@ namespace NzbDrone.Api.Series
 
         private Response AllSeries()
         {
-            var series = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
+            var series = _seriesRepository.All().ToList();
             var seriesModels = Mapper.Map<List<Core.Tv.Series>, List<SeriesResource>>(series);
 
             return seriesModels.AsResponse();
@@ -41,7 +43,7 @@ namespace NzbDrone.Api.Series
 
         private Response GetSeries(int id)
         {
-            var series = _seriesProvider.GetSeries(id);
+            var series = _seriesRepository.Get(id);
             var seriesModels = Mapper.Map<Core.Tv.Series, SeriesResource>(series);
 
             return seriesModels.AsResponse();
@@ -56,7 +58,7 @@ namespace NzbDrone.Api.Series
             //(we can just create the folder and it won't blow up if it already exists)
             //We also need to remove any special characters from the filename before attempting to create it           
 
-            _seriesProvider.AddSeries("", request.Path, request.SeriesId, request.QualityProfileId, null);
+            _seriesService.AddSeries("", request.Path, request.SeriesId, request.QualityProfileId, null);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };
@@ -66,7 +68,7 @@ namespace NzbDrone.Api.Series
         {
             var request = Request.Body.FromJson<SeriesResource>();
 
-            var series = _seriesProvider.GetSeries(request.Id);
+            var series = _seriesRepository.Get(request.Id);
 
             series.Monitored = request.Monitored;
             series.SeasonFolder = request.SeasonFolder;
@@ -83,12 +85,12 @@ namespace NzbDrone.Api.Series
             else
                 series.CustomStartDate = null;
 
-            _seriesProvider.UpdateSeries(series);
+            _seriesRepository.Update(series);
 
             if (oldPath != series.Path)
                 _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.SeriesId });
 
-            _seriesProvider.UpdateSeries(series);
+            _seriesRepository.Update(series);
 
             return request.AsResponse();
         }

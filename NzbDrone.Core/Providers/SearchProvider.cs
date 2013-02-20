@@ -16,18 +16,20 @@ namespace NzbDrone.Core.Providers
 {
     public class SearchProvider
     {
-        private readonly SeriesProvider _seriesProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly ISeriesService _seriesService;
+        private readonly EpisodeService _episodeService;
         private readonly PartialSeasonSearch _partialSeasonSearch;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SearchProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-                              PartialSeasonSearch partialSeasonSearch)
+        public SearchProvider(ISeriesService seriesService, EpisodeService episodeService,
+                              PartialSeasonSearch partialSeasonSearch,ISeriesRepository seriesRepository)
         {
-            _seriesProvider = seriesProvider;
-            _episodeProvider = episodeProvider;
+            _seriesService = seriesService;
+            _episodeService = episodeService;
             _partialSeasonSearch = partialSeasonSearch;
+            _seriesRepository = seriesRepository;
         }
 
         public SearchProvider()
@@ -36,7 +38,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<int> SeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
+            var series = _seriesRepository.Get(seriesId);
 
             if (series == null)
             {
@@ -44,14 +46,14 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
-            if (series.IsDaily)
+            if (series.SeriesType == SeriesType.Daily)
             {
                 logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
                 return new List<int>();
             }
 
             logger.Debug("Getting episodes from database for series: {0} and season: {1}", seriesId, seasonNumber);
-            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
+            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {
@@ -65,7 +67,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
+            var series = _seriesRepository.Get(seriesId);
 
             if (series == null)
             {
@@ -73,13 +75,13 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
-            if (series.IsDaily)
+            if (series.SeriesType == SeriesType.Daily)
             {
                 logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
                 return new List<int>();
             }
 
-            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
+            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {

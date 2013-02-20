@@ -15,32 +15,36 @@ namespace NzbDrone.Core.Jobs
     /// </summary>
     public class ImportNewSeriesJob : IJob
     {
-        private readonly SeriesProvider _seriesProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly ISeriesService _seriesService;
+        private readonly EpisodeService _episodeService;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
         private readonly BannerDownloadJob _bannerDownloadJob;
-        private readonly SeasonProvider _seasonProvider;
+        private readonly ISeasonRepository _seasonRepository;
         private readonly XemUpdateJob _xemUpdateJob;
+        private readonly ISeriesRepository _seriesRepository;
+        private readonly ISeasonService _seasonService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private List<int> _attemptedSeries;
 
-        public ImportNewSeriesJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
+        public ImportNewSeriesJob(ISeriesService seriesService, EpisodeService episodeService,
                                     MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob,
                                     DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob,
-                                    SeasonProvider seasonProvider, XemUpdateJob xemUpdateJob)
+                                    ISeasonRepository seasonRepository, XemUpdateJob xemUpdateJob, ISeriesRepository seriesRepository,ISeasonService seasonService)
         {
-            _seriesProvider = seriesProvider;
-            _episodeProvider = episodeProvider;
+            _seriesService = seriesService;
+            _episodeService = episodeService;
             _mediaFileProvider = mediaFileProvider;
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
             _bannerDownloadJob = bannerDownloadJob;
-            _seasonProvider = seasonProvider;
+            _seasonRepository = seasonRepository;
             _xemUpdateJob = xemUpdateJob;
+            _seriesRepository = seriesRepository;
+            _seasonService = seasonService;
         }
 
         public string Name
@@ -61,7 +65,7 @@ namespace NzbDrone.Core.Jobs
 
         private void ScanSeries(ProgressNotification notification)
         {
-            var syncList = _seriesProvider.GetAllSeries().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.SeriesId)).ToList();
+            var syncList = _seriesRepository.All().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.SeriesId)).ToList();
             if (syncList.Count == 0)
             {
                 return;
@@ -77,7 +81,7 @@ namespace NzbDrone.Core.Jobs
                     _updateInfoJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
                     _diskScanJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
 
-                    var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
+                    var updatedSeries = _seriesRepository.Get(currentSeries.SeriesId);
                     AutoIgnoreSeasons(updatedSeries.SeriesId);
 
                     //Download the banner for the new series
@@ -105,14 +109,14 @@ namespace NzbDrone.Core.Jobs
 
             if (episodeFiles.Count() != 0)
             {
-                var seasons = _episodeProvider.GetSeasons(seriesId);
+                var seasons = _seasonRepository.GetSeasonNumbers(seriesId);
                 var currentSeasons = seasons.Max();
 
                 foreach (var season in seasons)
                 {
                     if (season != currentSeasons && !episodeFiles.Any(e => e.SeasonNumber == season))
                     {
-                        _seasonProvider.SetIgnore(seriesId, season, true);
+                        _seasonService.SetIgnore(seriesId, season, true);
                     }
                 }
             }

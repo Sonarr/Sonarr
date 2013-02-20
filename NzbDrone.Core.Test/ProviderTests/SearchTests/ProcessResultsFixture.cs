@@ -51,27 +51,27 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                     .CreateListOfSize(1)
                     .Build();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                   .Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                   .Returns(_episodes);
         }
 
         private void WithMatchingSeries()
         {
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(_matchingSeries);
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(s => s.GetByTitle(It.IsAny<string>())).Returns(_matchingSeries);
         }
 
         private void WithMisMatchedSeries()
         {
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(_mismatchedSeries);
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(s => s.GetByTitle(It.IsAny<string>())).Returns(_mismatchedSeries);
         }
 
         private void WithNullSeries()
         {
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(_nullSeries);
+            Mocker.GetMock<ISeriesRepository>()
+                .Setup(s => s.GetByTitle(It.IsAny<string>())).Returns(_nullSeries);
         }
 
         private void WithSuccessfulDownload()

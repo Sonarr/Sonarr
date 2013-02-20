@@ -13,16 +13,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly SearchProvider _searchProvider;
         private readonly EpisodeSearchJob _episodeSearchJob;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SeasonSearchJob(SearchProvider searchProvider, EpisodeSearchJob episodeSearchJob,
-                                EpisodeProvider episodeProvider)
+                                EpisodeService episodeService)
         {
             _searchProvider = searchProvider;
             _episodeSearchJob = episodeSearchJob;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
         }
 
         public SeasonSearchJob()
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Jobs
             //    return;
 
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
-            List<Episode> episodes = _episodeProvider.GetEpisodesBySeason(options.SeriesId, options.SeasonNumber);
+            List<Episode> episodes = _episodeService.GetEpisodesBySeason(options.SeriesId, options.SeasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {
@@ -68,11 +68,11 @@ namespace NzbDrone.Core.Jobs
             if (episodes.Count == successes.Count)
                 return;
 
-            var missingEpisodes = episodes.Select(e => e.EpisodeId).Except(successes).ToList();
+            var missingEpisodes = episodes.Select(e => e.OID).Except(successes).ToList();
 
-            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeId)).OrderBy(o => o.EpisodeNumber))
+            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.OID)).OrderBy(o => o.EpisodeNumber))
             {
-                _episodeSearchJob.Start(notification, new { EpisodeId = episode.EpisodeId });
+                _episodeSearchJob.Start(notification, new { EpisodeId = episode.OID });
             }
         }
     }

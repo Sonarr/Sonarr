@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Providers.Search
 {
     public abstract class SearchBase
     {
-        protected readonly SeriesProvider _seriesProvider;
-        protected readonly EpisodeProvider _episodeProvider;
+        protected readonly ISeriesService _seriesService;
+        private readonly ISeriesRepository _seriesRepository;
+        protected readonly EpisodeService _episodeService;
         protected readonly DownloadProvider _downloadProvider;
         protected readonly IndexerProvider _indexerProvider;
         protected readonly SceneMappingProvider _sceneMappingProvider;
@@ -25,13 +24,14 @@ namespace NzbDrone.Core.Providers.Search
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected SearchBase(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, DownloadProvider downloadProvider,
+        protected SearchBase(ISeriesService seriesService,ISeriesRepository seriesRepository, EpisodeService episodeService, DownloadProvider downloadProvider,
                              IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
                              AllowedDownloadSpecification allowedDownloadSpecification,
                              SearchHistoryProvider searchHistoryProvider)
         {
-            _seriesProvider = seriesProvider;
-            _episodeProvider = episodeProvider;
+            _seriesService = seriesService;
+            _seriesRepository = seriesRepository;
+            _episodeService = episodeService;
             _downloadProvider = downloadProvider;
             _indexerProvider = indexerProvider;
             _sceneMappingProvider = sceneMappingProvider;
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Providers.Search
                     items.Add(item);
 
                     logger.Trace("Analysing report " + episodeParseResult);
-                    episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
+                    episodeParseResult.Series = _seriesRepository.GetByTitle(episodeParseResult.CleanTitle);
 
                     if(episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
                     {
@@ -113,9 +113,9 @@ namespace NzbDrone.Core.Providers.Search
                         continue;
                     }
 
-                    episodeParseResult.Episodes = _episodeProvider.GetEpisodesByParseResult(episodeParseResult);
+                    episodeParseResult.Episodes = _episodeService.GetEpisodesByParseResult(episodeParseResult);
 
-                    if (searchResult.Successes.Intersect(episodeParseResult.Episodes.Select(e => e.EpisodeId)).Any())
+                    if (searchResult.Successes.Intersect(episodeParseResult.Episodes.Select(e => e.OID)).Any())
                     {
                         item.SearchError = ReportRejectionType.Skipped;
                         continue;
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Providers.Search
                     if(item.SearchError == ReportRejectionType.None)
                     {
                         if(DownloadReport(notification, episodeParseResult, item))
-                            searchResult.Successes.AddRange(episodeParseResult.Episodes.Select(e => e.EpisodeId));
+                            searchResult.Successes.AddRange(episodeParseResult.Episodes.Select(e => e.OID));
                     }
                 }
                 catch(Exception e)

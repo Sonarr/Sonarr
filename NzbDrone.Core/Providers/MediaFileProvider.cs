@@ -18,11 +18,11 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly IDatabase _database;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
 
-        public MediaFileProvider(EpisodeProvider episodeProvider, ConfigProvider configProvider, IDatabase database)
+        public MediaFileProvider(EpisodeService episodeService, ConfigProvider configProvider, IDatabase database)
         {
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
             _configProvider = configProvider;
             _database = database;
         }
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)
         {
-            var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId).ToList();
+            var allEpisodes = _episodeService.GetEpisodeBySeries(seriesId).ToList();
 
             var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate != null && e.AirDate <= DateTime.Today).ToList();
             var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0).ToList();
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Providers
                 result += series.Title + separatorStyle.Pattern;
             }
 
-            if(!series.IsDaily)
+            if (series.SeriesType == SeriesType.Standard)
             {
                 result += numberStyle.Pattern.Replace("%0e",
                                                       String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));

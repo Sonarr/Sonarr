@@ -23,13 +23,12 @@ namespace NzbDrone.Core.Test
             Episode episode = Builder<Episode>.CreateNew()
                 .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
-                .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = null)
                 .Build();
 
             if (hasEpisodes)
             {
-                episode.EpisodeFileId = 12;
+                episode.EpisodeFile = new EpisodeFile();
             }
 
             Assert.AreEqual(status, episode.Status);
@@ -43,14 +42,13 @@ namespace NzbDrone.Core.Test
         {
             Episode episode = Builder<Episode>.CreateNew()
                .With(e => e.Ignored = ignored)
-                .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = DateTime.Now.AddDays(-2).AddHours(-1))
                 .With(e => e.AirDate = DateTime.Today.AddDays(-2))
                 .Build();
 
             if (hasEpisodes)
             {
-                episode.EpisodeFileId = 12;
+                episode.EpisodeFile = new EpisodeFile();
             }
 
             episode.Status.Should().Be(status);
@@ -67,13 +65,12 @@ namespace NzbDrone.Core.Test
             Episode episode = Builder<Episode>.CreateNew()
             .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
-                .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = DateTime.Now.AddHours(22))
                 .Build();
 
             if (hasEpisodes)
             {
-                episode.EpisodeFileId = 12;
+                episode.EpisodeFile = new EpisodeFile();
             }
 
             Assert.AreEqual(status, episode.Status);
@@ -85,13 +82,12 @@ namespace NzbDrone.Core.Test
             Episode episode = Builder<Episode>.CreateNew()
                 .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
-                .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = null)
                 .Build();
 
             if (hasEpisodes)
             {
-                episode.EpisodeFileId = 12;
+                episode.EpisodeFile = new EpisodeFile();
             }
 
             Assert.AreEqual(status, episode.Status);
@@ -103,7 +99,6 @@ namespace NzbDrone.Core.Test
             Episode episode = Builder<Episode>.CreateNew()
                 .With(e => e.AirDate = DateTime.Now.AddDays(20))
                 .With(e => e.Ignored = false)
-                .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = null)
                 .Build();
 
@@ -120,14 +115,13 @@ namespace NzbDrone.Core.Test
         {
             Episode episode = Builder<Episode>.CreateNew()
                 .With(e => e.Ignored = ignored)
-                .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = DateTime.Now.AddHours(22))
                 .With(e => e.PostDownloadStatus = postDownloadStatus)
                 .Build();
 
             if (hasEpisodes)
             {
-                episode.EpisodeFileId = 12;
+                episode.EpisodeFile = new EpisodeFile();
             }
 
             Assert.AreEqual(status, episode.Status);

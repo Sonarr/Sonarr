@@ -41,13 +41,13 @@ namespace NzbDrone.Core.Test.JobTests
             Subject.Init();
 
             Storage.All().Should().HaveCount(1);
-            Storage.All()[0].Interval.Should().Be((Int32)_fakeJob.DefaultInterval.TotalMinutes);
-            Storage.All()[0].Name.Should().Be(_fakeJob.Name);
-            Storage.All()[0].TypeName.Should().Be(_fakeJob.GetType().ToString());
-            Storage.All()[0].LastExecution.Should().HaveYear(DateTime.Now.Year);
-            Storage.All()[0].LastExecution.Should().HaveMonth(DateTime.Now.Month);
-            Storage.All()[0].LastExecution.Should().HaveDay(DateTime.Today.Day);
-            Storage.All()[0].Enable.Should().BeTrue();
+            Storage.All().ToList()[0].Interval.Should().Be((Int32)_fakeJob.DefaultInterval.TotalMinutes);
+            Storage.All().ToList()[0].Name.Should().Be(_fakeJob.Name);
+            Storage.All().ToList()[0].TypeName.Should().Be(_fakeJob.GetType().ToString());
+            Storage.All().ToList()[0].LastExecution.Should().HaveYear(DateTime.Now.Year);
+            Storage.All().ToList()[0].LastExecution.Should().HaveMonth(DateTime.Now.Month);
+            Storage.All().ToList()[0].LastExecution.Should().HaveDay(DateTime.Today.Day);
+            Storage.All().ToList()[0].Enable.Should().BeTrue();
         }
 
         [Test]
@@ -108,14 +108,14 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(c => c.LastExecution = DateTime.Now.AddDays(-7).Date)
                 .Build();
 
-            Storage.Add(oldJob);
+            Storage.Insert(oldJob);
 
             var newJob = new FakeJob();
 
             IEnumerable<IJob> fakeJobs = new List<IJob> { newJob };
             Mocker.SetConstant(fakeJobs);
 
-           Subject.Init();
+            Subject.Init();
 
 
             var registeredJobs = Storage.All();
@@ -142,20 +142,20 @@ namespace NzbDrone.Core.Test.JobTests
             Storage.All().First().Enable.Should().BeFalse();
         }
 
-/*        [Test]
-        public void disabled_jobs_arent_run_by_scheduler()
-        {
-            IEnumerable<IJob> BaseFakeJobs = new List<IJob> { disabledJob };
-            Mocker.SetConstant(BaseFakeJobs);
+        /*        [Test]
+                public void disabled_jobs_arent_run_by_scheduler()
+                {
+                    IEnumerable<IJob> BaseFakeJobs = new List<IJob> { disabledJob };
+                    Mocker.SetConstant(BaseFakeJobs);
 
-            var jobProvider = Mocker.Resolve<JobController>();
-            jobProvider.QueueScheduled();
+                    var jobProvider = Mocker.Resolve<JobController>();
+                    jobProvider.QueueScheduled();
 
-            WaitForQueue();
+                    WaitForQueue();
 
 
-            disabledJob.ExecutionCount.Should().Be(0);
-        }*/
+                    disabledJob.ExecutionCount.Should().Be(0);
+                }*/
 
     }
 }

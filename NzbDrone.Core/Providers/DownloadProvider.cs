@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly SabProvider _sabProvider;
         private readonly HistoryProvider _historyProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly ConfigProvider _configProvider;
         private readonly BlackholeProvider _blackholeProvider;
@@ -25,14 +25,14 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
-            EpisodeProvider episodeProvider, ExternalNotificationProvider externalNotificationProvider,
+            EpisodeService episodeService, ExternalNotificationProvider externalNotificationProvider,
             ConfigProvider configProvider, BlackholeProvider blackholeProvider,
             SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider,
             NzbgetProvider nzbgetProvider)
         {
             _sabProvider = sabProvider;
             _historyProvider = historyProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
             _externalNotificationProvider = externalNotificationProvider;
             _configProvider = configProvider;
             _blackholeProvider = blackholeProvider;
@@ -66,16 +66,16 @@ namespace NzbDrone.Core.Providers
                                             IsProper = parseResult.Quality.Proper,
                                             Quality = parseResult.Quality.Quality,
                                             NzbTitle = parseResult.OriginalString,
-                                            EpisodeId = episode.EpisodeId,
+                                            EpisodeId = episode.OID,
                                             SeriesId = episode.SeriesId,
                                             NzbInfoUrl = parseResult.NzbInfoUrl,
                                             ReleaseGroup = parseResult.ReleaseGroup,
                                       };
 
                     _historyProvider.Add(history);
-                    _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
+                    _episodeService.MarkEpisodeAsFetched(episode.OID);
 
-                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Downloading, null);
+                    _signalRProvider.UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Downloading, null);
                 }
 
                 _externalNotificationProvider.OnGrab(downloadTitle);
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Providers
                 return seasonResult;
             }
 
-            if (parseResult.Series.IsDaily)
+            if (parseResult.Series.SeriesType == SeriesType.Daily)
             {
                 var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", seriesTitle,
                                      parseResult.AirDate, parseResult.Episodes.First().Title, parseResult.Quality.Quality);

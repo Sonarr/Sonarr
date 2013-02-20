@@ -37,16 +37,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(1)
-                .With(e => e.EpisodeFileId = 1)
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
-                .With(e => e.EpisodeFileId = 2)
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             WithStrictMocker();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -86,16 +84,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(1)
-                .With(e => e.EpisodeFileId = 1)
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
-                .With(e => e.EpisodeFileId = 2)
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             WithStrictMocker();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -135,16 +131,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(1)
-                .With(e => e.EpisodeFileId = 1)
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
-                .With(e => e.EpisodeFileId = 2)
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             WithStrictMocker();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -186,16 +180,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(2)
-                .With(e => e.EpisodeFileId = 1)
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
-                .With(e => e.EpisodeFileId = 2)
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             WithStrictMocker();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -237,16 +229,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(2)
-                .With(e => e.EpisodeFileId = 1)
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
-                .With(e => e.EpisodeFileId = 2)
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             WithStrictMocker();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             Mocker.GetMock<MediaFileProvider>()

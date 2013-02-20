@@ -29,13 +29,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).With(e => e.EpisodeFileId = 0).Build();
+                .All().With(e => e.SeriesId = 1).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
@@ -53,14 +53,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeEpisodes = Builder<Episode>.CreateNew()
                 .With(e => e.SeriesId = 1)
                 .With(e => e.EpisodeNumber = 1)
-                .And(e => e.SeasonNumber = 2)
-                .With(e => e.EpisodeFileId = 0).Build();
+                .And(e => e.SeasonNumber = 2).Build();
 
             Db.Insert(fakeSeries);
             Db.Insert(fakeEpisodes);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(fakeSeries.SeriesId, 2, 1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(fakeSeries.SeriesId, 2, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes);
@@ -73,7 +72,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, 1, 1);
 
             //Assert
             episode.Should().BeNull();
@@ -87,14 +86,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
             Db.Insert(fakeFile);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
@@ -108,7 +107,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             WithRealDb();
 
-            Mocker.Resolve<SeriesProvider>();
+            Mocker.Resolve<SeriesService>();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                     .All().With(e => e.SeriesId = 1).Build();
@@ -118,9 +117,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+            Mocker.Resolve<EpisodeService>().GetEpisode(1);
         }
-     
+
         [Test]
         public void GetEpisodesBySeason_success()
         {
@@ -139,7 +138,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(episodes);
 
             //Act
-            var seasonEposodes = Mocker.Resolve<EpisodeProvider>().GetEpisodesBySeason(12, 2);
+            var seasonEposodes = Mocker.Resolve<EpisodeService>().GetEpisodesBySeason(12, 2);
 
             //Assert
             Db.Fetch<Episode>().Should().HaveCount(10);
@@ -172,10 +171,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Returns(fakeEpisodes);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var actualCount = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList().Count;
+            var actualCount = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList().Count;
             Mocker.GetMock<TvDbProvider>().VerifyAll();
             actualCount.Should().Be(episodeCount);
         }
@@ -207,10 +206,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var storedEpisodes = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var storedEpisodes = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             storedEpisodes.Should().HaveCount(10);
             storedEpisodes.Where(e => e.AirDate == null).Should().HaveCount(7);
             storedEpisodes.Where(e => e.AirDate != null).Should().HaveCount(3);
@@ -247,10 +246,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Returns(fakeTvDbEpisodes);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var storedEpisodes = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var storedEpisodes = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             storedEpisodes.Should().HaveCount(1);
             storedEpisodes.Where(e => e.AirDate == null).Should().HaveCount(1);
         }
@@ -285,10 +284,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             Mocker.GetMock<TvDbProvider>().VerifyAll();
             result.Should().HaveCount(episodeCount);
             result.Where(e => e.EpisodeNumber == 0 && e.SeasonNumber == 15).Single().Ignored.Should().BeTrue();
@@ -324,10 +323,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             result.Should().HaveCount(episodeCount - 3);
             result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title) || c.AirDate < DateTime.Now);
         }
@@ -346,7 +345,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .With(e => e.EpisodeName = "Something")
                                                .TheFirst(3)
                                                .With(e => e.EpisodeName = "")
-                                               .With(e => e.FirstAired = new DateTime(1889,1,1))
+                                               .With(e => e.FirstAired = new DateTime(1889, 1, 1))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -362,10 +361,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             result.Should().HaveCount(episodeCount - 3);
             result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title) || c.AirDate < DateTime.Now);
         }
@@ -395,10 +394,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             result.Should().HaveSameCount(fakeEpisodes.Episodes);
         }
 
@@ -428,10 +427,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             result.Should().HaveSameCount(fakeEpisodes.Episodes);
         }
 
@@ -461,15 +460,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
-            Mocker.GetMock<SeasonProvider>()
+            Mocker.GetMock<SeasonRepository>()
                 .Setup(s => s.IsIgnored(seriesId, 0))
                 .Returns(true);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             Mocker.GetMock<TvDbProvider>().VerifyAll();
             result.Should().HaveCount(episodeCount);
             result.Where(e => e.Ignored).Should().HaveCount(episodeCount);
@@ -497,7 +496,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             Mocker.GetMock<IDatabase>().Verify(c => c.InsertMany(It.Is<IEnumerable<Episode>>(l => l.Count() == 5)), Times.Once());
@@ -531,7 +530,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Returns(currentEpisodes);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             Mocker.GetMock<IDatabase>().Verify(c => c.InsertMany(It.Is<IEnumerable<Episode>>(l => l.Count() == 0)), Times.Once());
@@ -564,7 +563,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Returns(fakeTvDbResult);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             Mocker.VerifyAllMocks();
@@ -605,7 +604,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Returns(new List<Episode> { localEpisode });
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             Mocker.VerifyAllMocks();
@@ -627,13 +626,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             {
                 currentEpisodes.Add(new Episode
                                         {
-                                                TvDbEpisodeId = tvDbEpisode.Id, 
-                                                EpisodeId = 99,
-                                                EpisodeFileId = 69,
-                                                Ignored = true,
-                                                Series = fakeSeries,
-                                                EpisodeNumber = tvDbEpisode.EpisodeNumber,
-                                                SeasonNumber = tvDbEpisode.SeasonNumber
+                                            TvDbEpisodeId = tvDbEpisode.Id,
+                                            OID = 99,
+                                            EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
+                                            Ignored = true,
+                                            Series = fakeSeries,
+                                            EpisodeNumber = tvDbEpisode.EpisodeNumber,
+                                            SeasonNumber = tvDbEpisode.SeasonNumber
                                         });
             }
 
@@ -652,11 +651,11 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Callback<IEnumerable<Episode>>(ep => updatedEpisodes = ep.ToList());
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             updatedEpisodes.Should().HaveSameCount(tvdbSeries.Episodes);
-            updatedEpisodes.Should().OnlyContain(c => c.EpisodeId == 99);
+            updatedEpisodes.Should().OnlyContain(c => c.OID == 99);
             updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 69);
             updatedEpisodes.Should().OnlyContain(c => c.Ignored == true);
         }
@@ -677,8 +676,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 currentEpisodes.Add(new Episode
                 {
                     TvDbEpisodeId = tvDbEpisode.Id,
-                    EpisodeId = 99,
-                    EpisodeFileId = 69,
+                    OID = 99,
+                    EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
                     Ignored = true,
                     Series = fakeSeries,
                     EpisodeNumber = tvDbEpisode.EpisodeNumber + 1,
@@ -701,7 +700,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Callback<IEnumerable<Episode>>(ep => updatedEpisodes = ep.ToList());
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 0);
@@ -723,8 +722,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 currentEpisodes.Add(new Episode
                 {
                     TvDbEpisodeId = tvDbEpisode.Id,
-                    EpisodeId = 99,
-                    EpisodeFileId = 69,
+                    OID = 99,
+                    EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
                     Ignored = true,
                     Series = fakeSeries,
                     EpisodeNumber = tvDbEpisode.EpisodeNumber,
@@ -747,7 +746,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Callback<IEnumerable<Episode>>(ep => updatedEpisodes = ep.ToList());
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
             updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 0);
@@ -794,15 +793,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
-            Mocker.GetMock<SeasonProvider>()
+            Mocker.GetMock<SeasonRepository>()
                 .Setup(s => s.IsIgnored(seriesId, It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             Mocker.GetMock<TvDbProvider>().VerifyAll();
             result.Should().HaveCount(episodeCount);
             result.Where(e => e.Ignored).Should().HaveCount(episodeCount);
@@ -820,15 +819,18 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             Db.Insert(Builder<QualityProfile>.CreateNew().Build());
 
+            var seriesRepo = Mocker.Resolve<ISeriesRepository>();
 
             const int tvDbSeriesId = 71256;
             //act
-            var seriesProvider = Mocker.Resolve<SeriesProvider>();
+            var seriesProvider = Mocker.Resolve<SeriesService>();
 
-            seriesProvider.AddSeries("Test Series","c:\\test\\", tvDbSeriesId, 1, null);
+            seriesProvider.AddSeries("Test Series", "c:\\test\\", tvDbSeriesId, 1, null);
 
-            var episodeProvider = Mocker.Resolve<EpisodeProvider>();
-            episodeProvider.RefreshEpisodeInfo(seriesProvider.GetSeries(tvDbSeriesId));
+
+
+            var episodeProvider = Mocker.Resolve<EpisodeService>();
+            episodeProvider.RefreshEpisodeInfo(seriesRepo.Get(tvDbSeriesId));
 
             //assert
             var episodes = episodeProvider.GetEpisodeBySeries(tvDbSeriesId);
@@ -841,7 +843,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, 1, 1);
 
             //Assert
             episode.Should().BeNull();
@@ -855,14 +857,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
             Db.Insert(fakeFile);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, 1, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
@@ -877,13 +879,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 0).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, 1, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes.First());
@@ -899,14 +901,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
             Db.Insert(fakeFile);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
@@ -921,13 +923,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 0).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).Build();
 
             Db.InsertMany(fakeEpisodes);
             Db.Insert(fakeSeries);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes.First());
@@ -947,11 +949,11 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().MarkEpisodeAsFetched(2);
+            Mocker.Resolve<EpisodeService>().MarkEpisodeAsFetched(2);
             var episodes = Db.Fetch<Episode>();
 
             //Assert
-            episodes.Where(e => e.EpisodeId == 2).Single().GrabDate.Should().BeWithin(TimeSpan.FromSeconds(5)).Before(
+            episodes.Where(e => e.OID == 2).Single().GrabDate.Should().BeWithin(TimeSpan.FromSeconds(5)).Before(
                 DateTime.Now);
 
             episodes.Where(e => e.GrabDate == null).Should().HaveCount(4);
@@ -979,12 +981,12 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(e => e.Ignored = false)
                 .Build();
 
-            Mocker.GetMock<SeasonProvider>()
+            Mocker.GetMock<SeasonRepository>()
                 .Setup(s => s.IsIgnored(newEpisode.SeriesId, newEpisode.SeasonNumber))
                 .Returns(true);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().AddEpisode(newEpisode);
+            Mocker.Resolve<EpisodeService>().AddEpisode(newEpisode);
 
             //Assert
             var episodesInDb = Db.Fetch<Episode>(@"SELECT * FROM Episodes");
@@ -1018,7 +1020,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Build();
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().AddEpisode(newEpisode);
+            Mocker.Resolve<EpisodeService>().AddEpisode(newEpisode);
 
             //Assert
             var episodesInDb = Db.Fetch<Episode>(@"SELECT * FROM Episodes");
@@ -1054,7 +1056,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Build();
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().AddEpisode(newEpisode);
+            Mocker.Resolve<EpisodeService>().AddEpisode(newEpisode);
 
             //Assert
             var episodesInDb = Db.Fetch<Episode>(@"SELECT * FROM Episodes");
@@ -1080,7 +1082,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             episodes.ForEach(c => Db.Insert(c));
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().SetEpisodeIgnore(1, true);
+            Mocker.Resolve<EpisodeService>().SetEpisodeIgnore(1, true);
 
             //Assert
             var episodesInDb = Db.Fetch<Episode>(@"SELECT * FROM Episodes");
@@ -1106,7 +1108,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             episodes.ForEach(c => Db.Insert(c));
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().SetEpisodeIgnore(1, false);
+            Mocker.Resolve<EpisodeService>().SetEpisodeIgnore(1, false);
 
             //Assert
             var episodesInDb = Db.Fetch<Episode>(@"SELECT * FROM Episodes");
@@ -1133,7 +1135,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.AirDate = DateTime.Today.AddDays(-4))
                 .With(c => c.Ignored = true)
                 .TheFirst(2)
-                .With(c => c.EpisodeFileId = 0)
                 .Section(1, 2)
                 .With(c => c.Ignored = false)
                 .Build().ToList();
@@ -1143,7 +1144,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.SeriesId = 10)
                 .With(c => c.SeasonNumber = 0)
                 .With(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .With(c => c.EpisodeFileId = 0)
                 .With(c => c.Ignored = false)
                 .TheFirst(1).With(c => c.Ignored = true)
                 .Build().ToList();
@@ -1153,7 +1153,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(specials);
 
             //Act
-            var missingFiles = Mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(false);
+            var missingFiles = Mocker.Resolve<EpisodeService>().EpisodesWithoutFiles(false);
 
             //Assert
             missingFiles.Should().HaveCount(1);
@@ -1178,7 +1178,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.AirDate = DateTime.Today.AddDays(-4))
                 .With(c => c.Ignored = true)
                 .TheFirst(2)
-                .With(c => c.EpisodeFileId = 0)
                 .Section(1, 2)
                 .With(c => c.Ignored = false)
                 .Build().ToList();
@@ -1188,7 +1187,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.SeriesId = 10)
                 .With(c => c.SeasonNumber = 0)
                 .With(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .With(c => c.EpisodeFileId = 0)
                 .With(c => c.Ignored = false)
                 .TheFirst(1)
                 .With(c => c.Ignored = true)
@@ -1199,7 +1197,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(specials);
 
             //Act
-            var missingFiles = Mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(true);
+            var missingFiles = Mocker.Resolve<EpisodeService>().EpisodesWithoutFiles(true);
 
             //Assert
             missingFiles.Should().HaveCount(2);
@@ -1229,7 +1227,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.AirDate = DateTime.Today.AddDays(-4))
                 .With(c => c.Ignored = true)
                 .With(c => c.EpisodeFile = episodeFile)
-                .With(c => c.EpisodeFileId = episodeFile.EpisodeFileId)
                 .Build().ToList();
 
             Db.Insert(series);
@@ -1237,7 +1234,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(episodes);
 
             //Act
-            var withFiles = Mocker.Resolve<EpisodeProvider>().EpisodesWithFiles();
+            var withFiles = Mocker.Resolve<EpisodeService>().EpisodesWithFiles();
 
             //Assert
             withFiles.Should().HaveCount(2);
@@ -1268,14 +1265,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.SeasonNumber = 1)
                 .With(c => c.AirDate = DateTime.Today.AddDays(-4))
                 .With(c => c.Ignored = true)
-                .With(c => c.EpisodeFileId = 0)
                 .Build().ToList();
 
             Db.Insert(series);
             Db.InsertMany(episodes);
 
             //Act
-            var withFiles = Mocker.Resolve<EpisodeProvider>().EpisodesWithFiles();
+            var withFiles = Mocker.Resolve<EpisodeService>().EpisodesWithFiles();
 
             //Assert
             withFiles.Should().HaveCount(0);
@@ -1296,14 +1292,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .All()
                 .With(c => c.SeriesId = 10)
                 .With(c => c.SeasonNumber = 1)
-                .With(c => c.EpisodeFileId = 12345)
+                .With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 12345 })
                 .Build();
 
             Db.Insert(series);
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            var episodes = Mocker.Resolve<EpisodeProvider>().GetEpisodesByFileId(12345);
+            var episodes = Mocker.Resolve<EpisodeService>().GetEpisodesByFileId(12345);
 
             //Assert
             episodes.Should().HaveCount(2);
@@ -1322,14 +1318,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(c => c.SeriesId = 10)
                 .With(c => c.SeasonNumber = 1)
-                .With(c => c.EpisodeFileId = 12345)
+                  .With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 12345 })
                 .Build();
 
             Db.Insert(series);
             Db.Insert(fakeEpisode);
 
             //Act
-            var episodes = Mocker.Resolve<EpisodeProvider>().GetEpisodesByFileId(12345);
+            var episodes = Mocker.Resolve<EpisodeService>().GetEpisodesByFileId(12345);
 
             //Assert
             episodes.Should().HaveCount(1);
@@ -1351,7 +1347,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            var result = Mocker.Resolve<EpisodeProvider>().IsFirstOrLastEpisodeOfSeason(10, 1, 5);
+            var result = Mocker.Resolve<EpisodeService>().IsFirstOrLastEpisodeOfSeason(10, 1, 5);
 
             //Assert
             result.Should().BeFalse();
@@ -1371,7 +1367,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            var result = Mocker.Resolve<EpisodeProvider>().IsFirstOrLastEpisodeOfSeason(10, 1, 1);
+            var result = Mocker.Resolve<EpisodeService>().IsFirstOrLastEpisodeOfSeason(10, 1, 1);
 
             //Assert
             result.Should().BeFalse();
@@ -1391,7 +1387,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.InsertMany(fakeEpisodes);
 
             //Act
-            var result = Mocker.Resolve<EpisodeProvider>().IsFirstOrLastEpisodeOfSeason(10, 1, 10);
+            var result = Mocker.Resolve<EpisodeService>().IsFirstOrLastEpisodeOfSeason(10, 1, 10);
 
             //Assert
             result.Should().BeFalse();
@@ -1422,10 +1418,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("officeus")).Returns(fakeSeries);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.EpisodeId).ToList(), postDownloadStatus);
+            Mocker.Resolve<EpisodeService>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.OID).ToList(), postDownloadStatus);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -1454,10 +1450,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
 
-            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("officeus")).Returns(fakeSeries);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int> { 300 }, postDownloadStatus);
+            Mocker.Resolve<EpisodeService>().SetPostDownloadStatus(new List<int> { 300 }, postDownloadStatus);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -1468,7 +1464,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [ExpectedException(typeof(ArgumentException))]
         public void SetPostDownloadStatus_should_throw_if_episode_list_is_empty()
         {
-            Mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int>(), PostDownloadStatusType.Failed);
+            Mocker.Resolve<EpisodeService>().SetPostDownloadStatus(new List<int>(), PostDownloadStatusType.Failed);
         }
 
         [Test]
@@ -1508,10 +1504,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Returns(tvdbSeries);
 
             //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+            Mocker.Resolve<EpisodeService>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            var result = Mocker.Resolve<EpisodeService>().GetEpisodeBySeries(seriesId).ToList();
             result.Should().HaveCount(episodeCount);
             result.Where(e => e.Ignored).Should().HaveCount(episodeCount - 1);
             result.Single(e => e.SeasonNumber == 1).Ignored.Should().BeFalse();
@@ -1525,14 +1521,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.WEBDL1080p).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
             Db.Insert(fakeFile);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1);
 
             //Assert
             episode.EpisodeFile.Quality.Should().Be(QualityTypes.WEBDL1080p);

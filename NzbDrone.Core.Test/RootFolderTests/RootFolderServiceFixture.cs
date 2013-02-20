@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
             
             Subject.Add(root);
 
-            Mocker.GetMock<IBasicRepository<RootFolder>>().Verify(c => c.Add(root), Times.Once());
+            Mocker.GetMock<IBasicRepository<RootFolder>>().Verify(c => c.Insert(root), Times.Once());
         }
 
         [Test]

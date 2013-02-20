@@ -15,14 +15,16 @@ namespace NzbDrone.Core.Providers.Search
 {
     public class DailyEpisodeSearch : SearchBase
     {
+        private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public DailyEpisodeSearch(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
+        public DailyEpisodeSearch(ISeriesService seriesService, EpisodeService episodeService, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
                              SceneMappingProvider sceneMappingProvider, AllowedDownloadSpecification allowedDownloadSpecification,
-                             SearchHistoryProvider searchHistoryProvider)
-                        : base(seriesProvider, episodeProvider, downloadProvider, indexerProvider, sceneMappingProvider, 
-                               allowedDownloadSpecification, searchHistoryProvider)
-            {
+                             SearchHistoryProvider searchHistoryProvider, ISeriesRepository seriesRepository)
+            : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerProvider, sceneMappingProvider,
+                   allowedDownloadSpecification, searchHistoryProvider)
+        {
+            _seriesRepository = seriesRepository;
         }
 
         public DailyEpisodeSearch()

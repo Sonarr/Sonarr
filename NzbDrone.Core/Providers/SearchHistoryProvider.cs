@@ -13,19 +13,21 @@ namespace NzbDrone.Core.Providers
     public class SearchHistoryProvider
     {
         private readonly IDatabase _database;
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly DownloadProvider _downloadProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly EpisodeService _episodeService;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SearchHistoryProvider(IDatabase database, SeriesProvider seriesProvider,
-                                        DownloadProvider downloadProvider, EpisodeProvider episodeProvider)
+        public SearchHistoryProvider(IDatabase database, ISeriesService seriesService,
+                                        DownloadProvider downloadProvider, EpisodeService episodeService, ISeriesRepository seriesRepository)
         {
             _database = database;
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _downloadProvider = downloadProvider;
-            _episodeProvider = episodeProvider;
+            _episodeService = episodeService;
+            _seriesRepository = seriesRepository;
         }
 
         public SearchHistoryProvider()
@@ -105,13 +107,13 @@ namespace NzbDrone.Core.Providers
             var item = _database.Single<SearchHistoryItem>(itemId);
             logger.Info("Starting Force Download of: {0}", item.ReportTitle);
             var searchResult = _database.Single<SearchHistory>(item.SearchHistoryId);
-            var series = _seriesProvider.GetSeries(searchResult.SeriesId);
+            var series = _seriesRepository.Get(searchResult.SeriesId);
             
             var parseResult = Parser.ParseTitle(item.ReportTitle);
             parseResult.NzbUrl = item.NzbUrl;
             parseResult.Series = series;
             parseResult.Indexer = item.Indexer;
-            parseResult.Episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);
+            parseResult.Episodes = _episodeService.GetEpisodesByParseResult(parseResult);
             parseResult.SceneSource = true;
 
             logger.Info("Forcing Download of: {0}", item.ReportTitle);

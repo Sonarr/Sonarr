@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Instrumentation
         {
             registration.Preparing += OnComponentPreparing;
         }
+
         static void OnComponentPreparing(object sender, PreparingEventArgs e)
         {
             e.Parameters = e.Parameters.Union(new[] 
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Instrumentation
                         new ResolvedParameter((p, i) => p.ParameterType == typeof(Logger), (p,i)=> GetLogger(p.Member.DeclaringType)) 
                 });
         }
-
+        
         private static object GetLogger(Type type)
         {
             const string STRING_TO_REMOVE = "NzbDrone";

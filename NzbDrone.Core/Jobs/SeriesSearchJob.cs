@@ -12,15 +12,14 @@ namespace NzbDrone.Core.Jobs
     public class SeriesSearchJob : IJob
     {
         private readonly SeasonSearchJob _seasonSearchJob;
-        private readonly SeasonProvider _seasonProvider;
+        private readonly ISeasonRepository _seasonRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SeriesSearchJob(SeasonSearchJob seasonSearchJob,
-                                SeasonProvider seasonProvider)
+        public SeriesSearchJob(SeasonSearchJob seasonSearchJob, ISeasonRepository seasonRepository)
         {
             _seasonSearchJob = seasonSearchJob;
-            _seasonProvider = seasonProvider;
+            _seasonRepository = seasonRepository;
         }
 
         public string Name
@@ -39,11 +38,11 @@ namespace NzbDrone.Core.Jobs
                 throw new ArgumentException("options.SeriesId");
 
             logger.Debug("Getting seasons from database for series: {0}", options.SeriesId);
-            IList<int> seasons = _seasonProvider.GetSeasons(options.SeriesId);
+            IList<int> seasons = _seasonRepository.GetSeasonBySeries(options.SeriesId);
 
             foreach (var season in seasons.Where(s => s > 0))
             {
-                if (!_seasonProvider.IsIgnored(options.SeriesId, season))
+                if (!_seasonRepository.IsIgnored(options.SeriesId, season))
                 {
                     _seasonSearchJob.Start(notification, new { SeriesId = options.SeriesId, SeasonNumber = season });
                 }

@@ -12,17 +12,19 @@ namespace NzbDrone.Core.Jobs
     public class RefreshEpisodeMetadata : IJob
     {
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly MetadataProvider _metadataProvider;
+        private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RefreshEpisodeMetadata(MediaFileProvider mediaFileProvider, SeriesProvider seriesProvider,
-                                        MetadataProvider metadataProvider)
+        public RefreshEpisodeMetadata(MediaFileProvider mediaFileProvider, ISeriesService seriesService,
+                                        MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
         {
             _mediaFileProvider = mediaFileProvider;
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _metadataProvider = metadataProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public string Name
@@ -40,10 +42,10 @@ namespace NzbDrone.Core.Jobs
             List<Series> seriesToRefresh;
 
             if (options == null || options.SeriesId <= 0)
-                seriesToRefresh = _seriesProvider.GetAllSeries().ToList();
+                seriesToRefresh = _seriesRepository.All().ToList();
 
             else
-                seriesToRefresh = new List<Series> { _seriesProvider.GetSeries(options.SeriesId) };
+                seriesToRefresh = new List<Series> { _seriesRepository.Get(options.SeriesId) };
 
             foreach(var series in seriesToRefresh)
             {

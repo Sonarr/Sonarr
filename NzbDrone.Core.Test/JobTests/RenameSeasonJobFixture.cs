@@ -36,8 +36,8 @@ namespace NzbDrone.Core.Test.JobTests
                     .With(e => e.SeasonNumber = 5)
                     .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                  .Setup(s => s.GetSeries(_series.SeriesId))
+            Mocker.GetMock<ISeriesRepository>()
+                  .Setup(s => s.Get(_series.SeriesId))
                   .Returns(_series);
 
             Mocker.GetMock<MediaFileProvider>()

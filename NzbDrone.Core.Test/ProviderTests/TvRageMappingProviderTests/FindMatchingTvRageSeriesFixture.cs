@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                     .With(s => s.UtcOffset = -8)
                     .Build();
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeService>()
                   .Setup(s => s.GetEpisode(_series.SeriesId, 1, 1))
                   .Returns(_episode);
 

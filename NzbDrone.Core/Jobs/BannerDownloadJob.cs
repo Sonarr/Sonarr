@@ -13,16 +13,18 @@ namespace NzbDrone.Core.Jobs
 {
     public class BannerDownloadJob : IJob
     {
-        private readonly SeriesProvider _seriesProvider;
+        private readonly ISeriesService _seriesService;
         private readonly BannerProvider _bannerProvider;
+        private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private const string BANNER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
-        public BannerDownloadJob(SeriesProvider seriesProvider, BannerProvider bannerProvider)
+        public BannerDownloadJob(ISeriesService seriesService, BannerProvider bannerProvider, ISeriesRepository seriesRepository)
         {
-            _seriesProvider = seriesProvider;
+            _seriesService = seriesService;
             _bannerProvider = bannerProvider;
+            _seriesRepository = seriesRepository;
         }
 
         public BannerDownloadJob()
@@ -45,7 +47,7 @@ namespace NzbDrone.Core.Jobs
 
             if (options != null)
             {
-                Series series = _seriesProvider.GetSeries(options.SeriesId);
+                Series series = _seriesRepository.Get(options.SeriesId);
 
                 if (series != null && !String.IsNullOrEmpty(series.BannerUrl))
                 {
@@ -55,7 +57,7 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            var seriesInDb = _seriesProvider.GetAllSeries();
+            var seriesInDb = _seriesRepository.All();
 
             foreach (var series in seriesInDb.Where(s => !String.IsNullOrEmpty(s.BannerUrl)))
             {
