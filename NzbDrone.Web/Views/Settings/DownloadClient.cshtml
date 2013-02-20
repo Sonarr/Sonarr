@@ -30,6 +30,9 @@
     }
 </style>
 <div id="stylized">
+    <div class="warningBox">
+        Do not set Download Client TV Directory to the same location as your TV shows, it can have undesired effects.
+    </div>
     @using (Html.BeginForm("SaveDownloadClient", "Settings", FormMethod.Post, new { id = "DownloadClientForm", name = "DownloadClientForm", @class = "settingsForm" }))
     {
         <div id="downloadClient-top" class="settingsForm">
