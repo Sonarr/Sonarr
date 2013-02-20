@@ -15,6 +15,7 @@
         /// <summary>
         /// Episode has aired, but no episode
         /// files are avilable
+        /// Todo: We shouldn't set missing until the episode has past the actual airtime + runtime, including UtcOffset
         /// </summary>
         Missing,
 

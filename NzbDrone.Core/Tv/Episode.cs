@@ -15,6 +15,8 @@ namespace NzbDrone.Core.Tv
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
+
+        //Todo: Since we're displaying next airing relative to the user's timezone we may want to store this as UTC (with airtime + UTC offset)
         public DateTime? AirDate { get; set; }
         public string Overview { get; set; }
         public Boolean Ignored { get; set; }
@@ -23,6 +25,7 @@ namespace NzbDrone.Core.Tv
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
 
+        //Todo: This should be UTC
         public DateTime? GrabDate { get; set; }
 
         public EpisodeStatusType Status

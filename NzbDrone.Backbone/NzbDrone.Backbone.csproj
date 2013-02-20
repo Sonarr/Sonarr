@@ -121,6 +121,12 @@
     <Content Include="Shared\NotificationView.js" />
     <Content Include="Shared\SpinnerTemplate.html" />
     <Content Include="Shared\SpinnerView.js" />
+    <Content Include="Upcoming\UpcomingCollection.js" />
+    <Content Include="Upcoming\UpcomingCollectionTemplate.html" />
+    <Content Include="Upcoming\UpcomingCollectionView.js" />
+    <Content Include="Upcoming\UpcomingGroupTemplate.html" />
+    <Content Include="Upcoming\UpcomingGroupView.js" />
+    <Content Include="Upcoming\UpcomingModel.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Bootstrap\accordion.less" />

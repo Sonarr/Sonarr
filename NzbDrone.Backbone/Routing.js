@@ -9,6 +9,8 @@
             'series/index': 'series',
             'series/add': 'addSeries',
             'series/add/:action(/:query)': 'addSeries',
+            'upcoming': 'upcoming',
+            'upcoming/index': 'upcoming',
             ':whatever': 'notFound'
         }
     });

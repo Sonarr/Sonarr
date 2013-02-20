@@ -2,6 +2,7 @@
 using System;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
+using PetaPoco;
 
 namespace NzbDrone.Core.Tv
 {
@@ -19,6 +20,7 @@ namespace NzbDrone.Core.Tv
 
         public DayOfWeek? AirsDayOfWeek { get; set; }
 
+        [Column("AirTimes")]
         public String AirTime { get; set; }
 
         public string Language { get; set; }

@@ -38,6 +38,7 @@ define('app',  function () {
         window.NzbDrone.AddSeries.RootFolders = {};
         window.NzbDrone.Quality = {};
         window.NzbDrone.Shared = {};
+        window.NzbDrone.Upcoming = {};
 
         window.NzbDrone.Events = {
             OpenModalDialog :'openModal',

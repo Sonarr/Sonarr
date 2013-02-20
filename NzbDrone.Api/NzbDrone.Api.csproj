@@ -115,6 +115,7 @@
     <Compile Include="FrontendModule\IndexModule.cs" />
     <Compile Include="FrontendModule\BootstrapModule.cs" />
     <Compile Include="FrontendModule\LessService.cs" />
+    <Compile Include="Resolvers\AirTimeResolver.cs" />
     <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
@@ -138,6 +139,8 @@
     <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />
+    <Compile Include="Upcoming\UpcomingModule.cs" />
+    <Compile Include="Upcoming\UpcomingResource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

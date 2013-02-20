@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Providers
             _database = database;
         }
 
+        //Todo: Might be best if this is part of episode repo (when its there)
         public virtual List<Episode> UpcomingEpisodes()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
