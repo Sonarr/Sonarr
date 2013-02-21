@@ -50,6 +50,7 @@
     <Content Include="AddSeries\SearchResultModel.js" />
     <Content Include="app.js" />
     <Content Include="Content\base.css" />
+    <Content Include="Content\menu.css" />
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\Images\white-batch-32.png" />
     <Content Include="Content\Images\white-batch-64.png" />
@@ -81,6 +82,7 @@
     <Content Include="Content\tablesorter.bootstrap.css" />
     <Content Include="Controller.js" />
     <Content Include="Content\theme.css" />
+    <Content Include="favicon.ico" />
     <Content Include="JsLibraries\backbone.collectionbinder.js" />
     <Content Include="JsLibraries\backbone.debug.js" />
     <Content Include="JsLibraries\backbone.js" />

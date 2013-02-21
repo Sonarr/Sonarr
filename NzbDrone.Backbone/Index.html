@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>NzbDrone</title>
-    <link rel="SHORTCUT ICON" href="../../favicon.ico" />
+    <link rel="SHORTCUT ICON" href="favicon.ico" />
     <link rel="apple-touch-icon" sizes="57x57" href="Static/Content/Images/apple-touch-icon-114.png" />
     <link rel="apple-touch-icon" sizes="114x114" href="Static/Content/Images/apple-touch-icon-114.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="Static/Content/Images/apple-touch-icon-144.png" />
@@ -15,6 +15,7 @@
     <link href="/static/content/fullcalendar.css" rel='stylesheet' type='text/css'>
     <link href="/static/Content/tablesorter.bootstrap.css" rel='stylesheet' type='text/css' />
     <link href="/static/AddSeries/addseries.css" rel='stylesheet' type='text/css' />
+    <link href="/static/content/menu.css" rel='stylesheet' type='text/css' />
 </head>
 <script type="text/html" id="notification-template">
     <div class="alert alert-{{level}}">
@@ -42,29 +43,15 @@
         <div class="container">
             <div class="row">
                 <div class="span12">
-                    <ul>
-                        <li><a href="index.html"><i class="batch home"></i>
-                            <br>
-                            Dashboard</a></li>
-                        <li><span class="label label-important pull-right">08</span><a href="stream.html"><i class="batch stream"></i><br>
-                            Stream</a></li>
-                        <li><span class="label label-important pull-right">04</span><a href="messages.html"><i class="batch plane"></i><br>
-                            Messages</a></li>
-                        <li><a href="calendar.html"><i class="batch calendar"></i>
-                            <br>
-                            Calendar</a></li>
-                        <li><a href="paragraphs.html" class="active"><i class="batch quill"></i>
-                            <br>
-                            Paragraphs</a></li>
-                        <li><a href="faq.html"><i class="batch forms"></i>
-                            <br>
-                            FAQ</a></li>
-                        <li><a href="users.html"><i class="batch users"></i>
-                            <br>
-                            Users</a></li>
-                        <li><a href="settings.html"><i class="batch settings"></i>
-                            <br>
-                            Settings</a></li>
+                    <ul id="main-menu">
+                        <li><a href="/"><i class="icon-film"></i><br>Series</a></li>
+                        <li><a href="/upcoming"><i class="icon-calendar"></i><br>Calendar</a></li>
+                        <li><span class="label label-important pull-right">08</span><a href="history"><i class="icon-time"></i><br>History</a></li>
+                        <li><span class="label label-important pull-right">04</span><a href="missing"><i class="icon-folder-open"></i><br>Missing</a></li>
+                        <li><a href="settings"><i class="icon-cogs"></i><br>Settings</a></li>
+                        <li><a href="system" class="active"><i class="icon-plane"></i><br>System</a></li>
+                        <li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank"><i class="icon-star"></i><br>Donate</a></li>
+                        
                     </ul>
                 </div>
             </div>
