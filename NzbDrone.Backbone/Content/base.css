@@ -7,36 +7,6 @@
     font-size: 13px;
 }
 
-body {
-    background: #191919 url(images/background.jpg) no-repeat right top;
-    font-size: 14px;
-    color: #3C3C3C;
-    background-attachment: fixed;
-}
-
-#logo {
-    height: 135px;
-    background: url(images/logo.png) no-repeat left top;
-    background-color: #065EFE;
-    color: white; /**color: rgb(40, 40, 40);**/
-    text-transform: lowercase;
-    letter-spacing: -1px;
-    line-height: 110px;
-    font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
-    font-weight: 100;
-    font-size: 110px;
-}
-
-#content {
-    background: white;
-}
-
-#main-region {
-    margin-top: 20px;
-    margin-bottom: 100px;
-    min-height: 600px;
-}
-
 .nz-center {
     text-align: center;
     overflow: hidden;

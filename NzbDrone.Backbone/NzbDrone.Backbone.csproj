@@ -50,6 +50,10 @@
     <Content Include="AddSeries\SearchResultModel.js" />
     <Content Include="app.js" />
     <Content Include="Content\base.css" />
+    <Content Include="Content\fullcalendar.css" />
+    <Content Include="Content\Images\white-batch-32.png" />
+    <Content Include="Content\Images\white-batch-64.png" />
+    <Content Include="Content\toastr.css" />
     <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\apple-touch-icon-114.png" />
@@ -74,9 +78,9 @@
     <Content Include="Content\Images\404.png" />
     <Content Include="Content\Images\thetvdb.png" />
     <Content Include="Content\Intelisense\bootstrap.css" />
-    <Content Include="Content\Menu.css" />
     <Content Include="Content\tablesorter.bootstrap.css" />
     <Content Include="Controller.js" />
+    <Content Include="Content\theme.css" />
     <Content Include="JsLibraries\backbone.collectionbinder.js" />
     <Content Include="JsLibraries\backbone.debug.js" />
     <Content Include="JsLibraries\backbone.js" />

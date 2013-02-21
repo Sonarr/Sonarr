@@ -9,13 +9,11 @@
     <link rel="apple-touch-icon" sizes="144x144" href="Static/Content/Images/apple-touch-icon-144.png" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/bootstrap.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic">
-    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/styles.css">
-    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/toastr.css">
-    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/fullcalendar.css">
+    <link href="/static/content/bootstrap/bootstrap.less" rel='stylesheet' type='text/css' />
+    <link href="/static/content/theme.css" rel='stylesheet' type='text/css'>
+    <link href="/static/content/toastr.css" rel='stylesheet' type='text/css'>
+    <link href="/static/content/fullcalendar.css" rel='stylesheet' type='text/css'>
     <link href="/static/Content/tablesorter.bootstrap.css" rel='stylesheet' type='text/css' />
-
     <link href="/static/AddSeries/addseries.css" rel='stylesheet' type='text/css' />
 </head>
 <script type="text/html" id="notification-template">
@@ -79,22 +77,7 @@
                     <div class="span12 header">
                         <h4 id="title-region">NZBDRONE</h4>
                     </div>
-                    <div class="span12">
-                        <div class="alert alert-block">
-                            <button type="button" data-dismiss="alert" class="close">&times;</button>
-                            <h4>Warning</h4>
-                            Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.
-                        </div>
-                        <div class="alert alert-error">
-                            <button type="button" data-dismiss="alert" class="close">&times;</button><strong>Oh snap! </strong>Change a few things up and try submitting again.
-                        </div>
-                        <div class="alert alert-success">
-                            <button type="button" data-dismiss="alert" class="close">&times;</button><strong>Well done! </strong>You successfully read this important alert message.
-                        </div>
-                        <div class="alert alert-info">
-                            <button type="button" data-dismiss="alert" class="close">&times;</button><strong>Heads up! </strong>This alert needs your attention, but it's not super important.
-                        </div>
-                    </div>
+                    <div class="span12" id="notification-region" />
                 </div>
                 <div class="row" id="main-region"></div>
             </div>
