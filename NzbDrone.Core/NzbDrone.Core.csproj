@@ -544,7 +544,7 @@
     <Compile Include="Providers\SearchProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tv\SeriesProvider.cs">
+    <Compile Include="Tv\SeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\SignalRProvider.cs">

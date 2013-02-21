@@ -16,10 +16,6 @@ namespace NzbDrone.Core.Tv
 
     public class SeasonRepository : BasicRepository<Season>, ISeasonRepository
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
-        private readonly IDatabase _database;
-
         public SeasonRepository(IObjectDatabase database)
                 : base(database)
         {
