@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -17,10 +18,10 @@ namespace NzbDrone.Core.Providers.Search
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PartialSeasonSearch(ISeriesService seriesService, EpisodeService episodeService, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
+        public PartialSeasonSearch(ISeriesService seriesService, EpisodeService episodeService, DownloadProvider downloadProvider, IndexerService indexerService,
                              SceneMappingProvider sceneMappingProvider, AllowedDownloadSpecification allowedDownloadSpecification,
                              SearchHistoryProvider searchHistoryProvider,ISeriesRepository seriesRepository)
-                        : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerProvider, sceneMappingProvider, 
+                        : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingProvider, 
                                allowedDownloadSpecification, searchHistoryProvider)
             {
         }
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Providers.Search
             {
                 var prefix = p;
 
-                Parallel.ForEach(_indexerProvider.GetEnabledIndexers(), indexer =>
+                Parallel.ForEach(_indexerService.GetEnabledIndexers(), indexer =>
                 {
                     try
                     {

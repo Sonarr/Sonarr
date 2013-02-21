@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
@@ -6,11 +7,11 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers.Indexer
+namespace NzbDrone.Core.Indexers.Providers
 {
-    public class Wombles : IndexerBase
+    public class NzbsRUs : IndexerBase
     {
-        public Wombles(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
+        public NzbsRUs(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
         {
         }
 
@@ -20,7 +21,10 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                            {
-                               string.Format("http://nzb.isasecret.com/rss")
+                               string.Format(
+                                   "https://www.nzbsrus.com/rssfeed.php?cat=91,75&i={0}&h={1}",
+                                   _configProvider.NzbsrusUId,
+                                   _configProvider.NzbsrusHash)
                            };
             }
         }
@@ -29,13 +33,14 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             get
             {
-                return true;
+                return !string.IsNullOrWhiteSpace(_configProvider.NzbsrusUId) &&
+                       !string.IsNullOrWhiteSpace(_configProvider.NzbsrusHash);
             }
         }
 
         public override string Name
         {
-            get { return "WomblesIndex"; }
+            get { return "NzbsRUs"; }
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
@@ -45,7 +50,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbInfoUrl(SyndicationItem item)
         {
-            return null;
+            return item.Links[0].Uri.ToString();
         }
 
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
@@ -72,15 +77,11 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             if (currentResult != null)
             {
-                currentResult.Size = 0;
+                var sizeString = Regex.Match(item.Summary.Text, @"\d+\.\d{1,2} \w{3}", RegexOptions.IgnoreCase).Value;
+                currentResult.Size = Parser.GetReportSize(sizeString);
             }
 
             return currentResult;
-        }
-
-        public override bool EnabledByDefault
-        {
-            get { return true; }
         }
     }
 }

@@ -10,13 +10,15 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Test.Indexers;
 using NzbDrone.Core.Test.ProviderTests;
 using NzbDrone.Test.Common;
 
@@ -54,8 +56,8 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", fileName));
 
-            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            Mocker.GetMock<IndexerProvider>()
+            var fakeSettings = Builder<Indexer>.CreateNew().Build();
+            Mocker.GetMock<IIndexerService>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
@@ -75,7 +77,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         [Test]
-        public void custome_parser_partial_success()
+        public void custom_parser_partial_success()
         {
             const string title = "Adventure.Inc.S03E19.DVDRip.XviD-OSiTV";
             const int season = 3;
@@ -84,8 +86,8 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             const string summary = "My fake summary";
 
-            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            Mocker.GetMock<IndexerProvider>()
+            var fakeSettings = Builder<Indexer>.CreateNew().Build();
+            Mocker.GetMock<IIndexerService>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
@@ -104,12 +106,12 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
-        public void custome_parser_full_parse(string title)
+        public void custom_parser_full_parse(string title)
         {
             const string summary = "My fake summary";
 
-            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            Mocker.GetMock<IndexerProvider>()
+            var fakeSettings = Builder<Indexer>.CreateNew().Build();
+            Mocker.GetMock<IIndexerService>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
@@ -275,8 +277,8 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "newznab.xml"));
 
-            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            Mocker.GetMock<IndexerProvider>()
+            var fakeSettings = Builder<Indexer>.CreateNew().Build();
+            Mocker.GetMock<IIndexerService>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
@@ -306,8 +308,8 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "" + fileName));
 
-            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            Mocker.GetMock<IndexerProvider>()
+            var fakeSettings = Builder<Indexer>.CreateNew().Build();
+            Mocker.GetMock<IIndexerService>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 

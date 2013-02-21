@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Text;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers.Indexer
+namespace NzbDrone.Core.Indexers.Providers
 {
     class Omgwtfnzbs : IndexerBase
     {

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Text;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Nzbx;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers.Indexer
+namespace NzbDrone.Core.Indexers.Providers
 {
     class Nzbx : IndexerBase
     {

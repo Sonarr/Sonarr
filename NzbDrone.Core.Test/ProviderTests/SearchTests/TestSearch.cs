@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -18,9 +19,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public TestSearch(ISeriesService seriesService, EpisodeService episodeService, DownloadProvider downloadProvider, 
-                          IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
+                          IndexerService indexerService, SceneMappingProvider sceneMappingProvider,
                           AllowedDownloadSpecification allowedDownloadSpecification, SearchHistoryProvider searchHistoryProvider,ISeriesRepository seriesRepository)
-                          : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerProvider, sceneMappingProvider, 
+                          : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingProvider, 
                                  allowedDownloadSpecification, searchHistoryProvider)
         {
         }
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             var seasonNumber = options.Episode.SeasonNumber;
             var episodeNumber = options.Episode.EpisodeNumber;
 
-            Parallel.ForEach(_indexerProvider.GetEnabledIndexers(), indexer =>
+            Parallel.ForEach(_indexerService.GetEnabledIndexers(), indexer =>
             {
                 try
                 {

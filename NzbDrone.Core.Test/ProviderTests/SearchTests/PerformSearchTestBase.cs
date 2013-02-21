@@ -5,11 +5,12 @@ using System.Text;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Test.Common;
 
@@ -56,7 +57,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             _indexer2 = new Mock<IndexerBase>();
             _indexers = new List<IndexerBase> { _indexer1.Object, _indexer2.Object };
 
-            Mocker.GetMock<IndexerProvider>()
+            Mocker.GetMock<IIndexerService>()
                   .Setup(c => c.GetEnabledIndexers())
                   .Returns(_indexers);
         }

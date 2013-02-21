@@ -4,94 +4,77 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
-
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.Indexers
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerProviderTest : SqlCeTest
+    public class IndexerServiceTest : CoreTest
     {
         [Test]
         public void Init_indexer_test()
         {
-            WithRealDb();
-
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
-            var indexerProvider = Mocker.Resolve<IndexerProvider>();
-            var settings = indexerProvider.GetSettings(typeof(MockIndexer));
-            settings.Enable = true;
-            indexerProvider.SaveSettings(settings);
+            //Mocker.GetMock<IIndexerRepository>()
+            //    .Setup(s => s.Find(typeof(MockIndexer)))
+            //    .Returns()
 
-            
-            indexerProvider.All();
+            Mocker.Resolve<IndexerService>();
 
-
-            indexerProvider.All().Should().HaveCount(1);
-            indexerProvider.GetEnabledIndexers().Should().HaveCount(1);
+            Mocker.GetMock<IIndexerRepository>()
+                .Verify(v => v.Insert(It.IsAny<Indexer>()), Times.Once());
         }
 
         [Test]
-        public void Init_indexer_with_disabled_job()
+        public void getEnabled_should_not_return_any_when_no_indexers_are_enabled()
         {
-            WithRealDb();
-
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
-            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            Mocker.GetMock<IIndexerRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<Indexer> {new Indexer {OID = 1, Type = "", Enable = false, Name = "Fake Indexer"}});
 
-            var settings = indexerProvider.GetSettings(typeof(MockIndexer));
-            settings.Enable = false;
-            indexerProvider.SaveSettings(settings);
-
-            
-
-            indexerProvider.All().Should().HaveCount(1);
-            indexerProvider.GetEnabledIndexers().Should().BeEmpty();
+            Mocker.Resolve<IndexerService>().GetEnabledIndexers().Should().BeEmpty();
         }
 
         [Test]
         public void Init_indexer_should_enable_indexer_that_is_enabled_by_default()
         {
-            WithRealDb();
-
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<DefaultEnabledIndexer>() });
 
-            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            Mocker.Resolve<IndexerService>();
 
+            Mocker.GetMock<IIndexerRepository>()
+                .Verify(v => v.Insert(It.Is<Indexer>(indexer => indexer.Enable)), Times.Once());
 
-            
-            indexerProvider.All();
-            indexerProvider.All().Should().HaveCount(1);
-            indexerProvider.GetEnabledIndexers().Should().HaveCount(1);
-            indexerProvider.GetSettings(typeof(DefaultEnabledIndexer)).Enable.Should().BeTrue();
+            Mocker.GetMock<IIndexerRepository>()
+                .Verify(v => v.Insert(It.Is<Indexer>(indexer => !indexer.Enable)), Times.Never());
         }
 
         [Test]
         public void Init_indexer_should_not_enable_indexer_that_is_not_enabled_by_default()
         {
-            WithRealDb();
-
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
-            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            Mocker.Resolve<IndexerService>();
 
+            Mocker.GetMock<IIndexerRepository>()
+                .Verify(v => v.Insert(It.Is<Indexer>(indexer => indexer.Enable)), Times.Never());
 
-            
-            indexerProvider.All();
-            indexerProvider.All().Should().HaveCount(1);
-            indexerProvider.GetEnabledIndexers().Should().HaveCount(0);
-            indexerProvider.GetSettings(typeof(MockIndexer)).Enable.Should().BeFalse();
+            Mocker.GetMock<IIndexerRepository>()
+                .Verify(v => v.Insert(It.Is<Indexer>(indexer => !indexer.Enable)), Times.Once());
         }
     }
 

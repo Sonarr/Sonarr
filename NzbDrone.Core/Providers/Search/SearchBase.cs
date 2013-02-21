@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Providers.Search
         private readonly ISeriesRepository _seriesRepository;
         protected readonly EpisodeService _episodeService;
         protected readonly DownloadProvider _downloadProvider;
-        protected readonly IndexerProvider _indexerProvider;
+        protected readonly IndexerService _indexerService;
         protected readonly SceneMappingProvider _sceneMappingProvider;
         protected readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         protected readonly SearchHistoryProvider _searchHistoryProvider;
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Providers.Search
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected SearchBase(ISeriesService seriesService,ISeriesRepository seriesRepository, EpisodeService episodeService, DownloadProvider downloadProvider,
-                             IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
+                             IndexerService indexerService, SceneMappingProvider sceneMappingProvider,
                              AllowedDownloadSpecification allowedDownloadSpecification,
                              SearchHistoryProvider searchHistoryProvider)
         {
@@ -33,7 +34,7 @@ namespace NzbDrone.Core.Providers.Search
             _seriesRepository = seriesRepository;
             _episodeService = episodeService;
             _downloadProvider = downloadProvider;
-            _indexerProvider = indexerProvider;
+            _indexerService = indexerService;
             _sceneMappingProvider = sceneMappingProvider;
             _allowedDownloadSpecification = allowedDownloadSpecification;
             _searchHistoryProvider = searchHistoryProvider;

@@ -7,10 +7,11 @@ using FluentAssertions;
 using NCrunch.Framework;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.ExternalNotification;
-using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Test.Framework;
 
@@ -112,7 +113,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void indexers_are_initialized()
         {
-            kernel.Resolve<IndexerProvider>().All().Select(c => c.IndexProviderType).Should().BeEquivalentTo(indexers);
+            kernel.Resolve<IIndexerService>().All().Select(c => c.Type).Should().BeEquivalentTo(indexers);
         }
 
         [Test]

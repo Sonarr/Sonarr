@@ -2,8 +2,6 @@
 //https://connect.microsoft.com/VisualStudio/feedback/details/325421/syndicationfeed-load-fails-to-parse-datetime-against-a-real-world-feeds-ie7-can-read
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,7 +11,7 @@ using System.Threading;
 using System.Xml;
 using NLog;
 
-namespace NzbDrone.Core.Providers.Indexer
+namespace NzbDrone.Core.Indexers.Providers
 {
     public class SyndicationFeedXmlReader : XmlTextReader
     {

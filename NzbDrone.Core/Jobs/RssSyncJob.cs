@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Providers.Indexer;
 
 namespace NzbDrone.Core.Jobs
 {
     public class RssSyncJob : IJob
     {
         private readonly DownloadProvider _downloadProvider;
-        private readonly IndexerProvider _indexerProvider;
+        private readonly IndexerService _indexerService;
         private readonly MonitoredEpisodeSpecification _isMonitoredEpisodeSpecification;
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
@@ -24,12 +24,12 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(DownloadProvider downloadProvider, IndexerProvider indexerProvider,
+        public RssSyncJob(DownloadProvider downloadProvider, IndexerService indexerService,
             MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, 
             UpgradeHistorySpecification upgradeHistorySpecification, ConfigProvider configProvider)
         {
             _downloadProvider = downloadProvider;
-            _indexerProvider = indexerProvider;
+            _indexerService = indexerService;
             _isMonitoredEpisodeSpecification = isMonitoredEpisodeSpecification;
             _allowedDownloadSpecification = allowedDownloadSpecification;
             _upgradeHistorySpecification = upgradeHistorySpecification;
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Jobs
 
             notification.CurrentMessage = "Fetching RSS";
 
-            Parallel.ForEach(_indexerProvider.GetEnabledIndexers(), indexer =>
+            Parallel.ForEach(_indexerService.GetEnabledIndexers(), indexer =>
             {
                 try
                 {

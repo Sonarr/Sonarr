@@ -247,7 +247,7 @@
     <Compile Include="JobTests\JobControllerFixture.cs" />
     <Compile Include="QualityTest.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
-    <Compile Include="ProviderTests\IndexerProviderTest.cs" />
+    <Compile Include="Indexers\IndexerServiceTest.cs" />
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
