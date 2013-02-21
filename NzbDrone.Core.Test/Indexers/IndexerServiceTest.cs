@@ -20,16 +20,12 @@ namespace NzbDrone.Core.Test.Indexers
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerServiceTest : CoreTest
+    public class IndexerServiceTest : CoreTest<IndexerService>
     {
         [Test]
         public void Init_indexer_test()
         {
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
-
-            //Mocker.GetMock<IIndexerRepository>()
-            //    .Setup(s => s.Find(typeof(MockIndexer)))
-            //    .Returns()
 
             Mocker.Resolve<IndexerService>();
 
@@ -46,7 +42,7 @@ namespace NzbDrone.Core.Test.Indexers
                   .Setup(s => s.All())
                   .Returns(new List<Indexer> {new Indexer {OID = 1, Type = "", Enable = false, Name = "Fake Indexer"}});
 
-            Mocker.Resolve<IndexerService>().GetEnabledIndexers().Should().BeEmpty();
+            Subject.GetEnabledIndexers().Should().BeEmpty();
         }
 
         [Test]

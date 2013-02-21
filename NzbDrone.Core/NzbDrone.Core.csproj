@@ -279,7 +279,7 @@
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
-    <Compile Include="Lifecycle\IInitilizable.cs" />
+    <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="Model\HistoryQueryModel.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />

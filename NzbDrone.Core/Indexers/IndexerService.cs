@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Indexers.Providers;
+using NzbDrone.Core.Lifecycle;
 using PetaPoco;
 
 namespace NzbDrone.Core.Indexers
@@ -15,19 +16,41 @@ namespace NzbDrone.Core.Indexers
         Indexer GetSettings(Type type);
     }
 
-    public class IndexerService : IIndexerService
+    public class IndexerService : IIndexerService, IInitializable
     {
         private readonly IIndexerRepository _indexerRepository;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger;
 
         private IList<IndexerBase> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IndexerBase> indexers)
+        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IndexerBase> indexers, Logger logger)
         {
             _indexerRepository = indexerRepository;
+            _logger = logger;
             _indexers = indexers.ToList();
-            InitializeIndexers();
+        }
+
+        public void Init()
+        {
+            _logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
+
+            var currentIndexers = All();
+
+            foreach (var feedProvider in _indexers)
+            {
+                IndexerBase indexerLocal = feedProvider;
+                if (!currentIndexers.Exists(c => c.Type == indexerLocal.GetType().ToString()))
+                {
+                    var settings = new Indexer
+                    {
+                        Enable = indexerLocal.EnabledByDefault,
+                        Type = indexerLocal.GetType().ToString(),
+                        Name = indexerLocal.Name
+                    };
+
+                    _indexerRepository.Insert(settings);
+                }
+            }
         }
 
         public List<Indexer> All()
@@ -43,45 +66,14 @@ namespace NzbDrone.Core.Indexers
 
         public void SaveSettings(Indexer indexer)
         {
-            if (indexer.OID == 0)
-            {
-                Logger.Debug("Adding Indexer definitions for {0}", indexer.Name);
-                _indexerRepository.Insert(indexer);
-            }
-            else
-            {
-                Logger.Debug("Updating Indexer definitions for {0}", indexer.Name);
-                _indexerRepository.Update(indexer);
-            }
+            //Todo: This will be used in the API
+            _logger.Debug("Upserting Indexer definitions for {0}", indexer.Name);
+            _indexerRepository.Upsert(indexer);
         }
 
         public Indexer GetSettings(Type type)
         {
             return _indexerRepository.Find(type);
-        }
-
-        private void InitializeIndexers()
-        {
-            Logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
-
-
-            var currentIndexers = All();
-
-            foreach (var feedProvider in _indexers)
-            {
-                IndexerBase indexerLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.Type == indexerLocal.GetType().ToString()))
-                {
-                    var settings = new Indexer
-                                       {
-                                           Enable = indexerLocal.EnabledByDefault,
-                                           Type = indexerLocal.GetType().ToString(),
-                                           Name = indexerLocal.Name
-                                       };
-
-                    SaveSettings(settings);
-                }
-            }
         }
     }
 }

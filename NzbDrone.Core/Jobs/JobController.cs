@@ -36,7 +36,6 @@ namespace NzbDrone.Core.Jobs
 
         private ProgressNotification _notification;
 
-
         public JobController(NotificationProvider notificationProvider, IEnumerable<IJob> jobs, IJobRepository jobRepository, Logger logger)
         {
             StopWatch = new Stopwatch();
@@ -60,7 +59,6 @@ namespace NzbDrone.Core.Jobs
                 return _queue;
             }
         }
-
 
         public virtual void QueueScheduled()
         {
@@ -260,7 +258,5 @@ namespace NzbDrone.Core.Jobs
             _logger.Trace("resetting queue processor thread");
             _jobThread = new Thread(ProcessQueue) { Name = "JobQueueThread" };
         }
-
-
     }
 }
