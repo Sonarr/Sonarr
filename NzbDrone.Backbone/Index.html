@@ -9,9 +9,11 @@
     <link rel="apple-touch-icon" sizes="144x144" href="Static/Content/Images/apple-touch-icon-144.png" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300' rel='stylesheet' type='text/css'>
-    <link href="/static/content/bootstrap/bootstrap.less" rel='stylesheet' type='text/css' />
-    <link href="/static/Content/base.css" rel='stylesheet' type='text/css' />
-    <link href="/static/Content/menu.css" rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/bootstrap.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic">
+    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/styles.css">
+    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/toastr.css">
+    <link rel="stylesheet" href="http://wbpreview.com/previews/WB0G25H3J/css/fullcalendar.css">
     <link href="/static/Content/tablesorter.bootstrap.css" rel='stylesheet' type='text/css' />
 
     <link href="/static/AddSeries/addseries.css" rel='stylesheet' type='text/css' />
@@ -29,61 +31,101 @@
 
 </script>
 <body>
-    <div class="container">
-        <div id="menu" class="row">
-            <div class="span20">
-                <ul>
-                    <li class='current_page_item'><a href="/">Series</a></li>
-                    <li><a href="/upcoming">Upcoming</a></li>
-                    <li><a href="/history">History</a></li>
-                    <li><a href="/missing">Missing</a></li>
-                    <li><a href="/settings">Settings</a></li>
-                    <li><a href="/system">System</a>
-                    <li id="donate" title="Donate to support the development of NzbDrone">
-                        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank">Donate</a>
-                    </li>
-                </ul>
-                <input id="localSeriesLookup" type="text" class="pull-right" placeholder="Search..." />
+    <div id="in-nav">
+        <div class="container">
+            <div class="row">
+                <a id="logo" href="index.html">
+                    <h4>Nzb<strong>Drone</strong></h4>
+                </a>
             </div>
-        </div>
-        <div id="logo" class="row">
-            <div id="title-region" class="span18 offset2">
-            </div>
-        </div>
-        <div id="content" class="row">
-            <div class="span20">
-                <div id="notification-region" class="row">
-                </div>
-                <div id="sub-menu-region" class="row">
-                </div>
-                <div class="row">
-                    <div id="main-region" class="span20 nz-center">
-                    </div>
-                </div>
-                <div id="modal-region"></div>
-            </div>
-        </div>
-        <div id="footer" class="row nz-center">
-            <div id="footer-region" class="span20"></div>
         </div>
     </div>
-    <script src="/static/JsLibraries/jquery.js"></script>
-    <script src="/static/JsLibraries/bootstrap.js"></script>
-    <script src="/static/JsLibraries/underscore.js"></script>
-    <script src="/static/JsLibraries/handlebars.js"></script>
-    <script src="/static/JsLibraries/backbone.js"></script>
-    <script src="/static/JsLibraries/backbone.modelbinder.js"></script>
-    <script src="/static/JsLibraries/backbone.mutators.js"></script>
-    <script src="/static/JsLibraries/backbone.marionette.js"></script>
-    <script src="/static/JsLibraries/jquery.tablesorter.js"></script>
-    <script src="/static/JsLibraries/jquery.tablesorter.bootstrap.js"></script>
-    <script src="/static/JsLibraries/sugar.js"></script>
-
-    <script src="/static/Mixins/backbone.marionette.templates.js"></script>
-    <script src="/static/Mixins/backbone.ajax.js"></script>
-    <script src="/static/Mixins/tablesorter.extensions.js"></script>
-
-    <script data-main="/static/app" src="/static/JsLibraries/require.js"></script>
-    <script src="/static/Routing.js"></script>
+    <div id="in-sub-nav">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul>
+                        <li><a href="index.html"><i class="batch home"></i>
+                            <br>
+                            Dashboard</a></li>
+                        <li><span class="label label-important pull-right">08</span><a href="stream.html"><i class="batch stream"></i><br>
+                            Stream</a></li>
+                        <li><span class="label label-important pull-right">04</span><a href="messages.html"><i class="batch plane"></i><br>
+                            Messages</a></li>
+                        <li><a href="calendar.html"><i class="batch calendar"></i>
+                            <br>
+                            Calendar</a></li>
+                        <li><a href="paragraphs.html" class="active"><i class="batch quill"></i>
+                            <br>
+                            Paragraphs</a></li>
+                        <li><a href="faq.html"><i class="batch forms"></i>
+                            <br>
+                            FAQ</a></li>
+                        <li><a href="users.html"><i class="batch users"></i>
+                            <br>
+                            Users</a></li>
+                        <li><a href="settings.html"><i class="batch settings"></i>
+                            <br>
+                            Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page-container">
+            <div class="container">
+                <div class="row">
+                    <div class="span12 header">
+                        <h4 id="title-region">NZBDRONE</h4>
+                    </div>
+                    <div class="span12">
+                        <div class="alert alert-block">
+                            <button type="button" data-dismiss="alert" class="close">&times;</button>
+                            <h4>Warning</h4>
+                            Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.
+                        </div>
+                        <div class="alert alert-error">
+                            <button type="button" data-dismiss="alert" class="close">&times;</button><strong>Oh snap! </strong>Change a few things up and try submitting again.
+                        </div>
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" class="close">&times;</button><strong>Well done! </strong>You successfully read this important alert message.
+                        </div>
+                        <div class="alert alert-info">
+                            <button type="button" data-dismiss="alert" class="close">&times;</button><strong>Heads up! </strong>This alert needs your attention, but it's not super important.
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="main-region"></div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <p>&copy; Copyright 2013 NzbDrone</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
+<script src="/static/JsLibraries/jquery.js"></script>
+<script src="/static/JsLibraries/bootstrap.js"></script>
+<script src="/static/JsLibraries/underscore.js"></script>
+<script src="/static/JsLibraries/handlebars.js"></script>
+<script src="/static/JsLibraries/backbone.js"></script>
+<script src="/static/JsLibraries/backbone.modelbinder.js"></script>
+<script src="/static/JsLibraries/backbone.mutators.js"></script>
+<script src="/static/JsLibraries/backbone.marionette.js"></script>
+<script src="/static/JsLibraries/jquery.tablesorter.js"></script>
+<script src="/static/JsLibraries/jquery.tablesorter.bootstrap.js"></script>
+<script src="/static/JsLibraries/sugar.js"></script>
+
+<script src="/static/Mixins/backbone.marionette.templates.js"></script>
+<script src="/static/Mixins/backbone.ajax.js"></script>
+<script src="/static/Mixins/tablesorter.extensions.js"></script>
+
+<script data-main="/static/app" src="/static/JsLibraries/require.js"></script>
+<script src="/static/Routing.js"></script>
 </html>
