@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Providers.Search
         private readonly ISeriesRepository _seriesRepository;
         protected readonly EpisodeService _episodeService;
         protected readonly DownloadProvider _downloadProvider;
-        protected readonly IndexerService _indexerService;
+        protected readonly IIndexerService _indexerService;
         protected readonly SceneMappingProvider _sceneMappingProvider;
         protected readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         protected readonly SearchHistoryProvider _searchHistoryProvider;
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers.Search
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected SearchBase(ISeriesService seriesService,ISeriesRepository seriesRepository, EpisodeService episodeService, DownloadProvider downloadProvider,
-                             IndexerService indexerService, SceneMappingProvider sceneMappingProvider,
+                             IIndexerService indexerService, SceneMappingProvider sceneMappingProvider,
                              AllowedDownloadSpecification allowedDownloadSpecification,
                              SearchHistoryProvider searchHistoryProvider)
         {

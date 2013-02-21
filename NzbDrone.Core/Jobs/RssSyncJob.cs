@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Jobs
     public class RssSyncJob : IJob
     {
         private readonly DownloadProvider _downloadProvider;
-        private readonly IndexerService _indexerService;
+        private readonly IIndexerService _indexerService;
         private readonly MonitoredEpisodeSpecification _isMonitoredEpisodeSpecification;
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(DownloadProvider downloadProvider, IndexerService indexerService,
+        public RssSyncJob(DownloadProvider downloadProvider, IIndexerService indexerService,
             MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, 
             UpgradeHistorySpecification upgradeHistorySpecification, ConfigProvider configProvider)
         {
