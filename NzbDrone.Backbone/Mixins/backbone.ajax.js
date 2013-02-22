@@ -1,4 +1,4 @@
-//try to add ajax data as query string
+//try to add ajax data as query string to DELETE calls.
 (function (){
 
     var original = Backbone.ajax;
