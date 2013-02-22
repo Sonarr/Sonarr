@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Jobs
             //    return;
 
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
-            List<Episode> episodes = _episodeService.GetEpisodesBySeason(options.SeriesId, options.SeasonNumber);
+            IList<Episode> episodes = _episodeService.GetEpisodesBySeason((int)options.SeriesId, (int)options.SeasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {

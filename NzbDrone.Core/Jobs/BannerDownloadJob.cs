@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Jobs
 
             if (options != null)
             {
-                Series series = _seriesRepository.Get(options.SeriesId);
+                Series series = _seriesRepository.Get((int)options.SeriesId);
 
                 if (series != null && !String.IsNullOrEmpty(series.BannerUrl))
                 {

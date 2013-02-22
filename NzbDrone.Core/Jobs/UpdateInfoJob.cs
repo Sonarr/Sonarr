@@ -58,7 +58,10 @@ namespace NzbDrone.Core.Jobs
             }
             else
             {
-                seriesToUpdate = new List<Series> { _seriesRepository.Get(options.SeriesId) };
+                seriesToUpdate = new List<Series>
+                    {
+                            _seriesRepository.Get((int)options.SeriesId)
+                    };
             }
 
             //Update any Daily Series in the DB with the IsDaily flag
@@ -74,11 +77,11 @@ namespace NzbDrone.Core.Jobs
                     notification.CurrentMessage = "Update completed for " + series.Title;
                 }
 
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.ErrorException("Failed to update episode info for series: " + series.Title, ex);
                 }
-                
+
             }
         }
     }

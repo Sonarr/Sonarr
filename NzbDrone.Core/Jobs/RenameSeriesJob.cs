@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Jobs
 
             else
             {
-                seriesToRename = new List<Series>{  _seriesRepository.Get(options.SeriesId) };
+                seriesToRename = new List<Series>{  _seriesRepository.Get((int)options.SeriesId) };
             }
 
             foreach(var series in seriesToRename)

@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Jobs
 
         public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
                                 ExternalNotificationProvider externalNotificationProvider, ISeriesService seriesService,
-                                MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
+                                MetadataProvider metadataProvider, ISeriesRepository seriesRepository)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Jobs
             if (options.SeasonNumber < 0)
                 throw new ArgumentException("options.SeasonNumber");
 
-            var series = _seriesRepository.Get(options.SeriesId);
+            var series = _seriesRepository.Get((int)options.SeriesId);
 
             notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, options.SeasonNumber);
 
             logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
-            IList<EpisodeFile> episodeFiles = _mediaFileProvider.GetSeasonFiles(options.SeriesId, options.SeasonNumber);
+            IList<EpisodeFile> episodeFiles = _mediaFileProvider.GetSeasonFiles((int)options.SeriesId, (int)options.SeasonNumber);
 
             if (episodeFiles == null || !episodeFiles.Any())
             {
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Jobs
                 }
             }
 
-            if(!oldEpisodeFiles.Any())
+            if (!oldEpisodeFiles.Any())
             {
                 logger.Trace("No episodes were renamed for: {0} Season {1}, no changes were made", series.Title,
                              options.SeasonNumber);

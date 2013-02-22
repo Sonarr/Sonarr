@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.EpisodeId <= 0)
                 throw new ArgumentNullException(options);
 
-            Episode episode = _episodeService.GetEpisode(options.EpisodeId);
+            Episode episode = _episodeService.GetEpisode((int)options.EpisodeId);
             notification.CurrentMessage = String.Format("Starting Conversion for {0}", episode);
             var outputFile = _handbrakeProvider.ConvertFile(episode, notification);
 

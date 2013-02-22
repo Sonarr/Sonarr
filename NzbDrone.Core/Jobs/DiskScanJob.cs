@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Jobs
             }
             else
             {
-                seriesToScan = new List<Series>() { _seriesRepository.Get(options.SeriesId) };
+                seriesToScan = new List<Series>() { _seriesRepository.Get((int)options.SeriesId) };
             }
 
             foreach (var series in seriesToScan)

@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Jobs
             if (options.SeriesId == 0)
                 throw new ArgumentNullException("options.SeriesId");
 
-            DeleteSeries(notification, options.SeriesId, options.DeleteFiles);
+            DeleteSeries(notification, (int)options.SeriesId, (bool)options.DeleteFiles);
         }
 
         private void DeleteSeries(ProgressNotification notification, int seriesId, bool deleteFiles)

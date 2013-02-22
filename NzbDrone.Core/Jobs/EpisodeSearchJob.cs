@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.EpisodeId <= 0)
                 throw new ArgumentException("options");
 
-            Episode episode = _episodeService.GetEpisode(options.EpisodeId);
+            Episode episode = _episodeService.GetEpisode((int)options.EpisodeId);
 
             if (episode == null)
             {
