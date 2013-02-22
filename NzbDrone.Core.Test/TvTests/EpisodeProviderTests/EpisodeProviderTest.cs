@@ -1513,25 +1513,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             result.Single(e => e.SeasonNumber == 1).Ignored.Should().BeFalse();
         }
 
-        [Test]
-        public void GetEpisode_with_EpisodeFile_should_have_quality_set_properly()
-        {
-            WithRealDb();
 
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.WEBDL1080p).Build();
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
-
-            Db.Insert(fakeSeries);
-            Db.InsertMany(fakeEpisodes);
-            Db.Insert(fakeFile);
-
-            //Act
-            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1);
-
-            //Assert
-            episode.EpisodeFile.Quality.Should().Be(QualityTypes.WEBDL1080p);
-        }
     }
 }

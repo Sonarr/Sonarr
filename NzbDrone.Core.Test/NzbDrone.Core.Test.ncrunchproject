@@ -55,6 +55,5 @@
       <RegularExpression>NzbDrone\.Core\.Test\.ParserTests\.ParserFixture\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
-  <AdditionalFilesToInclude>..\NzbDrone.Core\bin\Debug\Eloquera.Server.exe</AdditionalFilesToInclude>
   <HiddenWarnings>PostBuildEventDisabled</HiddenWarnings>
 </ProjectConfiguration>

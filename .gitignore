@@ -123,16 +123,12 @@ _TeamCity*
 # NzbDrone
 config.xml
 nzbdrone.log*txt
-NzbDrone.Web/MediaCover
 UpdateLogs/
 */Bootstrap/*.css
 *//Bootstrap/*.css
-NzbDrone.Web/cassette-cache/*
 *.eq
-NzbDrone.Web/_backboneApp/.idea/workspace.xml
 */.idea/workspace.xml
 *workspace.xml
-NzbDrone.Web/_backboneApp/.idea/.
 *.test-cache
 *.sqo
 *.userprefs
