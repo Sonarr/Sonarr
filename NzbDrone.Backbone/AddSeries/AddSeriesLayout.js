@@ -1,10 +1,10 @@
 ﻿define([
-        'app',
-        'AddSeries/RootFolders/RootFolderCollection',
-        'Quality/QualityProfileCollection',
-        'AddSeries/RootFolders/RootFolderView',
-        'AddSeries/New/AddNewSeriesView',
-        'AddSeries/Existing/ImportSeriesView'
+    'app',
+    'AddSeries/RootFolders/RootFolderCollection',
+    'Quality/QualityProfileCollection',
+    'AddSeries/RootFolders/RootFolderView',
+    'AddSeries/New/AddNewSeriesView',
+    'AddSeries/Existing/ImportSeriesView'
 ],
     function (app, rootFolderCollection, qualityProfileCollection) {
         NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({

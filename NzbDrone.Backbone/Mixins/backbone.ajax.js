@@ -26,25 +26,3 @@
 
     };
 } ());
-
-/*
-
-var xhrMixin = function (){
-    console.log ('mixing in xhr');
-
-    var originalOnRender = Backbone.Marionette.View.prototype.onRender;
-    var originalBeforeClose = Backbone.Marionette.View.prototype.beforeClose;
-
-    Backbone.Marionette.View.prototype.onRender = function (){
-        console.log ('render');
-        if (originalOnRender){
-            originalOnRender.call (this);
-        }
-    };
-    Backbone.Marionette.View.prototype.beforeClose = function (){
-        console.log ('beforeClose');
-        if (originalBeforeClose){
-            originalBeforeClose.call (this);
-        }
-    };
-} ();*/

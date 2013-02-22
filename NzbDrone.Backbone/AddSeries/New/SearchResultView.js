@@ -28,7 +28,7 @@ define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection
             var quality = this.ui.qualityProfile.val();
             var rootFolderId = this.ui.rootFolder.val();
 
-            //Todo: This wiil create an invalid path on linux...
+            //Todo: This will create an invalid path on linux...
             var rootPath = this.model.get('rootFolders').get(rootFolderId).get('path');
             var path = rootPath + "\\" + title;
 
@@ -62,11 +62,10 @@ define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection
     NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
 
         itemView: NzbDrone.AddSeries.New.SearchItemView,
-
         className: 'accordion',
-
         initialize: function () {
             this.listenTo(this.collection, 'reset', this.render);
         }
+
     });
 });
