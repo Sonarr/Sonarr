@@ -17,13 +17,13 @@ namespace NzbDrone.Core.Providers
     public class SearchProvider
     {
         private readonly ISeriesService _seriesService;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly PartialSeasonSearch _partialSeasonSearch;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SearchProvider(ISeriesService seriesService, EpisodeService episodeService,
+        public SearchProvider(ISeriesService seriesService, IEpisodeService episodeService,
                               PartialSeasonSearch partialSeasonSearch,ISeriesRepository seriesRepository)
         {
             _seriesService = seriesService;

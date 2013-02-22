@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] mediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
         private readonly DiskProvider _diskProvider;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly ISeriesService _seriesService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
 
-        public DiskScanProvider(DiskProvider diskProvider, EpisodeService episodeService,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService,
                                 ISeriesService seriesService, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
                                 SignalRProvider signalRProvider, ConfigProvider configProvider,

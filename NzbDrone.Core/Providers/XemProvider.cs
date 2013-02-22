@@ -11,13 +11,13 @@ namespace NzbDrone.Core.Providers
     public class XemProvider
     {
         private readonly ISeriesService _seriesService;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(ISeriesService seriesService, EpisodeService episodeService,
+        public XemProvider(ISeriesService seriesService, IEpisodeService episodeService,
                             XemCommunicationProvider xemCommunicationProvider,ISeriesRepository seriesRepository)
         {
             _seriesService = seriesService;

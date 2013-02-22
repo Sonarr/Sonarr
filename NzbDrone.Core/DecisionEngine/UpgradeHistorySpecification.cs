@@ -8,12 +8,12 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class UpgradeHistorySpecification
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly HistoryProvider _historyProvider;
         private readonly QualityUpgradeSpecification _qualityUpgradeSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpgradeHistorySpecification(EpisodeService episodeService, HistoryProvider historyProvider, QualityUpgradeSpecification qualityUpgradeSpecification)
+        public UpgradeHistorySpecification(IEpisodeService episodeService, HistoryProvider historyProvider, QualityUpgradeSpecification qualityUpgradeSpecification)
         {
             _episodeService = episodeService;
             _historyProvider = historyProvider;

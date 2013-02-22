@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<ISeriesRepository>()
                 .Setup(c => c.Update(It.Is<Series>(s => s.LastDiskSync != null))).Verifiable();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                 .Returns(new List<Episode> { new Episode() });
 

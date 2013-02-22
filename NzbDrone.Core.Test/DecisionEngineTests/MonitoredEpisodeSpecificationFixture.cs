@@ -59,8 +59,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var singleEpisodeList = new List<Episode> { firstEpisode };
             var doubleEpisodeList = new List<Episode> { firstEpisode, secondEpisode };
 
-            Mocker.GetMock<EpisodeService>().Setup(c => c.GetEpisodesByParseResult(parseResultSingle)).Returns(singleEpisodeList);
-            Mocker.GetMock<EpisodeService>().Setup(c => c.GetEpisodesByParseResult(parseResultMulti)).Returns(doubleEpisodeList);
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodesByParseResult(parseResultSingle)).Returns(singleEpisodeList);
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodesByParseResult(parseResultMulti)).Returns(doubleEpisodeList);
 
             Mocker.GetMock<ISeriesRepository>().Setup(c => c.GetByTitle(parseResultMulti.CleanTitle)).Returns(fakeSeries);
             Mocker.GetMock<ISeriesRepository>().Setup(c => c.GetByTitle(parseResultSingle.CleanTitle)).Returns(fakeSeries);

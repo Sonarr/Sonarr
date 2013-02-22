@@ -14,13 +14,13 @@ namespace NzbDrone.Core.Jobs
     public class UpdateInfoJob : IJob
     {
         private readonly ISeriesService _seriesService;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly ReferenceDataProvider _referenceDataProvider;
         private readonly ConfigProvider _configProvider;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateInfoJob(ISeriesService seriesService, EpisodeService episodeService,
+        public UpdateInfoJob(ISeriesService seriesService, IEpisodeService episodeService,
                             ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider, ISeriesRepository seriesRepository)
         {
             _seriesService = seriesService;

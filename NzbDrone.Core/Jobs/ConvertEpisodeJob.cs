@@ -13,12 +13,12 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly HandbrakeProvider _handbrakeProvider;
         private readonly AtomicParsleyProvider _atomicParsleyProvider;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public ConvertEpisodeJob(HandbrakeProvider handbrakeProvider, AtomicParsleyProvider atomicParsleyProvider,
-                                    EpisodeService episodeService)
+                                    IEpisodeService episodeService)
         {
             _handbrakeProvider = handbrakeProvider;
             _atomicParsleyProvider = atomicParsleyProvider;

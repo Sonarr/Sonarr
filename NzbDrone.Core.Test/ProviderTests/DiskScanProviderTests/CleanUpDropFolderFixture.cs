@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(series);
 
-            Mocker.GetMock<EpisodeService>().Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+            Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                     .Returns(episode);
 
             Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series, QualityTypes.Unknown, false, It.IsAny<EpisodeFile>()))

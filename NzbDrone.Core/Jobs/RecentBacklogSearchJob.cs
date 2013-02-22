@@ -13,13 +13,13 @@ namespace NzbDrone.Core.Jobs
 {
     public class RecentBacklogSearchJob : IJob
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly EpisodeSearchJob _episodeSearchJob;
         private readonly ConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RecentBacklogSearchJob(EpisodeService episodeService, EpisodeSearchJob episodeSearchJob,
+        public RecentBacklogSearchJob(IEpisodeService episodeService, EpisodeSearchJob episodeSearchJob,
                                             ConfigProvider configProvider)
         {
             _episodeService = episodeService;

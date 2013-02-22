@@ -12,14 +12,14 @@ namespace NzbDrone.Core.Jobs
 {
     public class EpisodeSearchJob : IJob
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly UpgradePossibleSpecification _upgradePossibleSpecification;
         private readonly EpisodeSearch _episodeSearch;
         private readonly DailyEpisodeSearch _dailyEpisodeSearch;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeSearchJob(EpisodeService episodeService, UpgradePossibleSpecification upgradePossibleSpecification,
+        public EpisodeSearchJob(IEpisodeService episodeService, UpgradePossibleSpecification upgradePossibleSpecification,
                                 EpisodeSearch episodeSearch, DailyEpisodeSearch dailyEpisodeSearch)
         {
             if(dailyEpisodeSearch == null) throw new ArgumentNullException("dailyEpisodeSearch");

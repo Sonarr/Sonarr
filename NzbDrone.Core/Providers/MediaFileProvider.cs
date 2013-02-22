@@ -18,9 +18,9 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly IDatabase _database;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
-        public MediaFileProvider(EpisodeService episodeService, ConfigProvider configProvider, IDatabase database)
+        public MediaFileProvider(IEpisodeService episodeService, ConfigProvider configProvider, IDatabase database)
         {
             _episodeService = episodeService;
             _configProvider = configProvider;

@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             //Act
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             With80MBFile();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             //Act
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             //Act
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(p => p.Exists(It.IsAny<String>()))
                   .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                 .Returns(new List<Episode>());
 
@@ -225,7 +225,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             //Act
@@ -257,7 +257,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(fakeEpisodes);
 
             //Act
@@ -290,7 +290,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(fakeEpisodes);
 
             //Act
@@ -328,7 +328,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode1, fakeEpisode2 });
 
             //Act
@@ -357,7 +357,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(p => p.Exists(It.IsAny<String>()))
                 .Returns(false);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode});
 
             //Act
@@ -380,7 +380,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             
             With80MBFile();
 
-            Mocker.GetMock<EpisodeService>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
+            Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                 .Returns(new List<Episode>());
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.IsChildOfPath(path, series.Path))
@@ -388,7 +388,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Mocker.Resolve<DiskScanProvider>().ImportFile(series, path);
 
-            Mocker.Verify<EpisodeService>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource)), Times.Once());
+            Mocker.Verify<IEpisodeService>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource)), Times.Once());
         }
 
         [Test]
@@ -403,7 +403,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             With80MBFile();
 
-            Mocker.GetMock<EpisodeService>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
+            Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                 .Returns(new List<Episode>());
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.IsChildOfPath(path, series.Path))
@@ -411,7 +411,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Mocker.Resolve<DiskScanProvider>().ImportFile(series, path);
 
-            Mocker.Verify<EpisodeService>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource == false)), Times.Once());
+            Mocker.Verify<IEpisodeService>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource == false)), Times.Once());
         }
 
         [Test]
@@ -454,7 +454,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(s => s.GetRunTime(path))
                   .Returns(600);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(_series, path);
@@ -481,7 +481,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(s => s.GetRunTime(path))
                   .Returns(60);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(_series, path);
@@ -512,7 +512,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(s => s.GetRunTime(path))
                   .Returns(60);
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(_series, path);
@@ -552,16 +552,16 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Once());
 
             //Get the count of episodes linked
-            var count = Mocker.GetMock<EpisodeService>().Object.GetEpisodesByParseResult(null).Count;
+            var count = Mocker.GetMock<IEpisodeService>().Object.GetEpisodesByParseResult(null).Count;
 
-            Mocker.GetMock<EpisodeService>().Verify(p => p.UpdateEpisode(It.Is<Episode>(e => e.EpisodeFileId == result.EpisodeFileId)), Times.Exactly(count));
+            Mocker.GetMock<IEpisodeService>().Verify(p => p.UpdateEpisode(It.Is<Episode>(e => e.EpisodeFileId == result.EpisodeFileId)), Times.Exactly(count));
         }
 
         private static void VerifySkipImport(EpisodeFile result, AutoMoqer Mocker)
         {
             result.Should().BeNull();
             Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Never());
-            Mocker.GetMock<EpisodeService>().Verify(p => p.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
+            Mocker.GetMock<IEpisodeService>().Verify(p => p.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
             Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
         }
     }

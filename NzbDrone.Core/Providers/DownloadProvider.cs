@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly SabProvider _sabProvider;
         private readonly HistoryProvider _historyProvider;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly ConfigProvider _configProvider;
         private readonly BlackholeProvider _blackholeProvider;
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
-            EpisodeService episodeService, ExternalNotificationProvider externalNotificationProvider,
+            IEpisodeService episodeService, ExternalNotificationProvider externalNotificationProvider,
             ConfigProvider configProvider, BlackholeProvider blackholeProvider,
             SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider,
             NzbgetProvider nzbgetProvider)

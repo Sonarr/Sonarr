@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.JobTests
             //Setup
             var episodes = new List<Episode>();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-35))
                 .Build();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             Mocker.GetMock<EpisodeSearchJob>().Setup(c => c.Start(It.IsAny<ProgressNotification>(), It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)));
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             WithEnableBacklogSearching();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             //WithEnableBacklogSearching();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             WithEnableBacklogSearching();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act

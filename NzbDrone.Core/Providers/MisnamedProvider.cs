@@ -14,11 +14,11 @@ namespace NzbDrone.Core.Providers
     public class MisnamedProvider
     {
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public MisnamedProvider(MediaFileProvider mediaFileProvider, EpisodeService episodeService)
+        public MisnamedProvider(MediaFileProvider mediaFileProvider, IEpisodeService episodeService)
         {
             _mediaFileProvider = mediaFileProvider;
             _episodeService = episodeService;

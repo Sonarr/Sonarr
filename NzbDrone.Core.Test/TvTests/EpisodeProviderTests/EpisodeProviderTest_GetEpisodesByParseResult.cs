@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
     // ReSharper disable InconsistentNaming
     public class EpisodeProviderTest_GetEpisodesByParseResult : SqlCeTest
     {
-        private EpisodeService episodeService;
+        private IEpisodeService episodeService;
 
         private Series fakeSeries;
         private Series fakeDailySeries;

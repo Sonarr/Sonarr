@@ -15,13 +15,13 @@ namespace NzbDrone.Core.Providers
         private readonly IDatabase _database;
         private readonly ISeriesService _seriesService;
         private readonly DownloadProvider _downloadProvider;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public SearchHistoryProvider(IDatabase database, ISeriesService seriesService,
-                                        DownloadProvider downloadProvider, EpisodeService episodeService, ISeriesRepository seriesRepository)
+                                        DownloadProvider downloadProvider, IEpisodeService episodeService, ISeriesRepository seriesRepository)
         {
             _database = database;
             _seriesService = seriesService;

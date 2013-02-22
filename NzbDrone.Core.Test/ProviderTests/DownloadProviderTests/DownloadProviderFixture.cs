@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
                             .All().With(s => s.SeriesId = 5)
                             .Build().ToList();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                     .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(episodes);
 
             return Builder<EpisodeParseResult>.CreateNew()
@@ -104,10 +104,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<HistoryProvider>()
                 .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)), Times.Once());
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(12));
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(99));
 
             Mocker.GetMock<ExternalNotificationProvider>()
@@ -139,10 +139,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<HistoryProvider>()
                 .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)), Times.Once());
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(12));
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(99));
 
             Mocker.GetMock<ExternalNotificationProvider>()
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
                 .Verify(s => s.Add(It.IsAny<History>()), Times.Never());
 
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(It.IsAny<int>()), Times.Never());
 
             Mocker.GetMock<ExternalNotificationProvider>()

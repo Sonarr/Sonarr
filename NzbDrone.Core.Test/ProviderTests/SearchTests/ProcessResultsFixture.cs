@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                     .CreateListOfSize(1)
                     .Build();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                   .Returns(_episodes);
         }

@@ -8,11 +8,11 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class MonitoredEpisodeSpecification
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public MonitoredEpisodeSpecification(EpisodeService episodeService, ISeriesRepository seriesRepository)
+        public MonitoredEpisodeSpecification(IEpisodeService episodeService, ISeriesRepository seriesRepository)
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;

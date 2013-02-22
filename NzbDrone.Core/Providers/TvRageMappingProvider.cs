@@ -13,12 +13,12 @@ namespace NzbDrone.Core.Providers
     {
         private readonly SceneMappingProvider _sceneMappingProvider;
         private readonly TvRageProvider _tvRageProvider;
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public TvRageMappingProvider(SceneMappingProvider sceneMappingProvider,
-                                TvRageProvider tvRageProvider, EpisodeService episodeService)
+                                TvRageProvider tvRageProvider, IEpisodeService episodeService)
         {
             _sceneMappingProvider = sceneMappingProvider;
             _tvRageProvider = tvRageProvider;

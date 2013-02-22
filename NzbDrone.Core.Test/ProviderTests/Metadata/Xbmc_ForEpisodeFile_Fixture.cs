@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                     .With(e => e.EpisodeNumber = 1)
                     .Build();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                         .Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                         .Returns(new List<Episode> { episode });
         }
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                     .With(e => e.SeasonNumber = 1)
                     .Build();
 
-            Mocker.GetMock<EpisodeService>()
+            Mocker.GetMock<IEpisodeService>()
                         .Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                         .Returns(episodes.ToList());
         }
