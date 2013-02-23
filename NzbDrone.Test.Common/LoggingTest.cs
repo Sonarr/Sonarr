@@ -7,6 +7,9 @@ namespace NzbDrone.Test.Common
 {
     public abstract class LoggingTest
     {
+
+        protected Logger TestLogger = LogManager.GetLogger("TestLogger");
+
         protected static void InitLogging()
         {
             if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
