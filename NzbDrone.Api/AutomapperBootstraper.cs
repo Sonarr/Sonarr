@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using NzbDrone.Api.Calendar;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
@@ -45,6 +46,12 @@ namespace NzbDrone.Api
 
             //Upcoming
             Mapper.CreateMap<Episode, UpcomingResource>()
+                  .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
+                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title))
+                  .ForMember(dest => dest.AirTime, opt => opt.ResolveUsing<AirTimeResolver>());
+
+            //Calendar
+            Mapper.CreateMap<Episode, CalendarResource>()
                   .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
                   .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title))
                   .ForMember(dest => dest.AirTime, opt => opt.ResolveUsing<AirTimeResolver>());

@@ -11,6 +11,7 @@
             'series/add/:action(/:query)': 'addSeries',
             'upcoming': 'upcoming',
             'upcoming/index': 'upcoming',
+            'calendar': 'calendar',
             ':whatever': 'notFound'
         }
     });

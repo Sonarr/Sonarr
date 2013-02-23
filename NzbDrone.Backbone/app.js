@@ -39,6 +39,7 @@ define('app',  function () {
         window.NzbDrone.Quality = {};
         window.NzbDrone.Shared = {};
         window.NzbDrone.Upcoming = {};
+        window.NzbDrone.Calendar = {};
 
         window.NzbDrone.Events = {
             OpenModalDialog :'openModal',

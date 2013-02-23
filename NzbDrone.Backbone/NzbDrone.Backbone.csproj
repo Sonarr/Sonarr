@@ -49,6 +49,10 @@
     <Content Include="AddSeries\SearchResultCollection.js" />
     <Content Include="AddSeries\SearchResultModel.js" />
     <Content Include="app.js" />
+    <Content Include="Calendar\CalendarCollection.js" />
+    <Content Include="Calendar\CalendarCollectionTemplate.html" />
+    <Content Include="Calendar\CalendarCollectionView.js" />
+    <Content Include="Calendar\CalendarModel.js" />
     <Content Include="Content\base.css" />
     <Content Include="Content\menu.css" />
     <Content Include="Content\fullcalendar.css" />
@@ -92,12 +96,14 @@
     <Content Include="JsLibraries\backbone.mutators.js" />
     <Content Include="JsLibraries\backbone.shortcuts.js" />
     <Content Include="JsLibraries\bootstrap.js" />
+    <Content Include="JsLibraries\fullcalendar.js" />
     <Content Include="JsLibraries\handlebars.js" />
     <Content Include="JsLibraries\jquery.js" />
     <Content Include="JsLibraries\jquery.tablesorter.bootstrap.js" />
     <Content Include="JsLibraries\jquery.tablesorter.js" />
     <Content Include="JsLibraries\require.js" />
     <Content Include="JsLibraries\sugar.js" />
+    <Content Include="JsLibraries\toastr-1.1.5.js" />
     <Content Include="JsLibraries\underscore.js" />
     <Content Include="Mixins\backbone.ajax.js" />
     <Content Include="Mixins\backbone.marionette.templates.js" />
