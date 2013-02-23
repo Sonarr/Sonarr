@@ -271,6 +271,7 @@
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\NewznabRepository.cs" />
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
+    <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\JobRepository.cs" />
     <Compile Include="Lifecycle\AppShutdownJob.cs" />
@@ -283,7 +284,7 @@
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="Model\HistoryQueryModel.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
-    <Compile Include="Instrumentation\LogProvider.cs" />
+    <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />

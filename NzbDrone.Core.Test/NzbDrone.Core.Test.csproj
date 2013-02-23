@@ -233,7 +233,7 @@
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
-    <Compile Include="ProviderTests\LogProviderTests\LogProviderFixture.cs" />
+    <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="ProviderTests\UpcomingEpisodesProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTests\GetNewFilenameFixture.cs" />
     <Compile Include="Framework\SqlCeTest.cs" />

@@ -2,22 +2,19 @@
 using NLog.Config;
 using NLog;
 using NLog.Targets;
-using NLog.Targets.Wrappers;
 using NzbDrone.Common;
-using PetaPoco;
 
 namespace NzbDrone.Core.Instrumentation
 {
 
     public class DatabaseTarget : Target
     {
-        private readonly IDatabase _database;
+        private readonly ILogRepository _repository;
 
-        public DatabaseTarget(IDatabase database)
+        public DatabaseTarget(ILogRepository repository)
         {
-            _database = database;
+            _repository = repository;
         }
-
 
         public void Register()
         {
@@ -62,7 +59,7 @@ namespace NzbDrone.Core.Instrumentation
 
             log.Level = logEvent.Level.Name;
 
-            _database.Insert(log);
+            _repository.Insert(log);
         }
     }
 }

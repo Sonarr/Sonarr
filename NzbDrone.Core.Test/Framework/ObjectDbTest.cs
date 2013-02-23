@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -7,32 +8,35 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Test.Framework
 {
-
-
-    public abstract class RepositoryTest<TRepository, TModel> : ObjectDbTest<TRepository>
-        where TRepository : class, IBasicRepository<TModel>
+    public abstract class ObjectDbTest<TSubject, TModel> : ObjectDbTest
+        where TSubject : class
         where TModel : ModelBase, new()
     {
+        private TSubject _subject;
 
         protected BasicRepository<TModel> Storage { get; private set; }
 
-        [SetUp]
-        public void RepositoryTestSetup()
+        protected IList<TModel> AllStoredModels
         {
-            WithObjectDb();
-            Storage = Mocker.Resolve<BasicRepository<TModel>>();
+            get
+            {
+                return Storage.All().ToList();
+            }
         }
 
-    }
-
-    public abstract class ObjectDbTest<TSubject> : ObjectDbTest where TSubject : class
-    {
-        private TSubject _subject;
+        protected TModel StoredModel
+        {
+            get
+            {
+                return Storage.All().Single();
+            }
+        }
 
         [SetUp]
         public void CoreTestSetup()
         {
             _subject = null;
+            Storage = Mocker.Resolve<BasicRepository<TModel>>();
         }
 
         protected TSubject Subject
@@ -65,18 +69,16 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
-        protected void WithObjectDb(bool memory = true)
+        private void WithObjectDb(bool memory = true)
         {
-            //if (memory)
-            //{
-            //    _db = new SiaqoDbFactory(new DiskProvider(),new EnvironmentProvider()).CreateMemoryDb();
-            //}
-            //else
-            //{
             _db = new SiaqoDbFactory(new DiskProvider(), new EnvironmentProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
-            //}
-
             Mocker.SetConstant(Db);
+        }
+
+        [SetUp]
+        public void SetupReadDb()
+        {
+            WithObjectDb();
         }
 
         [TearDown]

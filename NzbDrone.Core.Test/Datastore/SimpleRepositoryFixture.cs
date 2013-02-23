@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.Datastore
     }
 
     [TestFixture]
-    public class SimpleRepositoryFixture : ObjectDbTest<BasicRepository<SampleType>>
+    public class SimpleRepositoryFixture : ObjectDbTest<BasicRepository<SampleType>,SampleType>
     {
         private SampleType sampleType;
 
@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void Setup()
         {
-            WithObjectDb();
             sampleType = Builder<SampleType>
                 .CreateNew()
                 .With(c => c.OID = 0)

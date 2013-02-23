@@ -7,11 +7,11 @@ namespace NzbDrone.Core.Instrumentation
 {
     public class TrimLogsJob : IJob
     {
-        private readonly LogProvider _logProvider;
+        private readonly LogService _logService;
 
-        public TrimLogsJob(LogProvider logProvider)
+        public TrimLogsJob(LogService logService)
         {
-            _logProvider = logProvider;
+            _logService = logService;
         }
 
         public string Name
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Instrumentation
 
         public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            _logProvider.Trim();
+            _logService.Trim();
         }
     }
 }

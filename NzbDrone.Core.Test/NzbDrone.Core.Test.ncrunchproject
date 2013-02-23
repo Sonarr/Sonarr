@@ -55,5 +55,5 @@
       <RegularExpression>NzbDrone\.Core\.Test\.ParserTests\.ParserFixture\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
-  <HiddenWarnings>PostBuildEventDisabled</HiddenWarnings>
+  <HiddenWarnings>PostBuildEventDisabled;PreBuildEventDisabled</HiddenWarnings>
 </ProjectConfiguration>

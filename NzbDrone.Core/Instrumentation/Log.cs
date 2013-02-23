@@ -1,15 +1,12 @@
 ﻿using System;
-using PetaPoco;
+using NzbDrone.Core.Datastore;
+using Sqo.Attributes;
 
 namespace NzbDrone.Core.Instrumentation
 {
-    [TableName("Logs")]
-    [PrimaryKey("LogId", autoIncrement = true)]
-    public class Log
+    public class Log : ModelBase
     {
-
-        public Int64 LogId { get; protected set; }
-
+        [Text]
         public string Message { get; set; }
 
         public DateTime Time { get; set; }
@@ -18,11 +15,11 @@ namespace NzbDrone.Core.Instrumentation
 
         public string Method { get; set; }
 
+        [Text]
         public string Exception { get; set; }
 
         public string ExceptionType { get; set; }
 
         public String Level { get; set; }
-
     }
 }

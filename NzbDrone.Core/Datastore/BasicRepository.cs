@@ -6,6 +6,7 @@ namespace NzbDrone.Core.Datastore
     public interface IBasicRepository<TModel>
     {
         IEnumerable<TModel> All();
+        int Count();
         TModel Get(int id);
         TModel Insert(TModel model);
         TModel Update(TModel model);
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.Datastore
         void Delete(int id);
         IList<TModel> InsertMany(IList<TModel> model);
         IList<TModel> UpdateMany(IList<TModel> model);
+        void Purge();
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -29,6 +31,11 @@ namespace NzbDrone.Core.Datastore
         public IEnumerable<TModel> All()
         {
             return Queryable.ToList();
+        }
+
+        public int Count()
+        {
+            return Queryable.Count();
         }
 
         public TModel Get(int id)
@@ -58,17 +65,30 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Upsert(TModel model)
         {
-           if(model.OID == 0)
-           {
-               return ObjectDatabase.Insert(model);
-           }
-           return ObjectDatabase.Update(model);
+            if (model.OID == 0)
+            {
+                return ObjectDatabase.Insert(model);
+            }
+            return ObjectDatabase.Update(model);
         }
 
         public void Delete(int id)
         {
             var itemToDelete = Get(id);
             ObjectDatabase.Delete(itemToDelete);
+        }
+
+        public void DeleteMany(IEnumerable<int> ids)
+        {
+            foreach (var id in ids)
+            {
+                Delete(id);
+            }
+        }
+
+        public void Purge()
+        {
+            DeleteMany(Queryable.Select(c => c.OID));
         }
     }
 }

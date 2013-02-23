@@ -88,6 +88,7 @@
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
     <Compile Include="ExceptionVerification.cs" />
     <Compile Include="LoggingTest.cs" />
+    <Compile Include="MockerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="TestBase.cs" />

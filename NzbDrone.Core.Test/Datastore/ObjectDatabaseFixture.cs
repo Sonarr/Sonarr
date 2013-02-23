@@ -19,8 +19,6 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void SetUp()
         {
-            WithObjectDb(memory:false);
-
             childModel = Builder<ChildModel>
                     .CreateNew()
                     .With(s => s.OID = 0)
@@ -30,7 +28,6 @@ namespace NzbDrone.Core.Test.Datastore
                     .CreateNew()
                     .With(e => e.OID = 0)
                     .Build();
-
 
         }
 

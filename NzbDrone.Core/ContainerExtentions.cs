@@ -80,7 +80,7 @@ namespace NzbDrone.Core
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
 
             container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
-            container.RegisterType<LogProvider>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
+            container.RegisterType<LogService>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }
     }
 }
