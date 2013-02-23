@@ -8,7 +8,7 @@ using Nancy.Bootstrappers.Autofac;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagement;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Core;
 using NzbDrone.Core.Lifecycle;

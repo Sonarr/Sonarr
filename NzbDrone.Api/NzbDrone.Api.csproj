@@ -111,8 +111,8 @@
     <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="ApiContainerExtensions.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
-    <Compile Include="Extentions\NancyJsonSerializer.cs" />
-    <Compile Include="Extentions\Serializer.cs" />
+    <Compile Include="Extensions\NancyJsonSerializer.cs" />
+    <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="FrontendModule\IndexModule.cs" />
     <Compile Include="FrontendModule\BootstrapModule.cs" />
     <Compile Include="FrontendModule\LessService.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
-    <Compile Include="Extentions\RootPathProvider.cs" />
+    <Compile Include="Extensions\RootPathProvider.cs" />
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />
@@ -136,7 +136,7 @@
     <Compile Include="QualityProfiles\QualityProfilesModule.cs" />
     <Compile Include="QualityType\QualityTypeModel.cs" />
     <Compile Include="QualityType\QualityTypeModule.cs" />
-    <Compile Include="Extentions\RequestExtensions.cs" />
+    <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />

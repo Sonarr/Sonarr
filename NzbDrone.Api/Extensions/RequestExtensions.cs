@@ -4,7 +4,7 @@ using Nancy;
 using Nancy.Responses;
 using Newtonsoft.Json;
 
-namespace NzbDrone.Api.Extentions
+namespace NzbDrone.Api.Extensions
 {
     public static class JsonExtensions
     {

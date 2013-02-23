@@ -2,7 +2,7 @@
 using System.Linq;
 using Nancy;
 
-namespace NzbDrone.Api.Extentions
+namespace NzbDrone.Api.Extensions
 {
     public class RootPathProvider : IRootPathProvider
     {

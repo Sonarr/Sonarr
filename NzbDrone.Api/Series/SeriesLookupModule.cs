@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Core.Providers;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using Nancy;
 using Newtonsoft.Json;
 
-namespace NzbDrone.Api.Extentions
+namespace NzbDrone.Api.Extensions
 {
     public class NancyJsonSerializer : ISerializer
     {

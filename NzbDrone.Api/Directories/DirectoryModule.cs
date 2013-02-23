@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Core.RootFolders;
 

@@ -1,9 +1,8 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace NzbDrone.Api.Extentions
+namespace NzbDrone.Api.Extensions
 {
     public static class Serializer
     {

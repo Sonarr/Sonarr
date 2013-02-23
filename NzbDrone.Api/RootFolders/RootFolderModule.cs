@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.RootFolders;

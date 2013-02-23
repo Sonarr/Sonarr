@@ -5,7 +5,7 @@ using System.Linq;
 using AutoMapper;
 using FluentValidation;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Series;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;

@@ -2,7 +2,7 @@
 using System.Linq;
 using NLog;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 
 namespace NzbDrone.Api.ErrorManagement
 {

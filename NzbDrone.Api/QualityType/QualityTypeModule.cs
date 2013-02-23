@@ -2,7 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Core.Providers;
 
