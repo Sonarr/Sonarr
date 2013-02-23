@@ -6,7 +6,7 @@ using Autofac.Core;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Metadata;

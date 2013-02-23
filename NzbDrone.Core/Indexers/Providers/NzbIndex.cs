@@ -7,11 +7,11 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Indexers
+namespace NzbDrone.Core.Indexers.Providers
 {
-    public class NzbClub : IndexerBase
+    public class NzbIndex : IndexerBase
     {
-        public NzbClub(HttpProvider httpProvider, ConfigProvider configProvider)
+        public NzbIndex(HttpProvider httpProvider, ConfigProvider configProvider)
             : base(httpProvider, configProvider)
         {
         }
@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Indexers
             {
                 return new[]
                            {
-                               String.Format("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee"),
-                               String.Format("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=5542&st=1&ns=1&q=")
+                               String.Format("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee"),
+                               String.Format("http://www.nzbindex.nl/rss/alt.binaries.hdtv/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=")
                            };
             }
         }
@@ -38,17 +38,17 @@ namespace NzbDrone.Core.Indexers
 
         public override string Name
         {
-            get { return "NzbClub"; }
+            get { return "NzbIndex"; }
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Links[0].Uri.ToString();
+            return item.Links[1].Uri.ToString();
         }
 
         protected override string NzbInfoUrl(SyndicationItem item)
         {
-            return item.Links[1].Uri.ToString();
+            return item.Links[0].Uri.ToString();
         }
 
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Indexers
         {
             if (currentResult != null)
             {
-                var sizeString = Regex.Match(item.Summary.Text, @"Size:\s\d+\.\d{1,2}\s\w{2}\s", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
+                var sizeString = Regex.Match(item.Summary.Text, @"<b>\d+\.\d{1,2}\s\w{2}</b><br\s/>", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
                 currentResult.Size = Parser.GetReportSize(sizeString);
             }
 
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Indexers
 
         public override bool EnabledByDefault
         {
-            get { return false; }
+            get { return true; }
         }
 
         protected override string TitlePreParser(SyndicationItem item)

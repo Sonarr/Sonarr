@@ -341,13 +341,13 @@
     <Compile Include="DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
-    <Compile Include="Indexers\Nzbx.cs" />
+    <Compile Include="Indexers\Providers\Nzbx.cs" />
     <Compile Include="Providers\Hubs\EpisodeHub.cs" />
-    <Compile Include="Indexers\NzbClub.cs" />
-    <Compile Include="Indexers\NzbIndex.cs" />
-    <Compile Include="Indexers\FileSharingTalk.cs" />
-    <Compile Include="Indexers\Omgwtfnzbs.cs" />
-    <Compile Include="Indexers\Wombles.cs" />
+    <Compile Include="Indexers\Providers\NzbClub.cs" />
+    <Compile Include="Indexers\Providers\NzbIndex.cs" />
+    <Compile Include="Indexers\Providers\FileSharingTalk.cs" />
+    <Compile Include="Indexers\Providers\Omgwtfnzbs.cs" />
+    <Compile Include="Indexers\Providers\Wombles.cs" />
     <Compile Include="Providers\MetadataProvider.cs" />
     <Compile Include="Providers\Metadata\MetadataBase.cs" />
     <Compile Include="Providers\Metadata\Xbmc.cs" />
@@ -494,16 +494,16 @@
     <Compile Include="Indexers\IndexerService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\IndexerBase.cs">
+    <Compile Include="Indexers\Providers\IndexerBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\Newznab.cs">
+    <Compile Include="Indexers\Providers\Newznab.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\NzbsRUs.cs">
+    <Compile Include="Indexers\Providers\NzbsRUs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\SyndicationFeedXmlReader.cs">
+    <Compile Include="Indexers\Providers\SyndicationFeedXmlReader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\MediaFileProvider.cs">

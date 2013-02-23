@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Lifecycle;
 using PetaPoco;
 

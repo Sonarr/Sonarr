@@ -9,7 +9,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Indexers
+namespace NzbDrone.Core.Indexers.Providers
 {
     public abstract class IndexerBase
     {
