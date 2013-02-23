@@ -19,6 +19,10 @@
     color: #333;
 }
 
+    a#logo:hover {
+        text-decoration: none;
+    }
+
 .page {
     width: 980px;
     margin: auto;
