@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.History;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.DecisionEngine;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
-        private readonly HistoryProvider _historyProvider;
+        private readonly HistoryService _historyService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

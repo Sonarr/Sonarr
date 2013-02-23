@@ -10,7 +10,10 @@ namespace NzbDrone.Core.Tv
 
         public Boolean Proper { get; set; }
 
-        public QualityModel() { }
+        public QualityModel():this(QualityTypes.Unknown, false)
+        {
+            
+        }
 
         public QualityModel(QualityTypes quality, Boolean proper)
         {

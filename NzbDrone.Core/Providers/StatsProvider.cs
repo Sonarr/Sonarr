@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers
         {
             var series = _database.Fetch<Series>();
             var episodes = _database.Fetch<Episode>();
-            var history = _database.Fetch<History>("WHERE Date >= @0", DateTime.Today.AddDays(-30));
+            var history = _database.Fetch<History.History>("WHERE Date >= @0", DateTime.Today.AddDays(-30));
 
             var stats = new StatsModel();
             stats.SeriesTotal = series.Count;

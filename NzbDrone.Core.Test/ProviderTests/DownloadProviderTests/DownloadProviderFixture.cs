@@ -5,12 +5,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.History;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
@@ -98,11 +98,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<BlackholeProvider>()
                 .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Never());
 
-            Mocker.GetMock<HistoryProvider>()
-                .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 12 && h.SeriesId == 5)), Times.Once());
+            Mocker.GetMock<HistoryService>()
+                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[0])), Times.Once());
 
-            Mocker.GetMock<HistoryProvider>()
-                .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)), Times.Once());
+            Mocker.GetMock<HistoryService>()
+                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[1])), Times.Once());
 
             Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(12));
@@ -133,11 +133,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<BlackholeProvider>()
                 .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Once());
 
-            Mocker.GetMock<HistoryProvider>()
-                .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 12 && h.SeriesId == 5)), Times.Once());
+            Mocker.GetMock<HistoryService>()
+                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[0])), Times.Once());
 
-            Mocker.GetMock<HistoryProvider>()
-                .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)), Times.Once());
+            Mocker.GetMock<HistoryService>()
+                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[1])), Times.Once());
 
             Mocker.GetMock<IEpisodeService>()
                 .Verify(c => c.MarkEpisodeAsFetched(12));
@@ -161,8 +161,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             //Act
             Mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
 
-            Mocker.GetMock<HistoryProvider>()
-                .Verify(s => s.Add(It.IsAny<History>()), Times.Never());
+            Mocker.GetMock<HistoryService>()
+                .Verify(s => s.Add(It.IsAny<History.History>()), Times.Never());
 
 
             Mocker.GetMock<IEpisodeService>()

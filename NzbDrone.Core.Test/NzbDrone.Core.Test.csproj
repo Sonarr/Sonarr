@@ -248,7 +248,7 @@
     <Compile Include="QualityTest.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="Indexers\IndexerServiceTest.cs" />
-    <Compile Include="ProviderTests\HistoryProviderTest.cs" />
+    <Compile Include="HistoryTests\HistoryServiceTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />

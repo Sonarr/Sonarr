@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.History;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Providers
     public class DownloadProvider
     {
         private readonly SabProvider _sabProvider;
-        private readonly HistoryProvider _historyProvider;
+        private readonly HistoryService _historyService;
         private readonly IEpisodeService _episodeService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly ConfigProvider _configProvider;
@@ -24,14 +25,14 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
+        public DownloadProvider(SabProvider sabProvider, HistoryService historyService,
             IEpisodeService episodeService, ExternalNotificationProvider externalNotificationProvider,
             ConfigProvider configProvider, BlackholeProvider blackholeProvider,
             SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider,
             NzbgetProvider nzbgetProvider)
         {
             _sabProvider = sabProvider;
-            _historyProvider = historyProvider;
+            _historyService = historyService;
             _episodeService = episodeService;
             _externalNotificationProvider = externalNotificationProvider;
             _configProvider = configProvider;
@@ -59,20 +60,18 @@ namespace NzbDrone.Core.Providers
 
                 foreach (var episode in parseResult.Episodes)
                 {
-                    var history = new History
+                    var history = new History.History
                                       {
                                             Date = DateTime.Now,
                                             Indexer = parseResult.Indexer,
-                                            IsProper = parseResult.Quality.Proper,
-                                            Quality = parseResult.Quality.Quality,
+                                            Quality = parseResult.Quality,
                                             NzbTitle = parseResult.OriginalString,
-                                            EpisodeId = episode.OID,
-                                            SeriesId = episode.SeriesId,
+                                            Episode = episode,
                                             NzbInfoUrl = parseResult.NzbInfoUrl,
                                             ReleaseGroup = parseResult.ReleaseGroup,
                                       };
 
-                    _historyProvider.Add(history);
+                    _historyService.Add(history);
                     _episodeService.MarkEpisodeAsFetched(episode.OID);
 
                     _signalRProvider.UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Downloading, null);

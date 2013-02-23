@@ -5,6 +5,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.History;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -65,9 +66,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             firstQuality = new QualityModel(QualityTypes.Bluray1080p, true);
             secondQuality = new QualityModel(QualityTypes.Bluray1080p, true);
 
-            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
-            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 4)).Returns(secondQuality);
-            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 5)).Returns<QualityModel>(null);
+            Mocker.GetMock<HistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
+            Mocker.GetMock<HistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 4)).Returns(secondQuality);
+            Mocker.GetMock<HistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 5)).Returns<QualityModel>(null);
         }
 
         private void WithFirstReportUpgradable()
@@ -123,7 +124,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.Quality = new QualityModel(QualityTypes.WEBDL1080p, false);
             firstQuality = new QualityModel(QualityTypes.WEBDL1080p, false);
 
-            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
+            Mocker.GetMock<HistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
 
             _upgradeHistory.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }

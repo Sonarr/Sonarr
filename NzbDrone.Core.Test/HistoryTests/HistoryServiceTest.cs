@@ -1,0 +1,108 @@
+﻿using System;
+using System.Linq;
+using FizzWare.NBuilder;
+using FluentAssertions;
+using NUnit.Framework;
+using NzbDrone.Core.History;
+using NzbDrone.Core.Tv;
+using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
+
+namespace NzbDrone.Core.Test.HistoryTests
+{
+    [TestFixture]
+    public class HistoryServiceTest : ObjectDbTest<HistoryRepository, History.History>
+    {
+        [Test]
+        public void Trim_Items()
+        {
+            var historyItem = Builder<History.History>.CreateListOfSize(30)
+                .All()
+                .With(c=>c.OID = 0)
+                .TheFirst(10).With(c => c.Date = DateTime.Now)
+                .TheNext(20).With(c => c.Date = DateTime.Now.AddDays(-31))
+                .Build();
+
+            Db.InsertMany(historyItem);
+
+            AllStoredModels.Should().HaveCount(30);
+            Subject.Trim();
+
+            AllStoredModels.Should().HaveCount(10);
+            AllStoredModels.Should().OnlyContain(s => s.Date > DateTime.Now.AddDays(-30));
+        }
+
+
+        [Test]
+        public void GetBestQualityInHistory_no_result()
+        {
+            Subject.GetBestQualityInHistory(12, 12, 12).Should().Be(null);
+        }
+
+        [Test]
+        public void GetBestQualityInHistory_single_result()
+        {
+            var series = Builder<Series>.CreateNew().Build();
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.Series = series)
+                .With(c => c.SeriesId = series.OID)
+                .Build();
+
+
+
+            var history = Builder<History.History>.CreateNew()
+                .With(c => c.OID = 0)
+                .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
+                .With(h => h.Episode = episode)
+                .Build();
+
+            Db.Insert(history);
+
+            var result = Subject.GetBestQualityInHistory(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+
+            result.Should().NotBeNull();
+            result.Quality.Should().Be(QualityTypes.Bluray720p);
+            result.Proper.Should().BeTrue();
+        }
+
+        [Test]
+        public void GetBestQualityInHistory_should_return_highest_result()
+        {
+
+            var series = Builder<Series>.CreateNew().Build();
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.Series = series)
+                .With(c => c.SeriesId = series.OID)
+                .Build();
+
+
+            var history = Builder<History.History>
+                    .CreateListOfSize(5)
+                    .All()
+                    .With(c => c.OID = 0)
+                    .With(h => h.Episode = episode)
+                    .TheFirst(1)
+                    .With(h => h.Quality = new QualityModel(QualityTypes.DVD, true))
+                    .TheNext(1)
+                    .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
+                    .TheNext(1)
+                    .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
+                    .TheNext(1)
+                    .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, false))
+                    .TheNext(1)
+                    .With(h => h.Quality = new QualityModel(QualityTypes.SDTV, true))
+                    .Build();
+
+            Db.InsertMany(history);
+
+            var result = Subject.GetBestQualityInHistory(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+
+            result.Should().NotBeNull();
+            result.Quality.Should().Be(QualityTypes.Bluray720p);
+            result.Proper.Should().BeTrue();
+        }
+
+        
+     
+    }
+}

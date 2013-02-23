@@ -131,10 +131,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
-    </Reference>
     <Reference Include="DeskMetrics.NET">
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
     </Reference>
@@ -268,6 +264,7 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Helpers\XElementHelper.cs" />
+    <Compile Include="History\HistoryRepository.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\NewznabRepository.cs" />
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
@@ -282,7 +279,6 @@
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
-    <Compile Include="Model\HistoryQueryModel.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
@@ -491,7 +487,7 @@
     <Compile Include="Providers\GrowlProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\HistoryProvider.cs">
+    <Compile Include="History\HistoryService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\IndexerService.cs">
@@ -592,7 +588,7 @@
     <Compile Include="Model\Notification\ProgressNotification.cs" />
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
-    <Compile Include="Repository\History.cs" />
+    <Compile Include="History\History.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityType.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
