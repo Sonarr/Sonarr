@@ -23,11 +23,11 @@ namespace NzbDrone.Core.Test.Indexers
     public class IndexerServiceTest : CoreTest<IndexerService>
     {
         [Test]
-        public void Init_indexer_test()
+        public void should_insert_indexer_in_repository_when_it_doesnt_exist()
         {
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
-            Mocker.Resolve<IndexerService>();
+            Subject.Init();
 
             Mocker.GetMock<IIndexerRepository>()
                 .Verify(v => v.Insert(It.IsAny<Indexer>()), Times.Once());
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.Indexers
         {
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<DefaultEnabledIndexer>() });
 
-            Mocker.Resolve<IndexerService>();
+            Subject.Init();
 
             Mocker.GetMock<IIndexerRepository>()
                 .Verify(v => v.Insert(It.Is<Indexer>(indexer => indexer.Enable)), Times.Once());
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.Indexers
         {
             Mocker.SetConstant<IEnumerable<IndexerBase>>(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
 
-            Mocker.Resolve<IndexerService>();
+            Subject.Init();
 
             Mocker.GetMock<IIndexerRepository>()
                 .Verify(v => v.Insert(It.Is<Indexer>(indexer => indexer.Enable)), Times.Never());
