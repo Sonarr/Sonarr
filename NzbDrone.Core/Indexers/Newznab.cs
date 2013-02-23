@@ -12,9 +12,9 @@ namespace NzbDrone.Core.Indexers
 {
     public class Newznab : IndexerBase
     {
-        private readonly NewznabService _newznabProvider;
+        private readonly INewznabService _newznabProvider;
 
-        public Newznab(HttpProvider httpProvider, ConfigProvider configProvider, NewznabService newznabProvider)
+        public Newznab(HttpProvider httpProvider, ConfigProvider configProvider, INewznabService newznabProvider)
             : base(httpProvider, configProvider)
         {
             _newznabProvider = newznabProvider;

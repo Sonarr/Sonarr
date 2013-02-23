@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                     .With(n => n.ApiKey = String.Empty)
                     .Build();
 
-            Mocker.GetMock<NewznabService>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
+            Mocker.GetMock<INewznabService>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -362,7 +362,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                     .With(n => n.ApiKey = String.Empty)
                     .Build();
 
-            Mocker.GetMock<NewznabService>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
+            Mocker.GetMock<INewznabService>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
