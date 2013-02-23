@@ -110,6 +110,8 @@
   <ItemGroup>
     <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="ApiContainerExtensions.cs" />
+    <Compile Include="Calendar\CalendarModule.cs" />
+    <Compile Include="Calendar\CalendarResource.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\Serializer.cs" />
