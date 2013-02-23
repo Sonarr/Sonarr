@@ -204,7 +204,7 @@
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\SabProviderTests\QueueFixture.cs" />
-    <Compile Include="ProviderTests\NewznabProviderTest.cs" />
+    <Compile Include="Indexers\NewznabServiceTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
     <Compile Include="ProviderTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\GrowlProviderTest.cs" />
