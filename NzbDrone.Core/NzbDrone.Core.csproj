@@ -269,6 +269,7 @@
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
+    <Compile Include="Indexers\NewznabRepository.cs" />
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\JobRepository.cs" />
@@ -341,13 +342,13 @@
     <Compile Include="DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
-    <Compile Include="Indexers\Providers\Nzbx.cs" />
+    <Compile Include="Indexers\Nzbx.cs" />
     <Compile Include="Providers\Hubs\EpisodeHub.cs" />
-    <Compile Include="Indexers\Providers\NzbClub.cs" />
-    <Compile Include="Indexers\Providers\NzbIndex.cs" />
-    <Compile Include="Indexers\Providers\FileSharingTalk.cs" />
-    <Compile Include="Indexers\Providers\Omgwtfnzbs.cs" />
-    <Compile Include="Indexers\Providers\Wombles.cs" />
+    <Compile Include="Indexers\NzbClub.cs" />
+    <Compile Include="Indexers\NzbIndex.cs" />
+    <Compile Include="Indexers\FileSharingTalk.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs.cs" />
+    <Compile Include="Indexers\Wombles.cs" />
     <Compile Include="Providers\MetadataProvider.cs" />
     <Compile Include="Providers\Metadata\MetadataBase.cs" />
     <Compile Include="Providers\Metadata\Xbmc.cs" />
@@ -494,16 +495,16 @@
     <Compile Include="Indexers\IndexerService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\Providers\IndexerBase.cs">
+    <Compile Include="Indexers\IndexerBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\Providers\Newznab.cs">
+    <Compile Include="Indexers\Newznab.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\Providers\NzbsRUs.cs">
+    <Compile Include="Indexers\NzbsRUs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\Providers\SyndicationFeedXmlReader.cs">
+    <Compile Include="Indexers\SyndicationFeedXmlReader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\MediaFileProvider.cs">
@@ -512,7 +513,7 @@
     <Compile Include="Providers\MisnamedProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\NewznabProvider.cs">
+    <Compile Include="Indexers\NewznabService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\NotificationProvider.cs">
@@ -574,7 +575,7 @@
     <Compile Include="Providers\Xbmc\ResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Repository\NewznabDefinition.cs" />
+    <Compile Include="Indexers\NewznabDefinition.cs" />
     <Compile Include="Repository\ExternalNotificationDefinition.cs" />
     <Compile Include="Jobs\JobDefinition.cs" />
     <Compile Include="Indexers\Indexer.cs" />

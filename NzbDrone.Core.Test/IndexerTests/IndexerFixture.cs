@@ -11,7 +11,6 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -164,7 +163,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                     .With(n => n.ApiKey = String.Empty)
                     .Build();
 
-            Mocker.GetMock<NewznabProvider>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
+            Mocker.GetMock<NewznabService>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -363,7 +362,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                     .With(n => n.ApiKey = String.Empty)
                     .Build();
 
-            Mocker.GetMock<NewznabProvider>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
+            Mocker.GetMock<NewznabService>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))

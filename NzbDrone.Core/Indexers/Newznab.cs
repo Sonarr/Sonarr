@@ -8,13 +8,13 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Indexers.Providers
+namespace NzbDrone.Core.Indexers
 {
     public class Newznab : IndexerBase
     {
-        private readonly NewznabProvider _newznabProvider;
+        private readonly NewznabService _newznabProvider;
 
-        public Newznab(HttpProvider httpProvider, ConfigProvider configProvider, NewznabProvider newznabProvider)
+        public Newznab(HttpProvider httpProvider, ConfigProvider configProvider, NewznabService newznabProvider)
             : base(httpProvider, configProvider)
         {
             _newznabProvider = newznabProvider;

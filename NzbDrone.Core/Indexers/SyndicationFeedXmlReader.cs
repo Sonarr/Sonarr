@@ -11,7 +11,7 @@ using System.Threading;
 using System.Xml;
 using NLog;
 
-namespace NzbDrone.Core.Indexers.Providers
+namespace NzbDrone.Core.Indexers
 {
     public class SyndicationFeedXmlReader : XmlTextReader
     {

@@ -6,7 +6,6 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Providers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
