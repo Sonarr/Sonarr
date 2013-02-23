@@ -20,8 +20,6 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         [SetUp]
         public void Setup()
         {
-            WithStrictMocker();
-
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/_test/");
             Mocker.Resolve<HttpProvider>();
         }
