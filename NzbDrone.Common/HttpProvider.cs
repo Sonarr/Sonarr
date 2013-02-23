@@ -12,10 +12,12 @@ namespace NzbDrone.Common
     {
         private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly string _userAgent;
 
         public HttpProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
+            _userAgent = String.Format("NzbDrone {0}", _environmentProvider.Version);
         }
 
         public HttpProvider()
@@ -37,6 +39,7 @@ namespace NzbDrone.Common
             try
             {
                 var client = new WebClient { Credentials = identity };
+                client.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
                 return client.DownloadString(address);
             }
             catch (Exception ex)
@@ -49,7 +52,7 @@ namespace NzbDrone.Common
         public virtual Stream DownloadStream(string url, NetworkCredential credential)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
-            request.UserAgent = String.Format("NzbDrone {0}", _environmentProvider.Version);
+            request.UserAgent = _userAgent;
 
             request.Credentials = credential;
             var response = request.GetResponse();
@@ -71,6 +74,7 @@ namespace NzbDrone.Common
 
                 var stopWatch = Stopwatch.StartNew();
                 var webClient = new WebClient();
+                webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
                 webClient.DownloadFile(url, fileName);
                 stopWatch.Stop();
                 logger.Trace("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
