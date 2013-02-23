@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Nancy;
-using NzbDrone.Api.Extentions;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Calendar
