@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Common.Eventing
 {
@@ -11,6 +12,7 @@ namespace NzbDrone.Common.Eventing
 
         public EventAggregator(Logger logger, IEnumerable<IHandle> handlers)
         {
+            Ensure.That(() => handlers).HasItems();
             _logger = logger;
             _handlers = handlers;
         }

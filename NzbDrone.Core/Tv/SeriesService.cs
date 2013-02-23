@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
 {
@@ -26,6 +28,7 @@ namespace NzbDrone.Core.Tv
         private readonly TvDbProvider _tvDbProvider;
         private readonly MetadataProvider _metadataProvider;
         private readonly TvRageMappingProvider _tvRageMappingProvider;
+        private readonly IEventAggregator _eventAggregator;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -33,7 +36,7 @@ namespace NzbDrone.Core.Tv
 
         public SeriesService(ISeriesRepository seriesRepository, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider, MetadataProvider metadataProvider,
-                                TvRageMappingProvider tvRageMappingProvider)
+                                TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator)
         {
             _seriesRepository = seriesRepository;
             _configProvider = configProviderProvider;
@@ -41,6 +44,7 @@ namespace NzbDrone.Core.Tv
             _sceneNameMappingProvider = sceneNameMappingProvider;
             _metadataProvider = metadataProvider;
             _tvRageMappingProvider = tvRageMappingProvider;
+            _eventAggregator = eventAggregator;
         }
 
 
@@ -128,6 +132,8 @@ namespace NzbDrone.Core.Tv
                 repoSeries.CustomStartDate = airedAfter;
 
             _seriesRepository.Insert(repoSeries);
+
+            _eventAggregator.Publish(new SeriesAddedEvent(repoSeries));
         }
 
 
@@ -156,7 +162,7 @@ namespace NzbDrone.Core.Tv
         /// </summary>
         /// <param name = "rawTime">The TVDB AirsTime</param>
         /// <returns>String that contains the AirTimes</returns>
-        
+
         private static readonly Regex timeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static string CleanAirsTime(string rawTime)
         {

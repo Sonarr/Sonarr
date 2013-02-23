@@ -306,6 +306,7 @@
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\SeasonRepository.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\QualityModel.cs" />
