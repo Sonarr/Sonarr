@@ -74,13 +74,13 @@ namespace NzbDrone.Core.Providers
                 return new List<EpisodeFile>();
             }
 
-            if (_episodeService.GetEpisodeBySeries(series.SeriesId).Count == 0)
+            if (_episodeService.GetEpisodeBySeries(series.OID).Count == 0)
             {
                 Logger.Debug("Series {0} has no episodes. skipping", series.Title);
                 return new List<EpisodeFile>();
             }
 
-            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
+            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.OID);
             CleanUp(seriesFile);
 
             var mediaFileList = GetVideoFiles(path);
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Providers
 
             var episodeFile = new EpisodeFile();
             episodeFile.DateAdded = DateTime.Now;
-            episodeFile.SeriesId = series.SeriesId;
+            episodeFile.SeriesId = series.OID;
             episodeFile.Path = filePath.NormalizePath();
             episodeFile.Size = size;
             episodeFile.Quality = parseResult.Quality.Quality;

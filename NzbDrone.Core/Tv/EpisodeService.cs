@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Tv
         void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus);
         void UpdateEpisodes(List<Episode> episodes);
         Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
+        List<Episode> GetEpisodesAiredInMonth(int year, int month);
     }
 
     public class EpisodeService : IEpisodeService
@@ -100,7 +101,7 @@ namespace NzbDrone.Core.Tv
                     return new List<Episode>();
                 }
 
-                var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
+                var episodeInfo = GetEpisode(parseResult.Series.OID, parseResult.AirDate.Value);
 
                 if (episodeInfo != null)
                 {
@@ -122,14 +123,14 @@ namespace NzbDrone.Core.Tv
                 Episode episodeInfo = null;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                    episodeInfo = GetEpisodeBySceneNumbering(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisodeBySceneNumbering(parseResult.Series.OID, parseResult.SeasonNumber, episodeNumber);
 
                 if (episodeInfo == null)
                 {
-                    episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisode(parseResult.Series.OID, parseResult.SeasonNumber, episodeNumber);
                     if (episodeInfo == null && parseResult.AirDate != null)
                     {
-                        episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
+                        episodeInfo = GetEpisode(parseResult.Series.OID, parseResult.AirDate.Value);
                     }
                 }
 
@@ -182,7 +183,7 @@ namespace NzbDrone.Core.Tv
 
         public virtual void RefreshEpisodeInfo(Series series)
         {
-            logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.SeriesId));
+            logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.OID));
             var successCount = 0;
             var failCount = 0;
 
@@ -192,7 +193,7 @@ namespace NzbDrone.Core.Tv
                                                               (episode.FirstAired < DateTime.Now.AddDays(2) && episode.FirstAired.Year > 1900))
                                             .ToList();
 
-            var seriesEpisodes = GetEpisodeBySeries(series.SeriesId);
+            var seriesEpisodes = GetEpisodeBySeries(series.OID);
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
 
@@ -223,7 +224,7 @@ namespace NzbDrone.Core.Tv
                         }
                         else
                         {
-                            episodeToUpdate.Ignored = _seasonRepository.IsIgnored(series.SeriesId, episode.SeasonNumber);
+                            episodeToUpdate.Ignored = _seasonRepository.IsIgnored(series.OID, episode.SeasonNumber);
                         }
                     }
                     else
@@ -239,7 +240,7 @@ namespace NzbDrone.Core.Tv
                         episodeToUpdate.EpisodeFile = null;
                     }
 
-                    episodeToUpdate.SeriesId = series.SeriesId;
+                    episodeToUpdate.SeriesId = series.OID;
                     episodeToUpdate.TvDbEpisodeId = episode.Id;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
@@ -283,7 +284,6 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.Update(episode);
         }
 
-
         public virtual IList<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber)
         {
             return GetEpisodesBySeason(seriesId, seasonNumber).Select(c => c.OID).ToList();
@@ -315,11 +315,11 @@ namespace NzbDrone.Core.Tv
 
         public virtual void DeleteEpisodesNotInTvdb(Series series, IList<TvdbEpisode> tvdbEpisodes)
         {
-            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.SeriesId));
+            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.OID));
 
             if (!tvdbEpisodes.Any()) return;
 
-            var seriesEpisodeIds = _episodeRepository.GetEpisodes(series.SeriesId).Select(c => c.OID);
+            var seriesEpisodeIds = _episodeRepository.GetEpisodes(series.OID).Select(c => c.OID);
 
             var toBeDeleted = seriesEpisodeIds.Except(tvdbEpisodes.Select(e => e.Id));
 
@@ -328,7 +328,7 @@ namespace NzbDrone.Core.Tv
                 _episodeRepository.Delete(id);
             }
 
-            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.SeriesId);
+            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.OID);
         }
 
         public virtual void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
@@ -355,6 +355,14 @@ namespace NzbDrone.Core.Tv
         public virtual Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
             return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
+        }
+
+        public List<Episode> GetEpisodesAiredInMonth(int year, int month)
+        {
+            var firstDay = new DateTime(year, month, 1);
+            var lastDay = firstDay.AddMonths(1).AddDays(-1);
+
+            return _episodeRepository.EpisodesBetweenDates(firstDay, lastDay);
         }
     }
 }

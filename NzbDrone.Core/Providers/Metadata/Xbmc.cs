@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers.Metadata
         public override void CreateForSeries(Series series, TvdbSeries tvDbSeries)
         {
             //Create tvshow.nfo, fanart.jpg, folder.jpg and season##.tbn
-            var episodeGuideUrl = GetEpisodeGuideUrl(series.SeriesId);
+            var episodeGuideUrl = GetEpisodeGuideUrl(series.OID);
 
             _logger.Debug("Generating tvshow.nfo for: {0}", series.Title);
             var sb = new StringBuilder();

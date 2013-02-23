@@ -52,7 +52,9 @@
     <Content Include="Calendar\CalendarCollection.js" />
     <Content Include="Calendar\CalendarCollectionTemplate.html" />
     <Content Include="Calendar\CalendarCollectionView.js" />
+    <Content Include="Calendar\CalendarItemTemplate.html" />
     <Content Include="Calendar\CalendarModel.js" />
+    <Content Include="Calendar\CalendarItemView.js" />
     <Content Include="Content\base.css" />
     <Content Include="Content\menu.css" />
     <Content Include="Content\fullcalendar.css" />

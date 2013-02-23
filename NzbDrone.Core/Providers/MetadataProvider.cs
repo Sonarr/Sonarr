@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void CreateForSeries(Series series)
         {
-            var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(series.OID, false, true);
 
             CreateForSeries(series, tvDbSeries);
         }

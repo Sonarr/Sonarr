@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Providers
             logger.Trace("Ensuring Banner Folder exists: ", bannerPath);
             _diskProvider.CreateDirectory(bannerPath);
 
-            var bannerFilename = Path.Combine(bannerPath, series.SeriesId.ToString()) + ".jpg";
+            var bannerFilename = Path.Combine(bannerPath, series.OID.ToString()) + ".jpg";
 
             logger.Trace("Downloading banner for '{0}'", series.Title);
 

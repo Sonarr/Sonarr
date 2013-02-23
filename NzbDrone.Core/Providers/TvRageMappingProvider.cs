@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers
 
         public Series FindMatchingTvRageSeries(Series series)
         {
-            var firstEpisode = _episodeService.GetEpisode(series.SeriesId, 1, 1);
+            var firstEpisode = _episodeService.GetEpisode(series.OID, 1, 1);
 
             var cleanName = _sceneMappingProvider.GetCleanName(series.SeriesId);
             var results = _tvRageProvider.SearchSeries(series.Title);

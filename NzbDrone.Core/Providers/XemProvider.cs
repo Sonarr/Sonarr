@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Providers
                     return;
                 }
 
-                var episodes = _episodeService.GetEpisodeBySeries(series.SeriesId);
+                var episodes = _episodeService.GetEpisodeBySeries(series.OID);
 
                 foreach (var mapping in mappings)
                 {

@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Providers.Search
             var searchResult = new SearchHistory
             {
                 SearchTime = DateTime.Now,
-                SeriesId = series.SeriesId,
+                SeriesId = series.OID,
                 EpisodeId = options.GetType().GetProperty("Episode") != null ? options.Episode.EpisodeId : null,
                 SeasonNumber = options.GetType().GetProperty("SeasonNumber") != null ? options.SeasonNumber : null
             };
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Providers.Search
                     logger.Trace("Analysing report " + episodeParseResult);
                     episodeParseResult.Series = _seriesRepository.GetByTitle(episodeParseResult.CleanTitle);
 
-                    if(episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
+                    if(episodeParseResult.Series == null || episodeParseResult.Series.OID != series.OID)
                     {
                         item.SearchError = ReportRejectionType.WrongSeries;
                         continue;
@@ -170,12 +170,12 @@ namespace NzbDrone.Core.Providers.Search
 
         public virtual string GetSearchTitle(Series series, int seasonNumber = -1)
         {
-            var seasonTitle = _sceneMappingProvider.GetSceneName(series.SeriesId, seasonNumber);
+            var seasonTitle = _sceneMappingProvider.GetSceneName(series.OID, seasonNumber);
 
             if(!String.IsNullOrWhiteSpace(seasonTitle))
                 return seasonTitle;
 
-            var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
+            var title = _sceneMappingProvider.GetSceneName(series.OID);
 
             if (String.IsNullOrWhiteSpace(title))
             {

@@ -88,7 +88,7 @@ namespace NzbDrone.Api.Series
             _seriesRepository.Update(series);
 
             if (oldPath != series.Path)
-                _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.SeriesId });
+                _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.OID });
 
             _seriesRepository.Update(series);
 
@@ -116,7 +116,7 @@ namespace NzbDrone.Api.Series
         {
             RuleSet("POST", () =>
                 {
-                    RuleFor(s => s.SeriesId).GreaterThan(0);
+                    RuleFor(s => s.OID).GreaterThan(0);
                     RuleFor(s => s.Path).NotEmpty().Must(_diskProvider.FolderExists);
                     RuleFor(s => s.QualityProfileId).GreaterThan(0);
                 });

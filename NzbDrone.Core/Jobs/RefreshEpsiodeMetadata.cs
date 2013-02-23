@@ -57,12 +57,12 @@ namespace NzbDrone.Core.Jobs
         {
             notification.CurrentMessage = String.Format("Refreshing episode metadata for '{0}'", series.Title);
 
-            Logger.Debug("Getting episodes from database for series: {0}", series.SeriesId);
-            var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
+            Logger.Debug("Getting episodes from database for series: {0}", series.OID);
+            var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.OID);
 
             if (episodeFiles == null || episodeFiles.Count == 0)
             {
-                Logger.Warn("No episodes in database found for series: {0}", series.SeriesId);
+                Logger.Warn("No episodes in database found for series: {0}", series.OID);
                 return;
             }
 

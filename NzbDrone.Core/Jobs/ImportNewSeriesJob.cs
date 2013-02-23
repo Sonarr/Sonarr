@@ -75,20 +75,20 @@ namespace NzbDrone.Core.Jobs
             {
                 try
                 {
-                    _attemptedSeries.Add(currentSeries.SeriesId);
+                    _attemptedSeries.Add(currentSeries.OID);
                     notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
 
-                    _updateInfoJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
-                    _diskScanJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
+                    _updateInfoJob.Start(notification, new { SeriesId = currentSeries.OID });
+                    _diskScanJob.Start(notification, new { SeriesId = currentSeries.OID });
 
-                    var updatedSeries = _seriesRepository.Get(currentSeries.SeriesId);
-                    AutoIgnoreSeasons(updatedSeries.SeriesId);
+                    var updatedSeries = _seriesRepository.Get(currentSeries.OID);
+                    AutoIgnoreSeasons(updatedSeries.OID);
 
                     //Download the banner for the new series
-                    _bannerDownloadJob.Start(notification, new { SeriesId = updatedSeries.SeriesId });
+                    _bannerDownloadJob.Start(notification, new { SeriesId = updatedSeries.OID });
 
                     //Get Scene Numbering if applicable
-                    _xemUpdateJob.Start(notification, new { SeriesId = updatedSeries.SeriesId });
+                    _xemUpdateJob.Start(notification, new { SeriesId = updatedSeries.OID });
 
                     notification.CurrentMessage = String.Format("{0} was successfully imported", updatedSeries.Title);
                 }

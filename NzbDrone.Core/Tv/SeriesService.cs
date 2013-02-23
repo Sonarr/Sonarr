@@ -56,10 +56,9 @@ namespace NzbDrone.Core.Tv
 
         public Series UpdateSeriesInfo(int seriesId)
         {
-            var tvDbSeries = _tvDbProvider.GetSeries(seriesId, false, true);
             var series = _seriesRepository.Get(seriesId);
-
-            series.SeriesId = tvDbSeries.Id;
+            var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true);
+            
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.AirsTime);
             series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
@@ -113,7 +112,8 @@ namespace NzbDrone.Core.Tv
             logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
             Ensure.That(() => tvDbSeriesId).IsGreaterThan(0);
-            Ensure.That(() => title).IsNotNullOrWhiteSpace();
+            //Todo: We can't validate the title if we're passing in an empty string
+            //Ensure.That(() => title).IsNotNullOrWhiteSpace();
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
 
             var repoSeries = new Series();
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Tv
             foreach (var series in allSeries)
             {
                 //Only update parameters that can be changed in MassEdit
-                var edited = editedSeries.Single(s => s.SeriesId == series.SeriesId);
+                var edited = editedSeries.Single(s => s.OID == series.OID);
                 series.QualityProfileId = edited.QualityProfileId;
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;
