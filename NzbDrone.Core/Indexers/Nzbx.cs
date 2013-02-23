@@ -9,7 +9,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Nzbx;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Indexers.Providers
+namespace NzbDrone.Core.Indexers
 {
     class Nzbx : IndexerBase
     {

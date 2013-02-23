@@ -8,7 +8,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Indexers.Providers
+namespace NzbDrone.Core.Indexers
 {
     public class Newznab : IndexerBase
     {
