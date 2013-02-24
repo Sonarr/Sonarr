@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         private void WithImportedFile(string file)
         {
             var fakeEpisodeFile = Builder<EpisodeFile>.CreateNew()
-                .With(f => f.SeriesId = fakeSeries.SeriesId)
+                .With(f => f.SeriesId = fakeSeries.OID)
                 .Build();
 
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.ImportFile(fakeSeries, file)).Returns(fakeEpisodeFile);

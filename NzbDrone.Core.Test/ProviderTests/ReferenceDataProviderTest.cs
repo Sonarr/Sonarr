@@ -138,11 +138,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(s => s.SeriesType = SeriesType.Standard)
                 .TheFirst(1)
-                .With(s => s.SeriesId = 10)
+                .With(s => s.OID = 10)
                 .TheNext(1)
-                .With(s => s.SeriesId = 11)
+                .With(s => s.OID = 11)
                 .TheNext(1)
-                .With(s => s.SeriesId = 12)
+                .With(s => s.OID = 12)
                 .Build();
 
             Db.InsertMany(fakeSeries);
@@ -170,12 +170,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .All()
                 .With(s => s.SeriesType = SeriesType.Standard)
                 .TheFirst(1)
-                .With(s => s.SeriesId = 10)
+                .With(s => s.OID = 10)
                 .With(s => s.SeriesType = SeriesType.Daily)
                 .TheNext(1)
-                .With(s => s.SeriesId = 11)
+                .With(s => s.OID = 11)
                 .TheNext(1)
-                .With(s => s.SeriesId = 12)
+                .With(s => s.OID = 12)
                 .Build();
 
             Db.InsertMany(fakeSeries);

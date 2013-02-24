@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     .Build();
 
             _episode = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = _series.SeriesId)
+                    .With(e => e.SeriesId = _series.OID)
                     .With(e => e.Series = _series)
                     .With(e => e.EpisodeFile = _episodeFile)
                     .Build();

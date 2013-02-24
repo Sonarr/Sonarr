@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class MockIndexer : IndexerBase
     {
-        public MockIndexer(HttpProvider httpProvider, ConfigService configService)
+        public MockIndexer(HttpProvider httpProvider, IConfigService configService)
             : base(httpProvider, configService)
         {
         }
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class TestUrlIndexer : IndexerBase
     {
-        public TestUrlIndexer(HttpProvider httpProvider, ConfigService configService)
+        public TestUrlIndexer(HttpProvider httpProvider, IConfigService configService)
             : base(httpProvider, configService)
         {
         }
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class CustomParserIndexer : IndexerBase
     {
-        public CustomParserIndexer(HttpProvider httpProvider, ConfigService configService)
+        public CustomParserIndexer(HttpProvider httpProvider, IConfigService configService)
             : base(httpProvider, configService)
         {
         }
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class NotConfiguredIndexer : IndexerBase
     {
-        public NotConfiguredIndexer(HttpProvider httpProvider, ConfigService configService)
+        public NotConfiguredIndexer(HttpProvider httpProvider, IConfigService configService)
             : base(httpProvider, configService)
         {
         }
@@ -300,7 +300,7 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class DefaultEnabledIndexer : IndexerBase
     {
-        public DefaultEnabledIndexer(HttpProvider httpProvider, ConfigService configService)
+        public DefaultEnabledIndexer(HttpProvider httpProvider, IConfigService configService)
             : base(httpProvider, configService)
         {
         }

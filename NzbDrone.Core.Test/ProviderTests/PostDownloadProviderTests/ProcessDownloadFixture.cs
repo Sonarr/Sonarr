@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .All()
-                .With(f => f.SeriesId = fakeSeries.SeriesId)
+                .With(f => f.SeriesId = fakeSeries.OID)
                 .Build().ToList();
 
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder)).Returns(fakeEpisodeFiles);
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .All()
-                .With(f => f.SeriesId = fakeSeries.SeriesId)
+                .With(f => f.SeriesId = fakeSeries.OID)
                 .Build().ToList();
 
             //Act

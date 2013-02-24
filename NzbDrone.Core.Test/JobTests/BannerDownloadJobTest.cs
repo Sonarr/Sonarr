@@ -82,10 +82,10 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateNew()
                     .Build();
 
-            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(series.SeriesId))
+            Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(series.OID))
                     .Returns(series);
 
-            Mocker.Resolve<BannerDownloadJob>().Start(_notification, new { SeriesId = series.SeriesId });
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, new { SeriesId = series.OID });
             VerifyDownloadMock(1);
         }
     }

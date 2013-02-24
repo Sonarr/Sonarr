@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Tv
 
     public class Series : ModelBase
     {
-        public virtual int SeriesId { get; set; }
+        public int TvDbId { get; set; }
 
         public string Title { get; set; }
 

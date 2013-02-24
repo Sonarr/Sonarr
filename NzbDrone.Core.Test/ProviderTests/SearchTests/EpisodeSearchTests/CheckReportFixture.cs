@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
 
             _episode = Builder<Episode>
                     .CreateNew()
-                    .With(e => e.SeriesId = _series.SeriesId)
+                    .With(e => e.SeriesId = _series.OID)
                     .With(e => e.Series = _series)
                     .Build();
 

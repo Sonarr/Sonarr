@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 
             series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesId == 79488)
+                    .With(s => s.OID == 79488)
                     .With(s => s.Title == "30 Rock")
                     .Build();
 

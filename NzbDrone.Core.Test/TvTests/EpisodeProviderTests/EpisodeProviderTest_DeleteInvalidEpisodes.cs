@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = seriesId)
+                .With(c => c.OID = seriesId)
                 .Build();
 
             var fakeEpisode = Builder<Episode>.CreateNew()
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = seriesId)
+                .With(c => c.OID = seriesId)
                 .Build();
 
             var fakeEpisode = Builder<Episode>.CreateNew()
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = seriesId)
+                .With(c => c.OID = seriesId)
                 .Build();
 
             var fakeEpisode = Builder<Episode>.CreateNew()
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = seriesId)
+                .With(c => c.OID = seriesId)
                 .Build();
 
             var fakeEpisode = Builder<Episode>.CreateNew()
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = seriesId)
+                .With(c => c.OID = seriesId)
                 .Build();
 
             var fakeEpisode = Builder<Episode>.CreateNew()
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             //Other Series
             var otherFakeSeries = Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = 12345)
+                .With(c => c.OID = 12345)
                 .Build();
 
             var otherFakeEpisode = Builder<Episode>.CreateNew()

@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(true);
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.SeriesId = 12).Build();
+                .With(s => s.OID = 12).Build();
 
             //Act
             Mocker.Resolve<DiskScanProvider>().Scan(series);

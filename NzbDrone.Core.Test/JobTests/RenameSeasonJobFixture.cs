@@ -37,11 +37,11 @@ namespace NzbDrone.Core.Test.JobTests
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(s => s.Get(_series.SeriesId))
+                  .Setup(s => s.Get(_series.OID))
                   .Returns(_series);
 
             Mocker.GetMock<MediaFileProvider>()
-                  .Setup(s => s.GetSeasonFiles(_series.SeriesId, 5))
+                  .Setup(s => s.GetSeasonFiles(_series.OID, 5))
                   .Returns(_episodeFiles);
         }
 
@@ -63,13 +63,13 @@ namespace NzbDrone.Core.Test.JobTests
         public void should_throw_if_seasonId_is_less_than_zero()
         {
             Assert.Throws<ArgumentException>(() => 
-                Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.SeriesId, SeasonNumber = -10 }));
+                Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.OID, SeasonNumber = -10 }));
         }
 
         [Test]
         public void should_log_warning_if_no_episode_files_are_found()
         {
-            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.SeriesId, SeasonNumber = 10 });
+            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.OID, SeasonNumber = 10 });
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void should_return_if_no_episodes_are_moved()
         {
-            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.SeriesId, SeasonNumber = 5 });
+            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.OID, SeasonNumber = 5 });
 
             Mocker.GetMock<MetadataProvider>().Verify(v => v.RemoveForEpisodeFiles(It.IsAny<List<EpisodeFile>>()), Times.Never());
         }
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.JobTests
         public void should_return_process_metadata_if_files_are_moved()
         {
             WithMovedFiles();
-            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.SeriesId, SeasonNumber = 5 });
+            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.OID, SeasonNumber = 5 });
 
             Mocker.GetMock<MetadataProvider>().Verify(v => v.RemoveForEpisodeFiles(It.IsAny<List<EpisodeFile>>()), Times.Once());
         }

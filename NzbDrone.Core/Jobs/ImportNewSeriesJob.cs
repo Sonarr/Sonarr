@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Jobs
 
         private void ScanSeries(ProgressNotification notification)
         {
-            var syncList = _seriesRepository.All().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.SeriesId)).ToList();
+            var syncList = _seriesRepository.All().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.OID)).ToList();
             if (syncList.Count == 0)
             {
                 return;
@@ -75,20 +76,20 @@ namespace NzbDrone.Core.Jobs
             {
                 try
                 {
-                    _attemptedSeries.Add(currentSeries.OID);
+                    _attemptedSeries.Add(((ModelBase)currentSeries).OID);
                     notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
 
-                    _updateInfoJob.Start(notification, new { SeriesId = currentSeries.OID });
-                    _diskScanJob.Start(notification, new { SeriesId = currentSeries.OID });
+                    _updateInfoJob.Start(notification, new { SeriesId = ((ModelBase)currentSeries).OID });
+                    _diskScanJob.Start(notification, new { SeriesId = ((ModelBase)currentSeries).OID });
 
-                    var updatedSeries = _seriesRepository.Get(currentSeries.OID);
-                    AutoIgnoreSeasons(updatedSeries.OID);
+                    var updatedSeries = _seriesRepository.Get(((ModelBase)currentSeries).OID);
+                    AutoIgnoreSeasons(((ModelBase)updatedSeries).OID);
 
                     //Download the banner for the new series
-                    _bannerDownloadJob.Start(notification, new { SeriesId = updatedSeries.OID });
+                    _bannerDownloadJob.Start(notification, new { SeriesId = ((ModelBase)updatedSeries).OID });
 
                     //Get Scene Numbering if applicable
-                    _xemUpdateJob.Start(notification, new { SeriesId = updatedSeries.OID });
+                    _xemUpdateJob.Start(notification, new { SeriesId = ((ModelBase)updatedSeries).OID });
 
                     notification.CurrentMessage = String.Format("{0} was successfully imported", updatedSeries.Title);
                 }

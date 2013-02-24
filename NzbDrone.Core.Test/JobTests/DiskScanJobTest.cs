@@ -26,12 +26,12 @@ namespace NzbDrone.Core.Test.JobTests
         public void series_specific_scan_should_scan_series()
         {
             var series = Builder<Series>.CreateNew()
-                .With(s => s.SeriesId = 12)
+                .With(s => s.OID = 12)
                 .Build();
 
 
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(p => p.Get(series.SeriesId));
+                  .Setup(p => p.Get(series.OID));
 
 
             Mocker.GetMock<DiskScanProvider>()
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Returns(new List<EpisodeFile>());
 
             //Act
-            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), new { SeriesId = series.SeriesId });
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), new { SeriesId = series.OID });
 
             //Assert
             Mocker.VerifyAllMocks();
@@ -51,8 +51,8 @@ namespace NzbDrone.Core.Test.JobTests
         public void job_with_no_target_should_scan_all_series()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .TheFirst(1).With(s => s.SeriesId = 12)
-                .TheNext(1).With(s => s.SeriesId = 15)
+                .TheFirst(1).With(s => s.OID = 12)
+                .TheNext(1).With(s => s.OID = 15)
                 .Build().ToList();
 
             Mocker.GetMock<ISeriesRepository>()
@@ -77,8 +77,8 @@ namespace NzbDrone.Core.Test.JobTests
         public void failed_scan_should_not_terminated_job()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .TheFirst(1).With(s => s.SeriesId = 12)
-                .TheNext(1).With(s => s.SeriesId = 15)
+                .TheFirst(1).With(s => s.OID = 12)
+                .TheNext(1).With(s => s.OID = 15)
                 .Build().ToList();
 
             Mocker.GetMock<ISeriesRepository>()
@@ -104,8 +104,8 @@ namespace NzbDrone.Core.Test.JobTests
         public void job_with_no_target_should_scan_series_with_episodes()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .TheFirst(1).With(s => s.SeriesId = 12)
-                .TheNext(1).With(s => s.SeriesId = 15)
+                .TheFirst(1).With(s => s.OID = 12)
+                .TheNext(1).With(s => s.OID = 15)
                 .Build().ToList();
 
             Mocker.GetMock<ISeriesRepository>()

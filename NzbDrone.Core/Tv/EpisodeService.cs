@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Tv
                     return new List<Episode>();
                 }
 
-                var episodeInfo = GetEpisode(parseResult.Series.OID, parseResult.AirDate.Value);
+                var episodeInfo = GetEpisode(((ModelBase)parseResult.Series).OID, parseResult.AirDate.Value);
 
                 if (episodeInfo != null)
                 {
@@ -116,14 +117,14 @@ namespace NzbDrone.Core.Tv
                 Episode episodeInfo = null;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                    episodeInfo = GetEpisodeBySceneNumbering(parseResult.Series.OID, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisodeBySceneNumbering(((ModelBase)parseResult.Series).OID, parseResult.SeasonNumber, episodeNumber);
 
                 if (episodeInfo == null)
                 {
-                    episodeInfo = GetEpisode(parseResult.Series.OID, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisode(((ModelBase)parseResult.Series).OID, parseResult.SeasonNumber, episodeNumber);
                     if (episodeInfo == null && parseResult.AirDate != null)
                     {
-                        episodeInfo = GetEpisode(parseResult.Series.OID, parseResult.AirDate.Value);
+                        episodeInfo = GetEpisode(((ModelBase)parseResult.Series).OID, parseResult.AirDate.Value);
                     }
                 }
 
@@ -180,7 +181,7 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-            var tvdbEpisodes = _tvDbProvider.GetSeries(series.SeriesId, true)
+            var tvdbEpisodes = _tvDbProvider.GetSeries(series.OID, true)
                                             .Episodes
                                             .Where(episode => !string.IsNullOrWhiteSpace(episode.EpisodeName) ||
                                                               (episode.FirstAired < DateTime.Now.AddDays(2) && episode.FirstAired.Year > 1900))

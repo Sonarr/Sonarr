@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
 using NzbDrone.Core.Repository;
@@ -33,7 +34,7 @@ namespace NzbDrone.Core.Providers
         {
             var firstEpisode = _episodeService.GetEpisode(series.OID, 1, 1);
 
-            var cleanName = _sceneMappingProvider.GetCleanName(series.SeriesId);
+            var cleanName = _sceneMappingProvider.GetCleanName(series.OID);
             var results = _tvRageProvider.SearchSeries(series.Title);
             var result = ProcessResults(results, series, cleanName, firstEpisode);
 

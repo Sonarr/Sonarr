@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;

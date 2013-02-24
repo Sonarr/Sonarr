@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -58,8 +59,8 @@ namespace NzbDrone.Core.Tv
         public Series UpdateSeriesInfo(int seriesId)
         {
             var series = _seriesRepository.Get(seriesId);
-            var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true);
-            
+            var tvDbSeries = _tvDbProvider.GetSeries(series.OID, false, true);
+
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.AirsTime);
             series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Tv
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
 
             var repoSeries = new Series();
-            repoSeries.SeriesId = tvDbSeriesId;
+            repoSeries.TvDbId = tvDbSeriesId;
             repoSeries.Path = path;
             repoSeries.Monitored = true;
             repoSeries.QualityProfileId = qualityProfileId;
@@ -145,7 +146,7 @@ namespace NzbDrone.Core.Tv
             foreach (var series in allSeries)
             {
                 //Only update parameters that can be changed in MassEdit
-                var edited = editedSeries.Single(s => s.OID == series.OID);
+                var edited = editedSeries.Single(s => ((ModelBase)s).OID == series.OID);
                 series.QualityProfileId = edited.QualityProfileId;
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;

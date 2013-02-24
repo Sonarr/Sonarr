@@ -36,19 +36,19 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Build();
 
             fakeEpisode = Builder<Episode>.CreateNew()
-                     .With(e => e.SeriesId = fakeSeries.SeriesId)
+                     .With(e => e.SeriesId = fakeSeries.OID)
                      .With(e => e.Title = "Episode (1)")
                      .Build();   
 
             fakeEpisode2 = Builder<Episode>.CreateNew()
-                     .With(e => e.SeriesId = fakeSeries.SeriesId)
+                     .With(e => e.SeriesId = fakeSeries.OID)
                      .With(e => e.SeasonNumber = fakeEpisode.SeasonNumber)
                      .With(e => e.EpisodeNumber = fakeEpisode.EpisodeNumber + 1)
                      .With(e => e.Title = "Episode (2)")
                      .Build();
 
             fakeDailyEpisode = Builder<Episode>.CreateNew()
-                     .With(e => e.SeriesId = fakeSeries.SeriesId)
+                     .With(e => e.SeriesId = fakeSeries.OID)
                      .With(e => e.AirDate = DateTime.Now.Date)
                      .With(e => e.Title = "Daily Episode 1")
                      .Build();

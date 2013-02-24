@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Repository;
 
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Providers
             {
                 var ids = _xemCommunicationProvider.GetXemSeriesIds();
                 var series = _seriesRepository.All();
-                var wantedSeries = series.Where(s => ids.Contains(s.SeriesId)).ToList();
+                var wantedSeries = series.Where(s => ids.Contains(s.OID)).ToList();
 
                 foreach(var ser in wantedSeries)
                 {
@@ -81,7 +82,7 @@ namespace NzbDrone.Core.Providers
             try
             {
                 var episodesToUpdate = new List<Episode>();
-                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.SeriesId);
+                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.OID);
 
                 if (mappings == null)
                 {

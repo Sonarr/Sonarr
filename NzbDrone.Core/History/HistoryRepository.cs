@@ -27,7 +27,7 @@ namespace NzbDrone.Core.History
 
         public QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
         {
-            var history = Queryable.OrderByDescending(c => c.Quality).FirstOrDefault(c => c.Episode.Series.SeriesId == seriesId && c.Episode.SeasonNumber == seasonNumber &&
+            var history = Queryable.OrderByDescending(c => c.Quality).FirstOrDefault(c => c.Episode.Series.OID == seriesId && c.Episode.SeasonNumber == seasonNumber &&
                                                                                           c.Episode.EpisodeNumber == episodeNumber);
 
             if (history != null)

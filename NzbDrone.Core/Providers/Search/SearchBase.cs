@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
@@ -109,7 +110,7 @@ namespace NzbDrone.Core.Providers.Search
                     logger.Trace("Analysing report " + episodeParseResult);
                     episodeParseResult.Series = _seriesRepository.GetByTitle(episodeParseResult.CleanTitle);
 
-                    if(episodeParseResult.Series == null || episodeParseResult.Series.OID != series.OID)
+                    if(episodeParseResult.Series == null || ((ModelBase)episodeParseResult.Series).OID != series.OID)
                     {
                         item.SearchError = ReportRejectionType.WrongSeries;
                         continue;

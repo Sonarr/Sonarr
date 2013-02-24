@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             _episode = Builder<Episode>
                     .CreateNew()
-                    .With(e => e.SeriesId = _series.SeriesId)
+                    .With(e => e.SeriesId = _series.OID)
                     .Build();
 
             Db.Insert(_episode);
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             _episode = Builder<Episode>
                     .CreateNew()
-                    .With(e => e.SeriesId = _series.SeriesId)
+                    .With(e => e.SeriesId = _series.OID)
                     .Build();
 
             Db.Insert(_episode);
@@ -52,14 +52,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void should_return_null_if_no_episodes_in_db()
         {
-            Mocker.Resolve<EpisodeService>().GetEpisodeBySceneNumbering(_series.SeriesId, 1, 1).Should().BeNull();
+            Mocker.Resolve<EpisodeService>().GetEpisodeBySceneNumbering(_series.OID, 1, 1).Should().BeNull();
         }
 
         [Test]
         public void should_return_null_if_no_matching_episode_is_found()
         {
             WithNullSceneNumbering();
-            Mocker.Resolve<EpisodeService>().GetEpisodeBySceneNumbering(_series.SeriesId, 1, 1).Should().BeNull();
+            Mocker.Resolve<EpisodeService>().GetEpisodeBySceneNumbering(_series.OID, 1, 1).Should().BeNull();
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithSceneNumbering();
 
             var result = Mocker.Resolve<EpisodeService>()
-                .GetEpisodeBySceneNumbering(_series.SeriesId, _episode.SceneSeasonNumber, _episode.SceneEpisodeNumber);
+                .GetEpisodeBySceneNumbering(_series.OID, _episode.SceneSeasonNumber, _episode.SceneEpisodeNumber);
             
             result.OID.Should().Be(_episode.OID);
         }

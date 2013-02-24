@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
             _episodes = Builder<Episode>
                     .CreateListOfSize(10)
                     .All()
-                    .With(e => e.SeriesId = _series.SeriesId)
+                    .With(e => e.SeriesId = _series.OID)
                     .With(e => e.Series = _series)
                     .Build()
                     .ToList();
