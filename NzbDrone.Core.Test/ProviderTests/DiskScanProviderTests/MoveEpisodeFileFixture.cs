@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -117,16 +118,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(s => s.FileExists(currentFilename))
                   .Returns(true);
 
-            Mocker.GetMock<ExternalNotificationProvider>()
-                    .Setup(e => e.OnDownload("30 Rock - 1x01 - [WEBDL]", It.IsAny<Series>()));
-
-            //Act
             var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, true);
 
-            //Assert
-            result.Should().NotBeNull();
-            Mocker.GetMock<ExternalNotificationProvider>()
-                    .Verify(e => e.OnDownload("30 Rock - 1x01 - [WEBDL]", It.IsAny<Series>()), Times.Once());
+
         }
 
         [Test]
@@ -172,13 +166,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                 .Returns(fi);
 
-            Mocker.GetMock<ExternalNotificationProvider>()
-                    .Setup(e => e.OnDownload("30 Rock - 1x01 - [WEBDL]", It.IsAny<Series>()));
-
-            //Act
             var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, true);
 
-            //Assert
             result.Should().BeNull();
             ExceptionVerification.ExpectedErrors(1);
         }

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using NLog;
+using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -12,23 +15,22 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly DiskScanProvider _diskScanProvider;
-        private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly ISeriesService _seriesService;
         private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
+        private readonly IEventAggregator _eventAggregator;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
-                                ExternalNotificationProvider externalNotificationProvider, ISeriesService seriesService,
-                                MetadataProvider metadataProvider, ISeriesRepository seriesRepository)
+        public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider, ISeriesService seriesService,
+                                MetadataProvider metadataProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
-            _externalNotificationProvider = externalNotificationProvider;
             _seriesService = seriesService;
             _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
+            _eventAggregator = eventAggregator;
         }
 
         public string Name
@@ -100,7 +102,8 @@ namespace NzbDrone.Core.Jobs
 
             //Start AfterRename
             var message = String.Format("Renamed: Series {0}, Season: {1}", series.Title, options.SeasonNumber);
-            _externalNotificationProvider.AfterRename(message, series);
+
+            _eventAggregator.Publish(new SeriesRenamedEvent(series));
 
             notification.CurrentMessage = String.Format("Rename completed for {0} Season {1}", series.Title, options.SeasonNumber);
         }

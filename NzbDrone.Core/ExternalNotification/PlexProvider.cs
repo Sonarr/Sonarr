@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.ExternalNotification
 {
     public class PlexProvider
     {
@@ -51,6 +48,7 @@ namespace NzbDrone.Core.Providers
 
             try
             {
+                logger.Trace("Sending Update Request to Plex Server");
                 var sections = GetSectionKeys(host);
                 sections.ForEach(s => UpdateSection(host, s));
             }

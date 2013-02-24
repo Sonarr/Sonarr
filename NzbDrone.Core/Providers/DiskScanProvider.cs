@@ -4,7 +4,10 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
@@ -17,27 +20,26 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly SignalRProvider _signalRProvider;
         private readonly IConfigService _configService;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
+        private readonly IEventAggregator _eventAggregator;
 
         public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, MediaFileProvider mediaFileProvider,
-                                ExternalNotificationProvider externalNotificationProvider,
                                 SignalRProvider signalRProvider, IConfigService configService,
-                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository)
+                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
             _mediaFileProvider = mediaFileProvider;
-            _externalNotificationProvider = externalNotificationProvider;
             _signalRProvider = signalRProvider;
             _configService = configService;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
             _seriesRepository = seriesRepository;
+            _eventAggregator = eventAggregator;
         }
 
         public DiskScanProvider()
@@ -228,11 +230,10 @@ namespace NzbDrone.Core.Providers
             parseResult.Quality = new QualityModel { Quality = episodeFile.Quality, Proper = episodeFile.Proper };
             parseResult.Episodes = episodes;
 
-            var message = parseResult.GetDownloadTitle();
 
             if (newDownload)
             {
-                _externalNotificationProvider.OnDownload(message, series);
+                _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult));
 
                 foreach (var episode in episodes)
                     _signalRProvider.UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Ready, parseResult.Quality);

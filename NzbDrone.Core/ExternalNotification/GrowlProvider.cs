@@ -4,7 +4,7 @@ using System.Linq;
 using Growl.Connector;
 using NLog;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.ExternalNotification
 {
     public class GrowlProvider
     {

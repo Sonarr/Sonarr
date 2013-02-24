@@ -11,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;

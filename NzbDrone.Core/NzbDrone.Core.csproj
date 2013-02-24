@@ -260,7 +260,10 @@
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Datastore\SqlCeProxy.cs" />
+    <Compile Include="Download\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
+    <Compile Include="Download\SeriesRenamedEvent.cs" />
+    <Compile Include="ExternalNotification\ExternalNotificationRepository.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
@@ -464,31 +467,28 @@
     <Compile Include="Tv\EpisodeRepository.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotificationProvider.cs">
+    <Compile Include="ExternalNotification\ExternalNotificationBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\ExternalNotificationBase.cs">
+    <Compile Include="ExternalNotification\Growl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\Growl.cs">
+    <Compile Include="ExternalNotification\Plex.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\Plex.cs">
+    <Compile Include="ExternalNotification\Prowl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\Prowl.cs">
+    <Compile Include="ExternalNotification\Smtp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\Smtp.cs">
+    <Compile Include="ExternalNotification\Twitter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\Twitter.cs">
+    <Compile Include="ExternalNotification\Xbmc.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ExternalNotification\Xbmc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Providers\GrowlProvider.cs">
+    <Compile Include="ExternalNotification\GrowlProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="History\HistoryService.cs">
@@ -521,7 +521,7 @@
     <Compile Include="Providers\NotificationProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\PlexProvider.cs" />
+    <Compile Include="ExternalNotification\PlexProvider.cs" />
     <Compile Include="Providers\PostDownloadProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -578,7 +578,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\NewznabDefinition.cs" />
-    <Compile Include="Repository\ExternalNotificationDefinition.cs" />
+    <Compile Include="ExternalNotification\ExternalNotificationDefinition.cs" />
     <Compile Include="Jobs\JobDefinition.cs" />
     <Compile Include="Indexers\Indexer.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
