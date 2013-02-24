@@ -202,19 +202,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DefaultQualityProfile", value); }
         }
 
-        public virtual Boolean XbmcNotifyOnGrab
-        {
-            get { return GetValueBoolean("XbmcNotifyOnGrab"); }
-
-            set { SetValue("XbmcNotifyOnGrab", value); }
-        }
-
-        public virtual Boolean XbmcNotifyOnDownload
-        {
-            get { return GetValueBoolean("XbmcNotifyOnDownload"); }
-
-            set { SetValue("XbmcNotifyOnDownload", value); }
-        }
 
         public virtual Boolean XbmcUpdateLibrary
         {
@@ -261,19 +248,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("UpdateUrl", value); }
         }
 
-        public virtual Boolean SmtpNotifyOnGrab
-        {
-            get { return GetValueBoolean("SmtpNotifyOnGrab"); }
-
-            set { SetValue("SmtpNotifyOnGrab", value); }
-        }
-
-        public virtual Boolean SmtpNotifyOnDownload
-        {
-            get { return GetValueBoolean("SmtpNotifyOnDownload"); }
-
-            set { SetValue("SmtpNotifyOnDownload", value); }
-        }
 
         public virtual string SmtpServer
         {
@@ -318,19 +292,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SmtpToAddresses", value); }
         }
 
-        public virtual Boolean TwitterNotifyOnGrab
-        {
-            get { return GetValueBoolean("TwitterNotifyOnGrab"); }
-
-            set { SetValue("TwitterNotifyOnGrab", value); }
-        }
-
-        public virtual Boolean TwitterNotifyOnDownload
-        {
-            get { return GetValueBoolean("TwitterNotifyOnDownload"); }
-
-            set { SetValue("TwitterNotifyOnDownload", value); }
-        }
 
         public virtual string TwitterAccessToken
         {
@@ -344,20 +305,7 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("TwitterAccessTokenSecret", value); }
         }
 
-        public virtual Boolean GrowlNotifyOnGrab
-        {
-            get { return GetValueBoolean("GrowlNotifyOnGrab"); }
-
-            set { SetValue("GrowlNotifyOnGrab", value); }
-        }
-
-        public virtual Boolean GrowlNotifyOnDownload
-        {
-            get { return GetValueBoolean("GrowlNotifyOnDownload"); }
-
-            set { SetValue("GrowlNotifyOnDownload", value); }
-        }
-
+       
         public virtual string GrowlHost
         {
             get { return GetValue("GrowlHost", "localhost:23053"); }
@@ -370,20 +318,7 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("GrowlPassword", value); }
         }
 
-        public virtual Boolean ProwlNotifyOnGrab
-        {
-            get { return GetValueBoolean("ProwlNotifyOnGrab"); }
-
-            set { SetValue("ProwlNotifyOnGrab", value); }
-        }
-
-        public virtual Boolean ProwlNotifyOnDownload
-        {
-            get { return GetValueBoolean("ProwlNotifyOnDownload"); }
-
-            set { SetValue("ProwlNotifyOnDownload", value); }
-        }
-
+       
         public virtual string ProwlApiKeys
         {
             get { return GetValue("ProwlApiKeys", String.Empty); }
@@ -435,20 +370,6 @@ namespace NzbDrone.Core.Configuration
         public virtual string ServiceRootUrl
         {
             get { return "http://services.nzbdrone.com"; }
-        }
-
-        public virtual Boolean PlexNotifyOnGrab
-        {
-            get { return GetValueBoolean("PlexNotifyOnGrab"); }
-
-            set { SetValue("PlexNotifyOnGrab", value); }
-        }
-
-        public virtual Boolean PlexNotifyOnDownload
-        {
-            get { return GetValueBoolean("PlexNotifyOnDownload"); }
-
-            set { SetValue("PlexNotifyOnDownload", value); }
         }
 
         public virtual Boolean PlexUpdateLibrary

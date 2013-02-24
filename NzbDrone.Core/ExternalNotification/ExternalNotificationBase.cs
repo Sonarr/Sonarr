@@ -76,8 +76,6 @@ namespace NzbDrone.Core.ExternalNotification
             return readFunction(def);
         }
 
-
-
         public void Handle(EpisodeGrabbedEvent message)
         {
             if (NotifyOnGrab)

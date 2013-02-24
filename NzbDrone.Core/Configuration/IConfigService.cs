@@ -35,8 +35,6 @@ namespace NzbDrone.Core.Configuration
         int SortingMultiEpisodeStyle { get; set; }
         bool SortingUseSceneName { get; set; }
         int DefaultQualityProfile { get; set; }
-        Boolean XbmcNotifyOnGrab { get; set; }
-        Boolean XbmcNotifyOnDownload { get; set; }
         Boolean XbmcUpdateLibrary { get; set; }
         Boolean XbmcCleanLibrary { get; set; }
         Boolean XbmcUpdateWhenPlaying { get; set; }
@@ -44,8 +42,6 @@ namespace NzbDrone.Core.Configuration
         string XbmcUsername { get; set; }
         string XbmcPassword { get; set; }
         string UpdateUrl { get; set; }
-        Boolean SmtpNotifyOnGrab { get; set; }
-        Boolean SmtpNotifyOnDownload { get; set; }
         string SmtpServer { get; set; }
         int SmtpPort { get; set; }
         Boolean SmtpUseSsl { get; set; }
@@ -53,16 +49,10 @@ namespace NzbDrone.Core.Configuration
         string SmtpPassword { get; set; }
         string SmtpFromAddress { get; set; }
         string SmtpToAddresses { get; set; }
-        Boolean TwitterNotifyOnGrab { get; set; }
-        Boolean TwitterNotifyOnDownload { get; set; }
         string TwitterAccessToken { get; set; }
         string TwitterAccessTokenSecret { get; set; }
-        Boolean GrowlNotifyOnGrab { get; set; }
-        Boolean GrowlNotifyOnDownload { get; set; }
         string GrowlHost { get; set; }
         string GrowlPassword { get; set; }
-        Boolean ProwlNotifyOnGrab { get; set; }
-        Boolean ProwlNotifyOnDownload { get; set; }
         string ProwlApiKeys { get; set; }
         int ProwlPriority { get; set; }
         bool EnableBacklogSearching { get; set; }
@@ -72,8 +62,6 @@ namespace NzbDrone.Core.Configuration
         DownloadClientType DownloadClient { get; set; }
         string BlackholeDirectory { get; set; }
         string ServiceRootUrl { get; }
-        Boolean PlexNotifyOnGrab { get; set; }
-        Boolean PlexNotifyOnDownload { get; set; }
         Boolean PlexUpdateLibrary { get; set; }
         string PlexServerHost { get; set; }
         string PlexClientHosts { get; set; }
