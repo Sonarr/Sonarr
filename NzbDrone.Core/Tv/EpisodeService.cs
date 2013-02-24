@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using TvdbLib.Data;
@@ -16,7 +18,6 @@ namespace NzbDrone.Core.Tv
         Episode GetEpisode(int seriesId, DateTime date);
         IList<Episode> GetEpisodeBySeries(int seriesId);
         IList<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
-        void MarkEpisodeAsFetched(int episodeId);
         IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult);
         IList<Episode> EpisodesWithoutFiles(bool includeSpecials);
         IList<Episode> GetEpisodesByFileId(int episodeFileId);
@@ -33,7 +34,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodesAiredInMonth(int year, int month);
     }
 
-    public class EpisodeService : IEpisodeService
+    public class EpisodeService : IEpisodeService, IHandle<EpisodeGrabbedEvent>
     {
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -78,14 +79,6 @@ namespace NzbDrone.Core.Tv
         public virtual IList<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber)
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
-        }
-
-        public virtual void MarkEpisodeAsFetched(int episodeId)
-        {
-            logger.Trace("Marking episode {0} as fetched.", episodeId);
-            var episode = _episodeRepository.Get(episodeId);
-            episode.GrabDate = DateTime.UtcNow;
-            _episodeRepository.Update(episode);
         }
 
         public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult)
@@ -363,6 +356,16 @@ namespace NzbDrone.Core.Tv
             var lastDay = firstDay.AddMonths(1).AddDays(-1);
 
             return _episodeRepository.EpisodesBetweenDates(firstDay, lastDay);
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            foreach (var episode in message.ParseResult.Episodes)
+            {
+                logger.Trace("Marking episode {0} as fetched.", episode.OID);
+                episode.GrabDate = DateTime.UtcNow;
+                _episodeRepository.Update(episode);
+            }
         }
     }
 }

@@ -8,6 +8,6 @@ namespace NzbDrone.Common.Eventing
     /// </summary>
     public interface IEventAggregator
     {
-        void Publish<TEvent>(TEvent message);
+        void Publish<TEvent>(TEvent message) where TEvent : IEvent;
     }
 }

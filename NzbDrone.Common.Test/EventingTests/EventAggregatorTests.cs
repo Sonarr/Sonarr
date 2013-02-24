@@ -13,37 +13,55 @@ namespace NzbDrone.Common.Test.EventingTests
         [Test]
         public void should_publish_event_to_handlers()
         {
-            var intHandler = new Mock<IHandle<int>>();
-            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler.Object });
-            aggregator.Publish(12);
+            var eventA = new EventA();
+            
 
-            intHandler.Verify(c => c.Handle(12), Times.Once());
+            var intHandler = new Mock<IHandle<EventA>>();
+            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler.Object });
+            aggregator.Publish(eventA);
+
+            intHandler.Verify(c => c.Handle(eventA), Times.Once());
         }
 
         [Test]
         public void should_publish_to_more_than_one_handler()
         {
-            var intHandler1 = new Mock<IHandle<int>>();
-            var intHandler2 = new Mock<IHandle<int>>();
-            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler1.Object, intHandler2.Object });
-            aggregator.Publish(12);
+            var eventA = new EventA();
 
-            intHandler1.Verify(c => c.Handle(12), Times.Once());
-            intHandler2.Verify(c => c.Handle(12), Times.Once());
+            var intHandler1 = new Mock<IHandle<EventA>>();
+            var intHandler2 = new Mock<IHandle<EventA>>();
+            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler1.Object, intHandler2.Object });
+            aggregator.Publish(eventA);
+
+            intHandler1.Verify(c => c.Handle(eventA), Times.Once());
+            intHandler2.Verify(c => c.Handle(eventA), Times.Once());
         }
 
         [Test]
         public void should_not_publish_to_incompatible_handlers()
         {
-            var intHandler = new Mock<IHandle<int>>();
-            var stringHandler = new Mock<IHandle<string>>();
-            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler.Object, stringHandler.Object });
+            var eventA = new EventA();
 
-            aggregator.Publish(12);
+            var aHandler = new Mock<IHandle<EventA>>();
+            var bHandler = new Mock<IHandle<EventB>>();
+            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { aHandler.Object, bHandler.Object });
 
-            intHandler.Verify(c => c.Handle(12), Times.Once());
-            stringHandler.Verify(c => c.Handle(It.IsAny<string>()), Times.Never());
+            aggregator.Publish(eventA);
+
+            aHandler.Verify(c => c.Handle(eventA), Times.Once());
+            bHandler.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
         }
+
+    }
+
+
+    public class EventA:IEvent
+    {
+        
+    }
+
+    public class EventB : IEvent
+    {
 
     }
 

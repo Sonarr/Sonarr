@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
+using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Hubs;
@@ -11,7 +13,7 @@ using SignalR.Hubs;
 
 namespace NzbDrone.Core.Providers
 {
-    public class SignalRProvider
+    public class SignalRProvider : IHandle<EpisodeGrabbedEvent>
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -24,15 +26,23 @@ namespace NzbDrone.Core.Providers
                 var context = GlobalHost.ConnectionManager.GetHubContext<EpisodeHub>();
                 context.Clients.updatedStatus(new
                                                {
-                                                       EpisodeId = episodeId,
-                                                       EpisodeStatus = episodeStatus.ToString(),
-                                                       Quality = (quality == null ? String.Empty : quality.Quality.ToString())
+                                                   EpisodeId = episodeId,
+                                                   EpisodeStatus = episodeStatus.ToString(),
+                                                   Quality = (quality == null ? String.Empty : quality.Quality.ToString())
                                                });
             }
             catch (Exception ex)
             {
                 logger.TraceException("Error", ex);
                 throw;
+            }
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            foreach (var episode in message.ParseResult.Episodes)
+            {
+                UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Downloading, message.ParseResult.Quality);
             }
         }
     }

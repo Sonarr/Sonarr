@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Tv;
@@ -129,6 +131,124 @@ namespace NzbDrone.Core.Test
 
 
             parseResult.ToString().Should().Be("My Series - 2010-12-30 HDTV-720p [proper]");
+        }
+
+
+
+        public static readonly object[] SabNamingCases =
+        {
+            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x02 - My Episode Title [DVD]" },
+            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x02 - My Episode Title [DVD] [Proper]" },
+            new object[] { 1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x02 -  [DVD] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 -  [HDTV-720p] [Proper]" },
+        };
+
+
+        [Test, TestCaseSource("SabNamingCases")]
+        public void create_proper_sab_titles(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
+        {
+            var series = Builder<Series>.CreateNew()
+                    .With(c => c.Title = "My Series Name")
+                    .Build();
+
+            var fakeEpisodes = new List<Episode>();
+
+            foreach (var episode in episodes)
+                fakeEpisodes.Add(Builder<Episode>
+                    .CreateNew()
+                    .With(e => e.EpisodeNumber = episode)
+                    .With(e => e.Title = title)
+                    .Build());
+
+            var parsResult = new EpisodeParseResult()
+            {
+                AirDate = DateTime.Now,
+                EpisodeNumbers = episodes.ToList(),
+                Quality = new QualityModel(quality, proper),
+                SeasonNumber = seasons,
+                Series = series,
+                EpisodeTitle = title,
+                Episodes = fakeEpisodes
+            };
+
+            parsResult.GetDownloadTitle().Should().Be(expected);
+        }
+
+        [TestCase(true, Result = "My Series Name - Season 1 [Bluray720p] [Proper]")]
+        [TestCase(false, Result = "My Series Name - Season 1 [Bluray720p]")]
+        public string create_proper_sab_season_title(bool proper)
+        {
+            var series = Builder<Series>.CreateNew()
+                                .With(c => c.Title = "My Series Name")
+                                .Build();
+
+            var parsResult = new EpisodeParseResult()
+            {
+                AirDate = DateTime.Now,
+                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
+                SeasonNumber = 1,
+                Series = series,
+                EpisodeTitle = "My Episode Title",
+                FullSeason = true
+            };
+
+            return parsResult.GetDownloadTitle();
+        }
+
+        [TestCase(true, Result = "My Series Name - 2011-12-01 - My Episode Title [Bluray720p] [Proper]")]
+        [TestCase(false, Result = "My Series Name - 2011-12-01 - My Episode Title [Bluray720p]")]
+        public string create_proper_sab_daily_titles(bool proper)
+        {
+            var series = Builder<Series>.CreateNew()
+                    .With(c => c.SeriesType = SeriesType.Daily)
+                    .With(c => c.Title = "My Series Name")
+                    .Build();
+
+            var episode = Builder<Episode>.CreateNew()
+                    .With(e => e.Title = "My Episode Title")
+                    .Build();
+
+            var parsResult = new EpisodeParseResult
+            {
+                AirDate = new DateTime(2011, 12, 1),
+                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
+                Series = series,
+                EpisodeTitle = "My Episode Title",
+                Episodes = new List<Episode> { episode }
+            };
+
+            return parsResult.GetDownloadTitle();
+        }
+
+        [Test]
+        public void should_not_repeat_the_same_episode_title()
+        {
+            var series = Builder<Series>.CreateNew()
+                    .With(c => c.Title = "My Series Name")
+                    .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                    .All()
+                    .With(e => e.SeasonNumber = 5)
+                    .TheFirst(1)
+                    .With(e => e.Title = "My Episode Title (1)")
+                    .TheLast(1)
+                    .With(e => e.Title = "My Episode Title (2)")
+                    .Build();
+
+            var parsResult = new EpisodeParseResult
+            {
+                AirDate = DateTime.Now,
+                EpisodeNumbers = new List<int> { 10, 11 },
+                Quality = new QualityModel(QualityTypes.HDTV720p, false),
+                SeasonNumber = 35,
+                Series = series,
+                Episodes = fakeEpisodes
+            };
+
+            parsResult.GetDownloadTitle().Should().Be("My Series Name - 5x01-5x02 - My Episode Title [HDTV-720p]");
         }
 
     }

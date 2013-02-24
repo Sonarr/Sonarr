@@ -260,6 +260,7 @@
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Datastore\SqlCeProxy.cs" />
+    <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
@@ -457,7 +458,7 @@
     <Compile Include="Providers\DownloadClients\SabProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DownloadProvider.cs">
+    <Compile Include="Download\DownloadProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tv\EpisodeRepository.cs">

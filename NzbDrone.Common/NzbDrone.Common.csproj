@@ -111,6 +111,7 @@
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="Eventing\EventAggregator.cs" />
+    <Compile Include="Eventing\IEvent.cs" />
     <Compile Include="Eventing\IEventAggregator.cs" />
     <Compile Include="Eventing\IHandle.cs" />
     <Compile Include="HostController.cs" />

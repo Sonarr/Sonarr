@@ -1,6 +1,8 @@
-﻿namespace NzbDrone.Core.Tv.Events
+﻿using NzbDrone.Common.Eventing;
+
+namespace NzbDrone.Core.Tv.Events
 {
-    public class SeriesAddedEvent
+    public class SeriesAddedEvent:IEvent
     {
         public Series Series { get; private set; }
 

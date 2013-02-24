@@ -1,49 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
     public class SmtpProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IConfigService _configService;
+        private readonly Logger _logger;
 
-        public SmtpProvider(IConfigService configService)
+        public SmtpProvider(IConfigService configService, Logger logger)
         {
             _configService = configService;
+            _logger = logger;
         }
 
         public virtual void SendEmail(string subject, string body, bool htmlBody = false)
         {
-            //Create the Email message
             var email = new MailMessage();
-
-            //Set the addresses
             email.From = new MailAddress(_configService.SmtpFromAddress);
-
-            //Allow multiple to addresses (split on each comma)
+            
             foreach (var toAddress in _configService.SmtpToAddresses.Split(','))
             {
                 email.To.Add(toAddress.Trim());
             }
 
-            //Set the Subject
             email.Subject = subject;
-
-            //Set the Body
             email.Body = body;
-
-            //Html Body
             email.IsBodyHtml = htmlBody;
-
-            //Handle credentials
+            
             var username = _configService.SmtpUsername;
             var password = _configService.SmtpPassword;
 
@@ -52,15 +40,14 @@ namespace NzbDrone.Core.Providers
             if (!String.IsNullOrWhiteSpace(username))
                 credentials = new NetworkCredential(username, password);
 
-            //Send the email
             try
             {
                 Send(email, _configService.SmtpServer, _configService.SmtpPort, _configService.SmtpUseSsl, credentials);
             }
             catch(Exception ex)
             {
-                Logger.Error("Error sending email. Subject: {0}", email.Subject);
-                Logger.TraceException(ex.Message, ex);
+                _logger.Error("Error sending email. Subject: {0}", email.Subject);
+                _logger.TraceException(ex.Message, ex);
             }
         }
 
@@ -69,41 +56,33 @@ namespace NzbDrone.Core.Providers
             var subject = "NzbDrone SMTP Test Notification";
             var body = "This is a test email from NzbDrone, if you received this message you properly configured your SMTP settings! (Now save them!)";
 
-            //Create the Email message
             var email = new MailMessage();
 
-            //Set the addresses
             email.From = new MailAddress(fromAddress);
 
-            //Allow multiple to addresses (split on each comma)
             foreach (var toAddress in toAddresses.Split(','))
             {
                 email.To.Add(toAddress.Trim());
             }
 
-            //Set the Subject
             email.Subject = subject;
 
-            //Set the Body
             email.Body = body;
 
-            //Html Body
             email.IsBodyHtml = false;
 
-            //Handle credentials
             NetworkCredential credentials = null;
 
             if (!String.IsNullOrWhiteSpace(username))
                 credentials = new NetworkCredential(username, password);
 
-            //Send the email
             try
             {
                 Send(email, server, port, ssl, credentials);
             }
             catch(Exception ex)
             {
-                Logger.TraceException("Failed to send test email", ex);
+                _logger.TraceException("Failed to send test email", ex);
                 return false;
             }
             return true;
@@ -113,22 +92,18 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                //Create the SMTP connection
                 var smtp = new SmtpClient(server, port);
 
-                //Enable SSL
                 smtp.EnableSsl = ssl;
 
-                //Credentials
                 smtp.Credentials = credentials;
 
-                //Send the email
                 smtp.Send(email);
             }
 
             catch (Exception ex)
             {
-                Logger.ErrorException("There was an error sending an email.", ex);
+                _logger.ErrorException("There was an error sending an email.", ex);
                 throw;
             }
         }

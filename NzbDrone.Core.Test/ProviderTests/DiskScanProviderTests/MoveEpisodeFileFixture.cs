@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -112,10 +113,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                   .Returns(fi);
 
-            Mocker.GetMock<DownloadProvider>()
-                  .Setup(s => s.GetDownloadTitle(It.Is<EpisodeParseResult>(e => e.Quality == new QualityModel { Quality = QualityTypes.WEBDL720p, Proper = false })))
-                  .Returns(message);
-
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.FileExists(currentFilename))
                   .Returns(true);
@@ -174,10 +171,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                 .Returns(fi);
-
-            Mocker.GetMock<DownloadProvider>()
-                    .Setup(s => s.GetDownloadTitle(It.Is<EpisodeParseResult>(e => e.Quality == new QualityModel { Quality = QualityTypes.WEBDL720p, Proper = false })))
-                    .Returns(message);
 
             Mocker.GetMock<ExternalNotificationProvider>()
                     .Setup(e => e.OnDownload("30 Rock - 1x01 - [WEBDL]", It.IsAny<Series>()));

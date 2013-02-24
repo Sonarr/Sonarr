@@ -1,12 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.History
 {
+    public interface IHistoryService
+    {
+        List<History> All();
+        void Purge();
+        void Trim();
+        QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber);
+    }
 
-    public class HistoryService
+    public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -33,15 +43,28 @@ namespace NzbDrone.Core.History
             _historyRepository.Trim();
         }
 
-        public void Add(History item)
-        {
-
-        }
-
         public virtual QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
         {
             return _historyRepository.GetBestQualityInHistory(seriesId, seasonNumber, episodeNumber);
         }
 
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            foreach (var episode in message.ParseResult.Episodes)
+            {
+                var history = new History
+                {
+                    Date = DateTime.Now,
+                    Indexer = message.ParseResult.Indexer,
+                    Quality = message.ParseResult.Quality,
+                    NzbTitle = message.ParseResult.OriginalString,
+                    Episode = episode,
+                    NzbInfoUrl = message.ParseResult.NzbInfoUrl,
+                    ReleaseGroup = message.ParseResult.ReleaseGroup,
+                };
+
+                _historyRepository.Insert(history);
+            }
+        }
     }
 }

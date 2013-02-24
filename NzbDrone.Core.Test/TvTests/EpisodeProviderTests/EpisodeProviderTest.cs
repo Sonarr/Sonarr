@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -941,23 +942,17 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void MarkEpisodeAsFetched()
         {
-            WithRealDb();
 
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All().With(e => e.GrabDate = null)
                 .Build();
 
-            Db.InsertMany(fakeEpisodes);
+            var parseResult = new EpisodeParseResult() { Episodes = fakeEpisodes };
 
-            //Act
-            Mocker.Resolve<EpisodeService>().MarkEpisodeAsFetched(2);
-            var episodes = Db.Fetch<Episode>();
+            Mocker.Resolve<EpisodeService>().Handle(new EpisodeGrabbedEvent(parseResult));
 
-            //Assert
-            episodes.Where(e => e.OID == 2).Single().GrabDate.Should().BeWithin(TimeSpan.FromSeconds(5)).Before(
-                DateTime.Now);
-
-            episodes.Where(e => e.GrabDate == null).Should().HaveCount(4);
+           Mocker.GetMock<IEpisodeRepository>().Verify(c=>c.Update(fakeEpisodes[0]),Times.Once());
+           Mocker.GetMock<IEpisodeRepository>().Verify(c=>c.Update(fakeEpisodes[1]),Times.Once());
         }
 
         [Test]

@@ -5,6 +5,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
@@ -98,6 +99,16 @@ namespace NzbDrone.Test.Common
         protected string GetTestFilePath(string fileName)
         {
             return Path.Combine(Directory.GetCurrentDirectory(), "Files", fileName);
+        }
+
+        protected void VerifyEventPublished<TEvent>(TEvent message) where TEvent : IEvent
+        {
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.Publish(message), Times.Once());
+        }
+
+        protected void VerifyEventNotPublished<TEvent>() where TEvent : IEvent
+        {
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.Publish(It.IsAny<TEvent>()), Times.Never());
         }
     }
 }

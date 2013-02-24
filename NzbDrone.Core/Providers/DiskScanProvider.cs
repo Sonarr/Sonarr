@@ -5,10 +5,9 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
@@ -19,7 +18,6 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly ISeriesService _seriesService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly SignalRProvider _signalRProvider;
@@ -28,15 +26,13 @@ namespace NzbDrone.Core.Providers
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService,
-                                ISeriesService seriesService, MediaFileProvider mediaFileProvider,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
                                 SignalRProvider signalRProvider, IConfigService configService,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
-            _seriesService = seriesService;
             _mediaFileProvider = mediaFileProvider;
             _externalNotificationProvider = externalNotificationProvider;
             _downloadProvider = downloadProvider;
@@ -235,7 +231,7 @@ namespace NzbDrone.Core.Providers
             parseResult.Quality = new QualityModel { Quality = episodeFile.Quality, Proper = episodeFile.Proper };
             parseResult.Episodes = episodes;
 
-            var message = _downloadProvider.GetDownloadTitle(parseResult);
+            var message = parseResult.GetDownloadTitle();
 
             if (newDownload)
             {

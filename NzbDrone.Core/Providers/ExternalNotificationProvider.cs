@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Repository;
 using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {
-    public class ExternalNotificationProvider
+    public class ExternalNotificationProvider : IHandle<EpisodeGrabbedEvent>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
@@ -86,14 +87,6 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual void OnGrab(string message)
-        {
-            foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))
-            {
-                notifier.OnGrab(message);
-            }
-        }
-
         public virtual void OnDownload(string message, Series series)
         {
             foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))
@@ -115,6 +108,14 @@ namespace NzbDrone.Core.Providers
             foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))
             {
                 notifier.AfterRename(message, series);
+            }
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))
+            {
+                notifier.OnGrab(message.ParseResult.GetDownloadTitle());
             }
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.ExternalNotification
 {

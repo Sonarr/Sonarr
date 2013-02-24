@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 

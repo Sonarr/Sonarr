@@ -6,11 +6,9 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.History;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
@@ -20,17 +18,9 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 {
     [TestFixture]
-    public class DownloadProviderFixture : CoreTest
+    public class DownloadProviderFixture : CoreTest<DownloadProvider>
     {
-        public static object[] SabNamingCases =
-        {
-            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x02 - My Episode Title [DVD]" },
-            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x02 - My Episode Title [DVD] [Proper]" },
-            new object[] { 1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x02 -  [DVD] [Proper]" },
-            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p]" },
-            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p] [Proper]" },
-            new object[] { 1, new[] { 2, 4 }, "", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 -  [HDTV-720p] [Proper]" },
-        };
+
 
         private void SetDownloadClient(DownloadClientType clientType)
         {
@@ -53,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             return Builder<EpisodeParseResult>.CreateNew()
                 .With(c => c.Quality = new QualityModel(QualityTypes.DVD, false))
                 .With(c => c.Series = Builder<Series>.CreateNew().Build())
-                .With(c => c.EpisodeNumbers = new List<int>{2})
+                .With(c => c.EpisodeNumbers = new List<int> { 2 })
                 .With(c => c.Episodes = episodes)
                 .Build();
         }
@@ -81,7 +71,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
         }
 
         [Test]
-        public void Download_report_should_send_to_sab_add_to_history_mark_as_grabbed()
+        public void Download_report_should_publish_on_grab_event()
         {
             WithSuccessfullAdd();
             SetDownloadClient(DownloadClientType.Sabnzbd);
@@ -89,7 +79,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             var parseResult = SetupParseResult();
 
             //Act
-            Mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
+            Subject.DownloadReport(parseResult);
 
 
             //Assert
@@ -99,197 +89,39 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
             Mocker.GetMock<BlackholeProvider>()
                 .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Never());
 
-            Mocker.GetMock<HistoryService>()
-                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[0])), Times.Once());
 
-            Mocker.GetMock<HistoryService>()
-                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[1])), Times.Once());
-
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(c => c.MarkEpisodeAsFetched(12));
-
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(c => c.MarkEpisodeAsFetched(99));
-
-            Mocker.GetMock<ExternalNotificationProvider>()
-                .Verify(c => c.OnGrab(It.IsAny<string>()));
-        }
-
-        [Test]
-        public void should_download_nzb_to_blackhole_add_to_history_mark_as_grabbed()
-        {
-            WithSuccessfullAdd();
-            SetDownloadClient(DownloadClientType.Blackhole);
-
-            var parseResult = SetupParseResult();
-
-            //Act
-            Mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
-
-
-            //Assert
-            Mocker.GetMock<SabProvider>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Never());
-
-            Mocker.GetMock<BlackholeProvider>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Once());
-
-            Mocker.GetMock<HistoryService>()
-                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[0])), Times.Once());
-
-            Mocker.GetMock<HistoryService>()
-                .Verify(s => s.Add(It.Is<History.History>(h => h.Episode == parseResult.Episodes[1])), Times.Once());
-
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(c => c.MarkEpisodeAsFetched(12));
-
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(c => c.MarkEpisodeAsFetched(99));
-
-            Mocker.GetMock<ExternalNotificationProvider>()
-                .Verify(c => c.OnGrab(It.IsAny<string>()));
+            VerifyEventPublished(It.Is<EpisodeGrabbedEvent>(c => c.ParseResult == parseResult));
         }
 
         [TestCase(DownloadClientType.Sabnzbd)]
         [TestCase(DownloadClientType.Blackhole)]
-        public void Download_report_should_not_add_to_history_mark_as_grabbed_if_add_fails(DownloadClientType clientType)
+        public void Download_report_should_not_publish_grabbed_event(DownloadClientType clientType)
         {
             WithFailedAdd();
             SetDownloadClient(clientType);
 
             var parseResult = SetupParseResult();
 
-            //Act
-            Mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
-
-            Mocker.GetMock<HistoryService>()
-                .Verify(s => s.Add(It.IsAny<History.History>()), Times.Never());
+            Subject.DownloadReport(parseResult);
 
 
-            Mocker.GetMock<IEpisodeService>()
-                .Verify(c => c.MarkEpisodeAsFetched(It.IsAny<int>()), Times.Never());
-
-            Mocker.GetMock<ExternalNotificationProvider>()
-                .Verify(c => c.OnGrab(It.IsAny<String>()), Times.Never());
+            VerifyEventNotPublished<EpisodeGrabbedEvent>();
         }
 
         [Test]
         public void should_return_sab_as_active_client()
         {
             SetDownloadClient(DownloadClientType.Sabnzbd);
-            Mocker.Resolve<DownloadProvider>().GetActiveDownloadClient().Should().BeAssignableTo<SabProvider>();
+            Subject.GetActiveDownloadClient().Should().BeAssignableTo<SabProvider>();
         }
 
         [Test]
         public void should_return_blackhole_as_active_client()
         {
             SetDownloadClient(DownloadClientType.Blackhole);
-            Mocker.Resolve<DownloadProvider>().GetActiveDownloadClient().Should().BeAssignableTo<BlackholeProvider>();
+            Subject.GetActiveDownloadClient().Should().BeAssignableTo<BlackholeProvider>();
         }
 
-        [Test, TestCaseSource("SabNamingCases")]
-        public void create_proper_sab_titles(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
-        {
-            var series = Builder<Series>.CreateNew()
-                    .With(c => c.Title = "My Series Name")
-                    .Build();
 
-            var fakeEpisodes = new List<Episode>();
-
-            foreach(var episode in episodes)
-                fakeEpisodes.Add(Builder<Episode>
-                    .CreateNew()
-                    .With(e => e.EpisodeNumber = episode)
-                    .With(e => e.Title = title)
-                    .Build());
-
-            var parsResult = new EpisodeParseResult()
-            {
-                AirDate = DateTime.Now,
-                EpisodeNumbers = episodes.ToList(),
-                Quality = new QualityModel(quality, proper),
-                SeasonNumber = seasons,
-                Series = series,
-                EpisodeTitle = title,
-                Episodes = fakeEpisodes
-            };
-
-            Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult).Should().Be(expected);
-        }
-
-        [TestCase(true, Result = "My Series Name - Season 1 [Bluray720p] [Proper]")]
-        [TestCase(false, Result = "My Series Name - Season 1 [Bluray720p]")]
-        public string create_proper_sab_season_title(bool proper)
-        {
-            var series = Builder<Series>.CreateNew()
-                                .With(c => c.Title = "My Series Name")
-                                .Build();
-
-            var parsResult = new EpisodeParseResult()
-            {
-                AirDate = DateTime.Now,
-                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
-                SeasonNumber = 1,
-                Series = series,
-                EpisodeTitle = "My Episode Title",
-                FullSeason = true
-            };
-
-            return Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult);
-        }
-
-        [TestCase(true, Result = "My Series Name - 2011-12-01 - My Episode Title [Bluray720p] [Proper]")]
-        [TestCase(false, Result = "My Series Name - 2011-12-01 - My Episode Title [Bluray720p]")]
-        public string create_proper_sab_daily_titles(bool proper)
-        {
-            var series = Builder<Series>.CreateNew()
-                    .With(c => c.SeriesType = SeriesType.Daily)
-                    .With(c => c.Title = "My Series Name")
-                    .Build();
-
-            var episode = Builder<Episode>.CreateNew()
-                    .With(e => e.Title = "My Episode Title")
-                    .Build();
-
-            var parsResult = new EpisodeParseResult
-            {
-                AirDate = new DateTime(2011, 12, 1),
-                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
-                Series = series,
-                EpisodeTitle = "My Episode Title",
-                Episodes = new List<Episode>{ episode }
-            };
-
-            return Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult);
-        }
-
-        [Test]
-        public void should_not_repeat_the_same_episode_title()
-        {
-            var series = Builder<Series>.CreateNew()
-                    .With(c => c.Title = "My Series Name")
-                    .Build();
-
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
-                    .All()
-                    .With(e => e.SeasonNumber = 5)
-                    .TheFirst(1)
-                    .With(e => e.Title = "My Episode Title (1)")
-                    .TheLast(1)
-                    .With(e => e.Title = "My Episode Title (2)")
-                    .Build();
-
-            var parsResult = new EpisodeParseResult
-            {
-                AirDate = DateTime.Now,
-                EpisodeNumbers = new List<int>{ 10, 11 },
-                Quality = new QualityModel(QualityTypes.HDTV720p, false),
-                SeasonNumber = 35,
-                Series = series,
-                Episodes = fakeEpisodes
-            };
-
-            Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult).Should().Be("My Series Name - 5x01-5x02 - My Episode Title [HDTV-720p]");
-        }
     }
 }

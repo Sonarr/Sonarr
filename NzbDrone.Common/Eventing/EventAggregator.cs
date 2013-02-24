@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Eventing
             _handlers = handlers;
         }
 
-        public void Publish<TEvent>(TEvent message)
+        public void Publish<TEvent>(TEvent message) where TEvent : IEvent
         {
             _logger.Trace("Publishing {0}", message.GetType().Name);
 
