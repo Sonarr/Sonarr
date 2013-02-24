@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 
         private void WithUseBanners()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.MetadataUseBanners).Returns(true);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.MetadataUseBanners).Returns(true);
         }
 
         private void WithSpecials()

@@ -38,22 +38,22 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithUnlimitedRetention()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(0);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(0);
         }
 
         private void WithLongRetention()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(1000);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(1000);
         }
 
         private void WithShortRetention()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(10);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(10);
         }
 
         private void WithEqualRetention()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(100);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(100);
         }
 
         [Test]

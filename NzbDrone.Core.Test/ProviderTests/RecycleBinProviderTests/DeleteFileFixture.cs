@@ -29,12 +29,12 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
     {
         private void WithRecycleBin()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(@"C:\Test\Recycle Bin");
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(@"C:\Test\Recycle Bin");
         }
 
         private void WithoutRecycleBin()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
         }
 
         [Test]

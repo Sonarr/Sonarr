@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTes
         [SetUp]
         public void Setup()
         {
-            var fakeConfig = Mocker.GetMock<ConfigService>();
+            var fakeConfig = Mocker.GetMock<IConfigService>();
             fakeConfig.SetupGet(c => c.NzbgetHost).Returns("192.168.5.55");
             fakeConfig.SetupGet(c => c.NzbgetPort).Returns(6789);
             fakeConfig.SetupGet(c => c.NzbgetUsername).Returns("nzbget");

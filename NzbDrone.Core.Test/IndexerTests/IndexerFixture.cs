@@ -30,17 +30,17 @@ namespace NzbDrone.Core.Test.IndexerTests
     {
         private void WithConfiguredIndexers()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
 
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
 
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
 
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.OmgwtfnzbsUsername).Returns("MockedConfigValue");
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.OmgwtfnzbsApiKey).Returns("MockedConfigValue");
         }
 
         [TestCase("nzbsrus.xml")]

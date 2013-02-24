@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.BlackholeDirectory).Returns(blackHoleFolder);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.BlackholeDirectory).Returns(blackHoleFolder);
         }
 
 

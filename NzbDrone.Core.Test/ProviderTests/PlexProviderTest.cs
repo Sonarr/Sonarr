@@ -27,22 +27,22 @@ namespace NzbDrone.Core.Test.ProviderTests
     {
         private void WithSingleClient()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexClientHosts)
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexClientHosts)
                     .Returns("localhost:3000");
         }
 
         private void WithMultipleClients()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexClientHosts)
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexClientHosts)
                     .Returns("localhost:3000, 192.168.0.10:3000");
         }
 
         public void WithClientCredentials()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexUsername)
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexUsername)
                     .Returns("plex");
 
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexPassword)
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexPassword)
                     .Returns("plex");
         }
 

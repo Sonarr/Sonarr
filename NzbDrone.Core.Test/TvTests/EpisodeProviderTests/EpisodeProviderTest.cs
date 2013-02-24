@@ -816,7 +816,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
             Mocker.Resolve<TvDbProvider>();
 
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                 .Setup(e => e.DefaultQualityProfile).Returns(1);
 
             Db.Insert(Builder<QualityProfile>.CreateNew().Build());

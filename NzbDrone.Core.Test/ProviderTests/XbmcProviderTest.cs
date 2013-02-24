@@ -297,7 +297,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var header = "NzbDrone Test";
             var message = "Test Message!";
 
-            var fakeConfig = Mocker.GetMock<ConfigService>();
+            var fakeConfig = Mocker.GetMock<IConfigService>();
             fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");
 
             //var fakeUdpProvider = Mocker.GetMock<EventClient>();
@@ -441,7 +441,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             WithStrictMocker();
 
-            var fakeConfig = Mocker.GetMock<ConfigService>();
+            var fakeConfig = Mocker.GetMock<IConfigService>();
             fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");
 
             var fakeEventClient = Mocker.GetMock<EventClientProvider>();

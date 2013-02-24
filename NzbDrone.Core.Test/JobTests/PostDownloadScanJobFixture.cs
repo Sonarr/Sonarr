@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<PostDownloadProvider>().Setup(s => s.ProcessDropFolder(path));
             Mocker.Resolve<PostDownloadScanJob>().Start(MockNotification, new { Path = path });
 
-            Mocker.GetMock<ConfigService>().Verify(s => s.DownloadClientTvDirectory, Times.Never());
+            Mocker.GetMock<IConfigService>().Verify(s => s.DownloadClientTvDirectory, Times.Never());
         }
 
         [Test]
@@ -53,10 +53,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var path = @"C:\Test\Unsorted TV";
 
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.DownloadClientTvDirectory).Returns(path);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.DownloadClientTvDirectory).Returns(path);
             Mocker.Resolve<PostDownloadScanJob>().Start(MockNotification, null);
 
-            Mocker.GetMock<ConfigService>().Verify(s => s.DownloadClientTvDirectory, Times.Once());
+            Mocker.GetMock<IConfigService>().Verify(s => s.DownloadClientTvDirectory, Times.Once());
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var path = @"C:\Test\Unsorted TV";
 
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.DownloadClientTvDirectory).Returns(path);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.DownloadClientTvDirectory).Returns(path);
             Mocker.Resolve<PostDownloadScanJob>().Start(MockNotification, null);
 
             Mocker.GetMock<PostDownloadProvider>().Verify(s => s.ProcessDropFolder(path), Times.Once());

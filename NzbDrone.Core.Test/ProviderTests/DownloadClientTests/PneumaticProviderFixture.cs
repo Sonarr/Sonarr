@@ -30,8 +30,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         {
             nzbPath = pneumaticFolder + title + ".nzb";
 
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.PneumaticDirectory).Returns(pneumaticFolder);
-            Mocker.GetMock<ConfigService>().SetupGet(c => c.DownloadClientTvDirectory).Returns(sabDrop);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.PneumaticDirectory).Returns(pneumaticFolder);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadClientTvDirectory).Returns(sabDrop);
         }
 
         private void WithExistingFile()

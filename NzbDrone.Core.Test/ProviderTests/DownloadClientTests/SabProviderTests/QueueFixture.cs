@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             string password = "pass";
             string cat = "tv";
 
-            var fakeConfig = Mocker.GetMock<ConfigService>();
+            var fakeConfig = Mocker.GetMock<IConfigService>();
             fakeConfig.SetupGet(c => c.SabHost).Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort).Returns(sabPort);
             fakeConfig.SetupGet(c => c.SabApiKey).Returns(apikey);

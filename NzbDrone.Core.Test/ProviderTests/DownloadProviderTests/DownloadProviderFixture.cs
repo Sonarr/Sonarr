@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 
         private void SetDownloadClient(DownloadClientType clientType)
         {
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                  .Setup(c => c.DownloadClient)
                  .Returns(clientType);
         }
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
                 .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Never());
 
 
-            VerifyEventPublished(It.Is<EpisodeGrabbedEvent>(c => c.ParseResult == parseResult));
+            VerifyEventPublished<EpisodeGrabbedEvent>();
         }
 
         [TestCase(DownloadClientType.Sabnzbd)]

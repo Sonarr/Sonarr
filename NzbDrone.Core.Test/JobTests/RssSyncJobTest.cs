@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.JobTests
     {
         public void WithMinutes(int minutes)
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.RssSyncInterval).Returns(minutes);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RssSyncInterval).Returns(minutes);
         }
 
         [TestCase(10)]

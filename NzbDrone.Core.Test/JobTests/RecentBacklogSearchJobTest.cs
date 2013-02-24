@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.JobTests
     {
         private void WithEnableBacklogSearching()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.EnableBacklogSearching).Returns(true);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.EnableBacklogSearching).Returns(true);
         }
 
         [SetUp]

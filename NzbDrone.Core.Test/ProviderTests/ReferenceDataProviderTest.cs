@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.ServiceRootUrl)
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.ServiceRootUrl)
                     .Returns("http://services.nzbdrone.com");
         }
 

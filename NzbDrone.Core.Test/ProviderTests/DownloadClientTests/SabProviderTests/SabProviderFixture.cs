@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         [SetUp]
         public void Setup()
         {
-            var fakeConfig = Mocker.GetMock<ConfigService>();
+            var fakeConfig = Mocker.GetMock<IConfigService>();
 
             fakeConfig.SetupGet(c => c.SabHost).Returns("192.168.5.55");
             fakeConfig.SetupGet(c => c.SabPort).Returns(2222);
@@ -210,11 +210,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         [Test]
         public void downloadNzb_should_use_sabRecentTvPriority_when_recentEpisode_is_true()
         {
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.SabRecentTvPriority)
                   .Returns(SabPriorityType.High);
 
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.SabBacklogTvPriority)
                   .Returns(SabPriorityType.Low);
 
@@ -232,11 +232,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         [Test]
         public void downloadNzb_should_use_sabBackogTvPriority_when_recentEpisode_is_false()
         {
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.SabRecentTvPriority)
                   .Returns(SabPriorityType.High);
 
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.SabBacklogTvPriority)
                   .Returns(SabPriorityType.Low);
 

@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(RecycleBin);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(RecycleBin);
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectories(RecycleBin))
                     .Returns(new [] { @"C:\Test\RecycleBin\Folder1", @"C:\Test\RecycleBin\Folder2", @"C:\Test\RecycleBin\Folder3" });
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         [Test]
         public void should_return_if_recycleBin_not_configured()
         {
-            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
 
             Mocker.Resolve<RecycleBinProvider>().Empty();
 
