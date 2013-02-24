@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Tv
 
         private readonly SceneMappingProvider _sceneNameMappingProvider;
 
-        public SeriesService(ISeriesRepository seriesRepository, ConfigService configServiceService,
+        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider, MetadataProvider metadataProvider,
                                 TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator)
         {

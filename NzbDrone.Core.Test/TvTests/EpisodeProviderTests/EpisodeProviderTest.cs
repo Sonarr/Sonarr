@@ -462,7 +462,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
-            Mocker.GetMock<SeasonRepository>()
+            Mocker.GetMock<ISeasonRepository>()
                 .Setup(s => s.IsIgnored(seriesId, 0))
                 .Returns(true);
 
@@ -795,7 +795,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
-            Mocker.GetMock<SeasonRepository>()
+            Mocker.GetMock<ISeasonRepository>()
                 .Setup(s => s.IsIgnored(seriesId, It.IsAny<int>()))
                 .Returns(true);
 
@@ -977,7 +977,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(e => e.Ignored = false)
                 .Build();
 
-            Mocker.GetMock<SeasonRepository>()
+            Mocker.GetMock<ISeasonRepository>()
                 .Setup(s => s.IsIgnored(newEpisode.SeriesId, newEpisode.SeasonNumber))
                 .Returns(true);
 

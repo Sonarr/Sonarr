@@ -7,6 +7,7 @@ using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
@@ -58,7 +59,7 @@ namespace NzbDrone.Api.Series
             //(we can just create the folder and it won't blow up if it already exists)
             //We also need to remove any special characters from the filename before attempting to create it           
 
-            _seriesService.AddSeries("", request.Path, request.SeriesId, request.QualityProfileId, null);
+            _seriesService.AddSeries("", request.Path, request.OID, request.QualityProfileId, null);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };
@@ -116,7 +117,7 @@ namespace NzbDrone.Api.Series
         {
             RuleSet("POST", () =>
                 {
-                    RuleFor(s => s.OID).GreaterThan(0);
+                    RuleFor(s => ((ModelBase)s).OID).GreaterThan(0);
                     RuleFor(s => s.Path).NotEmpty().Must(_diskProvider.FolderExists);
                     RuleFor(s => s.QualityProfileId).GreaterThan(0);
                 });

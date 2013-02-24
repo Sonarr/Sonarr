@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 
@@ -9,14 +8,12 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class UpgradeHistorySpecification
     {
-        private readonly IEpisodeService _episodeService;
-        private readonly HistoryService _historyService;
+        private readonly IHistoryService _historyService;
         private readonly QualityUpgradeSpecification _qualityUpgradeSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpgradeHistorySpecification(IEpisodeService episodeService, HistoryService historyService, QualityUpgradeSpecification qualityUpgradeSpecification)
+        public UpgradeHistorySpecification(IHistoryService historyService, QualityUpgradeSpecification qualityUpgradeSpecification)
         {
-            _episodeService = episodeService;
             _historyService = historyService;
             _qualityUpgradeSpecification = qualityUpgradeSpecification;
         }

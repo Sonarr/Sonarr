@@ -12,12 +12,11 @@ namespace NzbDrone.Core.Test
     [TestFixture]
     // ReSharper disable InconsistentNaming
     public class EpisodeStatusTest : CoreTest
-    {        
+    {
         [TestCase(1, false, false, EpisodeStatusType.NotAired)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
         [TestCase(0, false, false, EpisodeStatusType.AirsToday)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
-        [TestCase(0, true, false, EpisodeStatusType.Ready)]
         public void no_grab_date(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
@@ -31,7 +30,7 @@ namespace NzbDrone.Core.Test
                 episode.EpisodeFile = new EpisodeFile();
             }
 
-            Assert.AreEqual(status, episode.Status);
+            episode.Status.Should().Be(status);
         }
 
         [TestCase(1, false, false, EpisodeStatusType.Missing)]
@@ -73,7 +72,8 @@ namespace NzbDrone.Core.Test
                 episode.EpisodeFile = new EpisodeFile();
             }
 
-            Assert.AreEqual(status, episode.Status);
+            episode.Status.Should().Be(status);
+
         }
 
         [TestCase(1, true, true, EpisodeStatusType.Ready)]
@@ -90,7 +90,8 @@ namespace NzbDrone.Core.Test
                 episode.EpisodeFile = new EpisodeFile();
             }
 
-            Assert.AreEqual(status, episode.Status);
+            episode.Status.Should().Be(status);
+
         }
 
         [Test]
@@ -124,7 +125,8 @@ namespace NzbDrone.Core.Test
                 episode.EpisodeFile = new EpisodeFile();
             }
 
-            Assert.AreEqual(status, episode.Status);
+            episode.Status.Should().Be(status);
+
         }
     }
 }

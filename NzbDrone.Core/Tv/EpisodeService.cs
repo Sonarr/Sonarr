@@ -42,9 +42,9 @@ namespace NzbDrone.Core.Tv
 
         private readonly TvDbProvider _tvDbProvider;
         private readonly ISeasonRepository _seasonRepository;
-        private readonly EpisodeRepository _episodeRepository;
+        private readonly IEpisodeRepository _episodeRepository;
 
-        public EpisodeService(TvDbProvider tvDbProviderProvider, ISeasonRepository seasonRepository, EpisodeRepository episodeRepository)
+        public EpisodeService(TvDbProvider tvDbProviderProvider, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository)
         {
             _tvDbProvider = tvDbProviderProvider;
             _seasonRepository = seasonRepository;

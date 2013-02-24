@@ -6,6 +6,7 @@ using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Upcoming;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Tv;
 

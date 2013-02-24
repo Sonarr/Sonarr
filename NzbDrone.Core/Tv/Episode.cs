@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Tv
         {
             get
             {
-                if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
+                if (HasFile) return EpisodeStatusType.Ready;
 
                 if (GrabDate != null)
                 {
