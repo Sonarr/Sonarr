@@ -46,11 +46,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             UpdateIfEnabled();
         }
 
-        public override void OnRename(string message, Series series)
-        {
-
-        }
-
         public override void AfterRename(string message, Series series)
         {
             UpdateIfEnabled();

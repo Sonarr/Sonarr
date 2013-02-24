@@ -95,14 +95,6 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual void OnRename(string message, Series series)
-        {
-            foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))
-            {
-                notifier.OnRename(message, series);
-            }
-        }
-
         public virtual void AfterRename(string message, Series series)
         {
             foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))

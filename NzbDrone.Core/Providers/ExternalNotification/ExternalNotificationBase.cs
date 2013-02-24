@@ -1,8 +1,6 @@
 ﻿using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.ExternalNotification
 {
@@ -34,13 +32,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         /// <param name = "message">The message to send to the receiver</param>
         /// <param name = "series">The Series for the new download</param>
         public abstract void OnDownload(string message, Series series);
-
-        /// <summary>
-        ///   Performs the on rename action
-        /// </summary>
-        /// <param name = "message">The message to send to the receiver</param>
-        /// <param name = "series">The Series for the new download</param>
-        public abstract void OnRename(string message, Series series);
 
         /// <summary>
         ///   Performs the after rename action, this will be handled after all renaming for episode/season/series

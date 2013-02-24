@@ -5,8 +5,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
@@ -20,7 +18,6 @@ namespace NzbDrone.Core.Providers
         private readonly IEpisodeService _episodeService;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
-        private readonly DownloadProvider _downloadProvider;
         private readonly SignalRProvider _signalRProvider;
         private readonly IConfigService _configService;
         private readonly RecycleBinProvider _recycleBinProvider;
@@ -28,7 +25,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesRepository _seriesRepository;
 
         public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, MediaFileProvider mediaFileProvider,
-                                ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
+                                ExternalNotificationProvider externalNotificationProvider,
                                 SignalRProvider signalRProvider, IConfigService configService,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository)
         {
@@ -36,7 +33,6 @@ namespace NzbDrone.Core.Providers
             _episodeService = episodeService;
             _mediaFileProvider = mediaFileProvider;
             _externalNotificationProvider = externalNotificationProvider;
-            _downloadProvider = downloadProvider;
             _signalRProvider = signalRProvider;
             _configService = configService;
             _recycleBinProvider = recycleBinProvider;
@@ -240,10 +236,6 @@ namespace NzbDrone.Core.Providers
 
                 foreach (var episode in episodes)
                     _signalRProvider.UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Ready, parseResult.Quality);
-            }
-            else
-            {
-                _externalNotificationProvider.OnRename(message, series);
             }
 
             return episodeFile;
