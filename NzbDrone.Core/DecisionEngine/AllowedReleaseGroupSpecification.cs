@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -8,12 +9,12 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class AllowedReleaseGroupSpecification
     {
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AllowedReleaseGroupSpecification(ConfigProvider configProvider)
+        public AllowedReleaseGroupSpecification(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public AllowedReleaseGroupSpecification()
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             logger.Trace("Beginning release group check for: {0}", subject);
 
-            var allowed = _configProvider.AllowedReleaseGroups;
+            var allowed = _configService.AllowedReleaseGroups;
 
             if (string.IsNullOrWhiteSpace(allowed))
                 return true;

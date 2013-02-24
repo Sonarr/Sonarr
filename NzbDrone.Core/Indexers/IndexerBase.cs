@@ -6,6 +6,7 @@ using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -15,15 +16,15 @@ namespace NzbDrone.Core.Indexers
     {
         protected readonly Logger _logger;
         protected readonly HttpProvider _httpProvider;
-        protected readonly ConfigProvider _configProvider;
+        protected readonly IConfigService _configService;
 
         protected static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         protected static readonly Regex RemoveThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        protected IndexerBase(HttpProvider httpProvider, ConfigProvider configProvider)
+        protected IndexerBase(HttpProvider httpProvider, IConfigService configService)
         {
             _httpProvider = httpProvider;
-            _configProvider = configProvider;
+            _configService = configService;
 
             _logger = LogManager.GetLogger(GetType().ToString());
         }

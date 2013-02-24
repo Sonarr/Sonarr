@@ -4,6 +4,7 @@ using System.IO;
 using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -15,13 +16,13 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
         private readonly HttpProvider _httpProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
 
-        public SceneMappingProvider(IDatabase database, HttpProvider httpProvider, ConfigProvider configProvider)
+        public SceneMappingProvider(IDatabase database, HttpProvider httpProvider, IConfigService configService)
         {
             _database = database;
             _httpProvider = httpProvider;
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public SceneMappingProvider()
@@ -33,7 +34,7 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var mappingsJson = _httpProvider.DownloadString(_configProvider.ServiceRootUrl + "/SceneMapping/Active");
+                var mappingsJson = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/SceneMapping/Active");
                 var mappings = JsonConvert.DeserializeObject<List<SceneMapping>>(mappingsJson);
 
                 Logger.Debug("Deleting all existing Scene Mappings.");
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Providers
             Logger.Trace("Example post parsed. CleanTitle: {0}, Title: {1}", cleanTitle, title);
 
             var newMapping = String.Format("/SceneMapping/AddPending?cleanTitle={0}&id={1}&title={2}", cleanTitle, id, title);
-            var response = _httpProvider.DownloadString(_configProvider.ServiceRootUrl + newMapping);
+            var response = _httpProvider.DownloadString(_configService.ServiceRootUrl + newMapping);
 
             if (JsonConvert.DeserializeObject<String>(response).Equals("Ok"))
                 return true;

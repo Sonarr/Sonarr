@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Providers.Core;
@@ -18,12 +19,12 @@ namespace NzbDrone.Core.Providers.DownloadClients
     public class SabProvider : IDownloadClient
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly HttpProvider _httpProvider;
 
-        public SabProvider(ConfigProvider configProvider, HttpProvider httpProvider)
+        public SabProvider(IConfigService configService, HttpProvider httpProvider)
         {
-            _configProvider = configProvider;
+            _configService = configService;
             _httpProvider = httpProvider;
         }
 
@@ -67,8 +68,8 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             try
             {
-                string cat = _configProvider.SabTvCategory;
-                int priority = recentlyAired ? (int)_configProvider.SabRecentTvPriority : (int)_configProvider.SabBacklogTvPriority;
+                string cat = _configService.SabTvCategory;
+                int priority = recentlyAired ? (int)_configService.SabRecentTvPriority : (int)_configService.SabBacklogTvPriority;
 
                 string name = url.Replace("&", "%26");
                 string nzbName = HttpUtility.UrlEncode(title);
@@ -122,19 +123,19 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             //Get saved values if any of these are defaults
             if (host == null)
-                host = _configProvider.SabHost;
+                host = _configService.SabHost;
 
             if (port == 0)
-                port = _configProvider.SabPort;
+                port = _configService.SabPort;
 
             if (apiKey == null)
-                apiKey = _configProvider.SabApiKey;
+                apiKey = _configService.SabApiKey;
 
             if (username == null)
-                username = _configProvider.SabUsername;
+                username = _configService.SabUsername;
 
             if (password == null)
-                password = _configProvider.SabPassword;
+                password = _configService.SabPassword;
 
             const string action = "mode=get_cats&output=json";
 
@@ -155,19 +156,19 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             //Get saved values if any of these are defaults
             if (host == null)
-                host = _configProvider.SabHost;
+                host = _configService.SabHost;
 
             if (port == 0)
-                port = _configProvider.SabPort;
+                port = _configService.SabPort;
 
             if (apiKey == null)
-                apiKey = _configProvider.SabApiKey;
+                apiKey = _configService.SabApiKey;
 
             if (username == null)
-                username = _configProvider.SabUsername;
+                username = _configService.SabUsername;
 
             if (password == null)
-                password = _configProvider.SabPassword;
+                password = _configService.SabPassword;
 
             const string action = "mode=version&output=json";
 
@@ -202,12 +203,12 @@ namespace NzbDrone.Core.Providers.DownloadClients
         private string GetSabRequest(string action)
         {
             return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
-                                 _configProvider.SabHost,
-                                 _configProvider.SabPort,
+                                 _configService.SabHost,
+                                 _configService.SabPort,
                                  action,
-                                 _configProvider.SabApiKey,
-                                 _configProvider.SabUsername,
-                                 _configProvider.SabPassword);
+                                 _configService.SabApiKey,
+                                 _configService.SabUsername,
+                                 _configService.SabPassword);
         }
 
         private void CheckForError(string response)

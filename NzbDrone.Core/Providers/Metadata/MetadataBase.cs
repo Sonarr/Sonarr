@@ -1,6 +1,7 @@
 ﻿using System;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -12,15 +13,15 @@ namespace NzbDrone.Core.Providers.Metadata
     public abstract class MetadataBase
     {
         protected readonly Logger _logger;
-        protected readonly ConfigProvider _configProvider;
+        protected readonly IConfigService _configService;
         protected readonly DiskProvider _diskProvider;
         protected readonly BannerProvider _bannerProvider;
         protected readonly IEpisodeService _episodeService;
 
-        protected MetadataBase(ConfigProvider configProvider, DiskProvider diskProvider,
+        protected MetadataBase(IConfigService configService, DiskProvider diskProvider,
                                 BannerProvider bannerProvider, IEpisodeService episodeService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
             _diskProvider = diskProvider;
             _bannerProvider = bannerProvider;
             _episodeService = episodeService;

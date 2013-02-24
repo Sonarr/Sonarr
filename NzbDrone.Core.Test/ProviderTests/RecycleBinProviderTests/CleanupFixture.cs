@@ -10,6 +10,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.RecycleBin).Returns(RecycleBin);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(RecycleBin);
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectories(RecycleBin))
                     .Returns(new [] { @"C:\Test\RecycleBin\Folder1", @"C:\Test\RecycleBin\Folder2", @"C:\Test\RecycleBin\Folder3" });
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         [Test]
         public void should_return_if_recycleBin_not_configured()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
 
             Mocker.Resolve<RecycleBinProvider>().Cleanup();
 

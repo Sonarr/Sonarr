@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -133,7 +134,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
 
-            Mocker.GetMock<ConfigProvider>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
+            Mocker.GetMock<ConfigService>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
 
             //Act
             var result = Mocker.Resolve<MediaFileProvider>().CalculateFilePath(fakeSeries, 1, filename, ".mkv");

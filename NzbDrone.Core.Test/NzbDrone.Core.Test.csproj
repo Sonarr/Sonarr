@@ -172,7 +172,7 @@
     <Compile Include="JobTests\PostDownloadScanJobFixture.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ParserTests\QualityParserFixture.cs" />
-    <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
+    <Compile Include="Configuration\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\BannerProviderTest.cs" />
     <Compile Include="DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CustomStartDateSpecificationFixture.cs" />
@@ -250,7 +250,7 @@
     <Compile Include="Indexers\IndexerServiceTest.cs" />
     <Compile Include="HistoryTests\HistoryServiceTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
-    <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
+    <Compile Include="Configuration\ConfigServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTests\ParserFixture.cs" />

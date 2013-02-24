@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -90,7 +91,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.Delete(It.IsAny<int>()));
 
-            Mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigService>()
                 .SetupGet(s => s.AutoIgnorePreviouslyDownloadedEpisodes)
                 .Returns(true);
 

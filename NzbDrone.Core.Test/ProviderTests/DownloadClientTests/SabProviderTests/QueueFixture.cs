@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Sabnzbd;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             string password = "pass";
             string cat = "tv";
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SabHost).Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort).Returns(sabPort);
             fakeConfig.SetupGet(c => c.SabApiKey).Returns(apikey);

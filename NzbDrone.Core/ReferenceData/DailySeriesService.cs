@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using PetaPoco;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.ReferenceData
 {
-    public class ReferenceDataProvider
+    public class DailySeriesService
     {
         private readonly IDatabase _database;
         private readonly HttpProvider _httpProvider;
-        private readonly IConfigService _configService;
+        private readonly ConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ReferenceDataProvider(IDatabase database, HttpProvider httpProvider, IConfigService configService)
+        public DailySeriesService(IDatabase database, HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _database = database;
             _httpProvider = httpProvider;
-            _configService = configService;
+            _configProvider = configProvider;
         }
 
         public virtual void UpdateDailySeries()
@@ -53,7 +49,7 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var dailySeriesIds = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/DailySeries/AllIds");
+                var dailySeriesIds = _httpProvider.DownloadString(_configProvider.ServiceRootUrl + "/DailySeries/AllIds");
 
                 var seriesIds = JsonConvert.DeserializeObject<List<int>>(dailySeriesIds);
 

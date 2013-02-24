@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers.Core;
@@ -19,13 +20,13 @@ namespace NzbDrone.Core.Providers
     public class XbmcProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly HttpProvider _httpProvider;
         private readonly EventClientProvider _eventClientProvider;
 
-        public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider, EventClientProvider eventClientProvider)
+        public XbmcProvider(IConfigService configService, HttpProvider httpProvider, EventClientProvider eventClientProvider)
         {
-            _configProvider = configProvider;
+            _configService = configService;
             _httpProvider = httpProvider;
             _eventClientProvider = eventClientProvider;
         }
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Providers
         public virtual void Notify(string header, string message)
         {
             //Always use EventServer, until Json has real support for it
-            foreach (var host in _configProvider.XbmcHosts.Split(','))
+            foreach (var host in _configService.XbmcHosts.Split(','))
             {
                 Logger.Trace("Sending Notifcation to XBMC Host: {0}", host);
                 _eventClientProvider.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", GetHostWithoutPort(host));
@@ -50,10 +51,10 @@ namespace NzbDrone.Core.Providers
             //Use Json for Eden/Nightly or depricated HTTP for 10.x (Dharma) to get the proper path
             //Perform update with EventServer (Json currently doesn't support updating a specific path only - July 2011)
 
-            var username = _configProvider.XbmcUsername;
-            var password = _configProvider.XbmcPassword;
+            var username = _configService.XbmcUsername;
+            var password = _configService.XbmcPassword;
 
-            foreach (var host in _configProvider.XbmcHosts.Split(','))
+            foreach (var host in _configService.XbmcHosts.Split(','))
             {
                 Logger.Trace("Determining version of XBMC Host: {0}", host);
                 var version = GetJsonVersion(host, username, password);
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Providers
                 if (version == new XbmcVersion(2))
                 {
                     //Check for active player only when we should skip updates when playing
-                    if (!_configProvider.XbmcUpdateWhenPlaying)
+                    if (!_configService.XbmcUpdateWhenPlaying)
                     {
                         Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
                         var activePlayers = GetActivePlayersDharma(host, username, password);
@@ -82,7 +83,7 @@ namespace NzbDrone.Core.Providers
                 else if (version == new XbmcVersion(3) || version == new XbmcVersion(4))
                 {
                     //Check for active player only when we should skip updates when playing
-                    if (!_configProvider.XbmcUpdateWhenPlaying)
+                    if (!_configService.XbmcUpdateWhenPlaying)
                     {
                         Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
                         var activePlayers = GetActivePlayersEden(host, username, password);
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Providers
                 else if (version >= new XbmcVersion(5))
                 {
                     //Check for active player only when we should skip updates when playing
-                    if (!_configProvider.XbmcUpdateWhenPlaying)
+                    if (!_configService.XbmcUpdateWhenPlaying)
                     {
                         Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
                         var activePlayers = GetActivePlayersEden(host, username, password);
@@ -251,7 +252,7 @@ namespace NzbDrone.Core.Providers
         {
             //Use EventServer, once Dharma is extinct use Json?
 
-            foreach (var host in _configProvider.XbmcHosts.Split(','))
+            foreach (var host in _configService.XbmcHosts.Split(','))
             {
                 Logger.Trace("Sending DB Clean Request to XBMC Host: {0}", host);
                 var command = "ExecBuiltIn(CleanLibrary(video))";

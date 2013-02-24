@@ -2,6 +2,7 @@
 using System;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -13,13 +14,13 @@ namespace NzbDrone.Core.Jobs
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly PostDownloadProvider _postDownloadProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly DiskProvider _diskProvider;
 
-        public PostDownloadScanJob(PostDownloadProvider postDownloadProvider,ConfigProvider configProvider, DiskProvider diskProvider)
+        public PostDownloadScanJob(PostDownloadProvider postDownloadProvider,IConfigService configService, DiskProvider diskProvider)
         {
             _postDownloadProvider = postDownloadProvider;
-            _configProvider = configProvider;
+            _configService = configService;
             _diskProvider = diskProvider;
         }
 
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Jobs
                 dropFolder = options.Path;
 
             else
-                dropFolder = _configProvider.DownloadClientTvDirectory;
+                dropFolder = _configService.DownloadClientTvDirectory;
 
             if (String.IsNullOrWhiteSpace(dropFolder))
             {

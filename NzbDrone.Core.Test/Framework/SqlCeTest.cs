@@ -2,6 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
@@ -95,7 +96,7 @@ namespace NzbDrone.Core.Test.Framework
         [TearDown]
         public void CoreTestTearDown()
         {
-            ConfigProvider.ClearCache();
+            ConfigService.ClearCache();
 
             if (EnvironmentProvider.IsMono)
             {

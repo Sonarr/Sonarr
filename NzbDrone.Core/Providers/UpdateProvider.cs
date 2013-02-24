@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Providers
     public class UpdateProvider
     {
         private readonly HttpProvider _httpProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly EnvironmentProvider _environmentProvider;
 
         private readonly DiskProvider _diskProvider;
@@ -26,11 +27,11 @@ namespace NzbDrone.Core.Providers
         public const string DEFAULT_UPDATE_URL = @"http://update.nzbdrone.com/_release/";
 
 
-        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
+        public UpdateProvider(HttpProvider httpProvider, IConfigService configService,
             EnvironmentProvider environmentProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
-            _configProvider = configProvider;
+            _configService = configService;
             _environmentProvider = environmentProvider;
             _diskProvider = diskProvider;
         }
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Providers
         private List<UpdatePackage> GetAvailablePackages()
         {
             var updateList = new List<UpdatePackage>();
-            var updateUrl = _configProvider.UpdateUrl;
+            var updateUrl = _configService.UpdateUrl;
             var rawUpdateList = _httpProvider.DownloadString(updateUrl);
             var matches = parseRegex.Matches(rawUpdateList);
 

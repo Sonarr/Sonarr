@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -16,9 +17,9 @@ namespace NzbDrone.Core.Providers.Metadata
 {
     public class Xbmc : MetadataBase
     {
-        public Xbmc(ConfigProvider configProvider, DiskProvider diskProvider, 
+        public Xbmc(IConfigService configService, DiskProvider diskProvider, 
                     BannerProvider bannerProvider, IEpisodeService episodeService)
-            : base(configProvider, diskProvider, bannerProvider, episodeService)
+            : base(configService, diskProvider, bannerProvider, episodeService)
         {
         }
 
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Providers.Metadata
 
             if (!_diskProvider.FileExists(Path.Combine(series.Path, "folder.jpg")))
             {
-                if(_configProvider.MetadataUseBanners)
+                if(_configService.MetadataUseBanners)
                 {
                     if(!String.IsNullOrWhiteSpace(tvDbSeries.BannerPath))
                     {

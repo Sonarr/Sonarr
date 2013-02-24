@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -10,8 +11,8 @@ namespace NzbDrone.Core.Indexers
 {
     public class FileSharingTalk : IndexerBase
     {
-        public FileSharingTalk(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public FileSharingTalk(HttpProvider httpProvider, IConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Indexers
                 return new[]
                                    {
                                        string.Format("http://filesharingtalk.com/ng_rss.php?uid={0}&ps={1}&category=tv&subcategory=x264sd,x264720,xvid,webdl720,x2641080", 
-                                       _configProvider.FileSharingTalkUid, _configProvider.FileSharingTalkSecret)
+                                       _configService.FileSharingTalkUid, _configService.FileSharingTalkSecret)
                                    };
             }
         }
@@ -31,8 +32,8 @@ namespace NzbDrone.Core.Indexers
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(_configProvider.FileSharingTalkUid) &&
-                       !string.IsNullOrWhiteSpace(_configProvider.FileSharingTalkSecret);
+                return !string.IsNullOrWhiteSpace(_configService.FileSharingTalkUid) &&
+                       !string.IsNullOrWhiteSpace(_configService.FileSharingTalkSecret);
             }
         }
 

@@ -11,6 +11,7 @@ using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Core;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Providers.Core;
 using SignalR;
@@ -68,7 +69,7 @@ namespace NzbDrone.Api
 
         private void RegisterReporting(ILifetimeScope container)
         {
-            EnvironmentProvider.UGuid = container.Resolve<ConfigProvider>().UGuid;
+            EnvironmentProvider.UGuid = container.Resolve<ConfigService>().UGuid;
             ReportingService.RestProvider = container.Resolve<RestProvider>();
             ReportingService.SetupExceptronDriver();
         }

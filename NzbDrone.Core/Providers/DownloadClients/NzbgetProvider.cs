@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Nzbget;
 using NzbDrone.Core.Providers.Core;
@@ -18,12 +19,12 @@ namespace NzbDrone.Core.Providers.DownloadClients
     public class NzbgetProvider : IDownloadClient
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly HttpProvider _httpProvider;
 
-        public NzbgetProvider(ConfigProvider configProvider, HttpProvider httpProvider)
+        public NzbgetProvider(IConfigService configService, HttpProvider httpProvider)
         {
-            _configProvider = configProvider;
+            _configService = configService;
             _httpProvider = httpProvider;
         }
 
@@ -68,8 +69,8 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             try
             {
-                string cat = _configProvider.NzbgetTvCategory;
-                int priority = recentlyAired ? (int)_configProvider.NzbgetRecentTvPriority : (int)_configProvider.NzbgetBacklogTvPriority;
+                string cat = _configService.NzbgetTvCategory;
+                int priority = recentlyAired ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetBacklogTvPriority;
 
                 var command = new JsonRequest
                 {
@@ -115,16 +116,16 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             //Get saved values if any of these are defaults
             if (host == null)
-                host = _configProvider.NzbgetHost;
+                host = _configService.NzbgetHost;
 
             if (port == 0)
-                port = _configProvider.NzbgetPort;
+                port = _configService.NzbgetPort;
 
             if (username == null)
-                username = _configProvider.NzbgetUsername;
+                username = _configService.NzbgetUsername;
 
             if (password == null)
-                password = _configProvider.NzbgetPassword;
+                password = _configService.NzbgetPassword;
 
             var command = new JsonRequest
             {
@@ -158,10 +159,10 @@ namespace NzbDrone.Core.Providers.DownloadClients
         private string PostCommand(string command)
         {
             var url = String.Format(@"{0}:{1}",
-                                 _configProvider.NzbgetHost,
-                                 _configProvider.NzbgetPort);
+                                 _configService.NzbgetHost,
+                                 _configService.NzbgetPort);
 
-            return _httpProvider.PostCommand(url, _configProvider.NzbgetUsername, _configProvider.NzbgetPassword, command);
+            return _httpProvider.PostCommand(url, _configService.NzbgetUsername, _configService.NzbgetPassword, command);
         }
 
         private void CheckForError(string response)

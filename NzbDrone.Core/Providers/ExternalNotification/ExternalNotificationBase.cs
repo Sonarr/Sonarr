@@ -1,4 +1,5 @@
 ﻿using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -8,11 +9,11 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     public abstract class ExternalNotificationBase
     {
         protected readonly Logger _logger;
-        protected readonly ConfigProvider _configProvider;
+        protected readonly IConfigService _configService;
 
-        protected ExternalNotificationBase(ConfigProvider configProvider)
+        protected ExternalNotificationBase(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
             _logger = LogManager.GetLogger(GetType().ToString());
         }
 

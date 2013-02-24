@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -11,8 +12,8 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly ProwlProvider _prowlProvider;
 
-        public Prowl(ConfigProvider configProvider, ProwlProvider prowlProvider)
-            : base(configProvider)
+        public Prowl(IConfigService configService, ProwlProvider prowlProvider)
+            : base(configService)
         {
             _prowlProvider = prowlProvider;
         }
@@ -26,13 +27,13 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             try
             {
-                if(_configProvider.GrowlNotifyOnGrab)
+                if(_configService.GrowlNotifyOnGrab)
                 {
                     _logger.Trace("Sending Notification to Prowl");
                     const string title = "Episode Grabbed";
 
-                    var apiKeys = _configProvider.ProwlApiKeys;
-                    var priority = _configProvider.ProwlPriority;
+                    var apiKeys = _configService.ProwlApiKeys;
+                    var priority = _configService.ProwlPriority;
 
                     _prowlProvider.SendNotification(title, message, apiKeys, (NotificationPriority)priority);
                 }
@@ -48,13 +49,13 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             try
             {
-                if (_configProvider.GrowlNotifyOnDownload)
+                if (_configService.GrowlNotifyOnDownload)
                 {
                     _logger.Trace("Sending Notification to Prowl");
                     const string title = "Episode Downloaded";
 
-                    var apiKeys = _configProvider.ProwlApiKeys;
-                    var priority = _configProvider.ProwlPriority;
+                    var apiKeys = _configService.ProwlApiKeys;
+                    var priority = _configService.ProwlPriority;
 
                     _prowlProvider.SendNotification(title, message, apiKeys, (NotificationPriority)priority);
                 }

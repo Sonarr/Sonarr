@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Test.JobTests
     {
         public void WithMinutes(int minutes)
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.RssSyncInterval).Returns(minutes);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.RssSyncInterval).Returns(minutes);
         }
 
         [TestCase(10)]

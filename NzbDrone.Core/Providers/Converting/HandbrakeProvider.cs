@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.Providers.Converting
     public class HandbrakeProvider
     {
         //Interacts with Handbrake
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private ProgressNotification _notification;
         private Episode _currentEpisode;
 
@@ -22,9 +23,9 @@ namespace NzbDrone.Core.Providers.Converting
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public HandbrakeProvider(ConfigProvider configProvider)
+        public HandbrakeProvider(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public HandbrakeProvider()
@@ -37,9 +38,9 @@ namespace NzbDrone.Core.Providers.Converting
             _notification = notification;
             _currentEpisode = episode;
 
-            var outputFile = _configProvider.GetValue("iPodConvertDir", "");
+            var outputFile = _configService.GetValue("iPodConvertDir", "");
 
-            var handBrakePreset = _configProvider.GetValue("HandBrakePreset", "iPhone & iPod Touch");
+            var handBrakePreset = _configService.GetValue("HandBrakePreset", "iPhone & iPod Touch");
             var handBrakeCommand = String.Format("-i \"{0}\" -o \"{1}\" --preset=\"{2}\"", episode.EpisodeFile.Path, outputFile, handBrakePreset);
             var handBrakeFile = @"C:\Program Files (x86)\Handbrake\HandBrakeCLI.exe";
 

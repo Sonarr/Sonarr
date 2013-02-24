@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -10,8 +11,8 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly PlexProvider _plexProvider;
 
-        public Plex(ConfigProvider configProvider, PlexProvider plexProvider)
-            : base(configProvider)
+        public Plex(IConfigService configService, PlexProvider plexProvider)
+            : base(configService)
         {
             _plexProvider = plexProvider;
         }
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             const string header = "NzbDrone [TV] - Grabbed";
 
-            if (_configProvider.PlexNotifyOnGrab)
+            if (_configService.PlexNotifyOnGrab)
             {
                 _logger.Trace("Sending Notification to Plex Clients");
                 _plexProvider.Notify(header, message);
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             const string header = "NzbDrone [TV] - Downloaded";
 
-            if (_configProvider.PlexNotifyOnDownload)
+            if (_configService.PlexNotifyOnDownload)
             {
                 _logger.Trace("Sending Notification to Plex Clients");
                 _plexProvider.Notify(header, message);
@@ -57,7 +58,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
         private void UpdateIfEnabled()
         {
-            if (_configProvider.PlexUpdateLibrary)
+            if (_configService.PlexUpdateLibrary)
             {
                 _logger.Trace("Sending Update Request to Plex Server");
                 _plexProvider.UpdateLibrary();

@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Test.Framework;
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.BlackholeDirectory).Returns(blackHoleFolder);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.BlackholeDirectory).Returns(blackHoleFolder);
         }
 
 

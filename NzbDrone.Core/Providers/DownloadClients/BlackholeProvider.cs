@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
 {
     public class BlackholeProvider : IDownloadClient
     {
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
@@ -20,10 +21,10 @@ namespace NzbDrone.Core.Providers.DownloadClients
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public BlackholeProvider(ConfigProvider configProvider, HttpProvider httpProvider,
+        public BlackholeProvider(IConfigService configService, HttpProvider httpProvider,
                                     DiskProvider diskProvider, UpgradeHistorySpecification upgradeHistorySpecification)
         {
-            _configProvider = configProvider;
+            _configService = configService;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
             _upgradeHistorySpecification = upgradeHistorySpecification;
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
             {
                 title = MediaFileProvider.CleanFilename(title);
 
-                var filename = Path.Combine(_configProvider.BlackholeDirectory, title + ".nzb");
+                var filename = Path.Combine(_configService.BlackholeDirectory, title + ".nzb");
 
                 if (_diskProvider.FileExists(filename))
                 {

@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -75,7 +76,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 
         private void WithUseBanners()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.MetadataUseBanners).Returns(true);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.MetadataUseBanners).Returns(true);
         }
 
         private void WithSpecials()

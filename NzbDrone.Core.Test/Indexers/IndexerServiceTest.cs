@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -75,8 +76,8 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class MockIndexer : IndexerBase
     {
-        public MockIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public MockIndexer(HttpProvider httpProvider, ConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 
@@ -133,8 +134,8 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class TestUrlIndexer : IndexerBase
     {
-        public TestUrlIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public TestUrlIndexer(HttpProvider httpProvider, ConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 
@@ -186,8 +187,8 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class CustomParserIndexer : IndexerBase
     {
-        public CustomParserIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public CustomParserIndexer(HttpProvider httpProvider, ConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 
@@ -246,8 +247,8 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class NotConfiguredIndexer : IndexerBase
     {
-        public NotConfiguredIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public NotConfiguredIndexer(HttpProvider httpProvider, ConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 
@@ -299,8 +300,8 @@ namespace NzbDrone.Core.Test.Indexers
 
     public class DefaultEnabledIndexer : IndexerBase
     {
-        public DefaultEnabledIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public DefaultEnabledIndexer(HttpProvider httpProvider, ConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 

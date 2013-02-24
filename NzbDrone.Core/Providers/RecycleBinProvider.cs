@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
@@ -12,14 +13,14 @@ namespace NzbDrone.Core.Providers
     public class RecycleBinProvider
     {
         private readonly DiskProvider _diskProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public RecycleBinProvider(DiskProvider diskProvider, ConfigProvider configProvider)
+        public RecycleBinProvider(DiskProvider diskProvider, IConfigService configService)
         {
             _diskProvider = diskProvider;
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public RecycleBinProvider()
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Providers
         public virtual void DeleteDirectory(string path)
         {
             logger.Trace("Attempting to send '{0}' to recycling bin", path);
-            var recyclingBin = _configProvider.RecycleBin;
+            var recyclingBin = _configService.RecycleBin;
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Providers
         public virtual void DeleteFile(string path)
         {
             logger.Trace("Attempting to send '{0}' to recycling bin", path);
-            var recyclingBin = _configProvider.RecycleBin;
+            var recyclingBin = _configService.RecycleBin;
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
@@ -81,7 +82,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Empty()
         {
-            if (String.IsNullOrWhiteSpace(_configProvider.RecycleBin))
+            if (String.IsNullOrWhiteSpace(_configService.RecycleBin))
             {
                 logger.Info("Recycle Bin has not been configured, cannot empty.");
                 return;
@@ -89,12 +90,12 @@ namespace NzbDrone.Core.Providers
 
             logger.Info("Removing all items from the recycling bin");
 
-            foreach (var folder in _diskProvider.GetDirectories(_configProvider.RecycleBin))
+            foreach (var folder in _diskProvider.GetDirectories(_configService.RecycleBin))
             {
                 _diskProvider.DeleteFolder(folder, true);
             }
 
-            foreach (var file in _diskProvider.GetFiles(_configProvider.RecycleBin, SearchOption.TopDirectoryOnly))
+            foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
             {
                 _diskProvider.DeleteFile(file);
             }
@@ -104,7 +105,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Cleanup()
         {
-            if (String.IsNullOrWhiteSpace(_configProvider.RecycleBin))
+            if (String.IsNullOrWhiteSpace(_configService.RecycleBin))
             {
                 logger.Info("Recycle Bin has not been configured, cannot cleanup.");
                 return;
@@ -112,7 +113,7 @@ namespace NzbDrone.Core.Providers
 
             logger.Info("Removing items older than 7 days from the recycling bin");
 
-            foreach (var folder in _diskProvider.GetDirectories(_configProvider.RecycleBin))
+            foreach (var folder in _diskProvider.GetDirectories(_configService.RecycleBin))
             {
                 if (_diskProvider.GetLastDirectoryWrite(folder).AddDays(7) > DateTime.UtcNow)
                 {
@@ -123,7 +124,7 @@ namespace NzbDrone.Core.Providers
                  _diskProvider.DeleteFolder(folder, true);
             }
 
-            foreach (var file in _diskProvider.GetFiles(_configProvider.RecycleBin, SearchOption.TopDirectoryOnly))
+            foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
             {
                 if (_diskProvider.GetLastFileWrite(file).AddDays(7) > DateTime.UtcNow)
                 {

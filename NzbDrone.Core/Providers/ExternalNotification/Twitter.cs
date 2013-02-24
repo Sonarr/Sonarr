@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -9,8 +10,8 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly TwitterProvider _twitterProvider;
 
-        public Twitter(ConfigProvider configProvider, TwitterProvider twitterProvider)
-            : base(configProvider)
+        public Twitter(IConfigService configService, TwitterProvider twitterProvider)
+            : base(configService)
         {
             _twitterProvider = twitterProvider;
         }
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
         public override void OnGrab(string message)
         {
-            if (_configProvider.TwitterNotifyOnGrab)
+            if (_configService.TwitterNotifyOnGrab)
             {
                 _logger.Trace("Sending Notification to Twitter (On Grab)");
                 _twitterProvider.SendTweet("Download Started: " + message);
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
         public override void OnDownload(string message, Series series)
         {
-            if (_configProvider.TwitterNotifyOnDownload)
+            if (_configService.TwitterNotifyOnDownload)
             {
                 _logger.Trace("Sending Notification to Twitter (On Grab)");
                 _twitterProvider.SendTweet("Download Completed: " + message);

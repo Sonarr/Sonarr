@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         {
             WithStrictMocker();
 
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/_test/");
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/_test/");
             Mocker.Resolve<HttpProvider>();
         }
 

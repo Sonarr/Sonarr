@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -9,8 +10,8 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly SmtpProvider _smtpProvider;
 
-        public Smtp(ConfigProvider configProvider, SmtpProvider smtpProvider)
-            : base(configProvider)
+        public Smtp(IConfigService configService, SmtpProvider smtpProvider)
+            : base(configService)
         {
             _smtpProvider = smtpProvider;
         }
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             const string subject = "NzbDrone [TV] - Grabbed";
             var body = String.Format("{0} sent to SABnzbd queue.", message);
 
-            if (_configProvider.SmtpNotifyOnGrab)
+            if (_configService.SmtpNotifyOnGrab)
             {
                 _logger.Trace("Sending SMTP Notification");
                 _smtpProvider.SendEmail(subject, body);
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             const string subject = "NzbDrone [TV] - Downloaded";
             var body = String.Format("{0} Downloaded and sorted.", message);
 
-            if (_configProvider.SmtpNotifyOnDownload)
+            if (_configService.SmtpNotifyOnDownload)
             {
                 _logger.Trace("Sending SMTP Notification");
                 _smtpProvider.SendEmail(subject, body);

@@ -7,6 +7,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -37,22 +38,22 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithUnlimitedRetention()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.Retention).Returns(0);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(0);
         }
 
         private void WithLongRetention()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.Retention).Returns(1000);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(1000);
         }
 
         private void WithShortRetention()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.Retention).Returns(10);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(10);
         }
 
         private void WithEqualRetention()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.Retention).Returns(100);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.Retention).Returns(100);
         }
 
         [Test]

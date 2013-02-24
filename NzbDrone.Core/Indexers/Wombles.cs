@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -10,7 +11,7 @@ namespace NzbDrone.Core.Indexers
 {
     public class Wombles : IndexerBase
     {
-        public Wombles(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
+        public Wombles(HttpProvider httpProvider, IConfigService configService) : base(httpProvider, configService)
         {
         }
 

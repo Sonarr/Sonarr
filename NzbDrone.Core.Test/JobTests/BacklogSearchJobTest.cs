@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Test.JobTests
     {
         private void WithEnableBacklogSearching()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.EnableBacklogSearching).Returns(true);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.EnableBacklogSearching).Returns(true);
         }
 
         [Test]

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Providers
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly SignalRProvider _signalRProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Providers
         public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService,
                                 ISeriesService seriesService, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
-                                SignalRProvider signalRProvider, ConfigProvider configProvider,
+                                SignalRProvider signalRProvider, IConfigService configService,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Providers
             _externalNotificationProvider = externalNotificationProvider;
             _downloadProvider = downloadProvider;
             _signalRProvider = signalRProvider;
-            _configProvider = configProvider;
+            _configService = configService;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
             _seriesRepository = seriesRepository;
@@ -270,7 +271,7 @@ namespace NzbDrone.Core.Providers
                         {
                             Logger.Trace("Detaching episode {0} from file.", episode.OID);
                             episode.EpisodeFile = null;
-                            episode.Ignored = _configProvider.AutoIgnorePreviouslyDownloadedEpisodes;
+                            episode.Ignored = _configService.AutoIgnorePreviouslyDownloadedEpisodes;
                             episode.GrabDate = null;
                             episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
                             _episodeService.UpdateEpisode(episode);

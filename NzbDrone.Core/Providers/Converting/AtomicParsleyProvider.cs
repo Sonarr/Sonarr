@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -11,13 +12,13 @@ namespace NzbDrone.Core.Providers.Converting
 {
     public class AtomicParsleyProvider
     {
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public AtomicParsleyProvider(ConfigProvider configProvider)
+        public AtomicParsleyProvider(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public AtomicParsleyProvider()
@@ -29,8 +30,8 @@ namespace NzbDrone.Core.Providers.Converting
         {
             throw new NotImplementedException();
 
-            var atomicParsleyLocation = _configProvider.GetValue("AtomicParsleyLocation", "");
-            var atomicParsleyTitleType = (AtomicParsleyTitleType) Convert.ToInt32(_configProvider.GetValue("AtomicParsley", 0));
+            var atomicParsleyLocation = _configService.GetValue("AtomicParsleyLocation", "");
+            var atomicParsleyTitleType = (AtomicParsleyTitleType) Convert.ToInt32(_configService.GetValue("AtomicParsley", 0));
 
             var atomicParsleyCommand = String.Format("\"{0}\" --overWrite --title \"{1}\" --genre \"TV Shows\" --stik \"TV Show\" --TVShowName \"{2}\" --TVEpisodeNum \"{3}\" --TVSeason \"{4}\"",
                                         outputFile, episode.Title, episode.Series.Title, episode.EpisodeNumber, episode.SeasonNumber);

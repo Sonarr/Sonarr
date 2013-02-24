@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -9,8 +10,8 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly XbmcProvider _xbmcProvider;
 
-        public Xbmc(ConfigProvider configProvider, XbmcProvider xbmcProvider)
-            : base(configProvider)
+        public Xbmc(IConfigService configService, XbmcProvider xbmcProvider)
+            : base(configService)
         {
             _xbmcProvider = xbmcProvider;
         }
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             const string header = "NzbDrone [TV] - Grabbed";
 
-            if (_configProvider.XbmcNotifyOnGrab)
+            if (_configService.XbmcNotifyOnGrab)
             {
                 _logger.Trace("Sending Notification to XBMC");
                 _xbmcProvider.Notify(header, message);
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             const string header = "NzbDrone [TV] - Downloaded";
 
-            if (_configProvider.XbmcNotifyOnDownload)
+            if (_configService.XbmcNotifyOnDownload)
             {
                 _logger.Trace("Sending Notification to XBMC");
                 _xbmcProvider.Notify(header, message);
@@ -56,13 +57,13 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
         private void UpdateAndClean(Series series)
         {
-            if (_configProvider.XbmcUpdateLibrary)
+            if (_configService.XbmcUpdateLibrary)
             {
                 _logger.Trace("Sending Update Request to XBMC");
                 _xbmcProvider.Update(series);
             }
 
-            if (_configProvider.XbmcCleanLibrary)
+            if (_configService.XbmcCleanLibrary)
             {
                 _logger.Trace("Sending Clean DB Request to XBMC");
                 _xbmcProvider.Clean();

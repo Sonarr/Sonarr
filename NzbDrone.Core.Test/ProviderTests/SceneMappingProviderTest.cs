@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.ServiceRootUrl)
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.ServiceRootUrl)
                     .Returns("http://services.nzbdrone.com");
 
             WithRealDb();

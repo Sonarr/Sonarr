@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
@@ -12,11 +13,11 @@ namespace NzbDrone.Core.Providers
     public class SmtpProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
 
-        public SmtpProvider(ConfigProvider configProvider)
+        public SmtpProvider(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public virtual void SendEmail(string subject, string body, bool htmlBody = false)
@@ -25,10 +26,10 @@ namespace NzbDrone.Core.Providers
             var email = new MailMessage();
 
             //Set the addresses
-            email.From = new MailAddress(_configProvider.SmtpFromAddress);
+            email.From = new MailAddress(_configService.SmtpFromAddress);
 
             //Allow multiple to addresses (split on each comma)
-            foreach (var toAddress in _configProvider.SmtpToAddresses.Split(','))
+            foreach (var toAddress in _configService.SmtpToAddresses.Split(','))
             {
                 email.To.Add(toAddress.Trim());
             }
@@ -43,8 +44,8 @@ namespace NzbDrone.Core.Providers
             email.IsBodyHtml = htmlBody;
 
             //Handle credentials
-            var username = _configProvider.SmtpUsername;
-            var password = _configProvider.SmtpPassword;
+            var username = _configService.SmtpUsername;
+            var password = _configService.SmtpPassword;
 
             NetworkCredential credentials = null;
 
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Providers
             //Send the email
             try
             {
-                Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
+                Send(email, _configService.SmtpServer, _configService.SmtpPort, _configService.SmtpUseSsl, credentials);
             }
             catch(Exception ex)
             {

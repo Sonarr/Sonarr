@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly HistoryService _historyService;
         private readonly IEpisodeService _episodeService;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly BlackholeProvider _blackholeProvider;
         private readonly SignalRProvider _signalRProvider;
         private readonly PneumaticProvider _pneumaticProvider;
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.Providers
 
         public DownloadProvider(SabProvider sabProvider, HistoryService historyService,
             IEpisodeService episodeService, ExternalNotificationProvider externalNotificationProvider,
-            ConfigProvider configProvider, BlackholeProvider blackholeProvider,
+            IConfigService configService, BlackholeProvider blackholeProvider,
             SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider,
             NzbgetProvider nzbgetProvider)
         {
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Providers
             _historyService = historyService;
             _episodeService = episodeService;
             _externalNotificationProvider = externalNotificationProvider;
-            _configProvider = configProvider;
+            _configService = configService;
             _blackholeProvider = blackholeProvider;
             _signalRProvider = signalRProvider;
             _pneumaticProvider = pneumaticProvider;
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual IDownloadClient GetActiveDownloadClient()
         {
-            switch (_configProvider.DownloadClient)
+            switch (_configService.DownloadClient)
             {
                 case DownloadClientType.Blackhole:
                     return _blackholeProvider;
@@ -103,7 +104,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual String GetDownloadTitle(EpisodeParseResult parseResult)
         {
-            if(_configProvider.DownloadClientUseSceneName)
+            if(_configService.DownloadClientUseSceneName)
             {
                 logger.Trace("Using scene name: {0}", parseResult.OriginalString);
                 return parseResult.OriginalString;

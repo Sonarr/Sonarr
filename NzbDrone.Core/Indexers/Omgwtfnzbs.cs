@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -11,8 +12,8 @@ namespace NzbDrone.Core.Indexers
 {
     class Omgwtfnzbs : IndexerBase
     {
-        public Omgwtfnzbs(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public Omgwtfnzbs(HttpProvider httpProvider, IConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Indexers
                 return new string[]
                 {
                     String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
-                                    _configProvider.OmgwtfnzbsUsername, _configProvider.OmgwtfnzbsApiKey)
+                                    _configService.OmgwtfnzbsUsername, _configService.OmgwtfnzbsApiKey)
                 };
             }
         }
@@ -37,8 +38,8 @@ namespace NzbDrone.Core.Indexers
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(_configProvider.OmgwtfnzbsUsername) &&
-                       !string.IsNullOrWhiteSpace(_configProvider.OmgwtfnzbsApiKey);
+                return !string.IsNullOrWhiteSpace(_configService.OmgwtfnzbsUsername) &&
+                       !string.IsNullOrWhiteSpace(_configService.OmgwtfnzbsApiKey);
             }
         }
 

@@ -10,6 +10,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -26,22 +27,22 @@ namespace NzbDrone.Core.Test.ProviderTests
     {
         private void WithSingleClient()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexClientHosts)
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexClientHosts)
                     .Returns("localhost:3000");
         }
 
         private void WithMultipleClients()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexClientHosts)
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexClientHosts)
                     .Returns("localhost:3000, 192.168.0.10:3000");
         }
 
         public void WithClientCredentials()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexUsername)
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexUsername)
                     .Returns("plex");
 
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexPassword)
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.PlexPassword)
                     .Returns("plex");
         }
 

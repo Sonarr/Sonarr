@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model.Nzbget;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTes
         [SetUp]
         public void Setup()
         {
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.NzbgetHost).Returns("192.168.5.55");
             fakeConfig.SetupGet(c => c.NzbgetPort).Returns(6789);
             fakeConfig.SetupGet(c => c.NzbgetUsername).Returns("nzbget");

@@ -7,6 +7,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -814,7 +815,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
             Mocker.Resolve<TvDbProvider>();
 
-            Mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigService>()
                 .Setup(e => e.DefaultQualityProfile).Returns(1);
 
             Db.Insert(Builder<QualityProfile>.CreateNew().Build());

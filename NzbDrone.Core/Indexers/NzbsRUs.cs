@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -11,7 +12,7 @@ namespace NzbDrone.Core.Indexers
 {
     public class NzbsRUs : IndexerBase
     {
-        public NzbsRUs(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
+        public NzbsRUs(HttpProvider httpProvider, IConfigService configService) : base(httpProvider, configService)
         {
         }
 
@@ -23,8 +24,8 @@ namespace NzbDrone.Core.Indexers
                            {
                                string.Format(
                                    "https://www.nzbsrus.com/rssfeed.php?cat=91,75&i={0}&h={1}",
-                                   _configProvider.NzbsrusUId,
-                                   _configProvider.NzbsrusHash)
+                                   _configService.NzbsrusUId,
+                                   _configService.NzbsrusHash)
                            };
             }
         }
@@ -33,8 +34,8 @@ namespace NzbDrone.Core.Indexers
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(_configProvider.NzbsrusUId) &&
-                       !string.IsNullOrWhiteSpace(_configProvider.NzbsrusHash);
+                return !string.IsNullOrWhiteSpace(_configService.NzbsrusUId) &&
+                       !string.IsNullOrWhiteSpace(_configService.NzbsrusHash);
             }
         }
 

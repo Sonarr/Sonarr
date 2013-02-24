@@ -5,31 +5,28 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Nzbget;
 using NzbDrone.Core.Model.Sabnzbd;
-using NzbDrone.Core.Repository;
-using PetaPoco;
+using NzbDrone.Core.Providers;
 
-namespace NzbDrone.Core.Providers.Core
+namespace NzbDrone.Core.Configuration
 {
-    public class ConfigProvider
+    public class ConfigService : IConfigService
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IConfigRepository _repository;
+        private readonly Logger _logger;
+        private static Dictionary<string, string> _cache;
 
-        private static Dictionary<string, string> cache = new Dictionary<string, string>();
 
-        private readonly IDatabase _database;
-
-        public ConfigProvider(IDatabase database)
+        public ConfigService(IConfigRepository repository, Logger logger)
         {
-            _database = database;
+            _repository = repository;
+            _logger = logger;
+            _cache = new Dictionary<string, string>();
         }
 
-        public ConfigProvider()
-        {
-        }
 
         public IEnumerable<Config> All()
         {
-            return _database.Fetch<Config>();
+            return _repository.All();
         }
 
         public virtual String NzbsOrgUId
@@ -619,14 +616,15 @@ namespace NzbDrone.Core.Providers.Core
 
             string dbValue;
 
-            if (cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
+            if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
                 return dbValue;
 
-            logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+            _logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
 
             if (persist)
+            {
                 SetValue(key, defaultValue.ToString());
-
+            }
             return defaultValue.ToString();
         }
 
@@ -647,18 +645,18 @@ namespace NzbDrone.Core.Providers.Core
             if (value == null)
                 throw new ArgumentNullException("key");
 
-            logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
+            _logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
-            var dbValue = _database.SingleOrDefault<Config>("WHERE [KEY]=@0", key);
+            var dbValue = _repository.Get(key);
 
             if (dbValue == null)
             {
-                _database.Insert(new Config { Key = key, Value = value });
+                _repository.Insert(new Config { Key = key, Value = value });
             }
             else
             {
                 dbValue.Value = value;
-                _database.Update(dbValue);
+                _repository.Update(dbValue);
             }
 
             ClearCache();
@@ -666,20 +664,20 @@ namespace NzbDrone.Core.Providers.Core
 
         private void EnsureCache()
         {
-            lock (cache)
+            lock (_cache)
             {
-                if (!cache.Any())
+                if (!_cache.Any())
                 {
-                    cache = _database.Fetch<Config>().ToDictionary(c => c.Key, c => c.Value);
+                    _cache = All().ToDictionary(c => c.Key, c => c.Value);
                 }
             }
         }
 
         public static void ClearCache()
         {
-            lock (cache)
+            lock (_cache)
             {
-                cache = new Dictionary<string, string>();
+                _cache = new Dictionary<string, string>();
             }
         }
     }

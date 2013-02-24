@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers;
@@ -296,7 +297,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var header = "NzbDrone Test";
             var message = "Test Message!";
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");
 
             //var fakeUdpProvider = Mocker.GetMock<EventClient>();
@@ -440,7 +441,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             WithStrictMocker();
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");
 
             var fakeEventClient = Mocker.GetMock<EventClientProvider>();

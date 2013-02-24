@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Twitter;
 using NzbDrone.Core.Providers.Core;
@@ -12,16 +13,16 @@ namespace NzbDrone.Core.Providers
 {
     public class TwitterProvider
     {
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private const string ConsumerKey = "umKU6jBWpFbHTuqQbW2VlQ";
         private const string ConsumerSecret = "e30OXkI6qrZWS35hbUUnrQQ8J2R9XNpccQNWAVK10";
 
-        public TwitterProvider(ConfigProvider configProvider)
+        public TwitterProvider(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public virtual TwitterAuthorizationModel GetAuthorization()
@@ -55,8 +56,8 @@ namespace NzbDrone.Core.Providers
 
                 OAuthTokenResponse accessToken = OAuthUtility.GetAccessToken(ConsumerKey, ConsumerSecret, authToken, verifier);
 
-                _configProvider.TwitterAccessToken = accessToken.Token;
-                _configProvider.TwitterAccessTokenSecret = accessToken.TokenSecret;
+                _configService.TwitterAccessToken = accessToken.Token;
+                _configService.TwitterAccessTokenSecret = accessToken.TokenSecret;
 
                 //Send a tweet to test!
                 SendTweet("I have just setup tweet notifications for NzbDrone!");
@@ -77,8 +78,8 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Trace("Sending status update to twitter: {0}", message);
 
-                var accessToken = _configProvider.TwitterAccessToken;
-                var accessTokenSecret = _configProvider.TwitterAccessTokenSecret;
+                var accessToken = _configService.TwitterAccessToken;
+                var accessTokenSecret = _configService.TwitterAccessTokenSecret;
 
                 //If the access token or access token secret are not configured, log an error and return
                 if (String.IsNullOrWhiteSpace(accessToken) || String.IsNullOrWhiteSpace(accessTokenSecret))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -16,17 +17,17 @@ namespace NzbDrone.Core.Jobs
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
         private readonly ReferenceDataProvider _referenceDataProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public UpdateInfoJob(ISeriesService seriesService, IEpisodeService episodeService,
-                            ReferenceDataProvider referenceDataProvider, ConfigProvider configProvider, ISeriesRepository seriesRepository)
+                            ReferenceDataProvider referenceDataProvider, IConfigService configService, ISeriesRepository seriesRepository)
         {
             _seriesService = seriesService;
             _episodeService = episodeService;
             _referenceDataProvider = referenceDataProvider;
-            _configProvider = configProvider;
+            _configService = configService;
             _seriesRepository = seriesRepository;
         }
 
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Jobs
             IList<Series> seriesToUpdate;
             if (options == null || options.SeriesId == 0)
             {
-                if (_configProvider.IgnoreArticlesWhenSortingSeries)
+                if (_configService.IgnoreArticlesWhenSortingSeries)
                     seriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
 
                 else

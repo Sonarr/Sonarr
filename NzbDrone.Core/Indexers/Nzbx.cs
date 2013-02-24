@@ -5,6 +5,7 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using Newtonsoft.Json;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Nzbx;
 using NzbDrone.Core.Providers.Core;
@@ -13,8 +14,8 @@ namespace NzbDrone.Core.Indexers
 {
     class Nzbx : IndexerBase
     {
-        public Nzbx(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public Nzbx(HttpProvider httpProvider, IConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
@@ -16,14 +17,14 @@ namespace NzbDrone.Core.Providers
     public class MediaFileProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly IDatabase _database;
         private readonly IEpisodeService _episodeService;
 
-        public MediaFileProvider(IEpisodeService episodeService, ConfigProvider configProvider, IDatabase database)
+        public MediaFileProvider(IEpisodeService episodeService, IConfigService configService, IDatabase database)
         {
             _episodeService = episodeService;
-            _configProvider = configProvider;
+            _configService = configService;
             _database = database;
         }
 
@@ -91,7 +92,7 @@ namespace NzbDrone.Core.Providers
             string path = series.Path;
             if (series.SeasonFolder)
             {
-                var seasonFolder = _configProvider.SortingSeasonFolderFormat
+                var seasonFolder = _configService.SortingSeasonFolderFormat
                     .Replace("%0s", seasonNumber.ToString("00"))
                     .Replace("%s", seasonNumber.ToString());
 
@@ -109,7 +110,7 @@ namespace NzbDrone.Core.Providers
 
             string updateString = "UPDATE Episodes SET EpisodeFileId = 0, GrabDate = NULL, PostDownloadStatus = 0";
 
-            if (_configProvider.AutoIgnorePreviouslyDownloadedEpisodes)
+            if (_configService.AutoIgnorePreviouslyDownloadedEpisodes)
             {
                 updateString += ", Ignored = 1";
             }
@@ -143,7 +144,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual string GetNewFilename(IList<Episode> episodes, Series series, QualityTypes quality, bool proper, EpisodeFile episodeFile)
         {
-            if (_configProvider.SortingUseSceneName)
+            if (_configService.SortingUseSceneName)
             {
                 Logger.Trace("Attempting to use scene name");
                 if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
@@ -159,8 +160,8 @@ namespace NzbDrone.Core.Providers
 
             var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber);
 
-            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SortingSeparatorStyle);
-            var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.SortingNumberStyle);
+            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configService.SortingSeparatorStyle);
+            var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configService.SortingNumberStyle);
 
             var episodeNames = new List<String>();
 
@@ -168,7 +169,7 @@ namespace NzbDrone.Core.Providers
 
             string result = String.Empty;
 
-            if (_configProvider.SortingIncludeSeriesName)
+            if (_configService.SortingIncludeSeriesName)
             {
                 result += series.Title + separatorStyle.Pattern;
             }
@@ -181,7 +182,7 @@ namespace NzbDrone.Core.Providers
                 if(episodes.Count > 1)
                 {
                     var multiEpisodeStyle =
-                            EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.SortingMultiEpisodeStyle);
+                            EpisodeSortingHelper.GetMultiEpisodeStyle(_configService.SortingMultiEpisodeStyle);
 
                     foreach(var episode in sortedEpisodes.Skip(1))
                     {
@@ -215,7 +216,7 @@ namespace NzbDrone.Core.Providers
                     result += "Unknown";
             }
 
-            if (_configProvider.SortingIncludeEpisodeTitle)
+            if (_configService.SortingIncludeEpisodeTitle)
             {
                 if (episodeNames.Distinct().Count() == 1)
                     result += separatorStyle.Pattern + episodeNames.First();
@@ -224,7 +225,7 @@ namespace NzbDrone.Core.Providers
                     result += separatorStyle.Pattern + String.Join(" + ", episodeNames.Distinct());
             }
 
-            if (_configProvider.SortingAppendQuality)
+            if (_configService.SortingAppendQuality)
             {
                 result += String.Format(" [{0}]", quality);
 
@@ -232,7 +233,7 @@ namespace NzbDrone.Core.Providers
                     result += " [Proper]";
             }
 
-            if (_configProvider.SortingReplaceSpaces)
+            if (_configService.SortingReplaceSpaces)
                 result = result.Replace(' ', '.');
 
             Logger.Trace("New File Name is: [{0}]", result.Trim());

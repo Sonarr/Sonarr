@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Tv
     public class SeriesService : ISeriesService
     {
         private readonly ISeriesRepository _seriesRepository;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly TvDbProvider _tvDbProvider;
         private readonly MetadataProvider _metadataProvider;
         private readonly TvRageMappingProvider _tvRageMappingProvider;
@@ -34,12 +35,12 @@ namespace NzbDrone.Core.Tv
 
         private readonly SceneMappingProvider _sceneNameMappingProvider;
 
-        public SeriesService(ISeriesRepository seriesRepository, ConfigProvider configProviderProvider,
+        public SeriesService(ISeriesRepository seriesRepository, ConfigService configServiceService,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider, MetadataProvider metadataProvider,
                                 TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator)
         {
             _seriesRepository = seriesRepository;
-            _configProvider = configProviderProvider;
+            _configService = configServiceService;
             _tvDbProvider = tvDbProviderProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
             _metadataProvider = metadataProvider;
@@ -123,9 +124,9 @@ namespace NzbDrone.Core.Tv
             repoSeries.QualityProfileId = qualityProfileId;
             repoSeries.Title = title;
             if (qualityProfileId == 0)
-                repoSeries.QualityProfileId = _configProvider.DefaultQualityProfile;
+                repoSeries.QualityProfileId = _configService.DefaultQualityProfile;
 
-            repoSeries.SeasonFolder = _configProvider.UseSeasonFolder;
+            repoSeries.SeasonFolder = _configService.UseSeasonFolder;
             repoSeries.BacklogSetting = BacklogSettingType.Inherit;
 
             if (airedAfter.HasValue)

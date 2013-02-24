@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -15,16 +16,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly ISeriesService _seriesService;
         private readonly DiskScanProvider _diskScanProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public DiskScanJob(ISeriesService seriesService, DiskScanProvider diskScanProvider,
-                            ConfigProvider configProvider, ISeriesRepository seriesRepository)
+                            IConfigService configService, ISeriesRepository seriesRepository)
         {
             _seriesService = seriesService;
             _diskScanProvider = diskScanProvider;
-            _configProvider = configProvider;
+            _configService = configService;
             _seriesRepository = seriesRepository;
         }
 
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Jobs
             IList<Series> seriesToScan;
             if (options == null || options.SeriesId == 0)
             {
-                if (_configProvider.IgnoreArticlesWhenSortingSeries)
+                if (_configService.IgnoreArticlesWhenSortingSeries)
                     seriesToScan = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
 
                 else

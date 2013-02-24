@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -10,8 +11,8 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly GrowlProvider _growlProvider;
 
-        public Growl(ConfigProvider configProvider, GrowlProvider growlProvider)
-            : base(configProvider)
+        public Growl(IConfigService configService, GrowlProvider growlProvider)
+            : base(configService)
         {
             _growlProvider = growlProvider;
         }
@@ -25,16 +26,16 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             try
             {
-                if(_configProvider.GrowlNotifyOnGrab)
+                if(_configService.GrowlNotifyOnGrab)
                 {
                     _logger.Trace("Sending Notification to Growl");
                     const string title = "Episode Grabbed";
 
-                    var growlHost = _configProvider.GrowlHost.Split(':');
+                    var growlHost = _configService.GrowlHost.Split(':');
                     var host = growlHost[0];
                     var port = Convert.ToInt32(growlHost[1]);
 
-                    _growlProvider.SendNotification(title, message, "GRAB", host, port, _configProvider.GrowlPassword);
+                    _growlProvider.SendNotification(title, message, "GRAB", host, port, _configService.GrowlPassword);
                 }
             }
 
@@ -48,16 +49,16 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         {
             try
             {
-                if (_configProvider.GrowlNotifyOnDownload)
+                if (_configService.GrowlNotifyOnDownload)
                 {
                     _logger.Trace("Sending Notification to Growl");
                     const string title = "Episode Downloaded";
                     
-                    var growlHost = _configProvider.GrowlHost.Split(':');
+                    var growlHost = _configService.GrowlHost.Split(':');
                     var host = growlHost[0];
                     var port = Convert.ToInt32(growlHost[1]);
 
-                    _growlProvider.SendNotification(title, message, "DOWNLOAD", host, port, _configProvider.GrowlPassword);
+                    _growlProvider.SendNotification(title, message, "DOWNLOAD", host, port, _configService.GrowlPassword);
                 }
             }
 

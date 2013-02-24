@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -14,8 +15,8 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly INewznabService _newznabProvider;
 
-        public Newznab(HttpProvider httpProvider, ConfigProvider configProvider, INewznabService newznabProvider)
-            : base(httpProvider, configProvider)
+        public Newznab(HttpProvider httpProvider, IConfigService configService, INewznabService newznabProvider)
+            : base(httpProvider, configService)
         {
             _newznabProvider = newznabProvider;
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -11,8 +12,8 @@ namespace NzbDrone.Core.Indexers
 {
     public class NzbIndex : IndexerBase
     {
-        public NzbIndex(HttpProvider httpProvider, ConfigProvider configProvider)
-            : base(httpProvider, configProvider)
+        public NzbIndex(HttpProvider httpProvider, IConfigService configService)
+            : base(httpProvider, configService)
         {
         }
 

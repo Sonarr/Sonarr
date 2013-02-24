@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
@@ -13,13 +14,13 @@ namespace NzbDrone.Core.Providers
     public class PlexProvider
     {
         private readonly HttpProvider _httpProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PlexProvider(HttpProvider httpProvider, ConfigProvider configProvider)
+        public PlexProvider(HttpProvider httpProvider, IConfigService configService)
         {
             _httpProvider = httpProvider;
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public PlexProvider()
@@ -30,12 +31,12 @@ namespace NzbDrone.Core.Providers
         public virtual void Notify(string header, string message)
         {
             //Foreach plex client send a notification
-            foreach(var host in _configProvider.PlexClientHosts.Split(','))
+            foreach(var host in _configService.PlexClientHosts.Split(','))
             {
                 try
                 {
                     var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
-                    SendCommand(host.Trim(), command, _configProvider.PlexUsername, _configProvider.PlexPassword);
+                    SendCommand(host.Trim(), command, _configService.PlexUsername, _configService.PlexPassword);
                 }
                 catch(Exception ex)
                 {
@@ -46,7 +47,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void UpdateLibrary()
         {
-            var host = _configProvider.PlexServerHost;
+            var host = _configService.PlexServerHost;
 
             try
             {
@@ -98,7 +99,7 @@ namespace NzbDrone.Core.Providers
             {
                 logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
                 var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
-                SendCommand(host.Trim(), command, _configProvider.PlexUsername, _configProvider.PlexPassword);
+                SendCommand(host.Trim(), command, _configService.PlexUsername, _configService.PlexPassword);
             }
         }
     }

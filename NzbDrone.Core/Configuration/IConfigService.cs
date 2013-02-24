@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Nzbget;
+using NzbDrone.Core.Model.Sabnzbd;
+
+namespace NzbDrone.Core.Configuration
+{
+    public interface IConfigService
+    {
+        IEnumerable<Config> All();
+        String NzbsOrgUId { get; set; }
+        String NzbsOrgHash { get; set; }
+        String NzbsrusUId { get; set; }
+        String NzbsrusHash { get; set; }
+        String FileSharingTalkUid { get; set; }
+        String FileSharingTalkSecret { get; set; }
+        String SabHost { get; set; }
+        int SabPort { get; set; }
+        String SabApiKey { get; set; }
+        String SabUsername { get; set; }
+        String SabPassword { get; set; }
+        String SabTvCategory { get; set; }
+        SabPriorityType SabBacklogTvPriority { get; set; }
+        SabPriorityType SabRecentTvPriority { get; set; }
+        String DownloadClientTvDirectory { get; set; }
+        bool SortingIncludeSeriesName { get; set; }
+        bool SortingIncludeEpisodeTitle { get; set; }
+        bool SortingReplaceSpaces { get; set; }
+        bool SortingAppendQuality { get; set; }
+        bool UseSeasonFolder { get; set; }
+        string SortingSeasonFolderFormat { get; set; }
+        int SortingSeparatorStyle { get; set; }
+        int SortingNumberStyle { get; set; }
+        int SortingMultiEpisodeStyle { get; set; }
+        bool SortingUseSceneName { get; set; }
+        int DefaultQualityProfile { get; set; }
+        Boolean XbmcNotifyOnGrab { get; set; }
+        Boolean XbmcNotifyOnDownload { get; set; }
+        Boolean XbmcUpdateLibrary { get; set; }
+        Boolean XbmcCleanLibrary { get; set; }
+        Boolean XbmcUpdateWhenPlaying { get; set; }
+        string XbmcHosts { get; set; }
+        string XbmcUsername { get; set; }
+        string XbmcPassword { get; set; }
+        string UpdateUrl { get; set; }
+        Boolean SmtpNotifyOnGrab { get; set; }
+        Boolean SmtpNotifyOnDownload { get; set; }
+        string SmtpServer { get; set; }
+        int SmtpPort { get; set; }
+        Boolean SmtpUseSsl { get; set; }
+        string SmtpUsername { get; set; }
+        string SmtpPassword { get; set; }
+        string SmtpFromAddress { get; set; }
+        string SmtpToAddresses { get; set; }
+        Boolean TwitterNotifyOnGrab { get; set; }
+        Boolean TwitterNotifyOnDownload { get; set; }
+        string TwitterAccessToken { get; set; }
+        string TwitterAccessTokenSecret { get; set; }
+        Boolean GrowlNotifyOnGrab { get; set; }
+        Boolean GrowlNotifyOnDownload { get; set; }
+        string GrowlHost { get; set; }
+        string GrowlPassword { get; set; }
+        Boolean ProwlNotifyOnGrab { get; set; }
+        Boolean ProwlNotifyOnDownload { get; set; }
+        string ProwlApiKeys { get; set; }
+        int ProwlPriority { get; set; }
+        bool EnableBacklogSearching { get; set; }
+        bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
+        int Retention { get; set; }
+        Guid UGuid { get; }
+        DownloadClientType DownloadClient { get; set; }
+        string BlackholeDirectory { get; set; }
+        string ServiceRootUrl { get; }
+        Boolean PlexNotifyOnGrab { get; set; }
+        Boolean PlexNotifyOnDownload { get; set; }
+        Boolean PlexUpdateLibrary { get; set; }
+        string PlexServerHost { get; set; }
+        string PlexClientHosts { get; set; }
+        string PlexUsername { get; set; }
+        string PlexPassword { get; set; }
+        Boolean MetadataUseBanners { get; set; }
+        string AllowedReleaseGroups { get; set; }
+        string PneumaticDirectory { get; set; }
+        string RecycleBin { get; set; }
+        int RssSyncInterval { get; set; }
+        string OmgwtfnzbsUsername { get; set; }
+        string OmgwtfnzbsApiKey { get; set; }
+        Boolean IgnoreArticlesWhenSortingSeries { get; set; }
+        Boolean DownloadClientUseSceneName { get; set; }
+        String NzbgetUsername { get; set; }
+        String NzbgetPassword { get; set; }
+        String NzbgetHost { get; set; }
+        Int32 NzbgetPort { get; set; }
+        String NzbgetTvCategory { get; set; }
+        Int32 NzbgetPriority { get; set; }
+        PriorityType NzbgetBacklogTvPriority { get; set; }
+        PriorityType NzbgetRecentTvPriority { get; set; }
+        string GetValue(string key, object defaultValue, bool persist = false);
+        void SetValue(string key, string value);
+    }
+}

@@ -10,6 +10,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -28,12 +29,12 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
     {
         private void WithRecycleBin()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.RecycleBin).Returns(@"C:\Test\Recycle Bin");
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(@"C:\Test\Recycle Bin");
         }
 
         private void WithoutRecycleBin()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
         }
 
         [Test]

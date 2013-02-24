@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -33,7 +34,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 
         private void SetDownloadClient(DownloadClientType clientType)
         {
-            Mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigService>()
                  .Setup(c => c.DownloadClient)
                  .Returns(clientType);
         }

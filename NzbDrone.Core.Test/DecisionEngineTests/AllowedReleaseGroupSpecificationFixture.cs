@@ -7,6 +7,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -42,28 +43,28 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_true_when_allowedReleaseGroups_is_empty()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.AllowedReleaseGroups).Returns(String.Empty);
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.AllowedReleaseGroups).Returns(String.Empty);
             Mocker.Resolve<AllowedReleaseGroupSpecification>().IsSatisfiedBy(parseResult).Should().BeTrue();
         }
 
         [Test]
         public void should_be_true_when_allowedReleaseGroups_is_nzbs_releaseGroup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.AllowedReleaseGroups).Returns("2HD");
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.AllowedReleaseGroups).Returns("2HD");
             Mocker.Resolve<AllowedReleaseGroupSpecification>().IsSatisfiedBy(parseResult).Should().BeTrue();
         }
 
         [Test]
         public void should_be_true_when_allowedReleaseGroups_contains_nzbs_releaseGroup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.AllowedReleaseGroups).Returns("2HD, LOL");
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.AllowedReleaseGroups).Returns("2HD, LOL");
             Mocker.Resolve<AllowedReleaseGroupSpecification>().IsSatisfiedBy(parseResult).Should().BeTrue();
         }
 
         [Test]
         public void should_be_false_when_allowedReleaseGroups_does_not_contain_nzbs_releaseGroup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.AllowedReleaseGroups).Returns("LOL,DTD");
+            Mocker.GetMock<ConfigService>().SetupGet(s => s.AllowedReleaseGroups).Returns("LOL,DTD");
             Mocker.Resolve<AllowedReleaseGroupSpecification>().IsSatisfiedBy(parseResult).Should().BeFalse();
         }
     }

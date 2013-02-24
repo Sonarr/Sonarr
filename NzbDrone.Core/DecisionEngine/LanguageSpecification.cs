@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
@@ -7,12 +8,12 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class LanguageSpecification
     {
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public LanguageSpecification(ConfigProvider configProvider)
+        public LanguageSpecification(IConfigService configService)
         {
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public LanguageSpecification()

@@ -214,6 +214,9 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\ConfigRepository.cs" />
+    <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
@@ -406,7 +409,7 @@
     <Compile Include="Providers\Core\ArchiveProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\Core\ConfigProvider.cs">
+    <Compile Include="Configuration\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\Core\UdpProvider.cs">
@@ -589,7 +592,6 @@
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="History\History.cs" />
-    <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityType.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="RootFolders\RootFolder.cs" />

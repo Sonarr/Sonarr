@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Test.Framework;
@@ -29,8 +30,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         {
             nzbPath = pneumaticFolder + title + ".nzb";
 
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.PneumaticDirectory).Returns(pneumaticFolder);
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.DownloadClientTvDirectory).Returns(sabDrop);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.PneumaticDirectory).Returns(pneumaticFolder);
+            Mocker.GetMock<ConfigService>().SetupGet(c => c.DownloadClientTvDirectory).Returns(sabDrop);
         }
 
         private void WithExistingFile()

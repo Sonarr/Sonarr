@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -19,21 +20,21 @@ namespace NzbDrone.Core.Jobs
         private readonly MonitoredEpisodeSpecification _isMonitoredEpisodeSpecification;
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigService _configService;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RssSyncJob(DownloadProvider downloadProvider, IIndexerService indexerService,
             MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, 
-            UpgradeHistorySpecification upgradeHistorySpecification, ConfigProvider configProvider)
+            UpgradeHistorySpecification upgradeHistorySpecification, IConfigService configService)
         {
             _downloadProvider = downloadProvider;
             _indexerService = indexerService;
             _isMonitoredEpisodeSpecification = isMonitoredEpisodeSpecification;
             _allowedDownloadSpecification = allowedDownloadSpecification;
             _upgradeHistorySpecification = upgradeHistorySpecification;
-            _configProvider = configProvider;
+            _configService = configService;
         }
 
         public string Name
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Jobs
 
         public TimeSpan DefaultInterval
         {
-            get { return TimeSpan.FromMinutes(_configProvider.RssSyncInterval); }
+            get { return TimeSpan.FromMinutes(_configService.RssSyncInterval); }
         }
 
         public void Start(ProgressNotification notification, dynamic options)
