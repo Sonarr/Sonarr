@@ -7,6 +7,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -119,7 +120,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -147,7 +148,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -174,7 +175,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -201,7 +202,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -229,7 +230,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -263,7 +264,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -297,7 +298,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -331,7 +332,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -365,7 +366,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -399,7 +400,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -431,7 +432,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void GetNewFilename_should_append_proper_when_proper_and_append_quality_is_true()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -456,7 +457,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void GetNewFilename_should_not_append_proper_when_not_proper_and_append_quality_is_true()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -481,7 +482,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void GetNewFilename_should_not_append_proper_when_proper_and_append_quality_is_false()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -506,7 +507,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void GetNewFilename_should_order_multiple_episode_files_in_numerical_order()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -540,7 +541,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -567,7 +568,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Setup
 
 
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -592,7 +593,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void GetNewFilename_UseSceneName_when_sceneName_isNull()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -623,7 +624,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void GetNewFilename_UseSceneName_when_sceneName_isNotNull()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -654,7 +655,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void should_only_have_one_episodeTitle_when_episode_titles_are_the_same()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -686,7 +687,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void should_have_two_episodeTitles_when_episode_titles_are_not_the_same()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -718,7 +719,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         public void should_have_two_episodeTitles_when_distinct_count_is_two()
         {
             //Setup
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -755,7 +756,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         [Test]
         public void should_use_airDate_if_series_isDaily()
         {
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -784,7 +785,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         [Test]
         public void should_use_airDate_if_series_isDaily_no_episode_title()
         {
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -813,7 +814,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         [Test]
         public void should_set_airdate_to_unknown_if_not_available()
         {
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigService>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);

@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         private void WithAutoIgnore(bool autoIgnore)
         {
 
-            Mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigService>()
                     .SetupGet(c => c.AutoIgnorePreviouslyDownloadedEpisodes).Returns(autoIgnore);
         }
 
