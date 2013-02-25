@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(e => e.SeriesId = seriesId)
-                .With(e => e.TvDbEpisodeId = null)
+                .With(e => e.TvDbEpisodeId = 0)
                 .Build();
 
             WithRealDb();

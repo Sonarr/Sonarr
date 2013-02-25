@@ -118,7 +118,7 @@
     <Compile Include="FrontendModule\IndexModule.cs" />
     <Compile Include="FrontendModule\BootstrapModule.cs" />
     <Compile Include="FrontendModule\LessService.cs" />
-    <Compile Include="Resolvers\AirTimeResolver.cs" />
+    <Compile Include="Resolvers\EndTimeResolver.cs" />
     <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />

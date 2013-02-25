@@ -23,7 +23,9 @@ namespace NzbDrone.Api.Calendar
         private Response Calendar()
         {
             var year = DateTime.Now.Year;
-            var month = DateTime.Now.Month;
+            //Todo: This is just for testing
+            //var month = DateTime.Now.Month;
+            var month = 1;
 
             var yearQuery = Request.Query.Year;
             var monthQuery = Request.Query.Month;

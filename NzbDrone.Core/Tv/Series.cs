@@ -29,9 +29,8 @@ namespace NzbDrone.Core.Tv
 
         public string Overview { get; set; }
 
-        public DayOfWeek? AirsDayOfWeek { get; set; }
+        //public DayOfWeek? AirsDayOfWeek { get; set; }
 
-        [Column("AirTimes")]
         public String AirTime { get; set; }
 
         public string Language { get; set; }

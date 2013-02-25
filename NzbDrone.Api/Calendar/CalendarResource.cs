@@ -13,7 +13,8 @@ namespace NzbDrone.Api.Calendar
         public String EpisodeTitle { get; set; }
         public Int32 SeasonNumber { get; set; }
         public Int32 EpisodeNumber { get; set; }
-        public DateTime? AirTime { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public Int32 Status { get; set; }
         public String Overview { get; set; }
     }

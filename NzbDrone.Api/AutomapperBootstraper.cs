@@ -48,14 +48,14 @@ namespace NzbDrone.Api
             //Upcoming
             Mapper.CreateMap<Episode, UpcomingResource>()
                   .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
-                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title))
-                  .ForMember(dest => dest.AirTime, opt => opt.ResolveUsing<AirTimeResolver>());
+                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title));
 
             //Calendar
             Mapper.CreateMap<Episode, CalendarResource>()
                   .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
                   .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title))
-                  .ForMember(dest => dest.AirTime, opt => opt.ResolveUsing<AirTimeResolver>());
+                  .ForMember(dest => dest.Start, opt => opt.MapFrom(src => src.AirDate))
+                  .ForMember(dest => dest.End, opt => opt.ResolveUsing<EndTimeResolver>());
         }
     }
 }

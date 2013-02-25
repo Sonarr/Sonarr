@@ -235,6 +235,7 @@ namespace NzbDrone.Core.Tv
                     }
 
                     episodeToUpdate.SeriesId = series.OID;
+                    episodeToUpdate.Series = series;
                     episodeToUpdate.TvDbEpisodeId = episode.Id;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
@@ -243,8 +244,14 @@ namespace NzbDrone.Core.Tv
 
                     episodeToUpdate.Overview = episode.Overview.Truncate(3500);
 
-                    if (episode.FirstAired.Year > 1900)
+                    if(episode.FirstAired.Year > 1900)
+                    {
                         episodeToUpdate.AirDate = episode.FirstAired.Date;
+
+                        if (!String.IsNullOrWhiteSpace(series.AirTime))
+                            episodeToUpdate.AirDate = episodeToUpdate.AirDate.Value.Add(Convert.ToDateTime(series.AirTime).TimeOfDay)
+                                                                                   .AddHours(series.UtcOffset * -1);
+                    }
                     else
                         episodeToUpdate.AirDate = null;
 
@@ -313,7 +320,7 @@ namespace NzbDrone.Core.Tv
 
             if (!tvdbEpisodes.Any()) return;
 
-            var seriesEpisodeIds = _episodeRepository.GetEpisodes(series.OID).Select(c => c.OID);
+            var seriesEpisodeIds = _episodeRepository.GetEpisodes(series.OID).Select(c => c.TvDbEpisodeId);
 
             var toBeDeleted = seriesEpisodeIds.Except(tvdbEpisodes.Select(e => e.Id));
 

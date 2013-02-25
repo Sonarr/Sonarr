@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Tv
 
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.AirsTime);
-            series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
+            //series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
             series.Language = tvDbSeries.Language != null ? tvDbSeries.Language.Abbriviation : string.Empty;

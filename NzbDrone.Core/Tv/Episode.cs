@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Tv
 {
     public class Episode : ModelBase
     {
-        public int? TvDbEpisodeId { get; set; }
+        public int TvDbEpisodeId { get; set; }
 
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Tv
 
         //Todo: This should be UTC
         public DateTime? GrabDate { get; set; }
-
 
         public bool HasFile
         {

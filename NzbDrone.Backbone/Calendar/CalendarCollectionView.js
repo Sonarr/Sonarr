@@ -3,33 +3,34 @@
 define(['app', 'Calendar/CalendarItemView'], function (app) {
     NzbDrone.Calendar.CalendarCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView: NzbDrone.Calendar.CalendarItemView,
+        itemViewContainer: '#fakeContainer',
         template: 'Calendar/CalendarCollectionTemplate',
-        itemViewContainer: 'table',
 
         ui: {
             calendar: '#calendar'
         },
 
-        initialize: function () {
-            this.collection = new NzbDrone.Calendar.CalendarCollection();
-            this.collection.fetch();
-            this.collection.bind('reset', this.addAll);
+        initialize: function (context, collection) {
+            this.collection = collection;
         },
-        render: function() {
-            this.ui.calendar.fullCalendar({
+        onRender: function() {
+            $(this.ui.calendar).fullCalendar({
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'month,basicWeek,basicDay',
+                    right: 'month,basicWeek',
                     ignoreTimezone: false
                 },
-                selectable: true,
-                selectHelper: true,
-                editable: true
+                buttonText: {
+                    prev: '<i class="icon-arrow-left"></i>',
+                    next: '<i class="icon-arrow-right"></i>'
+                }
             });
+
+            $(this.ui.calendar).fullCalendar('addEventSource', this.collection.toJSON());
     	},
         addAll: function(){
-            this.el.fullCalendar('addEventSource', this.collection.toJSON());
+            $(this.ui.calendar).fullCalendar('addEventSource', this.collection.toJSON());
         }
     });
 });

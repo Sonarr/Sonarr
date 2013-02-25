@@ -21,7 +21,9 @@
         
         calendar: function (action, query) {
             this.setTitle('Calendar');
-            NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView(this, action, query));
+            var calendarCollection = new NzbDrone.Calendar.CalendarCollection();
+            calendarCollection.fetch();
+            NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView(this, calendarCollection, action, query));
         },
 
         notFound: function () {

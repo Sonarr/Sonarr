@@ -253,6 +253,7 @@ function Calendar(element, options, eventSources) {
 	
 	
 	function initialRender() {
+        element.html('');
 		tm = options.theme ? 'ui' : 'fc';
 		element.addClass('fc');
 		if (options.isRTL) {
