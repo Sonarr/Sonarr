@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
         private void WithAutoIgnore(bool autoIgnore)
         {
 
-            Mocker.GetMock<ConfigService>()
+            Mocker.GetMock<IConfigService>()
                     .SetupGet(c => c.AutoIgnorePreviouslyDownloadedEpisodes).Returns(autoIgnore);
         }
 
