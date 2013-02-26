@@ -17,6 +17,6 @@ namespace NzbDrone.Core.Datastore
         }
 
         [JsonProperty(PropertyName = "id")]
-        private int OID { get; set; }
+        private int OID;
     }
 }

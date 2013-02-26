@@ -302,6 +302,8 @@ namespace NzbDrone.Core.Tv
 
         private void DeleteEpisodesNotInTvdb(Series series, IEnumerable<Episode> tvdbEpisodes)
         {
+            //Todo: This will not work as currently implemented - what are we trying to do here?
+            return;
             logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
             foreach (var episode in tvdbEpisodes)
             {
