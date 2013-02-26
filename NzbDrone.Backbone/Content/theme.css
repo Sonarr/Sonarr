@@ -19,12 +19,13 @@
     color: #333;
 }
 
-    a#logo:hover {
-        text-decoration: none;
-    }
+a#logo:hover {
+    text-decoration: none;
+}
 
 .page {
-    width: 980px;
+    width: 1210px;
+    min-width: 1210px;
     margin: auto;
     background-color: #FFF;
     border-radius: 6px;
@@ -39,40 +40,6 @@
         border-bottom: 1px solid #EEE;
     }
 
-@media (min-width: 1200px) {
-    .page {
-        width: 1210px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-    .page {
-        width: 764px;
-    }
-}
-
-@media (max-width: 767px) {
-    body {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .page {
-        width: 100%;
-    }
-
-    .page-container {
-        padding: 0px 20px;
-    }
-
-    #in-nav ul.pull-right {
-        top: 0px !important;
-    }
-
-    .message-sidebar {
-        margin-right: -20px !important;
-    }
-}
 
 #in-nav {
     background-color: white;
@@ -239,6 +206,8 @@ footer {
     border-right: 1px solid #EEE;
     margin: -20px;
     margin-right: 0;
+    overflow: auto;
+    height: 700px;
 }
 
     .message-sidebar a.message-preview {
@@ -284,12 +253,6 @@ footer {
             display: block;
         }
 
-@media (min-width: 768px) {
-    .message-sidebar {
-        overflow: auto;
-        height: 700px;
-    }
-}
 
 .messages h4 {
     text-transform: none;
@@ -844,14 +807,10 @@ ul.stat-list {
 
 #events .load-more {
     text-align: center;
+            overflow: auto;
+        height: 600px;
 }
 
-@media (min-width: 768px) {
-    #events {
-        overflow: auto;
-        height: 600px;
-    }
-}
 
 #calendar h2 {
     font-size: 17.5px;
