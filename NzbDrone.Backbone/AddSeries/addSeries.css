@@ -4,7 +4,7 @@
 }
 
 .nz-input-large input {
-    height: 40px;
+    height: 50px;
 }
 
 .nz-input-large *[class*='icon-'] {
@@ -58,8 +58,8 @@
 }
 
 .unmapped-folder-view .folder-header {
-    font-size: 30px;
     font-weight: 300;
+    padding-left: 20px;
 }
 
 .unmapped-folder-view .folder-header input {
@@ -73,4 +73,9 @@
 
 .existing-root-folder-view, h1 {
     padding: 10px 0 20px 0;
+}
+
+.folder-name-matches {
+    padding-left: 20px;
+    padding-top: 10px;
 }

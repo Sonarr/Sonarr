@@ -1,4 +1,10 @@
-﻿#localSeriesLookup {
+﻿/*make the main scrollbar always visible*/
+html {
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;
+}
+
+#localSeriesLookup {
     width: 220px;
     border: 0px;
     background: rgb(75, 75, 75);
@@ -7,13 +13,8 @@
     font-size: 13px;
 }
 
-.nz-center {
-    text-align: center;
-    overflow: hidden;
-}
-
-.nz-center .typeahead {
-    text-align: left;
+.input-append .add-on {
+    margin-left: 0;
 }
 
 #footer-region {
@@ -43,15 +44,12 @@
     padding-right: 10px;
 }
 
-#notification-region pre{
+#notification-region pre {
     font-size: 12px;
 }
 
 
-.line {
-    height: 4em;
-    line-height: 4em;
-}
+
 
 .line > [class^="icon-"], .line > [class*=" icon-"] {
     margin-top: 1em;
@@ -66,23 +64,25 @@
     margin-bottom: 2px;
 }
 
-.progress .bar {
-    position: absolute;
-    overflow: hidden;
-}
-.progress .progressbar-back-text {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    font-size: 12px;
-    text-align: center;
-}
-.progress .progressbar-front-text {
-    display: block;
-    width: 125px;
-    font-size: 12px;
-    text-align: center;
-}
+    .progress .bar {
+        position: absolute;
+        overflow: hidden;
+    }
+
+    .progress .progressbar-back-text {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .progress .progressbar-front-text {
+        display: block;
+        width: 125px;
+        font-size: 12px;
+        text-align: center;
+    }
 
 /* Todo: Should move this to somehting modal/form specific */
 
@@ -97,8 +97,8 @@ label, .form-horizontal input, .form-horizontal select {
     line-height: 14px;
 }
 
-label.control-label {
-    font-size: 16px;
-    line-height: 16px;
-    font-weight: bold;
-}
+    label.control-label {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: bold;
+    }
