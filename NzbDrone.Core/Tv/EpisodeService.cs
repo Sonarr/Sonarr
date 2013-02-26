@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Tv
         void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus);
         void UpdateEpisodes(List<Episode> episodes);
         Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
-        List<Episode> GetEpisodesAiredInMonth(int year, int month);
+        List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
     }
 
     public class EpisodeService : IEpisodeService, IHandle<EpisodeGrabbedEvent>
@@ -337,12 +337,9 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
         }
 
-        public List<Episode> GetEpisodesAiredInMonth(int year, int month)
+        public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end)
         {
-            var firstDay = new DateTime(year, month, 1);
-            var lastDay = firstDay.AddMonths(1).AddDays(-1);
-
-            return _episodeRepository.EpisodesBetweenDates(firstDay, lastDay);
+            return _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
         }
 
         public void Handle(EpisodeGrabbedEvent message)

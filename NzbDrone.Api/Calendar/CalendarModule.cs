@@ -22,19 +22,17 @@ namespace NzbDrone.Api.Calendar
 
         private Response Calendar()
         {
-            var year = DateTime.Now.Year;
-            //Todo: This is just for testing
-            //var month = DateTime.Now.Month;
-            var month = 1;
+            var start = DateTime.Today;
+            var end = DateTime.Today.AddDays(7);
 
-            var yearQuery = Request.Query.Year;
-            var monthQuery = Request.Query.Month;
+            var queryStart = Request.Query.Start;
+            var queryEnd = Request.Query.End;
 
-            if (yearQuery.HasValue) year = Convert.ToInt32(yearQuery.Value);
+            if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
 
-            if(monthQuery.HasValue) month = Convert.ToInt32(monthQuery.Value);
+            if(queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
 
-            var episodes = _episodeService.GetEpisodesAiredInMonth(year, month);
+            var episodes = _episodeService.EpisodesBetweenDates(start, end);
             return Mapper.Map<List<Episode>, List<CalendarResource>>(episodes).AsResponse();
         }
     }
