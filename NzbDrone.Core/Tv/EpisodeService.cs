@@ -28,7 +28,6 @@ namespace NzbDrone.Core.Tv
         IList<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber);
         void SetEpisodeIgnore(int episodeId, bool isIgnored);
         bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber);
-        void DeleteEpisodesNotInTvdb(Series series, IList<TvdbEpisode> tvdbEpisodes);
         void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus);
         void UpdateEpisodes(List<Episode> episodes);
         Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
@@ -181,11 +180,8 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-            var tvdbEpisodes = _tvDbProvider.GetSeries(series.OID, true)
-                                            .Episodes
-                                            .Where(episode => !string.IsNullOrWhiteSpace(episode.EpisodeName) ||
-                                                              (episode.FirstAired < DateTime.Now.AddDays(2) && episode.FirstAired.Year > 1900))
-                                            .ToList();
+            var tvdbEpisodes = _tvDbProvider.GetEpisodes(series.OID);
+
 
             var seriesEpisodes = GetEpisodeBySeries(series.OID);
             var updateList = new List<Episode>();
@@ -198,7 +194,7 @@ namespace NzbDrone.Core.Tv
                     logger.Trace("Updating info for [{0}] - S{1:00}E{2:00}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
 
                     //first check using tvdbId, this should cover cases when and episode number in a season is changed
-                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.Id);
+                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId);
 
                     //not found, try using season/episode number
                     if (episodeToUpdate == null)
@@ -230,30 +226,20 @@ namespace NzbDrone.Core.Tv
                          episodeToUpdate.SeasonNumber != episode.SeasonNumber) &&
                         episodeToUpdate.EpisodeFileId > 0)
                     {
-                        logger.Info("Unlinking episode file because TheTVDB changed the epsiode number...");
+                        logger.Info("Unlinking episode file because TheTVDB changed the episode number...");
                         episodeToUpdate.EpisodeFile = null;
                     }
 
                     episodeToUpdate.SeriesId = series.OID;
                     episodeToUpdate.Series = series;
-                    episodeToUpdate.TvDbEpisodeId = episode.Id;
+                    episodeToUpdate.TvDbEpisodeId = episode.TvDbEpisodeId;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
-                    episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteNumber;
-                    episodeToUpdate.Title = episode.EpisodeName;
+                    episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
+                    episodeToUpdate.Title = episode.Title;
 
-                    episodeToUpdate.Overview = episode.Overview.Truncate(3500);
-
-                    if(episode.FirstAired.Year > 1900)
-                    {
-                        episodeToUpdate.AirDate = episode.FirstAired.Date;
-
-                        if (!String.IsNullOrWhiteSpace(series.AirTime))
-                            episodeToUpdate.AirDate = episodeToUpdate.AirDate.Value.Add(Convert.ToDateTime(series.AirTime).TimeOfDay)
-                                                                                   .AddHours(series.UtcOffset * -1);
-                    }
-                    else
-                        episodeToUpdate.AirDate = null;
+                    episodeToUpdate.Overview = episode.Overview;
+                    episodeToUpdate.AirDate = episode.AirDate;
 
                     successCount++;
                 }
@@ -314,19 +300,12 @@ namespace NzbDrone.Core.Tv
             return false;
         }
 
-        public virtual void DeleteEpisodesNotInTvdb(Series series, IList<TvdbEpisode> tvdbEpisodes)
+        private void DeleteEpisodesNotInTvdb(Series series, IEnumerable<Episode> tvdbEpisodes)
         {
             logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.OID));
-
-            if (!tvdbEpisodes.Any()) return;
-
-            var seriesEpisodeIds = _episodeRepository.GetEpisodes(series.OID).Select(c => c.TvDbEpisodeId);
-
-            var toBeDeleted = seriesEpisodeIds.Except(tvdbEpisodes.Select(e => e.Id));
-
-            foreach (var id in toBeDeleted)
+            foreach (var episode in tvdbEpisodes)
             {
-                _episodeRepository.Delete(id);
+                _episodeRepository.Delete(episode.OID);
             }
 
             logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.OID);

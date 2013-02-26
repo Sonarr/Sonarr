@@ -22,9 +22,9 @@ namespace NzbDrone.Core.Providers.Search
 
         public DailyEpisodeSearch(ISeriesService seriesService, IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
                              SceneMappingProvider sceneMappingProvider, AllowedDownloadSpecification allowedDownloadSpecification,
-                             SearchHistoryProvider searchHistoryProvider, ISeriesRepository seriesRepository)
+                             ISeriesRepository seriesRepository)
             : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingProvider,
-                   allowedDownloadSpecification, searchHistoryProvider)
+                   allowedDownloadSpecification)
         {
             _seriesRepository = seriesRepository;
         }

@@ -21,9 +21,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
         public TestSearch(ISeriesService seriesService, IEpisodeService episodeService, DownloadProvider downloadProvider, 
                           IIndexerService indexerService, SceneMappingProvider sceneMappingProvider,
-                          AllowedDownloadSpecification allowedDownloadSpecification, SearchHistoryProvider searchHistoryProvider,ISeriesRepository seriesRepository)
+                          AllowedDownloadSpecification allowedDownloadSpecification, ISeriesRepository seriesRepository)
                           : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingProvider, 
-                                 allowedDownloadSpecification, searchHistoryProvider)
+                                 allowedDownloadSpecification)
         {
         }
 

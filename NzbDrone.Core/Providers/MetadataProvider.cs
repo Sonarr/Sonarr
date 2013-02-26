@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Repository;
 using PetaPoco;

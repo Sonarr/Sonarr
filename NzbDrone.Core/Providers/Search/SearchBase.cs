@@ -23,14 +23,12 @@ namespace NzbDrone.Core.Providers.Search
         protected readonly IIndexerService _indexerService;
         protected readonly SceneMappingProvider _sceneMappingProvider;
         protected readonly AllowedDownloadSpecification _allowedDownloadSpecification;
-        protected readonly SearchHistoryProvider _searchHistoryProvider;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected SearchBase(ISeriesService seriesService,ISeriesRepository seriesRepository, IEpisodeService episodeService, DownloadProvider downloadProvider,
                              IIndexerService indexerService, SceneMappingProvider sceneMappingProvider,
-                             AllowedDownloadSpecification allowedDownloadSpecification,
-                             SearchHistoryProvider searchHistoryProvider)
+                             AllowedDownloadSpecification allowedDownloadSpecification)
         {
             _seriesService = seriesService;
             _seriesRepository = seriesRepository;
@@ -39,7 +37,6 @@ namespace NzbDrone.Core.Providers.Search
             _indexerService = indexerService;
             _sceneMappingProvider = sceneMappingProvider;
             _allowedDownloadSpecification = allowedDownloadSpecification;
-            _searchHistoryProvider = searchHistoryProvider;
         }
 
         protected SearchBase()
@@ -71,7 +68,6 @@ namespace NzbDrone.Core.Providers.Search
             notification.CurrentMessage = "Processing search results";
             
             ProcessReports(series, options, reports, searchResult, notification);
-            _searchHistoryProvider.Add(searchResult);
 
             if(searchResult.Successes.Any())
                 return searchResult.Successes;

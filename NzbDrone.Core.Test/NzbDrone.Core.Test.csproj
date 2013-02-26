@@ -190,7 +190,6 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\EmptyFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
-    <Compile Include="ProviderTests\SearchHistoryProviderTest.cs" />
     <Compile Include="ProviderTests\PlexProviderTest.cs" />
     <Compile Include="TvTests\SeasonProviderTest.cs" />
     <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
@@ -220,7 +219,6 @@
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
     <Compile Include="HelperTests\SortHelperFixture.cs" />
-    <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
     <Compile Include="ProviderTests\MisnamedProviderTest.cs" />

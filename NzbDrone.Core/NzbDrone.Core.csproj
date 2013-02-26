@@ -284,7 +284,6 @@
     <Compile Include="Jobs\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
-    <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
@@ -358,7 +357,6 @@
     <Compile Include="Providers\Metadata\MetadataBase.cs" />
     <Compile Include="Providers\Metadata\Xbmc.cs" />
     <Compile Include="Providers\RecycleBinProvider.cs" />
-    <Compile Include="Providers\SearchHistoryProvider.cs" />
     <Compile Include="Providers\Search\DailyEpisodeSearch.cs" />
     <Compile Include="Providers\Search\PartialSeasonSearch.cs" />
     <Compile Include="Providers\Search\EpisodeSearch.cs" />
@@ -387,7 +385,6 @@
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
-    <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Providers\TvRageMappingProvider.cs" />
     <Compile Include="Providers\TvRageProvider.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />

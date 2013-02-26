@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tvdb;
 using TvdbLib;
 using TvdbLib.Cache;
@@ -61,10 +63,40 @@ namespace NzbDrone.Core.Providers
                      .GroupBy(e => e.SeriesId.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
                      .Select(e => e.First());
 
-                result.Episodes = episodes.ToList();
+                result.Episodes = episodes.Where(episode => !string.IsNullOrWhiteSpace(episode.EpisodeName) || (episode.FirstAired < DateTime.Now.AddDays(2) && episode.FirstAired.Year > 1900)).ToList();
 
                 return result;
             }
+        }
+
+        public virtual IList<Episode> GetEpisodes(int tvDbSeriesId)
+        {
+            var series = GetSeries(tvDbSeriesId, true);
+
+            var episodes = new List<Episode>();
+
+            foreach (var tvDbEpisode in series.Episodes)
+            {
+                var episode = new Episode();
+
+                episode.TvDbEpisodeId = tvDbEpisode.Id;
+                episode.EpisodeNumber = tvDbEpisode.EpisodeNumber;
+                episode.SeasonNumber = tvDbEpisode.SeasonNumber;
+                episode.AbsoluteEpisodeNumber = tvDbEpisode.AbsoluteNumber;
+                episode.Title = tvDbEpisode.EpisodeName;
+                episode.Overview = tvDbEpisode.Overview;
+
+                if (tvDbEpisode.FirstAired.Year > 1900)
+                {
+                    episode.AirDate = tvDbEpisode.FirstAired.Date;
+                }
+                else
+                {
+                    episode.AirDate = null;
+                }
+            }
+
+            return episodes;
         }
     }
 }
