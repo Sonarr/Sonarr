@@ -99,6 +99,8 @@ namespace NzbDrone.Core.Providers
                 {
                     episode.AirDate = null;
                 }
+
+                episodes.Add(episode);
             }
 
             return episodes;

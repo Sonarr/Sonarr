@@ -37,10 +37,11 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
         getEvents: function(start, end, callback){
             var bbView = NzbDrone.Calendar.CalendarCollectionView.Instance;
 
-
+            var startDate = Date.create(start).format(Date.ISO8601_DATETIME);
+            var endDate = Date.create(end).format(Date.ISO8601_DATETIME);
 
             bbView.calendar.fetch({
-                data:{ start: Date.create(start).format(Date.ISO8601_DATETIME), end: Date.create(end).format(Date.ISO8601_DATETIME) },
+                data:{ start: startDate, end: endDate },
                 success:function (calendarCollection) {
                     callback(calendarCollection.toJSON());
                 }
