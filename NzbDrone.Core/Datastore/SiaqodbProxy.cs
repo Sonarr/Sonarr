@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Datastore
 
         public T Insert<T>(T obj) where T : ModelBase
         {
-            if (obj.OID != 0)
+            if (obj.Id != 0)
             {
                 throw new InvalidOperationException("Attempted to insert object with existing ID as new object");
             }
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Datastore
 
         public T Update<T>(T obj) where T : ModelBase
         {
-            if (obj.OID == 0)
+            if (obj.Id == 0)
             {
                 throw new InvalidOperationException("Attempted to update object without an ID");
             }

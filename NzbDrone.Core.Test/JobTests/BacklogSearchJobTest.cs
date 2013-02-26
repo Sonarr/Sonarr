@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = Builder<Episode>.CreateListOfSize(5)
                 .All()
                 .With(e => e.Series = series)
-                .With(e => e.SeriesId = series.OID)
+                .With(e => e.SeriesId = series.Id)
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = Builder<Episode>.CreateListOfSize(10)
                 .TheFirst(5)
                 .With(e => e.Series = series)
-                .With(e => e.SeriesId = series.OID)
+                .With(e => e.SeriesId = series.Id)
                 .With(e => e.SeasonNumber = 1)
                 .TheNext(5)
                 .With(e => e.Series = series2)

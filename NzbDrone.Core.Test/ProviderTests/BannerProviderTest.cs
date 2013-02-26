@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithTempAsAppPath();
 
             _series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 12345)
+                .With(s => s.Id = 12345)
                     .Build();
 
             var path = @"C:\Windows\Temp";

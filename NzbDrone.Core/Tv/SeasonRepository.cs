@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Tv
 
         public bool IsIgnored(int seriesId, int seasonNumber)
         {
-            var season = Queryable.SingleOrDefault(c => c.OID == seriesId && c.SeasonNumber == seasonNumber);
+            var season = Queryable.SingleOrDefault(c => c.Id == seriesId && c.SeasonNumber == seasonNumber);
 
             if(season == null) return false;
 

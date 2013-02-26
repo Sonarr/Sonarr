@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Providers
         {
             foreach (var episode in message.ParseResult.Episodes)
             {
-                UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Downloading, message.ParseResult.Quality);
+                UpdateEpisodeStatus(episode.Id, EpisodeStatusType.Downloading, message.ParseResult.Quality);
             }
         }
     }

@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Indexers
 
                 _logger.Debug("Deleting broken Newznab indexer");
                 var brokenIndexers = currentIndexers.Where(i => String.IsNullOrEmpty(i.Name) || String.IsNullOrWhiteSpace(i.Url)).ToList();
-                brokenIndexers.ForEach(e => Delete(e.OID));
+                brokenIndexers.ForEach(e => Delete(e.Id));
 
                 currentIndexers = All();
 

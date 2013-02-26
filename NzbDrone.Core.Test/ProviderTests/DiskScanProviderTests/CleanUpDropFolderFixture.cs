@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                    .Build();
 
             var series = Builder<Series>.CreateNew()
-                    .With(s => s.OID = seriesId)
+                    .With(s => s.Id = seriesId)
                     .With(s => s.Title = "The Office")
                     .Build();
 

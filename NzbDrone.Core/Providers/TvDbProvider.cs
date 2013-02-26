@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tvdb;
 using TvdbLib;
 using TvdbLib.Cache;
 using TvdbLib.Data;
@@ -36,7 +35,7 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public virtual List<TvdbSeriesSearchItem> SearchSeries(string title)
+        public virtual List<Series> SearchSeries(string title)
         {
             logger.Debug("Searching TVDB for '{0}'", title);
 
@@ -45,18 +44,24 @@ namespace NzbDrone.Core.Providers
                 title = title.Replace(" & ", " ");
             }
 
-            var result = _handlerV2.SearchSeries(title);
+            var searchResult = _handlerV2.SearchSeries(title).Select(tvdbSeriesSearchItem => new Series
+                {
+                    TvDbId = tvdbSeriesSearchItem.seriesid,
+                    Title = tvdbSeriesSearchItem.SeriesName,
+                    FirstAired = tvdbSeriesSearchItem.FirstAired,
+                    Overview = tvdbSeriesSearchItem.Overview
+                }).ToList();
 
-            logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);
-            return result;
+            logger.Debug("Search for '{0}' returned {1} possible results", title, searchResult.Count);
+            return searchResult;
         }
 
-        public virtual TvdbSeries GetSeries(int id, bool loadEpisodes, bool loadActors = false)
+        public virtual TvdbSeries GetSeries(int tvDbSeriesId, bool loadEpisodes, bool loadActors = false)
         {
             lock (_handler)
             {
-                logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
-                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, loadActors, true, true);
+                logger.Debug("Fetching SeriesId'{0}' from tvdb", tvDbSeriesId);
+                var result = _handler.GetSeries(tvDbSeriesId, TvdbLanguage.DefaultLanguage, loadEpisodes, loadActors, true, true);
 
                 //Remove duplicated episodes
                 var episodes = result.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)

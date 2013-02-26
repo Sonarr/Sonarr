@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.HistoryTests
         {
             var historyItem = Builder<History.History>.CreateListOfSize(30)
                 .All()
-                .With(c=>c.OID = 0)
+                .With(c=>c.Id = 0)
                 .TheFirst(10).With(c => c.Date = DateTime.Now)
                 .TheNext(20).With(c => c.Date = DateTime.Now.AddDays(-31))
                 .Build();
@@ -46,13 +46,13 @@ namespace NzbDrone.Core.Test.HistoryTests
             var series = Builder<Series>.CreateNew().Build();
             var episode = Builder<Episode>.CreateNew()
                 .With(c => c.Series = series)
-                .With(c => c.SeriesId = series.OID)
+                .With(c => c.SeriesId = series.Id)
                 .Build();
 
 
 
             var history = Builder<History.History>.CreateNew()
-                .With(c => c.OID = 0)
+                .With(c => c.Id = 0)
                 .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
                 .With(h => h.Episode = episode)
                 .Build();
@@ -73,14 +73,14 @@ namespace NzbDrone.Core.Test.HistoryTests
             var series = Builder<Series>.CreateNew().Build();
             var episode = Builder<Episode>.CreateNew()
                 .With(c => c.Series = series)
-                .With(c => c.SeriesId = series.OID)
+                .With(c => c.SeriesId = series.Id)
                 .Build();
 
 
             var history = Builder<History.History>
                     .CreateListOfSize(5)
                     .All()
-                    .With(c => c.OID = 0)
+                    .With(c => c.Id = 0)
                     .With(h => h.Episode = episode)
                     .TheFirst(1)
                     .With(h => h.Quality = new QualityModel(QualityTypes.DVD, true))

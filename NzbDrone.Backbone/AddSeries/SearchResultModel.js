@@ -7,7 +7,7 @@
                 var date = Date.utc.create(this.get('firstAired')).format('({yyyy})');
 
                 //don't append year, if the series name already has the name appended.
-                if (this.get('seriesName').endsWith(date)) {
+                if (this.get('title').endsWith(date)) {
                     return "";
                 } else {
                     return date;

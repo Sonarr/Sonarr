@@ -15,13 +15,13 @@ define([
 
                 var self = this;
 
-                var seriesId = this.model.get('id');
-                var title = this.model.get('seriesName');
+                var seriesId = this.model.get('tvDbId');
+                var title = this.model.get('title');
                 var quality = this.options.qualityProfile.val();
                 var path = this.options.folder.path;
 
                 var model = new NzbDrone.Series.SeriesModel({
-                    seriesId:seriesId,
+                    tvDbId: seriesId,
                     title:title,
                     qualityProfileId:quality,
                     path:path
@@ -34,6 +34,7 @@ define([
                 model.save(undefined, {
                     success:function () {
                         var notificationModel = new NzbDrone.Shared.NotificationModel({
+                            tvDbId: seriesId,
                             title:'Added',
                             message:title,
                             level:'success'

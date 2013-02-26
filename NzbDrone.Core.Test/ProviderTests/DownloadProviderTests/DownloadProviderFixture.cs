@@ -32,8 +32,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
         private EpisodeParseResult SetupParseResult()
         {
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                            .TheFirst(1).With(s => s.OID = 12)
-                            .TheNext(1).With(s => s.OID = 99)
+                            .TheFirst(1).With(s => s.Id = 12)
+                            .TheNext(1).With(s => s.Id = 99)
                             .All().With(s => s.SeriesId = 5)
                             .Build().ToList();
 

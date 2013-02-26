@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 1)
+                .With(s => s.Id = 1)
                 .And(c => c.Monitored = true)
                 .Build();
 
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().HaveCount(5);
-            result.Should().OnlyContain(c => c.Series != null && c.SeriesId == series.OID);
+            result.Should().OnlyContain(c => c.Series != null && c.SeriesId == series.Id);
         }
 
         [Test]

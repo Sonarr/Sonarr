@@ -134,3 +134,4 @@ UpdateLogs/
 *.userprefs
 */test-results/*
 .idea/*
+NzbDrone.Web/*

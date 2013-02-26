@@ -59,7 +59,7 @@ namespace NzbDrone.Api.Series
             //(we can just create the folder and it won't blow up if it already exists)
             //We also need to remove any special characters from the filename before attempting to create it           
 
-            _seriesService.AddSeries("", request.Path, request.OID, request.QualityProfileId, null);
+            _seriesService.AddSeries(request.Title, request.Path, request.TvDbId, request.QualityProfileId, null);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };
@@ -89,7 +89,7 @@ namespace NzbDrone.Api.Series
             _seriesRepository.Update(series);
 
             if (oldPath != series.Path)
-                _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.OID });
+                _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.Id });
 
             _seriesRepository.Update(series);
 
@@ -117,7 +117,7 @@ namespace NzbDrone.Api.Series
         {
             RuleSet("POST", () =>
                 {
-                    RuleFor(s => ((ModelBase)s).OID).GreaterThan(0);
+                    RuleFor(s => ((ModelBase)s).Id).GreaterThan(0);
                     RuleFor(s => s.Path).NotEmpty().Must(_diskProvider.FolderExists);
                     RuleFor(s => s.QualityProfileId).GreaterThan(0);
                 });

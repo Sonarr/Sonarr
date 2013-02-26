@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Providers
             {
                 var ids = _xemCommunicationProvider.GetXemSeriesIds();
                 var series = _seriesRepository.All();
-                var wantedSeries = series.Where(s => ids.Contains(s.OID)).ToList();
+                var wantedSeries = series.Where(s => ids.Contains(s.Id)).ToList();
 
                 foreach(var ser in wantedSeries)
                 {
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Providers
             try
             {
                 var episodesToUpdate = new List<Episode>();
-                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.OID);
+                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.Id);
 
                 if (mappings == null)
                 {
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Providers
                     return;
                 }
 
-                var episodes = _episodeService.GetEpisodeBySeries(series.OID);
+                var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
                 foreach (var mapping in mappings)
                 {

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesCollection'], function (app,notificationCollection) {
-    
+define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesCollection'], function (app, notificationCollection) {
+
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
         template: "AddSeries/New/SearchResultTemplate",
@@ -23,8 +23,8 @@ define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection
 
         add: function () {
 
-            var seriesId = this.model.get('id');
-            var title = this.model.get('seriesName');
+            var seriesId = this.model.get('tvDbId');
+            var title = this.model.get('title');
             var quality = this.ui.qualityProfile.val();
             var rootFolderId = this.ui.rootFolder.val();
 
@@ -33,7 +33,7 @@ define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection
             var path = rootPath + "\\" + title;
 
             var model = new NzbDrone.Series.SeriesModel({
-                seriesId: seriesId,
+                tvdbId: seriesId,
                 title: title,
                 qualityProfileId: quality,
                 path: path
@@ -41,7 +41,7 @@ define(['app','Shared/NotificationCollection', 'AddSeries/SearchResultCollection
 
             var self = this;
 
-            var seriesCollection  = new NzbDrone.Series.SeriesCollection();
+            var seriesCollection = new NzbDrone.Series.SeriesCollection();
             seriesCollection.push(model);
 
             model.save(undefined, {

@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Jobs
             Logger.Debug("Processing missing episodes from the past week, count: {0}", missingEpisodes.Count);
             foreach (var episode in missingEpisodes)
             {
-                _episodeSearchJob.Start(notification, new { EpisodeId = episode.OID });
+                _episodeSearchJob.Start(notification, new { EpisodeId = episode.Id });
             }
         }
 

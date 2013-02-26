@@ -22,7 +22,7 @@ namespace PetaPoco
             episode.EpisodeFile = (episode.EpisodeFileId == 0 ?  null : episodeFile);
 
             // Is this the same season as the current one we're processing
-            if (_current != null && _current.OID == season.OID)
+            if (_current != null && _current.Id == season.Id)
             {
                 // Yes, just add this post to the current author's collection of posts
                 _current.Episodes.Add(episode);

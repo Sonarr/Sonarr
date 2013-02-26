@@ -70,13 +70,13 @@ namespace NzbDrone.Core.Providers
                 return new List<EpisodeFile>();
             }
 
-            if (_episodeService.GetEpisodeBySeries(series.OID).Count == 0)
+            if (_episodeService.GetEpisodeBySeries(series.Id).Count == 0)
             {
                 Logger.Debug("Series {0} has no episodes. skipping", series.Title);
                 return new List<EpisodeFile>();
             }
 
-            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.OID);
+            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.Id);
             CleanUp(seriesFile);
 
             var mediaFileList = GetVideoFiles(path);
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Providers
 
             var episodeFile = new EpisodeFile();
             episodeFile.DateAdded = DateTime.Now;
-            episodeFile.SeriesId = series.OID;
+            episodeFile.SeriesId = series.Id;
             episodeFile.Path = filePath.NormalizePath();
             episodeFile.Size = size;
             episodeFile.Quality = parseResult.Quality.Quality;
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Providers
                 _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult));
 
                 foreach (var episode in episodes)
-                    _signalRProvider.UpdateEpisodeStatus(episode.OID, EpisodeStatusType.Ready, parseResult.Quality);
+                    _signalRProvider.UpdateEpisodeStatus(episode.Id, EpisodeStatusType.Ready, parseResult.Quality);
             }
 
             return episodeFile;
@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Providers
                         //Set the EpisodeFileId for each episode attached to this file to 0
                         foreach (var episode in _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                         {
-                            Logger.Trace("Detaching episode {0} from file.", episode.OID);
+                            Logger.Trace("Detaching episode {0} from file.", episode.Id);
                             episode.EpisodeFile = null;
                             episode.Ignored = _configService.AutoIgnorePreviouslyDownloadedEpisodes;
                             episode.GrabDate = null;

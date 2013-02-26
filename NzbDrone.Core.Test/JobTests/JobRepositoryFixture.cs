@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.JobTests
             Subject.Init();
 
             var deletedJob = Builder<JobDefinition>.CreateNew()
-                                .With(c => c.OID = 0)
+                                .With(c => c.Id = 0)
                                 .Build();
 
             Db.Insert(deletedJob);
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             var deletedJob = Builder<JobDefinition>.CreateNew()
                 .With(c => c.Name = _fakeJob.Name)
-                .With(c => c.OID = 0)
+                .With(c => c.Id = 0)
                 .Build();
 
 
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
 
             var oldJob = Builder<JobDefinition>.CreateNew()
-                .With(c => c.OID = 0)
+                .With(c => c.Id = 0)
                 .With(c => c.Name = "OldName")
                 .With(c => c.TypeName = typeof(FakeJob).ToString())
                 .With(c => c.Interval = 0)

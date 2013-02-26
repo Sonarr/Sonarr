@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Jobs
                 try
                 {
                     notification.CurrentMessage = "Updating " + series.Title;
-                    _seriesService.UpdateSeriesInfo(series.OID);
+                    _seriesService.UpdateSeriesInfo(series.Id);
                     _episodeService.RefreshEpisodeInfo(series);
                     notification.CurrentMessage = "Update completed for " + series.Title;
                 }

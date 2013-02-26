@@ -1,9 +1,9 @@
 ﻿<div class="accordion-group">
     <div class="accordion-heading">
-        <a href="http://thetvdb.com/?tab=series&id={{id}}" target="_blank" class="icon-info-sign pull-left"></a>
-        <a class="accordion-toggle" data-toggle="collapse" href="#{{id}}">{{seriesName}} {{seriesYear}}</a>
+        <a href="http://thetvdb.com/?tab=series&id={{tvDbId}}" target="_blank" class="icon-info-sign pull-left"></a>
+        <a class="accordion-toggle" data-toggle="collapse" href="#{{tvDbId}}">{{title}} {{seriesYear}}</a>
     </div>
-    <div id="{{id}}" class="accordion-body collapse">
+    <div id="{{tvDbId}}" class="accordion-body collapse">
         <div class="accordion-inner">
             <select class="span7 x-root-folder">
                 {{#each rootFolders.models}}

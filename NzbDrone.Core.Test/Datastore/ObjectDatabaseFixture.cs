@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Test.Datastore
         {
             childModel = Builder<ChildModel>
                     .CreateNew()
-                    .With(s => s.OID = 0)
+                    .With(s => s.Id = 0)
                     .Build();
 
             ParentModel = Builder<ParentModel>
                     .CreateNew()
-                    .With(e => e.OID = 0)
+                    .With(e => e.Id = 0)
                     .Build();
 
         }
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void update_item_with_root_index_0_should_faile()
         {
-            childModel.OID = 0;
+            childModel.Id = 0;
             Assert.Throws<InvalidOperationException>(() => Db.Update(childModel));
         }
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             ParentModel.Child = Builder<ChildModel>
                                     .CreateNew()
-                                    .With(s => s.OID = 0)
+                                    .With(s => s.Id = 0)
                                     .Build();
 
             Db.Insert(ParentModel);
@@ -106,19 +106,19 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void new_objects_should_get_id()
         {
-            childModel.OID = 0;
+            childModel.Id = 0;
             Db.Insert(childModel);
-            childModel.OID.Should().NotBe(0);
+            childModel.Id.Should().NotBe(0);
         }
 
         [Test]
         public void new_object_should_get_new_id()
         {
-            childModel.OID = 0;
+            childModel.Id = 0;
             Db.Insert(childModel);
 
             Db.AsQueryable<ChildModel>().Should().HaveCount(1);
-            childModel.OID.Should().Be(1);
+            childModel.Id.Should().Be(1);
         }
 
 
@@ -131,31 +131,31 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.Insert(nested);
 
-            nested.OID.Should().Be(1);
-            nested.List.Should().OnlyContain(c => c.OID > 0);
+            nested.Id.Should().Be(1);
+            nested.List.Should().OnlyContain(c => c.Id > 0);
         }
 
         [Test]
         public void should_have_id_when_returned_from_database()
         {
-            childModel.OID = 0;
+            childModel.Id = 0;
             Db.Insert(childModel);
             var item = Db.AsQueryable<ChildModel>();
 
             item.Should().HaveCount(1);
-            item.First().OID.Should().NotBe(0);
-            item.First().OID.Should().BeLessThan(100);
-            item.First().OID.Should().Be(childModel.OID);
+            item.First().Id.Should().NotBe(0);
+            item.First().Id.Should().BeLessThan(100);
+            item.First().Id.Should().Be(childModel.Id);
         }
 
         [Test]
         public void should_be_able_to_find_object_by_id()
         {
             Db.Insert(childModel);
-            var item = Db.AsQueryable<ChildModel>().Single(c => c.OID == childModel.OID);
+            var item = Db.AsQueryable<ChildModel>().Single(c => c.Id == childModel.Id);
 
-            item.OID.Should().NotBe(0);
-            item.OID.Should().Be(childModel.OID);
+            item.Id.Should().NotBe(0);
+            item.Id.Should().Be(childModel.Id);
         }
 
         [Test]

@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.OID = 1)
+                .With(s => s.Id = 1)
                 .Build();
             var fakeEpisodes = Builder<Episode>.CreateNew()
                 .With(e => e.SeriesId = 1)
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeEpisodes);
 
             //Act
-            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(fakeSeries.OID, 2, 1);
+            var episode = Mocker.Resolve<EpisodeService>().GetEpisode(fakeSeries.Id, 2, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes);
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.OID = 12)
+                .With(s => s.Id = 12)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(10)
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                          .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
             Db.Insert(fakeSeries);
@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -313,7 +313,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -351,7 +351,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -417,7 +417,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -452,7 +452,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -484,7 +484,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             var currentEpisodes = new List<Episode>();
 
@@ -515,7 +515,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
@@ -553,7 +553,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                              )
                 .Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
             var fakeEpisodeList = new List<Episode> { new Episode { TvDbEpisodeId = 99, SeasonNumber = 10, EpisodeNumber = 10, Series = fakeSeries } };
 
             Mocker.GetMock<IDatabase>()
@@ -595,7 +595,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Build();
 
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
                 .Setup(c => c.GetSeries(seriesId, true, false))
@@ -621,7 +621,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
@@ -629,7 +629,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 currentEpisodes.Add(new Episode
                                         {
                                             TvDbEpisodeId = tvDbEpisode.Id,
-                                            OID = 99,
+                                            Id = 99,
                                             EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
                                             Ignored = true,
                                             Series = fakeSeries,
@@ -657,7 +657,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             //Assert
             updatedEpisodes.Should().HaveSameCount(tvdbSeries.Episodes);
-            updatedEpisodes.Should().OnlyContain(c => c.OID == 99);
+            updatedEpisodes.Should().OnlyContain(c => c.Id == 99);
             updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 69);
             updatedEpisodes.Should().OnlyContain(c => c.Ignored == true);
         }
@@ -670,7 +670,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
@@ -678,7 +678,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 currentEpisodes.Add(new Episode
                 {
                     TvDbEpisodeId = tvDbEpisode.Id,
-                    OID = 99,
+                    Id = 99,
                     EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
                     Ignored = true,
                     Series = fakeSeries,
@@ -716,7 +716,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
@@ -724,7 +724,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 currentEpisodes.Add(new Episode
                 {
                     TvDbEpisodeId = tvDbEpisode.Id,
-                    OID = 99,
+                    Id = 99,
                     EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
                     Ignored = true,
                     Series = fakeSeries,
@@ -784,7 +784,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 
@@ -1121,7 +1121,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 10)
+                .With(s => s.Id = 10)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
@@ -1164,7 +1164,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 10)
+                .With(s => s.Id = 10)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
@@ -1208,7 +1208,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 10)
+                .With(s => s.Id = 10)
                 .Build();
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
@@ -1252,7 +1252,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 10)
+                .With(s => s.Id = 10)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
@@ -1281,7 +1281,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 10)
+                .With(s => s.Id = 10)
                 .Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
@@ -1308,7 +1308,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var series = Builder<Series>.CreateNew()
-                .With(s => s.OID = 10)
+                .With(s => s.Id = 10)
                 .Build();
 
             var fakeEpisode = Builder<Episode>.CreateNew()
@@ -1400,7 +1400,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.OID = 12345)
+                .With(s => s.Id = 12345)
                 .With(s => s.CleanTitle = "officeus")
                 .Build();
 
@@ -1417,7 +1417,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("officeus")).Returns(fakeSeries);
 
             //Act
-            Mocker.Resolve<EpisodeService>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.OID).ToList(), postDownloadStatus);
+            Mocker.Resolve<EpisodeService>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.Id).ToList(), postDownloadStatus);
 
             //Assert
             var result = Db.Fetch<Episode>();
@@ -1432,7 +1432,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var postDownloadStatus = PostDownloadStatusType.Failed;
 
             var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.OID = 12345)
+                .With(s => s.Id = 12345)
                 .With(s => s.CleanTitle = "officeus")
                 .Build();
 
@@ -1489,7 +1489,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.OID = seriesId).Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
             WithRealDb();
 

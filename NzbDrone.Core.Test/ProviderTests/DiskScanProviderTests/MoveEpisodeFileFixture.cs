@@ -29,13 +29,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void should_not_move_file_if_source_and_destination_are_the_same_path()
         {
             var fakeSeries = Builder<Series>.CreateNew()
-                    .With(s => s.OID = 5)
+                    .With(s => s.Id = 5)
                     .With(s => s.Title = "30 Rock")
                     .Build();
 
             var fakeEpisode = Builder<Episode>.CreateListOfSize(1)
                     .All()
-                    .With(e => e.SeriesId = fakeSeries.OID)
+                    .With(e => e.SeriesId = fakeSeries.Id)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.EpisodeNumber = 1)
                     .Build();
@@ -44,12 +44,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var fi = new FileInfo(Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".avi"));
 
             var file = Builder<EpisodeFile>.CreateNew()
-                    .With(f => f.SeriesId = fakeSeries.OID)
+                    .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = fi.FullName)
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(e => e.Get(fakeSeries.OID))
+                .Setup(e => e.Get(fakeSeries.Id))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<IEpisodeService>()
@@ -75,13 +75,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void should_use_EpisodeFiles_quality()
         {
             var fakeSeries = Builder<Series>.CreateNew()
-                    .With(s => s.OID = 5)
+                    .With(s => s.Id = 5)
                     .With(s => s.Title = "30 Rock")
                     .Build();
 
             var fakeEpisode = Builder<Episode>.CreateListOfSize(1)
                     .All()
-                    .With(e => e.SeriesId = fakeSeries.OID)
+                    .With(e => e.SeriesId = fakeSeries.Id)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.EpisodeNumber = 1)
                     .Build();
@@ -92,14 +92,14 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             const string message = "30 Rock - 1x01 - [WEBDL]";
 
             var file = Builder<EpisodeFile>.CreateNew()
-                    .With(f => f.SeriesId = fakeSeries.OID)
+                    .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = currentFilename)
                     .With(f => f.Quality = QualityTypes.WEBDL720p)
                     .With(f => f.Proper = false)
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(e => e.Get(fakeSeries.OID))
+                  .Setup(e => e.Get(fakeSeries.Id))
                   .Returns(fakeSeries);
 
             Mocker.GetMock<IEpisodeService>()
@@ -127,13 +127,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void should_log_error_and_return_null_when_source_file_does_not_exists()
         {
             var fakeSeries = Builder<Series>.CreateNew()
-                    .With(s => s.OID = 5)
+                    .With(s => s.Id = 5)
                     .With(s => s.Title = "30 Rock")
                     .Build();
 
             var fakeEpisode = Builder<Episode>.CreateListOfSize(1)
                     .All()
-                    .With(e => e.SeriesId = fakeSeries.OID)
+                    .With(e => e.SeriesId = fakeSeries.Id)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.EpisodeNumber = 1)
                     .Build();
@@ -144,14 +144,14 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             const string message = "30 Rock - 1x01 - [WEBDL]";
 
             var file = Builder<EpisodeFile>.CreateNew()
-                    .With(f => f.SeriesId = fakeSeries.OID)
+                    .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = currentFilename)
                     .With(f => f.Quality = QualityTypes.WEBDL720p)
                     .With(f => f.Proper = false)
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(e => e.Get(fakeSeries.OID))
+                .Setup(e => e.Get(fakeSeries.Id))
                 .Returns(fakeSeries);
 
             Mocker.GetMock<IEpisodeService>()

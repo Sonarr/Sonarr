@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Failed to get TV Shows from XBMC");
 
                 else
-                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.OID || s.Label == series.Title);
+                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.Id || s.Label == series.Title);
 
                 //var hostOnly = GetHostWithoutPort(host);
 
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Failed to get TV Shows from XBMC");
 
                 else
-                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.OID || s.Label == series.Title);
+                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.Id || s.Label == series.Title);
 
                 var postJson = new JObject();
                 postJson.Add(new JProperty("jsonrpc", "2.0"));
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Providers
             try
             {
                 Logger.Trace("Sending Update DB Request to XBMC Host: {0}", host);
-                var xbmcSeriesPath = GetXbmcSeriesPath(host, series.OID, username, password);
+                var xbmcSeriesPath = GetXbmcSeriesPath(host, series.Id, username, password);
 
                 //If the path is found update it, else update the whole library
                 if (!String.IsNullOrEmpty(xbmcSeriesPath))

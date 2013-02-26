@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             sampleType = Builder<SampleType>
                 .CreateNew()
-                .With(c => c.OID = 0)
+                .With(c => c.Id = 0)
                 .Build();
 
         }
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.Datastore
             Subject.Insert(sampleType);
             Subject.All().Should().HaveCount(1);
 
-            Subject.Delete(sampleType.OID);
+            Subject.Delete(sampleType.Id);
             Subject.All().Should().BeEmpty();
         }
 
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_find_by_id()
         {
             Subject.Insert(sampleType);
-            Subject.Get(sampleType.OID)
+            Subject.Get(sampleType.Id)
                 .ShouldHave()
                 .AllProperties()
                 .EqualTo(sampleType);

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.Indexers
 
             Mocker.GetMock<IIndexerRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<Indexer> {new Indexer {OID = 1, Type = "", Enable = false, Name = "Fake Indexer"}});
+                  .Returns(new List<Indexer> {new Indexer {Id = 1, Type = "", Enable = false, Name = "Fake Indexer"}});
 
             Subject.GetEnabledIndexers().Should().BeEmpty();
         }

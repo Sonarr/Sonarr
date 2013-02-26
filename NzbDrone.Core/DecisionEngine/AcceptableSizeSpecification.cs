@@ -57,7 +57,7 @@ namespace NzbDrone.Core.DecisionEngine
             //Check if there was only one episode parsed
             //and it is the first or last episode of the season
             if (subject.EpisodeNumbers != null && subject.EpisodeNumbers.Count == 1 &&
-                _episodeService.IsFirstOrLastEpisodeOfSeason(series.OID,
+                _episodeService.IsFirstOrLastEpisodeOfSeason(series.Id,
                 subject.SeasonNumber, subject.EpisodeNumbers[0]))
             {
                 maxSize = maxSize * 2;

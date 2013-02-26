@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = tvDbProvider.SearchSeries(title);
 
             result.Should().NotBeEmpty();
-            result[0].SeriesName.Should().Be(title);
+            result[0].Title.Should().Be(title);
         }
 
 

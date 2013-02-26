@@ -27,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             foreach (var episode in subject.Episodes)
             {
-                var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.OID, episode.SeasonNumber, episode.EpisodeNumber);
+                var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.Id, episode.SeasonNumber, episode.EpisodeNumber);
                 if (bestQualityInHistory != null)
                 {
                     logger.Trace("Comparing history quality with report. History is {0}", bestQualityInHistory);

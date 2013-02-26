@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Jobs
             //Process the list of remaining episodes, 1 by 1
             foreach (var episode in individualEpisodes)
             {
-                _episodeSearchJob.Start(notification, new { EpisodeId = episode.OID});
+                _episodeSearchJob.Start(notification, new { EpisodeId = episode.Id});
             }
         }
 

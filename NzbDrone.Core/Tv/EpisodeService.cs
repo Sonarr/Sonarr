@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Tv
                     return new List<Episode>();
                 }
 
-                var episodeInfo = GetEpisode(((ModelBase)parseResult.Series).OID, parseResult.AirDate.Value);
+                var episodeInfo = GetEpisode(((ModelBase)parseResult.Series).Id, parseResult.AirDate.Value);
 
                 if (episodeInfo != null)
                 {
@@ -116,14 +116,14 @@ namespace NzbDrone.Core.Tv
                 Episode episodeInfo = null;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                    episodeInfo = GetEpisodeBySceneNumbering(((ModelBase)parseResult.Series).OID, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisodeBySceneNumbering(((ModelBase)parseResult.Series).Id, parseResult.SeasonNumber, episodeNumber);
 
                 if (episodeInfo == null)
                 {
-                    episodeInfo = GetEpisode(((ModelBase)parseResult.Series).OID, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisode(((ModelBase)parseResult.Series).Id, parseResult.SeasonNumber, episodeNumber);
                     if (episodeInfo == null && parseResult.AirDate != null)
                     {
-                        episodeInfo = GetEpisode(((ModelBase)parseResult.Series).OID, parseResult.AirDate.Value);
+                        episodeInfo = GetEpisode(((ModelBase)parseResult.Series).Id, parseResult.AirDate.Value);
                     }
                 }
 
@@ -176,14 +176,14 @@ namespace NzbDrone.Core.Tv
 
         public virtual void RefreshEpisodeInfo(Series series)
         {
-            logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.OID));
+            logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.Id));
             var successCount = 0;
             var failCount = 0;
 
-            var tvdbEpisodes = _tvDbProvider.GetEpisodes(series.OID);
+            var tvdbEpisodes = _tvDbProvider.GetEpisodes(series.TvDbId);
 
 
-            var seriesEpisodes = GetEpisodeBySeries(series.OID);
+            var seriesEpisodes = GetEpisodeBySeries(series.Id);
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
 
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Tv
                         }
                         else
                         {
-                            episodeToUpdate.Ignored = _seasonRepository.IsIgnored(series.OID, episode.SeasonNumber);
+                            episodeToUpdate.Ignored = _seasonRepository.IsIgnored(series.Id, episode.SeasonNumber);
                         }
                     }
                     else
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Tv
                         episodeToUpdate.EpisodeFile = null;
                     }
 
-                    episodeToUpdate.SeriesId = series.OID;
+                    episodeToUpdate.SeriesId = series.Id;
                     episodeToUpdate.Series = series;
                     episodeToUpdate.TvDbEpisodeId = episode.TvDbEpisodeId;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Tv
 
         public virtual IList<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber)
         {
-            return GetEpisodesBySeason(seriesId, seasonNumber).Select(c => c.OID).ToList();
+            return GetEpisodesBySeason(seriesId, seasonNumber).Select(c => c.Id).ToList();
         }
 
         public virtual void SetEpisodeIgnore(int episodeId, bool isIgnored)
@@ -302,13 +302,13 @@ namespace NzbDrone.Core.Tv
 
         private void DeleteEpisodesNotInTvdb(Series series, IEnumerable<Episode> tvdbEpisodes)
         {
-            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.OID));
+            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
             foreach (var episode in tvdbEpisodes)
             {
-                _episodeRepository.Delete(episode.OID);
+                _episodeRepository.Delete(episode.Id);
             }
 
-            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.OID);
+            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
         }
 
         public virtual void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
@@ -349,7 +349,7 @@ namespace NzbDrone.Core.Tv
         {
             foreach (var episode in message.ParseResult.Episodes)
             {
-                logger.Trace("Marking episode {0} as fetched.", episode.OID);
+                logger.Trace("Marking episode {0} as fetched.", episode.Id);
                 episode.GrabDate = DateTime.UtcNow;
                 _episodeRepository.Update(episode);
             }

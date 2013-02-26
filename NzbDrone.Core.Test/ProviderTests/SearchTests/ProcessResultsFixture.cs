@@ -36,12 +36,12 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         public void Setup()
         {
             _matchingSeries = Builder<Series>.CreateNew()
-                .With(s => s.OID = 79488)
+                .With(s => s.Id = 79488)
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
             _mismatchedSeries = Builder<Series>.CreateNew()
-                .With(s => s.OID = 12345)
+                .With(s => s.Id = 12345)
                 .With(s => s.Title = "Not 30 Rock")
                 .Build();
 

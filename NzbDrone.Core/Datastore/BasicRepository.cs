@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            return Queryable.Single(c => c.OID == id);
+            return Queryable.Single(c => c.Id == id);
         }
 
         public TModel Insert(TModel model)
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Upsert(TModel model)
         {
-            if (model.OID == 0)
+            if (model.Id == 0)
             {
                 return ObjectDatabase.Insert(model);
             }
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Datastore
 
         public void Purge()
         {
-            DeleteMany(Queryable.Select(c => c.OID));
+            DeleteMany(Queryable.Select(c => c.Id));
         }
     }
 }

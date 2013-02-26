@@ -36,14 +36,14 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
             _episode = Builder<Episode>
                     .CreateNew()
-                    .With(e => e.SeriesId = _series.OID)
+                    .With(e => e.SeriesId = _series.Id)
                     .With(e => e.Series = _series)
                     .Build();
 
             _episodes = Builder<Episode>
                     .CreateListOfSize(10)
                     .All()
-                    .With(e => e.SeriesId = _series.OID)
+                    .With(e => e.SeriesId = _series.Id)
                     .With(e => e.Series = _series)
                     .Build()
                     .ToList();

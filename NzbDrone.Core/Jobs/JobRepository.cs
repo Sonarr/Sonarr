@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Jobs
                 if (_jobs.All(c => c.GetType().ToString() != currentJob.TypeName))
                 {
                     _logger.Debug("Removing job from database '{0}'", currentJob.Name);
-                    Delete(currentJob.OID);
+                    Delete(currentJob.Id);
                 }
             }
 

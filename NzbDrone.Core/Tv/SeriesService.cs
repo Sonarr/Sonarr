@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Tv
         public Series UpdateSeriesInfo(int seriesId)
         {
             var series = _seriesRepository.Get(seriesId);
-            var tvDbSeries = _tvDbProvider.GetSeries(series.OID, false, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(series.TvDbId, false, true);
 
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.AirsTime);
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Tv
             foreach (var series in allSeries)
             {
                 //Only update parameters that can be changed in MassEdit
-                var edited = editedSeries.Single(s => ((ModelBase)s).OID == series.OID);
+                var edited = editedSeries.Single(s => ((ModelBase)s).Id == series.Id);
                 series.QualityProfileId = edited.QualityProfileId;
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;

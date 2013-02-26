@@ -46,11 +46,11 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                     .Build();
 
             Mocker.GetMock<IEpisodeService>()
-                  .Setup(s => s.GetEpisode(_series.OID, 1, 1))
+                  .Setup(s => s.GetEpisode(_series.Id, 1, 1))
                   .Returns(_episode);
 
             Mocker.GetMock<SceneMappingProvider>()
-                  .Setup(s => s.GetCleanName(_series.OID))
+                  .Setup(s => s.GetCleanName(_series.Id))
                   .Returns("");
 
             Mocker.GetMock<TvRageProvider>()

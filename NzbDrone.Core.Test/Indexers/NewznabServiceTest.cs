@@ -21,14 +21,14 @@ namespace NzbDrone.Core.Test.Indexers
         {
             Mocker.GetMock<INewznabRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<NewznabDefinition>{new NewznabDefinition { OID = 1, Name = "", Url = "http://www.nzbdrone.com" }});
+                  .Returns(new List<NewznabDefinition>{new NewznabDefinition { Id = 1, Name = "", Url = "http://www.nzbdrone.com" }});
         }
 
         private void WithExisting()
         {
             Mocker.GetMock<INewznabRepository>()
                   .Setup(s => s.All())
-                  .Returns(new List<NewznabDefinition> { new NewznabDefinition { OID = 1, Name = "Nzbs.org", Url = "http://nzbs.org" } });
+                  .Returns(new List<NewznabDefinition> { new NewznabDefinition { Id = 1, Name = "Nzbs.org", Url = "http://nzbs.org" } });
         }
 
         [Test]

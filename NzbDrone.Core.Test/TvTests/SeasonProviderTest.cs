@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.TvTests
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(4)
                 .All()
                 .With(c => c.SeriesId = fakeSeason.SeriesId)
-                .With(c => c.SeasonNumber = fakeSeason.OID)
+                .With(c => c.SeasonNumber = fakeSeason.Id)
                 .With(c => c.Ignored = !ignoreFlag)
                 .Build().ToList();
 
