@@ -5,7 +5,6 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore
@@ -13,18 +12,18 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class ObjectDatabaseFixture : ObjectDbTest
     {
-        private ChildModel childModel;
-        private ParentModel ParentModel;
+        private ChildModel _childModel;
+        private ParentModel _parentModel;
 
         [SetUp]
         public void SetUp()
         {
-            childModel = Builder<ChildModel>
+            _childModel = Builder<ChildModel>
                     .CreateNew()
                     .With(s => s.Id = 0)
                     .Build();
 
-            ParentModel = Builder<ParentModel>
+            _parentModel = Builder<ParentModel>
                     .CreateNew()
                     .With(e => e.Id = 0)
                     .Build();
@@ -34,22 +33,22 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_write_to_database()
         {
-            Db.Insert(childModel);
+            Db.Insert(_childModel);
             Db.AsQueryable<ChildModel>().Should().HaveCount(1);
         }
 
         [Test]
         public void double_insert_should_fail()
         {
-            Db.Insert(childModel);
-            Assert.Throws<InvalidOperationException>(() => Db.Insert(childModel));
+            Db.Insert(_childModel);
+            Assert.Throws<InvalidOperationException>(() => Db.Insert(_childModel));
         }
 
         [Test]
         public void update_item_with_root_index_0_should_faile()
         {
-            childModel.Id = 0;
-            Assert.Throws<InvalidOperationException>(() => Db.Update(childModel));
+            _childModel.Id = 0;
+            Assert.Throws<InvalidOperationException>(() => Db.Update(_childModel));
         }
 
 
@@ -64,11 +63,11 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_not_store_dirty_data_in_cache()
         {
-            Db.Insert(ParentModel);
+            Db.Insert(_parentModel);
 
             Db.AsQueryable<ParentModel>().Single().Child.Should().BeNull();
 
-            ParentModel.Child = Builder<ChildModel>.CreateNew().Build();
+            _parentModel.Child = Builder<ChildModel>.CreateNew().Build();
 
             Db.AsQueryable<ParentModel>().Single().Child.Should().BeNull();
         }
@@ -76,9 +75,9 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_store_nested_objects()
         {
-            ParentModel.Child = childModel;
+            _parentModel.Child = _childModel;
 
-            Db.Insert(ParentModel);
+            Db.Insert(_parentModel);
 
             Db.AsQueryable<ParentModel>().Should().HaveCount(1);
             Db.AsQueryable<ParentModel>().Single().Child.Should().NotBeNull();
@@ -87,16 +86,16 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_update_nested_objects()
         {
-            ParentModel.Child = Builder<ChildModel>
+            _parentModel.Child = Builder<ChildModel>
                                     .CreateNew()
                                     .With(s => s.Id = 0)
                                     .Build();
 
-            Db.Insert(ParentModel);
+            Db.Insert(_parentModel);
 
-            ParentModel.Child.A = "UpdatedTitle";
+            _parentModel.Child.A = "UpdatedTitle";
 
-            Db.Update(ParentModel);
+            Db.Update(_parentModel);
 
             Db.AsQueryable<ParentModel>().Should().HaveCount(1);
             Db.AsQueryable<ParentModel>().Single().Child.Should().NotBeNull();
@@ -106,19 +105,19 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void new_objects_should_get_id()
         {
-            childModel.Id = 0;
-            Db.Insert(childModel);
-            childModel.Id.Should().NotBe(0);
+            _childModel.Id = 0;
+            Db.Insert(_childModel);
+            _childModel.Id.Should().NotBe(0);
         }
 
         [Test]
         public void new_object_should_get_new_id()
         {
-            childModel.Id = 0;
-            Db.Insert(childModel);
+            _childModel.Id = 0;
+            Db.Insert(_childModel);
 
             Db.AsQueryable<ChildModel>().Should().HaveCount(1);
-            childModel.Id.Should().Be(1);
+            _childModel.Id.Should().Be(1);
         }
 
 
@@ -138,25 +137,61 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_have_id_when_returned_from_database()
         {
-            childModel.Id = 0;
-            Db.Insert(childModel);
+            _childModel.Id = 0;
+            Db.Insert(_childModel);
             var item = Db.AsQueryable<ChildModel>();
 
             item.Should().HaveCount(1);
             item.First().Id.Should().NotBe(0);
             item.First().Id.Should().BeLessThan(100);
-            item.First().Id.Should().Be(childModel.Id);
+            item.First().Id.Should().Be(_childModel.Id);
         }
 
         [Test]
         public void should_be_able_to_find_object_by_id()
         {
-            Db.Insert(childModel);
-            var item = Db.AsQueryable<ChildModel>().Single(c => c.Id == childModel.Id);
+            Db.Insert(_childModel);
+            var item = Db.AsQueryable<ChildModel>().Single(c => c.Id == _childModel.Id);
 
             item.Id.Should().NotBe(0);
-            item.Id.Should().Be(childModel.Id);
+            item.Id.Should().Be(_childModel.Id);
         }
+
+        [Test]
+        public void deleting_child_model_directly_should_set_link_to_null()
+        {
+            _parentModel.Child = _childModel;           
+            
+            Db.Insert(_childModel);
+            Db.Insert(_parentModel);
+
+            Db.AsQueryable<ParentModel>().Single().Child.Should().NotBeNull();
+
+            Db.Delete(_childModel);
+
+            Db.AsQueryable<ParentModel>().Single().Child.Should().BeNull();
+        }
+
+        [Test]
+        public void deleting_child_model_directly_should_remove_item_from_child_list()
+        {
+
+            var children = Builder<ChildModel>.CreateListOfSize(5)
+                                           .All()
+                                           .With(c => c.Id = 0)
+                                           .Build();
+
+            _parentModel.ChildList = children.ToList();
+
+            Db.Insert(_parentModel);
+
+            Db.AsQueryable<ParentModel>().Single().ChildList.Should().HaveSameCount(children);
+
+            Db.Delete(children[1]);
+
+            Db.AsQueryable<ParentModel>().Single().ChildList.Should().HaveCount(4);
+        }
+        
 
         [Test]
         public void should_be_able_to_read_unknown_type()
@@ -183,11 +218,11 @@ namespace NzbDrone.Core.Test.Datastore
     public class ParentModel : ModelBase
     {
         public ChildModel Child { get; set; }
+        public List<ChildModel> ChildList { get; set; }
     }
 
     public class ChildModel : ModelBase
     {
-
         public String A { get; set; }
         public int B { get; set; }
         public int C { get; set; }
