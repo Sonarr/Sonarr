@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -17,6 +17,6 @@ namespace NzbDrone.Core.Datastore
         }
 
         [JsonProperty(PropertyName = "id")]
-        private int OID;
+        public int OID { get; set; }
     }
 }
