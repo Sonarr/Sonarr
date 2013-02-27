@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Providers
                     show.Seasons = s.Element("seasons").ConvertTo<Int32>();
                     show.Status = s.Element("status").Value;
                     show.RunTime = s.Element("seasons").ConvertTo<Int32>();
-                    show.AirTime = s.Element("seasons").ConvertTo<DateTime>();
+                    show.AirTime = s.Element("airtime").ConvertTo<DateTime>();
                     show.AirDay = s.Element("airday").ConvertToDayOfWeek();
 
                     searchResults.Add(show);

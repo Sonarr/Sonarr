@@ -106,6 +106,8 @@ namespace NzbDrone.Core.Jobs
 
         public void AutoIgnoreSeasons(int seriesId)
         {
+            //Todo: Need to convert this over to ObjectDb
+            return;
             var episodeFiles = _mediaFileProvider.GetSeriesFiles(seriesId);
 
             if (episodeFiles.Count() != 0)

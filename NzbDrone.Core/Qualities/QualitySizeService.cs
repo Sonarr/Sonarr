@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Qualities
 
             foreach (var quality in Quality.All().Where(q => q.Id > 0))
             {
-                if(existing.SingleOrDefault(s => s.QualityId == quality.Id) == null)
+                if(!existing.Any(s => s.QualityId == quality.Id))
                 {
                     _qualitySizeRepository.Insert(new QualitySize
                         {
