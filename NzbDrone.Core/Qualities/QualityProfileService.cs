@@ -55,8 +55,7 @@ namespace NzbDrone.Core.Qualities
 
         public void Init()
         {
-            if (All().Any())
-                return;
+            if (All().Any()) return;
 
             _logger.Info("Setting up default quality profiles");
 
