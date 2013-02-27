@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void WithWebdlCutoff()
         {
             var profile = new QualityProfile { Cutoff = Quality.WEBDL720p };
-            Mocker.GetMock<QualityProfileService>().Setup(s => s.Get(It.IsAny<int>())).Returns(profile);
+            Mocker.GetMock<IQualityProfileService>().Setup(s => s.Get(It.IsAny<int>())).Returns(profile);
         }
 
         private Series _series;

@@ -10,11 +10,11 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class AcceptableSizeSpecification
     {
-        private readonly QualitySizeService _qualityTypeProvider;
+        private readonly IQualitySizeService _qualityTypeProvider;
         private readonly IEpisodeService _episodeService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AcceptableSizeSpecification(QualitySizeService qualityTypeProvider, IEpisodeService episodeService)
+        public AcceptableSizeSpecification(IQualitySizeService qualityTypeProvider, IEpisodeService episodeService)
         {
             _qualityTypeProvider = qualityTypeProvider;
             _episodeService = episodeService;
