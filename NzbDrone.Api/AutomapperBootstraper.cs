@@ -7,7 +7,7 @@ using NzbDrone.Api.Resolvers;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Upcoming;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api
@@ -19,24 +19,22 @@ namespace NzbDrone.Api
         {
             //QualityProfiles
             Mapper.CreateMap<QualityProfile, QualityProfileModel>()
-                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityProfileId))
                   .ForMember(dest => dest.Qualities,
                              opt => opt.ResolveUsing<AllowedToQualitiesResolver>().FromMember(src => src.Allowed));
 
             Mapper.CreateMap<QualityProfileModel, QualityProfile>()
-                  .ForMember(dest => dest.QualityProfileId, opt => opt.MapFrom(src => src.Id))
                   .ForMember(dest => dest.Allowed,
                              opt => opt.ResolveUsing<QualitiesToAllowedResolver>().FromMember(src => src.Qualities));
 
-            Mapper.CreateMap<QualityTypes, QualityProfileType>()
+            Mapper.CreateMap<Quality, QualityProfileType>()
                   .ForMember(dest => dest.Allowed, opt => opt.Ignore());
 
-            //QualityTypes
-            Mapper.CreateMap<Core.Repository.Quality.QualityType, QualityTypeModel>()
-                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityTypeId));
+            //QualitySize
+            Mapper.CreateMap<QualitySize, QualityTypeModel>()
+                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityId));
 
-            Mapper.CreateMap<QualityTypeModel, Core.Repository.Quality.QualityType>()
-                  .ForMember(dest => dest.QualityTypeId, opt => opt.MapFrom(src => src.Id));
+            Mapper.CreateMap<QualityTypeModel, QualitySize>()
+                  .ForMember(dest => dest.QualityId, opt => opt.MapFrom(src => src.Id));
 
             //Series
             Mapper.CreateMap<Core.Tv.Series, SeriesResource>()

@@ -307,6 +307,8 @@
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
+    <Compile Include="Qualities\QualitySizeRepository.cs" />
+    <Compile Include="Qualities\QualityProfileRepository.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\SeasonRepository.cs" />
@@ -390,7 +392,7 @@
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />
-    <Compile Include="Repository\Quality\QualityTypes.cs" />
+    <Compile Include="Qualities\Quality.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />
     <Compile Include="Model\ReportRejectionType.cs" />
@@ -525,10 +527,10 @@
     <Compile Include="Providers\ProwlProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\QualityProvider.cs">
+    <Compile Include="Qualities\QualityProfileService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\QualityTypeProvider.cs">
+    <Compile Include="Qualities\QualitySizeService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\ReferenceDataProvider.cs">
@@ -590,8 +592,8 @@
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="History\History.cs" />
-    <Compile Include="Repository\Quality\QualityType.cs" />
-    <Compile Include="Repository\Quality\QualityProfile.cs" />
+    <Compile Include="Qualities\QualitySize.cs" />
+    <Compile Include="Qualities\QualityProfile.cs" />
     <Compile Include="RootFolders\RootFolder.cs" />
     <Compile Include="Repository\SceneMapping.cs" />
     <Compile Include="Tv\Series.cs" />

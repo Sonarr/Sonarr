@@ -1,13 +1,12 @@
 ﻿using System.Linq;
+using NzbDrone.Core.Datastore;
 using PetaPoco;
 
-namespace NzbDrone.Core.Repository.Quality
+namespace NzbDrone.Core.Qualities
 {
-    [TableName("QualityTypes")]
-    [PrimaryKey("QualityTypeId", autoIncrement = false)]
-    public class QualityType
+    public class QualitySize : ModelBase
     {
-        public int QualityTypeId { get; set; }
+        public int QualityId { get; set; }
         public string Name { get; set; }
         public int MinSize { get; set; }
         public int MaxSize { get; set; }

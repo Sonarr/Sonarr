@@ -9,11 +9,11 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using PetaPoco;
 using TvdbLib.Data;
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = Quality.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
@@ -857,7 +857,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = Quality.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .All().With(e => e.SeriesId = 1).TheFirst(1).With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
@@ -901,7 +901,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = Quality.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
@@ -1213,7 +1213,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(c => c.EpisodeFileId = 1)
-                .With(c => c.Quality = QualityTypes.SDTV)
+                .With(c => c.Quality = Quality.SDTV)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)

@@ -5,7 +5,6 @@ using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Model.Xbmc;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Test
 {

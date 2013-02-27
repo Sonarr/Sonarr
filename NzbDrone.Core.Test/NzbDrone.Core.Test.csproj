@@ -164,7 +164,7 @@
     <Compile Include="HelperTests\XElementHelperTests\ConvertToDayOfWeekFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\GetUtcOffsetFixture.cs" />
     <Compile Include="ProviderTests\TvRageProviderTests\SearchSeriesFixture.cs" />
-    <Compile Include="QualityTypesTest.cs" />
+    <Compile Include="Qualities\QualityFixture.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
@@ -220,7 +220,7 @@
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
     <Compile Include="HelperTests\SortHelperFixture.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
+    <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
     <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
     <Compile Include="JobTests\SeasonSearchJobTest.cs" />
     <Compile Include="JobTests\SeriesSearchJobTest.cs" />
@@ -243,7 +243,7 @@
     <Compile Include="IndexerTests\IndexerFixture.cs" />
     <Compile Include="DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
     <Compile Include="JobTests\JobControllerFixture.cs" />
-    <Compile Include="QualityTest.cs" />
+    <Compile Include="TvTests\QualityModelFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="Indexers\IndexerServiceTest.cs" />
     <Compile Include="HistoryTests\HistoryServiceTest.cs" />
@@ -253,7 +253,7 @@
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTests\ParserFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QualityProfileTest.cs" />
+    <Compile Include="Qualities\QualityProfileFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
     <Compile Include="ProviderTests\SceneMappingProviderTest.cs" />
     <Compile Include="TvTests\SeriesProviderTest.cs" />

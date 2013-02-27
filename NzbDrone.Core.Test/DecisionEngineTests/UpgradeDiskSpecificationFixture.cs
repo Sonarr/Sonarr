@@ -6,12 +6,12 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -33,20 +33,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<QualityUpgradeSpecification>();
             _upgradeDisk = Mocker.Resolve<UpgradeDiskSpecification>();
 
-            firstFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
-            secondFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
+            firstFile = new EpisodeFile { Quality = Quality.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
+            secondFile = new EpisodeFile { Quality = Quality.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
 
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = null } };
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = secondFile }, new Episode { EpisodeFile = null } };
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = QualityTypes.Bluray1080p })
+                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
             parseResultMulti = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(QualityTypes.DVD, true),
+                Quality = new QualityModel(Quality.DVD, true),
                 EpisodeNumbers = new List<int> { 3, 4 },
                 SeasonNumber = 12,
                 Episodes = doubleEpisodeList
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(QualityTypes.DVD, true),
+                Quality = new QualityModel(Quality.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
                 Episodes = singleEpisodeList
@@ -64,12 +64,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithFirstFileUpgradable()
         {
-            firstFile.Quality = QualityTypes.SDTV;
+            firstFile.Quality = Quality.SDTV;
         }
 
         private void WithSecondFileUpgradable()
         {
-            secondFile.Quality = QualityTypes.SDTV;
+            secondFile.Quality = Quality.SDTV;
         }
 
         [Test]
@@ -118,9 +118,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_not_be_upgradable_if_qualities_are_the_same()
         {
-            firstFile.Quality = QualityTypes.WEBDL1080p;
+            firstFile.Quality = Quality.WEBDL1080p;
             firstFile.Proper = false;
-            parseResultSingle.Quality = new QualityModel(QualityTypes.WEBDL1080p, false);
+            parseResultSingle.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }
 

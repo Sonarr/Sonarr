@@ -5,14 +5,15 @@ using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.QualityType
 {
     public class QualityTypeModule : NzbDroneApiModule
     {
-        private readonly QualityTypeProvider _qualityTypeProvider;
+        private readonly QualitySizeService _qualityTypeProvider;
 
-        public QualityTypeModule(QualityTypeProvider qualityTypeProvider)
+        public QualityTypeModule(QualitySizeService qualityTypeProvider)
             : base("/QualityTypes")
         {
             _qualityTypeProvider = qualityTypeProvider;
@@ -26,7 +27,7 @@ namespace NzbDrone.Api.QualityType
         {
             var model = Request.Body.FromJson<QualityTypeModel>();
 
-            var type = Mapper.Map<QualityTypeModel, Core.Repository.Quality.QualityType>(model);
+            var type = Mapper.Map<QualityTypeModel, QualitySize>(model);
             _qualityTypeProvider.Update(type);
 
             return model.AsResponse();
@@ -36,13 +37,13 @@ namespace NzbDrone.Api.QualityType
         private Response GetQualityType(int id)
         {
             var type = _qualityTypeProvider.Get(id);
-            return Mapper.Map<Core.Repository.Quality.QualityType, QualityTypeModel>(type).AsResponse();
+            return Mapper.Map<QualitySize, QualityTypeModel>(type).AsResponse();
         }
 
         private Response GetQualityType()
         {
-            var types = _qualityTypeProvider.All().Where(qualityType => qualityType.QualityTypeId != 0 && qualityType.QualityTypeId != 10).ToList();
-            var responseModel = Mapper.Map<List<Core.Repository.Quality.QualityType>, List<QualityTypeModel>>(types);
+            var types = _qualityTypeProvider.All().Where(qualityType => qualityType.QualityId != 0 && qualityType.QualityId != 10).ToList();
+            var responseModel = Mapper.Map<List<QualitySize>, List<QualityTypeModel>>(types);
 
             return responseModel.AsResponse();
         }

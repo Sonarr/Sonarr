@@ -4,21 +4,21 @@ using System.Linq;
 using System.Text;
 using AutoMapper;
 using NzbDrone.Api.QualityProfiles;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Resolvers
 {
-    public class QualitiesToAllowedResolver : ValueResolver<List<QualityProfileType>, List<QualityTypes>>
+    public class QualitiesToAllowedResolver : ValueResolver<List<QualityProfileType>, List<Quality>>
     {
-        protected override List<QualityTypes> ResolveCore(List<QualityProfileType> source)
+        protected override List<Quality> ResolveCore(List<QualityProfileType> source)
         {
             var ids = source.Where(s => s.Allowed).Select(s => s.Id).ToList();
 
-            var qualityTypes = new List<QualityTypes>();
+            var qualityTypes = new List<Quality>();
 
             ids.ForEach(id =>
                             {
-                                qualityTypes.Add(QualityTypes.FindById(id));
+                                qualityTypes.Add(Quality.FindById(id));
                             });
 
             return qualityTypes;

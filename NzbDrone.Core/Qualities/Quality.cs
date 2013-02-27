@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NzbDrone.Core.Repository.Quality
+namespace NzbDrone.Core.Qualities
 {
-    public class QualityTypes : IComparable<QualityTypes>
+    public class Quality : IComparable<Quality>
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
 
-        public int CompareTo(QualityTypes other)
+        public int CompareTo(Quality other)
         {
             if (other.Weight > Weight)
                 return -1;
@@ -24,12 +24,12 @@ namespace NzbDrone.Core.Repository.Quality
             return 0;
         }
 
-        public static bool operator !=(QualityTypes x, QualityTypes y)
+        public static bool operator !=(Quality x, Quality y)
         {
             return !(x == y);
         }
 
-        public static bool operator ==(QualityTypes x, QualityTypes y)
+        public static bool operator ==(Quality x, Quality y)
         {
             var xObj = (Object)x;
             var yObj = (object)y;
@@ -42,22 +42,22 @@ namespace NzbDrone.Core.Repository.Quality
             return x.CompareTo(y) == 0;
         }
 
-        public static bool operator >(QualityTypes x, QualityTypes y)
+        public static bool operator >(Quality x, Quality y)
         {
             return x.CompareTo(y) > 0;
         }
 
-        public static bool operator <(QualityTypes x, QualityTypes y)
+        public static bool operator <(Quality x, Quality y)
         {
             return x.CompareTo(y) < 0;
         }
 
-        public static bool operator <=(QualityTypes x, QualityTypes y)
+        public static bool operator <=(Quality x, Quality y)
         {
             return x.CompareTo(y) <= 0;
         }
 
-        public static bool operator >=(QualityTypes x, QualityTypes y)
+        public static bool operator >=(Quality x, Quality y)
         {
             return x.CompareTo(y) >= 0;
         }
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Repository.Quality
             }
         }
 
-        public bool Equals(QualityTypes other)
+        public bool Equals(Quality other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -88,26 +88,26 @@ namespace NzbDrone.Core.Repository.Quality
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (QualityTypes)) return false;
-            return Equals((QualityTypes) obj);
+            if (obj.GetType() != typeof (Quality)) return false;
+            return Equals((Quality) obj);
         }
 
-        public static QualityTypes Unknown = new QualityTypes { Id = 0, Name = "Unknown", Weight = 0 };
-        public static QualityTypes SDTV = new QualityTypes {Id = 1, Name = "SDTV", Weight = 1};
-        public static QualityTypes WEBDL480p = new QualityTypes { Id = 8, Name = "WEBDL-480p", Weight = 2 };
-        public static QualityTypes DVD = new QualityTypes { Id = 2, Name = "DVD", Weight = 3 };
-        public static QualityTypes HDTV720p = new QualityTypes { Id = 4, Name = "HDTV-720p", Weight = 4 };
-        public static QualityTypes HDTV1080p = new QualityTypes { Id = 9, Name = "HDTV-1080p", Weight = 5 };
-        public static QualityTypes RAWHD = new QualityTypes { Id = 10, Name = "Raw-HD", Weight = 6 };
-        public static QualityTypes WEBDL720p = new QualityTypes { Id = 5, Name = "WEBDL-720p", Weight = 7 };
-        public static QualityTypes Bluray720p = new QualityTypes { Id = 6, Name = "Bluray720p", Weight = 8 };
-        public static QualityTypes WEBDL1080p = new QualityTypes { Id = 3, Name = "WEBDL-1080p", Weight = 9 };
-        public static QualityTypes Bluray1080p = new QualityTypes { Id = 7, Name = "Bluray1080p", Weight = 10 };
+        public static Quality Unknown = new Quality { Id = 0, Name = "Unknown", Weight = 0 };
+        public static Quality SDTV = new Quality {Id = 1, Name = "SDTV", Weight = 1};
+        public static Quality WEBDL480p = new Quality { Id = 8, Name = "WEBDL-480p", Weight = 2 };
+        public static Quality DVD = new Quality { Id = 2, Name = "DVD", Weight = 3 };
+        public static Quality HDTV720p = new Quality { Id = 4, Name = "HDTV-720p", Weight = 4 };
+        public static Quality HDTV1080p = new Quality { Id = 9, Name = "HDTV-1080p", Weight = 5 };
+        public static Quality RAWHD = new Quality { Id = 10, Name = "Raw-HD", Weight = 6 };
+        public static Quality WEBDL720p = new Quality { Id = 5, Name = "WEBDL-720p", Weight = 7 };
+        public static Quality Bluray720p = new Quality { Id = 6, Name = "Bluray720p", Weight = 8 };
+        public static Quality WEBDL1080p = new Quality { Id = 3, Name = "WEBDL-1080p", Weight = 9 };
+        public static Quality Bluray1080p = new Quality { Id = 7, Name = "Bluray1080p", Weight = 10 };
 
 
-        public static List<QualityTypes> All()
+        public static List<Quality> All()
         {
-            return new List<QualityTypes>
+            return new List<Quality>
                        {
                                Unknown,
                                SDTV,
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Repository.Quality
                        };
         }
 
-        public static QualityTypes FindById(int id)
+        public static Quality FindById(int id)
         {
             var quality = All().SingleOrDefault(q => q.Id == id);
 
@@ -133,12 +133,12 @@ namespace NzbDrone.Core.Repository.Quality
             return quality;            
         }
 
-        public static explicit operator QualityTypes(int id)
+        public static explicit operator Quality(int id)
         {
             return FindById(id);
         }
 
-        public static explicit operator int(QualityTypes quality)
+        public static explicit operator int(Quality quality)
         {
             return quality.Id;
         }

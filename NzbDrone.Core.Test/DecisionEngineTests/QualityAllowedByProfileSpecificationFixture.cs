@@ -5,11 +5,11 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -23,16 +23,16 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         public static object[] AllowedTestCases =
         {
-            new object[] { QualityTypes.DVD },
-            new object[] { QualityTypes.HDTV720p },
-            new object[] { QualityTypes.Bluray1080p }
+            new object[] { Quality.DVD },
+            new object[] { Quality.HDTV720p },
+            new object[] { Quality.Bluray1080p }
         };
 
         public static object[] DeniedTestCases =
         {
-            new object[] { QualityTypes.SDTV },
-            new object[] { QualityTypes.WEBDL720p },
-            new object[] { QualityTypes.Bluray720p }
+            new object[] { Quality.SDTV },
+            new object[] { Quality.WEBDL720p },
+            new object[] { Quality.Bluray720p }
         };
 
         [SetUp]
@@ -41,32 +41,32 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _qualityAllowedByProfile = Mocker.Resolve<QualityAllowedByProfileSpecification>();
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = QualityTypes.Bluray1080p })
+                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
             parseResult = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(QualityTypes.DVD, true),
+                Quality = new QualityModel(Quality.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
             };
         }
 
         [Test, TestCaseSource("AllowedTestCases")]
-        public void should_allow_if_quality_is_defined_in_profile(QualityTypes qualityType)
+        public void should_allow_if_quality_is_defined_in_profile(Quality qualityType)
         {
             parseResult.Quality.Quality = qualityType;
-            parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV720p, QualityTypes.Bluray1080p };
+            parseResult.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
             _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeTrue();
         }
 
         [Test, TestCaseSource("DeniedTestCases")]
-        public void should_not_allow_if_quality_is_not_defined_in_profile(QualityTypes qualityType)
+        public void should_not_allow_if_quality_is_not_defined_in_profile(Quality qualityType)
         {
             parseResult.Quality.Quality = qualityType;
-            parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV720p, QualityTypes.Bluray1080p };
+            parseResult.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
             _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeFalse();
         }

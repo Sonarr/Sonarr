@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+    using NzbDrone.Core.Qualities;
     using NzbDrone.Core.Tv;
     using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core
 {
@@ -257,12 +257,12 @@ namespace NzbDrone.Core
 
             name = name.Trim();
             var normalizedName = NormalizeTitle(name);
-            var result = new QualityModel { Quality = QualityTypes.Unknown };
+            var result = new QualityModel { Quality = Quality.Unknown };
             result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
             if (normalizedName.Contains("dvd") || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
             {
-                result.Quality = QualityTypes.DVD;
+                result.Quality = Quality.DVD;
                 return result;
             }
 
@@ -270,11 +270,11 @@ namespace NzbDrone.Core
             {
                 if (normalizedName.Contains("bluray"))
                 {
-                    result.Quality = QualityTypes.DVD;
+                    result.Quality = Quality.DVD;
                     return result;
                 }
 
-                result.Quality = QualityTypes.SDTV;
+                result.Quality = Quality.SDTV;
                 return result;
             }
 
@@ -282,46 +282,46 @@ namespace NzbDrone.Core
             {
                 if (normalizedName.Contains("720p"))
                 {
-                    result.Quality = QualityTypes.Bluray720p;
+                    result.Quality = Quality.Bluray720p;
                     return result;
                 }
 
                 if (normalizedName.Contains("1080p"))
                 {
-                    result.Quality = QualityTypes.Bluray1080p;
+                    result.Quality = Quality.Bluray1080p;
                     return result;
                 }
 
-                result.Quality = QualityTypes.Bluray720p;
+                result.Quality = Quality.Bluray720p;
                 return result;
             }
             if (normalizedName.Contains("webdl"))
             {
                 if (normalizedName.Contains("1080p"))
                 {
-                    result.Quality = QualityTypes.WEBDL1080p;
+                    result.Quality = Quality.WEBDL1080p;
                     return result;
                 }
 
                 if (normalizedName.Contains("720p"))
                 {
-                    result.Quality = QualityTypes.WEBDL720p;
+                    result.Quality = Quality.WEBDL720p;
                     return result;
                 }
 
                 if(name.Contains("[WEBDL]"))
                 {
-                    result.Quality = QualityTypes.WEBDL720p;
+                    result.Quality = Quality.WEBDL720p;
                     return result;
                 }
 
-                result.Quality = QualityTypes.WEBDL480p;
+                result.Quality = Quality.WEBDL480p;
                 return result;
             }
 
             if (normalizedName.Contains("trollhd") || normalizedName.Contains("rawhd"))
             {
-                result.Quality = QualityTypes.RAWHD;
+                result.Quality = Quality.RAWHD;
                 return result;
             }
 
@@ -329,16 +329,16 @@ namespace NzbDrone.Core
             {
                 if(normalizedName.Contains("1080p"))
                 {
-                    result.Quality = QualityTypes.HDTV1080p;
+                    result.Quality = Quality.HDTV1080p;
                     return result;
                 }
 
-                result.Quality = QualityTypes.HDTV720p;
+                result.Quality = Quality.HDTV720p;
                 return result;
             }
             //Based on extension
 
-            if (result.Quality == QualityTypes.Unknown)
+            if (result.Quality == Quality.Unknown)
             {
                 try
                 {
@@ -359,13 +359,13 @@ namespace NzbDrone.Core
                         case ".ogm":
                         case ".strm":
                             {
-                                result.Quality = QualityTypes.SDTV;
+                                result.Quality = Quality.SDTV;
                                 break;
                             }
                         case ".mkv":
                         case ".ts":
                             {
-                                result.Quality = QualityTypes.HDTV720p;
+                                result.Quality = Quality.HDTV720p;
                                 break;
                             }
                     }
@@ -379,21 +379,21 @@ namespace NzbDrone.Core
 
             if (name.Contains("[HDTV]"))
             {
-                result.Quality = QualityTypes.HDTV720p;
+                result.Quality = Quality.HDTV720p;
                 return result;
             }
 
             if (normalizedName.Contains("hdtv") && normalizedName.Contains("1080p"))
             {
-                result.Quality = QualityTypes.HDTV1080p;
+                result.Quality = Quality.HDTV1080p;
                 return result;
             }
 
             if ((normalizedName.Contains("sdtv") || normalizedName.Contains("pdtv") ||
-                (result.Quality == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) &&
+                (result.Quality == Quality.Unknown && normalizedName.Contains("hdtv"))) &&
                 !normalizedName.Contains("mpeg"))
             {
-                result.Quality = QualityTypes.SDTV;
+                result.Quality = Quality.SDTV;
                 return result;
             }
 

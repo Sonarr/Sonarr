@@ -1,21 +1,21 @@
 ﻿using System.Linq;
 using System;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv
 {
     public class QualityModel : IComparable<QualityModel>
     {
-        public QualityTypes Quality { get; set; }
+        public Quality Quality { get; set; }
 
         public Boolean Proper { get; set; }
 
-        public QualityModel():this(QualityTypes.Unknown, false)
+        public QualityModel():this(Quality.Unknown, false)
         {
             
         }
 
-        public QualityModel(QualityTypes quality, Boolean proper)
+        public QualityModel(Quality quality, Boolean proper)
         {
             Quality = quality;
             Proper = proper;

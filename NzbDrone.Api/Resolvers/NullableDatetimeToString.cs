@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using NzbDrone.Api.QualityProfiles;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Api.Resolvers
 {

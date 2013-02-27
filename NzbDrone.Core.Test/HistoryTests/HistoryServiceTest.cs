@@ -5,8 +5,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HistoryTests
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.HistoryTests
 
             var history = Builder<History.History>.CreateNew()
                 .With(c => c.Id = 0)
-                .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
+                .With(h => h.Quality = new QualityModel(Quality.Bluray720p, true))
                 .With(h => h.Episode = episode)
                 .Build();
 
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.HistoryTests
             var result = Subject.GetBestQualityInHistory(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
 
             result.Should().NotBeNull();
-            result.Quality.Should().Be(QualityTypes.Bluray720p);
+            result.Quality.Should().Be(Quality.Bluray720p);
             result.Proper.Should().BeTrue();
         }
 
@@ -83,15 +83,15 @@ namespace NzbDrone.Core.Test.HistoryTests
                     .With(c => c.Id = 0)
                     .With(h => h.Episode = episode)
                     .TheFirst(1)
-                    .With(h => h.Quality = new QualityModel(QualityTypes.DVD, true))
+                    .With(h => h.Quality = new QualityModel(Quality.DVD, true))
                     .TheNext(1)
-                    .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
+                    .With(h => h.Quality = new QualityModel(Quality.Bluray720p, true))
                     .TheNext(1)
-                    .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, true))
+                    .With(h => h.Quality = new QualityModel(Quality.Bluray720p, true))
                     .TheNext(1)
-                    .With(h => h.Quality = new QualityModel(QualityTypes.Bluray720p, false))
+                    .With(h => h.Quality = new QualityModel(Quality.Bluray720p, false))
                     .TheNext(1)
-                    .With(h => h.Quality = new QualityModel(QualityTypes.SDTV, true))
+                    .With(h => h.Quality = new QualityModel(Quality.SDTV, true))
                     .Build();
 
             Db.InsertMany(history);
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.HistoryTests
             var result = Subject.GetBestQualityInHistory(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
 
             result.Should().NotBeNull();
-            result.Quality.Should().Be(QualityTypes.Bluray720p);
+            result.Quality.Should().Be(Quality.Bluray720p);
             result.Proper.Should().BeTrue();
         }
 

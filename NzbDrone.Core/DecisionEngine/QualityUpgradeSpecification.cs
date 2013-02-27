@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -10,7 +10,7 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public virtual bool IsSatisfiedBy(QualityModel currentQuality, QualityModel newQuality, QualityTypes cutOff)
+        public virtual bool IsSatisfiedBy(QualityModel currentQuality, QualityModel newQuality, Quality cutOff)
         {
             if (currentQuality >= newQuality)
             {

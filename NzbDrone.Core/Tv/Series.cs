@@ -2,7 +2,7 @@
 using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 using PetaPoco;
 
 namespace NzbDrone.Core.Tv

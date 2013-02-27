@@ -6,12 +6,12 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -23,9 +23,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
     {
         public static object[] ImportTestCases =
         {
-            new object[] { QualityTypes.SDTV, false },
-            new object[] { QualityTypes.DVD, true },
-            new object[] { QualityTypes.HDTV720p, false }
+            new object[] { Quality.SDTV, false },
+            new object[] { Quality.DVD, true },
+            new object[] { Quality.HDTV720p, false }
         };
 
         private readonly long SIZE = 80.Megabytes();
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         }
 
         [Test, TestCaseSource("ImportTestCases")]
-        public void import_new_file_with_better_same_quality_should_succeed(QualityTypes currentFileQuality, bool currentFileProper)
+        public void import_new_file_with_better_same_quality_should_succeed(Quality currentFileQuality, bool currentFileProper)
         {
             const string newFile = @"WEEDS.S03E01.DUAL.1080p.HELLYWOOD.mkv";
 
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
-                                               .With(g => g.Quality = (QualityTypes)currentFileQuality)
+                                               .With(g => g.Quality = (Quality)currentFileQuality)
                                                .And(g => g.Proper = currentFileProper).Build()
                 ).Build();
             
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(c => c.EpisodeFile = Builder<EpisodeFile>.CreateNew()
-                        .With(e => e.Quality = QualityTypes.Bluray720p).Build()
+                        .With(e => e.Quality = Quality.Bluray720p).Build()
                      )
                 .Build();
 
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(c => c.EpisodeFile = Builder<EpisodeFile>.CreateNew()
-                        .With(e => e.Quality = QualityTypes.SDTV).Build()
+                        .With(e => e.Quality = Quality.SDTV).Build()
                      )
                 .Build();
 
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
                 .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
-                                               .With(f => f.Quality = QualityTypes.SDTV)
+                                               .With(f => f.Quality = Quality.SDTV)
                                                .Build())
                 .Build();
 
@@ -278,7 +278,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
                 .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
-                                               .With(f => f.Quality = QualityTypes.Bluray720p)
+                                               .With(f => f.Quality = Quality.Bluray720p)
                                                .Build())
                 .Build();
 
@@ -310,7 +310,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .All()
-                .With(e => e.Quality = QualityTypes.SDTV)
+                .With(e => e.Quality = Quality.SDTV)
                 .Build();
 
             var fakeEpisode1 = Builder<Episode>.CreateNew()

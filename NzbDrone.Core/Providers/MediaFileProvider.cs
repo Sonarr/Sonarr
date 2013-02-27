@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 using NzbDrone.Common;
 
@@ -142,7 +142,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual string GetNewFilename(IList<Episode> episodes, Series series, QualityTypes quality, bool proper, EpisodeFile episodeFile)
+        public virtual string GetNewFilename(IList<Episode> episodes, Series series, Quality quality, bool proper, EpisodeFile episodeFile)
         {
             if (_configService.SortingUseSceneName)
             {
@@ -240,12 +240,12 @@ namespace NzbDrone.Core.Providers
             return CleanFilename(result.Trim());
         }
 
-        public virtual void ChangeQuality(int episodeFileId, QualityTypes quality)
+        public virtual void ChangeQuality(int episodeFileId, Quality quality)
         {
             _database.Execute("UPDATE EpisodeFiles SET Quality = @quality WHERE EpisodeFileId = @episodeFileId", new { episodeFileId, quality });
         }
 
-        public virtual void ChangeQuality(int seriesId, int seasonNumber, QualityTypes quality)
+        public virtual void ChangeQuality(int seriesId, int seasonNumber, Quality quality)
         {
             _database.Execute("UPDATE EpisodeFiles SET Quality = @quality WHERE SeriesId = @seriesId AND SeasonNumber = @seasonNumber", new { seriesId, seasonNumber, quality });
         }

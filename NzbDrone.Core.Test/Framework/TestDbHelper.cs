@@ -9,7 +9,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
 namespace NzbDrone.Core.Test.Framework

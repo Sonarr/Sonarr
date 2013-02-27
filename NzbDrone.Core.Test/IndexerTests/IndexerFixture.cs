@@ -15,8 +15,8 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Indexers;
 using NzbDrone.Core.Test.ProviderTests;
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             const string title = "Adventure.Inc.S03E19.DVDRip.XviD-OSiTV";
             const int season = 3;
             const int episode = 19;
-            var quality = QualityTypes.DVD;
+            var quality = Quality.DVD;
 
             const string summary = "My fake summary";
 

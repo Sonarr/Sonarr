@@ -4,16 +4,16 @@ using AutoMapper;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Api.QualityType;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.QualityProfiles
 {
     public class QualityProfilesModule : NzbDroneApiModule
     {
-        private readonly QualityProvider _qualityProvider;
+        private readonly QualityProfileService _qualityProvider;
 
-        public QualityProfilesModule(QualityProvider qualityProvider)
+        public QualityProfilesModule(QualityProfileService qualityProvider)
             : base("/QualityProfiles")
         {
             _qualityProvider = qualityProvider;
@@ -39,7 +39,7 @@ namespace NzbDrone.Api.QualityProfiles
         {
             var request = Request.Body.FromJson<QualityProfileModel>();
             var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
-            request.Id = _qualityProvider.Add(profile);
+            request.Id = _qualityProvider.Add(profile).Id;
 
             return request.AsResponse();
         }

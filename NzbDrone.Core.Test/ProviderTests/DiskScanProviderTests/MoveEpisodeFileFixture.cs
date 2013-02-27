@@ -10,12 +10,12 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.ExternalNotification;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<Quality>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var file = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = currentFilename)
-                    .With(f => f.Quality = QualityTypes.WEBDL720p)
+                    .With(f => f.Quality = Quality.WEBDL720p)
                     .With(f => f.Proper = false)
                     .Build();
 
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                  .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                  .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<Quality>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                   .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var file = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = currentFilename)
-                    .With(f => f.Quality = QualityTypes.WEBDL720p)
+                    .With(f => f.Quality = Quality.WEBDL720p)
                     .With(f => f.Proper = false)
                     .Build();
 
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<Quality>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()

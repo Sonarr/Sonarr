@@ -7,10 +7,10 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.DownloadClients;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 // ReSharper disable InconsistentNaming
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
                     .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(episodes);
 
             return Builder<EpisodeParseResult>.CreateNew()
-                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, false))
+                .With(c => c.Quality = new QualityModel(Quality.DVD, false))
                 .With(c => c.Series = Builder<Series>.CreateNew().Build())
                 .With(c => c.EpisodeNumbers = new List<int> { 2 })
                 .With(c => c.Episodes = episodes)

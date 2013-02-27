@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 using PetaPoco;
 
 namespace NzbDrone.Core.Datastore
@@ -9,11 +9,11 @@ namespace NzbDrone.Core.Datastore
     {
         public override Func<object, object> GetToDbConverter(Type sourceType)
         {
-            if (sourceType == typeof(QualityTypes))
+            if (sourceType == typeof(Quality))
             {
                 return delegate(object s)
                 {
-                    var source = (QualityTypes)s;
+                    var source = (Quality)s;
                     return source.Id;
                 };
             }
@@ -45,13 +45,13 @@ namespace NzbDrone.Core.Datastore
                            };
             }
 
-            if ((sourceType == typeof(Int32) || sourceType == typeof(Int64)) && destinationType == typeof(QualityTypes))
+            if ((sourceType == typeof(Int32) || sourceType == typeof(Int64)) && destinationType == typeof(Quality))
             {
                 return delegate(object s)
                 {
                     int value;
                     Int32.TryParse(s.ToString(), out value);
-                    var quality = (QualityTypes)value;
+                    var quality = (Quality)value;
                     return quality;
                 };
             }

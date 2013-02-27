@@ -8,13 +8,13 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                     {
                                         SeriesTitle = "Title",
                                         Language = LanguageType.English,
-                                        Quality = new QualityModel(QualityTypes.SDTV, true),
+                                        Quality = new QualityModel(Quality.SDTV, true),
                                         EpisodeNumbers = new List<int> { 3 },
                                         SeasonNumber = 12,
                                         AirDate = DateTime.Now.AddDays(-12).Date,

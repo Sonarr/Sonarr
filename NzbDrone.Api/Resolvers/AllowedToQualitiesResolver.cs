@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using NzbDrone.Api.QualityProfiles;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Resolvers
 {
-    public class AllowedToQualitiesResolver : ValueResolver<List<QualityTypes>, List<QualityProfileType>>
+    public class AllowedToQualitiesResolver : ValueResolver<List<Quality>, List<QualityProfileType>>
     {
-        protected override List<QualityProfileType> ResolveCore(List<QualityTypes> source)
+        protected override List<QualityProfileType> ResolveCore(List<Quality> source)
         {
-            var qualities = Mapper.Map<List<QualityTypes>, List<QualityProfileType>>(QualityTypes.All().Where(q => q.Id > 0).ToList());
+            var qualities = Mapper.Map<List<Quality>, List<QualityProfileType>>(Quality.All().Where(q => q.Id > 0).ToList());
 
             qualities.ForEach(quality =>
             {

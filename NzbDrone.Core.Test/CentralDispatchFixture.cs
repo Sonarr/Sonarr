@@ -12,6 +12,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Metadata;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
@@ -124,7 +125,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void quality_profile_initialized()
         {
-            kernel.Resolve<QualityProvider>().All().Should().HaveCount(2);
+            kernel.Resolve<QualityProfileService>().All().Should().HaveCount(2);
         }
 
         [Test]

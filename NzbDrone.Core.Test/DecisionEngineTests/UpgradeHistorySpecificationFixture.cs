@@ -6,12 +6,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -42,13 +42,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                        };
 
             fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = QualityTypes.Bluray1080p })
+                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
             parseResultMulti = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(QualityTypes.DVD, true),
+                Quality = new QualityModel(Quality.DVD, true),
                 EpisodeNumbers = new List<int> { 3, 4 },
                 SeasonNumber = 12,
                 Episodes = doubleEpisodeList
@@ -57,14 +57,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(QualityTypes.DVD, true),
+                Quality = new QualityModel(Quality.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
                 Episodes = singleEpisodeList
             };
 
-            firstQuality = new QualityModel(QualityTypes.Bluray1080p, true);
-            secondQuality = new QualityModel(QualityTypes.Bluray1080p, true);
+            firstQuality = new QualityModel(Quality.Bluray1080p, true);
+            secondQuality = new QualityModel(Quality.Bluray1080p, true);
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.Id, 12, 3)).Returns(firstQuality);
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.Id, 12, 4)).Returns(secondQuality);
@@ -73,12 +73,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithFirstReportUpgradable()
         {
-            firstQuality.Quality = QualityTypes.SDTV;
+            firstQuality.Quality = Quality.SDTV;
         }
 
         private void WithSecondReportUpgradable()
         {
-            secondQuality.Quality = QualityTypes.SDTV;
+            secondQuality.Quality = Quality.SDTV;
         }
 
 
@@ -120,9 +120,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_not_be_upgradable_if_episode_is_of_same_quality_as_existing()
         {
-            fakeSeries.QualityProfile = new QualityProfile { Cutoff = QualityTypes.WEBDL1080p };
-            parseResultSingle.Quality = new QualityModel(QualityTypes.WEBDL1080p, false);
-            firstQuality = new QualityModel(QualityTypes.WEBDL1080p, false);
+            fakeSeries.QualityProfile = new QualityProfile { Cutoff = Quality.WEBDL1080p };
+            parseResultSingle.Quality = new QualityModel(Quality.WEBDL1080p, false);
+            firstQuality = new QualityModel(Quality.WEBDL1080p, false);
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(fakeSeries.Id, 12, 3)).Returns(firstQuality);
 

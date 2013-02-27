@@ -4,9 +4,9 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, false);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, false);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03 HDTV-720p");
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, true);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, true);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03 HDTV-720p [proper]");
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3, 4, 5 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, false);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, false);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03-04-05 HDTV-720p");
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3, 4, 5 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, true);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, true);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03-04-05 HDTV-720p [proper]");
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = null;
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, false);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, false);
 
 
             parseResult.ToString().Should().Be("My Series - Season 12 HDTV-720p");
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = null;
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, true);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, true);
 
 
             parseResult.ToString().Should().Be("My Series - Season 12 HDTV-720p [proper]");
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = new DateTime(2010, 12, 30);
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, false);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, false);
 
 
             parseResult.ToString().Should().Be("My Series - 2010-12-30 HDTV-720p");
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = new DateTime(2010, 12, 30);
-            parseResult.Quality = new QualityModel(QualityTypes.HDTV720p, true);
+            parseResult.Quality = new QualityModel(Quality.HDTV720p, true);
 
 
             parseResult.ToString().Should().Be("My Series - 2010-12-30 HDTV-720p [proper]");
@@ -137,17 +137,17 @@ namespace NzbDrone.Core.Test
 
         public static readonly object[] SabNamingCases =
         {
-            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x02 - My Episode Title [DVD]" },
-            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x02 - My Episode Title [DVD] [Proper]" },
-            new object[] { 1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x02 -  [DVD] [Proper]" },
-            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p]" },
-            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p] [Proper]" },
-            new object[] { 1, new[] { 2, 4 }, "", QualityTypes.HDTV720p, true, "My Series Name - 1x02-1x04 -  [HDTV-720p] [Proper]" },
+            new object[] { 1, new[] { 2 }, "My Episode Title", Quality.DVD, false, "My Series Name - 1x02 - My Episode Title [DVD]" },
+            new object[] { 1, new[] { 2 }, "My Episode Title", Quality.DVD, true, "My Series Name - 1x02 - My Episode Title [DVD] [Proper]" },
+            new object[] { 1, new[] { 2 }, "", Quality.DVD, true, "My Series Name - 1x02 -  [DVD] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", Quality.HDTV720p, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", Quality.HDTV720p, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV-720p] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "", Quality.HDTV720p, true, "My Series Name - 1x02-1x04 -  [HDTV-720p] [Proper]" },
         };
 
 
         [Test, TestCaseSource("SabNamingCases")]
-        public void create_proper_sab_titles(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
+        public void create_proper_sab_titles(int seasons, int[] episodes, string title, Quality quality, bool proper, string expected)
         {
             var series = Builder<Series>.CreateNew()
                     .With(c => c.Title = "My Series Name")
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
-                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
+                Quality = new QualityModel(Quality.Bluray720p, proper),
                 SeasonNumber = 1,
                 Series = series,
                 EpisodeTitle = "My Episode Title",
@@ -213,7 +213,7 @@ namespace NzbDrone.Core.Test
             var parsResult = new EpisodeParseResult
             {
                 AirDate = new DateTime(2011, 12, 1),
-                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
+                Quality = new QualityModel(Quality.Bluray720p, proper),
                 Series = series,
                 EpisodeTitle = "My Episode Title",
                 Episodes = new List<Episode> { episode }
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Test
             {
                 AirDate = DateTime.Now,
                 EpisodeNumbers = new List<int> { 10, 11 },
-                Quality = new QualityModel(QualityTypes.HDTV720p, false),
+                Quality = new QualityModel(Quality.HDTV720p, false),
                 SeasonNumber = 35,
                 Series = series,
                 Episodes = fakeEpisodes

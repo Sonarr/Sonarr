@@ -6,12 +6,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             var episodeFiles = Builder<EpisodeFile>
                 .CreateListOfSize(10)
                 .All()
-                .With(e => e.Quality = QualityTypes.DVD)
+                .With(e => e.Quality = Quality.DVD)
                 .Build();
             var episodes = Builder<Episode>.CreateListOfSize(5).Build();
 

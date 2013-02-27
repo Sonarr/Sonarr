@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
 namespace NzbDrone.Core.Repository.Search

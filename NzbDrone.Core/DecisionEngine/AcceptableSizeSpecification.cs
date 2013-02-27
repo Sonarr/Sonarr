@@ -1,20 +1,20 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.DecisionEngine
 {
     public class AcceptableSizeSpecification
     {
-        private readonly QualityTypeProvider _qualityTypeProvider;
+        private readonly QualitySizeService _qualityTypeProvider;
         private readonly IEpisodeService _episodeService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AcceptableSizeSpecification(QualityTypeProvider qualityTypeProvider, IEpisodeService episodeService)
+        public AcceptableSizeSpecification(QualitySizeService qualityTypeProvider, IEpisodeService episodeService)
         {
             _qualityTypeProvider = qualityTypeProvider;
             _episodeService = episodeService;
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             logger.Trace("Beginning size check for: {0}", subject);
 
-            if(subject.Quality.Quality == QualityTypes.RAWHD)
+            if(subject.Quality.Quality == Quality.RAWHD)
             {
                 logger.Trace("Raw-HD release found, skipping size check.");
                 return true;

@@ -9,12 +9,12 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
@@ -29,12 +29,12 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var firstSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
-                .With(c => c.Quality = QualityTypes.SDTV)
+                .With(c => c.Quality = Quality.SDTV)
                 .With(s => s.SeriesId = 12).Build();
 
             var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
-                .With(c => c.Quality = QualityTypes.SDTV)
+                .With(c => c.Quality = Quality.SDTV)
                 .With(s => s.SeriesId = 20).Build();
 
 
@@ -56,14 +56,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var firstSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
-                .With(c => c.Quality = QualityTypes.SDTV)
+                .With(c => c.Quality = Quality.SDTV)
                 .With(s => s.SeriesId = 12)
                 .With(s => s.SeasonNumber = 1)
                 .Build();
 
             var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
-                .With(c => c.Quality = QualityTypes.SDTV)
+                .With(c => c.Quality = Quality.SDTV)
                 .With(s => s.SeriesId = 12)
                 .With(s => s.SeasonNumber = 2)
                 .Build();
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodeFiles = Builder<EpisodeFile>
                 .CreateListOfSize(10)
                 .All()
-                .With(c => c.Quality = QualityTypes.SDTV)
+                .With(c => c.Quality = Quality.SDTV)
                 .Build();
 
 
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             WithRealDb();
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                    .With(c => c.Quality = QualityTypes.SDTV)
+                    .With(c => c.Quality = Quality.SDTV)
                     .With(f => f.Path = path.NormalizePath())
                     .Build();
 

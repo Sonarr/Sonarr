@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AutoMapper;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Resolvers
 {
-    public class QualityTypesToIntResolver : ValueResolver<QualityTypes, Int32>
+    public class QualityTypesToIntResolver : ValueResolver<Quality, Int32>
     {
-        protected override int ResolveCore(QualityTypes source)
+        protected override int ResolveCore(Quality source)
         {
             return source.Id;
         }

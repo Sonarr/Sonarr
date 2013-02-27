@@ -5,11 +5,11 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -20,8 +20,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         private void WithWebdlCutoff()
         {
-            var profile = new QualityProfile { Cutoff = QualityTypes.WEBDL720p };
-            Mocker.GetMock<QualityProvider>().Setup(s => s.Get(It.IsAny<int>())).Returns(profile);
+            var profile = new QualityProfile { Cutoff = Quality.WEBDL720p };
+            Mocker.GetMock<QualityProfileService>().Setup(s => s.Get(It.IsAny<int>())).Returns(profile);
         }
 
         private Series _series;
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     .Build();
 
             _episodeFile = Builder<EpisodeFile>.CreateNew()
-                    .With(f => f.Quality = QualityTypes.SDTV)
+                    .With(f => f.Quality = Quality.SDTV)
                     .Build();
 
             _episode = Builder<Episode>.CreateNew()
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithWebdlCutoff();
 
-            _episodeFile.Quality = QualityTypes.WEBDL720p;
+            _episodeFile.Quality = Quality.WEBDL720p;
 
             //Act
             bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(_episode);
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithWebdlCutoff();
 
-            _episodeFile.Quality = QualityTypes.Bluray720p;
+            _episodeFile.Quality = Quality.Bluray720p;
 
             //Act
             bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(_episode);

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
@@ -8,10 +9,10 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class UpgradePossibleSpecification
     {
-        private readonly QualityProvider _qualityProvider;
+        private readonly IQualityProfileService _qualityProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpgradePossibleSpecification(QualityProvider qualityProvider)
+        public UpgradePossibleSpecification(IQualityProfileService qualityProvider)
         {
             _qualityProvider = qualityProvider;
         }
