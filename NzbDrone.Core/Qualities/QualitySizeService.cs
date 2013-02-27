@@ -48,18 +48,14 @@ namespace NzbDrone.Core.Qualities
 
         public void Init()
         {
-            var inDb = All();
+            var existing = All();
 
             _logger.Debug("Setting up default quality sizes");
 
-            foreach (var quality in Quality.All())
+            foreach (var quality in Quality.All().Where(q => q.Id > 0))
             {
-                //Skip UNKNOWN
-                if (quality.Id == 0) continue;
-
-                var db = inDb.SingleOrDefault(s => s.QualityId == quality.Id);
-
-                if(db == null)
+                if(existing.SingleOrDefault(s => s.QualityId == quality.Id) == null)
+                {
                     _qualitySizeRepository.Insert(new QualitySize
                         {
                                 QualityId = quality.Id,
@@ -67,6 +63,7 @@ namespace NzbDrone.Core.Qualities
                                 MinSize = 0,
                                 MaxSize = 100
                         });
+                }
             }
         }
     }

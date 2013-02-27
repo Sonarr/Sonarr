@@ -92,17 +92,17 @@ namespace NzbDrone.Core.Qualities
             return Equals((Quality) obj);
         }
 
-        public static Quality Unknown = new Quality { Id = 0, Name = "Unknown", Weight = 0 };
-        public static Quality SDTV = new Quality {Id = 1, Name = "SDTV", Weight = 1};
-        public static Quality WEBDL480p = new Quality { Id = 8, Name = "WEBDL-480p", Weight = 2 };
-        public static Quality DVD = new Quality { Id = 2, Name = "DVD", Weight = 3 };
-        public static Quality HDTV720p = new Quality { Id = 4, Name = "HDTV-720p", Weight = 4 };
-        public static Quality HDTV1080p = new Quality { Id = 9, Name = "HDTV-1080p", Weight = 5 };
-        public static Quality RAWHD = new Quality { Id = 10, Name = "Raw-HD", Weight = 6 };
-        public static Quality WEBDL720p = new Quality { Id = 5, Name = "WEBDL-720p", Weight = 7 };
-        public static Quality Bluray720p = new Quality { Id = 6, Name = "Bluray720p", Weight = 8 };
-        public static Quality WEBDL1080p = new Quality { Id = 3, Name = "WEBDL-1080p", Weight = 9 };
-        public static Quality Bluray1080p = new Quality { Id = 7, Name = "Bluray1080p", Weight = 10 };
+        public static readonly Quality Unknown = new Quality { Id = 0, Name = "Unknown", Weight = 0 };
+        public static readonly Quality SDTV = new Quality {Id = 1, Name = "SDTV", Weight = 1};
+        public static readonly Quality WEBDL480p = new Quality { Id = 8, Name = "WEBDL-480p", Weight = 2 };
+        public static readonly Quality DVD = new Quality { Id = 2, Name = "DVD", Weight = 3 };
+        public static readonly Quality HDTV720p = new Quality { Id = 4, Name = "HDTV-720p", Weight = 4 };
+        public static readonly Quality HDTV1080p = new Quality { Id = 9, Name = "HDTV-1080p", Weight = 5 };
+        public static readonly Quality RAWHD = new Quality { Id = 10, Name = "Raw-HD", Weight = 6 };
+        public static readonly Quality WEBDL720p = new Quality { Id = 5, Name = "WEBDL-720p", Weight = 7 };
+        public static readonly Quality Bluray720p = new Quality { Id = 6, Name = "Bluray720p", Weight = 8 };
+        public static readonly Quality WEBDL1080p = new Quality { Id = 3, Name = "WEBDL-1080p", Weight = 9 };
+        public static readonly Quality Bluray1080p = new Quality { Id = 7, Name = "Bluray1080p", Weight = 10 };
 
 
         public static List<Quality> All()
