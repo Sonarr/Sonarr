@@ -5,8 +5,6 @@ using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
 using NzbDrone.Api.Series;
-using NzbDrone.Api.Upcoming;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -42,11 +40,6 @@ namespace NzbDrone.Api
                   .ForMember(dest => dest.CustomStartDate, opt => opt.ResolveUsing<NullableDatetimeToString>().FromMember(src => src.CustomStartDate))
                   .ForMember(dest => dest.BacklogSetting, opt => opt.MapFrom(src => (Int32)src.BacklogSetting))
                   .ForMember(dest => dest.NextAiring, opt => opt.ResolveUsing<NextAiringResolver>());
-
-            //Upcoming
-            Mapper.CreateMap<Episode, UpcomingResource>()
-                  .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
-                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title));
 
             //Calendar
             Mapper.CreateMap<Episode, CalendarResource>()

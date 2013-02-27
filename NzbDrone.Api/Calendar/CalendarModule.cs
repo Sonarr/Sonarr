@@ -17,10 +17,10 @@ namespace NzbDrone.Api.Calendar
             : base("/calendar")
         {
             _episodeService = episodeService;
-            Get["/"] = x => Calendar();
+            Get["/"] = x => GetEpisodesBetweenStartAndEndDate();
         }
 
-        private Response Calendar()
+        private Response GetEpisodesBetweenStartAndEndDate()
         {
             var start = DateTime.Today;
             var end = DateTime.Today.AddDays(7);

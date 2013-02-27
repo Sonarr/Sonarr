@@ -561,9 +561,6 @@
     <Compile Include="Providers\TwitterProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\UpcomingEpisodesProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\UpdateProvider.cs">
       <SubType>Code</SubType>
     </Compile>

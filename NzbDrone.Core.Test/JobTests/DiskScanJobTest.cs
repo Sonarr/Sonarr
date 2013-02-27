@@ -29,10 +29,9 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.Id = 12)
                 .Build();
 
-
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(p => p.Get(series.Id));
-
+                  .Setup(p => p.Get(series.Id))
+                  .Returns(series);
 
             Mocker.GetMock<DiskScanProvider>()
                 .Setup(p => p.Scan(series))
@@ -120,14 +119,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
-
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
-
-
 
             Mocker.VerifyAllMocks();
             Mocker.GetMock<DiskScanProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
         }
     }
-
 }
