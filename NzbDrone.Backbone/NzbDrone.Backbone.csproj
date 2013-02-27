@@ -29,6 +29,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="MainMenuView.js" />
     <Content Include="AddSeries\addSeries.css" />
     <Content Include="AddSeries\AddSeriesLayout.js" />
     <Content Include="AddSeries\addSeriesLayoutTemplate.html" />

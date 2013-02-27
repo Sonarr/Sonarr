@@ -1,6 +1,6 @@
 ﻿define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout', 'Series/SeriesCollectionView',
         'Upcoming/UpcomingCollectionView', 'Calendar/CalendarCollectionView', 'Shared/NotificationView',
-        'Shared/NotFoundView'], function (app, modalRegion) {
+        'Shared/NotFoundView', 'MainMenuView'], function (app, modalRegion) {
 
     var controller = Backbone.Marionette.Controller.extend({
 
@@ -43,7 +43,7 @@
         }
     });
 
-
+    //Modal dialog initializer
     NzbDrone.addInitializer(function () {
 
         NzbDrone.addRegions({ modalRegion: modalRegion });
@@ -59,7 +59,7 @@
         });
 
     });
-
+            
     return new controller();
 
 });
