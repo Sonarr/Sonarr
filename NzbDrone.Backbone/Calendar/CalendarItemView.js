@@ -7,7 +7,8 @@ define([
 ], function () {
     NzbDrone.Calendar.CalendarItemView = Backbone.Marionette.ItemView.extend({
         template: 'Calendar/CalendarItemTemplate',
-        tagName: 'tr',
+        tagName: 'div',
+        className: 'event',
 
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);

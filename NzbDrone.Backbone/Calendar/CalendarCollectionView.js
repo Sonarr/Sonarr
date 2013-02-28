@@ -3,8 +3,9 @@
 define(['app', 'Calendar/CalendarItemView'], function (app) {
     NzbDrone.Calendar.CalendarCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView: NzbDrone.Calendar.CalendarItemView,
-        itemViewContainer: '#upcomingContainer',
+        itemViewContainer: '#events',
         template: 'Calendar/CalendarCollectionTemplate',
+        className: 'row',
 
         ui: {
             calendar: '#calendar'
@@ -17,7 +18,7 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
         onCompositeCollectionRendered: function() {
             $(this.ui.calendar).fullCalendar({
                 allDayDefault: false,
-                //ignoreTimezone: false,
+                ignoreTimezone: false,
                 weekMode: 'variable',
                 header: {
                     left: 'prev,next today',
