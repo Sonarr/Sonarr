@@ -2,6 +2,7 @@
 using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
+using Sqo.Attributes;
 
 namespace NzbDrone.Core.Tv
 {
@@ -16,7 +17,10 @@ namespace NzbDrone.Core.Tv
 
         //Todo: Since we're displaying next airing relative to the user's timezone we may want to store this as UTC (with airtime + UTC offset)
         public DateTime? AirDate { get; set; }
+
+        [Text]
         public string Overview { get; set; }
+
         public Boolean Ignored { get; set; }
         public PostDownloadStatusType PostDownloadStatus { get; set; }
         public int AbsoluteEpisodeNumber { get; set; }

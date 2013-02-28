@@ -853,7 +853,9 @@ ul.stat-list {
 }
 
 /* ============== popover ============== */
+.popover {
+    width: 276px;
+}
 .popover-title {
-    white-space: nowrap;
     text-transform: none;
 }

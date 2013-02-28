@@ -114,7 +114,7 @@
 
 .fc-view {
     width: 100%; /* needed for view switching (when view is absolute) */
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 
