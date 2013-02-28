@@ -25,57 +25,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public static void RegisterConsoleLogger(LogLevel minLevel, string loggerNamePattern = "*")
-        {
-            try
-            {
-                var consoleTarget = new ConsoleTarget();
-                consoleTarget.Layout = "${message} ${exception}";
-                LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule(loggerNamePattern, minLevel, consoleTarget));
-
-                LogManager.ConfigurationReloaded += (sender, args) => RegisterConsoleLogger(minLevel, loggerNamePattern);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-
-                if (LogManager.ThrowExceptions)
-                    throw;
-            }
-        }
-
-        public static void RegisterUdpLogger()
-        {
-            try
-            {
-                var udpTarget = new NLogViewerTarget();
-                udpTarget.Address = "udp://127.0.0.1:20480";
-                udpTarget.IncludeCallSite = true;
-                udpTarget.IncludeSourceInfo = true;
-                udpTarget.IncludeNLogData = true;
-                udpTarget.IncludeNdc = true;
-                udpTarget.Parameters.Add(new NLogViewerParameterInfo
-                                             {
-                                                 Name = "Exception",
-                                                 Layout = "${exception:format=ToString}"
-                                             });
-
-                LogManager.Configuration.AddTarget(udpTarget.GetType().Name, udpTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, udpTarget));
-
-                LogManager.ConfigurationReloaded += (sender, args) => RegisterUdpLogger();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-
-                if (LogManager.ThrowExceptions)
-                    throw;
-            }
-        }
-
-
+        
         private static FileTarget GetBaseTarget()
         {
             var fileTarget = new FileTarget();

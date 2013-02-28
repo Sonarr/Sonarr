@@ -1,5 +1,6 @@
 using NLog;
 using NLog.Config;
+using NLog.Targets;
 using NUnit.Framework;
 using NzbDrone.Common;
 
@@ -15,8 +16,10 @@ namespace NzbDrone.Test.Common
             if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
             {
                 LogManager.Configuration = new LoggingConfiguration();
-                LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
-                LogConfiguration.RegisterUdpLogger();
+                var consoleTarget = new ConsoleTarget();
+                consoleTarget.Layout = "${message} ${exception}";
+                LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", consoleTarget));
 
                 RegisterExceptionVerification();
                 LogConfiguration.Reload();

@@ -66,9 +66,6 @@ namespace NzbDrone.Update
 
             LogConfiguration.RegisterRemote();
 
-            LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
-            LogConfiguration.RegisterUdpLogger();
-
             var logPath = Path.Combine(new EnvironmentProvider().GetSandboxLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
             LogConfiguration.RegisterFileLogger(logPath, LogLevel.Info);
             

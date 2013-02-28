@@ -45,8 +45,6 @@ namespace NzbDrone
             ReportingService.SetupExceptronDriver();
 
             LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);
-            LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
-            LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterRemote();
             LogConfiguration.Reload();
             logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
