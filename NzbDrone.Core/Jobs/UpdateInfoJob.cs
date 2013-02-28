@@ -49,18 +49,18 @@ namespace NzbDrone.Core.Jobs
 
         public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            IList<Series> seriesToUpdate;
+            IList<Series> ListOfSeriesToUpdate;
             if (options == null || options.SeriesId == 0)
             {
                 if (_configService.IgnoreArticlesWhenSortingSeries)
-                    seriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+                    ListOfSeriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
 
                 else
-                    seriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title).ToList();
+                    ListOfSeriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title).ToList();
             }
             else
             {
-                seriesToUpdate = new List<Series>
+                ListOfSeriesToUpdate = new List<Series>
                     {
                             _seriesRepository.Get((int)options.SeriesId)
                     };
@@ -69,12 +69,14 @@ namespace NzbDrone.Core.Jobs
             //Update any Daily Series in the DB with the IsDaily flag
             _referenceDataProvider.UpdateDailySeries();
 
-            foreach (var series in seriesToUpdate)
+            foreach (var seriesToUpdate in ListOfSeriesToUpdate)
             {
+                var series = seriesToUpdate;
+
                 try
                 {
                     notification.CurrentMessage = "Updating " + series.Title;
-                    _seriesService.UpdateSeriesInfo(series.Id);
+                    series = _seriesService.UpdateSeriesInfo(series.Id);
                     _episodeService.RefreshEpisodeInfo(series);
                     notification.CurrentMessage = "Update completed for " + series.Title;
                 }
