@@ -34,7 +34,7 @@ define([
         editSeries: function () {
             var view = new NzbDrone.Series.EditSeriesView({ model: this.model});
 
-           NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
+            NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
                 view: view
             });
         },

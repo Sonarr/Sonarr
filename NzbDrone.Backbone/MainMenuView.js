@@ -8,7 +8,6 @@
             'click a': 'onClick'
         },
 
-
         onClick: function (event) {
 
             event.preventDefault();
@@ -38,15 +37,13 @@
 
         },
 
-
         setActive: function (element) {
             this.$('a').removeClass('active');
             $(element).addClass('active');
         },
 
-
         initialize: function () {
-            console.log('menue');
+            console.log('menu');
             this.setElement($('#main-menu-region'));
         }
     });

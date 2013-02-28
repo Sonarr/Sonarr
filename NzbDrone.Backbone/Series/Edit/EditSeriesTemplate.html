@@ -28,7 +28,7 @@
             <label class="control-label" for="inputQualityProfile">Quality Profile</label>
             <div class="controls">
                 
-                <select class="x-quality-profile" name="qualityProfileId">
+                <select class="x-quality-profile" id="inputQualityProfile" name="qualityProfileId">
                     {{#each qualityProfiles.models}}
                     <option value="{{id}}">{{attributes.name}}</option>
                     {{/each}}

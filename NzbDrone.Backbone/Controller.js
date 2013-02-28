@@ -11,7 +11,7 @@
 
         series: function (action, query) {
             this.setTitle('NzbDrone');
-            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView(this, action, query));
+            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView());
         },
 
         upcoming: function (action, query) {
@@ -23,7 +23,7 @@
             this.setTitle('Calendar');
             var calendarCollection = new NzbDrone.Calendar.CalendarCollection();
             calendarCollection.fetch();
-            NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView(this, calendarCollection, action, query));
+            NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView(this, action, query, calendarCollection));
         },
 
         notFound: function () {

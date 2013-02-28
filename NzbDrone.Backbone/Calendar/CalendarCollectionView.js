@@ -10,7 +10,7 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
             calendar: '#calendar'
         },
 
-        initialize: function (context, collection) {
+        initialize: function (context, action, query, collection) {
             this.collection = collection;
             this.calendar = new NzbDrone.Calendar.CalendarCollection();
         },
