@@ -61,10 +61,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Exceptron.Client, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptron.Client.1.0.7\lib\net20\Exceptron.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -115,18 +111,17 @@
     <Compile Include="Eventing\IEventAggregator.cs" />
     <Compile Include="Eventing\IHandle.cs" />
     <Compile Include="HostController.cs" />
+    <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
     <Compile Include="ConsoleProvider.cs" />
     <Compile Include="Contract\ReportBase.cs" />
     <Compile Include="Contract\ParseErrorReport.cs" />
-    <Compile Include="NlogTargets\RemoteTarget.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="PathExtentions.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnvironmentProvider.cs" />
-    <Compile Include="LogConfiguration.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

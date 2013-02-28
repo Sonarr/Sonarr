@@ -71,7 +71,6 @@ namespace NzbDrone.Api
         {
             EnvironmentProvider.UGuid = container.Resolve<ConfigService>().UGuid;
             ReportingService.RestProvider = container.Resolve<RestProvider>();
-            ReportingService.SetupExceptronDriver();
         }
 
         protected override ILifetimeScope GetApplicationContainer()

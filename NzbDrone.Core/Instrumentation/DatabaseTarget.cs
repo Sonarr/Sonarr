@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Instrumentation
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, this));
 
             LogManager.ConfigurationReloaded += (sender, args) => Register();
-            LogConfiguration.Reload();
         }
         
 

@@ -31,7 +31,9 @@ namespace NzbDrone.Update
                 builder.RegisterAssemblyTypes(typeof(UpdateProvider).Assembly).SingleInstance();
                 builder.RegisterAssemblyTypes(typeof(RestProvider).Assembly).SingleInstance();
                 _container = builder.Build();
-                InitLoggers();
+
+                ReportingService.RestProvider = _container.Resolve<RestProvider>();
+
 
                 logger.Info("Updating NzbDrone to version {0}", _container.Resolve<EnvironmentProvider>().Version);
                 _container.Resolve<Program>().Start(args);
@@ -59,18 +61,6 @@ namespace NzbDrone.Update
             }
         }
 
-        private static void InitLoggers()
-        {
-            ReportingService.RestProvider = _container.Resolve<RestProvider>();
-            ReportingService.SetupExceptronDriver();
-
-            LogConfiguration.RegisterRemote();
-
-            var logPath = Path.Combine(new EnvironmentProvider().GetSandboxLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
-            LogConfiguration.RegisterFileLogger(logPath, LogLevel.Info);
-            
-            LogConfiguration.Reload();
-        }
 
         public void Start(string[] args)
         {

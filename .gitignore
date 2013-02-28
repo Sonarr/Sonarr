@@ -135,3 +135,4 @@ UpdateLogs/
 */test-results/*
 .idea/*
 NzbDrone.Web/*
+*log.txt

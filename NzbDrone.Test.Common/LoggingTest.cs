@@ -22,7 +22,6 @@ namespace NzbDrone.Test.Common
                 LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", consoleTarget));
 
                 RegisterExceptionVerification();
-                LogConfiguration.Reload();
             }
         }
 

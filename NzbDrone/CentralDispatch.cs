@@ -17,7 +17,7 @@ namespace NzbDrone
             var builder = new ContainerBuilder();
             BindKernel(builder);
             container = builder.Build();
-            InitilizeApp();
+            InitializeApp();
         }
 
         public static IContainer Container
@@ -37,16 +37,12 @@ namespace NzbDrone
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly());
         }
 
-        private static void InitilizeApp()
+        private static void InitializeApp()
         {
             var environmentProvider = container.Resolve<EnvironmentProvider>();
 
             ReportingService.RestProvider = container.Resolve<RestProvider>();
-            ReportingService.SetupExceptronDriver();
 
-            LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);
-            LogConfiguration.RegisterRemote();
-            LogConfiguration.Reload();
             logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
         }
     }
