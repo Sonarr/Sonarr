@@ -28,7 +28,26 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
                     prev: '<i class="icon-arrow-left"></i>',
                     next: '<i class="icon-arrow-right"></i>'
                 },
-                events: this.getEvents
+                events: this.getEvents,
+                eventRender: function (event, element) {
+                    element.popover({
+                        title: '{seriesTitle} - {season}x{episode} - {episodeTitle}'.assign({
+                            seriesTitle: event.seriesTitle,
+                            season: event.seasonNumber,
+                            episode: event.episodeNumber.pad(2),
+                            episodeTitle: event.episodeTitle
+                        }),
+                        content: event.overview,
+                        placement: 'bottom',
+                        trigger: 'manual'
+                    });
+                },
+                eventMouseover: function(event, jsEvent, view){
+                    $(this).popover('show');
+                },
+                eventMouseout: function(event, jsEvent, view){
+                    $(this).popover('hide');
+                }
             });
 
             NzbDrone.Calendar.CalendarCollectionView.Instance = this;

@@ -851,3 +851,9 @@ ul.stat-list {
 .settings-group {
     margin-top: 40px;
 }
+
+/* ============== popover ============== */
+.popover-title {
+    white-space: nowrap;
+    text-transform: none;
+}
