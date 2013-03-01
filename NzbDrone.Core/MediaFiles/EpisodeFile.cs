@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
-using PetaPoco;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Tv
+namespace NzbDrone.Core.MediaFiles
 {
-    public class EpisodeFile
+    public class EpisodeFile : ModelBase
     {
         public EpisodeFile()
         {
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Tv
 
         public EpisodeFile(EpisodeFile source)
         {
-            EpisodeFileId = source.EpisodeFileId;
+            Id = source.Id;
             SeriesId = source.SeriesId;
             SeasonNumber = source.SeasonNumber;
             Path = source.Path;
@@ -22,8 +23,6 @@ namespace NzbDrone.Core.Tv
             Proper = source.Proper;
             Size = source.Size;
         }
-
-        public int EpisodeFileId { get; set; }
 
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }

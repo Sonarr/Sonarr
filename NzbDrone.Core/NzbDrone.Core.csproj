@@ -285,6 +285,7 @@
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
+    <Compile Include="MediaFiles\MediaFileRepository.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
@@ -508,7 +509,7 @@
     <Compile Include="Indexers\SyndicationFeedXmlReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\MediaFileProvider.cs">
+    <Compile Include="MediaFiles\MediaFileService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\MisnamedProvider.cs">
@@ -582,7 +583,7 @@
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
-    <Compile Include="Tv\EpisodeFile.cs" />
+    <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />

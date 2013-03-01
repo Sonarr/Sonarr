@@ -1,28 +1,25 @@
 // ReSharper disable RedundantUsingDirective
 
+using System.Linq;
 using System;
 using System.Collections.Generic;
-
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.MediaFileTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class MediaFileProviderTest : SqlCeTest
+    public class MediaFileServiceTest : SqlCeTest
     {
         [Test]
         public void get_series_files()
@@ -45,7 +42,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(firstSeriesFiles);
             Db.InsertMany(secondSeriesFiles);
 
-            var result = Mocker.Resolve<MediaFileProvider>().GetSeriesFiles(12);
+            var result = Mocker.Resolve<IMediaFileService>().GetFilesBySeries(12);
 
 
             result.Should().HaveSameCount(firstSeriesFiles);
@@ -74,7 +71,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(firstSeriesFiles);
             Db.InsertMany(secondSeriesFiles);
 
-            var result = Mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12, 1);
+            var result = Mocker.Resolve<IMediaFileService>().GetFilesBySeason(12, 1);
 
             result.Should().HaveSameCount(firstSeriesFiles);
         }
@@ -87,9 +84,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.GetEpisodeBySeries(12))
                 .Returns(new List<Episode>());
-
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.CleanUpDatabase());
 
 
             Mocker.GetMock<DiskProvider>()
@@ -112,7 +106,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void CleanFileName(string name, string expectedName)
         {
             //Act
-            var result = MediaFileProvider.CleanFilename(name);
+            var result = MediaFileService.CleanFilename(name);
 
             //Assert
             Assert.AreEqual(expectedName, result);
@@ -137,7 +131,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IConfigService>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
 
             //Act
-            var result = Mocker.Resolve<MediaFileProvider>().CalculateFilePath(fakeSeries, 1, filename, ".mkv");
+            var result = Mocker.Resolve<IMediaFileService>().CalculateFilePath(fakeSeries, 1, filename, ".mkv");
 
             //Assert
             Assert.AreEqual(expectedPath, result.FullName);
@@ -158,12 +152,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(episodeFiles);
 
             //Act
-            Mocker.Resolve<MediaFileProvider>().Delete(1);
+            Mocker.Resolve<IMediaFileService>().Delete(1);
             var result = Db.Fetch<EpisodeFile>();
 
             //Assert
             result.Should().HaveCount(9);
-            result.Should().NotContain(e => e.EpisodeFileId == 1);
+            result.Should().NotContain(e => e.Id == 1);
         }
 
         [Test]
@@ -173,7 +167,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithRealDb();
 
             //Act
-            var result = Mocker.Resolve<MediaFileProvider>().GetFileByPath(@"C:\Test\EpisodeFile.avi");
+            var result = Mocker.Resolve<IMediaFileService>().GetFileByPath(@"C:\Test\EpisodeFile.avi");
 
             //Resolve
             result.Should().BeNull();
@@ -194,12 +188,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodeFileId = Convert.ToInt32(Db.Insert(episodeFile));
 
             //Act
-            var result = Mocker.Resolve<MediaFileProvider>().GetFileByPath(path);
+            var result = Mocker.Resolve<IMediaFileService>().GetFileByPath(path);
 
             //Resolve
             result.Should().NotBeNull();
             result.Path.Should().Be(path.NormalizePath());
-            result.EpisodeFileId.Should().Be(episodeFileId);
+            result.Id.Should().Be(episodeFileId);
         }
     }
 }

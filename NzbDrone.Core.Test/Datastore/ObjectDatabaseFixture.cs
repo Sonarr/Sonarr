@@ -160,8 +160,8 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void deleting_child_model_directly_should_set_link_to_null()
         {
-            _parentModel.Child = _childModel;           
-            
+            _parentModel.Child = _childModel;
+
             Db.Insert(_childModel);
             Db.Insert(_parentModel);
 
@@ -191,7 +191,30 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.AsQueryable<ParentModel>().Single().ChildList.Should().HaveCount(4);
         }
-        
+
+        [Test]
+        public void update_field_should_only_update_that_filed()
+        {
+            var childModel = new ChildModel
+                {
+                        A = "A_Original",
+                        B = 1,
+                        C = 1
+
+                };
+
+            Db.Insert(childModel);
+
+            _childModel.A = "A_New";
+            _childModel.B = 2;
+            _childModel.C = 2;
+
+            Db.UpdateField(childModel, "B");
+
+            Db.AsQueryable<ChildModel>().Single().A.Should().Be("A_Original");
+            Db.AsQueryable<ChildModel>().Single().B.Should().Be(2);
+            Db.AsQueryable<ChildModel>().Single().C.Should().Be(1);
+        }
 
         [Test]
         public void should_be_able_to_read_unknown_type()

@@ -8,6 +8,7 @@ using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.ExternalNotification;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Providers
         private static readonly string[] mediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
         private readonly DiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly IMediaFileService _mediaFileService;
         private readonly SignalRProvider _signalRProvider;
         private readonly IConfigService _configService;
         private readonly RecycleBinProvider _recycleBinProvider;
@@ -27,13 +28,13 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, MediaFileProvider mediaFileProvider,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService,
                                 SignalRProvider signalRProvider, IConfigService configService,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
-            _mediaFileProvider = mediaFileProvider;
+            _mediaFileService = mediaFileService;
             _signalRProvider = signalRProvider;
             _configService = configService;
             _recycleBinProvider = recycleBinProvider;
@@ -62,8 +63,6 @@ namespace NzbDrone.Core.Providers
         /// <param name="path">Path to scan</param>
         public virtual List<EpisodeFile> Scan(Series series, string path)
         {
-            _mediaFileProvider.CleanUpDatabase();
-
             if (!_diskProvider.FolderExists(path))
             {
                 Logger.Warn("Series folder doesn't exist: {0}", path);
@@ -76,7 +75,7 @@ namespace NzbDrone.Core.Providers
                 return new List<EpisodeFile>();
             }
 
-            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.Id);
+            var seriesFile = _mediaFileService.GetFilesBySeries(series.Id);
             CleanUp(seriesFile);
 
             var mediaFileList = GetVideoFiles(path);
@@ -104,7 +103,7 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
 
-            if (_mediaFileProvider.Exists(filePath))
+            if (_mediaFileService.Exists(filePath))
             {
                 Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
                 return null;
@@ -169,7 +168,7 @@ namespace NzbDrone.Core.Providers
 
             //Todo: We shouldn't actually import the file until we confirm its the only one we want.
             //Todo: Separate episodeFile creation from importing (pass file to import to import)
-             _mediaFileProvider.Add(episodeFile);
+             _mediaFileService.Add(episodeFile);
 
             //Link file to all episodes
             foreach (var ep in episodes)
@@ -189,9 +188,9 @@ namespace NzbDrone.Core.Providers
                 throw new ArgumentNullException("episodeFile");
 
             var series = _seriesRepository.Get(episodeFile.SeriesId);
-            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId);
-            string newFileName = _mediaFileProvider.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
-            var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
+            string newFileName = _mediaFileService.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
+            var newFile = _mediaFileService.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Only rename if existing and new filenames don't match
             if (DiskProvider.PathEquals(episodeFile.Path, newFile.FullName))
@@ -223,7 +222,7 @@ namespace NzbDrone.Core.Providers
             }
 
             episodeFile.Path = newFile.FullName;
-            _mediaFileProvider.Update(episodeFile);
+            _mediaFileService.Update(episodeFile);
 
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
@@ -257,7 +256,7 @@ namespace NzbDrone.Core.Providers
                         Logger.Trace("File [{0}] no longer exists on disk. removing from db", episodeFile.Path);
 
                         //Set the EpisodeFileId for each episode attached to this file to 0
-                        foreach (var episode in _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+                        foreach (var episode in _episodeService.GetEpisodesByFileId(episodeFile.Id))
                         {
                             Logger.Trace("Detaching episode {0} from file.", episode.Id);
                             episode.EpisodeFile = null;
@@ -269,12 +268,12 @@ namespace NzbDrone.Core.Providers
 
                         //Delete it from the DB
                         Logger.Trace("Removing EpisodeFile from DB.");
-                        _mediaFileProvider.Delete(episodeFile.EpisodeFileId);
+                        _mediaFileService.Delete(episodeFile.Id);
                     }
                 }
                 catch (Exception ex)
                 {
-                    var message = String.Format("Unable to cleanup EpisodeFile in DB: {0}", episodeFile.EpisodeFileId);
+                    var message = String.Format("Unable to cleanup EpisodeFile in DB: {0}", episodeFile.Id);
                     Logger.ErrorException(message, ex);
                 }
             }
@@ -290,7 +289,7 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    var episodeFile = _mediaFileProvider.GetFileByPath(file);
+                    var episodeFile = _mediaFileService.GetFileByPath(file);
 
                     if (episodeFile != null)
                     {

@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -86,9 +87,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = Quality.SDTV).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.Id).With(c => c.Quality = Quality.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { Id = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
@@ -630,7 +631,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                                         {
                                             TvDbEpisodeId = tvDbEpisode.Id,
                                             Id = 99,
-                                            EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
+                                            EpisodeFile = new EpisodeFile { Id = 69 },
                                             Ignored = true,
                                             Series = fakeSeries,
                                             EpisodeNumber = tvDbEpisode.EpisodeNumber,
@@ -679,7 +680,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 {
                     TvDbEpisodeId = tvDbEpisode.Id,
                     Id = 99,
-                    EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
+                    EpisodeFile = new EpisodeFile { Id = 69 },
                     Ignored = true,
                     Series = fakeSeries,
                     EpisodeNumber = tvDbEpisode.EpisodeNumber + 1,
@@ -725,7 +726,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 {
                     TvDbEpisodeId = tvDbEpisode.Id,
                     Id = 99,
-                    EpisodeFile = new EpisodeFile { EpisodeFileId = 69 },
+                    EpisodeFile = new EpisodeFile { Id = 69 },
                     Ignored = true,
                     Series = fakeSeries,
                     EpisodeNumber = tvDbEpisode.EpisodeNumber,
@@ -857,9 +858,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = Quality.SDTV).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.Id).With(c => c.Quality = Quality.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(c => c.EpisodeFile = new EpisodeFile { Id = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
@@ -901,9 +902,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = Quality.SDTV).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.Id).With(c => c.Quality = Quality.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { Id = 1 }).With(e => e.EpisodeFile = fakeFile).Build();
 
             Db.Insert(fakeSeries);
             Db.InsertMany(fakeEpisodes);
@@ -925,7 +926,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { EpisodeFileId = 1 }).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFile = new EpisodeFile { Id = 1 }).Build();
 
             Db.InsertMany(fakeEpisodes);
             Db.Insert(fakeSeries);
@@ -1212,7 +1213,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .Build();
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                .With(c => c.EpisodeFileId = 1)
+                .With(c => c.Id = 1)
                 .With(c => c.Quality = Quality.SDTV)
                 .Build();
 
@@ -1288,7 +1289,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                 .All()
                 .With(c => c.SeriesId = 10)
                 .With(c => c.SeasonNumber = 1)
-                .With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 12345 })
+                .With(c => c.EpisodeFile = new EpisodeFile { Id = 12345 })
                 .Build();
 
             Db.Insert(series);
@@ -1314,7 +1315,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(c => c.SeriesId = 10)
                 .With(c => c.SeasonNumber = 1)
-                  .With(c => c.EpisodeFile = new EpisodeFile { EpisodeFileId = 12345 })
+                  .With(c => c.EpisodeFile = new EpisodeFile { Id = 12345 })
                 .Build();
 
             Db.Insert(series);

@@ -4,6 +4,7 @@ using System;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.Jobs
 {
     public class RenameSeriesJob : IJob
     {
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly IMediaFileService _mediaFileService;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
@@ -20,10 +21,10 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeriesJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
+        public RenameSeriesJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider,
                                 MetadataProvider metadataProvider,ISeriesRepository seriesRepository,IEventAggregator eventAggregator)
         {
-            _mediaFileProvider = mediaFileProvider;
+            _mediaFileService = mediaFileService;
             _diskScanProvider = diskScanProvider;
             _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Jobs
                 notification.CurrentMessage = String.Format("Renaming episodes for '{0}'", series.Title);
 
                 Logger.Debug("Getting episodes from database for series: {0}", series.Id);
-                var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.Id);
+                var episodeFiles = _mediaFileService.GetFilesBySeries(series.Id);
 
                 if (episodeFiles == null || episodeFiles.Count == 0)
                 {

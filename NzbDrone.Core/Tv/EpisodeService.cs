@@ -283,8 +283,7 @@ namespace NzbDrone.Core.Tv
         public virtual void SetEpisodeIgnore(int episodeId, bool isIgnored)
         {
             var episode = _episodeRepository.Get(episodeId);
-            episode.Ignored = isIgnored;
-            _episodeRepository.Update(episode);
+            _episodeRepository.SetIgnoreFlat(episode, isIgnored);
 
             logger.Info("Ignore flag for Episode:{0} was set to {1}", episodeId, isIgnored);
         }

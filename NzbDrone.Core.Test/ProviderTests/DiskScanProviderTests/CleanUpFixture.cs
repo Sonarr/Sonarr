@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.GetEpisodesByFileId(It.IsAny<int>()))
                 .Returns(new List<Episode>());
 
-            Mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<IMediaFileService>()
                 .Setup(e => e.Delete(It.IsAny<int>()));
 
 
@@ -66,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                .Verify(e => e.GetEpisodesByFileId(It.IsAny<int>()), Times.Exactly(10));
 
-            Mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<IMediaFileService>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));
 
         }
@@ -82,12 +83,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByFileId(It.IsAny<int>()))
-                .Returns(new List<Episode> { new Episode { EpisodeFile = new EpisodeFile { EpisodeFileId = 10 } }, new Episode { EpisodeFile = new EpisodeFile { EpisodeFileId = 10 } } });
+                .Returns(new List<Episode> { new Episode { EpisodeFile = new EpisodeFile { Id = 10 } }, new Episode { EpisodeFile = new EpisodeFile { Id = 10 } } });
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.UpdateEpisode(It.IsAny<Episode>()));
 
-            Mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<IMediaFileService>()
                 .Setup(e => e.Delete(It.IsAny<int>()));
 
             Mocker.GetMock<IConfigService>()
@@ -106,10 +107,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Verify(e => e.UpdateEpisode(It.Is<Episode>(g => g.EpisodeFileId == 0)), Times.Exactly(20));
 
-            Mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<IMediaFileService>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));
 
-            Mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<IMediaFileService>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));
 
         }

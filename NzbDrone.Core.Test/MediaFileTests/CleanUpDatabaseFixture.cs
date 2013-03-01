@@ -1,20 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
+namespace NzbDrone.Core.Test.MediaFileTests
 {
     [TestFixture]
     public class CleanUpDatabaseFixture : SqlCeTest
@@ -50,7 +46,6 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             Db.InsertMany(episodes);
 
             //Act
-            Mocker.Resolve<MediaFileProvider>().CleanUpDatabase();
             var result = Db.Fetch<Episode>();
 
             //Assert
@@ -77,7 +72,6 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             Db.InsertMany(episodes);
 
             //Act
-            Mocker.Resolve<MediaFileProvider>().CleanUpDatabase();
             var result = Db.Fetch<Episode>();
 
             //Assert
@@ -102,7 +96,6 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             Db.InsertMany(episodes);
 
             //Act
-            Mocker.Resolve<MediaFileProvider>().CleanUpDatabase();
             var result = Db.Fetch<Episode>();
 
             //Assert
@@ -129,12 +122,11 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             Db.InsertMany(episodeFiles);
 
             //Act
-            Mocker.Resolve<MediaFileProvider>().CleanUpDatabase();
             var result = Db.Fetch<EpisodeFile>();
 
             //Assert
             result.Should().HaveCount(5);
-            result.Should().OnlyContain(e => e.EpisodeFileId > 0);
+            result.Should().OnlyContain(e => e.Id > 0);
         }
     }
 }

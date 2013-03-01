@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
@@ -67,8 +68,8 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<ISeriesRepository>()
                 .Setup(s => s.Get(series[1].Id)).Returns(series[1]);
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(s => s.GetFilesBySeries(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
             //Act
             Mocker.Resolve<ImportNewSeriesJob>().Start(notification, null);
@@ -121,8 +122,8 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<ISeriesRepository>()
                 .Setup(s => s.Get(series[0].Id)).Returns(series[0]);
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(s => s.GetFilesBySeries(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
             Mocker.GetMock<XemUpdateJob>()
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].Id)));
@@ -148,8 +149,8 @@ namespace NzbDrone.Core.Test.JobTests
             int seriesId = 12;
 
             WithStrictMocker();
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(p => p.GetSeriesFiles(seriesId))
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(p => p.GetFilesBySeries(seriesId))
                 .Returns(new List<EpisodeFile>());
 
             Mocker.GetMock<ISeasonRepository>()
@@ -176,8 +177,8 @@ namespace NzbDrone.Core.Test.JobTests
 
             WithStrictMocker();
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(p => p.GetSeriesFiles(seriesId))
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(p => p.GetFilesBySeries(seriesId))
                 .Returns(episodesFiles);
 
             Mocker.GetMock<ISeasonRepository>()
@@ -202,8 +203,8 @@ namespace NzbDrone.Core.Test.JobTests
 
             
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(p => p.GetSeriesFiles(seriesId))
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(p => p.GetFilesBySeries(seriesId))
                 .Returns(episodesFiles);
 
             Mocker.GetMock<ISeasonRepository>()

@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.ExternalNotification;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Jobs
 {
     public class RenameSeasonJob : IJob
     {
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly IMediaFileService _mediaFileService;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly ISeriesService _seriesService;
         private readonly MetadataProvider _metadataProvider;
@@ -22,10 +23,10 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider, ISeriesService seriesService,
+        public RenameSeasonJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider, ISeriesService seriesService,
                                 MetadataProvider metadataProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
-            _mediaFileProvider = mediaFileProvider;
+            _mediaFileService = mediaFileService;
             _diskScanProvider = diskScanProvider;
             _seriesService = seriesService;
             _metadataProvider = metadataProvider;
@@ -56,7 +57,7 @@ namespace NzbDrone.Core.Jobs
             notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, options.SeasonNumber);
 
             logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
-            IList<EpisodeFile> episodeFiles = _mediaFileProvider.GetSeasonFiles((int)options.SeriesId, (int)options.SeasonNumber);
+            IList<EpisodeFile> episodeFiles = _mediaFileService.GetFilesBySeason((int)options.SeriesId, (int)options.SeasonNumber);
 
             if (episodeFiles == null || !episodeFiles.Any())
             {

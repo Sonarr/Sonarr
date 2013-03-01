@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
@@ -40,8 +41,8 @@ namespace NzbDrone.Core.Test.JobTests
                   .Setup(s => s.Get(_series.Id))
                   .Returns(_series);
 
-            Mocker.GetMock<MediaFileProvider>()
-                  .Setup(s => s.GetSeasonFiles(_series.Id, 5))
+            Mocker.GetMock<IMediaFileService>()
+                  .Setup(s => s.GetFilesBySeason(_series.Id, 5))
                   .Returns(_episodeFiles);
         }
 

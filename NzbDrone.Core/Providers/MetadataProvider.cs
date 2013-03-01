@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Repository;
@@ -135,7 +136,7 @@ namespace NzbDrone.Core.Providers
             {
                 foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
                 {
-                    Logger.Trace("Creating {0} metadata for {1}", provider.Name, episodeFile.EpisodeFileId);
+                    Logger.Trace("Creating {0} metadata for {1}", provider.Name, episodeFile.Id);
                     provider.CreateForEpisodeFile(episodeFile, tvDbSeries);
                 }
             }

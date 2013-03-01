@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -115,11 +116,11 @@ namespace NzbDrone.Core.Providers.Metadata
         public override void CreateForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries)
         {
             //Create filename.tbn and filename.nfo
-            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.EpisodeFileId);
+            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
 
             if (!episodes.Any())
             {
-                _logger.Debug("No episodes where found for this episode file: {0}", episodeFile.EpisodeFileId);
+                _logger.Debug("No episodes where found for this episode file: {0}", episodeFile.Id);
                 return;
             }
 
@@ -137,7 +138,7 @@ namespace NzbDrone.Core.Providers.Metadata
             {
                 if (!_diskProvider.FileExists(episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn")))
                 {
-                    _logger.Debug("Downloading episode thumbnail for: {0}", episodeFile.EpisodeFileId);
+                    _logger.Debug("Downloading episode thumbnail for: {0}", episodeFile.Id);
                     _bannerProvider.Download(episodeFileThumbnail.BannerPath,
                                              episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn"));
                 }
@@ -145,7 +146,7 @@ namespace NzbDrone.Core.Providers.Metadata
 
             
 
-            _logger.Debug("Generating filename.nfo for: {0}", episodeFile.EpisodeFileId);
+            _logger.Debug("Generating filename.nfo for: {0}", episodeFile.Id);
 
             var xmlResult = String.Empty;
             foreach (var episode in episodes)

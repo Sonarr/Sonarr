@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using NLog;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -12,17 +13,17 @@ namespace NzbDrone.Core.Jobs
 {
     public class RefreshEpisodeMetadata : IJob
     {
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly IMediaFileService _mediaFileService;
         private readonly ISeriesService _seriesService;
         private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RefreshEpisodeMetadata(MediaFileProvider mediaFileProvider, ISeriesService seriesService,
+        public RefreshEpisodeMetadata(IMediaFileService mediaFileService, ISeriesService seriesService,
                                         MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
         {
-            _mediaFileProvider = mediaFileProvider;
+            _mediaFileService = mediaFileService;
             _seriesService = seriesService;
             _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Jobs
             notification.CurrentMessage = String.Format("Refreshing episode metadata for '{0}'", series.Title);
 
             Logger.Debug("Getting episodes from database for series: {0}", series.Id);
-            var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.Id);
+            var episodeFiles = _mediaFileService.GetFilesBySeries(series.Id);
 
             if (episodeFiles == null || episodeFiles.Count == 0)
             {

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
 using Sqo.Attributes;
 
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Tv
             get
             {
                 if (!HasFile) return 0;
-                return EpisodeFile.EpisodeFileId;
+                return EpisodeFile.Id;
             }
         }
 

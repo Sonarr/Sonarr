@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Datastore
         IList<T> UpdateMany<T>(IList<T> objects) where T : ModelBase;
         void Delete<T>(T obj) where T : ModelBase;
         void DeleteMany<T>(IEnumerable<T> objects) where T : ModelBase;
+        void UpdateField<T>(T model, string fieldName) where T : ModelBase;
     }
 
     public static class SiaqodbLogger
@@ -22,8 +23,8 @@ namespace NzbDrone.Core.Datastore
         public static void ListenTo(Siaqodb db)
         {
             db.DeletedObject += OnDeletedObject;
-            db.LoadingObject +=OnLoadingObject;
-            db.LoadedObject +=OnLoadedObject;
+            db.LoadingObject += OnLoadingObject;
+            db.LoadedObject += OnLoadedObject;
         }
 
         private static void OnLoadedObject(object sender, LoadedObjectEventArgs e)
@@ -114,6 +115,11 @@ namespace NzbDrone.Core.Datastore
             {
                 Delete(o);
             }
+        }
+
+        public void UpdateField<T>(T model, string fieldName) where T : ModelBase
+        {
+            _db.UpdateObjectBy(model, fieldName);
         }
 
         private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : ModelBase

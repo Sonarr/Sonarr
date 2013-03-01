@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
@@ -30,8 +31,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(c => c.FolderExists(It.IsAny<string>()))
                 .Returns(true);
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetSeriesFiles(It.IsAny<int>()))
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>());
 
             Mocker.Resolve<DiskScanProvider>().Scan(new Series());
@@ -50,10 +51,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .With(s => s.Path = @"C:\Test\TV\SeriesName\")
                 .Build();
 
-
-            Mocker.GetMock<MediaFileProvider>()
-                    .Setup(c => c.CleanUpDatabase());
-   
 
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(series.Path))

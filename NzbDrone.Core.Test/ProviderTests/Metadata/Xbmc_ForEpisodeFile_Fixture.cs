@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -105,7 +106,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                     .Build();
 
             Mocker.GetMock<IEpisodeService>()
-                        .Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+                        .Setup(s => s.GetEpisodesByFileId(episodeFile.Id))
                         .Returns(new List<Episode> { episode });
         }
 
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                     .Build();
 
             Mocker.GetMock<IEpisodeService>()
-                        .Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+                        .Setup(s => s.GetEpisodesByFileId(episodeFile.Id))
                         .Returns(episodes.ToList());
         }
 

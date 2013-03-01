@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.Resolve<DiskScanProvider>().CleanUpDropFolder(folder);
 
             //Assert
-            Mocker.GetMock<MediaFileProvider>().Verify(v => v.GetFileByPath(It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.GetFileByPath(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -54,14 +55,14 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetFiles(folder, SearchOption.AllDirectories))
                     .Returns(new string[] { filename });
 
-            Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetFileByPath(filename))
+            Mocker.GetMock<IMediaFileService>().Setup(s => s.GetFileByPath(filename))
                     .Returns(() => null);
 
             //Act
             Mocker.Resolve<DiskScanProvider>().CleanUpDropFolder(folder);
 
             //Assert
-            Mocker.GetMock<MediaFileProvider>().Verify(v => v.GetFileByPath(filename), Times.Once());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.GetFileByPath(filename), Times.Once());
             Mocker.GetMock<ISeriesRepository>().Verify(v => v.Get(It.IsAny<int>()), Times.Never());
         }
 
@@ -91,25 +92,25 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(e => e.EpisodeFile = episodeFile)
                     .Build();
 
-            Mocker.GetMock<MediaFileProvider>().Setup(v => v.GetFileByPath(filename))
+            Mocker.GetMock<IMediaFileService>().Setup(v => v.GetFileByPath(filename))
                    .Returns(() => null);
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetFiles(folder, SearchOption.AllDirectories))
                     .Returns(new string[] { filename });
 
-            Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetFileByPath(filename))
+            Mocker.GetMock<IMediaFileService>().Setup(s => s.GetFileByPath(filename))
                     .Returns(episodeFile);
 
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(series);
 
-            Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+            Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByFileId(episodeFile.Id))
                     .Returns(episode);
 
-            Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series, Quality.Unknown, false, It.IsAny<EpisodeFile>()))
+            Mocker.GetMock<IMediaFileService>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series, Quality.Unknown, false, It.IsAny<EpisodeFile>()))
                 .Returns(newFilename);
 
-            Mocker.GetMock<MediaFileProvider>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+            Mocker.GetMock<IMediaFileService>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Returns(new FileInfo(newFilePath));
 
             Mocker.GetMock<DiskProvider>()
@@ -122,7 +123,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.Resolve<DiskScanProvider>().CleanUpDropFolder(folder);
 
             //Assert
-            Mocker.GetMock<MediaFileProvider>().Verify(v => v.GetFileByPath(filename), Times.Once());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.GetFileByPath(filename), Times.Once());
             Mocker.GetMock<DiskProvider>().Verify(v => v.MoveFile(filename.NormalizePath(), newFilePath), Times.Once());
         }
     }

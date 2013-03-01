@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly IMediaFileService _mediaFileService;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
         private readonly BannerDownloadJob _bannerDownloadJob;
@@ -32,13 +33,13 @@ namespace NzbDrone.Core.Jobs
         private List<int> _attemptedSeries;
 
         public ImportNewSeriesJob(ISeriesService seriesService, IEpisodeService episodeService,
-                                    MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob,
+                                    IMediaFileService mediaFileService, UpdateInfoJob updateInfoJob,
                                     DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob,
                                     ISeasonRepository seasonRepository, XemUpdateJob xemUpdateJob, ISeriesRepository seriesRepository,ISeasonService seasonService)
         {
             _seriesService = seriesService;
             _episodeService = episodeService;
-            _mediaFileProvider = mediaFileProvider;
+            _mediaFileService = mediaFileService;
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
             _bannerDownloadJob = bannerDownloadJob;
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.Jobs
         {
             //Todo: Need to convert this over to ObjectDb
             return;
-            var episodeFiles = _mediaFileProvider.GetSeriesFiles(seriesId);
+            var episodeFiles = _mediaFileService.GetFilesBySeries(seriesId);
 
             if (episodeFiles.Count() != 0)
             {

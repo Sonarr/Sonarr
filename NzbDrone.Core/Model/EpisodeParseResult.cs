@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Repository;
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Model
 
         public string GetDownloadTitle()
         {
-            var seriesTitle = MediaFileProvider.CleanFilename(Series.Title);
+            var seriesTitle = MediaFileService.CleanFilename(Series.Title);
 
             //Handle Full Naming
             if (FullSeason)

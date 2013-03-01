@@ -199,7 +199,7 @@
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradePossibleSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\BlackholeProviderFixture.cs" />
-    <Compile Include="ProviderTests\MediaFileProviderTests\CleanUpDatabaseFixture.cs" />
+    <Compile Include="MediaFileTests\CleanUpDatabaseFixture.cs" />
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\SabProviderTests\QueueFixture.cs" />
@@ -232,7 +232,7 @@
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
-    <Compile Include="ProviderTests\MediaFileProviderTests\GetNewFilenameFixture.cs" />
+    <Compile Include="MediaFileTests\GetNewFilenameFixture.cs" />
     <Compile Include="Framework\SqlCeTest.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\DownloadProviderFixture.cs" />
@@ -246,7 +246,7 @@
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="Indexers\IndexerServiceTest.cs" />
     <Compile Include="HistoryTests\HistoryServiceTest.cs" />
-    <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
+    <Compile Include="MediaFileTests\MediaFileServiceTest.cs" />
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
