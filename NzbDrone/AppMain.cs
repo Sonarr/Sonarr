@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using NzbDrone.Providers;
 using Autofac;
+using NLog;
 
 namespace NzbDrone
 {
     public static class AppMain
     {
+        private static readonly Logger logger = LogManager.GetLogger("AppMain");
+
+
         public static void Main(string[] args)
         {
             try
             {
-                Console.WriteLine("Starting NzbDrone Console. Version " + Assembly.GetExecutingAssembly().GetName().Version);
+                logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+
+                AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));
 
                 //Check if full version .NET is installed.
                 try
@@ -21,29 +26,35 @@ namespace NzbDrone
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to the download page.");
+                    logger.Error("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to the download page.");
                     Console.Read();
 
                     try
                     {
                         Process.Start("http://www.microsoft.com/download/en/details.aspx?id=17851");
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        Console.WriteLine("Opps. can't start default browser. Please visit http://www.microsoft.com/download/en/details.aspx?id=17851 to download .NET Framework 4.");
+                        logger.Warn("Oops. can't start default browser. Please visit http://www.microsoft.com/download/en/details.aspx?id=17851 to download .NET Framework 4.");
                         Console.ReadLine();
                     }
-                    
+
                     return;
                 }
 
 
-                CentralDispatch.Container.Resolve<Router>().Route(args);
+                NzbDroneBootstrapper.Container.Resolve<Router>().Route(args);
             }
             catch (Exception e)
             {
-                MonitoringProvider.AppDomainException(e);
+                AppDomainException(e);
             }
+        }
+
+        public static void AppDomainException(Exception exception)
+        {
+            Console.WriteLine("EPIC FAIL: {0}", exception);
+            logger.FatalException("EPIC FAIL: " + exception.Message, exception);
         }
     }
 }

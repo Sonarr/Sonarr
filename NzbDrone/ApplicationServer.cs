@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Providers;
 
 
 namespace NzbDrone
@@ -17,22 +14,20 @@ namespace NzbDrone
         private readonly EnvironmentProvider _environmentProvider;
         private readonly IHostController _hostController;
         private readonly ProcessProvider _processProvider;
-        private readonly MonitoringProvider _monitoringProvider;
+        private readonly PriorityMonitor _priorityMonitor;
         private readonly SecurityProvider _securityProvider;
-        private readonly DiskProvider _diskProvider;
 
         public ApplicationServer(ConfigFileProvider configFileProvider, IHostController hostController,
                           EnvironmentProvider environmentProvider,
-                           ProcessProvider processProvider, MonitoringProvider monitoringProvider,
-                           SecurityProvider securityProvider, DiskProvider diskProvider)
+                           ProcessProvider processProvider, PriorityMonitor priorityMonitor,
+                           SecurityProvider securityProvider)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
             _environmentProvider = environmentProvider;
             _processProvider = processProvider;
-            _monitoringProvider = monitoringProvider;
+            _priorityMonitor = priorityMonitor;
             _securityProvider = securityProvider;
-            _diskProvider = diskProvider;
         }
 
         public ApplicationServer()
@@ -47,19 +42,9 @@ namespace NzbDrone
 
         public virtual void Start()
         {
-            _hostController.StopServer();
             _securityProvider.MakeAccessible();
 
-            if(_securityProvider.IsCurrentUserAdmin())
-            {
-                var tempFiles = Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "Temporary ASP.NET Files");
-                logger.Debug("Creating Temporary ASP.Net folder: {0}", tempFiles);
-                _diskProvider.CreateDirectory(tempFiles);
-            }
-
             _hostController.StartServer();
-            //Todo: verify that IIS is actually started
-
 
             if (_environmentProvider.IsUserInteractive && _configFileProvider.LaunchBrowser)
             {
@@ -74,7 +59,7 @@ namespace NzbDrone
                 }
             }
 
-            _monitoringProvider.Start();
+            _priorityMonitor.Start();
         }
 
         protected override void OnStop()

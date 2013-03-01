@@ -1,12 +1,9 @@
-﻿using System.IO;
-using System.ServiceProcess;
+﻿using System.ServiceProcess;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Model;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.App.Test
 {
@@ -14,34 +11,34 @@ namespace NzbDrone.App.Test
     public class RouterTest : TestBase
     {
 
-        [TestCase(null, ApplicationMode.Console)]
-        [TestCase("", ApplicationMode.Console)]
-        [TestCase("1", ApplicationMode.Help)]
-        [TestCase("ii", ApplicationMode.Help)]
-        [TestCase("uu", ApplicationMode.Help)]
-        [TestCase("i", ApplicationMode.InstallService)]
-        [TestCase("I", ApplicationMode.InstallService)]
-        [TestCase("/I", ApplicationMode.InstallService)]
-        [TestCase("/i", ApplicationMode.InstallService)]
-        [TestCase("-I", ApplicationMode.InstallService)]
-        [TestCase("-i", ApplicationMode.InstallService)]
-        [TestCase("u", ApplicationMode.UninstallService)]
-        [TestCase("U", ApplicationMode.UninstallService)]
-        [TestCase("/U", ApplicationMode.UninstallService)]
-        [TestCase("/u", ApplicationMode.UninstallService)]
-        [TestCase("-U", ApplicationMode.UninstallService)]
-        [TestCase("-u", ApplicationMode.UninstallService)]
-        public void GetApplicationMode_single_arg(string arg, ApplicationMode mode)
+        [TestCase(null, ApplicationModes.Console)]
+        [TestCase("", ApplicationModes.Console)]
+        [TestCase("1", ApplicationModes.Help)]
+        [TestCase("ii", ApplicationModes.Help)]
+        [TestCase("uu", ApplicationModes.Help)]
+        [TestCase("i", ApplicationModes.InstallService)]
+        [TestCase("I", ApplicationModes.InstallService)]
+        [TestCase("/I", ApplicationModes.InstallService)]
+        [TestCase("/i", ApplicationModes.InstallService)]
+        [TestCase("-I", ApplicationModes.InstallService)]
+        [TestCase("-i", ApplicationModes.InstallService)]
+        [TestCase("u", ApplicationModes.UninstallService)]
+        [TestCase("U", ApplicationModes.UninstallService)]
+        [TestCase("/U", ApplicationModes.UninstallService)]
+        [TestCase("/u", ApplicationModes.UninstallService)]
+        [TestCase("-U", ApplicationModes.UninstallService)]
+        [TestCase("-u", ApplicationModes.UninstallService)]
+        public void GetApplicationMode_single_arg(string arg, ApplicationModes modes)
         {
-            Router.GetApplicationMode(new[] { arg }).Should().Be(mode);
+            Router.GetApplicationMode(new[] { arg }).Should().Be(modes);
         }
 
-        [TestCase("", "", ApplicationMode.Console)]
-        [TestCase("", null, ApplicationMode.Console)]
-        [TestCase("i", "n", ApplicationMode.Help)]
-        public void GetApplicationMode_two_args(string a, string b, ApplicationMode mode)
+        [TestCase("", "", ApplicationModes.Console)]
+        [TestCase("", null, ApplicationModes.Console)]
+        [TestCase("i", "n", ApplicationModes.Help)]
+        public void GetApplicationMode_two_args(string a, string b, ApplicationModes modes)
         {
-            Router.GetApplicationMode(new[] { a, b }).Should().Be(mode);
+            Router.GetApplicationMode(new[] { a, b }).Should().Be(modes);
         }
 
         [Test]
@@ -53,7 +50,7 @@ namespace NzbDrone.App.Test
             serviceProviderMock.Setup(c => c.Start(ServiceProvider.NZBDRONE_SERVICE_NAME));
             Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
-            Mocker.Resolve<Router>().Route(ApplicationMode.InstallService);
+            Mocker.Resolve<Router>().Route(ApplicationModes.InstallService);
 
             serviceProviderMock.Verify(c => c.Install(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
         }
@@ -67,7 +64,7 @@ namespace NzbDrone.App.Test
             Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
             serviceProviderMock.Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)).Returns(true);
 
-            Mocker.Resolve<Router>().Route(ApplicationMode.UninstallService);
+            Mocker.Resolve<Router>().Route(ApplicationModes.UninstallService);
 
             serviceProviderMock.Verify(c => c.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
         }
@@ -81,17 +78,17 @@ namespace NzbDrone.App.Test
             appServerProvider.Setup(c => c.Start());
             Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
-            Mocker.Resolve<Router>().Route(ApplicationMode.Console);
+            Mocker.Resolve<Router>().Route(ApplicationModes.Console);
 
             consoleProvider.Verify(c => c.WaitForClose(), Times.Once());
             appServerProvider.Verify(c => c.Start(), Times.Once());
         }
 
-        [TestCase(ApplicationMode.Console)]
-        [TestCase(ApplicationMode.InstallService)]
-        [TestCase(ApplicationMode.UninstallService)]
-        [TestCase(ApplicationMode.Help)]
-        public void Route_should_call_service_start_when_run_in_service_more(ApplicationMode applicationMode)
+        [TestCase(ApplicationModes.Console)]
+        [TestCase(ApplicationModes.InstallService)]
+        [TestCase(ApplicationModes.UninstallService)]
+        [TestCase(ApplicationModes.Help)]
+        public void Route_should_call_service_start_when_run_in_service_more(ApplicationModes applicationModes)
         {
             var envMock = Mocker.GetMock<EnvironmentProvider>();
             var serviceProvider = Mocker.GetMock<ServiceProvider>();
@@ -100,7 +97,7 @@ namespace NzbDrone.App.Test
 
             serviceProvider.Setup(c => c.Run(It.IsAny<ServiceBase>()));
 
-            Mocker.Resolve<Router>().Route(applicationMode);
+            Mocker.Resolve<Router>().Route(applicationModes);
 
             serviceProvider.Verify(c => c.Run(It.IsAny<ServiceBase>()), Times.Once());
         }
@@ -116,7 +113,7 @@ namespace NzbDrone.App.Test
             consoleMock.Setup(c => c.PrintServiceAlreadyExist());
             serviceMock.Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)).Returns(true);
 
-            Mocker.Resolve<Router>().Route(ApplicationMode.InstallService);
+            Mocker.Resolve<Router>().Route(ApplicationModes.InstallService);
 
             Mocker.VerifyAllMocks();
         }
@@ -131,7 +128,7 @@ namespace NzbDrone.App.Test
             consoleMock.Setup(c => c.PrintServiceDoestExist());
             serviceMock.Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)).Returns(false);
 
-            Mocker.Resolve<Router>().Route(ApplicationMode.UninstallService);
+            Mocker.Resolve<Router>().Route(ApplicationModes.UninstallService);
 
             Mocker.VerifyAllMocks();
         }

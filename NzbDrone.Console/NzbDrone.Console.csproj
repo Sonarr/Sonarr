@@ -8,7 +8,7 @@
     <ProjectGuid>{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NzbDrone</RootNamespace>
+    <RootNamespace>NzbDrone.Console</RootNamespace>
     <AssemblyName>NzbDrone.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\NzbDrone\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,75 +55,35 @@
     <IntermediateOutputPath>C:\Users\Mark\AppData\Local\Temp\vs1A55.tmp\x86\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>NzbDrone.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>NzbDrone.AppMain</StartupObject>
+    <StartupObject>NzbDrone.Console.AppMain</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptron.Client, Version=1.0.20.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptron.Client.1.0.20\lib\net20\Exceptron.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptron.NLog">
-      <HintPath>..\packages\Exceptron.Nlog.1.0.11\lib\net20\Exceptron.NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Bootstrappers.Autofac, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Bootstrappers.Autofac.0.16.1\lib\net40\Nancy.Bootstrappers.Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Hosting.Self, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Hosting.Self.0.16.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ApplicationServer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CentralDispatch.cs" />
-    <Compile Include="Model\ApplicationMode.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\MonitoringProvider.cs" />
-    <Compile Include="Router.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
+    <None Include="..\NzbDrone\NLog.config">
+      <Link>NLog.config</Link>
+    </None>
+    <None Include="..\NzbDrone\NLog.xsd">
+      <Link>NLog.xsd</Link>
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="NzbDrone.ico" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -148,18 +108,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
-      <Project>{fd286df8-2d3a-4394-8ad5-443fade55fb2}</Project>
-      <Name>NzbDrone.Api</Name>
+    <ProjectReference Include="..\NzbDrone\NzbDrone.csproj">
+      <Project>{d12f7f2f-8a3c-415f-88fa-6dd061a84869}</Project>
+      <Name>NzbDrone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
-      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
-      <Name>NzbDrone.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
-      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
-      <Name>NzbDrone.Core</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\NzbDrone\NzbDrone.ico">
+      <Link>NzbDrone.ico</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

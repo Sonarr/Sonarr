@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Sqo;
 
@@ -16,6 +17,37 @@ namespace NzbDrone.Core.Datastore
         void DeleteMany<T>(IEnumerable<T> objects) where T : ModelBase;
     }
 
+    public static class SiaqodbLogger
+    {
+        public static void ListenTo(Siaqodb db)
+        {
+            db.DeletedObject += OnDeletedObject;
+            db.LoadingObject +=OnLoadingObject;
+            db.LoadedObject +=OnLoadedObject;
+        }
+
+        private static void OnLoadedObject(object sender, LoadedObjectEventArgs e)
+        {
+            Write("Loaded", e.Object.GetType(), e.OID);
+        }
+
+        private static void OnLoadingObject(object sender, LoadingObjectEventArgs e)
+        {
+            Write("Loading", e.ObjectType, e.OID);
+        }
+
+        static void OnDeletedObject(object sender, DeletedEventsArgs e)
+        {
+            Write("Deleted", e.ObjectType, e.OID);
+        }
+
+        private static void Write(string operation, Type modelType, int id)
+        {
+            var message = string.Format("{0} {1}[{2}]", operation, modelType.Name, id);
+            Trace.WriteLine(message, "Siaqodb");
+        }
+    }
+
     public class SiaqodbProxy : IObjectDatabase
     {
         private readonly Siaqodb _db;
@@ -23,7 +55,10 @@ namespace NzbDrone.Core.Datastore
         public SiaqodbProxy(Siaqodb db)
         {
             _db = db;
+            //SiaqodbConfigurator.SetRaiseLoadEvents(true);
+            //SiaqodbLogger.ListenTo(_db);
         }
+
 
         public void Dispose()
         {
@@ -32,7 +67,7 @@ namespace NzbDrone.Core.Datastore
 
         public IEnumerable<T> AsQueryable<T>()
         {
-            return _db.Cast<T>();
+            return _db.LoadAllLazy<T>();
         }
 
         public T Insert<T>(T obj) where T : ModelBase

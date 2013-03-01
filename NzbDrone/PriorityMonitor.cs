@@ -1,29 +1,27 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using NLog;
 using NzbDrone.Common;
 
-namespace NzbDrone.Providers
+namespace NzbDrone
 {
-    public class MonitoringProvider
+    public class PriorityMonitor
     {
-        private static readonly Logger logger = LogManager.GetLogger("Host.MonitoringProvider");
-
         private readonly ProcessProvider _processProvider;
+        private readonly Logger _logger;
 
         private Timer _processPriorityCheckTimer;
 
-        public MonitoringProvider(ProcessProvider processProvider)
+        public PriorityMonitor(ProcessProvider processProvider, Logger logger)
         {
             _processProvider = processProvider;
+            _logger = logger;
         }
 
         public void Start()
         {
-            AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));
-
-
             _processPriorityCheckTimer = new Timer(EnsurePriority);
             _processPriorityCheckTimer.Change(TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(30));
 
@@ -48,14 +46,8 @@ namespace NzbDrone.Providers
             }
             catch (Exception e)
             {
-                logger.WarnException("Unable to verify priority", e);
+                _logger.WarnException("Unable to verify priority", e);
             }
-        }
-
-        public static void AppDomainException(Exception excepion)
-        {
-            Console.WriteLine("EPIC FAIL: {0}", excepion);
-            logger.FatalException("EPIC FAIL: " + excepion.Message, excepion);
         }
     }
 }

@@ -35,11 +35,12 @@ namespace NzbDrone.Common
         public void StartServer()
         {
             _host = new NancyHost(new Uri(AppUrl), _bootstrapper);
+            _host.Start();
         }
 
         public string AppUrl
         {
-            get { return string.Format("http://localhost:{0}/", _configFileProvider.Port); }
+            get { return string.Format("http://localhost:{0}", _configFileProvider.Port); }
         }
 
 

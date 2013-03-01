@@ -1,12 +1,11 @@
-﻿namespace NzbDrone.Model
+﻿namespace NzbDrone
 {
-    public enum ApplicationMode
+    public enum ApplicationModes
     {
         Console,
         Help,
         InstallService,
         UninstallService,
         Service,
-        Nancy
     }
 }

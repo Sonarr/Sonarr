@@ -2,34 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Nancy.Hosting.Self;
-using NzbDrone.Api;
 using NzbDrone.Common;
 using NzbDrone.Common.SysTray;
-using NzbDrone.Model;
 
 namespace NzbDrone
 {
     public class Router
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
         private readonly ApplicationServer _applicationServer;
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly SysTrayProvider _sysTrayProvider;
-        private readonly ProcessProvider _processProvider;
+        private readonly Logger _logger;
 
         public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider,
-                        ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider, SysTrayProvider sysTrayProvider, ProcessProvider processProvider)
+                        ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider, SysTrayProvider sysTrayProvider, Logger logger)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
             _environmentProvider = environmentProvider;
             _sysTrayProvider = sysTrayProvider;
-            _processProvider = processProvider;
+            _logger = logger;
         }
 
         public void Route(IEnumerable<string> args)
@@ -37,41 +32,27 @@ namespace NzbDrone
             Route(GetApplicationMode(args));
         }
 
-        public void Route(ApplicationMode applicationMode)
+        public void Route(ApplicationModes applicationModes)
         {
             if (!_environmentProvider.IsUserInteractive)
             {
-                applicationMode = ApplicationMode.Service;
+                applicationModes = ApplicationModes.Service;
             }
 
-            logger.Info("Application mode: {0}", applicationMode);
+            _logger.Info("Application mode: {0}", applicationModes);
 
-            switch (applicationMode)
+            switch (applicationModes)
             {
-                case ApplicationMode.Nancy:
+                case ApplicationModes.Service:
                     {
-
-                        var nancyHost = new NancyHost(new Uri("http://localhost:8282"), new NancyBootstrapper());
-                        nancyHost.Start();
-
-
-                        _processProvider.Start("http://localhost:8282");
-
-                        _consoleProvider.WaitForClose();
-
-                        break;
-                    }
-
-                case ApplicationMode.Service:
-                    {
-                        logger.Trace("Service selected");
+                        _logger.Trace("Service selected");
                         _serviceProvider.Run(_applicationServer);
                         break;
                     }
 
-                case ApplicationMode.Console:
+                case ApplicationModes.Console:
                     {
-                        logger.Trace("Console selected");
+                        _logger.Trace("Console selected");
                         _applicationServer.Start();
                         if (ConsoleProvider.IsConsoleApplication)
                             _consoleProvider.WaitForClose();
@@ -83,9 +64,9 @@ namespace NzbDrone
 
                         break;
                     }
-                case ApplicationMode.InstallService:
+                case ApplicationModes.InstallService:
                     {
-                        logger.Trace("Install Service selected");
+                        _logger.Trace("Install Service selected");
                         if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
                             _consoleProvider.PrintServiceAlreadyExist();
@@ -97,9 +78,9 @@ namespace NzbDrone
                         }
                         break;
                     }
-                case ApplicationMode.UninstallService:
+                case ApplicationModes.UninstallService:
                     {
-                        logger.Trace("Uninstall Service selected");
+                        _logger.Trace("Uninstall Service selected");
                         if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
                             _consoleProvider.PrintServiceDoestExist();
@@ -119,21 +100,20 @@ namespace NzbDrone
             }
         }
 
-        public static ApplicationMode GetApplicationMode(IEnumerable<string> args)
+        public static ApplicationModes GetApplicationMode(IEnumerable<string> args)
         {
-            if (args == null) return ApplicationMode.Console;
+            if (args == null) return ApplicationModes.Console;
 
             var cleanArgs = args.Where(c => c != null && !String.IsNullOrWhiteSpace(c)).ToList();
-            if (cleanArgs.Count == 0) return ApplicationMode.Console;
-            if (cleanArgs.Count != 1) return ApplicationMode.Help;
+            if (cleanArgs.Count == 0) return ApplicationModes.Console;
+            if (cleanArgs.Count != 1) return ApplicationModes.Help;
 
             var arg = cleanArgs.First().Trim('/', '\\', '-').ToLower();
 
-            if (arg == "i") return ApplicationMode.InstallService;
-            if (arg == "u") return ApplicationMode.UninstallService;
-            if (arg == "n") return ApplicationMode.Nancy;
+            if (arg == "i") return ApplicationModes.InstallService;
+            if (arg == "u") return ApplicationModes.UninstallService;
 
-            return ApplicationMode.Help;
+            return ApplicationModes.Help;
         }
     }
 }

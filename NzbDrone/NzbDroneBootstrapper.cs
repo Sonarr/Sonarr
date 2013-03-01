@@ -7,12 +7,12 @@ using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone
 {
-    public static class CentralDispatch
+    public static class NzbDroneBootstrapper
     {
         private static readonly IContainer container;
-        private static readonly Logger logger = LogManager.GetLogger("Host.CentralDispatch");
+        private static readonly Logger logger = LogManager.GetLogger("NzbDroneBootstrapper");
 
-        static CentralDispatch()
+        static NzbDroneBootstrapper()
         {
             var builder = new ContainerBuilder();
             BindKernel(builder);

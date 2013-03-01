@@ -23,15 +23,7 @@ namespace NzbDrone.Core.Instrumentation
         
         private static object GetLogger(Type type)
         {
-            const string STRING_TO_REMOVE = "NzbDrone";
-
-            var loggerName = type.FullName;
-            if (loggerName.StartsWith(STRING_TO_REMOVE))
-            {
-                loggerName = loggerName.Substring(STRING_TO_REMOVE.Length + 1);
-            }
-
-            return LogManager.GetLogger(loggerName);
+            return LogManager.GetLogger(type.Name);
         }
     }
 }
