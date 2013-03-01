@@ -10,6 +10,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Tv
         private readonly MetadataProvider _metadataProvider;
         private readonly TvRageMappingProvider _tvRageMappingProvider;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IQualityProfileService _qualityProfileService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -38,7 +40,7 @@ namespace NzbDrone.Core.Tv
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider, MetadataProvider metadataProvider,
-                                TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator)
+                                TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator, IQualityProfileService qualityProfileService)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
@@ -47,6 +49,7 @@ namespace NzbDrone.Core.Tv
             _metadataProvider = metadataProvider;
             _tvRageMappingProvider = tvRageMappingProvider;
             _eventAggregator = eventAggregator;
+            _qualityProfileService = qualityProfileService;
         }
 
 
@@ -63,7 +66,6 @@ namespace NzbDrone.Core.Tv
 
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.AirsTime);
-            //series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
             series.Language = tvDbSeries.Language != null ? tvDbSeries.Language.Abbriviation : string.Empty;
@@ -114,8 +116,7 @@ namespace NzbDrone.Core.Tv
             logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
             Ensure.That(() => tvDbSeriesId).IsGreaterThan(0);
-            //Todo: We can't validate the title if we're passing in an empty string
-            //Ensure.That(() => title).IsNotNullOrWhiteSpace();
+            Ensure.That(() => title).IsNotNullOrWhiteSpace();
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
 
             var repoSeries = new Series();
@@ -127,6 +128,7 @@ namespace NzbDrone.Core.Tv
             if (qualityProfileId == 0)
                 repoSeries.QualityProfileId = _configService.DefaultQualityProfile;
 
+            repoSeries.QualityProfile = _qualityProfileService.Get(repoSeries.QualityProfileId);
             repoSeries.SeasonFolder = _configService.UseSeasonFolder;
             repoSeries.BacklogSetting = BacklogSettingType.Inherit;
 
@@ -137,7 +139,6 @@ namespace NzbDrone.Core.Tv
 
             _eventAggregator.Publish(new SeriesAddedEvent(repoSeries));
         }
-
 
         public void UpdateFromSeriesEditor(IList<Series> editedSeries)
         {

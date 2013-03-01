@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Series
 {

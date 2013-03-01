@@ -1,6 +1,6 @@
 ﻿define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout', 'Series/SeriesCollectionView',
         'Upcoming/UpcomingCollectionView', 'Calendar/CalendarCollectionView', 'Shared/NotificationView',
-        'Shared/NotFoundView', 'MainMenuView'], function (app, modalRegion) {
+        'Shared/NotFoundView', 'MainMenuView', 'HeaderView'], function (app, modalRegion) {
 
     var controller = Backbone.Marionette.Controller.extend({
 

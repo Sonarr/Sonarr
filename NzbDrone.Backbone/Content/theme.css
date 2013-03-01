@@ -824,12 +824,51 @@ ul.stat-list {
     border-color: #EEE;
 }
 
-#calendar .fc-event-skin {
-    background-color: #007ccd;
-    border: 1px solid #007ccd;
-    border-radius: 4px;
-    text-align: center;
-}
+    #calendar .fc-event-skin {
+        background-color: #007ccd;
+        border: 1px solid #007ccd;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    #calendar .success {
+        border-color: #4cb158;
+        background-color: #4cb158;
+    }
+
+    #calendar .danger {
+        border-color: #ea494a;
+        background-color: #ea494a;
+    }
+
+    #calendar .info {
+        border-color: #14b8d4;
+        background-color: #14b8d4;
+    }
+
+    #calendar .primary {
+        border-color: #007ccd;
+        background-color: #007ccd;
+    }
+
+    #calendar .warning {
+        border-color: #ffa93c;
+        background-color: #ffa93c;
+    }
+
+    #calendar .purple {
+        border-color: #7932ea;
+        background-color: #7932ea;
+    }
+
+    #calendar .inverse {
+        border-color: #333;
+        background-color: #333;
+    }
+
+    #calendar .fc-state-highlight {
+        background: rgba(20, 184, 212, .2);
+    }
 
 /* ============== tags ============== */
 .tag {

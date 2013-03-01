@@ -22,7 +22,7 @@ namespace NzbDrone.Api.Calendar
 
         private Response GetEpisodesBetweenStartAndEndDate()
         {
-            var start = DateTime.Today;
+            var start = DateTime.Today.AddDays(-1);
             var end = DateTime.Today.AddDays(7);
 
             var queryStart = Request.Query.Start;

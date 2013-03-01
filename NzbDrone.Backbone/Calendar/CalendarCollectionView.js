@@ -20,6 +20,7 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
                 allDayDefault: false,
                 ignoreTimezone: false,
                 weekMode: 'variable',
+                timeFormat: 'h(:mm)tt',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
@@ -31,6 +32,9 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
                 },
                 events: this.getEvents,
                 eventRender: function (event, element) {
+                    $(element).addClass(event.statusLevel);
+                    $(element).children('.fc-event-inner').addClass(event.statusLevel);
+
                     element.popover({
                         title: '{seriesTitle} - {season}x{episode} - {episodeTitle}'.assign({
                             seriesTitle: event.seriesTitle,

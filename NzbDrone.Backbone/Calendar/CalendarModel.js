@@ -33,11 +33,16 @@
                 if (currentTime.isBetween(start, end))
                     return 'warning';
 
-                if (status === 'Missing') return 'danger';
+                if (start.isBefore(currentTime) || status === 'Missing')
+                    return 'danger';
+
                 if (status === 'Ready') return 'success';
 
-                return 'info';
-            }
+                return 'primary';
+            },
+            bestDateString: function () {
+                return bestDateString(this.get('start'));
+            },
         },
         defaults: {
             status: 0

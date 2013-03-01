@@ -39,7 +39,8 @@ namespace NzbDrone.Api
                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                   .ForMember(dest => dest.CustomStartDate, opt => opt.ResolveUsing<NullableDatetimeToString>().FromMember(src => src.CustomStartDate))
                   .ForMember(dest => dest.BacklogSetting, opt => opt.MapFrom(src => (Int32)src.BacklogSetting))
-                  .ForMember(dest => dest.NextAiring, opt => opt.ResolveUsing<NextAiringResolver>());
+                  .ForMember(dest => dest.NextAiring, opt => opt.ResolveUsing<NextAiringResolver>())
+                  .ForMember(dest => dest.QualityProfileName, opt => opt.MapFrom(src => src.QualityProfile.Name));
 
             //Calendar
             Mapper.CreateMap<Episode, CalendarResource>()
