@@ -23,13 +23,11 @@ namespace NzbDrone.Core.Providers
 
         public virtual string CreateBackupZip()
         {
-            var dbFile = _environmentProvider.GetSqlCeMainDbPath();
             var configFile = _environmentProvider.GetConfigPath();
             var zipFile = _environmentProvider.GetConfigBackupFile();
 
             using (var zip = new ZipFile())
             {
-                zip.AddFile(dbFile, String.Empty);
                 zip.AddFile(configFile, String.Empty);
                 zip.Save(zipFile);
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
 using NzbDrone.Core.Repository;
@@ -12,16 +13,16 @@ namespace NzbDrone.Core.Providers
 {
     public class TvRageMappingProvider
     {
-        private readonly SceneMappingProvider _sceneMappingProvider;
+        private readonly SceneMappingService _sceneMappingService;
         private readonly TvRageProvider _tvRageProvider;
         private readonly IEpisodeService _episodeService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public TvRageMappingProvider(SceneMappingProvider sceneMappingProvider,
+        public TvRageMappingProvider(SceneMappingService sceneMappingService,
                                 TvRageProvider tvRageProvider, IEpisodeService episodeService)
         {
-            _sceneMappingProvider = sceneMappingProvider;
+            _sceneMappingService = sceneMappingService;
             _tvRageProvider = tvRageProvider;
             _episodeService = episodeService;
         }
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Providers
         {
             var firstEpisode = _episodeService.GetEpisode(series.Id, 1, 1);
 
-            var cleanName = _sceneMappingProvider.GetCleanName(series.Id);
+            var cleanName = _sceneMappingService.GetCleanName(series.Id);
             var results = _tvRageProvider.SearchSeries(series.Title);
             var result = ProcessResults(results, series, cleanName, firstEpisode);
 

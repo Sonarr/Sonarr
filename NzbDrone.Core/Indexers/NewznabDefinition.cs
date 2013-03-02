@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using NzbDrone.Core.Datastore;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Indexers
 {

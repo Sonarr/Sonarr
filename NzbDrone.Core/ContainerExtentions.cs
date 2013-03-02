@@ -11,7 +11,6 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Providers.Search;
-using PetaPoco;
 
 namespace NzbDrone.Core
 {
@@ -62,15 +61,7 @@ namespace NzbDrone.Core
             var appDataPath = new EnvironmentProvider().GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            container.Register(c => c.Resolve<ConnectionFactory>().GetMainPetaPocoDb())
-                     .As<IDatabase>();
 
-            container.Register(c => c.Resolve<ConnectionFactory>().GetLogPetaPocoDb(false))
-                     .SingleInstance()
-                     .Named<IDatabase>("DatabaseTarget");
-
-            container.Register(c => c.Resolve<ConnectionFactory>().GetLogPetaPocoDb())
-                     .Named<IDatabase>("LogProvider");
 
             container.Register(c =>
                       {
@@ -78,9 +69,6 @@ namespace NzbDrone.Core
                       }).As<IObjectDatabase>().SingleInstance();
 
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
-
-            container.RegisterType<DatabaseTarget>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("DatabaseTarget"));
-            container.RegisterType<LogService>().WithParameter(ResolvedParameter.ForNamed<IDatabase>("LogProvider"));
         }
     }
 }

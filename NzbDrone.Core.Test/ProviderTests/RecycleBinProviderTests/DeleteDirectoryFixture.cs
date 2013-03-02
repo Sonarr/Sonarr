@@ -17,7 +17,7 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
-using PetaPoco;
+
 using TvdbLib.Data;
 
 namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests

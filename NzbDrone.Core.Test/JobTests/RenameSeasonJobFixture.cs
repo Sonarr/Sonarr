@@ -75,21 +75,6 @@ namespace NzbDrone.Core.Test.JobTests
             ExceptionVerification.ExpectedWarns(1);
         }
 
-        [Test]
-        public void should_return_if_no_episodes_are_moved()
-        {
-            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.Id, SeasonNumber = 5 });
-
-            Mocker.GetMock<MetadataProvider>().Verify(v => v.RemoveForEpisodeFiles(It.IsAny<List<EpisodeFile>>()), Times.Never());
-        }
-
-        [Test]
-        public void should_return_process_metadata_if_files_are_moved()
-        {
-            WithMovedFiles();
-            Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.Id, SeasonNumber = 5 });
-
-            Mocker.GetMock<MetadataProvider>().Verify(v => v.RemoveForEpisodeFiles(It.IsAny<List<EpisodeFile>>()), Times.Once());
-        }
+    
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -21,9 +22,9 @@ namespace NzbDrone.Core.Providers.Search
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public DailyEpisodeSearch(ISeriesService seriesService, IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
-                             SceneMappingProvider sceneMappingProvider, AllowedDownloadSpecification allowedDownloadSpecification,
+                             SceneMappingService sceneMappingService, AllowedDownloadSpecification allowedDownloadSpecification,
                              ISeriesRepository seriesRepository)
-            : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingProvider,
+            : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
                    allowedDownloadSpecification)
         {
             _seriesRepository = seriesRepository;

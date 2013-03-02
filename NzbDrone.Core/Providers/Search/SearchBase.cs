@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -21,13 +22,13 @@ namespace NzbDrone.Core.Providers.Search
         protected readonly IEpisodeService _episodeService;
         protected readonly DownloadProvider _downloadProvider;
         protected readonly IIndexerService _indexerService;
-        protected readonly SceneMappingProvider _sceneMappingProvider;
+        protected readonly SceneMappingService _sceneMappingService;
         protected readonly AllowedDownloadSpecification _allowedDownloadSpecification;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected SearchBase(ISeriesService seriesService,ISeriesRepository seriesRepository, IEpisodeService episodeService, DownloadProvider downloadProvider,
-                             IIndexerService indexerService, SceneMappingProvider sceneMappingProvider,
+                             IIndexerService indexerService, SceneMappingService sceneMappingService,
                              AllowedDownloadSpecification allowedDownloadSpecification)
         {
             _seriesService = seriesService;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Providers.Search
             _episodeService = episodeService;
             _downloadProvider = downloadProvider;
             _indexerService = indexerService;
-            _sceneMappingProvider = sceneMappingProvider;
+            _sceneMappingService = sceneMappingService;
             _allowedDownloadSpecification = allowedDownloadSpecification;
         }
 
@@ -168,12 +169,12 @@ namespace NzbDrone.Core.Providers.Search
 
         public virtual string GetSearchTitle(Series series, int seasonNumber = -1)
         {
-            var seasonTitle = _sceneMappingProvider.GetSceneName(series.Id, seasonNumber);
+            var seasonTitle = _sceneMappingService.GetSceneName(series.Id, seasonNumber);
 
             if(!String.IsNullOrWhiteSpace(seasonTitle))
                 return seasonTitle;
 
-            var title = _sceneMappingProvider.GetSceneName(series.Id);
+            var title = _sceneMappingService.GetSceneName(series.Id);
 
             if (String.IsNullOrWhiteSpace(title))
             {

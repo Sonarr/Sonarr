@@ -5,7 +5,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Test.Framework;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Test.Configuration
 {

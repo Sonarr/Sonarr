@@ -303,7 +303,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>().Setup(s => s.DeleteFolder(droppedFolder.FullName, true));
             Mocker.GetMock<DiskProvider>().Setup(s => s.FolderExists(fakeSeries.Path)).Returns(true);
             Mocker.GetMock<DiskProvider>().Setup(s => s.IsFolderLocked(droppedFolder.FullName)).Returns(false);
-            Mocker.GetMock<MetadataProvider>().Setup(s => s.CreateForEpisodeFiles(It.IsAny<List<EpisodeFile>>()));
 
             //Act
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);

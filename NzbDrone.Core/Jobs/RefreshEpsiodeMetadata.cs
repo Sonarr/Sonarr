@@ -15,17 +15,15 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly ISeriesService _seriesService;
-        private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RefreshEpisodeMetadata(IMediaFileService mediaFileService, ISeriesService seriesService,
-                                        MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
+                                       ISeriesRepository seriesRepository)
         {
             _mediaFileService = mediaFileService;
             _seriesService = seriesService;
-            _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
         }
 
@@ -66,16 +64,6 @@ namespace NzbDrone.Core.Jobs
             {
                 Logger.Warn("No episodes in database found for series: {0}", series.Id);
                 return;
-            }
-
-            try
-            {
-                _metadataProvider.CreateForEpisodeFiles(episodeFiles.ToList());
-            }
-
-            catch (Exception e)
-            {
-                Logger.WarnException("An error has occurred while refreshing episode metadata", e);
             }
 
             notification.CurrentMessage = String.Format("Epsiode metadata refresh completed for {0}", series.Title);

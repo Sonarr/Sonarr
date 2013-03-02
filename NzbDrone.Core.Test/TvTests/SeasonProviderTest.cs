@@ -13,45 +13,14 @@ namespace NzbDrone.Core.Test.TvTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeasonProviderTest : SqlCeTest
+    public class SeasonProviderTest : ObjectDbTest
     {
         [SetUp]
         public void Setup()
         {
-            WithRealDb();
+          
         }
 
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SetIgnore_should_update_ignored_status(bool ignoreFlag)
-        {
-            var fakeSeason = Builder<Season>.CreateNew()
-                .With(s => s.Ignored = !ignoreFlag)
-                .Build();
-
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(4)
-                .All()
-                .With(c => c.SeriesId = fakeSeason.SeriesId)
-                .With(c => c.SeasonNumber = fakeSeason.Id)
-                .With(c => c.Ignored = !ignoreFlag)
-                .Build().ToList();
-
-            fakeEpisodes.ForEach(c => Db.Insert(c));
-
-            var id = Db.Insert(fakeSeason);
-
-            //Act
-            Mocker.Resolve<ISeasonService>().SetIgnore(fakeSeason.SeriesId, fakeSeason.SeasonNumber, ignoreFlag);
-
-            //Assert
-            var season = Db.SingleOrDefault<Season>(id);
-            season.Ignored.Should().Be(ignoreFlag);
-
-            var episodes = Db.Fetch<Episode>();
-            episodes.Should().HaveSameCount(fakeEpisodes);
-            episodes.Should().OnlyContain(c => c.Ignored == ignoreFlag);
-        }
 
         [TestCase(true)]
         [TestCase(false)]
@@ -111,7 +80,7 @@ namespace NzbDrone.Core.Test.TvTests
             const int seriesId = 10;
 
             //Setup
-            WithRealDb();
+          
 
             var seasons = Builder<Season>.CreateListOfSize(5)
                 .All()

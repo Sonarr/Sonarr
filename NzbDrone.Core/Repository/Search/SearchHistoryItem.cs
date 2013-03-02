@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Repository.Search
 {
-    [PrimaryKey("Id", autoIncrement = true)]
-    [TableName("SearchHistoryItems")]
     public class SearchHistoryItem
     {
         public int Id { get; set; }

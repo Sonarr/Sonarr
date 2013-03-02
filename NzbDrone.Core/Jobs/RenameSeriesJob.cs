@@ -15,18 +15,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly DiskScanProvider _diskScanProvider;
-        private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RenameSeriesJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider,
-                                MetadataProvider metadataProvider,ISeriesRepository seriesRepository,IEventAggregator eventAggregator)
+                               ISeriesRepository seriesRepository,IEventAggregator eventAggregator)
         {
             _mediaFileService = mediaFileService;
             _diskScanProvider = diskScanProvider;
-            _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
             _eventAggregator = eventAggregator;
         }
@@ -90,10 +88,6 @@ namespace NzbDrone.Core.Jobs
                         Logger.WarnException("An error has occurred while renaming file", e);
                     }
                 }
-
-                //Remove & Create Metadata for episode files
-                _metadataProvider.RemoveForEpisodeFiles(oldEpisodeFiles);
-                _metadataProvider.CreateForEpisodeFiles(newEpisodeFiles);
 
                 //Start AfterRename
 

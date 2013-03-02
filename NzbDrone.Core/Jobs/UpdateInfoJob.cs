@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -17,17 +18,17 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
-        private readonly ReferenceDataProvider _referenceDataProvider;
+        private readonly DailySeriesService _dailySeriesService;
         private readonly IConfigService _configService;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public UpdateInfoJob(ISeriesService seriesService, IEpisodeService episodeService,
-                            ReferenceDataProvider referenceDataProvider, IConfigService configService, ISeriesRepository seriesRepository)
+                            DailySeriesService dailySeriesService, IConfigService configService, ISeriesRepository seriesRepository)
         {
             _seriesService = seriesService;
             _episodeService = episodeService;
-            _referenceDataProvider = referenceDataProvider;
+            _dailySeriesService = dailySeriesService;
             _configService = configService;
             _seriesRepository = seriesRepository;
         }
@@ -67,7 +68,7 @@ namespace NzbDrone.Core.Jobs
             }
 
             //Update any Daily Series in the DB with the IsDaily flag
-            _referenceDataProvider.UpdateDailySeries();
+            _dailySeriesService.UpdateDailySeries();
 
             foreach (var seriesToUpdate in ListOfSeriesToUpdate)
             {

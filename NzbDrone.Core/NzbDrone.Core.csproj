@@ -151,18 +151,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Migrator, Version=0.9.1.26254, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Migrator.NET\Migrator.dll</HintPath>
-    </Reference>
-    <Reference Include="Migrator.Framework, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Migrator.NET\Migrator.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Migrator.Providers, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Migrator.NET\Migrator.Providers.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -221,45 +209,8 @@
     <Compile Include="ContainerExtentions.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
-    <Compile Include="Datastore\ConnectionFactory.cs" />
     <Compile Include="Datastore\ObjectDbFactory.cs" />
     <Compile Include="Datastore\SiaqodbProxy.cs" />
-    <Compile Include="Datastore\CustomeMapper.cs" />
-    <Compile Include="Datastore\MigrationLogger.cs" />
-    <Compile Include="Datastore\MigrationsHelper.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110707.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110726.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110909.cs" />
-    <Compile Include="Datastore\Migrations\Migration20111011.cs" />
-    <Compile Include="Datastore\Migrations\Migration20111112.cs" />
-    <Compile Include="Datastore\Migrations\Migration20111125.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120118.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120123.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120220.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120227.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120228.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120420.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120430.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120504.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120707.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120727.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120802.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120918.cs" />
-    <Compile Include="Datastore\Migrations\Migration20120919.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121012.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121016.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121122.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121202.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121209.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121218.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121223.cs" />
-    <Compile Include="Datastore\Migrations\Migration20121226.cs" />
-    <Compile Include="Datastore\Migrations\Migration20130203.cs" />
-    <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
-    <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
-    <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
-    <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
-    <Compile Include="Datastore\SqlCeProxy.cs" />
     <Compile Include="Download\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
@@ -310,6 +261,9 @@
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
+    <Compile Include="ReferenceData\DailySeriesDataProxy.cs" />
+    <Compile Include="ReferenceData\SceneMappingProxy.cs" />
+    <Compile Include="ReferenceData\SceneMappingRepository.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\SeasonRepository.cs" />
@@ -356,7 +310,6 @@
     <Compile Include="Indexers\FileSharingTalk.cs" />
     <Compile Include="Indexers\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Wombles.cs" />
-    <Compile Include="Providers\MetadataProvider.cs" />
     <Compile Include="Providers\Metadata\MetadataBase.cs" />
     <Compile Include="Providers\Metadata\Xbmc.cs" />
     <Compile Include="Providers\RecycleBinProvider.cs" />
@@ -392,7 +345,6 @@
     <Compile Include="Providers\TvRageProvider.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
-    <Compile Include="Repository\MetadataDefinition.cs" />
     <Compile Include="Qualities\Quality.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />
@@ -534,14 +486,14 @@
     <Compile Include="Qualities\QualitySizeService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ReferenceDataProvider.cs">
+    <Compile Include="ReferenceData\DailySeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
     <Compile Include="RootFolders\RootFolderService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\SceneMappingProvider.cs">
+    <Compile Include="ReferenceData\SceneMappingProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\SearchProvider.cs">
@@ -593,7 +545,7 @@
     <Compile Include="Qualities\QualitySize.cs" />
     <Compile Include="Qualities\QualityProfile.cs" />
     <Compile Include="RootFolders\RootFolder.cs" />
-    <Compile Include="Repository\SceneMapping.cs" />
+    <Compile Include="ReferenceData\SceneMapping.cs" />
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tvdb\Tvdb.cs" />

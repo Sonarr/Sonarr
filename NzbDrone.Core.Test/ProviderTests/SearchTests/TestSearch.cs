@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -20,9 +21,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public TestSearch(ISeriesService seriesService, IEpisodeService episodeService, DownloadProvider downloadProvider, 
-                          IIndexerService indexerService, SceneMappingProvider sceneMappingProvider,
+                          IIndexerService indexerService, SceneMappingService sceneMappingService,
                           AllowedDownloadSpecification allowedDownloadSpecification, ISeriesRepository seriesRepository)
-                          : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingProvider, 
+                          : base(seriesService, seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService, 
                                  allowedDownloadSpecification)
         {
         }

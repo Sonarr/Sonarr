@@ -2,16 +2,17 @@
 using System.Linq;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.ReferenceData;
 
 namespace NzbDrone.Core.Jobs
 {
     public class UpdateSceneMappingsJob : IJob
     {
-        private readonly SceneMappingProvider _sceneNameMappingProvider;
+        private readonly SceneMappingService _sceneNameMappingService;
 
-        public UpdateSceneMappingsJob(SceneMappingProvider sceneNameMappingProvider)
+        public UpdateSceneMappingsJob(SceneMappingService sceneNameMappingService)
         {
-            _sceneNameMappingProvider = sceneNameMappingProvider;
+            _sceneNameMappingService = sceneNameMappingService;
         }
 
         public UpdateSceneMappingsJob()
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Jobs
 
         public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            _sceneNameMappingProvider.UpdateMappings();
+            _sceneNameMappingService.UpdateMappings();
         }
     }
 }

@@ -16,20 +16,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly DiskScanProvider _diskScanProvider;
-        private readonly ISeriesService _seriesService;
-        private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public RenameSeasonJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider, ISeriesService seriesService,
-                                MetadataProvider metadataProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
+                                ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _mediaFileService = mediaFileService;
             _diskScanProvider = diskScanProvider;
-            _seriesService = seriesService;
-            _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
             _eventAggregator = eventAggregator;
         }
@@ -96,14 +92,7 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            //Remove & Create Metadata for episode files
-            //Todo: Add a metadata manager to avoid this hack
-            _metadataProvider.RemoveForEpisodeFiles(oldEpisodeFiles);
-            _metadataProvider.CreateForEpisodeFiles(newEpisodeFiles);
-
             //Start AfterRename
-            var message = String.Format("Renamed: Series {0}, Season: {1}", series.Title, options.SeasonNumber);
-
             _eventAggregator.Publish(new SeriesRenamedEvent(series));
 
             notification.CurrentMessage = String.Format("Rename completed for {0} Season {1}", series.Title, options.SeasonNumber);

@@ -10,6 +10,9 @@ namespace NzbDrone.Core.Tv
         bool SeriesPathExists(string path);
         List<Series> Search(string title);
         Series GetByTitle(string cleanTitle);
+        Series FindByTvdbId(int tvdbId);
+        void SetSeriesType(int seriesId, SeriesType seriesType);
+
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -32,6 +35,16 @@ namespace NzbDrone.Core.Tv
         public Series GetByTitle(string cleanTitle)
         {
             return Queryable.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
+        }
+
+        public Series FindByTvdbId(int tvdbId)
+        {
+            return Queryable.SingleOrDefault(s => s.TvDbId == tvdbId);
+        }
+
+        public void SetSeriesType(int seriesId, SeriesType seriesType)
+        {
+            ObjectDatabase.UpdateField(new Series(){Id = seriesId, SeriesType =seriesType }, "SeriesType");
         }
     }
 }

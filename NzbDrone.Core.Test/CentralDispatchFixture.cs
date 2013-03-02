@@ -36,11 +36,6 @@ namespace NzbDrone.Core.Test
 
         public CentralDispatchFixture()
         {
-            if (EnvironmentProvider.IsMono)
-            {
-                throw new IgnoreException("SqlCe is not supported");
-            }
-
             InitLogging();
         }
 
@@ -116,11 +111,6 @@ namespace NzbDrone.Core.Test
             kernel.Resolve<IIndexerService>().All().Select(c => c.Type).Should().BeEquivalentTo(indexers);
         }
 
-        [Test]
-        public void metadata_clients_are_initialized()
-        {
-            kernel.Resolve<MetadataProvider>().All().Should().HaveSameCount(metadata);
-        }
 
         [Test]
         public void quality_profile_initialized()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using NLog;
 using NzbDrone.Core.Lifecycle;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Indexers
 {

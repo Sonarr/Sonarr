@@ -10,6 +10,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -21,6 +22,8 @@ namespace NzbDrone.Core.Tv
         Series FindSeries(string title);
         void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
+        Series FindByTvdbId(int tvdbId);
+        void SetSeriesType(int seriesId, SeriesType seriesType);
     }
 
     public class SeriesService : ISeriesService
@@ -28,24 +31,22 @@ namespace NzbDrone.Core.Tv
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
         private readonly TvDbProvider _tvDbProvider;
-        private readonly MetadataProvider _metadataProvider;
         private readonly TvRageMappingProvider _tvRageMappingProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IQualityProfileService _qualityProfileService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly SceneMappingProvider _sceneNameMappingProvider;
+        private readonly SceneMappingService _sceneNameMappingService;
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
-                                TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider, MetadataProvider metadataProvider,
+                                TvDbProvider tvDbProviderProvider, SceneMappingService sceneNameMappingService,
                                 TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator, IQualityProfileService qualityProfileService)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _tvDbProvider = tvDbProviderProvider;
-            _sceneNameMappingProvider = sceneNameMappingProvider;
-            _metadataProvider = metadataProvider;
+            _sceneNameMappingService = sceneNameMappingService;
             _tvRageMappingProvider = tvRageMappingProvider;
             _eventAggregator = eventAggregator;
             _qualityProfileService = qualityProfileService;
@@ -91,7 +92,6 @@ namespace NzbDrone.Core.Tv
             }
 
             _seriesRepository.Update(series);
-            _metadataProvider.CreateForSeries(series, tvDbSeries);
 
             return series;
         }
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Tv
         {
             var normalizeTitle = Parser.NormalizeTitle(title);
 
-            var mapping = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
+            var mapping = _sceneNameMappingService.GetTvDbId(normalizeTitle);
             if (mapping.HasValue)
             {
                 var sceneSeries = _seriesRepository.Get(mapping.Value);
@@ -157,6 +157,16 @@ namespace NzbDrone.Core.Tv
                 _seriesRepository.Update(series);
             }
 
+        }
+
+        public Series FindByTvdbId(int tvdbId)
+        {
+            return _seriesRepository.FindByTvdbId(tvdbId);
+        }
+
+        public void SetSeriesType(int seriesId, SeriesType seriesType)
+        {
+            _seriesRepository.SetSeriesType(seriesId, seriesType);
         }
 
         /// <summary>

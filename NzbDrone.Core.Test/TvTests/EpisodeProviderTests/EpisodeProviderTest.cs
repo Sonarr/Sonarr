@@ -1,4 +1,5 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿/*
+// ReSharper disable RedundantUsingDirective
 
 using System;
 using System.Collections.Generic;
@@ -16,19 +17,19 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
-using PetaPoco;
+
 using TvdbLib.Data;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeProviderTest : SqlCeTest
+    public class EpisodeProviderTest : ObjectDbTest
     {
         [Test]
         public void GetEpisodes_exists()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodes_by_season_episode_exists()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Id = 1)
@@ -72,7 +73,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodes_by_season_episode_doesnt_exists()
         {
-            WithRealDb();
+          
 
             //Act
             var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, 1, 1);
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisode_with_EpisodeFile()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.Id).With(c => c.Quality = Quality.SDTV).Build();
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Sequence contains no elements")]
         public void GetEpisodes_invalid_series()
         {
-            WithRealDb();
+          
 
             Mocker.Resolve<SeriesService>();
 
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodesBySeason_success()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Id = 12)
@@ -165,7 +166,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -199,7 +200,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -240,7 +241,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
             Db.Insert(fakeSeries);
             Db.Insert(fakeEpisode);
 
@@ -277,7 +278,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -316,7 +317,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -354,7 +355,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -387,7 +388,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -420,7 +421,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -455,7 +456,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -787,7 +788,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
             Db.Insert(fakeEpisode);
@@ -814,7 +815,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Explicit]
         public void Add_daily_show_episodes()
         {
-            WithRealDb();
+          
             Mocker.Resolve<TvDbProvider>();
 
             Mocker.GetMock<IConfigService>()
@@ -843,7 +844,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisode_by_Season_Episode_none_existing()
         {
-            WithRealDb();
+          
 
             //Act
             var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1, 1, 1);
@@ -855,7 +856,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisode_by_Season_Episode_with_EpisodeFile()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.Id).With(c => c.Quality = Quality.SDTV).Build();
@@ -878,7 +879,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisode_by_Season_Episode_without_EpisodeFile()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
@@ -899,7 +900,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisode_by_AirDate_with_EpisodeFile()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.Id).With(c => c.Quality = Quality.SDTV).Build();
@@ -922,7 +923,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisode_by_AirDate_without_EpisodeFile()
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
@@ -959,7 +960,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void AddEpisode_episode_is_ignored_when_full_season_is_ignored()
         {
-            WithRealDb();
+          
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .All()
@@ -997,7 +998,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void AddEpisode_episode_is_not_ignored_when_full_season_is_not_ignored()
         {
-            WithRealDb();
+          
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .All()
@@ -1031,7 +1032,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void AddEpisode_episode_is_not_ignored_when_not_full_season_is_not_ignored()
         {
-            WithRealDb();
+          
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .All()
@@ -1067,7 +1068,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void IgnoreEpisode_Ignore()
         {
-            WithRealDb();
+          
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .All()
@@ -1093,7 +1094,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void IgnoreEpisode_RemoveIgnore()
         {
-            WithRealDb();
+          
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .All()
@@ -1119,7 +1120,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void EpisodesWithoutFiles_no_specials()
         {
-            WithRealDb();
+          
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Id = 10)
@@ -1162,7 +1163,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void EpisodesWithoutFiles_with_specials()
         {
-            WithRealDb();
+          
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Id = 10)
@@ -1206,7 +1207,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void EpisodesWithFiles_success()
         {
-            WithRealDb();
+          
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Id = 10)
@@ -1250,7 +1251,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void EpisodesWithFiles_no_files()
         {
-            WithRealDb();
+          
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Id = 10)
@@ -1279,7 +1280,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodesByFileId_multi_episodes()
         {
-            WithRealDb();
+          
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Id = 10)
@@ -1306,7 +1307,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodesByFileId_single_episode()
         {
-            WithRealDb();
+          
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Id = 10)
@@ -1333,7 +1334,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void IsFirstOrLastEpisodeInSeason_false()
         {
-            WithRealDb();
+          
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
                 .All()
@@ -1353,7 +1354,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void IsFirstOrLastEpisodeInSeason_true_first()
         {
-            WithRealDb();
+          
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
                 .All()
@@ -1373,7 +1374,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void IsFirstOrLastEpisodeInSeason_true_last()
         {
-            WithRealDb();
+          
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
                 .All()
@@ -1398,7 +1399,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [TestCase("The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Failed, 10)]
         public void SetPostDownloadStatus(string folderName, PostDownloadStatusType postDownloadStatus, int episodeCount)
         {
-            WithRealDb();
+          
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Id = 12345)
@@ -1428,7 +1429,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void SetPostDownloadStatus_Invalid_EpisodeId()
         {
-            WithRealDb();
+          
 
             var postDownloadStatus = PostDownloadStatusType.Failed;
 
@@ -1492,7 +1493,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.Id = seriesId).Build();
 
-            WithRealDb();
+          
 
             Db.Insert(fakeSeries);
 
@@ -1513,3 +1514,4 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 
     }
 }
+*/

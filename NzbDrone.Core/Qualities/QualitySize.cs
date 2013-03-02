@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using NzbDrone.Core.Datastore;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Qualities
 {

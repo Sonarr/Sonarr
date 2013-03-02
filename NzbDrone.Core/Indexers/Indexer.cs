@@ -1,6 +1,6 @@
 ﻿using System;
 using NzbDrone.Core.Datastore;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Indexers
 {

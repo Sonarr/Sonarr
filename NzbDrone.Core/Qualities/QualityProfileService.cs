@@ -4,7 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Qualities;
-using PetaPoco;
+
 
 namespace NzbDrone.Core.Qualities
 {

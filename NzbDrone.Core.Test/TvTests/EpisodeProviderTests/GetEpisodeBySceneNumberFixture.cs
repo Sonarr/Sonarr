@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class GetEpisodeBySceneNumberFixture : SqlCeTest
+    public class GetEpisodeBySceneNumberFixture : ObjectDbTest
     {
         private Series _series;
         private Episode _episode;
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [SetUp]
         public void Setup()
         {
-            WithRealDb();
+          
 
             _series = Builder<Series>
                 .CreateNew()
@@ -36,7 +36,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                     .Build();
 
             Db.Insert(_episode);
-            Db.Execute("UPDATE Episodes SET SceneSeasonNumber = NULL, SceneEpisodeNumber = NULL");
         }
 
         public void WithSceneNumbering()

@@ -1,4 +1,5 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿/*
+// ReSharper disable RedundantUsingDirective
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeProviderTest_GetEpisodesByParseResult : SqlCeTest
+    public class EpisodeProviderTest_GetEpisodesByParseResult : ObjectDbTest
     {
         private IEpisodeService episodeService;
 
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                      .With(e => e.Title = "Daily Episode 1")
                      .Build();
 
-            WithRealDb();
+          
 
             episodeService = Mocker.Resolve<EpisodeService>();
         }
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             ep.Should().HaveCount(1);
             parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
             VerifyEpisode(ep[0], fakeEpisode);
-            Db.Fetch<Episode>().Should().HaveCount(1);
+            Db<Episode>().Should().HaveCount(1);
         }
 
         [Test]
@@ -273,3 +274,4 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         }
     }
 }
+*/

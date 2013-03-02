@@ -4,7 +4,7 @@ using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
-using PetaPoco;
+
 using Sqo.Attributes;
 
 namespace NzbDrone.Core.Tv

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NzbDrone.Core.Datastore
 {
-    public interface IBasicRepository<TModel>
+    public interface IBasicRepository<TModel> where TModel : ModelBase, new()
     {
         IEnumerable<TModel> All();
         int Count();
@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Datastore
         IList<TModel> InsertMany(IList<TModel> model);
         IList<TModel> UpdateMany(IList<TModel> model);
         void Purge();
+        bool HasItems();
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -89,6 +90,11 @@ namespace NzbDrone.Core.Datastore
         public void Purge()
         {
             DeleteMany(Queryable.Select(c => c.Id));
+        }
+
+        public bool HasItems()
+        {
+            return Queryable.Any();
         }
     }
 }

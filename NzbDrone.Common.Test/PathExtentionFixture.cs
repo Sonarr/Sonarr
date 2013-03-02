@@ -62,17 +62,6 @@ namespace NzbDrone.Common.Test
             GetEnviromentProvider().GetConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\Config.xml");
         }
 
-        [Test]
-        public void IISConfig_path_test()
-        {
-            GetEnviromentProvider().GetIISConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\IISExpress\AppServer\applicationhost.config");
-        }
-
-        [Test]
-        public void IISExe_path_test()
-        {
-            GetEnviromentProvider().GetIISExe().Should().BeEquivalentTo(@"C:\NzbDrone\IISExpress\IISExpress.exe");
-        }
 
         [Test]
         public void NlogConfig_path_test()

@@ -8,16 +8,12 @@ namespace NzbDrone.Common
         private const string WEB_FOLDER = "NzbDrone.Web\\";
         private const string APP_DATA = "App_Data\\";
         private const string WEB_BIN = "bin\\";
-        public const string IIS_FOLDER = "IISExpress";
-        public const string IIS_EXE = "iisexpress.exe";
 
         private const string LOG_CONFIG_FILE = "log.config";
         private const string APP_CONFIG_FILE = "config.xml";
 
         public const string NZBDRONE_EXE = "NzbDrone.exe";
-        public const string NZBDRONE_SQLCE_DB_FILE = "nzbdrone.sdf";
 
-        public const string LOG_SQLCE_DB_FILE = "log.sdf";
         public const string OBJ_DB_FOLDER = "objDb";
 
         private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
@@ -45,20 +41,8 @@ namespace NzbDrone.Common
         }
 
 
-        public static string GetIISFolder(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.ApplicationPath, IIS_FOLDER);
-        }
 
-        public static string GetIISExe(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetIISFolder(), IIS_EXE);
-        }
 
-        public static string GetIISConfigPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetIISFolder(), "AppServer", "applicationhost.config");
-        }
 
         public static string GetWebRoot(this EnvironmentProvider environmentProvider)
         {
@@ -83,16 +67,6 @@ namespace NzbDrone.Common
         public static string GetConfigPath(this EnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.ApplicationPath, APP_CONFIG_FILE);
-        }
-
-        public static string GetSqlCeMainDbPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_SQLCE_DB_FILE);
-        }
-
-        public static string GetSqlCeLogDbPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetAppDataPath(), LOG_SQLCE_DB_FILE);
         }
 
         public static string GetObjectDbFolder(this EnvironmentProvider environmentProvider)

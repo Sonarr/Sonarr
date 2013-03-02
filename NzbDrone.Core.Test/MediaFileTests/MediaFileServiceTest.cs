@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class MediaFileServiceTest : SqlCeTest
+    public class MediaFileServiceTest : ObjectDbTest
     {
         [Test]
         public void get_series_files()
@@ -35,8 +35,6 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .With(s => s.SeriesId = 20).Build();
 
 
-
-            WithRealDb();
 
 
             Db.InsertMany(firstSeriesFiles);
@@ -66,7 +64,6 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .Build();
 
 
-            WithRealDb();
 
             Db.InsertMany(firstSeriesFiles);
             Db.InsertMany(secondSeriesFiles);
@@ -148,23 +145,18 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .Build();
 
 
-            WithRealDb();
             Db.InsertMany(episodeFiles);
 
             //Act
             Mocker.Resolve<IMediaFileService>().Delete(1);
-            var result = Db.Fetch<EpisodeFile>();
 
-            //Assert
-            result.Should().HaveCount(9);
-            result.Should().NotContain(e => e.Id == 1);
+           
         }
 
         [Test]
         public void GetFileByPath_should_return_null_if_file_does_not_exist_in_database()
         {
             //Setup
-            WithRealDb();
 
             //Act
             var result = Mocker.Resolve<IMediaFileService>().GetFileByPath(@"C:\Test\EpisodeFile.avi");
@@ -179,7 +171,6 @@ namespace NzbDrone.Core.Test.MediaFileTests
             var path = @"C:\Test\EpisodeFile.avi";
 
             //Setup
-            WithRealDb();
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                     .With(c => c.Quality = Quality.SDTV)
                     .With(f => f.Path = path.NormalizePath())

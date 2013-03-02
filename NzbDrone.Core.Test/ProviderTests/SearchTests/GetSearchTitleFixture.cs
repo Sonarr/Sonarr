@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Search;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
         private void WithSceneMapping()
         {
-            Mocker.GetMock<SceneMappingProvider>()
+            Mocker.GetMock<SceneMappingService>()
                   .Setup(s => s.GetSceneName(_series.Id, -1))
                   .Returns("Hawaii Five 0 2010");
         }
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         [Test]
         public void should_return_season_scene_name_when_one_exists()
         {
-            Mocker.GetMock<SceneMappingProvider>()
+            Mocker.GetMock<SceneMappingService>()
                   .Setup(s => s.GetSceneName(_series.Id, 5))
                   .Returns("Hawaii Five 0 2010 - Season 5");
 
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         {
             _series.Title = input;
 
-            Mocker.GetMock<SceneMappingProvider>()
+            Mocker.GetMock<SceneMappingService>()
                   .Setup(s => s.GetSceneName(_series.Id, -1))
                   .Returns("");
 

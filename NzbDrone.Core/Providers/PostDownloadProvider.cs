@@ -16,17 +16,13 @@ namespace NzbDrone.Core.Providers
         private static readonly Regex StatusRegex = new Regex(@"^_[\w_]*_", RegexOptions.Compiled);
         private readonly DiskProvider _diskProvider;
         private readonly DiskScanProvider _diskScanProvider;
-        private readonly ISeriesService _seriesService;
-        private readonly MetadataProvider _metadataProvider;
         private readonly ISeriesRepository _seriesRepository;
 
         public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider,
-                                    ISeriesService seriesService, MetadataProvider metadataProvider,ISeriesRepository seriesRepository)
+                                    ISeriesService seriesService, ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
             _diskScanProvider = diskScanProvider;
-            _seriesService = seriesService;
-            _metadataProvider = metadataProvider;
             _seriesRepository = seriesRepository;
         }
 
@@ -108,10 +104,6 @@ namespace NzbDrone.Core.Providers
             var importedFiles = _diskScanProvider.Scan(series, subfolderInfo.FullName);
             importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
 
-            //Create Metadata for all the episode files found
-            if (importedFiles.Any())
-                _metadataProvider.CreateForEpisodeFiles(importedFiles);
-
             //Delete the folder only if folder is small enough
             if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < Constants.IgnoreFileSize)
             {
@@ -176,7 +168,6 @@ namespace NzbDrone.Core.Providers
             if (episodeFile != null)
             {
                 _diskScanProvider.MoveEpisodeFile(episodeFile, true);
-                _metadataProvider.CreateForEpisodeFile(episodeFile);
             }
         }
 

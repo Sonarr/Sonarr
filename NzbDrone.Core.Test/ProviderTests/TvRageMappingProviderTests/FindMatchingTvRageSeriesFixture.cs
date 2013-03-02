@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
 using NzbDrone.Core.Providers;
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                   .Setup(s => s.GetEpisode(_series.Id, 1, 1))
                   .Returns(_episode);
 
-            Mocker.GetMock<SceneMappingProvider>()
+            Mocker.GetMock<SceneMappingService>()
                   .Setup(s => s.GetCleanName(_series.Id))
                   .Returns("");
 
