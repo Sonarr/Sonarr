@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Tv
         Episode GetEpisode(int id);
         Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode GetEpisode(int seriesId, DateTime date);
-        IList<Episode> GetEpisodeBySeries(int seriesId);
+        List<Episode> GetEpisodeBySeries(int seriesId);
         IList<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult);
         IList<Episode> EpisodesWithoutFiles(bool includeSpecials);
@@ -56,32 +56,32 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.Insert(episode);
         }
 
-        public virtual Episode GetEpisode(int id)
+        public Episode GetEpisode(int id)
         {
             return _episodeRepository.Get(id);
         }
 
-        public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
+        public Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
             return _episodeRepository.Get(seriesId, seasonNumber, episodeNumber);
         }
 
-        public virtual Episode GetEpisode(int seriesId, DateTime date)
+        public Episode GetEpisode(int seriesId, DateTime date)
         {
             return _episodeRepository.Get(seriesId, date);
         }
 
-        public virtual IList<Episode> GetEpisodeBySeries(int seriesId)
+        public List<Episode> GetEpisodeBySeries(int seriesId)
         {
-            return _episodeRepository.GetEpisodes(seriesId);
+            return _episodeRepository.GetEpisodes(seriesId).ToList();
         }
 
-        public virtual IList<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber)
+        public IList<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber)
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult)
+        public IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult)
         {
             var result = new List<Episode>();
 
@@ -159,22 +159,22 @@ namespace NzbDrone.Core.Tv
             return result;
         }
 
-        public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
+        public IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
             return _episodeRepository.EpisodesWithoutFiles(includeSpecials);
         }
 
-        public virtual IList<Episode> GetEpisodesByFileId(int episodeFileId)
+        public IList<Episode> GetEpisodesByFileId(int episodeFileId)
         {
             return _episodeRepository.GetEpisodeByFileId(episodeFileId);
         }
 
-        public virtual IList<Episode> EpisodesWithFiles()
+        public IList<Episode> EpisodesWithFiles()
         {
             return _episodeRepository.EpisodesWithFiles();
         }
 
-        public virtual void RefreshEpisodeInfo(Series series)
+        public void RefreshEpisodeInfo(Series series)
         {
             logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.Id));
             var successCount = 0;
@@ -270,17 +270,17 @@ namespace NzbDrone.Core.Tv
             DeleteEpisodesNotInTvdb(series, tvdbEpisodes);
         }
 
-        public virtual void UpdateEpisode(Episode episode)
+        public void UpdateEpisode(Episode episode)
         {
             _episodeRepository.Update(episode);
         }
 
-        public virtual IList<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber)
+        public IList<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber)
         {
             return GetEpisodesBySeason(seriesId, seasonNumber).Select(c => c.Id).ToList();
         }
 
-        public virtual void SetEpisodeIgnore(int episodeId, bool isIgnored)
+        public void SetEpisodeIgnore(int episodeId, bool isIgnored)
         {
             var episode = _episodeRepository.Get(episodeId);
             _episodeRepository.SetIgnoreFlat(episode, isIgnored);
@@ -288,7 +288,7 @@ namespace NzbDrone.Core.Tv
             logger.Info("Ignore flag for Episode:{0} was set to {1}", episodeId, isIgnored);
         }
 
-        public virtual bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber)
+        public bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber)
         {
             var episodes = GetEpisodesBySeason(seriesId, seasonNumber).OrderBy(e => e.EpisodeNumber);
 
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Tv
             logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
         }
 
-        public virtual void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
+        public void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
         {
             if (episodeIds.Count == 0) throw new ArgumentException("episodeIds should contain one or more episode ids.");
 
@@ -332,12 +332,12 @@ namespace NzbDrone.Core.Tv
             logger.Trace("Updating PostDownloadStatus for {0} episode(s) to {1}", episodeIds.Count, postDownloadStatus);
         }
 
-        public virtual void UpdateEpisodes(List<Episode> episodes)
+        public void UpdateEpisodes(List<Episode> episodes)
         {
             _episodeRepository.UpdateMany(episodes);
         }
 
-        public virtual Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
+        public Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
             return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
         }

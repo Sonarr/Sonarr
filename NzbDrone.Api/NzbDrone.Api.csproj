@@ -113,6 +113,8 @@
     <Compile Include="Calendar\CalendarModule.cs" />
     <Compile Include="Calendar\CalendarResource.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
+    <Compile Include="Episodes\EpisodeModule.cs" />
+    <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="FrontendModule\IndexModule.cs" />

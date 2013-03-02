@@ -32,6 +32,7 @@
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="HeaderView.js" />
     <Content Include="MainMenuView.js" />
     <Content Include="AddSeries\addSeries.css" />
     <Content Include="AddSeries\AddSeriesLayout.js" />
@@ -121,6 +122,12 @@
     <Content Include="Routing.js" />
     <Content Include="Series\Delete\DeleteSeriesTemplate.html" />
     <Content Include="Series\Delete\DeleteSeriesView.js" />
+    <Content Include="Series\Details\EpisodeModel.js" />
+    <Content Include="Series\Details\SeasonCollection.js" />
+    <Content Include="Series\Details\SeasonCollectionTemplate.html" />
+    <Content Include="Series\Details\SeasonCollectionView.js" />
+    <Content Include="Series\Details\SeriesDetailsTemplate.html" />
+    <Content Include="Series\Details\SeriesDetailsView.js" />
     <Content Include="Series\Edit\EditSeriesTemplate.html" />
     <Content Include="Series\Edit\EditSeriesView.js" />
     <Content Include="Series\EmptySeriesCollectionTemplate.html" />

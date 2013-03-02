@@ -9,6 +9,7 @@
             'series/index': 'series',
             'series/add': 'addSeries',
             'series/add/:action(/:query)': 'addSeries',
+            'series/details/:query': 'seriesDetails',
             'upcoming': 'upcoming',
             'upcoming/index': 'upcoming',
             'calendar': 'calendar',

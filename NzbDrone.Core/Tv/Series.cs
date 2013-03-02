@@ -53,7 +53,5 @@ namespace NzbDrone.Core.Tv
         public int EpisodeFileCount { get; set; }
         public int SeasonCount { get; set; }
         public DateTime? NextAiring { get; set; }
-
-        public List<Episode> Episodes { get; set; }
     }
 }
