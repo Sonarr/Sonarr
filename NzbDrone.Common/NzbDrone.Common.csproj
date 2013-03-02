@@ -134,6 +134,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SysTray\SysTrayProvider.cs" />
+    <Compile Include="TryParseExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EnsureThat\ve-3BAF.tmp" />

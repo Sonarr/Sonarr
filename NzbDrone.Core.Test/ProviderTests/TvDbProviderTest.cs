@@ -68,11 +68,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void none_unique_season_episode_number()
         {
             //act
-            var result = tvDbProvider.GetSeries(75978, true);//Family guy
+            var result = tvDbProvider.GetEpisodes(75978);//Family guy
 
             //Asserts that when episodes are grouped by Season/Episode each group contains maximum of
             //one item.
-            result.Episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+            result.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
                 .Max(e => e.Count()).Should().Be(1);
 
         }

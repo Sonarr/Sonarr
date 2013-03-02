@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Eventing;
@@ -62,23 +61,19 @@ namespace NzbDrone.Core.Tv
         public Series UpdateSeriesInfo(int seriesId)
         {
             var series = _seriesRepository.Get(seriesId);
-            var tvDbSeries = _tvDbProvider.GetSeries(series.TvDbId, false, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(series.TvDbId);
 
-            series.Title = tvDbSeries.SeriesName;
-            series.AirTime = CleanAirsTime(tvDbSeries.AirsTime);
+            series.Title = tvDbSeries.Title;
+            series.AirTime = tvDbSeries.AirTime;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
-            series.Language = tvDbSeries.Language != null ? tvDbSeries.Language.Abbriviation : string.Empty;
-            series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
+            series.Language = tvDbSeries.Language;
+            series.CleanTitle = tvDbSeries.CleanTitle;
             series.LastInfoSync = DateTime.Now;
-            series.Runtime = (int)tvDbSeries.Runtime;
-            series.BannerUrl = tvDbSeries.BannerPath;
+            series.Runtime = tvDbSeries.Runtime;
+            series.BannerUrl = tvDbSeries.BannerUrl;
             series.Network = tvDbSeries.Network;
-
-            if (tvDbSeries.FirstAired.Year > 1900)
-                series.FirstAired = tvDbSeries.FirstAired.Date;
-            else
-                series.FirstAired = null;
+            series.FirstAired = tvDbSeries.FirstAired;
 
             try
             {
@@ -169,29 +164,6 @@ namespace NzbDrone.Core.Tv
             _seriesRepository.SetSeriesType(seriesId, seriesType);
         }
 
-        /// <summary>
-        ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
-        /// </summary>
-        /// <param name = "rawTime">The TVDB AirsTime</param>
-        /// <returns>String that contains the AirTimes</returns>
 
-        private static readonly Regex timeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static string CleanAirsTime(string rawTime)
-        {
-            var match = timeRegex.Match(rawTime);
-            var time = match.Groups["time"].Value;
-            var meridiem = match.Groups["meridiem"].Value;
-
-            //Lets assume that a string that doesn't contain a Merideim is aired at night... So we'll add it
-            if (String.IsNullOrEmpty(meridiem))
-                meridiem = "PM";
-
-            DateTime dateTime;
-
-            if (String.IsNullOrEmpty(time) || !DateTime.TryParse(time + " " + meridiem.ToUpper(), out dateTime))
-                return String.Empty;
-
-            return dateTime.ToString("hh:mm tt");
-        }
     }
 }

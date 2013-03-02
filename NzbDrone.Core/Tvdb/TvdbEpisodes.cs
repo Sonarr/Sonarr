@@ -127,6 +127,6 @@ namespace NzbDrone.Core.Tvdb
         public int? seasonid { get; set; }
 
         [XmlElement]
-        public int? seriesid { get; set; }
+        public int seriesid { get; set; }
     }
 }

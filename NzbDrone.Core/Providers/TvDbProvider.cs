@@ -1,38 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Core.Tv;
-using TvdbLib;
-using TvdbLib.Cache;
-using TvdbLib.Data;
-using TvdbLanguage = TvdbLib.Data.TvdbLanguage;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Providers
 {
     public class TvDbProvider
     {
-        private readonly EnvironmentProvider _environmentProvider;
         public const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 
 
-        private readonly TvdbHandler _handler;
         private readonly Tvdb.Tvdb _handlerV2;
 
 
-        public TvDbProvider(EnvironmentProvider environmentProvider)
-        {
-            _environmentProvider = environmentProvider;
-            _handler = new TvdbHandler(new XmlCacheProvider(_environmentProvider.GetCacheFolder()), TVDB_APIKEY);
-            _handlerV2 = new Tvdb.Tvdb(TVDB_APIKEY);
-        }
-
         public TvDbProvider()
         {
-
+            _handlerV2 = new Tvdb.Tvdb(TVDB_APIKEY);
         }
 
         public virtual List<Series> SearchSeries(string title)
@@ -56,38 +44,63 @@ namespace NzbDrone.Core.Providers
             return searchResult;
         }
 
-        public virtual TvdbSeries GetSeries(int tvDbSeriesId, bool loadEpisodes, bool loadActors = false)
+        public virtual Series GetSeries(int tvDbSeriesId)
         {
-            lock (_handler)
+
+            var tvDbSeries = _handlerV2.GetSeriesBaseRecord("http://thetvdb.com", tvDbSeriesId);
+
+            var series = new Series();
+
+            series.Title = tvDbSeries.SeriesName;
+            series.AirTime = CleanAirsTime(tvDbSeries.Airs_Time);
+            series.Overview = tvDbSeries.Overview;
+            series.Status = tvDbSeries.Status;
+            series.Language = tvDbSeries.Language ?? string.Empty;
+            series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
+            series.LastInfoSync = DateTime.Now;
+            
+            if (tvDbSeries.Runtime.HasValue)
             {
-                logger.Debug("Fetching SeriesId'{0}' from tvdb", tvDbSeriesId);
-                var result = _handler.GetSeries(tvDbSeriesId, TvdbLanguage.DefaultLanguage, loadEpisodes, loadActors, true, true);
-
-                //Remove duplicated episodes
-                var episodes = result.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
-                     .GroupBy(e => e.SeriesId.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
-                     .Select(e => e.First());
-
-                result.Episodes = episodes.Where(episode => !string.IsNullOrWhiteSpace(episode.EpisodeName) || (episode.FirstAired < DateTime.Now.AddDays(2) && episode.FirstAired.Year > 1900)).ToList();
-
-                return result;
+                series.Runtime = Convert.ToInt32(tvDbSeries.Runtime);
             }
+            
+            series.BannerUrl = tvDbSeries.banner;
+            series.Network = tvDbSeries.Network;
+
+            if (tvDbSeries.FirstAired.HasValue && tvDbSeries.FirstAired.Value.Year > 1900)
+            {
+                series.FirstAired = tvDbSeries.FirstAired.Value.Date;
+            }
+            else
+            {
+                series.FirstAired = null;
+            }
+
+            return series;
+
         }
 
         public virtual IList<Episode> GetEpisodes(int tvDbSeriesId)
         {
-            var series = GetSeries(tvDbSeriesId, true);
+
+
+            var seriesRecord = _handlerV2.GetSeriesFullRecord("http://thetvdb.com", tvDbSeriesId);
+
+            var tvdbEpisodes = seriesRecord.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
+                     .GroupBy(e => e.seriesid.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+                     .Select(e => e.First());
+
 
             var episodes = new List<Episode>();
 
-            foreach (var tvDbEpisode in series.Episodes)
+            foreach (var tvDbEpisode in tvdbEpisodes)
             {
                 var episode = new Episode();
 
-                episode.TvDbEpisodeId = tvDbEpisode.Id;
+                episode.TvDbEpisodeId = tvDbEpisode.id;
                 episode.EpisodeNumber = tvDbEpisode.EpisodeNumber;
                 episode.SeasonNumber = tvDbEpisode.SeasonNumber;
-                episode.AbsoluteEpisodeNumber = tvDbEpisode.AbsoluteNumber;
+                episode.AbsoluteEpisodeNumber = tvDbEpisode.absolute_number.ParseInt32();
                 episode.Title = tvDbEpisode.EpisodeName;
                 episode.Overview = tvDbEpisode.Overview;
 
@@ -104,6 +117,31 @@ namespace NzbDrone.Core.Providers
             }
 
             return episodes;
+        }
+
+        /// <summary>
+        ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
+        /// </summary>
+        /// <param name = "rawTime">The TVDB AirsTime</param>
+        /// <returns>String that contains the AirTimes</returns>
+
+        private static readonly Regex timeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static string CleanAirsTime(string rawTime)
+        {
+            var match = timeRegex.Match(rawTime);
+            var time = match.Groups["time"].Value;
+            var meridiem = match.Groups["meridiem"].Value;
+
+            //Lets assume that a string that doesn't contain a Merideim is aired at night... So we'll add it
+            if (String.IsNullOrEmpty(meridiem))
+                meridiem = "PM";
+
+            DateTime dateTime;
+
+            if (String.IsNullOrEmpty(time) || !DateTime.TryParse(time + " " + meridiem.ToUpper(), out dateTime))
+                return String.Empty;
+
+            return dateTime.ToString("hh:mm tt");
         }
     }
 }

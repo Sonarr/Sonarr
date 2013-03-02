@@ -7,7 +7,6 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using TvdbLib.Data;
 
 namespace NzbDrone.Core.Tv
 {

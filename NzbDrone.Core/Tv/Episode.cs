@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Tv
 
         public Boolean Ignored { get; set; }
         public PostDownloadStatusType PostDownloadStatus { get; set; }
-        public int AbsoluteEpisodeNumber { get; set; }
+        public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
 

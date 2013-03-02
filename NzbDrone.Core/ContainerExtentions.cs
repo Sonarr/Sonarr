@@ -9,7 +9,6 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Providers.Search;
 
 namespace NzbDrone.Core
@@ -48,10 +47,6 @@ namespace NzbDrone.Core
             container.RegisterAssemblyTypes(assembly)
                       .Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase)))
                      .As<ExternalNotificationBase>().SingleInstance();
-
-            container.RegisterAssemblyTypes(assembly)
-                     .Where(t => t.IsSubclassOf(typeof(MetadataBase)))
-                     .As<MetadataBase>().SingleInstance();
         }
 
         private static void InitDatabase(this ContainerBuilder container)

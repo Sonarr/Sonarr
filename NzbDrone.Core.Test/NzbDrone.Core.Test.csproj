@@ -182,8 +182,6 @@
     <Compile Include="ProviderTests\DiskScanProviderTests\ScanFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\PneumaticProviderFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\GetEpisodeBySceneNumberFixture.cs" />
-    <Compile Include="ProviderTests\Metadata\Xbmc_ForEpisodeFile_Fixture.cs" />
-    <Compile Include="ProviderTests\Metadata\Xbmc_ForSeries_Fixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDropDirectoryFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessVideoFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\CleanupFixture.cs" />
@@ -222,7 +220,6 @@
     <Compile Include="JobTests\SeasonSearchJobTest.cs" />
     <Compile Include="JobTests\SeriesSearchJobTest.cs" />
     <Compile Include="ProviderTests\EventClientProviderTest.cs" />
-    <Compile Include="CentralDispatchFixture.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\MoveEpisodeFileFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
