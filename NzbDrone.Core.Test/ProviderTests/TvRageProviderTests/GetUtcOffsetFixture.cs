@@ -9,8 +9,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using TvdbLib.Data;
-using TvdbLib.Exceptions;
 
 namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
 {

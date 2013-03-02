@@ -18,8 +18,6 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-using TvdbLib.Data;
-
 namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {
     [TestFixture]

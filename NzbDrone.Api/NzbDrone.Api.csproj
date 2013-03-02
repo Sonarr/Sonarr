@@ -144,6 +144,7 @@
     <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />
+    <Compile Include="Settings\SettingsModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
