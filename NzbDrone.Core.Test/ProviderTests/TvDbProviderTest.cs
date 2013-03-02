@@ -75,6 +75,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
                 .Max(e => e.Count()).Should().Be(1);
 
+
+            result.Select(c => c.TvDbEpisodeId).Should().OnlyHaveUniqueItems();
+
         }
     }
 }

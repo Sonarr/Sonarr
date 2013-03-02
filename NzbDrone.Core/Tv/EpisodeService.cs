@@ -192,6 +192,8 @@ namespace NzbDrone.Core.Tv
                     logger.Trace("Updating info for [{0}] - S{1:00}E{2:00}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
 
                     //first check using tvdbId, this should cover cases when and episode number in a season is changed
+
+                    var episodes = seriesEpisodes.Where(e => e.TvDbEpisodeId == episode.TvDbEpisodeId).ToList();
                     var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId);
 
                     //not found, try using season/episode number
