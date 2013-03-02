@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeskMetrics.NET</name>
+    </assembly>
+    <members>
+        <member name="M:DeskMetrics.IDeskMetricsClient.Start">
+            <summary>
+            Starts the application tracking.
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.Stop">
+            <summary>
+            Stops the application tracking and send the collected data to DeskMetrics
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterEvent(System.String,System.String)">
+            <summary>
+            Register an event occurrence
+            </summary>
+            <param name="eventCategory">EventCategory Category</param>
+            <param name="eventName">EventCategory eventName</param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterEventPeriod(System.String,System.String,System.TimeSpan,System.Boolean)">
+            <summary>
+            Tracks an event related to time and intervals
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventTime">
+            The event duration 
+            </param>
+            <param name="completed">
+            True if the event was completed.
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterInstall">
+            <summary>
+            Tracks an installation
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterUninstall">
+            <summary>
+            Tracks an uninstall
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterException(System.Exception)">
+            <summary>
+            Tracks an exception
+            </summary>
+            <param name="exception">
+            The exception object to be tracked
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterEventValue(System.String,System.String,System.String)">
+            <summary>
+            Tracks an event with custom value
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventValue">
+            The custom value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterCustomData(System.String,System.String)">
+            <summary>
+            Tracks custom data
+            </summary>
+            <param name="key">
+            The custom data name
+            </param>
+            <param name="value">
+            The custom data value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterLog(System.String)">
+            <summary>
+            Tracks a log
+            </summary>
+            <param name="message">
+            The log message
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.Start">
+            <summary>
+            Starts the application tracking.
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.Stop">
+            <summary>
+            Stops the application tracking and send the collected data to DeskMetrics
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterEvent(System.String,System.String)">
+            <summary>
+            Register an event occurrence
+            </summary>
+            <param name="eventCategory">EventCategory Category</param>
+            <param name="eventName">EventCategory eventName</param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterEventPeriod(System.String,System.String,System.TimeSpan,System.Boolean)">
+            <summary>
+            Tracks an event related to time and intervals
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventTime">
+            The event duration 
+            </param>
+            <param name="completed">
+            True if the event was completed.
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterInstall">
+            <summary>
+            Tracks an installation
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterUninstall">
+            <summary>
+            Tracks an uninstall
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterException(System.Exception)">
+            <summary>
+            Tracks an exception
+            </summary>
+            <param name="exception">
+            The exception object to be tracked
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterEventValue(System.String,System.String,System.String)">
+            <summary>
+            Tracks an event with custom value
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventValue">
+            The custom value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterCustomData(System.String,System.String)">
+            <summary>
+            Tracks custom data
+            </summary>
+            <param name="key">
+            The custom data name
+            </param>
+            <param name="value">
+            The custom data value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterLog(System.String)">
+            <summary>
+            Tracks a log
+            </summary>
+            <param name="message">
+            The log message
+            </param>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.Started">
+            <summary>
+            Indicates if the Start() has been called and a session is active.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.SessionId">
+            <summary>
+            Currently active session. will be null if no sessions are active.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.ApplicationId">
+            <summary>
+            DeskmMtrics Application ID
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.ApplicationVersion">
+            <summary>
+            Version of application being tracked.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.Enabled">
+            <summary>
+            Checks if application events are tracked.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.UserId">
+            <summary>
+            Anonymous identifier of the user being tracked.
+            </summary>
+        </member>
+    </members>
+</doc>

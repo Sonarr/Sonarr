@@ -1,0 +1,51 @@
+<SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<SOAP-ENV:Body>
+<a1:Hashtable id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/ns/System.Collections">
+<LoadFactor>0.72</LoadFactor>
+<Version>2</Version>
+<Comparer xsi:null="1"/>
+<HashCodeProvider xsi:null="1"/>
+<HashSize>11</HashSize>
+<Keys href="#ref-2"/>
+<Values href="#ref-3"/>
+</a1:Hashtable>
+<SOAP-ENC:Array id="ref-2" SOAP-ENC:arrayType="xsd:anyType[2]">
+<item id="ref-4" xsi:type="SOAP-ENC:string">_reserved_nestedSavedStates</item>
+<item id="ref-5" xsi:type="SOAP-ENC:string">_reserved_lastInstallerAttempted</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-3" SOAP-ENC:arrayType="xsd:anyType[2]">
+<item href="#ref-6"/>
+<item xsi:type="xsd:int">0</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-6" SOAP-ENC:arrayType="a1:IDictionary[1]" xmlns:a1="http://schemas.microsoft.com/clr/ns/System.Collections">
+<item href="#ref-7"/>
+</SOAP-ENC:Array>
+<a1:Hashtable id="ref-7" xmlns:a1="http://schemas.microsoft.com/clr/ns/System.Collections">
+<LoadFactor>0.72</LoadFactor>
+<Version>6</Version>
+<Comparer xsi:null="1"/>
+<HashCodeProvider xsi:null="1"/>
+<HashSize>11</HashSize>
+<Keys href="#ref-8"/>
+<Values href="#ref-9"/>
+</a1:Hashtable>
+<SOAP-ENC:Array id="ref-8" SOAP-ENC:arrayType="xsd:anyType[6]">
+<item id="ref-10" xsi:type="SOAP-ENC:string">VS_7_1_INSTALLDIR</item>
+<item href="#ref-4"/>
+<item id="ref-11" xsi:type="SOAP-ENC:string">VS_8_0_INSTALLDIR</item>
+<item id="ref-12" xsi:type="SOAP-ENC:string">VS_10_0_INSTALLDIR</item>
+<item id="ref-13" xsi:type="SOAP-ENC:string">VS_9_0_INSTALLDIR</item>
+<item href="#ref-5"/>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-9" SOAP-ENC:arrayType="xsd:anyType[6]">
+<item xsi:type="xsd:boolean">true</item>
+<item href="#ref-14"/>
+<item xsi:type="xsd:boolean">true</item>
+<item xsi:type="xsd:boolean">true</item>
+<item xsi:type="xsd:boolean">true</item>
+<item xsi:type="xsd:int">-1</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-14" SOAP-ENC:arrayType="a1:IDictionary[0]" xmlns:a1="http://schemas.microsoft.com/clr/ns/System.Collections">
+</SOAP-ENC:Array>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
