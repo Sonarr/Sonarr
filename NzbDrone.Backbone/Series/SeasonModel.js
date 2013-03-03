@@ -1,5 +1,5 @@
 ﻿define(['app'], function () {
-    NzbDrone.Series.Details.SeasonModel = Backbone.Model.extend({
+    NzbDrone.Series.SeasonModel = Backbone.Model.extend({
 
         mutators: {
             seasonTitle: function () {

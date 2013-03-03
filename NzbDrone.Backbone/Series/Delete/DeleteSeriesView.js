@@ -2,7 +2,7 @@
 
 define(['app', 'Series/SeriesModel'], function () {
 
-    NzbDrone.Series.DeleteSeriesView = Backbone.Marionette.ItemView.extend({
+    NzbDrone.Series.Delete.DeleteSeriesView = Backbone.Marionette.ItemView.extend({
         template:'Series/Delete/DeleteSeriesTemplate',
         tagName:'div',
         className:"modal",

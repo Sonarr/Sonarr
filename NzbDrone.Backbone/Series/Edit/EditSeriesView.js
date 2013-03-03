@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/QualityProfileCollection'], function () {
 
-    NzbDrone.Series.EditSeriesView = Backbone.Marionette.ItemView.extend({
+    NzbDrone.Series.Edit.EditSeriesView = Backbone.Marionette.ItemView.extend({
         template: 'Series/Edit/EditSeriesTemplate',
         tagName: 'div',
         className: "modal",
@@ -36,7 +36,7 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         },
 
         removeSeries: function () {
-            var view = new NzbDrone.Series.DeleteSeriesView({ model: this.model });
+            var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
             NzbDrone.modalRegion.show(view);
         }
     });

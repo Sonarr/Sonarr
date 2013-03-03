@@ -1,8 +1,8 @@
 ﻿define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
-        'Series/SeriesCollectionView', 'Upcoming/UpcomingCollectionView',
+        'Series/Index/SeriesIndexCollectionView', 'Upcoming/UpcomingCollectionView',
         'Calendar/CalendarCollectionView', 'Shared/NotificationView',
         'Shared/NotFoundView', 'MainMenuView', 'HeaderView',
-        'Series/Details/SeriesDetailsView', 'Series/Details/EpisodeCollection'],
+        'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection'],
         function (app, modalRegion) {
 
     var controller = Backbone.Marionette.Controller.extend({
@@ -14,7 +14,7 @@
 
         series: function (action, query) {
             this.setTitle('NzbDrone');
-            NzbDrone.mainRegion.show(new NzbDrone.Series.SeriesCollectionView());
+            NzbDrone.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexCollectionView());
         },
 
         upcoming: function (action, query) {

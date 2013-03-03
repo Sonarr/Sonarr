@@ -1,5 +1,5 @@
-define(['app'], function (app) {
-    NzbDrone.Series.Details.EpisodeModel = Backbone.Model.extend({
+define(['app'], function () {
+    NzbDrone.Series.EpisodeModel = Backbone.Model.extend({
 
         mutators: {
 

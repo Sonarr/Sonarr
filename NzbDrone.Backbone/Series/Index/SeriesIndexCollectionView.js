@@ -1,10 +1,10 @@
 ﻿'use strict';
 
-define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], function (app, qualityProfileCollection) {
-    NzbDrone.Series.SeriesCollectionView = Backbone.Marionette.CompositeView.extend({
-        itemView: NzbDrone.Series.SeriesItemView,
+define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'], function (app, qualityProfileCollection) {
+    NzbDrone.Series.Index.SeriesIndexCollectionView = Backbone.Marionette.CompositeView.extend({
+        itemView: NzbDrone.Series.Index.SeriesItemView,
         itemViewContainer: 'tbody',
-        template: 'Series/SeriesCollectionTemplate',
+        template: 'Series/Index/SeriesIndexTemplate',
         qualityProfileCollection: qualityProfileCollection,
         //emptyView: NzbDrone.Series.EmptySeriesCollectionView,
 
@@ -88,7 +88,7 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/SeriesItemView'], fun
     });
 });
 
-NzbDrone.Series.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
-    template: 'Series/EmptySeriesCollectionTemplate',
+NzbDrone.Series.Index.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
+    template: 'Series/Index/EmptySeriesCollectionTemplate',
     tagName: 'tr'
 });

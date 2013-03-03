@@ -137,7 +137,7 @@
     <Content Include="Series\EmptySeriesCollectionTemplate.html" />
     <Content Include="Series\SeriesCollection.js" />
     <Content Include="Series\SeriesCollectionTemplate.html" />
-    <Content Include="Series\SeriesCollectionView.js" />
+    <Content Include="Series\SeriesIndexCollectionView.js" />
     <Content Include="Series\SeriesItemTemplate.html" />
     <Content Include="Series\SeriesItemView.js" />
     <Content Include="Series\SeriesModel.js" />

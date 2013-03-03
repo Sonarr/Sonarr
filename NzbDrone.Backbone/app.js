@@ -30,6 +30,7 @@ define('app',  function () {
 
         window.NzbDrone = new Backbone.Marionette.Application();
         window.NzbDrone.Series = {};
+        window.NzbDrone.Series.Index = {};
         window.NzbDrone.Series.Edit = {};
         window.NzbDrone.Series.Delete = {};
         window.NzbDrone.Series.Details = {};

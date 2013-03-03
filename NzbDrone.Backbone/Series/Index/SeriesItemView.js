@@ -9,8 +9,8 @@ define([
 
 ], function () {
 
-    NzbDrone.Series.SeriesItemView = Backbone.Marionette.ItemView.extend({
-        template: 'Series/SeriesItemTemplate',
+    NzbDrone.Series.Index.SeriesItemView = Backbone.Marionette.ItemView.extend({
+        template: 'Series/Index/SeriesItemTemplate',
         tagName: 'tr',
 
         ui: {
@@ -40,7 +40,7 @@ define([
         },
 
         removeSeries: function () {
-            var view = new NzbDrone.Series.DeleteSeriesView({ model: this.model });
+            var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
             NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
                 view: view
             });
