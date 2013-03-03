@@ -30,31 +30,14 @@
         },
 
         seriesDetails: function (query) {
-            this.setTitle('Series Title Goes Here');
-//            var seriesModel = new NzbDrone.Series.SeriesModel();
-//            seriesModel.fetch();
 
-            var seriesEpisodes = new NzbDrone.Series.Details.EpisodeCollection({ seriesId: query });
-            seriesEpisodes.fetch({
-                success: function (collection) {
-                    var seasons = collection.models.groupBy(function(episode){
-                        var seasonNumber = episode.get('seasonNumber');
-
-                        if (seasonNumber === undefined)
-                            return 0;
-
-                        return seasonNumber;
-                    });
-
-                    var seasonCollection = new NzbDrone.Series.Details.SeasonCollection();
-
-                    $.each(seasons, function(index, season){
-                       seasonCollection.add(new NzbDrone.Series.Details.SeasonModel(
-                           { seasonNumber: index, episodes: season })
-                       );
-                    });
-
-                    NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsView({ collection: seasonCollection }));
+            var self = this;
+            this.setTitle('Loading Series');
+            var series = new NzbDrone.Series.SeriesModel({ id: query });
+            series.fetch({
+                success: function (seriesModel) {
+                    self.setTitle(seriesModel.get('title'));
+                    NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsView({ model: seriesModel }));
                 }
             });
         },

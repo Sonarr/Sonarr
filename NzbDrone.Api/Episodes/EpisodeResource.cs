@@ -6,8 +6,8 @@ namespace NzbDrone.Api.Episodes
 {
     public class EpisodeResource
     {
+        public Int32 Id { get; set; }
         public Int32 SeriesId { get; set; }
-        public Int32 EpisodeId { get; set; }
         public Int32 EpisodeFileId { get; set; }
         public Int32 SeasonNumber { get; set; }
         public Int32 EpisodeNumber { get; set; }

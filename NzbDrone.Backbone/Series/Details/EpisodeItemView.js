@@ -1,10 +1,5 @@
 ﻿'use strict';
-
-define([
-        'app',
-        'Series/Details/SeasonModel'
-
-], function () {
+define(['app', 'Series/Details/SeasonModel'], function () {
 
     NzbDrone.Series.Details.EpisodeItemView = Backbone.Marionette.ItemView.extend({
         template: 'Series/Details/EpisodeItemTemplate',

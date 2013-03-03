@@ -1,6 +1,8 @@
 ﻿define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfileCollection) {
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
 
+        urlRoot: NzbDrone.Constants.ApiRoot + '/series',
+
         mutators: {
             bestDateString: function () {
                 return bestDateString(this.get('nextAiring'));
