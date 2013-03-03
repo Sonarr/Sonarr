@@ -6,7 +6,11 @@ define(['app', 'Series/Details/EpisodeItemView'], function () {
         template: 'Series/Details/SeasonCompositeTemplate',
 
         initialize: function() {
-
+            this.collection =new  NzbDrone.Series.EpisodeCollection();
+            this.collection.fetch({data: {
+                seriesId: this.model.get('seriesId'),
+                seasonNumber:this.model.get('seasonNumber')
+            }});
         }
     });
 });

@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .All()
                     .With(e => e.SeriesId = seriesId)
                     .With(e => e.EpisodeFile = episodeFile)
-                    .Build();
+                    .Build().ToList();
 
             Mocker.GetMock<IMediaFileService>().Setup(v => v.GetFileByPath(filename))
                    .Returns(() => null);

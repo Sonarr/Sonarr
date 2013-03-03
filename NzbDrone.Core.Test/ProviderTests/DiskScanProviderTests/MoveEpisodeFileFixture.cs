@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(e => e.SeriesId = fakeSeries.Id)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.EpisodeNumber = 1)
-                    .Build();
+                    .Build().ToList();
 
             const string filename = @"30 Rock - S01E01 - TBD";
             var fi = new FileInfo(Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".avi"));
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(e => e.SeriesId = fakeSeries.Id)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.EpisodeNumber = 1)
-                    .Build();
+                    .Build().ToList();
 
             const string filename = @"30 Rock - S01E01 - TBD";
             var fi = new FileInfo(Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".mkv"));
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                     .With(e => e.SeriesId = fakeSeries.Id)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.EpisodeNumber = 1)
-                    .Build();
+                    .Build().ToList();
 
             const string filename = @"30 Rock - S01E01 - TBD";
             var fi = new FileInfo(Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".mkv"));

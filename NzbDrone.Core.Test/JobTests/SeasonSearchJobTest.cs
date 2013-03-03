@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.JobTests
     // ReSharper disable InconsistentNaming
     public class SeasonSearchJobTest : CoreTest
     {
-        private IList<Episode> _episodes; 
+        private List<Episode> _episodes; 
 
         private ProgressNotification notification;
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.JobTests
                  .With(e => e.SeasonNumber = 1)
                  .With(e => e.Ignored = false)
                  .With(e => e.AirDate = DateTime.Today.AddDays(-1))
-                 .Build();
+                 .Build().ToList();
 
              Mocker.GetMock<IEpisodeService>()
                  .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(_episodes);
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .TheLast(2)
                 .With(e => e.AirDate = DateTime.Today.AddDays(2))
-                .Build();
+                .Build().ToList();
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);

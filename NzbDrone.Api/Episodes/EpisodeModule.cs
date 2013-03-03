@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Nancy;
@@ -17,12 +15,15 @@ namespace NzbDrone.Api.Episodes
             : base("/episodes")
         {
             _episodeService = episodeService;
-            Get["/{seriesId}"] = x => GetEpisodesForSeries(x.SeriesId);
+            Get["/"] = x => GetEpisodesForSeries();
         }
 
-        private Response GetEpisodesForSeries(int seriesId)
+        private Response GetEpisodesForSeries()
         {
-            var episodes = _episodeService.GetEpisodeBySeries(seriesId);
+            var seriesId = (int)Request.Query.SeriesId;
+            var seasonNumber = (int)Request.Query.SeasonNumber;
+
+            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
             return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).AsResponse();
         }
     }

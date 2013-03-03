@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -91,7 +92,7 @@ namespace NzbDrone.Update.Test
         [Test]
         public void should_kill_nzbdrone_process_if_running()
         {
-            var proccesses = Builder<ProcessInfo>.CreateListOfSize(2).Build();
+            var proccesses = Builder<ProcessInfo>.CreateListOfSize(2).Build().ToList();
 
             Mocker.GetMock<ProcessProvider>()
                 .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProccessName))

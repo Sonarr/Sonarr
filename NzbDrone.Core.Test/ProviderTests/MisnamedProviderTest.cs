@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheNext(1)
                 .With(f => f.Id = 2)
                 .With(f => f.Path = @"C:\Test\Title2.avi")
-                .Build();
+                .Build().ToList();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
                 .With(e => e.EpisodeFile = episodeFiles[1])
-                .Build();
+                .Build().ToList();
 
             WithStrictMocker();
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
                 .With(e => e.EpisodeFile = episodeFiles[1])
-                .Build();
+                .Build().ToList();
 
             WithStrictMocker();
 
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
                 .With(e => e.EpisodeFile = episodeFiles[1])
-                .Build();
+                .Build().ToList();
 
             WithStrictMocker();
 
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheNext(1)
                 .With(f => f.Id = 2)
                 .With(f => f.Path = @"C:\Test\Title2.avi")
-                .Build();
+                .Build().ToList();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
                 .All()
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
                 .With(e => e.EpisodeFile = episodeFiles[1])
-                .Build();
+                .Build().ToList();
 
             WithStrictMocker();
 
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheNext(1)
                 .With(f => f.Id = 2)
                 .With(f => f.Path = @"C:\Test\Title2.avi")
-                .Build();
+                .Build().ToList();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
                 .All()
@@ -233,7 +233,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[0])
                 .TheNext(1)
                 .With(e => e.EpisodeFile = episodeFiles[1])
-                .Build();
+                .Build().ToList();
 
             WithStrictMocker();
 

@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         private SearchHistory _searchHistory;
         private ProgressNotification _notification;
 
-        private IList<Episode> _episodes;
+        private List<Episode> _episodes;
             
         [SetUp]
         public void Setup()
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
             _episodes = Builder<Episode>
                     .CreateListOfSize(1)
-                    .Build();
+                    .Build().ToList();
 
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))

@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = Builder<Episode>.CreateListOfSize(1)
                 .All()
                 .With(e => e.Series = series)
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = Builder<Episode>.CreateListOfSize(5)
                 .All()
                 .With(e => e.Series = series)
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .All()
                 .With(e => e.Series = series)
                 .With(e => e.SeasonNumber = 1)
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.Series = series)
                 .With(e => e.SeriesId = series.Id)
                 .With(e => e.SeasonNumber = 1)
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .TheNext(5)
                 .With(e => e.Series = series2)
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -243,7 +243,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .TheLast(6)
                 .With(e => e.Series = series[1])
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -282,7 +282,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.Series = series[1])
                 .TheNext(5)
                 .With(e => e.Series = series[2])
-                .Build();
+                .Build().ToList();
 
             //WithEnableBacklogSearching();
 
@@ -322,7 +322,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.Series = series[1])
                 .TheNext(5)
                 .With(e => e.Series = series[2])
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 

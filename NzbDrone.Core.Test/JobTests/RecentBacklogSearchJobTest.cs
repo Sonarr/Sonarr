@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-31)) //31 Days
                 .TheNext(5)
                 .With(e => e.AirDate = DateTime.Today.AddDays(-35))
-                .Build();
+                .Build().ToList();
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .TheLast(6)
                 .With(e => e.Series = series[1])
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.Series = series[1])
                 .TheNext(5)
                 .With(e => e.Series = series[2])
-                .Build();
+                .Build().ToList();
 
             //WithEnableBacklogSearching();
 
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.Series = series[1])
                 .TheNext(5)
                 .With(e => e.Series = series[2])
-                .Build();
+                .Build().ToList();
 
             WithEnableBacklogSearching();
 

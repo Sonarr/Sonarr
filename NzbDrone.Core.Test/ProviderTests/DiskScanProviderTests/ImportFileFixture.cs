@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Quality = Quality.SDTV)
                                                .Build())
-                .Build();
+                .Build().ToList();
 
             With80MBFile();
 
@@ -281,7 +281,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Quality = Quality.Bluray720p)
                                                .Build())
-                .Build();
+                .Build().ToList();
 
             //Mocks
             
