@@ -1,4 +1,21 @@
-﻿define(['app', 'Series/Details/SeasonCollection'], function (app) {
+﻿define(['app'], function () {
     NzbDrone.Series.Details.SeasonModel = Backbone.Model.extend({
+
+        mutators: {
+            seasonTitle: function () {
+                var seasonNumber = this.get('seasonNumber');
+
+                if (seasonNumber === 0) {
+                    return "Specials"
+                }
+
+                return "Season " + seasonNumber;
+            }
+        },
+
+        defaults: {
+            seasonNumber: 0
+        }
     });
 });
+

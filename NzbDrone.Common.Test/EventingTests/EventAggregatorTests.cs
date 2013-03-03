@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Test.EventingTests
             
 
             var intHandler = new Mock<IHandle<EventA>>();
-            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler.Object });
+            var aggregator = new EventAggregator(TestLogger, () => new List<IHandle> { intHandler.Object });
             aggregator.Publish(eventA);
 
             intHandler.Verify(c => c.Handle(eventA), Times.Once());
@@ -30,7 +30,7 @@ namespace NzbDrone.Common.Test.EventingTests
 
             var intHandler1 = new Mock<IHandle<EventA>>();
             var intHandler2 = new Mock<IHandle<EventA>>();
-            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { intHandler1.Object, intHandler2.Object });
+            var aggregator = new EventAggregator(TestLogger, () => new List<IHandle> { intHandler1.Object, intHandler2.Object });
             aggregator.Publish(eventA);
 
             intHandler1.Verify(c => c.Handle(eventA), Times.Once());
@@ -44,7 +44,7 @@ namespace NzbDrone.Common.Test.EventingTests
 
             var aHandler = new Mock<IHandle<EventA>>();
             var bHandler = new Mock<IHandle<EventB>>();
-            var aggregator = new EventAggregator(TestLogger, new List<IHandle> { aHandler.Object, bHandler.Object });
+            var aggregator = new EventAggregator(TestLogger, () => new List<IHandle> { aHandler.Object, bHandler.Object });
 
             aggregator.Publish(eventA);
 

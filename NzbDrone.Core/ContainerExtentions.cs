@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Indexers;
@@ -24,6 +26,7 @@ namespace NzbDrone.Core
             containerBuilder.RegisterAssembly("NzbDrone.Core");
 
             containerBuilder.InitDatabase();
+
 
             containerBuilder.RegisterModule<LogInjectionModule>();
         }

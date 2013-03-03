@@ -122,10 +122,14 @@
     <Content Include="Routing.js" />
     <Content Include="Series\Delete\DeleteSeriesTemplate.html" />
     <Content Include="Series\Delete\DeleteSeriesView.js" />
+    <Content Include="Series\Details\EpisodeCollection.js" />
+    <Content Include="Series\Details\EpisodeItemTemplate.html" />
+    <Content Include="Series\Details\EpisodeItemView.js" />
     <Content Include="Series\Details\EpisodeModel.js" />
     <Content Include="Series\Details\SeasonCollection.js" />
-    <Content Include="Series\Details\SeasonCollectionTemplate.html" />
-    <Content Include="Series\Details\SeasonCollectionView.js" />
+    <Content Include="Series\Details\SeasonCompositeTemplate.html" />
+    <Content Include="Series\Details\SeasonCompositeView.js" />
+    <Content Include="Series\Details\SeasonModel.js" />
     <Content Include="Series\Details\SeriesDetailsTemplate.html" />
     <Content Include="Series\Details\SeriesDetailsView.js" />
     <Content Include="Series\Edit\EditSeriesTemplate.html" />

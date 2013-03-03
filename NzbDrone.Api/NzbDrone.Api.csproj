@@ -125,6 +125,7 @@
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
     <Compile Include="Extensions\RootPathProvider.cs" />
+    <Compile Include="Seasons\SeasonModule.cs" />
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />

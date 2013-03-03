@@ -7,6 +7,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
 {
@@ -41,12 +42,14 @@ namespace NzbDrone.Core.Tv
         private readonly TvDbProvider _tvDbProvider;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IEpisodeRepository _episodeRepository;
+        private readonly IEventAggregator _eventAggregator;
 
-        public EpisodeService(TvDbProvider tvDbProviderProvider, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository)
+        public EpisodeService(TvDbProvider tvDbProviderProvider, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator)
         {
             _tvDbProvider = tvDbProviderProvider;
             _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
+            _eventAggregator = eventAggregator;
         }
 
         public void AddEpisode(Episode episode)
@@ -240,7 +243,7 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
 
-                    if(!String.IsNullOrWhiteSpace(series.AirTime) && episodeToUpdate.AirDate.HasValue)
+                    if (!String.IsNullOrWhiteSpace(series.AirTime) && episodeToUpdate.AirDate.HasValue)
                     {
                         episodeToUpdate.AirDate = episodeToUpdate.AirDate.Value.Add(Convert.ToDateTime(series.AirTime).TimeOfDay)
                                                                                .AddHours(series.UtcOffset * -1);
@@ -257,6 +260,16 @@ namespace NzbDrone.Core.Tv
 
             _episodeRepository.InsertMany(newList);
             _episodeRepository.UpdateMany(updateList);
+
+            if (newList.Any())
+            {
+                _eventAggregator.Publish(new EpisodeInfoAddedEvent(newList));
+            }
+
+            if (updateList.Any())
+            {
+                _eventAggregator.Publish(new EpisodeInfoUpdatedEvent(updateList));
+            }
 
             if (failCount != 0)
             {

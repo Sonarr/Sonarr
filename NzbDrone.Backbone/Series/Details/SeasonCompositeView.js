@@ -6,9 +6,7 @@ define(['app', 'Series/Details/EpisodeItemView'], function () {
         template: 'Series/Details/SeasonCompositeTemplate',
 
         initialize: function() {
-            var episodes = this.model.get('episodes');
-            var test = 1;
-            //this.collection
+
         }
     });
 });

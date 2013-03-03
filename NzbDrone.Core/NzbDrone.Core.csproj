@@ -261,6 +261,8 @@
     <Compile Include="ReferenceData\SceneMappingProxy.cs" />
     <Compile Include="ReferenceData\SceneMappingRepository.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\SeasonRepository.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
