@@ -1,3 +1,113 @@
-﻿<div>
-    Naming settings will go here
+﻿<fieldset>
+    <legend>Episode Naming</legend>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingUseSceneName">Use Scene Name</label>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id ="sortingUseSceneName" name="sortingUseSceneName">
+                Use the scene name, ignoring all other naming settings?
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingIncludeSeriesName">Series Name</label>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id ="sortingIncludeSeriesName" name="sortingIncludeSeriesName">
+                Should filenames contain the series name when renamed?
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingIncludeSeriesName">Episode Name</label>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id ="sortingIncludeEpisodeTitle" name="sortingIncludeEpisodeTitle">
+                Should filenames contain the episode name when renamed?
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingReplaceSpaces">Replace Spaces</label>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id ="sortingReplaceSpaces" name="sortingReplaceSpaces">
+                Do you want to replace spaces in the filename with periods?
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+    <label class="control-label" for="sortingAppendQuality">Append Quality</label>
+    <div class="controls">
+        <label class="checkbox">
+            <input type="checkbox" id ="sortingAppendQuality" name="sortingAppendQuality">
+            Should filenames have the quality appended to the end?
+        </label>
+    </div>
 </div>
+
+    <div class="control-group">
+        <label class="control-label" for="useSeasonFolder">Use Scene Folders</label>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id ="useSeasonFolder" name="useSeasonFolder">
+                Should files be stored in season folders by default? (Applied only when a series is added)
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingSeasonFolderFormat">Season Folder Format</label>
+        <div class="controls">
+            <input type="text" id="sortingSeasonFolderFormat" placeholder="Season %s" name="sortingSeasonFolderFormat">
+            <span class="help-inline">How should season folders be named? (Use %0s to pad to two digits)</span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingSeparatorStyle">Separator Style</label>
+        <div class="controls">
+            <select id="sortingSeparatorStyle" class="inputClass x-backlog-setting" name="sortingSeparatorStyle">
+                <option value="0">Dash</option>
+                <option value="1">Space</option>
+                <option value="2">Period</option>
+            </select>
+            <span class="help-inline">How should NzbDrone separate sections of the filename?</span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingNumberStyle">Numbering Style</label>
+        <div class="controls">
+            <select id="sortingNumberStyle" class="inputClass x-backlog-setting" name="sortingNumberStyle">
+                <option value="0">1x05</option>
+                <option value="1">01x05</option>
+                <option value="2">S01E05</option>
+                <option value="3">s01e05</option>
+            </select>
+            <span class="help-inline">What numbering style do you want?</span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="sortingMultiEpisodeStyle">Multi-Episode Style</label>
+        <div class="controls">
+            <select id="sortingMultiEpisodeStyle" class="inputClass x-backlog-setting" name="sortingMultiEpisodeStyle">
+                <option value="0">Extend</option>
+                <option value="1">Duplicate</option>
+                <option value="2">Repeat</option>
+                <option value="3">Scene</option>
+            </select>
+            <span class="help-inline">How will multi-episode files be named?</span>
+        </div>
+    </div>
+
+    <button class="btn btn-primary">Save</button>
+</fieldset>
+
+

@@ -7,6 +7,7 @@ define([
 
     NzbDrone.Settings.Naming.NamingView = Backbone.Marionette.ItemView.extend({
         template: 'Settings/Naming/NamingTemplate',
+        className: 'form-horizontal',
 
         events: {
             'click .x-save': 'save'
