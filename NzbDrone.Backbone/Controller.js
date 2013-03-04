@@ -2,7 +2,7 @@
         'Series/Index/SeriesIndexCollectionView', 'Upcoming/UpcomingCollectionView',
         'Calendar/CalendarCollectionView', 'Shared/NotificationView',
         'Shared/NotFoundView', 'MainMenuView', 'HeaderView',
-        'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection'],
+        'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection',
         'Settings/SettingsLayout'],
         function (app, modalRegion) {
 
