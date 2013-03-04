@@ -3,6 +3,7 @@
         'Calendar/CalendarCollectionView', 'Shared/NotificationView',
         'Shared/NotFoundView', 'MainMenuView', 'HeaderView',
         'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection'],
+        'Settings/SettingsLayout'],
         function (app, modalRegion) {
 
     var controller = Backbone.Marionette.Controller.extend({
@@ -38,6 +39,17 @@
                 success: function (seriesModel) {
                     self.setTitle(seriesModel.get('title'));
                     NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsView({ model: seriesModel }));
+                }
+            });
+        },
+
+        settings: function(action, query) {
+            this.setTitle('Settings');
+
+            var settingsModel = new NzbDrone.Settings.SettingsModel();
+            settingsModel.fetch({
+                success: function(settings){
+                    NzbDrone.mainRegion.show(new NzbDrone.Settings.SettingsLayout(this, action, query, settings));
                 }
             });
         },

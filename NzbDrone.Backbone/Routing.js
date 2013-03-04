@@ -13,6 +13,8 @@
             'upcoming': 'upcoming',
             'upcoming/index': 'upcoming',
             'calendar': 'calendar',
+            'settings': 'settings',
+            'settings/:action(/:query)': 'settings',
             ':whatever': 'notFound'
         }
     });

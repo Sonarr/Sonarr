@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Configuration;
@@ -18,8 +20,12 @@ namespace NzbDrone.Api.Settings
 
         private Response GetAllSettings()
         {
-            var settings = _configService.All();
-            return settings.AsResponse();
+            var collection = Request.Query.Collection;
+
+            if(collection.HasValue && Boolean.Parse(collection.Value))
+                return _configService.All().AsResponse();
+
+            return _configService.All().ToDictionary(c => c.Key, c => c.Value).AsResponse();
         }
     }
 }
