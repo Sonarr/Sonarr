@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.TvRage;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.MetadataSource
 {
-    public class TvRageProvider
+    public class TvRageProxy
     {
         private readonly HttpProvider _httpProvider;
         private const string TVRAGE_APIKEY = "NW4v0PSmQIoVmpbASLdD";
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public TvRageProvider(HttpProvider httpProvider)
+        public TvRageProxy(HttpProvider httpProvider)
         {
             _httpProvider = httpProvider;
         }
 
-        public TvRageProvider()
+        public TvRageProxy()
         {
         }
 

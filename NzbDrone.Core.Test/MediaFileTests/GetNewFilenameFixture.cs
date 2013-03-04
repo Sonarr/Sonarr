@@ -763,7 +763,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             var series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesType = SeriesType.Daily)
+                    .With(s => s.SeriesTypes = SeriesTypes.Daily)
                     .With(s => s.Title = "The Daily Show with Jon Stewart")
                     .Build();
 
@@ -792,7 +792,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             var series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesType = SeriesType.Daily)
+                    .With(s => s.SeriesTypes = SeriesTypes.Daily)
                     .With(s => s.Title = "The Daily Show with Jon Stewart")
                     .Build();
 
@@ -821,7 +821,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             var series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesType = SeriesType.Daily)
+                    .With(s => s.SeriesTypes = SeriesTypes.Daily)
                     .With(s => s.Title = "The Daily Show with Jon Stewart")
                     .Build();
 

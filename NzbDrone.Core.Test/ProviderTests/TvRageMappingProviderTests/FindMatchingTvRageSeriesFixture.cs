@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
@@ -54,11 +55,11 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                   .Setup(s => s.GetCleanName(_series.Id))
                   .Returns("");
 
-            Mocker.GetMock<TvRageProvider>()
+            Mocker.GetMock<TvRageProxy>()
                   .Setup(s => s.SearchSeries(_series.Title))
                   .Returns(_searchResults);
 
-            Mocker.GetMock<TvRageProvider>()
+            Mocker.GetMock<TvRageProxy>()
                   .Setup(s => s.GetSeries(_searchResults.First().ShowId))
                   .Returns(_tvRageSeries);
         }

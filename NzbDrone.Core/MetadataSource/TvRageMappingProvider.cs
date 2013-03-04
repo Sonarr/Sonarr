@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
-using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
-using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.MetadataSource
 {
     public class TvRageMappingProvider
     {
         private readonly SceneMappingService _sceneMappingService;
-        private readonly TvRageProvider _tvRageProvider;
+        private readonly TvRageProxy _tvRageProxy;
         private readonly IEpisodeService _episodeService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public TvRageMappingProvider(SceneMappingService sceneMappingService,
-                                TvRageProvider tvRageProvider, IEpisodeService episodeService)
+                                TvRageProxy tvRageProxy, IEpisodeService episodeService)
         {
             _sceneMappingService = sceneMappingService;
-            _tvRageProvider = tvRageProvider;
+            _tvRageProxy = tvRageProxy;
             _episodeService = episodeService;
         }
 
@@ -36,7 +34,7 @@ namespace NzbDrone.Core.Providers
             var firstEpisode = _episodeService.GetEpisode(series.Id, 1, 1);
 
             var cleanName = _sceneMappingService.GetCleanName(series.Id);
-            var results = _tvRageProvider.SearchSeries(series.Title);
+            var results = _tvRageProxy.SearchSeries(series.Title);
             var result = ProcessResults(results, series, cleanName, firstEpisode);
 
             if (result != null)
@@ -44,7 +42,7 @@ namespace NzbDrone.Core.Providers
                 logger.Trace("TV Rage: {0} matches TVDB: {1}", result.Name, series.Title);
                 series.TvRageId = result.ShowId;
                 series.TvRageTitle = result.Name;
-                series.UtcOffset = _tvRageProvider.GetSeries(result.ShowId).UtcOffset;
+                series.UtcOffset = _tvRageProxy.GetSeries(result.ShowId).UtcOffset;
             }
 
             return series;

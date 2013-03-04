@@ -232,6 +232,7 @@
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
+    <Compile Include="MediaCover\MediaCover.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesUpdatedEvent.cs" />
     <Compile Include="Tv\SeasonRepository.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\QualityModel.cs" />
@@ -294,7 +296,7 @@
     <Compile Include="Model\Xem\XemSceneTvdbMapping.cs" />
     <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="AutofacSignalrDependencyResolver.cs" />
-    <Compile Include="Providers\BannerProvider.cs" />
+    <Compile Include="MediaCover\MediaCoverService.cs" />
     <Compile Include="DecisionEngine\LanguageSpecification.cs" />
     <Compile Include="Providers\DownloadClients\NzbgetProvider.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />
@@ -321,7 +323,6 @@
     <Compile Include="Jobs\RenameSeriesJob.cs" />
     <Compile Include="Lifecycle\AppUpdateJob.cs" />
     <Compile Include="Jobs\BacklogSearchJob.cs" />
-    <Compile Include="Jobs\BannerDownloadJob.cs" />
     <Compile Include="Jobs\ConvertEpisodeJob.cs" />
     <Compile Include="Jobs\SeriesSearchJob.cs" />
     <Compile Include="Jobs\SeasonSearchJob.cs" />
@@ -337,8 +338,8 @@
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
-    <Compile Include="Providers\TvRageMappingProvider.cs" />
-    <Compile Include="Providers\TvRageProvider.cs" />
+    <Compile Include="MetadataSource\TvRageMappingProvider.cs" />
+    <Compile Include="MetadataSource\TvRageProxy.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Qualities\Quality.cs" />
@@ -504,7 +505,7 @@
     <Compile Include="Providers\SmtpProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\TvDbProvider.cs">
+    <Compile Include="MetadataSource\TvDbProxy.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\TwitterProvider.cs">

@@ -132,7 +132,7 @@ namespace NzbDrone.Core.MediaFiles
                 result += series.Title + separatorStyle.Pattern;
             }
 
-            if (series.SeriesType == SeriesType.Standard)
+            if (series.SeriesTypes == SeriesTypes.Standard)
             {
                 result += numberStyle.Pattern.Replace("%0e",
                                                       String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));

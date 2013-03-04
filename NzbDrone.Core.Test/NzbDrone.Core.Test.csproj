@@ -140,6 +140,7 @@
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
+    <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\ContainsRecentEpisode.cs" />
@@ -163,13 +164,11 @@
     <Compile Include="Qualities\QualityFixture.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
-    <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RssSyncJobTest.cs" />
     <Compile Include="JobTests\PostDownloadScanJobFixture.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ParserTests\QualityParserFixture.cs" />
     <Compile Include="Configuration\ConfigCachingFixture.cs" />
-    <Compile Include="ProviderTests\BannerProviderTest.cs" />
     <Compile Include="DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CustomStartDateSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\CleanUpFixture.cs" />

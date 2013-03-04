@@ -16,10 +16,9 @@ namespace NzbDrone.Test.Common
             if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
             {
                 LogManager.Configuration = new LoggingConfiguration();
-                var consoleTarget = new ConsoleTarget();
-                consoleTarget.Layout = "${message} ${exception}";
+                var consoleTarget = new ConsoleTarget { Layout = "${message} ${exception}" };
                 LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", consoleTarget));
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
 
                 RegisterExceptionVerification();
             }
@@ -29,7 +28,7 @@ namespace NzbDrone.Test.Common
         {
             var exceptionVerification = new ExceptionVerification();
             LogManager.Configuration.AddTarget("ExceptionVerification", exceptionVerification);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, exceptionVerification));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, exceptionVerification));
         }
 
         [SetUp]

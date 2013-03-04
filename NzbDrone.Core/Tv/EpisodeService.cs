@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv.Events;
@@ -39,14 +40,14 @@ namespace NzbDrone.Core.Tv
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly TvDbProvider _tvDbProvider;
+        private readonly TvDbProxy _tvDbProxy;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IEventAggregator _eventAggregator;
 
-        public EpisodeService(TvDbProvider tvDbProviderProvider, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator)
+        public EpisodeService(TvDbProxy tvDbProxyProxy, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator)
         {
-            _tvDbProvider = tvDbProviderProvider;
+            _tvDbProxy = tvDbProxyProxy;
             _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
             _eventAggregator = eventAggregator;
@@ -89,7 +90,7 @@ namespace NzbDrone.Core.Tv
 
             if (parseResult.AirDate.HasValue)
             {
-                if (parseResult.Series.SeriesType == SeriesType.Standard)
+                if (parseResult.Series.SeriesTypes == SeriesTypes.Standard)
                 {
                     //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
                     logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", parseResult.Series.Title, parseResult.OriginalString);
@@ -182,7 +183,7 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-            var tvdbEpisodes = _tvDbProvider.GetEpisodes(series.TvDbId);
+            var tvdbEpisodes = _tvDbProxy.GetEpisodes(series.TvDbId);
 
             var seriesEpisodes = GetEpisodeBySeries(series.Id);
             var updateList = new List<Episode>();

@@ -9,10 +9,10 @@ using Sqo.Attributes;
 
 namespace NzbDrone.Core.Tv
 {
-    public enum  SeriesType
+    public enum SeriesTypes
     {
-        Standard =0,
-        Daily =1,
+        Standard = 0,
+        Daily = 1,
         Anime = 2,
     }
 
@@ -35,8 +35,8 @@ namespace NzbDrone.Core.Tv
         public DateTime? LastInfoSync { get; set; }
         public DateTime? LastDiskSync { get; set; }
         public int Runtime { get; set; }
-        public string BannerUrl { get; set; }
-        public SeriesType SeriesType { get; set; }
+        public List<MediaCover.MediaCover> Covers { get; set; }
+        public SeriesTypes SeriesTypes { get; set; }
         public BacklogSettingType BacklogSetting { get; set; }
         public string Network { get; set; }
         public DateTime? CustomStartDate { get; set; }

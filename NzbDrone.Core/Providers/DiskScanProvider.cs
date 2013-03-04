@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Providers
             var size = _diskProvider.GetSize(filePath);
             var runTime = _mediaInfoProvider.GetRunTime(filePath);
 
-            if (series.SeriesType == SeriesType.Daily || parseResult.SeasonNumber > 0)
+            if (series.SeriesTypes == SeriesTypes.Daily || parseResult.SeasonNumber > 0)
             {
                 if (size < Constants.IgnoreFileSize && runTime < 180)
                 {

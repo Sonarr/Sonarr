@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Tv
         List<Series> Search(string title);
         Series GetByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
-        void SetSeriesType(int seriesId, SeriesType seriesType);
+        void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
 
     }
 
@@ -42,9 +42,9 @@ namespace NzbDrone.Core.Tv
             return Queryable.SingleOrDefault(s => s.TvDbId == tvdbId);
         }
 
-        public void SetSeriesType(int seriesId, SeriesType seriesType)
+        public void SetSeriesType(int seriesId, SeriesTypes seriesTypes)
         {
-            ObjectDatabase.UpdateField(new Series(){Id = seriesId, SeriesType =seriesType }, "SeriesType");
+            ObjectDatabase.UpdateField(new Series(){Id = seriesId, SeriesTypes =seriesTypes }, "SeriesType");
         }
     }
 }

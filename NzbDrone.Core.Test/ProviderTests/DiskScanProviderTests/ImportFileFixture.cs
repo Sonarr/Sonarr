@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             _series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesType = SeriesType.Standard)
+                    .With(s => s.SeriesTypes = SeriesTypes.Standard)
                     .Build();
         }
 
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
         public void WithDailySeries()
         {
-            _series.SeriesType = SeriesType.Daily;
+            _series.SeriesTypes = SeriesTypes.Daily;
         }
 
         [Test]

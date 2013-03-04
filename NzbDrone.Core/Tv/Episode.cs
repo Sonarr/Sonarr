@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Tv
         {
             string seriesTitle = Series == null ? "[NULL]" : Series.Title;
 
-            if (Series != null && Series.SeriesType == SeriesType.Daily && AirDate.HasValue)
+            if (Series != null && Series.SeriesTypes == SeriesTypes.Daily && AirDate.HasValue)
                 return string.Format("{0} - {1:yyyy-MM-dd}", seriesTitle, AirDate.Value);
 
             return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);

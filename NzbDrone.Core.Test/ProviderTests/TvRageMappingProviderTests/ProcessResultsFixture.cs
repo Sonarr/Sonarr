@@ -5,6 +5,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
 using NzbDrone.Core.Providers;

@@ -7,6 +7,7 @@ using Autofac;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class TvDbProviderTest : CoreTest
     {
-        private TvDbProvider tvDbProvider;
+        private TvDbProxy tvDbProxy;
 
         [SetUp]
         public void Setup()
@@ -25,11 +26,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EnvironmentProvider>();
-            builder.RegisterType<TvDbProvider>();
+            builder.RegisterType<TvDbProxy>();
 
             var container = builder.Build();
 
-            tvDbProvider = container.Resolve<TvDbProvider>();
+            tvDbProxy = container.Resolve<TvDbProxy>();
         }
 
         [TearDown]
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase("Franklin & Bash")]
         public void successful_search(string title)
         {
-            var result = tvDbProvider.SearchSeries(title);
+            var result = tvDbProxy.SearchSeries(title);
 
             result.Should().NotBeEmpty();
             result[0].Title.Should().Be(title);
@@ -56,7 +57,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void no_search_result()
         {
             //act
-            var result = tvDbProvider.SearchSeries(Guid.NewGuid().ToString());
+            var result = tvDbProxy.SearchSeries(Guid.NewGuid().ToString());
 
             //assert
             result.Should().BeEmpty();
@@ -67,7 +68,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void none_unique_season_episode_number()
         {
             //act
-            var result = tvDbProvider.GetEpisodes(75978);//Family guy
+            var result = tvDbProxy.GetEpisodes(75978);//Family guy
 
             //Asserts that when episodes are grouped by Season/Episode each group contains maximum of
             //one item.

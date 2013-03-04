@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            if (episode.Series.SeriesType == SeriesType.Daily)
+            if (episode.Series.SeriesTypes == SeriesTypes.Daily)
             {
                 if (!episode.AirDate.HasValue)
                 {

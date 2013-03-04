@@ -24,7 +24,7 @@ namespace NzbDrone.Core.ReferenceData
 
                 if (series != null)
                 {
-                    _seriesService.SetSeriesType(series.Id, SeriesType.Daily);
+                    _seriesService.SetSeriesType(series.Id, SeriesTypes.Daily);
                 }
             }
         }

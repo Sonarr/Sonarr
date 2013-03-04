@@ -48,9 +48,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].Id)))
                 .Callback(() => series[1].LastDiskSync = DateTime.Now);
 
-            Mocker.GetMock<BannerDownloadJob>()
-                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") > 0)));
-
             Mocker.GetMock<XemUpdateJob>()
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") > 0)));
 
@@ -115,9 +112,6 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<DiskScanJob>()
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].Id)))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
-
-            Mocker.GetMock<BannerDownloadJob>()
-                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].Id)));
 
             Mocker.GetMock<ISeriesRepository>()
                 .Setup(s => s.Get(series[0].Id)).Returns(series[0]);

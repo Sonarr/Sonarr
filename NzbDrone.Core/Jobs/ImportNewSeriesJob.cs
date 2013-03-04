@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Jobs
         private readonly IMediaFileService _mediaFileService;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
-        private readonly BannerDownloadJob _bannerDownloadJob;
         private readonly ISeasonRepository _seasonRepository;
         private readonly XemUpdateJob _xemUpdateJob;
         private readonly ISeriesRepository _seriesRepository;
@@ -34,15 +33,14 @@ namespace NzbDrone.Core.Jobs
 
         public ImportNewSeriesJob(ISeriesService seriesService, IEpisodeService episodeService,
                                     IMediaFileService mediaFileService, UpdateInfoJob updateInfoJob,
-                                    DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob,
-                                    ISeasonRepository seasonRepository, XemUpdateJob xemUpdateJob, ISeriesRepository seriesRepository,ISeasonService seasonService)
+                                    DiskScanJob diskScanJob,
+                                    ISeasonRepository seasonRepository, XemUpdateJob xemUpdateJob, ISeriesRepository seriesRepository, ISeasonService seasonService)
         {
             _seriesService = seriesService;
             _episodeService = episodeService;
             _mediaFileService = mediaFileService;
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
-            _bannerDownloadJob = bannerDownloadJob;
             _seasonRepository = seasonRepository;
             _xemUpdateJob = xemUpdateJob;
             _seriesRepository = seriesRepository;
@@ -85,9 +83,6 @@ namespace NzbDrone.Core.Jobs
 
                     var updatedSeries = _seriesRepository.Get(((ModelBase)currentSeries).Id);
                     AutoIgnoreSeasons(((ModelBase)updatedSeries).Id);
-
-                    //Download the banner for the new series
-                    _bannerDownloadJob.Start(notification, new { SeriesId = ((ModelBase)updatedSeries).Id });
 
                     //Get Scene Numbering if applicable
                     _xemUpdateJob.Start(notification, new { SeriesId = ((ModelBase)updatedSeries).Id });

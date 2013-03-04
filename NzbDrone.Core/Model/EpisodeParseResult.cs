@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Model
                 return seasonResult;
             }
 
-            if (Series.SeriesType == SeriesType.Daily)
+            if (Series.SeriesTypes == SeriesTypes.Daily)
             {
                 var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", seriesTitle,
                                      AirDate, Episodes.First().Title, Quality.Quality);

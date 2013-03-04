@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.MetadataSource
 {
-    public class TvDbProvider
+    public class TvDbProxy
     {
         public const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Providers
         private readonly Tvdb.Tvdb _handlerV2;
 
 
-        public TvDbProvider()
+        public TvDbProxy()
         {
             _handlerV2 = new Tvdb.Tvdb(TVDB_APIKEY);
         }
@@ -58,13 +59,29 @@ namespace NzbDrone.Core.Providers
             series.Language = tvDbSeries.Language ?? string.Empty;
             series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
             series.LastInfoSync = DateTime.Now;
-            
+
             if (tvDbSeries.Runtime.HasValue)
             {
                 series.Runtime = Convert.ToInt32(tvDbSeries.Runtime);
             }
-            
-            series.BannerUrl = tvDbSeries.banner;
+
+            series.Covers = new List<MediaCover.MediaCover>();
+
+            if (!string.IsNullOrWhiteSpace(tvDbSeries.banner))
+            {
+                series.Covers.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = tvDbSeries.banner });
+            }
+
+            if (!string.IsNullOrWhiteSpace(tvDbSeries.fanart))
+            {
+                series.Covers.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = tvDbSeries.fanart });
+            }
+
+            if (!string.IsNullOrWhiteSpace(tvDbSeries.poster))
+            {
+                series.Covers.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = tvDbSeries.poster });
+            }
+
             series.Network = tvDbSeries.Network;
 
             if (tvDbSeries.FirstAired.HasValue && tvDbSeries.FirstAired.Value.Year > 1900)

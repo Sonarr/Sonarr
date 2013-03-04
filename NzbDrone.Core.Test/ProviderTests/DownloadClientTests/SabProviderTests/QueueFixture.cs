@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             {
                 Quality = new QualityModel { Quality = Quality.Bluray720p, Proper = false },
                 AirDate = new DateTime(2011, 12, 01),
-                Series = new Series { Title = "The Dailyshow", CleanTitle = Parser.NormalizeTitle("The Dailyshow"), SeriesType = SeriesType.Daily },
+                Series = new Series { Title = "The Dailyshow", CleanTitle = Parser.NormalizeTitle("The Dailyshow"), SeriesTypes = SeriesTypes.Daily },
             };
 
 

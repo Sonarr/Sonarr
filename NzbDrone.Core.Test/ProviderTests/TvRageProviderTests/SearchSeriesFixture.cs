@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -45,35 +46,35 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         public void should_be_empty_when_no_results_are_found()
         {
             WithEmptyResults();
-            Mocker.Resolve<TvRageProvider>().SearchSeries("asdasdasdasdas").Should().BeEmpty();
+            Mocker.Resolve<TvRageProxy>().SearchSeries("asdasdasdasdas").Should().BeEmpty();
         }
 
         [Test]
         public void should_be_have_more_than_one_when_multiple_results_are_returned()
         {
             WithManyResults();
-            Mocker.Resolve<TvRageProvider>().SearchSeries("top+gear").Should().NotBeEmpty();
+            Mocker.Resolve<TvRageProxy>().SearchSeries("top+gear").Should().NotBeEmpty();
         }
 
         [Test]
         public void should_have_one_when_only_one_result_is_found()
         {
             WithOneResult();
-            Mocker.Resolve<TvRageProvider>().SearchSeries("suits").Should().HaveCount(1);
+            Mocker.Resolve<TvRageProxy>().SearchSeries("suits").Should().HaveCount(1);
         }
 
         [Test]
         public void ended_should_not_have_a_value_when_series_has_not_ended()
         {
             WithOneResult();
-            Mocker.Resolve<TvRageProvider>().SearchSeries("suits").First().Ended.HasValue.Should().BeFalse();
+            Mocker.Resolve<TvRageProxy>().SearchSeries("suits").First().Ended.HasValue.Should().BeFalse();
         }
 
         [Test]
         public void started_should_match_series()
         {
             WithOneResult();
-            Mocker.Resolve<TvRageProvider>().SearchSeries("suits").First().Started.Should().Be(new DateTime(2011, 6, 23));
+            Mocker.Resolve<TvRageProxy>().SearchSeries("suits").First().Started.Should().Be(new DateTime(2011, 6, 23));
         }
     }
 }

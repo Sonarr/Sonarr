@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         public void should_be_null_when_no_showinfo_is_returned()
         {
             WithEmptyResults();
-            Mocker.Resolve<TvRageProvider>().GetSeries(100).Should().BeNull();
+            Mocker.Resolve<TvRageProxy>().GetSeries(100).Should().BeNull();
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         public void should_return_series_when_showinfo_is_valid()
         {
             WithOneResult();
-            var result = Mocker.Resolve<TvRageProvider>().GetSeries(29999);
+            var result = Mocker.Resolve<TvRageProxy>().GetSeries(29999);
 
             result.ShowId.Should().Be(29999);
             result.Name.Should().Be("Anger Management");
