@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Configuration
         private readonly Logger _logger;
         private static Dictionary<string, string> _cache;
 
-
         public ConfigService(IConfigRepository repository, Logger logger)
         {
             _repository = repository;
@@ -23,10 +22,26 @@ namespace NzbDrone.Core.Configuration
             _cache = new Dictionary<string, string>();
         }
 
-
         public IEnumerable<Config> All()
         {
             return _repository.All();
+        }
+
+        public Dictionary<String, Object> AllWithDefaults()
+        {
+            var dict = new Dictionary<String, Object>();
+
+            var type = GetType();
+            var properties = type.GetProperties();
+
+            foreach(var propertyInfo in properties)
+            {
+                var value = propertyInfo.GetValue(this, null);
+                
+                dict.Add(propertyInfo.Name, value);
+            }
+
+            return dict;
         }
 
         public virtual String NzbsOrgUId
@@ -202,7 +217,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DefaultQualityProfile", value); }
         }
 
-
         public virtual Boolean XbmcUpdateLibrary
         {
             get { return GetValueBoolean("XbmcUpdateLibrary"); }
@@ -248,7 +262,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("UpdateUrl", value); }
         }
 
-
         public virtual string SmtpServer
         {
             get { return GetValue("SmtpServer", String.Empty); }
@@ -292,7 +305,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SmtpToAddresses", value); }
         }
 
-
         public virtual string TwitterAccessToken
         {
             get { return GetValue("TwitterAccessToken", String.Empty); }
@@ -304,7 +316,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
             set { SetValue("TwitterAccessTokenSecret", value); }
         }
-
        
         public virtual string GrowlHost
         {
@@ -317,7 +328,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("GrowlPassword", String.Empty); }
             set { SetValue("GrowlPassword", value); }
         }
-
        
         public virtual string ProwlApiKeys
         {

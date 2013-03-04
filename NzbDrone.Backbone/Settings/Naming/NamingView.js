@@ -14,7 +14,6 @@ define([
 
         initialize: function (options) {
             this.model = options.model;
-            var test = 1;
         },
 
         onRender: function () {

@@ -25,7 +25,7 @@ namespace NzbDrone.Api.Settings
             if(collection.HasValue && Boolean.Parse(collection.Value))
                 return _configService.All().AsResponse();
 
-            return _configService.All().ToDictionary(c => c.Key, c => c.Value).AsResponse();
+            return _configService.AllWithDefaults().AsResponse();
         }
     }
 }

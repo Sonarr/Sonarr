@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Configuration
     public interface IConfigService
     {
         IEnumerable<Config> All();
+        Dictionary<String, Object> AllWithDefaults();
         String NzbsOrgUId { get; set; }
         String NzbsOrgHash { get; set; }
         String NzbsrusUId { get; set; }
