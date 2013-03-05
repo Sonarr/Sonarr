@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -15,9 +16,9 @@ namespace NzbDrone.Core.Jobs
     {
         bool IsProcessing { get; }
         IEnumerable<JobQueueItem> Queue { get; }
-        void QueueScheduled();
-        void QueueJob(Type jobType, dynamic options = null, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User);
-        bool QueueJob(string jobTypeString);
+        void EnqueueScheduled();
+        void Enqueue(Type jobType, dynamic options = null, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User);
+        bool Enqueue(string jobTypeString);
     }
 
     public class JobController : IJobController
@@ -27,14 +28,10 @@ namespace NzbDrone.Core.Jobs
         private readonly IJobRepository _jobRepository;
         private readonly Logger _logger;
 
-        private Thread _jobThread;
-
-
-
-        private readonly object _executionLock = new object();
         private readonly BlockingCollection<JobQueueItem> _queue = new BlockingCollection<JobQueueItem>();
 
         private ProgressNotification _notification;
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
         public JobController(NotificationProvider notificationProvider, IEnumerable<IJob> jobs, IJobRepository jobRepository, Logger logger)
         {
@@ -42,11 +39,13 @@ namespace NzbDrone.Core.Jobs
             _jobs = jobs;
             _jobRepository = jobRepository;
             _logger = logger;
-            ResetThread();
+            _cancellationTokenSource = new CancellationTokenSource();
+            Task.Factory.StartNew(ProcessQueue, _cancellationTokenSource.Token);
         }
 
 
         public bool IsProcessing { get; private set; }
+
 
         public IEnumerable<JobQueueItem> Queue
         {
@@ -56,15 +55,12 @@ namespace NzbDrone.Core.Jobs
             }
         }
 
-        public virtual void QueueScheduled()
+        public void EnqueueScheduled()
         {
-            lock (_executionLock)
+            if (IsProcessing)
             {
-                if (_jobThread.IsAlive)
-                {
-                    _logger.Trace("Queue is already running. Ignoring scheduler's request.");
-                    return;
-                }
+                _logger.Trace("Queue is already running. Ignoring scheduler's request.");
+                return;
             }
 
             var pendingJobs = _jobRepository.GetPendingJobs()
@@ -72,11 +68,11 @@ namespace NzbDrone.Core.Jobs
                 .GetType()).ToList();
 
 
-            pendingJobs.ForEach(jobType => QueueJob(jobType, source: JobQueueItem.JobSourceType.Scheduler));
+            pendingJobs.ForEach(jobType => Enqueue(jobType, source: JobQueueItem.JobSourceType.Scheduler));
             _logger.Trace("{0} Scheduled tasks have been added to the queue", pendingJobs.Count);
         }
 
-        public virtual void QueueJob(Type jobType, dynamic options = null, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User)
+        public void Enqueue(Type jobType, dynamic options = null, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User)
         {
             IsProcessing = true;
 
@@ -89,84 +85,58 @@ namespace NzbDrone.Core.Jobs
 
             _logger.Debug("Attempting to queue {0}", queueItem);
 
-            lock (_executionLock)
+            lock (_queue)
             {
-                lock (_queue)
+                if (!_queue.Contains(queueItem))
                 {
-                    if (!_queue.Contains(queueItem))
-                    {
-                        _queue.Add(queueItem);
-                        _logger.Trace("Job {0} added to the queue. current items in queue: {1}", queueItem, _queue.Count);
-                    }
-                    else
-                    {
-                        _logger.Info("{0} already exists in the queue. Skipping. current items in queue: {1}", queueItem, _queue.Count);
-                    }
+                    _queue.Add(queueItem);
+                    _logger.Trace("Job {0} added to the queue. current items in queue: {1}", queueItem, _queue.Count);
                 }
-
-                if (_jobThread.IsAlive)
+                else
                 {
-                    _logger.Trace("Queue is already running. No need to start it up.");
-                    return;
+                    _logger.Info("{0} already exists in the queue. Skipping. current items in queue: {1}", queueItem, _queue.Count);
                 }
-
-                ResetThread();
-                _jobThread.Start();
             }
 
         }
 
-        public virtual bool QueueJob(string jobTypeString)
+
+        public bool Enqueue(string jobTypeString)
         {
             var type = Type.GetType(jobTypeString);
 
             if (type == null)
                 return false;
 
-            QueueJob(type);
+            Enqueue(type);
             return true;
         }
 
         private void ProcessQueue()
         {
-            try
+            while (true)
             {
-                while (true)
+                try
                 {
                     IsProcessing = false;
                     var item = _queue.Take();
-                    IsProcessing = true;
-                    
-                    try
-                    {
-                        Execute(item);
-                    }
-                    catch (ThreadAbortException)
-                    {
-                        throw;
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.FatalException("An error has occurred while executing job.", e);
-                    }
+                    Execute(item);
                 }
-            }
-            catch (ThreadAbortException e)
-            {
-                _logger.Warn(e.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.ErrorException("Error has occurred in queue processor thread", e);
-            }
-            finally
-            {
-                _logger.Trace("Finished processing jobs in the queue.");
+                catch (ThreadAbortException e)
+                {
+                    _logger.Warn(e.Message);
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("Error has occurred in queue processor thread", e);
+                }
             }
         }
 
         private void Execute(JobQueueItem queueItem)
         {
+            IsProcessing = true;
+
             var jobImplementation = _jobs.SingleOrDefault(t => t.GetType() == queueItem.JobType);
             if (jobImplementation == null)
             {
@@ -194,10 +164,6 @@ namespace NzbDrone.Core.Jobs
                     _logger.Debug("Job {0} successfully completed in {1:0}.{2} seconds.", queueItem, sw.Elapsed.TotalSeconds, sw.Elapsed.Milliseconds / 100,
                                  sw.Elapsed.Seconds);
                 }
-                catch (ThreadAbortException)
-                {
-                    throw;
-                }
                 catch (Exception e)
                 {
                     _logger.ErrorException("An error has occurred while executing job [" + jobImplementation.Name + "].", e);
@@ -214,18 +180,6 @@ namespace NzbDrone.Core.Jobs
             {
                 _jobRepository.Update(jobDefinition);
             }
-        }
-
-
-        private void ResetThread()
-        {
-            if (_jobThread != null)
-            {
-                _jobThread.Abort();
-            }
-
-            _logger.Trace("resetting queue processor thread");
-            _jobThread = new Thread(ProcessQueue) { Name = "JobQueueThread" };
         }
     }
 }

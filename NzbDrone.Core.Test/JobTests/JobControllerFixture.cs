@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _fakeJob.GetType().FullName } });
 
-            Subject.QueueScheduled();
+            Subject.EnqueueScheduled();
             WaitForQueue();
 
             _updatedJob.LastExecution.Should().BeWithin(TimeSpan.FromSeconds(10));
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _brokenJob.GetType().FullName } });
 
-            Subject.QueueScheduled();
+            Subject.EnqueueScheduled();
             WaitForQueue();
 
             _updatedJob.LastExecution.Should().BeWithin(TimeSpan.FromSeconds(10));
@@ -102,11 +102,11 @@ namespace NzbDrone.Core.Test.JobTests
         }
 
         [Test]
-        public void can_run_async_job_again()
+        public void can_run_job_again()
         {
-            Subject.QueueJob(typeof(FakeJob));
+            Subject.Enqueue(typeof(FakeJob));
             WaitForQueue();
-            Subject.QueueJob(typeof(FakeJob));
+            Subject.Enqueue(typeof(FakeJob));
             WaitForQueue();
 
             Subject.Queue.Should().BeEmpty();
@@ -116,9 +116,9 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void should_ignore_job_with_same_arg()
         {
-            Subject.QueueJob(typeof(SlowJob2), 1);
-            Subject.QueueJob(typeof(FakeJob), 1);
-            Subject.QueueJob(typeof(FakeJob), 1);
+            Subject.Enqueue(typeof(SlowJob2), 1);
+            Subject.Enqueue(typeof(FakeJob), 1);
+            Subject.Enqueue(typeof(FakeJob), 1);
 
             WaitForQueue();
 
@@ -131,10 +131,10 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void can_run_broken_job_again()
         {
-            Subject.QueueJob(typeof(BrokenJob));
+            Subject.Enqueue(typeof(BrokenJob));
             WaitForQueue();
 
-            Subject.QueueJob(typeof(BrokenJob));
+            Subject.Enqueue(typeof(BrokenJob));
             WaitForQueue();
 
 
@@ -145,8 +145,8 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void schedule_hit_should_be_ignored_if_queue_is_running()
         {
-            Subject.QueueJob(typeof(SlowJob));
-            Subject.QueueScheduled();
+            Subject.Enqueue(typeof(SlowJob));
+            Subject.EnqueueScheduled();
             WaitForQueue();
 
             _slowJob.ExecutionCount.Should().Be(1);
@@ -158,9 +158,9 @@ namespace NzbDrone.Core.Test.JobTests
         public void can_queue_jobs_at_the_same_time()
         {
 
-            Subject.QueueJob(typeof(SlowJob));
-            var thread1 = new Thread(() => Subject.QueueJob(typeof(FakeJob)));
-            var thread2 = new Thread(() => Subject.QueueJob(typeof(FakeJob)));
+            Subject.Enqueue(typeof(SlowJob));
+            var thread1 = new Thread(() => Subject.Enqueue(typeof(FakeJob)));
+            var thread2 = new Thread(() => Subject.Enqueue(typeof(FakeJob)));
 
             thread1.Start();
             thread2.Start();
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void job_with_specific_target_should_not_update_status()
         {
-            Subject.QueueJob(typeof(FakeJob), 10);
+            Subject.Enqueue(typeof(FakeJob), 10);
 
             WaitForQueue();
 
@@ -194,12 +194,12 @@ namespace NzbDrone.Core.Test.JobTests
         {
             GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _slowJob.GetType().FullName } });
 
-            var jobThread = new Thread(Subject.QueueScheduled);
+            var jobThread = new Thread(Subject.EnqueueScheduled);
             jobThread.Start();
 
             Thread.Sleep(200);
 
-            Subject.QueueJob(typeof(DisabledJob), 12);
+            Subject.Enqueue(typeof(DisabledJob), 12);
 
             WaitForQueue();
 
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void trygin_to_queue_unregistered_job_should_fail()
         {
-            Subject.QueueJob(typeof(UpdateInfoJob));
+            Subject.Enqueue(typeof(UpdateInfoJob));
             WaitForQueue();
             ExceptionVerification.ExpectedErrors(1);
         }
@@ -219,7 +219,7 @@ namespace NzbDrone.Core.Test.JobTests
         public void scheduled_job_should_have_scheduler_as_source()
         {
             GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _slowJob.GetType().FullName }, new JobDefinition { TypeName = _slowJob2.GetType().FullName } });
-            Subject.QueueScheduled();
+            Subject.EnqueueScheduled();
 
             Subject.Queue.Should().OnlyContain(c => c.Source == JobQueueItem.JobSourceType.Scheduler);
 

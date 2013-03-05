@@ -546,6 +546,9 @@
     <RegexTestSelector>
       <RegularExpression>NzbDrone\.Core\.Test\.TvTests\.QualityModelFixture\..*</RegularExpression>
     </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Core\.Test\.JobTests\.JobControllerFixture\..*</RegularExpression>
+    </RegexTestSelector>
   </IgnoredTests>
   <HiddenWarnings>PostBuildEventDisabled;PreBuildEventDisabled</HiddenWarnings>
 </ProjectConfiguration>
