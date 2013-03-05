@@ -57,4 +57,12 @@ namespace NzbDrone.Core.Test.JobTests
             Thread.Sleep(1000);
         }
     }
+
+    public class SlowJob2 : FakeJob
+    {
+        protected override void Start()
+        {
+            Thread.Sleep(1000);
+        }
+    }
 }

@@ -6,7 +6,6 @@ using FluentAssertions;
 using Moq;
 using NCrunch.Framework;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Test.Framework;
@@ -21,6 +20,7 @@ namespace NzbDrone.Core.Test.JobTests
 
         FakeJob _fakeJob;
         SlowJob _slowJob;
+        SlowJob2 _slowJob2;
         BrokenJob _brokenJob;
         DisabledJob _disabledJob;
 
@@ -32,11 +32,12 @@ namespace NzbDrone.Core.Test.JobTests
         {
             _fakeJob = new FakeJob();
             _slowJob = new SlowJob();
+            _slowJob2 = new SlowJob2();
             _brokenJob = new BrokenJob();
             _disabledJob = new DisabledJob();
             _updatedJob = null;
 
-            IEnumerable<IJob> jobs = new List<IJob> { _fakeJob, _slowJob, _brokenJob, _disabledJob };
+            IEnumerable<IJob> jobs = new List<IJob> { _fakeJob, _slowJob, _slowJob2, _brokenJob, _disabledJob };
 
             Mocker.SetConstant(jobs);
 
@@ -65,11 +66,11 @@ namespace NzbDrone.Core.Test.JobTests
         private void WaitForQueue()
         {
             Console.WriteLine("Waiting for queue to clear.");
-            var stopWatch = Mocker.Resolve<JobController>().StopWatch;
+            var queue = Mocker.Resolve<JobController>().Queue;
 
-            while (stopWatch.IsRunning)
+            while (Subject.IsProcessing)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
         }
 
@@ -113,16 +114,16 @@ namespace NzbDrone.Core.Test.JobTests
         }
 
         [Test]
-        public void no_concurent_jobs()
+        public void should_ignore_job_with_same_arg()
         {
-            Subject.QueueJob(typeof(SlowJob), 1);
-            Subject.QueueJob(typeof(SlowJob), 2);
-            Subject.QueueJob(typeof(SlowJob), 3);
+            Subject.QueueJob(typeof(SlowJob2), 1);
+            Subject.QueueJob(typeof(FakeJob), 1);
+            Subject.QueueJob(typeof(FakeJob), 1);
 
             WaitForQueue();
 
             Subject.Queue.Should().BeEmpty();
-            _slowJob.ExecutionCount.Should().Be(3);
+            _fakeJob.ExecutionCount.Should().Be(1);
             ExceptionVerification.AssertNoUnexcpectedLogs();
         }
 
@@ -182,11 +183,11 @@ namespace NzbDrone.Core.Test.JobTests
 
             WaitForQueue();
 
-            Mocker.GetMock<IJobRepository>().Verify(c=>c.Update(It.IsAny<JobDefinition>()),Times.Never());
+            Mocker.GetMock<IJobRepository>().Verify(c => c.Update(It.IsAny<JobDefinition>()), Times.Never());
             _updatedJob.Should().BeNull();
         }
 
-       
+
 
         [Test]
         public void Item_added_to_queue_while_scheduler_runs_should_be_executed()
@@ -217,7 +218,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void scheduled_job_should_have_scheduler_as_source()
         {
-            GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _slowJob.GetType().FullName }, new JobDefinition { TypeName = _slowJob.GetType().FullName } });
+            GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _slowJob.GetType().FullName }, new JobDefinition { TypeName = _slowJob2.GetType().FullName } });
             Subject.QueueScheduled();
 
             Subject.Queue.Should().OnlyContain(c => c.Source == JobQueueItem.JobSourceType.Scheduler);
