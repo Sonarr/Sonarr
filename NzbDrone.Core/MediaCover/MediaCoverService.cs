@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Eventing;
@@ -9,7 +10,7 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaCover
 {
-    public class MediaCoverService : IHandle<SeriesUpdatedEvent>
+    public class MediaCoverService : IHandleAsync<SeriesUpdatedEvent>
     {
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.MediaCover
             _coverRootFolder = environmentProvider.GetMediaCoverPath();
         }
 
-        public void Handle(SeriesUpdatedEvent message)
+        public void HandleAsync(SeriesUpdatedEvent message)
         {
             EnsureCovers(message.Series);
         }

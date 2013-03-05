@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 return;
             }
 
-            notification.CurrentMessage = String.Format("Epsiode metadata refresh completed for {0}", series.Title);
+            notification.CurrentMessage = String.Format("Episode metadata refresh completed for {0}", series.Title);
         }
     }
 }
