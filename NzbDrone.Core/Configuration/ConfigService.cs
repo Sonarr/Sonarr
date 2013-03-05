@@ -593,6 +593,23 @@ namespace NzbDrone.Core.Configuration
             ClearCache();
         }
 
+        public void SaveValues(Dictionary<string, object> configValues)
+        {
+            //Todo: make this not suck - we need the pascal case of the key
+            //Todo: Can we batch save this without savig default values? Or do we care?
+
+            var allWithDefaults = AllWithDefaults();
+
+            foreach(var configValue in configValues)
+            {
+                object currentValue;
+                allWithDefaults.TryGetValue(configValue.Key, out currentValue);
+
+                if (!configValue.Equals(currentValue))
+                    SetValue(configValue.Key, configValue.Value.ToString());
+            }
+        }
+
         private void EnsureCache()
         {
             lock (_cache)

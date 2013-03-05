@@ -32,6 +32,8 @@ namespace NzbDrone.Api.Settings
         private Response SaveSettings()
         {
             var request = Request.Body.FromJson<Dictionary<string, object>>();
+            _configService.SaveValues(request);
+
 
             return request.AsResponse();
         }

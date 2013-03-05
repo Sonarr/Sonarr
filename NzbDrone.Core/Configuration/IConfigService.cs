@@ -87,5 +87,6 @@ namespace NzbDrone.Core.Configuration
         PriorityType NzbgetRecentTvPriority { get; set; }
         string GetValue(string key, object defaultValue, bool persist = false);
         void SetValue(string key, string value);
+        void SaveValues(Dictionary<string, object> configValues);
     }
 }
