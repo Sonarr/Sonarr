@@ -147,7 +147,7 @@
     <Content Include="Shared\ModalRegion.js" />
     <Content Include="Shared\NotificationCollection.js" />
     <Content Include="Shared\NotificationModel.js" />
-    <Content Include="Shared\NotificationsView.js" />
+    <Content Include="Shared\NotificationView.js" />
     <Content Include="Shared\SpinnerTemplate.html" />
     <Content Include="Shared\SpinnerView.js" />
     <Content Include="Upcoming\UpcomingCollection.js" />

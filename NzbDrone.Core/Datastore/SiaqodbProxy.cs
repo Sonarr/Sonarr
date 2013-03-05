@@ -119,7 +119,8 @@ namespace NzbDrone.Core.Datastore
 
         public void UpdateField<T>(T model, string fieldName) where T : ModelBase
         {
-            _db.UpdateObjectBy(model, fieldName);
+            _db.StoreObjectPartially(model, fieldName);
+
         }
 
         private IList<T> DoMany<T>(IEnumerable<T> objects, Func<T, T> function) where T : ModelBase

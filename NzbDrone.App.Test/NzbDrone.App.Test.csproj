@@ -81,7 +81,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CentralDispatchTests.cs" />
     <Compile Include="IISProviderFixture.cs" />
     <Compile Include="RouterTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />

@@ -8,8 +8,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-
-    public class SampleType : ModelBase
+    public class BaiscType : ModelBase
     {
         public string Name { get; set; }
         public string Tilte { get; set; }
@@ -17,25 +16,25 @@ namespace NzbDrone.Core.Test.Datastore
     }
 
     [TestFixture]
-    public class SimpleRepositoryFixture : ObjectDbTest<BasicRepository<SampleType>,SampleType>
+    public class BasicRepositoryFixture : ObjectDbTest<BasicRepository<BaiscType>,BaiscType>
     {
-        private SampleType sampleType;
+        private BaiscType _baiscType;
 
 
         [SetUp]
         public void Setup()
         {
-            sampleType = Builder<SampleType>
-                .CreateNew()
-                .With(c => c.Id = 0)
-                .Build();
+            _baiscType = Builder<BaiscType>
+                    .CreateNew()
+                    .With(c => c.Id = 0)
+                    .Build();
 
         }
 
         [Test]
         public void should_be_able_to_add()
         {
-            Subject.Insert(sampleType);
+            Subject.Insert(_baiscType);
             Subject.All().Should().HaveCount(1);
         }
 
@@ -44,21 +43,21 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_delete_model()
         {
-            Subject.Insert(sampleType);
+            Subject.Insert(_baiscType);
             Subject.All().Should().HaveCount(1);
 
-            Subject.Delete(sampleType.Id);
+            Subject.Delete(_baiscType.Id);
             Subject.All().Should().BeEmpty();
         }
 
         [Test]
         public void should_be_able_to_find_by_id()
         {
-            Subject.Insert(sampleType);
-            Subject.Get(sampleType.Id)
-                .ShouldHave()
-                .AllProperties()
-                .EqualTo(sampleType);
+            Subject.Insert(_baiscType);
+            Subject.Get(_baiscType.Id)
+                   .ShouldHave()
+                   .AllProperties()
+                   .EqualTo(_baiscType);
         }
 
         [Test]
@@ -72,6 +71,14 @@ namespace NzbDrone.Core.Test.Datastore
         public void get_all_with_empty_db_should_return_empty_list()
         {
             Subject.All().Should().BeEmpty();
+        }
+
+
+        [Test]
+        public void should_be_able_to_call_ToList_on_empty_quariable()
+        {
+            Subject.All().ToList().Should().BeEmpty();
+
         }
     }
 }

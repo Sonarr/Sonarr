@@ -131,7 +131,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Datastore\SimpleRepositoryFixture.cs" />
+    <Compile Include="Datastore\BasicRepositoryFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\ObjectDbTest.cs" />
@@ -141,6 +141,7 @@
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
+    <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\ContainsRecentEpisode.cs" />

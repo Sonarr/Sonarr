@@ -205,9 +205,9 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.Insert(childModel);
 
-            _childModel.A = "A_New";
-            _childModel.B = 2;
-            _childModel.C = 2;
+            childModel.A = "A_New";
+            childModel.B = 2;
+            childModel.C = 2;
 
             Db.UpdateField(childModel, "B");
 
