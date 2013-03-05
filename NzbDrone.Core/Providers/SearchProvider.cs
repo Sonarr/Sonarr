@@ -1,32 +1,22 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Providers.Search;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Providers
 {
     public class SearchProvider
     {
-        private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
         private readonly PartialSeasonSearch _partialSeasonSearch;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public SearchProvider(ISeriesService seriesService, IEpisodeService episodeService,
-                              PartialSeasonSearch partialSeasonSearch,ISeriesRepository seriesRepository)
+        public SearchProvider(IEpisodeService episodeService, PartialSeasonSearch partialSeasonSearch, ISeriesRepository seriesRepository)
         {
-            _seriesService = seriesService;
             _episodeService = episodeService;
             _partialSeasonSearch = partialSeasonSearch;
             _seriesRepository = seriesRepository;
@@ -89,7 +79,7 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
-            return _partialSeasonSearch.Search(series, new {SeasonNumber = seasonNumber, Episodes = episodes}, notification);
+            return _partialSeasonSearch.Search(series, new { SeasonNumber = seasonNumber, Episodes = episodes }, notification);
         }
     }
 }

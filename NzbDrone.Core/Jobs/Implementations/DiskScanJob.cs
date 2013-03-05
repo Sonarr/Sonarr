@@ -12,16 +12,14 @@ namespace NzbDrone.Core.Jobs.Implementations
 {
     public class DiskScanJob : IJob
     {
-        private readonly ISeriesService _seriesService;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly IConfigService _configService;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DiskScanJob(ISeriesService seriesService, DiskScanProvider diskScanProvider,
+        public DiskScanJob(DiskScanProvider diskScanProvider,
                             IConfigService configService, ISeriesRepository seriesRepository)
         {
-            _seriesService = seriesService;
             _diskScanProvider = diskScanProvider;
             _configService = configService;
             _seriesRepository = seriesRepository;

@@ -16,8 +16,6 @@ namespace NzbDrone.Core.Jobs.Implementations
     /// </summary>
     public class ImportNewSeriesJob : IJob
     {
-        private readonly ISeriesService _seriesService;
-        private readonly IEpisodeService _episodeService;
         private readonly IMediaFileService _mediaFileService;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
@@ -30,13 +28,10 @@ namespace NzbDrone.Core.Jobs.Implementations
 
         private List<int> _attemptedSeries;
 
-        public ImportNewSeriesJob(ISeriesService seriesService, IEpisodeService episodeService,
-                                    IMediaFileService mediaFileService, UpdateInfoJob updateInfoJob,
+        public ImportNewSeriesJob(IMediaFileService mediaFileService, UpdateInfoJob updateInfoJob,
                                     DiskScanJob diskScanJob,
                                     ISeasonRepository seasonRepository, XemUpdateJob xemUpdateJob, ISeriesRepository seriesRepository, ISeasonService seasonService)
         {
-            _seriesService = seriesService;
-            _episodeService = episodeService;
             _mediaFileService = mediaFileService;
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;

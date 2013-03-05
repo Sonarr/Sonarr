@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
     public class XemProvider
     {
-        private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(ISeriesService seriesService, IEpisodeService episodeService,
-                            XemCommunicationProvider xemCommunicationProvider,ISeriesRepository seriesRepository)
+        public XemProvider(IEpisodeService episodeService,XemCommunicationProvider xemCommunicationProvider,ISeriesRepository seriesRepository)
         {
-            _seriesService = seriesService;
             _episodeService = episodeService;
             _xemCommunicationProvider = xemCommunicationProvider;
             _seriesRepository = seriesRepository;

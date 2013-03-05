@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Jobs.Implementations
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeasonJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider, ISeriesService seriesService,
+        public RenameSeasonJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider,
                                 ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _mediaFileService = mediaFileService;

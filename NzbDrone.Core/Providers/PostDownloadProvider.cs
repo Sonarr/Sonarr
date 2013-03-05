@@ -18,8 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly DiskScanProvider _diskScanProvider;
         private readonly ISeriesRepository _seriesRepository;
 
-        public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider,
-                                    ISeriesService seriesService, ISeriesRepository seriesRepository)
+        public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider, ISeriesRepository seriesRepository)
         {
             _diskProvider = diskProvider;
             _diskScanProvider = diskScanProvider;

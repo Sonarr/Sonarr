@@ -8,7 +8,6 @@ namespace NzbDrone.Common.SysTray
 {
     public class SysTrayApp : Form
     {
-        private readonly ConfigFileProvider _configFileProvider;
         private readonly ProcessProvider _processProvider;
         private readonly IHostController _hostController;
         private readonly EnvironmentProvider _environmentProvider;
@@ -16,10 +15,8 @@ namespace NzbDrone.Common.SysTray
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
-        public SysTrayApp(ConfigFileProvider configFileProvider, ProcessProvider processProvider,
-                          IHostController hostController, EnvironmentProvider environmentProvider)
+        public SysTrayApp(ProcessProvider processProvider, IHostController hostController, EnvironmentProvider environmentProvider)
         {
-            _configFileProvider = configFileProvider;
             _processProvider = processProvider;
             _hostController = hostController;
             _environmentProvider = environmentProvider;
@@ -34,7 +31,7 @@ namespace NzbDrone.Common.SysTray
             _trayMenu.MenuItems.Add("Launch Browser", LaunchBrowser);
             _trayMenu.MenuItems.Add("-");
             _trayMenu.MenuItems.Add("Exit", OnExit);
-            
+
             _trayIcon.Text = String.Format("NzbDrone - {0}", _environmentProvider.Version);
             _trayIcon.Icon = new Icon(Assembly.GetEntryAssembly().GetManifestResourceStream("NzbDrone.NzbDrone.ico"));
 

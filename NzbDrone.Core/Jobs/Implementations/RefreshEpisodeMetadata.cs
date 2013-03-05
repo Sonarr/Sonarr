@@ -11,16 +11,13 @@ namespace NzbDrone.Core.Jobs.Implementations
     public class RefreshEpisodeMetadata : IJob
     {
         private readonly IMediaFileService _mediaFileService;
-        private readonly ISeriesService _seriesService;
         private readonly ISeriesRepository _seriesRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RefreshEpisodeMetadata(IMediaFileService mediaFileService, ISeriesService seriesService,
-                                       ISeriesRepository seriesRepository)
+        public RefreshEpisodeMetadata(IMediaFileService mediaFileService, ISeriesRepository seriesRepository)
         {
             _mediaFileService = mediaFileService;
-            _seriesService = seriesService;
             _seriesRepository = seriesRepository;
         }
 
@@ -44,10 +41,10 @@ namespace NzbDrone.Core.Jobs.Implementations
             else
                 seriesToRefresh = new List<Series> { _seriesRepository.Get(options.SeriesId) };
 
-            foreach(var series in seriesToRefresh)
+            foreach (var series in seriesToRefresh)
             {
-                RefreshMetadata(notification, series); 
-            }  
+                RefreshMetadata(notification, series);
+            }
         }
 
         private void RefreshMetadata(ProgressNotification notification, Series series)

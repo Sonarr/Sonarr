@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.RootFolders
 {
@@ -25,14 +24,12 @@ namespace NzbDrone.Core.RootFolders
         private readonly IBasicRepository<RootFolder> _rootFolderRepository;
         private readonly DiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly ISeriesService _seriesService;
 
-        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, ISeriesService seriesService, DiskProvider diskProvider,ISeriesRepository seriesRepository)
+        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, DiskProvider diskProvider,ISeriesRepository seriesRepository)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
-            _seriesService = seriesService;
         }
 
         public virtual List<RootFolder> All()

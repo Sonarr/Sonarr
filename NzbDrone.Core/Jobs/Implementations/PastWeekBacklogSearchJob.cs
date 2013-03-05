@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Tv;
 
@@ -12,16 +11,13 @@ namespace NzbDrone.Core.Jobs.Implementations
     {
         private readonly IEpisodeService _episodeService;
         private readonly EpisodeSearchJob _episodeSearchJob;
-        private readonly IConfigService _configService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public PastWeekBacklogSearchJob(IEpisodeService episodeService, EpisodeSearchJob episodeSearchJob,
-                                            IConfigService configService)
+        public PastWeekBacklogSearchJob(IEpisodeService episodeService, EpisodeSearchJob episodeSearchJob)
         {
             _episodeService = episodeService;
             _episodeSearchJob = episodeSearchJob;
-            _configService = configService;
         }
 
         public string Name
