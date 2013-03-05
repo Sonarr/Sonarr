@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Jobs.Implementations
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RssSyncJob(DownloadProvider downloadProvider, IIndexerService indexerService,
-            MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, 
+            MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification,
             UpgradeHistorySpecification upgradeHistorySpecification, IConfigService configService)
         {
             _downloadProvider = downloadProvider;
@@ -56,7 +56,11 @@ namespace NzbDrone.Core.Jobs.Implementations
             {
                 try
                 {
-                    reports.AddRange(indexer.FetchRss());
+                    var parseResults = indexer.FetchRss();
+                    lock (reports)
+                    {
+                        reports.AddRange(parseResults);
+                    }
                 }
                 catch (Exception e)
                 {
