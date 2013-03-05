@@ -8,7 +8,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv.Events;
@@ -24,6 +23,7 @@ namespace NzbDrone.Core.Tv
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
+        void DeleteSeries(int seriesId);
     }
 
     public class SeriesService : ISeriesService
@@ -167,6 +167,11 @@ namespace NzbDrone.Core.Tv
             _seriesRepository.SetSeriesType(seriesId, seriesTypes);
         }
 
-
+        public void DeleteSeries(int seriesId)
+        {
+            var series = _seriesRepository.Get(seriesId);
+            _seriesRepository.Delete(seriesId);
+            _eventAggregator.Publish(new SeriesDeletedEvent(series));
+        }
     }
 }
