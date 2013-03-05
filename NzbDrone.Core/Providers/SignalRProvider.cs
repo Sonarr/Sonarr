@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
@@ -9,7 +7,6 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Hubs;
 using SignalR;
-using SignalR.Hubs;
 
 namespace NzbDrone.Core.Providers
 {
