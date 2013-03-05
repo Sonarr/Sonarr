@@ -224,7 +224,7 @@
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
-    <Compile Include="Jobs\JobRepository.cs" />
+    <Compile Include="Jobs\Framework\JobRepository.cs" />
     <Compile Include="Lifecycle\AppShutdownJob.cs" />
     <Compile Include="Lifecycle\AppRestartJob.cs" />
     <Compile Include="Jobs\XemUpdateJob.cs" />
@@ -253,7 +253,7 @@
     <Compile Include="Model\Nzbx\NzbxRecentItem.cs" />
     <Compile Include="Model\Nzbx\NzbxVotesModel.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
-    <Compile Include="Model\JobQueueItem.cs" />
+    <Compile Include="Jobs\Framework\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
@@ -318,7 +318,7 @@
     <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
-    <Compile Include="Jobs\JobController.cs" />
+    <Compile Include="Jobs\Framework\JobController.cs" />
     <Compile Include="Jobs\RenameSeasonJob.cs" />
     <Compile Include="Jobs\RenameSeriesJob.cs" />
     <Compile Include="Lifecycle\AppUpdateJob.cs" />
@@ -335,7 +335,7 @@
     <Compile Include="Jobs\DeleteSeriesJob.cs" />
     <Compile Include="Jobs\DiskScanJob.cs" />
     <Compile Include="Jobs\ImportNewSeriesJob.cs" />
-    <Compile Include="Jobs\IJob.cs" />
+    <Compile Include="Jobs\Framework\IJob.cs" />
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="MetadataSource\TvRageMappingProvider.cs" />
@@ -525,7 +525,7 @@
     </Compile>
     <Compile Include="Indexers\NewznabDefinition.cs" />
     <Compile Include="ExternalNotification\ExternalNotificationDefinition.cs" />
-    <Compile Include="Jobs\JobDefinition.cs" />
+    <Compile Include="Jobs\Framework\JobDefinition.cs" />
     <Compile Include="Indexers\Indexer.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />

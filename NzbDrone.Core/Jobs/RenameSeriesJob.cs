@@ -4,6 +4,7 @@ using System;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;

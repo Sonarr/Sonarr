@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.ReferenceData;

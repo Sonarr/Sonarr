@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;

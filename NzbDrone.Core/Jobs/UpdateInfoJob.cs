@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;

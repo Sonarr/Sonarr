@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Instrumentation

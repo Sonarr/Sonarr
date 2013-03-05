@@ -2,7 +2,7 @@
 using System;
 using NzbDrone.Core.Datastore;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Framework
 {
     public class JobDefinition : ModelBase
     {

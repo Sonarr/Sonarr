@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System;
 using NLog;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Converting;

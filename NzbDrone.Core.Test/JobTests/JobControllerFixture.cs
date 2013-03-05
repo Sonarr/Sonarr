@@ -7,6 +7,7 @@ using Moq;
 using NCrunch.Framework;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;

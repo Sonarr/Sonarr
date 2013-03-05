@@ -6,11 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Framework
 {
     public interface IJobController
     {

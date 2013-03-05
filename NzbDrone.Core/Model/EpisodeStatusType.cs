@@ -14,14 +14,14 @@
 
         /// <summary>
         /// Episode has aired, but no episode
-        /// files are avilable
+        /// files are available
         /// Todo: We shouldn't set missing until the episode has past the actual airtime + runtime, including UtcOffset
         /// </summary>
         Missing,
 
         /// <summary>
         /// Episode airs today, but no episode
-        /// files are avilable
+        /// files are available
         /// </summary>
         AirsToday,
         

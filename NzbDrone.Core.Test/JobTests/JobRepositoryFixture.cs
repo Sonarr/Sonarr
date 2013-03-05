@@ -10,6 +10,7 @@ using NCrunch.Framework;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;

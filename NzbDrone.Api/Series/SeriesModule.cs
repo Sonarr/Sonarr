@@ -8,6 +8,7 @@ using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
@@ -18,9 +19,9 @@ namespace NzbDrone.Api.Series
     {
         private readonly ISeriesService _seriesService;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly JobController _jobProvider;
+        private readonly IJobController _jobProvider;
 
-        public SeriesModule(ISeriesService seriesService,ISeriesRepository seriesRepository, JobController jobProvider)
+        public SeriesModule(ISeriesService seriesService,ISeriesRepository seriesRepository, IJobController jobProvider)
             : base("/Series")
         {
             _seriesService = seriesService;
@@ -60,7 +61,7 @@ namespace NzbDrone.Api.Series
             //We also need to remove any special characters from the filename before attempting to create it           
 
             _seriesService.AddSeries(request.Title, request.Path, request.TvDbId, request.QualityProfileId, null);
-            _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
+            _jobProvider.Enqueue(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };
         }
@@ -89,7 +90,7 @@ namespace NzbDrone.Api.Series
             _seriesRepository.Update(series);
 
             if (oldPath != series.Path)
-                _jobProvider.QueueJob(typeof(DiskScanJob), new { SeriesId = series.Id });
+                _jobProvider.Enqueue(typeof(DiskScanJob), new { SeriesId = series.Id });
 
             _seriesRepository.Update(series);
 
@@ -99,7 +100,7 @@ namespace NzbDrone.Api.Series
         private Response DeleteSeries(int id)
         {
             var deleteFiles = Convert.ToBoolean(Request.Headers["deleteFiles"].FirstOrDefault());
-            _jobProvider.QueueJob(typeof(DeleteSeriesJob), new { SeriesId = id, DeleteFiles = deleteFiles });
+            _jobProvider.Enqueue(typeof(DeleteSeriesJob), new { SeriesId = id, DeleteFiles = deleteFiles });
             return new Response { StatusCode = HttpStatusCode.OK };
         }
     }
