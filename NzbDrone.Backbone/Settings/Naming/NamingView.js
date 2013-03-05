@@ -9,22 +9,15 @@ define([
         template: 'Settings/Naming/NamingTemplate',
         className: 'form-horizontal',
 
-        events: {
-            'click .x-save': 'save'
-        },
-
-        initialize: function (options) {
-            this.model = options.model;
+        ui: {
+            switch: '.switch',
+            tooltip: '.help-inline i'
         },
 
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
-        },
-
-
-        save: function () {
-            //Todo: Actually save the model
-            alert('Save pressed!');
+            this.ui.switch.bootstrapSwitch();
+            this.ui.tooltip.tooltip({ placement: 'right' });
         }
     });
 });

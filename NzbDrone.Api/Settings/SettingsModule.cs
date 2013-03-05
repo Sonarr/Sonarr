@@ -9,13 +9,14 @@ namespace NzbDrone.Api.Settings
 {
     public class SettingsModule : NzbDroneApiModule
     {
-        private readonly ConfigService _configService;
+        private readonly IConfigService _configService;
 
-        public SettingsModule(ConfigService configService)
+        public SettingsModule(IConfigService configService)
             : base("/settings")
         {
             _configService = configService;
             Get["/"] = x => GetAllSettings();
+            Post["/"] = x => SaveSettings();
         }
 
         private Response GetAllSettings()
@@ -26,6 +27,13 @@ namespace NzbDrone.Api.Settings
                 return _configService.All().AsResponse();
 
             return _configService.AllWithDefaults().AsResponse();
+        }
+
+        private Response SaveSettings()
+        {
+            var request = Request.Body.FromJson<Dictionary<string, object>>();
+
+            return request.AsResponse();
         }
     }
 }

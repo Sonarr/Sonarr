@@ -1,0 +1,10 @@
+﻿.form-horizontal .controls i {
+    font-size: 25px;
+    color: #3A87AD;
+    cursor: default;
+    vertical-align: text-bottom;
+}
+
+.help-checkbox {
+    margin-top: -20px;
+}

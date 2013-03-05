@@ -44,316 +44,316 @@ namespace NzbDrone.Core.Configuration
             return dict;
         }
 
-        public virtual String NzbsOrgUId
+        public String NzbsOrgUId
         {
             get { return GetValue("NzbsOrgUId"); }
 
             set { SetValue("NzbsOrgUId", value); }
         }
 
-        public virtual String NzbsOrgHash
+        public String NzbsOrgHash
         {
             get { return GetValue("NzbsOrgHash"); }
 
             set { SetValue("NzbsOrgHash", value); }
         }
 
-        public virtual String NzbsrusUId
+        public String NzbsrusUId
         {
             get { return GetValue("NzbsrusUId"); }
 
             set { SetValue("NzbsrusUId", value); }
         }
 
-        public virtual String NzbsrusHash
+        public String NzbsrusHash
         {
             get { return GetValue("NzbsrusHash"); }
 
             set { SetValue("NzbsrusHash", value); }
         }
 
-        public virtual String FileSharingTalkUid
+        public String FileSharingTalkUid
         {
             get { return GetValue("FileSharingTalkUid"); }
 
             set { SetValue("FileSharingTalkUid", value); }
         }
 
-        public virtual String FileSharingTalkSecret
+        public String FileSharingTalkSecret
         {
             get { return GetValue("FileSharingTalkSecret"); }
 
             set { SetValue("FileSharingTalkSecret", value); }
         }
 
-        public virtual String SabHost
+        public String SabHost
         {
             get { return GetValue("SabHost", "localhost"); }
 
             set { SetValue("SabHost", value); }
         }
 
-        public virtual int SabPort
+        public int SabPort
         {
             get { return GetValueInt("SabPort", 8080); }
 
             set { SetValue("SabPort", value); }
         }
 
-        public virtual String SabApiKey
+        public String SabApiKey
         {
             get { return GetValue("SabApiKey"); }
 
             set { SetValue("SabApiKey", value); }
         }
 
-        public virtual String SabUsername
+        public String SabUsername
         {
             get { return GetValue("SabUsername"); }
 
             set { SetValue("SabUsername", value); }
         }
 
-        public virtual String SabPassword
+        public String SabPassword
         {
             get { return GetValue("SabPassword"); }
 
             set { SetValue("SabPassword", value); }
         }
 
-        public virtual String SabTvCategory
+        public String SabTvCategory
         {
             get { return GetValue("SabTvCategory", "tv"); }
 
             set { SetValue("SabTvCategory", value); }
         }
 
-        public virtual SabPriorityType SabBacklogTvPriority
+        public SabPriorityType SabBacklogTvPriority
         {
             get { return (SabPriorityType)GetValueInt("SabBacklogTvPriority"); }
 
             set { SetValue("SabBacklogTvPriority", (int)value); }
         }
 
-        public virtual SabPriorityType SabRecentTvPriority
+        public SabPriorityType SabRecentTvPriority
         {
             get { return (SabPriorityType)GetValueInt("SabRecentTvPriority"); }
 
             set { SetValue("SabRecentTvPriority", (int)value); }
         }
 
-        public virtual String DownloadClientTvDirectory
+        public String DownloadClientTvDirectory
         {
             get { return GetValue("DownloadClientTvDirectory"); }
 
             set { SetValue("DownloadClientTvDirectory", value); }
         }
 
-        public virtual bool SortingIncludeSeriesName
+        public bool SortingIncludeSeriesName
         {
             get { return GetValueBoolean("Sorting_SeriesName", true); }
             set { SetValue("Sorting_SeriesName", value); }
         }
 
-        public virtual bool SortingIncludeEpisodeTitle
+        public bool SortingIncludeEpisodeTitle
         {
             get { return GetValueBoolean("Sorting_EpisodeName", true); }
             set { SetValue("Sorting_EpisodeName", value); }
         }
 
-        public virtual bool SortingReplaceSpaces
+        public bool SortingReplaceSpaces
         {
             get { return GetValueBoolean("Sorting_ReplaceSpaces"); }
             set { SetValue("Sorting_ReplaceSpaces", value); }
         }
 
-        public virtual bool SortingAppendQuality
+        public bool SortingAppendQuality
         {
             get { return GetValueBoolean("Sorting_AppendQaulity", true); }
             set { SetValue("Sorting_AppendQaulity", value); }
         }
 
-        public virtual bool UseSeasonFolder
+        public bool UseSeasonFolder
         {
             get { return GetValueBoolean("UseSeasonFolder", true); }
 
             set { SetValue("UseSeasonFolder", value); }
         }
 
-        public virtual string SortingSeasonFolderFormat
+        public string SortingSeasonFolderFormat
         {
             get { return GetValue("Sorting_SeasonFolderFormat", "Season %s"); }
             set { SetValue("Sorting_SeasonFolderFormat", value); }
         }
 
-        public virtual int SortingSeparatorStyle
+        public int SortingSeparatorStyle
         {
             get { return GetValueInt("Sorting_SeparatorStyle"); }
             set { SetValue("Sorting_SeparatorStyle", value); }
         }
 
-        public virtual int SortingNumberStyle
+        public int SortingNumberStyle
         {
             get { return GetValueInt("Sorting_NumberStyle", 2); }
             set { SetValue("Sorting_NumberStyle", value); }
         }
 
-        public virtual int SortingMultiEpisodeStyle
+        public int SortingMultiEpisodeStyle
         {
             get { return GetValueInt("Sorting_MultiEpisodeStyle"); }
             set { SetValue("Sorting_MultiEpisodeStyle", value); }
         }
 
-        public virtual bool SortingUseSceneName
+        public bool SortingUseSceneName
         {
             get { return GetValueBoolean("Sorting_UseSceneName", false); }
             set { SetValue("Sorting_UseSceneName", value); }
         }
 
-        public virtual int DefaultQualityProfile
+        public int DefaultQualityProfile
         {
             get { return GetValueInt("DefaultQualityProfile", 1); }
 
             set { SetValue("DefaultQualityProfile", value); }
         }
 
-        public virtual Boolean XbmcUpdateLibrary
+        public Boolean XbmcUpdateLibrary
         {
             get { return GetValueBoolean("XbmcUpdateLibrary"); }
 
             set { SetValue("XbmcUpdateLibrary", value); }
         }
 
-        public virtual Boolean XbmcCleanLibrary
+        public Boolean XbmcCleanLibrary
         {
             get { return GetValueBoolean("XbmcCleanLibrary"); }
 
             set { SetValue("XbmcCleanLibrary", value); }
         }
 
-        public virtual Boolean XbmcUpdateWhenPlaying
+        public Boolean XbmcUpdateWhenPlaying
         {
             get { return GetValueBoolean("XbmcUpdateWhenPlaying"); }
 
             set { SetValue("XbmcUpdateWhenPlaying", value); }
         }
 
-        public virtual string XbmcHosts
+        public string XbmcHosts
         {
             get { return GetValue("XbmcHosts", "localhost:8080"); }
             set { SetValue("XbmcHosts", value); }
         }
 
-        public virtual string XbmcUsername
+        public string XbmcUsername
         {
             get { return GetValue("XbmcUsername", "xbmc"); }
             set { SetValue("XbmcUsername", value); }
         }
 
-        public virtual string XbmcPassword
+        public string XbmcPassword
         {
             get { return GetValue("XbmcPassword", String.Empty); }
             set { SetValue("XbmcPassword", value); }
         }
 
-        public virtual string UpdateUrl
+        public string UpdateUrl
         {
             get { return GetValue("UpdateUrl", UpdateProvider.DEFAULT_UPDATE_URL); }
             set { SetValue("UpdateUrl", value); }
         }
 
-        public virtual string SmtpServer
+        public string SmtpServer
         {
             get { return GetValue("SmtpServer", String.Empty); }
             set { SetValue("SmtpServer", value); }
         }
 
-        public virtual int SmtpPort
+        public int SmtpPort
         {
             get { return GetValueInt("SmtpPort", 25); }
             set { SetValue("SmtpPort", value); }
         }
 
-        public virtual Boolean SmtpUseSsl
+        public Boolean SmtpUseSsl
         {
             get { return GetValueBoolean("SmtpUseSsl"); }
 
             set { SetValue("SmtpUseSsl", value); }
         }
 
-        public virtual string SmtpUsername
+        public string SmtpUsername
         {
             get { return GetValue("SmtpUsername", String.Empty); }
             set { SetValue("SmtpUsername", value); }
         }
 
-        public virtual string SmtpPassword
+        public string SmtpPassword
         {
             get { return GetValue("SmtpPassword", String.Empty); }
             set { SetValue("SmtpPassword", value); }
         }
 
-        public virtual string SmtpFromAddress
+        public string SmtpFromAddress
         {
             get { return GetValue("SmtpFromAddress", String.Empty); }
             set { SetValue("SmtpFromAddress", value); }
         }
 
-        public virtual string SmtpToAddresses
+        public string SmtpToAddresses
         {
             get { return GetValue("SmtpToAddresses", String.Empty); }
             set { SetValue("SmtpToAddresses", value); }
         }
 
-        public virtual string TwitterAccessToken
+        public string TwitterAccessToken
         {
             get { return GetValue("TwitterAccessToken", String.Empty); }
             set { SetValue("TwitterAccessToken", value); }
         }
 
-        public virtual string TwitterAccessTokenSecret
+        public string TwitterAccessTokenSecret
         {
             get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
             set { SetValue("TwitterAccessTokenSecret", value); }
         }
        
-        public virtual string GrowlHost
+        public string GrowlHost
         {
             get { return GetValue("GrowlHost", "localhost:23053"); }
             set { SetValue("GrowlHost", value); }
         }
 
-        public virtual string GrowlPassword
+        public string GrowlPassword
         {
             get { return GetValue("GrowlPassword", String.Empty); }
             set { SetValue("GrowlPassword", value); }
         }
        
-        public virtual string ProwlApiKeys
+        public string ProwlApiKeys
         {
             get { return GetValue("ProwlApiKeys", String.Empty); }
             set { SetValue("ProwlApiKeys", value); }
         }
 
-        public virtual int ProwlPriority
+        public int ProwlPriority
         {
             get { return GetValueInt("ProwlPriority", 0); }
             set { SetValue("ProwlPriority", value); }
         }
 
-        public virtual bool EnableBacklogSearching
+        public bool EnableBacklogSearching
         {
             get { return GetValueBoolean("EnableBacklogSearching"); }
             set { SetValue("EnableBacklogSearching", value); }
         }
 
-        public virtual bool AutoIgnorePreviouslyDownloadedEpisodes
+        public bool AutoIgnorePreviouslyDownloadedEpisodes
         {
             get { return GetValueBoolean("AutoIgnorePreviouslyDownloadedEpisodes"); }
             set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
         }
 
-        public virtual int Retention
+        public int Retention
         {
             get { return GetValueInt("Retention", 0); }
             set { SetValue("Retention", value); }
@@ -364,162 +364,162 @@ namespace NzbDrone.Core.Configuration
             get { return Guid.Parse(GetValue("UGuid", Guid.NewGuid().ToString(), persist: true)); }
         }
 
-        public virtual DownloadClientType DownloadClient
+        public DownloadClientType DownloadClient
         {
             get { return (DownloadClientType)GetValueInt("DownloadClient"); }
 
             set { SetValue("DownloadClient", (int)value); }
         }
 
-        public virtual string BlackholeDirectory
+        public string BlackholeDirectory
         {
             get { return GetValue("BlackholeDirectory", String.Empty); }
             set { SetValue("BlackholeDirectory", value); }
         }
 
-        public virtual string ServiceRootUrl
+        public string ServiceRootUrl
         {
             get { return "http://services.nzbdrone.com"; }
         }
 
-        public virtual Boolean PlexUpdateLibrary
+        public Boolean PlexUpdateLibrary
         {
             get { return GetValueBoolean("PlexUpdateLibrary"); }
 
             set { SetValue("PlexUpdateLibrary", value); }
         }
 
-        public virtual string PlexServerHost
+        public string PlexServerHost
         {
             get { return GetValue("PlexServerHost", "localhost:32400"); }
             set { SetValue("PlexServerHost", value); }
         }
 
-        public virtual string PlexClientHosts
+        public string PlexClientHosts
         {
             get { return GetValue("PlexClientHosts", "localhost:3000"); }
             set { SetValue("PlexClientHosts", value); }
         }
 
-        public virtual string PlexUsername
+        public string PlexUsername
         {
             get { return GetValue("PlexUsername"); }
             set { SetValue("PlexUsername", value); }
         }
 
-        public virtual string PlexPassword
+        public string PlexPassword
         {
             get { return GetValue("PlexPassword"); }
             set { SetValue("PlexPassword", value); }
         }
 
-        public virtual Boolean MetadataUseBanners
+        public Boolean MetadataUseBanners
         {
             get { return GetValueBoolean("MetadataUseBanners"); }
 
             set { SetValue("MetadataUseBanners", value); }
         }
 
-        public virtual string AllowedReleaseGroups
+        public string AllowedReleaseGroups
         {
             get { return GetValue("AllowedReleaseGroups"); }
             set { SetValue("AllowedReleaseGroups", value); }
         }
 
-        public virtual string PneumaticDirectory
+        public string PneumaticDirectory
         {
             get { return GetValue("PneumaticDirectory", String.Empty); }
             set { SetValue("PneumaticDirectory", value); }
         }
 
-        public virtual string RecycleBin
+        public string RecycleBin
         {
             get { return GetValue("RecycleBin", String.Empty); }
             set { SetValue("RecycleBin", value); }
         }
 
-        public virtual int RssSyncInterval
+        public int RssSyncInterval
         {
             get { return GetValueInt("RssSyncInterval", 25); }
             set { SetValue("RssSyncInterval", value); }
         }
 
-        public virtual string OmgwtfnzbsUsername
+        public string OmgwtfnzbsUsername
         {
             get { return GetValue("OmgwtfnzbsUsername", String.Empty); }
             set { SetValue("OmgwtfnzbsUsername", value); }
         }
 
-        public virtual string OmgwtfnzbsApiKey
+        public string OmgwtfnzbsApiKey
         {
             get { return GetValue("OmgwtfnzbsApiKey", String.Empty); }
             set { SetValue("OmgwtfnzbsApiKey", value); }
         }
 
-        public virtual Boolean IgnoreArticlesWhenSortingSeries
+        public Boolean IgnoreArticlesWhenSortingSeries
         {
             get { return GetValueBoolean("IgnoreArticlesWhenSortingSeries", true); }
 
             set { SetValue("IgnoreArticlesWhenSortingSeries", value); }
         }
 
-        public virtual Boolean DownloadClientUseSceneName
+        public Boolean DownloadClientUseSceneName
         {
             get { return GetValueBoolean("DownloadClientUseSceneName", false); }
 
             set { SetValue("DownloadClientUseSceneName", value); }
         }
 
-        public virtual String NzbgetUsername
+        public String NzbgetUsername
         {
             get { return GetValue("NzbgetUsername", "nzbget"); }
 
             set { SetValue("NzbgetUsername", value); }
         }
 
-        public virtual String NzbgetPassword
+        public String NzbgetPassword
         {
             get { return GetValue("NzbgetPassword", ""); }
 
             set { SetValue("NzbgetPassword", value); }
         }
 
-        public virtual String NzbgetHost
+        public String NzbgetHost
         {
             get { return GetValue("NzbgetHost", "localhost"); }
 
             set { SetValue("NzbgetHost", value); }
         }
 
-        public virtual Int32 NzbgetPort
+        public Int32 NzbgetPort
         {
             get { return GetValueInt("NzbgetPort", 6789); }
 
             set { SetValue("NzbgetPort", value); }
         }
 
-        public virtual String NzbgetTvCategory
+        public String NzbgetTvCategory
         {
             get { return GetValue("NzbgetTvCategory", "nzbget"); }
 
             set { SetValue("NzbgetTvCategory", value); }
         }
 
-        public virtual Int32 NzbgetPriority
+        public Int32 NzbgetPriority
         {
             get { return GetValueInt("NzbgetPriority", 0); }
 
             set { SetValue("NzbgetPriority", value); }
         }
 
-        public virtual PriorityType NzbgetBacklogTvPriority
+        public PriorityType NzbgetBacklogTvPriority
         {
             get { return (PriorityType)GetValueInt("NzbgetBacklogTvPriority"); }
 
             set { SetValue("NzbgetBacklogTvPriority", (int)value); }
         }
 
-        public virtual PriorityType NzbgetRecentTvPriority
+        public PriorityType NzbgetRecentTvPriority
         {
             get { return (PriorityType)GetValueInt("NzbgetRecentTvPriority"); }
 
@@ -541,7 +541,7 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
-        public virtual string GetValue(string key, object defaultValue, bool persist = false)
+        public string GetValue(string key, object defaultValue, bool persist = false)
         {
             EnsureCache();
 

@@ -88,19 +88,19 @@ html {
 
 /* Todo: Should move this to somehting modal/form specific */
 
-label.checkbox {
-    font-size: 14px;
-    line-height: normal;
-    color: #595959;
-}
+/*label.checkbox {*/
+    /*font-size: 14px;*/
+    /*line-height: normal;*/
+    /*color: #595959;*/
+/*}*/
 
-label, .form-horizontal input, .form-horizontal select {
-    font-size: 14px;
-    line-height: 14px;
-}
+/*label, .form-horizontal input, .form-horizontal select {*/
+    /*font-size: 14px;*/
+    /*line-height: 14px;*/
+/*}*/
 
-    label.control-label {
-        font-size: 16px;
-        line-height: 16px;
-        font-weight: bold;
-    }
+    /*label.control-label {*/
+        /*font-size: 16px;*/
+        /*line-height: 16px;*/
+        /*font-weight: bold;*/
+    /*}*/

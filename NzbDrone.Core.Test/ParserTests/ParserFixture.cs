@@ -77,6 +77,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Franklin & Bash S02E10 6-50 to SLC [SDTV]", "Franklin & Bash", 2, 10)]
         [TestCase("The_Big_Bang_Theory_-_6x12_-_The_Egg_Salad_Equivalency_[HDTV-720p]", "The Big Bang Theory", 6, 12)]
         [TestCase("Top_Gear.19x06.720p_HDTV_x264-FoV", "Top Gear", 19, 6)]
+        [TestCase("Portlandia.S03E10.Alexandra.720p.WEB-DL.AAC2.0.H.264-CROM.mkv", "Portlandia", 3, 10)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);

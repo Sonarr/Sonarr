@@ -40,7 +40,8 @@
                 'click .x-download-client-tab': 'showDownloadClient',
                 'click .x-notifications-tab': 'showNotifications',
                 'click .x-system-tab': 'showSystem',
-                'click .x-misc-tab': 'showMisc'
+                'click .x-misc-tab': 'showMisc',
+                'click .x-save-settings': 'save'
             },
 
             showNaming: function (e) {
@@ -153,6 +154,10 @@
                     default:
                         this.showNaming();
                 }
+            },
+
+            save: function () {
+                this.settings.save();
             }
         });
     });
