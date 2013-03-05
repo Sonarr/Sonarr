@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Eventing;
@@ -10,7 +9,9 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaCover
 {
-    public class MediaCoverService : IHandleAsync<SeriesUpdatedEvent>
+    public class MediaCoverService :
+        IHandleAsync<SeriesUpdatedEvent>,
+        IHandleAsync<SeriesDeletedEvent>
     {
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
@@ -61,9 +62,23 @@ namespace NzbDrone.Core.MediaCover
             }
         }
 
+        public void HandleAsync(SeriesDeletedEvent message)
+        {
+            var path = GetSeriesCoverPath(message.Series.Id);
+            if (_diskProvider.FolderExists(path))
+            {
+                _diskProvider.DeleteFolder(path, true);
+            }
+        }
+
         private string GetCoverPath(int seriesId, MediaCoverTypes coverTypes)
         {
-            return Path.Combine(_coverRootFolder, seriesId.ToString("0000"), coverTypes.ToString().ToLower() + ".jpg");
+            return Path.Combine(GetSeriesCoverPath(seriesId), coverTypes.ToString().ToLower() + ".jpg");
+        }
+
+        private string GetSeriesCoverPath(int seriesId)
+        {
+            return Path.Combine(_coverRootFolder, seriesId.ToString("0000"));
         }
     }
 }

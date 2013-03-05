@@ -208,7 +208,6 @@
     <Compile Include="Jobs\Implementations\BacklogSearchJob.cs" />
     <Compile Include="Jobs\Implementations\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\Implementations\ConvertEpisodeJob.cs" />
-    <Compile Include="Jobs\Implementations\DeleteSeriesJob.cs" />
     <Compile Include="Jobs\Implementations\DiskScanJob.cs" />
     <Compile Include="Jobs\Implementations\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\Implementations\EpisodeSearchJob.cs" />

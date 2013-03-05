@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -23,7 +25,7 @@ namespace NzbDrone.Core.MediaFiles
         string GetNewFilename(IList<Episode> episodes, Series series, Quality quality, bool proper, EpisodeFile episodeFile);
     }
 
-    public class MediaFileService : IMediaFileService
+    public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
@@ -209,6 +211,12 @@ namespace NzbDrone.Core.MediaFiles
                 result = result.Replace(badCharacters[i], goodCharacters[i]);
 
             return result.Trim();
+        }
+
+        public void HandleAsync(SeriesDeletedEvent message)
+        {
+            var files = GetFilesBySeries(message.Series.Id);
+            _mediaFileRepository.DeleteMany(files);
         }
     }
 }

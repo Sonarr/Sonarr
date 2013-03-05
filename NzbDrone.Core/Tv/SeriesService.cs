@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Tv
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
-        void DeleteSeries(int seriesId);
+        void DeleteSeries(int seriesId, bool deleteFiles);
     }
 
     public class SeriesService : ISeriesService
@@ -167,11 +167,11 @@ namespace NzbDrone.Core.Tv
             _seriesRepository.SetSeriesType(seriesId, seriesTypes);
         }
 
-        public void DeleteSeries(int seriesId)
+        public void DeleteSeries(int seriesId, bool deleteFiles)
         {
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
-            _eventAggregator.Publish(new SeriesDeletedEvent(series));
+            _eventAggregator.Publish(new SeriesDeletedEvent(series, deleteFiles));
         }
     }
 }

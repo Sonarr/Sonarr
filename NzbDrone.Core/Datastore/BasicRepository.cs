@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Datastore
         void Delete(int id);
         IList<TModel> InsertMany(IList<TModel> model);
         IList<TModel> UpdateMany(IList<TModel> model);
+        void DeleteMany(IList<TModel> model);
         void Purge();
         bool HasItems();
     }
@@ -62,6 +63,11 @@ namespace NzbDrone.Core.Datastore
         public IList<TModel> UpdateMany(IList<TModel> model)
         {
             return ObjectDatabase.UpdateMany(model);
+        }
+
+        public void DeleteMany(IList<TModel> model)
+        {
+            ObjectDatabase.DeleteMany(model);
         }
 
         public TModel Upsert(TModel model)

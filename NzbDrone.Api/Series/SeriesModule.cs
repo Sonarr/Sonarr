@@ -100,7 +100,7 @@ namespace NzbDrone.Api.Series
         private Response DeleteSeries(int id)
         {
             var deleteFiles = Convert.ToBoolean(Request.Headers["deleteFiles"].FirstOrDefault());
-            _jobProvider.Enqueue(typeof(DeleteSeriesJob), new { SeriesId = id, DeleteFiles = deleteFiles });
+            _seriesService.DeleteSeries(id, deleteFiles);
             return new Response { StatusCode = HttpStatusCode.OK };
         }
     }

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Providers
 {
-    public class RecycleBinProvider
+    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>
     {
         private readonly DiskProvider _diskProvider;
         private readonly IConfigService _configService;
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Providers
 
                 logger.Trace("Setting last accessed: {0}", path);
                 _diskProvider.DirectorySetLastWriteTimeUtc(destination, DateTime.UtcNow);
-                foreach(var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
+                foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
                 {
                     _diskProvider.FileSetLastWriteTimeUtc(file, DateTime.UtcNow);
                 }
@@ -119,8 +119,8 @@ namespace NzbDrone.Core.Providers
                     logger.Trace("Folder hasn't expired yet, skipping: {0}", folder);
                     continue;
                 }
-                
-                 _diskProvider.DeleteFolder(folder, true);
+
+                _diskProvider.DeleteFolder(folder, true);
             }
 
             foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
@@ -130,11 +130,16 @@ namespace NzbDrone.Core.Providers
                     logger.Trace("File hasn't expired yet, skipping: {0}", file);
                     continue;
                 }
-                
+
                 _diskProvider.DeleteFile(file);
             }
 
             logger.Trace("Recycling Bin has been cleaned up.");
+        }
+
+        public void HandleAsync(SeriesDeletedEvent message)
+        {
+            DeleteDirectory(message.Series.Path);
         }
     }
 }

@@ -35,7 +35,9 @@ namespace NzbDrone.Core.Tv
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
     }
 
-    public class EpisodeService : IEpisodeService, IHandle<EpisodeGrabbedEvent>
+    public class EpisodeService : IEpisodeService,
+        IHandle<EpisodeGrabbedEvent>,
+        IHandleAsync<SeriesDeletedEvent>
     {
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -370,6 +372,12 @@ namespace NzbDrone.Core.Tv
                 episode.GrabDate = DateTime.UtcNow;
                 _episodeRepository.Update(episode);
             }
+        }
+
+        public void HandleAsync(SeriesDeletedEvent message)
+        {
+            var episodes = GetEpisodeBySeries(message.Series.Id);
+            _episodeRepository.DeleteMany(episodes);
         }
     }
 }
