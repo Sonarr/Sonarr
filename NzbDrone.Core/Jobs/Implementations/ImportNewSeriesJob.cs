@@ -1,16 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     /// <summary>
     /// This job processes newly added jobs by downloading their info

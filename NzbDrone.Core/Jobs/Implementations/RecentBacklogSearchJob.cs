@@ -1,16 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Jobs.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RecentBacklogSearchJob : IJob
     {

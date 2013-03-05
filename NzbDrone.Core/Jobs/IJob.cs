@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using NzbDrone.Core.Model.Notification;
 
-namespace NzbDrone.Core.Jobs.Framework
+namespace NzbDrone.Core.Jobs
 {
     public interface IJob
     {

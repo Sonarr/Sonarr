@@ -1,16 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using NLog;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RefreshEpisodeMetadata : IJob
     {

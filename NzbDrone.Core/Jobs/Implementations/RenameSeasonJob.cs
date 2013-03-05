@@ -1,17 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.ExternalNotification;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RenameSeasonJob : IJob
     {

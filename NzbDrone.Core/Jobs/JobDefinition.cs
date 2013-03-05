@@ -1,8 +1,8 @@
-﻿using System.Linq;
 using System;
+using System.Linq;
 using NzbDrone.Core.Datastore;
 
-namespace NzbDrone.Core.Jobs.Framework
+namespace NzbDrone.Core.Jobs
 {
     public class JobDefinition : ModelBase
     {

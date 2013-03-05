@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.ReferenceData;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     public class UpdateSceneMappingsJob : IJob
     {

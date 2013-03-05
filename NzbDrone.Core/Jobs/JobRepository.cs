@@ -5,7 +5,7 @@ using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 
-namespace NzbDrone.Core.Jobs.Framework
+namespace NzbDrone.Core.Jobs
 {
     public interface IJobRepository : IInitializable, IBasicRepository<JobDefinition>
     {

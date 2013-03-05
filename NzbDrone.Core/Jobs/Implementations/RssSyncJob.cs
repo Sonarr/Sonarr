@@ -1,18 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.DecisionEngine;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RssSyncJob : IJob
     {

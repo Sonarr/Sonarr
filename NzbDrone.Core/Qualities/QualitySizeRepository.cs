@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Qualities
@@ -14,7 +11,7 @@ namespace NzbDrone.Core.Qualities
     public class QualitySizeRepository : BasicRepository<QualitySize>, IQualitySizeRepository
     {
         public QualitySizeRepository(IObjectDatabase database)
-                : base(database)
+            : base(database)
         {
         }
 

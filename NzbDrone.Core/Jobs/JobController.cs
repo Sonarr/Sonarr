@@ -9,7 +9,7 @@ using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
-namespace NzbDrone.Core.Jobs.Framework
+namespace NzbDrone.Core.Jobs
 {
     public interface IJobController
     {

@@ -1,12 +1,9 @@
-﻿using System.Linq;
 using System;
-using NLog;
-using NzbDrone.Core.Jobs.Framework;
+using System.Linq;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Converting;
 
-namespace NzbDrone.Core.Jobs
+namespace NzbDrone.Core.Jobs.Implementations
 {
     public class EmptyRecycleBinJob : IJob
     {

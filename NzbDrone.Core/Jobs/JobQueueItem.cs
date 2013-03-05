@@ -1,7 +1,7 @@
-﻿using System.Linq;
 using System;
+using System.Linq;
 
-namespace NzbDrone.Core.Jobs.Framework
+namespace NzbDrone.Core.Jobs
 {
     public class JobQueueItem : IEquatable<JobQueueItem>
     {
