@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Newtonsoft.Json;
 
-namespace NzbDrone.Core.Model.Sabnzbd
+namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class SabHistoryItem
     {

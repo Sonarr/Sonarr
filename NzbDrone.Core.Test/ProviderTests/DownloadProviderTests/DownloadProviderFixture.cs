@@ -7,10 +7,11 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Test.Framework;
 
 // ReSharper disable InconsistentNaming

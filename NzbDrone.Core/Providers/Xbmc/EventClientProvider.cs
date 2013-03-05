@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NzbDrone.Core.Providers.Core;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Xbmc;
 
 namespace NzbDrone.Core.Providers.Xbmc

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Nzbget;
-using NzbDrone.Core.Model.Sabnzbd;
+using NzbDrone.Core.Download.Clients.Nzbget;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 
 namespace NzbDrone.Core.Configuration
 {

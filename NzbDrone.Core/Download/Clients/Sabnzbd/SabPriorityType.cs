@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Model.Sabnzbd
+﻿namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public enum SabPriorityType
     {

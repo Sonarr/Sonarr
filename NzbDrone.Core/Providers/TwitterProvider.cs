@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Twitter;
-using NzbDrone.Core.Providers.Core;
 using Twitterizer;
 
 namespace NzbDrone.Core.Providers

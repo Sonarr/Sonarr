@@ -6,7 +6,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Jobs
 {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
+using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using NLog;
 
-namespace NzbDrone.Core.Providers.Core
+namespace NzbDrone.Common
 {
     public class UdpProvider
     {

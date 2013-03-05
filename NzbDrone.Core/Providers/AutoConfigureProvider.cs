@@ -7,7 +7,7 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Sabnzbd;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 
 namespace NzbDrone.Core.Providers
 {

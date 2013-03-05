@@ -14,7 +14,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Xbmc;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;

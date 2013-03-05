@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Model.Nzbget
+﻿namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public enum PriorityType
     {

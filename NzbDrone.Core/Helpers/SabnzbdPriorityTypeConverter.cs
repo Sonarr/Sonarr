@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Newtonsoft.Json;
-using NzbDrone.Core.Model.Sabnzbd;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 
 namespace NzbDrone.Core.Helpers
 {

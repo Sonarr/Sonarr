@@ -6,7 +6,6 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 

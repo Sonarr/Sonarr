@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NzbDrone.Core.Model.Nzbget
+namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public class ErrorModel
     {

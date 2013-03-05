@@ -7,10 +7,9 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.DecisionEngine;
 
-namespace NzbDrone.Core.Providers.DownloadClients
+namespace NzbDrone.Core.Download.Clients
 {
     public class BlackholeProvider : IDownloadClient
     {
@@ -18,7 +17,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
-        private readonly HistoryService _historyService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

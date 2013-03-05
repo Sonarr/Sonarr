@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core.Model.Sabnzbd
+namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class SabQueueItem
     {

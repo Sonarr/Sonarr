@@ -61,6 +61,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -85,6 +88,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveProvider.cs" />
     <Compile Include="CommonContainerExtentions.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
@@ -135,6 +139,7 @@
     </Compile>
     <Compile Include="SysTray\SysTrayProvider.cs" />
     <Compile Include="TryParseExtension.cs" />
+    <Compile Include="UdpProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EnsureThat\ve-3BAF.tmp" />

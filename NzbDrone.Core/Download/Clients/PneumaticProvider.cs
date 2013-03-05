@@ -6,10 +6,9 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.DecisionEngine;
 
-namespace NzbDrone.Core.Providers.DownloadClients
+namespace NzbDrone.Core.Download.Clients
 {
     public class PneumaticProvider : IDownloadClient
     {

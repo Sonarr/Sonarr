@@ -2,7 +2,6 @@
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.DecisionEngine
 {

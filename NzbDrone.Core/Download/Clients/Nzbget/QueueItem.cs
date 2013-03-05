@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
+using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core.Model.Nzbget
+namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public class QueueItem
     {

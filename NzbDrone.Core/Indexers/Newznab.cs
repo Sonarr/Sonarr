@@ -7,7 +7,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Indexers
 {

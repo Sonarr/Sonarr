@@ -222,14 +222,14 @@
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\BacklogSettingType.cs" />
     <Compile Include="Model\MediaInfoModel.cs" />
-    <Compile Include="Model\Nzbget\EnqueueResponse.cs" />
-    <Compile Include="Model\Nzbget\ErrorModel.cs" />
-    <Compile Include="Model\Nzbget\JsonError.cs" />
-    <Compile Include="Model\Nzbget\JsonRequest.cs" />
-    <Compile Include="Model\Nzbget\Queue.cs" />
-    <Compile Include="Model\Nzbget\QueueItem.cs" />
-    <Compile Include="Model\Nzbget\PriorityType.cs" />
-    <Compile Include="Model\Nzbget\VersionModel.cs" />
+    <Compile Include="Download\Clients\Nzbget\EnqueueResponse.cs" />
+    <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
+    <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
+    <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
+    <Compile Include="Download\Clients\Nzbget\Queue.cs" />
+    <Compile Include="Download\Clients\Nzbget\QueueItem.cs" />
+    <Compile Include="Download\Clients\Nzbget\PriorityType.cs" />
+    <Compile Include="Download\Clients\Nzbget\VersionModel.cs" />
     <Compile Include="Model\Nzbx\NzbxSearchItem.cs" />
     <Compile Include="Model\Nzbx\NzbxRecentItem.cs" />
     <Compile Include="Model\Nzbx\NzbxVotesModel.cs" />
@@ -250,15 +250,15 @@
     <Compile Include="Tv\SeasonRepository.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\QualityModel.cs" />
-    <Compile Include="Model\Sabnzbd\SabAddResponse.cs" />
-    <Compile Include="Model\Sabnzbd\SabHistoryItem.cs" />
-    <Compile Include="Model\Sabnzbd\SabHistory.cs" />
-    <Compile Include="Model\Sabnzbd\SabJsonError.cs" />
-    <Compile Include="Model\Sabnzbd\SabQueue.cs" />
-    <Compile Include="Model\Sabnzbd\SabCategoryModel.cs" />
-    <Compile Include="Model\Sabnzbd\SabModel.cs" />
-    <Compile Include="Model\Sabnzbd\SabQueueItem.cs" />
-    <Compile Include="Model\Sabnzbd\SabVersionModel.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabAddResponse.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabHistoryItem.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabHistory.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabJsonError.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabQueue.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabCategoryModel.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabModel.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabQueueItem.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabVersionModel.cs" />
     <Compile Include="Model\StatsModel.cs" />
     <Compile Include="Model\TvRage\TvRageEpisode.cs" />
     <Compile Include="Model\TvRage\TvRageSearchResult.cs" />
@@ -279,13 +279,12 @@
     <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
     <Compile Include="DecisionEngine\LanguageSpecification.cs" />
-    <Compile Include="Providers\DownloadClients\NzbgetProvider.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetProvider.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />
     <Compile Include="DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="DecisionEngine\CustomStartDateSpecification.cs" />
-    <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
+    <Compile Include="Download\Clients\PneumaticProvider.cs" />
     <Compile Include="Indexers\Nzbx.cs" />
-    <Compile Include="Providers\Hubs\EpisodeHub.cs" />
     <Compile Include="Indexers\NzbClub.cs" />
     <Compile Include="Indexers\NzbIndex.cs" />
     <Compile Include="Indexers\FileSharingTalk.cs" />
@@ -340,13 +339,7 @@
     <Compile Include="Providers\Converting\HandbrakeProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\Core\ArchiveProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Configuration\ConfigService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Providers\Core\UdpProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DecisionEngine\AcceptableSizeSpecification.cs">
@@ -382,13 +375,13 @@
     <Compile Include="Providers\DiskScanProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DownloadClients\BlackholeProvider.cs">
+    <Compile Include="Download\Clients\BlackholeProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DownloadClients\IDownloadClient.cs">
+    <Compile Include="Download\IDownloadClient.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DownloadClients\SabProvider.cs">
+    <Compile Include="Download\Clients\Sabnzbd\SabProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Download\DownloadProvider.cs">
@@ -480,9 +473,6 @@
     <Compile Include="Tv\SeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\SignalRProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\SmtpProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -511,7 +501,7 @@
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
-    <Compile Include="Model\Sabnzbd\SabPriorityType.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />

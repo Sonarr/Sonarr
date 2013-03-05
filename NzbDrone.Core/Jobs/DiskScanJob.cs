@@ -8,7 +8,6 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs

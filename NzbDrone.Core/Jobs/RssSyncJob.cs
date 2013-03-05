@@ -10,7 +10,6 @@ using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.DecisionEngine;
 
 namespace NzbDrone.Core.Jobs

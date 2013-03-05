@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NzbDrone.Core.Model.Sabnzbd
+namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class SabCategoryModel
     {

@@ -21,21 +21,18 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
         private readonly IMediaFileService _mediaFileService;
-        private readonly SignalRProvider _signalRProvider;
         private readonly IConfigService _configService;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService,
-                                SignalRProvider signalRProvider, IConfigService configService,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService, IConfigService configService,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
             _mediaFileService = mediaFileService;
-            _signalRProvider = signalRProvider;
             _configService = configService;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
@@ -168,7 +165,7 @@ namespace NzbDrone.Core.Providers
 
             //Todo: We shouldn't actually import the file until we confirm its the only one we want.
             //Todo: Separate episodeFile creation from importing (pass file to import to import)
-             _mediaFileService.Add(episodeFile);
+            _mediaFileService.Add(episodeFile);
 
             //Link file to all episodes
             foreach (var ep in episodes)
@@ -233,9 +230,6 @@ namespace NzbDrone.Core.Providers
             if (newDownload)
             {
                 _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult));
-
-                foreach (var episode in episodes)
-                    _signalRProvider.UpdateEpisodeStatus(episode.Id, EpisodeStatusType.Ready, parseResult.Quality);
             }
 
             return episodeFile;

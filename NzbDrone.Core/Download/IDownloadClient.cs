@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core.Providers.DownloadClients
+namespace NzbDrone.Core.Download
 {
     public interface IDownloadClient
     {

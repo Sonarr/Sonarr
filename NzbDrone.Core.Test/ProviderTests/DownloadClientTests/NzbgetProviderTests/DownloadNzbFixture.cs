@@ -8,9 +8,8 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Model.Nzbget;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.DownloadClients;
+using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTests

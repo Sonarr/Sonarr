@@ -2,19 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
-using System.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Nzbget;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Providers.DownloadClients
+namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public class NzbgetProvider : IDownloadClient
     {

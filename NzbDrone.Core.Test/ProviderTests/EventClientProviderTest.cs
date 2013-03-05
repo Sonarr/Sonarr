@@ -3,8 +3,8 @@
 using System;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Xbmc;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Xbmc;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;

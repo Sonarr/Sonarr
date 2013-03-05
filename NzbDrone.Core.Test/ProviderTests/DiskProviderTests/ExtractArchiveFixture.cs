@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Providers.Core;
+using NzbDrone.Common;
 using NzbDrone.Core.Test.Framework;
 using System.IO;
 

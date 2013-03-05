@@ -9,8 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.DownloadClients;
+using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
