@@ -9,6 +9,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Jobs.Implementations;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Test.JobTests

@@ -5,7 +5,6 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Jobs.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 

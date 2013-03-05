@@ -56,7 +56,6 @@ namespace NzbDrone.Api
                 try
                 {
                     initializable.Init();
-
                 }
                 catch (Exception e)
                 {

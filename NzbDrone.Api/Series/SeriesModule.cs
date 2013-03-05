@@ -8,7 +8,7 @@ using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs.Framework;
+using NzbDrone.Core.Jobs.Implementations;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
