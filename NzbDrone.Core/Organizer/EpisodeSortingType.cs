@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Organizer
 {
     public class EpisodeSortingType
     {

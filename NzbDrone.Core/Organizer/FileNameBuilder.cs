@@ -4,45 +4,15 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Organizer
 {
-
-    public class NameSpecification : ModelBase
-    {
-        public static NameSpecification Default
-        {
-            get { return new NameSpecification(); }
-        }
-
-        public bool UseSceneName { get; set; }
-
-        public int SeparatorStyle { get; set; }
-
-        public int NumberStyle { get; set; }
-
-        public bool IncludeSeriesName { get; set; }
-
-        public int MultiEpisodeStyle { get; set; }
-
-        public bool IncludeEpisodeTitle { get; set; }
-
-        public bool AppendQuality { get; set; }
-
-        public bool ReplaceSpaces { get; set; }
-
-        public string SeasonFolderFormat { get; set; }
-    }
-
-
     public interface IBuildFileNames
     {
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile);
-        FileInfo BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
+        string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -69,13 +39,9 @@ namespace NzbDrone.Core.Organizer
 
             if (nameSpec.UseSceneName)
             {
-                _logger.Trace("Attempting to use scene name");
                 if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
                 {
-                    var name = Path.GetFileNameWithoutExtension(episodeFile.Path);
-                    _logger.Trace("Unable to use scene name, because it is null, sticking with current name: {0}", name);
-
-                    return name;
+                    return Path.GetFileNameWithoutExtension(episodeFile.Path);
                 }
 
                 return episodeFile.SceneName;
@@ -83,18 +49,18 @@ namespace NzbDrone.Core.Organizer
 
             var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber);
 
-            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(nameSpec.SeparatorStyle);
-            var numberStyle = EpisodeSortingHelper.GetNumberStyle(nameSpec.NumberStyle);
+            var numberStyle = GetNumberStyle(nameSpec.NumberStyle);
 
-            var episodeNames = new List<string>();
+            var episodeNames = new List<string>
+                {
+                    Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title)
+                };
 
-            episodeNames.Add(Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title));
-
-            string result = String.Empty;
+            var result = String.Empty;
 
             if (nameSpec.IncludeSeriesName)
             {
-                result += series.Title + separatorStyle.Pattern;
+                result += series.Title + nameSpec.Separator;
             }
 
             if (series.SeriesTypes == SeriesTypes.Standard)
@@ -105,13 +71,13 @@ namespace NzbDrone.Core.Organizer
                 if (episodes.Count > 1)
                 {
                     var multiEpisodeStyle =
-                        EpisodeSortingHelper.GetMultiEpisodeStyle(nameSpec.MultiEpisodeStyle);
+                        GetMultiEpisodeStyle(nameSpec.MultiEpisodeStyle);
 
                     foreach (var episode in sortedEpisodes.Skip(1))
                     {
                         if (multiEpisodeStyle.Name == "Duplicate")
                         {
-                            result += separatorStyle.Pattern + numberStyle.Pattern;
+                            result += nameSpec.Separator + numberStyle.Pattern;
                         }
                         else
                         {
@@ -127,7 +93,7 @@ namespace NzbDrone.Core.Organizer
                     .Replace("%s", String.Format("{0}", episodes.First().SeasonNumber))
                     .Replace("%0s", String.Format("{0:00}", episodes.First().SeasonNumber))
                     .Replace("%x", numberStyle.EpisodeSeparator)
-                    .Replace("%p", separatorStyle.Pattern);
+                    .Replace("%p", nameSpec.Separator);
             }
 
             else
@@ -142,10 +108,10 @@ namespace NzbDrone.Core.Organizer
             if (nameSpec.IncludeEpisodeTitle)
             {
                 if (episodeNames.Distinct().Count() == 1)
-                    result += separatorStyle.Pattern + episodeNames.First();
+                    result += nameSpec.Separator + episodeNames.First();
 
                 else
-                    result += separatorStyle.Pattern + String.Join(" + ", episodeNames.Distinct());
+                    result += nameSpec.Separator + String.Join(" + ", episodeNames.Distinct());
             }
 
             if (nameSpec.AppendQuality)
@@ -163,7 +129,7 @@ namespace NzbDrone.Core.Organizer
             return CleanFilename(result.Trim());
         }
 
-        public FileInfo BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
+        public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
 
             var nameSpec = GetSpecification();
@@ -178,9 +144,7 @@ namespace NzbDrone.Core.Organizer
                 path = Path.Combine(path, seasonFolder);
             }
 
-            path = Path.Combine(path, fileName + extension);
-
-            return new FileInfo(path);
+            return Path.Combine(path, fileName + extension);
         }
 
 
@@ -194,6 +158,79 @@ namespace NzbDrone.Core.Organizer
                 result = result.Replace(badCharacters[i], goodCharacters[i]);
 
             return result.Trim();
+        }
+
+
+        private static readonly List<EpisodeSortingType> NumberStyles = new List<EpisodeSortingType>
+                                                                            {
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 0,
+                                                                                        Name = "1x05",
+                                                                                        Pattern = "%sx%0e",
+                                                                                        EpisodeSeparator = "x"
+
+                                                                                    },
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 1,
+                                                                                        Name = "01x05",
+                                                                                        Pattern = "%0sx%0e",
+                                                                                        EpisodeSeparator = "x"
+                                                                                    },
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 2,
+                                                                                        Name = "S01E05",
+                                                                                        Pattern = "S%0sE%0e",
+                                                                                        EpisodeSeparator = "E"
+                                                                                    },
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 3,
+                                                                                        Name = "s01e05",
+                                                                                        Pattern = "s%0se%0e",
+                                                                                        EpisodeSeparator = "e"
+                                                                                    }
+                                                                            };
+
+        private static readonly List<EpisodeSortingType> MultiEpisodeStyles = new List<EpisodeSortingType>
+                                                                                  {
+                                                                                      new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 0,
+                                                                                              Name = "Extend",
+                                                                                              Pattern = "-%0e"
+                                                                                          },
+                                                                                      new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 1,
+                                                                                              Name = "Duplicate",
+                                                                                              Pattern = "%p%0s%x%0e"
+                                                                                          },
+                                                                                      new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 2,
+                                                                                              Name = "Repeat",
+                                                                                              Pattern = "%x%0e"
+                                                                                          },
+                                                                                        new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 3,
+                                                                                              Name = "Scene",
+                                                                                              Pattern = "-%x%0e"
+                                                                                          }
+                                                                                  };
+
+
+        private static EpisodeSortingType GetNumberStyle(int id)
+        {
+            return NumberStyles.Single(s => s.Id == id);
+        }
+
+        private static EpisodeSortingType GetMultiEpisodeStyle(int id)
+        {
+            return MultiEpisodeStyles.Single(s => s.Id == id);
         }
     }
 }

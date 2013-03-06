@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(newFilename);
 
             Mocker.GetMock<IBuildFileNames>().Setup(s => s.BuildFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new FileInfo(newFilePath));
+                    .Returns(newFilePath);
 
             Mocker.GetMock<DiskProvider>()
                   .Setup(s => s.FileExists(filename))

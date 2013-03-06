@@ -195,7 +195,6 @@
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
-    <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Helpers\XElementHelper.cs" />
@@ -234,6 +233,7 @@
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
+    <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
@@ -256,6 +256,7 @@
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
+    <Compile Include="Organizer\NameSpecification.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
     <Compile Include="ReferenceData\DailySeriesDataProxy.cs" />
@@ -501,7 +502,6 @@
     <Compile Include="ExternalNotification\ExternalNotificationDefinition.cs" />
     <Compile Include="Indexers\Indexer.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
-    <Compile Include="Model\EpisodeSortingType.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />

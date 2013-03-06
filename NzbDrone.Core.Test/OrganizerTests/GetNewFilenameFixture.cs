@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = false;
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = false;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 1;
+            nameSpecification.Separator = " ";
             nameSpecification.NumberStyle = 1;
             nameSpecification.ReplaceSpaces = false;
 
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = false;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 1;
+            nameSpecification.Separator = " ";
             nameSpecification.NumberStyle = 3;
             nameSpecification.ReplaceSpaces = false;
 
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 1;
+            nameSpecification.Separator = " ";
             nameSpecification.NumberStyle = 3;
             nameSpecification.ReplaceSpaces = true;
 
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 3;
             nameSpecification.ReplaceSpaces = true;
 
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = false;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 3;
@@ -276,7 +276,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 2;
@@ -310,7 +310,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 1;
+            nameSpecification.Separator = " ";
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 2;
@@ -344,7 +344,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 1;
+            nameSpecification.Separator = " ";
             nameSpecification.NumberStyle = 3;
             nameSpecification.ReplaceSpaces = true;
             nameSpecification.MultiEpisodeStyle = 1;
@@ -378,7 +378,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = false;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = true;
             nameSpecification.MultiEpisodeStyle = 0;
@@ -412,7 +412,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = false;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = true;
             nameSpecification.MultiEpisodeStyle = 2;
@@ -444,7 +444,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -469,7 +469,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -494,7 +494,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -519,7 +519,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 3;
@@ -553,7 +553,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 2;
+            nameSpecification.Separator = ".";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -580,7 +580,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 2;
+            nameSpecification.Separator = "."; ;
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = false;
 
@@ -605,7 +605,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 2;
+            nameSpecification.Separator = "."; ;
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.UseSceneName = true;
@@ -636,7 +636,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = false;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 2;
+            nameSpecification.Separator = ".";
             nameSpecification.NumberStyle = 0;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.UseSceneName = true;
@@ -667,7 +667,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 3;
@@ -699,7 +699,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 3;
@@ -731,7 +731,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
             nameSpecification.MultiEpisodeStyle = 3;
@@ -768,7 +768,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = true;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -797,7 +797,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = false;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
@@ -826,7 +826,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             nameSpecification.IncludeSeriesName = true;
             nameSpecification.IncludeEpisodeTitle = true;
             nameSpecification.AppendQuality = false;
-            nameSpecification.SeparatorStyle = 0;
+            nameSpecification.Separator = " - ";
             nameSpecification.NumberStyle = 2;
             nameSpecification.ReplaceSpaces = false;
 
