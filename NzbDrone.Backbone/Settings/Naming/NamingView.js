@@ -11,7 +11,7 @@ define([
 
         ui: {
             switch: '.switch',
-            tooltip: '.help-inline i'
+            tooltip: '[class^="help-inline"] i'
         },
 
         onRender: function () {

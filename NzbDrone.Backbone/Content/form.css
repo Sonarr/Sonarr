@@ -2,9 +2,30 @@
     font-size: 25px;
     color: #3A87AD;
     cursor: default;
-    vertical-align: text-bottom;
 }
 
-.help-checkbox {
-    margin-top: -20px;
+.help-inline-checkbox {
+    float: left;
+    padding-left: 7px;
+    padding-top: 3px;
 }
+
+.switch {
+    float: left;
+}
+
+/*.control-group {*/
+    /*border: 1px solid red;*/
+/*}*/
+
+/*.control-label {*/
+    /*border: 1px solid yellow;*/
+/*}*/
+
+/*.switch {*/
+    /*border: 1px solid purple;*/
+/*}*/
+
+/*.help-inline, .help-checkbox {*/
+    /*border: 1px solid #2e8b57;*/
+/*}*/

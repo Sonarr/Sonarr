@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Configuration
 
         public Dictionary<String, Object> AllWithDefaults()
         {
-            var dict = new Dictionary<String, Object>();
+            var dict = new Dictionary<String, Object>(StringComparer.InvariantCultureIgnoreCase);
 
             var type = GetType();
             var properties = type.GetProperties();
@@ -545,6 +545,7 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureCache();
 
+            key = key.ToLowerInvariant();
             string dbValue;
 
             if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
@@ -571,6 +572,8 @@ namespace NzbDrone.Core.Configuration
 
         public void SetValue(string key, string value)
         {
+            key = key.ToLowerInvariant();
+
             if (String.IsNullOrEmpty(key))
                 throw new ArgumentOutOfRangeException("key");
             if (value == null)
@@ -595,17 +598,17 @@ namespace NzbDrone.Core.Configuration
 
         public void SaveValues(Dictionary<string, object> configValues)
         {
-            //Todo: make this not suck - we need the pascal case of the key
-            //Todo: Can we batch save this without savig default values? Or do we care?
-
             var allWithDefaults = AllWithDefaults();
 
             foreach(var configValue in configValues)
             {
                 object currentValue;
                 allWithDefaults.TryGetValue(configValue.Key, out currentValue);
+                if (currentValue == null) continue;
 
-                if (!configValue.Equals(currentValue))
+                var equal = configValue.Value.ToString().Equals(currentValue.ToString());
+
+                if (!equal)
                     SetValue(configValue.Key, configValue.Value.ToString());
             }
         }
