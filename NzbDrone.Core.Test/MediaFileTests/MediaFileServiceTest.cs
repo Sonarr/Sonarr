@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV-720p]", "Law & Order- Criminal Intent - S10E07 - Icarus [HDTV-720p]")]
         public void CleanFileName(string name, string expectedName)
         {
-            MediaFileService.CleanFilename(name).Should().Be(expectedName);
+            FileNameBuilder.CleanFilename(name).Should().Be(expectedName);
         }
 
         [Test]

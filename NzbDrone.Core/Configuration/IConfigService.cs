@@ -25,16 +25,8 @@ namespace NzbDrone.Core.Configuration
         SabPriorityType SabBacklogTvPriority { get; set; }
         SabPriorityType SabRecentTvPriority { get; set; }
         String DownloadClientTvDirectory { get; set; }
-        bool SortingIncludeSeriesName { get; set; }
-        bool SortingIncludeEpisodeTitle { get; set; }
-        bool SortingReplaceSpaces { get; set; }
-        bool SortingAppendQuality { get; set; }
         bool UseSeasonFolder { get; set; }
         string SortingSeasonFolderFormat { get; set; }
-        int SortingSeparatorStyle { get; set; }
-        int SortingNumberStyle { get; set; }
-        int SortingMultiEpisodeStyle { get; set; }
-        bool SortingUseSceneName { get; set; }
         int DefaultQualityProfile { get; set; }
         Boolean XbmcUpdateLibrary { get; set; }
         Boolean XbmcCleanLibrary { get; set; }

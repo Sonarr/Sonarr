@@ -7,8 +7,8 @@ using NzbDrone.Common;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
@@ -17,23 +17,25 @@ namespace NzbDrone.Core.Providers
     public class DiskScanProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] mediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
+        private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
         private readonly DiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IConfigService _configService;
+        private readonly IBuildFileNames _buildFileNames;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService, IConfigService configService,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService, IConfigService configService,IBuildFileNames buildFileNames,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
             _mediaFileService = mediaFileService;
             _configService = configService;
+            _buildFileNames = buildFileNames;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
             _seriesRepository = seriesRepository;
@@ -186,8 +188,8 @@ namespace NzbDrone.Core.Providers
 
             var series = _seriesRepository.Get(episodeFile.SeriesId);
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
-            string newFileName = _mediaFileService.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
-            var newFile = _mediaFileService.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            string newFileName = _buildFileNames.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
+            var newFile = _buildFileNames.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Only rename if existing and new filenames don't match
             if (DiskProvider.PathEquals(episodeFile.Path, newFile.FullName))
@@ -308,7 +310,7 @@ namespace NzbDrone.Core.Providers
             var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
 
-            var mediaFileList = filesOnDisk.Where(c => mediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
+            var mediaFileList = filesOnDisk.Where(c => MediaExtensions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
             Logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;

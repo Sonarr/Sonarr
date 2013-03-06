@@ -65,7 +65,7 @@ namespace NzbDrone.Core.ExternalNotification
                       new ExternalNotificationDefinition { Name = Name };
 
             updateAction(def);
-            _externalNotificationRepository.Upsert(def);
+            _externalNotificationRepository.UpSert(def);
         }
 
         private bool GetEnableStatus(Func<ExternalNotificationDefinition, bool> readFunction)

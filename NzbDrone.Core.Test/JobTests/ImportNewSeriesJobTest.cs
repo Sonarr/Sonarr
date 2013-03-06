@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<IMediaFileService>()
                 .Setup(p => p.GetFilesBySeries(seriesId))
-                .Returns(episodesFiles);
+                .Returns(episodesFiles.ToList());
 
             Mocker.GetMock<ISeasonRepository>()
                 .Setup(p => p.GetSeasonNumbers(seriesId))
@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<IMediaFileService>()
                 .Setup(p => p.GetFilesBySeries(seriesId))
-                .Returns(episodesFiles);
+                .Returns(episodesFiles.ToList());
 
             Mocker.GetMock<ISeasonRepository>()
                 .Setup(p => p.GetSeasonNumbers(seriesId))

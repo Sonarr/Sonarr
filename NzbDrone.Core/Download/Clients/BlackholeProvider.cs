@@ -8,6 +8,7 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Download.Clients
 {
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients
         {
             try
             {
-                title = MediaFileService.CleanFilename(title);
+                title = FileNameBuilder.CleanFilename(title);
 
                 var filename = Path.Combine(_configService.BlackholeDirectory, title + ".nzb");
 

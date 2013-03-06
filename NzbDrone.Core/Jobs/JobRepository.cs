@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Jobs
 
                 jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
 
-                Upsert(jobDefinition);
+                UpSert(jobDefinition);
             }
         }
     }

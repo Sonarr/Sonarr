@@ -149,29 +149,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientTvDirectory", value); }
         }
 
-        public bool SortingIncludeSeriesName
-        {
-            get { return GetValueBoolean("Sorting_SeriesName", true); }
-            set { SetValue("Sorting_SeriesName", value); }
-        }
-
-        public bool SortingIncludeEpisodeTitle
-        {
-            get { return GetValueBoolean("Sorting_EpisodeName", true); }
-            set { SetValue("Sorting_EpisodeName", value); }
-        }
-
-        public bool SortingReplaceSpaces
-        {
-            get { return GetValueBoolean("Sorting_ReplaceSpaces"); }
-            set { SetValue("Sorting_ReplaceSpaces", value); }
-        }
-
-        public bool SortingAppendQuality
-        {
-            get { return GetValueBoolean("Sorting_AppendQaulity", true); }
-            set { SetValue("Sorting_AppendQaulity", value); }
-        }
 
         public bool UseSeasonFolder
         {
@@ -184,30 +161,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("Sorting_SeasonFolderFormat", "Season %s"); }
             set { SetValue("Sorting_SeasonFolderFormat", value); }
-        }
-
-        public int SortingSeparatorStyle
-        {
-            get { return GetValueInt("Sorting_SeparatorStyle"); }
-            set { SetValue("Sorting_SeparatorStyle", value); }
-        }
-
-        public int SortingNumberStyle
-        {
-            get { return GetValueInt("Sorting_NumberStyle", 2); }
-            set { SetValue("Sorting_NumberStyle", value); }
-        }
-
-        public int SortingMultiEpisodeStyle
-        {
-            get { return GetValueInt("Sorting_MultiEpisodeStyle"); }
-            set { SetValue("Sorting_MultiEpisodeStyle", value); }
-        }
-
-        public bool SortingUseSceneName
-        {
-            get { return GetValueBoolean("Sorting_UseSceneName", false); }
-            set { SetValue("Sorting_UseSceneName", value); }
         }
 
         public int DefaultQualityProfile

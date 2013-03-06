@@ -222,7 +222,7 @@
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
-    <Compile Include="MediaFileTests\GetNewFilenameFixture.cs" />
+    <Compile Include="OrganizerTests\GetNewFilenameFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\DownloadProviderFixture.cs" />
     <Compile Include="EpisodeStatusTest.cs" />

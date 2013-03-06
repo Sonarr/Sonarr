@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<IMediaFileService>()
                   .Setup(s => s.GetFilesBySeason(_series.Id, 5))
-                  .Returns(_episodeFiles);
+                  .Returns(_episodeFiles.ToList());
         }
 
         private void WithMovedFiles()

@@ -8,13 +8,15 @@ namespace NzbDrone.Core.Datastore
         IEnumerable<TModel> All();
         int Count();
         TModel Get(int id);
+        TModel Single();
+        TModel SingleOrDefault();
         TModel Insert(TModel model);
         TModel Update(TModel model);
-        TModel Upsert(TModel model);
+        TModel UpSert(TModel model);
         void Delete(int id);
         IList<TModel> InsertMany(IList<TModel> model);
         IList<TModel> UpdateMany(IList<TModel> model);
-        void DeleteMany(IList<TModel> model);
+        void DeleteMany(List<TModel> model);
         void Purge();
         bool HasItems();
     }
@@ -45,6 +47,16 @@ namespace NzbDrone.Core.Datastore
             return Queryable.Single(c => c.Id == id);
         }
 
+        public TModel Single()
+        {
+            return Queryable.Single();
+        }
+
+        public TModel SingleOrDefault()
+        {
+            return Queryable.SingleOrDefault();
+        }
+
         public TModel Insert(TModel model)
         {
             return ObjectDatabase.Insert(model);
@@ -65,12 +77,12 @@ namespace NzbDrone.Core.Datastore
             return ObjectDatabase.UpdateMany(model);
         }
 
-        public void DeleteMany(IList<TModel> model)
+        public void DeleteMany(List<TModel> model)
         {
             ObjectDatabase.DeleteMany(model);
         }
 
-        public TModel Upsert(TModel model)
+        public TModel UpSert(TModel model)
         {
             if (model.Id == 0)
             {

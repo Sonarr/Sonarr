@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using NLog;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -14,15 +14,15 @@ namespace NzbDrone.Core.Providers
 {
     public class MisnamedProvider
     {
-        private readonly IMediaFileService _mediaFileService;
         private readonly IEpisodeService _episodeService;
+        private readonly IBuildFileNames _buildFileNames;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public MisnamedProvider(IMediaFileService mediaFileService, IEpisodeService episodeService)
+        public MisnamedProvider(IEpisodeService episodeService, IBuildFileNames buildFileNames)
         {
-            _mediaFileService = mediaFileService;
             _episodeService = episodeService;
+            _buildFileNames = buildFileNames;
         }
 
         public virtual List<MisnamedEpisodeModel> MisnamedFiles(int pageNumber, int pageSize, out int totalItems)
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers
             var misnamedFilesSelect = episodesWithFiles.AsParallel().Where(
                 w =>
                 w.First().EpisodeFile.Path !=
-                _mediaFileService.GetNewFilename(w.Select(e => e).ToList(), w.First().Series,
+                _buildFileNames.GetNewFilename(w.Select(e => e).ToList(), w.First().Series,
                                                   w.First().EpisodeFile.Quality, w.First().EpisodeFile.Proper, w.First().EpisodeFile)).Skip(Math.Max(pageSize * (pageNumber - 1), 0)).Take(pageSize);
 
             //Process the episodes
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Providers
                                                       {
                                                           var episodes = f.Select(e => e).ToList();
                                                           var firstEpisode = episodes[0];
-                                                          var properName = _mediaFileService.GetNewFilename(episodes,
+                                                          var properName = _buildFileNames.GetNewFilename(episodes,
                                                                                                              firstEpisode.Series,
                                                                                                              firstEpisode.EpisodeFile.Quality, firstEpisode.EpisodeFile.Proper, firstEpisode.EpisodeFile);
 

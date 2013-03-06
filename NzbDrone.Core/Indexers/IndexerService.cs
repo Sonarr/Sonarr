@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Indexers
         {
             //Todo: This will be used in the API
             _logger.Debug("Upserting Indexer definitions for {0}", indexer.Name);
-            _indexerRepository.Upsert(indexer);
+            _indexerRepository.UpSert(indexer);
         }
 
         public Indexer GetSettings(Type type)

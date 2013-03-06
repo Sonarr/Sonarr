@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
@@ -48,11 +49,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("Title1");
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
@@ -95,11 +96,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("New Title 1");
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("New Title 2");
 
@@ -142,11 +143,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("New Title 1");
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
@@ -191,11 +192,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("New Title 1");
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 
@@ -240,11 +241,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[0]))
                 .Returns("Title1");
 
-            Mocker.GetMock<IMediaFileService>()
+            Mocker.GetMock<IBuildFileNames>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, It.IsAny<Series>(), It.IsAny<Quality>(), It.IsAny<bool>(), episodeFiles[1]))
                 .Returns("Title2");
 

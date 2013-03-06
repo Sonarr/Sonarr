@@ -7,6 +7,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Download.Clients
 {
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Download.Clients
                     return false;
                 }
 
-                title = MediaFileService.CleanFilename(title);
+                title = FileNameBuilder.CleanFilename(title);
 
                 //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
                 var filename = Path.Combine(_configService.PneumaticDirectory, title + ".nzb");

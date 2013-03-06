@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -106,10 +107,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByFileId(episodeFile.Id))
                     .Returns(episode);
 
-            Mocker.GetMock<IMediaFileService>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series, Quality.Unknown, false, It.IsAny<EpisodeFile>()))
+            Mocker.GetMock<IBuildFileNames>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series, Quality.Unknown, false, It.IsAny<EpisodeFile>()))
                 .Returns(newFilename);
 
-            Mocker.GetMock<IMediaFileService>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+            Mocker.GetMock<IBuildFileNames>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Returns(new FileInfo(newFilePath));
 
             Mocker.GetMock<DiskProvider>()
