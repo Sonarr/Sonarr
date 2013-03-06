@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using NzbDrone.Core.Model;
 
 
 namespace NzbDrone.Core.Repository.Search

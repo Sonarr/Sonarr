@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
 
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Repository.Search
         public string NzbUrl { get; set; }
         public string NzbInfoUrl { get; set; }
         public bool Success { get; set; }
-        public ReportRejectionType SearchError { get; set; }
+        public ReportRejectionReasons SearchError { get; set; }
         public Quality Quality { get; set; }
         public bool Proper { get; set; }
         public int Age { get; set; }

@@ -1,8 +1,6 @@
-﻿using System.Linq;
-
-namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.DecisionEngine
 {
-    public enum ReportRejectionType
+    public enum ReportRejectionReasons
     {
         None = 0,
         WrongSeries = 1,

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 define(['app', 'Series/SeriesModel'], function () {
 

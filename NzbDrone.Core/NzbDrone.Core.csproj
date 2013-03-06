@@ -327,7 +327,7 @@
     <Compile Include="Qualities\Quality.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />
-    <Compile Include="Model\ReportRejectionType.cs" />
+    <Compile Include="DecisionEngine\ReportRejectionReasons.cs" />
     <Compile Include="Tv\Season.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs">
       <SubType>Code</SubType>

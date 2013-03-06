@@ -116,7 +116,7 @@ namespace NzbDrone.Core.RootFolders
                     }
                     catch (Exception ex)
                     {
-                        Logger.WarnException("Error getting fromm space for: " + pathRoot, ex);
+                        Logger.WarnException("Error getting disk space for: " + pathRoot, ex);
                     }
                 }
             }

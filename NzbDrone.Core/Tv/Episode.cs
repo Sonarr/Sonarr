@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
@@ -16,7 +15,7 @@ namespace NzbDrone.Core.Tv
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
 
-        //Todo: Since we're displaying next airing relative to the user's timezone we may want to store this as UTC (with airtime + UTC offset)
+        //Todo: Since we're displaying next airing relative to the user's time zone we may want to store this as UTC (with airtime + UTC offset)
         public DateTime? AirDate { get; set; }
 
         [Text]

@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Providers.Search
             if(options.SeasonNumber != episodeParseResult.SeasonNumber)
             {
                 logger.Trace("Season number does not match searched season number, skipping.");
-                item.SearchError = ReportRejectionType.WrongSeason;
+                item.SearchError = ReportRejectionReasons.WrongSeason;
 
                 return item;
             }

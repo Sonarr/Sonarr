@@ -113,49 +113,49 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_allowed_if_all_conditions_are_met()
         {
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.None);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.None);
         }
 
         [Test]
         public void should_not_be_allowed_if_profile_is_not_allowed()
         {
             WithProfileNotAllowed();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.QualityNotWanted);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.QualityNotWanted);
         }
 
         [Test]
         public void should_not_be_allowed_if_size_is_not_allowed()
         {
             WithNotAcceptableSize();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.Size);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.Size);
         }
 
         [Test]
         public void should_not_be_allowed_if_disk_is_not_upgrade()
         {
             WithNoDiskUpgrade();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.ExistingQualityIsEqualOrBetter);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.ExistingQualityIsEqualOrBetter);
         }
 
         [Test]
         public void should_not_be_allowed_if_episode_is_already_in_queue()
         {
             WithEpisodeAlreadyInQueue();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.AlreadyInQueue);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.AlreadyInQueue);
         }
 
         [Test]
         public void should_not_be_allowed_if_report_is_over_retention()
         {
             WithOverRetention();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.Retention);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.Retention);
         }
 
         [Test]
         public void should_not_be_allowed_if_episode_aired_before_cutoff()
         {
             WithAiredBeforeCustomStartDateCutoff();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.AiredAfterCustomStartDate);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.AiredAfterCustomStartDate);
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithProfileNotAllowed();
             WithOverRetention();
 
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.QualityNotWanted);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.QualityNotWanted);
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithLanguageNotWanted();
 
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.LanguageNotWanted);
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionReasons.LanguageNotWanted);
         }
     }
 }

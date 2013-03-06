@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 try
                 {
                     if (_isMonitoredEpisodeSpecification.IsSatisfiedBy(episodeParseResult) &&
-                        _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult) == ReportRejectionType.None &&
+                        _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult) == ReportRejectionReasons.None &&
                         _upgradeHistorySpecification.IsSatisfiedBy(episodeParseResult))
                     {
                         _downloadProvider.DownloadReport(episodeParseResult);

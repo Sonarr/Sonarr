@@ -5,6 +5,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Jobs.Implementations;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var resultItems = Builder<SearchHistoryItem>.CreateListOfSize(5)
                 .All()
-                .With(e => e.SearchError = ReportRejectionType.None)
+                .With(e => e.SearchError = ReportRejectionReasons.None)
                 .With(e => e.Success = true)
                 .Build();
 

@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Providers.Search
 
                     if(episodeParseResult.Series == null || ((ModelBase)episodeParseResult.Series).Id != series.Id)
                     {
-                        item.SearchError = ReportRejectionType.WrongSeries;
+                        item.SearchError = ReportRejectionReasons.WrongSeries;
                         continue;
                     }
 
@@ -115,17 +115,17 @@ namespace NzbDrone.Core.Providers.Search
 
                     if (searchResult.Successes.Intersect(episodeParseResult.Episodes.Select(e => e.Id)).Any())
                     {
-                        item.SearchError = ReportRejectionType.Skipped;
+                        item.SearchError = ReportRejectionReasons.Skipped;
                         continue;
                     }
 
                     CheckReport(series, options, episodeParseResult, item);
-                    if (item.SearchError != ReportRejectionType.None)
+                    if (item.SearchError != ReportRejectionReasons.None)
                         continue;
 
                     item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
 
-                    if(item.SearchError == ReportRejectionType.None)
+                    if(item.SearchError == ReportRejectionReasons.None)
                     {
                         if(DownloadReport(notification, episodeParseResult, item))
                             searchResult.Successes.AddRange(episodeParseResult.Episodes.Select(e => e.Id));
@@ -153,13 +153,13 @@ namespace NzbDrone.Core.Providers.Search
                     return true;
                 }
 
-                item.SearchError = ReportRejectionType.DownloadClientFailure;
+                item.SearchError = ReportRejectionReasons.DownloadClientFailure;
             }
             catch (Exception e)
             {
                 logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
                 notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
-                item.SearchError = ReportRejectionType.DownloadClientFailure;
+                item.SearchError = ReportRejectionReasons.DownloadClientFailure;
             }
 
             return false;

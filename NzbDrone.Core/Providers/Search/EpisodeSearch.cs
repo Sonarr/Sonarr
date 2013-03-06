@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Providers.Search
                 if (options.Episode.SceneSeasonNumber != episodeParseResult.SeasonNumber)
                 {
                     logger.Trace("Season number does not match searched season number, skipping.");
-                    item.SearchError = ReportRejectionType.WrongSeason;
+                    item.SearchError = ReportRejectionReasons.WrongSeason;
 
                     return item;
                 }
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Providers.Search
                 if (!episodeParseResult.EpisodeNumbers.Contains(options.Episode.SceneEpisodeNumber))
                 {
                     logger.Trace("Episode number does not match searched episode number, skipping.");
-                    item.SearchError = ReportRejectionType.WrongEpisode;
+                    item.SearchError = ReportRejectionReasons.WrongEpisode;
 
                     return item;
                 }
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Providers.Search
             if(options.Episode.SeasonNumber != episodeParseResult.SeasonNumber)
             {
                 logger.Trace("Season number does not match searched season number, skipping.");
-                item.SearchError = ReportRejectionType.WrongSeason;
+                item.SearchError = ReportRejectionReasons.WrongSeason;
 
                 return item;
             }
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Providers.Search
             if (!episodeParseResult.EpisodeNumbers.Contains(options.Episode.EpisodeNumber))
             {
                 logger.Trace("Episode number does not match searched episode number, skipping.");
-                item.SearchError = ReportRejectionType.WrongEpisode;
+                item.SearchError = ReportRejectionReasons.WrongEpisode;
 
                 return item;
             }

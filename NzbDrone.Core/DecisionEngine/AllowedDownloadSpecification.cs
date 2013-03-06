@@ -37,19 +37,19 @@ namespace NzbDrone.Core.DecisionEngine
         {
         }
 
-        public virtual ReportRejectionType IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual ReportRejectionReasons IsSatisfiedBy(EpisodeParseResult subject)
         {
-            if (!_qualityAllowedByProfileSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.QualityNotWanted;
-            if (!_customStartDateSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.AiredAfterCustomStartDate;
-            if (!_upgradeDiskSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.ExistingQualityIsEqualOrBetter;
-            if (!_languageSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.LanguageNotWanted;
-            if (!_retentionSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.Retention;
-            if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.Size;
-            if (!_allowedReleaseGroupSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.ReleaseGroupNotWanted;
-            if (_alreadyInQueueSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.AlreadyInQueue;
+            if (!_qualityAllowedByProfileSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.QualityNotWanted;
+            if (!_customStartDateSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.AiredAfterCustomStartDate;
+            if (!_upgradeDiskSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.ExistingQualityIsEqualOrBetter;
+            if (!_languageSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.LanguageNotWanted;
+            if (!_retentionSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.Retention;
+            if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.Size;
+            if (!_allowedReleaseGroupSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.ReleaseGroupNotWanted;
+            if (_alreadyInQueueSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.AlreadyInQueue;
             
             logger.Debug("Episode {0} is needed", subject);
-            return ReportRejectionType.None;
+            return ReportRejectionReasons.None;
         }
     }
 }

@@ -93,14 +93,14 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
         {
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
-                .Returns(ReportRejectionType.None);
+                .Returns(ReportRejectionReasons.None);
         }
 
         private void WithQualityNotNeeded()
         {
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
-                .Returns(ReportRejectionType.ExistingQualityIsEqualOrBetter);
+                .Returns(ReportRejectionReasons.ExistingQualityIsEqualOrBetter);
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.Quality == Quality.Bluray1080p)))
-                .Returns(ReportRejectionType.None);
+                .Returns(ReportRejectionReasons.None);
 
             var result = Mocker.Resolve<TestSearch>().ProcessReports(_matchingSeries, new { }, parseResults, _searchHistory, _notification);
 
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             parseResults[2].Age = 100;
 
             Mocker.GetMock<AllowedDownloadSpecification>()
-                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(ReportRejectionType.None);
+                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(ReportRejectionReasons.None);
 
             var result = Mocker.Resolve<TestSearch>().ProcessReports(_matchingSeries, new { }, parseResults, _searchHistory, _notification);
 
@@ -323,7 +323,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.Quality == Quality.Bluray1080p)))
-                .Returns(ReportRejectionType.None);
+                .Returns(ReportRejectionReasons.None);
 
             //Act
             var result = Mocker.Resolve<TestSearch>().ProcessReports(_matchingSeries, new { }, parseResults, _searchHistory, _notification);

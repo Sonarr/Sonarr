@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
         {
             Mocker.Resolve<PartialSeasonSearch>()
                   .CheckReport(_series, new { SeasonNumber = 2, Episodes = _episodes }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError.Should().Be(ReportRejectionType.WrongSeason);
+                  .SearchError.Should().Be(ReportRejectionReasons.WrongSeason);
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
         {
             Mocker.Resolve<PartialSeasonSearch>()
                   .CheckReport(_series, new { SeasonNumber = 1, Episodes = _episodes }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError.Should().Be(ReportRejectionType.None);
+                  .SearchError.Should().Be(ReportRejectionReasons.None);
         }
     }
 }

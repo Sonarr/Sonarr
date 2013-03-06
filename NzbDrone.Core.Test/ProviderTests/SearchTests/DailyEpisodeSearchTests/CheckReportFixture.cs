@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -56,7 +57,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.DailyEpisodeSearchTests
                   .CheckReport(_series, new {Episode = _episode}, _episodeParseResult, _searchHistoryItem)
                   .SearchError
                   .Should()
-                  .Be(ReportRejectionType.WrongEpisode);
+                  .Be(ReportRejectionReasons.WrongEpisode);
         }
 
         [Test]
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.DailyEpisodeSearchTests
                   .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
                   .SearchError
                   .Should()
-                  .Be(ReportRejectionType.WrongEpisode);
+                  .Be(ReportRejectionReasons.WrongEpisode);
         }
 
         [Test]
@@ -78,7 +79,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.DailyEpisodeSearchTests
                   .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
                   .SearchError
                   .Should()
-                  .Be(ReportRejectionType.None);
+                  .Be(ReportRejectionReasons.None);
         }
     }
 }

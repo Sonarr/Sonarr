@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using NzbDrone.Core.Datastore;
-using Sqo.Attributes;
-
-namespace NzbDrone.Core.RootFolders
+﻿namespace NzbDrone.Core.RootFolders
 {
     public class UnmappedFolder
     {

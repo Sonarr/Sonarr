@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Providers.Search
             if (!episodeParseResult.AirDate.HasValue || episodeParseResult.AirDate.Value != episode.AirDate.Value)
             {
                 logger.Trace("Episode AirDate does not match searched episode number, skipping.");
-                item.SearchError = ReportRejectionType.WrongEpisode;
+                item.SearchError = ReportRejectionReasons.WrongEpisode;
 
                 return item;
             }
