@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService, IConfigService configService,IBuildFileNames buildFileNames,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService, IConfigService configService, IBuildFileNames buildFileNames,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _diskProvider = diskProvider;
@@ -188,8 +188,8 @@ namespace NzbDrone.Core.Providers
 
             var series = _seriesRepository.Get(episodeFile.SeriesId);
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
-            string newFileName = _buildFileNames.GetNewFilename(episodes, series, episodeFile.Quality, episodeFile.Proper, episodeFile);
-            var newFile = _buildFileNames.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            string newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
+            var newFile = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Only rename if existing and new filenames don't match
             if (DiskProvider.PathEquals(episodeFile.Path, newFile.FullName))

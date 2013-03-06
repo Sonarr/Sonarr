@@ -58,11 +58,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<IBuildFileNames>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<Quality>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                .Setup(e => e.BuildFilename(fakeEpisode, fakeSeries, It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<IBuildFileNames>()
-                .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
+                .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
                 .Returns(fi);
 
             //Act
@@ -108,11 +108,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Returns(fakeEpisode);
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<Quality>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                  .Setup(e => e.BuildFilename(fakeEpisode, fakeSeries, It.IsAny<EpisodeFile>()))
                   .Returns(filename);
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
+                  .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                   .Returns(fi);
 
             Mocker.GetMock<DiskProvider>()
@@ -160,11 +160,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<IBuildFileNames>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries, It.IsAny<Quality>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
+                .Setup(e => e.BuildFilename(fakeEpisode, fakeSeries, It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<IBuildFileNames>()
-                .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
+                .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                 .Returns(fi);
 
             var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, true);

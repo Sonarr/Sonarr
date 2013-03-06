@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             //Setup
             var folder = @"C:\Test\DropDir\The Office";
-            
+
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetFiles(folder, SearchOption.AllDirectories))
                     .Returns(new string[0]);
 
@@ -107,10 +107,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>().Setup(s => s.GetEpisodesByFileId(episodeFile.Id))
                     .Returns(episode);
 
-            Mocker.GetMock<IBuildFileNames>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series, Quality.Unknown, false, It.IsAny<EpisodeFile>()))
+            Mocker.GetMock<IBuildFileNames>().Setup(s => s.BuildFilename(It.IsAny<IList<Episode>>(), series, It.IsAny<EpisodeFile>()))
                 .Returns(newFilename);
 
-            Mocker.GetMock<IBuildFileNames>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+            Mocker.GetMock<IBuildFileNames>().Setup(s => s.BuildFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Returns(new FileInfo(newFilePath));
 
             Mocker.GetMock<DiskProvider>()

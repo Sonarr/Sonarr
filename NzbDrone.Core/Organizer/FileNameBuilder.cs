@@ -19,30 +19,30 @@ namespace NzbDrone.Core.Organizer
             get { return new NameSpecification(); }
         }
 
-        public bool SortingUseSceneName { get; set; }
+        public bool UseSceneName { get; set; }
 
-        public int SortingSeparatorStyle { get; set; }
+        public int SeparatorStyle { get; set; }
 
-        public int SortingNumberStyle { get; set; }
+        public int NumberStyle { get; set; }
 
-        public bool SortingIncludeSeriesName { get; set; }
+        public bool IncludeSeriesName { get; set; }
 
-        public int SortingMultiEpisodeStyle { get; set; }
+        public int MultiEpisodeStyle { get; set; }
 
-        public bool SortingIncludeEpisodeTitle { get; set; }
+        public bool IncludeEpisodeTitle { get; set; }
 
-        public bool SortingAppendQuality { get; set; }
+        public bool AppendQuality { get; set; }
 
-        public bool SortingReplaceSpaces { get; set; }
+        public bool ReplaceSpaces { get; set; }
 
-        public string SortingSeasonFolderFormat { get; set; }
+        public string SeasonFolderFormat { get; set; }
     }
 
 
     public interface IBuildFileNames
     {
-        string GetNewFilename(IList<Episode> episodes, Series series, Quality quality, bool proper, EpisodeFile episodeFile);
-        FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extension);
+        string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile);
+        FileInfo BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -59,23 +59,15 @@ namespace NzbDrone.Core.Organizer
 
         public NameSpecification GetSpecification()
         {
-            var spec = _nameSpecificationRepository.SingleOrDefault();
-
-            if (spec == null)
-            {
-                spec = NameSpecification.Default;
-            }
-
-            return spec;
-
+            return _nameSpecificationRepository.SingleOrDefault() ?? NameSpecification.Default;
         }
 
-        public string GetNewFilename(IList<Episode> episodes, Series series, Quality quality, bool proper, EpisodeFile episodeFile)
+
+        public string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile)
         {
             var nameSpec = GetSpecification();
 
-
-            if (nameSpec.SortingUseSceneName)
+            if (nameSpec.UseSceneName)
             {
                 _logger.Trace("Attempting to use scene name");
                 if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
@@ -91,8 +83,8 @@ namespace NzbDrone.Core.Organizer
 
             var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber);
 
-            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(nameSpec.SortingSeparatorStyle);
-            var numberStyle = EpisodeSortingHelper.GetNumberStyle(nameSpec.SortingNumberStyle);
+            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(nameSpec.SeparatorStyle);
+            var numberStyle = EpisodeSortingHelper.GetNumberStyle(nameSpec.NumberStyle);
 
             var episodeNames = new List<string>();
 
@@ -100,7 +92,7 @@ namespace NzbDrone.Core.Organizer
 
             string result = String.Empty;
 
-            if (nameSpec.SortingIncludeSeriesName)
+            if (nameSpec.IncludeSeriesName)
             {
                 result += series.Title + separatorStyle.Pattern;
             }
@@ -113,7 +105,7 @@ namespace NzbDrone.Core.Organizer
                 if (episodes.Count > 1)
                 {
                     var multiEpisodeStyle =
-                        EpisodeSortingHelper.GetMultiEpisodeStyle(nameSpec.SortingMultiEpisodeStyle);
+                        EpisodeSortingHelper.GetMultiEpisodeStyle(nameSpec.MultiEpisodeStyle);
 
                     foreach (var episode in sortedEpisodes.Skip(1))
                     {
@@ -147,7 +139,7 @@ namespace NzbDrone.Core.Organizer
                     result += "Unknown";
             }
 
-            if (nameSpec.SortingIncludeEpisodeTitle)
+            if (nameSpec.IncludeEpisodeTitle)
             {
                 if (episodeNames.Distinct().Count() == 1)
                     result += separatorStyle.Pattern + episodeNames.First();
@@ -156,22 +148,22 @@ namespace NzbDrone.Core.Organizer
                     result += separatorStyle.Pattern + String.Join(" + ", episodeNames.Distinct());
             }
 
-            if (nameSpec.SortingAppendQuality)
+            if (nameSpec.AppendQuality)
             {
-                result += String.Format(" [{0}]", quality);
+                result += String.Format(" [{0}]", episodeFile.Quality);
 
-                if (proper)
+                if (episodeFile.Proper)
                     result += " [Proper]";
             }
 
-            if (nameSpec.SortingReplaceSpaces)
+            if (nameSpec.ReplaceSpaces)
                 result = result.Replace(' ', '.');
 
             _logger.Trace("New File Name is: [{0}]", result.Trim());
             return CleanFilename(result.Trim());
         }
 
-        public FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extension)
+        public FileInfo BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
 
             var nameSpec = GetSpecification();
@@ -179,7 +171,7 @@ namespace NzbDrone.Core.Organizer
             string path = series.Path;
             if (series.SeasonFolder)
             {
-                var seasonFolder = nameSpec.SortingSeasonFolderFormat
+                var seasonFolder = nameSpec.SeasonFolderFormat
                                                  .Replace("%0s", seasonNumber.ToString("00"))
                                                  .Replace("%s", seasonNumber.ToString());
 
