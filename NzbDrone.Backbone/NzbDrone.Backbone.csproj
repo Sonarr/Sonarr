@@ -115,10 +115,10 @@
     <Content Include="Mixins\backbone.ajax.js" />
     <Content Include="Mixins\backbone.marionette.templates.js" />
     <Content Include="Mixins\tablesorter.extensions.js" />
-    <Content Include="Quality\qualityProfileCollection.js" />
-    <Content Include="Quality\qualityProfileModel.js" />
-    <Content Include="Quality\qualityTypeCollection.js" />
-    <Content Include="Quality\qualityTypeModel.js" />
+    <Content Include="Quality\QualityProfileCollection.js" />
+    <Content Include="Quality\QualityProfileModel.js" />
+    <Content Include="Quality\QualitySizeCollection.js" />
+    <Content Include="Quality\QualitySizeModel.js" />
     <Content Include="Routing.js" />
     <Content Include="Series\Delete\DeleteSeriesTemplate.html" />
     <Content Include="Series\Delete\DeleteSeriesView.js" />

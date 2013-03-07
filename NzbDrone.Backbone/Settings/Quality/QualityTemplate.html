@@ -1,3 +1,14 @@
-﻿<div>
-    Quality settings will go here
-</div>
+﻿
+    <div class="control-group">
+        <label class="control-label">Default Quality Profile</label>
+        <div class="controls">
+            <select class="x-quality-profile" name="qualityProfileId">
+                {{#each qualityProfiles.models}}
+                <option value="{{id}}">{{attributes.name}}</option>
+                {{/each}}
+            </select>
+            <span class="help-inline">
+                <i class="icon-question-sign" title="The default quality to use when adding series to NzbDrone "></i>
+            </span>
+        </div>
+    </div>

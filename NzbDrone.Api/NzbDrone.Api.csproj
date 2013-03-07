@@ -139,8 +139,8 @@
     <Compile Include="NzbDroneApiModule.cs" />
     <Compile Include="QualityProfiles\QualityProfileModel.cs" />
     <Compile Include="QualityProfiles\QualityProfilesModule.cs" />
-    <Compile Include="QualityType\QualityTypeModel.cs" />
-    <Compile Include="QualityType\QualityTypeModule.cs" />
+    <Compile Include="QualityType\QualitySizeResource.cs" />
+    <Compile Include="QualityType\QualitySizeModule.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />

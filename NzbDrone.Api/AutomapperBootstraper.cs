@@ -29,10 +29,10 @@ namespace NzbDrone.Api
                   .ForMember(dest => dest.Allowed, opt => opt.Ignore());
 
             //QualitySize
-            Mapper.CreateMap<QualitySize, QualityTypeModel>()
+            Mapper.CreateMap<QualitySize, QualitySizeResource>()
                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.QualityId));
 
-            Mapper.CreateMap<QualityTypeModel, QualitySize>()
+            Mapper.CreateMap<QualitySizeResource, QualitySize>()
                   .ForMember(dest => dest.QualityId, opt => opt.MapFrom(src => src.Id));
 
             //Series

@@ -2,15 +2,12 @@
 
 define([
         'app',
-        'Quality/QualityProfileCollection',
-        'Series/SeriesCollection',
-        'Series/Edit/EditSeriesView',
-        'Series/Delete/DeleteSeriesView'
+        'Quality/QualityProfileCollection'
 
 ], function () {
 
-    NzbDrone.Series.Index.SeriesItemView = Backbone.Marionette.ItemView.extend({
-        template: 'Series/Index/SeriesItemTemplate',
+    NzbDrone.Settings.QualityProfileView = Backbone.Marionette.ItemView.extend({
+        template: 'Settings/Quality/QualityProfileTemplate',
         tagName: 'tr',
 
         ui: {
@@ -29,6 +26,7 @@ define([
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
         },
+
 
         editSeries: function () {
             var view = new NzbDrone.Series.Edit.EditSeriesView({ model: this.model});

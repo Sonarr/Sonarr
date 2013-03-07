@@ -1,15 +1,14 @@
 ﻿define([
     'app',
-    'Quality/QualityProfileCollection',
     'Settings/Naming/NamingView',
-    'Settings/Quality/QualityView',
+    'Settings/Quality/QualityLayout',
     'Settings/Indexers/IndexersView',
     'Settings/DownloadClient/DownloadClientView',
     'Settings/Notifications/NotificationsView',
     'Settings/System/SystemView',
     'Settings/Misc/MiscView'
 ],
-    function (app, qualityProfileCollection) {
+    function (app) {
         NzbDrone.Settings.SettingsLayout = Backbone.Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
 
@@ -120,10 +119,8 @@
             },
 
             onRender: function () {
-                qualityProfileCollection.fetch();
-
                 this.naming.show(new NzbDrone.Settings.Naming.NamingView({model: this.settings}));
-                this.quality.show(new NzbDrone.Settings.Quality.QualityView({model: this.settings}));
+                this.quality.show(new NzbDrone.Settings.Quality.QualityLayout({settings: this.settings}));
                 this.indexers.show(new NzbDrone.Settings.Indexers.IndexersView({model: this.settings}));
                 this.downloadClient.show(new NzbDrone.Settings.DownloadClient.DownloadClientView({model: this.settings}));
                 this.notifications.show(new NzbDrone.Settings.Notifications.NotificationsView({model: this.settings}));

@@ -14,6 +14,11 @@ define([
             tooltip: '[class^="help-inline"] i'
         },
 
+        initialize: function(){
+            //Listen to save event
+            this.bind
+        },
+
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
             this.ui.switch.bootstrapSwitch();

@@ -9,12 +9,12 @@ using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.QualityType
 {
-    public class QualityTypeModule : NzbDroneApiModule
+    public class QualitySizeModule : NzbDroneApiModule
     {
         private readonly QualitySizeService _qualityTypeProvider;
 
-        public QualityTypeModule(QualitySizeService qualityTypeProvider)
-            : base("/QualityTypes")
+        public QualitySizeModule(QualitySizeService qualityTypeProvider)
+            : base("/qualitysizes")
         {
             _qualityTypeProvider = qualityTypeProvider;
 
@@ -25,9 +25,9 @@ namespace NzbDrone.Api.QualityType
 
         private Response PutQualityType()
         {
-            var model = Request.Body.FromJson<QualityTypeModel>();
+            var model = Request.Body.FromJson<QualitySizeResource>();
 
-            var type = Mapper.Map<QualityTypeModel, QualitySize>(model);
+            var type = Mapper.Map<QualitySizeResource, QualitySize>(model);
             _qualityTypeProvider.Update(type);
 
             return model.AsResponse();
@@ -37,13 +37,13 @@ namespace NzbDrone.Api.QualityType
         private Response GetQualityType(int id)
         {
             var type = _qualityTypeProvider.Get(id);
-            return Mapper.Map<QualitySize, QualityTypeModel>(type).AsResponse();
+            return Mapper.Map<QualitySize, QualitySizeResource>(type).AsResponse();
         }
 
         private Response GetQualityType()
         {
             var types = _qualityTypeProvider.All().Where(qualityType => qualityType.QualityId != 0 && qualityType.QualityId != 10).ToList();
-            var responseModel = Mapper.Map<List<QualitySize>, List<QualityTypeModel>>(types);
+            var responseModel = Mapper.Map<List<QualitySize>, List<QualitySizeResource>>(types);
 
             return responseModel.AsResponse();
         }
