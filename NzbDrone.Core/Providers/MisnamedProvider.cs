@@ -8,7 +8,7 @@ using NLog;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository;
+
 
 namespace NzbDrone.Core.Providers
 {

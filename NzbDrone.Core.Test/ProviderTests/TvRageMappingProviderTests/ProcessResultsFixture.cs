@@ -9,7 +9,7 @@ using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.TvRage;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests

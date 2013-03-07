@@ -7,7 +7,7 @@ using NUnit.Framework;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 

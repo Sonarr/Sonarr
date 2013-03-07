@@ -277,39 +277,6 @@
       <RegularExpression>NzbDrone\.Core\.Test\.Datastore\.BasicRepositoryFixture\..*</RegularExpression>
     </RegexTestSelector>
     <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.AcceptableSizeSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.AllowedDownloadSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.AllowedReleaseGroupSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.CustomStartDateSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.LanguageSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.MonitoredEpisodeSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.QualityAllowedByProfileSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.QualityUpgradeSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.RetentionSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.UpgradeDiskSpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.UpgradeHistorySpecificationFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
       <RegularExpression>NzbDrone\.Core\.Test\.DecisionEngineTests\.UpgradePossibleSpecificationFixture\..*</RegularExpression>
     </RegexTestSelector>
     <RegexTestSelector>

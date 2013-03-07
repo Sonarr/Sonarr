@@ -2,7 +2,7 @@
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Api.RootFolders

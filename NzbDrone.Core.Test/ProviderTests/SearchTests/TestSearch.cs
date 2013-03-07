@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Providers.Search;
-using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 {
@@ -21,11 +16,11 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public TestSearch(ISeriesService seriesService, IEpisodeService episodeService, DownloadProvider downloadProvider, 
+        public TestSearch(ISeriesService seriesService, IEpisodeService episodeService, DownloadProvider downloadProvider,
                           IIndexerService indexerService, SceneMappingService sceneMappingService,
-                          AllowedDownloadSpecification allowedDownloadSpecification, ISeriesRepository seriesRepository)
-                          : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService, 
-                                 allowedDownloadSpecification)
+                          DownloadDirector downloadDirector, ISeriesRepository seriesRepository)
+            : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
+                   downloadDirector)
         {
         }
 
@@ -59,14 +54,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             return reports;
         }
 
-        public override SearchHistoryItem CheckReport(Series series, dynamic options, EpisodeParseResult episodeParseResult, Repository.Search.SearchHistoryItem item)
+        public override bool IsEpisodeMatch(Series series, dynamic options, EpisodeParseResult episodeParseResult)
         {
-            return item;
+            return true;
         }
 
-        protected override void FinalizeSearch(Series series, dynamic options, bool reportsFound, Model.Notification.ProgressNotification notification)
-        {
-            logger.Warn("Unable to find {0} in any of indexers.", series.Title);
-        }
     }
 }

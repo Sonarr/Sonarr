@@ -11,7 +11,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 

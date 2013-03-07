@@ -10,7 +10,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Search;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests

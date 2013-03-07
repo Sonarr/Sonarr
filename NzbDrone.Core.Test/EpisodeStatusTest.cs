@@ -5,7 +5,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test

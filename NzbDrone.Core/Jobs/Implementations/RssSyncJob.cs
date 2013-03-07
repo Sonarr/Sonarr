@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
@@ -17,23 +15,17 @@ namespace NzbDrone.Core.Jobs.Implementations
     {
         private readonly DownloadProvider _downloadProvider;
         private readonly IIndexerService _indexerService;
-        private readonly MonitoredEpisodeSpecification _isMonitoredEpisodeSpecification;
-        private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
-        private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
+        private readonly IDownloadDirector DownloadDirector;
         private readonly IConfigService _configService;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(DownloadProvider downloadProvider, IIndexerService indexerService,
-            MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification,
-            UpgradeHistorySpecification upgradeHistorySpecification, IConfigService configService)
+        public RssSyncJob(DownloadProvider downloadProvider, IIndexerService indexerService, IDownloadDirector downloadDirector, IConfigService configService)
         {
             _downloadProvider = downloadProvider;
             _indexerService = indexerService;
-            _isMonitoredEpisodeSpecification = isMonitoredEpisodeSpecification;
-            _allowedDownloadSpecification = allowedDownloadSpecification;
-            _upgradeHistorySpecification = upgradeHistorySpecification;
+            DownloadDirector = downloadDirector;
             _configService = configService;
         }
 
@@ -77,9 +69,7 @@ namespace NzbDrone.Core.Jobs.Implementations
             {
                 try
                 {
-                    if (_isMonitoredEpisodeSpecification.IsSatisfiedBy(episodeParseResult) &&
-                        _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult) == ReportRejectionReasons.None &&
-                        _upgradeHistorySpecification.IsSatisfiedBy(episodeParseResult))
+                    if (DownloadDirector.GetDownloadDecision(episodeParseResult).Approved)
                     {
                         _downloadProvider.DownloadReport(episodeParseResult);
                     }

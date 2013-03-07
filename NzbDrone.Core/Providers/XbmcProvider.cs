@@ -12,7 +12,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers.Xbmc;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {

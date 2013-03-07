@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.ReferenceData;
@@ -12,8 +9,6 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Providers.Search
 {
@@ -22,11 +17,11 @@ namespace NzbDrone.Core.Providers.Search
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public EpisodeSearch(IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
-                             SceneMappingService sceneMappingService, AllowedDownloadSpecification allowedDownloadSpecification,
+                             SceneMappingService sceneMappingService, DownloadDirector downloadDirector,
                               ISeriesRepository seriesRepository)
-                        : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService, 
-                               allowedDownloadSpecification)
-            {
+            : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
+                   downloadDirector)
+        {
         }
 
         public EpisodeSearch()
@@ -51,7 +46,7 @@ namespace NzbDrone.Core.Providers.Search
 
             if (series.UseSceneNumbering)
             {
-                if(options.Episode.SceneSeasonNumber > 0 && options.Episode.SceneEpisodeNumber > 0)
+                if (options.Episode.SceneSeasonNumber > 0 && options.Episode.SceneEpisodeNumber > 0)
                 {
                     logger.Trace("Using Scene Numbering for: {0}", options.Episode);
                     seasonNumber = options.Episode.SceneSeasonNumber;
@@ -76,55 +71,39 @@ namespace NzbDrone.Core.Providers.Search
             return reports;
         }
 
-        public override SearchHistoryItem CheckReport(Series series, dynamic options, EpisodeParseResult episodeParseResult,
-                                                                SearchHistoryItem item)
+        public override bool IsEpisodeMatch(Series series, dynamic options, EpisodeParseResult episodeParseResult)
         {
-            if(series.UseSceneNumbering && options.Episode.SeasonNumber > 0 && options.Episode.EpisodeNumber > 0)
+            if (series.UseSceneNumbering && options.Episode.SeasonNumber > 0 && options.Episode.EpisodeNumber > 0)
             {
                 if (options.Episode.SceneSeasonNumber != episodeParseResult.SeasonNumber)
                 {
                     logger.Trace("Season number does not match searched season number, skipping.");
-                    item.SearchError = ReportRejectionReasons.WrongSeason;
-
-                    return item;
+                    return false;
                 }
 
                 if (!episodeParseResult.EpisodeNumbers.Contains(options.Episode.SceneEpisodeNumber))
                 {
                     logger.Trace("Episode number does not match searched episode number, skipping.");
-                    item.SearchError = ReportRejectionReasons.WrongEpisode;
-
-                    return item;
+                    return false;
                 }
 
-                return item;
+                return true;
             }
 
-            if(options.Episode.SeasonNumber != episodeParseResult.SeasonNumber)
+            if (options.Episode.SeasonNumber != episodeParseResult.SeasonNumber)
             {
                 logger.Trace("Season number does not match searched season number, skipping.");
-                item.SearchError = ReportRejectionReasons.WrongSeason;
-
-                return item;
+                return false;
             }
 
             if (!episodeParseResult.EpisodeNumbers.Contains(options.Episode.EpisodeNumber))
             {
                 logger.Trace("Episode number does not match searched episode number, skipping.");
-                item.SearchError = ReportRejectionReasons.WrongEpisode;
-
-                return item;
+                return false;
             }
 
-            return item;
+            return true;
         }
 
-        protected override void FinalizeSearch(Series series, dynamic options, Boolean reportsFound, ProgressNotification notification)
-        {
-            logger.Warn("Unable to find {0} in any of indexers.", options.Episode);
-
-            notification.CurrentMessage = reportsFound ? String.Format("Sorry, couldn't find {0}, that matches your preferences.", options.Episode)
-                                                        : String.Format("Sorry, couldn't find {0} in any of indexers.", options.Episode);
-        }
     }
 }

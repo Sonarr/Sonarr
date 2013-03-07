@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Search;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Search;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
@@ -23,7 +15,6 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
         private Series _series;
         private Episode _episode;
         private EpisodeParseResult _episodeParseResult;
-        private SearchHistoryItem _searchHistoryItem;
             
         [SetUp]
         public void Setup()
@@ -46,7 +37,6 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
                     .With(p => p.Series = _series)
                     .Build();
 
-            _searchHistoryItem = new SearchHistoryItem();
         }
 
         [Test]
@@ -55,10 +45,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
             _episode.SeasonNumber = 10;
 
             Mocker.Resolve<EpisodeSearch>()
-                  .CheckReport(_series, new {Episode = _episode}, _episodeParseResult, _searchHistoryItem)
-                  .SearchError
+                  .IsEpisodeMatch(_series, new {Episode = _episode}, _episodeParseResult)
                   .Should()
-                  .Be(ReportRejectionReasons.WrongSeason);
+                  .BeFalse();
         }
 
         [Test]
@@ -67,20 +56,18 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
             _episode.EpisodeNumber = 10;
 
             Mocker.Resolve<EpisodeSearch>()
-                  .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError
+                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
                   .Should()
-                  .Be(ReportRejectionReasons.WrongEpisode);
+                  .BeFalse();
         }
 
         [Test]
         public void should_not_return_error_when_season_and_episode_match()
         {
             Mocker.Resolve<EpisodeSearch>()
-                  .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError
+                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
                   .Should()
-                  .Be(ReportRejectionReasons.None);
+                  .BeFalse();
         }
 
         [Test]
@@ -92,10 +79,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
             _episode.EpisodeNumber = 10;
 
             Mocker.Resolve<EpisodeSearch>()
-                  .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError
-                  .Should()
-                  .Be(ReportRejectionReasons.WrongSeason);
+                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
+                 .Should()
+                  .BeFalse();
         }
 
         [Test]
@@ -107,10 +93,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
             _episode.EpisodeNumber = 10;
 
             Mocker.Resolve<EpisodeSearch>()
-                  .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError
-                  .Should()
-                  .Be(ReportRejectionReasons.WrongEpisode);
+                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
+                 .Should()
+                  .BeFalse();
         }
 
         [Test]
@@ -123,10 +108,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
             _episode.EpisodeNumber = 10;
 
             Mocker.Resolve<EpisodeSearch>()
-                  .CheckReport(_series, new { Episode = _episode }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError
+                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
                   .Should()
-                  .Be(ReportRejectionReasons.None);
+                  .BeTrue();
         }
     }
 }

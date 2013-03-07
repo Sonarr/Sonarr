@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Model
 {
@@ -20,6 +18,8 @@ namespace NzbDrone.Core.Model
                 return Parser.NormalizeTitle(SeriesTitle);
             }
         }
+
+        public DownloadDecision Decision { get; set; }
 
         public string EpisodeTitle { get; set; }
 

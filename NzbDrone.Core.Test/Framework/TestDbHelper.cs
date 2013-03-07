@@ -7,7 +7,7 @@ using FluentAssertions;
 using Moq;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Repository;
+
 
 
 namespace NzbDrone.Core.Test.Framework

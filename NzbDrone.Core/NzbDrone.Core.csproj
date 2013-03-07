@@ -188,9 +188,10 @@
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ObjectDbFactory.cs" />
     <Compile Include="Datastore\SiaqodbProxy.cs" />
+    <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IFetchableSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
-    <Compile Include="DecisionEngine\AllowedDownloadSpecification.cs" />
+    <Compile Include="DecisionEngine\DownloadDirector.cs" />
     <Compile Include="DecisionEngine\Specifications\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CustomStartDateSpecification.cs" />
@@ -336,9 +337,6 @@
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Qualities\Quality.cs" />
-    <Compile Include="Repository\Search\SearchHistoryItem.cs" />
-    <Compile Include="Repository\Search\SearchHistory.cs" />
-    <Compile Include="DecisionEngine\ReportRejectionReasons.cs" />
     <Compile Include="Tv\Season.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs">
       <SubType>Code</SubType>

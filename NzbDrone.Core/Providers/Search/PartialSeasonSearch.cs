@@ -12,8 +12,6 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Providers.Search
 {
@@ -22,11 +20,11 @@ namespace NzbDrone.Core.Providers.Search
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public PartialSeasonSearch(IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
-                             SceneMappingService sceneMappingService, AllowedDownloadSpecification allowedDownloadSpecification,
+                             SceneMappingService sceneMappingService, DownloadDirector downloadDirector,
                              ISeriesRepository seriesRepository)
-                        : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService, 
-                               allowedDownloadSpecification)
-            {
+            : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
+                   downloadDirector)
+        {
         }
 
         public PartialSeasonSearch()
@@ -54,7 +52,7 @@ namespace NzbDrone.Core.Providers.Search
             var title = GetSearchTitle(series);
             var prefixes = GetEpisodeNumberPrefixes(episodes.Select(e => e.EpisodeNumber));
 
-            foreach(var p in prefixes)
+            foreach (var p in prefixes)
             {
                 var prefix = p;
 
@@ -62,13 +60,13 @@ namespace NzbDrone.Core.Providers.Search
                 {
                     try
                     {
-                        lock(reportsLock)
+                        lock (reportsLock)
                         {
                             reports.AddRange(indexer.FetchPartialSeason(title, options.SeasonNumber, prefix));
                         }
                     }
 
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         logger.ErrorException(
                                                 String.Format(
@@ -82,27 +80,17 @@ namespace NzbDrone.Core.Providers.Search
             return reports;
         }
 
-        public override SearchHistoryItem CheckReport(Series series, dynamic options, EpisodeParseResult episodeParseResult,
-                                                                SearchHistoryItem item)
+        public override bool IsEpisodeMatch(Series series, dynamic options, EpisodeParseResult episodeParseResult)
         {
-            if(options.SeasonNumber != episodeParseResult.SeasonNumber)
+            if (options.SeasonNumber != episodeParseResult.SeasonNumber)
             {
                 logger.Trace("Season number does not match searched season number, skipping.");
-                item.SearchError = ReportRejectionReasons.WrongSeason;
-
-                return item;
+                return false;
             }
 
-            return item;
+            return true;
         }
 
-        protected override void FinalizeSearch(Series series, dynamic options, Boolean reportsFound, ProgressNotification notification)
-        {
-            logger.Warn("Unable to find {0} - Season {1} in any of indexers.", series.Title, options.SeasonNumber);
-
-            notification.CurrentMessage = reportsFound ? String.Format("Sorry, couldn't find {0} Season {1:00}, that matches your preferences.", series.Title, options.SeasonNumber)
-                                                        : String.Format("Sorry, couldn't find {0} Season {1:00} in any of indexers.", series.Title, options.SeasonNumber);
-        }
 
         private List<int> GetEpisodeNumberPrefixes(IEnumerable<int> episodeNumbers)
         {

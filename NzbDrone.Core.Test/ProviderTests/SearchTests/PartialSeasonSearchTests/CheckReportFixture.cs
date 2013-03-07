@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Search;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Search;
+
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
@@ -23,8 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
         private Series _series;
         private List<Episode> _episodes;
         private EpisodeParseResult _episodeParseResult;
-        private SearchHistoryItem _searchHistoryItem;
-            
+
         [SetUp]
         public void Setup()
         {
@@ -45,23 +38,22 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
                     .With(p => p.SeasonNumber = 1)
                     .Build();
 
-            _searchHistoryItem = new SearchHistoryItem();
         }
 
         [Test]
         public void should_return_wrongSeason_when_season_does_not_match()
         {
             Mocker.Resolve<PartialSeasonSearch>()
-                  .CheckReport(_series, new { SeasonNumber = 2, Episodes = _episodes }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError.Should().Be(ReportRejectionReasons.WrongSeason);
+                  .IsEpisodeMatch(_series, new { SeasonNumber = 2, Episodes = _episodes }, _episodeParseResult)
+                  .Should().BeFalse();
         }
 
         [Test]
         public void should_not_return_error_when_season_matches()
         {
             Mocker.Resolve<PartialSeasonSearch>()
-                  .CheckReport(_series, new { SeasonNumber = 1, Episodes = _episodes }, _episodeParseResult, _searchHistoryItem)
-                  .SearchError.Should().Be(ReportRejectionReasons.None);
+                  .IsEpisodeMatch(_series, new { SeasonNumber = 1, Episodes = _episodes }, _episodeParseResult)
+                  .Should().BeFalse();
         }
     }
 }

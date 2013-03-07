@@ -9,7 +9,7 @@ using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Search;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchTests

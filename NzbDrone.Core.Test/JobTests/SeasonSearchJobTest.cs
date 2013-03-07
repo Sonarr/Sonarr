@@ -8,15 +8,10 @@ using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Jobs.Implementations;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Search;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests
 {
@@ -48,12 +43,6 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void SeasonSearch_partial_season_success()
         {
-            var resultItems = Builder<SearchHistoryItem>.CreateListOfSize(5)
-                .All()
-                .With(e => e.SearchError = ReportRejectionReasons.None)
-                .With(e => e.Success = true)
-                .Build();
-
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(_episodes.Select(e => e.EpisodeNumber).ToList());

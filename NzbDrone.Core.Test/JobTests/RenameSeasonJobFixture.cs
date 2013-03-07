@@ -11,7 +11,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.JobTests

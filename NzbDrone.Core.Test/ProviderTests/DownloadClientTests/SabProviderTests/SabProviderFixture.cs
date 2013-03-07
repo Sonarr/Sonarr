@@ -14,7 +14,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Repository;
+
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
