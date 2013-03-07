@@ -13,7 +13,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
-    public class TestSearch : SearchBase
+    public class TestSearch : IndexerSearchBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

@@ -151,6 +151,7 @@
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
+    <Compile Include="MediaFileTests\GhostFileCleanupFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
@@ -172,7 +173,6 @@
     <Compile Include="Configuration\ConfigCachingFixture.cs" />
     <Compile Include="DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CustomStartDateSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DiskScanProviderTests\CleanUpFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\CleanUpDropFolderFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ScanFixture.cs" />

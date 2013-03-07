@@ -20,21 +20,21 @@ namespace NzbDrone.Core.Providers
         private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
         private readonly DiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
+        private readonly ICleanGhostFiles _ghostFileCleaner;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IConfigService _configService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, IMediaFileService mediaFileService, IConfigService configService, IBuildFileNames buildFileNames,
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService, IConfigService configService, IBuildFileNames buildFileNames,
                                 RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
+            _ghostFileCleaner = ghostFileCleaner;
             _mediaFileService = mediaFileService;
-            _configService = configService;
             _buildFileNames = buildFileNames;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
@@ -74,8 +74,7 @@ namespace NzbDrone.Core.Providers
                 return new List<EpisodeFile>();
             }
 
-            var seriesFile = _mediaFileService.GetFilesBySeries(series.Id);
-            CleanUp(seriesFile);
+            _ghostFileCleaner.RemoveNonExistingFiles(series.Id);
 
             var mediaFileList = GetVideoFiles(path);
             var importedFiles = new List<EpisodeFile>();
@@ -237,43 +236,7 @@ namespace NzbDrone.Core.Providers
             return episodeFile;
         }
 
-        /// <summary>
-        ///   Removes files that no longer exist on disk from the database
-        /// </summary>
-        /// <param name = "files">list of files to verify</param>
-        public virtual void CleanUp(IList<EpisodeFile> files)
-        {
-            foreach (var episodeFile in files)
-            {
-                try
-                {
-                    if (!_diskProvider.FileExists(episodeFile.Path))
-                    {
-                        Logger.Trace("File [{0}] no longer exists on disk. removing from db", episodeFile.Path);
 
-                        //Set the EpisodeFileId for each episode attached to this file to 0
-                        foreach (var episode in _episodeService.GetEpisodesByFileId(episodeFile.Id))
-                        {
-                            Logger.Trace("Detaching episode {0} from file.", episode.Id);
-                            episode.EpisodeFile = null;
-                            episode.Ignored = _configService.AutoIgnorePreviouslyDownloadedEpisodes;
-                            episode.GrabDate = null;
-                            episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
-                            _episodeService.UpdateEpisode(episode);
-                        }
-
-                        //Delete it from the DB
-                        Logger.Trace("Removing EpisodeFile from DB.");
-                        _mediaFileService.Delete(episodeFile.Id);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var message = String.Format("Unable to cleanup EpisodeFile in DB: {0}", episodeFile.Id);
-                    Logger.ErrorException(message, ex);
-                }
-            }
-        }
 
         public virtual void CleanUpDropFolder(string path)
         {

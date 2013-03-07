@@ -102,9 +102,16 @@ namespace NzbDrone.Test.Common
             return Path.Combine(Directory.GetCurrentDirectory(), "Files", fileName);
         }
 
+
+
         protected void VerifyEventPublished<TEvent>() where TEvent : IEvent
         {
-            Mocker.GetMock<IEventAggregator>().Verify(c => c.Publish(It.IsAny<TEvent>()), Times.Once());
+            VerifyEventPublished<TEvent>(Times.Once());
+        }
+
+        protected void VerifyEventPublished<TEvent>(Times times) where TEvent : IEvent
+        {
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.Publish(It.IsAny<TEvent>()), times);
         }
 
         protected void VerifyEventNotPublished<TEvent>() where TEvent : IEvent

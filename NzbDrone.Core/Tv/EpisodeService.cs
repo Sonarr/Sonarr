@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -37,6 +39,7 @@ namespace NzbDrone.Core.Tv
 
     public class EpisodeService : IEpisodeService,
         IHandle<EpisodeGrabbedEvent>,
+        IHandle<EpisodeFileDeletedEvent>,
         IHandleAsync<SeriesDeletedEvent>
     {
 
@@ -46,13 +49,17 @@ namespace NzbDrone.Core.Tv
         private readonly ISeasonRepository _seasonRepository;
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IConfigService _configService;
+        private readonly Logger _logger;
 
-        public EpisodeService(TvDbProxy tvDbProxyProxy, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator)
+        public EpisodeService(TvDbProxy tvDbProxyProxy, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator, IConfigService configService, Logger logger)
         {
             _tvDbProxy = tvDbProxyProxy;
             _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
             _eventAggregator = eventAggregator;
+            _configService = configService;
+            _logger = logger;
         }
 
         public void AddEpisode(Episode episode)
@@ -378,6 +385,19 @@ namespace NzbDrone.Core.Tv
         {
             var episodes = GetEpisodeBySeries(message.Series.Id);
             _episodeRepository.DeleteMany(episodes);
+        }
+
+        public void Handle(EpisodeFileDeletedEvent message)
+        {
+            foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
+            {
+                _logger.Trace("Detaching episode {0} from file.", episode.Id);
+                episode.EpisodeFile = null;
+                episode.Ignored = _configService.AutoIgnorePreviouslyDownloadedEpisodes;
+                episode.GrabDate = null;
+                episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
+                UpdateEpisode(episode);
+            }
         }
     }
 }

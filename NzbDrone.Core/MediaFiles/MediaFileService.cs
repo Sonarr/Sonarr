@@ -3,6 +3,7 @@ using System.IO;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile Add(EpisodeFile episodeFile);
         void Update(EpisodeFile episodeFile);
-        void Delete(int episodeFileId);
+        void Delete(EpisodeFile episodeFile);
         bool Exists(string path);
         EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
@@ -23,15 +24,17 @@ namespace NzbDrone.Core.MediaFiles
     {
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
         private readonly IMediaFileRepository _mediaFileRepository;
 
 
-        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IEpisodeService episodeService, Logger logger)
+        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
             _configService = configService;
             _episodeService = episodeService;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -45,16 +48,10 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileRepository.Update(episodeFile);
         }
 
-        public void Delete(int episodeFileId)
+        public void Delete(EpisodeFile episodeFile)
         {
-            _mediaFileRepository.Delete(episodeFileId);
-
-            var ep = _episodeService.GetEpisodesByFileId(episodeFileId);
-
-            foreach (var episode in ep)
-            {
-                _episodeService.SetEpisodeIgnore(episode.Id, true);
-            }
+            _mediaFileRepository.Delete(episodeFile);
+            _eventAggregator.Publish(new EpisodeFileDeletedEvent(episodeFile));
         }
 
         public bool Exists(string path)

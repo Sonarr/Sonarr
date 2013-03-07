@@ -7,11 +7,10 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class AutoConfigureProvider
+    public class SabAutoConfigureService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 

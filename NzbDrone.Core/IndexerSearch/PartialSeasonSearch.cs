@@ -13,7 +13,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public class PartialSeasonSearch : SearchBase
+    public class PartialSeasonSearch : IndexerSearchBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

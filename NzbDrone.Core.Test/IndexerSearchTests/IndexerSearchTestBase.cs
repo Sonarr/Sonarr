@@ -13,7 +13,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
     public abstract class IndexerSearchTestBase<TSearch> : CoreTest<TSearch>
-        where TSearch : SearchBase
+        where TSearch : IndexerSearchBase
     {
         protected Series _series;
         protected Episode _episode;

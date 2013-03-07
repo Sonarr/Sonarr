@@ -42,8 +42,8 @@ namespace NzbDrone.Core
                      .As<IndexerBase>().SingleInstance();
 
             container.RegisterAssemblyTypes(assembly)
-                      .Where(t => t.IsSubclassOf(typeof(SearchBase)))
-                     .As<SearchBase>().SingleInstance();
+                      .Where(t => t.IsSubclassOf(typeof(IndexerSearchBase)))
+                     .As<IndexerSearchBase>().SingleInstance();
 
             container.RegisterAssemblyTypes(assembly)
                       .Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase)))

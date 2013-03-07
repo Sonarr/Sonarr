@@ -14,7 +14,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public class DailyEpisodeSearch : SearchBase
+    public class DailyEpisodeSearch : IndexerSearchBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

@@ -201,6 +201,7 @@
     <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeHistorySpecification.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
     <Compile Include="Download\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="IndexerSearch\DailyEpisodeSearch.cs" />
     <Compile Include="IndexerSearch\EpisodeSearch.cs" />
     <Compile Include="IndexerSearch\PartialSeasonSearch.cs" />
-    <Compile Include="IndexerSearch\SearchBase.cs" />
+    <Compile Include="IndexerSearch\IndexerSearchBase.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\NewznabRepository.cs" />
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
@@ -249,6 +250,8 @@
     <Compile Include="Lifecycle\AppRestartJob.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
+    <Compile Include="MediaFiles\GhostFileCleanupService.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
@@ -338,9 +341,6 @@
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Qualities\Quality.cs" />
     <Compile Include="Tv\Season.cs" />
-    <Compile Include="Providers\AutoConfigureProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\BackupProvider.cs">
       <SubType>Code</SubType>
     </Compile>

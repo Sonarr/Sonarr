@@ -13,18 +13,19 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public abstract class SearchBase
+    public abstract class IndexerSearchBase
     {
         private readonly ISeriesRepository _seriesRepository;
-        protected readonly IEpisodeService _episodeService;
-        protected readonly DownloadProvider _downloadProvider;
+        private readonly IEpisodeService _episodeService;
+        private readonly DownloadProvider _downloadProvider;
+        private readonly ISceneMappingService _sceneMappingService;
+        private readonly IDownloadDirector DownloadDirector;
+
         protected readonly IIndexerService _indexerService;
-        protected readonly ISceneMappingService _sceneMappingService;
-        protected readonly IDownloadDirector DownloadDirector;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected SearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, DownloadProvider downloadProvider,
+        protected IndexerSearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, DownloadProvider downloadProvider,
                              IIndexerService indexerService, ISceneMappingService sceneMappingService,
                              IDownloadDirector downloadDirector)
         {
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.IndexerSearch
             DownloadDirector = downloadDirector;
         }
 
-        protected SearchBase()
+        protected IndexerSearchBase()
         {
         }
 
