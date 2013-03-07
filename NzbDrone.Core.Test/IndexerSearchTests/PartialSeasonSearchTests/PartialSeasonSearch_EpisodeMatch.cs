@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Search;
-
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.SearchTests.PartialSeasonSearchTests
+namespace NzbDrone.Core.Test.IndexerSearchTests.PartialSeasonSearchTests
 {
     [TestFixture]
-    public class CheckReportFixture : TestBase
+    public class PartialSeasonSearch_EpisodeMatch : TestBase
     {
         private Series _series;
         private List<Episode> _episodes;

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Search;
-
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.SearchTests
+namespace NzbDrone.Core.Test.IndexerSearchTests
 {
     public class GetSearchTitleFixture : TestBase
     {

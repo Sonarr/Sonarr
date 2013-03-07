@@ -5,7 +5,15 @@ using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.ReferenceData
 {
-    public class SceneMappingService : IInitializable
+    public interface ISceneMappingService
+    {
+        void UpdateMappings();
+        string GetSceneName(int tvdbId, int seasonNumber = -1);
+        Nullable<Int32> GetTvDbId(string cleanName);
+        string GetCleanName(int tvdbId);
+    }
+
+    public class SceneMappingService : IInitializable, ISceneMappingService
     {
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;

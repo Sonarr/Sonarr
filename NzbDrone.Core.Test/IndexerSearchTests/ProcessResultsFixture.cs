@@ -1,4 +1,4 @@
-﻿/*
+/*
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -230,3 +230,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
     }
 }
 */
+
+namespace NzbDrone.Core.Test.IndexerSearchTests
+{
+}

@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Search;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
+namespace NzbDrone.Core.Test.IndexerSearchTests.EpisodeSearchTests
 {
     [TestFixture]
-    public class CheckReportFixture : TestBase
+    public class IndexerEpisodeSearch_EpisodeMatch : TestBase
     {
         private Series _series;
         private Episode _episode;
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
             Mocker.Resolve<EpisodeSearch>()
                   .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
                   .Should()
-                  .BeFalse();
+                  .BeTrue();
         }
 
         [Test]

@@ -1,8 +1,8 @@
 using System;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Search;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Jobs.Implementations

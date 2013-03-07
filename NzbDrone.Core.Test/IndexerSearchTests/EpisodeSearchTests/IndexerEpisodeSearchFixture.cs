@@ -1,52 +1,37 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Search;
-
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
+namespace NzbDrone.Core.Test.IndexerSearchTests.EpisodeSearchTests
 {
     [TestFixture]
-    public class PerformSearchFixture : PerformSearchTestBase
+    public class IndexerEpisodeSearchFixture : IndexerSearchTestBase<EpisodeSearch>
     {
-        [Test]
-        public void should_throw_if_episode_is_null()
-        {
-            Episode nullEpisode = null;
-            Assert.Throws<ArgumentException>(() => 
-                                                Mocker.Resolve<EpisodeSearch>()
-                                                      .PerformSearch(_series, new { Episode = nullEpisode }, notification));
-        }
 
         [Test]
         public void should_fetch_results_from_indexers()
         {
             WithValidIndexers();
 
-            Mocker.Resolve<EpisodeSearch>()
-                  .PerformSearch(_series, new {Episode = _episode}, notification)
-                  .Should()
-                  .HaveCount(20);
+            Subject
+                   .PerformSearch(_series, new List<Episode> { _episode }, notification)
+                   .Should()
+                   .HaveCount(20);
         }
 
         [Test]
         public void should_log_error_when_fetching_from_indexer_fails()
         {
-            WithInvalidIndexers();
+            WithBrokenIndexers();
 
-            Mocker.Resolve<EpisodeSearch>()
-                  .PerformSearch(_series, new { Episode = _episode }, notification)
-                  .Should()
-                  .HaveCount(0);
+            Subject
+                   .PerformSearch(_series, new List<Episode> { _episode }, notification)
+                   .Should()
+                   .HaveCount(0);
 
             ExceptionVerification.ExpectedErrors(2);
         }
@@ -60,10 +45,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
 
             WithValidIndexers();
 
-            Mocker.Resolve<EpisodeSearch>()
-                  .PerformSearch(_series, new { Episode = _episode }, notification)
-                  .Should()
-                  .HaveCount(20);
+            Subject
+                   .PerformSearch(_series, new List<Episode> { _episode }, notification)
+                   .Should()
+                   .HaveCount(20);
 
             _indexer1.Verify(v => v.FetchEpisode(_series.Title, 10, 5), Times.Once());
             _indexer2.Verify(v => v.FetchEpisode(_series.Title, 10, 5), Times.Once());
@@ -78,10 +63,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
 
             WithValidIndexers();
 
-            Mocker.Resolve<EpisodeSearch>()
-                  .PerformSearch(_series, new { Episode = _episode }, notification)
-                  .Should()
-                  .HaveCount(20);
+            Subject
+                   .PerformSearch(_series, new List<Episode> { _episode }, notification)
+                   .Should()
+                   .HaveCount(20);
 
             _indexer1.Verify(v => v.FetchEpisode(_series.Title, _episode.SeasonNumber, _episode.EpisodeNumber), Times.Once());
             _indexer2.Verify(v => v.FetchEpisode(_series.Title, _episode.SeasonNumber, _episode.EpisodeNumber), Times.Once());
@@ -94,10 +79,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.EpisodeSearchTests
 
             WithValidIndexers();
 
-            Mocker.Resolve<EpisodeSearch>()
-                  .PerformSearch(_series, new { Episode = _episode }, notification)
-                  .Should()
-                  .HaveCount(20);
+            Subject
+                   .PerformSearch(_series, new List<Episode> { _episode }, notification)
+                   .Should()
+                   .HaveCount(20);
 
             _indexer1.Verify(v => v.FetchEpisode(_series.Title, _episode.SeasonNumber, _episode.EpisodeNumber), Times.Once());
             _indexer2.Verify(v => v.FetchEpisode(_series.Title, _episode.SeasonNumber, _episode.EpisodeNumber), Times.Once());

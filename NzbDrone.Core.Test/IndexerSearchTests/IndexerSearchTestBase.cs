@@ -1,25 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
-using NzbDrone.Test.Common;
-
-namespace NzbDrone.Core.Test.ProviderTests.SearchTests
+namespace NzbDrone.Core.Test.IndexerSearchTests
 {
-    public class PerformSearchTestBase : TestBase
+    public abstract class IndexerSearchTestBase<TSearch> : CoreTest<TSearch>
+        where TSearch : SearchBase
     {
         protected Series _series;
         protected Episode _episode;
-        protected List<Episode> _episodes;
         protected ProgressNotification notification = new ProgressNotification("Testing");
 
         protected Mock<IndexerBase> _indexer1;
@@ -40,13 +37,6 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                     .With(e => e.Series = _series)
                     .Build();
 
-            _episodes = Builder<Episode>
-                    .CreateListOfSize(10)
-                    .All()
-                    .With(e => e.SeriesId = _series.Id)
-                    .With(e => e.Series = _series)
-                    .Build()
-                    .ToList();
 
             _parseResults = Builder<EpisodeParseResult>
                     .CreateListOfSize(10)
@@ -78,7 +68,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                 .Returns(_parseResults);
         }
 
-        protected void WithInvalidIndexers()
+        protected void WithBrokenIndexers()
         {
             _indexer1.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Throws(new Exception());

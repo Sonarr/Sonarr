@@ -7,9 +7,9 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ExternalNotification;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Providers.Search;
 
 namespace NzbDrone.Core
 {

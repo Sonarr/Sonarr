@@ -1,23 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.ReferenceData;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.ReferenceData;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Providers.Search
+namespace NzbDrone.Core.IndexerSearch
 {
     public class EpisodeSearch : SearchBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public EpisodeSearch(IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
-                             SceneMappingService sceneMappingService, DownloadDirector downloadDirector,
+                             ISceneMappingService sceneMappingService, IDownloadDirector downloadDirector,
                               ISeriesRepository seriesRepository)
             : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
                    downloadDirector)
@@ -28,29 +29,27 @@ namespace NzbDrone.Core.Providers.Search
         {
         }
 
-        public override List<EpisodeParseResult> PerformSearch(Series series, dynamic options, ProgressNotification notification)
+        public override List<EpisodeParseResult> PerformSearch(Series series, List<Episode> episodes, ProgressNotification notification)
         {
             //Todo: Daily and Anime or separate them out?
             //Todo: Epsiodes that use scene numbering
 
-            if (options.Episode == null)
-                throw new ArgumentException("Episode is invalid");
+            var episode = episodes.Single();
 
-            notification.CurrentMessage = "Looking for " + options.Episode;
 
             var reports = new List<EpisodeParseResult>();
             var title = GetSearchTitle(series);
 
-            var seasonNumber = options.Episode.SeasonNumber;
-            var episodeNumber = options.Episode.EpisodeNumber;
+            var seasonNumber = episode.SeasonNumber;
+            var episodeNumber = episode.EpisodeNumber;
 
             if (series.UseSceneNumbering)
             {
-                if (options.Episode.SceneSeasonNumber > 0 && options.Episode.SceneEpisodeNumber > 0)
+                if (episode.SceneSeasonNumber > 0 && episode.SceneEpisodeNumber > 0)
                 {
-                    logger.Trace("Using Scene Numbering for: {0}", options.Episode);
-                    seasonNumber = options.Episode.SceneSeasonNumber;
-                    episodeNumber = options.Episode.SceneEpisodeNumber;
+                    logger.Trace("Using Scene Numbering for: {0}", episode);
+                    seasonNumber = episode.SceneSeasonNumber;
+                    episodeNumber = episode.SceneEpisodeNumber;
                 }
             }
 
@@ -64,7 +63,7 @@ namespace NzbDrone.Core.Providers.Search
                 catch (Exception e)
                 {
                     logger.ErrorException(String.Format("An error has occurred while searching for {0}-S{1:00}E{2:00} from: {3}",
-                                                         series.Title, options.Episode.SeasonNumber, options.Episode.EpisodeNumber, indexer.Name), e);
+                                                         series.Title, episode.SeasonNumber, episode.EpisodeNumber, indexer.Name), e);
                 }
             });
 

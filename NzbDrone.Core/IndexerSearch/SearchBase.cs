@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.ReferenceData;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.ReferenceData;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Providers.Search
+namespace NzbDrone.Core.IndexerSearch
 {
     public abstract class SearchBase
     {
@@ -19,14 +19,14 @@ namespace NzbDrone.Core.Providers.Search
         protected readonly IEpisodeService _episodeService;
         protected readonly DownloadProvider _downloadProvider;
         protected readonly IIndexerService _indexerService;
-        protected readonly SceneMappingService _sceneMappingService;
-        protected readonly DownloadDirector DownloadDirector;
+        protected readonly ISceneMappingService _sceneMappingService;
+        protected readonly IDownloadDirector DownloadDirector;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected SearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, DownloadProvider downloadProvider,
-                             IIndexerService indexerService, SceneMappingService sceneMappingService,
-                             DownloadDirector downloadDirector)
+                             IIndexerService indexerService, ISceneMappingService sceneMappingService,
+                             IDownloadDirector downloadDirector)
         {
             _seriesRepository = seriesRepository;
             _episodeService = episodeService;
@@ -40,10 +40,10 @@ namespace NzbDrone.Core.Providers.Search
         {
         }
 
-        public abstract List<EpisodeParseResult> PerformSearch(Series series, dynamic options, ProgressNotification notification);
+        public abstract List<EpisodeParseResult> PerformSearch(Series series, List<Episode> episodes, ProgressNotification notification);
         public abstract bool IsEpisodeMatch(Series series, dynamic options, EpisodeParseResult episodeParseResult);
 
-        public virtual List<Int32> Search(Series series, dynamic options, ProgressNotification notification)
+        public virtual List<int> Search(Series series, dynamic options, ProgressNotification notification)
         {
             if (options == null)
                 throw new ArgumentNullException(options);

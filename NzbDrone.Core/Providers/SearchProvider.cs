@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Search;
 
 namespace NzbDrone.Core.Providers
 {

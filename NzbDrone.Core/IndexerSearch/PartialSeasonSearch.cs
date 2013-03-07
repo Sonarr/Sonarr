@@ -1,26 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.ReferenceData;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.ReferenceData;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Providers.Search
+namespace NzbDrone.Core.IndexerSearch
 {
     public class PartialSeasonSearch : SearchBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public PartialSeasonSearch(IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
-                             SceneMappingService sceneMappingService, DownloadDirector downloadDirector,
+                             ISceneMappingService sceneMappingService, IDownloadDirector downloadDirector,
                              ISeriesRepository seriesRepository)
             : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
                    downloadDirector)
@@ -31,20 +29,17 @@ namespace NzbDrone.Core.Providers.Search
         {
         }
 
-        public override List<EpisodeParseResult> PerformSearch(Series series, dynamic options, ProgressNotification notification)
+        public override List<EpisodeParseResult> PerformSearch(Series series, List<Episode> episodes, ProgressNotification notification)
         {
-            if (options.SeasonNumber == null || options.SeasonNumber < 0)
-                throw new ArgumentException("SeasonNumber is invalid");
+            var seasons = episodes.Select(c => c.SeasonNumber).Distinct().ToList();
 
-            if (options.Episodes == null)
-                throw new ArgumentException("Episodes were not provided");
+            if (seasons.Count > 1)
+            {
+                throw new ArgumentOutOfRangeException("episodes", "episode list contains episodes from more than one season");
+            }
 
-            List<Episode> episodes = options.Episodes;
-
-            if (!episodes.Any())
-                throw new ArgumentException("Episodes were not provided");
-
-            notification.CurrentMessage = String.Format("Looking for {0} - Season {1}", series.Title, options.SeasonNumber);
+            var seasonNumber = seasons[0];
+            notification.CurrentMessage = String.Format("Looking for {0} - Season {1}", series.Title, seasonNumber);
 
             var reports = new List<EpisodeParseResult>();
             object reportsLock = new object();
@@ -62,7 +57,7 @@ namespace NzbDrone.Core.Providers.Search
                     {
                         lock (reportsLock)
                         {
-                            reports.AddRange(indexer.FetchPartialSeason(title, options.SeasonNumber, prefix));
+                            reports.AddRange(indexer.FetchPartialSeason(title, seasonNumber, prefix));
                         }
                     }
 
@@ -71,7 +66,7 @@ namespace NzbDrone.Core.Providers.Search
                         logger.ErrorException(
                                                 String.Format(
                                                             "An error has occurred while searching for {0} Season {1:00} Prefix: {2} from: {3}",
-                                                            series.Title, options.SeasonNumber, prefix, indexer.Name),
+                                                            series.Title, seasonNumber, prefix, indexer.Name),
                                                 e);
                     }
                 });

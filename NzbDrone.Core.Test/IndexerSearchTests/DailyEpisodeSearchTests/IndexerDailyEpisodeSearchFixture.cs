@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Search;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
-using NzbDrone.Test.Common;
-
-namespace NzbDrone.Core.Test.ProviderTests.SearchTests.DailyEpisodeSearchTests
+namespace NzbDrone.Core.Test.IndexerSearchTests.DailyEpisodeSearchTests
 {
     [TestFixture]
-    public class CheckReportFixture : TestBase
+    public class IndexerDailyEpisodeSearchFixture : CoreTest<DailyEpisodeSearch>
     {
         private Series _series;
         private Episode _episode;
@@ -43,8 +42,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.DailyEpisodeSearchTests
         {
             _episodeParseResult.AirDate = null;
 
-            Mocker.Resolve<DailyEpisodeSearch>()
-                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult).Should().BeFalse();
+            Subject.IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult).Should().BeFalse();
         }
 
         [Test]
@@ -52,18 +50,16 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests.DailyEpisodeSearchTests
         {
             _episodeParseResult.AirDate = _episode.AirDate.Value.AddDays(-10);
 
-            Mocker.Resolve<DailyEpisodeSearch>()
-                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
-                  .Should()
-                  .BeFalse();
+            Subject.IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
+                   .Should()
+                   .BeFalse();
         }
 
         [Test]
         public void should_not_return_error_when_airDates_match()
         {
-            Mocker.Resolve<DailyEpisodeSearch>()
-                  .IsEpisodeMatch(_series, new { Episode = _episode }, _episodeParseResult)
-                  .Should().BeFalse();
+            Subject.IsEpisodeMatch(_series, new {Episode = _episode}, _episodeParseResult)
+                   .Should().BeTrue();
         }
     }
 }

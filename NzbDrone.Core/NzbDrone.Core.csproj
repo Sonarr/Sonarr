@@ -212,6 +212,10 @@
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="History\HistoryRepository.cs" />
+    <Compile Include="IndexerSearch\DailyEpisodeSearch.cs" />
+    <Compile Include="IndexerSearch\EpisodeSearch.cs" />
+    <Compile Include="IndexerSearch\PartialSeasonSearch.cs" />
+    <Compile Include="IndexerSearch\SearchBase.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\NewznabRepository.cs" />
     <Compile Include="Instrumentation\LogInjectionModule.cs" />
@@ -322,10 +326,6 @@
     <Compile Include="Indexers\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Wombles.cs" />
     <Compile Include="Providers\RecycleBinProvider.cs" />
-    <Compile Include="Providers\Search\DailyEpisodeSearch.cs" />
-    <Compile Include="Providers\Search\PartialSeasonSearch.cs" />
-    <Compile Include="Providers\Search\EpisodeSearch.cs" />
-    <Compile Include="Providers\Search\SearchBase.cs" />
     <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
     <Compile Include="Lifecycle\AppUpdateJob.cs" />

@@ -11,13 +11,13 @@ namespace NzbDrone.Core.MetadataSource
 {
     public class TvRageMappingProvider
     {
-        private readonly SceneMappingService _sceneMappingService;
+        private readonly ISceneMappingService _sceneMappingService;
         private readonly TvRageProxy _tvRageProxy;
         private readonly IEpisodeService _episodeService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public TvRageMappingProvider(SceneMappingService sceneMappingService,
+        public TvRageMappingProvider(ISceneMappingService sceneMappingService,
                                 TvRageProxy tvRageProxy, IEpisodeService episodeService)
         {
             _sceneMappingService = sceneMappingService;
