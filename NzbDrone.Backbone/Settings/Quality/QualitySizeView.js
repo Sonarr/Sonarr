@@ -8,6 +8,7 @@ define([
 
     NzbDrone.Settings.Quality.QualitySizeView = Backbone.Marionette.ItemView.extend({
         template: 'Settings/Quality/QualitySizeTemplate',
+        className: 'quality-size-item',
 
         ui: {
             slider: '.slider',
