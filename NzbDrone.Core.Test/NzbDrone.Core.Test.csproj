@@ -153,6 +153,7 @@
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
     <Compile Include="MediaFileTests\GhostFileCleanupFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
+    <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\ContainsRecentEpisode.cs" />
@@ -217,7 +218,6 @@
     <Compile Include="JobTests\SeriesSearchJobTest.cs" />
     <Compile Include="ProviderTests\EventClientProviderTest.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
-    <Compile Include="ProviderTests\DiskScanProviderTests\MoveEpisodeFileFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />

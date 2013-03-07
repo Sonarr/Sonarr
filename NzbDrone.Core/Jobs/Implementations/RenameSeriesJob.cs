@@ -6,7 +6,6 @@ using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Jobs.Implementations
@@ -14,19 +13,18 @@ namespace NzbDrone.Core.Jobs.Implementations
     public class RenameSeriesJob : IJob
     {
         private readonly IMediaFileService _mediaFileService;
-        private readonly DiskScanProvider _diskScanProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IMoveEpisodeFiles _moveEpisodeFiles;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeriesJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider,
-                               ISeriesRepository seriesRepository,IEventAggregator eventAggregator)
+        public RenameSeriesJob(IMediaFileService mediaFileService, ISeriesRepository seriesRepository, IEventAggregator eventAggregator, IMoveEpisodeFiles moveEpisodeFiles)
         {
             _mediaFileService = mediaFileService;
-            _diskScanProvider = diskScanProvider;
             _seriesRepository = seriesRepository;
             _eventAggregator = eventAggregator;
+            _moveEpisodeFiles = moveEpisodeFiles;
         }
 
         public string Name
@@ -50,10 +48,10 @@ namespace NzbDrone.Core.Jobs.Implementations
 
             else
             {
-                seriesToRename = new List<Series>{  _seriesRepository.Get((int)options.SeriesId) };
+                seriesToRename = new List<Series> { _seriesRepository.Get((int)options.SeriesId) };
             }
 
-            foreach(var series in seriesToRename)
+            foreach (var series in seriesToRename)
             {
                 notification.CurrentMessage = String.Format("Renaming episodes for '{0}'", series.Title);
 
@@ -74,7 +72,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                     try
                     {
                         var oldFile = new EpisodeFile(episodeFile);
-                        var newFile = _diskScanProvider.MoveEpisodeFile(episodeFile);
+                        var newFile = _moveEpisodeFiles.MoveEpisodeFile(episodeFile);
 
                         if (newFile != null)
                         {

@@ -4,11 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Eventing;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
@@ -22,24 +18,22 @@ namespace NzbDrone.Core.Providers
         private readonly IEpisodeService _episodeService;
         private readonly ICleanGhostFiles _ghostFileCleaner;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IBuildFileNames _buildFileNames;
         private readonly RecycleBinProvider _recycleBinProvider;
         private readonly MediaInfoProvider _mediaInfoProvider;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMoveEpisodeFiles _moveEpisodeFiles;
 
-        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService, IConfigService configService, IBuildFileNames buildFileNames,
-                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
+        public DiskScanProvider(DiskProvider diskProvider, IEpisodeService episodeService, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService,
+                                RecycleBinProvider recycleBinProvider, MediaInfoProvider mediaInfoProvider, ISeriesRepository seriesRepository, IMoveEpisodeFiles moveEpisodeFiles)
         {
             _diskProvider = diskProvider;
             _episodeService = episodeService;
             _ghostFileCleaner = ghostFileCleaner;
             _mediaFileService = mediaFileService;
-            _buildFileNames = buildFileNames;
             _recycleBinProvider = recycleBinProvider;
             _mediaInfoProvider = mediaInfoProvider;
             _seriesRepository = seriesRepository;
-            _eventAggregator = eventAggregator;
+            _moveEpisodeFiles = moveEpisodeFiles;
         }
 
         public DiskScanProvider()
@@ -180,63 +174,6 @@ namespace NzbDrone.Core.Providers
             return episodeFile;
         }
 
-        public virtual EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, bool newDownload = false)
-        {
-            if (episodeFile == null)
-                throw new ArgumentNullException("episodeFile");
-
-            var series = _seriesRepository.Get(episodeFile.SeriesId);
-            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
-            string newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
-            var newFile = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-
-            //Only rename if existing and new filenames don't match
-            if (DiskProvider.PathEquals(episodeFile.Path, newFile))
-            {
-                Logger.Debug("Skipping file rename, source and destination are the same: {0}", episodeFile.Path);
-                return null;
-            }
-
-            if (!_diskProvider.FileExists(episodeFile.Path))
-            {
-                Logger.Error("Episode file path does not exist, {0}", episodeFile.Path);
-                return null;
-            }
-
-            _diskProvider.CreateDirectory(new FileInfo(newFile).DirectoryName);
-
-            Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile);
-            _diskProvider.MoveFile(episodeFile.Path, newFile);
-
-            //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
-            try
-            {
-                _diskProvider.InheritFolderPermissions(newFile);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                Logger.Debug("Unable to apply folder permissions to: ", newFile);
-                Logger.TraceException(ex.Message, ex);
-            }
-
-            episodeFile.Path = newFile;
-            _mediaFileService.Update(episodeFile);
-
-            var parseResult = Parser.ParsePath(episodeFile.Path);
-            parseResult.Series = series;
-            parseResult.Quality = new QualityModel { Quality = episodeFile.Quality, Proper = episodeFile.Proper };
-            parseResult.Episodes = episodes;
-
-
-            if (newDownload)
-            {
-                _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult));
-            }
-
-            return episodeFile;
-        }
-
-
 
         public virtual void CleanUpDropFolder(string path)
         {
@@ -254,7 +191,7 @@ namespace NzbDrone.Core.Providers
                     {
                         Logger.Trace("[{0}] was imported but not moved, moving it now", file);
 
-                        MoveEpisodeFile(episodeFile, true);
+                        _moveEpisodeFiles.MoveEpisodeFile(episodeFile, true);
                     }
 
                 }

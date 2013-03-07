@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs.Implementations;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.JobTests
@@ -22,7 +17,7 @@ namespace NzbDrone.Core.Test.JobTests
         private ProgressNotification _testNotification;
         private Series _series;
         private IList<EpisodeFile> _episodeFiles;
-            
+
         [SetUp]
         public void Setup()
         {
@@ -47,24 +42,18 @@ namespace NzbDrone.Core.Test.JobTests
                   .Returns(_episodeFiles.ToList());
         }
 
-        private void WithMovedFiles()
-        {
-            Mocker.GetMock<DiskScanProvider>()
-                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), false))
-                  .Returns(_episodeFiles.First());
-        }
 
         [Test]
         public void should_throw_if_seriesId_is_zero()
         {
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = 0, SeasonNumber = 10 }));
         }
 
         [Test]
         public void should_throw_if_seasonId_is_less_than_zero()
         {
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
                 Mocker.Resolve<RenameSeasonJob>().Start(_testNotification, new { SeriesId = _series.Id, SeasonNumber = -10 }));
         }
 
@@ -76,6 +65,6 @@ namespace NzbDrone.Core.Test.JobTests
             ExceptionVerification.ExpectedWarns(1);
         }
 
-    
+
     }
 }

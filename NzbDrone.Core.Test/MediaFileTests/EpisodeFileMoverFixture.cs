@@ -1,30 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
+namespace NzbDrone.Core.Test.MediaFileTests
 {
-    // ReSharper disable InconsistentNaming
-    public class MoveEpisodeFileFixture : CoreTest
+    public class EpisodeFileMoverFixture : CoreTest<MoveEpisodeFiles>
     {
         [Test]
         public void should_not_move_file_if_source_and_destination_are_the_same_path()
@@ -66,7 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fi);
 
             //Act
-            var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, false);
+            var result = Subject.MoveEpisodeFile(file, false);
 
             //Assert
             result.Should().BeNull();
@@ -119,7 +109,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                   .Setup(s => s.FileExists(currentFilename))
                   .Returns(true);
 
-            var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, true);
+            var result = Subject.MoveEpisodeFile(file, true);
 
 
         }
@@ -167,7 +157,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                 .Returns(fi);
 
-            var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, true);
+            var result = Subject.MoveEpisodeFile(file, true);
 
             result.Should().BeNull();
             ExceptionVerification.ExpectedErrors(1);

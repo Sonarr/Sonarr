@@ -250,6 +250,7 @@
     <Compile Include="Lifecycle\AppRestartJob.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
+    <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\GhostFileCleanupService.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />

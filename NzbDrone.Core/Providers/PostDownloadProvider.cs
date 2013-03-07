@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 
@@ -17,12 +18,14 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly ISeriesRepository _seriesRepository;
+        private readonly IMoveEpisodeFiles _episodeFileMover;
 
-        public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider, ISeriesRepository seriesRepository)
+        public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider, ISeriesRepository seriesRepository, IMoveEpisodeFiles episodeFileMover)
         {
             _diskProvider = diskProvider;
             _diskScanProvider = diskScanProvider;
             _seriesRepository = seriesRepository;
+            _episodeFileMover = episodeFileMover;
         }
 
         public PostDownloadProvider()
@@ -101,7 +104,7 @@ namespace NzbDrone.Core.Providers
             _diskScanProvider.CleanUpDropFolder(subfolderInfo.FullName);
 
             var importedFiles = _diskScanProvider.Scan(series, subfolderInfo.FullName);
-            importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
+            importedFiles.ForEach(file => _episodeFileMover.MoveEpisodeFile(file, true));
 
             //Delete the folder only if folder is small enough
             if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < Constants.IgnoreFileSize)
@@ -166,7 +169,7 @@ namespace NzbDrone.Core.Providers
             var episodeFile = _diskScanProvider.ImportFile(series, videoFile);
             if (episodeFile != null)
             {
-                _diskScanProvider.MoveEpisodeFile(episodeFile, true);
+                _episodeFileMover.MoveEpisodeFile(episodeFile, true);
             }
         }
 

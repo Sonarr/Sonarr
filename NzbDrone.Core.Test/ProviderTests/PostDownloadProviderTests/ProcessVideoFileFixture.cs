@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
             //Assert
-            Mocker.GetMock<DiskScanProvider>().Verify(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true), Times.Once());
+            Mocker.GetMock<IMoveEpisodeFiles>().Verify(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true), Times.Once());
             ExceptionVerification.IgnoreWarns();
         }
         

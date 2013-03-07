@@ -6,7 +6,6 @@ using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Jobs.Implementations
@@ -14,19 +13,18 @@ namespace NzbDrone.Core.Jobs.Implementations
     public class RenameSeasonJob : IJob
     {
         private readonly IMediaFileService _mediaFileService;
-        private readonly DiskScanProvider _diskScanProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IMoveEpisodeFiles _episodeFilesMover;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeasonJob(IMediaFileService mediaFileService, DiskScanProvider diskScanProvider,
-                                ISeriesRepository seriesRepository, IEventAggregator eventAggregator)
+        public RenameSeasonJob(IMediaFileService mediaFileService, ISeriesRepository seriesRepository, IEventAggregator eventAggregator, IMoveEpisodeFiles episodeFilesMover)
         {
             _mediaFileService = mediaFileService;
-            _diskScanProvider = diskScanProvider;
             _seriesRepository = seriesRepository;
             _eventAggregator = eventAggregator;
+            _episodeFilesMover = episodeFilesMover;
         }
 
         public string Name
@@ -68,7 +66,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 try
                 {
                     var oldFile = new EpisodeFile(episodeFile);
-                    var newFile = _diskScanProvider.MoveEpisodeFile(episodeFile);
+                    var newFile = _episodeFilesMover.MoveEpisodeFile(episodeFile);
 
                     if (newFile != null)
                     {
