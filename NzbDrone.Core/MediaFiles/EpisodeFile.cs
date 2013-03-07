@@ -34,7 +34,7 @@ namespace NzbDrone.Core.MediaFiles
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
 
-        public QualityModel QualityWrapper
+        public QualityModel QualityModel
         {
             get
             {

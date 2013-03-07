@@ -7,6 +7,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
 
-            Mocker.GetMock<AlreadyInQueueSpecification>()
+            Mocker.GetMock<NotInQueueSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(false);
 
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithEpisodeAlreadyInQueue()
         {
-            Mocker.GetMock<AlreadyInQueueSpecification>()
+            Mocker.GetMock<NotInQueueSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
         }

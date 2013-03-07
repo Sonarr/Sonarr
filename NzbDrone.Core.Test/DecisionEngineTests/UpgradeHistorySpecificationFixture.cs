@@ -5,6 +5,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            Mocker.Resolve<QualityUpgradeSpecification>();
+            Mocker.Resolve<QualityUpgradableSpecification>();
             _upgradeHistory = Mocker.Resolve<UpgradeHistorySpecification>();
 
             var singleEpisodeList = new List<Episode> { new Episode { SeasonNumber = 12, EpisodeNumber = 3 } };

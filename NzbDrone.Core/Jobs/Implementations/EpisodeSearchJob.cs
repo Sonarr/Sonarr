@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Model.Notification;
@@ -11,25 +10,25 @@ namespace NzbDrone.Core.Jobs.Implementations
     public class EpisodeSearchJob : IJob
     {
         private readonly IEpisodeService _episodeService;
-        private readonly UpgradePossibleSpecification _upgradePossibleSpecification;
+        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly EpisodeSearch _episodeSearch;
         private readonly DailyEpisodeSearch _dailyEpisodeSearch;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeSearchJob(IEpisodeService episodeService, UpgradePossibleSpecification upgradePossibleSpecification,
+        public EpisodeSearchJob(IEpisodeService episodeService, IQualityUpgradableSpecification qualityUpgradableSpecification,
                                 EpisodeSearch episodeSearch, DailyEpisodeSearch dailyEpisodeSearch)
         {
-            if(dailyEpisodeSearch == null) throw new ArgumentNullException("dailyEpisodeSearch");
+            if (dailyEpisodeSearch == null) throw new ArgumentNullException("dailyEpisodeSearch");
             _episodeService = episodeService;
-            _upgradePossibleSpecification = upgradePossibleSpecification;
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
             _episodeSearch = episodeSearch;
             _dailyEpisodeSearch = dailyEpisodeSearch;
         }
 
         public EpisodeSearchJob()
         {
-            
+
         }
 
         public string Name
@@ -55,7 +54,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 return;
             }
 
-            if (!_upgradePossibleSpecification.IsSatisfiedBy(episode))
+            if (!_qualityUpgradableSpecification.IsUpgradable(episode.Series.QualityProfile, episode.EpisodeFile.QualityModel))
             {
                 logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
                 notification.CurrentMessage = String.Format("Skipping search for {0}, the file you have is already at cutoff", episode);
@@ -76,7 +75,7 @@ namespace NzbDrone.Core.Jobs.Implementations
 
             else
             {
-                _episodeSearch.Search(episode.Series, new { Episode = episode }, notification);    
+                _episodeSearch.Search(episode.Series, new { Episode = episode }, notification);
             }
         }
     }

@@ -1,37 +1,35 @@
-﻿using System.Linq;
 using NLog;
-using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 
-namespace NzbDrone.Core.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class AcceptableSizeSpecification
+    public class AcceptableSizeSpecification : IFetchableSpecification
     {
         private readonly IQualitySizeService _qualityTypeProvider;
         private readonly IEpisodeService _episodeService;
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger;
 
-        public AcceptableSizeSpecification(IQualitySizeService qualityTypeProvider, IEpisodeService episodeService)
+        public AcceptableSizeSpecification(IQualitySizeService qualityTypeProvider, IEpisodeService episodeService, Logger logger)
         {
             _qualityTypeProvider = qualityTypeProvider;
             _episodeService = episodeService;
+            _logger = logger;
         }
 
-        public AcceptableSizeSpecification()
+        public string RejectionReason
         {
-            
+            get { return "File size too big or small"; }
         }
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
-            logger.Trace("Beginning size check for: {0}", subject);
+            _logger.Trace("Beginning size check for: {0}", subject);
 
-            if(subject.Quality.Quality == Quality.RAWHD)
+            if (subject.Quality.Quality == Quality.RAWHD)
             {
-                logger.Trace("Raw-HD release found, skipping size check.");
+                _logger.Trace("Raw-HD release found, skipping size check.");
                 return true;
             }
 
@@ -39,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine
 
             if (qualityType.MaxSize == 0)
             {
-                logger.Trace("Max size is 0 (unlimited) - skipping check.");
+                _logger.Trace("Max size is 0 (unlimited) - skipping check.");
                 return true;
             }
 
@@ -66,13 +64,13 @@ namespace NzbDrone.Core.DecisionEngine
             //If the parsed size is greater than maxSize we don't want it
             if (subject.Size > maxSize)
             {
-                logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Size, maxSize);
+                _logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Size, maxSize);
                 return false;
             }
-                
-            logger.Trace("Item: {0}, meets size contraints.", subject);
+
+            _logger.Trace("Item: {0}, meets size constraints.", subject);
             return true;
         }
-       
+
     }
 }

@@ -3,6 +3,7 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityUpgradeSpecificationFixture : CoreTest
+    public class QualityUpgradeSpecificationFixture : CoreTest<QualityUpgradableSpecification>
     {
         public static object[] IsUpgradeTestCases =
         {
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test, TestCaseSource("IsUpgradeTestCases")]
         public void IsUpgradeTest(Quality current, bool currentProper, Quality newQuality, bool newProper, Quality cutoff, bool expected)
         {
-            new QualityUpgradeSpecification().IsSatisfiedBy(new QualityModel(current, currentProper), new QualityModel(newQuality, newProper), cutoff)
+            Subject.IsUpgradable(new QualityProfile() { Cutoff = cutoff }, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
                     .Should().Be(expected);
         }
     }

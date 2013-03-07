@@ -191,7 +191,7 @@
     <Compile Include="DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\UpgradePossibleSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\QualityUpgradableSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\BlackholeProviderFixture.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\SabProviderTests\QueueFixture.cs" />

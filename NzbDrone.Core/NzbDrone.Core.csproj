@@ -188,6 +188,18 @@
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ObjectDbFactory.cs" />
     <Compile Include="Datastore\SiaqodbProxy.cs" />
+    <Compile Include="DecisionEngine\IFetchableSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
+    <Compile Include="DecisionEngine\AllowedDownloadSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\AllowedReleaseGroupSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\CustomStartDateSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\MonitoredEpisodeSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />
+    <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\UpgradeHistorySpecification.cs" />
     <Compile Include="Download\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
@@ -299,11 +311,8 @@
     <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
-    <Compile Include="DecisionEngine\LanguageSpecification.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetProvider.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />
-    <Compile Include="DecisionEngine\AllowedReleaseGroupSpecification.cs" />
-    <Compile Include="DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Download\Clients\PneumaticProvider.cs" />
     <Compile Include="Indexers\Nzbx.cs" />
     <Compile Include="Indexers\NzbClub.cs" />
@@ -346,34 +355,7 @@
     <Compile Include="Configuration\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DecisionEngine\AcceptableSizeSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\AllowedDownloadSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\AlreadyInQueueSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\MonitoredEpisodeSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\QualityAllowedByProfileSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\QualityUpgradeSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\RetentionSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\UpgradeDiskSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\UpgradeHistorySpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\UpgradePossibleSpecification.cs">
+    <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\DiskScanProvider.cs">

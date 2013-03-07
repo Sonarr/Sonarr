@@ -1,7 +1,6 @@
-﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -10,7 +9,7 @@ namespace NzbDrone.Core.DecisionEngine
         private readonly QualityAllowedByProfileSpecification _qualityAllowedByProfileSpecification;
         private readonly UpgradeDiskSpecification _upgradeDiskSpecification;
         private readonly AcceptableSizeSpecification _acceptableSizeSpecification;
-        private readonly AlreadyInQueueSpecification _alreadyInQueueSpecification;
+        private readonly NotInQueueSpecification _notInQueueSpecification;
         private readonly RetentionSpecification _retentionSpecification;
         private readonly AllowedReleaseGroupSpecification _allowedReleaseGroupSpecification;
         private readonly CustomStartDateSpecification _customStartDateSpecification;
@@ -19,14 +18,14 @@ namespace NzbDrone.Core.DecisionEngine
 
         public AllowedDownloadSpecification(QualityAllowedByProfileSpecification qualityAllowedByProfileSpecification,
             UpgradeDiskSpecification upgradeDiskSpecification, AcceptableSizeSpecification acceptableSizeSpecification,
-            AlreadyInQueueSpecification alreadyInQueueSpecification, RetentionSpecification retentionSpecification,
+            NotInQueueSpecification notInQueueSpecification, RetentionSpecification retentionSpecification,
             AllowedReleaseGroupSpecification allowedReleaseGroupSpecification, CustomStartDateSpecification customStartDateSpecification,
             LanguageSpecification languageSpecification)
         {
             _qualityAllowedByProfileSpecification = qualityAllowedByProfileSpecification;
             _upgradeDiskSpecification = upgradeDiskSpecification;
             _acceptableSizeSpecification = acceptableSizeSpecification;
-            _alreadyInQueueSpecification = alreadyInQueueSpecification;
+            _notInQueueSpecification = notInQueueSpecification;
             _retentionSpecification = retentionSpecification;
             _allowedReleaseGroupSpecification = allowedReleaseGroupSpecification;
             _customStartDateSpecification = customStartDateSpecification;
@@ -46,7 +45,7 @@ namespace NzbDrone.Core.DecisionEngine
             if (!_retentionSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.Retention;
             if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.Size;
             if (!_allowedReleaseGroupSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.ReleaseGroupNotWanted;
-            if (_alreadyInQueueSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.AlreadyInQueue;
+            if (!_notInQueueSpecification.IsSatisfiedBy(subject)) return ReportRejectionReasons.AlreadyInQueue;
             
             logger.Debug("Episode {0} is needed", subject);
             return ReportRejectionReasons.None;

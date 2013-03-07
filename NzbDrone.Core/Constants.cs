@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace NzbDrone.Core
+﻿namespace NzbDrone.Core
 {
     public static class Constants
     {

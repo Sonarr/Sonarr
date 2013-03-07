@@ -1,26 +1,29 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.DecisionEngine
+namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class MonitoredEpisodeSpecification
+    public class MonitoredEpisodeSpecification : IFetchableSpecification
     {
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger;
 
-        public MonitoredEpisodeSpecification(IEpisodeService episodeService, ISeriesRepository seriesRepository)
+        public MonitoredEpisodeSpecification(IEpisodeService episodeService, ISeriesRepository seriesRepository, Logger logger)
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;
+            _logger = logger;
         }
 
-        public MonitoredEpisodeSpecification()
+        public string RejectionReason
         {
-            
+            get
+            {
+                return "Series is not monitored";
+            }
         }
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
@@ -29,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine
 
             if (series == null)
             {
-                logger.Trace("{0} is not mapped to any series in DB. skipping", subject.CleanTitle);
+                _logger.Trace("{0} is not mapped to any series in DB. skipping", subject.CleanTitle);
                 return false;
             }
 
@@ -37,7 +40,7 @@ namespace NzbDrone.Core.DecisionEngine
 
             if (!series.Monitored)
             {
-                logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.CleanTitle);
+                _logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.CleanTitle);
                 return false;
             }
 
@@ -50,7 +53,7 @@ namespace NzbDrone.Core.DecisionEngine
                 return true;
             }
 
-            logger.Debug("All episodes are ignored. skipping.");
+            _logger.Debug("All episodes are ignored. skipping.");
             return false;
         }
     }
