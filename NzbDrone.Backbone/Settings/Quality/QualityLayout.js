@@ -33,7 +33,7 @@
 
             onRender: function () {
                 this.qualityStandard.show(new NzbDrone.Settings.Quality.QualityView({model: this.settings, qualityProfiles: qualityProfileCollection}));
-                this.qualityProfile.show(new NzbDrone.Settings.Quality.QualityProfileCollectionView({collection: this.qualityProfileCollection}));
+                this.qualityProfile.show(new NzbDrone.Settings.Quality.QualityProfileCollectionView({collection: qualityProfileCollection}));
                 this.qualitySize.show(new NzbDrone.Settings.Quality.QualitySizeCollectionView({collection: this.qualitySizeCollection}));
             }
         });

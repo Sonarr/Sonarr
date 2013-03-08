@@ -6,7 +6,7 @@ define([
 
 ], function () {
 
-    NzbDrone.Settings.QualityProfileView = Backbone.Marionette.ItemView.extend({
+    NzbDrone.Settings.Quality.QualityProfileView = Backbone.Marionette.ItemView.extend({
         template: 'Settings/Quality/QualityProfileTemplate',
         tagName: 'tr',
 
@@ -19,8 +19,8 @@ define([
             'click .x-remove': 'removeSeries'
         },
 
-        initialize: function (options) {
-            this.qualityProfileCollection = options.qualityProfiles;
+        initialize: function () {
+            var test = 1;
         },
 
         onRender: function () {
