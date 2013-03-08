@@ -9,7 +9,8 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         ui: {
             progressbar: '.progress .bar',
             qualityProfile: '.x-quality-profile',
-            backlogSettings: '.x-backlog-setting'
+            backlogSettings: '.x-backlog-setting',
+            switch: '.switch'
         },
 
         events: {
@@ -19,6 +20,7 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
 
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
+            this.ui.switch.bootstrapSwitch();
         },
 
 

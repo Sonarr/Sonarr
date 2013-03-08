@@ -1,26 +1,31 @@
 ﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>Edit: {{title}}</h3>
 </div>
 <div class="modal-body">
     <div class="form-horizontal">
         
         <div class="control-group">
-            <label class="control-label" for="inputMonitored">Monitored</label>
+            <label class="control-label">Monitored</label>
             <div class="controls">
-                <label class="checkbox">
-                    <input type="checkbox" id ="inputMonitored" name="monitored">
-                    Should NzbDrone download episodes for this series?
-                </label>
+                <div class="switch">
+                    <input type="checkbox" name="monitored" />
+                </div>
+                <span class="help-inline-checkbox">
+                    <i class="icon-question-sign" title="Should NzbDrone download episodes for this series?"></i>
+                </span>
             </div>
         </div>
         
         <div class="control-group">
-            <label class="control-label" for="inputSeasonFolder">Use Season Folder</label>
+            <label class="control-label">Use Season Folder</label>
             <div class="controls">
-                <label class="checkbox">
-                    <input type="checkbox" id ="inputSeasonFolder" name="seasonFolder">
-                    Should downloaded episodes be stored in season folders?
-                </label>
+                <div class="switch">
+                    <input type="checkbox" name="seasonFolder" />
+                </div>
+                <span class="help-inline-checkbox">
+                    <i class="icon-question-sign" title="Should downloaded episodes be stored in season folders?"></i>
+                </span>
             </div>
         </div>
 
@@ -33,7 +38,9 @@
                     <option value="{{id}}">{{attributes.name}}</option>
                     {{/each}}
                 </select>
-                <span class="help-inline">Which Quality Profile should NzbDrone use to download episodes?</span>
+                <span class="help-inline">
+                    <i class="icon-question-sign" title="Which Quality Profile should NzbDrone use to download episodes?"></i>
+                </span>
             </div>
         </div>
 
@@ -41,7 +48,9 @@
             <label class="control-label" for="inputPath">Path</label>
             <div class="controls">
                 <input type="text" id="inputPath" placeholder="Path" name="path">
-                <span class="help-inline">Where should NzbDrone store episodes for this series?</span>
+                <span class="help-inline">
+                    <i class="icon-question-sign" title="Where should NzbDrone store episodes for this series?"></i>
+                </span>
             </div>
         </div>
         
@@ -53,7 +62,9 @@
                     <option value="1">Enable</option>
                     <option value="2">Disable</option>
                 </select>
-                <span class="help-inline">Should NzbDrone search for missing episodes every 30 days?</span>
+                <span class="help-inline">
+                    <i class="icon-question-sign" title="Should NzbDrone search for missing episodes every 30 days?"></i>
+                </span>
             </div>
         </div>
         
@@ -61,7 +72,9 @@
             <label class="control-label" for="inputCustomStartDate">Custom Start Date</label>
             <div class="controls">
                 <input type="date" id="inputCustomStartDate"  name="customStartDate">
-                <span class="help-inline">Should NzbDrone only download episodes after your preferred start date?</span>
+                <span class="help-inline">
+                    <i class="icon-question-sign" title="Should NzbDrone only download episodes after your preferred start date?"></i>
+                </span>
             </div>
         </div>
     </div>
