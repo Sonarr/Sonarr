@@ -45,6 +45,8 @@ define('app',  function () {
     window.NzbDrone.Settings = {};
     window.NzbDrone.Settings.Naming = {};
     window.NzbDrone.Settings.Quality = {};
+    window.NzbDrone.Settings.Quality.Size = {};
+    window.NzbDrone.Settings.Quality.Profile = {};
     window.NzbDrone.Settings.Indexers = {};
     window.NzbDrone.Settings.DownloadClient = {};
     window.NzbDrone.Settings.Notifications = {};

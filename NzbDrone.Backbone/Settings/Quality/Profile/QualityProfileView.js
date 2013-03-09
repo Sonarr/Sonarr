@@ -6,8 +6,8 @@ define([
 
 ], function () {
 
-    NzbDrone.Settings.Quality.QualityProfileView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Quality/QualityProfileTemplate',
+    NzbDrone.Settings.Quality.Profile.QualityProfileView = Backbone.Marionette.ItemView.extend({
+        template: 'Settings/Quality/Profile/QualityProfileTemplate',
         tagName: 'tr',
 
         ui: {

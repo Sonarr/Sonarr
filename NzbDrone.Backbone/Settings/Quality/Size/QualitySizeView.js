@@ -6,8 +6,8 @@ define([
 
 ], function () {
 
-    NzbDrone.Settings.Quality.QualitySizeView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Quality/QualitySizeTemplate',
+    NzbDrone.Settings.Quality.Size.QualitySizeView = Backbone.Marionette.ItemView.extend({
+        template: 'Settings/Quality/Size/QualitySizeTemplate',
         className: 'quality-size-item',
 
         ui: {
