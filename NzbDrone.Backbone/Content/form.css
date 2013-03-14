@@ -1,6 +1,7 @@
 ﻿.form-horizontal .controls i {
-    font-size: 25px;
-    color: #3A87AD;
+    font-size: 16px;
+    /*color: #3A87AD;*/ /* Info blue */
+    color: #595959;
     cursor: default;
 }
 

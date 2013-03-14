@@ -16,7 +16,6 @@ define([
 
         initialize: function(){
             //Listen to save event
-            this.bind
         },
 
         onRender: function () {

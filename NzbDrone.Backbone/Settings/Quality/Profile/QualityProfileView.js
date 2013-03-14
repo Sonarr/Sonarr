@@ -2,7 +2,8 @@
 
 define([
         'app',
-        'Quality/QualityProfileCollection'
+        'Quality/QualityProfileCollection',
+        'Settings/Quality/Profile/EditQualityProfileView'
 
 ], function () {
 
@@ -20,16 +21,14 @@ define([
         },
 
         initialize: function () {
-            var test = 1;
         },
 
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
         },
 
-
         editSeries: function () {
-            var view = new NzbDrone.Series.Edit.EditSeriesView({ model: this.model});
+            var view = new NzbDrone.Settings.Quality.Profile.EditQualityProfileView({ model: this.model});
 
             NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
                 view: view

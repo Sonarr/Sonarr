@@ -14,7 +14,7 @@
         defaults: {
             id: null,
             name: '',
-            //allowed: {},
+            //'qualities.allowed': false,
             cutoff: null
         }
     });
