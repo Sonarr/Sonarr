@@ -29,7 +29,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             _logger.Trace("Beginning release group check for: {0}", subject);
 
-            var allowed = _configService.AllowedReleaseGroups;
+            //Todo: Make this use NzbRestrictions - How should whitelist be used? Will it override blacklist or vice-versa?
+
+            //var allowed = _configService.AllowedReleaseGroups;
+            var allowed = "";
 
             if (string.IsNullOrWhiteSpace(allowed))
                 return true;

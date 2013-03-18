@@ -61,7 +61,6 @@ namespace NzbDrone.Core.Configuration
         string PlexUsername { get; set; }
         string PlexPassword { get; set; }
         Boolean MetadataUseBanners { get; set; }
-        string AllowedReleaseGroups { get; set; }
         string PneumaticDirectory { get; set; }
         string RecycleBin { get; set; }
         int RssSyncInterval { get; set; }
@@ -77,6 +76,7 @@ namespace NzbDrone.Core.Configuration
         Int32 NzbgetPriority { get; set; }
         PriorityType NzbgetBacklogTvPriority { get; set; }
         PriorityType NzbgetRecentTvPriority { get; set; }
+        string NzbRestrictions { get; set; }
         string GetValue(string key, object defaultValue, bool persist = false);
         void SetValue(string key, string value);
         void SaveValues(Dictionary<string, object> configValues);

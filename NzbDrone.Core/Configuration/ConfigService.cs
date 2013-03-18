@@ -149,7 +149,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientTvDirectory", value); }
         }
 
-
         public bool UseSeasonFolder
         {
             get { return GetValueBoolean("UseSeasonFolder", true); }
@@ -373,12 +372,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("MetadataUseBanners", value); }
         }
 
-        public string AllowedReleaseGroups
-        {
-            get { return GetValue("AllowedReleaseGroups"); }
-            set { SetValue("AllowedReleaseGroups", value); }
-        }
-
         public string PneumaticDirectory
         {
             get { return GetValue("PneumaticDirectory", String.Empty); }
@@ -477,6 +470,12 @@ namespace NzbDrone.Core.Configuration
             get { return (PriorityType)GetValueInt("NzbgetRecentTvPriority"); }
 
             set { SetValue("NzbgetRecentTvPriority", (int)value); }
+        }
+
+        public string NzbRestrictions
+        {
+            get { return GetValue("NzbRestrictions", String.Empty); }
+            set { SetValue("NzbRestrictions", value); }
         }
 
         private string GetValue(string key)

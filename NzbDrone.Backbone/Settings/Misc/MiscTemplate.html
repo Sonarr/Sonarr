@@ -1,3 +1,40 @@
-﻿<div>
-    Misc settings will go here
-</div>
+﻿<fieldset>
+    <legend>General</legend>
+
+    <div class="control-group">
+        <label class="control-label">Backlog Searching</label>
+        <div class="controls">
+            <div class="switch">
+                <input type="checkbox" name="enableBacklogSearching" />
+            </div>
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Should NzbDrone try to download missing episodes automatically?"></i>
+                <i class="icon-exclamation-sign danger" title="Enabling backlog searching can use a lot of bandwidth and is not
+                                                     recommended for users with block usenet accounts or bandwidth restrictions."></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Ignore Deleted Episodes</label>
+        <div class="controls">
+            <div class="switch">
+                <input type="checkbox" name="autoIgnorePreviouslyDownloadedEpisodes" />
+            </div>
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Episodes deleted from disk are automatically ignored in NzbDrone"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Nzb Restrictions</label>
+        <div class="controls">
+            <textarea rows="3" name="nzbRestrictions" class="nzb-restrictions"></textarea>
+            <span class="help-inline">
+                <i class="icon-question-sign" title="White list or black list nzbs based on these rules<br/>White list: +:LoL<br/>Black list: -:French"></i>
+            </span>
+            <span class="text-area-help">Newline-delimited set of rules in the form of +|-:</span>
+        </div>
+    </div>
+</fieldset>
