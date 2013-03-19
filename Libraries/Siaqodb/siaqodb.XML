@@ -86,6 +86,152 @@
             Do NOT use it!, it is used only internally
             </summary>
     </member>
+    <member name="T:Sqo.SiaqodbConfigurator">
+      <summary>
+            Class responsible for configurations of Siaqodb database engine
+            </summary>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.AddIndex(System.String,System.Type)">
+      <summary>
+            Add an index for a field or automatic property of a certain Type,an Index can be added also by using Attribute: Sqo.Attributes.Index;
+            both ways of adding index are similar
+            </summary>
+      <param name="field">Field name or automatic property name</param>
+      <param name="type">Type that declare the field</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.AddUniqueConstraint(System.String,System.Type)">
+      <summary>
+            Add an UniqueConstraint for a field of a certain Type,an UniqueConstraint can be added also by using Attribute: Sqo.Attributes.UniqueConstraint;
+            both ways of adding UniqueConstraint are similar
+            </summary>
+      <param name="field">Field name or automatic property name</param>
+      <param name="type">Type that declare the field</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.AddMaxLength(System.String,System.Int32,System.Type)">
+      <summary>
+            Put MaxLength for a string field or automatic property of a Type, MaxLength can be set also by using Attribute: Sqo.Attributes.MaxLength
+            </summary>
+      <param name="field">Field name or automatic property name</param>
+      <param name="maxLength">max length for a string</param>
+      <param name="type">Type that declare the field</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.AddIgnore(System.String,System.Type)">
+      <summary>
+            Ignore a field or automatic property to be stored
+            </summary>
+      <param name="field">Name of field or automatic property</param>
+      <param name="type">Type that declare the field</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.PropertyUseField(System.String,System.String,System.Type)">
+      <summary>
+            Set the name of backing field for a property in case engine cannto discover it, this also can be set by attribute: Sqo.Attributes.UseVariable
+            </summary>
+      <param name="propertyName">Name of property</param>
+      <param name="fieldName">Name of backing field of property</param>
+      <param name="type">
+      </param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.SetEncryptionPassword(System.String)">
+      <summary>
+            Set the password for encryption algorithm used to encrypt database data
+            </summary>
+      <param name="pwd">The password</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.SetEncryptor(Sqo.Encryption.IEncryptor)">
+      <summary>
+            Set your custom encryption algorithm that implemets IEncryptor interface
+            </summary>
+      <param name="encryptor">The instance of custom encryption algorithm</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.SetEncryptor(Sqo.BuildInAlgorithm)">
+      <summary>
+            Set build-in encryption algorithm 
+            </summary>
+      <param name="alg">Encryption algorithm</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.SetDatabaseFileName``1(System.String)">
+      <summary>
+            Set custom fileName on disk of database file for Type T
+            </summary>
+      <typeparam name="T">Type of objects</typeparam>
+      <param name="fileName">Name of database file on disk</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.LoadRelatedObjects``1(System.Boolean)">
+      <summary>
+            By default this is true for all types. Set this to false to not load childs entities of objects of Type provided
+            </summary>
+      <typeparam name="T">Type for objects</typeparam>
+      <param name="loadRelatedObjects">true if related object need to be loaded, false if you want to load by Include(...) method</param>
+    </member>
+    <member name="M:Sqo.SiaqodbConfigurator.SetRaiseLoadEvents(System.Boolean)">
+      <summary>
+            Set true to raise Loading/Loaded events
+            </summary>
+      <param name="raiseLoadEvents">
+      </param>
+    </member>
+    <member name="P:Sqo.SiaqodbConfigurator.EncryptedDatabase">
+      <summary>
+            Set if database will be encrypted or not
+            </summary>
+    </member>
+    <member name="T:Sqo.SiaqodbUtil">
+      <summary>
+            Database utilities
+            </summary>
+    </member>
+    <member name="M:Sqo.SiaqodbUtil.ReIndex(System.String)">
+      <summary>
+            Rebuild and defragment indexes
+            </summary>
+      <param name="siaqodb">
+      </param>
+    </member>
+    <member name="M:Sqo.SiaqodbUtil.Shrink(System.String,Sqo.ShrinkType)">
+      <summary>
+            Shrink database files including rawdata.sqr and indexes 
+            </summary>
+    </member>
+    <member name="M:Sqo.SiaqodbUtil.Repair(System.String)">
+      <summary>
+            Repair database files by fixing corrupted objects bytes
+            </summary>
+      <param name="siaqodb">
+      </param>
+    </member>
+    <member name="M:Sqo.SiaqodbUtil.RepairType``1(System.String)">
+      <summary>
+            Repair database file of Type provided, the corrupted objects will be recuperated or deleted
+            </summary>
+      <param name="siaqodb">
+      </param>
+    </member>
+    <member name="F:Sqo.ShrinkType.Normal">
+      <summary>
+            Normal shrink, all blocks marked as free will be supressed 
+             </summary>
+    </member>
+    <member name="F:Sqo.ShrinkType.ForceClaimSpace">
+      <summary>
+            All database files will be parsed and check if a block can be marked as free then supress free blocks;
+            This operation can be slow if your database is big.
+            </summary>
+    </member>
+    <member name="F:Sqo.ShrinkType.Total">
+      <summary>
+            This includes Normal + ForceClaimSpace but also shrink of every db file; after this operation OID values of the stored objects may change.
+            </summary>
+    </member>
+    <member name="T:Sqo.SqoDataObject">
+      <summary>
+            Basic class that any siaqodb storable class may inherits from 
+            </summary>
+    </member>
+    <member name="P:Sqo.SqoDataObject.OID">
+      <summary>
+            Object Identifier(unique per Type)
+            </summary>
+    </member>
     <member name="T:Sqo.IObjectList`1">
       <summary>
             Main interface to be used by implementers to retrieve objects from database
@@ -125,37 +271,6 @@
       <summary>
             List of fields
             </summary>
-    </member>
-    <member name="T:Sqo.ObjectList`1">
-      <summary>
-            List used to retrieve objects from database
-            </summary>
-      <typeparam name="T">Type of objects from list</typeparam>
-    </member>
-    <member name="M:Sqo.ObjectList`1.Add(`0)">
-      <summary>
-            Add obeject of Type T in the list
-            </summary>
-      <param name="item">object to be added</param>
-    </member>
-    <member name="M:Sqo.ObjectList`1.Clear">
-      <summary>
-            Remove all elements from list
-            </summary>
-    </member>
-    <member name="M:Sqo.ObjectList`1.Contains(`0)">
-      <summary>
-            Determines if an element is in list
-            </summary>
-      <param name="item">The object to locate in list</param>
-      <returns>bool value if object was found or not</returns>
-    </member>
-    <member name="M:Sqo.ObjectList`1.Remove(`0)">
-      <summary>
-            Remove object from list
-            </summary>
-      <param name="item">The object to remove</param>
-      <returns>bool value if object was removed or not</returns>
     </member>
     <member name="T:Sqo.Siaqodb">
       <summary>
@@ -476,151 +591,36 @@
             Raised after object is loaded from database
             </summary>
     </member>
-    <member name="T:Sqo.SiaqodbConfigurator">
+    <member name="T:Sqo.ObjectList`1">
       <summary>
-            Class responsible for configurations of Siaqodb database engine
+            List used to retrieve objects from database
+            </summary>
+      <typeparam name="T">Type of objects from list</typeparam>
+    </member>
+    <member name="M:Sqo.ObjectList`1.Add(`0)">
+      <summary>
+            Add obeject of Type T in the list
+            </summary>
+      <param name="item">object to be added</param>
+    </member>
+    <member name="M:Sqo.ObjectList`1.Clear">
+      <summary>
+            Remove all elements from list
             </summary>
     </member>
-    <member name="M:Sqo.SiaqodbConfigurator.AddIndex(System.String,System.Type)">
+    <member name="M:Sqo.ObjectList`1.Contains(`0)">
       <summary>
-            Add an index for a field or automatic property of a certain Type,an Index can be added also by using Attribute: Sqo.Attributes.Index;
-            both ways of adding index are similar
+            Determines if an element is in list
             </summary>
-      <param name="field">Field name or automatic property name</param>
-      <param name="type">Type that declare the field</param>
+      <param name="item">The object to locate in list</param>
+      <returns>bool value if object was found or not</returns>
     </member>
-    <member name="M:Sqo.SiaqodbConfigurator.AddUniqueConstraint(System.String,System.Type)">
+    <member name="M:Sqo.ObjectList`1.Remove(`0)">
       <summary>
-            Add an UniqueConstraint for a field of a certain Type,an UniqueConstraint can be added also by using Attribute: Sqo.Attributes.UniqueConstraint;
-            both ways of adding UniqueConstraint are similar
+            Remove object from list
             </summary>
-      <param name="field">Field name or automatic property name</param>
-      <param name="type">Type that declare the field</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.AddMaxLength(System.String,System.Int32,System.Type)">
-      <summary>
-            Put MaxLength for a string field or automatic property of a Type, MaxLength can be set also by using Attribute: Sqo.Attributes.MaxLength
-            </summary>
-      <param name="field">Field name or automatic property name</param>
-      <param name="maxLength">max length for a string</param>
-      <param name="type">Type that declare the field</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.AddIgnore(System.String,System.Type)">
-      <summary>
-            Ignore a field or automatic property to be stored
-            </summary>
-      <param name="field">Name of field or automatic property</param>
-      <param name="type">Type that declare the field</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.PropertyUseField(System.String,System.String,System.Type)">
-      <summary>
-            Set the name of backing field for a property in case engine cannto discover it, this also can be set by attribute: Sqo.Attributes.UseVariable
-            </summary>
-      <param name="propertyName">Name of property</param>
-      <param name="fieldName">Name of backing field of property</param>
-      <param name="type">
-      </param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.SetEncryptionPassword(System.String)">
-      <summary>
-            Set the password for encryption algorithm used to encrypt database data
-            </summary>
-      <param name="pwd">The password</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.SetEncryptor(Sqo.Encryption.IEncryptor)">
-      <summary>
-            Set your custom encryption algorithm that implemets IEncryptor interface
-            </summary>
-      <param name="encryptor">The instance of custom encryption algorithm</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.SetEncryptor(Sqo.BuildInAlgorithm)">
-      <summary>
-            Set build-in encryption algorithm 
-            </summary>
-      <param name="alg">Encryption algorithm</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.SetDatabaseFileName``1(System.String)">
-      <summary>
-            Set custom fileName on disk of database file for Type T
-            </summary>
-      <typeparam name="T">Type of objects</typeparam>
-      <param name="fileName">Name of database file on disk</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.LoadRelatedObjects``1(System.Boolean)">
-      <summary>
-            By default this is true for all types. Set this to false to not load childs entities of objects of Type provided
-            </summary>
-      <typeparam name="T">Type for objects</typeparam>
-      <param name="loadRelatedObjects">true if related object need to be loaded, false if you want to load by Include(...) method</param>
-    </member>
-    <member name="M:Sqo.SiaqodbConfigurator.SetRaiseLoadEvents(System.Boolean)">
-      <summary>
-            Set true to raise Loading/Loaded events
-            </summary>
-      <param name="raiseLoadEvents">
-      </param>
-    </member>
-    <member name="P:Sqo.SiaqodbConfigurator.EncryptedDatabase">
-      <summary>
-            Set if database will be encrypted or not
-            </summary>
-    </member>
-    <member name="T:Sqo.SiaqodbUtil">
-      <summary>
-            Database utilities
-            </summary>
-    </member>
-    <member name="M:Sqo.SiaqodbUtil.ReIndex(System.String)">
-      <summary>
-            Rebuild and defragment indexes
-            </summary>
-      <param name="siaqodb">
-      </param>
-    </member>
-    <member name="M:Sqo.SiaqodbUtil.Shrink(System.String,Sqo.ShrinkType)">
-      <summary>
-            Shrink database files including rawdata.sqr and indexes 
-            </summary>
-    </member>
-    <member name="M:Sqo.SiaqodbUtil.Repair(System.String)">
-      <summary>
-            Repair database files by fixing corrupted objects bytes
-            </summary>
-      <param name="siaqodb">
-      </param>
-    </member>
-    <member name="M:Sqo.SiaqodbUtil.RepairType``1(System.String)">
-      <summary>
-            Repair database file of Type provided, the corrupted objects will be recuperated or deleted
-            </summary>
-      <param name="siaqodb">
-      </param>
-    </member>
-    <member name="F:Sqo.ShrinkType.Normal">
-      <summary>
-            Normal shrink, all blocks marked as free will be supressed 
-             </summary>
-    </member>
-    <member name="F:Sqo.ShrinkType.ForceClaimSpace">
-      <summary>
-            All database files will be parsed and check if a block can be marked as free then supress free blocks;
-            This operation can be slow if your database is big.
-            </summary>
-    </member>
-    <member name="F:Sqo.ShrinkType.Total">
-      <summary>
-            This includes Normal + ForceClaimSpace but also shrink of every db file; after this operation OID values of the stored objects may change.
-            </summary>
-    </member>
-    <member name="T:Sqo.SqoDataObject">
-      <summary>
-            Basic class that any siaqodb storable class may inherits from 
-            </summary>
-    </member>
-    <member name="P:Sqo.SqoDataObject.OID">
-      <summary>
-            Object Identifier(unique per Type)
-            </summary>
+      <param name="item">The object to remove</param>
+      <returns>bool value if object was removed or not</returns>
     </member>
     <member name="M:Sqo.Transactions.Transaction.Commit">
       <summary>

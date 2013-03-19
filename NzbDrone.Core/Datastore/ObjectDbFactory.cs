@@ -32,8 +32,6 @@ namespace NzbDrone.Core.Datastore
                 _diskProvider.CreateDirectory(dbPath);
             }
 
-            SiaqodbConfigurator.SetTrialLicense("uvhpW4hT5Rtq+Uoyq8MOm1Smon15foxV5iS5bAegIXU=");
-
             var db = new Siaqodb(dbPath);
 
             return new SiaqodbProxy(db);
