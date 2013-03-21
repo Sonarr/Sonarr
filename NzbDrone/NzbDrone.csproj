@@ -120,7 +120,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="licenses.licx" />
     <EmbeddedResource Include="NzbDrone.ico" />
   </ItemGroup>
   <ItemGroup>
