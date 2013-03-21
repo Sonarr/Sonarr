@@ -89,7 +89,6 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Warn("Series Folder doesn't exist: {0}, creating it.", series.Path);
                 _diskProvider.CreateDirectory(series.Path);
-                return;
             }
 
             var size = _diskProvider.GetDirectorySize(subfolderInfo.FullName);
