@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Tvdb
         [XmlElement]
         public int EpisodeNumber { get; set; }
 
-        [XmlIgnore]
+        [XmlElement]
         public DateTime FirstAired { get; set; }
 
         [XmlElement]

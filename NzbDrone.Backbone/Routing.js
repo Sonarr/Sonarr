@@ -15,6 +15,7 @@
             'calendar': 'calendar',
             'settings': 'settings',
             'settings/:action(/:query)': 'settings',
+            'missing': 'missing',
             ':whatever': 'notFound'
         }
     });

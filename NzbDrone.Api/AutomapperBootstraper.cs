@@ -2,6 +2,7 @@
 using AutoMapper;
 using NzbDrone.Api.Calendar;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Missing;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
@@ -52,6 +53,11 @@ namespace NzbDrone.Api
 
             //Episode
             Mapper.CreateMap<Episode, EpisodeResource>();
+
+            //Missing
+            Mapper.CreateMap<Episode, MissingResource>()
+                  .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
+                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title));
         }
     }
 }

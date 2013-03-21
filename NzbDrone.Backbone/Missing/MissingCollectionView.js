@@ -1,34 +1,19 @@
 ﻿'use strict';
 
-define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'], function (app, qualityProfileCollection) {
-    NzbDrone.Series.Index.SeriesIndexCollectionView = Backbone.Marionette.CompositeView.extend({
-        itemView: NzbDrone.Series.Index.SeriesItemView,
+define(['app', 'Missing/MissingItemView'], function (app) {
+    NzbDrone.Missing.MissingCollectionView = Backbone.Marionette.CompositeView.extend({
+        itemView: NzbDrone.Missing.MissingItemView,
         itemViewContainer: 'tbody',
-        template: 'Series/Index/SeriesIndexTemplate',
-        qualityProfileCollection: qualityProfileCollection,
-        //emptyView: NzbDrone.Series.EmptySeriesCollectionView,
-
-        initialize: function () {
-            this.collection = new NzbDrone.Series.SeriesCollection();
-            //Todo: This caused the onRendered event to be trigger twice, which displays two empty collection messages
-            //http://stackoverflow.com/questions/13065176/backbone-marionette-composit-view-onrender-executing-twice
-            this.collection.fetch();
-            this.qualityProfileCollection.fetch();
-
-            this.itemViewOptions = { qualityProfiles: this.qualityProfileCollection };
-        },
+        template: 'Missing/MissingCollectionTemplate',
 
         ui:{
-            table : '.x-series-table'
+            table : '.x-missing-table'
         },
 
-        onItemRemoved: function()
-        {
-            this.ui.table.trigger('update');
+        initialize: function (context, action, query, collection) {
+            this.collection = collection;
         },
-
-        onCompositeCollectionRendered: function()
-        {
+        onCompositeCollectionRendered: function() {
             this.ui.table.trigger('update');
 
             if(!this.tableSorter && this.collection.length > 0)
@@ -37,21 +22,21 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'
                     textExtraction: function (node) {
                         return node.innerHTML;
                     },
-                    sortList: [[1,0]],
+                    sortList: [[3,1]],
                     headers: {
                         0: {
-                            sorter: 'title'
-                        },
-                        1: {
                             sorter: 'innerHtml'
                         },
-                        5: {
-                            sorter: 'date'
-                        },
-                        6: {
+                        1: {
                             sorter: false
                         },
-                        7: {
+                        2: {
+                            sorter: false
+                        },
+                        3: {
+                            sorter: 'date'
+                        },
+                        4: {
                             sorter: false
                         }
                     }
@@ -85,11 +70,6 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'
             {
                 this.ui.table.trigger('update');
             }
-        }
+    	}
     });
-});
-
-NzbDrone.Series.Index.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
-    template: 'Series/Index/EmptySeriesCollectionTemplate',
-    tagName: 'tr'
 });

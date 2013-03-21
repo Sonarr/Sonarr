@@ -120,6 +120,8 @@
     <Compile Include="FrontendModule\IndexModule.cs" />
     <Compile Include="FrontendModule\BootstrapModule.cs" />
     <Compile Include="FrontendModule\LessService.cs" />
+    <Compile Include="Missing\MissingResource.cs" />
+    <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="Resolvers\EndTimeResolver.cs" />
     <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
