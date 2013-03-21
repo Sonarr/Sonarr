@@ -102,6 +102,7 @@
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="licenses.licx" />
     <Compile Include="NzbDroneBootstrapper.cs" />
     <Compile Include="ApplicationMode.cs" />
     <Compile Include="AppMain.cs" />

@@ -65,6 +65,10 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="siaqodb, Version=3.6.0.0, Culture=neutral, PublicKeyToken=c9a50dde883b61a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Siaqodb\siaqodb.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -117,6 +121,11 @@
     <Content Include="..\NzbDrone\NzbDrone.ico">
       <Link>NzbDrone.ico</Link>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\NzbDrone\licenses.licx">
+      <Link>licenses.licx</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
