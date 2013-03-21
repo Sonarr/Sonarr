@@ -420,7 +420,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void should_return_if_series_path_does_not_exist()
+        public void should_create_series_directory_if_series_path_does_not_exist()
         {
             var downloadName = new DirectoryInfo(@"C:\Test\Drop\30.Rock.S01E01.Pilot");
 
@@ -432,7 +432,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(downloadName);
 
-            Mocker.GetMock<DiskProvider>().Verify(c => c.GetDirectorySize(It.IsAny<String>()), Times.Never());
+            Mocker.GetMock<DiskProvider>().Verify(c => c.CreateDirectory(fakeSeries.Path), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }
 
