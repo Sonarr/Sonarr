@@ -137,3 +137,4 @@ UpdateLogs/
 NzbDrone.Web/*
 *log.txt
 siaqodb.lic
+node_modules/

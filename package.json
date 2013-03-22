@@ -1,0 +1,22 @@
+{
+  "name": "NzbDrone",
+  "version": "0.0.0",
+  "description": "NZBDrone\r =====",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NzbDrone/NzbDrone.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
+  "readmeFilename": "readme.md",
+  "dependencies": {
+    "grunt": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-handlebars": "*"
+  }
+}
