@@ -34,6 +34,8 @@ namespace NzbDrone.Common
 
         public void StartServer()
         {
+            //Todo: We need this to be able run when the user isn't an admin
+            //Todo: And when the URL hasn't been registered in URL ACL: netsh http add urlacl url=http://+:8989/ user=everyone
             _host = new NancyHost(new Uri(AppUrl), _bootstrapper);
             _host.Start();
         }
