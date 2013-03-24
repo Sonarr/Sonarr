@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data;
+using System.Linq;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Qualities
@@ -10,14 +11,14 @@ namespace NzbDrone.Core.Qualities
 
     public class QualitySizeRepository : BasicRepository<QualitySize>, IQualitySizeRepository
     {
-        public QualitySizeRepository(IObjectDatabase database)
+        public QualitySizeRepository(IDbConnection database)
             : base(database)
         {
         }
 
         public QualitySize GetByQualityId(int qualityId)
         {
-            return Queryable.Single(q => q.QualityId == qualityId);
+            return Single(q => q.QualityId == qualityId);
         }
     }
 }

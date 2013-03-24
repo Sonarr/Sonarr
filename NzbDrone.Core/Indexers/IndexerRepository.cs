@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -14,14 +11,14 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerRepository : BasicRepository<Indexer>, IIndexerRepository
     {
-        public IndexerRepository(IObjectDatabase objectDatabase)
-            : base(objectDatabase)
+        public IndexerRepository(IDbConnection database)
+            : base(database)
         {
         }
 
         public Indexer Find(Type type)
         {
-            return Queryable.Single(i => i.Type == type.ToString());
+            return Single(i => i.Type == type.ToString());
         }
     }
 }

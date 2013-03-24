@@ -2,7 +2,7 @@
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
-using Sqo.Attributes;
+
 
 namespace NzbDrone.Core.Tv
 {
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Tv
         //Todo: Since we're displaying next airing relative to the user's time zone we may want to store this as UTC (with airtime + UTC offset)
         public DateTime? AirDate { get; set; }
 
-        [Text]
+
         public string Overview { get; set; }
 
         public Boolean Ignored { get; set; }
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Tv
         {
             string seriesTitle = Series == null ? "[NULL]" : Series.Title;
 
-            if (Series != null && Series.SeriesTypes == SeriesTypes.Daily && AirDate.HasValue)
+            if (Series != null && Series.SeriesType == SeriesTypes.Daily && AirDate.HasValue)
                 return string.Format("{0} - {1:yyyy-MM-dd}", seriesTitle, AirDate.Value);
 
             return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);

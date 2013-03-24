@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Tv
 
             if (parseResult.AirDate.HasValue)
             {
-                if (parseResult.Series.SeriesTypes == SeriesTypes.Standard)
+                if (parseResult.Series.SeriesType == SeriesTypes.Standard)
                 {
                     //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
                     logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", parseResult.Series.Title, parseResult.OriginalString);

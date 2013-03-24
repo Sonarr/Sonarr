@@ -1,3 +1,4 @@
+using System.Data;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 
@@ -12,19 +13,19 @@ namespace NzbDrone.Core.ReferenceData
 
     public class SceneMappingRepository : BasicRepository<SceneMapping>, ISceneMappingRepository
     {
-        public SceneMappingRepository(IObjectDatabase objectDatabase)
-            : base(objectDatabase)
+        public SceneMappingRepository(IDbConnection database)
+            : base(database)
         {
         }
 
         public SceneMapping FindByTvdbId(int tvdbId)
         {
-            return Queryable.SingleOrDefault(c => c.TvdbId == tvdbId);
+            return SingleOrDefault(c => c.TvdbId == tvdbId);
         }
 
         public SceneMapping FindByCleanTitle(string cleanTitle)
         {
-            return Queryable.SingleOrDefault(c => c.CleanTitle == cleanTitle);
+            return SingleOrDefault(c => c.CleanTitle == cleanTitle);
         }
     }
 }

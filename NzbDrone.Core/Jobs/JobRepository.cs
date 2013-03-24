@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
@@ -18,8 +19,8 @@ namespace NzbDrone.Core.Jobs
         private readonly IEnumerable<IJob> _jobs;
         private readonly Logger _logger;
 
-        public JobRepository(IObjectDatabase objectDatabase, IEnumerable<IJob> jobs, Logger logger)
-            : base(objectDatabase)
+        public JobRepository(IDbConnection database, IEnumerable<IJob> jobs, Logger logger)
+            : base(database)
         {
             _jobs = jobs;
             _logger = logger;
@@ -27,13 +28,13 @@ namespace NzbDrone.Core.Jobs
 
         public JobDefinition GetDefinition(Type type)
         {
-            return Queryable.Single(c => c.TypeName == type.FullName);
+            return Single(c => c.TypeName == type.FullName);
         }
 
 
         public IList<JobDefinition> GetPendingJobs()
         {
-            return Queryable.Where(c => c.Enable && c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
+            return Where(c => c.Enable && c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
         }
 
         public void Init()
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Jobs
 
                 jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
 
-                UpSert(jobDefinition);
+                Upsert(jobDefinition);
             }
         }
     }

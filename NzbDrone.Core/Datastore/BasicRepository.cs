@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
+using NzbDrone.Core.Tv;
+using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -8,117 +13,142 @@ namespace NzbDrone.Core.Datastore
         IEnumerable<TModel> All();
         int Count();
         TModel Get(int id);
-        TModel Single();
+        TModel Single(Expression<Func<TModel, bool>> predicate);
         TModel SingleOrDefault();
+        TModel SingleOrDefault(Expression<Func<TModel, bool>> predicate);
+        List<TModel> Where(Expression<Func<TModel, bool>> predicate);
         TModel Insert(TModel model);
         TModel Update(TModel model);
-        TModel UpSert(TModel model);
+        TModel Upsert(TModel model);
         void Delete(int id);
         void Delete(TModel model);
-        IList<TModel> InsertMany(IList<TModel> model);
-        IList<TModel> UpdateMany(IList<TModel> model);
+        void InsertMany(IList<TModel> model);
+        void UpdateMany(IList<TModel> model);
         void DeleteMany(List<TModel> model);
         void Purge();
         bool HasItems();
+        void DeleteMany(IEnumerable<int> ids);
+        void UpdateOnly<TKey>(TModel model, Expression<Func<TModel, TKey>> onlyFields);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
-        public BasicRepository(IObjectDatabase objectDatabase)
+        public BasicRepository(IDbConnection database)
         {
-            ObjectDatabase = objectDatabase;
+            Database = database;
         }
 
-        public IObjectDatabase ObjectDatabase { get; private set; }
-
-        protected IEnumerable<TModel> Queryable { get { return ObjectDatabase.AsQueryable<TModel>(); } }
+        public IDbConnection Database { get; private set; }
 
         public IEnumerable<TModel> All()
         {
-            return Queryable.ToList();
+            return Database.Select<TModel>();
         }
 
         public int Count()
         {
-            return Queryable.Count();
+            return (int)Database.Count<TModel>();
         }
 
         public TModel Get(int id)
         {
-            return Queryable.Single(c => c.Id == id);
+            return Database.GetById<TModel>(id);
         }
 
-        public TModel Single()
+        public TModel Single(Expression<Func<TModel, bool>> predicate)
         {
-            return Queryable.Single();
+            return Database.Select(predicate).Single();
         }
 
         public TModel SingleOrDefault()
         {
-            return Queryable.SingleOrDefault();
+            return All().Single();
+        }
+
+        public TModel Single()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public TModel SingleOrDefault(Expression<Func<TModel, bool>> predicate)
+        {
+            return Database.Select(predicate).SingleOrDefault();
+        }
+
+        public List<TModel> Where(Expression<Func<TModel, bool>> predicate)
+        {
+            return Database.Select(predicate);
         }
 
         public TModel Insert(TModel model)
         {
-            return ObjectDatabase.Insert(model);
+            Database.Insert(model);
+            model.Id = (int)Database.GetLastInsertId();
+            return model;
         }
 
         public TModel Update(TModel model)
         {
-            return ObjectDatabase.Update(model);
+            Database.Update(model);
+            return model;
         }
+
 
         public void Delete(TModel model)
         {
-            ObjectDatabase.Delete(model);
+            Database.Delete(model);
         }
 
-        public IList<TModel> InsertMany(IList<TModel> model)
+        public void InsertMany(IList<TModel> models)
         {
-            return ObjectDatabase.InsertMany(model);
+            Database.InsertAll(models);
         }
 
-        public IList<TModel> UpdateMany(IList<TModel> model)
+        public void UpdateMany(IList<TModel> models)
         {
-            return ObjectDatabase.UpdateMany(model);
+            Database.UpdateAll(models);
         }
 
-        public void DeleteMany(List<TModel> model)
+        public void DeleteMany(List<TModel> models)
         {
-            ObjectDatabase.DeleteMany(model);
+            Database.DeleteAll(models);
         }
 
-        public TModel UpSert(TModel model)
+        public TModel Upsert(TModel model)
         {
             if (model.Id == 0)
             {
-                return ObjectDatabase.Insert(model);
+                Database.Insert(model);
+                model.Id = (int)Database.GetLastInsertId();
+                return model;
             }
-            return ObjectDatabase.Update(model);
+            Database.Update(model);
+            return model;
         }
 
         public void Delete(int id)
         {
-            var itemToDelete = Get(id);
-            ObjectDatabase.Delete(itemToDelete);
+            Database.DeleteById<TModel>(id);
         }
 
         public void DeleteMany(IEnumerable<int> ids)
         {
-            foreach (var id in ids)
-            {
-                Delete(id);
-            }
+            Database.DeleteByIds<TModel>(ids);
         }
 
         public void Purge()
         {
-            DeleteMany(Queryable.Select(c => c.Id));
+            Database.DeleteAll<TModel>();
         }
 
         public bool HasItems()
         {
-            return Queryable.Any();
+            return Count() > 0;
+        }
+
+        public void UpdateOnly<TKey>(TModel model, Expression<Func<TModel, TKey>> onlyFields)
+        {
+            Database.UpdateOnly(model, onlyFields);
         }
     }
 }

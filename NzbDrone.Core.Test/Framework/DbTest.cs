@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Data;
 using System.Linq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
+using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Test.Framework
 {
-    public abstract class ObjectDbTest<TSubject, TModel> : ObjectDbTest
+    public abstract class DbTest<TSubject, TModel> : DbTest
         where TSubject : class
         where TModel : ModelBase, new()
     {
@@ -54,11 +55,14 @@ namespace NzbDrone.Core.Test.Framework
         }
     }
 
-    public abstract class ObjectDbTest : CoreTest
+
+
+
+    public abstract class DbTest : CoreTest
     {
 
-        private IObjectDatabase _db;
-        protected IObjectDatabase Db
+        private IDatabase _db;
+        protected IDatabase Db
         {
             get
             {
@@ -71,7 +75,8 @@ namespace NzbDrone.Core.Test.Framework
 
         private void WithObjectDb(bool memory = true)
         {
-            _db = new SiaqoDbFactory(new DiskProvider(), new EnvironmentProvider()).Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString()));
+            var factory = new DbFactory(new EnvironmentProvider());
+            _db = new TestDatabase(factory.Create());
             Mocker.SetConstant(Db);
         }
 
@@ -81,13 +86,51 @@ namespace NzbDrone.Core.Test.Framework
             WithObjectDb();
         }
 
-        [TearDown]
-        public void ObjectDbTearDown()
+
+    }
+
+
+    public interface IDatabase
+    {
+        void InsertMany<T>(IEnumerable<T> items) where T : new();
+        void Insert<T>(T item) where T : new();
+        IEnumerable<T> All<T>() where T : new();
+        void Update<T>(T childModel) where T : new();
+        void Delete<T>(T childModel) where T : new();
+    }
+
+    public class TestDatabase : IDatabase
+    {
+        private readonly IDbConnection _dbConnection;
+
+        public TestDatabase(IDbConnection dbConnection)
         {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
+            _dbConnection = dbConnection;
+        }
+
+        public void InsertMany<T>(IEnumerable<T> items) where T : new()
+        {
+            _dbConnection.InsertAll(items);
+        }
+
+        public void Insert<T>(T item) where T : new()
+        {
+            _dbConnection.Insert(item);
+        }
+
+        public IEnumerable<T> All<T>() where T : new()
+        {
+            return _dbConnection.Select<T>();
+        }
+
+        public void Update<T>(T childModel) where T : new()
+        {
+            _dbConnection.Update(childModel);
+        }
+
+        public void Delete<T>(T childModel) where T : new()
+        {
+            _dbConnection.Delete(childModel);
         }
     }
 }

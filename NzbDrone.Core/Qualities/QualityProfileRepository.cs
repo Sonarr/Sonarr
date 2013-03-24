@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using NzbDrone.Core.Datastore;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Qualities
 
     public class QualityProfileRepository : BasicRepository<QualityProfile>, IQualityProfileRepository
     {
-        public QualityProfileRepository(IObjectDatabase database)
+        public QualityProfileRepository(IDbConnection database)
                 : base(database)
         {
         }

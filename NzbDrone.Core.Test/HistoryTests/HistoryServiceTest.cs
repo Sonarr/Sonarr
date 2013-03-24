@@ -12,7 +12,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HistoryTests
 {
     [TestFixture]
-    public class HistoryServiceTest : ObjectDbTest<HistoryRepository, History.History>
+    public class HistoryServiceTest : DbTest<HistoryRepository, History.History>
     {
         [Test]
         public void Trim_Items()

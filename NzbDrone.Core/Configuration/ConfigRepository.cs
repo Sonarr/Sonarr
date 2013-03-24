@@ -1,3 +1,4 @@
+using System.Data;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 
@@ -11,15 +12,15 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigRepository : BasicRepository<Config>, IConfigRepository
     {
-        public ConfigRepository(IObjectDatabase objectDatabase)
-            : base(objectDatabase)
+        public ConfigRepository(IDbConnection database)
+            : base(database)
         {
         }
 
 
         public Config Get(string key)
         {
-            return Queryable.SingleOrDefault(c => c.Key == key);
+            return SingleOrDefault(c => c.Key == key);
         }
 
 

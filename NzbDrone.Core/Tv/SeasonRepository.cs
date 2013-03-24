@@ -6,7 +6,7 @@ using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Tv
 {
-    public interface ISeasonRepository : IBasicDb<Season>
+    public interface ISeasonRepository : IBasicRepository<Season>
     {
         IList<int> GetSeasonNumbers(int seriesId);
         Season Get(int seriesId, int seasonNumber);
@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Tv
         List<Season> GetSeasonBySeries(int seriesId);
     }
 
-    public class SeasonRepository : BasicDb<Season>, ISeasonRepository
+    public class SeasonRepository : BasicRepository<Season>, ISeasonRepository
     {
         private readonly IDbConnection _database;
 

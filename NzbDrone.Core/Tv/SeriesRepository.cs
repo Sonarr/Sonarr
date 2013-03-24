@@ -6,7 +6,7 @@ using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Tv
 {
-    public interface ISeriesRepository : IBasicDb<Series>
+    public interface ISeriesRepository : IBasicRepository<Series>
     {
         bool SeriesPathExists(string path);
         List<Series> Search(string title);
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Tv
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
     }
 
-    public class SeriesRepository : BasicDb<Series>, ISeriesRepository
+    public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
         public SeriesRepository(IDbConnection database)
             : base(database)

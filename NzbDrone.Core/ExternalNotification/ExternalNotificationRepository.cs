@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Data;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.ExternalNotification
@@ -10,14 +10,14 @@ namespace NzbDrone.Core.ExternalNotification
 
     public class ExternalNotificationRepository : BasicRepository<ExternalNotificationDefinition>, IExternalNotificationRepository
     {
-        public ExternalNotificationRepository(IObjectDatabase objectDatabase)
-            : base(objectDatabase)
+        public ExternalNotificationRepository(IDbConnection database)
+            : base(database)
         {
         }
         
         public ExternalNotificationDefinition Get(string name)
         {
-            return Queryable.SingleOrDefault(c => c.Name.ToLower() == name.ToLower());
+            return SingleOrDefault(c => c.Name.ToLower() == name.ToLower());
         }
     }
 }

@@ -5,7 +5,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
 
-using Sqo.Attributes;
+
 
 namespace NzbDrone.Core.Tv
 {
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Tv
         public string CleanTitle { get; set; }
         public string Status { get; set; }
 
-        [Text]
+
         public string Overview { get; set; }
 
         public String AirTime { get; set; }

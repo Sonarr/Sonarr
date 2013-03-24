@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
 using NzbDrone.Common;
 using ServiceStack.OrmLite;
 
@@ -28,7 +27,7 @@ namespace NzbDrone.Core.Datastore
             }
 
             var dbFactory = new OrmLiteConnectionFactory(GetConnectionString(dbPath));
-            return dbFactory.OpenDbConnection();
+            return dbFactory.Open();
         }
 
         private string GetConnectionString(string dbPath)

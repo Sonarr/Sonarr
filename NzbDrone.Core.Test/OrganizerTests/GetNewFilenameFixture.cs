@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
@@ -774,7 +775,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             var series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesTypes = SeriesTypes.Daily)
+                    .With(s => s.SeriesType = SeriesTypes.Daily)
                     .With(s => s.Title = "The Daily Show with Jon Stewart")
                     .Build();
 
@@ -803,7 +804,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             var series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesTypes = SeriesTypes.Daily)
+                    .With(s => s.SeriesType = SeriesTypes.Daily)
                     .With(s => s.Title = "The Daily Show with Jon Stewart")
                     .Build();
 
@@ -832,7 +833,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             var series = Builder<Series>
                     .CreateNew()
-                    .With(s => s.SeriesTypes = SeriesTypes.Daily)
+                    .With(s => s.SeriesType = SeriesTypes.Daily)
                     .With(s => s.Title = "The Daily Show with Jon Stewart")
                     .Build();
 

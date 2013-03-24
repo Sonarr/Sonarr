@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Organizer
                 result += series.Title + nameSpec.Separator;
             }
 
-            if (series.SeriesTypes == SeriesTypes.Standard)
+            if (series.SeriesType == SeriesTypes.Standard)
             {
                 result += numberStyle.Pattern.Replace("%0e",
                                                       String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));

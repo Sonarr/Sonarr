@@ -1,12 +1,12 @@
 ﻿using System;
 using NzbDrone.Core.Datastore;
-using Sqo.Attributes;
+
 
 namespace NzbDrone.Core.Instrumentation
 {
     public class Log : ModelBase
     {
-        [Text]
+
         public string Message { get; set; }
 
         public DateTime Time { get; set; }
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Instrumentation
 
         public string Method { get; set; }
 
-        [Text]
+
         public string Exception { get; set; }
 
         public string ExceptionType { get; set; }

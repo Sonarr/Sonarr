@@ -13,7 +13,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.InstrumentationTests
 {
     [TestFixture]
-    public class DatabaseTargetFixture : ObjectDbTest<DatabaseTarget, Log>
+    public class DatabaseTargetFixture : DbTest<DatabaseTarget, Log>
     {
         string _loggerName;
 

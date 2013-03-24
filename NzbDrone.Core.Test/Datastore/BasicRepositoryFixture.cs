@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.Datastore
     }
 
     [TestFixture]
-    public class BasicRepositoryFixture : ObjectDbTest<BasicRepository<BaiscType>,BaiscType>
+    public class BasicRepositoryFixture : DbTest<BasicRepository<BaiscType>,BaiscType>
     {
         private BaiscType _baiscType;
 

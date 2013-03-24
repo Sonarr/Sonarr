@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.MediaFileTests
 {
     [TestFixture]
-    public class MediaFileRepositoryFixture : ObjectDbTest<MediaFileRepository, EpisodeFile>
+    public class MediaFileRepositoryFixture : DbTest<MediaFileRepository, EpisodeFile>
     {
         [Test]
         public void get_files_by_series()

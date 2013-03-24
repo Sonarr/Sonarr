@@ -18,7 +18,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    public class JobRepositoryFixture : ObjectDbTest<JobRepository, JobDefinition>
+    public class JobRepositoryFixture : DbTest<JobRepository, JobDefinition>
     {
         FakeJob _fakeJob;
         DisabledJob _disabledJob;

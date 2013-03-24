@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
-            if (series.SeriesTypes == SeriesTypes.Daily)
+            if (series.SeriesType == SeriesTypes.Daily)
             {
                 logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
                 return new List<int>();
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
-            if (series.SeriesTypes == SeriesTypes.Daily)
+            if (series.SeriesType == SeriesTypes.Daily)
             {
                 logger.Trace("Daily series detected, skipping season search: {0}", series.Title);
                 return new List<int>();

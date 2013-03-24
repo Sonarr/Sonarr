@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
 
 
-                if (newParseResult.Series.SeriesTypes == SeriesTypes.Daily)
+                if (newParseResult.Series.SeriesType == SeriesTypes.Daily)
                 {
                     return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
                 }

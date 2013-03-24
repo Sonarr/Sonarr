@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class GetEpisodeBySceneNumberFixture : ObjectDbTest
+    public class GetEpisodeBySceneNumberFixture : DbTest
     {
         private Series _series;
         private Episode _episode;

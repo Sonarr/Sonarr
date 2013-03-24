@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Autofac;
 using NLog;
@@ -63,12 +61,11 @@ namespace NzbDrone.Core
                 return c.Resolve<IDbFactory>().Create();
             }).As<IDbConnection>().SingleInstance();
 
-            container.RegisterGeneric(typeof(BasicDb<>)).As(typeof(IBasicDb<>));
 
             container.Register(c =>
                       {
-                          return c.Resolve<IObjectDbFactory>().Create();
-                      }).As<IObjectDatabase>().SingleInstance();
+                          return c.Resolve<IDbFactory>().Create();
+                      }).As<IDbConnection>().SingleInstance();
 
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
 

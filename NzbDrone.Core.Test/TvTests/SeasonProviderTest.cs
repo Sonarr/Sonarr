@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.TvTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeasonProviderTest : ObjectDbTest
+    public class SeasonProviderTest : DbTest
     {
         [SetUp]
         public void Setup()

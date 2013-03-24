@@ -9,7 +9,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Configuration
 {
     [TestFixture]
-    public class ConfigServiceFixture : ObjectDbTest<ConfigService, Config>
+    public class ConfigServiceFixture : DbTest<ConfigService, Config>
     {
         [SetUp]
         public void SetUp()
