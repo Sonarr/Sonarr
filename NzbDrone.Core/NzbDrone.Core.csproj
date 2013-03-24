@@ -574,9 +574,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="NzbDrone.ico" />
-    <Content Include="sqlite\x64\sqlite3.dll" />
-    <Content Include="sqlite\x86\sqlite3.dll" />
-    <Content Include="sqlite\x86\sqlite3.exe" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

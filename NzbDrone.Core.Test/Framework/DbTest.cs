@@ -75,9 +75,10 @@ namespace NzbDrone.Core.Test.Framework
 
         private void WithObjectDb(bool memory = true)
         {
-            var factory = new DbFactory(new EnvironmentProvider());
-            _db = new TestDatabase(factory.Create());
-            Mocker.SetConstant(Db);
+            var factory = new DbFactory();
+            var dbConnection = factory.Create();
+            _db = new TestDatabase(dbConnection);
+            Mocker.SetConstant(dbConnection);
         }
 
         [SetUp]

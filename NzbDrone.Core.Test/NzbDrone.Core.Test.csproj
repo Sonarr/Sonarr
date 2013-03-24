@@ -70,10 +70,6 @@
     <Reference Include="AutoMoq">
       <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="DeskMetrics.NET, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
-    </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -316,9 +312,6 @@
     <Content Include="Files\JsonError.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="sqlite\x64\sqlite3.dll" />
-    <Content Include="sqlite\x86\sqlite3.dll" />
-    <Content Include="sqlite\x86\sqlite3.exe" />
     <None Include="Files\RSS\nzbx_search.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -422,14 +415,11 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-
-xcopy /s /y "$(SolutionDir)\SqlCe\*.*"   "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-
-xcopy /s /y "$(SolutionDir)\SqlCe\*.*"   "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /s /y "$(SolutionDir)\Libraries\Sqlite\x86\*.*"   "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

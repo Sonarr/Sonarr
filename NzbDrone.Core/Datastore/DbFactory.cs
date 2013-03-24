@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
-using NzbDrone.Common;
 using ServiceStack.OrmLite;
+using ServiceStack.OrmLite.Sqlite;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -12,21 +12,23 @@ namespace NzbDrone.Core.Datastore
 
     public class DbFactory : IDbFactory
     {
-        private readonly EnvironmentProvider _environmentProvider;
+        private const string MemoryConnectionString = "Data Source=:memory:;Version=3;New=True;";
 
-        public DbFactory(EnvironmentProvider environmentProvider)
+        static DbFactory()
         {
-            _environmentProvider = environmentProvider;
+            OrmLiteConfig.DialectProvider = new SqliteOrmLiteDialectProvider();
         }
 
         public IDbConnection Create(string dbPath = null)
         {
-            if (string.IsNullOrWhiteSpace(dbPath))
+            var connectionString = MemoryConnectionString;
+
+            if (!string.IsNullOrWhiteSpace(dbPath))
             {
-                dbPath = _environmentProvider.GetObjectDbFolder();
+                connectionString = GetConnectionString(dbPath);
             }
 
-            var dbFactory = new OrmLiteConnectionFactory(GetConnectionString(dbPath));
+            var dbFactory = new OrmLiteConnectionFactory(connectionString);
             return dbFactory.Open();
         }
 
