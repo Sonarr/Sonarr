@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Tv
         public DateTime? LastDiskSync { get; set; }
         public int Runtime { get; set; }
         public List<MediaCover.MediaCover> Covers { get; set; }
-        public SeriesTypes SeriesTypes { get; set; }
+        public SeriesTypes SeriesType { get; set; }
         public BacklogSettingType BacklogSetting { get; set; }
         public string Network { get; set; }
         public DateTime? CustomStartDate { get; set; }

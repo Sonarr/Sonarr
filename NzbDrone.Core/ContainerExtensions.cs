@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -57,7 +58,12 @@ namespace NzbDrone.Core
             var appDataPath = new EnvironmentProvider().GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
+            container.Register(c =>
+            {
+                return c.Resolve<IDbFactory>().Create();
+            }).As<IDbConnection>().SingleInstance();
 
+            container.RegisterGeneric(typeof(BasicDb<>)).As(typeof(IBasicDb<>));
 
             container.Register(c =>
                       {
@@ -65,6 +71,7 @@ namespace NzbDrone.Core
                       }).As<IObjectDatabase>().SingleInstance();
 
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
+
         }
     }
 }

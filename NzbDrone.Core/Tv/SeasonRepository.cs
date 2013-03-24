@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using NLog;
 using NzbDrone.Core.Datastore;
-
+using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Tv
 {
-    public interface ISeasonRepository : IBasicRepository<Season>
+    public interface ISeasonRepository : IBasicDb<Season>
     {
         IList<int> GetSeasonNumbers(int seriesId);
         Season Get(int seriesId, int seasonNumber);
@@ -14,26 +14,28 @@ namespace NzbDrone.Core.Tv
         List<Season> GetSeasonBySeries(int seriesId);
     }
 
-    public class SeasonRepository : BasicRepository<Season>, ISeasonRepository
+    public class SeasonRepository : BasicDb<Season>, ISeasonRepository
     {
-        public SeasonRepository(IObjectDatabase database)
-                : base(database)
+        private readonly IDbConnection _database;
+
+        public SeasonRepository(IDbConnection database)
+            : base(database)
         {
         }
 
         public IList<int> GetSeasonNumbers(int seriesId)
         {
-            return Queryable.Where(c => c.SeriesId == seriesId).Select(c => c.SeasonNumber).ToList();
+            return _database.List<int>("SELECT SeasonNumber WHERE SeriesId = {0}", seriesId);
         }
 
         public Season Get(int seriesId, int seasonNumber)
         {
-            return Queryable.Single(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber);
+            return _database.Select<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).Single();
         }
 
         public bool IsIgnored(int seriesId, int seasonNumber)
         {
-            var season = Queryable.SingleOrDefault(c => c.Id == seriesId && c.SeasonNumber == seasonNumber);
+            var season = _database.Select<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).SingleOrDefault();
 
             if(season == null) return false;
 
@@ -42,8 +44,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Season> GetSeasonBySeries(int seriesId)
         {
-            return Queryable.Where(c => c.SeriesId == seriesId).ToList();
+            return _database.Select<Season>(s =>  s.SeriesId == seriesId);
         }
-
     }
 }

@@ -15,6 +15,7 @@ namespace NzbDrone.Common
         public const string NZBDRONE_EXE = "NzbDrone.exe";
 
         public const string OBJ_DB_FOLDER = "objDb";
+        public const string NZBDRONE_DB = "nzbdrone.db";
 
         private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
 
@@ -39,10 +40,6 @@ namespace NzbDrone.Common
 
             return info.FullName.Trim('/', '\\', ' ');
         }
-
-
-
-
 
         public static string GetWebRoot(this EnvironmentProvider environmentProvider)
         {
@@ -73,7 +70,6 @@ namespace NzbDrone.Common
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), OBJ_DB_FOLDER);
         }
-
 
         public static string GetMediaCoverPath(this EnvironmentProvider environmentProvider)
         {
