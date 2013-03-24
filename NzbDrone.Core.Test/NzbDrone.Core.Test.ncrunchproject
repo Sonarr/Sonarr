@@ -5,8 +5,8 @@
   <AllowDynamicCodeContractChecking>true</AllowDynamicCodeContractChecking>
   <AllowStaticCodeContractChecking>false</AllowStaticCodeContractChecking>
   <IgnoreThisComponentCompletely>false</IgnoreThisComponentCompletely>
-  <RunPreBuildEvents>false</RunPreBuildEvents>
-  <RunPostBuildEvents>false</RunPostBuildEvents>
+  <RunPreBuildEvents>true</RunPreBuildEvents>
+  <RunPostBuildEvents>true</RunPostBuildEvents>
   <PreviouslyBuiltSuccessfully>true</PreviouslyBuiltSuccessfully>
   <InstrumentAssembly>true</InstrumentAssembly>
   <PreventSigningOfAssembly>false</PreventSigningOfAssembly>

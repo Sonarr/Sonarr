@@ -30,7 +30,11 @@ namespace NzbDrone.Core.Datastore
 
             OrmLiteConfig.DialectProvider = new SqliteOrmLiteDialectProvider();
             var dbFactory = new OrmLiteConnectionFactory(connectionString);
-            return dbFactory.Open();
+            var connection = dbFactory.Open();
+
+            Migration.CreateTables(connection);
+
+            return connection;
         }
 
         private string GetConnectionString(string dbPath)

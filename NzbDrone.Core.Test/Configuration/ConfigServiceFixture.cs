@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.Configuration
 
                 if (propertyInfo.PropertyType == typeof(string))
                 {
-                    value = new Guid().ToString();
+                    value = Guid.NewGuid().ToString();
                 }
                 else if (propertyInfo.PropertyType == typeof(int))
                 {

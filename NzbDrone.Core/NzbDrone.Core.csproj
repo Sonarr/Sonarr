@@ -201,6 +201,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtensions.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
+    <Compile Include="Datastore\Migration.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
