@@ -9,14 +9,13 @@ module.exports = function(grunt) {
           cwd: 'NzbDrone.Backbone/',      // Src matches are relative to this path.
           src: ['**/*.js'], // Actual pattern(s) to match.
           dest: 'build/',   // Destination path prefix.
-          ext: '.min.js'   // Dest filepaths will have this extension.
+          ext: '.min.js'
         }
     },
     less:{
       bootstrap:{
-         files: {
-            "NzbDrone.Backbone/Content/bootstrap.css": "NzbDrone.Backbone/Content/Bootstrap/bootstrap.less"
-        }
+        src: ["NzbDrone.Backbone/Content/Bootstrap/bootstrap.less"],
+        dest: "NzbDrone.Backbone/Content/bootstrap.css"
       }
     },
 
@@ -38,7 +37,7 @@ module.exports = function(grunt) {
 
     watch:{
       bootstrap:{
-        files: 'NzbDrone.Backbone/Content/Bootstrap/*.less',
+        files: '<%= less.bootstrap.src %>',
         tasks: ['less:bootstrap']  
       },
       handlebars:{
@@ -57,6 +56,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
 
   // Default task(s).
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['less:bootstrap','handlebars', 'watch']);
 
 };

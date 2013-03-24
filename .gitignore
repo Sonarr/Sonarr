@@ -139,3 +139,4 @@ NzbDrone.Web/*
 siaqodb.lic
 node_modules/
 NzbDrone.Backbone/templates.js
+NzbDrone.Backbone/Content/bootstrap.css
