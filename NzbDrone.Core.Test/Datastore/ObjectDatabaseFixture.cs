@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.Datastore
             childModel.Name = "B";
             childModel.Tilte = "C";
 
-            Subject.UpdateOnly(childModel, t=>t.Name);
+            Subject.UpdateFields(childModel, t=>t.Name);
 
             Db.All<BaiscType>().Single().Address.Should().Be("Address");
             Db.All<BaiscType>().Single().Name.Should().Be("B");
