@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Datastore
                 connectionString = GetConnectionString(dbPath);
             }
 
+            OrmLiteConfig.DialectProvider = new SqliteOrmLiteDialectProvider();
             var dbFactory = new OrmLiteConnectionFactory(connectionString);
             return dbFactory.Open();
         }
