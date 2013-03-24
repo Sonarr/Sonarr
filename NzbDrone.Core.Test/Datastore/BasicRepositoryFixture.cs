@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Test.Framework;
+using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -29,6 +31,7 @@ namespace NzbDrone.Core.Test.Datastore
                     .With(c => c.Id = 0)
                     .Build();
 
+            Mocker.Resolve<IDbConnection>().CreateTable<BaiscType>();
         }
 
         [Test]

@@ -57,7 +57,15 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            return _database.GetById<TModel>(id);
+            try
+            {
+                return _database.GetById<TModel>(id);
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new InvalidOperationException(e.Message);
+            }
+
         }
 
         public TModel Single(Expression<Func<TModel, bool>> predicate)
@@ -87,6 +95,11 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Insert(TModel model)
         {
+            if (model.Id != 0)
+            {
+                throw new InvalidOperationException("Can't insert model with existing ID");
+            }
+
             _database.Insert(model);
             model.Id = (int)_database.GetLastInsertId();
             return model;
@@ -94,6 +107,11 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Update(TModel model)
         {
+            if (model.Id == 0)
+            {
+                throw new InvalidOperationException("Can't update model with ID 0");
+            }
+
             _database.Update(model);
             return model;
         }

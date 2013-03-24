@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Test.Framework;
+using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -21,6 +23,9 @@ namespace NzbDrone.Core.Test.Datastore
                     .CreateNew()
                     .With(s => s.Id = 0)
                     .Build();
+
+            Mocker.Resolve<IDbConnection>().CreateTable<BaiscType>();
+
         }
 
         [Test]
@@ -102,9 +107,9 @@ namespace NzbDrone.Core.Test.Datastore
         {
             var childModel = new BaiscType
                 {
-                       Address = "Address",
-                       Name = "Name",
-                       Tilte = "Title"
+                    Address = "Address",
+                    Name = "Name",
+                    Tilte = "Title"
 
                 };
 
@@ -114,7 +119,7 @@ namespace NzbDrone.Core.Test.Datastore
             childModel.Name = "B";
             childModel.Tilte = "C";
 
-            Subject.UpdateFields(childModel, t=>t.Name);
+            Subject.UpdateFields(childModel, t => t.Name);
 
             Db.All<BaiscType>().Single().Address.Should().Be("Address");
             Db.All<BaiscType>().Single().Name.Should().Be("B");
