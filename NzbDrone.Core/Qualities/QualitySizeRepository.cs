@@ -11,14 +11,14 @@ namespace NzbDrone.Core.Qualities
 
     public class QualitySizeRepository : BasicRepository<QualitySize>, IQualitySizeRepository
     {
-        public QualitySizeRepository(IDbConnection database)
+        public QualitySizeRepository(IDatabase database)
             : base(database)
         {
         }
 
         public QualitySize GetByQualityId(int qualityId)
         {
-            return Single(q => q.QualityId == qualityId);
+            return Queryable().Single(q => q.QualityId == qualityId);
         }
     }
 }

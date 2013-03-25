@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Qualities
 
     public class QualityProfileRepository : BasicRepository<QualityProfile>, IQualityProfileRepository
     {
-        public QualityProfileRepository(IDbConnection database)
+        public QualityProfileRepository(IDatabase database)
                 : base(database)
         {
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Tv
@@ -15,29 +16,29 @@ namespace NzbDrone.Core.Tv
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
-        public SeriesRepository(IDbConnection database)
+        public SeriesRepository(IDatabase database)
             : base(database)
         {
         }
 
         public bool SeriesPathExists(string path)
         {
-            return Any(c => c.Path == path);
+            return Queryable().Any(c => c.Path == path);
         }
 
         public List<Series> Search(string title)
         {
-            return Where(s => s.Title.Contains(title));
+            return Queryable().Where(s => s.Title.Contains(title));
         }
 
         public Series GetByTitle(string cleanTitle)
         {
-            return SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
+            return Queryable().SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
         }
 
         public Series FindByTvdbId(int tvdbId)
         {
-            return SingleOrDefault(s => s.TvDbId.Equals(tvdbId));
+            return Queryable().SingleOrDefault(s => s.TvDbId.Equals(tvdbId));
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesType)

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
-using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -61,8 +62,12 @@ namespace NzbDrone.Core.Test.Framework
     public abstract class DbTest : CoreTest
     {
 
-        private IDatabase _db;
-        protected IDatabase Db
+        private string _dbName;
+
+        private ITestDatabase _db;
+        private IDatabase _database;
+
+        protected ITestDatabase Db
         {
             get
             {
@@ -75,10 +80,15 @@ namespace NzbDrone.Core.Test.Framework
 
         private void WithObjectDb(bool memory = true)
         {
+
+            _dbName = DateTime.Now.Ticks.ToString() + ".db";
+
+            MapRepository.Instance.EnableTraceLogging = true;
+
             var factory = new DbFactory();
-            var dbConnection = factory.Create();
-            _db = new TestDatabase(dbConnection);
-            Mocker.SetConstant(dbConnection);
+            _database = factory.Create(_dbName);
+            _db = new TestTestDatabase(_database);
+            Mocker.SetConstant(_database);
         }
 
         [SetUp]
@@ -87,51 +97,68 @@ namespace NzbDrone.Core.Test.Framework
             WithObjectDb();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db");
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
 
     }
 
 
-    public interface IDatabase
+    public interface ITestDatabase
     {
-        void InsertMany<T>(IEnumerable<T> items) where T : new();
-        void Insert<T>(T item) where T : new();
-        IEnumerable<T> All<T>() where T : new();
-        void Update<T>(T childModel) where T : new();
-        void Delete<T>(T childModel) where T : new();
+        void InsertMany<T>(IEnumerable<T> items) where T : ModelBase, new();
+        void Insert<T>(T item) where T : ModelBase, new();
+        IEnumerable<T> All<T>() where T : ModelBase, new();
+        void Update<T>(T childModel) where T : ModelBase, new();
+        void Delete<T>(T childModel) where T : ModelBase, new();
     }
 
-    public class TestDatabase : IDatabase
+    public class TestTestDatabase : ITestDatabase
     {
-        private readonly IDbConnection _dbConnection;
+        private readonly IDatabase _dbConnection;
 
-        public TestDatabase(IDbConnection dbConnection)
+        public TestTestDatabase(IDatabase dbConnection)
         {
             _dbConnection = dbConnection;
         }
 
-        public void InsertMany<T>(IEnumerable<T> items) where T : new()
+        public void InsertMany<T>(IEnumerable<T> items) where T : ModelBase, new()
         {
-            _dbConnection.InsertAll(items);
+            new BasicRepository<T>(_dbConnection).InsertMany(items.ToList());
         }
 
-        public void Insert<T>(T item) where T : new()
+        public void Insert<T>(T item) where T : ModelBase, new()
         {
-            _dbConnection.Insert(item);
+            new BasicRepository<T>(_dbConnection).Insert(item);
         }
 
-        public IEnumerable<T> All<T>() where T : new()
+        public IEnumerable<T> All<T>() where T : ModelBase, new()
         {
-            return _dbConnection.Select<T>();
+            return new BasicRepository<T>(_dbConnection).All();
         }
 
-        public void Update<T>(T childModel) where T : new()
+        public void Update<T>(T childModel) where T : ModelBase, new()
         {
-            _dbConnection.Update(childModel);
+            new BasicRepository<T>(_dbConnection).Update(childModel);
         }
 
-        public void Delete<T>(T childModel) where T : new()
+        public void Delete<T>(T childModel) where T : ModelBase, new()
         {
-            _dbConnection.Delete(childModel);
+            new BasicRepository<T>(_dbConnection).Delete(childModel);
         }
     }
 }

@@ -14,13 +14,13 @@ namespace NzbDrone.Core.Indexers
 
     public class NewznabRepository : BasicRepository<NewznabDefinition>, INewznabRepository
     {
-        public NewznabRepository(IDbConnection database) : base(database)
+        public NewznabRepository(IDatabase database) : base(database)
         {
         }
 
         public IEnumerable<NewznabDefinition> Enabled()
         {
-            return Where(n => n.Enable);
+            return Queryable().Where(n => n.Enabled);
         }
     }
 }

@@ -14,21 +14,21 @@ namespace NzbDrone.Core.History
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
     {
-        public HistoryRepository(IDbConnection database)
+        public HistoryRepository(IDatabase database)
             : base(database)
         {
         }
 
         public void Trim()
         {
-            var oldIds = Where(c => c.Date < DateTime.Now.AddDays(-30).Date).Select(c => c.Id);
+            var oldIds =  Queryable().Where(c => c.Date < DateTime.Now.AddDays(-30).Date).Select(c => c.Id);
             DeleteMany(oldIds);
         }
 
 
         public QualityModel GetBestQualityInHistory(int episodeId)
         {
-            var history = Where(c => c.EpisodeId == episodeId)
+            var history = Queryable().Where(c => c.EpisodeId == episodeId)
                 .OrderByDescending(c => c.Quality).FirstOrDefault();
 
             if (history != null)

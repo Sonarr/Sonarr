@@ -7,24 +7,21 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Test.Framework;
-using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Test.Datastore
 {
     [TestFixture]
-    public class ObjectDatabaseFixture : DbTest<BasicRepository<BaiscType>, BaiscType>
+    public class ObjectDatabaseFixture : DbTest<BasicRepository<BasicType>, BasicType>
     {
-        private BaiscType _sampleType;
+        private BasicType _sampleType;
 
         [SetUp]
         public void SetUp()
         {
-            _sampleType = Builder<BaiscType>
+            _sampleType = Builder<BasicType>
                     .CreateNew()
                     .With(s => s.Id = 0)
                     .Build();
-
-            Mocker.Resolve<IDbConnection>().CreateTable<BaiscType>();
 
         }
 
@@ -32,7 +29,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_write_to_database()
         {
             Subject.Insert(_sampleType);
-            Db.All<BaiscType>().Should().HaveCount(1);
+            Db.All<BasicType>().Should().HaveCount(1);
         }
 
         [Test]
@@ -52,7 +49,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_store_empty_list()
         {
-            var series = new List<BaiscType>();
+            var series = new List<BasicType>();
 
             Subject.InsertMany(series);
         }
@@ -71,7 +68,7 @@ namespace NzbDrone.Core.Test.Datastore
             _sampleType.Id = 0;
             Subject.Insert(_sampleType);
 
-            Db.All<BaiscType>().Should().HaveCount(1);
+            Db.All<BasicType>().Should().HaveCount(1);
             _sampleType.Id.Should().Be(1);
         }
 
@@ -83,7 +80,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             _sampleType.Id = 0;
             Subject.Insert(_sampleType);
-            var item = Db.All<BaiscType>();
+            var item = Db.All<BasicType>();
 
             item.Should().HaveCount(1);
             item.First().Id.Should().NotBe(0);
@@ -95,7 +92,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_find_object_by_id()
         {
             Subject.Insert(_sampleType);
-            var item = Db.All<BaiscType>().Single(c => c.Id == _sampleType.Id);
+            var item = Db.All<BasicType>().Single(c => c.Id == _sampleType.Id);
 
             item.Id.Should().NotBe(0);
             item.Id.Should().Be(_sampleType.Id);
@@ -105,7 +102,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void update_field_should_only_update_that_filed()
         {
-            var childModel = new BaiscType
+            var childModel = new BasicType
                 {
                     Address = "Address",
                     Name = "Name",
@@ -121,9 +118,9 @@ namespace NzbDrone.Core.Test.Datastore
 
             Subject.UpdateFields(childModel, t => t.Name);
 
-            Db.All<BaiscType>().Single().Address.Should().Be("Address");
-            Db.All<BaiscType>().Single().Name.Should().Be("B");
-            Db.All<BaiscType>().Single().Tilte.Should().Be("Title");
+            Db.All<BasicType>().Single().Address.Should().Be("Address");
+            Db.All<BasicType>().Single().Name.Should().Be("B");
+            Db.All<BasicType>().Single().Tilte.Should().Be("Title");
         }
 
 

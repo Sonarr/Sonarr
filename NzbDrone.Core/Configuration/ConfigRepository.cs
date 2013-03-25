@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigRepository : BasicRepository<Config>, IConfigRepository
     {
-        public ConfigRepository(IDbConnection database)
+        public ConfigRepository(IDatabase database)
             : base(database)
         {
         }
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Configuration
 
         public Config Get(string key)
         {
-            return SingleOrDefault(c => c.Key == key);
+            return Queryable().SingleOrDefault(c => c.Key == key);
         }
 
 

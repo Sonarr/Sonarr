@@ -13,19 +13,19 @@ namespace NzbDrone.Core.ReferenceData
 
     public class SceneMappingRepository : BasicRepository<SceneMapping>, ISceneMappingRepository
     {
-        public SceneMappingRepository(IDbConnection database)
+        public SceneMappingRepository(IDatabase database)
             : base(database)
         {
         }
 
         public SceneMapping FindByTvdbId(int tvdbId)
         {
-            return SingleOrDefault(c => c.TvdbId == tvdbId);
+            return Queryable().SingleOrDefault(c => c.TvdbId == tvdbId);
         }
 
         public SceneMapping FindByCleanTitle(string cleanTitle)
         {
-            return SingleOrDefault(c => c.CleanTitle == cleanTitle);
+            return Queryable().SingleOrDefault(c => c.CleanTitle == cleanTitle);
         }
     }
 }

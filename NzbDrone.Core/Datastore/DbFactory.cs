@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Data;
-using ServiceStack.OrmLite;
-using ServiceStack.OrmLite.Sqlite;
+using Marr.Data;
+using Mono.Data.Sqlite;
+
 
 namespace NzbDrone.Core.Datastore
 {
     public interface IDbFactory
     {
-        IDbConnection Create(string dbPath = null);
+        IDatabase Create(string dbPath = null);
     }
 
     public class DbFactory : IDbFactory
     {
         private const string MemoryConnectionString = "Data Source=:memory:;Version=3;New=True;";
 
-        static DbFactory()
-        {
-            OrmLiteConfig.DialectProvider = new SqliteOrmLiteDialectProvider();
-        }
-
-        public IDbConnection Create(string dbPath = null)
+        public IDatabase Create(string dbPath = null)
         {
             var connectionString = MemoryConnectionString;
 
@@ -29,15 +25,11 @@ namespace NzbDrone.Core.Datastore
             }
 
             MigrationHelper.MigrateToLatest(connectionString, MigrationType.Main);
-
-            OrmLiteConfig.DialectProvider = new SqliteOrmLiteDialectProvider();
-            var dbFactory = new OrmLiteConnectionFactory(connectionString);
-            var connection = dbFactory.Open();
-
-            Migration.CreateTables(connection);
-
-            return connection;
+            var dataMapper = new DataMapper(SqliteFactory.Instance, connectionString);
+            return new Database(dataMapper);
         }
+
+
 
         private string GetConnectionString(string dbPath)
         {

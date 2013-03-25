@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
-using ServiceStack.OrmLite;
+using Marr.Data;
+using Marr.Data.QGen;
+
 
 namespace NzbDrone.Core.Datastore
 {
@@ -11,12 +13,8 @@ namespace NzbDrone.Core.Datastore
     {
         IEnumerable<TModel> All();
         int Count();
-        bool Any(Expression<Func<TModel, bool>> predicate);
         TModel Get(int id);
-        TModel Single(Expression<Func<TModel, bool>> predicate);
         TModel SingleOrDefault();
-        TModel SingleOrDefault(Expression<Func<TModel, bool>> predicate);
-        List<TModel> Where(Expression<Func<TModel, bool>> predicate);
         TModel Insert(TModel model);
         TModel Update(TModel model);
         TModel Upsert(TModel model);
@@ -29,38 +27,39 @@ namespace NzbDrone.Core.Datastore
         bool HasItems();
         void DeleteMany(IEnumerable<int> ids);
         void UpdateFields<TKey>(TModel model, Expression<Func<TModel, TKey>> onlyFields);
-        List<TModel> Where(SqlExpressionVisitor<TModel> expression);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
-        private readonly IDbConnection _database;
+        private readonly IDataMapper _dataMapper;
 
-        public BasicRepository(IDbConnection database)
+        public BasicRepository(IDatabase database)
         {
-            _database = database;
+            _dataMapper = database.DataMapper;
+        }
+
+        protected QueryBuilder<TModel> Queryable()
+        {
+            return _dataMapper.Query<TModel>();
         }
 
         public IEnumerable<TModel> All()
         {
-            return _database.Select<TModel>();
+            return _dataMapper.Query<TModel>().ToList();
         }
 
         public int Count()
         {
-            return (int)_database.Count<TModel>();
-        }
-
-        public bool Any(Expression<Func<TModel, bool>> predicate)
-        {
-            return _database.Exists<TModel>(predicate);
+            return _dataMapper.Query<TModel>().Count();
         }
 
         public TModel Get(int id)
         {
             try
             {
-                return _database.GetById<TModel>(id);
+                var c = _dataMapper.Query<TModel>().FromTable(typeof(TModel).Name);
+
+                return null;
             }
             catch (ArgumentNullException e)
             {
@@ -69,34 +68,10 @@ namespace NzbDrone.Core.Datastore
 
         }
 
-        public TModel Single(Expression<Func<TModel, bool>> predicate)
-        {
-            return _database.Select(predicate).Single();
-        }
 
         public TModel SingleOrDefault()
         {
             return All().Single();
-        }
-
-        public TModel Single()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public TModel SingleOrDefault(Expression<Func<TModel, bool>> predicate)
-        {
-            return _database.Select(predicate).SingleOrDefault();
-        }
-
-        public List<TModel> Where(Expression<Func<TModel, bool>> predicate)
-        {
-            return _database.Select(predicate);
-        }
-
-        public List<TModel> Where(SqlExpressionVisitor<TModel> expression)
-        {
-            return _database.Select(expression);
         }
 
         public TModel Insert(TModel model)
@@ -106,8 +81,7 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't insert model with existing ID");
             }
 
-            _database.Insert(model);
-            model.Id = (int)_database.GetLastInsertId();
+            var id = _dataMapper.Insert(model);
             return model;
         }
 
@@ -118,56 +92,61 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't update model with ID 0");
             }
 
-            _database.Update(model);
+            _dataMapper.Update(model, c => c.Id == model.Id);
             return model;
         }
 
 
         public void Delete(TModel model)
         {
-            _database.Delete(model);
+            _dataMapper.Delete<TModel>(c => c.Id == model.Id);
         }
 
         public void InsertMany(IList<TModel> models)
         {
-            _database.InsertAll(models);
+            foreach (var model in models)
+            {
+                Insert(model);
+            }
         }
 
         public void UpdateMany(IList<TModel> models)
         {
-            _database.UpdateAll(models);
+            foreach (var model in models)
+            {
+                Update(model);
+            }
         }
 
         public void DeleteMany(List<TModel> models)
         {
-            _database.DeleteAll(models);
+            models.ForEach(Delete);
         }
 
         public TModel Upsert(TModel model)
         {
             if (model.Id == 0)
             {
-                _database.Insert(model);
-                model.Id = (int)_database.GetLastInsertId();
+                Insert(model);
                 return model;
             }
-            _database.Update(model);
+            Update(model);
             return model;
         }
 
         public void Delete(int id)
         {
-            _database.DeleteById<TModel>(id);
+            _dataMapper.Delete<TModel>(c => c.Id == id);
         }
 
         public void DeleteMany(IEnumerable<int> ids)
         {
-            _database.DeleteByIds<TModel>(ids);
+            ids.ToList().ForEach(Delete);
         }
 
         public void Purge()
         {
-            _database.DeleteAll<TModel>();
+            _dataMapper.Delete<TModel>(c => c.Id > -1);
         }
 
         public bool HasItems()
@@ -182,7 +161,7 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Attempted to updated model without ID");
             }
 
-            _database.UpdateOnly(model, onlyFields, m => m.Id == model.Id);
+           // _database.UpdateOnly(model, onlyFields, m => m.Id == model.Id);
         }
     }
 }

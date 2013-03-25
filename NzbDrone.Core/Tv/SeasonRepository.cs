@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using NzbDrone.Core.Datastore;
-using ServiceStack.OrmLite;
+
 
 namespace NzbDrone.Core.Tv
 {
@@ -18,33 +18,33 @@ namespace NzbDrone.Core.Tv
     {
         private readonly IDbConnection _database;
 
-        public SeasonRepository(IDbConnection database)
+        public SeasonRepository(IDatabase database)
             : base(database)
         {
         }
 
         public IList<int> GetSeasonNumbers(int seriesId)
         {
-            return _database.List<int>("SELECT SeasonNumber WHERE SeriesId = {0}", seriesId);
+            return Queryable().Where(c => c.SeriesId == seriesId).Select(c => c.SeriesId).ToList();
         }
 
         public Season Get(int seriesId, int seasonNumber)
         {
-            return _database.Select<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).Single();
+            return Queryable().Single(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
         }
 
         public bool IsIgnored(int seriesId, int seasonNumber)
         {
-            var season = _database.Select<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).SingleOrDefault();
+            var season = Queryable().SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
 
-            if(season == null) return false;
+            if (season == null) return false;
 
             return season.Ignored;
         }
 
         public List<Season> GetSeasonBySeries(int seriesId)
         {
-            return _database.Select<Season>(s =>  s.SeriesId == seriesId);
+            return Queryable().Where(s => s.SeriesId == seriesId);
         }
     }
 }

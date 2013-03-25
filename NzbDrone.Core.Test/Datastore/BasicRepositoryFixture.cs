@@ -3,14 +3,14 @@ using System.Data;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Marr.Data.Mapping;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Test.Framework;
-using ServiceStack.OrmLite;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-    public class BaiscType : ModelBase
+    public class BasicType : ModelBase
     {
         public string Name { get; set; }
         public string Tilte { get; set; }
@@ -18,26 +18,33 @@ namespace NzbDrone.Core.Test.Datastore
     }
 
     [TestFixture]
-    public class BasicRepositoryFixture : DbTest<BasicRepository<BaiscType>,BaiscType>
+    public class 
+        BasicRepositoryFixture : DbTest<BasicRepository<BasicType>, BasicType>
     {
-        private BaiscType _baiscType;
+        private BasicType _basicType;
 
 
         [SetUp]
         public void Setup()
         {
-            _baiscType = Builder<BaiscType>
+            _basicType = Builder<BasicType>
                     .CreateNew()
                     .With(c => c.Id = 0)
                     .Build();
 
-            Mocker.Resolve<IDbConnection>().CreateTable<BaiscType>();
+            var mapping = new FluentMappings(true);
+
+            mapping.Entity<BasicType>()
+                   .Columns.AutoMapSimpleTypeProperties()
+                   .For(c => c.Id).SetAutoIncrement()
+                   .SetPrimaryKey();
+
         }
 
         [Test]
         public void should_be_able_to_add()
         {
-            Subject.Insert(_baiscType);
+            Subject.Insert(_basicType);
             Subject.All().Should().HaveCount(1);
         }
 
@@ -46,21 +53,21 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_delete_model()
         {
-            Subject.Insert(_baiscType);
+            Subject.Insert(_basicType);
             Subject.All().Should().HaveCount(1);
 
-            Subject.Delete(_baiscType.Id);
+            Subject.Delete(_basicType.Id);
             Subject.All().Should().BeEmpty();
         }
 
         [Test]
         public void should_be_able_to_find_by_id()
         {
-            Subject.Insert(_baiscType);
-            Subject.Get(_baiscType.Id)
+            Subject.Insert(_basicType);
+            Subject.Get(_basicType.Id)
                    .ShouldHave()
                    .AllProperties()
-                   .EqualTo(_baiscType);
+                   .EqualTo(_basicType);
         }
 
         [Test]
