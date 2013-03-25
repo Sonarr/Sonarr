@@ -7,7 +7,6 @@ namespace NzbDrone.Core.Configuration
     {
         [Index(Unique = true)]
         public string Key { get; set; }
-
         public string Value { get; set; }
     }
 }

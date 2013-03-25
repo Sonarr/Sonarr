@@ -79,9 +79,9 @@ namespace NzbDrone.Core.Indexers
         {
             var newznabIndexers = new List<NewznabDefinition>
                                       {
-                                              new NewznabDefinition { Enabled = false, Name = "Nzbs.org", Url = "http://nzbs.org", BuiltIn = true },
-                                              new NewznabDefinition { Enabled = false, Name = "Nzb.su", Url = "https://nzb.su", BuiltIn = true },
-                                              new NewznabDefinition { Enabled = false, Name = "Dognzb.cr", Url = "https://dognzb.cr", BuiltIn = true }
+                                              new NewznabDefinition { Enable = false, Name = "Nzbs.org", Url = "http://nzbs.org", BuiltIn = true },
+                                              new NewznabDefinition { Enable = false, Name = "Nzb.su", Url = "https://nzb.su", BuiltIn = true },
+                                              new NewznabDefinition { Enable = false, Name = "Dognzb.cr", Url = "https://dognzb.cr", BuiltIn = true }
                                       };
 
             _logger.Debug("Initializing Newznab indexers. Count {0}", newznabIndexers);
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Indexers
                         {
                             var definition = new NewznabDefinition
                             {
-                                Enabled = false,
+                                Enable = false,
                                 Name = indexerLocal.Name,
                                 Url = indexerLocal.Url,
                                 ApiKey = indexerLocal.ApiKey,

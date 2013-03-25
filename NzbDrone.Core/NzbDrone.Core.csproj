@@ -127,6 +127,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="FluentMigrator">
+      <HintPath>..\packages\FluentMigrator.1.0.6.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>
@@ -181,6 +187,14 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.x64.1.0.84.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.x64.1.0.84.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -201,9 +215,14 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtensions.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
+    <Compile Include="Datastore\MigrationHelper.cs" />
     <Compile Include="Datastore\Migration.cs" />
+    <Compile Include="Datastore\Migrations\Migration20130324.cs" />
+    <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
+    <Compile Include="Datastore\MigrationType.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
+    <Compile Include="Datastore\NlogAnnouncer.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IFetchableSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
@@ -530,6 +549,7 @@
     <Compile Include="Tvdb\TvdbServerTime.cs" />
     <Compile Include="Tvdb\TvdbUpdate.cs" />
     <Compile Include="Tvdb\TvdbUpdateItems.cs" />
+    <Compile Include="Tv\SeriesStatusType.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

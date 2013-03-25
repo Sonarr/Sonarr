@@ -4,7 +4,7 @@ using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
-
+using ServiceStack.DataAnnotations;
 
 
 namespace NzbDrone.Core.Tv
@@ -21,11 +21,8 @@ namespace NzbDrone.Core.Tv
         public int TvDbId { get; set; }
         public string Title { get; set; }
         public string CleanTitle { get; set; }
-        public string Status { get; set; }
-
-
+        public SeriesStatusType Status { get; set; }
         public string Overview { get; set; }
-
         public String AirTime { get; set; }
         public string Language { get; set; }
         public string Path { get; set; }

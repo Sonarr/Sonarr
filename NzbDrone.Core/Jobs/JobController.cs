@@ -42,9 +42,7 @@ namespace NzbDrone.Core.Jobs
             Task.Factory.StartNew(ProcessQueue, _cancellationTokenSource.Token);
         }
 
-
         public bool IsProcessing { get; private set; }
-
 
         public IEnumerable<JobQueueItem> Queue
         {
@@ -63,7 +61,7 @@ namespace NzbDrone.Core.Jobs
             }
 
             var pendingJobs = _jobRepository.GetPendingJobs()
-                .Select(c => _jobs.Single(t => t.GetType().ToString() == c.TypeName)
+                .Select(c => _jobs.Single(t => t.GetType().ToString() == c.Type)
                 .GetType()).ToList();
 
 
@@ -98,7 +96,6 @@ namespace NzbDrone.Core.Jobs
             }
 
         }
-
 
         public bool Enqueue(string jobTypeString)
         {

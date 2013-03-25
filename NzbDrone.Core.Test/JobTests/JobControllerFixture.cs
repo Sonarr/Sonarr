@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void running_scheduled_jobs_should_updates_last_execution_time()
         {
-            GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _fakeJob.GetType().FullName } });
+            GivenPendingJob(new List<JobDefinition> { new JobDefinition { Type = _fakeJob.GetType().FullName } });
 
             Subject.EnqueueScheduled();
             WaitForQueue();
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void failing_scheduled_job_should_mark_job_as_failed()
         {
-            GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _brokenJob.GetType().FullName } });
+            GivenPendingJob(new List<JobDefinition> { new JobDefinition { Type = _brokenJob.GetType().FullName } });
 
             Subject.EnqueueScheduled();
             WaitForQueue();
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void Item_added_to_queue_while_scheduler_runs_should_be_executed()
         {
-            GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _slowJob.GetType().FullName } });
+            GivenPendingJob(new List<JobDefinition> { new JobDefinition { Type = _slowJob.GetType().FullName } });
 
             var jobThread = new Thread(Subject.EnqueueScheduled);
             jobThread.Start();
@@ -219,7 +219,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void scheduled_job_should_have_scheduler_as_source()
         {
-            GivenPendingJob(new List<JobDefinition> { new JobDefinition { TypeName = _slowJob.GetType().FullName }, new JobDefinition { TypeName = _slowJob2.GetType().FullName } });
+            GivenPendingJob(new List<JobDefinition> { new JobDefinition { Type = _slowJob.GetType().FullName }, new JobDefinition { Type = _slowJob2.GetType().FullName } });
             Subject.EnqueueScheduled();
 
             Subject.Queue.Should().OnlyContain(c => c.Source == JobQueueItem.JobSourceType.Scheduler);

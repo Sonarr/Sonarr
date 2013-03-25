@@ -3,7 +3,7 @@ using System.IO;
 
 namespace NzbDrone.Common
 {
-    public static class PathExtentions
+    public static class PathExtensions
     {
         private const string WEB_FOLDER = "NzbDrone.Web\\";
         private const string APP_DATA = "App_Data\\";
@@ -134,6 +134,11 @@ namespace NzbDrone.Common
         public static string GetNzbDroneExe(this EnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.ApplicationPath, NZBDRONE_EXE);
+        }
+
+        public static string GetNzbDroneDatabase(this EnvironmentProvider environmentProvider)
+        {
+            return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_DB);
         }
     }
 }

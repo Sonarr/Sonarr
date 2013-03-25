@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.JobTests
             Storage.All().Should().HaveCount(1);
             StoredModel.Interval.Should().Be((Int32)_fakeJob.DefaultInterval.TotalMinutes);
             StoredModel.Name.Should().Be(_fakeJob.Name);
-            StoredModel.TypeName.Should().Be(_fakeJob.GetType().ToString());
+            StoredModel.Type.Should().Be(_fakeJob.GetType().ToString());
             StoredModel.LastExecution.Should().HaveYear(DateTime.Now.Year);
             StoredModel.LastExecution.Should().HaveMonth(DateTime.Now.Month);
             StoredModel.LastExecution.Should().HaveDay(DateTime.Today.Day);
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.JobTests
             Subject.Init();
 
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().NotContain(c => c.TypeName == deletedJob.TypeName);
+            AllStoredModels.Should().NotContain(c => c.Type == deletedJob.Type);
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.JobTests
 
 
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().NotContain(c => c.TypeName == deletedJob.TypeName);
+            AllStoredModels.Should().NotContain(c => c.Type == deletedJob.Type);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Test.JobTests
             var oldJob = Builder<JobDefinition>.CreateNew()
                 .With(c => c.Id = 0)
                 .With(c => c.Name = "OldName")
-                .With(c => c.TypeName = typeof(FakeJob).ToString())
+                .With(c => c.Type = typeof(FakeJob).ToString())
                 .With(c => c.Interval = 0)
                 .With(c => c.Enable = true)
                 .With(c => c.Success = true)
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.JobTests
 
 
             AllStoredModels.Should().HaveCount(1);
-            StoredModel.TypeName.Should().Be(newJob.GetType().FullName);
+            StoredModel.Type.Should().Be(newJob.GetType().FullName);
             StoredModel.Name.Should().Be(newJob.Name);
             StoredModel.Interval.Should().Be((int)newJob.DefaultInterval.TotalMinutes);
             StoredModel.Enable.Should().Be(true);

@@ -123,7 +123,7 @@
     <Compile Include="Contract\ReportBase.cs" />
     <Compile Include="Contract\ParseErrorReport.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
-    <Compile Include="PathExtentions.cs" />
+    <Compile Include="PathExtensions.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnvironmentProvider.cs" />
     <Compile Include="Model\ProcessInfo.cs" />

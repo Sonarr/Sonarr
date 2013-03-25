@@ -55,7 +55,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.Airs_Time);
             series.Overview = tvDbSeries.Overview;
-            series.Status = tvDbSeries.Status;
+            series.Status = tvDbSeries.Status == "Continuing" ? SeriesStatusType.Continuing : SeriesStatusType.Ended ;
             series.Language = tvDbSeries.Language ?? string.Empty;
             series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
             series.LastInfoSync = DateTime.Now;

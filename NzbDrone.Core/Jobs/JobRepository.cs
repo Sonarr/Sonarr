@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Jobs
 
         public JobDefinition GetDefinition(Type type)
         {
-            return Single(c => c.TypeName == type.FullName);
+            return Single(c => c.Type == type.FullName);
         }
 
 
@@ -39,12 +39,12 @@ namespace NzbDrone.Core.Jobs
 
         public void Init()
         {
-            var currentJobs = All();
+            var currentJobs = All().ToList();
             _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count());
 
             foreach (var currentJob in currentJobs)
             {
-                if (_jobs.All(c => c.GetType().ToString() != currentJob.TypeName))
+                if (_jobs.All(c => c.GetType().ToString() != currentJob.Type))
                 {
                     _logger.Debug("Removing job from database '{0}'", currentJob.Name);
                     Delete(currentJob.Id);
@@ -53,13 +53,13 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var job in _jobs)
             {
-                var jobDefinition = currentJobs.SingleOrDefault(c => c.TypeName == job.GetType().ToString());
+                var jobDefinition = currentJobs.SingleOrDefault(c => c.Type == job.GetType().ToString());
 
                 if (jobDefinition == null)
                 {
                     jobDefinition = new JobDefinition
                         {
-                            TypeName = job.GetType().ToString(),
+                            Type = job.GetType().ToString(),
                             LastExecution = DateTime.Now
                         };
                 }

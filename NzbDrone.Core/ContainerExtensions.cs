@@ -23,8 +23,7 @@ namespace NzbDrone.Core
             containerBuilder.RegisterAssembly("NzbDrone.Core");
 
             containerBuilder.InitDatabase();
-
-
+            
             containerBuilder.RegisterModule<LogInjectionModule>();
         }
 
@@ -53,22 +52,16 @@ namespace NzbDrone.Core
         {
             logger.Info("Registering Database...");
 
-            var appDataPath = new EnvironmentProvider().GetAppDataPath();
+            var environmentProvider = new EnvironmentProvider();
+            var appDataPath = environmentProvider.GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
             container.Register(c =>
             {
-                return c.Resolve<IDbFactory>().Create();
+                return c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase());
             }).As<IDbConnection>().SingleInstance();
 
-
-            container.Register(c =>
-                      {
-                          return c.Resolve<IDbFactory>().Create();
-                      }).As<IDbConnection>().SingleInstance();
-
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
-
         }
     }
 }

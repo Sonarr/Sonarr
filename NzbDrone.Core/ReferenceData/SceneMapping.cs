@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using NzbDrone.Core.Datastore;
+using ServiceStack.DataAnnotations;
 
 namespace NzbDrone.Core.ReferenceData
 {
+    [Alias("SceneMappings")]
     public class SceneMapping : ModelBase
     {
         public string CleanTitle { get; set; }
