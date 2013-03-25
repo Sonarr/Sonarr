@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Marr.Data;
 using Mono.Data.Sqlite;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -27,7 +26,10 @@ namespace NzbDrone.Core.Datastore
             var connectionString = GetConnectionString(dbPath);
 
             _migrationController.MigrateToLatest(connectionString, migrationType);
-            var dataMapper = new DataMapper(SqliteFactory.Instance, connectionString);
+            var dataMapper = new DataMapper(SqliteFactory.Instance, connectionString)
+                {
+                    SqlMode = SqlModes.Text,
+                };
             return new Database(dataMapper);
         }
 

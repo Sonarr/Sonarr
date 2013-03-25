@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Jobs
 
         public IList<JobDefinition> GetPendingJobs()
         {
-            return Queryable().Where(c => c.Enable && c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
+            return Queryable().Where(c => c.Enable == false && c.Interval != 2).ToList().Where(c => c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
         }
 
         public void Init()

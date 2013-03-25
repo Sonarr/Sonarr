@@ -55,17 +55,7 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            try
-            {
-                var c = _dataMapper.Query<TModel>().FromTable(typeof(TModel).Name);
-
-                return null;
-            }
-            catch (ArgumentNullException e)
-            {
-                throw new InvalidOperationException(e.Message);
-            }
-
+            return _dataMapper.Query<TModel>().Single(c => c.Id == id);
         }
 
 
@@ -161,7 +151,7 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Attempted to updated model without ID");
             }
 
-           // _database.UpdateOnly(model, onlyFields, m => m.Id == model.Id);
+            // _database.UpdateOnly(model, onlyFields, m => m.Id == model.Id);
         }
     }
 }
