@@ -7,6 +7,7 @@ namespace NzbDrone.Core.History
 {
     public class History : ModelBase
     {
+        public int EpisodeId { get; set; }
         public string NzbTitle { get; set; }
         public QualityModel Quality { get; set; }
         public DateTime Date { get; set; }
@@ -14,6 +15,5 @@ namespace NzbDrone.Core.History
         public string NzbInfoUrl { get; set; }
         public string ReleaseGroup { get; set; }
 
-        public Episode Episode { get; set; }
     }
 }

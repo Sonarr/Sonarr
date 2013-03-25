@@ -13,7 +13,7 @@ namespace NzbDrone.Core.History
         List<History> All();
         void Purge();
         void Trim();
-        QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber);
+        QualityModel GetBestQualityInHistory(int episodeId);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>
@@ -43,9 +43,9 @@ namespace NzbDrone.Core.History
             _historyRepository.Trim();
         }
 
-        public virtual QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
+        public virtual QualityModel GetBestQualityInHistory(int episodeId)
         {
-            return _historyRepository.GetBestQualityInHistory(seriesId, seasonNumber, episodeNumber);
+            return _historyRepository.GetBestQualityInHistory(episodeId);
         }
 
         public void Handle(EpisodeGrabbedEvent message)
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.History
                     Indexer = message.ParseResult.Indexer,
                     Quality = message.ParseResult.Quality,
                     NzbTitle = message.ParseResult.OriginalString,
-                    Episode = episode,
+                    EpisodeId = episode.Id,
                     NzbInfoUrl = message.ParseResult.NzbInfoUrl,
                     ReleaseGroup = message.ParseResult.ReleaseGroup,
                 };

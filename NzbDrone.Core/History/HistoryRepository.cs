@@ -9,7 +9,7 @@ namespace NzbDrone.Core.History
     public interface IHistoryRepository : IBasicRepository<History>
     {
         void Trim();
-        QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber);
+        QualityModel GetBestQualityInHistory(int episodeId);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -26,9 +26,9 @@ namespace NzbDrone.Core.History
         }
 
 
-        public QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
+        public QualityModel GetBestQualityInHistory(int episodeId)
         {
-            var history = Where(c => c.Episode.Series.Id == seriesId && c.Episode.SeasonNumber == seasonNumber && c.Episode.EpisodeNumber == episodeNumber)
+            var history = Where(c => c.EpisodeId == episodeId)
                 .OrderByDescending(c => c.Quality).FirstOrDefault();
 
             if (history != null)

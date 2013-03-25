@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.HistoryTests
         [Test]
         public void GetBestQualityInHistory_no_result()
         {
-            Subject.GetBestQualityInHistory(12, 12, 12).Should().Be(null);
+            Subject.GetBestQualityInHistory(12).Should().Be(null);
         }
 
         [Test]
@@ -54,12 +54,12 @@ namespace NzbDrone.Core.Test.HistoryTests
             var history = Builder<History.History>.CreateNew()
                 .With(c => c.Id = 0)
                 .With(h => h.Quality = new QualityModel(Quality.Bluray720p, true))
-                .With(h => h.Episode = episode)
+                .With(h => h.EpisodeId = episode.Id)
                 .Build();
 
             Db.Insert(history);
 
-            var result = Subject.GetBestQualityInHistory(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+            var result = Subject.GetBestQualityInHistory(episode.Id);
 
             result.Should().NotBeNull();
             result.Quality.Should().Be(Quality.Bluray720p);
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                     .CreateListOfSize(5)
                     .All()
                     .With(c => c.Id = 0)
-                    .With(h => h.Episode = episode)
+                    .With(h => h.EpisodeId = episode.Id)
                     .TheFirst(1)
                     .With(h => h.Quality = new QualityModel(Quality.DVD, true))
                     .TheNext(1)
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.HistoryTests
 
             Db.InsertMany(history);
 
-            var result = Subject.GetBestQualityInHistory(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+            var result = Subject.GetBestQualityInHistory(episode.Id);
 
             result.Should().NotBeNull();
             result.Quality.Should().Be(Quality.Bluray720p);

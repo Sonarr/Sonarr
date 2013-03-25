@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Datastore
         bool HasItems();
         void DeleteMany(IEnumerable<int> ids);
         void UpdateFields<TKey>(TModel model, Expression<Func<TModel, TKey>> onlyFields);
+        List<TModel> Where(SqlExpressionVisitor<TModel> expression);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -91,6 +92,11 @@ namespace NzbDrone.Core.Datastore
         public List<TModel> Where(Expression<Func<TModel, bool>> predicate)
         {
             return _database.Select(predicate);
+        }
+
+        public List<TModel> Where(SqlExpressionVisitor<TModel> expression)
+        {
+            return _database.Select(expression);
         }
 
         public TModel Insert(TModel model)
