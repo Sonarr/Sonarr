@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
 using NzbDrone.Core.Datastore;
-using ServiceStack.DataAnnotations;
 
 namespace NzbDrone.Core.Jobs
 {
-    [Alias("JobDefinitions")]
     public class JobDefinition : ModelBase
     {
         public Boolean Enable { get; set; }

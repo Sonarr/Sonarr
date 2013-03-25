@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Jobs
 
         public JobDefinition GetDefinition(Type type)
         {
-            return Queryable().Single(c => c.TypeName == type.FullName);
+            return Queryable().Single(c => c.Type == type.FullName);
         }
 
 

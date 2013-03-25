@@ -1,11 +1,9 @@
 ﻿using System;
 using NzbDrone.Core.Datastore;
-using ServiceStack.DataAnnotations;
 
 
 namespace NzbDrone.Core.Indexers
 {
-    [Alias("NewznabDefinitions")]
     public class NewznabDefinition : ModelBase
     {
         public Boolean Enable { get; set; }

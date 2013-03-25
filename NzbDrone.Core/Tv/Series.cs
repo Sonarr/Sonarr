@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
-using ServiceStack.DataAnnotations;
 
 
 namespace NzbDrone.Core.Tv

@@ -132,6 +132,7 @@
     </Reference>
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
     <Reference Include="FastReflection">
       <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\FastReflection.dll</HintPath>
     </Reference>
@@ -208,7 +209,6 @@
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\MigrationHelper.cs" />
-    <Compile Include="Datastore\Migration.cs" />
     <Compile Include="Datastore\Migrations\Migration20130324.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\MigrationType.cs" />
