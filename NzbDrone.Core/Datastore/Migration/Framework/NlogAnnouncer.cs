@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentMigrator.Runner.Announcers;
+﻿using FluentMigrator.Runner.Announcers;
 using NLog;
 
-namespace NzbDrone.Core.Datastore
+namespace NzbDrone.Core.Datastore.Migration.Framework
 {
     public class NlogAnnouncer : Announcer
     {

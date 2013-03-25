@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentMigrator;
-using NzbDrone.Common;
 
-namespace NzbDrone.Core.Datastore.Migrations
+namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-    public abstract class NzbDroneMigration : Migration
+    public abstract class NzbDroneMigrationBase : FluentMigrator.Migration
     {
         protected virtual void MainDbUpgrade()
         {
@@ -19,11 +14,11 @@ namespace NzbDrone.Core.Datastore.Migrations
 
         public override void Up()
         {
-            if ((MigrationType)this.ApplicationContext == MigrationType.Main)
+            if ((MigrationType)ApplicationContext == MigrationType.Main)
             {
                 MainDbUpgrade();
             }
-            else if ((MigrationType)this.ApplicationContext == MigrationType.Log)
+            else if ((MigrationType)ApplicationContext == MigrationType.Log)
             {
                 LogDbUpgrade();
             }

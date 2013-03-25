@@ -1,44 +1,29 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Marr.Data.Mapping;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-    public class BasicType : ModelBase
-    {
-        public string Name { get; set; }
-        public string Tilte { get; set; }
-        public string Address { get; set; }
-    }
 
     [TestFixture]
-    public class 
-        BasicRepositoryFixture : DbTest<BasicRepository<BasicType>, BasicType>
+    public class
+        BasicRepositoryFixture : DbTest<BasicRepository<JobDefinition>, JobDefinition>
     {
-        private BasicType _basicType;
+        private JobDefinition _basicType;
 
 
         [SetUp]
         public void Setup()
         {
-            _basicType = Builder<BasicType>
+            _basicType = Builder<JobDefinition>
                     .CreateNew()
                     .With(c => c.Id = 0)
                     .Build();
-
-            var mapping = new FluentMappings(true);
-
-            mapping.Entity<BasicType>()
-                   .Columns.AutoMapSimpleTypeProperties()
-                   .For(c => c.Id).SetAutoIncrement()
-                   .SetPrimaryKey();
-
         }
 
         [Test]

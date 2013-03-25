@@ -2,34 +2,34 @@
 using System.Data;
 using Marr.Data;
 using Mono.Data.Sqlite;
+using NzbDrone.Core.Datastore.Migration.Framework;
 
 
 namespace NzbDrone.Core.Datastore
 {
     public interface IDbFactory
     {
-        IDatabase Create(string dbPath = null);
+        IDatabase Create(string dbPath, MigrationType migrationType = MigrationType.Main);
     }
 
     public class DbFactory : IDbFactory
     {
-        private const string MemoryConnectionString = "Data Source=:memory:;Version=3;New=True;";
+        private readonly IMigrationController _migrationController;
 
-        public IDatabase Create(string dbPath = null)
+        public DbFactory(IMigrationController migrationController)
         {
-            var connectionString = MemoryConnectionString;
+            TableMapping.Map();
+            _migrationController = migrationController;
+        }
 
-            if (!string.IsNullOrWhiteSpace(dbPath))
-            {
-                connectionString = GetConnectionString(dbPath);
-            }
+        public IDatabase Create(string dbPath, MigrationType migrationType = MigrationType.Main)
+        {
+            var connectionString = GetConnectionString(dbPath);
 
-            MigrationHelper.MigrateToLatest(connectionString, MigrationType.Main);
+            _migrationController.MigrateToLatest(connectionString, migrationType);
             var dataMapper = new DataMapper(SqliteFactory.Instance, connectionString);
             return new Database(dataMapper);
         }
-
-
 
         private string GetConnectionString(string dbPath)
         {

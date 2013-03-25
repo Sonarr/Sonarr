@@ -6,19 +6,20 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore
 {
     [TestFixture]
-    public class ObjectDatabaseFixture : DbTest<BasicRepository<BasicType>, BasicType>
+    public class ObjectDatabaseFixture : DbTest<BasicRepository<JobDefinition>, JobDefinition>
     {
-        private BasicType _sampleType;
+        private JobDefinition _sampleType;
 
         [SetUp]
         public void SetUp()
         {
-            _sampleType = Builder<BasicType>
+            _sampleType = Builder<JobDefinition>
                     .CreateNew()
                     .With(s => s.Id = 0)
                     .Build();
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_write_to_database()
         {
             Subject.Insert(_sampleType);
-            Db.All<BasicType>().Should().HaveCount(1);
+            Db.All<JobDefinition>().Should().HaveCount(1);
         }
 
         [Test]
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_store_empty_list()
         {
-            var series = new List<BasicType>();
+            var series = new List<JobDefinition>();
 
             Subject.InsertMany(series);
         }
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Test.Datastore
             _sampleType.Id = 0;
             Subject.Insert(_sampleType);
 
-            Db.All<BasicType>().Should().HaveCount(1);
+            Db.All<JobDefinition>().Should().HaveCount(1);
             _sampleType.Id.Should().Be(1);
         }
 
@@ -80,7 +81,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             _sampleType.Id = 0;
             Subject.Insert(_sampleType);
-            var item = Db.All<BasicType>();
+            var item = Db.All<JobDefinition>();
 
             item.Should().HaveCount(1);
             item.First().Id.Should().NotBe(0);
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_find_object_by_id()
         {
             Subject.Insert(_sampleType);
-            var item = Db.All<BasicType>().Single(c => c.Id == _sampleType.Id);
+            var item = Db.All<JobDefinition>().Single(c => c.Id == _sampleType.Id);
 
             item.Id.Should().NotBe(0);
             item.Id.Should().Be(_sampleType.Id);
@@ -102,25 +103,25 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void update_field_should_only_update_that_filed()
         {
-            var childModel = new BasicType
+            var childModel = new JobDefinition
                 {
-                    Address = "Address",
+                    Type = "Address",
                     Name = "Name",
-                    Tilte = "Title"
+                    Interval = 12
 
                 };
 
             Subject.Insert(childModel);
 
-            childModel.Address = "A";
+            childModel.Type = "A";
             childModel.Name = "B";
-            childModel.Tilte = "C";
+            childModel.Interval = 0;
 
             Subject.UpdateFields(childModel, t => t.Name);
 
-            Db.All<BasicType>().Single().Address.Should().Be("Address");
-            Db.All<BasicType>().Single().Name.Should().Be("B");
-            Db.All<BasicType>().Single().Tilte.Should().Be("Title");
+            Db.All<JobDefinition>().Single().Type.Should().Be("Address");
+            Db.All<JobDefinition>().Single().Name.Should().Be("B");
+            Db.All<JobDefinition>().Single().Interval.Should().Be(12);
         }
 
 

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentMigrator;
+﻿using FluentMigrator;
+using  NzbDrone.Core.Datastore.Migration.Framework;
 
-namespace NzbDrone.Core.Datastore.Migrations
+namespace NzbDrone.Core.Datastore.Migration
 {
     [Tags("")]
     [Migration(20130324)]
-    public class Migration20130324 : NzbDroneMigration
+    public class Migration20130324 : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
         {
@@ -79,12 +76,6 @@ namespace NzbDrone.Core.Datastore.Migrations
                   .WithColumn("Interval").AsInt32().NotNullable()
                   .WithColumn("LastExecution").AsDateTime().NotNullable()
                   .WithColumn("Success").AsBoolean().NotNullable();
-
-            Create.Table("MetadataDefinitions")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Enable").AsBoolean().NotNullable()
-                  .WithColumn("Type").AsString().NotNullable()
-                  .WithColumn("Name").AsString().NotNullable();
 
             Create.Table("NewznabDefinitions")
                   .WithColumn("Id").AsInt32().PrimaryKey().Identity()

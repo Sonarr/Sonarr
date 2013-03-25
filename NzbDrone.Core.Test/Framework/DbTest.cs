@@ -7,6 +7,7 @@ using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Test.Framework
 
             MapRepository.Instance.EnableTraceLogging = true;
 
-            var factory = new DbFactory();
+            var factory = new DbFactory(new MigrationController(new NlogAnnouncer()));
             _database = factory.Create(_dbName);
             _db = new TestTestDatabase(_database);
             Mocker.SetConstant(_database);
