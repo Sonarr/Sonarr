@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
-using NzbDrone.Core.Datastore.Migration.Sqlite;
+using FluentMigrator.Runner.Processors.Sqlite;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             };
 
             var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
-            var factory = new MonoSqliteProcessorFactory();
+            var factory = new SqliteProcessorFactory();
             var processor = factory.Create(connectionString, _announcer, options);
             var runner = new MigrationRunner(assembly, migrationContext, processor);
             runner.MigrateUp(true);

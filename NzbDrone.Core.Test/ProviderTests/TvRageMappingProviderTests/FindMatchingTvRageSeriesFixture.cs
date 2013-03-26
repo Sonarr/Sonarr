@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageMappingProviderTests
                   .Setup(s => s.GetEpisode(_series.Id, 1, 1))
                   .Returns(_episode);
 
-            Mocker.GetMock<SceneMappingService>()
+            Mocker.GetMock<ISceneMappingService>()
                   .Setup(s => s.GetCleanName(_series.Id))
                   .Returns("");
 

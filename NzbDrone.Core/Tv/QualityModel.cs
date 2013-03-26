@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv
 {
-    public class QualityModel : IComparable<QualityModel>
+    public class QualityModel : IComparable<QualityModel>, IEmbeddedDocument
     {
         public Quality Quality { get; set; }
 

@@ -17,21 +17,15 @@ namespace NzbDrone.Core.Download.Clients
         private readonly IConfigService _configService;
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public PneumaticProvider(IConfigService configService, HttpProvider httpProvider,
-                                    DiskProvider diskProvider, UpgradeHistorySpecification upgradeHistorySpecification)
+                                    DiskProvider diskProvider)
         {
             _configService = configService;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
-            _upgradeHistorySpecification = upgradeHistorySpecification;
-        }
-
-        public PneumaticProvider()
-        {
         }
 
         public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
@@ -76,7 +70,7 @@ namespace NzbDrone.Core.Download.Clients
 
         public virtual bool IsInQueue(EpisodeParseResult newParseResult)
         {
-            return !_upgradeHistorySpecification.IsSatisfiedBy(newParseResult);
+            return false;
         }
     }
 }

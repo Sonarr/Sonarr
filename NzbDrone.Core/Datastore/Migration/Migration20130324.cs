@@ -1,5 +1,5 @@
 ﻿using FluentMigrator;
-using  NzbDrone.Core.Datastore.Migration.Framework;
+using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
             Create.Table("Episodes")
                   .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("TvdbId").AsInt32().Nullable()
+                  .WithColumn("TvDbEpisodeId").AsInt32().Nullable()
                   .WithColumn("SeriesId").AsInt32().NotNullable()
                   .WithColumn("SeasonNumber").AsInt32().NotNullable()
                   .WithColumn("EpisodeNumber").AsInt32().NotNullable()
@@ -56,8 +56,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("SeriesId").AsInt32().NotNullable()
                   .WithColumn("NzbTitle").AsString().NotNullable()
                   .WithColumn("Date").AsDateTime().NotNullable()
-                  .WithColumn("Quality").AsInt32().NotNullable()
-                  .WithColumn("Proper").AsBoolean().NotNullable()
+                  .WithColumn("Quality").AsString().NotNullable()
                   .WithColumn("Indexer").AsString().NotNullable()
                   .WithColumn("NzbInfoUrl").AsString().Nullable()
                   .WithColumn("ReleaseGroup").AsString().Nullable();
@@ -131,7 +130,6 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("LastInfoSync").AsDateTime().Nullable()
                   .WithColumn("LastDiskSync").AsDateTime().Nullable()
                   .WithColumn("Runtime").AsInt32().NotNullable()
-                  .WithColumn("BannerUrl").AsString().NotNullable()
                   .WithColumn("SeriesType").AsInt32().NotNullable()
                   .WithColumn("BacklogSetting").AsInt32().NotNullable()
                   .WithColumn("Network").AsString().NotNullable()
@@ -140,7 +138,14 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("TvRageId").AsInt32().Nullable()
                   .WithColumn("TvRageTitle").AsString().NotNullable()
                   .WithColumn("UtcOffSet").AsInt32().NotNullable()
-                  .WithColumn("FirstAired").AsDateTime().Nullable();
+                  .WithColumn("FirstAired").AsDateTime().Nullable()
+                  .WithColumn("NextAiring").AsDateTime().Nullable();
+
+            Create.Table("MediaCovers")
+                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
+                  .WithColumn("SeriesId").AsInt32().NotNullable()
+                  .WithColumn("Url").AsString().NotNullable()
+                  .WithColumn("CoverType").AsInt32().NotNullable();
         }
 
         protected override void LogDbUpgrade()

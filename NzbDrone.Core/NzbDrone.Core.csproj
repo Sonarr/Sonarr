@@ -152,10 +152,6 @@
       <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Data.Sqlite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Sqlite\Mono.Data.Sqlite.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -179,6 +175,14 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.1.0.84.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.1.0.84.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -200,16 +204,18 @@
     <Compile Include="ContainerExtensions.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
+    <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
+    <Compile Include="Datastore\EnumIntConverter.cs" />
+    <Compile Include="Datastore\IEmbeddedDocument.cs" />
+    <Compile Include="Datastore\LazyList.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\NlogAnnouncer.cs" />
     <Compile Include="Datastore\Migration\Migration20130324.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
     <Compile Include="Datastore\MigrationType.cs" />
-    <Compile Include="Datastore\Migration\Sqlite\MonoSqliteDbFactory.cs" />
-    <Compile Include="Datastore\Migration\Sqlite\MonoSqliteProcessorFactory.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\TableMapping.cs" />

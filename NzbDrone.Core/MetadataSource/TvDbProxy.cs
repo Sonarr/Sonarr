@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common;
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Title = tvDbSeries.SeriesName;
             series.AirTime = CleanAirsTime(tvDbSeries.Airs_Time);
             series.Overview = tvDbSeries.Overview;
-            series.Status = tvDbSeries.Status == "Continuing" ? SeriesStatusType.Continuing : SeriesStatusType.Ended ;
+            series.Status = tvDbSeries.Status == "Continuing" ? SeriesStatusType.Continuing : SeriesStatusType.Ended;
             series.Language = tvDbSeries.Language ?? string.Empty;
             series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
             series.LastInfoSync = DateTime.Now;
@@ -65,21 +66,20 @@ namespace NzbDrone.Core.MetadataSource
                 series.Runtime = Convert.ToInt32(tvDbSeries.Runtime);
             }
 
-            series.Covers = new List<MediaCover.MediaCover>();
 
             if (!string.IsNullOrWhiteSpace(tvDbSeries.banner))
             {
-                series.Covers.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = tvDbSeries.banner });
+                series.Covers.Value.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = tvDbSeries.banner, SeriesId = series.Id });
             }
 
             if (!string.IsNullOrWhiteSpace(tvDbSeries.fanart))
             {
-                series.Covers.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = tvDbSeries.fanart });
+                series.Covers.Value.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = tvDbSeries.fanart, SeriesId = series.Id });
             }
 
             if (!string.IsNullOrWhiteSpace(tvDbSeries.poster))
             {
-                series.Covers.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = tvDbSeries.poster });
+                series.Covers.Value.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = tvDbSeries.poster, SeriesId = series.Id });
             }
 
             series.Network = tvDbSeries.Network;

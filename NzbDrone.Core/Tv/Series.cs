@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
@@ -16,6 +15,11 @@ namespace NzbDrone.Core.Tv
 
     public class Series : ModelBase
     {
+        public Series()
+        {
+            Covers = new LazyList<MediaCover.MediaCover>();
+        }
+
         public int TvDbId { get; set; }
         public string Title { get; set; }
         public string CleanTitle { get; set; }
@@ -30,7 +34,7 @@ namespace NzbDrone.Core.Tv
         public DateTime? LastInfoSync { get; set; }
         public DateTime? LastDiskSync { get; set; }
         public int Runtime { get; set; }
-        public List<MediaCover.MediaCover> Covers { get; set; }
+        public LazyList<MediaCover.MediaCover> Covers { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public BacklogSettingType BacklogSetting { get; set; }
         public string Network { get; set; }
@@ -44,9 +48,6 @@ namespace NzbDrone.Core.Tv
 
         public DateTime? FirstAired { get; set; }
         public QualityProfile QualityProfile { get; set; }
-        public int EpisodeCount { get; set; }
-        public int EpisodeFileCount { get; set; }
-        public int SeasonCount { get; set; }
         public DateTime? NextAiring { get; set; }
     }
 }

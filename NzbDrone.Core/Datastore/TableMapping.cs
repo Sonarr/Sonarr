@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Configuration;
@@ -13,6 +14,7 @@ using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using BooleanIntConverter = NzbDrone.Core.Datastore.Converters.BooleanIntConverter;
+using System.Linq;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -35,12 +37,21 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
-            Mapper.Entity<History.History>().RegisterModel("History");
+            Mapper.Entity<History.History>().RegisterModel("History")
+                .Relationships.AutoMapComplexTypeProperties<ILazyLoaded>()
+                .For(c => c.Episode)
+                .LazyLoad((db, history) => db.Query<Episode>().Where(ep => ep.Id == history.Id).ToList());
 
-            Mapper.Entity<Series>().RegisterModel("Series");
+            Mapper.Entity<Series>().RegisterModel("Series")
+                  .Relationships.AutoMapComplexTypeProperties<ILazyLoaded>()
+                  .For(c => c.Covers)
+                  .LazyLoad((db, series) => db.Query<MediaCover.MediaCover>().Where(cover => cover.SeriesId == series.Id).ToList());
+
+
             Mapper.Entity<Season>().RegisterModel("Seasons");
             Mapper.Entity<Episode>().RegisterModel("Episodes");
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles");
+            Mapper.Entity<MediaCover.MediaCover>().RegisterModel("MediaCovers");
 
             Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles");
             Mapper.Entity<QualitySize>().RegisterModel("QualitySizes");
@@ -53,19 +64,48 @@ namespace NzbDrone.Core.Datastore
         {
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter());
         }
 
 
-        private static void RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName) where T : ModelBase
+        private static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName) where T : ModelBase
         {
-            mapBuilder.Table.MapTable(tableName)
-                      .Columns
-                      .AutoMapSimpleTypeProperties()
-                      .For(c => c.Id)
-                      .SetPrimaryKey()
-                      .SetReturnValue()
-                      .SetAutoIncrement();
+            return mapBuilder.Table.MapTable(tableName)
+                         .Columns
+                         .AutoMapPropertiesWhere(IsMappableProperty)
+                         .For(c => c.Id)
+                         .SetPrimaryKey()
+                         .SetReturnValue()
+                         .SetAutoIncrement();
         }
 
+        private static bool IsMappableProperty(MemberInfo memberInfo)
+        {
+            var propertyInfo = memberInfo as PropertyInfo;
+
+            if (propertyInfo == null) return false;
+
+            if (propertyInfo.PropertyType.GetInterfaces().Any(i => i == typeof(IEmbeddedDocument)))
+            {
+                return true;
+            }
+
+            return propertyInfo.CanRead && propertyInfo.CanWrite && IsSimpleType(propertyInfo.PropertyType);
+        }
+
+        private static bool IsSimpleType(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                type = type.GetGenericArguments()[0];
+            }
+
+            return type.IsPrimitive
+                || type.IsEnum
+                || type == typeof(string)
+                || type == typeof(DateTime)
+                || type == typeof(Decimal);
+        }
     }
 }

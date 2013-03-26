@@ -1,14 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.History;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Organizer;
 
 namespace NzbDrone.Core.Download.Clients
