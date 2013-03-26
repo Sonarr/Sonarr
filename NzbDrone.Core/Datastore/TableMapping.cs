@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<History.History>().RegisterModel("History")
                 .Relationships.AutoMapComplexTypeProperties<ILazyLoaded>()
                 .For(c => c.Episode)
-                .LazyLoad((db, history) => db.Query<Episode>().Where(ep => ep.Id == history.Id).ToList());
+                .LazyLoad((db, history) => db.Query<Episode>().Single(ep => ep.Id == history.EpisodeId));
 
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Relationships.AutoMapComplexTypeProperties<ILazyLoaded>()

@@ -4,14 +4,14 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {
     [TestFixture]
-    public class DatabaseJoinFixture : DbTest<BasicRepository<Series>, Series>
+    public class DatabaseRelationshipFixture : DbTest
     {
         [Test]
         [Explicit]
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.Datastore
 
             Marr.Data.MapRepository.Instance.EnableTraceLogging = false;
 
-            Subject.Insert(series);
+            Db.Insert(series);
 
             var covers = Builder<MediaCover.MediaCover>.CreateListOfSize(5)
                 .All()
@@ -34,12 +34,12 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.InsertMany(covers);
 
-            var loadedSeries = Subject.SingleOrDefault();
+            var loadedSeries = Db.Single<Series>();
 
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < 10000; i++)
             {
-                loadedSeries = Subject.SingleOrDefault();
+                loadedSeries = Db.Single<Series>();
                 var list = loadedSeries.Covers.Value;
             }
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.Datastore
                                         .With(c => c.Id = 0)
                                         .Build();
 
-            Subject.Insert(series);
+            Db.Insert(series);
 
             var covers = Builder<MediaCover.MediaCover>.CreateListOfSize(5)
                 .All()
@@ -68,14 +68,12 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.InsertMany(covers);
 
-            var loadedSeries = Subject.SingleOrDefault();
-            loadedSeries = Subject.SingleOrDefault();
-
+            var loadedSeries = Db.Single<Series>();
             loadedSeries.Covers.Value.Should().HaveSameCount(covers);
         }
 
         [Test]
-        public void embeded_document_as_json()
+        public void one_to_one()
         {
             var episode = Builder<Episode>.CreateNew()
                                                        .With(c => c.Id = 0)
@@ -91,7 +89,28 @@ namespace NzbDrone.Core.Test.Datastore
                             .Build();
 
             Db.Insert(history);
-            Db.Single<History.History>().Episode.Value.Should().NotBeNull();
+
+            var loadedEpisode = Db.Single<History.History>().Episode.Value;
+
+            loadedEpisode.Should().NotBeNull();
+            loadedEpisode.ShouldHave().AllProperties().EqualTo(episode);
+        }
+
+
+        [Test]
+        public void embedded_document_as_json()
+        {
+            var quality = new QualityModel { Quality = Quality.Bluray720p, Proper = true };
+
+            var history = Builder<History.History>.CreateNew()
+                            .With(c => c.Id = 0)
+                            .With(c => c.Quality = quality)
+                            .Build();
+
+            Db.Insert(history);
+
+            var loadedQuality = Db.Single<History.History>().Quality;
+            loadedQuality.Should().Be(quality);
         }
     }
 }

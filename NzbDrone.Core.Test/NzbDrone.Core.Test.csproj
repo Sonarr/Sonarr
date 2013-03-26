@@ -138,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
-    <Compile Include="Datastore\DatabaseJoinFixture.cs" />
+    <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
