@@ -18,6 +18,7 @@ namespace NzbDrone.Common
     public class HostController : IHostController
     {
         private readonly ConfigFileProvider _configFileProvider;
+        private readonly SecurityProvider _securityProvider;
         private readonly INancyBootstrapper _bootstrapper;
         private readonly Logger _logger;
         private NancyHost _host;
@@ -25,18 +26,22 @@ namespace NzbDrone.Common
 
         public bool ServerStarted { get; private set; }
 
-        public HostController(ConfigFileProvider configFileProvider, INancyBootstrapper bootstrapper, Logger logger)
+        public HostController(ConfigFileProvider configFileProvider, SecurityProvider securityProvider, INancyBootstrapper bootstrapper, Logger logger)
         {
             _configFileProvider = configFileProvider;
+            _securityProvider = securityProvider;
             _bootstrapper = bootstrapper;
             _logger = logger;
         }
 
         public void StartServer()
         {
-            //Todo: We need this to be able run when the user isn't an admin
-            //Todo: And when the URL hasn't been registered in URL ACL: netsh http add urlacl url=http://+:8989/ user=everyone
-            _host = new NancyHost(new Uri(AppUrl), _bootstrapper);
+            if (_securityProvider.IsNzbDroneUrlRegistered())
+                _host = new NancyHost(new Uri(AppUrl), _bootstrapper);
+
+            else
+                _host = new NancyHost(new Uri(AppUrl), _bootstrapper, new HostConfiguration { RewriteLocalhost = false });
+
             _host.Start();
         }
 
@@ -44,7 +49,6 @@ namespace NzbDrone.Common
         {
             get { return string.Format("http://localhost:{0}", _configFileProvider.Port); }
         }
-
 
         public void RestartServer()
         {

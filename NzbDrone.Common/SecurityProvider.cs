@@ -10,38 +10,45 @@ using NetFwTypeLib;
 
 namespace NzbDrone.Common
 {
-	public class SecurityProvider
-	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
+    public interface ISecurityProvider
+    {
+        void MakeAccessible();
+        bool IsCurrentUserAdmin();
+        bool IsNzbDronePortOpen();
+        bool IsNzbDroneUrlRegistered();
+    }
 
+	public class SecurityProvider : ISecurityProvider
+	{
 		private readonly ConfigFileProvider _configFileProvider;
 		private readonly EnvironmentProvider _environmentProvider;
 		private readonly ProcessProvider _processProvider;
+	    private readonly Logger _logger;
 
-		public SecurityProvider (ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
-                                    ProcessProvider processProvider)
+	    public SecurityProvider(ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
+                                    ProcessProvider processProvider, Logger logger)
 		{
 			_configFileProvider = configFileProvider;
 			_environmentProvider = environmentProvider;
 			_processProvider = processProvider;
+		    _logger = logger;
 		}
 
-		public SecurityProvider ()
+		public void MakeAccessible()
 		{
-		}
-
-		public virtual void MakeAccessible ()
-		{
-			if (!IsCurrentUserAdmin ()) {
-				Logger.Trace ("User is not an admin, skipping.");
+			if (!IsCurrentUserAdmin ())
+            {
+				_logger.Trace ("User is not an admin, skipping.");
 				return;
 			}
 
 			int port = 0;
 
-			if (IsFirewallEnabled ()) {
-				if (IsNzbDronePortOpen ()) {
-					Logger.Trace ("NzbDrone port is already open, skipping.");
+			if (IsFirewallEnabled ())
+            {
+				if (IsNzbDronePortOpen ())
+                {
+					_logger.Trace ("NzbDrone port is already open, skipping.");
 					return;
 				}
 
@@ -58,24 +65,24 @@ namespace NzbDrone.Common
 
 			//Unregister Url (if port != 0)
 			if (port != 0)
-				UnregisterUrl (port);
+				UnregisterUrl(port);
 
 			//Register Url
-			RegisterUrl (_configFileProvider.Port);
+			RegisterUrl(_configFileProvider.Port);
 		}
 
-		public virtual bool IsCurrentUserAdmin ()
+		public bool IsCurrentUserAdmin()
 		{
 			try {
 				var principal = new WindowsPrincipal (WindowsIdentity.GetCurrent ());
 				return principal.IsInRole (WindowsBuiltInRole.Administrator);
 			} catch (Exception ex) {
-				Logger.WarnException ("Error checking if the current user is an administrator.", ex);
+				_logger.WarnException ("Error checking if the current user is an administrator.", ex);
 				return false;
 			}
 		}
 
-		public virtual bool IsNzbDronePortOpen ()
+		public bool IsNzbDronePortOpen()
 		{
 #if __MonoCS__
 #else
@@ -83,7 +90,6 @@ namespace NzbDrone.Common
 			try {
 				var netFwMgrType = Type.GetTypeFromProgID ("HNetCfg.FwMgr", false);
 
-		
 				var mgr = (INetFwMgr)Activator.CreateInstance (netFwMgrType);
 
 				if (!mgr.LocalPolicy.CurrentProfile.FirewallEnabled)
@@ -95,14 +101,20 @@ namespace NzbDrone.Common
 					if (p.Port == _configFileProvider.Port)
 						return true;
 				}
-			} catch (Exception ex) {
-				Logger.WarnException ("Failed to check for open port in firewall", ex);
+			}
+            catch (Exception ex) {
+				_logger.WarnException ("Failed to check for open port in firewall", ex);
 			}
 #endif
 			return false;
 		}
 
-		private bool OpenFirewallPort (int portNumber)
+        public bool IsNzbDroneUrlRegistered()
+        {
+            return CheckIfUrlIsRegisteredUrl(_configFileProvider.Port);
+        }
+
+		private void OpenFirewallPort(int portNumber)
 		{
 #if __MonoCS__
 			return true;
@@ -121,15 +133,14 @@ namespace NzbDrone.Common
 				var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
 				ports.Add (port);
-				return true;
-			} catch (Exception ex) {
-				Logger.WarnException ("Failed to open port in firewall for NzbDrone " + portNumber, ex);
-				return false;
+			}
+            catch (Exception ex) {
+				_logger.WarnException ("Failed to open port in firewall for NzbDrone " + portNumber, ex);
 			}
 #endif
 		}
 
-		private int CloseFirewallPort ()
+		private int CloseFirewallPort()
 		{
 
 #if __MonoCS__
@@ -149,18 +160,21 @@ namespace NzbDrone.Common
 					}
 				}
 
-				if (portNumber != _configFileProvider.Port) {
+				if (portNumber != _configFileProvider.Port)
+                {
 					ports.Remove (portNumber, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
 					return portNumber;
 				}
-			} catch (Exception ex) {
-				Logger.WarnException ("Failed to close port in firewall for NzbDrone", ex);
+			}
+            catch (Exception ex)
+            {
+				_logger.WarnException ("Failed to close port in firewall for NzbDrone", ex);
 			}
 #endif
 			return 0;
 		}
 
-		private bool IsFirewallEnabled ()
+		private bool IsFirewallEnabled()
 		{
 #if __MonoCS__
 			return true;
@@ -170,49 +184,70 @@ namespace NzbDrone.Common
 				var netFwMgrType = Type.GetTypeFromProgID ("HNetCfg.FwMgr", false);
 				var mgr = (INetFwMgr)Activator.CreateInstance (netFwMgrType);
 				return mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
-			} catch (Exception ex) {
-				Logger.WarnException ("Failed to check if the firewall is enabled", ex);
+			}
+            catch (Exception ex)
+            {
+				_logger.WarnException ("Failed to check if the firewall is enabled", ex);
 				return false;
 			}
 #endif
 		}
 
-		private bool RegisterUrl (int portNumber)
+		private void RegisterUrl(int portNumber)
 		{
-			try {
-				var startInfo = new ProcessStartInfo ()
-                {
-                    FileName = "netsh.exe",
-                    Arguments = string.Format("http add urlacl http://*:{0}/ user=EVERYONE", portNumber)
-                };
-
-				var process = _processProvider.Start (startInfo);
-				process.WaitForExit (5000);
-				return true;
-			} catch (Exception ex) {
-				Logger.WarnException ("Error registering URL", ex);
-			}
-
-			return false;
+		    var arguments = String.Format("http add urlacl http://+:{0}/ user=EVERYONE", portNumber);
+		    RunNetsh(arguments);
 		}
 
-		private bool UnregisterUrl (int portNumber)
+		private void UnregisterUrl(int portNumber)
 		{
-			try {
-				var startInfo = new ProcessStartInfo ()
+		    var arguments = String.Format("http delete urlacl http://+:{0}/", portNumber);
+            RunNetsh(arguments);
+		}
+
+        private bool CheckIfUrlIsRegisteredUrl(int portNumber)
+        {
+            var url = String.Format("http://+:{0}/", portNumber);
+            var arguments = String.Format("http show urlacl url=\"{0}\"", url);
+            var output = RunNetsh(arguments);
+
+            if(String.IsNullOrWhiteSpace(output))
+            {
+                _logger.Error("netsh output is invalid for arguments: {0}", arguments);
+            }
+
+            if(!output.Contains(url))
+            {
+                _logger.Trace("Url has not already been registered");
+                return false;
+            }
+
+            _logger.Trace("Url has already been registered!");
+            return true;
+        }
+
+        private string RunNetsh(string arguments)
+        {
+            try
+            {
+                var startInfo = new ProcessStartInfo()
                 {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
                     FileName = "netsh.exe",
-                    Arguments = string.Format("http delete urlacl http://*:{0}/", portNumber)
+                    Arguments = arguments
                 };
 
-				var process = _processProvider.Start (startInfo);
-				process.WaitForExit (5000);
-				return true;
-			} catch (Exception ex) {
-				Logger.WarnException ("Error registering URL", ex);
-			}
+                var process = _processProvider.Start(startInfo);
+                process.WaitForExit(5000);
+                return process.StandardOutput.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Error executing netsh with arguments: " + arguments, ex);
+            }
 
-			return false;
-		}
+            return null;
+        }
 	}
 }
