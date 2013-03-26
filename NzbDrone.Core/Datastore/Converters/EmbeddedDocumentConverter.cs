@@ -28,11 +28,6 @@ namespace NzbDrone.Core.Datastore.Converters
         {
             if (clrValue == null) return null;
 
-            if (clrValue as IEmbeddedDocument == null)
-            {
-                throw new InvalidOperationException("Attempted to embedded an object not marked with IEmbeddedDocument");
-            }
-
             var json = JsonConvert.SerializeObject(clrValue);
             return json;
         }

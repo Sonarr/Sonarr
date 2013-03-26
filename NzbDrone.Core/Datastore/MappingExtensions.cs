@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Marr.Data.Mapping;
@@ -29,7 +30,14 @@ namespace NzbDrone.Core.Datastore
                 return true;
             }
 
-            return propertyInfo.CanRead && propertyInfo.CanWrite && IsSimpleType(propertyInfo.PropertyType);
+            if (typeof(IEnumerable<IEmbeddedDocument>).IsAssignableFrom(propertyInfo.PropertyType))
+            {
+                return true;
+            }
+
+            var result = propertyInfo.IsReadable() && propertyInfo.IsWritable() && IsSimpleType(propertyInfo.PropertyType);
+
+            return result;
         }
 
         public static bool IsSimpleType(Type type)
@@ -44,6 +52,16 @@ namespace NzbDrone.Core.Datastore
                    || type == typeof(string)
                    || type == typeof(DateTime)
                    || type == typeof(Decimal);
+        }
+
+        private static bool IsReadable(this PropertyInfo propertyInfo)
+        {
+            return propertyInfo.CanRead && propertyInfo.GetGetMethod(false) != null;
+        }
+
+        private static bool IsWritable(this PropertyInfo propertyInfo)
+        {
+            return propertyInfo.CanWrite && propertyInfo.GetSetMethod(false) != null;
         }
     }
 }
