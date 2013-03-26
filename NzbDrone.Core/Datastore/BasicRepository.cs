@@ -58,7 +58,6 @@ namespace NzbDrone.Core.Datastore
             return _dataMapper.Query<TModel>().Single(c => c.Id == id);
         }
 
-
         public TModel SingleOrDefault()
         {
             return All().Single();

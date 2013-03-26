@@ -196,6 +196,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtensions.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
+    <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Database.cs" />

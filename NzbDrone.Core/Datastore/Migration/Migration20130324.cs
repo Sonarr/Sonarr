@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                   .WithColumn("CleanTitle").AsString().NotNullable()
                   .WithColumn("SceneName").AsString().NotNullable()
-                  .WithColumn("SeriesId").AsInt32().NotNullable()
+                  .WithColumn("TvdbId").AsInt32().NotNullable()
                   .WithColumn("SeasonNumber").AsInt32().NotNullable();
 
             Create.Table("Seasons")
