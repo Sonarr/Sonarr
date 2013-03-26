@@ -70,6 +70,10 @@
     <Reference Include="AutoMoq">
       <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
     </Reference>
+    <Reference Include="FastReflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\FastReflection.dll</HintPath>
+    </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -77,14 +81,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Marr.Data">
-      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\Marr.Data.dll</HintPath>
-    </Reference>
     <Reference Include="FluentMigrator">
       <HintPath>..\packages\FluentMigrator.1.0.6.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="Marr.Data, Version=3.17.4747.34302, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\Marr.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

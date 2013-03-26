@@ -49,8 +49,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Backbone", "NzbDro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Console", "NzbDrone.Console\NzbDrone.Console.csproj", "{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marr.Data", "..\..\..\Users\Keivan\Desktop\Marr.Data\Marr.Data.csproj", "{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -351,24 +349,6 @@ Global
 		{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}.Services|x64.ActiveCfg = Release|x86
 		{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}.Services|x86.ActiveCfg = Release|x86
 		{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}.Services|x86.Build.0 = Release|x86
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Release|x64.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Release|x86.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Services|Any CPU.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Services|Any CPU.Build.0 = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Services|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Services|Mixed Platforms.Build.0 = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Services|x64.ActiveCfg = Release|Any CPU
-		{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}.Services|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
