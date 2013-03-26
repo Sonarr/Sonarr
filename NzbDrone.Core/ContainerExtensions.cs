@@ -56,10 +56,7 @@ namespace NzbDrone.Core
             var appDataPath = environmentProvider.GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            container.Register(c =>
-            {
-                return c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase());
-            }).As<IDbConnection>().SingleInstance();
+            container.Register(c => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase())).As<IDatabase>().SingleInstance();
 
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
         }
