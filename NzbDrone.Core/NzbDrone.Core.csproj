@@ -203,6 +203,7 @@
     <Compile Include="Datastore\EnumIntConverter.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
+    <Compile Include="Datastore\MappingExtensions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\NlogAnnouncer.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Datastore\MigrationType.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
+    <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IFetchableSpecification.cs" />
