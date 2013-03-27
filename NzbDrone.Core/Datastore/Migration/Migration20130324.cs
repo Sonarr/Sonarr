@@ -151,11 +151,11 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void LogDbUpgrade()
         {
             Create.Table("Logs")
-                  .WithColumn("LogId").AsInt64().PrimaryKey().Identity()
+                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                   .WithColumn("Message").AsString().NotNullable()
                   .WithColumn("Time").AsDateTime().NotNullable()
                   .WithColumn("Logger").AsString().NotNullable()
-                  .WithColumn("Method").AsString().NotNullable()
+                  .WithColumn("Method").AsString().Nullable()
                   .WithColumn("Exception").AsString().Nullable()
                   .WithColumn("ExceptionType").AsString().Nullable()
                   .WithColumn("Level").AsString().NotNullable();

@@ -31,7 +31,11 @@ namespace NzbDrone.Core.Instrumentation
             log.Time = logEvent.TimeStamp;
             log.Message = logEvent.FormattedMessage;
 
-            log.Method = logEvent.UserStackFrame.GetMethod().Name;
+            if (logEvent.UserStackFrame != null)
+            {
+                log.Method = logEvent.UserStackFrame.GetMethod().Name;
+            }
+
             log.Logger = logEvent.LoggerName;
 
             if (log.Logger.StartsWith("NzbDrone."))

@@ -68,6 +68,16 @@ namespace NzbDrone.Core.Test.Framework
         private ITestDatabase _db;
         private IDatabase _database;
 
+
+        protected virtual MigrationType MigrationType
+        {
+            get
+            {
+                return MigrationType.Main;
+
+            }
+        }
+
         protected ITestDatabase Db
         {
             get
@@ -87,7 +97,7 @@ namespace NzbDrone.Core.Test.Framework
             MapRepository.Instance.EnableTraceLogging = true;
 
             var factory = new DbFactory(new MigrationController(new NlogAnnouncer()));
-            _database = factory.Create(_dbName);
+            _database = factory.Create(_dbName, MigrationType);
             _db = new TestTestDatabase(_database);
             Mocker.SetConstant(_database);
         }
