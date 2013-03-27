@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Tv
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesType)
         {
-            UpdateFields(new Series { Id = seriesId, SeriesType = seriesType }, s => s.SeriesType);
+            SetFields(new Series { Id = seriesId, SeriesType = seriesType }, s => s.SeriesType);
         }
     }
 }

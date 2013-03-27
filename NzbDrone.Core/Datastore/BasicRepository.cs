@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Datastore
         void Purge();
         bool HasItems();
         void DeleteMany(IEnumerable<int> ids);
-        void UpdateFields<TKey>(TModel model, Expression<Func<TModel, TKey>> onlyFields);
+        void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -148,16 +148,19 @@ namespace NzbDrone.Core.Datastore
             return Count() > 0;
         }
 
-        public void UpdateFields<TKey>(TModel model, Expression<Func<TModel, TKey>> onlyFields)
+        public void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties)
         {
             if (model.Id == 0)
             {
                 throw new InvalidOperationException("Attempted to updated model without ID");
             }
 
-            _dataMapper.Update<TModel>(model, m => m.Id == model.Id);
-
-            // _database.UpdateOnly(model, onlyFields, m => m.Id == model.Id);
+            _dataMapper.Update<TModel>()
+                .Where(c => c.Id == model.Id)
+                .ColumnsIncluding(properties)
+                .Entity(model)
+                .Execute();
         }
+
     }
 }

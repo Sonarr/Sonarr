@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.Datastore
 
 
         [Test]
-        public void update_field_should_only_update_that_filed()
+        public void set_fields_should_only_update_selected_filed()
         {
             var childModel = new JobDefinition
                 {
@@ -117,14 +117,12 @@ namespace NzbDrone.Core.Test.Datastore
             childModel.Name = "B";
             childModel.Interval = 0;
 
-            Subject.UpdateFields(childModel, t => t.Name);
+            Subject.SetFields(childModel, t => t.Name);
 
             Db.All<JobDefinition>().Single().Type.Should().Be("Address");
             Db.All<JobDefinition>().Single().Name.Should().Be("B");
             Db.All<JobDefinition>().Single().Interval.Should().Be(12);
         }
-
-
     }
 
 }
