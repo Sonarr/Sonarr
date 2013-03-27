@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Providers
             //Make sure this file is an upgrade for ALL episodes already on disk
             if (episodes.All(e => e.EpisodeFile == null || e.EpisodeFile.QualityWrapper < parseResult.Quality))
             {
-                Logger.Debug("Deleting the existing file(s) on disk to upgrade to: {0}", filePath);
+                Logger.Info("Deleting the existing file(s) on disk to upgrade to: {0}", filePath);
                 //Do the delete for files where there is already an episode on disk
                 episodes.Where(e => e.EpisodeFile != null).Select(e => e.EpisodeFile.Path).Distinct().ToList().ForEach(p => _recycleBinProvider.DeleteFile(p));
             }

@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
-                logger.Info("Recycling Bin has not been configured, deleting permanently.");
+                logger.Info("Recycling Bin has not been configured, deleting permanently. {0}", path);
                 _diskProvider.DeleteFolder(path, true);
                 logger.Trace("Folder has been permanently deleted: {0}", path);
             }
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Providers
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
-                logger.Info("Recycling Bin has not been configured, deleting permanently.");
+                logger.Info("Recycling Bin has not been configured, deleting permanently. {0}", path);
                 _diskProvider.DeleteFile(path);
                 logger.Trace("File has been permanently deleted: {0}", path);
             }
