@@ -150,6 +150,8 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Attempted to updated model without ID");
             }
 
+            _dataMapper.Update<TModel>(model, m => m.Id == model.Id);
+
             // _database.UpdateOnly(model, onlyFields, m => m.Id == model.Id);
         }
     }

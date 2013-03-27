@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -12,7 +10,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HistoryTests
 {
     [TestFixture]
-    public class HistoryServiceTest : DbTest<HistoryRepository, History.History>
+    public class HistoryRepositoryFixture : DbTest<HistoryRepository, History.History>
     {
         [Test]
         public void Trim_Items()

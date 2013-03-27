@@ -34,10 +34,10 @@ namespace NzbDrone.Core.Configuration
             var type = GetType();
             var properties = type.GetProperties();
 
-            foreach(var propertyInfo in properties)
+            foreach (var propertyInfo in properties)
             {
                 var value = propertyInfo.GetValue(this, null);
-                
+
                 dict.Add(propertyInfo.Name, value);
             }
 
@@ -268,7 +268,7 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
             set { SetValue("TwitterAccessTokenSecret", value); }
         }
-       
+
         public string GrowlHost
         {
             get { return GetValue("GrowlHost", "localhost:23053"); }
@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("GrowlPassword", String.Empty); }
             set { SetValue("GrowlPassword", value); }
         }
-       
+
         public string ProwlApiKeys
         {
             get { return GetValue("ProwlApiKeys", String.Empty); }
@@ -552,7 +552,7 @@ namespace NzbDrone.Core.Configuration
         {
             var allWithDefaults = AllWithDefaults();
 
-            foreach(var configValue in configValues)
+            foreach (var configValue in configValues)
             {
                 object currentValue;
                 allWithDefaults.TryGetValue(configValue.Key, out currentValue);
@@ -571,7 +571,7 @@ namespace NzbDrone.Core.Configuration
             {
                 if (!_cache.Any())
                 {
-                    _cache = All().ToDictionary(c => c.Key, c => c.Value);
+                    _cache = All().ToDictionary(c => c.Key.ToLower(), c => c.Value);
                 }
             }
         }

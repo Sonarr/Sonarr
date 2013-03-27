@@ -242,7 +242,7 @@
     <Compile Include="TvTests\QualityModelFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="Indexers\IndexerServiceTest.cs" />
-    <Compile Include="HistoryTests\HistoryServiceTest.cs" />
+    <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileServiceTest.cs" />
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
@@ -300,6 +300,9 @@
     </Content>
     <Content Include="Files\JsonError.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Files\RSS\nzbx_search.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

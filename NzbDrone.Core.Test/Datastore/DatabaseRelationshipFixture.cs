@@ -112,5 +112,25 @@ namespace NzbDrone.Core.Test.Datastore
             var loadedQuality = Db.Single<History.History>().Quality;
             loadedQuality.Should().Be(quality);
         }
+
+        [Test]
+        public void embedded_list_of_document_with_json()
+        {
+            var quality = new QualityModel { Quality = Quality.Bluray720p, Proper = true };
+
+            var history = Builder<History.History>.CreateListOfSize(2)
+                            .All().With(c => c.Id = 0)
+                            .Build().ToList();
+
+            history[0].Quality = new QualityModel(Quality.HDTV1080p, true);
+            history[1].Quality = new QualityModel(Quality.Bluray720p, true);
+
+
+            Db.InsertMany(history);
+
+            var returnedHistory = Db.All<History.History>();
+
+            returnedHistory[0].Quality.Quality.Should().Be(Quality.HDTV1080p);
+        }
     }
 }

@@ -63,7 +63,6 @@ namespace NzbDrone.Core.Test.Configuration
 
             Db.Insert(new Config { Key = key, Value = originalValue });
 
-            //Act
             Subject.SetValue(key, newValue);
             var result = Subject.GetValue(key, "");
 
