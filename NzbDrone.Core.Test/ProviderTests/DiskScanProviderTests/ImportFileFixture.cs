@@ -24,6 +24,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             new object[] { QualityTypes.SDTV, false },
             new object[] { QualityTypes.DVD, true },
+        };
+
+        public static object[] SkipImportTestCases =
+        {
             new object[] { QualityTypes.HDTV720p, false }
         };
 
@@ -78,7 +82,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         }
 
         [Test, TestCaseSource("ImportTestCases")]
-        public void import_new_file_with_better_same_quality_should_succeed(QualityTypes currentFileQuality, bool currentFileProper)
+        public void import_new_file_with_better_quality_should_succeed(QualityTypes currentFileQuality, bool currentFileProper)
         {
             const string newFile = @"WEEDS.S03E01.DUAL.1080p.HELLYWOOD.mkv";
 
@@ -102,6 +106,33 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             //Assert
             VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
         }
+
+        [Test, TestCaseSource("SkipImportTestCases")]
+        public void import_new_file_with_same_quality_should_not_import(QualityTypes currentFileQuality, bool currentFileProper)
+        {
+            const string newFile = @"WEEDS.S03E01.DUAL.1080p.HELLYWOOD.mkv";
+
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                               .With(g => g.Quality = (QualityTypes)currentFileQuality)
+                                               .And(g => g.Proper = currentFileProper).Build()
+                ).Build();
+
+
+            With80MBFile();
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
+
+            //Act
+            var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, newFile);
+
+            //Assert
+            VerifySkipImport(result, Mocker);
+        }
+
 
         [TestCase("WEEDS.S03E01.DUAL.DVD.XviD.AC3.-HELLYWOOD.avi")]
         [TestCase("WEEDS.S03E01.DUAL.SDTV.XviD.AC3.-HELLYWOOD.avi")]
@@ -235,10 +266,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
         }
 
-        [TestCase("WEEDS.S03E01.DUAL.hdtv.XviD.AC3.-HELLYWOOD.avi")]
         [TestCase("WEEDS.S03E01.DUAL.DVD.XviD.AC3.-HELLYWOOD.avi")]
         [TestCase("WEEDS.S03E01.DUAL.bluray.x264.AC3.-HELLYWOOD.mkv")]
-        public void import_new_multi_part_file_episode_has_equal_or_better_quality_than_existing(string fileName)
+        public void import_new_multi_part_file_episode_has_better_quality_than_existing(string fileName)
         {
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -265,6 +295,35 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             //Assert
             VerifyFileImport(result, Mocker, fakeEpisodes[0], SIZE);
             Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
+        }
+
+        [TestCase("WEEDS.S03E01.DUAL.hdtv.XviD.AC3.-HELLYWOOD.avi")]
+        public void skip_import_new_multi_part_file_episode_has_same_quality_as_existing(string fileName)
+        {
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .All()
+                .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                               .With(f => f.Quality = QualityTypes.SDTV)
+                                               .Build())
+                .Build();
+
+            With80MBFile();
+
+            Mocker.GetMock<MediaFileProvider>()
+                .Setup(p => p.Exists(It.IsAny<String>()))
+                .Returns(false);
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(fakeEpisodes);
+
+            //Act
+            var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
+
+            //Assert
+            VerifySkipImport(result, Mocker);
         }
 
         [TestCase("WEEDS.S03E01.DUAL.DVD.XviD.AC3.-HELLYWOOD.avi")]
