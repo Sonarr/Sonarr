@@ -23,22 +23,22 @@ namespace NzbDrone.Core.Tv
 
         public bool SeriesPathExists(string path)
         {
-            return Queryable().Any(c => c.Path == path);
+            return Query.Any(c => c.Path == path);
         }
 
         public List<Series> Search(string title)
         {
-            return Queryable().Where(s => s.Title.Contains(title));
+            return Query.Where(s => s.Title.Contains(title));
         }
 
         public Series GetByTitle(string cleanTitle)
         {
-            return Queryable().SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
+            return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
         }
 
         public Series FindByTvdbId(int tvdbId)
         {
-            return Queryable().SingleOrDefault(s => s.TvDbId.Equals(tvdbId));
+            return Query.SingleOrDefault(s => s.TvDbId.Equals(tvdbId));
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesType)

@@ -20,12 +20,12 @@ namespace NzbDrone.Core.ReferenceData
 
         public SceneMapping FindByTvdbId(int tvdbId)
         {
-            return Queryable().SingleOrDefault(c => c.TvdbId == tvdbId);
+            return Query.SingleOrDefault(c => c.TvdbId == tvdbId);
         }
 
         public SceneMapping FindByCleanTitle(string cleanTitle)
         {
-            return Queryable().SingleOrDefault(c => c.CleanTitle == cleanTitle);
+            return Query.SingleOrDefault(c => c.CleanTitle == cleanTitle);
         }
     }
 }

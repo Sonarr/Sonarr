@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Qualities
 
         public QualitySize GetByQualityId(int qualityId)
         {
-            return Queryable().Single(q => q.QualityId == qualityId);
+            return Query.Single(q => q.QualityId == qualityId);
         }
     }
 }

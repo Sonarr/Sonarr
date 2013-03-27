@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<String>();
 
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Indexers
             return searchUrls;
         }
 
-        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        protected override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
         {
             var searchUrls = new List<String>();
 
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Indexers
             return searchUrls;
         }
 
-        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        protected override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
         {
             var searchUrls = new List<String>();
 
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Indexers
             return searchUrls;
         }
 
-        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        protected override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
         {
             var searchUrls = new List<String>();
 

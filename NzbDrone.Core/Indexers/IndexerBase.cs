@@ -61,49 +61,25 @@ namespace NzbDrone.Core.Indexers
             get { return null; }
         }
 
-        protected abstract IList<String> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
-        protected abstract IList<String> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);
-        protected abstract IList<String> GetSeasonSearchUrls(string seriesTitle, int seasonNumber);
-        protected abstract IList<String> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard);
+        protected abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
+        protected abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);
+        protected abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber);
+        protected abstract IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard);
 
-        /// <summary>
-        /// This method can be overwritten to provide indexer specific info parsing
-        /// </summary>
-        /// <param name="item">RSS item that needs to be parsed</param>
-        /// <param name="currentResult">Result of the built in parse function.</param>
-        /// <returns></returns>
         protected virtual EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
         {
             return currentResult;
         }
 
-        /// <summary>
-        /// This method can be overwritten to provide pre-parse the title
-        /// </summary>
-        /// <param name="item">RSS item that needs to be parsed</param>
-        /// <returns></returns>
         protected virtual string TitlePreParser(SyndicationItem item)
         {
             return item.Title.Text;
         }
 
-        /// <summary>
-        ///   Generates direct link to download an NZB
-        /// </summary>
-        /// <param name = "item">RSS Feed item to generate the link for</param>
-        /// <returns>Download link URL</returns>
         protected abstract string NzbDownloadUrl(SyndicationItem item);
 
-        /// <summary>
-        ///   Generates link to the NZB info at the indexer
-        /// </summary>
-        /// <param name = "item">RSS Feed item to generate the link for</param>
-        /// <returns>Nzb Info URL</returns>
         protected abstract string NzbInfoUrl(SyndicationItem item);
 
-        /// <summary>
-        ///   Fetches RSS feed and process each news item.
-        /// </summary>
         public virtual IList<EpisodeParseResult> FetchRss()
         {
             _logger.Debug("Fetching feeds from " + Name);
@@ -168,7 +144,7 @@ namespace NzbDrone.Core.Indexers
 
         }
 
-        protected virtual List<EpisodeParseResult> Fetch(IEnumerable<string> urls)
+        private List<EpisodeParseResult> Fetch(IEnumerable<string> urls)
         {
             var result = new List<EpisodeParseResult>();
 
@@ -213,7 +189,7 @@ namespace NzbDrone.Core.Indexers
                 {
                     if (webException.Message.Contains("503"))
                     {
-                        _logger.Warn("{0} server is currently unavailable.{1} {2}", Name,url, webException.Message);
+                        _logger.Warn("{0} server is currently unavailable.{1} {2}", Name, url, webException.Message);
                     }
                     else
                     {
@@ -231,11 +207,6 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        /// <summary>
-        ///   Parses the RSS feed item
-        /// </summary>
-        /// <param name = "item">RSS feed item to parse</param>
-        /// <returns>Detailed episode info</returns>
         public EpisodeParseResult ParseFeed(SyndicationItem item)
         {
             var title = TitlePreParser(item);
@@ -253,11 +224,6 @@ namespace NzbDrone.Core.Indexers
             return CustomParser(item, episodeParseResult);
         }
 
-        /// <summary>
-        /// This method can be overwritten to provide indexer specific title cleaning
-        /// </summary>
-        /// <param name="title">Title that needs to be cleaned</param>
-        /// <returns></returns>
         public virtual string GetQueryTitle(string title)
         {
             title = RemoveThe.Replace(title, string.Empty);

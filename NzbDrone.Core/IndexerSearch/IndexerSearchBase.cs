@@ -17,7 +17,7 @@ namespace NzbDrone.Core.IndexerSearch
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEpisodeService _episodeService;
-        private readonly DownloadProvider _downloadProvider;
+        private readonly IDownloadProvider _downloadProvider;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IDownloadDirector DownloadDirector;
 
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected IndexerSearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, DownloadProvider downloadProvider,
+        protected IndexerSearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, IDownloadProvider downloadProvider,
                              IIndexerService indexerService, ISceneMappingService sceneMappingService,
                              IDownloadDirector downloadDirector)
         {

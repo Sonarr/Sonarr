@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Configuration
 
         public Config Get(string key)
         {
-            return Queryable().SingleOrDefault(c => c.Key == key);
+            return Query.SingleOrDefault(c => c.Key == key);
         }
 
 

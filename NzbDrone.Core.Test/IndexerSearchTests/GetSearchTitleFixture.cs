@@ -2,12 +2,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.ReferenceData;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
-    public class GetSearchTitleFixture : TestBase
+    public class GetSearchTitleFixture : CoreTest<TestSearch>
     {
         private Series _series;
 
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
         private void WithSceneMapping()
         {
-            Mocker.GetMock<SceneMappingService>()
+            Mocker.GetMock<ISceneMappingService>()
                   .Setup(s => s.GetSceneName(_series.Id, -1))
                   .Returns("Hawaii Five 0 2010");
         }
@@ -30,8 +30,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         [Test]
         public void should_return_series_title_when_there_is_no_scene_mapping()
         {
-            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
-                  .Should().Be(_series.Title);
+            Subject.GetSearchTitle(_series, 5).Should().Be(_series.Title);
         }
 
         [Test]
@@ -39,19 +38,17 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         {
             WithSceneMapping();
 
-            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
-                  .Should().Be("Hawaii Five 0 2010");
+            Subject.GetSearchTitle(_series, 5).Should().Be("Hawaii Five 0 2010");
         }
 
         [Test]
         public void should_return_season_scene_name_when_one_exists()
         {
-            Mocker.GetMock<SceneMappingService>()
+            Mocker.GetMock<ISceneMappingService>()
                   .Setup(s => s.GetSceneName(_series.Id, 5))
                   .Returns("Hawaii Five 0 2010 - Season 5");
 
-            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
-                  .Should().Be("Hawaii Five 0 2010 - Season 5");
+            Subject.GetSearchTitle(_series, 5).Should().Be("Hawaii Five 0 2010 - Season 5");
         }
 
         [Test]
@@ -59,8 +56,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         {
             WithSceneMapping();
 
-            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
-                  .Should().Be("Hawaii Five 0 2010");
+            Subject.GetSearchTitle(_series, 5).Should().Be("Hawaii Five 0 2010");
         }
 
         [Test]
@@ -68,8 +64,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         {
             _series.Title = "Franklin & Bash";
 
-            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
-                  .Should().Be("Franklin and Bash");
+            Subject.GetSearchTitle(_series, 5).Should().Be("Franklin and Bash");
         }
 
         [TestCase("Betty White's Off Their Rockers", "Betty Whites Off Their Rockers")]
@@ -79,12 +74,11 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         {
             _series.Title = input;
 
-            Mocker.GetMock<SceneMappingService>()
+            Mocker.GetMock<ISceneMappingService>()
                   .Setup(s => s.GetSceneName(_series.Id, -1))
                   .Returns("");
 
-            Mocker.Resolve<TestSearch>().GetSearchTitle(_series, 5)
-                  .Should().Be(expected);
+            Subject.GetSearchTitle(_series, 5).Should().Be(expected);
         }
     }
 }

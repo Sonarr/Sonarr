@@ -21,14 +21,14 @@ namespace NzbDrone.Core.History
 
         public void Trim()
         {
-            var oldIds =  Queryable().Where(c => c.Date < DateTime.Now.AddDays(-30).Date).Select(c => c.Id);
-            DeleteMany(oldIds);
+            var cutoff = DateTime.Now.AddDays(-30).Date;
+            Delete(c=> c.Date < cutoff);
         }
 
 
         public QualityModel GetBestQualityInHistory(int episodeId)
         {
-            var history = Queryable().Where(c => c.EpisodeId == episodeId)
+            var history = Query.Where(c => c.EpisodeId == episodeId)
                 .OrderByDescending(c => c.Quality).FirstOrDefault();
 
             if (history != null)

@@ -10,7 +10,14 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Download
 {
-    public class DownloadProvider
+    public interface IDownloadProvider
+    {
+        bool DownloadReport(EpisodeParseResult parseResult);
+        IDownloadClient GetActiveDownloadClient();
+        bool ContainsRecentEpisode(EpisodeParseResult parseResult);
+    }
+
+    public class DownloadProvider : IDownloadProvider
     {
         private readonly SabProvider _sabProvider;
         private readonly IConfigService _configService;
@@ -18,10 +25,14 @@ namespace NzbDrone.Core.Download
         private readonly PneumaticProvider _pneumaticProvider;
         private readonly NzbgetProvider _nzbgetProvider;
         private readonly IEventAggregator _eventAggregator;
+        private readonly Logger _logger;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public DownloadProvider(SabProvider sabProvider, IConfigService configService, BlackholeProvider blackholeProvider, PneumaticProvider pneumaticProvider, NzbgetProvider nzbgetProvider, IEventAggregator eventAggregator)
+        public DownloadProvider(SabProvider sabProvider, IConfigService configService,
+            BlackholeProvider blackholeProvider,
+            PneumaticProvider pneumaticProvider,
+            NzbgetProvider nzbgetProvider,
+            IEventAggregator eventAggregator, Logger logger)
         {
             _sabProvider = sabProvider;
             _configService = configService;
@@ -29,11 +40,9 @@ namespace NzbDrone.Core.Download
             _pneumaticProvider = pneumaticProvider;
             _nzbgetProvider = nzbgetProvider;
             _eventAggregator = eventAggregator;
+            _logger = logger;
         }
 
-        public DownloadProvider()
-        {
-        }
 
         public virtual bool DownloadReport(EpisodeParseResult parseResult)
         {
@@ -50,7 +59,7 @@ namespace NzbDrone.Core.Download
 
             if (success)
             {
-                logger.Trace("Download added to Queue: {0}", downloadTitle);
+                _logger.Trace("Download added to Queue: {0}", downloadTitle);
                 _eventAggregator.Publish(new EpisodeGrabbedEvent(parseResult));
             }
 

@@ -25,17 +25,17 @@ namespace NzbDrone.Core.Tv
 
         public IList<int> GetSeasonNumbers(int seriesId)
         {
-            return Queryable().Where(c => c.SeriesId == seriesId).Select(c => c.SeriesId).ToList();
+            return Query.Where(c => c.SeriesId == seriesId).Select(c => c.SeriesId).ToList();
         }
 
         public Season Get(int seriesId, int seasonNumber)
         {
-            return Queryable().Single(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
+            return Query.Single(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
         }
 
         public bool IsIgnored(int seriesId, int seasonNumber)
         {
-            var season = Queryable().SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
+            var season = Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
 
             if (season == null) return false;
 
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Season> GetSeasonBySeries(int seriesId)
         {
-            return Queryable().Where(s => s.SeriesId == seriesId);
+            return Query.Where(s => s.SeriesId == seriesId);
         }
     }
 }

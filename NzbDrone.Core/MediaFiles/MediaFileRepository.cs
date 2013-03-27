@@ -23,17 +23,17 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFile GetFileByPath(string path)
         {
-            return Queryable().SingleOrDefault(c => c.Path == path);
+            return Query.SingleOrDefault(c => c.Path == path);
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
         {
-            return Queryable().Where(c => c.SeriesId == seriesId).ToList();
+            return Query.Where(c => c.SeriesId == seriesId).ToList();
         }
 
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
-            return Queryable().Where(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber).ToList();
+            return Query.Where(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber).ToList();
 
         }
     }

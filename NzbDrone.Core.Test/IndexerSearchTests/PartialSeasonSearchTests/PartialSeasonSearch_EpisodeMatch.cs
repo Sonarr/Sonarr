@@ -5,13 +5,14 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests.PartialSeasonSearchTests
 {
     [TestFixture]
-    public class PartialSeasonSearch_EpisodeMatch : TestBase
+    public class PartialSeasonSearch_EpisodeMatch : CoreTest<PartialSeasonSearch>
     {
         private Series _series;
         private List<Episode> _episodes;
@@ -42,17 +43,15 @@ namespace NzbDrone.Core.Test.IndexerSearchTests.PartialSeasonSearchTests
         [Test]
         public void should_return_wrongSeason_when_season_does_not_match()
         {
-            Mocker.Resolve<PartialSeasonSearch>()
-                  .IsEpisodeMatch(_series, new { SeasonNumber = 2, Episodes = _episodes }, _episodeParseResult)
+            Subject.IsEpisodeMatch(_series, new { SeasonNumber = 2, Episodes = _episodes }, _episodeParseResult)
                   .Should().BeFalse();
         }
 
         [Test]
         public void should_not_return_error_when_season_matches()
         {
-            Mocker.Resolve<PartialSeasonSearch>()
-                  .IsEpisodeMatch(_series, new { SeasonNumber = 1, Episodes = _episodes }, _episodeParseResult)
-                  .Should().BeFalse();
+            Subject.IsEpisodeMatch(_series, new { SeasonNumber = 1, Episodes = _episodes }, _episodeParseResult)
+                   .Should().BeTrue();
         }
     }
 }

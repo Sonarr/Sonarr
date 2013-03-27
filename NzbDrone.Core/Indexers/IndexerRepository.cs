@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Indexers
 
         public Indexer Find(Type type)
         {
-            return Queryable().Single(i => i.Type == type.ToString());
+            return Query.Single(i => i.Type == type.ToString());
         }
     }
 }

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Indexers
 
         public IEnumerable<NewznabDefinition> Enabled()
         {
-            return Queryable().Where(n => n.Enable);
+            return Query.Where(n => n.Enable);
         }
     }
 }

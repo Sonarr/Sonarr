@@ -18,7 +18,7 @@ namespace NzbDrone.Core.ExternalNotification
         
         public ExternalNotificationDefinition Get(string name)
         {
-            return Queryable().SingleOrDefault(c => c.Name.ToLower() == name.ToLower());
+            return Query.SingleOrDefault(c => c.Name.ToLower() == name.ToLower());
         }
     }
 }

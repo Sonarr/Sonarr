@@ -27,13 +27,13 @@ namespace NzbDrone.Core.Jobs
 
         public JobDefinition GetDefinition(Type type)
         {
-            return Queryable().Single(c => c.Type == type.FullName);
+            return Query.Single(c => c.Type == type.FullName);
         }
 
 
         public IList<JobDefinition> GetPendingJobs()
         {
-            return Queryable().Where(c => c.Enable == true && c.Interval != 2).ToList().Where(c => c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
+            return Query.Where(c => c.Enable == true && c.Interval != 2).ToList().Where(c => c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
         }
 
         public void Init()

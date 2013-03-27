@@ -38,9 +38,14 @@ namespace NzbDrone.Core.Datastore
             _dataMapper = database.DataMapper;
         }
 
-        protected QueryBuilder<TModel> Queryable()
+        protected QueryBuilder<TModel> Query
         {
-            return _dataMapper.Query<TModel>();
+            get { return _dataMapper.Query<TModel>(); }
+        }
+
+        protected void Delete(Expression<Func<TModel, bool>> filter)
+        {
+            _dataMapper.Delete(filter);
         }
 
         public IEnumerable<TModel> All()
