@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore
             RegisterMappers();
 
             Mapper.Entity<Config>().RegisterModel("Config");
-            Mapper.Entity<RootFolder>().RegisterModel("RootFolders");
+            Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
 
             Mapper.Entity<Indexer>().RegisterModel("IndexerDefinitions");
             Mapper.Entity<NewznabDefinition>().RegisterModel("NewznabDefinitions");

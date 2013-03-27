@@ -122,6 +122,7 @@ namespace NzbDrone.Core.Tv
             repoSeries.Monitored = true;
             repoSeries.QualityProfileId = qualityProfileId;
             repoSeries.Title = title;
+            repoSeries.CleanTitle = Parser.NormalizeTitle(title);
             if (qualityProfileId == 0)
                 repoSeries.QualityProfileId = _configService.DefaultQualityProfile;
 
@@ -131,6 +132,9 @@ namespace NzbDrone.Core.Tv
 
             if (airedAfter.HasValue)
                 repoSeries.CustomStartDate = airedAfter;
+
+            //Todo: Allow the user to set this as part of the addition process.
+            repoSeries.Language = "en";
 
             _seriesRepository.Insert(repoSeries);
 
