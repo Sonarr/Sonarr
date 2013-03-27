@@ -48,7 +48,6 @@ namespace NzbDrone.Core.MetadataSource
 
         public virtual Series GetSeries(int tvDbSeriesId)
         {
-
             var tvDbSeries = _handlerV2.GetSeriesBaseRecord("http://thetvdb.com", tvDbSeriesId);
 
             var series = new Series();
@@ -94,13 +93,10 @@ namespace NzbDrone.Core.MetadataSource
             }
 
             return series;
-
         }
 
         public virtual IList<Episode> GetEpisodes(int tvDbSeriesId)
         {
-
-
             var seriesRecord = _handlerV2.GetSeriesFullRecord("http://thetvdb.com", tvDbSeriesId);
 
             var tvdbEpisodes = seriesRecord.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
