@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
@@ -13,12 +12,10 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Qualities;
 
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Indexers;
-using NzbDrone.Core.Test.ProviderTests;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests

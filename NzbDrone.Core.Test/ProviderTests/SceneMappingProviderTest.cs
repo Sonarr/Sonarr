@@ -9,6 +9,8 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Test.TvTests;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -50,7 +52,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.TvdbId = 12345)
                 .With(f => f.SceneName = "Law and Order")
                 .With(f => f.SeasonNumber = -1)
-                .Build();
+                .BuildNew<SceneMapping>();
 
             Db.Insert(fakeMap);
 

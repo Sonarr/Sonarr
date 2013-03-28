@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Instrumentation;

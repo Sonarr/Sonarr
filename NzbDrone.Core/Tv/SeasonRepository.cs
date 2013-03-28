@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Tv
 
         public IList<int> GetSeasonNumbers(int seriesId)
         {
-            return Query.Where(c => c.SeriesId == seriesId).Select(c => c.SeriesId).ToList();
+            return Query.Where(c => c.SeriesId == seriesId).Select(c => c.SeasonNumber).ToList();
         }
 
         public Season Get(int seriesId, int seasonNumber)

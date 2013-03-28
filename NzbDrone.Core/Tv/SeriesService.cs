@@ -34,14 +34,14 @@ namespace NzbDrone.Core.Tv
         private readonly TvRageMappingProvider _tvRageMappingProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IQualityProfileService _qualityProfileService;
+        private readonly Logger _logger;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly SceneMappingService _sceneNameMappingService;
+        private readonly ISceneMappingService _sceneNameMappingService;
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
-                                TvDbProxy tvDbProxyProxy, SceneMappingService sceneNameMappingService,
-                                TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator, IQualityProfileService qualityProfileService)
+                                TvDbProxy tvDbProxyProxy, ISceneMappingService sceneNameMappingService,
+                                TvRageMappingProvider tvRageMappingProvider, IEventAggregator eventAggregator, IQualityProfileService qualityProfileService, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
@@ -50,6 +50,7 @@ namespace NzbDrone.Core.Tv
             _tvRageMappingProvider = tvRageMappingProvider;
             _eventAggregator = eventAggregator;
             _qualityProfileService = qualityProfileService;
+            _logger = logger;
         }
 
 
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Tv
 
             catch (Exception ex)
             {
-                logger.ErrorException("Error getting TvRage information for series: " + series.Title, ex);
+                _logger.ErrorException("Error getting TvRage information for series: " + series.Title, ex);
             }
 
             _seriesRepository.Update(series);
@@ -110,7 +111,7 @@ namespace NzbDrone.Core.Tv
 
         public void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
         {
-            logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
+            _logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
             Ensure.That(() => tvDbSeriesId).IsGreaterThan(0);
             Ensure.That(() => title).IsNotNullOrWhiteSpace();
