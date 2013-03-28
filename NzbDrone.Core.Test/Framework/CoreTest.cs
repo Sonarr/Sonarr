@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected string ReadAllText(params string[] path)
         {
-            return ReadAllText(Path.Combine(path));
+            return File.ReadAllText(Path.Combine(path));
         }
     }
 
