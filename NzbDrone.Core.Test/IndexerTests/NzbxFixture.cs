@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_recent.json"));
+                          .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_recent.json"));
 
             //Act
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
@@ -38,12 +38,12 @@ namespace NzbDrone.Core.Test.IndexerTests
             parseResults[0].Size.Should().Be(890190951);
         }
 
-        [Test] 
+        [Test]
         public void should_get_size_when_parsing_search_results()
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadString("https://nzbx.co/api/search?q=30+Rock+S01E01", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_search.json"));
+                          .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_search.json"));
 
             //Act
             var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\nzbx_recent.json"));
+                          .Returns(ReadAllText("Files", "Rss", "nzbx_recent.json"));
 
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
 
@@ -69,18 +69,18 @@ namespace NzbDrone.Core.Test.IndexerTests
 
         [Test]
         public void should_be_able_to_parse_results_from_search_results()
-    {
-        Mocker.GetMock<HttpProvider>()
-              .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-              .Returns(File.ReadAllText(".\\Files\\Rss\\nzbx_search.json"));
+        {
+            Mocker.GetMock<HttpProvider>()
+                  .Setup(h => h.DownloadString(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                  .Returns(ReadAllText("Files", "Rss", "nzbx_search.json"));
 
-        var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
+            var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
 
-        parseResults.Should().NotBeEmpty();
-        parseResults.Should().OnlyContain(s => s.Indexer == "nzbx");
-        parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
-        parseResults.Should().OnlyContain(s => s.Age >= 0);
-    }
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == "nzbx");
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
+            parseResults.Should().OnlyContain(s => s.Age >= 0);
+        }
 
         [Test]
         public void should_get_postedDate_when_parsing_recent_feed()
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_recent.json"));
+                          .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_recent.json"));
 
             //Act
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadString("https://nzbx.co/api/search?q=30+Rock+S01E01", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_search.json"));
+                          .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_search.json"));
 
             //Act
             var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
-                          .Returns(File.ReadAllText(".\\Files\\Rss\\SizeParsing\\nzbx_recent.json"));
+                          .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_recent.json"));
 
             //Act
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();

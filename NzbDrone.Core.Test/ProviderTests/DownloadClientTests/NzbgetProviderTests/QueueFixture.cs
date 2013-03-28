@@ -10,11 +10,12 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.Nzbget;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTests
 {
-    public class QueueFixture : TestBase
+    public class QueueFixture : CoreTest
     {
         [SetUp]
         public void Setup()
@@ -33,21 +34,21 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTes
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(File.ReadAllText(@".\Files\Nzbget\Queue.txt"));
+                    .Returns(ReadAllText("Files", "Nzbget", "Queue.txt"));
         }
 
         private void WithEmptyQueue()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(File.ReadAllText(@".\Files\Nzbget\Queue_empty.txt"));
+                    .Returns(ReadAllText("Files", "Nzbget", "Queue_empty.txt"));
         }
 
         private void WithFailResponse()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(File.ReadAllText(@".\Files\Nzbget\JsonError.txt"));
+                    .Returns(ReadAllText("Files", "Nzbget", "JsonError.txt"));
         }
 
         [Test]

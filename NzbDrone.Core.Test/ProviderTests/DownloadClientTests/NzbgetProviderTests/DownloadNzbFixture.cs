@@ -10,11 +10,12 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.Nzbget;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTests
 {
-    public class DownloadNzbFixture : TestBase
+    public class DownloadNzbFixture : CoreTest
     {
         [SetUp]
         public void Setup()
@@ -29,12 +30,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTes
             fakeConfig.SetupGet(c => c.NzbgetRecentTvPriority).Returns(PriorityType.High);
         }
 
-        
+
         private void WithFailResponse()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(File.ReadAllText(@".\Files\Nzbget\JsonError.txt"));
+                    .Returns(ReadAllText("Files", "Nzbget", "JsonError.txt"));
         }
 
         [Test]

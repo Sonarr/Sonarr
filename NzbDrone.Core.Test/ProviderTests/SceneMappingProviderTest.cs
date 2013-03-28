@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadString(SceneMappingUrl))
-                .Returns(File.ReadAllText(@".\Files\SceneMappings.json"));
+                .Returns(ReadAllText("Files", "SceneMappings.json"));
         }
 
         private void WithErrorDownloadingJson()

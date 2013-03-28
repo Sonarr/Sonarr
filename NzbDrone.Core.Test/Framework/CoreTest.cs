@@ -26,6 +26,11 @@ namespace NzbDrone.Core.Test.Framework
         {
             return File.OpenRead(Path.Combine(path));
         }
+
+        protected string ReadAllText(params string[] path)
+        {
+            return ReadAllText(Path.Combine(path));
+        }
     }
 
     public abstract class CoreTest<TSubject> : CoreTest where TSubject : class

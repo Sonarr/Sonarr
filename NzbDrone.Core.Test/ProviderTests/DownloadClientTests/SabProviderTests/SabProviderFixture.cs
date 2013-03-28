@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 
             Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                     .Setup(s => s.DownloadString("http://192.168.5.22:1111/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d2&ma_username=admin2&ma_password=pass2"))
-                    .Returns(File.ReadAllText(@".\Files\Categories_json.txt"));
+                    .Returns(ReadAllText("Files","Categories_json.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetCategories(host, port, apikey, username, password);
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(File.ReadAllText(@".\Files\Categories_json.txt"));
+                    .Returns(ReadAllText("Files","Categories_json.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetCategories();
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(File.ReadAllText(@".\Files\History.txt"));
+                    .Returns(ReadAllText("Files", "History.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetHistory();
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(File.ReadAllText(@".\Files\HistoryEmpty.txt"));
+                    .Returns(ReadAllText("Files","HistoryEmpty.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetHistory();
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(File.ReadAllText(@".\Files\JsonError.txt"));
+                    .Returns(ReadAllText("Files","JsonError.txt"));
 
             //Act
             Assert.Throws<ApplicationException>(() => Mocker.Resolve<SabProvider>().GetHistory(), "API Key Incorrect");

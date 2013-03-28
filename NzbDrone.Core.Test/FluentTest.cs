@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test
         public void MaxOrDefault_should_return_max_when_collection_is_not_empty()
         {
             //Setup
-            var list = new List<int> {6, 4, 5, 3, 8, 10};
+            var list = new List<int> { 6, 4, 5, 3, 8, 10 };
 
             //Act
             var result = list.MaxOrDefault();
@@ -210,13 +210,13 @@ namespace NzbDrone.Core.Test
         public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
         {
             //Setup
-            var str = File.ReadAllText(@"Files\LongOverview.txt");
+            var str = ReadAllText("Files", "LongOverview.txt");
 
             //Act
             var resultString = str.Truncate(1000);
 
             //Resolve
-            var result =  new UTF8Encoding().GetBytes(resultString);
+            var result = new UTF8Encoding().GetBytes(resultString);
             result.Length.Should().BeLessOrEqualTo(1000);
         }
 
