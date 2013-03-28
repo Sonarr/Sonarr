@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;

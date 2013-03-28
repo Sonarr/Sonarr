@@ -18,7 +18,7 @@ namespace NzbDrone.Core.IndexerSearch
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public DailyEpisodeSearch(IEpisodeService episodeService, DownloadProvider downloadProvider, IIndexerService indexerService,
+        public DailyEpisodeSearch(IEpisodeService episodeService, IDownloadProvider downloadProvider, IIndexerService indexerService,
                              ISceneMappingService sceneMappingService, IDownloadDirector downloadDirector,
                              ISeriesRepository seriesRepository)
             : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
