@@ -12,7 +12,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class EpisodeParseResultTest : CoreTest
     {
         [Test]

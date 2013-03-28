@@ -1,21 +1,12 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System;
-using System.Collections.Generic;
-
-using FizzWare.NBuilder;
-using FluentAssertions;
-using Moq;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Helpers;
-using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers;
-
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HelperTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class SortHelperTest : CoreTest
     {
         [TestCase("The Office (US)", "Office (US)")]

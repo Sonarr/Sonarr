@@ -16,7 +16,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class SeasonSearchJobTest : CoreTest
     {
         private List<Episode> _episodes; 
@@ -47,10 +47,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(_episodes.Select(e => e.EpisodeNumber).ToList());
 
-            //Act
+            
             Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 1 });
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, new { EpisodeId =  It.IsAny<int>() }), Times.Never());
@@ -63,10 +63,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(new List<int>());
 
-            //Act
+            
             Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 1 });
 
-            //Assert
+            
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
         }
 
@@ -91,10 +91,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .Returns(new List<int>{1});
 
 
-            //Act
+            
             Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 1 });
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
         }
@@ -105,10 +105,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 0)).Returns(new List<int>());
 
-            //Act
+            
             Mocker.Resolve<SeasonSearchJob>().Start(notification, new { SeriesId = 1, SeasonNumber = 0 });
 
-            //Assert
+            
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Never());
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, new { EpisodeId = It.IsAny<int>() }), Times.Never());
 

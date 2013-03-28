@@ -14,7 +14,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Indexers
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class NewznabProviderTest : CoreTest<NewznabService>
     {
         private void WithInvalidName()

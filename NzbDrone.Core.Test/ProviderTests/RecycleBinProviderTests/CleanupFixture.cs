@@ -1,26 +1,17 @@
-﻿// ReSharper disable RedundantUsingDirective
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-
-using FizzWare.NBuilder;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class CleanupFixture : CoreTest
     {
         private const string RecycleBin = @"C:\Test\RecycleBin";

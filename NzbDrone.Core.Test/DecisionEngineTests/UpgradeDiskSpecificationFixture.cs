@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class UpgradeDiskSpecificationFixture : CoreTest
     {
         private UpgradeDiskSpecification _upgradeDisk;

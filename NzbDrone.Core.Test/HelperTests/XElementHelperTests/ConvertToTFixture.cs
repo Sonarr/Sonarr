@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -15,7 +15,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HelperTests.XElementHelperTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class XElementHelperTest : CoreTest
     {
         [Test]

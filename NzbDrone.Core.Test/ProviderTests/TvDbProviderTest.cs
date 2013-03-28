@@ -1,6 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
@@ -15,7 +13,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class TvDbProviderTest : CoreTest
     {
         private TvDbProxy tvDbProxy;
@@ -56,10 +54,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void no_search_result()
         {
-            //act
+            
             var result = tvDbProxy.SearchSeries(Guid.NewGuid().ToString());
 
-            //assert
+            
             result.Should().BeEmpty();
         }
 
@@ -67,11 +65,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void none_unique_season_episode_number()
         {
-            //act
+            
             var result = tvDbProxy.GetEpisodes(75978);//Family guy
 
-            //Asserts that when episodes are grouped by Season/Episode each group contains maximum of
-            //one item.
             result.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
                 .Max(e => e.Count()).Should().Be(1);
 

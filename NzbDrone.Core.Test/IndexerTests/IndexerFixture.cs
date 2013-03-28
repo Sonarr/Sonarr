@@ -21,7 +21,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class IndexerFixture : CoreTest
     {
         private void WithConfiguredIndexers()
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbsrus.xml"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<NzbsRUs>().FetchRss();
 
             parseResults.Should().HaveCount(1);
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "SizeParsing", "newznab.xml"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Newznab>().FetchRss();
 
             parseResults[0].Size.Should().Be(1183105773);
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream("http://www.nzbindex.nl/rss/alt.binaries.hdtv/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=", It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbindex.xml"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
 
             parseResults[0].Size.Should().Be(587328389);
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=5542&st=1&ns=1&q=", It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "SizeParsing", "nzbclub.xml"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<NzbClub>().FetchRss();
 
             parseResults.Should().HaveCount(2);
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user=MockedConfigValue&api=MockedConfigValue&eng=1", It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "SizeParsing", "omgwtfnzbs.xml"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Omgwtfnzbs>().FetchRss();
 
             parseResults.Should().HaveCount(1);
@@ -480,7 +480,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadStream("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user=MockedConfigValue&api=MockedConfigValue&eng=1", It.IsAny<NetworkCredential>()))
                           .Returns(OpenRead("Files", "Rss", "SizeParsing", "omgwtfnzbs.xml"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Omgwtfnzbs>().FetchRss();
 
             parseResults.Should().HaveCount(1);

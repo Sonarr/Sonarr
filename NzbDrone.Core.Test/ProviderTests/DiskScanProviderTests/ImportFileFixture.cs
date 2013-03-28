@@ -18,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
-    // ReSharper disable InconsistentNaming
+    
     public class ImportFileFixture : CoreTest
     {
         public static object[] ImportTestCases =
@@ -70,10 +70,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, newFile);
 
-            //Assert
+            
             VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
 
         }
@@ -97,10 +97,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, newFile);
 
-            //Assert
+            
             VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
         }
 
@@ -127,10 +127,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifySkipImport(result, Mocker);
         }
 
@@ -146,10 +146,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             With80MBFile();
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifySkipImport(result, Mocker);
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -168,10 +168,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             With80MBFile();
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifySkipImport(result, Mocker);
         }
 
@@ -199,10 +199,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(new List<Episode>());
 
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifySkipImport(result, Mocker);
         }
 
@@ -228,10 +228,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
             Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
         }
@@ -260,10 +260,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(fakeEpisodes);
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifyFileImport(result, Mocker, fakeEpisodes[0], SIZE);
             Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
         }
@@ -293,10 +293,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(fakeEpisodes);
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifySkipImport(result, Mocker);
         }
 
@@ -331,10 +331,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode1, fakeEpisode2 });
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifyFileImport(result, Mocker, fakeEpisode1, SIZE);
             Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Exactly(2));
         }
@@ -360,10 +360,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(e => e.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode});
 
-            //Act
+            
             var result = Mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
 
-            //Assert
+            
             VerifyFileImport(result, Mocker, fakeEpisode, SIZE);
             Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
         }

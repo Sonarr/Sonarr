@@ -15,7 +15,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class SceneMappingProviderTest : DbTest
     {
         private const string SceneMappingUrl = "http://services.nzbdrone.com/SceneMapping/Active";
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public  void GetSceneName_exists()
         {
 
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.CleanTitle = "laworder")
                 .With(f => f.TvdbId = 12345)
@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             Db.Insert(fakeMap);
 
-            //Act
+            
             var sceneName = Mocker.Resolve<SceneMappingService>().GetSceneName(fakeMap.TvdbId);
 
-            //Assert
+            
             Assert.AreEqual(fakeMap.SceneName, sceneName);
         }
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public  void GetSeriesId_exists()
         {
 
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.TvdbId = 12345)
                 .With(f => f.SceneName = "Law and Order")
@@ -77,10 +77,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             Db.Insert(fakeMap);
 
-            //Act
+            
             var seriesId = Mocker.Resolve<SceneMappingService>().GetTvDbId(fakeMap.CleanTitle);
 
-            //Assert
+            
             Assert.AreEqual(fakeMap.TvdbId, seriesId);
         }
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetSceneName_null()
         {
 
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.TvdbId = 12345)
                 .With(f => f.SceneName = "Law and Order")
@@ -98,10 +98,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             Db.Insert(fakeMap);
 
-            //Act
+            
             var sceneName = Mocker.Resolve<SceneMappingService>().GetSceneName(54321);
 
-            //Assert
+            
             Assert.AreEqual(null, sceneName);
         }
 
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetSeriesId_null()
         {
 
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.TvdbId = 12345)
                 .With(f => f.SceneName = "Law and Order")
@@ -118,10 +118,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             Db.Insert(fakeMap);
 
-            //Act
+            
             var seriesId = Mocker.Resolve<SceneMappingService>().GetTvDbId("notlaworder");
 
-            //Assert
+            
             Assert.AreEqual(null, seriesId);
         }
 
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Test that ensures a series with clean names (office, officeus) can be looked up by seriesId
 
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.CleanTitle = "office")
                 .With(f => f.TvdbId = 12345)
@@ -150,10 +150,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeMap);
             Db.Insert(fakeMap2);
 
-            //Act
+            
             var sceneName = Mocker.Resolve<SceneMappingService>().GetSceneName(fakeMap.TvdbId);
 
-            //Assert
+            
             Assert.AreEqual(fakeMap.SceneName, sceneName);
         }
 
@@ -179,17 +179,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithValidJson();
 
-            //Act
+            
             Mocker.Resolve<SceneMappingService>().UpdateMappings();
 
-            //Assert
+            
             Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
         }
 
         [Test]
         public void UpdateMappings_should_overwrite_existing_mappings()
         {
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.TvdbId = 12345)
                 .With(f => f.SceneName = "Law and Order")
@@ -199,17 +199,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithValidJson();
             Db.Insert(fakeMap);
 
-            //Act
+            
             Mocker.Resolve<SceneMappingService>().UpdateMappings();
 
-            //Assert
+            
             Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
         }
 
         [Test]
         public void UpdateMappings_should_not_delete_if_csv_download_fails()
         {
-            //Setup
+            
             var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.TvdbId = 12345)
                 .With(f => f.SceneName = "Law and Order")
@@ -219,10 +219,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithErrorDownloadingJson();
             Db.Insert(fakeMap);
 
-            //Act
+            
             Mocker.Resolve<SceneMappingService>().UpdateMappings();
 
-            //Assert
+            
             Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
         }
 

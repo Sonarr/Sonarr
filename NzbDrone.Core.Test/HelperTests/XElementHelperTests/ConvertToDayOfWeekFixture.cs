@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.HelperTests.XElementHelperTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class ParseDayOfWeekFixture : CoreTest
     {
         [Test]

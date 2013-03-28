@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class DeleteDirectoryFixture : CoreTest
     {
         private void WithRecycleBin()

@@ -12,7 +12,7 @@ using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
 using Prowlin;
 
-// ReSharper disable InconsistentNaming
+
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -28,26 +28,26 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Verify_should_return_true_for_a_valid_apiKey()
         {
-            //Setup
+            
             WithStrictMocker();
             
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().Verify(_apiKey);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void Verify_should_return_false_for_an_invalid_apiKey()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().Verify(_badApiKey);
 
-            //Assert
+            
             ExceptionVerification.ExpectedWarns(1);
             result.Should().BeFalse();
         }
@@ -55,26 +55,26 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SendNotification_should_return_true_for_a_valid_apiKey()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void SendNotification_should_return_false_for_an_invalid_apiKey()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _badApiKey);
 
-            //Assert
+            
             ExceptionVerification.ExpectedWarns(1);
             result.Should().BeFalse();
         }
@@ -82,65 +82,65 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SendNotification_should_alert_with_high_priority()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (High)", _apiKey, NotificationPriority.High);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void SendNotification_should_alert_with_VeryLow_priority()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (VeryLow)", _apiKey, NotificationPriority.VeryLow);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void SendNotification_should_have_a_call_back_url()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey, NotificationPriority.Normal, "http://www.nzbdrone.com");
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void SendNotification_should_return_true_for_two_valid_apiKey()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _apiKey2);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void SendNotification_should_return_true_for_valid_apiKey_with_bad_apiKey()
         {
-            //Setup
+            
             WithStrictMocker();
 
-            //Act
+            
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _badApiKey);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
     }

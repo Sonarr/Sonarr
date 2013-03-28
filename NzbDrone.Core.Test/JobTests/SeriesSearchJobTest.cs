@@ -14,7 +14,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class SeriesSearchJobTest : CoreTest
     {
         [Test]
@@ -35,10 +35,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<SeasonSearchJob>()
                 .Setup(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == 1 && d.GetPropertyValue<int>("SeasonNumber") >= 0))).Verifiable();
 
-            //Act
+            
             Mocker.Resolve<SeriesSearchJob>().Start(notification, new { SeriesId = 1 });
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == 1 && d.GetPropertyValue<int>("SeasonNumber") >= 0)),
                                                        Times.Exactly(seasons.Count));
@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<ISeasonRepository>()
                 .Setup(c => c.GetSeasonNumbers(1)).Returns(seasons);
 
-            //Act
+            
             Mocker.Resolve<SeriesSearchJob>().Start(notification, new { SeriesId = 1 });
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, new { SeriesId = 1, SeasonNumber = It.IsAny<int>() }),
                                                        Times.Never());

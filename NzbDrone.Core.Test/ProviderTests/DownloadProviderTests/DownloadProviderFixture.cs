@@ -14,7 +14,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Test.Framework;
 
-// ReSharper disable InconsistentNaming
+
 
 namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 {
@@ -79,11 +79,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadProviderTests
 
             var parseResult = SetupParseResult();
 
-            //Act
+            
             Subject.DownloadReport(parseResult);
 
 
-            //Assert
+            
             Mocker.GetMock<SabProvider>()
                 .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Once());
 

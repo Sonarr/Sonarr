@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -21,13 +21,13 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class QueueFixture : CoreTest
     {
         [SetUp]
         public void Setup()
         {
-            //Setup
+            
             string sabHost = "192.168.5.55";
             int sabPort = 2222;
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";

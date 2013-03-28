@@ -59,10 +59,10 @@ namespace NzbDrone.Update.Test
             WithInstalledService();
             WithServiceRunning(true);
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
         }
 
@@ -72,20 +72,20 @@ namespace NzbDrone.Update.Test
             WithInstalledService();
             WithServiceRunning(false);
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Never());
         }
 
         [Test]
         public void should_not_stop_nzbdrone_service_if_service_isnt_installed()
         {
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(It.IsAny<string>()), Times.Never());
         }
 
@@ -98,10 +98,10 @@ namespace NzbDrone.Update.Test
                 .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProccessName))
                 .Returns(proccesses);
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<ProcessProvider>().Verify(c => c.Kill(proccesses[0].Id), Times.Once());
             Mocker.GetMock<ProcessProvider>().Verify(c => c.Kill(proccesses[1].Id), Times.Once());
         }
@@ -113,10 +113,10 @@ namespace NzbDrone.Update.Test
                 .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProccessName))
                 .Returns(new List<ProcessInfo>());
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<ProcessProvider>().Verify(c => c.Kill(It.IsAny<int>()), Times.Never());
         }
 
@@ -125,7 +125,7 @@ namespace NzbDrone.Update.Test
         {
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<IHostController>().Verify(c => c.StopServer(), Times.Once());
         }
 
@@ -157,10 +157,10 @@ namespace NzbDrone.Update.Test
                 .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER))
                 .Throws(new IOException());
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             Mocker.GetMock<DiskProvider>()
                 .Verify(c => c.CopyDirectory(BACKUP_FOLDER, TARGET_FOLDER), Times.Once());
             ExceptionVerification.ExpectedFatals(1);
@@ -172,10 +172,10 @@ namespace NzbDrone.Update.Test
             WithInstalledService();
             WithServiceRunning(true);
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             VerifyServiceRestart();
         }
 
@@ -185,10 +185,10 @@ namespace NzbDrone.Update.Test
             WithInstalledService();
             WithServiceRunning(false);
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             VerifyProcessRestart();
         }
 
@@ -202,10 +202,10 @@ namespace NzbDrone.Update.Test
                 .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER))
                 .Throws(new IOException());
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             VerifyServiceRestart();
             ExceptionVerification.ExpectedFatals(1);
         }
@@ -220,10 +220,10 @@ namespace NzbDrone.Update.Test
                 .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER))
                 .Throws(new IOException());
 
-            //Act
+            
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            //Assert
+            
             VerifyProcessRestart();
             ExceptionVerification.ExpectedFatals(1);
         }

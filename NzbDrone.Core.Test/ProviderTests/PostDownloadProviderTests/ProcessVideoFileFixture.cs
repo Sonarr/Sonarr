@@ -1,4 +1,4 @@
-// ReSharper disable InconsistentNaming
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -96,11 +96,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var file = Path.Combine(TempFolder, "test.avi");
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle(It.IsAny<String>())).Returns<Series>(null).Verifiable();
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
-            //Assert
+            
             Mocker.GetMock<ISeriesRepository>().Verify(s => s.GetByTitle(It.IsAny<String>()), Times.Once());
             ExceptionVerification.IgnoreWarns();
         }
@@ -112,11 +112,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var file = Path.Combine(TempFolder, "test.avi");
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle(It.IsAny<String>())).Returns<Series>(null);
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
-            //Assert
+            
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetSize(It.IsAny<String>()), Times.Never());
             ExceptionVerification.IgnoreWarns();
         }
@@ -132,10 +132,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             WithValidSeries();
             WithImportedFile(file);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
-            //Assert
+            
             Mocker.GetMock<IMoveEpisodeFiles>().Verify(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true), Times.Once());
             ExceptionVerification.IgnoreWarns();
         }
@@ -166,11 +166,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.FolderExists(series.Path))
                     .Returns(true);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(series, downloadName), Times.Never());
             ExceptionVerification.ExpectedErrors(1);
         }
@@ -191,11 +191,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.GetSize(downloadName))
                     .Returns(8);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Once());
         }
 
@@ -214,11 +214,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.FreeDiskSpace(It.IsAny<string>()))
                     .Returns(10);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Once());
         }
 
@@ -233,11 +233,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                                 .Setup(s => s.FolderExists(fakeSeries.Path))
                                 .Returns(false);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
 
 
-            //Assert
+            
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -252,11 +252,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                                 .Setup(s => s.IsFileLocked(It.Is<FileInfo>(f => f.FullName == downloadName)))
                                 .Returns(true);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Never());
         }
     }

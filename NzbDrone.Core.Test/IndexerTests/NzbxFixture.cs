@@ -21,7 +21,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class NzbxFixture : CoreTest
     {
         [Test]
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
                           .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_recent.json"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
 
             parseResults.Should().HaveCount(1);
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadString("https://nzbx.co/api/search?q=30+Rock+S01E01", It.IsAny<NetworkCredential>()))
                           .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_search.json"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
 
             parseResults.Should().HaveCount(1);
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
                           .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_recent.json"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
 
             parseResults.Should().HaveCount(1);
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadString("https://nzbx.co/api/search?q=30+Rock+S01E01", It.IsAny<NetworkCredential>()))
                           .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_search.json"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Nzbx>().FetchEpisode("30 Rock", 1, 1);
 
             parseResults.Should().HaveCount(1);
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.IndexerTests
                           .Setup(h => h.DownloadString("https://nzbx.co/api/recent?category=tv", It.IsAny<NetworkCredential>()))
                           .Returns(ReadAllText("Files", "Rss", "SizeParsing", "nzbx_recent.json"));
 
-            //Act
+            
             var parseResults = Mocker.Resolve<Nzbx>().FetchRss();
 
             parseResults.Should().HaveCount(1);

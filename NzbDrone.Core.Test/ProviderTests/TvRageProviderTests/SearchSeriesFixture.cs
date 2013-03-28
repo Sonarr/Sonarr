@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class SearchSeriesFixture : CoreTest
     {
         private const string search = "http://services.tvrage.com/feeds/full_search.php?show=";
@@ -25,21 +25,21 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadStream(It.Is<String>(u => u.StartsWith(search)), null))
-                    .Returns(new FileStream(@".\Files\TVRage\SearchResults_empty.xml", FileMode.Open, FileAccess.Read, FileShare.Read));
+                    .Returns(OpenRead("Files", "TVRage", "SearchResults_empty.xml"));
         }
 
         private void WithManyResults()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadStream(It.Is<String>(u => u.StartsWith(search)), null))
-                    .Returns(new FileStream(@".\Files\TVRage\SearchResults_many.xml", FileMode.Open, FileAccess.Read, FileShare.Read));
+                    .Returns(OpenRead("Files", "TVRage", "SearchResults_many.xml"));
         }
 
         private void WithOneResult()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadStream(It.Is<String>(u => u.StartsWith(search)), null))
-                    .Returns(new FileStream(@".\Files\TVRage\SearchResults_one.xml", FileMode.Open, FileAccess.Read, FileShare.Read));
+                    .Returns(OpenRead("Files", "TVRage", "earchResults_one.xml"));
         }
 
         [Test]

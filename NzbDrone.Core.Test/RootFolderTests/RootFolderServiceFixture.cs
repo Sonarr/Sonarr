@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.RootFolderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class RootFolderServiceFixture : CoreTest<RootFolderService>
     {
         [SetUp]

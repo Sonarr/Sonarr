@@ -17,7 +17,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.XemCommunicationProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class GetXemSeriesIdsFixture : CoreTest
     {
         private void WithFailureJson()

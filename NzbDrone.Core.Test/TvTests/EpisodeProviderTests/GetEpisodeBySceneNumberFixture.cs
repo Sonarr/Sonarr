@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System.Linq;
 using FizzWare.NBuilder;
@@ -10,7 +10,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class GetEpisodeBySceneNumberFixture : DbTest
     {
         private Series _series;

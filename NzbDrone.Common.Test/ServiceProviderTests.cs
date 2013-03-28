@@ -1,4 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
+﻿
 
 using System.ServiceProcess;
 using FluentAssertions;
@@ -43,7 +43,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Exists_should_find_existing_service()
         {
-            //Act
+            
             var exists = serviceProvider.ServiceExist(ALWAYS_INSTALLED_SERVICE);
 
             exists.Should().BeTrue();
@@ -52,7 +52,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Exists_should_not_find_random_service()
         {
-            //Act
+            
             var exists = serviceProvider.ServiceExist("random_service_name");
 
             exists.Should().BeFalse();
@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Service_should_be_installed_and_then_uninstalled()
         {
-            //Act
+            
             serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse("Service already installed");
             serviceProvider.Install(TEMP_SERVICE_NAME);
             serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeTrue();
@@ -76,7 +76,7 @@ namespace NzbDrone.Common.Test
         [Explicit]
         public void UnInstallService()
         {
-            //Act
+            
             serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
             serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME).Should().BeFalse();
         }
@@ -105,10 +105,10 @@ namespace NzbDrone.Common.Test
             serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status
                 .Should().NotBe(ServiceControllerStatus.Running);
 
-            //Act
+            
             serviceProvider.Stop(ALWAYS_INSTALLED_SERVICE);
 
-            //Assert
+            
             serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status
                 .Should().Be(ServiceControllerStatus.Stopped);
 

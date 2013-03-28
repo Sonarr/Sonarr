@@ -7,7 +7,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class ReportingService_ReportParseError_Fixture : TestBase
     {
         [SetUp]

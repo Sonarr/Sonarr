@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.JobTests
 { 
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class ImportNewSeriesJobTest : CoreTest
     {
         [Test]
@@ -69,10 +69,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IMediaFileService>()
                 .Setup(s => s.GetFilesBySeries(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
-            //Act
+            
             Mocker.Resolve<ImportNewSeriesJob>().Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].Id)), Times.Once());
             Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].Id)), Times.Once());
 
@@ -123,10 +123,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<XemUpdateJob>()
                 .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].Id)));
 
-            //Act
+            
             Mocker.Resolve<ImportNewSeriesJob>().Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].Id)), Times.Once());
             Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].Id)), Times.Once());
 

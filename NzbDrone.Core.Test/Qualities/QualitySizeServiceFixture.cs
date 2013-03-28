@@ -1,4 +1,4 @@
-// ReSharper disable RedundantUsingDirective
+
 
 using System.Linq;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Qualities
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class QualitySizeServiceFixture : CoreTest<QualitySizeService>
     {
         [Test]

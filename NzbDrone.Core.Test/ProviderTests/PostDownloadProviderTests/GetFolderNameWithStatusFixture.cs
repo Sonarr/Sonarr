@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System.Linq;
 using System;
@@ -12,7 +12,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class GetFolderNameWithStatusFixture : CoreTest
     {
         [TestCase(@"c:\_NzbDrone_InvalidEpisode_Title", @"c:\_UnknownSeries_Title", PostDownloadStatusType.UnknownSeries)]

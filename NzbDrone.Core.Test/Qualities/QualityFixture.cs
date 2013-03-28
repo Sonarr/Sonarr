@@ -7,7 +7,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Qualities
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class QualityFixture : CoreTest
     {
         public static object[] FromIntCases =

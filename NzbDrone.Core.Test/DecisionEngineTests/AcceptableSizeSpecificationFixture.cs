@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System.Linq;
 using System;
@@ -18,7 +18,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class AcceptableSizeSpecificationFixture : CoreTest
     {
         private EpisodeParseResult parseResultMulti;
@@ -84,10 +84,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -105,10 +105,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -126,10 +126,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeFalse();
         }
 
@@ -147,10 +147,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeFalse();
         }
 
@@ -168,10 +168,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -189,10 +189,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -210,10 +210,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
-            //Assert
+            
             result.Should().BeFalse();
         }
 
@@ -231,10 +231,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
-            //Assert
+            
             result.Should().BeFalse();
         }
 
@@ -252,10 +252,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -273,10 +273,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -294,10 +294,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeFalse();
         }
 
@@ -315,10 +315,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeFalse();
         }
 
@@ -337,10 +337,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -359,10 +359,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -382,10 +382,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
-            //Act
+            
             bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 

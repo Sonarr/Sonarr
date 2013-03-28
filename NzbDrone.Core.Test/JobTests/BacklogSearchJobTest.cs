@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void no_missing_epsiodes_should_not_trigger_any_search()
         {
-            //Setup
+            
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = new List<Episode>();
@@ -39,10 +39,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            //Act
+            
             Subject.Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, new { SeriesId = It.IsAny<int>(), SeasonNumber = It.IsAny<int>() }),
                                                        Times.Never());
 
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void individual_missing_episode()
         {
-            //Setup
+            
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var series = Builder<Series>.CreateNew()
@@ -74,10 +74,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<EpisodeSearchJob>()
                 .Setup(s => s.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") == 1)));
 
-            //Act
+            
             Subject.Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)),
                                                        Times.Once());
         }
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void individual_missing_episodes_only()
         {
-            //Setup
+            
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var series = Builder<Series>.CreateNew()
@@ -103,10 +103,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            //Act
+            
             Subject.Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)),
                                                        Times.Exactly(episodes.Count));
         }
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void series_season_missing_episodes_only_mismatch_count()
         {
-            //Setup
+            
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var series = Builder<Series>.CreateNew()
@@ -136,10 +136,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
-            //Act
+            
             Subject.Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("EpisodeId") >= 0)),
                                        Times.Exactly(episodes.Count));
         }
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void series_season_missing_episodes_only()
         {
-            //Setup
+            
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var series = Builder<Series>.CreateNew()
@@ -170,10 +170,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
-            //Act
+            
             Subject.Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") >= 0 &&
                                                                                                    d.GetPropertyValue<int>("SeasonNumber") >= 0)),
                                                        Times.Once());
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void multiple_missing_episodes()
         {
-            //Setup
+            
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var series = Builder<Series>.CreateNew()
@@ -212,10 +212,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5 });
 
-            //Act
+            
             Subject.Start(notification, null);
 
-            //Assert
+            
             Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") >= 0 &&
                                                                                                    d.GetPropertyValue<int>("SeasonNumber") >= 0)),
                                                        Times.Once());
@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void GetMissingForEnabledSeries_should_only_return_episodes_for_monitored_series()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateListOfSize(2)
                 .TheFirst(1)
                 .With(s => s.Monitored = false)
@@ -250,10 +250,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            //Act
+            
             var result = Subject.GetMissingForEnabledSeries();
 
-            //Assert
+            
             result.Should().NotBeEmpty();
             result.Should().Contain(s => s.Series.Monitored);
             result.Should().NotContain(s => !s.Series.Monitored);
@@ -262,7 +262,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void GetMissingForEnabledSeries_should_only_return_explicity_enabled_series_when_backlog_searching_is_ignored()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateListOfSize(3)
                 .TheFirst(1)
                 .With(s => s.Monitored = true)
@@ -289,10 +289,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            //Act
+            
             var result = Subject.GetMissingForEnabledSeries();
 
-            //Assert
+            
             result.Should().NotBeEmpty();
             result.Should().Contain(s => s.Series.BacklogSetting == BacklogSettingType.Enable);
             result.Should().NotContain(s => s.Series.BacklogSetting == BacklogSettingType.Disable);
@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void GetMissingForEnabledSeries_should_return_explicity_enabled_and_inherit_series_when_backlog_searching_is_enabled()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateListOfSize(3)
                 .TheFirst(1)
                 .With(s => s.Monitored = true)
@@ -329,10 +329,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IEpisodeService>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            //Act
+            
             var result = Subject.GetMissingForEnabledSeries();
 
-            //Assert
+            
             result.Should().NotBeEmpty();
             result.Should().Contain(s => s.Series.BacklogSetting == BacklogSettingType.Enable);
             result.Should().NotContain(s => s.Series.BacklogSetting == BacklogSettingType.Disable);

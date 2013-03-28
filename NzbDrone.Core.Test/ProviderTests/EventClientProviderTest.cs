@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using Moq;
@@ -12,13 +12,13 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class EventClientProviderTest : CoreTest
     {
         [Test]
         public void SendNotification_true()
         {
-            //Setup
+            
             
 
             var header = "NzbDrone Test";
@@ -28,17 +28,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Notification, It.IsAny<byte[]>())).Returns(true);
 
-            //Act
+            
             var result = Mocker.Resolve<EventClientProvider>().SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", address);
 
-            //Assert
+            
             Assert.AreEqual(true, result);
         }
 
         [Test]
         public void SendNotification_false()
         {
-            //Setup
+            
             
 
             var header = "NzbDrone Test";
@@ -48,17 +48,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Notification, It.IsAny<byte[]>())).Returns(false);
 
-            //Act
+            
             var result = Mocker.Resolve<EventClientProvider>().SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", address);
 
-            //Assert
+            
             Assert.AreEqual(false, result);
         }
 
         [Test]
         public void SendAction_Update_true()
         {
-            //Setup
+            
             
 
             var path = @"C:\Test\TV\30 Rock";
@@ -68,17 +68,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Action, It.IsAny<byte[]>())).Returns(true);
 
-            //Act
+            
             var result = Mocker.Resolve<EventClientProvider>().SendAction(address, ActionType.ExecBuiltin, command);
 
-            //Assert
+            
             Assert.AreEqual(true, result);
         }
 
         [Test]
         public void SendAction_Update_false()
         {
-            //Setup
+            
             
 
             var path = @"C:\Test\TV\30 Rock";
@@ -88,10 +88,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Action, It.IsAny<byte[]>())).Returns(false);
 
-            //Act
+            
             var result = Mocker.Resolve<EventClientProvider>().SendAction(address, ActionType.ExecBuiltin, command);
 
-            //Assert
+            
             Assert.AreEqual(false, result);
         }
     }

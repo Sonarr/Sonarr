@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.Configuration
             Subject.SetValue(key, newValue);
             var result = Subject.GetValue(key, "");
 
-            //Assert
+            
             result.Should().Be(newValue);
             AllStoredModels.Should().HaveCount(1);
         }
@@ -142,7 +142,7 @@ namespace NzbDrone.Core.Test.Configuration
             var allProperties = typeof(ConfigService).GetProperties().Where(p => p.GetSetMethod() != null).ToList();
 
 
-            //Act
+            
             foreach (var propertyInfo in allProperties)
             {
                 object value = null;

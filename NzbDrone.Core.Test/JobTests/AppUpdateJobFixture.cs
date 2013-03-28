@@ -44,10 +44,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(true);
 
-            //Act
+            
             StartUpdate();
 
-            //Assert
+            
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true));
         }
 
@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(false);
 
-            //Act
+            
             StartUpdate();
 
-            //Assert
+            
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
         }
 
@@ -69,10 +69,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
-            //Act
+            
             StartUpdate();
 
-            //Assert
+            
             Mocker.GetMock<HttpProvider>().Verify(
                     c => c.DownloadFile(updatePackage.Url, updateArchive));
         }
@@ -82,10 +82,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
-            //Act
+            
             StartUpdate();
 
-            //Assert
+            
             Mocker.GetMock<ArchiveProvider>().Verify(
                c => c.ExtractArchive(updateArchive, SANDBOX_FOLDER));
         }
@@ -95,10 +95,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var updateClientFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientFolder();
 
-            //Act
+            
             StartUpdate();
 
-            //Assert
+            
             Mocker.GetMock<DiskProvider>().Verify(
                c => c.MoveDirectory(updateClientFolder, SANDBOX_FOLDER));
         }
@@ -106,16 +106,16 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void should_start_update_client()
         {
-            //Setup
+            
             var updateClientPath = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientExePath();
 
             Mocker.GetMock<EnvironmentProvider>()
                 .SetupGet(c => c.NzbDroneProcessIdFromEnviroment).Returns(12);
 
-            //Act
+            
             StartUpdate();
 
-            //Assert
+            
             Mocker.GetMock<ProcessProvider>().Verify(
                c => c.Start(It.Is<ProcessStartInfo>(p =>
                        p.FileName == updateClientPath &&
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.JobTests
             var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateSandboxFolder());
 
 
-            //Act
+            
             updateSubFolder.Exists.Should().BeFalse();
 
             Mocker.Resolve<HttpProvider>();
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.Resolve<ArchiveProvider>();
             StartUpdate();
             updateSubFolder.Refresh();
-            //Assert
+            
 
             updateSubFolder.Exists.Should().BeTrue();
             updateSubFolder.GetDirectories("nzbdrone").Should().HaveCount(1);

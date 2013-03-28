@@ -21,29 +21,29 @@ using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
-    // ReSharper disable InconsistentNaming
+    
     public class CleanUpDropFolderFixture : CoreTest
     {
         [Test]
         public void should_do_nothing_if_no_files_are_found()
         {
-            //Setup
+            
             var folder = @"C:\Test\DropDir\The Office";
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetFiles(folder, SearchOption.AllDirectories))
                     .Returns(new string[0]);
 
-            //Act
+            
             Mocker.Resolve<DiskScanProvider>().CleanUpDropFolder(folder);
 
-            //Assert
+            
             Mocker.GetMock<IMediaFileService>().Verify(v => v.GetFileByPath(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
         public void should_do_nothing_if_no_conflicting_files_are_found()
         {
-            //Setup
+            
             var folder = @"C:\Test\DropDir\The Office";
             var filename = Path.Combine(folder, "NotAProblem.avi");
 
@@ -58,10 +58,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<IMediaFileService>().Setup(s => s.GetFileByPath(filename))
                     .Returns(() => null);
 
-            //Act
+            
             Mocker.Resolve<DiskScanProvider>().CleanUpDropFolder(folder);
 
-            //Assert
+            
             Mocker.GetMock<IMediaFileService>().Verify(v => v.GetFileByPath(filename), Times.Once());
             Mocker.GetMock<ISeriesRepository>().Verify(v => v.Get(It.IsAny<int>()), Times.Never());
         }
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [Test]
         public void should_move_file_if_a_conflict_is_found()
         {
-            //Setup
+            
             var folder = @"C:\Test\DropDir\The Office";
             var filename = Path.Combine(folder, "Problem.avi");
             var seriesId = 12345;
@@ -119,10 +119,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveFile(episodeFile.Path, newFilePath));
 
-            //Act
+            
             Mocker.Resolve<DiskScanProvider>().CleanUpDropFolder(folder);
 
-            //Assert
+            
             Mocker.GetMock<IMediaFileService>().Verify(v => v.GetFileByPath(filename), Times.Once());
             Mocker.GetMock<DiskProvider>().Verify(v => v.MoveFile(filename.NormalizePath(), newFilePath), Times.Once());
         }

@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class GetUtcOffsetFixture : CoreTest
     {
         [Test]

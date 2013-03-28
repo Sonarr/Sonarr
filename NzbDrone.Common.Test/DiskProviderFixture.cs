@@ -1,6 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
@@ -84,11 +82,11 @@ namespace NzbDrone.Common.Test
         [Test]
         public void CopyFolder_should_copy_folder()
         {
-            //Act
+            
             var diskProvider = new DiskProvider();
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
 
-            //Assert
+            
             VerifyCopy();
         }
 
@@ -96,7 +94,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void CopyFolder_should_overright_existing_folder()
         {
-            //Act
+            
             var diskProvider = new DiskProvider();
 
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
@@ -107,7 +105,7 @@ namespace NzbDrone.Common.Test
 
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
 
-            //Assert
+            
             VerifyCopy();
         }
 
@@ -120,10 +118,10 @@ namespace NzbDrone.Common.Test
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderMove.FullName);
             VerifyCopy();
 
-            //Act
+            
             diskProvider.MoveDirectory(BinFolderCopy.FullName, BinFolderMove.FullName);
 
-            //Assert
+            
             VerifyMove();
         }
 

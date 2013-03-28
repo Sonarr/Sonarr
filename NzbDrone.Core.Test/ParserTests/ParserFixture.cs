@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Linq;
@@ -12,7 +12,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-    // ReSharper disable InconsistentNaming
+    
     [TestFixture]
     public class ParserFixture : CoreTest
     {

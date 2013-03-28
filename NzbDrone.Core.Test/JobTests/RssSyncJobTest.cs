@@ -14,7 +14,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class RssSyncJobTest : CoreTest
     {
         public void WithMinutes(int minutes)

@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class QualityAllowedByProfileSpecificationFixture : CoreTest
     {
         private QualityAllowedByProfileSpecification _qualityAllowedByProfile;

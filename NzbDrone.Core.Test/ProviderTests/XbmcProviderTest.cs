@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Linq;
@@ -19,7 +19,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class XbmcProviderTest : CoreTest
     {
         private string EdenActivePlayers;
@@ -52,42 +52,42 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void JsonError_true()
         {
-            //Setup
+            
             
             var response = "{\"error\":{\"code\":-32601,\"message\":\"Method not found.\"},\"id\":10,\"jsonrpc\":\"2.0\"}";
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().CheckForJsonError(response);
 
-            //Assert
+            
             Assert.AreEqual(true, result);
         }
 
         [Test]
         public void JsonError_true_empty_response()
         {
-            //Setup
+            
             
             var response = String.Empty;
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().CheckForJsonError(response);
 
-            //Assert
+            
             Assert.AreEqual(true, result);
         }
 
         [Test]
         public void JsonError_false()
         {
-            //Setup
+            
             
             var reposnse = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":3}}";
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().CheckForJsonError(reposnse);
 
-            //Assert
+            
             Assert.AreEqual(false, result);
         }
 
@@ -102,10 +102,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetJsonVersion("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().Be(new XbmcVersion(number));
         }
 
@@ -122,10 +122,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetJsonVersion("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().Be(new XbmcVersion(major, minor, patch));
         }
 
@@ -138,10 +138,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetJsonVersion("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().Be(new XbmcVersion(0));
         }
 
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(true, false, true)]
         public void GetActivePlayersDharma(bool audio, bool picture, bool video)
         {
-            //Setup
+            
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"audio\":"
                 + audio.ToString().ToLower()
                 + ",\"picture\":"
@@ -168,10 +168,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersDharma("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             Assert.AreEqual(audio, result["audio"]);
             Assert.AreEqual(picture, result["picture"]);
             Assert.AreEqual(video, result["video"]);
@@ -180,34 +180,34 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetActivePlayersEden_should_be_empty_when_no_active_players()
         {
-            //Setup
+            
             WithNoActivePlayers();
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().BeEmpty();
         }
 
         [Test]
         public void GetActivePlayersEden_should_have_active_video_player()
         {
-            //Setup
+            
             WithVideoPlayerActive();
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().HaveCount(1);
             result.First().Type.Should().Be("video");
         }
@@ -215,17 +215,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetActivePlayersEden_should_have_active_audio_player()
         {
-            //Setup
+            
             WithAudioPlayerActive();
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().HaveCount(1);
             result.First().Type.Should().Be("audio");
         }
@@ -233,17 +233,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetActivePlayersEden_should_have_active_picture_player()
         {
-            //Setup
+            
             WithPicturePlayerActive();
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().HaveCount(1);
             result.First().Type.Should().Be("picture");
         }
@@ -251,17 +251,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetActivePlayersEden_should_have_all_players_active()
         {
-            //Setup
+            
             WithAllPlayersActive();
 
             var fakeHttp = Mocker.GetMock<HttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             result.Should().HaveCount(3);
             result.Select(a => a.PlayerId).Distinct().Should().HaveCount(3);
             result.Select(a => a.Type).Distinct().Should().HaveCount(3);
@@ -270,7 +270,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetTvShowsJson()
         {
-            //Setup
+            
             
 
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\",\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1},{\"file\":\"smb://HOMESERVER/TV/30 Rock/\",\"imdbnumber\":\"79488\",\"label\":\"30 Rock\",\"tvshowid\":2},{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
@@ -279,10 +279,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetTvShowsJson("localhost:8080", "xbmc", "xbmc");
 
-            //Assert
+            
             Assert.AreEqual(5, result.Count);
             result.Should().Contain(s => s.ImdbNumber == 79488);
         }
@@ -290,7 +290,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Notify_true()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var header = "NzbDrone Test";
@@ -303,17 +303,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeEventClient = Mocker.GetMock<EventClientProvider>();
             fakeEventClient.Setup(s => s.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", "localhost")).Returns(true);
 
-            //Act
+            
             Mocker.Resolve<XbmcProvider>().Notify(header, message);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void SendCommand()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var host = "localhost:8080";
@@ -327,10 +327,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeHttp = Mocker.GetMock<HttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(url, username, password)).Returns("Ok\n");
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().SendCommand(host, command, username, username);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Assert.AreEqual("Ok\n", result);
         }
@@ -338,7 +338,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetXbmcSeriesPath_true()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/30 Rock/</field></record></xml>";
@@ -360,10 +360,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                                                                                                     </html>");
             fakeHttp.Setup(s => s.DownloadString(query, username, password)).Returns(queryResult);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetXbmcSeriesPath(host, 79488, username, username);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Assert.AreEqual("smb://xbmc:xbmc@HOMESERVER/TV/30 Rock/", result);
         }
@@ -371,7 +371,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetXbmcSeriesPath_false()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var queryResult = @"<xml></xml>";
@@ -393,10 +393,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                                                                                                     </html>");
             fakeHttp.Setup(s => s.DownloadString(query, username, password)).Returns(queryResult);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetXbmcSeriesPath(host, 79488, username, username);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Assert.AreEqual("", result);
         }
@@ -404,7 +404,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetXbmcSeriesPath_special_characters()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/Law & Order- Special Victims Unit/</field></record></xml>";
@@ -426,10 +426,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                                                                                                     </html>");
             fakeHttp.Setup(s => s.DownloadString(query, username, password)).Returns(queryResult);
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().GetXbmcSeriesPath(host, 79488, username, username);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             result.Should().Be("smb://xbmc:xbmc@HOMESERVER/TV/Law & Order- Special Victims Unit/");
         }
@@ -437,7 +437,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Clean()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var fakeConfig = Mocker.GetMock<IConfigService>();
@@ -446,10 +446,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeEventClient = Mocker.GetMock<EventClientProvider>();
             fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(CleanLibrary(video))")).Returns(true);
 
-            //Act
+            
             Mocker.Resolve<XbmcProvider>().Clean();
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
         }
 
@@ -472,10 +472,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.DownloadString(queryUrl, username, password)).Returns(queryResult);
             fakeHttp.Setup(s => s.DownloadString(url, username, password));
 
-            //Act
+            
             Mocker.Resolve<XbmcProvider>().UpdateWithHttp(fakeSeries, host, username, password);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
         }
 
@@ -498,17 +498,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.DownloadString(queryUrl, username, password)).Returns(queryResult);
             fakeHttp.Setup(s => s.DownloadString(url, username, password));
 
-            //Act
+            
             Mocker.Resolve<XbmcProvider>().UpdateWithHttp(fakeSeries, host, username, password);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void UpdateWithJsonBuiltIn_Single()
         {
-            //Setup
+            
             
 
             var host = "localhost:8080";
@@ -531,17 +531,17 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             fakeHttp.Setup(s => s.DownloadString(url, username, password)).Returns("<html><li>OK</html>");
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonExecBuiltIn(fakeSeries, host, username, password);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
         [Test]
         public void UpdateWithJsonBuiltIn_All()
         {
-            //Setup
+            
             
 
             var host = "localhost:8080";
@@ -567,10 +567,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             //var fakeEventClient = Mocker.GetMock<EventClientProvider>();
             //fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video))"));
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonExecBuiltIn(fakeSeries, host, username, password);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -599,10 +599,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                       .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))))
                       .Returns("{\"id\":55,\"jsonrpc\":\"2.0\",\"result\":\"OK\"}");
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonVideoLibraryScan(fakeSeries, host, username, password);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
 
@@ -631,10 +631,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                       .Contains("\"params\":{\"directory\":\"smb://HOMESERVER/TV/30Rock/\"}"))))
                       .Returns("{\"id\":55,\"jsonrpc\":\"2.0\",\"result\":\"OK\"}");
 
-            //Act
+            
             var result = Mocker.Resolve<XbmcProvider>().UpdateWithJsonVideoLibraryScan(fakeSeries, host, username, password);
 
-            //Assert
+            
             result.Should().BeTrue();
         }
     }

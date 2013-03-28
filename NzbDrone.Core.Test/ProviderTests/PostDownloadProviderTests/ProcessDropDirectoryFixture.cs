@@ -1,4 +1,4 @@
-// ReSharper disable InconsistentNaming
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,10 +78,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Setup(c => c.FolderExists(It.IsAny<String>()))
                 .Returns(true);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDropFolder(@"C:\drop\");
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[0]), Times.Once());
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[1]), Times.Never());
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[2]), Times.Once());
@@ -121,11 +121,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Setup(c => c.FolderExists(It.IsAny<String>()))
                 .Returns(true);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDropFolder(@"C:\drop\");
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<String>()), Times.Exactly(4));
         }
     }

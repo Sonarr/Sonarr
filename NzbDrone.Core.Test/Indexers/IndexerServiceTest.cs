@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.Indexers
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class IndexerServiceTest : CoreTest<IndexerService>
     {
         [Test]

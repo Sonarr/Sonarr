@@ -8,7 +8,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.TvTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class QualityModelFixture : CoreTest
     {
         [Test]

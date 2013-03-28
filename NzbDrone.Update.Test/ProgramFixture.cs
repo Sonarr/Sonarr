@@ -57,10 +57,10 @@ namespace NzbDrone.Update.Test
             Mocker.GetMock<ProcessProvider>().Setup(c => c.GetProcessById(12))
                 .Returns(new ProcessInfo() { StartPath = ProcessPath });
 
-            //Act
+            
             _program.Start(new[] { "12", "" });
 
-            //Assert
+            
             Mocker.GetMock<UpdateProvider>().Verify(c => c.Start(@"C:\NzbDrone"), Times.Once());
         }
 

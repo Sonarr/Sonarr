@@ -1,4 +1,4 @@
-// ReSharper disable InconsistentNaming
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -99,11 +99,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var droppedFolder = new DirectoryInfo(TempFolder + "\\_test\\");
             droppedFolder.Create();
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle(It.IsAny<String>())).Returns<Series>(null).Verifiable();
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             ExceptionVerification.IgnoreWarns();
         }
@@ -118,10 +118,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("office")).Returns<Series>(null).Verifiable();
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             ExceptionVerification.IgnoreWarns();
         }
@@ -160,20 +160,20 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Ignore("Disabled tagging")]
         public void when_series_isnt_found_folder_should_be_tagged_as_unknown_series()
         {
-            //Setup
+            
             WithStrictMocker();
             WithOldWrite();
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - S01E01 - Episode Title");
 
             var taggedFolder = @"C:\Test\Unsorted TV\_UnknownSeries_The Office - S01E01 - Episode Title";
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("office")).Returns<Series>(null);
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(droppedFolder.FullName, taggedFolder));
 
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Ignore("Disabled tagging")]
         public void when_no_files_are_imported_folder_should_be_tagged_with_parse_error()
         {
-            //Setup
+            
             WithStrictMocker();
             WithOldWrite();
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - S01E01 - Episode Title");
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .With(s => s.Title = "The Office")
                 .Build();
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("office")).Returns(fakeSeries);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder.FullName)).Returns(new List<EpisodeFile>());
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(droppedFolder.FullName, taggedFolder));
@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Ignore("Disabled tagging")]
         public void when_no_file_are_imported_and_folder_size_isnt_small_enought_folder_should_be_tagged_unknown()
         {
-            //Setup
+            
             WithStrictMocker();
             WithOldWrite();
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - Season 01");
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .With(f => f.SeriesId = fakeSeries.Id)
                 .Build().ToList();
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle("office")).Returns(fakeSeries);
             Mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(droppedFolder.FullName, taggedFolder));
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectorySize(droppedFolder.FullName)).Returns(Constants.IgnoreFileSize + 10.Megabytes());
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -248,17 +248,17 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [TestCase("\\Test\\_UnknownSeries_The Office - S01E01 - Episode Title")]
         public void folder_shouldnt_be_tagged_with_same_tag_again(string path)
         {
-            //Setup
+            
 
             var droppedFolder = new DirectoryInfo(TempFolder + path);
             droppedFolder.Create();
             WithOldWrite();
 
-            //Act
+            
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle(It.IsAny<String>())).Returns<Series>(null);
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
@@ -266,7 +266,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void folder_should_not_be_tagged_if_existing_tag_is_diffrent()
         {
-            //Setup
+            
             WithOldWrite();
             var droppedFolder = new DirectoryInfo(TempFolder + @"\_UnknownEpisode_The Office - S01E01 - Episode Title");
             droppedFolder.Create();
@@ -276,10 +276,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.GetMock<ISeriesRepository>().Setup(s => s.GetByTitle(It.IsAny<String>())).Returns<Series>(null);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(droppedFolder.FullName, taggedFolder), Times.Never());
             ExceptionVerification.IgnoreWarns();
@@ -288,7 +288,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void when_files_are_imported_and_folder_is_small_enough_dir_should_be_deleted()
         {
-            //Setup
+            
             WithStrictMocker();
             WithLotsOfFreeDiskSpace();
 
@@ -304,10 +304,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>().Setup(s => s.FolderExists(fakeSeries.Path)).Returns(true);
             Mocker.GetMock<DiskProvider>().Setup(s => s.IsFolderLocked(droppedFolder.FullName)).Returns(false);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
         }
 
@@ -326,10 +326,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>().Setup(s => s.FolderExists(fakeSeries.Path)).Returns(true);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder.FullName)).Returns(fakeEpisodeFiles);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
 
-            //Assert
+            
             Mocker.GetMock<IMoveEpisodeFiles>().Verify(c => c.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true),
                 Times.Exactly(fakeEpisodeFiles.Count));
             Mocker.VerifyAllMocks();
@@ -361,11 +361,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.FreeDiskSpace(series.Path))
                     .Returns(9);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(series, downloadName.FullName), Times.Never());
             ExceptionVerification.ExpectedErrors(1);
         }
@@ -388,11 +388,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.GetDirectorySize(downloadName.FullName))
                     .Returns(8);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(fakeSeries, downloadName.FullName), Times.Once());
         }
 
@@ -412,11 +412,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.FreeDiskSpace(It.IsAny<string>()))
                     .Returns(10);
 
-            //Act
+            
             Mocker.Resolve<PostDownloadProvider>().ProcessDownload(downloadName);
 
 
-            //Assert
+            
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(fakeSeries, downloadName.FullName), Times.Once());
         }
 

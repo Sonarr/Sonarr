@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class FluentTest : CoreTest
     {
         [TestCase(null, "def", "def")]
@@ -86,11 +86,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ParentUriString_should_return_self_if_already_parent()
         {
-            //Setup
+            
             var url = "http://www.nzbdrone.com";
             var uri = new Uri(url);
 
-            //Act
+            
             var result = uri.ParentUriString();
 
             //Resolve
@@ -100,11 +100,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ParentUriString_should_return_parent_url_when_path_is_passed()
         {
-            //Setup
+            
             var url = "http://www.nzbdrone.com/test/";
             var uri = new Uri(url);
 
-            //Act
+            
             var result = uri.ParentUriString();
 
             //Resolve
@@ -114,11 +114,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ParentUriString_should_return_parent_url_when_multiple_paths_are_passed()
         {
-            //Setup
+            
             var url = "http://www.nzbdrone.com/test/test2";
             var uri = new Uri(url);
 
-            //Act
+            
             var result = uri.ParentUriString();
 
             //Resolve
@@ -128,11 +128,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ParentUriString_should_return_parent_url_when_url_with_query_string_is_passed()
         {
-            //Setup
+            
             var url = "http://www.nzbdrone.com/test.aspx?test=10";
             var uri = new Uri(url);
 
-            //Act
+            
             var result = uri.ParentUriString();
 
             //Resolve
@@ -142,11 +142,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ParentUriString_should_return_parent_url_when_url_with_path_and_query_strings_is_passed()
         {
-            //Setup
+            
             var url = "http://www.nzbdrone.com/tester/test.aspx?test=10";
             var uri = new Uri(url);
 
-            //Act
+            
             var result = uri.ParentUriString();
 
             //Resolve
@@ -156,11 +156,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ParentUriString_should_return_parent_url_when_url_with_query_strings_is_passed()
         {
-            //Setup
+            
             var url = "http://www.nzbdrone.com/test.aspx?test=10&test2=5";
             var uri = new Uri(url);
 
-            //Act
+            
             var result = uri.ParentUriString();
 
             //Resolve
@@ -170,10 +170,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MaxOrDefault_should_return_zero_when_collection_is_empty()
         {
-            //Setup
+            
 
 
-            //Act
+            
             var result = (new List<int>()).MaxOrDefault();
 
             //Resolve
@@ -183,10 +183,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MaxOrDefault_should_return_max_when_collection_is_not_empty()
         {
-            //Setup
+            
             var list = new List<int> { 6, 4, 5, 3, 8, 10 };
 
-            //Act
+            
             var result = list.MaxOrDefault();
 
             //Resolve
@@ -196,10 +196,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MaxOrDefault_should_return_zero_when_collection_is_null()
         {
-            //Setup
+            
             List<int> list = null;
 
-            //Act
+            
             var result = list.MaxOrDefault();
 
             //Resolve
@@ -209,10 +209,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
         {
-            //Setup
+            
             var str = ReadAllText("Files", "LongOverview.txt");
 
-            //Act
+            
             var resultString = str.Truncate(1000);
 
             //Resolve
@@ -223,10 +223,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Truncate_should_not_truncate_string_shorter_than_max_bytes()
         {
-            //Setup
+            
             var str = "Hello World";
 
-            //Act
+            
             var resultString = str.Truncate(1000);
 
             //Resolve
@@ -237,10 +237,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MinOrDefault_should_return_zero_when_collection_is_empty()
         {
-            //Setup
+            
 
 
-            //Act
+            
             var result = (new List<int>()).MinOrDefault();
 
             //Resolve
@@ -250,10 +250,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MinOrDefault_should_return_min_when_collection_is_not_empty()
         {
-            //Setup
+            
             var list = new List<int> { 6, 4, 5, 3, 8, 10 };
 
-            //Act
+            
             var result = list.MinOrDefault();
 
             //Resolve
@@ -263,10 +263,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void MinOrDefault_should_return_zero_when_collection_is_null()
         {
-            //Setup
+            
             List<int> list = null;
 
-            //Act
+            
             var result = list.MinOrDefault();
 
             //Resolve

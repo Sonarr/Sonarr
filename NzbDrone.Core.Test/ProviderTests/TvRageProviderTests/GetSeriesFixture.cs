@@ -1,5 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class GetSeriesFixture : CoreTest
     {
         private const string showinfo = "http://services.tvrage.com/feeds/showinfo.php?key=NW4v0PSmQIoVmpbASLdD&sid=";
@@ -25,14 +24,14 @@ namespace NzbDrone.Core.Test.ProviderTests.TvRageProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadStream(It.Is<String>(u => u.StartsWith(showinfo)), null))
-                    .Returns(new FileStream(@".\Files\TVRage\SeriesInfo_empty.xml", FileMode.Open, FileAccess.Read, FileShare.Read));
+                    .Returns(OpenRead("Files", "TVRage", "SeriesInfo_empty.xml"));
         }
 
         private void WithOneResult()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadStream(It.Is<String>(u => u.StartsWith(showinfo)), null))
-                    .Returns(new FileStream(@".\Files\TVRage\SeriesInfo_one.xml", FileMode.Open, FileAccess.Read, FileShare.Read));
+                    .Returns(OpenRead("Files", "TVRage", "SeriesInfo_one.xml"));
         }
 
         [Test]

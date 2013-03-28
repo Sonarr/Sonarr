@@ -1,5 +1,5 @@
 ﻿/*
-// ReSharper disable RedundantUsingDirective
+
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class EpisodeProviderTest_GetEpisodesByParseResult : ObjectDbTest
     {
         private IEpisodeService episodeService;
@@ -160,9 +160,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodeParseResult_should_return_empty_list_if_episode_list_is_null()
         {
-            //Act
+            
             var episodes = episodeService.GetEpisodesByParseResult(new EpisodeParseResult());
-            //Assert
+            
             episodes.Should().NotBeNull();
             episodes.Should().BeEmpty();
         }
@@ -170,9 +170,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         [Test]
         public void GetEpisodeParseResult_should_return_empty_list_if_episode_list_is_empty()
         {
-            //Act
+            
             var episodes = episodeService.GetEpisodesByParseResult(new EpisodeParseResult { EpisodeNumbers = new List<int>() });
-            //Assert
+            
             episodes.Should().NotBeNull();
             episodes.Should().BeEmpty();
         }
@@ -184,10 +184,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             Db.Insert(fakeSeries);
             Db.Insert(fakeDailyEpisode);
 
-            //Act
+            
             var episodes = episodeService.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries });
 
-            //Assert
+            
             episodes.Should().HaveCount(1);
             VerifyEpisode(episodes[0], fakeDailyEpisode);
 
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             var episodes = episodeService.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries });
 
-            //Assert
+            
             episodes.Should().HaveCount(0);
             Db.Fetch<Episode>().Should().HaveCount(0);
         }

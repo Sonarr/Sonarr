@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System.Linq;
 using FluentAssertions;
@@ -13,7 +13,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class QualityUpgradeSpecificationFixture : CoreTest<QualityUpgradableSpecification>
     {
         public static object[] IsUpgradeTestCases =

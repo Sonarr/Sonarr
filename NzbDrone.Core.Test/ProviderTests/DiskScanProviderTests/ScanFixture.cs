@@ -12,7 +12,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
-    // ReSharper disable InconsistentNaming
+    
     public class ScanFixture : CoreTest
     {
         [Test]
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [Test]
         public void series_should_log_warning_if_path_doesnt_exist_on_disk()
         {
-            //Setup
+            
             WithStrictMocker();
 
             var series = Builder<Series>.CreateNew()
@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Setup(c => c.FolderExists(series.Path))
                 .Returns(false);
 
-            //Act
+            
             Mocker.Resolve<DiskScanProvider>().Scan(series, series.Path);
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
             ExceptionVerification.ExpectedWarns(1);
         }

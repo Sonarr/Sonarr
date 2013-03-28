@@ -119,10 +119,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
 
             WithMisMatchedSeries();
 
-            //Act
+            
             var result = Subject.ProcessReports(_matchingSeries, new { }, parseResults, _episodeSearchResult, _notification);
 
-            //Assert
+            
             result.SearchHistoryItems.Should().HaveCount(parseResults.Count);
             result.SearchHistoryItems.Should().NotContain(s => s.Success);
 
@@ -147,10 +147,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
             WithQualityNeeded();
             WithSuccessfulDownload();
 
-            //Act
+            
             var result = Subject.ProcessReports(_matchingSeries, new { }, parseResults, _episodeSearchResult, _notification);
 
-            //Assert
+            
             result.SearchHistoryItems.Should().HaveCount(parseResults.Count);
             result.SearchHistoryItems.Should().Contain(s => s.Success);
 
@@ -182,10 +182,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                 .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == Quality.SDTV)))
                 .Returns(true);
 
-            //Act
+            
             var result = Subject.ProcessReports(_matchingSeries, new { }, parseResults, _episodeSearchResult, _notification);
 
-            //Assert
+            
             result.SearchHistoryItems.Should().HaveCount(parseResults.Count);
             result.SearchHistoryItems.Should().Contain(s => s.Success);
 
@@ -215,10 +215,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchTests
                 .Setup(s => s.IsDownloadPermitted(It.Is<EpisodeParseResult>(d => d.Quality.Quality == Quality.Bluray1080p)))
                 .Returns(ReportRejectionReasons.None);
 
-            //Act
+            
             var result = Subject.ProcessReports(_matchingSeries, new { }, parseResults, _episodeSearchResult, _notification);
 
-            //Assert
+            
             result.Successes.Should().NotBeNull();
             result.Successes.Should().NotBeEmpty();
 

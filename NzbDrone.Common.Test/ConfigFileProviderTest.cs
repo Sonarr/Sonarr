@@ -10,7 +10,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class ConfigFileProviderTest : TestBase
     {
         [SetUp]

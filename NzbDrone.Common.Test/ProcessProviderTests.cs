@@ -1,4 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
+﻿
 
 using System;
 using System.ComponentModel;
@@ -70,7 +70,7 @@ namespace NzbDrone.Common.Test
         {
             var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
 
-            //Act/Assert
+            
             _processProvider.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
                 .BeEmpty("Dummy process is already running");
             _processProvider.Start(startInfo).Should().NotBeNull();

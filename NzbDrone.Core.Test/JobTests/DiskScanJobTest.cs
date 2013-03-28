@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ using System.Linq;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class DiskScanJobTest : CoreTest
     {
         [Test]
@@ -39,10 +39,10 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.Scan(series))
                 .Returns(new List<EpisodeFile>());
 
-            //Act
+            
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), new { SeriesId = series.Id });
 
-            //Assert
+            
             Mocker.VerifyAllMocks();
         }
 

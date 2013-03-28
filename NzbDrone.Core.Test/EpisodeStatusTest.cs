@@ -11,7 +11,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
+    
     public class EpisodeStatusTest : CoreTest
     {
         [TestCase(1, false, false, EpisodeStatusType.NotAired)]

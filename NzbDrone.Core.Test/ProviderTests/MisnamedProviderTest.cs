@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void no_misnamed_files()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Title = "SeriesTitle")
                 .Build();
@@ -57,18 +57,18 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.BuildFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), episodeFiles[1]))
                 .Returns("Title2");
 
-            //Act
+            
             var totalItems = 0;
             var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
-            //Assert
+            
             misnamedEpisodes.Should().HaveCount(0);
         }
 
         [Test]
         public void all_misnamed_files()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Title = "SeriesTitle")
                 .Build();
@@ -104,18 +104,18 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.BuildFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), episodeFiles[1]))
                 .Returns("New Title 2");
 
-            //Act
+            
             var totalItems = 0;
             var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
-            //Assert
+            
             misnamedEpisodes.Should().HaveCount(2);
         }
 
         [Test]
         public void one_misnamed_file()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Title = "SeriesTitle")
                 .Build();
@@ -151,11 +151,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.BuildFilename(new List<Episode> { episodes[1] }, It.IsAny<Series>(), episodeFiles[1]))
                 .Returns("Title2");
 
-            //Act
+            
             var totalItems = 0;
             var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
-            //Assert
+            
             misnamedEpisodes.Should().HaveCount(1);
             misnamedEpisodes[0].CurrentName.Should().Be("Title1");
             misnamedEpisodes[0].ProperName.Should().Be("New Title 1");
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void misnamed_multi_episode_file()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Title = "SeriesTitle")
                 .Build();
@@ -200,11 +200,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.BuildFilename(new List<Episode> { episodes[2] }, It.IsAny<Series>(), episodeFiles[1]))
                 .Returns("Title2");
 
-            //Act
+            
             var totalItems = 0;
             var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
-            //Assert
+            
             misnamedEpisodes.Should().HaveCount(1);
             misnamedEpisodes[0].CurrentName.Should().Be("Title1");
             misnamedEpisodes[0].ProperName.Should().Be("New Title 1");
@@ -213,7 +213,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void no_misnamed_multi_episode_file()
         {
-            //Setup
+            
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Title = "SeriesTitle")
                 .Build();
@@ -249,11 +249,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.BuildFilename(new List<Episode> { episodes[2] }, It.IsAny<Series>(), episodeFiles[1]))
                 .Returns("Title2");
 
-            //Act
+            
             var totalItems = 0;
             var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
-            //Assert
+            
             misnamedEpisodes.Should().HaveCount(0);
         }
     }
