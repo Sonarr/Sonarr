@@ -143,6 +143,7 @@
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
+    <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerSearchTests\DailyEpisodeSearchTests\IndexerDailyEpisodeSearchFixture.cs" />
     <Compile Include="IndexerSearchTests\DailyEpisodeSearchTests\IndexerDailyEpisodeSearch_EpisodeMatch.cs" />

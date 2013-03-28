@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using NzbDrone.Core.Datastore;
 
-namespace NzbDrone.Test.Common
+namespace NzbDrone.Core.Test.Framework
 {
     public static class NBuilderExtensions
     {
