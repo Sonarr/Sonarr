@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using Autofac;
 using NLog;
+using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Autofac;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Frontend;
 using NzbDrone.Common;
 using NzbDrone.Core;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using SignalR;
+using ErrorPipeline = NzbDrone.Api.ErrorManagement.ErrorPipeline;
 
 namespace NzbDrone.Api
 {
@@ -41,7 +44,7 @@ namespace NzbDrone.Api
             SignalRBootstraper.InitializeAutomapper(container);
             RegisterReporting(container);
             KickoffInitilizables(container);
-            
+
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<ErrorPipeline>().HandleException);
         }
 
@@ -77,7 +80,7 @@ namespace NzbDrone.Api
             var builder = new ContainerBuilder();
             builder.RegisterCoreServices();
             builder.RegisterApiServices();
-            
+
             var container = builder.Build();
 
             return container;
@@ -104,8 +107,10 @@ namespace NzbDrone.Api
         protected override void ConfigureConventions(NancyConventions nancyConventions)
         {
             base.ConfigureConventions(nancyConventions);
-            Conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("static", @"UI", new[] { ".css", ".js", ".html", ".htm", ".jpg", ".jpeg", ".icon", ".gif", ".png", ".woff", ".ttf" }));
+            var processors = ApplicationContainer.Resolve<IProcessStaticResource>();
+            Conventions.StaticContentsConventions.Add(processors.ProcessStaticResourceRequest);
         }
+
     }
 
     public static class SignalRBootstraper

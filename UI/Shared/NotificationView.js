@@ -1,7 +1,9 @@
-﻿define(['app', 'Shared/NotificationCollection'], function (app, notificationCollection) {
+﻿"use strict";
+
+define(['app', 'Shared/NotificationCollection'], function (app, notificationCollection) {
 
     var notificationItemView = Backbone.Marionette.ItemView.extend({
-        template: '#notification-template',
+        template: 'Shared/NotificationTemplate',
 
         events: {
             'click .x-close': 'kill'

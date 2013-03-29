@@ -1,22 +1,23 @@
-﻿require(['app','Controller'], function (app, controller) {
+﻿"use strict";
+require(['app', 'Controller'], function (app, controller) {
 
     NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
         controller: controller,
-        appRoutes: {
-            '': 'series',
-            'series': 'series',
-            'series/index': 'series',
-            'series/add': 'addSeries',
+        appRoutes : {
+            ''                           : 'series',
+            'series'                     : 'series',
+            'series/index'               : 'series',
+            'series/add'                 : 'addSeries',
             'series/add/:action(/:query)': 'addSeries',
-            'series/details/:query': 'seriesDetails',
-            'upcoming': 'upcoming',
-            'upcoming/index': 'upcoming',
-            'calendar': 'calendar',
-            'settings': 'settings',
-            'settings/:action(/:query)': 'settings',
-            'missing': 'missing',
-            ':whatever': 'notFound'
+            'series/details/:query'      : 'seriesDetails',
+            'upcoming'                   : 'upcoming',
+            'upcoming/index'             : 'upcoming',
+            'calendar'                   : 'calendar',
+            'settings'                   : 'settings',
+            'settings/:action(/:query)'  : 'settings',
+            'missing'                    : 'missing',
+            ':whatever'                  : 'notFound'
         }
     });
 

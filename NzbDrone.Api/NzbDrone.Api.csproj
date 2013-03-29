@@ -102,7 +102,9 @@
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\Serializer.cs" />
-    <Compile Include="FrontendModule\IndexModule.cs" />
+    <Compile Include="Frontend\IndexModule.cs" />
+    <Compile Include="Frontend\StaticResourceProvider.cs" />
+    <Compile Include="Frontend\StaticResourceMapper.cs" />
     <Compile Include="Missing\MissingResource.cs" />
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="Resolvers\EndTimeResolver.cs" />

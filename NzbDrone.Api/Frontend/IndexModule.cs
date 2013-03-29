@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+using System;
 using Nancy;
-using Nancy.Responses.Negotiation;
 
-namespace NzbDrone.Api.FrontendModule
+namespace NzbDrone.Api.Frontend
 {
     public class IndexModule : NancyModule
     {

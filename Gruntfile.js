@@ -21,8 +21,7 @@ module.exports = function(grunt) {
 
     handlebars: {
       options: {
-        namespace: "NzbDrone.Templates",
-        wrapped: false,
+        namespace: "Templates",
         processName: function(fileName){
           return fileName
               .replace('UI/','')
@@ -50,10 +49,6 @@ module.exports = function(grunt) {
       },
       images:{
         src: 'UI/**/*.png', 
-        dest: '_output/'
-      },
-      templates:{
-        src: 'UI/**/*emplate.html', 
         dest: '_output/'
       },
       fonts:{
@@ -86,10 +81,6 @@ module.exports = function(grunt) {
       copyImages:{
         files: '<%= copy.images.src %>',
         tasks: ['copy:images']  
-      },
-      copyTemplates:{
-        files: '<%= copy.templates.src %>',
-        tasks: ['copy:templates']  
       },
       copyFonts:{
         files: '<%= copy.fonts.src %>',

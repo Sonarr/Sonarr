@@ -9,32 +9,20 @@
     <link rel="apple-touch-icon" sizes="144x144" href="Static/Content/Images/apple-touch-icon-144.png" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300' rel='stylesheet' type='text/css'>
-    <link href="/static/content/bootstrap.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/bootstrap.slider.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/bootstrapSwitch.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/base.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/theme.css" rel='stylesheet' type='text/css'>
-    <link href="/static/content/toastr.css" rel='stylesheet' type='text/css'>
-    <link href="/static/content/fullcalendar.css" rel='stylesheet' type='text/css'>
-    <link href="/static/content/tablesorter.bootstrap.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/tablesorter.pager.css" rel='stylesheet' type='text/css' />
-    <link href="/static/AddSeries/addseries.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/menu.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/form.css" rel='stylesheet' type='text/css' />
-    <link href="/static/content/settings.quality.css" rel='stylesheet' type='text/css' />
+    <link href="/content/bootstrap.css" rel='stylesheet' type='text/css' />
+    <link href="/content/bootstrap.slider.css" rel='stylesheet' type='text/css' />
+    <link href="/content/bootstrapSwitch.css" rel='stylesheet' type='text/css' />
+    <link href="/content/base.css" rel='stylesheet' type='text/css' />
+    <link href="/content/theme.css" rel='stylesheet' type='text/css'>
+    <link href="/content/toastr.css" rel='stylesheet' type='text/css'>
+    <link href="/content/fullcalendar.css" rel='stylesheet' type='text/css'>
+    <link href="/content/tablesorter.bootstrap.css" rel='stylesheet' type='text/css' />
+    <link href="/content/tablesorter.pager.css" rel='stylesheet' type='text/css' />
+    <link href="/AddSeries/addseries.css" rel='stylesheet' type='text/css' />
+    <link href="/content/menu.css" rel='stylesheet' type='text/css' />
+    <link href="/content/form.css" rel='stylesheet' type='text/css' />
+    <link href="/content/settings.quality.css" rel='stylesheet' type='text/css' />
 </head>
-<script type="text/html" id="notification-template">
-    <div class="alert alert-{{level}}">
-        <button type="button" class="close x-close icon-remove-sign"></button>
-        <i class="{{iconClass}}" /><strong>{{title}}</strong>
-        {{#if isPreFormatted}}
-        <pre>{{{preFormattedMessage}}}</pre>
-        {{else}}
-        {{message}}
-        {{/if}}
-    </div>
-
-</script>
 <body>
     <div id="in-nav">
         <div class="container">
@@ -100,27 +88,29 @@
         </div>
     </footer>
 </body>
-<script src="/static/JsLibraries/jquery.js"></script>
-<script src="/static/JsLibraries/bootstrap.js"></script>
-<script src="/static/JsLibraries/bootstrap.slider.js"></script>
-<script src="/static/JsLibraries/bootstrapSwitch.js"></script>
-<script src="/static/JsLibraries/underscore.js"></script>
-<script src="/static/JsLibraries/handlebars.js"></script>
-<script src="/static/JsLibraries/backbone.js"></script>
-<script src="/static/JsLibraries/backbone.modelbinder.js"></script>
-<script src="/static/JsLibraries/backbone.mutators.js"></script>
-<script src="/static/JsLibraries/backbone.marionette.js"></script>
-<script src="/static/JsLibraries/jquery.tablesorter.js"></script>
-<script src="/static/JsLibraries/jquery.tablesorter.bootstrap.js"></script>
-<script src="/static/JsLibraries/jquery.tablesorter.pager.js"></script>
-<script src="/static/JsLibraries/sugar.js"></script>
-<script src="/static/JsLibraries/fullcalendar.js"></script>
+<script src="/JsLibraries/jquery.js"></script>
+<script src="/JsLibraries/bootstrap.js"></script>
+<script src="/JsLibraries/bootstrap.slider.js"></script>
+<script src="/JsLibraries/bootstrapSwitch.js"></script>
+<script src="/JsLibraries/underscore.js"></script>
+<script src="/JsLibraries/handlebars.js"></script>
+<script src="/JsLibraries/backbone.js"></script>
+<script src="/JsLibraries/backbone.modelbinder.js"></script>
+<script src="/JsLibraries/backbone.mutators.js"></script>
+<script src="/JsLibraries/backbone.marionette.js"></script>
+<script src="/JsLibraries/jquery.tablesorter.js"></script>
+<script src="/JsLibraries/jquery.tablesorter.bootstrap.js"></script>
+<script src="/JsLibraries/jquery.tablesorter.pager.js"></script>
+<script src="/JsLibraries/sugar.js"></script>
+<script src="/JsLibraries/fullcalendar.js"></script>
 
-<script src="/static/Mixins/backbone.marionette.templates.js"></script>
-<script src="/static/Mixins/backbone.ajax.js"></script>
-<script src="/static/Mixins/tablesorter.extensions.js"></script>
-<script src="/static/Mixins/spoon.js"></script>
+<script src="/templates.js"></script>
 
-<script data-main="/static/app" src="/static/JsLibraries/require.js"></script>
-<script src="/static/Routing.js"></script>
+<script src="/Mixins/backbone.marionette.templates.js"></script>
+<script src="/Mixins/backbone.ajax.js"></script>
+<script src="/Mixins/tablesorter.extensions.js"></script>
+<script src="/Mixins/spoon.js"></script>
+
+<script data-main="/app" src="/JsLibraries/require.js"></script>
+<script src="/Routing.js"></script>
 </html>

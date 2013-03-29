@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
 using Moq;
 using NLog;
@@ -10,6 +9,32 @@ using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
 {
+    public abstract class TestBase<TSubject> : TestBase where TSubject : class
+    {
+
+        private TSubject _subject;
+
+        [SetUp]
+        public void CoreTestSetup()
+        {
+            _subject = null;
+        }
+
+        protected TSubject Subject
+        {
+            get
+            {
+                if (_subject == null)
+                {
+                    _subject = Mocker.Resolve<TSubject>();
+                }
+
+                return _subject;
+            }
+
+        }
+    }
+
     public abstract class TestBase : LoggingTest
     {
         protected const string INTEGRATION_TEST = "Integration Test";
