@@ -6,10 +6,10 @@
         },
 
         mutators: {
-            thirtyMinuteSize: function() {
+            thirtyMinuteSize: function () {
                 return this.get('maxSize') * 30;
             },
-            sixtyMinuteSize: function(){
+            sixtyMinuteSize : function () {
                 return this.get('maxSize') * 60;
             }
         }

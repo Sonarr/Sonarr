@@ -1,10 +1,10 @@
 ﻿define(['app'], function (app) {
     NzbDrone.Missing.MissingModel = Backbone.Model.extend({
         mutators: {
-            bestDateString: function () {
+            bestDateString     : function () {
                 return bestDateString(this.get('airDate'));
             },
-            paddedEpisodeNumber: function(){
+            paddedEpisodeNumber: function () {
                 return this.get('episodeNumber');
             }
         }

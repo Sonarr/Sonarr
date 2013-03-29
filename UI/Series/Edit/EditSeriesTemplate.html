@@ -4,24 +4,26 @@
 </div>
 <div class="modal-body">
     <div class="form-horizontal">
-        
+
         <div class="control-group">
             <label class="control-label">Monitored</label>
+
             <div class="controls">
                 <div class="switch">
-                    <input type="checkbox" name="monitored" />
+                    <input type="checkbox" name="monitored"/>
                 </div>
                 <span class="help-inline-checkbox">
                     <i class="icon-question-sign" title="Should NzbDrone download episodes for this series?"></i>
                 </span>
             </div>
         </div>
-        
+
         <div class="control-group">
             <label class="control-label">Use Season Folder</label>
+
             <div class="controls">
                 <div class="switch">
-                    <input type="checkbox" name="seasonFolder" />
+                    <input type="checkbox" name="seasonFolder"/>
                 </div>
                 <span class="help-inline-checkbox">
                     <i class="icon-question-sign" title="Should downloaded episodes be stored in season folders?"></i>
@@ -31,11 +33,12 @@
 
         <div class="control-group">
             <label class="control-label" for="inputQualityProfile">Quality Profile</label>
+
             <div class="controls">
-                
+
                 <select class="x-quality-profile" id="inputQualityProfile" name="qualityProfileId">
                     {{#each qualityProfiles.models}}
-                    <option value="{{id}}">{{attributes.name}}</option>
+                        <option value="{{id}}">{{attributes.name}}</option>
                     {{/each}}
                 </select>
                 <span class="help-inline">
@@ -46,6 +49,7 @@
 
         <div class="control-group">
             <label class="control-label" for="inputPath">Path</label>
+
             <div class="controls">
                 <input type="text" id="inputPath" placeholder="Path" name="path">
                 <span class="help-inline">
@@ -53,9 +57,10 @@
                 </span>
             </div>
         </div>
-        
+
         <div class="control-group">
             <label class="control-label" for="inputBacklogSetting">Backlog Setting</label>
+
             <div class="controls">
                 <select id="inputBacklogSetting" class="inputClass x-backlog-setting" name="backlogSetting">
                     <option value="0">Inherit</option>
@@ -67,11 +72,12 @@
                 </span>
             </div>
         </div>
-        
+
         <div class="control-group">
             <label class="control-label" for="inputCustomStartDate">Custom Start Date</label>
+
             <div class="controls">
-                <input type="date" id="inputCustomStartDate"  name="customStartDate">
+                <input type="date" id="inputCustomStartDate" name="customStartDate">
                 <span class="help-inline">
                     <i class="icon-question-sign" title="Should NzbDrone only download episodes after your preferred start date?"></i>
                 </span>
@@ -80,7 +86,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger pull-left x-remove" >delete</button>
+    <button class="btn btn-danger pull-left x-remove">delete</button>
     <button class="btn" data-dismiss="modal">cancel</button>
     <button class="btn btn-primary x-save">save</button>
 </div>

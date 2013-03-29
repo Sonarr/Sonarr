@@ -13,34 +13,34 @@
             template: 'Settings/SettingsLayoutTemplate',
 
             regions: {
-                naming: '#naming',
-                quality: '#quality',
-                indexers: '#indexers',
+                naming        : '#naming',
+                quality       : '#quality',
+                indexers      : '#indexers',
                 downloadClient: '#download-client',
-                notifications: '#notifications',
-                system: '#system',
-                misc: '#misc'
+                notifications : '#notifications',
+                system        : '#system',
+                misc          : '#misc'
             },
 
             ui: {
-                namingTab: '.x-naming-tab',
-                qualityTab: '.x-quality-tab',
-                indexersTab: '.x-indexers-tab',
+                namingTab        : '.x-naming-tab',
+                qualityTab       : '.x-quality-tab',
+                indexersTab      : '.x-indexers-tab',
                 downloadClientTab: '.x-download-client-tab',
-                notificationsTab: '.x-notifications-tab',
-                systemTab: '.x-system-tab',
-                miscTab: '.x-misc-tab'
+                notificationsTab : '.x-notifications-tab',
+                systemTab        : '.x-system-tab',
+                miscTab          : '.x-misc-tab'
             },
 
             events: {
-                'click .x-naming-tab': 'showNaming',
-                'click .x-quality-tab': 'showQuality',
-                'click .x-indexers-tab': 'showIndexers',
+                'click .x-naming-tab'         : 'showNaming',
+                'click .x-quality-tab'        : 'showQuality',
+                'click .x-indexers-tab'       : 'showIndexers',
                 'click .x-download-client-tab': 'showDownloadClient',
-                'click .x-notifications-tab': 'showNotifications',
-                'click .x-system-tab': 'showSystem',
-                'click .x-misc-tab': 'showMisc',
-                'click .x-save-settings': 'save'
+                'click .x-notifications-tab'  : 'showNotifications',
+                'click .x-system-tab'         : 'showSystem',
+                'click .x-misc-tab'           : 'showMisc',
+                'click .x-save-settings'      : 'save'
             },
 
             showNaming: function (e) {

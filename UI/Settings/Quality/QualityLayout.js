@@ -12,8 +12,8 @@
 
             regions: {
                 qualityStandard: '#quality-standard',
-                qualityProfile: '#quality-profile',
-                qualitySize: '#quality-size'
+                qualityProfile : '#quality-profile',
+                qualitySize    : '#quality-size'
             },
 
             ui: {

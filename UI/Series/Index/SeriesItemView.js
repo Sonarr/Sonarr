@@ -1,24 +1,24 @@
 ﻿'use strict';
 
 define([
-        'app',
-        'Quality/QualityProfileCollection',
-        'Series/SeriesCollection',
-        'Series/Edit/EditSeriesView',
-        'Series/Delete/DeleteSeriesView'
+    'app',
+    'Quality/QualityProfileCollection',
+    'Series/SeriesCollection',
+    'Series/Edit/EditSeriesView',
+    'Series/Delete/DeleteSeriesView'
 
 ], function () {
 
     NzbDrone.Series.Index.SeriesItemView = Backbone.Marionette.ItemView.extend({
         template: 'Series/Index/SeriesItemTemplate',
-        tagName: 'tr',
+        tagName : 'tr',
 
         ui: {
             'progressbar': '.progress .bar'
         },
 
         events: {
-            'click .x-edit': 'editSeries',
+            'click .x-edit'  : 'editSeries',
             'click .x-remove': 'removeSeries'
         },
 

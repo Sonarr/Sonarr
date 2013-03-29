@@ -3,6 +3,7 @@
 .tablesorter-pager.disabled {
     display: none;
 }
+
 /* hide or fade out pager arrows when the first or last row is visible */
 .tablesorter-pager .disabled {
     /* visibility: hidden */

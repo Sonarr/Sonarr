@@ -14,8 +14,9 @@
 
                 var percent = 100;
 
-                if (episodeCount > 0)
+                if (episodeCount > 0) {
                     percent = episodeFileCount / episodeCount * 100;
+                }
 
                 return percent;
             }
@@ -23,8 +24,8 @@
 
         defaults: {
             episodeFileCount: 0,
-            episodeCount: 0,
-            qualityProfiles: qualityProfileCollection
+            episodeCount    : 0,
+            qualityProfiles : qualityProfileCollection
         }
     });
 

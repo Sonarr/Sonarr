@@ -1,20 +1,20 @@
 ﻿'use strict';
 
 define([
-        'app', 'Settings/SettingsModel'
+    'app', 'Settings/SettingsModel'
 
 ], function () {
 
     NzbDrone.Settings.Naming.NamingView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Naming/NamingTemplate',
+        template : 'Settings/Naming/NamingTemplate',
         className: 'form-horizontal',
 
         ui: {
-            switch: '.switch',
+            switch : '.switch',
             tooltip: '[class^="help-inline"] i'
         },
 
-        initialize: function(){
+        initialize: function () {
             //Listen to save event
         },
 

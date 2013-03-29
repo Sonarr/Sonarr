@@ -1,11 +1,11 @@
 ﻿"use strict";
 
-define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplete'], function (app,rootFolders) {
+define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplete'], function (app, rootFolders) {
 
     NzbDrone.AddSeries.RootFolderItemView = Backbone.Marionette.ItemView.extend({
 
         template: 'AddSeries/RootFolders/RootFolderItemTemplate',
-        tagName: 'tr',
+        tagName : 'tr',
 
         events: {
             'click .x-remove': 'removeFolder'
@@ -25,13 +25,13 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
     NzbDrone.AddSeries.RootDirListView = Backbone.Marionette.CollectionView.extend({
         itemView: NzbDrone.AddSeries.RootFolderItemView,
 
-        tagName: 'table',
+        tagName  : 'table',
         className: 'table table-hover'
     });
 
     NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/RootFolders/RootFolderTemplate',
-        route: 'series/add/rootdir',
+        route   : 'series/add/rootdir',
 
         ui: {
             pathInput: '.x-path input'
@@ -56,9 +56,9 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
 
         addFolder: function () {
             var newDir = new NzbDrone.AddSeries.RootFolders.RootFolderModel(
-            {
-                Path: this.ui.pathInput.val()
-            });
+                {
+                    Path: this.ui.pathInput.val()
+                });
 
             var self = this;
 

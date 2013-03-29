@@ -1,17 +1,17 @@
 ﻿'use strict';
 
 define([
-        'app', 'Settings/SettingsModel'
+    'app', 'Settings/SettingsModel'
 
 ], function () {
 
     NzbDrone.Settings.DownloadClient.DownloadClientView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/DownloadClient/DownloadClientTemplate',
+        template : 'Settings/DownloadClient/DownloadClientTemplate',
         className: 'form-horizontal',
 
         ui: {
-            switch: '.switch',
-            tooltip: '[class^="help-inline"] i',
+            switch   : '.switch',
+            tooltip  : '[class^="help-inline"] i',
             pathInput: '.x-path'
         },
 

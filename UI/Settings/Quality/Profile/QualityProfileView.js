@@ -1,22 +1,22 @@
 ﻿'use strict';
 
 define([
-        'app',
-        'Quality/QualityProfileCollection',
-        'Settings/Quality/Profile/EditQualityProfileView'
+    'app',
+    'Quality/QualityProfileCollection',
+    'Settings/Quality/Profile/EditQualityProfileView'
 
 ], function () {
 
     NzbDrone.Settings.Quality.Profile.QualityProfileView = Backbone.Marionette.ItemView.extend({
         template: 'Settings/Quality/Profile/QualityProfileTemplate',
-        tagName: 'tr',
+        tagName : 'tr',
 
         ui: {
             'progressbar': '.progress .bar'
         },
 
         events: {
-            'click .x-edit': 'editSeries',
+            'click .x-edit'  : 'editSeries',
             'click .x-remove': 'removeSeries'
         },
 

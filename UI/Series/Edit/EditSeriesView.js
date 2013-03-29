@@ -2,19 +2,19 @@
 define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/QualityProfileCollection'], function () {
 
     NzbDrone.Series.Edit.EditSeriesView = Backbone.Marionette.ItemView.extend({
-        template: 'Series/Edit/EditSeriesTemplate',
-        tagName: 'div',
+        template : 'Series/Edit/EditSeriesTemplate',
+        tagName  : 'div',
         className: "modal",
 
         ui: {
-            progressbar: '.progress .bar',
-            qualityProfile: '.x-quality-profile',
+            progressbar    : '.progress .bar',
+            qualityProfile : '.x-quality-profile',
             backlogSettings: '.x-backlog-setting',
-            switch: '.switch'
+            switch         : '.switch'
         },
 
         events: {
-            'click .x-save': 'saveSeries',
+            'click .x-save'  : 'saveSeries',
             'click .x-remove': 'removeSeries'
         },
 

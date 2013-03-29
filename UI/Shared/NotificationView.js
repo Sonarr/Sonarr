@@ -16,8 +16,8 @@ define(['app', 'Shared/NotificationCollection'], function (app, notificationColl
             $.Deferred(function () {
                 self.$el.slideUp('slow');
             }).done(function () {
-                self.model.destroy();
-            });
+                    self.model.destroy();
+                });
         }
     });
 
@@ -34,7 +34,7 @@ define(['app', 'Shared/NotificationCollection'], function (app, notificationColl
         console.log('initializing notification view');
         NzbDrone.notificationRegion.show(new collectionView());
     });
-    
+
 });
 
 

@@ -1,19 +1,19 @@
 ﻿'use strict';
 
 define([
-        'app',
-        'Quality/QualitySizeCollection'
+    'app',
+    'Quality/QualitySizeCollection'
 
 ], function () {
 
     NzbDrone.Settings.Quality.Size.QualitySizeView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Quality/Size/QualitySizeTemplate',
+        template : 'Settings/Quality/Size/QualitySizeTemplate',
         className: 'quality-size-item',
 
         ui: {
-            slider: '.slider',
+            slider          : '.slider',
             thirtyMinuteSize: '.thirty-minute-size',
-            sixtyMinuteSize: '.sixty-minute-size'
+            sixtyMinuteSize : '.sixty-minute-size'
         },
 
         events: {
@@ -29,10 +29,10 @@ define([
 
             var self = this;
             this.ui.slider.slider({
-                min: 0,
-                max: 200,
-                step: 1,
-                value: self.model.get('maxSize'),
+                min    : 0,
+                max    : 200,
+                step   : 1,
+                value  : self.model.get('maxSize'),
                 tooltip: 'hide'
             });
         },

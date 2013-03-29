@@ -2,18 +2,18 @@
     NzbDrone.Quality.QualityProfileModel = Backbone.Model.extend({
 
         mutators: {
-            allowed: function() {
+            allowed: function () {
                 return _.where(this.get('qualities'), { allowed: true });
             },
 
-            cutoffName: function() {
+            cutoffName: function () {
                 return _.findWhere(this.get('qualities'), { id: this.get('cutoff') }).name;
             }
         },
 
         defaults: {
-            id: null,
-            name: '',
+            id    : null,
+            name  : '',
             //'qualities.allowed': false,
             cutoff: null
         }

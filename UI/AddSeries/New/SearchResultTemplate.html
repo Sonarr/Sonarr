@@ -7,14 +7,15 @@
         <div class="accordion-inner">
             <select class="span7 x-root-folder">
                 {{#each rootFolders.models}}
-                <option value="{{id}}">{{attributes.path}}</option>
+                    <option value="{{id}}">{{attributes.path}}</option>
                 {{/each}}
             </select>
             <select class="span2 x-quality-profile">
                 {{#each qualityProfiles.models}}
-                <option value="{{id}}">{{attributes.name}}</option>
+                    <option value="{{id}}">{{attributes.name}}</option>
                 {{/each}}
             </select>
+
             <div class="btn btn-success pull-right icon-plus x-add">
             </div>
         </div>

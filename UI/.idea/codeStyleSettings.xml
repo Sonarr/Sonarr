@@ -7,7 +7,7 @@
         <option name="RIGHT_MARGIN" value="190" />
         <option name="HTML_ALIGN_ATTRIBUTES" value="false" />
         <CssCodeStyleSettings>
-          <option name="HEX_COLOR_UPPER_CASE" value="true" />
+          <option name="HEX_COLOR_LOWER_CASE" value="true" />
           <option name="HEX_COLOR_LONG_FORMAT" value="true" />
         </CssCodeStyleSettings>
         <JSCodeStyleSettings>
@@ -18,7 +18,6 @@
         </XML>
         <codeStyleSettings language="CSS">
           <indentOptions>
-            <option name="USE_TAB_CHARACTER" value="true" />
             <option name="SMART_TABS" value="true" />
           </indentOptions>
         </codeStyleSettings>

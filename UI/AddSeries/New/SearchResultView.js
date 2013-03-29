@@ -3,13 +3,13 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
 
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
-        template: "AddSeries/New/SearchResultTemplate",
+        template : "AddSeries/New/SearchResultTemplate",
         className: 'search-item',
 
         ui: {
             qualityProfile: '.x-quality-profile',
-            rootFolder: '.x-root-folder',
-            addButton: '.x-add'
+            rootFolder    : '.x-root-folder',
+            addButton     : '.x-add'
         },
 
         events: {
@@ -32,10 +32,10 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
             var path = rootPath + "\\" + title;
 
             var model = new NzbDrone.Series.SeriesModel({
-                tvdbId: seriesId,
-                title: title,
+                tvdbId          : seriesId,
+                title           : title,
                 qualityProfileId: quality,
-                path: path
+                path            : path
             });
 
             var self = this;
@@ -46,9 +46,9 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
             model.save(undefined, {
                 success: function () {
                     var notificationModel = new NzbDrone.Shared.NotificationModel({
-                        title: 'Added',
+                        title  : 'Added',
                         message: title,
-                        level: 'success'
+                        level  : 'success'
                     });
 
                     notificationCollection.push(notificationModel);
@@ -60,8 +60,8 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
 
     NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
 
-        itemView: NzbDrone.AddSeries.New.SearchItemView,
-        className: 'accordion',
+        itemView  : NzbDrone.AddSeries.New.SearchItemView,
+        className : 'accordion',
         initialize: function () {
             this.listenTo(this.collection, 'reset', this.render);
         }

@@ -12,21 +12,21 @@ define([
             template: 'AddSeries/addSeriesLayoutTemplate',
 
             regions: {
-                addNew: '#add-new',
+                addNew        : '#add-new',
                 importExisting: '#import-existing',
-                rootFolders: '#root-folders'
+                rootFolders   : '#root-folders'
             },
 
             ui: {
-                addNewTab: '.x-add-new-tab',
+                addNewTab        : '.x-add-new-tab',
                 importExistingTab: '.x-import-existing-tab',
-                rootFoldersTab: '.x-root-folders-tab'
+                rootFoldersTab   : '.x-root-folders-tab'
             },
 
             events: {
-                'click .x-add-new-tab': 'showAddNew',
+                'click .x-add-new-tab'        : 'showAddNew',
                 'click .x-import-existing-tab': 'showImport',
-                'click .x-root-folders-tab': 'showRootFolders'
+                'click .x-root-folders-tab'   : 'showRootFolders'
             },
 
             showAddNew: function (e) {

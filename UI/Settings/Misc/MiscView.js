@@ -1,16 +1,16 @@
 ﻿'use strict';
 
 define([
-        'app', 'Settings/SettingsModel'
+    'app', 'Settings/SettingsModel'
 
 ], function () {
 
     NzbDrone.Settings.Misc.MiscView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Misc/MiscTemplate',
+        template : 'Settings/Misc/MiscTemplate',
         className: 'form-horizontal',
 
         ui: {
-            switch: '.switch',
+            switch : '.switch',
             tooltip: '[class^="help-inline"] i'
         },
 

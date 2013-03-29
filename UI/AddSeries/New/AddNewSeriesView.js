@@ -2,7 +2,7 @@
 define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView'], function () {
     NzbDrone.AddSeries.New.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/New/AddNewSeriesTemplate',
-        route: 'Series/add/new',
+        route   : 'Series/add/new',
 
         ui: {
             seriesSearch: '.search input'
@@ -41,7 +41,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
                 context.searchResult.show(new NzbDrone.Shared.SpinnerView());
 
                 context.currentSearchRequest = context.collection.fetch({
-                    data: { term: term },
+                    data   : { term: term },
                     success: function () {
                         context.searchResult.show(context.resultView);
                     }

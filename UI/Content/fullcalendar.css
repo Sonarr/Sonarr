@@ -9,29 +9,26 @@
  *
  */
 
-
 .fc {
     direction: ltr;
     text-align: left;
 }
 
-    .fc table {
-        border-collapse: collapse;
-        border-spacing: 0;
-    }
+.fc table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 
-    html .fc,
-    .fc table {
-        font-size: 1em;
-    }
+html .fc,
+.fc table {
+    font-size: 1em;
+}
 
-    .fc td,
-    .fc th {
-        padding: 0;
-        vertical-align: top;
-    }
-
-
+.fc td,
+.fc th {
+    padding: 0;
+    vertical-align: top;
+}
 
 /* Header
 ------------------------------------------------------------------------*/
@@ -59,10 +56,10 @@
     vertical-align: top;
 }
 
-    .fc-header-title h2 {
-        margin-top: 0;
-        white-space: nowrap;
-    }
+.fc-header-title h2 {
+    margin-top: 0;
+    white-space: nowrap;
+}
 
 .fc .fc-header-space {
     padding-left: 10px;
@@ -103,8 +100,6 @@
     z-index: 4;
 }
 
-
-
 /* Content
 ------------------------------------------------------------------------*/
 
@@ -117,27 +112,27 @@
     /*overflow: hidden;*/
 }
 
-
-
 /* Cell Styles
 ------------------------------------------------------------------------*/
 
 .fc-widget-header, /* <th>, usually */
-.fc-widget-content { /* <td>, usually */
-    border: 1px solid #ccc;
+.fc-widget-content {
+    /* <td>, usually */
+    border: 1px solid #cccccc;
 }
 
-.fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
-    background: #ffc;
+.fc-state-highlight {
+    /* <td> today cell */
+    /* TODO: add .fc-today to <th> */
+    background: #ffffcc;
 }
 
-.fc-cell-overlay { /* semi-transparent rectangle while dragging */
-    background: #9cf;
+.fc-cell-overlay {
+    /* semi-transparent rectangle while dragging */
+    background: #99ccff;
     opacity: .2;
     filter: alpha(opacity=20); /* for IE */
 }
-
-
 
 /* Buttons
 ------------------------------------------------------------------------*/
@@ -148,7 +143,8 @@
     cursor: pointer;
 }
 
-.fc-state-default { /* non-theme */
+.fc-state-default {
+    /* non-theme */
     border-style: solid;
     border-width: 1px 0;
 }
@@ -159,7 +155,8 @@
     overflow: hidden;
 }
 
-.fc-state-default .fc-button-inner { /* non-theme */
+.fc-state-default .fc-button-inner {
+    /* non-theme */
     border-style: solid;
     border-width: 0 1px;
 }
@@ -173,21 +170,21 @@
     white-space: nowrap;
 }
 
-    /* icon (for jquery ui) */
+/* icon (for jquery ui) */
 
-    .fc-button-content .fc-icon-wrap {
-        position: relative;
-        float: left;
-        top: 50%;
-    }
+.fc-button-content .fc-icon-wrap {
+    position: relative;
+    float: left;
+    top: 50%;
+}
 
-    .fc-button-content .ui-icon {
-        position: relative;
-        float: left;
-        margin-top: -50%;
-        *margin-top: 0;
-        *top: -50%;
-    }
+.fc-button-content .ui-icon {
+    position: relative;
+    float: left;
+    margin-top: -50%;
+    *margin-top: 0;
+    *top: -50%;
+}
 
 /* gloss effect */
 
@@ -197,63 +194,61 @@
     left: 0;
 }
 
-    .fc-state-default .fc-button-effect span {
-        position: absolute;
-        top: -100px;
-        left: 0;
-        width: 500px;
-        height: 100px;
-        border-width: 100px 0 0 1px;
-        border-style: solid;
-        border-color: #fff;
-        background: #444;
-        opacity: .09;
-        filter: alpha(opacity=9);
-    }
+.fc-state-default .fc-button-effect span {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 500px;
+    height: 100px;
+    border-width: 100px 0 0 1px;
+    border-style: solid;
+    border-color: #ffffff;
+    background: #444444;
+    opacity: .09;
+    filter: alpha(opacity=9);
+}
 
 /* button states (determines colors)  */
 
 .fc-state-default,
 .fc-state-default .fc-button-inner {
     border-style: solid;
-    border-color: #ccc #bbb #aaa;
-    background: #F3F3F3;
-    color: #000;
+    border-color: #cccccc #bbbbbb #aaaaaa;
+    background: #f3f3f3;
+    color: #000000;
 }
 
 .fc-state-hover,
 .fc-state-hover .fc-button-inner {
-    border-color: #999;
+    border-color: #999999;
 }
 
 .fc-state-down,
 .fc-state-down .fc-button-inner {
-    border-color: #555;
-    background: #777;
+    border-color: #555555;
+    background: #777777;
 }
 
 .fc-state-active,
 .fc-state-active .fc-button-inner {
-    border-color: #555;
-    background: #777;
-    color: #fff;
+    border-color: #555555;
+    background: #777777;
+    color: #ffffff;
 }
 
 .fc-state-disabled,
 .fc-state-disabled .fc-button-inner {
-    color: #999;
-    border-color: #ddd;
+    color: #999999;
+    border-color: #dddddd;
 }
 
 .fc-state-disabled {
     cursor: default;
 }
 
-    .fc-state-disabled .fc-button-effect {
-        display: none;
-    }
-
-
+.fc-state-disabled .fc-button-effect {
+    display: none;
+}
 
 /* Global Event Styles
 ------------------------------------------------------------------------*/
@@ -279,9 +274,9 @@ a.fc-event {
 }
 
 .fc-event-skin {
-    border-color: #36c; /* default BORDER color */
-    background-color: #36c; /* default BACKGROUND color */
-    color: #fff; /* default TEXT color */
+    border-color: #3366cc; /* default BORDER color */
+    background-color: #3366cc; /* default BACKGROUND color */
+    color: #ffffff; /* default TEXT color */
 }
 
 .fc-event-inner {
@@ -298,7 +293,8 @@ a.fc-event {
     padding: 0 1px;
 }
 
-.fc .ui-resizable-handle { /*** TODO: don't use ui-resizable anymore, change class ***/
+.fc .ui-resizable-handle {
+    /*** TODO: don't use ui-resizable anymore, change class ***/
     display: block;
     position: absolute;
     z-index: 99999;
@@ -306,8 +302,6 @@ a.fc-event {
     font-size: 300%; /* */
     line-height: 50%; /* */
 }
-
-
 
 /* Horizontal Events
 ------------------------------------------------------------------------*/
@@ -317,29 +311,27 @@ a.fc-event {
     margin-bottom: 1px;
 }
 
-    /* resizable */
+/* resizable */
 
-    .fc-event-hori .ui-resizable-e {
-        top: 0 !important; /* importants override pre jquery ui 1.7 styles */
-        right: -3px !important;
-        width: 7px !important;
-        height: 100% !important;
-        cursor: e-resize;
-    }
+.fc-event-hori .ui-resizable-e {
+    top: 0 !important; /* importants override pre jquery ui 1.7 styles */
+    right: -3px !important;
+    width: 7px !important;
+    height: 100% !important;
+    cursor: e-resize;
+}
 
-    .fc-event-hori .ui-resizable-w {
-        top: 0 !important;
-        left: -3px !important;
-        width: 7px !important;
-        height: 100% !important;
-        cursor: w-resize;
-    }
+.fc-event-hori .ui-resizable-w {
+    top: 0 !important;
+    left: -3px !important;
+    width: 7px !important;
+    height: 100% !important;
+    cursor: w-resize;
+}
 
-    .fc-event-hori .ui-resizable-handle {
-        _padding-bottom: 14px; /* IE6 had 0 height */
-    }
-
-
+.fc-event-hori .ui-resizable-handle {
+    _padding-bottom: 14px; /* IE6 had 0 height */
+}
 
 /* Fake Rounded Corners (for buttons and events)
 ------------------------------------------------------------*/
@@ -348,37 +340,35 @@ a.fc-event {
     margin-left: 1px;
 }
 
-    .fc-corner-left .fc-button-inner,
-    .fc-corner-left .fc-event-inner {
-        margin-left: -1px;
-    }
+.fc-corner-left .fc-button-inner,
+.fc-corner-left .fc-event-inner {
+    margin-left: -1px;
+}
 
 .fc-corner-right {
     margin-right: 1px;
 }
 
-    .fc-corner-right .fc-button-inner,
-    .fc-corner-right .fc-event-inner {
-        margin-right: -1px;
-    }
+.fc-corner-right .fc-button-inner,
+.fc-corner-right .fc-event-inner {
+    margin-right: -1px;
+}
 
 .fc-corner-top {
     margin-top: 1px;
 }
 
-    .fc-corner-top .fc-event-inner {
-        margin-top: -1px;
-    }
+.fc-corner-top .fc-event-inner {
+    margin-top: -1px;
+}
 
 .fc-corner-bottom {
     margin-bottom: 1px;
 }
 
-    .fc-corner-bottom .fc-event-inner {
-        margin-bottom: -1px;
-    }
-
-
+.fc-corner-bottom .fc-event-inner {
+    margin-bottom: -1px;
+}
 
 /* Fake Rounded Corners SPECIFICALLY FOR EVENTS
 -----------------------------------------------------------------*/
@@ -399,8 +389,6 @@ a.fc-event {
     border-bottom-width: 1px;
 }
 
-
-
 /* Reusable Separate-border Table
 ------------------------------------------------------------*/
 
@@ -413,10 +401,10 @@ table.fc-border-separate {
     border-width: 1px 0 0 1px;
 }
 
-    .fc-border-separate th.fc-last,
-    .fc-border-separate td.fc-last {
-        border-right-width: 1px;
-    }
+.fc-border-separate th.fc-last,
+.fc-border-separate td.fc-last {
+    border-right-width: 1px;
+}
 
 .fc-border-separate tr.fc-last th,
 .fc-border-separate tr.fc-last td {
@@ -427,8 +415,6 @@ table.fc-border-separate {
 .fc-border-separate tbody tr.fc-first th {
     border-top-width: 0;
 }
-
-
 
 /* Month View, Basic Week View, Basic Day View
 ------------------------------------------------------------------------*/
@@ -446,8 +432,8 @@ table.fc-border-separate {
     opacity: 0.3;
     filter: alpha(opacity=30); /* for IE */
     /* opacity with small font can sometimes look too faded
-	   might want to set the 'color' property instead
-	   making day-numbers bold also fixes the problem */
+       might want to set the 'color' property instead
+       making day-numbers bold also fixes the problem */
 }
 
 .fc-grid .fc-day-content {
@@ -470,8 +456,6 @@ table.fc-border-separate {
 .fc-rtl .fc-grid .fc-event-time {
     float: right;
 }
-
-
 
 /* Agenda Week View, Agenda Day View
 ------------------------------------------------------------------------*/
@@ -526,7 +510,7 @@ table.fc-border-separate {
 }
 
 .fc-widget-header .fc-agenda-divider-inner {
-    background: #eee;
+    background: #eeeeee;
 }
 
 /* slot rows */
@@ -540,9 +524,9 @@ table.fc-border-separate {
     background: none;
 }
 
-    .fc-agenda-slots td div {
-        height: 20px;
-    }
+.fc-agenda-slots td div {
+    height: 20px;
+}
 
 .fc-agenda-slots tr.fc-slot0 th,
 .fc-agenda-slots tr.fc-slot0 td {
@@ -554,11 +538,9 @@ table.fc-border-separate {
     border-top-style: dotted;
 }
 
-    .fc-agenda-slots tr.fc-minor th.ui-widget-header {
-        *border-top-style: solid; /* doesn't work with background in IE6/7 */
-    }
-
-
+.fc-agenda-slots tr.fc-minor th.ui-widget-header {
+    *border-top-style: solid; /* doesn't work with background in IE6/7 */
+}
 
 /* Vertical Events
 ------------------------------------------------------------------------*/
@@ -567,30 +549,31 @@ table.fc-border-separate {
     border-width: 0 1px;
 }
 
-    .fc-event-vert .fc-event-head,
-    .fc-event-vert .fc-event-content {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        overflow: hidden;
-    }
+.fc-event-vert .fc-event-head,
+.fc-event-vert .fc-event-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    overflow: hidden;
+}
 
-    .fc-event-vert .fc-event-time {
-        white-space: nowrap;
-        font-size: 10px;
-    }
+.fc-event-vert .fc-event-time {
+    white-space: nowrap;
+    font-size: 10px;
+}
 
-    .fc-event-vert .fc-event-bg { /* makes the event lighter w/ a semi-transparent overlay  */
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #fff;
-        opacity: .3;
-        filter: alpha(opacity=30);
-    }
+.fc-event-vert .fc-event-bg {
+    /* makes the event lighter w/ a semi-transparent overlay  */
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    opacity: .3;
+    filter: alpha(opacity=30);
+}
 
 .fc .ui-draggable-dragging .fc-event-bg, /* TODO: something nicer like .fc-opacity */
 .fc-select-helper .fc-event-bg {
@@ -611,6 +594,7 @@ table.fc-border-separate {
     cursor: s-resize;
 }
 
-.fc-agenda .ui-resizable-resizing { /* TODO: better selector */
+.fc-agenda .ui-resizable-resizing {
+    /* TODO: better selector */
     _overflow: hidden;
 }

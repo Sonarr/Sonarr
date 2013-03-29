@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 define([
-        'app', 'Settings/SettingsModel'
+    'app', 'Settings/SettingsModel'
 
 ], function () {
 

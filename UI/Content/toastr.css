@@ -7,16 +7,15 @@
     word-wrap: break-word;
 }
 
-    .toast-message a,
-    .toast-message label {
-        color: #FFF;
-    }
+.toast-message a,
+.toast-message label {
+    color: #ffffff;
+}
 
-        .toast-message a:hover {
-            color: #CCC;
-            text-decoration: none;
-        }
-
+.toast-message a:hover {
+    color: #cccccc;
+    text-decoration: none;
+}
 
 .toast-top-full-width {
     top: 0;
@@ -55,42 +54,42 @@
     z-index: 999999;
 }
 
-    #toast-container > div {
-        margin: 0 0 6px;
-        padding: 15px 15px 15px 50px;
-        width: 300px;
-        -moz-border-radius: 3px 3px 3px 3px;
-        -webkit-border-radius: 3px 3px 3px 3px;
-        border-radius: 3px 3px 3px 3px;
-        background-position: 15px center;
-        background-repeat: no-repeat;
-        -moz-box-shadow: 0 0 12px #999999;
-        -webkit-box-shadow: 0 0 12px #999999;
-        box-shadow: 0 0 12px #999999;
-        color: #FFFFFF;
-        opacity: 0.8;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-        filter: alpha(opacity=80);
-    }
+#toast-container > div {
+    margin: 0 0 6px;
+    padding: 15px 15px 15px 50px;
+    width: 300px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    -moz-box-shadow: 0 0 12px #999999;
+    -webkit-box-shadow: 0 0 12px #999999;
+    box-shadow: 0 0 12px #999999;
+    color: #ffffff;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+}
 
 .toast {
     background-color: #030303;
 }
 
 .toast-success {
-    background-color: #51A351;
+    background-color: #51a351;
 }
 
 .toast-error {
-    background-color: #BD362F;
+    background-color: #bd362f;
 }
 
 .toast-info {
-    background-color: #2F96B4;
+    background-color: #2f96b4;
 }
 
 .toast-warning {
-    background-color: #F89406;
+    background-color: #f89406;
 }
 
 #toast-container > :hover {
