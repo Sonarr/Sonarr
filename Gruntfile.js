@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     uglify: {
         files: {
           expand: true, // Enable dynamic expansion.
-          cwd: 'NzbDrone.Backbone/',      // Src matches are relative to this path.
+          cwd: 'UI/',      // Src matches are relative to this path.
           src: ['**/*.js'], // Actual pattern(s) to match.
           dest: 'build/',   // Destination path prefix.
           ext: '.min.js'
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     },
     less:{
       bootstrap:{
-        src: ["NzbDrone.Backbone/Content/bootstrap/bootstrap.less"],
+        src: ["UI/Content/bootstrap/bootstrap.less"],
         dest: "_output/UI/Content/bootstrap.css"
       }
     },
@@ -25,50 +25,40 @@ module.exports = function(grunt) {
         wrapped: false,
         processName: function(fileName){
           return fileName
-              .replace('NzbDrone.Backbone/','')
+              .replace('UI/','')
               .replace('.html','');
         }
       },  
       files: {
-          src: ['NzbDrone.Backbone/**/*emplate.html'],
+          src: ['UI/**/*emplate.html'],
           dest: '_output/UI/templates.js'
       },
     },
 
     copy:{
       index:{
-        src: 'NzbDrone.Backbone/index.html', 
+        src: 'UI/index.html', 
         dest: '_output/UI/index.html'
       },
       scripts:{
-        expand:true,
-        cwd: 'NzbDrone.Backbone/',
-        src: '**/*.js', 
-        dest: '_output/UI/'
+        src: 'UI/**/*.js', 
+        dest: '_output/'
       },
       styles:{
-        expand:true,
-        cwd: 'NzbDrone.Backbone/',
-        src: '**/*.css', 
-        dest: '_output/UI/'
+        src: 'UI/**/*.css', 
+        dest: '_output/'
       },
       images:{
-        expand:true,
-        cwd: 'NzbDrone.Backbone/',
-        src: '**/*.png', 
-        dest: '_output/UI/'
+        src: 'UI/**/*.png', 
+        dest: '_output/'
       },
       templates:{
-        expand:true,
-        cwd: 'NzbDrone.Backbone/',
-        src: '**/*emplate.html', 
-        dest: '_output/UI/'
+        src: 'UI/**/*emplate.html', 
+        dest: '_output/'
       },
       fonts:{
-        expand:true,
-        src: 'NzbDrone.Backbone/Content/Fonts/*.*', 
-        dest: '_output/UI/Content/Fonts/',
-        flatten: true
+        src: 'UI/**/Fonts/*.*', 
+        dest: '_output/',
       }
     },
 
@@ -86,19 +76,19 @@ module.exports = function(grunt) {
         tasks: ['copy:index']  
       },
       copyScripts:{
-        files: 'NzbDrone.Backbone/**/*.js',
+        files: '<%= copy.scripts.src %>',
         tasks: ['copy:scripts']  
       },
       copyStyles:{
-        files: 'NzbDrone.Backbone/**/*.js',
+        files: '<%= copy.styles.src %>',
         tasks: ['copy:styles']  
       },
       copyImages:{
-        files: 'NzbDrone.Backbone/**/*.png',
+        files: '<%= copy.images.src %>',
         tasks: ['copy:images']  
       },
       copyTemplates:{
-        files: '<%= handlebars.files.src %>',
+        files: '<%= copy.templates.src %>',
         tasks: ['copy:templates']  
       },
       copyFonts:{
