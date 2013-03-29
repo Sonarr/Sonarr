@@ -1,7 +1,8 @@
-﻿require.config({
+﻿"use strict";
+require.config({
 
     paths: {
-        'backbone': 'JsLibraries/backbone',
+        'backbone'  : 'JsLibraries/backbone',
         'underscore': 'JsLibraries/underscore',
         'marionette': 'JsLibraries/backbone.marionette',
         'handlebars': 'JsLibraries/handlebars'
@@ -11,12 +12,12 @@
         underscore: {
             exports: '_'
         },
-        backbone: {
-            deps: ['underscore'],
+        backbone  : {
+            deps   : ['underscore'],
             exports: 'Backbone'
         },
         marionette: {
-            deps: ['backbone'],
+            deps   : ['backbone'],
             exports: 'Marionette'
         },
         handlebars: {
@@ -26,7 +27,7 @@
     }
 });
 
-define('app',  function () {
+define('app', function () {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Series = {};
@@ -55,9 +56,9 @@ define('app',  function () {
     window.NzbDrone.Missing = {};
 
     window.NzbDrone.Events = {
-        OpenModalDialog :'openModal',
-        CloseModalDialog : 'closeModal'
-    },
+        OpenModalDialog : 'openModal',
+        CloseModalDialog: 'closeModal'
+    };
 
     window.NzbDrone.Constants = {
         ApiRoot: '/api'
@@ -71,23 +72,31 @@ define('app',  function () {
 
         //TODO: move this out of here
         Handlebars.registerHelper("formatStatus", function (status, monitored) {
-            if (!monitored) return '<i class="icon-pause grid-icon" title="Not Monitored"></i>';
-            if (status === 'Continuing') return '<i class="icon-play grid-icon" title="Continuing"></i>';
+            if (!monitored) {
+                return '<i class="icon-pause grid-icon" title="Not Monitored"></i>';
+            }
+            if (status === 'Continuing') {
+                return '<i class="icon-play grid-icon" title="Continuing"></i>';
+            }
 
-            return '<i class="icon-stop grid-icon" title="Ended"></i>';
+            return null;
         });
 
-        NzbDrone.addRegions({
-            titleRegion: '#title-region',
-            mainRegion: '#main-region',
-            notificationRegion: '#notification-region',
-        });
+        return '<i class="icon-stop grid-icon" title="Ended"></i>';
     });
+
+    NzbDrone.addRegions({
+        titleRegion       : '#title-region',
+        mainRegion        : '#main-region',
+        notificationRegion: '#notification-region'
+    });
+
 
     window.NzbDrone.start();
 
     return NzbDrone;
 });
+
 
 
 

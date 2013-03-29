@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JSHintConfiguration" version="1.1.0" use-config-file="false">
+    <option bitwise="true" />
+    <option camelcase="false" />
+    <option curly="true" />
+    <option eqeqeq="true" />
+    <option forin="true" />
+    <option immed="false" />
+    <option latedef="false" />
+    <option newcap="false" />
+    <option noarg="true" />
+    <option noempty="true" />
+    <option nonew="true" />
+    <option plusplus="false" />
+    <option regexp="false" />
+    <option undef="true" />
+    <option unused="false" />
+    <option strict="true" />
+    <option trailing="false" />
+    <option asi="false" />
+    <option boss="false" />
+    <option debug="false" />
+    <option eqnull="false" />
+    <option es5="false" />
+    <option esnext="false" />
+    <option evil="false" />
+    <option expr="false" />
+    <option funcscope="false" />
+    <option globalstrict="true" />
+    <option iterator="false" />
+    <option lastsemic="false" />
+    <option laxbreak="false" />
+    <option laxcomma="false" />
+    <option loopfunc="false" />
+    <option multistr="false" />
+    <option proto="false" />
+    <option onecase="false" />
+    <option regexdash="false" />
+    <option scripturl="false" />
+    <option smarttabs="false" />
+    <option shadow="false" />
+    <option sub="false" />
+    <option supernew="false" />
+    <option validthis="false" />
+    <option browser="true" />
+    <option couch="false" />
+    <option devel="false" />
+    <option dojo="false" />
+    <option jquery="false" />
+    <option mootools="false" />
+    <option node="false" />
+    <option nonstandard="false" />
+    <option prototypejs="false" />
+    <option rhino="false" />
+    <option worker="false" />
+    <option wsh="false" />
+    <option yui="false" />
+    <option nomen="false" />
+    <option onevar="false" />
+    <option passfail="false" />
+    <option white="false" />
+    <option maxerr="50" />
+    <option predef="NzbDrone, define, Backbone, _, window,Handlebars, console,require,$" />
+  </component>
+</project>
+

@@ -1,4 +1,5 @@
-﻿define([
+﻿"use strict";
+define([
     'app',
     'AddSeries/RootFolders/RootFolderCollection',
     'Quality/QualityProfileCollection',
