@@ -1,7 +1,6 @@
-﻿'use strict;'
+﻿"use strict";
 
 define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplete'], function (app,rootFolders) {
-
 
     NzbDrone.AddSeries.RootFolderItemView = Backbone.Marionette.ItemView.extend({
 

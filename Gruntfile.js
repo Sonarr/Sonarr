@@ -115,6 +115,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-wrap');
 
   // Default task(s).
   grunt.registerTask('default', ['copy','less:bootstrap','handlebars', 'watch']);

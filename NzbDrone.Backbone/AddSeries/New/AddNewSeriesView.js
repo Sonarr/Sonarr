@@ -1,4 +1,5 @@
-﻿define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView'], function () {
+﻿"use strict";
+define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView'], function () {
     NzbDrone.AddSeries.New.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/New/AddNewSeriesTemplate',
         route: 'Series/add/new',

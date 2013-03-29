@@ -1,4 +1,5 @@
-﻿define(['app', 'AddSeries/RootFolders/RootFolderModel'], function () {
+﻿"use strict";
+define(['app', 'AddSeries/RootFolders/RootFolderModel'], function () {
 
     var rootFolderCollection = Backbone.Collection.extend({
         url: NzbDrone.Constants.ApiRoot + '/rootfolder',

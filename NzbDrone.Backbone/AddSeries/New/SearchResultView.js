@@ -1,5 +1,4 @@
 ﻿'use strict';
-
 define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollection', 'AddSeries/SearchResultModel', 'Series/SeriesCollection'], function (app, notificationCollection) {
 
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({

@@ -1,3 +1,4 @@
+"use strict";
 define(['app'], function () {
     NzbDrone.AddSeries.RootFolders.RootFolderModel = Backbone.Model.extend({
         mutators: {
