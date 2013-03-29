@@ -16,6 +16,7 @@
   "readmeFilename": "readme.md",
   "dependencies": {
     "grunt": "*",
+    "grunt-cli": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-handlebars": "*",
     "grunt-contrib-watch": "*",
