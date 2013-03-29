@@ -21,6 +21,7 @@
     "grunt-contrib-watch": "*",
     "grunt-contrib-less": "*",
     "grunt-contrib-concat": "*",
-    "grunt-contrib-copy": "*"
+    "grunt-contrib-copy": "*",
+    "grunt-curl": "*"
   }
 }
