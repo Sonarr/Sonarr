@@ -16,7 +16,6 @@ TestResults
 # Build results
 [Dd]ebug/
 [Rr]elease/
-x64/
 *_i.c
 *_p.c
 *.ilk
@@ -93,7 +92,6 @@ csx
 AppPackages/
 
 # Others
-sql
 TestResults
 [Tt]est[Rr]esult*
 *.Cache
@@ -136,3 +134,4 @@ node_modules/
 UpgradeLog*.htm
 NzbDrone.Backbone/templates.js
 NzbDrone.Backbone/Content/bootstrap.css
+_output/
