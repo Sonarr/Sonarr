@@ -20,6 +20,7 @@
     "grunt-contrib-handlebars": "*",
     "grunt-contrib-watch": "*",
     "grunt-contrib-less": "*",
-    "grunt-contrib-concat": "*"
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-copy": "*"
   }
 }

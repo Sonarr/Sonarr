@@ -104,7 +104,7 @@ namespace NzbDrone.Api
         protected override void ConfigureConventions(NancyConventions nancyConventions)
         {
             base.ConfigureConventions(nancyConventions);
-            Conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("static", @"NzbDrone.Backbone", new string[] { ".css", ".js", ".html", ".htm", ".jpg", ".jpeg", ".icon", ".gif", ".png", ".woff", ".ttf" }));
+            Conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("static", @"UI", new[] { ".css", ".js", ".html", ".htm", ".jpg", ".jpeg", ".icon", ".gif", ".png", ".woff", ".ttf" }));
         }
     }
 

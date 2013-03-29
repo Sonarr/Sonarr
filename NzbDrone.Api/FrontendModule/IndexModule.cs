@@ -24,7 +24,7 @@ namespace NzbDrone.Api.FrontendModule
             }
 
 
-            return View["NzbDrone.Backbone/index.html"];
+            return View["UI/index.html"];
         }
     }
 }

@@ -66,7 +66,7 @@
     <Content Include="Content\Images\white-batch-32.png" />
     <Content Include="Content\Images\white-batch-64.png" />
     <Content Include="Content\toastr.css" />
-    <Content Include="Content\font\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\apple-touch-icon-114.png" />
     <Content Include="Content\Images\apple-touch-icon-144.png" />
@@ -186,121 +186,121 @@
     <Content Include="Upcoming\UpcomingModel.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\accordion.less" />
+    <Content Include="Content\bootstrap\accordion.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\alerts.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\close.less" />
+    <Content Include="Content\bootstrap\close.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\code.less" />
+    <Content Include="Content\bootstrap\code.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\font-awesome-ie7.less" />
+    <Content Include="Content\bootstrap\font-awesome-ie7.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\font-awesome.less" />
+    <Content Include="Content\bootstrap\font-awesome.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\forms.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\grid.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\hero-unit.less" />
+    <Content Include="Content\bootstrap\hero-unit.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\labels-badges.less" />
+    <Content Include="Content\bootstrap\labels-badges.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\layouts.less" />
+    <Content Include="Content\bootstrap\layouts.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\modals.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navs.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\pager.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\reset.less" />
+    <Content Include="Content\bootstrap\reset.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\sprites.less" />
+    <Content Include="Content\bootstrap\sprites.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\tables.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\type.less" />
+    <Content Include="Content\bootstrap\type.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\variables.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\wells.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

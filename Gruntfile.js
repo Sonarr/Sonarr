@@ -14,8 +14,8 @@ module.exports = function(grunt) {
     },
     less:{
       bootstrap:{
-        src: ["NzbDrone.Backbone/Content/Bootstrap/bootstrap.less"],
-        dest: "NzbDrone.Backbone/Content/bootstrap.css"
+        src: ["NzbDrone.Backbone/Content/bootstrap/bootstrap.less"],
+        dest: "_output/UI/Content/bootstrap.css"
       }
     },
 
@@ -31,20 +31,80 @@ module.exports = function(grunt) {
       },  
       files: {
           src: ['NzbDrone.Backbone/**/*emplate.html'],
-          dest: 'NzbDrone.Backbone/templates.js'
+          dest: '_output/UI/templates.js'
       },
+    },
+
+    copy:{
+      index:{
+        src: 'NzbDrone.Backbone/index.html', 
+        dest: '_output/UI/index.html'
+      },
+      scripts:{
+        expand:true,
+        cwd: 'NzbDrone.Backbone/',
+        src: '**/*.js', 
+        dest: '_output/UI/'
+      },
+      styles:{
+        expand:true,
+        cwd: 'NzbDrone.Backbone/',
+        src: '**/*.css', 
+        dest: '_output/UI/'
+      },
+      images:{
+        expand:true,
+        cwd: 'NzbDrone.Backbone/',
+        src: '**/*.png', 
+        dest: '_output/UI/'
+      },
+      templates:{
+        expand:true,
+        cwd: 'NzbDrone.Backbone/',
+        src: '**/*emplate.html', 
+        dest: '_output/UI/'
+      },
+      fonts:{
+        expand:true,
+        src: 'NzbDrone.Backbone/Content/Fonts/*.*', 
+        dest: '_output/UI/Content/Fonts/',
+        flatten: true
+      }
     },
 
     watch:{
       bootstrap:{
-        files: '<%= less.bootstrap.src %>',
+        files: 'NzbDrone.Backbone/Content/bootstrap/*.less',
         tasks: ['less:bootstrap']  
       },
       handlebars:{
         files: '<%= handlebars.files.src %>',
         tasks: ['handlebars']  
+      },
+      copyIndex:{
+        files: '<%= copy.index.src %>',
+        tasks: ['copy:index']  
+      },
+      copyScripts:{
+        files: 'NzbDrone.Backbone/**/*.js',
+        tasks: ['copy:scripts']  
+      },
+      copyStyles:{
+        files: 'NzbDrone.Backbone/**/*.js',
+        tasks: ['copy:styles']  
+      },
+      copyImages:{
+        files: 'NzbDrone.Backbone/**/*.png',
+        tasks: ['copy:images']  
+      },
+      copyTemplates:{
+        files: '<%= handlebars.files.src %>',
+        tasks: ['copy:templates']  
+      },
+      copyFonts:{
+        files: '<%= copy.fonts.src %>',
+        tasks: ['copy:fonts']  
       }
-
     }
   });
 
@@ -54,8 +114,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task(s).
-  grunt.registerTask('default', ['less:bootstrap','handlebars', 'watch']);
+  grunt.registerTask('default', ['copy','less:bootstrap','handlebars', 'watch']);
 
 };

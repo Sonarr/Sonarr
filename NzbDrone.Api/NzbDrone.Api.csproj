@@ -61,9 +61,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="dotless.ClientOnly">
-      <HintPath>..\packages\DotlessClientOnly.1.3.1.0\lib\dotless.ClientOnly.dll</HintPath>
-    </Reference>
     <Reference Include="FluentValidation">
       <HintPath>..\packages\FluentValidation.3.4.6.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
@@ -106,8 +103,6 @@
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="FrontendModule\IndexModule.cs" />
-    <Compile Include="FrontendModule\BootstrapModule.cs" />
-    <Compile Include="FrontendModule\LessService.cs" />
     <Compile Include="Missing\MissingResource.cs" />
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="Resolvers\EndTimeResolver.cs" />
