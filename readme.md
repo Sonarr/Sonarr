@@ -1,49 +1,46 @@
-NZBDrone
-=====
+*NZBDrone vNext is currently under development to be faster, smarter and work on all major platforms (Windows, Linux, OSX).
+There ARE severe bugs in it and at any given time it may not work at all.*
 
-*NZBDrone is currently in development. There may be severe bugs in it and at any given time it may not work at all.*
 
-NZBDrone is a PVR for newsgroup users written in .NET 4.0. It watches for new episodes of your favorite shows and when they are posted it downloads them, sorts and renames them. It retrieves show information from theTVDB.com.
+# NZBDrone #
 
-Features include:
 
-* automatically detects new episodes
+NZBDrone is a PVR for newsgroup users written in .NET 4.0. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
+
+## Major Features Include: ##
+
+* Automatically detects new episodes
 * can scan your existing library and then download any old seasons that are missing
-* can watch for better versions and upgrade your existing episodes (to from TV DVD/BluRay for example)
+* can watch for better versions and upgrade your existing episodes. *eg. from DVD to Blu-Ray*
 * fully configurable episode renaming
-* sends NZBs directly to SABnzbd, prioritizes and categorizes them properly
-* can notify XBMC, when new episodes are downloaded
-* specials and double episode support
+* full integration with SABNzbd
+* full integration with XBMC (notification, library update, metadata)
+* full support for specials and multi-episode releases
 
 
-NZBDrone makes use of the following projects:
-=====
+## Configuring Development Enviroment: ##
 
-## Platform
-* [ASP.NET MVC 3.0](http://www.asp.net/mvc)
-* [IIS Express](http://learn.iis.net/page.aspx/868/iis-express-overview/)
-* [Microsoft SQL Server Compact 4.0](http://www.microsoft.com/download/en/details.aspx?id=17876)
+### Requirements ###
+- Visual Studio 2012 ([Express Edition](http://www.microsoft.com/visualstudio/eng/products/visual-studio-express-for-web "Express Edition") might work but not tested.)
+- [Git](http://git-scm.com/downloads)
+- [NodeJS](http://nodejs.org/download/)
+- [Grunt](http://gruntjs.com/getting-started)
 
-## Open Source Libraries
-* [jQuery](http://jquery.com)
-* [Ninject](http://ninject.org/)
-* [NLog](http://nlog-project.org/)
-* [PetaPoco](http://www.toptensoftware.com/petapoco/)
-* [MVC Mini Profiler](http://code.google.com/p/mvc-mini-profiler/)
-* [Migrator.NET](https://github.com/kayone/Migrator.NET)
+### Setup ###
 
-## Development Tools
-* [Visual Studio 2010](http://www.microsoft.com/visualstudio/en-us/products/2010-editions)
-* [ReSharper 6](http://www.jetbrains.com/resharper/index.html)
-* [ANTS Performance Profiler](http://www.red-gate.com/products/dotnet-development/ants-performance-profiler/)
-* [NUnit](http://www.nunit.org/)
-* [Moq](http://code.google.com/p/moq/)
-* [NBuilder](http://nbuilder.org/)
-* [Fluent Assertions](http://fluentassertions.codeplex.com/)
-* [TeamCity](http://www.jetbrains.com/teamcity/)
-* [DotCover](http://www.jetbrains.com/dotcover/)
+- Make sure all the required software mentioned above are installed.
+- Clone the repository into your development machine. [*info*](https://help.github.com/articles/working-with-repositories)
+- install the required Node Packages using the following command `npm install`
+- start grunt to monitor your dev environment for any changes that need post processing using `grunt` command.
+
+*Please note grunt must be running at all times while you are working with NzbDrone source files.*
+
+
+### Development ###
+- Open `NzbDrone.sln` in Visual Studio 2012
+- Make sure `NzbDrone.Console` is set as the startup project
 
 
 ## License
 * [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
-Copyright 2010-2013
+Copyright 2010-2013 
