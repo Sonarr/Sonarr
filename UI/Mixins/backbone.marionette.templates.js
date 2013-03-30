@@ -1,22 +1,23 @@
 ﻿"use strict";
 
 Marionette.TemplateCache.get = function (templateId) {
-    var templateFunction = window.Templates[templateId];
+
+    var templateKey = templateId.toLowerCase();
+
+    var templateFunction = window.Templates[templateKey.toLowerCase()];
 
     if (!templateFunction) {
-        console.error('couldn\'t find pre-compiled template ' + templateId);
+        throw 'couldn\'t find pre-compiled template ' + templateKey;
     }
-
-    var templateName = templateId;
 
     return function (data) {
 
         try {
-            //console.log('rendering template ' + templateName);
+            //console.log('rendering template ' + templateKey);
             return templateFunction(data);
         }
         catch (error) {
-            console.error('template render failed for ' + templateName + ' ' + error.message);
+            console.error('template render failed for ' + templateKey + ' ' + error.message);
             console.error(data);
         }
     };

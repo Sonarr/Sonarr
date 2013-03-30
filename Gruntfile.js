@@ -25,7 +25,8 @@ module.exports = function(grunt) {
         processName: function(fileName){
           return fileName
               .replace('UI/','')
-              .replace('.html','');
+              .replace('.html','')
+              .toLowerCase();
         }
       },  
       files: {
