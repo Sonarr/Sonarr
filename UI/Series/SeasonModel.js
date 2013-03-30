@@ -6,7 +6,7 @@
                 var seasonNumber = this.get('seasonNumber');
 
                 if (seasonNumber === 0) {
-                    return "Specials"
+                    return "Specials";
                 }
 
                 return "Season " + seasonNumber;
