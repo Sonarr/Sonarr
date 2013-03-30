@@ -1,4 +1,5 @@
-﻿define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
+﻿"use strict";
+define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
     'Series/Index/SeriesIndexCollectionView', 'Upcoming/UpcomingCollectionView',
     'Calendar/CalendarCollectionView', 'Shared/NotificationView',
     'Shared/NotFoundView', 'MainMenuView', 'HeaderView',
@@ -13,7 +14,7 @@
                 NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
             },
 
-            series: function (action, query) {
+            series: function () {
                 this.setTitle('NzbDrone');
                 NzbDrone.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexCollectionView());
             },
@@ -62,7 +63,7 @@
                     success: function (missing) {
                         NzbDrone.mainRegion.show(new NzbDrone.Missing.MissingCollectionView(this, action, query, missing));
                     }
-                })
+                });
             },
 
             notFound: function () {

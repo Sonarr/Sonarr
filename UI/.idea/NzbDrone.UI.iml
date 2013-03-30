@@ -5,6 +5,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jQuery-1.9.1" level="application" />
+    <orderEntry type="library" name="libraries" level="project" />
   </component>
 </module>
 
