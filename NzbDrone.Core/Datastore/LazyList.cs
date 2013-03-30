@@ -6,6 +6,7 @@ namespace NzbDrone.Core.Datastore
     public class LazyList<T> : LazyLoaded<List<T>>
     {
         public LazyList()
+            : this(new List<T>())
         {
 
         }
