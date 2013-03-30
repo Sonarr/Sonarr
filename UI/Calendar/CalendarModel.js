@@ -1,4 +1,5 @@
-﻿define(['app'], function (app) {
+﻿"use strict";
+define(['app'], function () {
     NzbDrone.Calendar.CalendarModel = Backbone.Model.extend({
         mutators: {
             title              : function () {
@@ -47,7 +48,7 @@
             },
             bestDateString     : function () {
                 return bestDateString(this.get('start'));
-            },
+            }
         },
         defaults: {
             status: 0

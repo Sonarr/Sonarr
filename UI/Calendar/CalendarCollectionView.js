@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-define(['app', 'Calendar/CalendarItemView'], function (app) {
+define(['app', 'Calendar/CalendarItemView'], function () {
     NzbDrone.Calendar.CalendarCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView         : NzbDrone.Calendar.CalendarItemView,
         itemViewContainer: '#events',
@@ -47,10 +47,10 @@ define(['app', 'Calendar/CalendarItemView'], function (app) {
                         trigger  : 'manual'
                     });
                 },
-                eventMouseover: function (event, jsEvent, view) {
+                eventMouseover: function () {
                     $(this).popover('show');
                 },
-                eventMouseout : function (event, jsEvent, view) {
+                eventMouseout : function () {
                     $(this).popover('hide');
                 }
             });

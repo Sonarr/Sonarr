@@ -8,7 +8,7 @@ define(['app'], function () {
         },
 
         defaults: {
-            freeSpace: 0,
+            freeSpace: 0
         }
     });
 });

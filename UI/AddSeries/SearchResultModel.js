@@ -1,4 +1,5 @@
-﻿define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection'],
+﻿"use strict";
+define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection'],
     function (app, rootFolderCollection, qualityProfileCollection) {
 
         NzbDrone.AddSeries.SearchResultModel = Backbone.Model.extend({

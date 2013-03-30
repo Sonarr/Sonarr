@@ -4,7 +4,7 @@ define([
 
 
     NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
-        template: 'AddSeries/Existing/FolderMatchResultViewTemplatate',
+        template: 'AddSeries/Existing/FolderMatchResultViewTemplate',
 
         events: {
             'click .x-btn-add': 'addSeries'
@@ -49,7 +49,7 @@ define([
 
     NzbDrone.AddSeries.Existing.UnmappedFolderCompositeView = Backbone.Marionette.CompositeView.extend({
 
-        template         : 'AddSeries/Existing/UnmappedFolderCompositeViewTemplatate',
+        template         : 'AddSeries/Existing/UnmappedFolderCompositeViewTemplate',
         itemViewContainer: '.x-folder-name-match-results',
         itemView         : NzbDrone.AddSeries.Existing.FolderMatchResultView,
 

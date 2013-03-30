@@ -2,8 +2,15 @@
   <dictionary name="Keivan">
     <words>
       <w>deps</w>
+      <w>mixins</w>
       <w>nzbdrone</w>
+      <w>rootdir</w>
       <w>rootfolder</w>
+      <w>rootfolders</w>
+      <w>thetvdb</w>
+      <w>tvdb</w>
+      <w>xlarge</w>
+      <w>yyyy</w>
     </words>
   </dictionary>
 </component>
