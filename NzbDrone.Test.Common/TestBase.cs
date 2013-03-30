@@ -118,7 +118,7 @@ namespace NzbDrone.Test.Common
         protected void WithTempAsAppPath()
         {
             Mocker.GetMock<EnvironmentProvider>()
-                .SetupGet(c => c.ApplicationPath)
+                .SetupGet(c => c.WorkingDirectory)
                 .Returns(VirtualPath);
         }
 

@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Lifecycle
             var startInfo = new ProcessStartInfo
                                 {
                                     FileName = _environmentProvider.GetUpdateClientExePath(),
-                                    Arguments = string.Format("{0} {1}", _environmentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
+                                    Arguments = string.Format("{0} {1}", _environmentProvider.NzbDroneProcessIdFromEnvironment, _configFileProvider.Guid)
                                 };
 
             var process = _processProvider.Start(startInfo);

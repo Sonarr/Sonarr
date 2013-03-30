@@ -43,7 +43,7 @@ namespace NzbDrone
 
             ReportingService.RestProvider = container.Resolve<RestProvider>();
 
-            logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
+            logger.Info("Start-up Path:'{0}'", environmentProvider.WorkingDirectory);
         }
     }
 }

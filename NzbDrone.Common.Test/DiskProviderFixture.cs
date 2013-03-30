@@ -160,7 +160,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var appPath = new EnvironmentProvider().ApplicationPath;
+            var appPath = new EnvironmentProvider().WorkingDirectory;
             Mocker.Resolve<DiskProvider>().GetLastDirectoryWrite(appPath).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-10));
             Mocker.Resolve<DiskProvider>().GetLastDirectoryWrite(appPath).Should().BeBefore(DateTime.UtcNow);
         }

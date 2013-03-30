@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.JobTests
             var updateClientPath = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientExePath();
 
             Mocker.GetMock<EnvironmentProvider>()
-                .SetupGet(c => c.NzbDroneProcessIdFromEnviroment).Returns(12);
+                .SetupGet(c => c.NzbDroneProcessIdFromEnvironment).Returns(12);
 
             
             StartUpdate();

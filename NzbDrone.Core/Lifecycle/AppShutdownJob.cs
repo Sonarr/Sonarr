@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
@@ -9,17 +8,16 @@ namespace NzbDrone.Core.Lifecycle
 {
     public class AppShutdownJob : IJob
     {
-        private readonly EnvironmentProvider _environmentProvider;
         private readonly ProcessProvider _processProvider;
         private readonly ServiceProvider _serviceProvider;
+        private readonly Logger _logger;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AppShutdownJob(EnvironmentProvider environmentProvider, ProcessProvider processProvider, ServiceProvider serviceProvider)
+        public AppShutdownJob(ProcessProvider processProvider, ServiceProvider serviceProvider, Logger logger)
         {
-            _environmentProvider = environmentProvider;
             _processProvider = processProvider;
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         public string Name
@@ -35,21 +33,21 @@ namespace NzbDrone.Core.Lifecycle
         public virtual void Start(ProgressNotification notification, dynamic options)
         {
             notification.CurrentMessage = "Shutting down NzbDrone";
-            logger.Info("Shutting down NzbDrone");
+            _logger.Info("Shutting down NzbDrone");
 
             if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
                && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
-                logger.Debug("Stopping NzbDrone Service");
+                _logger.Debug("Stopping NzbDrone Service");
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
 
             else
             {
-                logger.Debug("Stopping NzbDrone console");
+                _logger.Debug("Stopping NzbDrone console");
 
-                var pid = _environmentProvider.NzbDroneProcessIdFromEnviroment;
-                _processProvider.Kill(pid);
+                var currentProcess = _processProvider.GetCurrentProcess();
+                _processProvider.Kill(currentProcess.Id);
             }
         }
     }

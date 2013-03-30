@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Test
         {
             var envMoq = new Mock<EnvironmentProvider>();
 
-            envMoq.SetupGet(c => c.ApplicationPath).Returns(@"C:\NzbDrone\");
+            envMoq.SetupGet(c => c.WorkingDirectory).Returns(@"C:\NzbDrone\");
 
             envMoq.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
@@ -60,13 +60,6 @@ namespace NzbDrone.Common.Test
         public void Config_path_test()
         {
             GetEnviromentProvider().GetConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\Config.xml");
-        }
-
-
-        [Test]
-        public void NlogConfig_path_test()
-        {
-            GetEnviromentProvider().GetNlogConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\NzbDrone.Web\log.config");
         }
 
         [Test]

@@ -1,22 +1,14 @@
 ﻿using System;
 using System.IO;
+using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Common
 {
     public static class PathExtensions
     {
-        private const string WEB_FOLDER = "NzbDrone.Web\\";
         private const string APP_DATA = "App_Data\\";
-        private const string WEB_BIN = "bin\\";
-
-        private const string LOG_CONFIG_FILE = "log.config";
         private const string APP_CONFIG_FILE = "config.xml";
-
-        public const string NZBDRONE_EXE = "NzbDrone.exe";
-
-        public const string OBJ_DB_FOLDER = "objDb";
-        public const string NZBDRONE_DB = "nzbdrone.db";
-
+        private const string NZBDRONE_DB = "nzbdrone.db";
         private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
 
         private const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update\\";
@@ -28,6 +20,8 @@ namespace NzbDrone.Common
 
         public static string NormalizePath(this string path)
         {
+            Ensure.That(() => path).IsNotNullOrWhiteSpace();
+
             if (String.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("Path can not be null or empty");
 
@@ -41,59 +35,24 @@ namespace NzbDrone.Common
             return info.FullName.Trim('/', '\\', ' ');
         }
 
-        public static string GetWebRoot(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.ApplicationPath, WEB_FOLDER);
-        }
-
         public static string GetAppDataPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.GetWebRoot(), APP_DATA);
-        }
-
-        public static string GetWebBinPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetWebRoot(), WEB_BIN);
-        }
-
-        public static string GetNlogConfigPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetWebRoot(), LOG_CONFIG_FILE);
+            return Path.Combine(environmentProvider.WorkingDirectory, APP_DATA);
         }
 
         public static string GetConfigPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.ApplicationPath, APP_CONFIG_FILE);
-        }
-
-        public static string GetObjectDbFolder(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetAppDataPath(), OBJ_DB_FOLDER);
+            return Path.Combine(environmentProvider.WorkingDirectory, APP_CONFIG_FILE);
         }
 
         public static string GetMediaCoverPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.GetWebRoot(), "MediaCover");
-        }
-
-        public static string GetBannerPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetMediaCoverPath(), "Banners");
-        }
-
-        public static string GetFanArtPath(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetMediaCoverPath(), "Fanarts");
-        }
-
-        public static string GetCacheFolder(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetWebRoot(), "Cache");
+            return Path.Combine(environmentProvider.GetAppDataPath(), "MediaCover");
         }
 
         public static string GetUpdateLogFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.ApplicationPath, UPDATE_LOG_FOLDER_NAME);
+            return Path.Combine(environmentProvider.WorkingDirectory, UPDATE_LOG_FOLDER_NAME);
         }
 
         public static string GetUpdateSandboxFolder(this EnvironmentProvider environmentProvider)
@@ -129,11 +88,6 @@ namespace NzbDrone.Common
         public static string GetConfigBackupFile(this EnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), BACKUP_ZIP_FILE);
-        }
-
-        public static string GetNzbDroneExe(this EnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.ApplicationPath, NZBDRONE_EXE);
         }
 
         public static string GetNzbDroneDatabase(this EnvironmentProvider environmentProvider)

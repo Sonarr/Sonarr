@@ -7,30 +7,26 @@ namespace NzbDrone.Common
 {
     public class EnvironmentProvider
     {
-        public const string NZBDRONE_PATH = "NZBDRONE_PATH";
-        public const string NZBDRONE_PID = "NZBDRONE_PID";
-        public const string ROOT_MARKER = "IISExpress";
+        private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
-        public static readonly char[] NewLineChars = Environment.NewLine.ToCharArray();
+        private static readonly EnvironmentProvider Instance = new EnvironmentProvider();
 
-        private static readonly string processName = Process.GetCurrentProcess().ProcessName.ToLower();
-
-        private static readonly EnvironmentProvider instance = new EnvironmentProvider();
+        private const string NZBDRONE_PID = "NZBDRONE_PID";
 
         public static bool IsProduction
         {
             get
             {
                 if (IsDebug || Debugger.IsAttached) return false;
-                if (instance.Version.Revision > 10000) return false; //Official builds will never have such a high revision
+                if (Instance.Version.Revision > 10000) return false; //Official builds will never have such a high revision
 
-                var lowerProcessName = processName.ToLower();
+                var lowerProcessName = ProcessName.ToLower();
                 if (lowerProcessName.Contains("vshost")) return false;
                 if (lowerProcessName.Contains("nunit")) return false;
                 if (lowerProcessName.Contains("jetbrain")) return false;
                 if (lowerProcessName.Contains("resharper")) return false;
 
-                if (instance.StartUpPath.ToLower().Contains("_rawpackage")) return false;
+                if (Instance.StartUpPath.ToLower().Contains("_rawpackage")) return false;
 
                 return true;
             }
@@ -57,7 +53,6 @@ namespace NzbDrone.Common
         {
             get
             {
-
 #if DEBUG
                 return true;
 #else
@@ -73,30 +68,9 @@ namespace NzbDrone.Common
             get { return Environment.UserInteractive; }
         }
 
-        public virtual string ApplicationPath
+        public virtual string WorkingDirectory
         {
             get { return Directory.GetCurrentDirectory(); }
-        }
-
-        public string CrawlToRoot(string dir)
-        {
-            if (String.IsNullOrWhiteSpace(dir))
-                return null;
-
-            var directoryInfo = new DirectoryInfo(dir);
-
-            while (!IsRoot(directoryInfo))
-            {
-                if (directoryInfo.Parent == null) return null;
-                directoryInfo = directoryInfo.Parent;
-            }
-
-            return directoryInfo.FullName;
-        }
-
-        private static bool IsRoot(DirectoryInfo dir)
-        {
-            return dir.GetDirectories(ROOT_MARKER).Length != 0;
         }
 
         public virtual string StartUpPath
@@ -104,13 +78,6 @@ namespace NzbDrone.Common
             get
             {
                 var path = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
-
-                if (path.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-                                   StringComparison.InvariantCultureIgnoreCase))
-                {
-                    path = Directory.GetCurrentDirectory();
-                }
-
                 return path;
             }
         }
@@ -137,7 +104,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual int NzbDroneProcessIdFromEnviroment
+        public virtual int NzbDroneProcessIdFromEnvironment
         {
             get
             {
@@ -147,14 +114,6 @@ namespace NzbDrone.Common
                     throw new InvalidOperationException("NZBDRONE_PID isn't a valid environment variable.");
 
                 return id;
-            }
-        }
-
-        public virtual string NzbDronePathFromEnvironment
-        {
-            get
-            {
-                return Environment.GetEnvironmentVariable(NZBDRONE_PATH);
             }
         }
 
