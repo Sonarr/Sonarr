@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
 
-    public class TvDbProviderTest : CoreTest<TvDbProxy>
+    public class TvDbProxyFixture : CoreTest<TvDbProxy>
     {
         [TestCase("The Simpsons")]
         [TestCase("Family Guy")]
@@ -49,6 +49,13 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             details.Should().NotBeNull();
             details.Covers.Value.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_be_able_to_get_list_of_episodes()
+        {
+            var details = Subject.GetEpisodes(75978);
+            details.Should().NotBeEmpty();
         }
     }
 }

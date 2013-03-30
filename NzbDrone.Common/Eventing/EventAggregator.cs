@@ -26,7 +26,7 @@ namespace NzbDrone.Common.Eventing
             {
                 _logger.Debug("{0} -> {1}", message.GetType().Name, handler.GetType().Name);
                 handler.Handle(message);
-                _logger.Debug("{0} -#> {1}", message.GetType().Name, handler.GetType().Name);
+                _logger.Debug("{0} <- {1}", message.GetType().Name, handler.GetType().Name);
             }
 
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Common.Eventing
                     {
                         _logger.Debug("{0} ~> {1}", message.GetType().Name, handlerLocal.GetType().Name);
                         handlerLocal.HandleAsync(message);
-                        _logger.Debug("{0} ~#> {1}", message.GetType().Name, handlerLocal.GetType().Name);
+                        _logger.Debug("{0} <~ {1}", message.GetType().Name, handlerLocal.GetType().Name);
                     });
             }
         }

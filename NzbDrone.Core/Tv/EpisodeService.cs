@@ -40,7 +40,8 @@ namespace NzbDrone.Core.Tv
     public class EpisodeService : IEpisodeService,
         IHandle<EpisodeGrabbedEvent>,
         IHandle<EpisodeFileDeletedEvent>,
-        IHandleAsync<SeriesDeletedEvent>
+        IHandleAsync<SeriesDeletedEvent>,
+        IHandleAsync<SeriesAddedEvent>
     {
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -398,6 +399,11 @@ namespace NzbDrone.Core.Tv
                 episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
                 UpdateEpisode(episode);
             }
+        }
+
+        public void HandleAsync(SeriesAddedEvent message)
+        {
+            RefreshEpisodeInfo(message.Series);
         }
     }
 }

@@ -80,7 +80,9 @@ namespace NzbDrone.Core.Tv
             try
             {
                 if (series.TvRageId == 0)
+                {
                     series = _tvRageMappingProvider.FindMatchingTvRageSeries(series);
+                }
             }
 
             catch (Exception ex)

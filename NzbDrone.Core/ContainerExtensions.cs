@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.IndexerSearch;
@@ -23,7 +24,11 @@ namespace NzbDrone.Core
             containerBuilder.RegisterAssembly("NzbDrone.Core");
 
             containerBuilder.InitDatabase();
-            
+
+
+            containerBuilder.RegisterType<EventAggregator>()
+                            .As<IEventAggregator>().SingleInstance();
+
             containerBuilder.RegisterModule<LogInjectionModule>();
         }
 

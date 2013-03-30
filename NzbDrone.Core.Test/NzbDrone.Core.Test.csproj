@@ -245,7 +245,7 @@
     <Compile Include="ProviderTests\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
     <Compile Include="ProviderTests\SceneMappingProviderTest.cs" />
     <Compile Include="TvTests\SeriesProviderTest.cs" />
-    <Compile Include="ProviderTests\TvDbProviderTest.cs" />
+    <Compile Include="ProviderTests\TvDbProxyFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
