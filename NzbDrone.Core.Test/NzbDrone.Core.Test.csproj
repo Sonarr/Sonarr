@@ -67,10 +67,6 @@
     <Reference Include="AutoMoq">
       <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="FastReflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\FastReflection.dll</HintPath>
-    </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -83,10 +79,6 @@
     </Reference>
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
-    </Reference>
-    <Reference Include="Marr.Data, Version=3.17.4747.34302, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\Marr.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -235,7 +227,6 @@
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTests\DownloadProviderFixture.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
-    <Compile Include="JobTests\ImportNewSeriesJobTest.cs" />
     <Compile Include="JobTests\DiskScanJobTest.cs" />
     <Compile Include="IndexerTests\IndexerFixture.cs" />
     <Compile Include="DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
@@ -258,6 +249,10 @@
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{f6fc6be7-0847-4817-a1ed-223dc647c3d7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>

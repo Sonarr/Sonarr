@@ -46,27 +46,30 @@ namespace NzbDrone.Core.Jobs.Implementations
 
         public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            IList<Series> ListOfSeriesToUpdate;
+            IList<Series> listOfSeriesToUpdate;
             if (options == null || options.SeriesId == 0)
             {
                 if (_configService.IgnoreArticlesWhenSortingSeries)
-                    ListOfSeriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
-
+                {
+                    listOfSeriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title.IgnoreArticles()).ToList();
+                }
                 else
-                    ListOfSeriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title).ToList();
+                {
+                    listOfSeriesToUpdate = _seriesRepository.All().OrderBy(o => o.Title).ToList();
+                }
             }
             else
             {
-                ListOfSeriesToUpdate = new List<Series>
+                listOfSeriesToUpdate = new List<Series>
                     {
-                            _seriesRepository.Get((int)options.SeriesId)
+                        _seriesRepository.Get((int) options.SeriesId)
                     };
             }
 
             //Update any Daily Series in the DB with the IsDaily flag
             _dailySeriesService.UpdateDailySeries();
 
-            foreach (var seriesToUpdate in ListOfSeriesToUpdate)
+            foreach (var seriesToUpdate in listOfSeriesToUpdate)
             {
                 var series = seriesToUpdate;
 

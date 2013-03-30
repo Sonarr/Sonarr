@@ -133,9 +133,6 @@
     <Reference Include="FluentMigrator.Runner">
       <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
     </Reference>
-    <Reference Include="FastReflection">
-      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\FastReflection.dll</HintPath>
-    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>
@@ -144,9 +141,6 @@
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="Marr.Data">
-      <HintPath>..\packages\MarrDataMapper.3.17.4747.34302\lib\Marr.Data.dll</HintPath>
     </Reference>
     <Reference Include="MediaInfoDotNet">
       <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
@@ -255,7 +249,6 @@
     <Compile Include="Jobs\Implementations\DiskScanJob.cs" />
     <Compile Include="Jobs\Implementations\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\Implementations\EpisodeSearchJob.cs" />
-    <Compile Include="Jobs\Implementations\ImportNewSeriesJob.cs" />
     <Compile Include="Jobs\Implementations\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\Implementations\PostDownloadScanJob.cs" />
     <Compile Include="Jobs\Implementations\RecentBacklogSearchJob.cs" />
@@ -577,6 +570,10 @@
     <EmbeddedResource Include="NzbDrone.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>

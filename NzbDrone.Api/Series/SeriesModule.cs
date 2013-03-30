@@ -61,7 +61,6 @@ namespace NzbDrone.Api.Series
             //We also need to remove any special characters from the filename before attempting to create it           
 
             _seriesService.AddSeries(request.Title, request.Path, request.TvDbId, request.QualityProfileId, null);
-            _jobProvider.Enqueue(typeof(ImportNewSeriesJob));
 
             return new Response { StatusCode = HttpStatusCode.Created };
         }

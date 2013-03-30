@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Tv
         void DeleteSeries(int seriesId, bool deleteFiles);
     }
 
-    public class SeriesService : ISeriesService
+    public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
@@ -177,6 +177,11 @@ namespace NzbDrone.Core.Tv
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
             _eventAggregator.Publish(new SeriesDeletedEvent(series, deleteFiles));
+        }
+
+        public void HandleAsync(SeriesAddedEvent message)
+        {
+            UpdateSeriesInfo(message.Series.Id);
         }
     }
 }
