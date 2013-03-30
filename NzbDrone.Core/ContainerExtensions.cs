@@ -37,15 +37,15 @@ namespace NzbDrone.Core
 
             container.RegisterAssemblyTypes(assembly)
                      .Where(t => t.IsSubclassOf(typeof(IndexerBase)))
-                     .As<IndexerBase>().SingleInstance();
+                     .As<IndexerBase>();
 
             container.RegisterAssemblyTypes(assembly)
                       .Where(t => t.IsSubclassOf(typeof(IndexerSearchBase)))
-                     .As<IndexerSearchBase>().SingleInstance();
+                     .As<IndexerSearchBase>();
 
             container.RegisterAssemblyTypes(assembly)
                       .Where(t => t.IsSubclassOf(typeof(ExternalNotificationBase)))
-                     .As<ExternalNotificationBase>().SingleInstance();
+                     .As<ExternalNotificationBase>();
         }
 
         private static void InitDatabase(this ContainerBuilder container)
@@ -56,7 +56,7 @@ namespace NzbDrone.Core
             var appDataPath = environmentProvider.GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            container.Register(c => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase())).As<IDatabase>().SingleInstance();
+            container.Register(c => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase())).As<IDatabase>();
 
             container.RegisterGeneric(typeof(BasicRepository<>)).As(typeof(IBasicRepository<>));
         }

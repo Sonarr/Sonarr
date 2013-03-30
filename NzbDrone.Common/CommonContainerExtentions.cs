@@ -22,12 +22,10 @@ namespace NzbDrone.Common
             }
 
             containerBuilder.RegisterAssemblyTypes(apiAssembly)
-                .AsImplementedInterfaces()
-                .SingleInstance();
+                            .AsImplementedInterfaces();
 
             containerBuilder.RegisterAssemblyTypes(apiAssembly)
-                .AsSelf()
-                .SingleInstance();
+                            .AsSelf();
         }
     }
 }

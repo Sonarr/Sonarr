@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Data.SQLite;
 using Marr.Data;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -16,9 +15,13 @@ namespace NzbDrone.Core.Datastore
     {
         private readonly IMigrationController _migrationController;
 
-        public DbFactory(IMigrationController migrationController)
+        static DbFactory()
         {
             TableMapping.Map();
+        }
+
+        public DbFactory(IMigrationController migrationController)
+        {
             _migrationController = migrationController;
         }
 
