@@ -12,5 +12,5 @@ define([
         onRender: function () {
             NzbDrone.ModelBinder.bind(this.model, this.el);
         }
-    })
-})
+    });
+});

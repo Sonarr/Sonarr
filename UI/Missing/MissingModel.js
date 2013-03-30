@@ -1,4 +1,5 @@
-﻿define(['app'], function (app) {
+﻿"use strict";
+define(['app'], function () {
     NzbDrone.Missing.MissingModel = Backbone.Model.extend({
         mutators: {
             bestDateString     : function () {

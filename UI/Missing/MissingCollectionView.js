@@ -1,6 +1,5 @@
 ﻿'use strict';
-
-define(['app', 'Missing/MissingItemView'], function (app) {
+define(['app', 'Missing/MissingItemView'], function () {
     NzbDrone.Missing.MissingCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView         : NzbDrone.Missing.MissingItemView,
         itemViewContainer: 'tbody',

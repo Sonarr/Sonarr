@@ -1,3 +1,6 @@
+"use strict";
+
+//TODO: global function, not good!
 function bestDateString(sourceDate) {
     if (!sourceDate) {
         return '';
