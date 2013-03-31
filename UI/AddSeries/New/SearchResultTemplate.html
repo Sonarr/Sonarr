@@ -1,11 +1,13 @@
-﻿<div class="accordion-group">
-    <div class="accordion-heading">
-        <a href="http://thetvdb.com/?tab=series&id={{tvDbId}}" target="_blank" class="icon-info-sign pull-left"></a>
-        <a class="accordion-toggle" data-toggle="collapse" href="#{{tvDbId}}">{{title}} {{seriesYear}}</a>
+﻿<div class="row">
+    <div class="span2">
+        <a href="{{traktUrl}}" target="_blank">
+            <img class="series-poster img-polaroid" src="{{banner}}">
+        </a>
     </div>
-    <div id="{{tvDbId}}" class="accordion-body collapse">
-        <div class="accordion-inner">
-            <select class="span7 x-root-folder">
+    <div class="span9">
+
+        <div class="row">
+            <select class="span6 x-root-folder">
                 {{#each rootFolders.models}}
                     <option value="{{id}}">{{attributes.path}}</option>
                 {{/each}}
@@ -16,8 +18,13 @@
                 {{/each}}
             </select>
 
-            <div class="btn btn-success pull-right icon-plus x-add">
-            </div>
+            <div class="btn btn-success icon-plus x-add pull-right"/>
+        </div>
+        <div class="row">
+            <h2>{{title}}</h2>
+        </div>
+        <div class="row">
+            {{overview}}
         </div>
     </div>
 </div>

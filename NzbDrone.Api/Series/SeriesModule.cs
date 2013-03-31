@@ -21,7 +21,7 @@ namespace NzbDrone.Api.Series
         private readonly ISeriesRepository _seriesRepository;
         private readonly IJobController _jobProvider;
 
-        public SeriesModule(ISeriesService seriesService,ISeriesRepository seriesRepository, IJobController jobProvider)
+        public SeriesModule(ISeriesService seriesService, ISeriesRepository seriesRepository, IJobController jobProvider)
             : base("/Series")
         {
             _seriesService = seriesService;
@@ -53,14 +53,14 @@ namespace NzbDrone.Api.Series
 
         private Response AddSeries()
         {
-            var request = Request.Body.FromJson<Core.Tv.Series>();
+            var newSeries = Request.Body.FromJson<Core.Tv.Series>();
 
             //Todo: Alert the user if this series already exists
             //Todo: We need to create the folder if the user is adding a new series
             //(we can just create the folder and it won't blow up if it already exists)
             //We also need to remove any special characters from the filename before attempting to create it           
 
-            _seriesService.AddSeries(request.Title, request.Path, request.TvDbId, request.QualityProfileId, null);
+            _seriesService.AddSeries(newSeries);
 
             return new Response { StatusCode = HttpStatusCode.Created };
         }

@@ -58,6 +58,7 @@
       <option name="m_limit" value="3" />
     </inspection_tool>
     <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSUnresolvedVariable" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="JSUnusedGlobalSymbols" enabled="false" level="INFO" enabled_by_default="false" />
     <inspection_tool class="LabeledStatementJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="LocalVariableNamingConventionJS" enabled="true" level="WARNING" enabled_by_default="true">

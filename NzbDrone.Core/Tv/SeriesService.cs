@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Tv
         bool IsMonitored(int id);
         Series UpdateSeriesInfo(int seriesId);
         Series FindSeries(string title);
-        void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter);
+        void AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
@@ -67,8 +67,7 @@ namespace NzbDrone.Core.Tv
             series.AirTime = tvDbSeries.AirTime;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
-            series.Language = tvDbSeries.Language;
-            series.CleanTitle = tvDbSeries.CleanTitle;
+            series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.Title);
             series.LastInfoSync = DateTime.Now;
             series.Runtime = tvDbSeries.Runtime;
             series.Images = tvDbSeries.Images;
@@ -95,37 +94,22 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.GetByTitle(normalizeTitle);
         }
 
-        public void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
+        public void AddSeries(Series newSeries)
         {
-            _logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
+            Ensure.That(() => newSeries).IsNotNull();
 
-            Ensure.That(() => tvDbSeriesId).IsGreaterThan(0);
-            Ensure.That(() => title).IsNotNullOrWhiteSpace();
-            Ensure.That(() => path).IsNotNullOrWhiteSpace();
+            _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
 
-            var repoSeries = new Series();
-            repoSeries.TvDbId = tvDbSeriesId;
-            repoSeries.Path = path;
-            repoSeries.Monitored = true;
-            repoSeries.QualityProfileId = qualityProfileId;
-            repoSeries.Title = title;
-            repoSeries.CleanTitle = Parser.NormalizeTitle(title);
-            if (qualityProfileId == 0)
-                repoSeries.QualityProfileId = _configService.DefaultQualityProfile;
+            newSeries.Monitored = true;
+            newSeries.CleanTitle = Parser.NormalizeTitle(newSeries.Title);
+            if (newSeries.QualityProfileId == 0)
+                newSeries.QualityProfileId = _configService.DefaultQualityProfile;
 
-            repoSeries.QualityProfile = _qualityProfileService.Get(repoSeries.QualityProfileId);
-            repoSeries.SeasonFolder = _configService.UseSeasonFolder;
-            repoSeries.BacklogSetting = BacklogSettingType.Inherit;
+            newSeries.SeasonFolder = _configService.UseSeasonFolder;
+            newSeries.BacklogSetting = BacklogSettingType.Inherit;
 
-            if (airedAfter.HasValue)
-                repoSeries.CustomStartDate = airedAfter;
-
-            //Todo: Allow the user to set this as part of the addition process.
-            repoSeries.Language = "en";
-
-            _seriesRepository.Insert(repoSeries);
-
-            _eventAggregator.Publish(new SeriesAddedEvent(repoSeries));
+            _seriesRepository.Insert(newSeries);
+            _eventAggregator.Publish(new SeriesAddedEvent(newSeries));
         }
 
         public void UpdateFromSeriesEditor(IList<Series> editedSeries)

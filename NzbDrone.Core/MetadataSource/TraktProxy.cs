@@ -56,6 +56,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Runtime = show.runtime;
             series.Network = show.network;
             series.AirTime = show.air_time;
+            series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
 
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = show.images.poster });

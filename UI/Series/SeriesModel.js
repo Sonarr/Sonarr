@@ -1,4 +1,4 @@
-﻿define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfileCollection) {
+﻿define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFolderCollection'], function (app, qualityProfileCollection, rootFolders) {
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
 
         urlRoot: NzbDrone.Constants.ApiRoot + '/series',
@@ -19,13 +19,29 @@
                 }
 
                 return percent;
+            },
+            banner           : function () {
+                var banner = _.find(this.get('images'), function (image) {
+                    return image.coverType === 1;
+                });
+
+                if (banner) {
+                    return banner.url;
+                }
+
+                return undefined;
+
+            },
+            traktUrl         : function () {
+                return "http://trakt.tv/show/" + this.get('titleSlug');
             }
         },
 
         defaults: {
             episodeFileCount: 0,
             episodeCount    : 0,
-            qualityProfiles : qualityProfileCollection
+            qualityProfiles : qualityProfileCollection,
+            rootFolders     : rootFolders
         }
     });
 

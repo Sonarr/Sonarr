@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Tv
     {
         public Series()
         {
-            Images =new List<MediaCover.MediaCover>();
+            Images = new List<MediaCover.MediaCover>();
         }
 
         public int TvDbId { get; set; }
@@ -28,7 +28,6 @@ namespace NzbDrone.Core.Tv
         public SeriesStatusType Status { get; set; }
         public string Overview { get; set; }
         public String AirTime { get; set; }
-        public string Language { get; set; }
         public string Path { get; set; }
         public bool Monitored { get; set; }
         public int QualityProfileId { get; set; }
@@ -43,7 +42,7 @@ namespace NzbDrone.Core.Tv
         public DateTime? CustomStartDate { get; set; }
         public bool UseSceneNumbering { get; set; }
         public int TvRageId { get; set; }
-        public string TvRageTitle { get; set; }
+        public string TitleSlug { get; set; }
 
         //Todo: This should be a double since there are timezones that aren't on a full hour offset
         public int UtcOffset { get; set; }

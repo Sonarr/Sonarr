@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Eventing;
@@ -18,8 +17,6 @@ namespace NzbDrone.Core.MediaCover
         private readonly Logger _logger;
 
         private readonly string _coverRootFolder;
-
-        private const string COVER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
         public MediaCoverService(HttpProvider httpProvider, DiskProvider diskProvider, EnvironmentProvider environmentProvider, Logger logger)
         {
@@ -54,7 +51,7 @@ namespace NzbDrone.Core.MediaCover
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
 
                 _logger.Info("Downloading {0} for {1}", cover.CoverType, series.Title);
-                _httpProvider.DownloadFile(COVER_URL_PREFIX + cover.Url, fileName);
+                _httpProvider.DownloadFile(cover.Url, fileName);
             }
             catch (Exception e)
             {

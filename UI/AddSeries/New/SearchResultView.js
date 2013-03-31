@@ -22,32 +22,22 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
 
         add: function () {
 
-            var seriesId = this.model.get('tvDbId');
-            var title = this.model.get('title');
             var quality = this.ui.qualityProfile.val();
-            var rootFolderId = this.ui.rootFolder.val();
 
             //Todo: This will create an invalid path on linux...
-            var rootPath = this.model.get('rootFolders').get(rootFolderId).get('path');
-            var path = rootPath + "\\" + title;
+            var rootPath = this.ui.rootFolder.find(":selected").text();
+            var path = rootPath + "\\" + this.model.get('title');
 
-            var model = new NzbDrone.Series.SeriesModel({
-                tvdbId          : seriesId,
-                title           : title,
-                qualityProfileId: quality,
-                path            : path
-            });
+            this.model.set('qualityProfileId', quality);
+            this.model.set('path', path);
 
             var self = this;
 
-            var seriesCollection = new NzbDrone.Series.SeriesCollection();
-            seriesCollection.push(model);
-
-            model.save(undefined, {
+            this.model.save(undefined, {
                 success: function () {
                     var notificationModel = new NzbDrone.Shared.NotificationModel({
                         title  : 'Added',
-                        message: title,
+                        message: self.model.get('title'),
                         level  : 'success'
                     });
 

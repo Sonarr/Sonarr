@@ -13,6 +13,16 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityPro
                     } else {
                         return date;
                     }
+                },
+                banner    : function () {
+                    var banner = _.find(this.get('images'), function (image) {
+                        return image.coverType === 1;
+                    });
+
+                    return banner.url;
+                },
+                traktUrl  : function () {
+                    return "http://trakt.tv/show/" + this.get('titleSlug');
                 }
             },
 

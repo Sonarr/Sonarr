@@ -12,7 +12,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
             searchResult: '#search-result'
         },
 
-        collection: new NzbDrone.AddSeries.SearchResultCollection(),
+        collection: new NzbDrone.Series.SeriesCollection(),
 
         onRender: function () {
             console.log('binding auto complete');
@@ -25,6 +25,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
                     self.$el.data('timeout', window.setTimeout(self.search, 500, self));
                 });
 
+            this.collection.url = NzbDrone.Constants.ApiRoot + '/series/lookup';
             this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
         },
 
