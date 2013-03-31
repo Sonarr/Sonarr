@@ -9,157 +9,137 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Create.Table("Config")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Key").AsString().PrimaryKey()
-                  .WithColumn("Value").AsString().NotNullable();
+            Create.TableForModel("Config")
+                  .WithColumn("Key").AsString().Unique()
+                  .WithColumn("Value").AsString();
 
-            Create.Table("EpisodeFiles")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("SeriesId").AsInt32().NotNullable()
-                  .WithColumn("Path").AsString().NotNullable()
-                  .WithColumn("Quality").AsInt32().NotNullable()
-                  .WithColumn("Proper").AsBoolean().NotNullable()
-                  .WithColumn("Size").AsInt64().NotNullable()
-                  .WithColumn("DateAdded").AsDateTime().NotNullable()
-                  .WithColumn("SeasonNumber").AsInt32().NotNullable()
+            Create.TableForModel("RootFolders")
+                  .WithColumn("Path").AsString().Unique();
+
+            Create.TableForModel("Series")
+                .WithColumn("TvdbId").AsInt32().Unique()
+                .WithColumn("TvRageId").AsInt32().Unique()
+                .WithColumn("ImdbId").AsString().Unique()
+                .WithColumn("Title").AsString()
+                .WithColumn("TitleSlug").AsString().Unique()
+                .WithColumn("CleanTitle").AsString()
+                .WithColumn("Status").AsInt32()
+                .WithColumn("Overview").AsString().Nullable()
+                .WithColumn("AirTime").AsString().Nullable()
+                .WithColumn("Images").AsString()
+                .WithColumn("Path").AsString().Unique()
+                .WithColumn("Monitored").AsBoolean()
+                .WithColumn("QualityProfileId").AsInt32()
+                .WithColumn("SeasonFolder").AsBoolean()
+                .WithColumn("LastInfoSync").AsDateTime().Nullable()
+                .WithColumn("LastDiskSync").AsDateTime().Nullable()
+                .WithColumn("Runtime").AsInt32()
+                .WithColumn("SeriesType").AsInt32()
+                .WithColumn("BacklogSetting").AsInt32()
+                .WithColumn("Network").AsString().Nullable()
+                .WithColumn("CustomStartDate").AsDateTime().Nullable()
+                .WithColumn("UseSceneNumbering").AsBoolean()
+                .WithColumn("UtcOffSet").AsInt32()
+                .WithColumn("FirstAired").AsDateTime().Nullable()
+                .WithColumn("NextAiring").AsDateTime().Nullable();
+
+            Create.TableForModel("Seasons")
+                .WithColumn("SeriesId").AsInt32()
+                .WithColumn("SeasonNumber").AsInt32()
+                .WithColumn("Ignored").AsBoolean();
+
+            Create.TableForModel("Episodes")
+                .WithColumn("TvDbEpisodeId").AsInt32().Unique()
+                .WithColumn("SeriesId").AsInt32()
+                .WithColumn("SeasonNumber").AsInt32()
+                .WithColumn("EpisodeNumber").AsInt32()
+                .WithColumn("Title").AsString().Nullable()
+                .WithColumn("Overview").AsString().Nullable()
+                .WithColumn("Ignored").AsBoolean().Nullable()
+                .WithColumn("EpisodeFileId").AsInt32().Nullable()
+                .WithColumn("AirDate").AsDateTime().Nullable()
+                .WithColumn("GrabDate").AsDateTime().Nullable()
+                .WithColumn("PostDownloadStatus").AsInt32().Nullable()
+                .WithColumn("AbsoluteEpisodeNumber").AsInt32().Nullable()
+                .WithColumn("SceneAbsoluteEpisodeNumber").AsInt32().Nullable()
+                .WithColumn("SceneSeasonNumber").AsInt32().Nullable()
+                .WithColumn("SceneEpisodeNumber").AsInt32().Nullable();
+
+            Create.TableForModel("EpisodeFiles")
+                  .WithColumn("SeriesId").AsInt32()
+                  .WithColumn("Path").AsString().Unique()
+                  .WithColumn("Quality").AsInt32()
+                  .WithColumn("Proper").AsBoolean()
+                  .WithColumn("Size").AsInt64()
+                  .WithColumn("DateAdded").AsDateTime()
+                  .WithColumn("SeasonNumber").AsInt32()
                   .WithColumn("SceneName").AsString().Nullable()
                   .WithColumn("ReleaseGroup").AsString().Nullable();
 
-            Create.Table("Episodes")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("TvDbEpisodeId").AsInt32().Nullable()
-                  .WithColumn("SeriesId").AsInt32().NotNullable()
-                  .WithColumn("SeasonNumber").AsInt32().NotNullable()
-                  .WithColumn("EpisodeNumber").AsInt32().NotNullable()
-                  .WithColumn("Title").AsString().Nullable()
-                  .WithColumn("Overview").AsString().Nullable()
-                  .WithColumn("Ignored").AsBoolean().Nullable()
-                  .WithColumn("EpisodeFileId").AsInt32().Nullable()
-                  .WithColumn("AirDate").AsDateTime().Nullable()
-                  .WithColumn("GrabDate").AsDateTime().Nullable()
-                  .WithColumn("PostDownloadStatus").AsInt32().Nullable()
-                  .WithColumn("AbsoluteEpisodeNumber").AsInt32().Nullable()
-                  .WithColumn("SceneAbsoluteEpisodeNumber").AsInt32().Nullable()
-                  .WithColumn("SceneSeasonNumber").AsInt32().Nullable()
-                  .WithColumn("SceneEpisodeNumber").AsInt32().Nullable();
-
-            Create.Table("ExternalNotificationDefinitions")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Enable").AsBoolean().NotNullable()
-                  .WithColumn("Type").AsString().NotNullable()
-                  .WithColumn("Name").AsString().NotNullable();
-
-            Create.Table("History")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("EpisodeId").AsInt32().NotNullable()
-                  .WithColumn("SeriesId").AsInt32().NotNullable()
-                  .WithColumn("NzbTitle").AsString().NotNullable()
-                  .WithColumn("Date").AsDateTime().NotNullable()
-                  .WithColumn("Quality").AsString().NotNullable()
-                  .WithColumn("Indexer").AsString().NotNullable()
+            Create.TableForModel("History")
+                  .WithColumn("EpisodeId").AsInt32()
+                  .WithColumn("SeriesId").AsInt32()
+                  .WithColumn("NzbTitle").AsString()
+                  .WithColumn("Date").AsDateTime()
+                  .WithColumn("Quality").AsString()
+                  .WithColumn("Indexer").AsString()
                   .WithColumn("NzbInfoUrl").AsString().Nullable()
                   .WithColumn("ReleaseGroup").AsString().Nullable();
 
-            Create.Table("IndexerDefinitions")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Enable").AsBoolean().NotNullable()
-                  .WithColumn("Type").AsString().NotNullable()
-                  .WithColumn("Name").AsString().NotNullable();
+            Create.TableForModel("ExternalNotificationDefinitions")
+                  .WithColumn("Enable").AsBoolean()
+                  .WithColumn("Type").AsString().Unique()
+                  .WithColumn("Name").AsString().Unique();
 
-            Create.Table("JobDefinitions")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Enable").AsBoolean().NotNullable()
-                  .WithColumn("Type").AsString().NotNullable()
-                  .WithColumn("Name").AsString().NotNullable()
-                  .WithColumn("Interval").AsInt32().NotNullable()
-                  .WithColumn("LastExecution").AsDateTime().NotNullable()
-                  .WithColumn("Success").AsBoolean().NotNullable();
+            Create.TableForModel("JobDefinitions")
+                  .WithColumn("Enable").AsBoolean()
+                  .WithColumn("Type").AsString().Unique()
+                  .WithColumn("Name").AsString().Unique()
+                  .WithColumn("Interval").AsInt32()
+                  .WithColumn("LastExecution").AsDateTime()
+                  .WithColumn("Success").AsBoolean();
 
-            Create.Table("NewznabDefinitions")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Enable").AsBoolean().NotNullable()
-                  .WithColumn("Name").AsString().NotNullable()
-                  .WithColumn("Url").AsString().NotNullable()
+            Create.TableForModel("IndexerDefinitions")
+                  .WithColumn("Enable").AsBoolean()
+                  .WithColumn("Type").AsString().Unique()
+                  .WithColumn("Name").AsString().Unique();
+
+            Create.TableForModel("NewznabDefinitions")
+                  .WithColumn("Enable").AsBoolean()
+                  .WithColumn("Name").AsString().Unique()
+                  .WithColumn("Url").AsString()
                   .WithColumn("ApiKey").AsString().Nullable()
-                  .WithColumn("BuiltIn").AsBoolean().NotNullable();
+                  .WithColumn("BuiltIn").AsBoolean();
 
-            Create.Table("QualityProfiles")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Name").AsString().NotNullable()
-                  .WithColumn("Cutoff").AsInt32().NotNullable()
-                  .WithColumn("Allowed").AsString().NotNullable();
+            Create.TableForModel("QualityProfiles")
+                  .WithColumn("Name").AsString().Unique()
+                  .WithColumn("Cutoff").AsInt32()
+                  .WithColumn("Allowed").AsString();
 
-            Create.Table("QualitySizes")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("QualityId").AsInt32().NotNullable().Unique()
-                  .WithColumn("Name").AsString().NotNullable()
-                  .WithColumn("MinSize").AsInt32().NotNullable()
-                  .WithColumn("MaxSize").AsInt32().NotNullable();
+            Create.TableForModel("QualitySizes")
+                  .WithColumn("QualityId").AsInt32().Unique()
+                  .WithColumn("Name").AsString().Unique()
+                  .WithColumn("MinSize").AsInt32()
+                  .WithColumn("MaxSize").AsInt32();
 
-            Create.Table("RootFolders")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Path").AsString().NotNullable();
+            Create.TableForModel("SceneMappings")
+                  .WithColumn("CleanTitle").AsString()
+                  .WithColumn("SceneName").AsString()
+                  .WithColumn("TvdbId").AsInt32()
+                  .WithColumn("SeasonNumber").AsInt32();
 
-            Create.Table("SceneMappings")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("CleanTitle").AsString().NotNullable()
-                  .WithColumn("SceneName").AsString().NotNullable()
-                  .WithColumn("TvdbId").AsInt32().NotNullable()
-                  .WithColumn("SeasonNumber").AsInt32().NotNullable();
-
-            Create.Table("Seasons")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("SeriesId").AsInt32().NotNullable()
-                  .WithColumn("SeasonNumber").AsInt32().NotNullable()
-                  .WithColumn("Ignored").AsBoolean().NotNullable();
-
-            Create.Table("Series")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("TvdbId").AsInt32().NotNullable()
-                  .WithColumn("Title").AsString().NotNullable()
-                  .WithColumn("TitleSlug").AsString().NotNullable()
-                  .WithColumn("CleanTitle").AsString().NotNullable()
-                  .WithColumn("Status").AsInt32().NotNullable()
-                  .WithColumn("Overview").AsString().Nullable()
-                  .WithColumn("AirTime").AsString().Nullable()
-                  .WithColumn("Images").AsString()
-                  .WithColumn("Path").AsString().NotNullable()
-                  .WithColumn("Monitored").AsBoolean().NotNullable()
-                  .WithColumn("QualityProfileId").AsString().NotNullable()
-                  .WithColumn("SeasonFolder").AsBoolean().NotNullable()
-                  .WithColumn("LastInfoSync").AsDateTime().Nullable()
-                  .WithColumn("LastDiskSync").AsDateTime().Nullable()
-                  .WithColumn("Runtime").AsInt32().NotNullable()
-                  .WithColumn("SeriesType").AsInt32().NotNullable()
-                  .WithColumn("BacklogSetting").AsInt32().NotNullable()
-                  .WithColumn("Network").AsString().Nullable()
-                  .WithColumn("CustomStartDate").AsDateTime().Nullable()
-                  .WithColumn("UseSceneNumbering").AsBoolean().NotNullable()
-                  .WithColumn("TvRageId").AsInt32().Nullable()
-                  .WithColumn("TvRageTitle").AsString().Nullable()
-                  .WithColumn("UtcOffSet").AsInt32().NotNullable()
-                  .WithColumn("FirstAired").AsDateTime().Nullable()
-                  .WithColumn("NextAiring").AsDateTime().Nullable();
-
-            Create.Table("MediaCovers")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("SeriesId").AsInt32().NotNullable()
-                  .WithColumn("Url").AsString().NotNullable()
-                  .WithColumn("CoverType").AsInt32().NotNullable();
         }
 
         protected override void LogDbUpgrade()
         {
-            Create.Table("Logs")
-                  .WithColumn("Id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("Message").AsString().NotNullable()
-                  .WithColumn("Time").AsDateTime().NotNullable()
-                  .WithColumn("Logger").AsString().NotNullable()
+            Create.TableForModel("Logs")
+                  .WithColumn("Message").AsString()
+                  .WithColumn("Time").AsDateTime()
+                  .WithColumn("Logger").AsString()
                   .WithColumn("Method").AsString().Nullable()
                   .WithColumn("Exception").AsString().Nullable()
                   .WithColumn("ExceptionType").AsString().Nullable()
-                  .WithColumn("Level").AsString().NotNullable();
+                  .WithColumn("Level").AsString();
         }
     }
 }
