@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Reflection;
-using FastReflection;
+using Fasterflect;
 
 namespace Marr.Data.Reflection
 {
     public class CachedReflectionStrategy : IReflectionStrategy
     {
-        private FastReflection.CachedReflector _reflector;
-
-        public CachedReflectionStrategy()
-        {
-            _reflector = new CachedReflector();
-        }
 
         /// <summary>
         /// Sets an entity field value by name to the passed in 'val'.
@@ -29,24 +20,27 @@ namespace Marr.Data.Reflection
                 if (val == DBNull.Value)
                 {
                     if (member.MemberType == MemberTypes.Field)
-                        _reflector.SetValue(member, entity, ReflectionHelper.GetDefaultValue((member as FieldInfo).FieldType));
-
+                    {
+                        entity.SetFieldValue(member.Name, ReflectionHelper.GetDefaultValue(((FieldInfo)member).FieldType));
+                    }
                     else if (member.MemberType == MemberTypes.Property)
                     {
-                        var pi = (member as PropertyInfo);
+                        var pi = (PropertyInfo)member;
                         if (pi.CanWrite)
-                            _reflector.SetValue(member, entity, ReflectionHelper.GetDefaultValue((member as PropertyInfo).PropertyType));
+                        {
+                            entity.SetPropertyValue(member.Name, ReflectionHelper.GetDefaultValue(((PropertyInfo)member).PropertyType));
+                        }
                     }
                 }
                 else
                 {
                     if (member.MemberType == MemberTypes.Field)
-                        _reflector.SetValue(member, entity, val);
-                    else if (member.MemberType == MemberTypes.Property)
                     {
-                        var pi = (member as PropertyInfo);
-                        if (pi.CanWrite)
-                            _reflector.SetValue(member, entity, val);
+                        entity.SetFieldValue(member.Name, val);
+                    }
+                    else if (member.MemberType == MemberTypes.Property && ((PropertyInfo)member).CanWrite)
+                    {
+                        member.Set(entity, val);
                     }
                 }
             }
@@ -66,12 +60,12 @@ namespace Marr.Data.Reflection
 
             if (member.MemberType == MemberTypes.Field)
             {
-                return _reflector.GetValue(member, entity);
+                return entity.GetFieldValue(member.Name);
             }
-            else if (member.MemberType == MemberTypes.Property)
+
+            if (member.MemberType == MemberTypes.Property && ((PropertyInfo)member).CanRead)
             {
-                if ((member as PropertyInfo).CanRead)
-                    return _reflector.GetValue(member, entity);
+                return entity.GetPropertyValue(member.Name);
             }
 
             throw new DataMappingException(string.Format("The DataMapper could not get the value for {0}.{1}.", entity.GetType().Name, fieldName));
@@ -84,7 +78,7 @@ namespace Marr.Data.Reflection
         /// <returns></returns>
         public object CreateInstance(Type type)
         {
-            return _reflector.Instantiate(type);
+            return type.CreateInstance();
         }
     }
 }

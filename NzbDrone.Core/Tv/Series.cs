@@ -23,6 +23,9 @@ namespace NzbDrone.Core.Tv
         }
 
         public int TvDbId { get; set; }
+        public int TvRageId { get; set; }
+        public string ImdbId { get; set; }
+
         public string Title { get; set; }
         public string CleanTitle { get; set; }
         public SeriesStatusType Status { get; set; }
@@ -41,7 +44,7 @@ namespace NzbDrone.Core.Tv
         public string Network { get; set; }
         public DateTime? CustomStartDate { get; set; }
         public bool UseSceneNumbering { get; set; }
-        public int TvRageId { get; set; }
+
         public string TitleSlug { get; set; }
 
         //Todo: This should be a double since there are timezones that aren't on a full hour offset

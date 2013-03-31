@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using Marr.Data;
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(MediaCover.MediaCover), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<MediaCover.MediaCover>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
         }
     }

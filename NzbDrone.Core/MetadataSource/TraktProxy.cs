@@ -50,6 +50,7 @@ namespace NzbDrone.Core.MetadataSource
             var series = new Series();
             series.TvDbId = show.tvdb_id;
             series.TvRageId = show.tvrage_id;
+            series.ImdbId = show.imdb_id;
             series.Title = show.title;
             series.FirstAired = show.first_aired;
             series.Overview = show.overview;

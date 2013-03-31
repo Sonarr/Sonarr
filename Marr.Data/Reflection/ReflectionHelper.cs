@@ -14,15 +14,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Reflection;
-/* * 
- * The FastReflection library was written by Renaud Bédard (renaud.bedard@gmail.com)
- * http://theinstructionlimit.com/?p=76
- * */
-using FastReflection;
 
 // ReSharper disable CheckNamespace
 namespace Marr.Data
