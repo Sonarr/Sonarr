@@ -46,16 +46,16 @@ namespace NzbDrone.Core.Tv
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly TvDbProxy _tvDbProxy;
+        private readonly IProvideEpisodeInfo _episodeInfoProxy;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IEventAggregator _eventAggregator;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public EpisodeService(TvDbProxy tvDbProxyProxy, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator, IConfigService configService, Logger logger)
+        public EpisodeService(IProvideEpisodeInfo episodeInfoProxy, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator, IConfigService configService, Logger logger)
         {
-            _tvDbProxy = tvDbProxyProxy;
+            _episodeInfoProxy = episodeInfoProxy;
             _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
             _eventAggregator = eventAggregator;
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-            var tvdbEpisodes = _tvDbProxy.GetEpisodes(series.TvDbId);
+            var tvdbEpisodes = _episodeInfoProxy.GetEpisodeInfo(series.TvDbId);
 
             var seriesEpisodes = GetEpisodeBySeries(series.Id);
             var updateList = new List<Episode>();

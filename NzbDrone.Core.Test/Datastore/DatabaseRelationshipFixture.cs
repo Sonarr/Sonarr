@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class DatabaseRelationshipFixture : DbTest
     {
-        [Test]
+/*        [Test]
         [Explicit]
         public void benchmark()
         {
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.Datastore
 
             var loadedSeries = Db.Single<Series>();
             loadedSeries.Covers.Value.Should().HaveSameCount(covers);
-        }
+        }*/
 
         [Test]
         public void one_to_one()

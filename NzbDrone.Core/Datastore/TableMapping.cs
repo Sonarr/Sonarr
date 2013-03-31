@@ -39,17 +39,13 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
             Mapper.Entity<History.History>().RegisterModel("History")
-                .HasOne<History.History, Episode>(h => h.Episode, h => h.EpisodeId);
+                .HasOne(h => h.Episode, h => h.EpisodeId);
 
-            Mapper.Entity<Series>().RegisterModel("Series")
-                  .Relationships.AutoMapComplexTypeProperties<ILazyLoaded>()
-                  .For(c => c.Covers)
-                  .LazyLoad((db, series) => db.Query<MediaCover.MediaCover>().Where(cover => cover.SeriesId == series.Id).ToList());
+            Mapper.Entity<Series>().RegisterModel("Series");
 
             Mapper.Entity<Season>().RegisterModel("Seasons");
             Mapper.Entity<Episode>().RegisterModel("Episodes");
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles");
-            Mapper.Entity<MediaCover.MediaCover>().RegisterModel("MediaCovers");
             Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles").For(q => q.DbAllowed).SetColumnName("Allowed").Ignore(q => q.Allowed);
             Mapper.Entity<QualitySize>().RegisterModel("QualitySizes");
 
@@ -63,6 +59,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(MediaCover.MediaCover), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
         }
     }

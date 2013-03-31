@@ -137,7 +137,6 @@
     <Compile Include="UdpProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="EnsureThat\ve-3BAF.tmp" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

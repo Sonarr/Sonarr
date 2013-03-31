@@ -122,6 +122,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("Status").AsInt32().NotNullable()
                   .WithColumn("Overview").AsString().Nullable()
                   .WithColumn("AirTime").AsString().Nullable()
+                  .WithColumn("Images").AsString()
                   .WithColumn("Language").AsString().NotNullable()
                   .WithColumn("Path").AsString().NotNullable()
                   .WithColumn("Monitored").AsBoolean().NotNullable()

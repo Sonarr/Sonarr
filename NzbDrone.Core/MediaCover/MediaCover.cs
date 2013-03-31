@@ -1,4 +1,3 @@
-using System.Linq;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.MediaCover
@@ -11,10 +10,9 @@ namespace NzbDrone.Core.MediaCover
         Fanart = 2
     }
 
-    public class MediaCover : ModelBase
+    public class MediaCover : IEmbeddedDocument
     {
         public MediaCoverTypes CoverType { get; set; }
         public string Url { get; set; }
-        public int SeriesId { get; set; }
     }
 }

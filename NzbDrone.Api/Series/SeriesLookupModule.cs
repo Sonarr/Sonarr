@@ -1,27 +1,24 @@
-﻿using System.Linq;
-using Nancy;
+﻿using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.QualityType;
 using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Api.Series
 {
     public class SeriesLookupModule : NzbDroneApiModule
     {
-        private readonly TvDbProxy _tvDbProxy;
+        private readonly ISearchForNewSeries _searchProxy;
 
-        public SeriesLookupModule(TvDbProxy tvDbProxy)
+        public SeriesLookupModule(ISearchForNewSeries searchProxy)
             : base("/Series/lookup")
         {
-            _tvDbProxy = tvDbProxy;
+            _searchProxy = searchProxy;
             Get["/"] = x => GetQualityType();
         }
 
 
         private Response GetQualityType()
         {
-            var tvDbResults = _tvDbProxy.SearchSeries((string)Request.Query.term);
+            var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
             return tvDbResults.AsResponse();
         }
     }

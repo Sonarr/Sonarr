@@ -274,6 +274,20 @@
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\GhostFileCleanupService.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
+    <Compile Include="MetadataSource\IProvideEpisodeInfo.cs" />
+    <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
+    <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
+    <Compile Include="MetadataSource\TraktProxy.cs" />
+    <Compile Include="MetadataSource\Trakt\Actor.cs" />
+    <Compile Include="MetadataSource\Trakt\Episode.cs" />
+    <Compile Include="MetadataSource\Trakt\Images.cs" />
+    <Compile Include="MetadataSource\Trakt\People.cs" />
+    <Compile Include="MetadataSource\Trakt\Ratings.cs" />
+    <Compile Include="MetadataSource\Trakt\Season.cs" />
+    <Compile Include="MetadataSource\Trakt\Show.cs" />
+    <Compile Include="MetadataSource\Trakt\Stats.cs" />
+    <Compile Include="MetadataSource\Trakt\TopEpisode.cs" />
+    <Compile Include="MetadataSource\Trakt\TopWatcher.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
@@ -322,9 +336,6 @@
     <Compile Include="Download\Clients\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabVersionModel.cs" />
     <Compile Include="Model\StatsModel.cs" />
-    <Compile Include="Model\TvRage\TvRageEpisode.cs" />
-    <Compile Include="Model\TvRage\TvRageSearchResult.cs" />
-    <Compile Include="Model\TvRage\TvRageSeries.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
@@ -356,8 +367,6 @@
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />
     <Compile Include="Model\Xbmc\VersionResult.cs" />
-    <Compile Include="MetadataSource\TvRageMappingProvider.cs" />
-    <Compile Include="MetadataSource\TvRageProxy.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Qualities\Quality.cs" />
@@ -481,9 +490,6 @@
     <Compile Include="Providers\SmtpProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MetadataSource\TvDbProxy.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\TwitterProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -519,21 +525,6 @@
     <Compile Include="ReferenceData\SceneMapping.cs" />
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tvdb\Tvdb.cs" />
-    <Compile Include="Tvdb\Tvdb.Sync.cs" />
-    <Compile Include="Tvdb\TvdbActor.cs" />
-    <Compile Include="Tvdb\TvdbAsyncResult.cs" />
-    <Compile Include="Tvdb\TvdbBanner.cs" />
-    <Compile Include="Tvdb\TvdbEpisodes.cs" />
-    <Compile Include="Tvdb\TvdbLanguages.cs" />
-    <Compile Include="Tvdb\TvdbMirrors.cs" />
-    <Compile Include="Tvdb\TvdbSeriesBase.cs" />
-    <Compile Include="Tvdb\TvdbSeriesFull.cs" />
-    <Compile Include="Tvdb\TvdbSeriesSearch.cs" />
-    <Compile Include="Tvdb\TvdbSeriesSearchItem.cs" />
-    <Compile Include="Tvdb\TvdbServerTime.cs" />
-    <Compile Include="Tvdb\TvdbUpdate.cs" />
-    <Compile Include="Tvdb\TvdbUpdateItems.cs" />
     <Compile Include="Tv\SeriesStatusType.cs" />
   </ItemGroup>
   <ItemGroup>

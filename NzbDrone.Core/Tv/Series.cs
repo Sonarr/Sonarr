@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
 
@@ -17,7 +19,7 @@ namespace NzbDrone.Core.Tv
     {
         public Series()
         {
-            Covers = new LazyList<MediaCover.MediaCover>();
+            Images =new List<MediaCover.MediaCover>();
         }
 
         public int TvDbId { get; set; }
@@ -34,7 +36,7 @@ namespace NzbDrone.Core.Tv
         public DateTime? LastInfoSync { get; set; }
         public DateTime? LastDiskSync { get; set; }
         public int Runtime { get; set; }
-        public LazyList<MediaCover.MediaCover> Covers { get; set; }
+        public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public BacklogSettingType BacklogSetting { get; set; }
         public string Network { get; set; }

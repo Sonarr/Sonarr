@@ -37,7 +37,7 @@ namespace NzbDrone.Core.MediaCover
 
         private void EnsureCovers(Series series)
         {
-            foreach (var cover in series.Covers.Value)
+            foreach (var cover in series.Images)
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
                 if (!_diskProvider.FileExists(fileName))
