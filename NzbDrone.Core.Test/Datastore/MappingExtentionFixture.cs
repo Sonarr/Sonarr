@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
@@ -33,6 +35,15 @@ namespace NzbDrone.Core.Test.Datastore
 
             public int ReadOnly { get; private set; }
             public int WriteOnly { private get; set; }
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<EmbeddedType>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(EmbeddedType), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
+            
         }
 
 

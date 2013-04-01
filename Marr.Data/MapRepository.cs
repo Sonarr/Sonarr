@@ -38,7 +38,7 @@ namespace Marr.Data
         internal Dictionary<Type, string> Tables { get; set; }
         internal Dictionary<Type, ColumnMapCollection> Columns { get; set; }
         internal Dictionary<Type, RelationshipCollection> Relationships { get; set; }
-        internal Dictionary<Type, IConverter> TypeConverters { get; set; }
+        public Dictionary<Type, IConverter> TypeConverters { get; private set; }
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
@@ -203,14 +203,7 @@ namespace Marr.Data
         /// <param name="converter">An IConverter object that will handle the data conversion.</param>
         public void RegisterTypeConverter(Type type, IConverter converter)
         {
-            if (TypeConverters.ContainsKey(type))
-            {
-                TypeConverters[type] = converter;
-            }
-            else
-            {
-                TypeConverters.Add(type, converter);
-            }
+            TypeConverters[type] = converter;
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Qualities
 {
-    public class Quality : IComparable<Quality>, IEmbeddedDocument
+    public class Quality : IComparable<Quality>
     {
         public int Id { get; set; }
         public string Name { get; set; }

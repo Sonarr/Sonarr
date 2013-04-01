@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection;
+using System.Linq;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Configuration;
@@ -16,7 +15,6 @@ using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using BooleanIntConverter = NzbDrone.Core.Datastore.Converters.BooleanIntConverter;
-using System.Linq;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -56,12 +54,28 @@ namespace NzbDrone.Core.Datastore
 
         private static void RegisterMappers()
         {
+            RegisterEmbeddedConverter();
+
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<MediaCover.MediaCover>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
+        }
+
+        private static void RegisterEmbeddedConverter()
+        {
+            var embeddedTypes = typeof(IEmbeddedDocument).Assembly.GetTypes()
+                                                          .Where(c => c.GetInterfaces().Any(i => i == typeof(IEmbeddedDocument)));
+
+
+            var embeddedConvertor = new EmbeddedDocumentConverter();
+            var genericListDefinition = typeof(List<>).GetGenericTypeDefinition();
+            foreach (var embeddedType in embeddedTypes)
+            {
+                var embeddedListType = genericListDefinition.MakeGenericType(embeddedType);
+                MapRepository.Instance.RegisterTypeConverter(embeddedType, embeddedConvertor);
+                MapRepository.Instance.RegisterTypeConverter(embeddedListType, embeddedConvertor);
+            }
         }
     }
 }

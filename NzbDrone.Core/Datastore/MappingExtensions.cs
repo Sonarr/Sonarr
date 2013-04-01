@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Marr.Data;
 using Marr.Data.Mapping;
 
 namespace NzbDrone.Core.Datastore
@@ -25,19 +26,18 @@ namespace NzbDrone.Core.Datastore
 
             if (propertyInfo == null) return false;
 
-            if (propertyInfo.PropertyType.GetInterfaces().Any(i => i == typeof(IEmbeddedDocument)))
+
+            if (!propertyInfo.IsReadable() || !propertyInfo.IsWritable())
+            {
+                return false;
+            }
+
+            if (IsSimpleType(propertyInfo.PropertyType) || MapRepository.Instance.TypeConverters.ContainsKey(propertyInfo.PropertyType))
             {
                 return true;
             }
 
-            if (typeof(IEnumerable<IEmbeddedDocument>).IsAssignableFrom(propertyInfo.PropertyType))
-            {
-                return true;
-            }
-
-            var result = propertyInfo.IsReadable() && propertyInfo.IsWritable() && IsSimpleType(propertyInfo.PropertyType);
-
-            return result;
+            return false;
         }
 
         public static bool IsSimpleType(Type type)
