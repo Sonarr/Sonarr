@@ -1,19 +1,11 @@
-﻿
-
-using System.Linq;
+﻿using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using NCrunch.Framework;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Model;
-
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.JobTests
 {
@@ -56,37 +48,43 @@ namespace NzbDrone.Core.Test.JobTests
             IEnumerable<IJob> fakeJobs = new List<IJob> { _fakeJob };
             Mocker.SetConstant(fakeJobs);
 
-            Subject.Init();
-
             var deletedJob = Builder<JobDefinition>.CreateNew()
-                                .With(c => c.Id = 0)
-                                .Build();
+                .With(c => c.Id = 0)
+                .Build();
 
             Db.Insert(deletedJob);
+
+            //Make sure deleted job is stored
+            AllStoredModels.Should().HaveCount(1);
+            AllStoredModels.Should().Contain(c => c.Type == deletedJob.Type);
+
             Subject.Init();
 
+            //Make sure init has cleaned up the deleted job
             AllStoredModels.Should().HaveCount(1);
             AllStoredModels.Should().NotContain(c => c.Type == deletedJob.Type);
         }
 
         [Test]
-        public void inti_should_removed_jobs_that_no_longer_exist_even_with_same_name()
+        public void init_should_removed_jobs_that_no_longer_exist_even_with_same_name()
         {
             IEnumerable<IJob> fakeJobs = new List<IJob> { _fakeJob };
             Mocker.SetConstant(fakeJobs);
-
-            Subject.Init();
 
             var deletedJob = Builder<JobDefinition>.CreateNew()
                 .With(c => c.Name = _fakeJob.Name)
                 .With(c => c.Id = 0)
                 .Build();
 
-
             Db.Insert(deletedJob);
+
+            //Make sure deleted job is stored
+            AllStoredModels.Should().HaveCount(1);
+            AllStoredModels.Should().Contain(c => c.Type == deletedJob.Type);
+
             Subject.Init();
 
-
+            //Make sure init has cleaned up the deleted job
             AllStoredModels.Should().HaveCount(1);
             AllStoredModels.Should().NotContain(c => c.Type == deletedJob.Type);
         }

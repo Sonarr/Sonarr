@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.ServiceModel.Syndication;
-using System.Threading;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Test.ProviderTests;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

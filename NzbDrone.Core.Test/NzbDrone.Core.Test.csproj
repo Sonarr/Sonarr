@@ -170,7 +170,6 @@
     <Compile Include="Qualities\QualityFixture.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
-    <Compile Include="JobTests\RssSyncJobTest.cs" />
     <Compile Include="JobTests\PostDownloadScanJobFixture.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ParserTests\QualityParserFixture.cs" />
@@ -179,7 +178,6 @@
     <Compile Include="DecisionEngineTests\CustomStartDateSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\CleanUpDropFolderFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
-    <Compile Include="ProviderTests\DiskScanProviderTests\ScanFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDropDirectoryFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessVideoFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\CleanupFixture.cs" />

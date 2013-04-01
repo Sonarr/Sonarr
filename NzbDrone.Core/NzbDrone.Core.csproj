@@ -208,7 +208,7 @@
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
-    <Compile Include="Datastore\Migration\Framework\NlogAnnouncer.cs" />
+    <Compile Include="Datastore\Migration\Framework\MigrationLogger.cs" />
     <Compile Include="Datastore\Migration\Migration20130324.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
     <Compile Include="Datastore\MigrationType.cs" />
