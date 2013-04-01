@@ -4,6 +4,8 @@ using System.Linq;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DataAugmentation;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Indexers;
@@ -11,10 +13,8 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
-using BooleanIntConverter = NzbDrone.Core.Datastore.Converters.BooleanIntConverter;
 
 namespace NzbDrone.Core.Datastore
 {

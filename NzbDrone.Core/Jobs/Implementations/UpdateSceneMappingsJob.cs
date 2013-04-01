@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
+using NzbDrone.Core.DataAugmentation;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.ReferenceData;
 
 namespace NzbDrone.Core.Jobs.Implementations
 {

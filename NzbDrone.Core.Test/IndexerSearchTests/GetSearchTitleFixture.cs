@@ -1,7 +1,8 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.ReferenceData;
+using NzbDrone.Core.DataAugmentation;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 

@@ -1,8 +1,7 @@
-﻿using System.Linq;
 using Newtonsoft.Json;
 using NzbDrone.Core.Datastore;
 
-namespace NzbDrone.Core.ReferenceData
+namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public class SceneMapping : ModelBase
     {

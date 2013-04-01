@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Core.ReferenceData
+namespace NzbDrone.Core.DataAugmentation.DailySeries
 {
 
     public interface IDailySeriesDataProxy

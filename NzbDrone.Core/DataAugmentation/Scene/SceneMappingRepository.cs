@@ -1,8 +1,7 @@
-using System.Data;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 
-namespace NzbDrone.Core.ReferenceData
+namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingRepository : IBasicRepository<SceneMapping>
     {

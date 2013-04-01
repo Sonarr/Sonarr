@@ -5,11 +5,12 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DataAugmentation;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.ReferenceData;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv

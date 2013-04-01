@@ -189,6 +189,12 @@
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtensions.cs" />
+    <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
+    <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingProvider.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
@@ -315,9 +321,6 @@
     <Compile Include="Organizer\NameSpecification.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
-    <Compile Include="ReferenceData\DailySeriesDataProxy.cs" />
-    <Compile Include="ReferenceData\SceneMappingProxy.cs" />
-    <Compile Include="ReferenceData\SceneMappingRepository.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
@@ -472,14 +475,8 @@
     <Compile Include="Qualities\QualitySizeService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ReferenceData\DailySeriesService.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
     <Compile Include="RootFolders\RootFolderService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReferenceData\SceneMappingProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\SearchProvider.cs">
@@ -523,7 +520,6 @@
     <Compile Include="Qualities\QualitySize.cs" />
     <Compile Include="Qualities\QualityProfile.cs" />
     <Compile Include="RootFolders\RootFolder.cs" />
-    <Compile Include="ReferenceData\SceneMapping.cs" />
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tv\SeriesStatusType.cs" />

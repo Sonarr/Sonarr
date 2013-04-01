@@ -12,12 +12,12 @@ namespace NzbDrone.Core.Test.Framework
             return builder.With(c => c.Id = 0).Build();
         }
 
-        public static List<T> BuildList<T>(this IOperable<T> builder) where T : ModelBase, new()
+        public static List<T> BuildList<T>(this IListBuilder<T> builder) where T : ModelBase, new()
         {
             return builder.Build().ToList();
         }
 
-        public static List<T> BuildListOfNew<T>(this IOperable<T> builder) where T : ModelBase, new()
+        public static List<T> BuildListOfNew<T>(this IListBuilder<T> builder) where T : ModelBase, new()
         {
             return BuildList<T>(builder.All().With(c => c.Id = 0));
         }

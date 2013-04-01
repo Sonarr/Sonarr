@@ -1,15 +1,15 @@
-﻿using System.Linq;
 using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
 
-namespace NzbDrone.Core.ReferenceData
+namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
         void UpdateMappings();
         string GetSceneName(int tvdbId, int seasonNumber = -1);
-        Nullable<Int32> GetTvDbId(string cleanName);
+        Nullable<int> GetTvDbId(string cleanName);
         string GetCleanName(int tvdbId);
     }
 
@@ -32,12 +32,19 @@ namespace NzbDrone.Core.ReferenceData
             {
                 var mappings = _sceneMappingProxy.Fetch();
 
-                _repository.Purge();
-                _repository.InsertMany(mappings);
+                if (mappings.Any())
+                {
+                    _repository.Purge();
+                    _repository.InsertMany(mappings);
+                }
+                else
+                {
+                    _logger.Warn("Received empty list of mapping. will not update.");
+                }
             }
             catch (Exception ex)
             {
-                _logger.InfoException("Failed to Update Scene Mappings:", ex);
+                _logger.ErrorException("Failed to Update Scene Mappings:", ex);
             }
         }
 
@@ -45,7 +52,7 @@ namespace NzbDrone.Core.ReferenceData
         {
             var mapping = _repository.FindByTvdbId(tvdbId);
 
-            if(mapping == null) return null;
+            if (mapping == null) return null;
 
             return mapping.SceneName;
         }

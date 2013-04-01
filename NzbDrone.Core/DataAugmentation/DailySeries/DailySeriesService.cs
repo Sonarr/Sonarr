@@ -1,7 +1,6 @@
-﻿using System.Linq;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.ReferenceData
+namespace NzbDrone.Core.DataAugmentation.DailySeries
 {
     public class DailySeriesService
     {
