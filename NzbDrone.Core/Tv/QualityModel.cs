@@ -11,12 +11,13 @@ namespace NzbDrone.Core.Tv
 
         public Boolean Proper { get; set; }
 
-        public QualityModel():this(Quality.Unknown, false)
+        public QualityModel()
+            : this(Quality.Unknown)
         {
-            
+
         }
 
-        public QualityModel(Quality quality, Boolean proper)
+        public QualityModel(Quality quality, Boolean proper = false)
         {
             Quality = quality;
             Proper = proper;
@@ -113,8 +114,8 @@ namespace NzbDrone.Core.Tv
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (QualityModel)) return false;
-            return Equals((QualityModel) obj);
+            if (obj.GetType() != typeof(QualityModel)) return false;
+            return Equals((QualityModel)obj);
         }
     }
 }

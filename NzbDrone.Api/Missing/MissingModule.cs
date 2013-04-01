@@ -10,9 +10,9 @@ namespace NzbDrone.Api.Missing
 {
     public class MissingModule : NzbDroneApiModule
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
-        public MissingModule(EpisodeService episodeService)
+        public MissingModule(IEpisodeService episodeService)
             : base("/missing")
         {
             _episodeService = episodeService;

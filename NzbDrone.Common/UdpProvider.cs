@@ -56,8 +56,8 @@ namespace NzbDrone.Common
             }
             else
             {
-                header[6] = (byte)(((ushort)PacketType.Blob & 0xff00) >> 8);
-                header[7] = (byte)((ushort)PacketType.Blob & 0x00ff);
+                header[6] = ((ushort)PacketType.Blob & 0xff00) >> 8;
+                header[7] = (ushort)PacketType.Blob & 0x00ff;
             }
 
             header[8] = (byte)((currentPacket & 0xff000000) >> 24);

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RssSyncJob : IJob
     {
-        private readonly DownloadProvider _downloadProvider;
+        private readonly DownloadService _downloadService;
         private readonly IIndexerService _indexerService;
         private readonly IDownloadDirector DownloadDirector;
         private readonly IConfigService _configService;
@@ -21,9 +21,9 @@ namespace NzbDrone.Core.Jobs.Implementations
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(DownloadProvider downloadProvider, IIndexerService indexerService, IDownloadDirector downloadDirector, IConfigService configService)
+        public RssSyncJob(DownloadService downloadService, IIndexerService indexerService, IDownloadDirector downloadDirector, IConfigService configService)
         {
-            _downloadProvider = downloadProvider;
+            _downloadService = downloadService;
             _indexerService = indexerService;
             DownloadDirector = downloadDirector;
             _configService = configService;
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 {
                     if (DownloadDirector.GetDownloadDecision(episodeParseResult).Approved)
                     {
-                        _downloadProvider.DownloadReport(episodeParseResult);
+                        _downloadService.DownloadReport(episodeParseResult);
                     }
                 }
                 catch (Exception e)

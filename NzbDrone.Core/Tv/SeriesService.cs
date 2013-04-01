@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Tv
             foreach (var series in allSeries)
             {
                 //Only update parameters that can be changed in MassEdit
-                var edited = editedSeries.Single(s => ((ModelBase)s).Id == series.Id);
+                var edited = editedSeries.Single(s => s.Id == series.Id);
                 series.QualityProfileId = edited.QualityProfileId;
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;

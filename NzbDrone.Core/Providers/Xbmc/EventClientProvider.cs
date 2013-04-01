@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Providers.Xbmc
             payload[offset++] = (byte)iconType;
 
             for (int i = 0; i < 4; i++)
-                payload[offset++] = (byte)0;
+                payload[offset++] = 0;
 
             Array.Copy(icon, 0, payload, caption.Length + message.Length + 7, icon.Length);
 

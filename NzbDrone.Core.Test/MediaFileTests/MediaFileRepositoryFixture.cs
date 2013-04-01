@@ -4,7 +4,9 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.MediaFileTests
 {
@@ -17,9 +19,10 @@ namespace NzbDrone.Core.Test.MediaFileTests
             var files = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
                 .With(c => c.Id = 0)
+                .With(c => c.Quality =new QualityModel(Quality.Bluray720p))
                 .Random(4)
                 .With(s => s.SeriesId = 12)
-                .Build();
+                .BuildListOfNew();
 
 
             Db.InsertMany(files);
@@ -70,7 +73,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                     .With(f => f.Path = path.NormalizePath())
                     .Build();
 
-           Subject.Insert(episodeFile);
+            Subject.Insert(episodeFile);
 
             var file = Subject.GetFileByPath(path);
 

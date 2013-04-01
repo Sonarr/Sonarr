@@ -6,13 +6,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class NotInQueueSpecification : IFetchableSpecification
     {
-        private readonly DownloadProvider _downloadProvider;
+        private readonly IProvideDownloadClient _downloadClientProvider;
 
-
-        public NotInQueueSpecification(DownloadProvider downloadProvider)
+        public NotInQueueSpecification(IProvideDownloadClient downloadClientProvider)
         {
-            _downloadProvider = downloadProvider;
-
+            _downloadClientProvider = downloadClientProvider;
         }
 
         public string RejectionReason
@@ -25,7 +23,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
-            return !_downloadProvider.GetActiveDownloadClient().IsInQueue(subject);
+            return !_downloadClientProvider.GetDownloadClient().IsInQueue(subject);
         }
 
     }

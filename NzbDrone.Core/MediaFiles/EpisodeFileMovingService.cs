@@ -80,7 +80,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
-            parseResult.Quality = new QualityModel { Quality = episodeFile.Quality, Proper = episodeFile.Proper };
+            parseResult.Quality = episodeFile.Quality;
             parseResult.Episodes = episodes;
 
 

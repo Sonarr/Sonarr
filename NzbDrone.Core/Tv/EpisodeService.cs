@@ -4,19 +4,16 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
 {
     public interface IEpisodeService
     {
-        void AddEpisode(Episode episode);
         Episode GetEpisode(int id);
         Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode GetEpisode(int seriesId, DateTime date);
@@ -33,7 +30,6 @@ namespace NzbDrone.Core.Tv
         bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber);
         void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus);
         void UpdateEpisodes(List<Episode> episodes);
-        Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
     }
 
@@ -63,11 +59,6 @@ namespace NzbDrone.Core.Tv
             _logger = logger;
         }
 
-        public void AddEpisode(Episode episode)
-        {
-            episode.Ignored = _seasonRepository.IsIgnored(episode.SeriesId, episode.SeasonNumber);
-            _episodeRepository.Insert(episode);
-        }
 
         public Episode GetEpisode(int id)
         {
@@ -107,7 +98,7 @@ namespace NzbDrone.Core.Tv
                     return new List<Episode>();
                 }
 
-                var episodeInfo = GetEpisode(((ModelBase)parseResult.Series).Id, parseResult.AirDate.Value);
+                var episodeInfo = GetEpisode(parseResult.Series.Id, parseResult.AirDate.Value);
 
                 if (episodeInfo != null)
                 {
@@ -129,14 +120,14 @@ namespace NzbDrone.Core.Tv
                 Episode episodeInfo = null;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                    episodeInfo = GetEpisodeBySceneNumbering(((ModelBase)parseResult.Series).Id, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = _episodeRepository.GetEpisodeBySceneNumbering(parseResult.Series.Id, parseResult.SeasonNumber, episodeNumber);
 
                 if (episodeInfo == null)
                 {
-                    episodeInfo = GetEpisode(((ModelBase)parseResult.Series).Id, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisode(parseResult.Series.Id, parseResult.SeasonNumber, episodeNumber);
                     if (episodeInfo == null && parseResult.AirDate != null)
                     {
-                        episodeInfo = GetEpisode(((ModelBase)parseResult.Series).Id, parseResult.AirDate.Value);
+                        episodeInfo = GetEpisode(parseResult.Series.Id, parseResult.AirDate.Value);
                     }
                 }
 
@@ -360,11 +351,6 @@ namespace NzbDrone.Core.Tv
         public void UpdateEpisodes(List<Episode> episodes)
         {
             _episodeRepository.UpdateMany(episodes);
-        }
-
-        public Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
-        {
-            return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end)

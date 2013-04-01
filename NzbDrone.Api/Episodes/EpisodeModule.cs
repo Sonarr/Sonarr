@@ -9,9 +9,9 @@ namespace NzbDrone.Api.Episodes
 {
     public class EpisodeModule : NzbDroneApiModule
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
-        public EpisodeModule(EpisodeService episodeService)
+        public EpisodeModule(IEpisodeService episodeService)
             : base("/episodes")
         {
             _episodeService = episodeService;

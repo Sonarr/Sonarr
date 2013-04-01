@@ -18,10 +18,10 @@ namespace NzbDrone.Core.IndexerSearch
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PartialSeasonSearch(IEpisodeService episodeService, IDownloadProvider downloadProvider, IIndexerService indexerService,
+        public PartialSeasonSearch(IEpisodeService episodeService, IDownloadService downloadService, IIndexerService indexerService,
                              ISceneMappingService sceneMappingService, IDownloadDirector downloadDirector,
                              ISeriesRepository seriesRepository)
-            : base(seriesRepository, episodeService, downloadProvider, indexerService, sceneMappingService,
+            : base(seriesRepository, episodeService, downloadService, indexerService, sceneMappingService,
                    downloadDirector)
         {
         }

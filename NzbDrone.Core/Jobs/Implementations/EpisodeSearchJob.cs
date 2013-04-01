@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 return;
             }
 
-            if (!_qualityUpgradableSpecification.IsUpgradable(episode.Series.QualityProfile, episode.EpisodeFile.QualityModel))
+            if (!_qualityUpgradableSpecification.IsUpgradable(episode.Series.QualityProfile, episode.EpisodeFile.Quality))
             {
                 logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
                 notification.CurrentMessage = String.Format("Skipping search for {0}, the file you have is already at cutoff", episode);

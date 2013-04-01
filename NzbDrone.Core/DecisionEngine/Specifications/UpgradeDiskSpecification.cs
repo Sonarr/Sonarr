@@ -29,8 +29,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             foreach (var file in subject.Episodes.Select(c => c.EpisodeFile).Where(c => c != null))
             {
-                _logger.Trace("Comparing file quality with report. Existing file is {0} proper:{1}", file.Quality, file.Proper);
-                if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, new QualityModel { Quality = file.Quality, Proper = file.Proper }, subject.Quality))
+                _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
+                if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, file.Quality, subject.Quality))
                     return false;
 
                 if (subject.Quality.Proper && file.DateAdded < DateTime.Today.AddDays(-7))

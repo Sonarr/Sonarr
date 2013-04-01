@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.NzbgetProviderTests
+namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
 {
     public class QueueFixture : CoreTest
     {

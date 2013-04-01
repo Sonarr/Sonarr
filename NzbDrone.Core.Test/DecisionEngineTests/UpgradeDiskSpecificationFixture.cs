@@ -19,7 +19,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    
+
     public class UpgradeDiskSpecificationFixture : CoreTest
     {
         private UpgradeDiskSpecification _upgradeDisk;
@@ -35,8 +35,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<QualityUpgradableSpecification>();
             _upgradeDisk = Mocker.Resolve<UpgradeDiskSpecification>();
 
-            firstFile = new EpisodeFile { Quality = Quality.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
-            secondFile = new EpisodeFile { Quality = Quality.Bluray1080p, Proper = true, DateAdded = DateTime.Now };
+            firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
+            secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
 
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = null } };
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = secondFile }, new Episode { EpisodeFile = null } };
@@ -66,12 +66,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithFirstFileUpgradable()
         {
-            firstFile.Quality = Quality.SDTV;
+            firstFile.Quality = new QualityModel(Quality.SDTV);
         }
 
         private void WithSecondFileUpgradable()
         {
-            secondFile.Quality = Quality.SDTV;
+            secondFile.Quality = new QualityModel(Quality.SDTV);
         }
 
         [Test]
@@ -120,8 +120,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_not_be_upgradable_if_qualities_are_the_same()
         {
-            firstFile.Quality = Quality.WEBDL1080p;
-            firstFile.Proper = false;
+            firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
             parseResultSingle.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }

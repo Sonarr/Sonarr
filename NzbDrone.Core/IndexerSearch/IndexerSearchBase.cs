@@ -18,7 +18,7 @@ namespace NzbDrone.Core.IndexerSearch
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IEpisodeService _episodeService;
-        private readonly IDownloadProvider _downloadProvider;
+        private readonly IDownloadService _downloadService;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IDownloadDirector DownloadDirector;
 
@@ -26,13 +26,13 @@ namespace NzbDrone.Core.IndexerSearch
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected IndexerSearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, IDownloadProvider downloadProvider,
+        protected IndexerSearchBase(ISeriesRepository seriesRepository, IEpisodeService episodeService, IDownloadService downloadService,
                              IIndexerService indexerService, ISceneMappingService sceneMappingService,
                              IDownloadDirector downloadDirector)
         {
             _seriesRepository = seriesRepository;
             _episodeService = episodeService;
-            _downloadProvider = downloadProvider;
+            _downloadService = downloadService;
             _indexerService = indexerService;
             _sceneMappingService = sceneMappingService;
             DownloadDirector = downloadDirector;
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.IndexerSearch
             logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
             try
             {
-                if (_downloadProvider.DownloadReport(episodeParseResult))
+                if (_downloadService.DownloadReport(episodeParseResult))
                 {
                     return true;
                 }

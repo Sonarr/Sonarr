@@ -55,10 +55,10 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
                 .Returns(fi);
 
-            
+
             var result = Subject.MoveEpisodeFile(file, false);
 
-            
+
             result.Should().BeNull();
         }
 
@@ -85,8 +85,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
             var file = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = currentFilename)
-                    .With(f => f.Quality = Quality.WEBDL720p)
-                    .With(f => f.Proper = false)
+                    .With(f => f.Quality = new QualityModel(Quality.WEBDL720p))
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()
@@ -137,8 +136,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
             var file = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.SeriesId = fakeSeries.Id)
                     .With(f => f.Path = currentFilename)
-                    .With(f => f.Quality = Quality.WEBDL720p)
-                    .With(f => f.Proper = false)
+                    .With(f => f.Quality = new QualityModel(Quality.WEBDL720p))
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()

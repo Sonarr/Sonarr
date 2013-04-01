@@ -117,7 +117,7 @@ namespace NzbDrone.Api.Series
         {
             RuleSet("POST", () =>
                 {
-                    RuleFor(s => ((ModelBase)s).Id).GreaterThan(0);
+                    RuleFor(s => s.Id).GreaterThan(0);
                     RuleFor(s => s.Path).NotEmpty().Must(_diskProvider.FolderExists);
                     RuleFor(s => s.QualityProfileId).GreaterThan(0);
                 });

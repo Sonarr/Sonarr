@@ -1,24 +1,19 @@
-﻿
-
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
-
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
+namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 {
     [TestFixture]
     

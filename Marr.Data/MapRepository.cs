@@ -54,7 +54,7 @@ namespace Marr.Data
 
             // Register a default IReflectionStrategy
             ReflectionStrategy = new CachedReflectionStrategy();
-            
+
             // Register a default type converter for Enums
             TypeConverters.Add(typeof(Enum), new Converters.EnumStringConverter());
 
@@ -180,7 +180,7 @@ namespace Marr.Data
 
             return Relationships[type];
         }
-        
+
         #endregion
 
         #region - Reflection Strategy -

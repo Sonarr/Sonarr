@@ -11,9 +11,9 @@ namespace NzbDrone.Api.Calendar
 {
     public class CalendarModule : NzbDroneApiModule
     {
-        private readonly EpisodeService _episodeService;
+        private readonly IEpisodeService _episodeService;
 
-        public CalendarModule(EpisodeService episodeService)
+        public CalendarModule(IEpisodeService episodeService)
             : base("/calendar")
         {
             _episodeService = episodeService;
