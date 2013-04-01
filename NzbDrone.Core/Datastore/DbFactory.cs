@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 using Marr.Data;
+using Marr.Data.Reflection;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 
@@ -34,6 +35,9 @@ namespace NzbDrone.Core.Datastore
                 {
                     SqlMode = SqlModes.Text,
                 };
+
+            MapRepository.Instance.ReflectionStrategy = new SimpleReflectionStrategy();
+
             return new Database(dataMapper);
         }
 
