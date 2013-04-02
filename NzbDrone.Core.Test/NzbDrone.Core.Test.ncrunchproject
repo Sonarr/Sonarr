@@ -17,6 +17,8 @@
   <UseBuildPlatform></UseBuildPlatform>
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
-  <AdditionalFilesToInclude>..\Libraries\Sqlite\x86\sqlite3.dll</AdditionalFilesToInclude>
+  <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
+  <BuildProcessArchitecture>x86</BuildProcessArchitecture>
+  <AdditionalFilesToInclude>..\Libraries\Sqlite\sqlite3.dll</AdditionalFilesToInclude>
   <HiddenWarnings>PostBuildEventDisabled;PreBuildEventDisabled</HiddenWarnings>
 </ProjectConfiguration>
