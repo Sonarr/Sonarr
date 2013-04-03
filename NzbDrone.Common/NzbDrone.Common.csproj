@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,10 +55,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
@@ -84,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveProvider.cs" />
-    <Compile Include="CommonContainerExtentions.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
     <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />
@@ -111,6 +108,7 @@
     <Compile Include="Eventing\IHandle.cs" />
     <Compile Include="HostController.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
+    <Compile Include="ReflectionExtentions.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
@@ -133,6 +131,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SysTray\SysTrayProvider.cs" />
+    <Compile Include="TinyIoC.cs" />
     <Compile Include="TryParseExtension.cs" />
     <Compile Include="UdpProvider.cs" />
   </ItemGroup>

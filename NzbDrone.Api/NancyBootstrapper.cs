@@ -1,54 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
 using NLog;
-using Nancy;
 using Nancy.Bootstrapper;
-using Nancy.Bootstrappers.Autofac;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Frontend;
 using NzbDrone.Common;
-using NzbDrone.Core;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
-using SignalR;
+using TinyIoC;
 using ErrorPipeline = NzbDrone.Api.ErrorManagement.ErrorPipeline;
 
 namespace NzbDrone.Api
 {
-
-    public class NancyBootstrapper : AutofacNancyBootstrapper
+    public class TinyNancyBootstrapper : TinyIoCNancyBootstrapper
     {
+        private readonly TinyIoCContainer _tinyIoCContainer;
         private readonly Logger _logger;
 
-        public NancyBootstrapper()
+        public TinyNancyBootstrapper(TinyIoCContainer tinyIoCContainer)
         {
+            _tinyIoCContainer = tinyIoCContainer;
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        protected override Nancy.IRootPathProvider RootPathProvider
-        {
-            get
-            {
-                return new RootPathProvider();
-            }
-        }
-
-        protected override void ApplicationStartup(ILifetimeScope container, IPipelines pipelines)
+        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             _logger.Info("Starting NzbDrone API");
             AutomapperBootstraper.InitializeAutomapper();
-            SignalRBootstraper.InitializeAutomapper(container);
             RegisterReporting(container);
             KickoffInitilizables(container);
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<ErrorPipeline>().HandleException);
         }
 
-        private void KickoffInitilizables(ILifetimeScope container)
+        private void RegisterReporting(TinyIoCContainer container)
+        {
+            EnvironmentProvider.UGuid = container.Resolve<ConfigService>().UGuid;
+            ReportingService.RestProvider = container.Resolve<RestProvider>();
+        }
+
+        private void KickoffInitilizables(TinyIoCContainer container)
         {
             var initilizables = container.Resolve<IEnumerable<IInitializable>>();
 
@@ -67,23 +61,10 @@ namespace NzbDrone.Api
             }
         }
 
-        private void RegisterReporting(ILifetimeScope container)
+
+        protected override TinyIoCContainer GetApplicationContainer()
         {
-            EnvironmentProvider.UGuid = container.Resolve<ConfigService>().UGuid;
-            ReportingService.RestProvider = container.Resolve<RestProvider>();
-        }
-
-        protected override ILifetimeScope GetApplicationContainer()
-        {
-            _logger.Debug("Initializing Service Container");
-
-            var builder = new ContainerBuilder();
-            builder.RegisterCoreServices();
-            builder.RegisterApiServices();
-
-            var container = builder.Build();
-
-            return container;
+            return _tinyIoCContainer;
         }
 
         protected override NancyInternalConfiguration InternalConfiguration
@@ -109,16 +90,6 @@ namespace NzbDrone.Api
             base.ConfigureConventions(nancyConventions);
             var processors = ApplicationContainer.Resolve<IProcessStaticResource>();
             Conventions.StaticContentsConventions.Add(processors.ProcessStaticResourceRequest);
-        }
-
-    }
-
-    public static class SignalRBootstraper
-    {
-
-        public static void InitializeAutomapper(ILifetimeScope container)
-        {
-            GlobalHost.DependencyResolver = new AutofacSignalrDependencyResolver(container.BeginLifetimeScope("SignalR"));
         }
     }
 }

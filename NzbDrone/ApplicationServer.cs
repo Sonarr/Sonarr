@@ -30,11 +30,6 @@ namespace NzbDrone
             _securityProvider = securityProvider;
         }
 
-        public ApplicationServer()
-        {
-
-        }
-
         protected override void OnStart(string[] args)
         {
             Start();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -67,7 +66,7 @@ namespace NzbDrone.Core.Providers
                         var activePlayers = GetActivePlayersDharma(host, username, password);
 
                         //If video is currently playing, then skip update
-                        if(activePlayers["video"])
+                        if (activePlayers["video"])
                         {
                             Logger.Debug("Video is currently playing, skipping library update");
                             continue;
@@ -87,7 +86,7 @@ namespace NzbDrone.Core.Providers
                         var activePlayers = GetActivePlayersEden(host, username, password);
 
                         //If video is currently playing, then skip update
-                        if(activePlayers.Any(a => a.Type.Equals("video")))
+                        if (activePlayers.Any(a => a.Type.Equals("video")))
                         {
                             Logger.Debug("Video is currently playing, skipping library update");
                             continue;
@@ -201,7 +200,7 @@ namespace NzbDrone.Core.Providers
                 Logger.Trace(" from response");
                 var result = JsonConvert.DeserializeObject<XbmcJsonResult<String>>(response);
 
-                if(!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
+                if (!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                     return false;
             }
 
@@ -242,7 +241,7 @@ namespace NzbDrone.Core.Providers
                 Logger.DebugException(ex.Message, ex);
                 return false;
             }
-            
+
             return true;
         }
 
@@ -329,7 +328,7 @@ namespace NzbDrone.Core.Providers
                 if (versionObject.Value.Type == JTokenType.Integer)
                     return new XbmcVersion((int)versionObject.Value);
 
-                if(versionObject.Value.Type == JTokenType.Object)
+                if (versionObject.Value.Type == JTokenType.Object)
                     return JsonConvert.DeserializeObject<XbmcVersion>(versionObject.Value.ToString());
 
                 throw new InvalidCastException("Unknown Version structure!: " + versionObject);
@@ -430,8 +429,7 @@ namespace NzbDrone.Core.Providers
 
             if (response.StartsWith("{\"error\""))
             {
-                var serializer = new JavaScriptSerializer();
-                var error = serializer.Deserialize<ErrorResult>(response);
+                var error = JsonConvert.DeserializeObject<ErrorResult>(response);
                 var code = error.Error["code"];
                 var message = error.Error["message"];
 

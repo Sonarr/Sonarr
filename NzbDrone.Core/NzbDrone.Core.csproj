@@ -123,10 +123,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
-    </Reference>
     <Reference Include="FluentMigrator">
       <HintPath>..\packages\FluentMigrator.1.0.6.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
@@ -189,7 +185,6 @@
     <Compile Include="Configuration\ConfigRepository.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="ContainerExtensions.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
@@ -249,7 +244,6 @@
     <Compile Include="IndexerSearch\IndexerSearchBase.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\NewznabRepository.cs" />
-    <Compile Include="Instrumentation\LogInjectionModule.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\Implementations\BacklogSearchJob.cs" />
@@ -355,7 +349,6 @@
     <Compile Include="Model\Xem\XemResult.cs" />
     <Compile Include="Model\Xem\XemSceneTvdbMapping.cs" />
     <Compile Include="Model\Xem\XemValues.cs" />
-    <Compile Include="AutofacSignalrDependencyResolver.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetProvider.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />

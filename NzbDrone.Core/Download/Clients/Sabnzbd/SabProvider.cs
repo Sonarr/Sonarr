@@ -10,6 +10,8 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Tv;
+using RestSharp.Contrib;
+using HttpUtility = System.Web.HttpUtility;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {

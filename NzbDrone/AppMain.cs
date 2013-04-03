@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using Autofac;
 using NLog;
 
 namespace NzbDrone
@@ -42,8 +41,7 @@ namespace NzbDrone
                     return;
                 }
 
-
-                NzbDroneBootstrapper.Container.Resolve<Router>().Route(args);
+                ContainerBuilder.Instance.Resolve<Router>().Route(args);
             }
             catch (Exception e)
             {
