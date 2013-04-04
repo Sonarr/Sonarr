@@ -20,17 +20,23 @@
 
                 return percent;
             },
-            banner           : function () {
-                var banner = _.find(this.get('images'), function (image) {
+            poster           : function () {
+                var poster = _.find(this.get('images'), function (image) {
                     return image.coverType === 1;
                 });
 
-                if (banner) {
-                    return banner.url;
+                if (poster) {
+                    return poster.url;
                 }
 
                 return undefined;
+            },
+            smallPoster      : function () {
+                var poster = this.get('poster');
+                var extension = '.' + poster.split('.').pop();
+                var withoutExtension = poster.substring(0, poster.length - extension.length);
 
+                return withoutExtension + '-138' + extension;
             },
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');
