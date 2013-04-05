@@ -3,7 +3,7 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
 
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
-        template : "AddSeries/New/SearchResultTemplate",
+        template : "AddSeries/SearchResultTemplate",
         className: 'search-item',
 
         ui: {
@@ -51,7 +51,6 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
     NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.CollectionView.extend({
 
         itemView  : NzbDrone.AddSeries.New.SearchItemView,
-        className : 'accordion',
         initialize: function () {
             this.listenTo(this.collection, 'reset', this.render);
         }

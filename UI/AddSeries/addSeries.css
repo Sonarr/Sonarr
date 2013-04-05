@@ -22,7 +22,6 @@
 }
 
 .search-item {
-    padding-right: 5px;
     padding-bottom: 20px;
 }
 
@@ -47,7 +46,6 @@
 
 .unmapped-folder-view .folder-header {
     font-weight: 300;
-    padding-left: 20px;
 }
 
 .unmapped-folder-view .folder-header input {

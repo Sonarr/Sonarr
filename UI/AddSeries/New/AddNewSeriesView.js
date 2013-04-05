@@ -47,7 +47,6 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
                         context.searchResult.show(context.resultView);
                     }
                 });
-
             }
         },
 

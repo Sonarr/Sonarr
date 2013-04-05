@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{jQuery-1.9.1, libraries}" />
+    <file url="PROJECT" libraries="{libraries}" />
   </component>
 </project>
 

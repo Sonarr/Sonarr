@@ -31,13 +31,6 @@
 
                 return undefined;
             },
-            smallPoster      : function () {
-                var poster = this.get('poster');
-                var extension = '.' + poster.split('.').pop();
-                var withoutExtension = poster.substring(0, poster.length - extension.length);
-
-                return withoutExtension + '-138' + extension;
-            },
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             }
@@ -47,7 +40,8 @@
             episodeFileCount: 0,
             episodeCount    : 0,
             qualityProfiles : qualityProfileCollection,
-            rootFolders     : rootFolders
+            rootFolders     : rootFolders,
+            isExisting      : false
         }
     });
 
