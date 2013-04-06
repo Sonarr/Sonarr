@@ -65,3 +65,8 @@
     padding-left: 20px;
     padding-top: 10px;
 }
+
+.img-polaroid {
+    min-width: 138px;
+    min-height: 203px;
+}

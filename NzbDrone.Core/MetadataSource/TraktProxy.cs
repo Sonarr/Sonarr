@@ -82,6 +82,8 @@ namespace NzbDrone.Core.MetadataSource
 
         private static string GetPosterThumbnailUrl(string posterUrl)
         {
+            if(posterUrl.Contains("poster-small.jpg")) return posterUrl;
+
             var extension = Path.GetExtension(posterUrl);
             var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
             return withoutExtension + "-138" + extension;
