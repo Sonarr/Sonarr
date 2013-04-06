@@ -44,7 +44,7 @@ namespace NzbDrone.Api
 
         private void KickoffInitilizables(TinyIoCContainer container)
         {
-            var initilizables = container.Resolve<IEnumerable<IInitializable>>();
+            var initilizables = container.ResolveAll<IInitializable>();
 
             foreach (var initializable in initilizables)
             {

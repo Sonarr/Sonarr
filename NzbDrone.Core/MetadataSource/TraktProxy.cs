@@ -21,7 +21,6 @@ namespace NzbDrone.Core.MetadataSource
             return response.Data.Select(MapSeries).ToList();
         }
 
-
         public Series GetSeriesInfo(int tvDbSeriesId)
         {
             var client = BuildClient("show", "summary");
@@ -39,7 +38,6 @@ namespace NzbDrone.Core.MetadataSource
 
             return response.Data.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
         }
-
 
         private static IRestClient BuildClient(string resource, string method)
         {

@@ -38,14 +38,18 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
             Mapper.Entity<History.History>().RegisterModel("History")
-                .HasOne(h => h.Episode, h => h.EpisodeId);
+                  .HasOne(h => h.Episode, h => h.EpisodeId);
 
             Mapper.Entity<Series>().RegisterModel("Series");
 
             Mapper.Entity<Season>().RegisterModel("Seasons");
             Mapper.Entity<Episode>().RegisterModel("Episodes");
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles");
-            Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles").For(q => q.DbAllowed).SetColumnName("Allowed").Ignore(q => q.Allowed);
+
+            Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles")
+                  .For(q => q.DbAllowed).SetColumnName("Allowed")
+                  .Ignore(q => q.Allowed);
+
             Mapper.Entity<QualitySize>().RegisterModel("QualitySizes");
 
             Mapper.Entity<Log>().RegisterModel("Logs");

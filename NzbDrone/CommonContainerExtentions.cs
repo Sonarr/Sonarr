@@ -13,6 +13,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.RootFolders;
 using TinyIoC;
 
@@ -36,6 +37,7 @@ namespace NzbDrone
             container.AutoRegisterImplementations<IndexerBase>();
             container.AutoRegisterImplementations<IndexerSearchBase>();
             container.AutoRegisterImplementations<ExternalNotificationBase>();
+            container.AutoRegisterMultipleImplementations<IInitializable>();
 
             container.Register<IEventAggregator, EventAggregator>().AsSingleton();
             container.Register<INancyBootstrapper, TinyNancyBootstrapper>().AsSingleton();
@@ -88,13 +90,24 @@ namespace NzbDrone
 
         private static void AutoRegisterImplementations(this TinyIoCContainer container, Type contractType)
         {
-            var implementations = contractType.Assembly.GetImplementations(contractType);
+            var implementations = contractType.Assembly.GetImplementations(contractType).ToList();
 
-            foreach (var implementation in implementations)
+            foreach(var implementation in implementations)
             {
                 logger.Trace("Registering {0} as {1}", implementation.Name, contractType.Name);
                 container.Register(contractType, implementation).AsMultiInstance();
             }
+        }
+
+        private static void AutoRegisterMultipleImplementations<TContract>(this TinyIoCContainer container)
+        {
+            container.AutoRegisterMultipleImplementations(typeof(TContract));
+        }
+
+        private static void AutoRegisterMultipleImplementations(this TinyIoCContainer container, Type contractType)
+        {
+            var implementations = contractType.Assembly.GetImplementations(contractType);
+            container.RegisterMultiple(contractType, implementations).AsMultiInstance();
         }
     }
 }
