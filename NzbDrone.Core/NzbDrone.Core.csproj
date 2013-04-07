@@ -234,7 +234,7 @@
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
-    <Compile Include="Download\EpisodeDownloadedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
     <Compile Include="ExternalNotification\ExternalNotificationRepository.cs" />
@@ -576,7 +576,9 @@
     </Content>
     <Content Include="NzbDrone.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Download\Clients\Sabnzbd\Api\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

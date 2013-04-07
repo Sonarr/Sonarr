@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {

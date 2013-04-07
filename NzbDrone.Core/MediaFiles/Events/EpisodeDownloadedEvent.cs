@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using NzbDrone.Common.Eventing;
+﻿using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core.Download
+namespace NzbDrone.Core.MediaFiles.Events
 {
     public class EpisodeDownloadedEvent : IEvent
     {

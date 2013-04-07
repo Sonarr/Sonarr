@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.ExternalNotification
