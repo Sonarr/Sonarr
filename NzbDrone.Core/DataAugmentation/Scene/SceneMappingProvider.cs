@@ -2,13 +2,14 @@ using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
         void UpdateMappings();
-        string GetSceneName(int tvdbId, int seasonNumber = -1);
+        string GetSceneName(int seriesId, int seasonNumber = -1);
         Nullable<int> GetTvDbId(string cleanName);
         string GetCleanName(int tvdbId);
     }
@@ -17,12 +18,14 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     {
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
+        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, Logger logger)
+        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ISeriesService seriesService, Logger logger)
         {
             _repository = repository;
             _sceneMappingProxy = sceneMappingProxy;
+            _seriesService = seriesService;
             _logger = logger;
         }
 
@@ -48,16 +51,20 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             }
         }
 
-        public virtual string GetSceneName(int tvdbId, int seasonNumber = -1)
+        public string GetSceneName(int seriesId, int seasonNumber = -1)
         {
-            var mapping = _repository.FindByTvdbId(tvdbId);
+            var tvDbId = _seriesService.FindByTvdbId(seriesId).TvDbId;
+
+            var mapping = _repository.FindByTvdbId(tvDbId);
 
             if (mapping == null) return null;
 
             return mapping.SceneName;
         }
 
-        public virtual Nullable<Int32> GetTvDbId(string cleanName)
+
+
+        public Nullable<Int32> GetTvDbId(string cleanName)
         {
             var mapping = _repository.FindByCleanTitle(cleanName);
 
@@ -68,7 +75,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         }
 
 
-        public virtual string GetCleanName(int tvdbId)
+        public string GetCleanName(int tvdbId)
         {
             var mapping = _repository.FindByTvdbId(tvdbId);
 

@@ -4,7 +4,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class NotInQueueSpecification : IFetchableSpecification
+    public class NotInQueueSpecification : IDecisionEngineSpecification
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
 

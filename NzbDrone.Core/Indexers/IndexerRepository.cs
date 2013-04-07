@@ -1,25 +1,23 @@
-﻿using System;
-using System.Data;
-using System.Linq;
+﻿using System.Linq;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Indexers
 {
-    public interface IIndexerRepository : IBasicRepository<Indexer>
+    public interface IIndexerRepository : IBasicRepository<IndexerDefinition>
     {
-        Indexer Find(Type type);
+        IndexerDefinition Get(string name);
     }
 
-    public class IndexerRepository : BasicRepository<Indexer>, IIndexerRepository
+    public class IndexerRepository : BasicRepository<IndexerDefinition>, IIndexerRepository
     {
         public IndexerRepository(IDatabase database)
             : base(database)
         {
         }
 
-        public Indexer Find(Type type)
+        public IndexerDefinition Get(string name)
         {
-            return Query.Single(i => i.Type == type.ToString());
+            return Query.Single(i => i.Name.ToLower() == name.ToLower());
         }
     }
 }

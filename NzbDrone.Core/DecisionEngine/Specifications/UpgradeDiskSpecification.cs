@@ -6,7 +6,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class UpgradeDiskSpecification : IFetchableSpecification
+    public class UpgradeDiskSpecification : IDecisionEngineSpecification
     {
         private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;

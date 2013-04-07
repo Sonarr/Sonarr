@@ -34,8 +34,7 @@ namespace NzbDrone
             container.AutoRegisterInterfaces("NzbDrone.Core");
             container.AutoRegisterInterfaces("NzbDrone.Api");
 
-            container.AutoRegisterImplementations<IndexerBase>();
-            container.AutoRegisterImplementations<IndexerSearchBase>();
+            container.AutoRegisterImplementations<IIndexerBase>();
             container.AutoRegisterImplementations<ExternalNotificationBase>();
             container.AutoRegisterMultipleImplementations<IInitializable>();
 

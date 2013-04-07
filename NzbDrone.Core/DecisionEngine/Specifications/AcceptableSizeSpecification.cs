@@ -5,7 +5,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class AcceptableSizeSpecification : IFetchableSpecification
+    public class AcceptableSizeSpecification : IDecisionEngineSpecification
     {
         private readonly IQualitySizeService _qualityTypeProvider;
         private readonly IEpisodeService _episodeService;

@@ -213,9 +213,13 @@
     <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
-    <Compile Include="DecisionEngine\IFetchableSpecification.cs" />
+    <Compile Include="DecisionEngine\IRejectWithReason.cs" />
+    <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\IDecisionEngineSearchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
-    <Compile Include="DecisionEngine\DownloadDirector.cs" />
+    <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
     <Compile Include="DecisionEngine\Specifications\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CustomStartDateSpecification.cs" />
@@ -223,6 +227,7 @@
     <Compile Include="DecisionEngine\Specifications\MonitoredEpisodeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />
     <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeHistorySpecification.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
@@ -238,29 +243,53 @@
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="History\HistoryRepository.cs" />
-    <Compile Include="IndexerSearch\DailyEpisodeSearch.cs" />
-    <Compile Include="IndexerSearch\EpisodeSearch.cs" />
-    <Compile Include="IndexerSearch\PartialSeasonSearch.cs" />
-    <Compile Include="IndexerSearch\IndexerSearchBase.cs" />
+    <Compile Include="IndexerSearch\Definitions\DailyEpisodeSearchDefinition.cs" />
+    <Compile Include="IndexerSearch\Definitions\PartialSeasonSearchDefinition.cs" />
+    <Compile Include="IndexerSearch\Definitions\SearchDefinitionBase.cs" />
+    <Compile Include="IndexerSearch\Definitions\SeasonSearchDefinition.cs" />
+    <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchDefinition.cs" />
+    <Compile Include="IndexerSearch\NzbSearchService.cs" />
+    <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
+    <Compile Include="Indexers\BasicRssParser.cs" />
+    <Compile Include="Indexers\RssSyncService.cs" />
+    <Compile Include="Indexers\FileSharingTalk\FileSharingTalk.cs" />
+    <Compile Include="Indexers\FileSharingTalk\FileSharingTalkParser.cs" />
+    <Compile Include="Indexers\BaseIndexer.cs" />
+    <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
-    <Compile Include="Indexers\NewznabRepository.cs" />
+    <Compile Include="Indexers\IndexerSettingProvider.cs" />
+    <Compile Include="Indexers\Newznab\Newznab.cs" />
+    <Compile Include="Indexers\Newznab\NewznabDefinition.cs" />
+    <Compile Include="Indexers\Newznab\NewznabParser.cs" />
+    <Compile Include="Indexers\Newznab\NewznabRepository.cs" />
+    <Compile Include="Indexers\Newznab\NewznabService.cs" />
+    <Compile Include="Indexers\NzbClub\NzbClub.cs" />
+    <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
+    <Compile Include="Indexers\NzbIndex\NzbIndex.cs" />
+    <Compile Include="Indexers\NzbIndex\NzbIndexParser.cs" />
+    <Compile Include="Indexers\NzbsRUs\NzbsRUs.cs" />
+    <Compile Include="Indexers\NzbsRUs\NzbsrusParser.cs" />
+    <Compile Include="Indexers\Nzbx\Nzbx.cs" />
+    <Compile Include="Indexers\Nzbx\NzbxParser.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
+    <Compile Include="Indexers\FileSharingTalk\FileSharingTalkSettings.cs" />
+    <Compile Include="Indexers\IIndexerSettings.cs" />
+    <Compile Include="Indexers\NzbsRUs\NzbsrusSettings.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
+    <Compile Include="Indexers\Wombles\Wombles.cs" />
+    <Compile Include="Indexers\Wombles\WomblesParser.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Jobs\IJob.cs" />
-    <Compile Include="Jobs\Implementations\BacklogSearchJob.cs" />
     <Compile Include="Jobs\Implementations\CleanupRecycleBinJob.cs" />
     <Compile Include="Jobs\Implementations\ConvertEpisodeJob.cs" />
     <Compile Include="Jobs\Implementations\DiskScanJob.cs" />
     <Compile Include="Jobs\Implementations\EmptyRecycleBinJob.cs" />
-    <Compile Include="Jobs\Implementations\EpisodeSearchJob.cs" />
-    <Compile Include="Jobs\Implementations\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\Implementations\PostDownloadScanJob.cs" />
-    <Compile Include="Jobs\Implementations\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\Implementations\RefreshEpisodeMetadata.cs" />
     <Compile Include="Jobs\Implementations\RenameSeasonJob.cs" />
     <Compile Include="Jobs\Implementations\RenameSeriesJob.cs" />
     <Compile Include="Jobs\Implementations\RssSyncJob.cs" />
-    <Compile Include="Jobs\Implementations\SeasonSearchJob.cs" />
-    <Compile Include="Jobs\Implementations\SeriesSearchJob.cs" />
     <Compile Include="Jobs\Implementations\UpdateInfoJob.cs" />
     <Compile Include="Jobs\Implementations\UpdateSceneMappingsJob.cs" />
     <Compile Include="Jobs\Implementations\XemUpdateJob.cs" />
@@ -353,12 +382,6 @@
     <Compile Include="Download\Clients\Nzbget\NzbgetProvider.cs" />
     <Compile Include="Providers\MediaInfoProvider.cs" />
     <Compile Include="Download\Clients\PneumaticProvider.cs" />
-    <Compile Include="Indexers\Nzbx.cs" />
-    <Compile Include="Indexers\NzbClub.cs" />
-    <Compile Include="Indexers\NzbIndex.cs" />
-    <Compile Include="Indexers\FileSharingTalk.cs" />
-    <Compile Include="Indexers\Omgwtfnzbs.cs" />
-    <Compile Include="Indexers\Wombles.cs" />
     <Compile Include="Providers\RecycleBinProvider.cs" />
     <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
@@ -433,13 +456,7 @@
     <Compile Include="Indexers\IndexerService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\IndexerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Indexers\Newznab.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Indexers\NzbsRUs.cs">
+    <Compile Include="Indexers\IndexerFetchService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\SyndicationFeedXmlReader.cs">
@@ -449,9 +466,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\MisnamedProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Indexers\NewznabService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\NotificationProvider.cs">
@@ -472,9 +486,6 @@
     </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
     <Compile Include="RootFolders\RootFolderService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Providers\SearchProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tv\SeriesService.cs">
@@ -498,9 +509,7 @@
     <Compile Include="Providers\Xbmc\ResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\NewznabDefinition.cs" />
     <Compile Include="ExternalNotification\ExternalNotificationDefinition.cs" />
-    <Compile Include="Indexers\Indexer.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />

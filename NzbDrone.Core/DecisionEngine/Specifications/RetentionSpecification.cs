@@ -4,7 +4,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class RetentionSpecification : IFetchableSpecification
+    public class RetentionSpecification : IDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
         private readonly Logger _logger;

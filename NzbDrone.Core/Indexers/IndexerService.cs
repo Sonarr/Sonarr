@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
@@ -9,10 +8,10 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerService
     {
-        List<Indexer> All();
-        List<IndexerBase> GetEnabledIndexers();
-        void SaveSettings(Indexer indexer);
-        Indexer GetSettings(Type type);
+        List<IndexerDefinition> All();
+        List<IIndexerBase> GetAvailableIndexers();
+        void Save(IndexerDefinition indexer);
+        IndexerDefinition Get(string name);
     }
 
     public class IndexerService : IIndexerService, IInitializable
@@ -20,9 +19,9 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _indexerRepository;
         private readonly Logger _logger;
 
-        private IList<IndexerBase> _indexers;
+        private readonly IList<IIndexerBase> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IndexerBase> indexers, Logger logger)
+        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexerBase> indexers, Logger logger)
         {
             _indexerRepository = indexerRepository;
             _logger = logger;
@@ -37,14 +36,13 @@ namespace NzbDrone.Core.Indexers
 
             foreach (var feedProvider in _indexers)
             {
-                IndexerBase indexerLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.Type == indexerLocal.GetType().ToString()))
+                IIndexerBase indexerLocal = feedProvider;
+                if (!currentIndexers.Exists(c => c.Name == indexerLocal.Name))
                 {
-                    var settings = new Indexer
+                    var settings = new IndexerDefinition
                     {
                         Enable = indexerLocal.EnabledByDefault,
-                        Type = indexerLocal.GetType().ToString(),
-                        Name = indexerLocal.Name
+                        Name = indexerLocal.Name.ToLower()
                     };
 
                     _indexerRepository.Insert(settings);
@@ -52,27 +50,27 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        public List<Indexer> All()
+        public List<IndexerDefinition> All()
         {
             return _indexerRepository.All().ToList();
         }
 
-        public List<IndexerBase> GetEnabledIndexers()
+        public List<IIndexerBase> GetAvailableIndexers()
         {
-            var all = All();
-            return _indexers.Where(i => all.Exists(c => c.Type == i.GetType().ToString() && c.Enable)).ToList();
+            var enabled = All().Where(c => c.Enable).Select(c => c.Name);
+            var configureIndexers = _indexers.Where(c => c.Settings.IsValid);
+
+            return configureIndexers.Where(c => enabled.Contains(c.Name)).ToList();
         }
 
-        public void SaveSettings(Indexer indexer)
+        public void Save(IndexerDefinition indexer)
         {
-            //Todo: This will be used in the API
-            _logger.Debug("Upserting Indexer definitions for {0}", indexer.Name);
-            _indexerRepository.Upsert(indexer);
+            _indexerRepository.Update(indexer);
         }
 
-        public Indexer GetSettings(Type type)
+        public IndexerDefinition Get(string name)
         {
-            return _indexerRepository.Find(type);
+            return _indexerRepository.Get(name);
         }
     }
 }

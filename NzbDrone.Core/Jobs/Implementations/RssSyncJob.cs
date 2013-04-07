@@ -1,31 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using NLog;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RssSyncJob : IJob
     {
-        private readonly DownloadService _downloadService;
-        private readonly IIndexerService _indexerService;
-        private readonly IDownloadDirector DownloadDirector;
+        private readonly ISyncRss _syncRssService;
         private readonly IConfigService _configService;
 
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        public RssSyncJob(DownloadService downloadService, IIndexerService indexerService, IDownloadDirector downloadDirector, IConfigService configService)
+        public RssSyncJob(ISyncRss syncRssService, IConfigService configService)
         {
-            _downloadService = downloadService;
-            _indexerService = indexerService;
-            DownloadDirector = downloadDirector;
+            _syncRssService = syncRssService;
             _configService = configService;
         }
 
@@ -41,49 +29,7 @@ namespace NzbDrone.Core.Jobs.Implementations
 
         public void Start(ProgressNotification notification, dynamic options)
         {
-            var reports = new List<EpisodeParseResult>();
-
-            notification.CurrentMessage = "Fetching RSS";
-
-            Parallel.ForEach(_indexerService.GetEnabledIndexers(), indexer =>
-            {
-                try
-                {
-                    var parseResults = indexer.FetchRss();
-                    lock (reports)
-                    {
-                        reports.AddRange(parseResults);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
-                }
-            });
-
-            Logger.Debug("Finished fetching reports from all indexers. Total {0}", reports.Count);
-
-            notification.CurrentMessage = "Processing downloaded RSS";
-
-            foreach (var episodeParseResult in reports)
-            {
-                try
-                {
-                    if (DownloadDirector.GetDownloadDecision(episodeParseResult).Approved)
-                    {
-                        _downloadService.DownloadReport(episodeParseResult);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
-                }
-            }
-
-            notification.CurrentMessage = "RSS Sync Completed";
-
-            Logger.Info("RSS Sync completed");
-
+            _syncRssService.Sync();
         }
     }
 }

@@ -4,7 +4,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class UpgradeHistorySpecification : IFetchableSpecification
+    public class UpgradeHistorySpecification : IDecisionEngineSpecification
     {
         private readonly IHistoryService _historyService;
         private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;

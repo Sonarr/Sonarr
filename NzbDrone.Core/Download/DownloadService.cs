@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
@@ -29,7 +32,6 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-
         public bool DownloadReport(EpisodeParseResult parseResult)
         {
             var downloadTitle = parseResult.OriginalString;
@@ -45,7 +47,7 @@ namespace NzbDrone.Core.Download
 
             if (success)
             {
-                _logger.Trace("Download added to Queue: {0}", downloadTitle);
+                _logger.Info("Report sent to download client. {0}", downloadTitle);
                 _eventAggregator.Publish(new EpisodeGrabbedEvent(parseResult));
             }
 

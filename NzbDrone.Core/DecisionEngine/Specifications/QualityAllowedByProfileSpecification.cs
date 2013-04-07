@@ -3,7 +3,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class QualityAllowedByProfileSpecification : IFetchableSpecification
+    public class QualityAllowedByProfileSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
 

@@ -49,7 +49,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual Stream DownloadStream(string url, NetworkCredential credential)
+        public virtual Stream DownloadStream(string url, NetworkCredential credential = null)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.UserAgent = _userAgent;

@@ -5,7 +5,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class MonitoredEpisodeSpecification : IFetchableSpecification
+    public class MonitoredEpisodeSpecification : IDecisionEngineSpecification
     {
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;

@@ -5,7 +5,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class AllowedReleaseGroupSpecification : IFetchableSpecification
+    public class AllowedReleaseGroupSpecification : IDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
         private readonly Logger _logger;

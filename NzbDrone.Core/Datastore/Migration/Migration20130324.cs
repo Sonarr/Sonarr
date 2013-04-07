@@ -100,8 +100,8 @@ namespace NzbDrone.Core.Datastore.Migration
 
             Create.TableForModel("IndexerDefinitions")
                   .WithColumn("Enable").AsBoolean()
-                  .WithColumn("Type").AsString().Unique()
-                  .WithColumn("Name").AsString().Unique();
+                  .WithColumn("Name").AsString().Unique()
+                  .WithColumn("Settings").AsString();
 
             Create.TableForModel("NewznabDefinitions")
                   .WithColumn("Enable").AsBoolean()

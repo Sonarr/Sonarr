@@ -4,7 +4,7 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class CustomStartDateSpecification : IFetchableSpecification
+    public class CustomStartDateSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
 

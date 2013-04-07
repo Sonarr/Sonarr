@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -9,28 +10,28 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class AllowedDownloadSpecificationFixture : CoreTest<DownloadDirector>
+    public class AllowedDownloadSpecificationFixture : CoreTest<DownloadDecisionMaker>
     {
-        private EpisodeParseResult _parseResult;
+        private List<EpisodeParseResult> _parseResults;
 
-        private Mock<IFetchableSpecification> _pass1;
-        private Mock<IFetchableSpecification> _pass2;
-        private Mock<IFetchableSpecification> _pass3;
+        private Mock<IDecisionEngineSpecification> _pass1;
+        private Mock<IDecisionEngineSpecification> _pass2;
+        private Mock<IDecisionEngineSpecification> _pass3;
 
-        private Mock<IFetchableSpecification> _fail1;
-        private Mock<IFetchableSpecification> _fail2;
-        private Mock<IFetchableSpecification> _fail3;
+        private Mock<IDecisionEngineSpecification> _fail1;
+        private Mock<IDecisionEngineSpecification> _fail2;
+        private Mock<IDecisionEngineSpecification> _fail3;
 
         [SetUp]
         public void Setup()
         {
-            _pass1 = new Mock<IFetchableSpecification>();
-            _pass2 = new Mock<IFetchableSpecification>();
-            _pass3 = new Mock<IFetchableSpecification>();
+            _pass1 = new Mock<IDecisionEngineSpecification>();
+            _pass2 = new Mock<IDecisionEngineSpecification>();
+            _pass3 = new Mock<IDecisionEngineSpecification>();
 
-            _fail1 = new Mock<IFetchableSpecification>();
-            _fail2 = new Mock<IFetchableSpecification>();
-            _fail3 = new Mock<IFetchableSpecification>();
+            _fail1 = new Mock<IDecisionEngineSpecification>();
+            _fail2 = new Mock<IDecisionEngineSpecification>();
+            _fail3 = new Mock<IDecisionEngineSpecification>();
 
             _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
             _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
@@ -40,11 +41,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(false);
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(false);
 
-            _parseResult = new EpisodeParseResult();
+            _parseResults = new List<EpisodeParseResult>() { new EpisodeParseResult() };
 
         }
 
-        private void GivenSpecifications(params Mock<IFetchableSpecification>[] mocks)
+        private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
         {
             Mocker.SetConstant(mocks.Select(c => c.Object));
         }
@@ -54,14 +55,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            Subject.GetDownloadDecision(_parseResult);
+            Subject.GetRssDecision(_parseResults);
 
-            _fail1.Verify(c => c.IsSatisfiedBy(_parseResult), Times.Once());
-            _fail2.Verify(c => c.IsSatisfiedBy(_parseResult), Times.Once());
-            _fail3.Verify(c => c.IsSatisfiedBy(_parseResult), Times.Once());
-            _pass1.Verify(c => c.IsSatisfiedBy(_parseResult), Times.Once());
-            _pass2.Verify(c => c.IsSatisfiedBy(_parseResult), Times.Once());
-            _pass3.Verify(c => c.IsSatisfiedBy(_parseResult), Times.Once());
+            _fail1.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
+            _fail2.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
+            _fail3.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
+            _pass1.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
+            _pass2.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
+            _pass3.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
         }
 
         [Test]
@@ -69,9 +70,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSpecifications(_pass1, _fail1, _pass2, _pass3);
 
-            var result = Subject.GetDownloadDecision(_parseResult);
+            var result = Subject.GetRssDecision(_parseResults);
 
-            result.Approved.Should().BeFalse();
+            result.Single().Approved.Should().BeFalse();
         }
 
         [Test]
@@ -79,9 +80,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
 
-            var result = Subject.GetDownloadDecision(_parseResult);
+            var result = Subject.GetRssDecision(_parseResults);
 
-            result.Approved.Should().BeTrue();
+            result.Single().Approved.Should().BeTrue();
         }
 
         [Test]
@@ -89,8 +90,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            var result = Subject.GetDownloadDecision(_parseResult);
-            result.Rejections.Should().HaveCount(3);
+            var result = Subject.GetRssDecision(_parseResults);
+            result.Single().Rejections.Should().HaveCount(3);
+        }
+
+
+        [Test]
+        public void parse_result_should_be_attached_to_decision()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
+
+            var result = Subject.GetRssDecision(_parseResults);
+            result.Single().ParseResult.Should().Be(_parseResults.Single());
         }
 
     }

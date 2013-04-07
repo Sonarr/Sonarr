@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Tv
         bool IsMonitored(int id);
         Series UpdateSeriesInfo(int seriesId);
         Series FindSeries(string title);
+        Series GetSeries(int seriesId);
         void AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
@@ -93,6 +94,11 @@ namespace NzbDrone.Core.Tv
             }
 
             return _seriesRepository.GetByTitle(normalizeTitle);
+        }
+
+        public Series GetSeries(int seriesId)
+        {
+            return _seriesRepository.Get(seriesId);
         }
 
         public void AddSeries(Series newSeries)
