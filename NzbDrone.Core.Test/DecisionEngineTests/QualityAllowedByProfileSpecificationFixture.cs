@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     public class QualityAllowedByProfileSpecificationFixture : CoreTest
     {
         private QualityAllowedByProfileSpecification _qualityAllowedByProfile;
-        private EpisodeParseResult parseResult;
+        private IndexerParseResult parseResult;
 
         public static object[] AllowedTestCases =
         {
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
-            parseResult = new EpisodeParseResult
+            parseResult = new IndexerParseResult
             {
                 Series = fakeSeries,
                 Quality = new QualityModel(Quality.DVD, true),

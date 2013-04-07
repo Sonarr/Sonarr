@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
-    using NzbDrone.Core.Qualities;
-    using NzbDrone.Core.Tv;
-    using NzbDrone.Core.Model;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
+using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core
 {
@@ -91,16 +91,16 @@ namespace NzbDrone.Core
 
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)(?:\W|_)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        internal static EpisodeParseResult ParsePath(string path)
+        internal static FileNameParseResult ParsePath(string path) 
         {
             var fileInfo = new FileInfo(path);
 
-            var result = ParseTitle(fileInfo.Name);
+            var result = ParseTitle<FileNameParseResult>(fileInfo.Name);
 
             if (result == null)
             {
                 Logger.Trace("Attempting to parse episode info using full path. {0}", fileInfo.FullName);
-                result = ParseTitle(fileInfo.FullName);
+                result = ParseTitle<FileNameParseResult>(fileInfo.FullName);
             }
 
             if (result != null)
@@ -115,7 +115,7 @@ namespace NzbDrone.Core
             return result;
         }
 
-        internal static EpisodeParseResult ParseTitle(string title)
+        internal static T ParseTitle<T>(string title) where T : ParseResult, new()
         {
             try
             {
@@ -128,7 +128,7 @@ namespace NzbDrone.Core
 
                     if (match.Count != 0)
                     {
-                        var result = ParseMatchCollection(match);
+                        var result = ParseMatchCollection<T>(match);
                         if (result != null)
                         {
                             //Check if episode is in the future (most likley a parse error)
@@ -138,7 +138,6 @@ namespace NzbDrone.Core
                             result.Language = ParseLanguage(title);
                             result.Quality = ParseQuality(title);
                             result.OriginalString = title;
-                            result.ReleaseGroup = ParseReleaseGroup(title);
                             return result;
                         }
                     }
@@ -155,14 +154,14 @@ namespace NzbDrone.Core
             return null;
         }
 
-        private static EpisodeParseResult ParseMatchCollection(MatchCollection matchCollection)
+        private static T ParseMatchCollection<T>(MatchCollection matchCollection) where T : ParseResult, new()
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
 
             int airyear;
             Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airyear);
 
-            EpisodeParseResult parsedEpisode;
+            T parsedIndexer;
 
             if (airyear < 1900)
             {
@@ -183,7 +182,7 @@ namespace NzbDrone.Core
                 if (seasons.Distinct().Count() > 1)
                     return null;
 
-                parsedEpisode = new EpisodeParseResult
+                parsedIndexer = new T
                 {
                     SeasonNumber = seasons.First(),
                     EpisodeNumbers = new List<int>()
@@ -198,7 +197,7 @@ namespace NzbDrone.Core
                     {
                         var first = Convert.ToInt32(episodeCaptures.First().Value);
                         var last = Convert.ToInt32(episodeCaptures.Last().Value);
-                        parsedEpisode.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToList();
+                        parsedIndexer.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToList();
                     }
                     else
                     {
@@ -207,7 +206,7 @@ namespace NzbDrone.Core
                         if (!String.IsNullOrWhiteSpace(matchCollection[0].Groups["extras"].Value))
                             return null;
 
-                        parsedEpisode.FullSeason = true;
+                        parsedIndexer.FullSeason = true;
                     }
                 }
             }
@@ -226,26 +225,26 @@ namespace NzbDrone.Core
                     airmonth = tempDay;
                 }
 
-                parsedEpisode = new EpisodeParseResult
-                {                  
+                parsedIndexer = new T
+                {
                     AirDate = new DateTime(airyear, airmonth, airday).Date,
                 };
             }
 
-            parsedEpisode.SeriesTitle = seriesName;
+            parsedIndexer.SeriesTitle = seriesName;
 
-            Logger.Trace("Episode Parsed. {0}", parsedEpisode);
+            Logger.Trace("Episode Parsed. {0}", parsedIndexer);
 
-            return parsedEpisode;
+            return parsedIndexer;
         }
 
         public static string ParseSeriesName(string title)
         {
             Logger.Trace("Parsing string '{0}'", title);
 
-            var parseResult = ParseTitle(title);
+            var parseResult = ParseTitle<ParseResult>(title);
 
-            if(parseResult == null)
+            if (parseResult == null)
                 return NormalizeTitle(title);
 
             return parseResult.CleanTitle;
@@ -309,7 +308,7 @@ namespace NzbDrone.Core
                     return result;
                 }
 
-                if(name.Contains("[WEBDL]"))
+                if (name.Contains("[WEBDL]"))
                 {
                     result.Quality = Quality.WEBDL720p;
                     return result;
@@ -327,7 +326,7 @@ namespace NzbDrone.Core
 
             if (normalizedName.Contains("x264") || normalizedName.Contains("h264") || normalizedName.Contains("720p"))
             {
-                if(normalizedName.Contains("1080p"))
+                if (normalizedName.Contains("1080p"))
                 {
                     result.Quality = Quality.HDTV1080p;
                     return result;
@@ -472,27 +471,7 @@ namespace NzbDrone.Core
             return LanguageType.English;
         }
 
-        internal static string ParseReleaseGroup(string title)
-        {
-            Logger.Trace("Trying to parse release group for {0}", title);
 
-            title = title.Trim();
-            var index = title.LastIndexOf('-');
-            
-            if (index < 0)
-                index = title.LastIndexOf(' ');
-
-            if (index < 0)
-                return String.Empty;
-
-            var group = title.Substring(index + 1);
-
-            if (group.Length == title.Length)
-                return String.Empty;
-
-            Logger.Trace("Release Group found: {0}", group);
-            return group;
-        }
 
         public static string NormalizeTitle(string title)
         {
@@ -527,7 +506,7 @@ namespace NzbDrone.Core
 
         internal static string ParseHeader(string header)
         {
-            foreach(var regex in HeaderRegex)
+            foreach (var regex in HeaderRegex)
             {
                 var match = regex.Matches(header);
 

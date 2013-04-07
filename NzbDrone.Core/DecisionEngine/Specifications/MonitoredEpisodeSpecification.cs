@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
         {
             var series = _seriesRepository.GetByTitle(subject.CleanTitle);
 

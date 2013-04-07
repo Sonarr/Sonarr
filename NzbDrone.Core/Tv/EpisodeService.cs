@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Tv
         Episode GetEpisode(int seriesId, DateTime date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
-        List<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult);
+        List<Episode> GetEpisodesByParseResult(ParseResult parseResult);
         List<Episode> EpisodesWithoutFiles(bool includeSpecials);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         List<Episode> EpisodesWithFiles();
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public List<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult)
+        public List<Episode> GetEpisodesByParseResult(ParseResult parseResult)
         {
             var result = new List<Episode>();
 
@@ -120,7 +120,10 @@ namespace NzbDrone.Core.Tv
                 Episode episodeInfo = null;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                    episodeInfo = _episodeRepository.GetEpisodeBySceneNumbering(parseResult.Series.Id, parseResult.SeasonNumber, episodeNumber);
+                {
+                    episodeInfo = _episodeRepository.GetEpisodeBySceneNumbering(parseResult.Series.Id,
+                                                                                parseResult.SeasonNumber, episodeNumber);
+                }
 
                 if (episodeInfo == null)
                 {

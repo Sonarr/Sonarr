@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
         }
 
-        public virtual bool IsInQueue(EpisodeParseResult newParseResult)
+        public virtual bool IsInQueue(IndexerParseResult newParseResult)
         {
             try
             {

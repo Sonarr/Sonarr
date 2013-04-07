@@ -23,7 +23,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return "Episode doesn't match";
             }
         }
-        public bool IsSatisfiedBy(EpisodeParseResult episodeParseResult, SearchDefinitionBase searchDefinitionBase)
+        public bool IsSatisfiedBy(IndexerParseResult indexerParseResult, SearchDefinitionBase searchDefinitionBase)
         {
             var dailySearchSpec = searchDefinitionBase as DailyEpisodeSearchDefinition;
 
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             var episode = _episodeService.GetEpisode(dailySearchSpec.SeriesId, dailySearchSpec.Airtime);
 
-            if (!episodeParseResult.AirDate.HasValue || episodeParseResult.AirDate.Value != episode.AirDate.Value)
+            if (!indexerParseResult.AirDate.HasValue || indexerParseResult.AirDate.Value != episode.AirDate.Value)
             {
                 _logger.Trace("Episode AirDate does not match searched episode number, skipping.");
                 return false;

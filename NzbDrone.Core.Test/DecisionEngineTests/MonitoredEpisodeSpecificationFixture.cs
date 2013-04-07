@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         private MonitoredEpisodeSpecification monitoredEpisodeSpecification;
 
-        private EpisodeParseResult parseResultMulti;
-        private EpisodeParseResult parseResultSingle;
+        private IndexerParseResult parseResultMulti;
+        private IndexerParseResult parseResultSingle;
         private Series fakeSeries;
         private Episode firstEpisode;
         private Episode secondEpisode;
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .With(c => c.Monitored = true)
                 .Build();
 
-            parseResultMulti = new EpisodeParseResult
+            parseResultMulti = new IndexerParseResult
             {
                 SeriesTitle = "Title",
                 Series = fakeSeries,
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 SeasonNumber = 12,
             };
 
-            parseResultSingle = new EpisodeParseResult
+            parseResultSingle = new IndexerParseResult
             {
                 SeriesTitle = "Title",
                 Series = fakeSeries,

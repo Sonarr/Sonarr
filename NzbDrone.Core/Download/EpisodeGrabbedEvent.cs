@@ -5,9 +5,9 @@ namespace NzbDrone.Core.Download
 {
     public class EpisodeGrabbedEvent : IEvent
     {
-        public EpisodeParseResult ParseResult { get; private set; }
+        public IndexerParseResult ParseResult { get; private set; }
 
-        public EpisodeGrabbedEvent(EpisodeParseResult parseResult)
+        public EpisodeGrabbedEvent(IndexerParseResult parseResult)
         {
             ParseResult = parseResult;
         }

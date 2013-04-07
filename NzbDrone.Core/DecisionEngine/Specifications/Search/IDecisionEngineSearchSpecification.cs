@@ -6,6 +6,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 {
     public interface IDecisionEngineSearchSpecification : IRejectWithReason
     {
-        bool IsSatisfiedBy(EpisodeParseResult subject, SearchDefinitionBase searchDefinitionBase);
+        bool IsSatisfiedBy(IndexerParseResult indexerParseResult, SearchDefinitionBase searchDefinitionBase);
     }
 }

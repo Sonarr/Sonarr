@@ -10,7 +10,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
-    
+
     [TestFixture]
     public class ParserFixture : CoreTest
     {
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Portlandia.S03E10.Alexandra.720p.WEB-DL.AAC2.0.H.264-CROM.mkv", "Portlandia", 3, 10)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<IndexerParseResult>(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void unparsable_path_should_report_the_path()
         {
             Parser.ParsePath("C:\\").Should().BeNull();
-            
+
             MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.IsAny<ParseErrorReport>()), Times.Exactly(2));
 
             ExceptionVerification.IgnoreWarns();
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string TITLE = "SOMETHING";
 
-            Parser.ParseTitle(TITLE).Should().BeNull();
+            Parser.ParseTitle<ParseResult>(TITLE).Should().BeNull();
 
             MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(r => r.Title == TITLE)), Times.Once());
 
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "", 7, new[] { 22, 23 })]
         [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
-        [TestCase("S02E03-04-05.720p.BluRay-FUTV", "", 2, new[] { 3,4,5 })]
+        [TestCase("S02E03-04-05.720p.BluRay-FUTV", "", 2, new[] { 3, 4, 5 })]
         [TestCase("Breakout.Kings.S02E09-E10.HDTV.x264-ASAP", "Breakout Kings", 2, new[] { 9, 10 })]
         [TestCase("Breakout Kings - 2x9-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
         [TestCase("Breakout Kings - 2x09-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hell.on.Wheels.S02E09-E10.720p.HDTV.x264-EVOLVE", "Hell on Wheels", 2, new[] { 9, 10 })]
         public void TitleParse_multi(string postTitle, string title, int season, int[] episodes)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
@@ -167,12 +167,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("2011.01.10 - Denis Leary - HD TV.mkv", "", 2011, 1, 10)]
         [TestCase("2011.03.13 - Denis Leary - HD TV.mkv", "", 2011, 3, 13)]
         [TestCase("The Tonight Show with Jay Leno - 2011-06-16 - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo", "The Tonight Show with Jay Leno", 2011, 6, 16)]
-        [TestCase("2020.NZ.2012.16.02.PDTV.XviD-C4TV","2020nz", 2012,2, 16)]
-        [TestCase("2020.NZ.2012.13.02.PDTV.XviD-C4TV","2020nz", 2012,2, 13)]
-        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV","2020nz", 2011,12, 2)]
+        [TestCase("2020.NZ.2012.16.02.PDTV.XviD-C4TV", "2020nz", 2012, 2, 16)]
+        [TestCase("2020.NZ.2012.13.02.PDTV.XviD-C4TV", "2020nz", 2012, 2, 13)]
+        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "2020nz", 2011, 12, 2)]
         public void parse_daily_episodes(string postTitle, string title, int year, int month, int day)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var title = string.Format("{0:yyyy.MM.dd} - Denis Leary - HD TV.mkv", DateTime.Now.AddDays(2));
 
-            Parser.ParseTitle(title).Should().BeNull();
+            Parser.ParseTitle<ParseResult>(title).Should().BeNull();
         }
 
 
@@ -197,7 +197,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "Adventure Time", 2)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.EpisodeNumbers.Count.Should().Be(0);
@@ -338,7 +338,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Doctor Who Confidential   Season 3", "Doctor Who Confidential", 3)]
         public void parse_season_info(string postTitle, string seriesName, int seasonNumber)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
 
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(seriesName));
             result.SeasonNumber.Should().Be(seasonNumber);
@@ -364,7 +364,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Instant Star S03 EXTRAS DVDRip XviD OSiTV")]
         public void parse_season_extras(string postTitle)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
 
             result.Should().BeNull();
         }
@@ -374,7 +374,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("CSI.S11.SUBPACK.DVDRip.XviD-REWARD")]
         public void parse_season_subpack(string postTitle)
         {
-            var result = Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
 
             result.Should().BeNull();
         }
@@ -382,20 +382,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Fussball Bundesliga 10e2011e30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
         public void unparsable_should_log_error_but_not_throw(string title)
         {
-            Parser.ParseTitle(title);
+            Parser.ParseTitle<ParseResult>(title);
             ExceptionVerification.IgnoreWarns();
             ExceptionVerification.ExpectedErrors(1);
-        }
-
-        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", "LOL")]
-        [TestCase("Castle 2009 S01E14 English HDTV XviD LOL", "LOL")]
-        [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER", "RUNNER")]
-        [TestCase("Punky.Brewster.S01.EXTRAS.DVDRip.XviD-RUNNER", "RUNNER")]
-        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "C4TV")]
-        [TestCase("The.Office.S03E115.DVDRip.XviD-OSiTV", "OSiTV")]
-        public void parse_releaseGroup(string title, string expected)
-        {
-            Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
 
         [TestCase("[112461]-[FULL]-[#a.b.teevee@EFNet]-[ 666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION ]-[02/31] - \"the.devils.address.103.720p-dimension.par2\" yEnc", "666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION")]
@@ -409,7 +398,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]
         public void should_not_parse_encypted_posts(string title)
         {
-            Parser.ParseTitle(title).Should().BeNull();
+            Parser.ParseTitle<ParseResult>(title).Should().BeNull();
             ExceptionVerification.IgnoreWarns();
         }
     }

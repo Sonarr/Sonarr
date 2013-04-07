@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadClient
     {
-        bool IsInQueue(EpisodeParseResult newParseResult);
+        bool IsInQueue(IndexerParseResult newParseResult);
         bool DownloadNzb(string url, string title, bool recentlyAired);
     }
 }

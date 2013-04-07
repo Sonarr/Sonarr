@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Download.Clients
             try
             {
                 //Todo: Allow full season releases
-                if (Parser.ParseTitle(title).FullSeason)
+                if (Parser.ParseTitle<ParseResult>(title).FullSeason)
                 {
                     logger.Info("Skipping Full Season Release: {0}", title);
                     return false;
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Download.Clients
 
                 var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
                 _diskProvider.WriteAllText(Path.Combine(_configService.DownloadClientTvDirectory, title + ".strm"), contents);
-                
+
                 return true;
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients
             }
         }
 
-        public virtual bool IsInQueue(EpisodeParseResult newParseResult)
+        public virtual bool IsInQueue(IndexerParseResult newParseResult)
         {
             return false;
         }

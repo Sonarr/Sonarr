@@ -6,7 +6,7 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class DownloadDecision
     {
-        public EpisodeParseResult ParseResult { get; private set; }
+        public IndexerParseResult ParseResult { get; private set; }
         public IEnumerable<string> Rejections { get; private set; }
 
         public bool Approved
@@ -17,14 +17,14 @@ namespace NzbDrone.Core.DecisionEngine
             }
         }
 
-        public DownloadDecision(EpisodeParseResult parseResult, params string[] rejections)
+        public DownloadDecision(IndexerParseResult parseResult, params string[] rejections)
         {
             ParseResult = parseResult;
             Rejections = rejections.ToList();
         }
 
 
-        public static EpisodeParseResult PickBestReport(IEnumerable<DownloadDecision> downloadDecisions)
+        public static IndexerParseResult PickBestReport(IEnumerable<DownloadDecision> downloadDecisions)
         {
             var reports = downloadDecisions
                   .Where(c => c.Approved)

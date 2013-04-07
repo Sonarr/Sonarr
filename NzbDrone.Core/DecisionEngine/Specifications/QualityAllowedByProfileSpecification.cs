@@ -20,7 +20,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
         {
             _logger.Trace("Checking if report meets quality requirements. {0}", subject.Quality);
             if (!subject.Series.QualityProfile.Allowed.Contains(subject.Quality.Quality))

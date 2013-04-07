@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.Download
     [TestFixture]
     public class DownloadServiceFixture : CoreTest<DownloadService>
     {
-        private EpisodeParseResult _parseResult;
+        private IndexerParseResult _parseResult;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Download
                 .All().With(s => s.SeriesId = 5)
                 .Build().ToList();
 
-            _parseResult = Builder<EpisodeParseResult>.CreateNew()
+            _parseResult = Builder<IndexerParseResult>.CreateNew()
                    .With(c => c.Quality = new QualityModel(Quality.DVD, false))
                    .With(c => c.Series = Builder<Series>.CreateNew().Build())
                    .With(c => c.EpisodeNumbers = new List<int> { 2 })

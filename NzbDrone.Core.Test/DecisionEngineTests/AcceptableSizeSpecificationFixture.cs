@@ -21,8 +21,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     
     public class AcceptableSizeSpecificationFixture : CoreTest
     {
-        private EpisodeParseResult parseResultMulti;
-        private EpisodeParseResult parseResultSingle;
+        private IndexerParseResult parseResultMulti;
+        private IndexerParseResult parseResultSingle;
         private Series series30minutes;
         private Series series60minutes;
         private QualitySize qualityType;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            parseResultMulti = new EpisodeParseResult
+            parseResultMulti = new IndexerParseResult
                                    {
                                        SeriesTitle = "Title",
                                        Language = LanguageType.English,
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                        AirDate = DateTime.Now.AddDays(-12).Date
                                    };
 
-            parseResultSingle = new EpisodeParseResult
+            parseResultSingle = new IndexerParseResult
                                     {
                                         SeriesTitle = "Title",
                                         Language = LanguageType.English,
@@ -392,7 +392,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_RAWHD()
         {
-            var parseResult = new EpisodeParseResult
+            var parseResult = new IndexerParseResult
                 {
                         Quality = new QualityModel(Quality.RAWHD, false)
                 };

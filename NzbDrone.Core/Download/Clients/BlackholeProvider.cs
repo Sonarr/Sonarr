@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients
             }
         }
 
-        public virtual bool IsInQueue(EpisodeParseResult newParseResult)
+        public virtual bool IsInQueue(IndexerParseResult newParseResult)
         {
             return !_upgradeHistorySpecification.IsSatisfiedBy(newParseResult);
         }

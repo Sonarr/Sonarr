@@ -7,7 +7,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Model
 {
-    public class EpisodeParseResult
+    public class ParseResult
     {
         public string SeriesTitle { get; set; }
 
@@ -19,7 +19,6 @@ namespace NzbDrone.Core.Model
             }
         }
 
-        public DownloadDecision Decision { get; set; }
 
         public string EpisodeTitle { get; set; }
 
@@ -33,23 +32,13 @@ namespace NzbDrone.Core.Model
 
         public LanguageType Language { get; set; }
 
-        public string NzbUrl { get; set; }
-
-        public string NzbInfoUrl { get; set; }
-
         public string OriginalString { get; set; }
 
         public Series Series { get; set; }
 
-        public String Indexer { get; set; }
-
         public bool FullSeason { get; set; }
 
         public long Size { get; set; }
-
-        public int Age { get; set; }
-
-        public string ReleaseGroup { get; set; }
 
         public bool SceneSource { get; set; }
 
@@ -74,7 +63,22 @@ namespace NzbDrone.Core.Model
 
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
         }
+    }
 
+
+    public class IndexerParseResult : ParseResult
+    {
+        public DownloadDecision Decision { get; set; }
+
+        public string NzbUrl { get; set; }
+
+        public string NzbInfoUrl { get; set; }
+
+        public String Indexer { get; set; }
+
+        public int Age { get; set; }
+
+        public string ReleaseGroup { get; set; }
 
         public string GetDownloadTitle()
         {
@@ -133,5 +137,11 @@ namespace NzbDrone.Core.Model
 
             return result;
         }
+    }
+
+
+    public class FileNameParseResult :ParseResult
+    {
+        
     }
 }

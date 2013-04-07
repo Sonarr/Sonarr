@@ -14,12 +14,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
     public class AllowedReleaseGroupSpecificationFixture : CoreTest<AllowedReleaseGroupSpecification>
     {
-        private EpisodeParseResult parseResult;
+        private IndexerParseResult parseResult;
 
         [SetUp]
         public void Setup()
         {
-            parseResult = new EpisodeParseResult
+            parseResult = new IndexerParseResult
                                     {
                                         SeriesTitle = "Title",
                                         Language = LanguageType.English,

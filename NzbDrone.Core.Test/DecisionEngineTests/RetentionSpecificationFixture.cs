@@ -23,14 +23,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         private RetentionSpecification retentionSpecification;
 
-        private EpisodeParseResult parseResult;
+        private IndexerParseResult parseResult;
 
         [SetUp]
         public void Setup()
         {
             retentionSpecification = Mocker.Resolve<RetentionSpecification>();
 
-            parseResult = new EpisodeParseResult
+            parseResult = new IndexerParseResult
             {
                 Age = 100
             };

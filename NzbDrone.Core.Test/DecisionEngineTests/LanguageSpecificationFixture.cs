@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     
     public class LanguageSpecificationFixture : CoreTest
     {
-        private EpisodeParseResult parseResult;
+        private IndexerParseResult parseResult;
 
         private void WithEnglishRelease()
         {
-            parseResult = Builder<EpisodeParseResult>
+            parseResult = Builder<IndexerParseResult>
                     .CreateNew()
                     .With(p => p.Language = LanguageType.English)
                     .Build();
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithGermanRelease()
         {
-            parseResult = Builder<EpisodeParseResult>
+            parseResult = Builder<IndexerParseResult>
                     .CreateNew()
                     .With(p => p.Language = LanguageType.German)
                     .Build();

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Indexers.NzbIndex
             return item.Links[0].Uri.ToString();
         }
 
-        protected override EpisodeParseResult PostProcessor(SyndicationItem item, EpisodeParseResult currentResult)
+        protected override IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
         {
             if (currentResult != null)
             {

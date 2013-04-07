@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        bool DownloadReport(EpisodeParseResult parseResult);
+        bool DownloadReport(IndexerParseResult parseResult);
     }
 
     public class DownloadService : IDownloadService
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public bool DownloadReport(EpisodeParseResult parseResult)
+        public bool DownloadReport(IndexerParseResult parseResult)
         {
             var downloadTitle = parseResult.OriginalString;
             if (!_configService.DownloadClientUseSceneName)
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Download
             return success;
         }
 
-        private static bool ContainsRecentEpisode(EpisodeParseResult parseResult)
+        private static bool ContainsRecentEpisode(IndexerParseResult parseResult)
         {
             return parseResult.Episodes.Any(e => e.AirDate >= DateTime.Today.AddDays(-7));
         }

@@ -21,7 +21,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
         {
             return !_downloadClientProvider.GetDownloadClient().IsInQueue(subject);
         }

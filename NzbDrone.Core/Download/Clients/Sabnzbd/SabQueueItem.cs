@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Newtonsoft.Json;
 using NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
@@ -27,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             set
             {
                 _title = value;
-                ParseResult = Parser.ParseTitle(value.Replace("DUPLICATE / ", String.Empty));
+                ParseResult = Parser.ParseTitle<ParseResult>(value.Replace("DUPLICATE / ", String.Empty));
             }
         }
 
@@ -45,6 +43,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         [JsonProperty(PropertyName = "nzo_id")]
         public string Id { get; set; }
 
-        public EpisodeParseResult ParseResult { private set; get; }
+        public ParseResult ParseResult { private set; get; }
     }
 }

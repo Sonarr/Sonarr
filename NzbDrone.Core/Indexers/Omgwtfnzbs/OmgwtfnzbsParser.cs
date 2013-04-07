@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return String.Empty;
         }
 
-        protected override EpisodeParseResult PostProcessor(SyndicationItem item, EpisodeParseResult currentResult)
+        protected override IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
         {
             if (currentResult != null)
             {

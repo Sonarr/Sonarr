@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
 {
     public class NzbClubParser : BasicRssParser
     {
-        protected override EpisodeParseResult PostProcessor(SyndicationItem item, EpisodeParseResult currentResult)
+        protected override IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
         {
             if (currentResult != null)
             {

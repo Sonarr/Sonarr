@@ -5,9 +5,9 @@ namespace NzbDrone.Core.MediaFiles.Events
 {
     public class EpisodeDownloadedEvent : IEvent
     {
-        public EpisodeParseResult ParseResult { get; private set; }
+        public FileNameParseResult ParseResult { get; private set; }
 
-        public EpisodeDownloadedEvent(EpisodeParseResult parseResult)
+        public EpisodeDownloadedEvent(FileNameParseResult parseResult)
         {
             ParseResult = parseResult;
         }

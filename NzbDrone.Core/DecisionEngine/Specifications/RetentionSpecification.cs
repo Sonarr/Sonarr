@@ -24,7 +24,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
         {
             _logger.Trace("Checking if report meets retention requirements. {0}", subject.Age);
             if (_configService.Retention > 0 && subject.Age > _configService.Retention)

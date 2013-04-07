@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Indexers
 
     public interface IFetchAndParseRss
     {
-        List<EpisodeParseResult> Fetch();
+        List<IndexerParseResult> Fetch();
     }
 
     public class FetchAndParseRssService : IFetchAndParseRss
@@ -79,9 +79,9 @@ namespace NzbDrone.Core.Indexers
             _feedFetcher = feedFetcher;
         }
 
-        public List<EpisodeParseResult> Fetch()
+        public List<IndexerParseResult> Fetch()
         {
-            var result = new List<EpisodeParseResult>();
+            var result = new List<IndexerParseResult>();
 
             var indexers = _indexerService.GetAvailableIndexers();
 

@@ -21,12 +21,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             }
         }
 
-        public bool IsSatisfiedBy(EpisodeParseResult episodeParseResult, SearchDefinitionBase searchDefinitionBase)
+        public bool IsSatisfiedBy(IndexerParseResult indexerParseResult, SearchDefinitionBase searchDefinitionBase)
         {
             var singleEpisodeSpec = searchDefinitionBase as SeasonSearchDefinition;
             if (singleEpisodeSpec == null) return true;
 
-            if (singleEpisodeSpec.SeasonNumber != episodeParseResult.SeasonNumber)
+            if (singleEpisodeSpec.SeasonNumber != indexerParseResult.SeasonNumber)
             {
                 _logger.Trace("Season number does not match searched season number, skipping.");
                 return false;

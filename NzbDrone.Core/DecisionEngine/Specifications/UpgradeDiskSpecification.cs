@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
         {
             foreach (var file in subject.Episodes.Select(c => c.EpisodeFile).Where(c => c != null))
             {

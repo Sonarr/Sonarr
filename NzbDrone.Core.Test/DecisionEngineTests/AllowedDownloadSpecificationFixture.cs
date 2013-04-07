@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     [TestFixture]
     public class AllowedDownloadSpecificationFixture : CoreTest<DownloadDecisionMaker>
     {
-        private List<EpisodeParseResult> _parseResults;
+        private List<IndexerParseResult> _parseResults;
 
         private Mock<IDecisionEngineSpecification> _pass1;
         private Mock<IDecisionEngineSpecification> _pass2;
@@ -33,15 +33,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2 = new Mock<IDecisionEngineSpecification>();
             _fail3 = new Mock<IDecisionEngineSpecification>();
 
-            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
-            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
-            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
+            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<IndexerParseResult>())).Returns(true);
+            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<IndexerParseResult>())).Returns(true);
+            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<IndexerParseResult>())).Returns(true);
 
-            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(false);
-            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(false);
-            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(false);
+            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<IndexerParseResult>())).Returns(false);
+            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<IndexerParseResult>())).Returns(false);
+            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<IndexerParseResult>())).Returns(false);
 
-            _parseResults = new List<EpisodeParseResult>() { new EpisodeParseResult() };
+            _parseResults = new List<IndexerParseResult>() { new IndexerParseResult() };
 
         }
 

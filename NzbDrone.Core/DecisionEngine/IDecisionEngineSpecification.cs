@@ -4,6 +4,6 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IDecisionEngineSpecification : IRejectWithReason
     {
-        bool IsSatisfiedBy(EpisodeParseResult subject);
+        bool IsSatisfiedBy(IndexerParseResult subject);
     }
 }

@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         private UpgradeHistorySpecification _upgradeHistory;
 
-        private EpisodeParseResult _parseResultMulti;
-        private EpisodeParseResult _parseResultSingle;
+        private IndexerParseResult _parseResultMulti;
+        private IndexerParseResult _parseResultSingle;
         private QualityModel _upgradableQuality;
         private QualityModel _notupgradableQuality;
         private Series _fakeSeries;
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
-            _parseResultMulti = new EpisodeParseResult
+            _parseResultMulti = new IndexerParseResult
             {
                 Series = _fakeSeries,
                 Quality = new QualityModel(Quality.DVD, true),
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Episodes = doubleEpisodeList
             };
 
-            _parseResultSingle = new EpisodeParseResult
+            _parseResultSingle = new IndexerParseResult
             {
                 Series = _fakeSeries,
                 Quality = new QualityModel(Quality.DVD, true),

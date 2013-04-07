@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IParseFeed
     {
-        IEnumerable<EpisodeParseResult> Process(Stream source);
+        IEnumerable<IndexerParseResult> Process(Stream source);
     }
 
     public class BasicRssParser : IParseFeed
@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Indexers
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public IEnumerable<EpisodeParseResult> Process(Stream source)
+        public IEnumerable<IndexerParseResult> Process(Stream source)
         {
             var reader = new SyndicationFeedXmlReader(source);
             var feed = SyndicationFeed.Load(reader).Items;
 
-            var result = new List<EpisodeParseResult>();
+            var result = new List<IndexerParseResult>();
 
             foreach (var syndicationItem in feed)
             {
@@ -66,26 +66,46 @@ namespace NzbDrone.Core.Indexers
             return string.Empty;
         }
 
-        protected virtual EpisodeParseResult PostProcessor(SyndicationItem item, EpisodeParseResult currentResult)
+        protected virtual IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
         {
             return currentResult;
         }
 
-        private EpisodeParseResult ParseFeed(SyndicationItem item)
+        private IndexerParseResult ParseFeed(SyndicationItem item)
         {
             var title = GetTitle(item);
 
-            var episodeParseResult = Parser.ParseTitle(title);
+            var episodeParseResult = Parser.ParseTitle<IndexerParseResult>(title);
             if (episodeParseResult != null)
             {
                 episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
                 episodeParseResult.OriginalString = title;
                 episodeParseResult.SceneSource = true;
+                episodeParseResult.ReleaseGroup = ParseReleaseGroup(title);
             }
 
             _logger.Trace("Parsed: {0} from: {1}", episodeParseResult, item.Title.Text);
 
             return PostProcessor(item, episodeParseResult);
+        }
+
+        private static string ParseReleaseGroup(string title)
+        {
+            title = title.Trim();
+            var index = title.LastIndexOf('-');
+
+            if (index < 0)
+                index = title.LastIndexOf(' ');
+
+            if (index < 0)
+                return String.Empty;
+
+            var group = title.Substring(index + 1);
+
+            if (group.Length == title.Length)
+                return String.Empty;
+
+            return group;
         }
     }
 }

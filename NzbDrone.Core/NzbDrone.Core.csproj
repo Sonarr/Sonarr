@@ -509,7 +509,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExternalNotification\ExternalNotificationDefinition.cs" />
-    <Compile Include="Model\EpisodeParseResult.cs" />
+    <Compile Include="Model\IndexerParseResult.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />

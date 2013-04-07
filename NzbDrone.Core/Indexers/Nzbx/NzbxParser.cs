@@ -19,9 +19,9 @@ namespace NzbDrone.Core.Indexers.Nzbx
             _serializer = new JsonSerializer();
         }
 
-        public IEnumerable<EpisodeParseResult> Process(Stream source)
+        public IEnumerable<IndexerParseResult> Process(Stream source)
         {
-            var result = new List<EpisodeParseResult>();
+            var result = new List<IndexerParseResult>();
             var jsonReader = new JsonTextReader(new StreamReader(source));
             var feed = _serializer.Deserialize<List<NzbxRecentItem>>(jsonReader);
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers.Nzbx
             {
                 try
                 {
-                    var episodeParseResult = Parser.ParseTitle(item.Name);
+                    var episodeParseResult = Parser.ParseTitle<IndexerParseResult>(item.Name);
                     if (episodeParseResult != null)
                     {
                         episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PostDate).Days;

@@ -22,7 +22,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         }
 
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
         {
             if (!subject.Series.CustomStartDate.HasValue)
             {

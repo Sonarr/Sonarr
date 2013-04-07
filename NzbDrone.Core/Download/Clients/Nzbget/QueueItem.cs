@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             set
             {
                 _title = value;
-                ParseResult = Parser.ParseTitle(value.Replace("DUPLICATE / ", String.Empty));
+                ParseResult = Parser.ParseTitle<ParseResult>(value.Replace("DUPLICATE / ", String.Empty));
             }
         }
 
@@ -26,6 +26,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public Int32 FileSizeMb { get; set; }
         public Int32 RemainingSizeMb { get; set; }
 
-        public EpisodeParseResult ParseResult { private set; get; }
+        public ParseResult ParseResult { private set; get; }
     }
 }

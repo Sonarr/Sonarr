@@ -8,8 +8,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IMakeDownloadDecision
     {
-        IEnumerable<DownloadDecision> GetRssDecision(IEnumerable<EpisodeParseResult> episodeParseResults);
-        IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<EpisodeParseResult> episodeParseResult, SearchDefinitionBase searchDefinitionBase);
+        IEnumerable<DownloadDecision> GetRssDecision(IEnumerable<IndexerParseResult> episodeParseResults);
+        IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<IndexerParseResult> episodeParseResult, SearchDefinitionBase searchDefinitionBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.DecisionEngine
             _specifications = specifications;
         }
 
-        public IEnumerable<DownloadDecision> GetRssDecision(IEnumerable<EpisodeParseResult> episodeParseResults)
+        public IEnumerable<DownloadDecision> GetRssDecision(IEnumerable<IndexerParseResult> episodeParseResults)
         {
             foreach (var parseResult in episodeParseResults)
             {
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         }
 
-        public IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<EpisodeParseResult> episodeParseResults, SearchDefinitionBase searchDefinitionBase)
+        public IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<IndexerParseResult> episodeParseResults, SearchDefinitionBase searchDefinitionBase)
         {
             foreach (var parseResult in episodeParseResults)
             {
@@ -45,19 +45,19 @@ namespace NzbDrone.Core.DecisionEngine
         }
 
 
-        private IEnumerable<string> GetGeneralRejectionReasons(EpisodeParseResult episodeParseResult)
+        private IEnumerable<string> GetGeneralRejectionReasons(IndexerParseResult indexerParseResult)
         {
             return _specifications
                 .OfType<IDecisionEngineSpecification>()
-                .Where(spec => !spec.IsSatisfiedBy(episodeParseResult))
+                .Where(spec => !spec.IsSatisfiedBy(indexerParseResult))
                 .Select(spec => spec.RejectionReason);
         }
 
-        private IEnumerable<string> GetSearchRejectionReasons(EpisodeParseResult episodeParseResult, SearchDefinitionBase searchDefinitionBase)
+        private IEnumerable<string> GetSearchRejectionReasons(IndexerParseResult indexerParseResult, SearchDefinitionBase searchDefinitionBase)
         {
             return _specifications
                 .OfType<IDecisionEngineSearchSpecification>()
-                .Where(spec => !spec.IsSatisfiedBy(episodeParseResult, searchDefinitionBase))
+                .Where(spec => !spec.IsSatisfiedBy(indexerParseResult, searchDefinitionBase))
                 .Select(spec => spec.RejectionReason);
         }
     }

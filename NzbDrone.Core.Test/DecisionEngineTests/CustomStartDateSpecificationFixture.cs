@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         private CustomStartDateSpecification _customStartDateSpecification;
 
-        private EpisodeParseResult parseResultMulti;
-        private EpisodeParseResult parseResultSingle;
+        private IndexerParseResult parseResultMulti;
+        private IndexerParseResult parseResultSingle;
         private Series fakeSeries;
         private Episode firstEpisode;
         private Episode secondEpisode;
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .With(c => c.CustomStartDate = null)
                 .Build();
 
-            parseResultMulti = new EpisodeParseResult
+            parseResultMulti = new IndexerParseResult
             {
                 SeriesTitle = "Title",
                 Series = fakeSeries,
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Episodes = new List<Episode> { firstEpisode, secondEpisode }
             };
 
-            parseResultSingle = new EpisodeParseResult
+            parseResultSingle = new IndexerParseResult
             {
                 SeriesTitle = "Title",
                 Series = fakeSeries,

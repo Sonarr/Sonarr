@@ -155,7 +155,6 @@ namespace NzbDrone.Core.Providers
             episodeFile.Quality = parseResult.Quality;
             episodeFile.SeasonNumber = parseResult.SeasonNumber;
             episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.NormalizePath());
-            episodeFile.ReleaseGroup = parseResult.ReleaseGroup;
 
             //Todo: We shouldn't actually import the file until we confirm its the only one we want.
             //Todo: Separate episodeFile creation from importing (pass file to import to import)
