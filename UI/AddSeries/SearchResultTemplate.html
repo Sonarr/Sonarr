@@ -1,32 +1,34 @@
-﻿<div class="row">
-    <div class="span2">
-        <a href="{{traktUrl}}" target="_blank">
-            <img class="series-poster img-polaroid" src="{{poster}}">
-        </a>
-    </div>
-    <div class="span9">
+﻿<div class="search-item">
+    <div class="row">
+        <div class="span2">
+            <a href="{{traktUrl}}" target="_blank">
+                <img class="series-poster img-polaroid" src="{{poster}}">
+            </a>
+        </div>
+        <div class="span9">
 
-        <div class="row">
-            {{#unless isExisting}}
-                <select class="span6 x-root-folder">
-                    {{#each rootFolders.models}}
-                        <option value="{{id}}">{{attributes.path}}</option>
+            <div class="row">
+                {{#unless isExisting}}
+                    <select class="span6 x-root-folder">
+                        {{#each rootFolders.models}}
+                            <option value="{{id}}">{{attributes.path}}</option>
+                        {{/each}}
+                    </select>
+                {{/unless}}
+                <select class="span2 x-quality-profile">
+                    {{#each qualityProfiles.models}}
+                        <option value="{{id}}">{{attributes.name}}</option>
                     {{/each}}
                 </select>
-            {{/unless}}
-            <select class="span2 x-quality-profile">
-                {{#each qualityProfiles.models}}
-                    <option value="{{id}}">{{attributes.name}}</option>
-                {{/each}}
-            </select>
 
-            <div class="btn btn-success icon-plus x-add pull-right"/>
-        </div>
-        <div class="row">
-            <h2>{{title}}</h2>
-        </div>
-        <div class="row">
-            {{overview}}
+                <div class="btn btn-success icon-plus x-add pull-right"/>
+            </div>
+            <div class="row">
+                <h2>{{title}}</h2>
+            </div>
+            <div class="row">
+                {{overview}}
+            </div>
         </div>
     </div>
 </div>

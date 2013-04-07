@@ -40,7 +40,12 @@
 
                 <div class="controls">
                     <div class="switch" data-on-label="Yes" data-off-label="No">
-                        <input type="checkbox" name="allowed"/>
+                        {{#if allowed}}
+                            <input type="checkbox" checked="checked" />
+                        {{else}}
+                            <input type="checkbox" />
+                        {{/if}}
+
                     </div>
                 </div>
             </div>

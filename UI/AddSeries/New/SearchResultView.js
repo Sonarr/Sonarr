@@ -4,7 +4,6 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
         template : "AddSeries/SearchResultTemplate",
-        className: 'search-item',
 
         ui: {
             qualityProfile: '.x-quality-profile',
@@ -13,14 +12,14 @@ define(['app', 'Shared/NotificationCollection', 'AddSeries/SearchResultCollectio
         },
 
         events: {
-            'click .x-add': 'add'
+            'click .x-add': 'addSeries'
         },
 
         onRender: function () {
             this.listenTo(this.model, 'change', this.render);
         },
 
-        add: function () {
+        addSeries: function () {
 
             var quality = this.ui.qualityProfile.val();
 

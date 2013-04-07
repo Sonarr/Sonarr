@@ -5,7 +5,6 @@ define(['app', 'Calendar/CalendarItemView'], function () {
         itemView         : NzbDrone.Calendar.CalendarItemView,
         itemViewContainer: '#events',
         template         : 'Calendar/CalendarCollectionTemplate',
-        className        : 'row',
 
         ui: {
             calendar: '#calendar'

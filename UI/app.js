@@ -30,6 +30,7 @@ require.config({
 define('app', function () {
 
     window.NzbDrone = new Backbone.Marionette.Application();
+    window.NzbDrone.Config = {};
     window.NzbDrone.Series = {};
     window.NzbDrone.Series.Index = {};
     window.NzbDrone.Series.Edit = {};

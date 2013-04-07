@@ -11,8 +11,7 @@ define(['app', 'Quality/QualityProfileModel'], function () {
         },
 
         events: {
-            'click .x-save': 'saveQualityProfile',
-            //'click .x-remove': 'removeSeries'
+            'click .x-save': 'saveQualityProfile'
         },
 
         onRender: function () {
@@ -20,19 +19,13 @@ define(['app', 'Quality/QualityProfileModel'], function () {
             this.ui.switch.bootstrapSwitch();
         },
 
-
         saveQualityProfile: function () {
             //Todo: Make sure model is updated with Allowed, Cutoff, Name
 
             this.model.save();
             this.trigger('saved');
             this.$el.parent().modal('hide');
-        },
-
-        //        removeSeries: function () {
-        //            var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
-        //            NzbDrone.modalRegion.show(view);
-        //        }
+        }
     });
 
 });
