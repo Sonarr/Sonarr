@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
             if (currentResult != null)
             {
                 var sizeString = Regex.Match(item.Summary.Text, @"Size:\s\d+\.\d{1,2}\s\w{2}\s", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
-                currentResult.Size = Parser.GetReportSize(sizeString);
+                currentResult.Size = GetReportSize(sizeString);
             }
 
             return currentResult;
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
 
         protected override string GetTitle(SyndicationItem syndicationItem)
         {
-            var title = Parser.ParseHeader(syndicationItem.Title.Text);
+            var title = ParseHeader(syndicationItem.Title.Text);
 
             if (String.IsNullOrWhiteSpace(title))
                 return syndicationItem.Title.Text;

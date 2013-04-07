@@ -53,7 +53,7 @@ namespace NzbDrone.Core
                                     new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)\d{1})(?<episode>\d{2}(?!p|i|\d+)))+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Mini-Series, treated as season 1, episodes are labeled as Part01, Part 01, Part.1
+                                    //Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
                                     new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
@@ -72,26 +72,13 @@ namespace NzbDrone.Core
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\||""",
                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2})\W?(?<unit>GB|MB|GiB|MiB)",
-                                                              RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex[] HeaderRegex = new[]
-                                                          {
-                                                                new Regex(@"(?:\[.+\]\-\[.+\]\-\[.+\]\-\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                                
-                                                                new Regex(@"(?:\[.+\]\W+\[.+\]\W+\[.+\]\W+\"")(?<nzbTitle>.+)(?:\"".+)",
-                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                                    
-                                                                new Regex(@"(?:\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                          };
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)(?:\W|_)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        internal static FileNameParseResult ParsePath(string path) 
+        public static FileNameParseResult ParsePath(string path) 
         {
             var fileInfo = new FileInfo(path);
 
@@ -115,7 +102,7 @@ namespace NzbDrone.Core
             return result;
         }
 
-        internal static T ParseTitle<T>(string title) where T : ParseResult, new()
+        public static T ParseTitle<T>(string title) where T : ParseResult, new()
         {
             try
             {
@@ -158,12 +145,12 @@ namespace NzbDrone.Core
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
 
-            int airyear;
-            Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airyear);
+            int airYear;
+            Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airYear);
 
-            T parsedIndexer;
+            T result;
 
-            if (airyear < 1900)
+            if (airYear < 1900)
             {
                 var seasons = new List<int>();
 
@@ -182,7 +169,7 @@ namespace NzbDrone.Core
                 if (seasons.Distinct().Count() > 1)
                     return null;
 
-                parsedIndexer = new T
+                result = new T
                 {
                     SeasonNumber = seasons.First(),
                     EpisodeNumbers = new List<int>()
@@ -197,7 +184,7 @@ namespace NzbDrone.Core
                     {
                         var first = Convert.ToInt32(episodeCaptures.First().Value);
                         var last = Convert.ToInt32(episodeCaptures.Last().Value);
-                        parsedIndexer.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToList();
+                        result.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToList();
                     }
                     else
                     {
@@ -206,7 +193,7 @@ namespace NzbDrone.Core
                         if (!String.IsNullOrWhiteSpace(matchCollection[0].Groups["extras"].Value))
                             return null;
 
-                        parsedIndexer.FullSeason = true;
+                        result.FullSeason = true;
                     }
                 }
             }
@@ -225,17 +212,17 @@ namespace NzbDrone.Core
                     airmonth = tempDay;
                 }
 
-                parsedIndexer = new T
+                result = new T
                 {
-                    AirDate = new DateTime(airyear, airmonth, airday).Date,
+                    AirDate = new DateTime(airYear, airmonth, airday).Date,
                 };
             }
 
-            parsedIndexer.SeriesTitle = seriesName;
+            result.SeriesTitle = seriesName;
 
-            Logger.Trace("Episode Parsed. {0}", parsedIndexer);
+            Logger.Trace("Episode Parsed. {0}", result);
 
-            return parsedIndexer;
+            return result;
         }
 
         public static string ParseSeriesName(string title)
@@ -250,7 +237,7 @@ namespace NzbDrone.Core
             return parseResult.CleanTitle;
         }
 
-        internal static QualityModel ParseQuality(string name)
+        private static QualityModel ParseQuality(string name)
         {
             Logger.Trace("Trying to parse quality for {0}", name);
 
@@ -399,7 +386,7 @@ namespace NzbDrone.Core
             return result;
         }
 
-        internal static LanguageType ParseLanguage(string title)
+        private static LanguageType ParseLanguage(string title)
         {
             var lowerTitle = title.ToLower();
 
@@ -484,40 +471,7 @@ namespace NzbDrone.Core
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
 
-        public static long GetReportSize(string sizeString)
-        {
-            var match = ReportSizeRegex.Matches(sizeString);
-
-            if (match.Count != 0)
-            {
-                var cultureInfo = new CultureInfo("en-US");
-                var value = Decimal.Parse(Regex.Replace(match[0].Groups["value"].Value, "\\,", ""), cultureInfo);
-
-                var unit = match[0].Groups["unit"].Value;
-
-                if (unit.Equals("MB", StringComparison.InvariantCultureIgnoreCase) || unit.Equals("MiB", StringComparison.InvariantCultureIgnoreCase))
-                    return Convert.ToInt64(value * 1048576L);
-
-                if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) || unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
-                    return Convert.ToInt64(value * 1073741824L);
-            }
-            return 0;
-        }
-
-        internal static string ParseHeader(string header)
-        {
-            foreach (var regex in HeaderRegex)
-            {
-                var match = regex.Matches(header);
-
-                if (match.Count != 0)
-                    return match[0].Groups["nzbTitle"].Value.Trim();
-            }
-
-            return header;
-        }
-
-        internal static string CleanupEpisodeTitle(string title)
+        public static string CleanupEpisodeTitle(string title)
         {
             //this will remove (1),(2) from the end of multi part episodes.
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();

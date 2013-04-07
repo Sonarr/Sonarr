@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
@@ -20,39 +21,22 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
-            foreach (var url in RecentFeed)
-            {
-                yield return String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber);
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
         }
 
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
         {
-            var searchUrls = new List<string>();
-
-            foreach (var url in RecentFeed)
-            {
-                searchUrls.Add(String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM/dd}", url, NewsnabifyTitle(seriesTitle), date));
-            }
-
-            return searchUrls;
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM/dd}", url, NewsnabifyTitle(seriesTitle), date)).ToList();
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
         {
-            foreach (var url in RecentFeed)
-            {
-                yield return String.Format("{0}&limit=100&q={1}&season={2}", url, NewsnabifyTitle(seriesTitle), seasonNumber);
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}", url, NewsnabifyTitle(seriesTitle), seasonNumber));
         }
 
         public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
         {
-            foreach (var url in RecentFeed)
-            {
-                yield return
-                    String.Format("{0}&limit=100&q={1}+S{2:00}E{3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeWildcard);
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+S{2:00}E{3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeWildcard));
         }
 
         public override string Name

@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             if (currentResult != null)
             {
                 var sizeString = Regex.Match(item.Summary.Text, @"Size:\<\/b\>\s\d+\.\d{1,2}\s\w{2}\<br \/\>", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
-                currentResult.Size = Parser.GetReportSize(sizeString);
+                currentResult.Size = GetReportSize(sizeString);
             }
 
             return currentResult;

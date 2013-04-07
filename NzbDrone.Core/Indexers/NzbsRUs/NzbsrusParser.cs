@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers.NzbsRUs
             if (currentResult != null)
             {
                 var sizeString = Regex.Match(item.Summary.Text, @"\d+\.\d{1,2} \w{3}", RegexOptions.IgnoreCase).Value;
-                currentResult.Size = Parser.GetReportSize(sizeString);
+                currentResult.Size = GetReportSize(sizeString);
             }
 
             return currentResult;

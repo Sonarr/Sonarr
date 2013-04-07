@@ -134,6 +134,7 @@
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
+    <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />

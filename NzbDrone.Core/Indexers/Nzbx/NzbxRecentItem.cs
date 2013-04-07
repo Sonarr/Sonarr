@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace NzbDrone.Core.Model.Nzbx
+namespace NzbDrone.Core.Indexers.Nzbx
 {
     public class NzbxRecentItem
     {
@@ -42,6 +39,5 @@ namespace NzbDrone.Core.Model.Nzbx
         public int RageId { get; set; }
         public int Comments { get; set; }
         public int Downloads { get; set; }
-        public NzbxVotesModel Votes { get; set; }
     }
 }

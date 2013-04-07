@@ -18,8 +18,8 @@ namespace NzbDrone.Test.Common.AutoMoq
     [DebuggerStepThrough]
     public class AutoMoqer
     {
-        internal readonly MockBehavior DefaultBehavior = MockBehavior.Default;
-        internal Type ResolveType;
+        public readonly MockBehavior DefaultBehavior = MockBehavior.Default;
+        public Type ResolveType;
         private IUnityContainer container;
         private IDictionary<Type, object> registeredMocks;
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Test.Common.AutoMoq
 
         }
 
-        internal AutoMoqer(IUnityContainer container)
+        public AutoMoqer(IUnityContainer container)
         {
             SetupAutoMoqer(container);
         }
@@ -73,7 +73,7 @@ namespace NzbDrone.Test.Common.AutoMoq
             return mock;
         }
 
-        internal virtual void SetMock(Type type, Mock mock)
+        public virtual void SetMock(Type type, Mock mock)
         {
             if (registeredMocks.ContainsKey(type) == false)
                 registeredMocks.Add(type, mock);

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.ServiceModel.Syndication;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
 
@@ -63,7 +65,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual string GetNzbInfoUrl(SyndicationItem item)
         {
-            return string.Empty;
+            return String.Empty;
         }
 
         protected virtual IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
@@ -89,7 +91,7 @@ namespace NzbDrone.Core.Indexers
             return PostProcessor(item, episodeParseResult);
         }
 
-        private static string ParseReleaseGroup(string title)
+        public static string ParseReleaseGroup(string title)
         {
             title = title.Trim();
             var index = title.LastIndexOf('-');
@@ -102,10 +104,59 @@ namespace NzbDrone.Core.Indexers
 
             var group = title.Substring(index + 1);
 
-            if (group.Length == title.Length)
+            if (@group.Length == title.Length)
                 return String.Empty;
 
-            return group;
+            return @group;
+        }
+
+        private static readonly Regex[] HeaderRegex = new[]
+                                                          {
+                                                                new Regex(@"(?:\[.+\]\-\[.+\]\-\[.+\]\-\[)(?<nzbTitle>.+)(?:\]\-.+)",
+                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                
+                                                                new Regex(@"(?:\[.+\]\W+\[.+\]\W+\[.+\]\W+\"")(?<nzbTitle>.+)(?:\"".+)",
+                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                    
+                                                                new Regex(@"(?:\[)(?<nzbTitle>.+)(?:\]\-.+)",
+                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                          };
+
+        public static string ParseHeader(string header)
+        {
+            foreach (var regex in HeaderRegex)
+            {
+                var match = regex.Matches(header);
+
+                if (match.Count != 0)
+                    return match[0].Groups["nzbTitle"].Value.Trim();
+            }
+
+            return header;
+        }
+
+        private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2})\W?(?<unit>GB|MB|GiB|MiB)",
+                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+
+        public static long GetReportSize(string sizeString)
+        {
+            var match = ReportSizeRegex.Matches(sizeString);
+
+            if (match.Count != 0)
+            {
+                var cultureInfo = new CultureInfo("en-US");
+                var value = Decimal.Parse(Regex.Replace(match[0].Groups["value"].Value, "\\,", ""), cultureInfo);
+
+                var unit = match[0].Groups["unit"].Value;
+
+                if (unit.Equals("MB", StringComparison.InvariantCultureIgnoreCase) || unit.Equals("MiB", StringComparison.InvariantCultureIgnoreCase))
+                    return Convert.ToInt64(value * 1048576L);
+
+                if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) || unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
+                    return Convert.ToInt64(value * 1073741824L);
+            }
+            return 0;
         }
     }
 }

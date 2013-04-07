@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Contract;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -325,8 +326,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Burn.Notice.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP", LanguageType.German)]
         public void parse_language(string postTitle, LanguageType language)
         {
-            var result = Parser.ParseLanguage(postTitle);
-            result.Should().Be(language);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            result.Language.Should().Be(language);
         }
 
         [TestCase("Hawaii Five 0 S01 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1)]
@@ -344,19 +345,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(seasonNumber);
             result.FullSeason.Should().BeTrue();
             result.OriginalString.Should().Be(postTitle);
-        }
-
-        [TestCase("5.64 GB", 6055903887)]
-        [TestCase("5.54 GiB", 5948529705)]
-        [TestCase("398.62 MiB", 417983365)]
-        [TestCase("7,162.1MB", 7510006170)]
-        [TestCase("162.1MB", 169974170)]
-        [TestCase("398.62 MB", 417983365)]
-        public void parse_size(string sizeString, long expectedSize)
-        {
-            var result = Parser.GetReportSize(sizeString);
-
-            result.Should().Be(expectedSize);
         }
 
         [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER")]
@@ -392,7 +380,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[ 21154 ] - [ TrollHD ] - [ 00/73 ] - \"MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb\" yEnc", "MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb")]
         public void parse_header(string title, string expected)
         {
-            Parser.ParseHeader(title).Should().Be(expected);
+            BasicRssParser.ParseHeader(title).Should().Be(expected);
         }
 
         [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]

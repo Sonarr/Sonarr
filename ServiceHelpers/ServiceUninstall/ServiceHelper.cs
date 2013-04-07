@@ -7,7 +7,7 @@ using System.Security.Principal;
 
 namespace ServiceUninstall
 {
-    internal static class ServiceHelper
+    public static class ServiceHelper
     {
         private static string NzbDroneExe
         {
@@ -23,7 +23,7 @@ namespace ServiceUninstall
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        internal static void Run(string arg)
+        public static void Run(string arg)
         {
             if (!File.Exists(NzbDroneExe))
             {

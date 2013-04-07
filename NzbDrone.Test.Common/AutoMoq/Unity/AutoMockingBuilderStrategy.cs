@@ -10,7 +10,7 @@ using Moq;
 
 namespace NzbDrone.Test.Common.AutoMoq.Unity
 {
-    internal class AutoMockingBuilderStrategy : BuilderStrategy
+    public class AutoMockingBuilderStrategy : BuilderStrategy
     {
         private readonly IUnityContainer _container;
         private readonly MockRepository _mockFactory;

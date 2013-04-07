@@ -4,13 +4,14 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
     [TestFixture]
-    
+
     public class QualityParserFixture : CoreTest
     {
         public static object[] QualityParserCases =
@@ -96,17 +97,17 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test, TestCaseSource("QualityParserCases")]
         public void quality_parse(string postTitle, Quality quality, bool proper)
         {
-            var result = Parser.ParseQuality(postTitle);
-            result.Quality.Should().Be(quality);
-            result.Proper.Should().Be(proper);
+            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            result.Quality.Quality.Should().Be(quality);
+            result.Quality.Proper.Should().Be(proper);
         }
 
         [Test, TestCaseSource("SelfQualityParserCases")]
         public void parsing_our_own_quality_enum(Quality quality)
         {
             var fileName = String.Format("My series S01E01 [{0}]", quality);
-            var result = Parser.ParseQuality(fileName);
-            result.Quality.Should().Be(quality);
+            var result = Parser.ParseTitle<ParseResult>(fileName);
+            result.Quality.Quality.Should().Be(quality);
         }
     }
 }

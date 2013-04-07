@@ -23,18 +23,18 @@ namespace NzbDrone.Core.Indexers.NzbIndex
             if (currentResult != null)
             {
                 var sizeString = Regex.Match(item.Summary.Text, @"<b>\d+\.\d{1,2}\s\w{2}</b><br\s/>", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
-                currentResult.Size = Parser.GetReportSize(sizeString);
+                currentResult.Size = GetReportSize(sizeString);
             }
 
             return currentResult;
         }
 
-        protected override string GetTitle(SyndicationItem item)
+        protected override string GetTitle(SyndicationItem syndicationItem)
         {
-            var title = Parser.ParseHeader(item.Title.Text);
+            var title = ParseHeader(syndicationItem.Title.Text);
 
             if (String.IsNullOrWhiteSpace(title))
-                return item.Title.Text;
+                return syndicationItem.Title.Text;
 
             return title;
         }

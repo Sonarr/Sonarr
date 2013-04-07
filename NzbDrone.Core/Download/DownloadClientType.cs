@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Model
+namespace NzbDrone.Core.Download
 {
     public enum DownloadClientType
     {

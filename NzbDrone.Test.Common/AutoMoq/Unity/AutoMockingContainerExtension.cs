@@ -8,7 +8,7 @@ using Microsoft.Practices.Unity.ObjectBuilder;
 
 namespace NzbDrone.Test.Common.AutoMoq.Unity
 {
-    internal class AutoMockingContainerExtension : UnityContainerExtension
+    public class AutoMockingContainerExtension : UnityContainerExtension
     {
         private readonly IList<Type> registeredTypes = new List<Type>();
 
