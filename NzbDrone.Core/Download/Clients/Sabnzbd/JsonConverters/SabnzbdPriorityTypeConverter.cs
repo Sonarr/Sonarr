@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+using System;
 using Newtonsoft.Json;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
 
-namespace NzbDrone.Core.Helpers
+namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
 {
     public class SabnzbdPriorityTypeConverter : JsonConverter
     {

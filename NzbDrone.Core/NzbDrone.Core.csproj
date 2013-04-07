@@ -230,6 +230,8 @@
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeHistorySpecification.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\EpisodeDownloadedEvent.cs" />
@@ -237,11 +239,8 @@
     <Compile Include="Download\SeriesRenamedEvent.cs" />
     <Compile Include="ExternalNotification\ExternalNotificationRepository.cs" />
     <Compile Include="Fluent.cs" />
-    <Compile Include="Helpers\Converters\EpochDateTimeConverter.cs" />
-    <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
+    <Compile Include="Model\Nzbx\JsonConverter\EpochDateTimeConverter.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
-    <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
-    <Compile Include="Helpers\XElementHelper.cs" />
     <Compile Include="History\HistoryRepository.cs" />
     <Compile Include="IndexerSearch\Definitions\DailyEpisodeSearchDefinition.cs" />
     <Compile Include="IndexerSearch\Definitions\PartialSeasonSearchDefinition.cs" />

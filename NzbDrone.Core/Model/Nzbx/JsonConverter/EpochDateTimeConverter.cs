@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NzbDrone.Core.Helpers.Converters
+namespace NzbDrone.Core.Model.Nzbx.JsonConverter
 {
     public class EpochDateTimeConverter : DateTimeConverterBase
     {

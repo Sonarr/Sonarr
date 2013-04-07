@@ -133,7 +133,6 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
-    <Compile Include="HelperTests\XElementHelperTests\ConvertToTFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
@@ -144,7 +143,6 @@
     <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />
     <Compile Include="MetadataSourceTests\TracktProxyFixture.cs" />
     <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
-    <Compile Include="HelperTests\XElementHelperTests\ConvertToDayOfWeekFixture.cs" />
     <Compile Include="Qualities\QualityFixture.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="JobTests\PostDownloadScanJobFixture.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Newtonsoft.Json;
+using NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 
