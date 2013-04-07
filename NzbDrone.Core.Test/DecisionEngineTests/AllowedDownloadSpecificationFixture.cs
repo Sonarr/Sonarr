@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
         {
-            Mocker.SetConstant(mocks.Select(c => c.Object));
+            Mocker.SetConstant<IEnumerable<IRejectWithReason>>(mocks.Select(c => c.Object));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            Subject.GetRssDecision(_parseResults);
+            Subject.GetRssDecision(_parseResults).ToList();
 
             _fail1.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());
             _fail2.Verify(c => c.IsSatisfiedBy(_parseResults[0]), Times.Once());

@@ -12,7 +12,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {
     [TestFixture]
-    public class BlackholeProviderFixture : CoreTest
+    public class BlackholeProviderFixture : CoreTest<BlackholeProvider>
     {
         private const string nzbUrl = "http://www.nzbs.com/url";
         private const string title = "some_nzb_title";
@@ -39,9 +39,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void DownloadNzb_should_download_file_if_it_doesnt_exist()
         {
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title, false).Should().BeTrue();
+            Subject.DownloadNzb(nzbUrl, title, false).Should().BeTrue();
 
-            Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(nzbUrl, nzbPath),Times.Once());
+            Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(nzbUrl, nzbPath), Times.Once());
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithExistingFile();
 
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title, false).Should().BeTrue();
+            Subject.DownloadNzb(nzbUrl, title, false).Should().BeTrue();
 
             Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
@@ -59,8 +59,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithFailedDownload();
 
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title, false).Should().BeFalse();
-            
+            Subject.DownloadNzb(nzbUrl, title, false).Should().BeFalse();
+
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
             var expectedFilename = Path.Combine(blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
 
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, illegalTitle, false).Should().BeTrue();
+            Subject.DownloadNzb(nzbUrl, illegalTitle, false).Should().BeTrue();
 
             Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }
