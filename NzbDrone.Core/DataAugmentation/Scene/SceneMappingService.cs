@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Tv;
 
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         string GetCleanName(int tvdbId);
     }
 
-    public class SceneMappingService : IInitializable, ISceneMappingService
+    public class SceneMappingService : ISceneMappingService,IHandleAsync<ApplicationStartedEvent>
     {
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mapping.CleanTitle;
         }
 
-        public void Init()
+        public void HandleAsync(ApplicationStartedEvent message)
         {
             if (!_repository.HasItems())
             {

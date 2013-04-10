@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Lifecycle;
 
 
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Indexers
         IndexerDefinition Get(string name);
     }
 
-    public class IndexerService : IIndexerService, IInitializable
+    public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
     {
         private readonly IIndexerRepository _indexerRepository;
         private readonly Logger _logger;
@@ -28,27 +29,6 @@ namespace NzbDrone.Core.Indexers
             _indexers = indexers.ToList();
         }
 
-        public void Init()
-        {
-            _logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
-
-            var currentIndexers = All();
-
-            foreach (var feedProvider in _indexers)
-            {
-                IIndexerBase indexerLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.Name == indexerLocal.Name))
-                {
-                    var settings = new IndexerDefinition
-                    {
-                        Enable = indexerLocal.EnabledByDefault,
-                        Name = indexerLocal.Name.ToLower()
-                    };
-
-                    _indexerRepository.Insert(settings);
-                }
-            }
-        }
 
         public List<IndexerDefinition> All()
         {
@@ -71,6 +51,28 @@ namespace NzbDrone.Core.Indexers
         public IndexerDefinition Get(string name)
         {
             return _indexerRepository.Get(name);
+        }
+
+        public void Handle(ApplicationStartedEvent message)
+        {
+            _logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
+
+            var currentIndexers = All();
+
+            foreach (var feedProvider in _indexers)
+            {
+                IIndexerBase indexerLocal = feedProvider;
+                if (!currentIndexers.Exists(c => c.Name == indexerLocal.Name))
+                {
+                    var settings = new IndexerDefinition
+                    {
+                        Enable = indexerLocal.EnabledByDefault,
+                        Name = indexerLocal.Name.ToLower()
+                    };
+
+                    _indexerRepository.Insert(settings);
+                }
+            }
         }
     }
 }

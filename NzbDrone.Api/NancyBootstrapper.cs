@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NLog;
+﻿using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
@@ -8,10 +6,10 @@ using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Frontend;
 using NzbDrone.Common;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using TinyIoC;
-using ErrorPipeline = NzbDrone.Api.ErrorManagement.ErrorPipeline;
 
 namespace NzbDrone.Api
 {
@@ -31,7 +29,8 @@ namespace NzbDrone.Api
             _logger.Info("Starting NzbDrone API");
             AutomapperBootstraper.InitializeAutomapper();
             RegisterReporting(container);
-            KickoffInitilizables(container);
+
+            container.Resolve<IEventAggregator>().Publish(new ApplicationStartedEvent());
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<ErrorPipeline>().HandleException);
         }
@@ -41,26 +40,6 @@ namespace NzbDrone.Api
             EnvironmentProvider.UGuid = container.Resolve<ConfigService>().UGuid;
             ReportingService.RestProvider = container.Resolve<RestProvider>();
         }
-
-        private void KickoffInitilizables(TinyIoCContainer container)
-        {
-            var initilizables = container.ResolveAll<IInitializable>();
-
-            foreach (var initializable in initilizables)
-            {
-                _logger.Debug("Initializing {0}", initializable.GetType().Name);
-                try
-                {
-                    initializable.Init();
-                }
-                catch (Exception e)
-                {
-                    _logger.FatalException("An error occurred while initializing " + initializable.GetType().Name, e);
-                    throw;
-                }
-            }
-        }
-
 
         protected override TinyIoCContainer GetApplicationContainer()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Indexers.Newznab
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         void Update(NewznabDefinition definition);
     }
 
-    public class NewznabService : INewznabService, IInitializable
+    public class NewznabService : INewznabService, IHandle<ApplicationStartedEvent>
     {
         private readonly INewznabRepository _newznabRepository;
         private readonly Logger _logger;
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         }
 
-        public void Init()
+        public void Handle(ApplicationStartedEvent message)
         {
             var newznabIndexers = new List<NewznabDefinition>
                                       {

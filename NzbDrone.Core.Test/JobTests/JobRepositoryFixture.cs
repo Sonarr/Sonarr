@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.JobTests
@@ -23,6 +24,12 @@ namespace NzbDrone.Core.Test.JobTests
         }
 
 
+        private void Initialize()
+        {
+            Subject.Handle(new ApplicationStartedEvent());
+        }
+
+
         [Test]
         public void Init_should_add_defintaions()
         {
@@ -30,7 +37,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.SetConstant(baseFakeJobs);
 
 
-            Subject.Init();
+            Initialize();
 
             Storage.All().Should().HaveCount(1);
             StoredModel.Interval.Should().Be((Int32)_fakeJob.DefaultInterval.TotalMinutes);
@@ -58,7 +65,7 @@ namespace NzbDrone.Core.Test.JobTests
             AllStoredModels.Should().HaveCount(1);
             AllStoredModels.Should().Contain(c => c.Type == deletedJob.Type);
 
-            Subject.Init();
+            Initialize();
 
             //Make sure init has cleaned up the deleted job
             AllStoredModels.Should().HaveCount(1);
@@ -82,7 +89,7 @@ namespace NzbDrone.Core.Test.JobTests
             AllStoredModels.Should().HaveCount(1);
             AllStoredModels.Should().Contain(c => c.Type == deletedJob.Type);
 
-            Subject.Init();
+            Initialize();
 
             //Make sure init has cleaned up the deleted job
             AllStoredModels.Should().HaveCount(1);
@@ -110,7 +117,7 @@ namespace NzbDrone.Core.Test.JobTests
             IEnumerable<IJob> fakeJobs = new List<IJob> { newJob };
             Mocker.SetConstant(fakeJobs);
 
-            Subject.Init();
+            Initialize();
 
 
             AllStoredModels.Should().HaveCount(1);
@@ -128,7 +135,7 @@ namespace NzbDrone.Core.Test.JobTests
             IEnumerable<IJob> fakeJobs = new List<IJob> { _disabledJob };
             Mocker.SetConstant(fakeJobs);
 
-            Subject.Init();
+            Initialize();
 
 
             Storage.All().Should().HaveCount(1);

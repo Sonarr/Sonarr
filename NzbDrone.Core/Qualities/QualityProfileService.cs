@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Qualities;
 
 
 namespace NzbDrone.Core.Qualities
@@ -17,7 +16,7 @@ namespace NzbDrone.Core.Qualities
         QualityProfile Get(int id);
     }
 
-    public class QualityProfileService : IQualityProfileService, IInitializable
+    public class QualityProfileService : IQualityProfileService, IHandle<ApplicationStartedEvent>
     {
         private readonly IQualityProfileRepository _qualityProfileRepository;
         private readonly Logger _logger;
@@ -54,6 +53,11 @@ namespace NzbDrone.Core.Qualities
         }
 
         public void Init()
+        {
+
+        }
+
+        public void Handle(ApplicationStartedEvent message)
         {
             if (All().Any()) return;
 

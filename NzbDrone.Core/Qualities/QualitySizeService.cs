@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Qualities
@@ -15,7 +14,7 @@ namespace NzbDrone.Core.Qualities
         QualitySize Get(int qualityId);
     }
 
-    public class QualitySizeService : IQualitySizeService, IInitializable
+    public class QualitySizeService : IQualitySizeService, IHandle<ApplicationStartedEvent>
     {
         private readonly IQualitySizeRepository _qualitySizeRepository;
         private readonly Logger _logger;
@@ -48,21 +47,26 @@ namespace NzbDrone.Core.Qualities
 
         public void Init()
         {
+           
+        }
+
+        public void Handle(ApplicationStartedEvent message)
+        {
             var existing = All();
 
             _logger.Debug("Setting up default quality sizes");
 
             foreach (var quality in Quality.All().Where(q => q.Id > 0))
             {
-                if(!existing.Any(s => s.QualityId == quality.Id))
+                if (!existing.Any(s => s.QualityId == quality.Id))
                 {
                     _qualitySizeRepository.Insert(new QualitySize
-                        {
-                                QualityId = quality.Id,
-                                Name = quality.Name,
-                                MinSize = 0,
-                                MaxSize = 100
-                        });
+                    {
+                        QualityId = quality.Id,
+                        Name = quality.Name,
+                        MinSize = 0,
+                        MaxSize = 100
+                    });
                 }
             }
         }

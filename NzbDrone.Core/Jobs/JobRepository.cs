@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Jobs
 {
-    public interface IJobRepository : IInitializable, IBasicRepository<JobDefinition>
+    public interface IJobRepository : IBasicRepository<JobDefinition>
     {
         IList<JobDefinition> GetPendingJobs();
         JobDefinition GetDefinition(Type type);
     }
 
-    public class JobRepository : BasicRepository<JobDefinition>, IJobRepository
+    public class JobRepository : BasicRepository<JobDefinition>, IJobRepository, IHandle<ApplicationStartedEvent>
     {
         private readonly IEnumerable<IJob> _jobs;
         private readonly Logger _logger;
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Jobs
             return Query.Where(c => c.Enable == true && c.Interval != 2).ToList().Where(c => c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
         }
 
-        public void Init()
+        public void Handle(ApplicationStartedEvent message)
         {
             var currentJobs = All().ToList();
             _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count());
@@ -57,10 +58,10 @@ namespace NzbDrone.Core.Jobs
                 if (jobDefinition == null)
                 {
                     jobDefinition = new JobDefinition
-                        {
-                            Type = job.GetType().ToString(),
-                            LastExecution = DateTime.Now
-                        };
+                    {
+                        Type = job.GetType().ToString(),
+                        LastExecution = DateTime.Now
+                    };
                 }
 
                 jobDefinition.Enable = job.DefaultInterval.TotalSeconds > 0;
