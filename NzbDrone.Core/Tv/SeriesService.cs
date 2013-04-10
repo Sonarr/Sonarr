@@ -5,12 +5,8 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DataAugmentation;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -19,7 +15,6 @@ namespace NzbDrone.Core.Tv
     {
         bool IsMonitored(int id);
         Series UpdateSeriesInfo(int seriesId);
-        Series FindSeries(string title);
         Series GetSeries(int seriesId);
         void AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
@@ -34,22 +29,15 @@ namespace NzbDrone.Core.Tv
         private readonly IConfigService _configService;
         private readonly IProvideSeriesInfo _seriesInfoProxy;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IQualityProfileService _qualityProfileService;
         private readonly Logger _logger;
 
-
-        private readonly ISceneMappingService _sceneNameMappingService;
-
-        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
-                             IProvideSeriesInfo seriesInfoProxy, ISceneMappingService sceneNameMappingService,
-                             IEventAggregator eventAggregator, IQualityProfileService qualityProfileService, Logger logger)
+        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService, IProvideSeriesInfo seriesInfoProxy,
+                             IEventAggregator eventAggregator, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _seriesInfoProxy = seriesInfoProxy;
-            _sceneNameMappingService = sceneNameMappingService;
             _eventAggregator = eventAggregator;
-            _qualityProfileService = qualityProfileService;
             _logger = logger;
         }
 
@@ -82,19 +70,6 @@ namespace NzbDrone.Core.Tv
             return series;
         }
 
-        public Series FindSeries(string title)
-        {
-            var normalizeTitle = Parser.NormalizeTitle(title);
-
-            var mapping = _sceneNameMappingService.GetTvDbId(normalizeTitle);
-            if (mapping.HasValue)
-            {
-                var sceneSeries = _seriesRepository.Get(mapping.Value);
-                return sceneSeries;
-            }
-
-            return _seriesRepository.GetByTitle(normalizeTitle);
-        }
 
         public Series GetSeries(int seriesId)
         {
