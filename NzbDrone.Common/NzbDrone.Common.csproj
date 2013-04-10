@@ -108,7 +108,6 @@
     <Compile Include="Eventing\IHandle.cs" />
     <Compile Include="HostController.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
-    <Compile Include="ReflectionExtentions.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />

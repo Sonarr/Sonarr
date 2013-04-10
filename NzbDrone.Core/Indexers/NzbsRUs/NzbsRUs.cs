@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.NzbsRUs
 {
-    public class Nzbsrus : BaseIndexer
+    public class Nzbsrus : IndexerWithSetting<NzbsrusSetting>
     {
         private readonly NzbsrusSetting _setting;
 
-        public Nzbsrus(IProviderIndexerSetting settingProvider)
+        public Nzbsrus(IProviderIndexerSetting settingProvider):base(settingProvider)
         {
-            _setting = settingProvider.Get<NzbsrusSetting>(this);
+
         }
 
         public override IEnumerable<string> RecentFeed
@@ -21,12 +21,6 @@ namespace NzbDrone.Core.Indexers.NzbsRUs
                         _setting.Hash);
 
             }
-        }
-
-
-        public override IIndexerSetting Settings
-        {
-            get { return _setting; }
         }
 
         public override string Name

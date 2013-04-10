@@ -236,6 +236,9 @@
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
+    <Compile Include="Indexers\IIndexerBase.cs" />
+    <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
+    <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
@@ -254,7 +257,7 @@
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\FileSharingTalk\FileSharingTalk.cs" />
     <Compile Include="Indexers\FileSharingTalk\FileSharingTalkParser.cs" />
-    <Compile Include="Indexers\BaseIndexer.cs" />
+    <Compile Include="Indexers\Indexer.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\IndexerSettingProvider.cs" />

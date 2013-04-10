@@ -3,26 +3,12 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers
 {
-    public interface IIndexerBase
+    public abstract class Indexer : IIndexerBase
     {
-        string Name { get; }
-        bool EnabledByDefault { get; }
 
-        IEnumerable<string> RecentFeed { get; }
-
-        IParseFeed Parser { get; }
-
-        IIndexerSetting Settings { get; }
-
-        IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
-        IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);
-        IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber);
-        IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard);
-    }
-
-    public abstract class BaseIndexer : IIndexerBase
-    {
         public abstract string Name { get; }
+
+
 
         public virtual bool EnabledByDefault
         {
@@ -40,13 +26,12 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        public virtual IIndexerSetting Settings
+        public virtual bool IsConfigured
         {
-            get
-            {
-                return new NullSetting();
-            }
+            get { return true; }
         }
+
+
 
         public abstract IEnumerable<string> RecentFeed { get; }
 

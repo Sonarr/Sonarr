@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
-    public class Omgwtfnzbs : BaseIndexer
+    public class Omgwtfnzbs : IndexerWithSetting<OmgwtfnzbsSetting>
     {
-        private readonly OmgwtfnzbsSetting _settings;
-
         public Omgwtfnzbs(IProviderIndexerSetting settingProvider)
+            : base(settingProvider)
         {
-            _settings = settingProvider.Get<OmgwtfnzbsSetting>(this);
         }
 
         public override string Name
@@ -24,14 +22,10 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
                 yield return
                     String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
-                                  _settings.Username, _settings.ApiKey);
+                                  Settings.Username, Settings.ApiKey);
             }
         }
 
-        public override IIndexerSetting Settings
-        {
-            get { return _settings; }
-        }
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {

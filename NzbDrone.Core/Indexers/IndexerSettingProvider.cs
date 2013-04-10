@@ -18,8 +18,14 @@ namespace NzbDrone.Core.Indexers
 
         public TSetting Get<TSetting>(IIndexerBase indexer) where TSetting : IIndexerSetting, new()
         {
-            var json = _indexerRepository.Get(indexer.Name).Settings;
-            return JsonConvert.DeserializeObject<TSetting>(json);
+            var indexerDef = _indexerRepository.Find(indexer.Name);
+
+            if (indexerDef == null || string.IsNullOrWhiteSpace(indexerDef.Settings))
+            {
+                return new TSetting();
+            }
+
+            return JsonConvert.DeserializeObject<TSetting>(indexerDef.Settings);
         }
     }
 }

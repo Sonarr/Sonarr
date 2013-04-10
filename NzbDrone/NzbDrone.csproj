@@ -117,7 +117,7 @@
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CommonContainerExtentions.cs" />
+    <Compile Include="ContainerBuilder.cs" />
     <Compile Include="NzbDroneBootstrapper.cs" />
     <Compile Include="ApplicationMode.cs" />
     <Compile Include="AppMain.cs" />

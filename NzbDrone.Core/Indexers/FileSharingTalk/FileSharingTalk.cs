@@ -3,26 +3,22 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.FileSharingTalk
 {
-    public class FileSharingTalk : BaseIndexer
+    public class FileSharingTalk : IndexerWithSetting<FileSharingTalkSetting>
     {
-        private readonly FileSharingTalkSetting _settings;
-
         public FileSharingTalk(IProviderIndexerSetting settingProvider)
+            : base(settingProvider)
         {
-            _settings = settingProvider.Get<FileSharingTalkSetting>(this);
         }
 
         public override IEnumerable<string> RecentFeed
         {
             get
             {
-                yield return
-                    string.Format(
+                yield return string.Format(
                         "http://filesharingtalk.com/ng_rss.php?uid={0}&ps={1}&category=tv&subcategory=x264sd,x264720,xvid,webdl720,x2641080",
-                        _settings.Uid, _settings.Secret);
+                        Settings.Uid, Settings.Secret);
             }
         }
-
 
         public override IParseFeed Parser
         {
@@ -30,11 +26,6 @@ namespace NzbDrone.Core.Indexers.FileSharingTalk
             {
                 return new FileSharingTalkParser();
             }
-        }
-
-        public override IIndexerSetting Settings
-        {
-            get { return _settings; }
         }
 
         public override string Name

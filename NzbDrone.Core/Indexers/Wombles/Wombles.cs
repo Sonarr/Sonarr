@@ -3,25 +3,17 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class Wombles : BaseIndexer
+    public class Wombles : Indexer
     {
         public override IEnumerable<string> RecentFeed
         {
-            get
-            {
-                return new[]
-                           {
-                               string.Format("http://nzb.isasecret.com/rss")
-                           };
-            }
+            get { yield return string.Format("http://nzb.isasecret.com/rss"); }
         }
 
         public override string Name
         {
             get { return "WomblesIndex"; }
         }
-
-
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {

@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Indexers
         public List<IIndexerBase> GetAvailableIndexers()
         {
             var enabled = All().Where(c => c.Enable).Select(c => c.Name);
-            var configureIndexers = _indexers.Where(c => c.Settings.IsValid);
+            var configureIndexers = _indexers.Where(c => c.IsConfigured);
 
             return configureIndexers.Where(c => enabled.Contains(c.Name)).ToList();
         }

@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Indexers.NzbClub
 {
-    public class NzbClub : BaseIndexer
+    public class NzbClub : Indexer
     {
-        public NzbClub(HttpProvider httpProvider, IConfigService configService)
-        {
-        }
-
         public override IEnumerable<string> RecentFeed
         {
             get

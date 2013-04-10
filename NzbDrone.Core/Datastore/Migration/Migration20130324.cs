@@ -101,14 +101,13 @@ namespace NzbDrone.Core.Datastore.Migration
             Create.TableForModel("IndexerDefinitions")
                   .WithColumn("Enable").AsBoolean()
                   .WithColumn("Name").AsString().Unique()
-                  .WithColumn("Settings").AsString();
+                  .WithColumn("Settings").AsString().Nullable();
 
             Create.TableForModel("NewznabDefinitions")
                   .WithColumn("Enable").AsBoolean()
                   .WithColumn("Name").AsString().Unique()
                   .WithColumn("Url").AsString()
-                  .WithColumn("ApiKey").AsString().Nullable()
-                  .WithColumn("BuiltIn").AsBoolean();
+                  .WithColumn("ApiKey").AsString().Nullable();
 
             Create.TableForModel("QualityProfiles")
                   .WithColumn("Name").AsString().Unique()

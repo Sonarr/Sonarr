@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.Nzbx
 {
-    public class Nzbx : BaseIndexer
+    public class Nzbx : Indexer
     {
         public override string Name
         {

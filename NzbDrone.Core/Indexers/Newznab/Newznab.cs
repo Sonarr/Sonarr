@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class Newznab : BaseIndexer
+    public class Newznab : Indexer
     {
         private readonly INewznabService _newznabProvider;
 
