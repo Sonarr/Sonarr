@@ -16,7 +16,6 @@
   "readmeFilename": "readme.md",
   "dependencies": {
     "grunt": "*",
-    "grunt-cli": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-handlebars": "*",
     "grunt-contrib-watch": "*",
@@ -25,5 +24,8 @@
     "grunt-contrib-copy": "*",
     "grunt-wrap": "*",
     "grunt-curl": "*"
-  }
+  },
+  "scripts": {
+  "preinstall": "npm install grunt-cli -g"
+}
 }

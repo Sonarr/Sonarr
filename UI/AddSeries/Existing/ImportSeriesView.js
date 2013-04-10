@@ -1,6 +1,6 @@
 ﻿'use strict';
 define([
-    'app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection', 'Shared/NotificationCollection', 'AddSeries/Existing/UnmappedFolderModel', 'AddSeries/SearchResultCollection', 'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection, notificationCollection) {
+    'app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection', 'Shared/NotificationCollection', 'AddSeries/Existing/UnmappedFolderModel', 'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection, notificationCollection) {
 
     NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
         template: 'AddSeries/SearchResultTemplate',
