@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var response = "<MediaContainer size=\"1\" mediaTagPrefix=\"/system/bundle/media/flags/\" mediaTagVersion=\"1329809559\" title1=\"Plex Library\" identifier=\"com.plexapp.plugins.library\"><Directory refreshing=\"0\" key=\"5\" type=\"show\" title=\"TV Shows\" art=\"/:/resources/show-fanart.jpg\" agent=\"com.plexapp.agents.thetvdb\" scanner=\"Plex Series Scanner\" language=\"en\" updatedAt=\"1329810350\"><Location path=\"C:/Test/TV\"/></Directory></MediaContainer>";
             Stream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(response));
 
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
                     .Returns(stream);
 
             
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var response = "<MediaContainer size=\"1\" mediaTagPrefix=\"/system/bundle/media/flags/\" mediaTagVersion=\"1329809559\" title1=\"Plex Library\" identifier=\"com.plexapp.plugins.library\"><Directory refreshing=\"0\" key=\"5\" type=\"show\" title=\"TV Shows\" art=\"/:/resources/show-fanart.jpg\" agent=\"com.plexapp.agents.thetvdb\" scanner=\"Plex Series Scanner\" language=\"en\" updatedAt=\"1329810350\"><Location path=\"C:/Test/TV\"/></Directory><Directory refreshing=\"0\" key=\"7\" type=\"movie\" title=\"TV Shows\" art=\"/:/resources/show-fanart.jpg\" agent=\"com.plexapp.agents.thetvdb\" scanner=\"Plex Series Scanner\" language=\"en\" updatedAt=\"1329810350\"><Location path=\"C:/Test/TV\"/></Directory></MediaContainer>";
             Stream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(response));
 
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
                     .Returns(stream);
 
             
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var response = "<MediaContainer size=\"1\" mediaTagPrefix=\"/system/bundle/media/flags/\" mediaTagVersion=\"1329809559\" title1=\"Plex Library\" identifier=\"com.plexapp.plugins.library\"><Directory refreshing=\"0\" key=\"5\" type=\"show\" title=\"TV Shows\" art=\"/:/resources/show-fanart.jpg\" agent=\"com.plexapp.agents.thetvdb\" scanner=\"Plex Series Scanner\" language=\"en\" updatedAt=\"1329810350\"><Location path=\"C:/Test/TV\"/></Directory><Directory refreshing=\"0\" key=\"6\" type=\"show\" title=\"TV Shows\" art=\"/:/resources/show-fanart.jpg\" agent=\"com.plexapp.agents.thetvdb\" scanner=\"Plex Series Scanner\" language=\"en\" updatedAt=\"1329810350\"><Location path=\"C:/Test/TV\"/></Directory></MediaContainer>";
             Stream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(response));
 
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
                     .Returns(stream);
 
             
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var response = "";
             Stream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(response));
 
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://localhost:32400/library/sections/5/refresh"))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadString("http://localhost:32400/library/sections/5/refresh"))
                     .Returns(response);
 
             
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(expectedUrl))
                     .Returns("ok");
 
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string header = "Test Header";
             const string message = "Test Message";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(It.IsAny<string>()))
                     .Returns("ok");
 
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(expectedUrl, "plex", "plex"))
                     .Returns("ok");
 
@@ -197,7 +197,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string header = "Test Header";
             const string message = "Test Message";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(It.IsAny<string>(), "plex", "plex"))
                     .Returns("ok");
 

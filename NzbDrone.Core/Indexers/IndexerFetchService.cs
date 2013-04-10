@@ -21,10 +21,10 @@ namespace NzbDrone.Core.Indexers
     public class FetchFeedService : IFetchFeedFromIndexers
     {
         private readonly Logger _logger;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
 
 
-        protected FetchFeedService(HttpProvider httpProvider, Logger logger)
+        public FetchFeedService(IHttpProvider httpProvider, Logger logger)
         {
             _httpProvider = httpProvider;
             _logger = logger;

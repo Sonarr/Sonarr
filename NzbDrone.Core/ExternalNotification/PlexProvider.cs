@@ -10,11 +10,11 @@ namespace NzbDrone.Core.ExternalNotification
 {
     public class PlexProvider
     {
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PlexProvider(HttpProvider httpProvider, IConfigService configService)
+        public PlexProvider(IHttpProvider httpProvider, IConfigService configService)
         {
             _httpProvider = httpProvider;
             _configService = configService;

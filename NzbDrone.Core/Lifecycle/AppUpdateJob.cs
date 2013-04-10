@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Lifecycle
         private readonly UpdateProvider _updateProvider;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly ProcessProvider _processProvider;
         private readonly ArchiveProvider _archiveProvider;
         private readonly ConfigFileProvider _configFileProvider;

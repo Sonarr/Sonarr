@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
 
         private void WithFailResponse()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
                     .Returns(ReadAllText("Files", "Nzbget", "JsonError.txt"));
         }
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
             const string url = "http://www.nzbdrone.com";
             const string title = "30 Rock - S01E01 - Pilot [HDTV-720p]";
 
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass",
                         It.Is<String>(c => c.Equals("{\"method\":\"appendurl\",\"params\":[\"30 Rock - S01E01 - Pilot [HDTV-720p]\",\"TV\",0,false,\"http://www.nzbdrone.com\"]}"))))
                     .Returns("{\"version\": \"1.1\",\"result\": true}");

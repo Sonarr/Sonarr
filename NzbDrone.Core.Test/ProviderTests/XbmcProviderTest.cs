@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":" + number + "}}";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":{\"major\":" + major + ",\"minor\":" + minor + ",\"patch\":" + patch + "}}}";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var message = "{\"error\":{\"code\":-32601,\"message\":\"Method not found.\"},\"id\":10,\"jsonrpc\":\"2.0\"}";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 + video.ToString().ToLower()
                 + "}}";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             
             WithNoActivePlayers();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             
             WithVideoPlayerActive();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             
             WithAudioPlayerActive();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             
             WithPicturePlayerActive();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
@@ -254,7 +254,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             
             WithAllPlayersActive();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(EdenActivePlayers);
 
@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\",\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1},{\"file\":\"smb://HOMESERVER/TV/30 Rock/\",\"imdbnumber\":\"79488\",\"label\":\"30 Rock\",\"tvshowid\":2},{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
                 .Returns(message);
 
@@ -324,7 +324,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var url = String.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=ExecBuiltIn(CleanLibrary(video))");
 
             //var fakeUdpProvider = Mocker.GetMock<EventClient>();
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(url, username, password)).Returns("Ok\n");
 
             
@@ -353,7 +353,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
             //var fakeUdpProvider = Mocker.GetMock<EventClient>();
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(setResponseUrl, username, password)).Returns("<xml><tag>OK</xml>");
             fakeHttp.Setup(s => s.DownloadString(resetResponseUrl, username, password)).Returns(@"<html>
                                                                                                     <li>OK
@@ -386,7 +386,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
             //var fakeUdpProvider = Mocker.GetMock<EventClient>();
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(setResponseUrl, username, password)).Returns("<xml><tag>OK</xml>");
             fakeHttp.Setup(s => s.DownloadString(resetResponseUrl, username, password)).Returns(@"<html>
                                                                                                     <li>OK
@@ -419,7 +419,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
             //var fakeUdpProvider = Mocker.GetMock<EventClient>();
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(setResponseUrl, username, password)).Returns("<xml><tag>OK</xml>");
             fakeHttp.Setup(s => s.DownloadString(resetResponseUrl, username, password)).Returns(@"<html>
                                                                                                     <li>OK
@@ -468,7 +468,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(queryUrl, username, password)).Returns(queryResult);
             fakeHttp.Setup(s => s.DownloadString(url, username, password));
 
@@ -494,7 +494,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(queryUrl, username, password)).Returns(queryResult);
             fakeHttp.Setup(s => s.DownloadString(url, username, password));
 
@@ -522,7 +522,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
                 .Returns(tvshows);
 
@@ -555,7 +555,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
                 .Returns(tvshows);
 
@@ -588,7 +588,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
                 .Returns(tvshows);
 
@@ -620,7 +620,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "30 Rock")
                 .Build();
 
-            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
                 .Returns(tvshows);
 

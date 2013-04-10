@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.JobTests
             StartUpdate();
 
             
-            Mocker.GetMock<HttpProvider>().Verify(
+            Mocker.GetMock<IHttpProvider>().Verify(
                     c => c.DownloadFile(updatePackage.Url, updateArchive));
         }
 

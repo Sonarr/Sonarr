@@ -12,13 +12,13 @@ namespace NzbDrone.Core.Providers
 {
     public class XemCommunicationProvider
     {
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private const string XEM_BASE_URL = "http://thexem.de/map/";
 
-        public XemCommunicationProvider(HttpProvider httpProvider)
+        public XemCommunicationProvider(IHttpProvider httpProvider)
         {
             _httpProvider = httpProvider;
         }

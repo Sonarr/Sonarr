@@ -11,7 +11,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void DownloadString_should_be_able_to_dowload_text_file()
         {
-            var jquery = new HttpProvider().DownloadString("http://www.google.com/robots.txt");
+            var jquery = new HttpProvider(new EnvironmentProvider()).DownloadString("http://www.google.com/robots.txt");
 
             jquery.Should().NotBeBlank();
             jquery.Should().Contain("Sitemap");
@@ -23,7 +23,7 @@ namespace NzbDrone.Common.Test
         [ExpectedException]
         public void DownloadString_should_throw_on_error(string url)
         {
-            var jquery = new HttpProvider().DownloadString(url);
+            var jquery = new HttpProvider(new EnvironmentProvider()).DownloadString(url);
         }
     }
 }

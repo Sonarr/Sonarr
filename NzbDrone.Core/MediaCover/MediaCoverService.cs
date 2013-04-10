@@ -12,13 +12,13 @@ namespace NzbDrone.Core.MediaCover
         IHandleAsync<SeriesUpdatedEvent>,
         IHandleAsync<SeriesDeletedEvent>
     {
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly Logger _logger;
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(HttpProvider httpProvider, DiskProvider diskProvider, EnvironmentProvider environmentProvider, Logger logger)
+        public MediaCoverService(IHttpProvider httpProvider, DiskProvider diskProvider, EnvironmentProvider environmentProvider, Logger logger)
         {
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;

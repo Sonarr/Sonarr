@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 
         private void WithFullQueue()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                     .Setup(
                            s =>
                            s.DownloadString(
@@ -51,20 +51,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 
         private void WithEmptyQueue()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns(ReadAllText("Files","QueueEmpty.txt"));
         }
 
         private void WithFailResponse()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString(It.IsAny<String>())).Returns(ReadAllText("Files","JsonError.txt"));
         }
 
         private void WithUnknownPriorityQueue()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                     .Setup(
                            s =>
                            s.DownloadString(

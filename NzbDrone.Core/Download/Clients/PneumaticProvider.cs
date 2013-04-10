@@ -15,12 +15,12 @@ namespace NzbDrone.Core.Download.Clients
     public class PneumaticProvider : IDownloadClient
     {
         private readonly IConfigService _configService;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PneumaticProvider(IConfigService configService, HttpProvider httpProvider,
+        public PneumaticProvider(IConfigService configService, IHttpProvider httpProvider,
                                     DiskProvider diskProvider)
         {
             _configService = configService;

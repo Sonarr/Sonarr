@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         [Test]
         public void fetch_should_return_list_of_mappings()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
              .Setup(s => s.DownloadString(SCENE_MAPPING_URL))
              .Returns(ReadAllText("Files", "SceneMappings.json"));
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         [Test]
         public void should_throw_on_server_error()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                   .Setup(s => s.DownloadString(SCENE_MAPPING_URL))
                   .Throws(new WebException());
             Assert.Throws<WebException>(() => Subject.Fetch());
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         [Test]
         public void should_throw_on_bad_json()
         {
-            Mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<IHttpProvider>()
                   .Setup(s => s.DownloadString(SCENE_MAPPING_URL))
                   .Returns("bad json");
             Assert.Throws<JsonReaderException>(() => Subject.Fetch());

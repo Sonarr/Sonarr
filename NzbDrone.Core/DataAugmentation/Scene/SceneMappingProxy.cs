@@ -12,10 +12,10 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
     public class SceneMappingProxy : ISceneMappingProxy
     {
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
 
-        public SceneMappingProxy(HttpProvider httpProvider, IConfigService configService)
+        public SceneMappingProxy(IHttpProvider httpProvider, IConfigService configService)
         {
             _httpProvider = httpProvider;
             _configService = configService;

@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers
 {
     public class UpdateProvider
     {
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
         private readonly EnvironmentProvider _environmentProvider;
 
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers
         public const string DEFAULT_UPDATE_URL = @"http://update.nzbdrone.com/_release/";
 
 
-        public UpdateProvider(HttpProvider httpProvider, IConfigService configService,
+        public UpdateProvider(IHttpProvider httpProvider, IConfigService configService,
             EnvironmentProvider environmentProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;

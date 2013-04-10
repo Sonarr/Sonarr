@@ -15,11 +15,11 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
 
     public class DailySeriesDataProxy : IDailySeriesDataProxy
     {
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public DailySeriesDataProxy(HttpProvider httpProvider, IConfigService configService, Logger logger)
+        public DailySeriesDataProxy(IHttpProvider httpProvider, IConfigService configService, Logger logger)
         {
             _httpProvider = httpProvider;
             _configService = configService;

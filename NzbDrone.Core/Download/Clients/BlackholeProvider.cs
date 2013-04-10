@@ -12,13 +12,13 @@ namespace NzbDrone.Core.Download.Clients
     public class BlackholeProvider : IDownloadClient
     {
         private readonly IConfigService _configService;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public BlackholeProvider(IConfigService configService, HttpProvider httpProvider,
+        public BlackholeProvider(IConfigService configService, IHttpProvider httpProvider,
                                     DiskProvider diskProvider, UpgradeHistorySpecification upgradeHistorySpecification)
         {
             _configService = configService;

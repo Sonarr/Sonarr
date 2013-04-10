@@ -13,14 +13,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public class NzbgetProvider : IDownloadClient
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IConfigService _configService;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
+        private readonly Logger _logger;
 
-        public NzbgetProvider(IConfigService configService, HttpProvider httpProvider)
+        public NzbgetProvider(IConfigService configService, IHttpProvider httpProvider, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _logger = logger;
         }
 
         public NzbgetProvider()
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             catch (Exception ex)
             {
-                logger.WarnException("Unable to connect to Nzbget to check queue.", ex);
+                _logger.WarnException("Unable to connect to Nzbget to check queue.", ex);
                 return false;
             }
         }
@@ -73,20 +74,20 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                     Params = new object[]{ title, cat, priority, false, url }
                 };
 
-                logger.Info("Adding report [{0}] to the queue.", title);
+                _logger.Info("Adding report [{0}] to the queue.", title);
                 var response = PostCommand(JsonConvert.SerializeObject(command));
 
                 CheckForError(response);
 
                 var success = JsonConvert.DeserializeObject<EnqueueResponse>(response).Result;
-                logger.Debug("Queue Response: [{0}]", success);
+                _logger.Debug("Queue Response: [{0}]", success);
 
                 return true;
             }
 
             catch (WebException ex)
             {
-                logger.Error("Error communicating with Nzbget: " + ex.Message);
+                _logger.Error("Error communicating with Nzbget: " + ex.Message);
             }
 
             return false;
@@ -145,7 +146,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
             catch(Exception ex)
             {
-                logger.DebugException("Failed to Test Nzbget", ex);
+                _logger.DebugException("Failed to Test Nzbget", ex);
             }
             
             return String.Empty;

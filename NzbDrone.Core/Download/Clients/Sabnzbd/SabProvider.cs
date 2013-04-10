@@ -19,9 +19,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IConfigService _configService;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
 
-        public SabProvider(IConfigService configService, HttpProvider httpProvider)
+        public SabProvider(IConfigService configService, IHttpProvider httpProvider)
         {
             _configService = configService;
             _httpProvider = httpProvider;

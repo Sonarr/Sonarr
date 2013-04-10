@@ -22,19 +22,19 @@ namespace NzbDrone.Core.Test.ProviderTests.XemCommunicationProviderTests
     {
         private void WithFailureJson()
         {
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>()))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>()))
                     .Returns(ReadAllText("Files","Xem","Failure.txt"));
         }
 
         private void WithIdsJson()
         {
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>()))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>()))
                     .Returns(ReadAllText("Files","Xem","Ids.txt"));
         }
 
         private void WithMappingsJson()
         {
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>()))
+            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>()))
                     .Returns(ReadAllText("Files","Xem","Mappings.txt"));
         }
 

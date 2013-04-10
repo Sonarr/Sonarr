@@ -18,10 +18,10 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IConfigService _configService;
-        private readonly HttpProvider _httpProvider;
+        private readonly IHttpProvider _httpProvider;
         private readonly EventClientProvider _eventClientProvider;
 
-        public XbmcProvider(IConfigService configService, HttpProvider httpProvider, EventClientProvider eventClientProvider)
+        public XbmcProvider(IConfigService configService, IHttpProvider httpProvider, EventClientProvider eventClientProvider)
         {
             _configService = configService;
             _httpProvider = httpProvider;

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -8,7 +7,17 @@ using NLog;
 
 namespace NzbDrone.Common
 {
-    public class HttpProvider
+    public interface IHttpProvider
+    {
+        string DownloadString(string address);
+        string DownloadString(string address, string username, string password);
+        string DownloadString(string address, ICredentials identity);
+        Stream DownloadStream(string url, NetworkCredential credential = null);
+        void DownloadFile(string url, string fileName);
+        string PostCommand(string address, string username, string password, string command);
+    }
+
+    public class HttpProvider : IHttpProvider
     {
         private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -20,21 +29,17 @@ namespace NzbDrone.Common
             _userAgent = String.Format("NzbDrone {0}", _environmentProvider.Version);
         }
 
-        public HttpProvider()
-        {
-        }
-
-        public virtual string DownloadString(string address)
+        public string DownloadString(string address)
         {
             return DownloadString(address, null);
         }
 
-        public virtual string DownloadString(string address, string username, string password)
+        public string DownloadString(string address, string username, string password)
         {
             return DownloadString(address, new NetworkCredential(username, password));
         }
 
-        public virtual string DownloadString(string address, ICredentials identity)
+        public string DownloadString(string address, ICredentials identity)
         {
             try
             {
@@ -49,7 +54,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual Stream DownloadStream(string url, NetworkCredential credential = null)
+        public Stream DownloadStream(string url, NetworkCredential credential = null)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.UserAgent = _userAgent;
@@ -60,7 +65,7 @@ namespace NzbDrone.Common
             return response.GetResponseStream();
         }
 
-        public virtual void DownloadFile(string url, string fileName)
+        public void DownloadFile(string url, string fileName)
         {
             try
             {
@@ -87,7 +92,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual string PostCommand(string address, string username, string password, string command)
+        public string PostCommand(string address, string username, string password, string command)
         {
             address = String.Format("http://{0}/jsonrpc", address);
 
