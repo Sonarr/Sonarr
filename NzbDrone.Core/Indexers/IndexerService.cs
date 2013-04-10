@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Eventing;
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Indexers
             foreach (var feedProvider in _indexers)
             {
                 IIndexerBase indexerLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.Name == indexerLocal.Name))
+                if (!currentIndexers.Exists(c => c.Name.Equals(indexerLocal.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     var settings = new IndexerDefinition
                     {
