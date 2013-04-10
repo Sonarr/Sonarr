@@ -1,0 +1,41 @@
+﻿<div class="series-item">
+    <div class="row">
+        <div class="span2">
+            <a href="/series/details/{{id}}" target="_blank">
+                <img class="series-poster img-polaroid" src="{{poster}}">
+            </a>
+        </div>
+        <div class="span10">
+            <div class="row">
+                <div class="span9">
+                    <h2>{{title}}</h2>
+                </div>
+                <div class="span1">
+                    <div class="pull-right">
+                        <i class="icon-cog x-edit" title="Edit Series"></i>
+                        <i class="icon-remove x-remove" title="Delete Series"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span10">
+                    {{overview}}
+                </div>
+            </div>
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="span10">
+                    {{#if isContinuing}}
+                        {{#if bestDateString}}
+                            <span class="label">{{bestDateString}}</span>
+                        {{else}}
+                            <span class="label label-inverse">{{status}}</span>
+                        {{/if}}
+                    {{else}}
+                        <span class="label label-important">{{status}}</span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

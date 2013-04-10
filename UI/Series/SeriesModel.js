@@ -33,6 +33,13 @@
             },
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');
+            },
+            isContinuing     : function () {
+                if (this.get('status') === 'Continuing'){
+                    return true;
+                }
+
+                return false;
             }
         },
 

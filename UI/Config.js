@@ -3,21 +3,28 @@ define(['app'], function () {
 
     $.cookie.json = true;
 
-    NzbDrone.Config.SeriesView = function (value) {
-        if (value) {
-            NzbDrone.Config.SetValue('seriesView', value);
+    NzbDrone.Config.SeriesViewStyle = function (value) {
+        var key = 'seriesViewStyle';
+
+        if (value !== undefined) {
+            NzbDrone.Config.SetValue(key, value);
         }
 
         else{
-            return NzbDrone.Config.GetValue('seriesView', 0);
+            return NzbDrone.Config.GetValue(key, 1);
         }
     };
 
     NzbDrone.Config.GetValue = function (key, defaultValue) {
         var cookie = NzbDrone.Config.GetCookie();
-        var value =  cookie[key];
 
-        if (!value) {
+        if (!cookie) {
+            return defaultValue;
+        }
+
+        var value = cookie[key];
+
+        if (value === undefined) {
             return defaultValue;
         }
 
@@ -28,7 +35,13 @@ define(['app'], function () {
 
     NzbDrone.Config.SetValue = function (key, value) {
         var cookie = NzbDrone.Config.GetCookie();
+
+        if (!cookie) {
+            cookie = {};
+        }
+
         cookie[key] = value;
+        NzbDrone.Config.SetCookie(cookie);
     };
 
     NzbDrone.Config.GetCookie = function () {
@@ -36,6 +49,6 @@ define(['app'], function () {
     };
 
     NzbDrone.Config.SetCookie = function (cookie) {
-        $.cookie('NzbDroneConfig', cookie, { expires: 7, path: '/' });
+        $.cookie('NzbDroneConfig', cookie, { expires: 365, path: '/' });
     };
 });

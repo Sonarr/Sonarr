@@ -69,4 +69,6 @@
 .img-polaroid {
     min-width: 138px;
     min-height: 203px;
+    max-width: 138px;
+    max-height: 203px;
 }

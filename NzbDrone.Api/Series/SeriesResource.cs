@@ -32,9 +32,9 @@ namespace NzbDrone.Api.Series
         public String Network { get; set; }
         public String AirTime { get; set; }
         public String Language { get; set; }
-
         public Int32 SeasonCount { get; set; }
         public Int32 UtcOffset { get; set; }
+        public List<Core.MediaCover.MediaCover> Images { get; set; }
 
         //View & Edit
         public String Path { get; set; }

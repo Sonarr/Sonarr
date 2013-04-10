@@ -1,25 +1,40 @@
 ﻿'use strict';
 
-define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'], function (app, qualityProfileCollection) {
+define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView', 'Config'], function (app, qualityProfileCollection) {
     NzbDrone.Series.Index.SeriesIndexCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView                : NzbDrone.Series.Index.SeriesItemView,
-        itemViewContainer       : 'tbody',
+        itemViewContainer       : '#x-series',
         template                : 'Series/Index/SeriesIndexTemplate',
         qualityProfileCollection: qualityProfileCollection,
         //emptyView: NzbDrone.Series.EmptySeriesCollectionView,
 
+        getTemplate: function(){
+            if (this.viewStyle === 1){
+                return 'Series/Index/SeriesIndexGridTemplate';
+            }
+            else {
+                return 'Series/Index/SeriesIndexTemplate';
+            }
+        },
+
+        ui: {
+            table: '.x-series-table'
+        },
+
+        events: {
+            'click .x-series-change-view': 'changeViewTemplate'
+        },
+
         initialize: function () {
+            this.viewStyle = NzbDrone.Config.SeriesViewStyle();
+
             this.collection = new NzbDrone.Series.SeriesCollection();
             //Todo: This caused the onRendered event to be trigger twice, which displays two empty collection messages
             //http://stackoverflow.com/questions/13065176/backbone-marionette-composit-view-onrender-executing-twice
             this.collection.fetch();
             this.qualityProfileCollection.fetch();
 
-            this.itemViewOptions = { qualityProfiles: this.qualityProfileCollection };
-        },
-
-        ui: {
-            table: '.x-series-table'
+            this.itemViewOptions = { qualityProfiles: this.qualityProfileCollection, viewStyle: this.viewStyle };
         },
 
         onItemRemoved: function () {
@@ -85,6 +100,21 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'
                     $(this).children('.tablesorter-header-inner').append('<i class="icon-sort pull-right">');
                 }
             });
+        },
+
+        changeViewTemplate: function(event) {
+            event.preventDefault();
+            if ($(event.currentTarget).hasClass('x-series-show-grid')) {
+                NzbDrone.Config.SeriesViewStyle(1);
+            }
+
+            else {
+                NzbDrone.Config.SeriesViewStyle(0);
+            }
+
+            this.viewStyle = NzbDrone.Config.SeriesViewStyle();
+            this.itemViewOptions.viewStyle = this.viewStyle;
+            this.render();
         }
     });
 });
