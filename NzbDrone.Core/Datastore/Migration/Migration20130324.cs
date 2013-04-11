@@ -29,7 +29,6 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("Images").AsString()
                 .WithColumn("RootFolderId").AsInt32()
                 .WithColumn("Folder").AsString().NotNullable()
-                .WithColumn("Path").AsString().Unique()
                 .WithColumn("Monitored").AsBoolean()
                 .WithColumn("QualityProfileId").AsInt32()
                 .WithColumn("SeasonFolder").AsBoolean()

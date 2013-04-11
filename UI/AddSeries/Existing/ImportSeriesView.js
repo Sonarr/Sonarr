@@ -13,27 +13,23 @@ define([
 
             var self = this;
 
-            var seriesId = this.model.get('tvDbId');
-            var title = this.model.get('title');
             var quality = this.options.qualityProfile.val();
-            var path = this.options.folder.path;
+            var rootFolderId = this.options.rootFolder.id;
+            var folder = this.options.folder.name;
 
-            var model = new NzbDrone.Series.SeriesModel({
-                tvDbId          : seriesId,
-                title           : title,
-                qualityProfileId: quality,
-                path            : path
-            });
+            this.model.set('qualityProfileId', quality);
+            this.model.set('rootFolderId', rootFolderId);
+            this.model.set('folder', folder);
 
             var seriesCollection = new NzbDrone.Series.SeriesCollection();
-            seriesCollection.add(model);
+            seriesCollection.add(this.model);
 
-            model.save(undefined, {
+            this.model.save(undefined, {
                 success: function () {
                     var notificationModel = new NzbDrone.Shared.NotificationModel({
-                        tvDbId : seriesId,
+                        tvDbId : self.model.get('tvDbId'),
                         title  : 'Added',
-                        message: title,
+                        message: self.model.get('title'),
                         level  : 'success'
                     });
 
@@ -52,7 +48,7 @@ define([
 
         events: {
             'click .x-btn-search': 'search',
-            'keydown .x-txt-search': 'keydown'
+            'keydown .x-txt-search': 'keyDown'
         },
 
         ui: {
@@ -88,7 +84,8 @@ define([
             });
         },
 
-        keydown: function (e) {
+        keyDown: function (e) {
+            //Check for enter being pressed
             var code = (e.keyCode ? e.keyCode : e.which);
             if(code === 13) {
                 this.search();

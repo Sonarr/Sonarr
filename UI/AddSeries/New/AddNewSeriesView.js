@@ -11,11 +11,9 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
         regions: {
             searchResult: '#search-result'
         },
-
         collection: new NzbDrone.Series.SeriesCollection(),
 
         onRender: function () {
-            console.log('binding auto complete');
             var self = this;
 
             this.ui.seriesSearch

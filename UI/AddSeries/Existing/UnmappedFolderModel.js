@@ -16,7 +16,7 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
         importItems: function (rootFolderModel) {
 
             this.reset();
-            var rootFolder = rootFolderModel.get('path');
+            var rootFolder = rootFolderModel;//.get('path');
 
             _.each(rootFolderModel.get('unmappedFolders'), function (folder) {
                 this.push(new NzbDrone.AddSeries.Existing.UnmappedFolderModel({ rootFolder: rootFolder, folder: folder}));
