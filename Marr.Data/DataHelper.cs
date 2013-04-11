@@ -84,6 +84,12 @@ namespace Marr.Data
             string columnName = propertyName;
 
             var columnMap = MapRepository.Instance.GetColumns(declaringType).GetByFieldName(propertyName);
+
+            if (columnMap == null)
+            {
+                throw new InvalidOperationException(string.Format("Column map missing for field {0}.{1}", declaringType.FullName, propertyName));
+            }
+
             if (useAltName)
             {
                 columnName = columnMap.ColumnInfo.TryGetAltName();
