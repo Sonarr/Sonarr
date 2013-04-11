@@ -1,4 +1,6 @@
-﻿define(['app'], function () {
+﻿"use strict";
+
+define(['app'], function () {
 
     $.fn.autoComplete = function (resource) {
         $(this).typeahead({

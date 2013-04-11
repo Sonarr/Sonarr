@@ -19,7 +19,6 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         },
 
         onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
             this.ui.switch.bootstrapSwitch();
         },
 

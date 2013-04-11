@@ -25,8 +25,6 @@ define([
         },
 
         onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-
             this.ui.switch.bootstrapSwitch();
             this.ui.tooltip.tooltip({ placement: 'right', html: true });
             this.ui.pathInput.autoComplete('/directories');

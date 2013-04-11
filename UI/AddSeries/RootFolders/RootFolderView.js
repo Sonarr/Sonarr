@@ -11,10 +11,6 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
             'click .x-remove': 'removeFolder'
         },
 
-        onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-        },
-
         removeFolder: function () {
             this.model.destroy({ wait: true });
             this.model.collection.remove(this.model);

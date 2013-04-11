@@ -15,10 +15,6 @@ define(['app', 'Series/SeriesModel'], function () {
             deleteFiles: '.x-delete-files'
         },
 
-        onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-        },
-
         removeSeries: function () {
 
             var deleteFiles = this.ui.deleteFiles.prop('checked');

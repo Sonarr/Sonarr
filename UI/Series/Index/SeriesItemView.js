@@ -37,10 +37,6 @@ define([
             this.viewStyle = options.viewStyle;
         },
 
-        onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-        },
-
         editSeries: function () {
             var view = new NzbDrone.Series.Edit.EditSeriesView({ model: this.model});
 

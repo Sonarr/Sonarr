@@ -15,7 +15,6 @@ define(['app', 'Quality/QualityProfileModel'], function () {
         },
 
         onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
             this.ui.switch.bootstrapSwitch();
         },
 

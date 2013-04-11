@@ -25,8 +25,6 @@ define([
         },
 
         onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-
             var self = this;
             this.ui.slider.slider({
                 min    : 0,

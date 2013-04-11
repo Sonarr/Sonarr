@@ -20,13 +20,6 @@ define([
             'click .x-remove': 'removeSeries'
         },
 
-        initialize: function () {
-        },
-
-        onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-        },
-
         editSeries: function () {
             var view = new NzbDrone.Settings.Quality.Profile.EditQualityProfileView({ model: this.model});
 

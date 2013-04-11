@@ -12,8 +12,5 @@ define(['app', 'Series/SeasonModel'], function () {
         events  : {
 
         },
-        onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-        }
     });
 });

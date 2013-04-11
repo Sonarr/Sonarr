@@ -7,9 +7,5 @@ define([
 
     NzbDrone.Settings.Indexers.IndexersView = Backbone.Marionette.ItemView.extend({
         template: 'Settings/Indexers/IndexersTemplate',
-
-        onRender: function () {
-            NzbDrone.ModelBinder.bind(this.model, this.el);
-        }
     });
 });
