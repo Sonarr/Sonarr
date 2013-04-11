@@ -37,7 +37,8 @@ namespace NzbDrone.Api.Series
         public List<Core.MediaCover.MediaCover> Images { get; set; }
 
         //View & Edit
-        public String Path { get; set; }
+        public int RootFolderId { get; set; }
+        public string FolderName { get; set; }
         public Int32 QualityProfileId { get; set; }
 
         //Editing Only

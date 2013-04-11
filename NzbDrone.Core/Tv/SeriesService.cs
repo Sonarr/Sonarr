@@ -91,10 +91,10 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(() => newSeries).IsNotNull();
 
-            if(String.IsNullOrWhiteSpace(newSeries.Folder))
+            if(String.IsNullOrWhiteSpace(newSeries.FolderName))
             {
-                newSeries.Folder = FileNameBuilder.CleanFilename(newSeries.Title);
-                _diskProvider.CreateDirectory(Path.Combine(_rootFolderRepository.Get(newSeries.RootFolderId).Path, newSeries.Folder));
+                newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
+                _diskProvider.CreateDirectory(Path.Combine(_rootFolderRepository.Get(newSeries.RootFolderId).Path, newSeries.FolderName));
             }
 
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Tv
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;
                 series.BacklogSetting = edited.BacklogSetting;
-                series.Path = edited.Path;
+                //series.Path = edited.Path;
                 series.CustomStartDate = edited.CustomStartDate;
 
                 _seriesRepository.Update(series);

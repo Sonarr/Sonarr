@@ -1,10 +1,12 @@
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
@@ -31,7 +33,8 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "30 Rock")
-                .With(s => s.Path = @"C:\Test\30 Rock")
+                .With(s => s.RootFolder = new LazyLoaded<RootFolder>(new RootFolder { Path = @"C:\Test\TV" }))
+                .With(s => s.FolderName = "30 Rock")
                 .With(s => s.SeasonFolder = useSeasonFolder)
                 .Build();
 

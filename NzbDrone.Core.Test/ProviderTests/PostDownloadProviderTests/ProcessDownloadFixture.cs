@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 
 using FizzWare.NBuilder;
+using Marr.Data;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -28,7 +30,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         public void Setup()
         {
             fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.Path = @"C:\Test\TV\30 Rock")
+                .With(s => s.RootFolder = new LazyLoaded<RootFolder>(new RootFolder { Path = @"C:\Test\TV" }))
+                .With(s => s.FolderName = "30 Rock")
                 .Build();
         }
 
@@ -342,7 +345,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             var series = Builder<Series>.CreateNew()
                     .With(s => s.Title = "30 Rock")
-                    .With(s => s.Path = @"C:\Test\TV\30 Rock")
+                    .With(s => s.RootFolder = new LazyLoaded<RootFolder>(new RootFolder { Path = @"C:\Test\TV" }))
+                    .With(s => s.FolderName = "30 Rock")
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()

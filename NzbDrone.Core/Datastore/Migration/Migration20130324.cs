@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("AirTime").AsString().Nullable()
                 .WithColumn("Images").AsString()
                 .WithColumn("RootFolderId").AsInt32()
-                .WithColumn("Folder").AsString().NotNullable()
+                .WithColumn("FolderName").AsString()
                 .WithColumn("Monitored").AsBoolean()
                 .WithColumn("QualityProfileId").AsInt32()
                 .WithColumn("SeasonFolder").AsBoolean()

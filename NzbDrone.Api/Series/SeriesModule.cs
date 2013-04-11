@@ -75,9 +75,10 @@ namespace NzbDrone.Api.Series
             series.SeasonFolder = request.SeasonFolder;
             series.QualityProfileId = request.QualityProfileId;
 
-            var oldPath = series.Path;
+            //Todo: Do we want to force a scan when this path changes? Can we use events instead?
+            series.RootFolderId = request.RootFolderId;
+            series.FolderName = request.FolderName;
 
-            series.Path = request.Path;
             series.BacklogSetting = (BacklogSettingType)request.BacklogSetting;
 
             if (!String.IsNullOrWhiteSpace(request.CustomStartDate))
@@ -85,11 +86,6 @@ namespace NzbDrone.Api.Series
 
             else
                 series.CustomStartDate = null;
-
-            _seriesRepository.Update(series);
-
-            if (oldPath != series.Path)
-                _jobProvider.Enqueue(typeof(DiskScanJob), new { SeriesId = series.Id });
 
             _seriesRepository.Update(series);
 
