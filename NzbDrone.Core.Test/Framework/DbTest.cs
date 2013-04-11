@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.Framework
     public interface ITestDatabase
     {
         void InsertMany<T>(IEnumerable<T> items) where T : ModelBase, new();
-        void Insert<T>(T item) where T : ModelBase, new();
+        T Insert<T>(T item) where T : ModelBase, new();
         List<T> All<T>() where T : ModelBase, new();
         T Single<T>() where T : ModelBase, new();
         void Update<T>(T childModel) where T : ModelBase, new();
@@ -151,9 +151,9 @@ namespace NzbDrone.Core.Test.Framework
             new BasicRepository<T>(_dbConnection).InsertMany(items.ToList());
         }
 
-        public void Insert<T>(T item) where T : ModelBase, new()
+        public T Insert<T>(T item) where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection).Insert(item);
+            return new BasicRepository<T>(_dbConnection).Insert(item);
         }
 
         public List<T> All<T>() where T : ModelBase, new()

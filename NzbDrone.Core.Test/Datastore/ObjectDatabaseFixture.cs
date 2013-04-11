@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -122,6 +123,25 @@ namespace NzbDrone.Core.Test.Datastore
             Db.All<JobDefinition>().Single().Type.Should().Be("Address");
             Db.All<JobDefinition>().Single().Name.Should().Be("B");
             Db.All<JobDefinition>().Single().Interval.Should().Be(12);
+        }
+
+        [Test]
+        public void should_load_lazy_objects()
+        {
+
+            var rootFolder = Db.Insert(new RootFolders.RootFolder() { Path = "C:\test" });
+
+            var series = Builder<Series>.CreateNew()
+                .With(c=>c.RootFolderId = rootFolder.Id)
+                .BuildNew();
+
+            Db.Insert(series);
+
+
+            Db.Single<Series>().RootFolder.Should().NotBeNull();
+            Db.Single<Series>().RootFolder.Value.Should().NotBeNull();
+            Db.Single<Series>().RootFolder.Value.Path.Should().Be(rootFolder.Path);
+
         }
     }
 
