@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Lifecycle
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public AppUpdateJob(UpdateProvider updateProvider, EnvironmentProvider environmentProvider, DiskProvider diskProvider,
-            HttpProvider httpProvider, ProcessProvider processProvider, ArchiveProvider archiveProvider, ConfigFileProvider configFileProvider)
+            IHttpProvider httpProvider, ProcessProvider processProvider, ArchiveProvider archiveProvider, ConfigFileProvider configFileProvider)
         {
             _updateProvider = updateProvider;
             _environmentProvider = environmentProvider;

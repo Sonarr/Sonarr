@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Organizer
 
             if (nameSpec.AppendQuality)
             {
-                result += String.Format(" [{0}]", episodeFile.Quality);
+                result += String.Format(" [{0}]", episodeFile.Quality.Quality);
 
                 if (episodeFile.Quality.Proper)
                     result += " [Proper]";
