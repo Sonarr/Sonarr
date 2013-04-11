@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.RootFolders;
 
 
 namespace NzbDrone.Core.Tv
@@ -25,13 +27,11 @@ namespace NzbDrone.Core.Tv
         public int TvDbId { get; set; }
         public int TvRageId { get; set; }
         public string ImdbId { get; set; }
-
         public string Title { get; set; }
         public string CleanTitle { get; set; }
         public SeriesStatusType Status { get; set; }
         public string Overview { get; set; }
         public String AirTime { get; set; }
-        public string Path { get; set; }
         public bool Monitored { get; set; }
         public int QualityProfileId { get; set; }
         public bool SeasonFolder { get; set; }
@@ -44,8 +44,14 @@ namespace NzbDrone.Core.Tv
         public string Network { get; set; }
         public DateTime? CustomStartDate { get; set; }
         public bool UseSceneNumbering { get; set; }
-
         public string TitleSlug { get; set; }
+
+        public int RootFolderId { get; set; }
+        public string Folder { get; set; }
+        public LazyLoaded<RootFolder> RootFolder { get; set; }
+        
+        //Todo: Store the root folder + folderName
+        public string Path { get; set; }
 
         //Todo: This should be a double since there are timezones that aren't on a full hour offset
         public int UtcOffset { get; set; }

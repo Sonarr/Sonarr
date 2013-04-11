@@ -83,7 +83,6 @@ namespace NzbDrone.Core.MediaFiles
             parseResult.Quality = episodeFile.Quality;
             parseResult.Episodes = episodes;
 
-
             if (newDownload)
             {
                 _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult));
@@ -91,7 +90,5 @@ namespace NzbDrone.Core.MediaFiles
 
             return episodeFile;
         }
-
-
     }
 }

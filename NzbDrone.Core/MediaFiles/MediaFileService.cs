@@ -28,7 +28,6 @@ namespace NzbDrone.Core.MediaFiles
         private readonly Logger _logger;
         private readonly IMediaFileRepository _mediaFileRepository;
 
-
         public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
@@ -73,8 +72,6 @@ namespace NzbDrone.Core.MediaFiles
         {
             return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
         }
-
-
 
         public void HandleAsync(SeriesDeletedEvent message)
         {

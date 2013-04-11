@@ -22,13 +22,10 @@ define(['app', 'Shared/NotificationCollection', 'Series/SeriesCollection'], func
         addSeries: function () {
 
             var quality = this.ui.qualityProfile.val();
-
-            //Todo: This will create an invalid path on linux...
-            var rootPath = this.ui.rootFolder.find(":selected").text();
-            var path = rootPath + "\\" + this.model.get('title');
+            var rootFolderId = this.ui.rootFolder.val();
 
             this.model.set('qualityProfileId', quality);
-            this.model.set('path', path);
+            this.model.set('rootFolderId', rootFolderId);
 
             var self = this;
 

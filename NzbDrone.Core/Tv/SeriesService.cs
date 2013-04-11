@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Marr.Data;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Eventing;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Organizer;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -29,15 +34,18 @@ namespace NzbDrone.Core.Tv
         private readonly IConfigService _configService;
         private readonly IProvideSeriesInfo _seriesInfoProxy;
         private readonly IEventAggregator _eventAggregator;
+        private readonly DiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService, IProvideSeriesInfo seriesInfoProxy,
-                             IEventAggregator eventAggregator, Logger logger)
+        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
+                             IProvideSeriesInfo seriesInfoProxy, IEventAggregator eventAggregator,
+                             DiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _seriesInfoProxy = seriesInfoProxy;
             _eventAggregator = eventAggregator;
+            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -79,6 +87,13 @@ namespace NzbDrone.Core.Tv
         public void AddSeries(Series newSeries)
         {
             Ensure.That(() => newSeries).IsNotNull();
+
+            //Todo: If Path is null we need to create the path
+            if(String.IsNullOrWhiteSpace(newSeries.Folder))
+            {
+                newSeries.Folder = FileNameBuilder.CleanFilename(newSeries.Title);
+                _diskProvider.CreateDirectory(Path.Combine(newSeries.RootFolder.Value.Path, newSeries.Folder));
+            }
 
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
 
