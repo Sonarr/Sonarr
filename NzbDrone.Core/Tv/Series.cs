@@ -50,8 +50,11 @@ namespace NzbDrone.Core.Tv
         public string Folder { get; set; }
         public LazyLoaded<RootFolder> RootFolder { get; set; }
         
-        //Todo: Store the root folder + folderName
-        public string Path { get; set; }
+        //Todo: Use this to auto link RootFolder and Folder (using the proper path separator)
+        public string Path
+        {
+            get { return System.IO.Path.Combine(RootFolder.Value.Path, Folder); }
+        }
 
         //Todo: This should be a double since there are timezones that aren't on a full hour offset
         public int UtcOffset { get; set; }
