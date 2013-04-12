@@ -23,7 +23,8 @@
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
     "grunt-wrap": "*",
-    "grunt-curl": "*"
+    "grunt-curl": "*",
+    "grunt-notify":"*"
   },
   "scripts": {
   "preinstall": "npm install grunt-cli -g"
