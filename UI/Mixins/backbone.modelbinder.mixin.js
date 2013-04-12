@@ -19,13 +19,15 @@ Marionette.View.prototype.viewName = function () {
 
 Marionette.ItemView.prototype.render = function () {
 
+    var result = oldItemViewRender.apply(this, arguments);
+
+    this.$el.addClass('iv-' + this.viewName());
+
     if (this.model) {
         NzbDrone.ModelBinder.bind(this.model, this.el);
     }
 
-    this.$el.addClass('iv-' + this.viewName());
-
-    return oldItemViewRender.apply(this, arguments);
+    return result;
 };
 
 Marionette.CollectionView.prototype.render = function () {
