@@ -1,0 +1,27 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug - Firefox" type="JavascriptDebugSession" factoryName="Remote" singleton="true">
+    <JSRemoteDebuggerConfigurationSettings>
+      <option name="engineId" value="firefox" />
+      <option name="fileUrl" value="http://localhost:8989" />
+      <mapping local-file="$PROJECT_DIR$/Calendar" url="http://localhost:8989/Calendar" />
+      <mapping local-file="$PROJECT_DIR$/MainMenuView.js" url="http://localhost:8989/MainMenuView.js" />
+      <mapping local-file="$PROJECT_DIR$/Settings" url="http://localhost:8989/Settings" />
+      <mapping local-file="$PROJECT_DIR$/Upcoming" url="http://localhost:8989/Upcoming" />
+      <mapping local-file="$PROJECT_DIR$/app.js" url="http://localhost:8989/app.js" />
+      <mapping local-file="$PROJECT_DIR$/Mixins" url="http://localhost:8989/Mixins" />
+      <mapping local-file="$PROJECT_DIR$/Missing" url="http://localhost:8989/Missing" />
+      <mapping local-file="$PROJECT_DIR$/Config.js" url="http://localhost:8989/Config.js" />
+      <mapping local-file="$PROJECT_DIR$/Quality" url="http://localhost:8989/Quality" />
+      <mapping local-file="$PROJECT_DIR$/AddSeries" url="http://localhost:8989/AddSeries" />
+      <mapping local-file="$PROJECT_DIR$/Shared" url="http://localhost:8989/Shared" />
+      <mapping local-file="$PROJECT_DIR$/HeaderView.js" url="http://localhost:8989/HeaderView.js" />
+      <mapping local-file="$PROJECT_DIR$" url="http://localhost:8989" />
+      <mapping local-file="$PROJECT_DIR$/Routing.js" url="http://localhost:8989/Routing.js" />
+      <mapping local-file="$PROJECT_DIR$/Controller.js" url="http://localhost:8989/Controller.js" />
+      <mapping local-file="$PROJECT_DIR$/Series" url="http://localhost:8989/Series" />
+    </JSRemoteDebuggerConfigurationSettings>
+    <RunnerSettings RunnerId="JavascriptDebugRunner" />
+    <ConfigurationWrapper RunnerId="JavascriptDebugRunner" />
+    <method />
+  </configuration>
+</component>
