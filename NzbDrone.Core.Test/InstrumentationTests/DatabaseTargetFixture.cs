@@ -33,6 +33,9 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             Mocker.Resolve<ILogRepository, LogRepository>();
             Mocker.Resolve<DatabaseTarget>().Register();
 
+            LogManager.ReconfigExistingLoggers();
+
+
             _logger = LogManager.GetCurrentClassLogger();
             _loggerName = _logger.Name.Replace("NzbDrone.","");
 

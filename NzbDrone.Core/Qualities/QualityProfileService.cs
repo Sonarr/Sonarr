@@ -52,11 +52,6 @@ namespace NzbDrone.Core.Qualities
             return _qualityProfileRepository.Get(id);
         }
 
-        public void Init()
-        {
-
-        }
-
         public void Handle(ApplicationStartedEvent message)
         {
             if (All().Any()) return;

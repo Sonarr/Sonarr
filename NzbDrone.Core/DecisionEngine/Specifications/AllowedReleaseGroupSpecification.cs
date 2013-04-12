@@ -32,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             //Todo: Make this use NzbRestrictions - How should whitelist be used? Will it override blacklist or vice-versa?
 
             //var allowed = _configService.AllowedReleaseGroups;
-            var allowed = "";
+            const string allowed = "";
 
             if (string.IsNullOrWhiteSpace(allowed))
                 return true;

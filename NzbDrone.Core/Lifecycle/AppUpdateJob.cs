@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Lifecycle
         {
             notification.CurrentMessage = "Checking for updates";
 
-            var updatePackage = _updateProvider.GetAvilableUpdate(_environmentProvider.Version);
+            var updatePackage = _updateProvider.GetAvailableUpdate(_environmentProvider.Version);
 
             //No updates available
             if (updatePackage == null)

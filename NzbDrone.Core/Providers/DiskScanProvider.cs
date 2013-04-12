@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception ex)
                 {
-                    Logger.WarnException("Failed to move epiosde file from drop folder: " + file, ex);
+                    Logger.WarnException("Failed to move episode file from drop folder: " + file, ex);
                     throw;
                 }
             }

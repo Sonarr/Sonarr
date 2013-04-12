@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,19 +19,19 @@ namespace NzbDrone.Core.Providers
         private readonly EnvironmentProvider _environmentProvider;
 
         private readonly DiskProvider _diskProvider;
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger;
 
         private static readonly Regex parseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
-        public const string DEFAULT_UPDATE_URL = @"http://update.nzbdrone.com/_release/";
 
 
         public UpdateProvider(IHttpProvider httpProvider, IConfigService configService,
-            EnvironmentProvider environmentProvider, DiskProvider diskProvider)
+            EnvironmentProvider environmentProvider, DiskProvider diskProvider, Logger logger)
         {
             _httpProvider = httpProvider;
             _configService = configService;
             _environmentProvider = environmentProvider;
             _diskProvider = diskProvider;
+            _logger = logger;
         }
 
         public UpdateProvider()
@@ -40,7 +39,7 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        private List<UpdatePackage> GetAvailablePackages()
+        private IEnumerable<UpdatePackage> GetAvailablePackages()
         {
             var updateList = new List<UpdatePackage>();
             var updateUrl = _configService.UpdateUrl;
@@ -59,17 +58,17 @@ namespace NzbDrone.Core.Providers
             return updateList;
         }
 
-        public virtual UpdatePackage GetAvilableUpdate(Version currentVersion)
+        public virtual UpdatePackage GetAvailableUpdate(Version currentVersion)
         {
             var latestAvailable = GetAvailablePackages().OrderByDescending(c => c.Version).FirstOrDefault();
 
             if (latestAvailable != null && latestAvailable.Version > currentVersion)
             {
-                logger.Debug("An update is available ({0}) => ({1})", currentVersion, latestAvailable.Version);
+                _logger.Debug("An update is available ({0}) => ({1})", currentVersion, latestAvailable.Version);
                 return latestAvailable;
             }
 
-            logger.Trace("No updates available");
+            _logger.Trace("No updates available");
             return null;
         }
 

@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Configuration
 
         public string UpdateUrl
         {
-            get { return GetValue("UpdateUrl", UpdateProvider.DEFAULT_UPDATE_URL); }
+            get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/_release/"); }
             set { SetValue("UpdateUrl", value); }
         }
 

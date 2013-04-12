@@ -178,7 +178,7 @@
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetUpdateLogFixture.cs" />
-    <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
+    <Compile Include="ProviderTests\UpdateProviderTests\GetAvailableUpdateFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />

@@ -1,14 +1,9 @@
-
-
 using System.Linq;
-using System;
-using System.Collections.Generic;
 using FizzWare.NBuilder;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Qualities
@@ -20,7 +15,7 @@ namespace NzbDrone.Core.Test.Qualities
         [Test]
         public void Init_should_add_two_profiles()
         {
-            Subject.Init();
+            Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityProfileRepository>()
                 .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Exactly(2));
@@ -35,7 +30,7 @@ namespace NzbDrone.Core.Test.Qualities
                   .Setup(s => s.All())
                   .Returns(Builder<QualityProfile>.CreateListOfSize(2).Build().ToList());
 
-            Subject.Init();
+            Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityProfileRepository>()
                 .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Never());
