@@ -67,25 +67,26 @@ namespace NzbDrone.Core.Tv
         public Series UpdateSeriesInfo(int seriesId)
         {
             var series = _seriesRepository.Get(seriesId);
-            var tvDbSeries = _seriesInfoProxy.GetSeriesInfo(series.TvDbId);
+            var seriesInfo = _seriesInfoProxy.GetSeriesInfo(series.TvDbId);
 
-            series.Title = tvDbSeries.Title;
-            series.AirTime = tvDbSeries.AirTime;
-            series.Overview = tvDbSeries.Overview;
-            series.Status = tvDbSeries.Status;
-            series.CleanTitle = Parser.Parser.NormalizeTitle(tvDbSeries.Title);
+            series.Title = seriesInfo.Title;
+            series.AirTime = seriesInfo.AirTime;
+            series.Overview = seriesInfo.Overview;
+            series.Status = seriesInfo.Status;
+            series.CleanTitle = Parser.NormalizeTitle(seriesInfo.Title);
             series.LastInfoSync = DateTime.Now;
-            series.Runtime = tvDbSeries.Runtime;
-            series.Images = tvDbSeries.Images;
-            series.Network = tvDbSeries.Network;
-            series.FirstAired = tvDbSeries.FirstAired;
+            series.Runtime = seriesInfo.Runtime;
+            series.Images = seriesInfo.Images;
+            series.Network = seriesInfo.Network;
+            series.FirstAired = seriesInfo.FirstAired;
             _seriesRepository.Update(series);
+
+            //Todo: We need to get the UtcOffset from TVRage, since its not available from trakt
 
             _eventAggregator.Publish(new SeriesUpdatedEvent(series));
 
             return series;
         }
-
 
         public Series GetSeries(int seriesId)
         {
