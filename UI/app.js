@@ -58,7 +58,8 @@ define('app', function () {
 
     window.NzbDrone.Events = {
         OpenModalDialog : 'openModal',
-        CloseModalDialog: 'closeModal'
+        CloseModalDialog: 'closeModal',
+        SeriesAdded: 'seriesAdded'
     };
 
     window.NzbDrone.Constants = {

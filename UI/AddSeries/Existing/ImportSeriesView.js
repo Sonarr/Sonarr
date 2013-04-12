@@ -34,6 +34,8 @@ define([
                     });
 
                     notificationCollection.push(notificationModel);
+                    NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: true, series: self.model });
+                    self.trigger('seriesAdded');
                     self.close();
                 }
             });
@@ -60,6 +62,10 @@ define([
         initialize: function () {
             this.collection = new NzbDrone.Series.SeriesCollection();
             this.collection.bind('reset', this.collectionReset, this);
+
+            this.on("itemview:seriesAdded", function(){
+                this.close();
+            });
         },
 
         onRender: function () {

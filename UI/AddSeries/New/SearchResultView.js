@@ -38,7 +38,7 @@ define(['app', 'Shared/NotificationCollection', 'Series/SeriesCollection'], func
                     });
 
                     notificationCollection.push(notificationModel);
-                    self.close();
+                    NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: false, series: self.model });
                 }
             });
         }

@@ -13,6 +13,19 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
         },
         collection: new NzbDrone.Series.SeriesCollection(),
 
+        initialize: function () {
+            NzbDrone.AddSeries.New.AddNewSeriesContext = this;
+
+            NzbDrone.vent.on(NzbDrone.Events.SeriesAdded, function (options){
+                if (!options.existing) {
+                    NzbDrone.AddSeries.New.AddNewSeriesContext.ui.seriesSearch.val('');
+
+                    //Todo: Figure out why this is inconsistent
+                    options.series.collection.reset();
+                }
+            });
+        },
+
         onRender: function () {
             var self = this;
 
