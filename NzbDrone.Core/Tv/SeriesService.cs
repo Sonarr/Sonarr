@@ -27,6 +27,8 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
+        List<Series> GetAllSeries();
+        void UpdateSeries(Series series);
     }
 
     public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
@@ -35,19 +37,19 @@ namespace NzbDrone.Core.Tv
         private readonly IConfigService _configService;
         private readonly IProvideSeriesInfo _seriesInfoProxy;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IBasicRepository<RootFolder> _rootFolderRepository;
+        private readonly IRootFolderService _rootFolderService;
         private readonly DiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
                              IProvideSeriesInfo seriesInfoProxy, IEventAggregator eventAggregator,
-                             IBasicRepository<RootFolder> rootFolderRepository, DiskProvider diskProvider, Logger logger)
+                             IRootFolderService rootFolderService, DiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _seriesInfoProxy = seriesInfoProxy;
             _eventAggregator = eventAggregator;
-            _rootFolderRepository = rootFolderRepository;
+            _rootFolderService = rootFolderService;
             _diskProvider = diskProvider;
             _logger = logger;
         }
@@ -94,7 +96,7 @@ namespace NzbDrone.Core.Tv
             if(String.IsNullOrWhiteSpace(newSeries.FolderName))
             {
                 newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
-                _diskProvider.CreateDirectory(Path.Combine(_rootFolderRepository.Get(newSeries.RootFolderId).Path, newSeries.FolderName));
+                _diskProvider.CreateDirectory(Path.Combine(_rootFolderService.Get(newSeries.RootFolderId).Path, newSeries.FolderName));
             }
 
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
@@ -151,6 +153,16 @@ namespace NzbDrone.Core.Tv
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
             _eventAggregator.Publish(new SeriesDeletedEvent(series, deleteFiles));
+        }
+
+        public List<Series> GetAllSeries()
+        {
+            return _seriesRepository.All().ToList();
+        }
+
+        public void UpdateSeries(Series series)
+        {
+            _seriesRepository.Update(series);
         }
 
         public void HandleAsync(SeriesAddedEvent message)

@@ -18,14 +18,12 @@ namespace NzbDrone.Api.Series
     public class SeriesModule : NzbDroneApiModule
     {
         private readonly ISeriesService _seriesService;
-        private readonly ISeriesRepository _seriesRepository;
         private readonly IJobController _jobProvider;
 
-        public SeriesModule(ISeriesService seriesService, ISeriesRepository seriesRepository, IJobController jobProvider)
+        public SeriesModule(ISeriesService seriesService, IJobController jobProvider)
             : base("/Series")
         {
             _seriesService = seriesService;
-            _seriesRepository = seriesRepository;
             _jobProvider = jobProvider;
             Get["/"] = x => AllSeries();
             Get["/{id}"] = x => GetSeries((int)x.id);
@@ -37,7 +35,7 @@ namespace NzbDrone.Api.Series
 
         private Response AllSeries()
         {
-            var series = _seriesRepository.All().ToList();
+            var series = _seriesService.GetAllSeries().ToList();
             var seriesModels = Mapper.Map<List<Core.Tv.Series>, List<SeriesResource>>(series);
 
             return seriesModels.AsResponse();
@@ -45,7 +43,7 @@ namespace NzbDrone.Api.Series
 
         private Response GetSeries(int id)
         {
-            var series = _seriesRepository.Get(id);
+            var series = _seriesService.GetSeries(id);
             var seriesModels = Mapper.Map<Core.Tv.Series, SeriesResource>(series);
 
             return seriesModels.AsResponse();
@@ -69,7 +67,7 @@ namespace NzbDrone.Api.Series
         {
             var request = Request.Body.FromJson<SeriesResource>();
 
-            var series = _seriesRepository.Get(request.Id);
+            var series = _seriesService.GetSeries(request.Id);
 
             series.Monitored = request.Monitored;
             series.SeasonFolder = request.SeasonFolder;
@@ -87,7 +85,7 @@ namespace NzbDrone.Api.Series
             else
                 series.CustomStartDate = null;
 
-            _seriesRepository.Update(series);
+            _seriesService.UpdateSeries(series);
 
             return request.AsResponse();
         }
