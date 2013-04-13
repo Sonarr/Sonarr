@@ -7,12 +7,13 @@ using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Lifecycle
 {
     public class AppUpdateJob : IJob
     {
-        private readonly UpdateProvider _updateProvider;
+        private readonly UpdateService _updateService;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly DiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
@@ -22,10 +23,10 @@ namespace NzbDrone.Core.Lifecycle
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public AppUpdateJob(UpdateProvider updateProvider, EnvironmentProvider environmentProvider, DiskProvider diskProvider,
+        public AppUpdateJob(UpdateService updateService, EnvironmentProvider environmentProvider, DiskProvider diskProvider,
             IHttpProvider httpProvider, ProcessProvider processProvider, ArchiveProvider archiveProvider, ConfigFileProvider configFileProvider)
         {
-            _updateProvider = updateProvider;
+            _updateService = updateService;
             _environmentProvider = environmentProvider;
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Lifecycle
         {
             notification.CurrentMessage = "Checking for updates";
 
-            var updatePackage = _updateProvider.GetAvailableUpdate(_environmentProvider.Version);
+            var updatePackage = _updateService.GetAvailableUpdate(_environmentProvider.Version);
 
             //No updates available
             if (updatePackage == null)

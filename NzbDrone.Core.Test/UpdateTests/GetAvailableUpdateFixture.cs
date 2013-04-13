@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
+namespace NzbDrone.Core.Test.UpdateTests
 {
-    class GetAvailableUpdateFixture : CoreTest<UpdateProvider>
+    class GetAvailableUpdateFixture : CoreTest<UpdateService>
     {
         private static readonly Version LatestTestVersion = new Version("0.6.0.3");
         private const string LATEST_TEST_URL = "http://update.nzbdrone.com/_test/NzbDrone.master.0.6.0.3.zip";

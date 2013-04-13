@@ -12,6 +12,7 @@ using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Update;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.JobTests
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
             Mocker.GetMock<ConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
-            Mocker.GetMock<UpdateProvider>().Setup(c => c.GetAvailableUpdate(It.IsAny<Version>())).Returns(updatePackage);
+            Mocker.GetMock<UpdateService>().Setup(c => c.GetAvailableUpdate(It.IsAny<Version>())).Returns(updatePackage);
         }
 
 
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void when_no_updates_are_available_should_return_without_error_or_warnings()
         {
-            Mocker.GetMock<UpdateProvider>().Setup(c => c.GetAvailableUpdate(It.IsAny<Version>())).Returns((UpdatePackage)null);
+            Mocker.GetMock<UpdateService>().Setup(c => c.GetAvailableUpdate(It.IsAny<Version>())).Returns((UpdatePackage)null);
 
             StartUpdate();
 

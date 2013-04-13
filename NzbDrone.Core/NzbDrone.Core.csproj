@@ -365,7 +365,6 @@
     <Compile Include="Download\Clients\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabVersionModel.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
-    <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersDharmaResult.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersEdenResult.cs" />
@@ -496,9 +495,6 @@
     <Compile Include="Providers\TwitterProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\UpdateProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\XbmcProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -525,6 +521,9 @@
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tv\SeriesStatusType.cs" />
+    <Compile Include="Update\AvailableUpdateService.cs" />
+    <Compile Include="Update\UpdatePackage.cs" />
+    <Compile Include="Update\UpdateProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

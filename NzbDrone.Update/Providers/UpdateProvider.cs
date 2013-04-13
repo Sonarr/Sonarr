@@ -125,7 +125,7 @@ namespace NzbDrone.Update.Providers
                 logger.Info("Starting NzbDrone service");
                 _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
-            else if(appType == AppType.Console)
+            else if (appType == AppType.Console)
             {
                 logger.Info("Starting NzbDrone with Console");
                 _processProvider.Start(Path.Combine(targetFolder, "NzbDrone.Console.exe"));

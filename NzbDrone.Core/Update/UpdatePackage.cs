@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
 
-namespace NzbDrone.Core.Model
+namespace NzbDrone.Core.Update
 {
     public class UpdatePackage
     {

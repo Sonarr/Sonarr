@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
+namespace NzbDrone.Core.Test.UpdateTests
 {
     class GetUpdateLogFixture : CoreTest
     {
@@ -43,7 +41,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
                 .Setup(c => c.FolderExists(UpdateLogFolder))
                 .Returns(false);
 
-            var logs = Mocker.Resolve<UpdateProvider>().UpdateLogFile();
+            var logs = Mocker.Resolve<UpdateService>().UpdateLogFile();
             logs.Should().BeEmpty();
         }
 
@@ -51,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         [Test]
         public void get_logs_should_return_list_of_files_in_log_folder()
         {
-            var logs = Mocker.Resolve<UpdateProvider>().UpdateLogFile();
+            var logs = Mocker.Resolve<UpdateService>().UpdateLogFile();
             logs.Should().HaveCount(3);
         }
 
