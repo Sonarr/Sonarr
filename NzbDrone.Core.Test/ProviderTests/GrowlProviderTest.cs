@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Register_should_add_new_application_to_local_growl_instance()
         {
             
-            WithStrictMocker();
+            
             
             
             Mocker.Resolve<GrowlProvider>().Register("localhost", 23053, "");
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void TestNotification_should_send_a_message_to_local_growl_instance()
         {
             
-            WithStrictMocker();
+            
 
             
             Mocker.Resolve<GrowlProvider>().TestNotification("localhost", 23053, "");
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void OnGrab_should_send_a_message_to_local_growl_instance()
         {
             
-            WithStrictMocker();
+            
 
             
             Mocker.Resolve<GrowlProvider>().SendNotification("Episode Grabbed", "Series Title - 1x05 - Episode Title", "GRAB", "localhost", 23053, "");
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void OnDownload_should_send_a_message_to_local_growl_instance()
         {
             
-            WithStrictMocker();
+            
 
             
             Mocker.Resolve<GrowlProvider>().SendNotification("Episode Downloaded", "Series Title - 1x05 - Episode Title", "DOWNLOAD", "localhost", 23053, "");

@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build().ToList();
 
-            WithStrictMocker();
+            
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build().ToList();
 
-            WithStrictMocker();
+            
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build().ToList();
 
-            WithStrictMocker();
+            
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build().ToList();
 
-            WithStrictMocker();
+            
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build().ToList();
 
-            WithStrictMocker();
+            
 
             Mocker.GetMock<IEpisodeService>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);

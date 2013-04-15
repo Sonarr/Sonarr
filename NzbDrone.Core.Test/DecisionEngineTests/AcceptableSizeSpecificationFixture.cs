@@ -96,8 +96,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_single_episode_not_first_or_last_30_minute()
         {
-            WithStrictMocker();
-
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Report.Size = 1.Gigabytes();
 
@@ -117,7 +115,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_single_episode_not_first_or_last_60_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Report.Size = 1.Gigabytes();
@@ -138,7 +136,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_30_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultMulti.Series = series30minutes;
             parseResultMulti.Report.Size = 184572800;
@@ -159,7 +157,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_60_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultMulti.Series = series60minutes;
             parseResultMulti.Report.Size = 368572800;
@@ -180,7 +178,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_30_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultMulti.Series = series30minutes;
             parseResultMulti.Report.Size = 1.Gigabytes();
@@ -201,7 +199,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_60_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultMulti.Series = series60minutes;
             parseResultMulti.Report.Size = 10.Gigabytes();
@@ -222,7 +220,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_single_episode_first_30_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Report.Size = 184572800;
@@ -243,7 +241,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_single_episode_first_60_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Report.Size = 368572800;
@@ -264,7 +262,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_single_episode_first_30_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Report.Size = 1.Gigabytes();
@@ -285,7 +283,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_single_episode_first_60_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Report.Size = 10.Gigabytes();
@@ -306,7 +304,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_unlimited_30_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Report.Size = 18457280000;
@@ -328,7 +326,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_unlimited_60_minute()
         {
-            WithStrictMocker();
+            
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Report.Size = 36857280000;

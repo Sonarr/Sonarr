@@ -291,7 +291,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Notify_true()
         {
             
-            WithStrictMocker();
+            
 
             var header = "NzbDrone Test";
             var message = "Test Message!";
@@ -314,7 +314,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendCommand()
         {
             
-            WithStrictMocker();
+            
 
             var host = "localhost:8080";
             var command = "ExecBuiltIn(CleanLibrary(video))";
@@ -339,7 +339,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetXbmcSeriesPath_true()
         {
             
-            WithStrictMocker();
+            
 
             var queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/30 Rock/</field></record></xml>";
 
@@ -372,7 +372,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetXbmcSeriesPath_false()
         {
             
-            WithStrictMocker();
+            
 
             var queryResult = @"<xml></xml>";
 
@@ -405,7 +405,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetXbmcSeriesPath_special_characters()
         {
             
-            WithStrictMocker();
+            
 
             var queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/Law & Order- Special Victims Unit/</field></record></xml>";
 
@@ -438,7 +438,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Clean()
         {
             
-            WithStrictMocker();
+            
 
             var fakeConfig = Mocker.GetMock<IConfigService>();
             fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");

@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Verify_should_return_true_for_a_valid_apiKey()
         {
             
-            WithStrictMocker();
+            
             
             
             var result = Mocker.Resolve<ProwlProvider>().Verify(_apiKey);
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Verify_should_return_false_for_an_invalid_apiKey()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().Verify(_badApiKey);
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_true_for_a_valid_apiKey()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey);
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_false_for_an_invalid_apiKey()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _badApiKey);
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_alert_with_high_priority()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (High)", _apiKey, NotificationPriority.High);
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_alert_with_VeryLow_priority()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (VeryLow)", _apiKey, NotificationPriority.VeryLow);
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_have_a_call_back_url()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey, NotificationPriority.Normal, "http://www.nzbdrone.com");
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_true_for_two_valid_apiKey()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _apiKey2);
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_true_for_valid_apiKey_with_bad_apiKey()
         {
             
-            WithStrictMocker();
+            
 
             
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _badApiKey);

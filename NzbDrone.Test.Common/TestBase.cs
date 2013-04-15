@@ -99,20 +99,6 @@ namespace NzbDrone.Test.Common
             catch (Exception)
             {
             }
-
-        }
-
-        [Obsolete("Use Mock.Verify() instead")]
-        protected void WithStrictMocker()
-        {
-            return;
-
-            //TODO: Remove dependency on restrict mocks!
-
-            if (_mocker != null)
-                throw new InvalidOperationException("Can not switch to a strict container after container has been used. make sure this is the first call in your test.");
-
-            _mocker = new AutoMoqer(MockBehavior.Strict);
         }
 
         protected void WithTempAsAppPath()
@@ -126,8 +112,6 @@ namespace NzbDrone.Test.Common
         {
             return Path.Combine(Directory.GetCurrentDirectory(), "Files", fileName);
         }
-
-
 
         protected void VerifyEventPublished<TEvent>() where TEvent : IEvent
         {
