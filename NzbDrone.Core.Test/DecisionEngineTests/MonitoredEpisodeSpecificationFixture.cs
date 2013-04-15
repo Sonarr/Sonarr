@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
@@ -15,79 +13,70 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
     public class MonitoredEpisodeSpecificationFixture : CoreTest<MonitoredEpisodeSpecification>
     {
-        private MonitoredEpisodeSpecification monitoredEpisodeSpecification;
+        private MonitoredEpisodeSpecification _monitoredEpisodeSpecification;
 
-        private RemoteEpisode parseResultMulti;
-        private RemoteEpisode parseResultSingle;
-        private Series fakeSeries;
-        private Episode firstEpisode;
-        private Episode secondEpisode;
+        private RemoteEpisode _parseResultMulti;
+        private RemoteEpisode _parseResultSingle;
+        private Series _fakeSeries;
+        private Episode _firstEpisode;
+        private Episode _secondEpisode;
 
         [SetUp]
         public void Setup()
         {
-            monitoredEpisodeSpecification = Mocker.Resolve<MonitoredEpisodeSpecification>();
+            _monitoredEpisodeSpecification = Mocker.Resolve<MonitoredEpisodeSpecification>();
 
-            fakeSeries = Builder<Series>.CreateNew()
+            _fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
                 .Build();
 
+            _firstEpisode = new Episode { Ignored = false };
+            _secondEpisode = new Episode { Ignored = false };
 
-            var singleEpisodeList = new List<Episode> { firstEpisode };
-            var doubleEpisodeList = new List<Episode> { firstEpisode, secondEpisode };
 
-            parseResultMulti = new RemoteEpisode
+            var singleEpisodeList = new List<Episode> { _firstEpisode };
+            var doubleEpisodeList = new List<Episode> { _firstEpisode, _secondEpisode };
+
+            _parseResultMulti = new RemoteEpisode
             {
-                Series = fakeSeries,
+                Series = _fakeSeries,
                 Episodes = doubleEpisodeList
             };
 
-            parseResultSingle = new RemoteEpisode
+            _parseResultSingle = new RemoteEpisode
             {
-                Series = fakeSeries,
+                Series = _fakeSeries,
                 Episodes = singleEpisodeList
             };
 
-            firstEpisode = new Episode { Ignored = false };
-            secondEpisode = new Episode { Ignored = false };
+
 
 
         }
 
         private void WithFirstEpisodeIgnored()
         {
-            firstEpisode.Ignored = true;
+            _firstEpisode.Ignored = true;
         }
 
         private void WithSecondEpisodeIgnored()
         {
-            secondEpisode.Ignored = true;
+            _secondEpisode.Ignored = true;
         }
 
         [Test]
         public void setup_should_return_monitored_episode_should_return_true()
         {
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
         }
 
 
         [Test]
         public void not_monitored_series_should_be_skipped()
         {
-            fakeSeries.Monitored = false;
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
-        }
-
-
-        [Test]
-        public void not_in_db_should_be_skipped()
-        {
-            Mocker.GetMock<ISeriesRepository>()
-                 .Setup(p => p.FindByTitle(It.IsAny<String>()))
-                 .Returns<Series>(null);
-
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _fakeSeries.Monitored = false;
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
         }
 
 
@@ -95,7 +84,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void only_episode_ignored_should_return_false()
         {
             WithFirstEpisodeIgnored();
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle).Should().BeFalse();
         }
 
 
@@ -104,7 +93,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithFirstEpisodeIgnored();
             WithSecondEpisodeIgnored();
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
         }
 
 
@@ -112,7 +101,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void only_first_episode_ignored_should_return_monitored()
         {
             WithFirstEpisodeIgnored();
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
         }
 
 
@@ -120,7 +109,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void only_second_episode_ignored_should_return_monitored()
         {
             WithSecondEpisodeIgnored();
-            monitoredEpisodeSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
         }
 
     }
