@@ -415,7 +415,7 @@
     <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\DiskScanProvider.cs">
+    <Compile Include="Providers\IDiskScanService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Download\Clients\BlackholeProvider.cs">

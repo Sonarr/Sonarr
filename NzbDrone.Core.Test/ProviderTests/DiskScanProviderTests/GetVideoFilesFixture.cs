@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             var path = @"C:\Test\";
 
-            Mocker.Resolve<DiskScanProvider>().GetVideoFiles(path);
+            Mocker.Resolve<IDiskScanService>().GetVideoFiles(path);
 
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Once());
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Never());
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             var path = @"C:\Test\";
 
-            Mocker.Resolve<DiskScanProvider>().GetVideoFiles(path, true);
+            Mocker.Resolve<IDiskScanService>().GetVideoFiles(path, true);
 
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Once());
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Never());
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             var path = @"C:\Test\";
 
-            Mocker.Resolve<DiskScanProvider>().GetVideoFiles(path, false);
+            Mocker.Resolve<IDiskScanService>().GetVideoFiles(path, false);
 
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Never());
             Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Once());
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             var path = @"C:\Test\";
 
-            Mocker.Resolve<DiskScanProvider>().GetVideoFiles(path).Should().HaveCount(4);
+            Mocker.Resolve<IDiskScanService>().GetVideoFiles(path).Should().HaveCount(4);
         }
     }
 }

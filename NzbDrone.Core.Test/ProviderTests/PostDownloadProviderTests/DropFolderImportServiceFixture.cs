@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             _fakeEpisodeFile = Builder<EpisodeFile>.CreateNew().Build();
 
 
-            Mocker.GetMock<DiskScanProvider>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(_videoFiles);
 
             Mocker.GetMock<DiskProvider>().Setup(c => c.GetDirectories(It.IsAny<string>()))
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void all_imported_files_should_be_moved()
         {
-            Mocker.GetMock<DiskScanProvider>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
                   .Returns(_fakeEpisodeFile);
 
             Subject.ProcessDropFolder("c:\\drop\\");
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void should_not_attempt_move_if_nothing_is_imported()
         {
-            Mocker.GetMock<DiskScanProvider>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
                  .Returns<EpisodeFile>(null);
 
             Subject.ProcessDropFolder("c:\\drop\\");
@@ -131,14 +131,14 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
         private void VerifyNoImport()
         {
-            Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()),
+            Mocker.GetMock<IDiskScanService>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()),
                 Times.Never());
         }
 
 
         private void VerifyImport()
         {
-            Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()),
+            Mocker.GetMock<IDiskScanService>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()),
                 Times.Once());
         }
     }

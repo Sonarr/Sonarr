@@ -16,21 +16,21 @@ namespace NzbDrone.Core.Providers
     public class DropFolderImportService : IDropFolderImportService
     {
         private readonly DiskProvider _diskProvider;
-        private readonly DiskScanProvider _diskScanProvider;
+        private readonly IDiskScanService _diskScanService;
         private readonly ISeriesService _seriesService;
         private readonly IMoveEpisodeFiles _episodeFileMover;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
         public DropFolderImportService(DiskProvider diskProvider,
-            DiskScanProvider diskScanProvider,
+            IDiskScanService diskScanService,
             ISeriesService seriesService,
             IMoveEpisodeFiles episodeFileMover,
             IParsingService parsingService,
             Logger logger)
         {
             _diskProvider = diskProvider;
-            _diskScanProvider = diskScanProvider;
+            _diskScanService = diskScanService;
             _seriesService = seriesService;
             _episodeFileMover = episodeFileMover;
             _parsingService = parsingService;
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            foreach (var videoFile in _diskScanProvider.GetVideoFiles(dropFolder, false))
+            foreach (var videoFile in _diskScanService.GetVideoFiles(dropFolder, false))
             {
                 try
                 {
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
-            var files = _diskScanProvider.GetVideoFiles(subfolderInfo.FullName);
+            var files = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
 
             foreach (var file in files)
             {
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
-            var episodeFile = _diskScanProvider.ImportFile(series, videoFile);
+            var episodeFile = _diskScanService.ImportFile(series, videoFile);
 
             if (episodeFile != null)
             {

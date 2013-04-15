@@ -12,15 +12,15 @@ namespace NzbDrone.Core.Jobs.Implementations
 {
     public class DiskScanJob : IJob
     {
-        private readonly DiskScanProvider _diskScanProvider;
+        private readonly IDiskScanService _diskScanService;
         private readonly IConfigService _configService;
         private readonly ISeriesRepository _seriesRepository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DiskScanJob(DiskScanProvider diskScanProvider,
+        public DiskScanJob(IDiskScanService diskScanService,
                             IConfigService configService, ISeriesRepository seriesRepository)
         {
-            _diskScanProvider = diskScanProvider;
+            _diskScanService = diskScanService;
             _configService = configService;
             _seriesRepository = seriesRepository;
         }
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 try
                 {
                     notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
-                    _diskScanProvider.Scan(series);
+                    _diskScanService.Scan(series);
                     notification.CurrentMessage = string.Format("Disk Scan completed for '{0}'", series.Title);
                 }
                 catch (Exception e)

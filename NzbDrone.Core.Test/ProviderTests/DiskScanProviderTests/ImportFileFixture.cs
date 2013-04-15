@@ -17,7 +17,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
 
-    public class ImportFileFixture : CoreTest<DiskScanProvider>
+    public class ImportFileFixture : CoreTest<DiskScanService>
     {
 
 

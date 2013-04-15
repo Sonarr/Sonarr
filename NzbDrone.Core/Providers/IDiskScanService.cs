@@ -10,7 +10,14 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Providers
 {
-    public class DiskScanProvider
+    public interface IDiskScanService
+    {
+        void Scan(Series series);
+        EpisodeFile ImportFile(Series series, string filePath);
+        string[] GetVideoFiles(string path, bool allDirectories = true);
+    }
+
+    public class DiskScanService : IDiskScanService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
@@ -20,7 +27,7 @@ namespace NzbDrone.Core.Providers
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IParsingService _parsingService;
 
-        public DiskScanProvider(DiskProvider diskProvider, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService, IVideoFileInfoReader videoFileInfoReader,
+        public DiskScanService(DiskProvider diskProvider, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService, IVideoFileInfoReader videoFileInfoReader,
             IParsingService parsingService)
         {
             _diskProvider = diskProvider;

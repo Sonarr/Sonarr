@@ -75,11 +75,11 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.All())
                 .Returns(series);
 
-            Mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<IDiskScanService>()
                 .Setup(s => s.Scan(series[0]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
-            Mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<IDiskScanService>()
                 .Setup(s => s.Scan(series[1]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
 
             Mocker.VerifyAllMocks();
-            Mocker.GetMock<DiskScanProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
+            Mocker.GetMock<IDiskScanService>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
         }
     }
 }
