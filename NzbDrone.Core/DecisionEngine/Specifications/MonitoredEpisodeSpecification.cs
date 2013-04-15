@@ -1,6 +1,8 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -26,29 +28,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
-            var series = _seriesRepository.GetByTitle(subject.CleanTitle);
-
-            if (series == null)
+            if (!subject.Series.Monitored)
             {
-                _logger.Trace("{0} is not mapped to any series in DB. skipping", subject.CleanTitle);
+                _logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.Series.Title);
                 return false;
             }
-
-            subject.Series = series;
-
-            if (!series.Monitored)
-            {
-                _logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.CleanTitle);
-                return false;
-            }
-
-            var episodes = _episodeService.GetEpisodesByParseResult(subject);
-            subject.Episodes = episodes;
 
             //return monitored if any of the episodes are monitored
-            if (episodes.Any(episode => !episode.Ignored))
+            if (subject.Episodes.Any(episode => !episode.Ignored))
             {
                 return true;
             }

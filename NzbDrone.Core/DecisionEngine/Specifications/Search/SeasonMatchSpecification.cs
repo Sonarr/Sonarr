@@ -1,6 +1,8 @@
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 {
@@ -21,17 +23,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             }
         }
 
-        public bool IsSatisfiedBy(IndexerParseResult indexerParseResult, SearchDefinitionBase searchDefinitionBase)
+        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinitionBase)
         {
             var singleEpisodeSpec = searchDefinitionBase as SeasonSearchDefinition;
             if (singleEpisodeSpec == null) return true;
 
-            if (singleEpisodeSpec.SeasonNumber != indexerParseResult.SeasonNumber)
+            if (singleEpisodeSpec.SeasonNumber != remoteEpisode.SeasonNumber)
             {
                 _logger.Trace("Season number does not match searched season number, skipping.");
                 return false;
             }
-           
+
             return true;
         }
     }

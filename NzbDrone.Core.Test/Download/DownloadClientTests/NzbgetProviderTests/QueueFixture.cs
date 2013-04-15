@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithEmptyQueue();
 
-            Mocker.Resolve<NzbgetProvider>()
+            Mocker.Resolve<NzbgetClient>()
                   .GetQueue()
                   .Should()
                   .BeEmpty();
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithFullQueue();
 
-            Mocker.Resolve<NzbgetProvider>()
+            Mocker.Resolve<NzbgetClient>()
                   .GetQueue()
                   .Should()
                   .HaveCount(1);
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithFailResponse();
 
-            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetProvider>().GetQueue());
+            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetClient>().GetQueue());
         }
     }
 }

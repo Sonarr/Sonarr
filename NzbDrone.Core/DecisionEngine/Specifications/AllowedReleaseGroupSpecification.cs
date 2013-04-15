@@ -2,6 +2,8 @@ using System;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -25,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
             _logger.Trace("Beginning release group check for: {0}", subject);
 
@@ -37,16 +39,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (string.IsNullOrWhiteSpace(allowed))
                 return true;
 
+            var releaseGroup = subject.Report.ReleaseGroup;
+
             foreach (var group in allowed.Trim(',', ' ').Split(','))
             {
-                if (subject.ReleaseGroup.Equals(group.Trim(' '), StringComparison.CurrentCultureIgnoreCase))
+                if (releaseGroup.Equals(group.Trim(' '), StringComparison.CurrentCultureIgnoreCase))
                 {
-                    _logger.Trace("Item: {0}'s release group is wanted: {1}", subject, subject.ReleaseGroup);
+                    _logger.Trace("Item: {0}'s release group is wanted: {1}", subject, releaseGroup);
                     return true;
                 }
             }
 
-            _logger.Trace("Item: {0}'s release group is not wanted: {1}", subject, subject.ReleaseGroup);
+            _logger.Trace("Item: {0}'s release group is not wanted: {1}", subject, releaseGroup);
             return false;
         }
     }

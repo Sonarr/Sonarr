@@ -11,35 +11,35 @@ namespace NzbDrone.Core.Update
 {
     public interface IUpdateService
     {
-        UpdatePackage GetAvailableUpdate(Version currentVersion);
-        Dictionary<DateTime, string> UpdateLogFile();
+        UpdatePackage GetAvailableUpdate();
+        Dictionary<DateTime, string> GetUpdateLogFiles();
     }
 }
 
 public class UpdateService : IUpdateService
 {
-    private readonly IAvailableUpdateService _availableUpdateService;
+    private readonly IUpdatePackageProvider _updatePackageProvider;
     private readonly EnvironmentProvider _environmentProvider;
 
     private readonly DiskProvider _diskProvider;
     private readonly Logger _logger;
 
 
-    public UpdateService(IAvailableUpdateService availableUpdateService, EnvironmentProvider environmentProvider, DiskProvider diskProvider, Logger logger)
+    public UpdateService(IUpdatePackageProvider updatePackageProvider, EnvironmentProvider environmentProvider, DiskProvider diskProvider, Logger logger)
     {
-        _availableUpdateService = availableUpdateService;
+        _updatePackageProvider = updatePackageProvider;
         _environmentProvider = environmentProvider;
         _diskProvider = diskProvider;
         _logger = logger;
     }
 
-    public UpdatePackage GetAvailableUpdate(Version currentVersion)
+    public UpdatePackage GetAvailableUpdate()
     {
-        var latestAvailable = _availableUpdateService.GetAvailablePackages().OrderByDescending(c => c.Version).FirstOrDefault();
+        var latestAvailable = _updatePackageProvider.GetLatestUpdate();
 
-        if (latestAvailable != null && latestAvailable.Version > currentVersion)
+        if (latestAvailable != null && latestAvailable.Version > _environmentProvider.Version)
         {
-            _logger.Debug("An update is available ({0}) => ({1})", currentVersion, latestAvailable.Version);
+            _logger.Debug("An update is available ({0}) => ({1})", _environmentProvider.Version, latestAvailable.Version);
             return latestAvailable;
         }
 
@@ -47,13 +47,13 @@ public class UpdateService : IUpdateService
         return null;
     }
 
-    public Dictionary<DateTime, string> UpdateLogFile()
+    public Dictionary<DateTime, string> GetUpdateLogFiles()
     {
         var list = new Dictionary<DateTime, string>();
-        CultureInfo provider = CultureInfo.InvariantCulture;
 
         if (_diskProvider.FolderExists(_environmentProvider.GetUpdateLogFolder()))
         {
+            var provider = CultureInfo.InvariantCulture;
             var files = _diskProvider.GetFiles(_environmentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly).ToList();
 
             foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c => c.Name))

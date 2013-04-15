@@ -1,6 +1,6 @@
-﻿namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Parser
 {
-    public enum LanguageType
+    public enum Language
     {
         English = 0,
         French = 1,

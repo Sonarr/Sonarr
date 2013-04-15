@@ -14,23 +14,23 @@ namespace NzbDrone.Core.Download
     public class DownloadClientProvider : IProvideDownloadClient
     {
 
-        private readonly SabProvider _sabProvider;
+        private readonly SabnzbdClient _sabnzbdClient;
         private readonly IConfigService _configService;
         private readonly BlackholeProvider _blackholeProvider;
-        private readonly PneumaticProvider _pneumaticProvider;
-        private readonly NzbgetProvider _nzbgetProvider;
+        private readonly PneumaticClient _pneumaticClient;
+        private readonly NzbgetClient _nzbgetClient;
 
 
-        public DownloadClientProvider(SabProvider sabProvider, IConfigService configService,
+        public DownloadClientProvider(SabnzbdClient sabnzbdClient, IConfigService configService,
                                       BlackholeProvider blackholeProvider,
-                                      PneumaticProvider pneumaticProvider,
-                                      NzbgetProvider nzbgetProvider)
+                                      PneumaticClient pneumaticClient,
+                                      NzbgetClient nzbgetClient)
         {
-            _sabProvider = sabProvider;
+            _sabnzbdClient = sabnzbdClient;
             _configService = configService;
             _blackholeProvider = blackholeProvider;
-            _pneumaticProvider = pneumaticProvider;
-            _nzbgetProvider = nzbgetProvider;
+            _pneumaticClient = pneumaticClient;
+            _nzbgetClient = nzbgetClient;
         }
 
         public IDownloadClient GetDownloadClient()
@@ -41,13 +41,13 @@ namespace NzbDrone.Core.Download
                     return _blackholeProvider;
 
                 case DownloadClientType.Pneumatic:
-                    return _pneumaticProvider;
+                    return _pneumaticClient;
 
                 case DownloadClientType.Nzbget:
-                    return _nzbgetProvider;
+                    return _nzbgetClient;
 
                 default:
-                    return _sabProvider;
+                    return _sabnzbdClient;
             }
         }
     }

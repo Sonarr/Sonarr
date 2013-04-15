@@ -19,15 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         private string _title;
 
         [JsonProperty(PropertyName = "filename")]
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                ParseResult = Parser.ParseTitle<ParseResult>(value.Replace("DUPLICATE / ", String.Empty));
-            }
-        }
+        public string Title { get; set; }
 
         [JsonConverter(typeof(SabnzbdPriorityTypeConverter))]
         public SabPriorityType Priority { get; set; }
@@ -42,7 +34,5 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         [JsonProperty(PropertyName = "nzo_id")]
         public string Id { get; set; }
-
-        public ParseResult ParseResult { private set; get; }
     }
 }

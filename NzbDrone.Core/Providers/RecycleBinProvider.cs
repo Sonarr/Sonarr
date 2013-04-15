@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Providers
 
             foreach (var folder in _diskProvider.GetDirectories(_configService.RecycleBin))
             {
-                if (_diskProvider.GetLastDirectoryWrite(folder).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.GetLastFolderWrite(folder).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Trace("Folder hasn't expired yet, skipping: {0}", folder);
                     continue;

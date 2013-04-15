@@ -31,10 +31,10 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var path = @"C:\Test\Unsorted TV";
 
-            Mocker.GetMock<PostDownloadProvider>().Setup(s => s.ProcessDropFolder(path));
+            Mocker.GetMock<DropFolderImportService>().Setup(s => s.ProcessDropFolder(path));
             Mocker.Resolve<PostDownloadScanJob>().Start(MockNotification, new { Path = path });
 
-            Mocker.GetMock<PostDownloadProvider>().Verify(s => s.ProcessDropFolder(path), Times.Once());
+            Mocker.GetMock<DropFolderImportService>().Verify(s => s.ProcessDropFolder(path), Times.Once());
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var path = @"C:\Test\Unsorted TV";
 
-            Mocker.GetMock<PostDownloadProvider>().Setup(s => s.ProcessDropFolder(path));
+            Mocker.GetMock<DropFolderImportService>().Setup(s => s.ProcessDropFolder(path));
             Mocker.Resolve<PostDownloadScanJob>().Start(MockNotification, new { Path = path });
 
             Mocker.GetMock<IConfigService>().Verify(s => s.DownloadClientTvDirectory, Times.Never());
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<IConfigService>().SetupGet(s => s.DownloadClientTvDirectory).Returns(path);
             Mocker.Resolve<PostDownloadScanJob>().Start(MockNotification, null);
 
-            Mocker.GetMock<PostDownloadProvider>().Verify(s => s.ProcessDropFolder(path), Times.Once());
+            Mocker.GetMock<DropFolderImportService>().Verify(s => s.ProcessDropFolder(path), Times.Once());
         }
     }
 }

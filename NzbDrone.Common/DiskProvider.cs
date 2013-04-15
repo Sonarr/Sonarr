@@ -24,7 +24,7 @@ namespace NzbDrone.Common
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public virtual DateTime GetLastDirectoryWrite(string path)
+        public virtual DateTime GetLastFolderWrite(string path)
         {
             if (!FolderExists(path))
             {
@@ -48,6 +48,15 @@ namespace NzbDrone.Common
                 throw new FileNotFoundException("File doesn't exist: " + path);
 
             return new FileInfo(path).LastWriteTimeUtc;
+        }
+
+
+        public virtual void EnsureFolder(string path)
+        {
+            if (!FolderExists(path))
+            {
+                CreateFolder(path);
+            }
         }
 
         public virtual bool FolderExists(string path)
@@ -84,7 +93,7 @@ namespace NzbDrone.Common
             return fi.Length;
         }
 
-        public virtual String CreateDirectory(string path)
+        public virtual String CreateFolder(string path)
         {
             return Directory.CreateDirectory(path).FullName;
         }
@@ -191,7 +200,7 @@ namespace NzbDrone.Common
             File.SetAccessControl(filename, fs);
         }
 
-        public virtual ulong FreeDiskSpace(string path)
+        public virtual ulong GetAvilableSpace(string path)
         {
             if (!FolderExists(path))
                 throw new DirectoryNotFoundException(path);
@@ -237,7 +246,7 @@ namespace NzbDrone.Common
         {
             var files = GetFileInfos(path, "*.*", SearchOption.AllDirectories);
 
-            foreach(var fileInfo in files)
+            foreach (var fileInfo in files)
             {
                 if (IsFileLocked(fileInfo))
                     return true;

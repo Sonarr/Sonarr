@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5e86c40b-3895-4973-999b-c900ff0d6df1" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\UI\Content\Bootstrap\media.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\UI\Content\Bootstrap\mixins.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\UI\Content\Bootstrap\modals.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\UI\Content\Bootstrap\navbar.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\UI\Content\Bootstrap\navs.less" afterPath="" />
+      <change type="DELETED" beforePath="C:\Dropbox\Git\NzbDrone\UI\Content\Bootstrap\pager.less" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../NzbDrone.ncrunchsolution" afterPath="$PROJECT_DIR$/../NzbDrone.ncrunchsolution" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../NzbDrone.Core/Tv/EpisodeRepository.cs" afterPath="$PROJECT_DIR$/../NzbDrone.Core/Tv/EpisodeRepository.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Gruntfile.js" afterPath="$PROJECT_DIR$/../Gruntfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../package.json" afterPath="$PROJECT_DIR$/../package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Content/Bootstrap/reset.less" afterPath="$PROJECT_DIR$/Content/Bootstrap/reset.less" />
+    </list>
+    <ignored path="NzbDrone.UI.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <file path="/Dummy.txt" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365724686050" ignored="false" />
+    <file path="/a.dummy" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365724699951" ignored="false" />
+    <file path="/AutoComplete.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365639488201" ignored="false" />
+    <file path="/backbone.ajax.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365639501764" ignored="false" />
+    <file path="/backbone.modelbinder.mixin.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365654406557" ignored="false" />
+    <file path="/Index.html" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365640244425" ignored="false" />
+    <file path="/*.regexp" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365642994641" ignored="false" />
+    <file path="$PROJECT_DIR$/Series/Delete/DeleteSeriesView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <file path="$PROJECT_DIR$/Calendar/CalendarItemView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <file path="$PROJECT_DIR$/Series/Details/EpisodeItemView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <file path="$PROJECT_DIR$/AddSeries/RootFolders/RootFolderView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <file path="$PROJECT_DIR$/Settings/Quality/Size/QualitySizeView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <file path="$PROJECT_DIR$/Series/Edit/EditSeriesView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <file path="$PROJECT_DIR$/Missing/MissingItemView.js" changelist="5e86c40b-3895-4973-999b-c900ff0d6df1" time="1365643509974" ignored="false" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="NzbDrone.UI" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Controller.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Controller.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="92" column="51" selection-start="3820" selection-end="3820" vertical-scroll-proportion="0.4800693">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SeriesItemView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Series/Index/SeriesItemView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="43" column="26" selection-start="1217" selection-end="1221" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Missing/MissingItemView.js" />
+        <option value="$PROJECT_DIR$/Series/Delete/DeleteSeriesView.js" />
+        <option value="$PROJECT_DIR$/Series/Details/EpisodeItemView.js" />
+        <option value="$PROJECT_DIR$/Series/Edit/EditSeriesView.js" />
+        <option value="$PROJECT_DIR$/Series/Index/SeriesItemView.js" />
+        <option value="$PROJECT_DIR$/Settings/DownloadClient/DownloadClientView.js" />
+        <option value="$PROJECT_DIR$/Settings/Indexers/IndexersView.js" />
+        <option value="$PROJECT_DIR$/Settings/Misc/MiscView.js" />
+        <option value="$PROJECT_DIR$/Settings/Naming/NamingView.js" />
+        <option value="$PROJECT_DIR$/Settings/Notifications/NotificationsView.js" />
+        <option value="$PROJECT_DIR$/Settings/Quality/Profile/EditQualityProfileView.js" />
+        <option value="$PROJECT_DIR$/Settings/Quality/Profile/QualityProfileView.js" />
+        <option value="$PROJECT_DIR$/Settings/Quality/QualityView.js" />
+        <option value="$PROJECT_DIR$/Settings/System/SystemView.js" />
+        <option value="$PROJECT_DIR$/Upcoming/UpcomingItemView.js" />
+        <option value="$PROJECT_DIR$/Mixins/backbone.modelbinder.mixin.js" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents ProjectPane="true" />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NzbDrone.UI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NzbDrone.UI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NzbDrone.UI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Mixins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="FullScreen" value="false" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5e86c40b-3895-4973-999b-c900ff0d6df1" name="Default" comment="" />
+      <created>1365554071026</created>
+      <updated>1365554071026</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24934107" sideWeight="0.67" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_NEW_TODO" value="true" />
+    <option name="myTodoPanelSettings">
+      <value>
+        <are-packages-shown value="false" />
+        <are-modules-shown value="false" />
+        <flatten-packages value="false" />
+        <is-autoscroll-to-source value="false" />
+      </value>
+    </option>
+    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
+    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
+    <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
+    <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
+    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
+    <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
+    <option name="SHORT_DIFF_HORISONTALLY" value="true" />
+    <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
+    <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
+    <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
+    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+    <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
+    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
+    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
+    <option name="LIMIT_HISTORY" value="true" />
+    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
+    <option name="UPDATE_FILTER_SCOPE_NAME" />
+    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
+    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
+    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
+    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
+    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
+    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
+    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
+    <option name="ACTIVE_VCS_NAME" />
+    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
+    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
+    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
+    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
+    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Series/Delete/DeleteSeriesView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="12" selection-start="461" selection-end="461" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Series/Details/EpisodeItemView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="12" selection-start="335" selection-end="335" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Series/Edit/EditSeriesView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="12" selection-start="704" selection-end="704" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/DownloadClient/DownloadClientView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="0" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Indexers/IndexersView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="0" selection-start="24" selection-end="24" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Misc/MiscView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="337" selection-end="337" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Naming/NamingView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="426" selection-end="426" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Notifications/NotificationsView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="0" selection-start="24" selection-end="24" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Quality/Profile/EditQualityProfileView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Quality/Profile/QualityProfileView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="245" selection-end="245" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/Quality/QualityView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Settings/System/SystemView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="0" selection-start="24" selection-end="24" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Upcoming/UpcomingItemView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="3" selection-start="252" selection-end="252" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JsLibraries/sugar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="799" column="26" selection-start="24272" selection-end="24277" vertical-scroll-proportion="0.018691588" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Mixins/backbone.modelbinder.mixin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="55" selection-start="573" selection-end="573" vertical-scroll-proportion="0.4050633" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Series/Index/SeriesItemView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="26" selection-start="1217" selection-end="1221" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="51" selection-start="3820" selection-end="3820" vertical-scroll-proportion="0.4800693">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+

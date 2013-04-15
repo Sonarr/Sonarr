@@ -1,64 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
-    public class NzbgetProvider : IDownloadClient
+    public class NzbgetClient : IDownloadClient
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly Logger _logger;
 
-        public NzbgetProvider(IConfigService configService, IHttpProvider httpProvider, Logger logger)
+        public NzbgetClient(IConfigService configService, IHttpProvider httpProvider, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
             _logger = logger;
-        }
-
-        public NzbgetProvider()
-        {
-        }
-
-        public virtual bool IsInQueue(IndexerParseResult newParseResult)
-        {
-            try
-            {
-                var queue = GetQueue().Where(c => c.ParseResult != null);
-
-                var matchigTitle = queue.Where(q => String.Equals(q.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
-
-                var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
-
-
-                if (newParseResult.Series.SeriesType == SeriesTypes.Daily)
-                {
-                    return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
-                }
-
-                var matchingSeason = matchingTitleWithQuality.Where(q => q.ParseResult.SeasonNumber == newParseResult.SeasonNumber);
-
-                if (newParseResult.FullSeason)
-                {
-                    return matchingSeason.Any();
-                }
-
-                return matchingSeason.Any(q => q.ParseResult.EpisodeNumbers != null && q.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)));
-            }
-
-            catch (Exception ex)
-            {
-                _logger.WarnException("Unable to connect to Nzbget to check queue.", ex);
-                return false;
-            }
         }
 
         public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
@@ -71,7 +31,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var command = new JsonRequest
                 {
                     Method = "appendurl",
-                    Params = new object[]{ title, cat, priority, false, url }
+                    Params = new object[] { title, cat, priority, false, url }
                 };
 
                 _logger.Info("Adding report [{0}] to the queue.", title);
@@ -93,19 +53,30 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return false;
         }
 
-        public virtual List<QueueItem> GetQueue()
+        public virtual IEnumerable<QueueItem> GetQueue()
         {
             var command = new JsonRequest
                 {
-                        Method = "listgroups",
-                        Params = null
+                    Method = "listgroups",
+                    Params = null
                 };
 
             var response = PostCommand(JsonConvert.SerializeObject(command));
 
             CheckForError(response);
 
-            return JsonConvert.DeserializeObject<Queue>(response).QueueItems;
+            var itmes = JsonConvert.DeserializeObject<NzbGetQueue>(response).QueueItems;
+
+            foreach (var nzbGetQueueItem in itmes)
+            {
+                var queueItem = new QueueItem();
+                queueItem.Id = nzbGetQueueItem.NzbId.ToString();
+                queueItem.Title = nzbGetQueueItem.NzbName;
+                queueItem.Size = nzbGetQueueItem.FileSizeMb;
+                queueItem.SizeLeft = nzbGetQueueItem.RemainingSizeMb;
+
+                yield return queueItem;
+            }
         }
 
         public virtual VersionModel GetVersion(string host = null, int port = 0, string username = null, string password = null)
@@ -144,11 +115,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var version = GetVersion(host, port, username, password);
                 return version.Result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.DebugException("Failed to Test Nzbget", ex);
             }
-            
+
             return String.Empty;
         }
 

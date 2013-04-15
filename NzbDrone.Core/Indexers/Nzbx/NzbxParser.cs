@@ -4,6 +4,8 @@ using System.IO;
 using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Nzbx
 {
@@ -18,9 +20,9 @@ namespace NzbDrone.Core.Indexers.Nzbx
             _serializer = new JsonSerializer();
         }
 
-        public IEnumerable<IndexerParseResult> Process(Stream source)
+        public IEnumerable<ReportInfo> Process(Stream source)
         {
-            var result = new List<IndexerParseResult>();
+            var result = new List<ReportInfo>();
             var jsonReader = new JsonTextReader(new StreamReader(source));
             var feed = _serializer.Deserialize<List<NzbxRecentItem>>(jsonReader);
 
@@ -28,18 +30,14 @@ namespace NzbDrone.Core.Indexers.Nzbx
             {
                 try
                 {
-                    var episodeParseResult = Parser.ParseTitle<IndexerParseResult>(item.Name);
-                    if (episodeParseResult != null)
-                    {
-                        episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PostDate).Days;
-                        episodeParseResult.OriginalString = item.Name;
-                        episodeParseResult.SceneSource = true;
-                        episodeParseResult.NzbUrl = String.Format("http://nzbx.co/nzb?{0}*|*{1}", item.Guid, item.Name);
-                        episodeParseResult.NzbInfoUrl = String.Format("http://nzbx.co/d?{0}", item.Guid);
-                        episodeParseResult.Size = item.Size;
+                    var episodeParseResult = new ReportInfo();
+                    episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PostDate).Days;
+                    episodeParseResult.Title = item.Name;
+                    episodeParseResult.NzbUrl = String.Format("http://nzbx.co/nzb?{0}*|*{1}", item.Guid, item.Name);
+                    episodeParseResult.NzbInfoUrl = String.Format("http://nzbx.co/d?{0}", item.Guid);
+                    episodeParseResult.Size = item.Size;
 
-                        result.Add(episodeParseResult);
-                    }
+                    result.Add(episodeParseResult);
                 }
                 catch (Exception itemEx)
                 {

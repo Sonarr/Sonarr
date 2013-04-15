@@ -152,10 +152,7 @@
     <Compile Include="Configuration\ConfigCachingFixture.cs" />
     <Compile Include="DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CustomStartDateSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DiskScanProviderTests\CleanUpDropFolderFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDropDirectoryFixture.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessVideoFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\CleanupFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\EmptyFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
@@ -173,8 +170,7 @@
     <Compile Include="ProviderTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\GrowlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTests\GetFolderNameWithStatusFixture.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
+    <Compile Include="ProviderTests\PostDownloadProviderTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
@@ -207,6 +203,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qualities\QualityProfileFixture.cs" />
     <Compile Include="TvTests\SeriesProviderTest.cs" />
+    <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="UpdateTests\GetAvailableUpdateFixture.cs" />
     <Compile Include="UpdateTests\GetUpdateLogFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />

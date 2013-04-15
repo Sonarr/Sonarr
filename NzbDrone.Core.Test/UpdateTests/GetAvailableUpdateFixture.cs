@@ -25,7 +25,10 @@ namespace NzbDrone.Core.Test.UpdateTests
         [TestCase("1.0.0.0")]
         public void should_return_null_if_latest_is_lower_than_current_version(string currentVersion)
         {
-            var updatePackage = Subject.GetAvailableUpdate(new Version(currentVersion));
+
+            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.Version).Returns(new Version(currentVersion));
+
+            var updatePackage = Subject.GetAvailableUpdate();
 
             updatePackage.Should().BeNull();
         }
@@ -33,7 +36,9 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void should_return_null_if_latest_is_equal_to_current_version()
         {
-            var updatePackage = Subject.GetAvailableUpdate(LatestTestVersion);
+            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.Version).Returns(LatestTestVersion);
+
+            var updatePackage = Subject.GetAvailableUpdate();
 
             updatePackage.Should().BeNull();
         }
@@ -43,7 +48,9 @@ namespace NzbDrone.Core.Test.UpdateTests
         [TestCase("0.0.10.10")]
         public void should_return_update_if_latest_is_higher_than_current_version(string currentVersion)
         {
-            var updatePackage = Subject.GetAvailableUpdate(new Version(currentVersion));
+            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.Version).Returns(new Version(currentVersion));
+
+            var updatePackage = Subject.GetAvailableUpdate();
 
             updatePackage.Should().NotBeNull();
             updatePackage.Version.Should().Be(LatestTestVersion);

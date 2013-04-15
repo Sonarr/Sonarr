@@ -6,6 +6,8 @@ using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -40,10 +42,10 @@ namespace NzbDrone.Core.Indexers
 
             var qualifiedReports = decisions
                          .Where(c => c.Approved)
-                         .Select(c => c.ParseResult)
+                         .Select(c => c.Episode)
                          .OrderByDescending(c => c.Quality)
-                         .ThenBy(c => c.EpisodeNumbers.MinOrDefault())
-                         .ThenBy(c => c.Age);
+                         .ThenBy(c => c.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
+                         .ThenBy(c => c.Report.Age);
 
 
             foreach (var episodeParseResult in qualifiedReports)
@@ -65,7 +67,7 @@ namespace NzbDrone.Core.Indexers
 
     public interface IFetchAndParseRss
     {
-        List<IndexerParseResult> Fetch();
+        List<ReportInfo> Fetch();
     }
 
     public class FetchAndParseRssService : IFetchAndParseRss
@@ -79,9 +81,9 @@ namespace NzbDrone.Core.Indexers
             _feedFetcher = feedFetcher;
         }
 
-        public List<IndexerParseResult> Fetch()
+        public List<ReportInfo> Fetch()
         {
-            var result = new List<IndexerParseResult>();
+            var result = new List<ReportInfo>();
 
             var indexers = _indexerService.GetAvailableIndexers();
 

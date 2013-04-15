@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Lifecycle
         {
             notification.CurrentMessage = "Checking for updates";
 
-            var updatePackage = _updateService.GetAvailableUpdate(_environmentProvider.Version);
+            var updatePackage = _updateService.GetAvailableUpdate();
 
             //No updates available
             if (updatePackage == null)
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Lifecycle
             var process = _processProvider.Start(startInfo);
             notification.CurrentMessage = "Update in progress. NzbDrone will restart shortly.";
 
-           _processProvider.WaitForExit(process);
+            _processProvider.WaitForExit(process);
         }
     }
 }

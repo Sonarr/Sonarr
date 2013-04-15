@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Web;
 using Newtonsoft.Json;
@@ -8,59 +7,19 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Tv;
-using RestSharp.Contrib;
-using HttpUtility = System.Web.HttpUtility;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class SabProvider : IDownloadClient
+    public class SabnzbdClient : IDownloadClient
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
 
-        public SabProvider(IConfigService configService, IHttpProvider httpProvider)
+        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider)
         {
             _configService = configService;
             _httpProvider = httpProvider;
-        }
-
-        public SabProvider()
-        {
-        }
-
-        public virtual bool IsInQueue(IndexerParseResult newParseResult)
-        {
-            try
-            {
-                var queue = GetQueue().Where(c => c.ParseResult != null);
-
-                var matchigTitle = queue.Where(q => String.Equals(q.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
-
-                var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
-
-                if (newParseResult.Series.SeriesType == SeriesTypes.Daily)
-                {
-                    return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
-                }
-
-                var matchingSeason = matchingTitleWithQuality.Where(q => q.ParseResult.SeasonNumber == newParseResult.SeasonNumber);
-
-                if (newParseResult.FullSeason)
-                {
-                    return matchingSeason.Any();
-                }
-
-                return matchingSeason.Any(q => q.ParseResult.EpisodeNumbers != null && q.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)));
-            }
-
-            catch (Exception ex)
-            {
-                logger.WarnException("Unable to connect to SABnzbd to check queue.", ex);
-                return false;
-            }
         }
 
         public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
@@ -80,7 +39,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 logger.Info("Adding report [{0}] to the queue.", title);
 
                 var response = _httpProvider.DownloadString(request);
-            
+
                 logger.Debug("Queue Response: [{0}]", response);
 
                 CheckForError(response);
@@ -95,15 +54,26 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return false;
         }
 
-        public virtual List<SabQueueItem> GetQueue(int start = 0, int limit = 0)
+        public IEnumerable<QueueItem> GetQueue()
         {
-            string action = String.Format("mode=queue&output=json&start={0}&limit={1}", start, limit);
+            string action = String.Format("mode=queue&output=json&start={0}&limit={1}", 0, 0);
             string request = GetSabRequest(action);
             string response = _httpProvider.DownloadString(request);
 
             CheckForError(response);
 
-            return JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
+            var sabQeueu = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
+
+            foreach (var sabQueueItem in sabQeueu)
+            {
+                var queueItem = new QueueItem();
+                queueItem.Id = sabQueueItem.Id;
+                queueItem.Title = sabQueueItem.Title;
+                queueItem.Size = sabQueueItem.Size;
+                queueItem.SizeLeft = sabQueueItem.Size;
+
+                yield return queueItem;
+            }
         }
 
         public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)
@@ -191,11 +161,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 var version = GetVersion(host, port, apiKey, username, password);
                 return version.Version;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.DebugException("Failed to Test SABnzbd", ex);
             }
-            
+
             return String.Empty;
         }
 

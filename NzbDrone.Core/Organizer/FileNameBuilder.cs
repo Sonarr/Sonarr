@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Organizer
 
             var episodeNames = new List<string>
                 {
-                    Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title)
+                    Parser.Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title)
                 };
 
             var result = String.Empty;
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Organizer
                         }
 
                         result = result.Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber));
-                        episodeNames.Add(Parser.CleanupEpisodeTitle(episode.Title));
+                        episodeNames.Add(Parser.Parser.CleanupEpisodeTitle(episode.Title));
                     }
                 }
 

@@ -12,6 +12,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv.Events;
 
@@ -25,10 +26,12 @@ namespace NzbDrone.Core.Tv
         void AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
+        Series FindByTitle(string title);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
         void UpdateSeries(Series series);
+        bool SeriesPathExists(string folder);
     }
 
     public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
@@ -70,7 +73,7 @@ namespace NzbDrone.Core.Tv
             series.AirTime = tvDbSeries.AirTime;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
-            series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.Title);
+            series.CleanTitle = Parser.Parser.NormalizeTitle(tvDbSeries.Title);
             series.LastInfoSync = DateTime.Now;
             series.Runtime = tvDbSeries.Runtime;
             series.Images = tvDbSeries.Images;
@@ -93,16 +96,16 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(() => newSeries).IsNotNull();
 
-            if(String.IsNullOrWhiteSpace(newSeries.FolderName))
+            if (String.IsNullOrWhiteSpace(newSeries.FolderName))
             {
                 newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
-                _diskProvider.CreateDirectory(Path.Combine(_rootFolderService.Get(newSeries.RootFolderId).Path, newSeries.FolderName));
+                _diskProvider.CreateFolder(Path.Combine(_rootFolderService.Get(newSeries.RootFolderId).Path, newSeries.FolderName));
             }
 
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
 
             newSeries.Monitored = true;
-            newSeries.CleanTitle = Parser.NormalizeTitle(newSeries.Title);
+            newSeries.CleanTitle = Parser.Parser.NormalizeTitle(newSeries.Title);
             if (newSeries.QualityProfileId == 0)
                 newSeries.QualityProfileId = _configService.DefaultQualityProfile;
 
@@ -143,6 +146,11 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.FindByTvdbId(tvdbId);
         }
 
+        public Series FindByTitle(string title)
+        {
+            return _seriesRepository.FindByTitle(Parser.Parser.NormalizeTitle(title));
+        }
+
         public void SetSeriesType(int seriesId, SeriesTypes seriesTypes)
         {
             _seriesRepository.SetSeriesType(seriesId, seriesTypes);
@@ -163,6 +171,11 @@ namespace NzbDrone.Core.Tv
         public void UpdateSeries(Series series)
         {
             _seriesRepository.Update(series);
+        }
+
+        public bool SeriesPathExists(string folder)
+        {
+            return _seriesRepository.SeriesPathExists(folder);
         }
 
         public void HandleAsync(SeriesAddedEvent message)

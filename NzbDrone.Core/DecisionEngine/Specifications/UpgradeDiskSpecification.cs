@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -25,13 +24,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(IndexerParseResult subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
             foreach (var file in subject.Episodes.Select(c => c.EpisodeFile).Where(c => c != null))
             {
                 _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
+
                 if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, file.Quality, subject.Quality))
+                {
                     return false;
+                }
 
                 if (subject.Quality.Proper && file.DateAdded < DateTime.Today.AddDays(-7))
                 {

@@ -83,7 +83,7 @@ namespace NzbDrone.Core.ExternalNotification
                 try
                 {
                     _logger.Trace("Sending grab notification to {0}", Name);
-                    OnGrab(message.ParseResult.GetDownloadTitle());
+                    OnGrab(message.Episode.GetDownloadTitle());
 
                 }
                 catch (Exception e)
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.ExternalNotification
                 try
                 {
                     _logger.Trace("Sending download notification to {0}", Name);
-                    OnDownload(message.ParseResult.ToString(), message.ParseResult.Series);
+                    OnDownload(message.ParseResult.ToString(), message.Series);
                 }
                 catch (Exception e)
                 {

@@ -6,6 +6,8 @@ using NUnit.Framework;
 using NzbDrone.Common.Contract;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
@@ -79,16 +81,15 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Portlandia.S03E10.Alexandra.720p.WEB-DL.AAC2.0.H.264-CROM.mkv", "Portlandia", 3, 10)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.ParseTitle<IndexerParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
-            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
             result.OriginalString.Should().Be(postTitle);
         }
 
-        [Test]
         [TestCase(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
         [TestCase(@"z:\tv shows\modern marvels\Season 16\S16E03 - The Potato.mkv", 16, 3)]
         [TestCase(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"S:\TV Drop\King of the Hill - 10x12 - 24 Hour Propane People [SDTV]\Hour Propane People.avi", 10, 12)]
         public void PathParse_tests(string path, int season, int episode)
         {
-            var result = Parser.ParsePath(path);
+            var result = Parser.Parser.ParsePath(path);
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
@@ -113,7 +114,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void unparsable_path_should_report_the_path()
         {
-            Parser.ParsePath("C:\\").Should().BeNull();
+            Parser.Parser.ParsePath("C:\\").Should().BeNull();
 
             MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.IsAny<ParseErrorReport>()), Times.Exactly(2));
 
@@ -125,7 +126,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string TITLE = "SOMETHING";
 
-            Parser.ParseTitle<ParseResult>(TITLE).Should().BeNull();
+            Parser.Parser.ParseTitle(TITLE).Should().BeNull();
 
             MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(r => r.Title == TITLE)), Times.Once());
 
@@ -153,10 +154,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hell.on.Wheels.S02E09-E10.720p.HDTV.x264-EVOLVE", "Hell on Wheels", 2, new[] { 9, 10 })]
         public void TitleParse_multi(string postTitle, string title, int season, int[] episodes)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
-            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
             result.OriginalString.Should().Be(postTitle);
         }
 
@@ -173,10 +174,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "2020nz", 2011, 12, 2)]
         public void parse_daily_episodes(string postTitle, string title, int year, int month, int day)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
-            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
             result.AirDate.Should().Be(airDate);
             result.EpisodeNumbers.Should().BeNull();
             result.OriginalString.Should().Be(postTitle);
@@ -187,7 +188,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var title = string.Format("{0:yyyy.MM.dd} - Denis Leary - HD TV.mkv", DateTime.Now.AddDays(2));
 
-            Parser.ParseTitle<ParseResult>(title).Should().BeNull();
+            Parser.Parser.ParseTitle(title).Should().BeNull();
         }
 
 
@@ -198,9 +199,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "Adventure Time", 2)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
-            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
             result.EpisodeNumbers.Count.Should().Be(0);
             result.FullSeason.Should().BeTrue();
             result.OriginalString.Should().Be(postTitle);
@@ -213,7 +214,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Parenthood.2010", "parenthood2010")]
         public void series_name_normalize(string parsedSeriesName, string seriesName)
         {
-            var result = Parser.NormalizeTitle(parsedSeriesName);
+            var result = Parser.Parser.NormalizeTitle(parsedSeriesName);
             result.Should().Be(seriesName);
         }
 
@@ -225,7 +226,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("24", "24")]
         public void Normalize_Title(string dirty, string clean)
         {
-            var result = Parser.NormalizeTitle(dirty);
+            var result = Parser.Parser.NormalizeTitle(dirty);
             result.Should().Be(clean);
         }
 
@@ -253,7 +254,7 @@ namespace NzbDrone.Core.Test.ParserTests
             foreach (var s in dirtyFormat)
             {
                 var dirty = String.Format(s, word);
-                Parser.NormalizeTitle(dirty).Should().Be("wordword");
+                Parser.Parser.NormalizeTitle(dirty).Should().Be("wordword");
             }
 
         }
@@ -279,7 +280,7 @@ namespace NzbDrone.Core.Test.ParserTests
             foreach (var s in dirtyFormat)
             {
                 var dirty = String.Format(s, word);
-                Parser.NormalizeTitle(dirty).Should().Be(("word" + word.ToLower() + "word"));
+                Parser.Parser.NormalizeTitle(dirty).Should().Be(("word" + word.ToLower() + "word"));
             }
 
         }
@@ -295,38 +296,38 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "adventuretime")]
         public void parse_series_name(string postTitle, string title)
         {
-            var result = Parser.ParseSeriesName(postTitle);
-            result.Should().Be(Parser.NormalizeTitle(title));
+            var result = Parser.Parser.ParseSeriesName(postTitle);
+            result.Should().Be(Parser.Parser.NormalizeTitle(title));
         }
 
-        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", LanguageType.English)]
-        [TestCase("Castle.2009.S01E14.French.HDTV.XviD-LOL", LanguageType.French)]
-        [TestCase("Castle.2009.S01E14.Spanish.HDTV.XviD-LOL", LanguageType.Spanish)]
-        [TestCase("Castle.2009.S01E14.German.HDTV.XviD-LOL", LanguageType.German)]
-        [TestCase("Castle.2009.S01E14.Germany.HDTV.XviD-LOL", LanguageType.English)]
-        [TestCase("Castle.2009.S01E14.Italian.HDTV.XviD-LOL", LanguageType.Italian)]
-        [TestCase("Castle.2009.S01E14.Danish.HDTV.XviD-LOL", LanguageType.Danish)]
-        [TestCase("Castle.2009.S01E14.Dutch.HDTV.XviD-LOL", LanguageType.Dutch)]
-        [TestCase("Castle.2009.S01E14.Japanese.HDTV.XviD-LOL", LanguageType.Japanese)]
-        [TestCase("Castle.2009.S01E14.Cantonese.HDTV.XviD-LOL", LanguageType.Cantonese)]
-        [TestCase("Castle.2009.S01E14.Mandarin.HDTV.XviD-LOL", LanguageType.Mandarin)]
-        [TestCase("Castle.2009.S01E14.Korean.HDTV.XviD-LOL", LanguageType.Korean)]
-        [TestCase("Castle.2009.S01E14.Russian.HDTV.XviD-LOL", LanguageType.Russian)]
-        [TestCase("Castle.2009.S01E14.Polish.HDTV.XviD-LOL", LanguageType.Polish)]
-        [TestCase("Castle.2009.S01E14.Vietnamese.HDTV.XviD-LOL", LanguageType.Vietnamese)]
-        [TestCase("Castle.2009.S01E14.Swedish.HDTV.XviD-LOL", LanguageType.Swedish)]
-        [TestCase("Castle.2009.S01E14.Norwegian.HDTV.XviD-LOL", LanguageType.Norwegian)]
-        [TestCase("Castle.2009.S01E14.Finnish.HDTV.XviD-LOL", LanguageType.Finnish)]
-        [TestCase("Castle.2009.S01E14.Turkish.HDTV.XviD-LOL", LanguageType.Turkish)]
-        [TestCase("Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL", LanguageType.Portuguese)]
-        [TestCase("Castle.2009.S01E14.HDTV.XviD-LOL", LanguageType.English)]
-        [TestCase("person.of.interest.1x19.ita.720p.bdmux.x264-novarip", LanguageType.Italian)]
-        [TestCase("Salamander.S01E01.FLEMISH.HDTV.x264-BRiGAND", LanguageType.Flemish)]
-        [TestCase("H.Polukatoikia.S03E13.Greek.PDTV.XviD-Ouzo", LanguageType.Greek)]
-        [TestCase("Burn.Notice.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP", LanguageType.German)]
-        public void parse_language(string postTitle, LanguageType language)
+        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", Language.English)]
+        [TestCase("Castle.2009.S01E14.French.HDTV.XviD-LOL", Language.French)]
+        [TestCase("Castle.2009.S01E14.Spanish.HDTV.XviD-LOL", Language.Spanish)]
+        [TestCase("Castle.2009.S01E14.German.HDTV.XviD-LOL", Language.German)]
+        [TestCase("Castle.2009.S01E14.Germany.HDTV.XviD-LOL", Language.English)]
+        [TestCase("Castle.2009.S01E14.Italian.HDTV.XviD-LOL", Language.Italian)]
+        [TestCase("Castle.2009.S01E14.Danish.HDTV.XviD-LOL", Language.Danish)]
+        [TestCase("Castle.2009.S01E14.Dutch.HDTV.XviD-LOL", Language.Dutch)]
+        [TestCase("Castle.2009.S01E14.Japanese.HDTV.XviD-LOL", Language.Japanese)]
+        [TestCase("Castle.2009.S01E14.Cantonese.HDTV.XviD-LOL", Language.Cantonese)]
+        [TestCase("Castle.2009.S01E14.Mandarin.HDTV.XviD-LOL", Language.Mandarin)]
+        [TestCase("Castle.2009.S01E14.Korean.HDTV.XviD-LOL", Language.Korean)]
+        [TestCase("Castle.2009.S01E14.Russian.HDTV.XviD-LOL", Language.Russian)]
+        [TestCase("Castle.2009.S01E14.Polish.HDTV.XviD-LOL", Language.Polish)]
+        [TestCase("Castle.2009.S01E14.Vietnamese.HDTV.XviD-LOL", Language.Vietnamese)]
+        [TestCase("Castle.2009.S01E14.Swedish.HDTV.XviD-LOL", Language.Swedish)]
+        [TestCase("Castle.2009.S01E14.Norwegian.HDTV.XviD-LOL", Language.Norwegian)]
+        [TestCase("Castle.2009.S01E14.Finnish.HDTV.XviD-LOL", Language.Finnish)]
+        [TestCase("Castle.2009.S01E14.Turkish.HDTV.XviD-LOL", Language.Turkish)]
+        [TestCase("Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL", Language.Portuguese)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD-LOL", Language.English)]
+        [TestCase("person.of.interest.1x19.ita.720p.bdmux.x264-novarip", Language.Italian)]
+        [TestCase("Salamander.S01E01.FLEMISH.HDTV.x264-BRiGAND", Language.Flemish)]
+        [TestCase("H.Polukatoikia.S03E13.Greek.PDTV.XviD-Ouzo", Language.Greek)]
+        [TestCase("Burn.Notice.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP", Language.German)]
+        public void parse_language(string postTitle, Language language)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
             result.Language.Should().Be(language);
         }
 
@@ -339,9 +340,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Doctor Who Confidential   Season 3", "Doctor Who Confidential", 3)]
         public void parse_season_info(string postTitle, string seriesName, int seasonNumber)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
 
-            result.CleanTitle.Should().Be(Parser.NormalizeTitle(seriesName));
+            result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(seriesName));
             result.SeasonNumber.Should().Be(seasonNumber);
             result.FullSeason.Should().BeTrue();
             result.OriginalString.Should().Be(postTitle);
@@ -352,7 +353,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Instant Star S03 EXTRAS DVDRip XviD OSiTV")]
         public void parse_season_extras(string postTitle)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
         }
@@ -362,7 +363,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("CSI.S11.SUBPACK.DVDRip.XviD-REWARD")]
         public void parse_season_subpack(string postTitle)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
         }
@@ -370,7 +371,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Fussball Bundesliga 10e2011e30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
         public void unparsable_should_log_error_but_not_throw(string title)
         {
-            Parser.ParseTitle<ParseResult>(title);
+            Parser.Parser.ParseTitle(title);
             ExceptionVerification.IgnoreWarns();
             ExceptionVerification.ExpectedErrors(1);
         }
@@ -386,7 +387,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]
         public void should_not_parse_encypted_posts(string title)
         {
-            Parser.ParseTitle<ParseResult>(title).Should().BeNull();
+            Parser.Parser.ParseTitle(title).Should().BeNull();
             ExceptionVerification.IgnoreWarns();
         }
     }

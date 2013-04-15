@@ -41,7 +41,7 @@ namespace NzbDrone.Core.RootFolders
                 {
                     if (_diskProvider.FolderExists(folder.Path))
                     {
-                        folder.FreeSpace = _diskProvider.FreeDiskSpace(folder.Path);
+                        folder.FreeSpace = _diskProvider.GetAvilableSpace(folder.Path);
                         folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
                     }
                 });
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.RootFolders
 
             _rootFolderRepository.Insert(rootFolder);
 
-            rootFolder.FreeSpace = _diskProvider.FreeDiskSpace(rootFolder.Path);
+            rootFolder.FreeSpace = _diskProvider.GetAvilableSpace(rootFolder.Path);
             rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
             return rootFolder;
         }
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.RootFolders
                 {
                     try
                     {
-                        freeSpace.Add(pathRoot, _diskProvider.FreeDiskSpace(rootDir.Path));
+                        freeSpace.Add(pathRoot, _diskProvider.GetAvilableSpace(rootDir.Path));
                     }
                     catch (Exception ex)
                     {

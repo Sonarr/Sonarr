@@ -1,26 +1,22 @@
 ﻿
 
 using System.Collections.Generic;
-using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.DecisionEngine;
-
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    
-    public class QualityAllowedByProfileSpecificationFixture : CoreTest
+
+    public class QualityAllowedByProfileSpecificationFixture : CoreTest<QualityAllowedByProfileSpecification>
     {
-        private QualityAllowedByProfileSpecification _qualityAllowedByProfile;
-        private IndexerParseResult parseResult;
+        private RemoteEpisode parseResult;
 
         public static object[] AllowedTestCases =
         {
@@ -39,18 +35,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            _qualityAllowedByProfile = Mocker.Resolve<QualityAllowedByProfileSpecification>();
-
             var fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
-            parseResult = new IndexerParseResult
+            parseResult = new RemoteEpisode
             {
                 Series = fakeSeries,
                 Quality = new QualityModel(Quality.DVD, true),
-                EpisodeNumbers = new List<int> { 3 },
-                SeasonNumber = 12,
             };
         }
 
@@ -60,7 +52,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResult.Quality.Quality = qualityType;
             parseResult.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
-            _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
         }
 
         [Test, TestCaseSource("DeniedTestCases")]
@@ -69,7 +61,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResult.Quality.Quality = qualityType;
             parseResult.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
-            _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeFalse();
+            Subject.IsSatisfiedBy(parseResult).Should().BeFalse();
         }
     }
 }

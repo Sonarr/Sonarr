@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 
@@ -8,7 +9,7 @@ namespace NzbDrone.Core.Tv
     {
         bool SeriesPathExists(string path);
         List<Series> Search(string title);
-        Series GetByTitle(string cleanTitle);
+        Series FindByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void SetTvRageId(int seriesId, int tvRageId);
@@ -31,9 +32,9 @@ namespace NzbDrone.Core.Tv
             return Query.Where(s => s.Title.Contains(title));
         }
 
-        public Series GetByTitle(string cleanTitle)
+        public Series FindByTitle(string cleanTitle)
         {
-            return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle));
+            return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public Series FindByTvdbId(int tvdbId)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -9,10 +10,12 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients
 {
-    public class PneumaticProvider : IDownloadClient
+    public class PneumaticClient : IDownloadClient
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
@@ -20,7 +23,7 @@ namespace NzbDrone.Core.Download.Clients
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PneumaticProvider(IConfigService configService, IHttpProvider httpProvider,
+        public PneumaticClient(IConfigService configService, IHttpProvider httpProvider,
                                     DiskProvider diskProvider)
         {
             _configService = configService;
@@ -33,7 +36,7 @@ namespace NzbDrone.Core.Download.Clients
             try
             {
                 //Todo: Allow full season releases
-                if (Parser.ParseTitle<ParseResult>(title).FullSeason)
+                if (Parser.Parser.ParseTitle(title).FullSeason)
                 {
                     logger.Info("Skipping Full Season Release: {0}", title);
                     return false;
@@ -68,7 +71,12 @@ namespace NzbDrone.Core.Download.Clients
             }
         }
 
-        public virtual bool IsInQueue(IndexerParseResult newParseResult)
+        public IEnumerable<QueueItem> GetQueue()
+        {
+            return new QueueItem[0];
+        }
+
+        public virtual bool IsInQueue(RemoteEpisode newEpisode)
         {
             return false;
         }

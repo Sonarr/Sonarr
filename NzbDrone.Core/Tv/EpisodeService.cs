@@ -15,11 +15,10 @@ namespace NzbDrone.Core.Tv
     public interface IEpisodeService
     {
         Episode GetEpisode(int id);
-        Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber);
+        Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
         Episode GetEpisode(int seriesId, DateTime date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
-        List<Episode> GetEpisodesByParseResult(ParseResult parseResult);
         List<Episode> EpisodesWithoutFiles(bool includeSpecials);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         List<Episode> EpisodesWithFiles();
@@ -27,7 +26,7 @@ namespace NzbDrone.Core.Tv
         void UpdateEpisode(Episode episode);
         List<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber);
         void SetEpisodeIgnore(int episodeId, bool isIgnored);
-        bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber);
+        bool IsFirstOrLastEpisodeOfSeason(int episodeId);
         void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus);
         void UpdateEpisodes(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
@@ -36,7 +35,8 @@ namespace NzbDrone.Core.Tv
     public class EpisodeService : IEpisodeService,
         IHandle<EpisodeGrabbedEvent>,
         IHandle<EpisodeFileDeletedEvent>,
-        IHandleAsync<SeriesDeletedEvent>,
+        IHandle<EpisodeFileAddedEvent>,
+    IHandleAsync<SeriesDeletedEvent>,
         IHandleAsync<SeriesAddedEvent>
     {
 
@@ -65,8 +65,12 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.Get(id);
         }
 
-        public Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
+        public Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useSceneNumbering = false)
         {
+            if (useSceneNumbering)
+            {
+                return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
+            }
             return _episodeRepository.Get(seriesId, seasonNumber, episodeNumber);
         }
 
@@ -85,86 +89,6 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public List<Episode> GetEpisodesByParseResult(ParseResult parseResult)
-        {
-            var result = new List<Episode>();
-
-            if (parseResult.AirDate.HasValue)
-            {
-                if (parseResult.Series.SeriesType == SeriesTypes.Standard)
-                {
-                    //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
-                    logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", parseResult.Series.Title, parseResult.OriginalString);
-                    return new List<Episode>();
-                }
-
-                var episodeInfo = GetEpisode(parseResult.Series.Id, parseResult.AirDate.Value);
-
-                if (episodeInfo != null)
-                {
-                    result.Add(episodeInfo);
-                    parseResult.EpisodeTitle = episodeInfo.Title;
-                }
-
-                return result;
-            }
-
-            if (parseResult.EpisodeNumbers == null)
-                return result;
-
-            //Set it to empty before looping through the episode numbers
-            parseResult.EpisodeTitle = String.Empty;
-
-            foreach (var episodeNumber in parseResult.EpisodeNumbers)
-            {
-                Episode episodeInfo = null;
-
-                if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                {
-                    episodeInfo = _episodeRepository.GetEpisodeBySceneNumbering(parseResult.Series.Id,
-                                                                                parseResult.SeasonNumber, episodeNumber);
-                }
-
-                if (episodeInfo == null)
-                {
-                    episodeInfo = GetEpisode(parseResult.Series.Id, parseResult.SeasonNumber, episodeNumber);
-                    if (episodeInfo == null && parseResult.AirDate != null)
-                    {
-                        episodeInfo = GetEpisode(parseResult.Series.Id, parseResult.AirDate.Value);
-                    }
-                }
-
-                if (episodeInfo != null)
-                {
-                    result.Add(episodeInfo);
-
-                    if (parseResult.Series.UseSceneNumbering)
-                    {
-                        logger.Info("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}x{4:00}",
-                                    parseResult.Series.Title,
-                                    episodeInfo.SceneSeasonNumber,
-                                    episodeInfo.SceneEpisodeNumber,
-                                    episodeInfo.SeasonNumber,
-                                    episodeInfo.EpisodeNumber);
-                    }
-
-                    if (parseResult.EpisodeNumbers.Count == 1)
-                    {
-                        parseResult.EpisodeTitle = episodeInfo.Title.Trim();
-                    }
-                    else
-                    {
-                        parseResult.EpisodeTitle = Parser.CleanupEpisodeTitle(episodeInfo.Title);
-                    }
-                }
-                else
-                {
-                    logger.Debug("Unable to find {0}", parseResult);
-                }
-            }
-
-            return result;
-        }
 
         public List<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
@@ -307,16 +231,15 @@ namespace NzbDrone.Core.Tv
             logger.Info("Ignore flag for Episode:{0} was set to {1}", episodeId, isIgnored);
         }
 
-        public bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber)
+        public bool IsFirstOrLastEpisodeOfSeason(int episodeId)
         {
-            var episodes = GetEpisodesBySeason(seriesId, seasonNumber).OrderBy(e => e.EpisodeNumber);
+            var episode = GetEpisode(episodeId);
+            var seasonEpisodes = GetEpisodesBySeason(episode.SeriesId, episode.SeasonNumber);
 
-            if (!episodes.Any())
-                return false;
 
             //Ensure that this is either the first episode
             //or is the last episode in a season that has 10 or more episodes
-            if (episodes.First().EpisodeNumber == episodeNumber || (episodes.Count() >= 10 && episodes.Last().EpisodeNumber == episodeNumber))
+            if (seasonEpisodes.First().EpisodeNumber == episode.EpisodeNumber || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().EpisodeNumber == episode.EpisodeNumber))
                 return true;
 
             return false;
@@ -363,7 +286,7 @@ namespace NzbDrone.Core.Tv
 
         public void Handle(EpisodeGrabbedEvent message)
         {
-            foreach (var episode in message.ParseResult.Episodes)
+            foreach (var episode in message.Episode.Episodes)
             {
                 logger.Trace("Marking episode {0} as fetched.", episode.Id);
                 episode.GrabDate = DateTime.UtcNow;
@@ -393,6 +316,16 @@ namespace NzbDrone.Core.Tv
         public void HandleAsync(SeriesAddedEvent message)
         {
             RefreshEpisodeInfo(message.Series);
+        }
+
+        public void Handle(EpisodeFileAddedEvent message)
+        {
+            foreach (var episode in message.EpisodeFile.Episodes.Value)
+            {
+                _episodeRepository.SetFileId(episode.Id, message.EpisodeFile.Id);
+                _episodeRepository.SetPostDownloadStatus(episode.Id, PostDownloadStatusType.NoError);
+                _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.Path, episode);
+            }
         }
     }
 }

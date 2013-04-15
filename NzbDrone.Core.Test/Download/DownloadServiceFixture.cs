@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Test.Download
     [TestFixture]
     public class DownloadServiceFixture : CoreTest<DownloadService>
     {
-        private IndexerParseResult _parseResult;
+        private RemoteEpisode _parseResult;
 
         [SetUp]
         public void Setup()
@@ -29,10 +30,9 @@ namespace NzbDrone.Core.Test.Download
                 .All().With(s => s.SeriesId = 5)
                 .Build().ToList();
 
-            _parseResult = Builder<IndexerParseResult>.CreateNew()
+            _parseResult = Builder<RemoteEpisode>.CreateNew()
                    .With(c => c.Quality = new QualityModel(Quality.DVD, false))
                    .With(c => c.Series = Builder<Series>.CreateNew().Build())
-                   .With(c => c.EpisodeNumbers = new List<int> { 2 })
                    .With(c => c.Episodes = episodes)
                    .Build();
         }

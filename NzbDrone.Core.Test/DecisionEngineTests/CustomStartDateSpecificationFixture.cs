@@ -1,30 +1,23 @@
-﻿
-
-using System.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.DecisionEngine;
-
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    
-    public class CustomStartDateSpecificationFixture : CoreTest
+
+    public class CustomStartDateSpecificationFixture : CoreTest<CustomStartDateSpecification>
     {
         private CustomStartDateSpecification _customStartDateSpecification;
 
-        private IndexerParseResult parseResultMulti;
-        private IndexerParseResult parseResultSingle;
+        private RemoteEpisode parseResultMulti;
+        private RemoteEpisode parseResultSingle;
         private Series fakeSeries;
         private Episode firstEpisode;
         private Episode secondEpisode;
@@ -42,21 +35,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .With(c => c.CustomStartDate = null)
                 .Build();
 
-            parseResultMulti = new IndexerParseResult
+            parseResultMulti = new RemoteEpisode
             {
-                SeriesTitle = "Title",
                 Series = fakeSeries,
-                EpisodeNumbers = new List<int> { 3, 4 },
-                SeasonNumber = 12,
                 Episodes = new List<Episode> { firstEpisode, secondEpisode }
             };
 
-            parseResultSingle = new IndexerParseResult
+            parseResultSingle = new RemoteEpisode
             {
-                SeriesTitle = "Title",
                 Series = fakeSeries,
-                EpisodeNumbers = new List<int> { 3 },
-                SeasonNumber = 12,
                 Episodes = new List<Episode> { firstEpisode }
             };
         }

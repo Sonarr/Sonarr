@@ -35,45 +35,37 @@ namespace NzbDrone.Core.Tv
             get { return EpisodeFile != null; }
         }
 
-        public int EpisodeFileId
+        public int EpisodeFileId { get; set; }
+
+
+        public EpisodeStatuses Status
         {
             get
             {
-                if (!HasFile) return 0;
-                return EpisodeFile.Id;
-            }
-        }
-
-
-
-        public EpisodeStatusType Status
-        {
-            get
-            {
-                if (HasFile) return EpisodeStatusType.Ready;
+                if (HasFile) return EpisodeStatuses.Ready;
 
                 if (GrabDate != null)
                 {
                     if (PostDownloadStatus == PostDownloadStatusType.Unpacking)
-                        return EpisodeStatusType.Unpacking;
+                        return EpisodeStatuses.Unpacking;
 
                     if (PostDownloadStatus == PostDownloadStatusType.Failed)
-                        return EpisodeStatusType.Failed;
+                        return EpisodeStatuses.Failed;
 
                     if (GrabDate.Value.AddDays(1) >= DateTime.Now)
-                        return EpisodeStatusType.Downloading;
+                        return EpisodeStatuses.Downloading;
                 }
 
                 if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
-                    return EpisodeStatusType.Downloading;
+                    return EpisodeStatuses.Downloading;
 
                 if (AirDate != null && AirDate.Value.Date == DateTime.Today)
-                    return EpisodeStatusType.AirsToday;
+                    return EpisodeStatuses.AirsToday;
 
                 if (AirDate != null && AirDate.Value.Date < DateTime.Now)
-                    return EpisodeStatusType.Missing;
+                    return EpisodeStatuses.Missing;
 
-                return EpisodeStatusType.NotAired;
+                return EpisodeStatuses.NotAired;
             }
         }
 

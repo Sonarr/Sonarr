@@ -1,76 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core
+namespace NzbDrone.Core.Parser
 {
     public static class Parser
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex[] ReportTitleRegex = new[]
-                                {
-                                    //Episodes with airdate
-                                    new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])\W?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+            {
+                //Episodes with airdate
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Multi-Part episodes without a title (S01E05.S01E06)
-                                    new Regex(@"^(?:\W*S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
-			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Multi-Part episodes without a title (S01E05.S01E06)
+                new Regex(@"^(?:\W*S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
-		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
+                new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
-                                    new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
-			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
+                new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
-		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
+                new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Episodes over 99 (3-digits or more) (S01E105, S01E105E106, etc)
-                                    new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d+))+)+\W?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Episodes over 99 (3-digits or more) (S01E105, S01E105E106, etc)
+                new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d+))+)+\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex])(?<episode>\d{2}(?!\d+)))+\W*)+\W?(?!\\)",
-			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex])(?<episode>\d{2}(?!\d+)))+\W*)+\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
-		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
+                new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Supports 103/113 naming
-                                    new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)\d{1})(?<episode>\d{2}(?!p|i|\d+)))+\W?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Supports 103/113 naming
+                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)\d{1})(?<episode>\d{2}(?!p|i|\d+)))+\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
-                                    new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
+                new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Supports 1103/1113 naming
-                                    new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[)\d{2})(?<episode>\d{2}(?!p|i|\d+|\)|\])))+\W?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                //Supports 1103/1113 naming
+                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[)\d{2})(?<episode>\d{2}(?!p|i|\d+|\)|\])))+\W?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                        //Supports Season only releases
-                                    new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))\W?(?<extras>EXTRAS|SUBPACK)?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled)
-                                };
+                //Supports Season only releases
+                new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))\W?(?<extras>EXTRAS|SUBPACK)?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled)
+            };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W|_))|\W|_|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\||""",
-                                                              RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 
 
@@ -78,16 +78,16 @@ namespace NzbDrone.Core
 
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)(?:\W|_)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static FileNameParseResult ParsePath(string path) 
+        public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
 
-            var result = ParseTitle<FileNameParseResult>(fileInfo.Name);
+            var result = ParseTitle(fileInfo.Name);
 
             if (result == null)
             {
                 Logger.Trace("Attempting to parse episode info using full path. {0}", fileInfo.FullName);
-                result = ParseTitle<FileNameParseResult>(fileInfo.FullName);
+                result = ParseTitle(fileInfo.FullName);
             }
 
             if (result != null)
@@ -102,7 +102,7 @@ namespace NzbDrone.Core
             return result;
         }
 
-        public static T ParseTitle<T>(string title) where T : ParseResult, new()
+        public static ParsedEpisodeInfo ParseTitle(string title)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace NzbDrone.Core
 
                     if (match.Count != 0)
                     {
-                        var result = ParseMatchCollection<T>(match);
+                        var result = ParseMatchCollection(match);
                         if (result != null)
                         {
                             //Check if episode is in the future (most likley a parse error)
@@ -141,14 +141,14 @@ namespace NzbDrone.Core
             return null;
         }
 
-        private static T ParseMatchCollection<T>(MatchCollection matchCollection) where T : ParseResult, new()
+        private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection)
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
 
             int airYear;
             Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airYear);
 
-            T result;
+            ParsedEpisodeInfo result;
 
             if (airYear < 1900)
             {
@@ -169,11 +169,11 @@ namespace NzbDrone.Core
                 if (seasons.Distinct().Count() > 1)
                     return null;
 
-                result = new T
-                {
-                    SeasonNumber = seasons.First(),
-                    EpisodeNumbers = new List<int>()
-                };
+                result = new ParsedEpisodeInfo
+                    {
+                        SeasonNumber = seasons.First(),
+                        EpisodeNumbers = new List<int>()
+                    };
 
                 foreach (Match matchGroup in matchCollection)
                 {
@@ -212,13 +212,13 @@ namespace NzbDrone.Core
                     airmonth = tempDay;
                 }
 
-                result = new T
-                {
-                    AirDate = new DateTime(airYear, airmonth, airday).Date,
-                };
+                result = new ParsedEpisodeInfo
+                    {
+                        AirDate = new DateTime(airYear, airmonth, airday).Date,
+                    };
             }
 
-            result.SeriesTitle = seriesName;
+            result.SeriesTitle = NormalizeTitle(seriesName);
 
             Logger.Trace("Episode Parsed. {0}", result);
 
@@ -229,12 +229,14 @@ namespace NzbDrone.Core
         {
             Logger.Trace("Parsing string '{0}'", title);
 
-            var parseResult = ParseTitle<ParseResult>(title);
+            var parseResult = ParseTitle(title);
 
             if (parseResult == null)
+            {
                 return NormalizeTitle(title);
+            }
 
-            return parseResult.CleanTitle;
+            return parseResult.SeriesTitle;
         }
 
         private static QualityModel ParseQuality(string name)
@@ -376,7 +378,7 @@ namespace NzbDrone.Core
             }
 
             if ((normalizedName.Contains("sdtv") || normalizedName.Contains("pdtv") ||
-                (result.Quality == Quality.Unknown && normalizedName.Contains("hdtv"))) &&
+                 (result.Quality == Quality.Unknown && normalizedName.Contains("hdtv"))) &&
                 !normalizedName.Contains("mpeg"))
             {
                 result.Quality = Quality.SDTV;
@@ -386,79 +388,77 @@ namespace NzbDrone.Core
             return result;
         }
 
-        private static LanguageType ParseLanguage(string title)
+        private static Language ParseLanguage(string title)
         {
             var lowerTitle = title.ToLower();
 
             if (lowerTitle.Contains("english"))
-                return LanguageType.English;
+                return Language.English;
 
             if (lowerTitle.Contains("french"))
-                return LanguageType.French;
+                return Language.French;
 
             if (lowerTitle.Contains("spanish"))
-                return LanguageType.Spanish;
+                return Language.Spanish;
 
             if (lowerTitle.Contains("danish"))
-                return LanguageType.Danish;
+                return Language.Danish;
 
             if (lowerTitle.Contains("dutch"))
-                return LanguageType.Dutch;
+                return Language.Dutch;
 
             if (lowerTitle.Contains("japanese"))
-                return LanguageType.Japanese;
+                return Language.Japanese;
 
             if (lowerTitle.Contains("cantonese"))
-                return LanguageType.Cantonese;
+                return Language.Cantonese;
 
             if (lowerTitle.Contains("mandarin"))
-                return LanguageType.Mandarin;
+                return Language.Mandarin;
 
             if (lowerTitle.Contains("korean"))
-                return LanguageType.Korean;
+                return Language.Korean;
 
             if (lowerTitle.Contains("russian"))
-                return LanguageType.Russian;
+                return Language.Russian;
 
             if (lowerTitle.Contains("polish"))
-                return LanguageType.Polish;
+                return Language.Polish;
 
             if (lowerTitle.Contains("vietnamese"))
-                return LanguageType.Vietnamese;
+                return Language.Vietnamese;
 
             if (lowerTitle.Contains("swedish"))
-                return LanguageType.Swedish;
+                return Language.Swedish;
 
             if (lowerTitle.Contains("norwegian"))
-                return LanguageType.Norwegian;
+                return Language.Norwegian;
 
             if (lowerTitle.Contains("finnish"))
-                return LanguageType.Finnish;
+                return Language.Finnish;
 
             if (lowerTitle.Contains("turkish"))
-                return LanguageType.Turkish;
+                return Language.Turkish;
 
             if (lowerTitle.Contains("portuguese"))
-                return LanguageType.Portuguese;
+                return Language.Portuguese;
 
             var match = LanguageRegex.Match(title);
 
             if (match.Groups["italian"].Captures.Cast<Capture>().Any())
-                return LanguageType.Italian;
+                return Language.Italian;
 
             if (match.Groups["german"].Captures.Cast<Capture>().Any())
-                return LanguageType.German;
+                return Language.German;
 
             if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
-                return LanguageType.Flemish;
+                return Language.Flemish;
 
             if (match.Groups["greek"].Captures.Cast<Capture>().Any())
-                return LanguageType.Greek;
+                return Language.Greek;
 
-            return LanguageType.English;
+            return Language.English;
         }
-
-
 
         public static string NormalizeTitle(string title)
         {
@@ -476,5 +476,6 @@ namespace NzbDrone.Core
             //this will remove (1),(2) from the end of multi part episodes.
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
+
     }
 }

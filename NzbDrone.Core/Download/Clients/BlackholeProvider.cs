@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients
 {
@@ -14,24 +16,25 @@ namespace NzbDrone.Core.Download.Clients
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
+        private readonly Logger _logger;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public BlackholeProvider(IConfigService configService, IHttpProvider httpProvider,
-                                    DiskProvider diskProvider, UpgradeHistorySpecification upgradeHistorySpecification)
+                                    DiskProvider diskProvider, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
-            _upgradeHistorySpecification = upgradeHistorySpecification;
+            _logger = logger;
         }
 
-        public BlackholeProvider()
+
+        public bool IsInQueue(RemoteEpisode newEpisode)
         {
+            throw new NotImplementedException();
         }
 
-        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
+        public bool DownloadNzb(string url, string title, bool recentlyAired)
         {
             try
             {
@@ -42,26 +45,26 @@ namespace NzbDrone.Core.Download.Clients
                 if (_diskProvider.FileExists(filename))
                 {
                     //Return true so a lesser quality is not returned.
-                    logger.Info("NZB already exists on disk: {0}", filename);
+                    _logger.Info("NZB already exists on disk: {0}", filename);
                     return true;
                 }
 
-                logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
+                _logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
                 _httpProvider.DownloadFile(url, filename);
 
-                logger.Trace("NZB Download succeeded, saved to: {0}", filename);
+                _logger.Trace("NZB Download succeeded, saved to: {0}", filename);
                 return true;
             }
             catch (Exception ex)
             {
-                logger.WarnException("Failed to download NZB: " + url, ex);
+                _logger.WarnException("Failed to download NZB: " + url, ex);
                 return false;
             }
         }
 
-        public virtual bool IsInQueue(IndexerParseResult newParseResult)
+        public IEnumerable<QueueItem> GetQueue()
         {
-            return !_upgradeHistorySpecification.IsSatisfiedBy(newParseResult);
+            return new QueueItem[0];
         }
     }
 }

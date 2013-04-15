@@ -1,16 +1,12 @@
-﻿
-
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 
 using NzbDrone.Core.Test.Framework;
@@ -18,12 +14,12 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class UpgradeHistorySpecificationFixture : CoreTest
+    public class UpgradeHistorySpecificationFixture : CoreTest<UpgradeHistorySpecification>
     {
         private UpgradeHistorySpecification _upgradeHistory;
 
-        private IndexerParseResult _parseResultMulti;
-        private IndexerParseResult _parseResultSingle;
+        private RemoteEpisode _parseResultMulti;
+        private RemoteEpisode _parseResultSingle;
         private QualityModel _upgradableQuality;
         private QualityModel _notupgradableQuality;
         private Series _fakeSeries;
@@ -45,21 +41,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
-            _parseResultMulti = new IndexerParseResult
+            _parseResultMulti = new RemoteEpisode
             {
                 Series = _fakeSeries,
                 Quality = new QualityModel(Quality.DVD, true),
-                EpisodeNumbers = new List<int> { 3, 4 },
-                SeasonNumber = 12,
                 Episodes = doubleEpisodeList
             };
 
-            _parseResultSingle = new IndexerParseResult
+            _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
                 Quality = new QualityModel(Quality.DVD, true),
-                EpisodeNumbers = new List<int> { 3 },
-                SeasonNumber = 12,
                 Episodes = singleEpisodeList
             };
 

@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
                         It.Is<String>(c => c.Equals("{\"method\":\"appendurl\",\"params\":[\"30 Rock - S01E01 - Pilot [HDTV-720p]\",\"TV\",0,false,\"http://www.nzbdrone.com\"]}"))))
                     .Returns("{\"version\": \"1.1\",\"result\": true}");
 
-            Mocker.Resolve<NzbgetProvider>()
+            Mocker.Resolve<NzbgetClient>()
                   .DownloadNzb(url, title, false)
                   .Should()
                   .BeTrue();
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithFailResponse();
 
-            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetProvider>().DownloadNzb("http://www.nzbdrone.com", "30 Rock - S01E01 - Pilot [HDTV-720p]", false));
+            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetClient>().DownloadNzb("http://www.nzbdrone.com", "30 Rock - S01E01 - Pilot [HDTV-720p]", false));
         }
     }
 }

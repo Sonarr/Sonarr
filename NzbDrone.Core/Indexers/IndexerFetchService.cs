@@ -5,17 +5,19 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
     public interface IFetchFeedFromIndexers
     {
-        IList<IndexerParseResult> FetchRss(IIndexerBase indexer);
+        IList<ReportInfo> FetchRss(IIndexerBase indexer);
 
-        IList<IndexerParseResult> Fetch(IIndexerBase indexer, SeasonSearchDefinition searchDefinition);
-        IList<IndexerParseResult> Fetch(IIndexerBase indexer, SingleEpisodeSearchDefinition searchDefinition);
-        IList<IndexerParseResult> Fetch(IIndexerBase indexer, PartialSeasonSearchDefinition searchDefinition);
-        IList<IndexerParseResult> Fetch(IIndexerBase indexer, DailyEpisodeSearchDefinition searchDefinition);
+        IList<ReportInfo> Fetch(IIndexerBase indexer, SeasonSearchDefinition searchDefinition);
+        IList<ReportInfo> Fetch(IIndexerBase indexer, SingleEpisodeSearchDefinition searchDefinition);
+        IList<ReportInfo> Fetch(IIndexerBase indexer, PartialSeasonSearchDefinition searchDefinition);
+        IList<ReportInfo> Fetch(IIndexerBase indexer, DailyEpisodeSearchDefinition searchDefinition);
     }
 
     public class FetchFeedService : IFetchFeedFromIndexers
@@ -31,7 +33,7 @@ namespace NzbDrone.Core.Indexers
         }
 
 
-        public virtual IList<IndexerParseResult> FetchRss(IIndexerBase indexer)
+        public virtual IList<ReportInfo> FetchRss(IIndexerBase indexer)
         {
             _logger.Debug("Fetching feeds from " + indexer.Name);
 
@@ -42,7 +44,7 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        public IList<IndexerParseResult> Fetch(IIndexerBase indexer, SeasonSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexerBase indexer, SeasonSearchDefinition searchDefinition)
         {
             _logger.Debug("Searching for {0}", searchDefinition);
 
@@ -54,7 +56,7 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        public IList<IndexerParseResult> Fetch(IIndexerBase indexer, SingleEpisodeSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexerBase indexer, SingleEpisodeSearchDefinition searchDefinition)
         {
             _logger.Debug("Searching for {0}", searchDefinition);
 
@@ -67,7 +69,7 @@ namespace NzbDrone.Core.Indexers
 
         }
 
-        public IList<IndexerParseResult> Fetch(IIndexerBase indexer, PartialSeasonSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexerBase indexer, PartialSeasonSearchDefinition searchDefinition)
         {
             _logger.Debug("Searching for {0}", searchDefinition);
 
@@ -79,7 +81,7 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        public IList<IndexerParseResult> Fetch(IIndexerBase indexer, DailyEpisodeSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexerBase indexer, DailyEpisodeSearchDefinition searchDefinition)
         {
             _logger.Debug("Searching for {0}", searchDefinition);
 
@@ -90,9 +92,9 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        private List<IndexerParseResult> Fetch(IIndexerBase indexer, IEnumerable<string> urls)
+        private List<ReportInfo> Fetch(IIndexerBase indexer, IEnumerable<string> urls)
         {
-            var result = new List<IndexerParseResult>();
+            var result = new List<ReportInfo>();
 
             foreach (var url in urls)
             {

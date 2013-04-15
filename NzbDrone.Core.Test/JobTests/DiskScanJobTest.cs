@@ -35,10 +35,6 @@ namespace NzbDrone.Core.Test.JobTests
                   .Setup(p => p.Get(series.Id))
                   .Returns(series);
 
-            Mocker.GetMock<DiskScanProvider>()
-                .Setup(p => p.Scan(series))
-                .Returns(new List<EpisodeFile>());
-
             
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), new { SeriesId = series.Id });
 
@@ -60,13 +56,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.All())
                 .Returns(series);
 
-            Mocker.GetMock<DiskScanProvider>()
-                .Setup(s => s.Scan(series[0]))
-                .Returns(new List<EpisodeFile>());
-
-            Mocker.GetMock<DiskScanProvider>()
-                .Setup(s => s.Scan(series[1]))
-                .Returns(new List<EpisodeFile>());
 
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
 
@@ -112,14 +101,6 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<ISeriesRepository>()
                 .Setup(p => p.All())
                 .Returns(series);
-
-            Mocker.GetMock<DiskScanProvider>()
-                .Setup(s => s.Scan(series[0]))
-                .Returns(new List<EpisodeFile>());
-
-            Mocker.GetMock<DiskScanProvider>()
-                .Setup(s => s.Scan(series[1]))
-                .Returns(new List<EpisodeFile>());
 
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
 

@@ -6,12 +6,14 @@ using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
     public interface IParseFeed
     {
-        IEnumerable<IndexerParseResult> Process(Stream source);
+        IEnumerable<ReportInfo> Process(Stream source);
     }
 
     public class BasicRssParser : IParseFeed
@@ -23,12 +25,12 @@ namespace NzbDrone.Core.Indexers
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public IEnumerable<IndexerParseResult> Process(Stream source)
+        public IEnumerable<ReportInfo> Process(Stream source)
         {
             var reader = new SyndicationFeedXmlReader(source);
             var feed = SyndicationFeed.Load(reader).Items;
 
-            var result = new List<IndexerParseResult>();
+            var result = new List<ReportInfo>();
 
             foreach (var syndicationItem in feed)
             {
@@ -38,7 +40,7 @@ namespace NzbDrone.Core.Indexers
                     if (parsedEpisode != null)
                     {
                         parsedEpisode.NzbUrl = GetNzbUrl(syndicationItem);
-                        parsedEpisode.NzbInfoUrl = GetNzbUrl(syndicationItem);
+                        parsedEpisode.NzbInfoUrl = GetNzbInfoUrl(syndicationItem);
                         result.Add(parsedEpisode);
                     }
                 }
@@ -68,23 +70,20 @@ namespace NzbDrone.Core.Indexers
             return String.Empty;
         }
 
-        protected virtual IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
+        protected virtual ReportInfo PostProcessor(SyndicationItem item, ReportInfo currentResult)
         {
             return currentResult;
         }
 
-        private IndexerParseResult ParseFeed(SyndicationItem item)
+        private ReportInfo ParseFeed(SyndicationItem item)
         {
             var title = GetTitle(item);
 
-            var episodeParseResult = Parser.ParseTitle<IndexerParseResult>(title);
-            if (episodeParseResult != null)
-            {
-                episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
-                episodeParseResult.OriginalString = title;
-                episodeParseResult.SceneSource = true;
-                episodeParseResult.ReleaseGroup = ParseReleaseGroup(title);
-            }
+            var episodeParseResult = new ReportInfo();
+
+            episodeParseResult.Title = title;
+            episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
+            episodeParseResult.ReleaseGroup = ParseReleaseGroup(title);
 
             _logger.Trace("Parsed: {0} from: {1}", episodeParseResult, item.Title.Text);
 

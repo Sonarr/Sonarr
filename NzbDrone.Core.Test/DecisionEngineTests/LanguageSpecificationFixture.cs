@@ -9,6 +9,8 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.DecisionEngine;
 
@@ -20,21 +22,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     
     public class LanguageSpecificationFixture : CoreTest
     {
-        private IndexerParseResult parseResult;
+        private RemoteEpisode parseResult;
 
         private void WithEnglishRelease()
         {
-            parseResult = Builder<IndexerParseResult>
+            parseResult = Builder<RemoteEpisode>
                     .CreateNew()
-                    .With(p => p.Language = LanguageType.English)
+                    .With(p => p.Language = Language.English)
                     .Build();
         }
 
         private void WithGermanRelease()
         {
-            parseResult = Builder<IndexerParseResult>
+            parseResult = Builder<RemoteEpisode>
                     .CreateNew()
-                    .With(p => p.Language = LanguageType.German)
+                    .With(p => p.Language = Language.German)
                     .Build();
         }
 

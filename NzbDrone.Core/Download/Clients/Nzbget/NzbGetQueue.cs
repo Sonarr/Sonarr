@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
-    public class Queue
+    public class NzbGetQueue
     {
         public String Version { get; set; }
 
         [JsonProperty(PropertyName = "result")]
-        public List<QueueItem> QueueItems { get; set; }
+        public List<NzbGetQueueItem> QueueItems { get; set; }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using MediaInfoLib;
 using NLog;
 using NzbDrone.Common;
@@ -10,22 +7,26 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Providers
 {
-    public class MediaInfoProvider
+    public interface IVideoFileInfoReader
+    {
+        MediaInfoModel GetMediaInfo(string filename);
+        TimeSpan GetRunTime(string filename);
+    }
+
+    public class VideoFileInfoReader : IVideoFileInfoReader
     {
         private readonly DiskProvider _diskProvider;
+        private readonly Logger _logger;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public MediaInfoProvider(DiskProvider diskProvider)
+        public VideoFileInfoReader(DiskProvider diskProvider, Logger logger)
         {
             _diskProvider = diskProvider;
+            _logger = logger;
         }
 
-        public MediaInfoProvider()
-        {
-        }
 
-        public virtual MediaInfoModel GetMediaInfo(string filename)
+        public MediaInfoModel GetMediaInfo(string filename)
         {
             if (!_diskProvider.FileExists(filename))
                 throw new FileNotFoundException("Media file does not exist: " + filename);
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Providers
 
             try
             {
-                logger.Trace("Getting media info from {0}", filename);
+                _logger.Trace("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
                 int open = mediaInfo.Open(filename);
@@ -102,20 +103,20 @@ namespace NzbDrone.Core.Providers
             }
             catch (Exception ex)
             {
-                logger.ErrorException("Unable to parse media info from file: " + filename, ex);
+                _logger.ErrorException("Unable to parse media info from file: " + filename, ex);
                 mediaInfo.Close();
             }
 
             return null;
         }
 
-        public virtual Int32 GetRunTime(string filename)
+        public TimeSpan GetRunTime(string filename)
         {
             var mediaInfo = new MediaInfo();
 
             try
             {
-                logger.Trace("Getting media info from {0}", filename);
+                _logger.Trace("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
                 int open = mediaInfo.Open(filename);
@@ -126,16 +127,16 @@ namespace NzbDrone.Core.Providers
                     Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
 
                     mediaInfo.Close();
-                    return runTime / 1000; //Convert to seconds
+                    return TimeSpan.FromMilliseconds(runTime);
                 }
             }
             catch (Exception ex)
             {
-                logger.ErrorException("Unable to parse media info from file: " + filename, ex);
+                _logger.ErrorException("Unable to parse media info from file: " + filename, ex);
                 mediaInfo.Close();
             }
 
-            return 0;
+            return new TimeSpan();
         }
     }
 }

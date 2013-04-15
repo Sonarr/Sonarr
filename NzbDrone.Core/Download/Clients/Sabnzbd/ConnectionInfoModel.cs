@@ -1,4 +1,4 @@
-namespace NzbDrone.Core.Download.Clients
+namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class ConnectionInfoModel
     {

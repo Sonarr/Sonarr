@@ -12,13 +12,13 @@ namespace NzbDrone.Core.Jobs.Implementations
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly PostDownloadProvider _postDownloadProvider;
+        private readonly DropFolderImportService _dropFolderImportService;
         private readonly IConfigService _configService;
         private readonly DiskProvider _diskProvider;
 
-        public PostDownloadScanJob(PostDownloadProvider postDownloadProvider,IConfigService configService, DiskProvider diskProvider)
+        public PostDownloadScanJob(DropFolderImportService dropFolderImportService,IConfigService configService, DiskProvider diskProvider)
         {
-            _postDownloadProvider = postDownloadProvider;
+            _dropFolderImportService = dropFolderImportService;
             _configService = configService;
             _diskProvider = diskProvider;
         }
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Jobs.Implementations
                 return;
             }
 
-            _postDownloadProvider.ProcessDropFolder(dropFolder);
+            _dropFolderImportService.ProcessDropFolder(dropFolder);
         }
     }
 }

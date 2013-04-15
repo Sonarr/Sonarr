@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test, TestCaseSource("QualityParserCases")]
         public void quality_parse(string postTitle, Quality quality, bool proper)
         {
-            var result = Parser.ParseTitle<ParseResult>(postTitle);
+            var result = Parser.Parser.ParseTitle(postTitle);
             result.Quality.Quality.Should().Be(quality);
             result.Quality.Proper.Should().Be(proper);
         }
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void parsing_our_own_quality_enum(Quality quality)
         {
             var fileName = String.Format("My series S01E01 [{0}]", quality);
-            var result = Parser.ParseTitle<ParseResult>(fileName);
+            var result = Parser.Parser.ParseTitle(fileName);
             result.Quality.Quality.Should().Be(quality);
         }
     }

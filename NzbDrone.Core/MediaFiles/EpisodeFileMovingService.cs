@@ -59,7 +59,7 @@ namespace NzbDrone.Core.MediaFiles
                 return null;
             }
 
-            _diskProvider.CreateDirectory(new FileInfo(newFile).DirectoryName);
+            _diskProvider.CreateFolder(new FileInfo(newFile).DirectoryName);
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile);
             _diskProvider.MoveFile(episodeFile.Path, newFile);
@@ -78,14 +78,12 @@ namespace NzbDrone.Core.MediaFiles
             episodeFile.Path = newFile;
             _mediaFileService.Update(episodeFile);
 
-            var parseResult = Parser.ParsePath(episodeFile.Path);
-            parseResult.Series = series;
+            var parseResult = Parser.Parser.ParsePath(episodeFile.Path);
             parseResult.Quality = episodeFile.Quality;
-            parseResult.Episodes = episodes;
 
             if (newDownload)
             {
-                _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult));
+                _eventAggregator.Publish(new EpisodeDownloadedEvent(parseResult, series));
             }
 
             return episodeFile;

@@ -2,6 +2,8 @@ using System;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.NzbIndex
 {
@@ -18,7 +20,7 @@ namespace NzbDrone.Core.Indexers.NzbIndex
             return item.Links[0].Uri.ToString();
         }
 
-        protected override IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
+        protected override ReportInfo PostProcessor(SyndicationItem item, ReportInfo currentResult)
         {
             if (currentResult != null)
             {

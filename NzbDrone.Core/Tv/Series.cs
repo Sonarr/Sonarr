@@ -36,7 +36,6 @@ namespace NzbDrone.Core.Tv
         public int QualityProfileId { get; set; }
         public bool SeasonFolder { get; set; }
         public DateTime? LastInfoSync { get; set; }
-        public DateTime? LastDiskSync { get; set; }
         public int Runtime { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }

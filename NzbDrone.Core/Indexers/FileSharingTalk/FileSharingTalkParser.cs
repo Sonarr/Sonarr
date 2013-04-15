@@ -1,5 +1,7 @@
 using System.ServiceModel.Syndication;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.FileSharingTalk
 {
@@ -10,7 +12,7 @@ namespace NzbDrone.Core.Indexers.FileSharingTalk
             return item.Id;
         }
 
-        protected override IndexerParseResult PostProcessor(SyndicationItem item, IndexerParseResult currentResult)
+        protected override ReportInfo PostProcessor(SyndicationItem item, ReportInfo currentResult)
         {
             if (currentResult != null)
             {

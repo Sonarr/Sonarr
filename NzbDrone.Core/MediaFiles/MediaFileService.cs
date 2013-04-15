@@ -39,7 +39,9 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFile Add(EpisodeFile episodeFile)
         {
-            return _mediaFileRepository.Insert(episodeFile);
+            var addedFile = _mediaFileRepository.Insert(episodeFile);
+            _eventAggregator.Publish(new EpisodeFileAddedEvent(addedFile));
+            return addedFile;
         }
 
         public void Update(EpisodeFile episodeFile)

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
         private void WithExpired()
         {
-            Mocker.GetMock<DiskProvider>().Setup(s => s.GetLastDirectoryWrite(It.IsAny<String>()))
+            Mocker.GetMock<DiskProvider>().Setup(s => s.GetLastFolderWrite(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-10));
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetLastFileWrite(It.IsAny<String>()))
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
         private void WithNonExpired()
         {
-            Mocker.GetMock<DiskProvider>().Setup(s => s.GetLastDirectoryWrite(It.IsAny<String>()))
+            Mocker.GetMock<DiskProvider>().Setup(s => s.GetLastFolderWrite(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-3));
 
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetLastFileWrite(It.IsAny<String>()))
