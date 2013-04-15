@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
 
-            _reports = new List<ReportInfo>();
+            _reports = new List<ReportInfo> {new ReportInfo()};
             _remoteEpisode = new RemoteEpisode();
 
             Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ReportInfo>()))
