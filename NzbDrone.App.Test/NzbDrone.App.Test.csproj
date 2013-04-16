@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContainerFixture.cs" />
     <Compile Include="RouterTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,6 +114,12 @@
       <Project>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</Project>
       <Name>NzbDrone</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Libraries\Sqlite\sqlite3.dll">
+      <Link>sqlite3.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
