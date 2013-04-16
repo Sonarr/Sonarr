@@ -66,13 +66,5 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
                   .Should()
                   .HaveCount(1);
         }
-
-        [Test]
-        public void should_throw_when_error_is_returned()
-        {
-            WithFailResponse();
-
-            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetClient>().GetQueue());
-        }
     }
 }
