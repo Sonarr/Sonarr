@@ -157,9 +157,6 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="SignalR">
-      <HintPath>..\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />

@@ -17,7 +17,6 @@ namespace NzbDrone.App.Test
             ContainerBuilder.Instance.Resolve<IEnumerable<IHandle>>().Should().NotBeEmpty();
         }
 
-
         [Test]
         public void should_be_able_to_resolve_indexers()
         {
