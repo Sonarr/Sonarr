@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Test.Common;
 
@@ -24,6 +25,11 @@ namespace NzbDrone.Core.Test.Framework
         protected string ReadAllText(params string[] path)
         {
             return File.ReadAllText(Path.Combine(path));
+        }
+
+        protected void UseRealHttp()
+        {
+            Mocker.SetConstant<IHttpProvider>(new HttpProvider(new EnvironmentProvider()));
         }
     }
 

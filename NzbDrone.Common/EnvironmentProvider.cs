@@ -11,8 +11,6 @@ namespace NzbDrone.Common
 
         private static readonly EnvironmentProvider Instance = new EnvironmentProvider();
 
-        private const string NZBDRONE_PID = "NZBDRONE_PID";
-
         public static bool IsProduction
         {
             get
@@ -101,19 +99,6 @@ namespace NzbDrone.Common
             {
                 var fileLocation = Assembly.GetCallingAssembly().Location;
                 return new FileInfo(fileLocation).CreationTime;
-            }
-        }
-
-        public virtual int NzbDroneProcessIdFromEnvironment
-        {
-            get
-            {
-                var id = Convert.ToInt32(Environment.GetEnvironmentVariable(NZBDRONE_PID));
-
-                if (id == 0)
-                    throw new InvalidOperationException("NZBDRONE_PID isn't a valid environment variable.");
-
-                return id;
             }
         }
 

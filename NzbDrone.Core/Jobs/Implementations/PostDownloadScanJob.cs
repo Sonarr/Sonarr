@@ -12,11 +12,11 @@ namespace NzbDrone.Core.Jobs.Implementations
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly DropFolderImportService _dropFolderImportService;
+        private readonly IDropFolderImportService _dropFolderImportService;
         private readonly IConfigService _configService;
         private readonly DiskProvider _diskProvider;
 
-        public PostDownloadScanJob(DropFolderImportService dropFolderImportService,IConfigService configService, DiskProvider diskProvider)
+        public PostDownloadScanJob(IDropFolderImportService dropFolderImportService,IConfigService configService, DiskProvider diskProvider)
         {
             _dropFolderImportService = dropFolderImportService;
             _configService = configService;

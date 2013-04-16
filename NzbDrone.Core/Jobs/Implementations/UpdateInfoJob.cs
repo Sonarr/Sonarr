@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DataAugmentation;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;

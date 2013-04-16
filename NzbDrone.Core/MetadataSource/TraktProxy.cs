@@ -41,7 +41,7 @@ namespace NzbDrone.Core.MetadataSource
 
         private static IRestClient BuildClient(string resource, string method)
         {
-            return new RestClient(string.Format("http://api.trakt.tv/{0}/{1}.json/6fc98f83c6a02decd17eb7e13d00e89c", resource, method));
+            return new RestClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
         }
 
         private static Series MapSeries(Show show)

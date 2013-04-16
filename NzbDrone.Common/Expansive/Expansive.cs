@@ -9,14 +9,12 @@ namespace NzbDrone.Common.Expansive
 {
     public static class Expansive
     {
-        private static Dictionary<TokenStyle, PatternStyle> _patternStyles;
+        private static PatternStyle _patternStyle;
 
 
         public static bool RequireAllExpansions { get; set; }
 
         public static Func<string, string> DefaultExpansionFactory { get; set; }
-
-        public static TokenStyle DefaultTokenStyle { get; set; }
 
         static Expansive()
         {
@@ -28,17 +26,12 @@ namespace NzbDrone.Common.Expansive
             return source.Expand(DefaultExpansionFactory);
         }
 
-        public static string Expand(this string source, TokenStyle tokenStyle)
-        {
-            return source.ExpandInternal(DefaultExpansionFactory, tokenStyle);
-        }
 
         public static string Expand(this string source, params string[] args)
         {
             var output = source;
             var tokens = new List<string>();
-            var patternStyle = _patternStyles[DefaultTokenStyle];
-            var pattern = new Regex(patternStyle.TokenMatchPattern, RegexOptions.IgnoreCase);
+            var pattern = new Regex(_patternStyle.TokenMatchPattern, RegexOptions.IgnoreCase);
             var calls = new Stack<string>();
             string callingToken = null;
 
@@ -46,7 +39,7 @@ namespace NzbDrone.Common.Expansive
             {
                 foreach (Match match in pattern.Matches(output))
                 {
-                    var token = patternStyle.TokenReplaceFilter(match.Value);
+                    var token = _patternStyle.TokenReplaceFilter(match.Value);
                     var tokenIndex = 0;
                     if (!tokens.Contains(token))
                     {
@@ -57,23 +50,23 @@ namespace NzbDrone.Common.Expansive
                     {
                         tokenIndex = tokens.IndexOf(token);
                     }
-                    output = Regex.Replace(output, patternStyle.OutputFilter(match.Value), "{" + tokenIndex + "}");
+                    output = Regex.Replace(output, _patternStyle.OutputFilter(match.Value), "{" + tokenIndex + "}");
                 }
             }
             var newArgs = new List<string>();
             foreach (var arg in args)
             {
                 var newArg = arg;
-                var tokenPattern = new Regex(patternStyle.TokenFilter(String.Join("|", tokens)));
+                var tokenPattern = new Regex(_patternStyle.TokenFilter(String.Join("|", tokens)));
                 while (tokenPattern.IsMatch(newArg))
                 {
                     foreach (Match match in tokenPattern.Matches(newArg))
                     {
-                        var token = patternStyle.TokenReplaceFilter(match.Value);
+                        var token = _patternStyle.TokenReplaceFilter(match.Value);
                         if (calls.Contains(string.Format("{0}:{1}", callingToken, token))) throw new CircularReferenceException(string.Format("Circular Reference Detected for token '{0}'.", callingToken));
                         calls.Push(string.Format("{0}:{1}", callingToken, token));
                         callingToken = token;
-                        newArg = Regex.Replace(newArg, patternStyle.OutputFilter(match.Value), args[tokens.IndexOf(token)]);
+                        newArg = Regex.Replace(newArg, _patternStyle.OutputFilter(match.Value), args[tokens.IndexOf(token)]);
                     }
 
                 }
@@ -84,38 +77,13 @@ namespace NzbDrone.Common.Expansive
 
         public static string Expand(this string source, Func<string, string> expansionFactory)
         {
-            return source.ExpandInternal(expansionFactory, DefaultTokenStyle);
+            return source.ExpandInternal(expansionFactory);
         }
 
-        public static string Expand(this string source, Func<string, string> expansionFactory, TokenStyle tokenStyle)
-        {
-            return source.ExpandInternal(expansionFactory, tokenStyle);
-        }
+
+
 
         public static string Expand(this string source, object model)
-        {
-            return source.Expand(model, DefaultTokenStyle);
-        }
-
-        public static string Expand(this string source, params object[] models)
-        {
-            var mergedModel = new ExpandoObject().ToDictionary();
-            models.ToList().ForEach(m =>
-                {
-                    var md = m.ToDictionary();
-                    var keys = md.Keys;
-                    keys.ToList().ForEach(k =>
-                        {
-                            if (!mergedModel.ContainsKey(k))
-                            {
-                                mergedModel.Add(k, md[k]);
-                            }
-                        });
-                });
-            return source.Expand(mergedModel as ExpandoObject);
-        }
-
-        public static string Expand(this string source, object model, TokenStyle tokenStyle)
         {
             return source.ExpandInternal(
                 name =>
@@ -132,69 +100,29 @@ namespace NzbDrone.Common.Expansive
                     }
 
                     return modelDict[name].ToString();
-                }
-                , tokenStyle);
+                });
         }
-
-        #region : Private Helper Methods :
 
         private static void Initialize()
         {
-            DefaultTokenStyle = TokenStyle.MvcRoute;
-            _patternStyles = new Dictionary<TokenStyle, PatternStyle>
+            _patternStyle = new PatternStyle
                 {
-                    {
-                        TokenStyle.MvcRoute, new PatternStyle
-                            {
-                                TokenMatchPattern = @"\{[a-zA-Z]\w*\}",
-                                TokenReplaceFilter = token => token.Replace("{", "").Replace("}", ""),
-                                OutputFilter = output => (output.StartsWith("{") && output.EndsWith("}") ? output : @"\{" + output + @"\}"),
-                                TokenFilter = tokens => "{(" + tokens + ")}"
-                            }
-                    }
-                    ,
-                    {
-                        TokenStyle.Razor, new PatternStyle
-                            {
-                                TokenMatchPattern = @"@([a-zA-Z]\w*|\([a-zA-Z]\w*\))",
-                                TokenReplaceFilter = token => token.Replace("@", "").Replace("(", "").Replace(")", ""),
-                                OutputFilter = output => (output.StartsWith("@") ? output.Replace("(", @"\(").Replace(")",@"\)") : "@" + output.Replace("(", @"\(").Replace(")",@"\)")),
-                                TokenFilter = tokens => @"@(" + tokens + @"|\(" + tokens + @"\))"
-                            }
-                    }
-                    ,
-                    {
-                        TokenStyle.NAnt, new PatternStyle
-                            {
-                                TokenMatchPattern = @"\$\{[a-zA-Z]\w*\}",
-                                TokenReplaceFilter = token => token.Replace("${", "").Replace("}", ""),
-                                OutputFilter = output => (output.StartsWith("${") && output.EndsWith("}") ? output.Replace("$",@"\$").Replace("{",@"\{").Replace("}",@"\}") : @"\$\{" + output + @"\}"),
-                                TokenFilter = tokens => @"\$\{(" + tokens + @")\}"
-                            }
-                    }
-                    ,
-                    {
-                        TokenStyle.MSBuild, new PatternStyle
-                            {
-                                TokenMatchPattern = @"\$\([a-zA-Z]\w*\)",
-                                TokenReplaceFilter = token => token.Replace("$(", "").Replace(")", ""),
-                                OutputFilter = output => (output.StartsWith("$(") && output.EndsWith(")") ? output.Replace("$",@"\$").Replace("(",@"\(").Replace(")",@"\)") : @"\$\(" + output + @"\)"),
-                                TokenFilter = tokens => @"\$\((" + tokens + @")\)"
-                            }
-                    }
+                    TokenMatchPattern = @"\{[a-zA-Z]\w*\}",
+                    TokenReplaceFilter = token => token.Replace("{", "").Replace("}", ""),
+                    OutputFilter = output => (output.StartsWith("{") && output.EndsWith("}") ? output : @"\{" + output + @"\}"),
+                    TokenFilter = tokens => "{(" + tokens + ")}"
                 };
         }
 
-        private static string ExpandInternal(this string source, Func<string, string> expansionFactory, TokenStyle tokenStyle)
+        private static string ExpandInternal(this string source, Func<string, string> expansionFactory)
         {
             if (expansionFactory == null) throw new ApplicationException("ExpansionFactory not defined.\nDefine a DefaultExpansionFactory or call Expand(source, Func<string, string> expansionFactory))");
 
-            var patternStyle = _patternStyles[tokenStyle];
-            var pattern = new Regex(patternStyle.TokenMatchPattern, RegexOptions.IgnoreCase);
+            var pattern = new Regex(_patternStyle.TokenMatchPattern, RegexOptions.IgnoreCase);
 
             var callTreeParent = new Tree<string>("root").Root;
 
-            return source.Explode(pattern, patternStyle, expansionFactory, callTreeParent);
+            return source.Explode(pattern, _patternStyle, expansionFactory, callTreeParent);
         }
 
         private static string Explode(this string source, Regex pattern, PatternStyle patternStyle, Func<string, string> expansionFactory, TreeNode<string> parent)
@@ -266,7 +194,5 @@ namespace NzbDrone.Common.Expansive
         {
             return (IDictionary<string, object>)thingy.ToExpando();
         }
-
-        #endregion
     }
 }

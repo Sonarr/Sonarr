@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.XPath;
-using NLog;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -11,10 +9,9 @@ namespace NzbDrone.Common
     public class ConfigFileProvider
     {
         private readonly EnvironmentProvider _environmentProvider;
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly string _configFile;
-        
+
         public ConfigFileProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
@@ -25,7 +22,7 @@ namespace NzbDrone.Common
 
         public ConfigFileProvider()
         {
-            
+
         }
 
         public virtual Guid Guid
@@ -60,11 +57,6 @@ namespace NzbDrone.Common
             set { SetValue("AuthenticationType", (int)value); }
         }
 
-        public virtual bool EnableProfiler
-        {
-            get { return GetValueBoolean("EnableProfiler", false); }
-            set { SetValue("EnableProfiler", value); }
-        }
 
         public virtual int GetValueInt(string key, int defaultValue)
         {
@@ -125,51 +117,6 @@ namespace NzbDrone.Common
 
                 xDoc.Save(_configFile);
             }
-        }
-
-        public virtual void UpdateIISConfig(string configPath)
-        {
-            logger.Info(@"Server configuration file: {0}", configPath);
-            logger.Info(@"Configuring server to: [http://localhost:{0}]", Port);
-
-            var configXml = XDocument.Load(configPath);
-
-            var bindings =
-                configXml.XPathSelectElement("configuration/system.applicationHost/sites").Elements("site").Where(
-                    d => d.Attribute("name").Value.ToLowerInvariant() == "nzbdrone").First().Element("bindings");
-            bindings.Descendants().Remove();
-            bindings.Add(
-                new XElement("binding",
-                             new XAttribute("protocol", "http"),
-                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", Port))
-                    ));
-
-            bindings.Add(
-                new XElement("binding",
-                             new XAttribute("protocol", "http"),
-                             new XAttribute("bindingInformation", String.Format("*:{0}:", Port))
-                    ));
-
-            //Update the authenticationTypes
-
-            var location = configXml.XPathSelectElement("configuration").Elements("location").Where(
-                    d => d.Attribute("path").Value.ToLowerInvariant() == "nzbdrone").First();
-
-
-            var authenticationTypes = location.XPathSelectElements("system.webServer/security/authentication").First().Descendants();
-
-            //Set all authentication types enabled to false
-            foreach (var child in authenticationTypes)
-            {
-                child.Attribute("enabled").Value = "false";
-            }
-
-            var configuredAuthType = String.Format("{0}Authentication", AuthenticationType.ToString()).ToLowerInvariant();
-
-            //Set the users authenticationType to true
-            authenticationTypes.Where(t => t.Name.ToString().ToLowerInvariant() == configuredAuthType).Single().Attribute("enabled").Value = "true";
-
-            configXml.Save(configPath);
         }
     }
 }

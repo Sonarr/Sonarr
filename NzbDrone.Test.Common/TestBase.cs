@@ -37,8 +37,6 @@ namespace NzbDrone.Test.Common
 
     public abstract class TestBase : LoggingTest
     {
-        protected const string INTEGRATION_TEST = "Integration Test";
-
         private AutoMoqer _mocker;
         protected AutoMoqer Mocker
         {

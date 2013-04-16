@@ -1,30 +1,25 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
+using NzbDrone.Common.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.JobTests
+namespace NzbDrone.Core.Test.UpdateTests
 {
     [TestFixture]
-    internal class AppUpdateJobFixture : CoreTest
+    internal class UpdateServiceFixture : CoreTest<UpdateService>
     {
-        private const string SANDBOX_FOLDER = @"C:\Temp\nzbdrone_update\";
+        private string _sandboxFolder;
 
         private readonly Guid _clientGuid = Guid.NewGuid();
 
-        private readonly UpdatePackage updatePackage = new UpdatePackage
+        private readonly UpdatePackage _updatePackage = new UpdatePackage
         {
             FileName = "NzbDrone.kay.one.0.6.0.2031.zip",
             Url = "http://update.nzbdrone.com/_test/NzbDrone.zip",
@@ -34,61 +29,56 @@ namespace NzbDrone.Core.Test.JobTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
             Mocker.GetMock<ConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
-            Mocker.GetMock<UpdateService>().Setup(c => c.GetAvailableUpdate()).Returns(updatePackage);
+            Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns(_updatePackage);
+
+            Mocker.GetMock<ProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
+
+            _sandboxFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateSandboxFolder();
         }
+
 
 
         [Test]
         public void should_delete_sandbox_before_update_if_folder_exists()
         {
-            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(true);
+            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(true);
 
+            Subject.InstallAvailableUpdate();
 
-            StartUpdate();
-
-
-            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true));
+            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true));
         }
 
         [Test]
         public void should_not_delete_sandbox_before_update_if_folder_doesnt_exists()
         {
-            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(false);
+            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(false);
 
+            Subject.InstallAvailableUpdate();
 
-            StartUpdate();
-
-
-            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
+            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true), Times.Never());
         }
 
 
         [Test]
         public void Should_download_update_package()
         {
-            var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
+            var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
+            Subject.InstallAvailableUpdate();
 
-            StartUpdate();
-
-
-            Mocker.GetMock<IHttpProvider>().Verify(
-                    c => c.DownloadFile(updatePackage.Url, updateArchive));
+            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive));
         }
 
         [Test]
         public void Should_extract_update_package()
         {
-            var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
+            var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
+            Subject.InstallAvailableUpdate();
 
-            StartUpdate();
-
-
-            Mocker.GetMock<ArchiveProvider>().Verify(
-               c => c.ExtractArchive(updateArchive, SANDBOX_FOLDER));
+            Mocker.GetMock<ArchiveProvider>().Verify(c => c.ExtractArchive(updateArchive, _sandboxFolder));
         }
 
         [Test]
@@ -96,25 +86,20 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var updateClientFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientFolder();
 
+            Subject.InstallAvailableUpdate();
 
-            StartUpdate();
 
-
-            Mocker.GetMock<DiskProvider>().Verify(
-               c => c.MoveDirectory(updateClientFolder, SANDBOX_FOLDER));
+            Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(updateClientFolder, _sandboxFolder));
         }
 
         [Test]
         public void should_start_update_client()
         {
-
             var updateClientPath = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientExePath();
 
-            Mocker.GetMock<EnvironmentProvider>()
-                .SetupGet(c => c.NzbDroneProcessIdFromEnvironment).Returns(12);
 
 
-            StartUpdate();
+            Subject.InstallAvailableUpdate();
 
 
             Mocker.GetMock<ProcessProvider>().Verify(
@@ -127,42 +112,34 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void when_no_updates_are_available_should_return_without_error_or_warnings()
         {
-            Mocker.GetMock<UpdateService>().Setup(c => c.GetAvailableUpdate()).Returns((UpdatePackage)null);
+            Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns<UpdatePackage>(null);
 
-            StartUpdate();
+            Subject.InstallAvailableUpdate();
 
             ExceptionVerification.AssertNoUnexcpectedLogs();
         }
 
         [Test]
-        [Category(INTEGRATION_TEST)]
+        [IntegrationTest]
         public void Should_download_and_extract_to_temp_folder()
         {
-
-            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            UseRealHttp();
 
             var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateSandboxFolder());
 
-
-
             updateSubFolder.Exists.Should().BeFalse();
 
-            Mocker.SetConstant<IHttpProvider>(new HttpProvider(new EnvironmentProvider()));
             Mocker.Resolve<DiskProvider>();
             Mocker.Resolve<ArchiveProvider>();
-            StartUpdate();
-            updateSubFolder.Refresh();
 
+            Subject.InstallAvailableUpdate();
+
+            updateSubFolder.Refresh();
 
             updateSubFolder.Exists.Should().BeTrue();
             updateSubFolder.GetDirectories("nzbdrone").Should().HaveCount(1);
             updateSubFolder.GetDirectories().Should().HaveCount(1);
-            updateSubFolder.GetFiles().Should().HaveCount(1);
-        }
-
-        private void StartUpdate()
-        {
-            Mocker.Resolve<AppUpdateJob>().Start(MockNotification, null);
+            updateSubFolder.GetFiles().Should().NotBeEmpty();
         }
     }
 }

@@ -172,7 +172,7 @@
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
-    <Compile Include="JobTests\AppUpdateJobFixture.cs" />
+    <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
@@ -204,7 +204,6 @@
     <Compile Include="Qualities\QualityProfileFixture.cs" />
     <Compile Include="TvTests\SeriesProviderTest.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
-    <Compile Include="UpdateTests\GetAvailableUpdateFixture.cs" />
     <Compile Include="UpdateTests\GetUpdateLogFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>

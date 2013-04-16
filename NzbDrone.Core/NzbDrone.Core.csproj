@@ -392,7 +392,7 @@
     <Compile Include="Providers\RecycleBinProvider.cs" />
     <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
-    <Compile Include="Lifecycle\AppUpdateJob.cs" />
+    <Compile Include="Update\AppUpdateJob.cs" />
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />
     <Compile Include="Model\Xbmc\VersionResult.cs" />
@@ -529,7 +529,7 @@
     <Compile Include="Tv\SeriesStatusType.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
-    <Compile Include="Update\UpdateProvider.cs" />
+    <Compile Include="Update\UpdateService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
