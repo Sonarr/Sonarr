@@ -66,7 +66,7 @@ namespace NzbDrone.Common
             Logger.Info("Uninstalling {0} service", serviceName);
 
             Stop(serviceName);
-            
+
             var serviceInstaller = new ServiceInstaller();
 
             var context = new InstallContext("service_uninstall.log", null);
@@ -84,9 +84,7 @@ namespace NzbDrone.Common
 
         public virtual ServiceController GetService(string serviceName)
         {
-            return ServiceController.GetServices().Where(
-                    c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase))
-                    .FirstOrDefault();
+            return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public virtual void Stop(string serviceName)

@@ -260,6 +260,9 @@
     <Content Include="Files\JsonError.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="..\NzbDrone.Test.Common\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="Files\RSS\nzbx_search.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -311,10 +314,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="Files\Xem\Ids.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -3,24 +3,28 @@ using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common;
 
-
 namespace NzbDrone
 {
-    public class ApplicationServer : ServiceBase
+    public interface INzbDroneServiceFactory
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        ServiceBase Build();
+        void Start();
+    }
 
+    public class NzbDroneServiceFactory : ServiceBase, INzbDroneServiceFactory
+    {
         private readonly ConfigFileProvider _configFileProvider;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly IHostController _hostController;
         private readonly ProcessProvider _processProvider;
         private readonly PriorityMonitor _priorityMonitor;
         private readonly SecurityProvider _securityProvider;
+        private readonly Logger _logger;
 
-        public ApplicationServer(ConfigFileProvider configFileProvider, IHostController hostController,
+        public NzbDroneServiceFactory(ConfigFileProvider configFileProvider, IHostController hostController,
                           EnvironmentProvider environmentProvider,
                            ProcessProvider processProvider, PriorityMonitor priorityMonitor,
-                           SecurityProvider securityProvider)
+                           SecurityProvider securityProvider, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
@@ -28,6 +32,7 @@ namespace NzbDrone
             _processProvider = processProvider;
             _priorityMonitor = priorityMonitor;
             _securityProvider = securityProvider;
+            _logger = logger;
         }
 
         protected override void OnStart(string[] args)
@@ -35,7 +40,7 @@ namespace NzbDrone
             Start();
         }
 
-        public virtual void Start()
+        public void Start()
         {
             _securityProvider.MakeAccessible();
 
@@ -45,12 +50,12 @@ namespace NzbDrone
             {
                 try
                 {
-                    logger.Info("Starting default browser. {0}", _hostController.AppUrl);
+                    _logger.Info("Starting default browser. {0}", _hostController.AppUrl);
                     _processProvider.Start(_hostController.AppUrl);
                 }
                 catch (Exception e)
                 {
-                    logger.ErrorException("Failed to open URL in default browser.", e);
+                    _logger.ErrorException("Failed to open URL in default browser.", e);
                 }
             }
 
@@ -59,9 +64,15 @@ namespace NzbDrone
 
         protected override void OnStop()
         {
-            logger.Info("Attempting to stop application.");
+            _logger.Info("Attempting to stop application.");
             _hostController.StopServer();
-            logger.Info("Application has finished stop routine.");
+            _logger.Info("Application has finished stop routine.");
+        }
+
+        public ServiceBase Build()
+        {
+            return this;
         }
     }
+
 }

@@ -13,7 +13,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.UpdateTests
 {
     [TestFixture]
-    internal class UpdateServiceFixture : CoreTest<UpdateService>
+    public class UpdateServiceFixture : CoreTest<UpdateService>
     {
         private string _sandboxFolder;
 

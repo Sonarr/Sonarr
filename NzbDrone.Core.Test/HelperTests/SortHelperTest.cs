@@ -6,7 +6,6 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HelperTests
 {
     [TestFixture]
-    
     public class SortHelperTest : CoreTest
     {
         [TestCase("The Office (US)", "Office (US)")]

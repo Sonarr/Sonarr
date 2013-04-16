@@ -7,7 +7,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.UpdateTests
 {
-    class GetUpdateLogFixture : CoreTest<UpdateService>
+    public class GetUpdateLogFixture : CoreTest<UpdateService>
     {
         String _updateLogFolder;
 

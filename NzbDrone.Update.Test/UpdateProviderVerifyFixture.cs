@@ -11,7 +11,7 @@ using NzbDrone.Update.Providers;
 namespace NzbDrone.Update.Test
 {
     [TestFixture]
-    class UpdateProviderVerifyFixture : TestBase
+    public class UpdateProviderVerifyFixture : TestBase
     {
 
 

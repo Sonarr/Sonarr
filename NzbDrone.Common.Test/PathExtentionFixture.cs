@@ -34,25 +34,27 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
         public void normalize_path_exception_empty()
         {
-            "".NormalizePath();
+            Assert.Throws<ArgumentException>(()=> "".NormalizePath());
+            ExceptionVerification.ExpectedWarns(1);
+
+
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
         public void normalize_path_exception_null()
         {
             string nullPath = null;
-            nullPath.NormalizePath();
+            Assert.Throws<ArgumentException>(() => nullPath.NormalizePath());
+            ExceptionVerification.ExpectedWarns(1);
         }
 
 
         [Test]
         public void AppDataDirectory_path_test()
         {
-            GetEnviromentProvider().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\NzbDrone.Web\App_Data\");
+            GetEnviromentProvider().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\App_Data\");
         }
 
 

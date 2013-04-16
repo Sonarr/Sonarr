@@ -22,9 +22,6 @@ namespace NzbDrone.Common
         {
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
 
-            if (String.IsNullOrWhiteSpace(path))
-                throw new ArgumentException("Path can not be null or empty");
-
             var info = new FileInfo(path);
 
             if (info.FullName.StartsWith(@"\\")) //UNC

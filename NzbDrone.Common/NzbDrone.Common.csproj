@@ -119,7 +119,7 @@
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
-    <Compile Include="ConsoleProvider.cs" />
+    <Compile Include="ConsoleService.cs" />
     <Compile Include="Contract\ReportBase.cs" />
     <Compile Include="Contract\ParseErrorReport.cs" />
     <Compile Include="Model\AuthenticationType.cs" />

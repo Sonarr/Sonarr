@@ -4,14 +4,23 @@ using System.IO;
 
 namespace NzbDrone.Common
 {
-    public class ConsoleProvider
+    public interface IConsoleService
     {
-        public static bool IsConsoleApplication
+        bool IsConsoleApplication { get; }
+        void WaitForClose();
+        void PrintHelp();
+        void PrintServiceAlreadyExist();
+        void PrintServiceDoestExist();
+    }
+
+    public class ConsoleService : IConsoleService
+    {
+        public bool IsConsoleApplication
         {
             get { return Console.In != StreamReader.Null; }
         }
 
-        public virtual void WaitForClose()
+        public void WaitForClose()
         {
             while (true)
             {
@@ -19,7 +28,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual void PrintHelp()
+        public void PrintHelp()
         {
             Console.WriteLine();
             Console.WriteLine("     Usage: {0} <command> ", Process.GetCurrentProcess().MainModule.ModuleName);
@@ -29,12 +38,12 @@ namespace NzbDrone.Common
             Console.WriteLine("                 <No Arguments>  Run application in console mode.");
         }
 
-        public virtual void PrintServiceAlreadyExist()
+        public void PrintServiceAlreadyExist()
         {
             Console.WriteLine("A service with the same name ({0}) already exists. Aborting installation", ServiceProvider.NZBDRONE_SERVICE_NAME);
         }
 
-        public virtual void PrintServiceDoestExist()
+        public void PrintServiceDoestExist()
         {
             Console.WriteLine("Can't find service ({0})", ServiceProvider.NZBDRONE_SERVICE_NAME);
         }

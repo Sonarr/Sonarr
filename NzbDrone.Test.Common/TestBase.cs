@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using FluentAssertions;
 using Moq;
 using NLog;
 using NUnit.Framework;
@@ -69,6 +70,8 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
+            GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
+
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
 

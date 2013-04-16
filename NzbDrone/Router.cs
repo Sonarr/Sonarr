@@ -9,19 +9,19 @@ namespace NzbDrone
 {
     public class Router
     {
-        private readonly ApplicationServer _applicationServer;
+        private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly ServiceProvider _serviceProvider;
-        private readonly ConsoleProvider _consoleProvider;
+        private readonly IConsoleService _consoleService;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly SysTrayProvider _sysTrayProvider;
         private readonly Logger _logger;
 
-        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider,
-                        ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider, SysTrayProvider sysTrayProvider, Logger logger)
+        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, ServiceProvider serviceProvider,
+                        IConsoleService consoleService, EnvironmentProvider environmentProvider, SysTrayProvider sysTrayProvider, Logger logger)
         {
-            _applicationServer = applicationServer;
+            _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
-            _consoleProvider = consoleProvider;
+            _consoleService = consoleService;
             _environmentProvider = environmentProvider;
             _sysTrayProvider = sysTrayProvider;
             _logger = logger;
@@ -46,17 +46,18 @@ namespace NzbDrone
                 case ApplicationModes.Service:
                     {
                         _logger.Trace("Service selected");
-                        _serviceProvider.Run(_applicationServer);
+                        _serviceProvider.Run(_nzbDroneServiceFactory.Build());
                         break;
                     }
 
                 case ApplicationModes.Console:
                     {
                         _logger.Trace("Console selected");
-                        _applicationServer.Start();
-                        if (ConsoleProvider.IsConsoleApplication)
-                            _consoleProvider.WaitForClose();
-
+                        _nzbDroneServiceFactory.Start();
+                        if (_consoleService.IsConsoleApplication)
+                        {
+                            _consoleService.WaitForClose();
+                        }
                         else
                         {
                             _sysTrayProvider.Start();
@@ -69,7 +70,7 @@ namespace NzbDrone
                         _logger.Trace("Install Service selected");
                         if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
-                            _consoleProvider.PrintServiceAlreadyExist();
+                            _consoleService.PrintServiceAlreadyExist();
                         }
                         else
                         {
@@ -83,7 +84,7 @@ namespace NzbDrone
                         _logger.Trace("Uninstall Service selected");
                         if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
-                            _consoleProvider.PrintServiceDoestExist();
+                            _consoleService.PrintServiceDoestExist();
                         }
                         else
                         {
@@ -94,7 +95,7 @@ namespace NzbDrone
                     }
                 default:
                     {
-                        _consoleProvider.PrintHelp();
+                        _consoleService.PrintHelp();
                         break;
                     }
             }

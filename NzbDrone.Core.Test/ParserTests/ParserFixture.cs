@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Common.Contract;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Model;

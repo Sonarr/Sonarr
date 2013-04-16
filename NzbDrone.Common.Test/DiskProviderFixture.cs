@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -10,26 +11,25 @@ namespace NzbDrone.Common.Test
     [TestFixture]
     public class DiskProviderFixture : TestBase
     {
-        DirectoryInfo BinFolder;
-        DirectoryInfo BinFolderCopy;
-        DirectoryInfo BinFolderMove;
+        DirectoryInfo _binFolder;
+        DirectoryInfo _binFolderCopy;
+        DirectoryInfo _binFolderMove;
 
         [SetUp]
         public void Setup()
         {
-            var binRoot = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent;
-            BinFolder = new DirectoryInfo(Path.Combine(binRoot.FullName, "bin"));
-            BinFolderCopy = new DirectoryInfo(Path.Combine(binRoot.FullName, "bin_copy"));
-            BinFolderMove = new DirectoryInfo(Path.Combine(binRoot.FullName, "bin_move"));
+            _binFolder = new DirectoryInfo(Directory.GetCurrentDirectory());
+            _binFolderCopy = new DirectoryInfo(Path.Combine(_binFolder.Parent.FullName, "bin_copy"));
+            _binFolderMove = new DirectoryInfo(Path.Combine(_binFolder.Parent.FullName, "bin_move"));
 
-            if (BinFolderCopy.Exists)
+            if (_binFolderCopy.Exists)
             {
-                BinFolderCopy.Delete(true);
+                _binFolderCopy.Delete(true);
             }
 
-            if (BinFolderMove.Exists)
+            if (_binFolderMove.Exists)
             {
-                BinFolderMove.Delete(true);
+                _binFolderMove.Delete(true);
             }
         }
 
@@ -44,7 +44,7 @@ namespace NzbDrone.Common.Test
         {
             Mocker.Resolve<DiskProvider>().FolderExists(@"\\localhost\c$").Should().BeTrue();
         }
-        
+
         [Test]
         public void directory_exist_should_not_be_able_to_find_none_existing_folder()
         {
@@ -55,12 +55,12 @@ namespace NzbDrone.Common.Test
         public void moveFile_should_overwrite_existing_file()
         {
             var diskProvider = new DiskProvider();
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
 
-            var targetPath = Path.Combine(BinFolderCopy.FullName, "file.move");
+            var targetPath = Path.Combine(_binFolderCopy.FullName, "file.move");
 
-            diskProvider.MoveFile(BinFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName, targetPath);
-            diskProvider.MoveFile(BinFolderCopy.GetFiles("*.pdb", SearchOption.AllDirectories).First().FullName, targetPath);
+            diskProvider.MoveFile(_binFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName, targetPath);
+            diskProvider.MoveFile(_binFolderCopy.GetFiles("*.pdb", SearchOption.AllDirectories).First().FullName, targetPath);
 
             File.Exists(targetPath).Should().BeTrue();
         }
@@ -69,9 +69,9 @@ namespace NzbDrone.Common.Test
         public void moveFile_should_not_move_overwrite_itself()
         {
             var diskProvider = new DiskProvider();
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
 
-            var targetPath = BinFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName;
+            var targetPath = _binFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName;
 
             diskProvider.MoveFile(targetPath, targetPath);
 
@@ -82,11 +82,11 @@ namespace NzbDrone.Common.Test
         [Test]
         public void CopyFolder_should_copy_folder()
         {
-            
-            var diskProvider = new DiskProvider();
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
 
-            
+            var diskProvider = new DiskProvider();
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+
+
             VerifyCopy();
         }
 
@@ -94,18 +94,18 @@ namespace NzbDrone.Common.Test
         [Test]
         public void CopyFolder_should_overright_existing_folder()
         {
-            
+
             var diskProvider = new DiskProvider();
 
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
 
             //Delete Random File
-            BinFolderCopy.Refresh();
-            BinFolderCopy.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
+            _binFolderCopy.Refresh();
+            _binFolderCopy.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
 
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
 
-            
+
             VerifyCopy();
         }
 
@@ -114,14 +114,14 @@ namespace NzbDrone.Common.Test
         {
             var diskProvider = new DiskProvider();
 
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
-            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderMove.FullName);
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+            diskProvider.CopyDirectory(_binFolder.FullName, _binFolderMove.FullName);
             VerifyCopy();
 
-            
-            diskProvider.MoveDirectory(BinFolderCopy.FullName, BinFolderMove.FullName);
 
-            
+            diskProvider.MoveDirectory(_binFolderCopy.FullName, _binFolderMove.FullName);
+
+
             VerifyMove();
         }
 
@@ -169,8 +169,8 @@ namespace NzbDrone.Common.Test
         [Explicit]
         public void check_last_write()
         {
-           Console.WriteLine(Mocker.Resolve<DiskProvider>().GetLastFolderWrite(@"C:\DRIVERS"));
-           Console.WriteLine(new DirectoryInfo(@"C:\DRIVERS").LastWriteTimeUtc);
+            Console.WriteLine(Mocker.Resolve<DiskProvider>().GetLastFolderWrite(@"C:\DRIVERS"));
+            Console.WriteLine(new DirectoryInfo(@"C:\DRIVERS").LastWriteTimeUtc);
         }
 
         [Test]
@@ -187,27 +187,27 @@ namespace NzbDrone.Common.Test
 
         private void VerifyCopy()
         {
-            BinFolder.Refresh();
-            BinFolderCopy.Refresh();
+            _binFolder.Refresh();
+            _binFolderCopy.Refresh();
 
-            BinFolderCopy.GetFiles("*.*", SearchOption.AllDirectories)
-               .Should().HaveSameCount(BinFolder.GetFiles("*.*", SearchOption.AllDirectories));
+            _binFolderCopy.GetFiles("*.*", SearchOption.AllDirectories)
+               .Should().HaveSameCount(_binFolder.GetFiles("*.*", SearchOption.AllDirectories));
 
-            BinFolderCopy.GetDirectories().Should().HaveSameCount(BinFolder.GetDirectories());
+            _binFolderCopy.GetDirectories().Should().HaveSameCount(_binFolder.GetDirectories());
         }
 
         private void VerifyMove()
         {
-            BinFolder.Refresh();
-            BinFolderCopy.Refresh();
-            BinFolderMove.Refresh();
+            _binFolder.Refresh();
+            _binFolderCopy.Refresh();
+            _binFolderMove.Refresh();
 
-            BinFolderCopy.Exists.Should().BeFalse();
+            _binFolderCopy.Exists.Should().BeFalse();
 
-            BinFolderMove.GetFiles("*.*", SearchOption.AllDirectories)
-               .Should().HaveSameCount(BinFolder.GetFiles("*.*", SearchOption.AllDirectories));
+            _binFolderMove.GetFiles("*.*", SearchOption.AllDirectories)
+               .Should().HaveSameCount(_binFolder.GetFiles("*.*", SearchOption.AllDirectories));
 
-            BinFolderMove.GetDirectories().Should().HaveSameCount(BinFolder.GetDirectories());
+            _binFolderMove.GetDirectories().Should().HaveSameCount(_binFolder.GetDirectories());
         }
     }
 }

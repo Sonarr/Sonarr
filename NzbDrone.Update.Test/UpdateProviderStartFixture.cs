@@ -12,7 +12,7 @@ using NzbDrone.Update.Providers;
 namespace NzbDrone.Update.Test
 {
     [TestFixture]
-    class UpdateProviderStartFixture : TestBase
+   public class UpdateProviderStartFixture : TestBase
     {
         private const string UPDATE_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone\";
         private const string BACKUP_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone_backup\";

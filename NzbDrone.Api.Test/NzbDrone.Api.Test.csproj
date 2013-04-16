@@ -74,12 +74,19 @@
       <Project>{f2be0fdf-6e47-4827-a420-dd4ef82407f8}</Project>
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
+      <Project>{ff5ee3b6-913b-47ce-9ceb-11c51b4e1205}</Project>
+      <Name>NzbDrone.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\NzbDrone.Test.Common\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

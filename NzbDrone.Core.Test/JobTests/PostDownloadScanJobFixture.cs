@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    internal class PostDownloadScanJobFixture : CoreTest<PostDownloadScanJob>
+    public class PostDownloadScanJobFixture : CoreTest<PostDownloadScanJob>
     {
         [SetUp]
         public void Setup()
