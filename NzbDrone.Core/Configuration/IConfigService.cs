@@ -78,6 +78,7 @@ namespace NzbDrone.Core.Configuration
         PriorityType NzbgetBacklogTvPriority { get; set; }
         PriorityType NzbgetRecentTvPriority { get; set; }
         string NzbRestrictions { get; set; }
+        string AllowedReleaseGroups { get; set; }
         string GetValue(string key, object defaultValue, bool persist = false);
         void SetValue(string key, string value);
         void SaveValues(Dictionary<string, object> configValues);

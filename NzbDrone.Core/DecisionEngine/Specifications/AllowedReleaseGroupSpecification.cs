@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Model;
@@ -33,25 +34,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             //Todo: Make this use NzbRestrictions - How should whitelist be used? Will it override blacklist or vice-versa?
 
-            //var allowed = _configService.AllowedReleaseGroups;
-            const string allowed = "";
+            var allowed = _configService.AllowedReleaseGroups;
 
             if (string.IsNullOrWhiteSpace(allowed))
                 return true;
 
-            var releaseGroup = subject.Report.ReleaseGroup;
+            var reportReleaseGroup = subject.Report.ReleaseGroup.ToLower();
 
-            foreach (var group in allowed.Trim(',', ' ').Split(','))
-            {
-                if (releaseGroup.Equals(group.Trim(' '), StringComparison.CurrentCultureIgnoreCase))
-                {
-                    _logger.Trace("Item: {0}'s release group is wanted: {1}", subject, releaseGroup);
-                    return true;
-                }
-            }
-
-            _logger.Trace("Item: {0}'s release group is not wanted: {1}", subject, releaseGroup);
-            return false;
+            return allowed.ToLower().Split(',').Any(allowedGroup => allowedGroup.Trim() == reportReleaseGroup);
         }
     }
 }
