@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 
@@ -14,17 +13,19 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
+        private readonly IJsonSerializer _jsonSerializer;
 
-        public SceneMappingProxy(IHttpProvider httpProvider, IConfigService configService)
+        public SceneMappingProxy(IHttpProvider httpProvider, IConfigService configService, IJsonSerializer jsonSerializer)
         {
             _httpProvider = httpProvider;
             _configService = configService;
+            _jsonSerializer = jsonSerializer;
         }
 
         public List<SceneMapping> Fetch()
         {
             var mappingsJson = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/SceneMapping/Active");
-            return JsonConvert.DeserializeObject<List<SceneMapping>>(mappingsJson);
+            return _jsonSerializer.Deserialize<List<SceneMapping>>(mappingsJson);
         }
     }
 }

@@ -1,12 +1,19 @@
 ﻿using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
-using Newtonsoft.Json;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
     public class EmbeddedDocumentConverter : IConverter
     {
+        private readonly IJsonSerializer _serializer;
+
+        public EmbeddedDocumentConverter(IJsonSerializer serializer)
+        {
+            _serializer = serializer;
+        }
+
         public object FromDB(ColumnMap map, object dbValue)
         {
             if (dbValue == DBNull.Value)
@@ -21,14 +28,14 @@ namespace NzbDrone.Core.Datastore.Converters
                 return null;
             }
 
-            return JsonConvert.DeserializeObject(stringValue, map.FieldType);
+            return  _serializer.Deserialize(stringValue, map.FieldType);
         }
 
         public object ToDB(object clrValue)
         {
             if (clrValue == null) return null;
 
-            var json = JsonConvert.SerializeObject(clrValue);
+            var json = _serializer.Serialize(clrValue);
             return json;
         }
 

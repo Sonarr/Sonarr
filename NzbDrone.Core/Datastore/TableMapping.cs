@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data;
 using Marr.Data.Mapping;
+using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DataAugmentation;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.ExternalNotification;
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Datastore
                                                           .Where(c => c.GetInterfaces().Any(i => i == typeof(IEmbeddedDocument)));
 
 
-            var embeddedConvertor = new EmbeddedDocumentConverter();
+            var embeddedConvertor = new EmbeddedDocumentConverter(new JsonSerializer());
             var genericListDefinition = typeof(List<>).GetGenericTypeDefinition();
             foreach (var embeddedType in embeddedTypes)
             {

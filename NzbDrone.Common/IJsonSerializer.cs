@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -9,6 +10,7 @@ namespace NzbDrone.Common
         T Deserialize<T>(string json) where T : class, new();
         string Serialize(object obj);
         void Serialize<TModel>(TModel model, Stream outputStream);
+        object Deserialize(string json, Type type);
     }
 
     public class JsonSerializer : IJsonSerializer
@@ -42,6 +44,11 @@ namespace NzbDrone.Common
             return JsonConvert.DeserializeObject<T>(json);
         }
 
+        public object Deserialize(string json, Type type)
+        {
+            return JsonConvert.DeserializeObject(json, type);
+        }
+
         public string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj);
@@ -54,5 +61,7 @@ namespace NzbDrone.Common
             _jsonNetSerializer.Serialize(jsonTextWriter, model);
             jsonTextWriter.Flush();
         }
+
+
     }
 }

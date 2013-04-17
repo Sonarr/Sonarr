@@ -74,6 +74,7 @@ namespace NzbDrone.Test.Common
 
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
+            Mocker.SetConstant<IJsonSerializer>(new JsonSerializer());
 
             LogManager.ReconfigExistingLoggers();
 
