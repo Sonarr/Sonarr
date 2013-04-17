@@ -1,13 +1,14 @@
 ﻿using System;
 using NLog.Config;
 using NLog;
+using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Common;
 
 namespace NzbDrone.Core.Instrumentation
 {
 
-    public class DatabaseTarget : Target
+    public class DatabaseTarget : TargetWithLayout
     {
         private readonly ILogRepository _repository;
 
@@ -18,23 +19,20 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Register()
         {
+            Layout = new SimpleLayout("${callsite:className=false:fileName=false:includeSourcePath=false:methodName=true}");
+
             LogManager.Configuration.AddTarget("DbLogger", this);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, this));
-
             LogManager.ConfigurationReloaded += (sender, args) => Register();
         }
-        
+
 
         protected override void Write(LogEventInfo logEvent)
         {
             var log = new Log();
             log.Time = logEvent.TimeStamp;
             log.Message = logEvent.FormattedMessage;
-
-            if (logEvent.UserStackFrame != null)
-            {
-                log.Method = logEvent.UserStackFrame.GetMethod().Name;
-            }
+            log.Method = Layout.Render(logEvent);
 
             log.Logger = logEvent.LoggerName;
 
