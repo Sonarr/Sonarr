@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Model.Nzbx
         public int CategoryId { get; set; }
         public string ImdbId { get; set; }
         public string AnidbId { get; set; }
-        public int RageId { get; set; }
+        public long RageId { get; set; }
         public int Comments { get; set; }
         public int Downloads { get; set; }
         public NzbxVotesModel Votes { get; set; }

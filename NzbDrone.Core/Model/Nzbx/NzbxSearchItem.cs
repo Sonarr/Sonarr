@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Model.Nzbx
         public int Completion { get; set; }
         public int CategoryId { get; set; }
         public string ImdbId { get; set; }
-        public int RageId { get; set; }
+        public long RageId { get; set; }
         public int Comments { get; set; }
         public int Downloads { get; set; }
         public NzbxVotesModel Votes { get; set; }
