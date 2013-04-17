@@ -47,15 +47,19 @@ namespace NzbDrone.Core.Tv
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IEventAggregator _eventAggregator;
         private readonly IConfigService _configService;
+        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public EpisodeService(IProvideEpisodeInfo episodeInfoProxy, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, IEventAggregator eventAggregator, IConfigService configService, Logger logger)
+        public EpisodeService(IProvideEpisodeInfo episodeInfoProxy, ISeasonRepository seasonRepository,
+                              IEpisodeRepository episodeRepository, IEventAggregator eventAggregator,
+                              IConfigService configService, ISeriesService seriesService, Logger logger)
         {
             _episodeInfoProxy = episodeInfoProxy;
             _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
             _eventAggregator = eventAggregator;
             _configService = configService;
+            _seriesService = seriesService;
             _logger = logger;
         }
 
@@ -89,7 +93,6 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-
         public List<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
             return _episodeRepository.EpisodesWithoutFiles(includeSpecials);
@@ -111,7 +114,7 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-            var tvdbEpisodes = _episodeInfoProxy.GetEpisodeInfo(series.TvDbId);
+            var tvdbEpisodes = _episodeInfoProxy.GetEpisodeInfo(series.TvdbId);
 
             var seriesEpisodes = GetEpisodeBySeries(series.Id);
             var updateList = new List<Episode>();
@@ -281,7 +284,15 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end)
         {
-            return _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
+            var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
+            var series = _seriesService.GetSeriesInList(episodes.Select(e => e.SeriesId).Distinct());
+
+            episodes.ForEach(e =>
+                                 {
+                                     e.Series = series.SingleOrDefault(s => s.Id == e.SeriesId);
+                                 });
+
+            return episodes;
         }
 
         public void Handle(EpisodeGrabbedEvent message)

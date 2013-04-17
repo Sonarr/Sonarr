@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Tv
             Images = new List<MediaCover.MediaCover>();
         }
 
-        public int TvDbId { get; set; }
+        public int TvdbId { get; set; }
         public int TvRageId { get; set; }
         public string ImdbId { get; set; }
         public string Title { get; set; }

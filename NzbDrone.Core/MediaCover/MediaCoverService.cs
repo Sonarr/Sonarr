@@ -55,7 +55,7 @@ namespace NzbDrone.Core.MediaCover
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't download media cover for " + series.TvDbId, e);
+                _logger.ErrorException("Couldn't download media cover for " + series.TvdbId, e);
             }
         }
 

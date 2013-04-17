@@ -54,7 +54,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public string GetSceneName(int seriesId, int seasonNumber = -1)
         {
-            var tvDbId = _seriesService.FindByTvdbId(seriesId).TvDbId;
+            var tvDbId = _seriesService.FindByTvdbId(seriesId).TvdbId;
 
             var mapping = _repository.FindByTvdbId(tvDbId);
 

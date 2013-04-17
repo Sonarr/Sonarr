@@ -47,7 +47,7 @@ namespace NzbDrone.Core.MetadataSource
         private static Series MapSeries(Show show)
         {
             var series = new Series();
-            series.TvDbId = show.tvdb_id;
+            series.TvdbId = show.tvdb_id;
             series.TvRageId = show.tvrage_id;
             series.ImdbId = show.imdb_id;
             series.Title = show.title;

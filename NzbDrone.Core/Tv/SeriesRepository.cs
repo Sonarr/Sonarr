@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void SetTvRageId(int seriesId, int tvRageId);
+        List<Series> SeriesIsInList(IEnumerable<int> ids);
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTvdbId(int tvdbId)
         {
-            return Query.SingleOrDefault(s => s.TvDbId.Equals(tvdbId));
+            return Query.SingleOrDefault(s => s.TvdbId.Equals(tvdbId));
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesType)
@@ -50,6 +51,11 @@ namespace NzbDrone.Core.Tv
         public void SetTvRageId(int seriesId, int tvRageId)
         {
             SetFields(new Series { Id = seriesId, TvRageId = tvRageId }, s => s.TvRageId);
+        }
+
+        public List<Series> SeriesIsInList(IEnumerable<int> ids)
+        {
+            return Query.Where(String.Format("Id IN ({0})", String.Join(",", ids)));
         }
     }
 }

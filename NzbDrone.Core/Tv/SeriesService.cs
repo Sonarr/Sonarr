@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Tv
         List<Series> GetAllSeries();
         void UpdateSeries(Series series);
         bool SeriesPathExists(string folder);
+        List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
     }
 
     public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
@@ -63,11 +64,10 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.Get(id).Monitored;
         }
 
-
         public Series UpdateSeriesInfo(int seriesId)
         {
             var series = _seriesRepository.Get(seriesId);
-            var seriesInfo = _seriesInfoProxy.GetSeriesInfo(series.TvDbId);
+            var seriesInfo = _seriesInfoProxy.GetSeriesInfo(series.TvdbId);
 
             series.Title = seriesInfo.Title;
             series.AirTime = seriesInfo.AirTime;
@@ -177,6 +177,11 @@ namespace NzbDrone.Core.Tv
         public bool SeriesPathExists(string folder)
         {
             return _seriesRepository.SeriesPathExists(folder);
+        }
+
+        public List<Series> GetSeriesInList(IEnumerable<int> seriesIds)
+        {
+            return _seriesRepository.SeriesIsInList(seriesIds);
         }
 
         public void HandleAsync(SeriesAddedEvent message)
