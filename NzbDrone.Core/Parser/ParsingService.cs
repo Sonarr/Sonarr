@@ -53,8 +53,16 @@ namespace NzbDrone.Core.Parser
 
         public Series GetSeries(string title)
         {
+            var searchTitle = title;
+
             var parseResult = Parser.ParseTitle(title);
-            return _seriesService.FindByTitle(parseResult.SeriesTitle);
+
+            if (parseResult != null)
+            {
+                searchTitle = parseResult.SeriesTitle;
+            }
+
+            return _seriesService.FindByTitle(searchTitle);
         }
 
         public RemoteEpisode Map(ReportInfo indexerParseResult)

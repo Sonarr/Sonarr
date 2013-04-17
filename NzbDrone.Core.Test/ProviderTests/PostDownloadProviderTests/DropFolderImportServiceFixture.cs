@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
@@ -45,6 +46,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.GetLastFolderWrite(It.IsAny<String>()))
                 .Returns(DateTime.UtcNow);
+
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.GetLastFileWrite(It.IsAny<String>()))
+                .Returns(DateTime.UtcNow);
         }
 
         [Test]
@@ -73,7 +78,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Subject.ProcessDropFolder("c:\\drop\\");
 
-            Mocker.GetMock<ISeriesService>().Verify(c => c.FindByTitle("foldername"), Times.Once());
+            Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
 
         }
 

@@ -95,7 +95,7 @@ namespace NzbDrone.Update.Test
             var proccesses = Builder<ProcessInfo>.CreateListOfSize(2).Build().ToList();
 
             Mocker.GetMock<ProcessProvider>()
-                .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProccessName))
+                .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProcessName))
                 .Returns(proccesses);
 
             
@@ -110,7 +110,7 @@ namespace NzbDrone.Update.Test
         public void should_not_kill_nzbdrone_process_not_running()
         {
             Mocker.GetMock<ProcessProvider>()
-                .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProccessName))
+                .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProcessName))
                 .Returns(new List<ProcessInfo>());
 
             

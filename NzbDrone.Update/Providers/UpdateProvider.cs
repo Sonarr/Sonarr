@@ -65,13 +65,13 @@ namespace NzbDrone.Update.Providers
 
             //TODO:Should be able to restart service if anything beyond this point fails
             logger.Info("Killing all running processes");
-            var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
+            var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProcessName);
             foreach (var processInfo in processes)
             {
                 _processProvider.Kill(processInfo.Id);
             }
 
-            var consoleProcesses = _processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProccessName);
+            var consoleProcesses = _processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProcessName);
             foreach (var processInfo in consoleProcesses)
             {
                 appType = AppType.Console;

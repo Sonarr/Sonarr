@@ -10,8 +10,8 @@ namespace NzbDrone.Common
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static readonly string NzbDroneProccessName = "NzbDrone";
-        public static readonly string NzbDroneConsoleProccessName = "NzbDrone.Console";
+        public const string NzbDroneProcessName = "NzbDrone";
+        public const string NzbDroneConsoleProcessName = "NzbDrone.Console";
 
         public virtual ProcessInfo GetCurrentProcess()
         {
@@ -66,7 +66,7 @@ namespace NzbDrone.Common
 
         public virtual void Kill(int processId)
         {
-            if (processId == 0 || !Process.GetProcesses().Any(p => p.Id == processId))
+            if (processId == 0 || Process.GetProcesses().All(p => p.Id != processId))
             {
                 Logger.Warn("Cannot find process with id: {0}", processId);
                 return;
@@ -74,14 +74,16 @@ namespace NzbDrone.Common
 
             var process = Process.GetProcessById(processId);
 
-            if (!process.HasExited)
+            if (process.HasExited)
             {
-                Logger.Info("[{0}]: Killing process", process.Id);
-                process.Kill();
-                Logger.Info("[{0}]: Waiting for exit", process.Id);
-                process.WaitForExit();
-                Logger.Info("[{0}]: Process terminated successfully", process.Id);
+                return;
             }
+
+            Logger.Info("[{0}]: Killing process", process.Id);
+            process.Kill();
+            Logger.Info("[{0}]: Waiting for exit", process.Id);
+            process.WaitForExit();
+            Logger.Info("[{0}]: Process terminated successfully", process.Id);
         }
 
         public virtual void SetPriority(int processId, ProcessPriorityClass priority)

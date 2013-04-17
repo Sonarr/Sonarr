@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using NLog;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
@@ -17,7 +14,6 @@ namespace NzbDrone.Core.Providers
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public MisnamedProvider(IEpisodeService episodeService, IBuildFileNames buildFileNames)
         {
@@ -31,8 +27,6 @@ namespace NzbDrone.Core.Providers
 
             var episodesWithFiles = _episodeService.EpisodesWithFiles().GroupBy(e => e.EpisodeFileId).ToList();
             totalItems = episodesWithFiles.Count();
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
 
             var misnamedFilesSelect = episodesWithFiles.AsParallel().Where(
                 w =>
@@ -41,27 +35,27 @@ namespace NzbDrone.Core.Providers
 
             //Process the episodes
             misnamedFilesSelect.AsParallel().ForAll(f =>
-                                                      {
-                                                          var episodes = f.Select(e => e).ToList();
-                                                          var firstEpisode = episodes[0];
-                                                          var properName = _buildFileNames.BuildFilename(episodes, firstEpisode.Series, firstEpisode.EpisodeFile);
+                {
+                    var episodes = f.Select(e => e).ToList();
+                    var firstEpisode = episodes[0];
+                    var properName = _buildFileNames.BuildFilename(episodes, firstEpisode.Series,
+                                                                   firstEpisode.EpisodeFile);
 
-                                                          var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Path);
+                    var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Path);
 
-                                                          if (properName != currentName)
-                                                          {
-                                                              misnamedFiles.Add(new MisnamedEpisodeModel
-                                                              {
-                                                                  CurrentName = currentName,
-                                                                  EpisodeFileId = firstEpisode.EpisodeFileId,
-                                                                  ProperName = properName,
-                                                                  SeriesId = firstEpisode.SeriesId,
-                                                                  SeriesTitle = firstEpisode.Series.Title
-                                                              });
-                                                          }
-                                                      });
+                    if (properName != currentName)
+                    {
+                        misnamedFiles.Add(new MisnamedEpisodeModel
+                            {
+                                CurrentName = currentName,
+                                EpisodeFileId = firstEpisode.EpisodeFileId,
+                                ProperName = properName,
+                                SeriesId = firstEpisode.SeriesId,
+                                SeriesTitle = firstEpisode.Series.Title
+                            });
+                    }
+                });
 
-            stopwatch.Stop();
             return misnamedFiles.OrderBy(e => e.SeriesTitle).ToList();
         }
     }
