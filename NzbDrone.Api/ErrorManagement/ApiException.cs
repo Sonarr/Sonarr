@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Nancy;
 using Nancy.Responses;
-using Newtonsoft.Json;
 using NzbDrone.Api.Extensions;
 
 namespace NzbDrone.Api.ErrorManagement
@@ -15,7 +13,7 @@ namespace NzbDrone.Api.ErrorManagement
         public HttpStatusCode StatusCode { get; private set; }
 
         protected ApiException(HttpStatusCode statusCode, object content = null)
-                : base(GetMessage(statusCode, content))
+            : base(GetMessage(statusCode, content))
         {
             StatusCode = statusCode;
             Content = content;
@@ -32,7 +30,7 @@ namespace NzbDrone.Api.ErrorManagement
 
             if (content != null)
             {
-                result = result + " :" + JsonConvert.SerializeObject(content);
+                result = result + " :" + content;
             }
 
             return result;

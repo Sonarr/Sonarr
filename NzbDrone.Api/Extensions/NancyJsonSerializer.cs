@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Nancy;
-using Newtonsoft.Json;
+using NzbDrone.Common;
 
 namespace NzbDrone.Api.Extensions
 {
     public class NancyJsonSerializer : ISerializer
     {
-        public readonly static NancyJsonSerializer Instance = new NancyJsonSerializer();
+        private readonly IJsonSerializer _jsonSerializer;
+
+        public NancyJsonSerializer(IJsonSerializer jsonSerializer)
+        {
+            _jsonSerializer = jsonSerializer;
+        }
+
 
         public bool CanSerialize(string contentType)
         {
@@ -17,9 +22,7 @@ namespace NzbDrone.Api.Extensions
 
         public void Serialize<TModel>(string contentType, TModel model, Stream outputStream)
         {
-            var jsonTextWriter = new JsonTextWriter(new StreamWriter(outputStream));
-            Serializer.Instance.Serialize(jsonTextWriter, model);
-            jsonTextWriter.Flush();
+            _jsonSerializer.Serialize(model, outputStream);
         }
 
         public IEnumerable<string> Extensions { get; private set; }

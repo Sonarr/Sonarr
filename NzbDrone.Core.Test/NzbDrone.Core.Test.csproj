@@ -91,8 +91,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NCrunch.Framework.1.45.0.11\lib\net35\NCrunch.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -171,7 +170,6 @@
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
-    <Compile Include="Services\ParseErrorServiceFixture.cs" />
     <Compile Include="HelperTests\SortHelperTest.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="Qualities\QualitySizeServiceFixture.cs" />

@@ -1,10 +1,11 @@
 ﻿using NUnit.Framework;
-using Newtonsoft.Json;
+using NzbDrone.Common;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Libraries.Test.Json
 {
     [TestFixture]
-    public class JsonFixture
+    public class JsonFixture : TestBase<JsonSerializer>
     {
         public class TypeWithNumbers
         {
@@ -16,9 +17,9 @@ namespace NzbDrone.Libraries.Test.Json
         {
             var quality = new TypeWithNumbers { Id = 12 };
 
-            var json = JsonConvert.SerializeObject(quality);
+            var json = Subject.Serialize(quality);
 
-            JsonConvert.DeserializeObject(json);
+            Subject.Deserialize<TypeWithNumbers>(json);
         }
     }
 }

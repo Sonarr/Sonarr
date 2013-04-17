@@ -1,25 +1,26 @@
 ﻿using System.IO;
-using System.Linq;
 using Nancy;
 using Nancy.Responses;
-using Newtonsoft.Json;
+using NzbDrone.Common;
 
 namespace NzbDrone.Api.Extensions
 {
     public static class JsonExtensions
     {
-        public static T FromJson<T>(this Stream body)
+        private static readonly JsonSerializer Serializer = new JsonSerializer();
+        private static readonly NancyJsonSerializer NancySerializer = new NancyJsonSerializer(Serializer);
+
+        public static T FromJson<T>(this Stream body) where T : class, new()
         {
             var reader = new StreamReader(body, true);
             body.Position = 0;
             var value = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<T>(value, Serializer.Settings);
+            return Serializer.Deserialize<T>(value);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            var jsonResponse = new JsonResponse<TModel>(model, new NancyJsonSerializer()) { StatusCode = statusCode };
-            return jsonResponse;
+            return new JsonResponse<TModel>(model, NancySerializer) { StatusCode = statusCode };
         }
     }
 }

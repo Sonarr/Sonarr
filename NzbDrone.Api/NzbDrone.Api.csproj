@@ -66,10 +66,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NLog, Version=2.0.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
@@ -86,7 +82,6 @@
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
-    <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="Frontend\IndexModule.cs" />
     <Compile Include="Frontend\StaticResourceProvider.cs" />
     <Compile Include="Frontend\StaticResourceMapper.cs" />
