@@ -7,7 +7,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 {
@@ -33,11 +32,10 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         }
 
         [Test]
-        public void should_get_episodes_with_attached_series()
+        public void should_get_episodes()
         {
             var episodes = Subject.EpisodesBetweenDates(DateTime.Today.AddDays(-1), DateTime.Today.AddDays(3));
             episodes.Should().HaveCount(1);
-            episodes.First().Series.Should().NotBeNull();
         }
     }
 }
