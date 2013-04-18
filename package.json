@@ -4,7 +4,7 @@
   "description": "NZBDrone\r =====",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "npm install grunt-cli -g"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,7 @@
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
     "grunt-wrap": "*",
-    "grunt-curl": "*",
-    "grunt-notify":"*"
-  },
-  "scripts": {
-  "preinstall": "npm install grunt-cli -g"
-}
+    "grunt-curl": "~0.6.0",
+    "grunt-notify": "*"
+  }
 }
