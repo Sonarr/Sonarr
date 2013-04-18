@@ -82,10 +82,8 @@ define('app', function () {
                 return '<i class="icon-play grid-icon" title="Continuing"></i>';
             }
 
-            return null;
+            return '<i class="icon-stop grid-icon" title="Ended"></i>';
         });
-
-        return '<i class="icon-stop grid-icon" title="Ended"></i>';
     });
 
     NzbDrone.addRegions({
