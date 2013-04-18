@@ -15,7 +15,7 @@ define(['app', 'Calendar/CalendarItemView'], function () {
             this.calendar = new NzbDrone.Calendar.CalendarCollection();
         },
         onCompositeCollectionRendered: function () {
-            $(this.ui.calendar).fullCalendar({
+            $(this.ui.calendar).empty().fullCalendar({
                 allDayDefault : false,
                 ignoreTimezone: false,
                 weekMode      : 'variable',
