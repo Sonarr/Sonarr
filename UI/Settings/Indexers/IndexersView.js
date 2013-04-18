@@ -6,6 +6,6 @@ define([
 ], function () {
 
     NzbDrone.Settings.Indexers.IndexersView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Indexers/IndexersTemplate',
+        template: 'Settings/Indexers/IndexersTemplate'
     });
 });

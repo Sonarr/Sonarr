@@ -42,6 +42,7 @@ define('app', function () {
     window.NzbDrone.AddSeries.RootFolders = {};
     window.NzbDrone.Quality = {};
     window.NzbDrone.Shared = {};
+    window.NzbDrone.Shared.Toolbar = {};
     window.NzbDrone.Upcoming = {};
     window.NzbDrone.Calendar = {};
     window.NzbDrone.Settings = {};

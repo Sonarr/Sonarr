@@ -1,12 +1,19 @@
 ﻿'use strict';
 
 define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView', 'Config'], function (app, qualityProfileCollection) {
+
+    NzbDrone.Series.Index.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
+        template: 'Series/Index/EmptySeriesIndexTemplate',
+        tagName : 'tr'
+    });
+
     NzbDrone.Series.Index.SeriesIndexCollectionView = Backbone.Marionette.CompositeView.extend({
         itemView                : NzbDrone.Series.Index.SeriesItemView,
         itemViewContainer       : '#x-series',
         template                : 'Series/Index/SeriesIndexTemplate',
         qualityProfileCollection: qualityProfileCollection,
-        //emptyView: NzbDrone.Series.EmptySeriesCollectionView,
+
+        emptyView : NzbDrone.Series.Index.EmptySeriesCollectionView,
 
         getTemplate: function(){
             if (this.viewStyle === 1){
@@ -107,7 +114,6 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'
             if ($(event.currentTarget).hasClass('x-series-show-grid')) {
                 NzbDrone.Config.SeriesViewStyle(1);
             }
-
             else {
                 NzbDrone.Config.SeriesViewStyle(0);
             }
@@ -117,9 +123,4 @@ define(['app', 'Quality/QualityProfileCollection', 'Series/Index/SeriesItemView'
             this.render();
         }
     });
-});
-
-NzbDrone.Series.Index.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
-    template: 'Series/Index/EmptySeriesCollectionTemplate',
-    tagName : 'tr'
 });
