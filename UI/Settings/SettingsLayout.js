@@ -1,4 +1,5 @@
-﻿define([
+﻿"use strict";
+define([
     'app',
     'Settings/Naming/NamingView',
     'Settings/Quality/QualityLayout',
@@ -8,7 +9,7 @@
     'Settings/System/SystemView',
     'Settings/Misc/MiscView'
 ],
-    function (app) {
+    function () {
         NzbDrone.Settings.SettingsLayout = Backbone.Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
 
@@ -106,15 +107,10 @@
                 NzbDrone.Router.navigate('settings/misc');
             },
 
-            initialize: function (context, action, query, settings) {
-                this.settings = settings;
-
-                if (action) {
-                    this.action = action.toLowerCase();
-                }
-
-                if (query) {
-                    this.query = query.toLowerCase();
+            initialize: function (options) {
+                this.settings = options.settings;
+                if (options.action) {
+                    this.action = options.action.toLowerCase();
                 }
             },
 

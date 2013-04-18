@@ -57,13 +57,9 @@ define([
             },
 
 
-            initialize: function (context, action, query) {
-                if (action) {
-                    this.action = action.toLowerCase();
-                }
-
-                if (query) {
-                    this.query = query.toLowerCase();
+            initialize: function (options) {
+                if (options.action) {
+                    this.action = options.action.toLowerCase();
                 }
             },
 

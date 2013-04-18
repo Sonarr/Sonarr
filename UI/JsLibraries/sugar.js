@@ -123,7 +123,7 @@
   function batchMethodExecute(klass, args, fn) {
     var all = args.length === 0, methods = multiArgs(args), changed = false;
     iterateOverObject(klass['SugarMethods'], function(name, m) {
-      if(all || methods.indexOf(name) > -1) {
+      if(all || methods.indexOf(name) !== -1) {
         changed = true;
         fn(m.instance ? klass.prototype : klass, name, m);
       }
@@ -211,6 +211,12 @@
     }
   }
 
+  function simpleRepeat(n, fn) {
+    for(var i = 0; i < n; i++) {
+      fn(i);
+    }
+  }
+
   function simpleMerge(target, source) {
     iterateOverObject(source, function(key) {
       target[key] = source[key];
@@ -228,16 +234,6 @@
 
   // Number helpers
 
-  function getRange(start, stop, fn, step) {
-    var arr = [], i = parseInt(start), down = step < 0;
-    while((!down && i <= stop) || (down && i >= stop)) {
-      arr.push(i);
-      if(fn) fn.call(this, i);
-      i += step || 1;
-    }
-    return arr;
-  }
-
   function round(val, precision, method) {
     var fn = math[method || 'round'];
     var multiplier = math.pow(10, math.abs(precision || 0));
@@ -252,6 +248,8 @@
   function floor(val, precision) {
     return round(val, precision, 'floor');
   }
+
+  // Used by Number and Date
 
   function padNumber(num, place, sign, base) {
     var str = math.abs(num).toString(base || 10);
@@ -303,6 +301,31 @@
     return str.replace(/([\\/'*+?|()\[\]{}.^$])/g,'\\$1');
   }
 
+
+  // Date helpers
+
+  function callDateGet(d, method) {
+    return d['get' + (d._utc ? 'UTC' : '') + method]();
+  }
+
+  function callDateSet(d, method, value) {
+    return d['set' + (d._utc && method != 'ISOWeek' ? 'UTC' : '') + method](value);
+  }
+
+  function extractDurationFromString(str) {
+    var match, val, unit;
+    match = str.toLowerCase().match(/^(\d+)?\s?(\w+?)s?$/i);
+    val = parseInt(match[1]) || 1;
+    unit = match[2].slice(0,1).toUpperCase() + match[2].slice(1);
+    if(unit.match(/hour|minute|second/i)) {
+      unit += 's';
+    } else if(unit === 'Year') {
+      unit = 'FullYear';
+    } else if(unit === 'Day') {
+      unit = 'Date';
+    }
+    return [val, unit];
+  }
 
   // Specialized helpers
 
@@ -798,7 +821,7 @@
      *
      ***/
     'bind': function(scope) {
-      var fn = this, args = multiArgs(arguments).slice(1), nop, bound;
+      var fn = this, args = multiArgs(arguments).slice(1), bound;
       if(!isFunction(this)) {
         throw new TypeError('Function.prototype.bind called on a non-function');
       }
@@ -1651,11 +1674,11 @@
       var arr = this;
       var result = [];
       var divisor = ceil(this.length / num);
-      getRange(0, num - 1, function(i) {
+      simpleRepeat(num, function(i) {
         var index = i * divisor;
         var group = arr.slice(index, index + divisor);
         if(pad && group.length < divisor) {
-          getRange(1, divisor - group.length, function() {
+          simpleRepeat(divisor - group.length, function() {
             group = group.add(padding);
           });
         }
@@ -1680,7 +1703,7 @@
       if(len === 0 || num === 0) return arr;
       if(isUndefined(num)) num = 1;
       if(isUndefined(padding)) padding = null;
-      getRange(0, ceil(len / num) - 1, function(i) {
+      simpleRepeat(ceil(len / num), function(i) {
         group = arr.slice(num * i, num * i + num);
         while(group.length < num) {
           group.push(padding);
@@ -2224,6 +2247,7 @@
     },
     {
       unit: 'month',
+      error: 0.919, // Feb 1-28 over 1 month
       method: 'Month',
       ambiguous: true,
       multiplier: function(d, ms) {
@@ -2235,8 +2259,7 @@
           }
         }
         return days * 24 * 60 * 60 * 1000;
-      },
-      error: 0.919
+      }
     },
     {
       unit: 'week',
@@ -2247,6 +2270,7 @@
     },
     {
       unit: 'day',
+      error: 0.958, // DST traversal over 1 day
       method: 'Date',
       ambiguous: true,
       multiplier: function() {
@@ -2542,7 +2566,7 @@
 
     if(loc['monthSuffix']) {
       loc['month'] = getDigit(1,2);
-      loc['months'] = getRange(1, 12).map(function(n) { return n + loc['monthSuffix']; });
+      loc['months'] = '1,2,3,4,5,6,7,8,9,10,11,12'.split(',').map(function(n) { return n + loc['monthSuffix']; });
     }
     loc['full_month'] = getDigit(1,2) + '|' + arrayToAlternates(loc['months']);
 
@@ -2919,9 +2943,9 @@
     return [value, unit, ms];
   }
 
-  function getAdjustedUnitWithMonthFallback(date) {
+  function getRelativeWithMonthFallback(date) {
     var adu = getAdjustedUnit(date.millisecondsFromNow());
-    if(adu[1] === 6) {
+    if(allowMonthFallback(date, adu)) {
       // If the adjusted unit is in months, then better to use
       // the "monthsfromNow" which applies a special error margin
       // for edge cases such as Jan-09 - Mar-09 being less than
@@ -2929,8 +2953,16 @@
       // The third "ms" element in the array will handle the sign
       // (past or future), so simply take the absolute value here.
       adu[0] = math.abs(date.monthsFromNow());
+      adu[1] = 6;
     }
     return adu;
+  }
+
+  function allowMonthFallback(date, adu) {
+    // Allow falling back to monthsFromNow if the unit is in months...
+    return adu[1] === 6 ||
+    // ...or if it's === 4 weeks and there are more days than in the given month
+    (adu[1] === 5 && adu[0] === 4 && date.daysFromNow() >= new Date().daysInMonth());
   }
 
 
@@ -2943,11 +2975,11 @@
     } else if(Date[format]) {
       format = Date[format];
     } else if(isFunction(format)) {
-      adu = getAdjustedUnitWithMonthFallback(date);
+      adu = getRelativeWithMonthFallback(date);
       format = format.apply(date, adu.concat(loc));
     }
     if(!format && relative) {
-      adu = adu || getAdjustedUnitWithMonthFallback(date);
+      adu = adu || getRelativeWithMonthFallback(date);
       // Adjust up if time is in ms, as this doesn't
       // look very good for a standard relative date.
       if(adu[1] === 0) {
@@ -3130,14 +3162,6 @@
       });
     }
     return d;
-  }
-
-  function callDateGet(d, method) {
-    return d['get' + (d._utc ? 'UTC' : '') + method]();
-  }
-
-  function callDateSet(d, method, value) {
-    return d['set' + (d._utc && method != 'ISOWeek' ? 'UTC' : '') + method](value);
   }
 
   // The ISO format allows times strung together without a demarcating ":", so make sure
@@ -3418,7 +3442,7 @@
         if(fraction && math.abs(fraction % 1) > error) {
           num = round(num);
         }
-        return parseInt(num);
+        return num < 0 ? ceil(num) : floor(num);
       }
       since = function(f, localeCode) {
         return applyErrorMargin(this.getTime() - date.create(f, localeCode).getTime());
@@ -4374,77 +4398,132 @@
   setDateProperties();
 
 
+
   /***
-   * @package DateRange
-   * @dependency date
-   * @description Date Ranges define a range of time. They can enumerate over specific points within that range, and be manipulated and compared.
+   * @package Range
+   * @dependency core
+   * @description Ranges allow creating spans of numbers, strings, or dates. They can enumerate over specific points within that range, and be manipulated and compared.
    *
    ***/
 
-  var DateRange = function(start, end) {
-    this.start = date.create(start);
-    this.end   = date.create(end);
+  function Range(start, end) {
+    this.start = cloneRangeMember(start);
+    this.end   = cloneRangeMember(end);
   };
 
-  // 'toString' doesn't appear in a for..in loop in IE even though
+  function getRangeMemberNumericValue(m) {
+    return isString(m) ? m.charCodeAt(0) : m;
+  }
+
+  function getRangeMemberPrimitiveValue(m) {
+    if(m == null) return m;
+    return isDate(m) ? m.getTime() : m.valueOf();
+  }
+
+  function cloneRangeMember(m) {
+    if(isDate(m)) {
+      return new date(m.getTime());
+    } else {
+      return getRangeMemberPrimitiveValue(m);
+    }
+  }
+
+  function isValidRangeMember(m) {
+    var val = getRangeMemberPrimitiveValue(m);
+    return !!val || val === 0;
+  }
+
+  function incrementRangeMember(obj, increment) {
+    if(isDate(obj)) {
+      return advanceDate(obj, increment);
+    } else if(isString(obj)) {
+      return string.fromCharCode(m.charCodeAt(0) + increment);
+    } else if(isNumber(obj)) {
+      return obj + increment;
+    }
+  }
+
+  function advanceDate(current, increment) {
+    var unit, amt = increment, tmp, val, d;
+    if(isString(increment)) {
+      tmp  = extractDurationFromString(increment);
+      amt  = tmp[0];
+      unit = tmp[1];
+      val  = callDateGet(current, unit);
+      d    = new date(current.getTime());
+      callDateSet(d, unit, val + amt);
+      return d;
+    } else {
+      return new date(current.getTime() + increment);
+    }
+  }
+
+  /***
+   * @method toString()
+   * @returns String
+   * @short Returns a string representation of the range.
+   * @example
+   *
+   *   Number.range(1, 5).toString()                               -> 1..5
+   *   Date.range(new Date(2003, 0), new Date(2005, 0)).toString() -> January 1, 2003..January 1, 2005
+   *
+   ***/
+
+  // Note: 'toString' doesn't appear in a for..in loop in IE even though
   // hasOwnProperty reports true, so extend() can't be used here.
   // Also tried simply setting the prototype = {} up front for all
   // methods but GCC very oddly started dropping properties in the
   // object randomly (maybe because of the global scope?) hence
   // the need for the split logic here.
-  DateRange.prototype.toString = function() {
-    /***
-     * @method toString()
-     * @returns String
-     * @short Returns a string representation of the DateRange.
-     * @example
-     *
-     *   Date.range('2003', '2005').toString() -> January 1, 2003..January 1, 2005
-     *
-     ***/
-    return this.isValid() ? this.start.full() + '..' + this.end.full() : 'Invalid DateRange';
+  Range.prototype.toString = function() {
+    return this.isValid() ? this.start + ".." + this.end : 'Invalid Range';
   };
 
-  extend(DateRange, true, false, {
+  extend(Range, true, false, {
 
     /***
      * @method isValid()
      * @returns Boolean
-     * @short Returns true if the DateRange is valid, false otherwise.
+     * @short Returns true if the range is valid, false otherwise.
      * @example
      *
-     *   Date.range('2003', '2005').isValid() -> true
-     *   Date.range('2005', '2003').isValid() -> false
+     *   Date.range(new Date(2003, 0), new Date(2005, 0)).isValid() -> true
+     *   Number.range(NaN, NaN).isValid()                           -> false
      *
      ***/
     'isValid': function() {
-      return this.start < this.end;
+      return isValidRangeMember(this.start) && isValidRangeMember(this.end) && typeof this.start === typeof this.end;
     },
 
     /***
-     * @method duration()
+     * @method span()
      * @returns Number
-     * @short Return the duration of the DateRange in milliseconds.
+     * @short Return the span of the range. If the range is a date range, the value is in milliseconds.
+     * @extra The span includes both the start and the end.
      * @example
      *
-     *   Date.range('2003', '2005').duration() -> 94694400000
+     *   Number.range(5, 10).span()                              -> 6
+     *   Date.range(new Date(2003, 0), new Date(2005, 0)).span() -> 94694400000
      *
      ***/
-    'duration': function() {
-      return this.isValid() ? this.end.getTime() - this.start.getTime() : NaN;
+    'span': function() {
+      return this.isValid() ? getRangeMemberNumericValue(this.end) - getRangeMemberNumericValue(this.start) + 1 : NaN;
     },
 
     /***
-     * @method contains(<d>)
+     * @method contains(<obj>)
      * @returns Boolean
-     * @short Returns true if <d> is contained inside the DateRange. <d> may be a date or another DateRange.
+     * @short Returns true if <obj> is contained inside the range. <obj> may be a value or another range.
      * @example
      *
-     *   Date.range('2003', '2005').contains(Date.create('2004')) -> true
+     *   Number.range(5, 10).contains(7)                                              -> true
+     *   Date.range(new Date(2003, 0), new Date(2005, 0)).contains(new Date(2004, 0)) -> true
      *
      ***/
     'contains': function(obj) {
-      var self = this, arr = obj.start && obj.end ? [obj.start, obj.end] : [obj];
+      var self = this, arr;
+      if(obj == null) return false;
+      arr = obj.start && obj.end ? [obj.start, obj.end] : [obj];
       return arr.every(function(d) {
         return d >= self.start && d <= self.end;
       });
@@ -4453,37 +4532,36 @@
     /***
      * @method every(<increment>, [fn])
      * @returns Array
-     * @short Iterates through the DateRange for every <increment>, calling [fn] if it is passed. Returns an array of each increment visited.
-     * @extra When <increment> is a number, increments will be to the exact millisecond. <increment> can also be a string in the format %{number} {unit}s%, in which case it will increment in the unit specified. Note that a discrepancy exists in the case of months, as %(2).months()% is an approximation. Stepping through the actual months by passing %"2 months"% is usually preferable in this case.
+     * @short Iterates through the range for every <increment>, calling [fn] if it is passed. Returns an array of each increment visited.
+     * @extra When <increment> is a number, increments will be to the exact millisecond. In the case of date ranges, <increment> can also be a string in the format %{number} {unit}s%, in which case it will increment in the unit specified. Note that a discrepancy exists in the case of months, as %(2).months()% is an approximation. Stepping through the actual months by passing %"2 months"% is usually preferable in this case.
      * @example
      *
-     *   Date.range('2003-01', '2003-03').every("2 months") -> [...]
+     *   Number.range(2, 8).every(2)                                       -> [2,4,6,8]
+     *   Date.range(new Date(2003, 1), new Date(2003,3)).every("2 months") -> [...]
      *
      ***/
     'every': function(increment, fn) {
-      var current = this.start.clone(), result = [], index = 0, params, isDay;
-      if(isString(increment)) {
-        current.advance(getDateParamsFromString(increment, 0), true);
-        params = getDateParamsFromString(increment);
-        isDay = increment.toLowerCase() === 'day';
-      } else {
-        params = { 'milliseconds': increment };
+      var start   = this.start,
+          end     = this.end,
+          inverse = end < start,
+          current = start,
+          index   = 0,
+          result  = [];
+      if(isFunction(increment)) {
+        fn = increment;
+        increment = null;
       }
-      while(current <= this.end) {
+      increment = increment || 1;
+      // Avoiding infinite loops
+      if(inverse && increment > 0) {
+        increment *= -1;
+      }
+      while(inverse ? current >= end : current <= end) {
         result.push(current);
-        if(fn) fn(current, index);
-        if(isDay && callDateGet(current, 'Hours') === 23) {
-          // When DST traversal happens at 00:00 hours, the time is effectively
-          // pushed back to 23:00, meaning 1) 00:00 for that day does not exist,
-          // and 2) there is no difference between 23:00 and 00:00, as you are
-          // "jumping" around in time. Hours here will be reset before the date
-          // is advanced and the date will never in fact advance, so set the hours
-          // directly ahead to the next day to avoid this problem.
-          current = current.clone();
-          callDateSet(current, 'Hours', 48);
-        } else {
-          current = current.clone().advance(params, true);
+        if(fn) {
+          fn(current, index);
         }
+        current = incrementRangeMember(current, increment);
         index++;
       }
       return result;
@@ -4491,15 +4569,16 @@
 
     /***
      * @method union(<range>)
-     * @returns DateRange
-     * @short Returns a new DateRange with the earliest starting point as its start, and the latest ending point as its end. If the two ranges do not intersect this will effectively remove the "gap" between them.
+     * @returns Range
+     * @short Returns a new range with the earliest starting point as its start, and the latest ending point as its end. If the two ranges do not intersect this will effectively remove the "gap" between them.
      * @example
      *
-     *   Date.range('2003=01', '2005-01').union(Date.range('2004-01', '2006-01')) -> Jan 1, 2003..Jan 1, 2006
+     *   Number.range(1, 3).union(Number.range(2, 5) -> 1..5
+     *   Date.range(new Date(2003, 1), new Date(2005, 1)).union(Date.range(new Date(2004, 1), new Date(2006, 1))) -> Jan 1, 2003..Jan 1, 2006
      *
      ***/
     'union': function(range) {
-      return new DateRange(
+      return new Range(
         this.start < range.start ? this.start : range.start,
         this.end   > range.end   ? this.end   : range.end
       );
@@ -4507,15 +4586,19 @@
 
     /***
      * @method intersect(<range>)
-     * @returns DateRange
-     * @short Returns a new DateRange with the latest starting point as its start, and the earliest ending point as its end. If the two ranges do not intersect this will effectively produce an invalid range.
+     * @returns Range
+     * @short Returns a new range with the latest starting point as its start, and the earliest ending point as its end. If the two ranges do not intersect this will effectively produce an invalid range.
      * @example
      *
-     *   Date.range('2003-01', '2005-01').intersect(Date.range('2004-01', '2006-01')) -> Jan 1, 2004..Jan 1, 2005
+     *   Number.range(1, 5).intersect(Number.range(4, 8) -> 4..5
+     *   Date.range(new Date(2003, 1), new Date(2005, 1)).intersect(Date.range(new Date(2004, 1), new Date(2006, 1))) -> Jan 1, 2004..Jan 1, 2005
      *
      ***/
     'intersect': function(range) {
-      return new DateRange(
+      if(range.start > this.end || range.end < this.start) {
+        return new Range(NaN, NaN);
+      }
+      return new Range(
         this.start > range.start ? this.start : range.start,
         this.end   < range.end   ? this.end   : range.end
       );
@@ -4523,60 +4606,161 @@
 
     /***
      * @method clone()
-     * @returns DateRange
-     * @short Clones the DateRange.
+     * @returns Range
+     * @short Clones the range.
+     * @extra Members of the range will also be cloned.
      * @example
      *
-     *   Date.range('2003-01', '2005-01').intersect(Date.range('2004-01', '2006-01')) -> Jan 1, 2004..Jan 1, 2005
+     *   Number.range(1, 5).clone() -> Returns a copy of the range.
      *
      ***/
     'clone': function(range) {
-      return new DateRange(this.start, this.end);
+      return new Range(this.start, this.end);
+    },
+
+    /***
+     * @method clamp(<obj>)
+     * @returns Mixed
+     * @short Clamps <obj> to be within the range if it falls outside.
+     * @example
+     *
+     *   Number.range(1, 5).clamp(8) -> 5
+     *   Date.range(new Date(2010, 0), new Date(2012, 0)).clamp(new Date(2013, 0)) -> 2012-01
+     *
+     ***/
+    'clamp': function(obj) {
+      var clamped,
+          start = this.start,
+          end = this.end,
+          min = end < start ? end : start,
+          max = start > end ? start : end;
+      if(obj < min) {
+        clamped = min;
+      } else if(obj > max) {
+        clamped = max;
+      } else {
+        clamped = obj;
+      }
+      return cloneRangeMember(clamped);
     }
 
   });
 
-  /***
-   * @method each[Unit]([fn])
-   * @returns Date
-   * @short Increments through the date range for each [unit], calling [fn] if it is passed. Returns an array of each increment visited.
-   *
-   * @set
-   *   eachMillisecond
-   *   eachSecond
-   *   eachMinute
-   *   eachHour
-   *   eachDay
-   *   eachWeek
-   *   eachMonth
-   *   eachYear
-   *
-   * @example
-   *
-   *   Date.range('2003-01', '2003-02').eachMonth()     -> [...]
-   *   Date.range('2003-01-15', '2003-01-16').eachDay() -> [...]
-   *
-   ***/
-  extendSimilar(DateRange, true, false, 'Millisecond,Second,Minute,Hour,Day,Week,Month,Year', function(methods, name) {
-    methods['each' + name] = function(fn) { return this.every(name, fn); }
-  });
+  extend(Range, true, false, {
 
+     /***
+     * @method step()
+     * @returns Array
+     * @short Alias for %every%.
+     *
+     * @example
+     *
+     +   range.step(fn);    -> iterates over every step
+     +   range.step(2, fn); -> iterates over every 2 steps
+     *
+     ***/
+    'step': Range.prototype.every
+
+  });
 
   /***
    * Date module
    ***/
 
-  extend(date, false, false, {
+  [number, string, date].forEach(function(klass) {
+     extend(klass, false, false, {
 
-     /***
-     * @method Date.range([start], [end])
-     * @returns DateRange
-     * @short Creates a new date range.
-     * @extra If either [start] or [end] are null, they will default to the current date.
+       /***
+       * @method Number.range([start], [end])
+       * @returns Range
+       * @short Creates a new range between [start] and [end].
+       *
+       ***
+       * @method String.range([start], [end])
+       * @returns Range
+       * @short Creates a new range between [start] and [end].
+       *
+       ***
+       * @method Date.range([start], [end])
+       * @returns Range
+       * @short Creates a new range between [start] and [end].
+       * @extra If either [start] or [end] are null, they will default to the current date.
+       *
+       ***/
+      'range': function(start, end) {
+        if(klass.create) {
+          start = klass.create(start);
+          end   = klass.create(end);
+        }
+        return new Range(start, end);
+      }
+
+    });
+
+  });
+
+  /***
+   * Number module
+   *
+   ***/
+
+  var numberRangeStep = function(num, fn, step) {
+    return number.range(this, num).step(step, fn);
+  };
+
+  number.extend({
+
+    /***
+     * @method upto(<num>, [fn], [step] = 1)
+     * @returns Array
+     * @short Returns an array containing numbers from the number up to <num>.
+     * @extra Optionally calls [fn] callback for each number in that array. [step] allows multiples greater than 1.
+     * @example
+     *
+     *   (2).upto(6) -> [2, 3, 4, 5, 6]
+     *   (2).upto(6, function(n) {
+     *     // This function is called 5 times receiving n as the value.
+     *   });
+     *   (2).upto(8, null, 2) -> [2, 4, 6, 8]
      *
      ***/
-    'range': function(start, end) {
-      return new DateRange(start, end);
+    'upto': numberRangeStep,
+
+    /***
+     * @method downto(<num>, [fn], [step] = 1)
+     * @returns Array
+     * @short Returns an array containing numbers from the number down to <num>.
+     * @extra Optionally calls [fn] callback for each number in that array. [step] allows multiples greater than 1.
+     * @example
+     *
+     *   (8).downto(3) -> [8, 7, 6, 5, 4, 3]
+     *   (8).downto(3, function(n) {
+     *     // This function is called 6 times receiving n as the value.
+     *   });
+     *   (8).downto(2, null, 2) -> [8, 6, 4, 2]
+     *
+     ***/
+    'downto': numberRangeStep,
+
+     /***
+     * @method clamp([start], [end])
+     * @returns Number
+     * @short Constrains the number so that it is between [start] and [end].
+     * @extra This alias will build a range object that can be accessed directly using %Number.range% and has an equivalent %clamp% method.
+     *
+     ***/
+    'clamp': function(start, end) {
+      return new Range(start, end).clamp(this);
+    }
+
+  });
+
+
+
+  extend(array, false, function(a) { return a instanceof Range; }, {
+
+    'create': function(range) {
+      return range.step();
     }
 
   });
@@ -5042,42 +5226,6 @@
      ***/
     'hex': function(pad) {
       return this.pad(pad || 1, false, 16);
-    },
-
-    /***
-     * @method upto(<num>, [fn], [step] = 1)
-     * @returns Array
-     * @short Returns an array containing numbers from the number up to <num>.
-     * @extra Optionally calls [fn] callback for each number in that array. [step] allows multiples greater than 1.
-     * @example
-     *
-     *   (2).upto(6) -> [2, 3, 4, 5, 6]
-     *   (2).upto(6, function(n) {
-     *     // This function is called 5 times receiving n as the value.
-     *   });
-     *   (2).upto(8, null, 2) -> [2, 4, 6, 8]
-     *
-     ***/
-    'upto': function(num, fn, step) {
-      return getRange(this, num, fn, step || 1);
-    },
-
-    /***
-     * @method downto(<num>, [fn], [step] = 1)
-     * @returns Array
-     * @short Returns an array containing numbers from the number down to <num>.
-     * @extra Optionally calls [fn] callback for each number in that array. [step] allows multiples greater than 1.
-     * @example
-     *
-     *   (8).downto(3) -> [8, 7, 6, 5, 4, 3]
-     *   (8).downto(3, function(n) {
-     *     // This function is called 6 times receiving n as the value.
-     *   });
-     *   (8).downto(2, null, 2) -> [8, 6, 4, 2]
-     *
-     ***/
-    'downto': function(num, fn, step) {
-      return getRange(this, num, fn, -(step || 1));
     },
 
     /***
@@ -5599,7 +5747,7 @@
     },
 
     /***
-     * @method Object.toQueryString(<obj>, [namespace] = true)
+     * @method Object.toQueryString(<obj>, [namespace] = null)
      * @returns Object
      * @short Converts the object into a query string.
      * @extra Accepts deep nested objects and arrays. If [namespace] is passed, it will be prefixed to all param names.
@@ -6019,7 +6167,7 @@
       * @method encodeBase64()
       * @returns String
       * @short Encodes the string into base64 encoding.
-      * @extra This method wraps the browser native %btoa% when available, and uses a custom implementation when not available.
+      * @extra This method wraps the browser native %btoa% when available, and uses a custom implementation when not available. It can also handle Unicode string encodings.
       * @example
       *
       *   'gonna get encoded!'.encodeBase64()  -> 'Z29ubmEgZ2V0IGVuY29kZWQh'
@@ -6027,14 +6175,14 @@
       *
       ***/
     'encodeBase64': function() {
-      return btoa(this);
+      return btoa(unescape(encodeURIComponent(this)));
     },
 
      /***
       * @method decodeBase64()
       * @returns String
       * @short Decodes the string from base64 encoding.
-      * @extra This method wraps the browser native %atob% when available, and uses a custom implementation when not available.
+      * @extra This method wraps the browser native %atob% when available, and uses a custom implementation when not available. It can also handle Unicode string encodings.
       * @example
       *
       *   'aHR0cDovL3R3aXR0ZXIuY29tLw=='.decodeBase64() -> 'http://twitter.com/'
@@ -6042,7 +6190,7 @@
       *
       ***/
     'decodeBase64': function() {
-      return atob(this);
+      return decodeURIComponent(escape(atob(this)));
     },
 
     /***
@@ -7220,7 +7368,8 @@
       'hankaku': {}
     };
     widthConversionRanges.forEach(function(r) {
-      getRange(r.start, r.end, function(n) {
+      simpleRepeat(r.end - r.start + 1, function(n) {
+        n += r.start;
         setWidthConversion(r.type, chr(n), chr(n + r.shift));
       });
     });

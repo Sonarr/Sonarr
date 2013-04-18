@@ -10,9 +10,6 @@ define(['app', 'Missing/MissingItemView'], function () {
             pager: '.x-missing-table-pager'
         },
 
-        initialize                   : function (context, action, query, collection) {
-            this.collection = collection;
-        },
         onCompositeCollectionRendered: function () {
             this.ui.table.trigger('update');
 

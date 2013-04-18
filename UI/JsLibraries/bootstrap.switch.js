@@ -1,5 +1,5 @@
 /* ============================================================
- * bootstrapSwitch v1.2 by Larentis Mattia @spiritualGuru
+ * bootstrapSwitch v1.3 by Larentis Mattia @spiritualGuru
  * http://www.larentis.eu/switch/
  * ============================================================
  * Licensed under the Apache License, Version 2.0
@@ -23,7 +23,8 @@
               , color
               , moving
               , onLabel = "ON"
-              , offLabel = "OFF";
+              , offLabel = "OFF"
+              , icon = false;
 
             $.each(['switch-mini', 'switch-small', 'switch-large'], function (i, el) {
               if (classes.indexOf(el) >= 0)
@@ -40,6 +41,9 @@
 
             if ($element.data('off-label') !== undefined)
               offLabel = $element.data('off-label');
+
+            if ($element.data('icon') !== undefined)
+              icon = $element.data('icon');
 
             $switchLeft = $('<span>')
               .addClass("switch-left")
@@ -61,6 +65,10 @@
               .html("&nbsp;")
               .addClass(myClasses)
               .attr('for', $element.find('input').attr('id'));
+
+            if (icon) {
+              $label.html('<i class="icon icon-' + icon + '"></i>');
+            }
 
             $div = $element.find(':checkbox').wrap($('<div>')).parent().data('animated', false);
 
@@ -100,21 +108,26 @@
             });
 
             $element.find('input').on('change', function (e) {
-              var $element = $(this).parent();
+              var $this = $(this)
+                , $element = $this.parent()
+                , thisState = $this.is(':checked')
+                , state = $element.is('.switch-off');
 
               e.preventDefault();
-              e.stopImmediatePropagation();
 
               $element.css('left', '');
 
-              if ($(this).is(':checked'))
-                $element.removeClass('switch-off').addClass('switch-on');
-              else $element.removeClass('switch-on').addClass('switch-off');
+              if (state === thisState) {
 
-              if ($element.data('animated') !== false)
-                $element.addClass("switch-animate");
+                if (thisState)
+                  $element.removeClass('switch-off').addClass('switch-on');
+                else $element.removeClass('switch-on').addClass('switch-off');
 
-              $element.parent().trigger('switch-change', {'el': $(this), 'value': $(this).is(':checked')})
+                if ($element.data('animated') !== false)
+                  $element.addClass("switch-animate");
+
+                $element.parent().trigger('switch-change', {'el': $this, 'value': thisState})
+              }
             });
 
             $element.find('label').on('mousedown touchstart', function (e) {

@@ -9,69 +9,69 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
 
         var controller = Backbone.Marionette.Controller.extend({
 
-            addSeries: function (action, query) {
-                this.setTitle('Add Series');
-                NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout(this, action, query));
-            },
-
             series: function () {
-                this.setTitle('NzbDrone');
+                this._setTitle('NzbDrone');
                 NzbDrone.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexCollectionView());
             },
-
-            upcoming: function (action, query) {
-                this.setTitle('Upcoming');
-                NzbDrone.mainRegion.show(new NzbDrone.Upcoming.UpcomingCollectionView(this, action, query));
-            },
-
-            calendar: function (action, query) {
-                this.setTitle('Calendar');
-                var calendarCollection = new NzbDrone.Calendar.CalendarCollection();
-                calendarCollection.fetch();
-                NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView(this, action, query, calendarCollection));
-            },
-
             seriesDetails: function (query) {
 
                 var self = this;
-                this.setTitle('Loading Series');
+                this._setTitle('Loading Series');
                 var series = new NzbDrone.Series.SeriesModel({ id: query });
                 series.fetch({
                     success: function (seriesModel) {
-                        self.setTitle(seriesModel.get('title'));
+                        self._setTitle(seriesModel.get('title'));
                         NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsView({ model: seriesModel }));
                     }
                 });
             },
 
-            settings: function (action, query) {
-                this.setTitle('Settings');
+            addSeries: function (action) {
+                this._setTitle('Add Series');
+                NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout({action: action}));
+            },
+
+            upcoming: function () {
+                this._setTitle('Upcoming');
+                NzbDrone.mainRegion.show(new NzbDrone.Upcoming.UpcomingCollectionView());
+            },
+
+            calendar: function () {
+                this._setTitle('Calendar');
+                var calendarCollection = new NzbDrone.Calendar.CalendarCollection();
+                calendarCollection.fetch();
+                NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView({collection: calendarCollection}));
+            },
+
+
+            settings: function (action) {
+                this._setTitle('Settings');
 
                 var settingsModel = new NzbDrone.Settings.SettingsModel();
                 settingsModel.fetch({
                     success: function (settings) {
-                        NzbDrone.mainRegion.show(new NzbDrone.Settings.SettingsLayout(this, action, query, settings));
+                        NzbDrone.mainRegion.show(new NzbDrone.Settings.SettingsLayout({settings: settings, action: action}));
                     }
                 });
             },
 
-            missing: function (action, query) {
-                this.setTitle('Missing');
+            missing: function () {
+                this._setTitle('Missing');
 
                 var missingCollection = new NzbDrone.Missing.MissingCollection();
                 missingCollection.fetch({
-                    success: function (missing) {
-                        NzbDrone.mainRegion.show(new NzbDrone.Missing.MissingCollectionView(this, action, query, missing));
+                    success: function () {
+                        NzbDrone.mainRegion.show(new NzbDrone.Missing.MissingCollectionView({collection: missingCollection}));
                     }
                 });
             },
 
             notFound: function () {
-                this.setTitle('Not Found');
+                this._setTitle('Not Found');
                 NzbDrone.mainRegion.show(new NzbDrone.Shared.NotFoundView(this));
             },
 
-            setTitle: function (title) {
+            _setTitle: function (title) {
                 $('#title-region').html(title);
 
                 if (title.toLocaleLowerCase() === 'nzbdrone') {
