@@ -25,10 +25,6 @@ namespace NzbDrone.Core.Jobs.Implementations
             _seriesRepository = seriesRepository;
         }
 
-        public DiskScanJob()
-        {
-        }
-
         public string Name
         {
             get { return "Media File Scan"; }

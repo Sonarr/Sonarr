@@ -15,11 +15,6 @@ namespace NzbDrone.Core.Jobs.Implementations
             _sceneNameMappingService = sceneNameMappingService;
         }
 
-        public UpdateSceneMappingsJob()
-        {
-
-        }
-
         public string Name
         {
             get { return "Update Scene Mappings"; }

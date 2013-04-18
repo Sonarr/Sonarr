@@ -29,11 +29,6 @@ namespace NzbDrone.Core.Jobs.Implementations
             _seriesRepository = seriesRepository;
         }
 
-        public UpdateInfoJob()
-        {
-
-        }
-
         public string Name
         {
             get { return "Update Episode Info"; }

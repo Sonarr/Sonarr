@@ -23,10 +23,6 @@ namespace NzbDrone.Core.Jobs.Implementations
             _diskProvider = diskProvider;
         }
 
-        public PostDownloadScanJob()
-        {
-        }
-
         public string Name
         {
             get { return "Drop folder monitor"; }

@@ -17,11 +17,6 @@ namespace NzbDrone.Core.Jobs.Implementations
             _xemProvider = xemProvider;
         }
 
-        public XemUpdateJob()
-        {
-
-        }
-
         public string Name
         {
             get { return "XEM Update"; }
