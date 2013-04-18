@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NzbDrone.Core.MediaCover;
@@ -57,6 +58,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Network = show.network;
             series.AirTime = show.air_time;
             series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
+            series.Status = GetSeriesStatus(show.status);
 
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });
@@ -85,6 +87,13 @@ namespace NzbDrone.Core.MetadataSource
             var extension = Path.GetExtension(posterUrl);
             var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
             return withoutExtension + "-138" + extension;
+        }
+
+        private static SeriesStatusType GetSeriesStatus(string status)
+        {
+            if (string.IsNullOrWhiteSpace(status)) return SeriesStatusType.Continuing;
+            if (status.Equals("Ended", StringComparison.InvariantCultureIgnoreCase)) return SeriesStatusType.Ended;
+            return SeriesStatusType.Continuing;
         }
     }
 }
