@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Datastore
         IEnumerable<TModel> All();
         int Count();
         TModel Get(int id);
+        IEnumerable<TModel> Get(IEnumerable<int> ids);
         TModel SingleOrDefault();
         TModel Insert(TModel model);
         TModel Update(TModel model);
@@ -62,6 +63,18 @@ namespace NzbDrone.Core.Datastore
         public TModel Get(int id)
         {
             return _dataMapper.Query<TModel>().Single(c => c.Id == id);
+        }
+
+        public IEnumerable<TModel> Get(IEnumerable<int> ids)
+        {
+            var idList = ids.ToList();
+            var result = Query.Where(String.Format("Id IN ({0})", String.Join(",", idList))).ToList();
+            var resultCount = result.Count;
+
+            if (resultCount != idList.Count || result.Select(r => r.Id).Distinct().Count() != resultCount)
+                throw new InvalidOperationException("Unexpected result from query");
+
+            return result;
         }
 
         public TModel SingleOrDefault()

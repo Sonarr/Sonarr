@@ -137,11 +137,6 @@ namespace NzbDrone.Core.Tv
 
         }
 
-        public void SetTvRageId(int seriesId, int tvRageId)
-        {
-            _seriesRepository.SetTvRageId(seriesId, tvRageId);
-        }
-
         public Series FindByTvdbId(int tvdbId)
         {
             return _seriesRepository.FindByTvdbId(tvdbId);
@@ -181,7 +176,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Series> GetSeriesInList(IEnumerable<int> seriesIds)
         {
-            return _seriesRepository.SeriesIsInList(seriesIds);
+            return _seriesRepository.Get(seriesIds).ToList();
         }
 
         public void HandleAsync(SeriesAddedEvent message)
