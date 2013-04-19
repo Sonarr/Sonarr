@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * FullCalendar v1.6.1 Stylesheet
  * Docs & License: http://arshaw.com/fullcalendar/
  * (c) 2013 Adam Shaw
@@ -106,7 +106,7 @@ html .fc,
 	
 .fc-view {
 	width: 100%; /* needed for view switching (when view is absolute) */
-	overflow: hidden;
+	/*overflow: hidden;*/
 	}
 	
 	
@@ -280,8 +280,15 @@ a.fc-event,
 	
 .fc-event-time,
 .fc-event-title {
-	padding: 0 1px;
-	}
+	padding: 0 2px;
+    display: block;
+}
+
+.fc-event-title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 	
 .fc .ui-resizable-handle {
 	display: block;
