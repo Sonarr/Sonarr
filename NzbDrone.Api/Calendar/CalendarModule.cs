@@ -33,6 +33,21 @@ namespace NzbDrone.Api.Calendar
             if(queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
 
             var episodes = _episodeService.EpisodesBetweenDates(start, end);
+
+            //Todo: This should be done on episode data refresh - because it can be used in multiple places
+            var groups = episodes.GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
+
+            foreach (var group in groups)
+            {
+                //Order by Episode Number
+                int episodeCount = 0;
+                foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
+                {
+                    episode.AirDate = episode.AirDate.Value.AddMinutes(episode.Series.Runtime * episodeCount);
+                    episodeCount++;
+                }
+            }
+
             return Mapper.Map<List<Episode>, List<CalendarResource>>(episodes).AsResponse();
         }
     }
