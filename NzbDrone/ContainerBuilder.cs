@@ -41,7 +41,7 @@ namespace NzbDrone
             container.AutoRegisterImplementations<ExternalNotificationBase>();
 
             container.Register<IEventAggregator, EventAggregator>().AsSingleton();
-            container.Register<INancyBootstrapper, TinyNancyBootstrapper>().AsSingleton();
+            container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
             container.Register<IAnnouncer, MigrationLogger>().AsSingleton();
             container.Register<Router>().AsSingleton();
 

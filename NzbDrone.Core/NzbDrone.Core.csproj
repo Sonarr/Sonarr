@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -235,6 +235,7 @@
     <Compile Include="Indexers\IIndexerBase.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
+    <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />

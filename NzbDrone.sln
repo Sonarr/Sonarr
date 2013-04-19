@@ -48,7 +48,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marr.Data", "Marr.Data\Marr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Libraries.Test", "NzbDrone.Libraries.Test\NzbDrone.Libraries.Test.csproj", "{CBF6B8B0-A015-413A-8C86-01238BB45770}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Smoke.Test", "NzbDrone.Smoke.Test\NzbDrone.Smoke.Test.csproj", "{8CEFECD0-A6C2-498F-98B1-3FBE5820F9AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Integration.Test", "NzbDrone.Integration.Test\NzbDrone.Integration.Test.csproj", "{8CEFECD0-A6C2-498F-98B1-3FBE5820F9AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

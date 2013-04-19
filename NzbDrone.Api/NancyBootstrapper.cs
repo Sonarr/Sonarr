@@ -13,12 +13,12 @@ using TinyIoC;
 
 namespace NzbDrone.Api
 {
-    public class TinyNancyBootstrapper : TinyIoCNancyBootstrapper
+    public class NancyBootstrapper : TinyIoCNancyBootstrapper
     {
         private readonly TinyIoCContainer _tinyIoCContainer;
         private readonly Logger _logger;
 
-        public TinyNancyBootstrapper(TinyIoCContainer tinyIoCContainer)
+        public NancyBootstrapper(TinyIoCContainer tinyIoCContainer)
         {
             _tinyIoCContainer = tinyIoCContainer;
             _logger = LogManager.GetCurrentClassLogger();
@@ -69,6 +69,11 @@ namespace NzbDrone.Api
             base.ConfigureConventions(nancyConventions);
             var processors = ApplicationContainer.Resolve<IProcessStaticResource>();
             Conventions.StaticContentsConventions.Add(processors.ProcessStaticResourceRequest);
+        }
+
+        public void Shutdown()
+        {
+            ApplicationContainer.Resolve<IEventAggregator>().Publish(new ApplicationShutdownRequested());
         }
     }
 }

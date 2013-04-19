@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common.Eventing;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
@@ -20,7 +22,7 @@ namespace NzbDrone.Core.Jobs
         bool Enqueue(string jobTypeString);
     }
 
-    public class JobController : IJobController
+    public class JobController : IJobController, IHandle<ApplicationShutdownRequested>
     {
         private readonly NotificationProvider _notificationProvider;
         private readonly IEnumerable<IJob> _jobs;
@@ -176,6 +178,11 @@ namespace NzbDrone.Core.Jobs
             {
                 _jobRepository.Update(jobDefinition);
             }
+        }
+
+        public void Handle(ApplicationShutdownRequested message)
+        {
+            _cancellationTokenSource.Cancel();
         }
     }
 }

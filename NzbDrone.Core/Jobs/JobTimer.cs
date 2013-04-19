@@ -4,7 +4,9 @@ using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Jobs
 {
-    public class JobTimer : IHandle<ApplicationStartedEvent>
+    public class JobTimer :
+        IHandle<ApplicationStartedEvent>,
+        IHandle<ApplicationShutdownRequested>
     {
         private readonly IJobController _jobController;
         private readonly Timer _timer;
@@ -21,6 +23,11 @@ namespace NzbDrone.Core.Jobs
             _timer.Interval = 1000 * 30;
             _timer.Elapsed += (o, args) => _jobController.EnqueueScheduled();
             _timer.Start();
+        }
+
+        public void Handle(ApplicationShutdownRequested message)
+        {
+            _timer.Stop();
         }
     }
 }

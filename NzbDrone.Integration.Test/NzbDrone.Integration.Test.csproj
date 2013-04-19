@@ -7,8 +7,8 @@
     <ProjectGuid>{8CEFECD0-A6C2-498F-98B1-3FBE5820F9AB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NzbDrone.Smoke.Test</RootNamespace>
-    <AssemblyName>NzbDrone.Smoke.Test</AssemblyName>
+    <RootNamespace>NzbDrone.Integration.Test</RootNamespace>
+    <AssemblyName>NzbDrone.Integration.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -66,9 +66,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\ClientBase.cs" />
+    <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="SmokeTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmokeTest.cs" />
+    <Compile Include="SeriesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NzbDrone.Test.Common\App.config">
