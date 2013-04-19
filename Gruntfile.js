@@ -124,6 +124,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-curl');
   // Default task(s).
   grunt.registerTask('default', ['copy','less:bootstrap','handlebars', 'watch']);
+  grunt.registerTask('package', ['copy','less:bootstrap','handlebars']);
   grunt.registerTask('update',  ['curl']);
 
 };

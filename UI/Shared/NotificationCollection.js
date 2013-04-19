@@ -1,4 +1,5 @@
-﻿define(['app', 'Shared/NotificationModel'], function () {
+﻿"use strict";
+define(['app', 'Shared/NotificationModel'], function () {
 
     var collection = Backbone.Collection.extend({
 
@@ -31,13 +32,23 @@
 
                     console.log("An error occurred while reporting error. " + error);
                     console.log(msg);
-                    alert('Couldn\'t report JS error.  ' + msg);
+                    window.alert('Couldn\'t report JS error.  ' + msg);
                 }
 
                 return false; //don't suppress default alerts and logs.
             };
 
             $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
+
+                var model = new NzbDrone.Shared.NotificationModel();
+                model.set('level', 'error');
+
+                if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
+                    model.set('title', "Connection Failed");
+                    model.set('message', "NzbDrone Server Not Reachable. make sure NzbDrone is running.");
+                    self.push(model);
+                    return false;
+                }
 
                 //don't report 200 error codes
                 if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {
@@ -49,10 +60,8 @@
                     return undefined;
                 }
 
-                var model = new NzbDrone.Shared.NotificationModel();
                 model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
                 model.set('message', xmlHttpRequest.responseText);
-                model.set('level', 'error');
                 self.push(model);
 
                 return false;
