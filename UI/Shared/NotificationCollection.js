@@ -1,7 +1,7 @@
 ﻿"use strict";
 define(['app', 'Shared/NotificationModel'], function () {
 
-    var collection = Backbone.Collection.extend({
+    var notificationCollection = Backbone.Collection.extend({
 
         model: NzbDrone.Shared.NotificationModel,
 
@@ -40,36 +40,34 @@ define(['app', 'Shared/NotificationModel'], function () {
 
             $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
 
+                //don't report 200 error codes
+                if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {
+                    return undefined;
+                }
+
+                //don't report aborted requests
+                if (xmlHttpRequest.statusText === 'abort') {
+                    return undefined;
+                }
+
                 var model = new NzbDrone.Shared.NotificationModel();
                 model.set('level', 'error');
 
                 if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
                     model.set('title', "Connection Failed");
                     model.set('message', "NzbDrone Server Not Reachable. make sure NzbDrone is running.");
-                    self.push(model);
-                    return false;
+                } else {
+                    model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
+                    model.set('message', xmlHttpRequest.responseText);
                 }
 
-                //don't report 200 error codes
-                if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {
-                    return undefined;
-                }
-
-                //doesn't report aborted requests
-                if (xmlHttpRequest.statusText === 'abort') {
-                    return undefined;
-                }
-
-                model.set('title', ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText);
-                model.set('message', xmlHttpRequest.responseText);
                 self.push(model);
-
                 return false;
             });
         }
     });
 
-    return new collection();
+    return new notificationCollection();
 });
 
 
