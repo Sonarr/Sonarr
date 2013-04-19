@@ -14,19 +14,19 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_be_able_to_resolve_event_handlers()
         {
-            ContainerBuilder.Instance.Resolve<IEnumerable<IHandle>>().Should().NotBeEmpty();
+            ContainerBuilder.BuildNzbDroneContainer().Resolve<IEnumerable<IHandle>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void should_be_able_to_resolve_indexers()
         {
-            ContainerBuilder.Instance.Resolve<IEnumerable<IIndexerBase>>().Should().NotBeEmpty();
+            ContainerBuilder.BuildNzbDroneContainer().Resolve<IEnumerable<IIndexerBase>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void should_be_able_to_resolve_downlodclients()
         {
-            ContainerBuilder.Instance.Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
+            ContainerBuilder.BuildNzbDroneContainer().Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
         }
     }
 }

@@ -41,7 +41,9 @@ namespace NzbDrone
                     return;
                 }
 
-                ContainerBuilder.Instance.Resolve<Router>().Route(args);
+                var container = ContainerBuilder.BuildNzbDroneContainer();
+
+                container.Resolve<Router>().Route(args);
             }
             catch (Exception e)
             {

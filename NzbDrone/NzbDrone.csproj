@@ -119,7 +119,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ContainerBuilder.cs" />
-    <Compile Include="NzbDroneBootstrapper.cs" />
     <Compile Include="ApplicationMode.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

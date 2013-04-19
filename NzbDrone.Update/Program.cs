@@ -31,9 +31,6 @@ namespace NzbDrone.Update
                 builder.RegisterAssemblyTypes(typeof(RestProvider).Assembly).SingleInstance();
                 _container = builder.Build();
 
-                ReportingService.RestProvider = _container.Resolve<RestProvider>();
-
-
                 logger.Info("Updating NzbDrone to version {0}", _container.Resolve<EnvironmentProvider>().Version);
                 _container.Resolve<Program>().Start(args);
             }

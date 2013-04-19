@@ -21,18 +21,20 @@ namespace NzbDrone
     public static class ContainerBuilder
     {
         private static readonly Logger Logger = LogManager.GetLogger("ContainerBuilder");
-        public static TinyIoCContainer Instance { get; private set; }
         private static readonly List<Type> NzbDroneTypes;
 
         static ContainerBuilder()
         {
-            var container = new TinyIoCContainer();
-
             NzbDroneTypes = new List<Type>();
             NzbDroneTypes.AddRange(Assembly.Load("NzbDrone").GetTypes());
             NzbDroneTypes.AddRange(Assembly.Load("NzbDrone.Common").GetTypes());
             NzbDroneTypes.AddRange(Assembly.Load("NzbDrone.Core").GetTypes());
             NzbDroneTypes.AddRange(Assembly.Load("NzbDrone.Api").GetTypes());
+        }
+
+        public static TinyIoCContainer BuildNzbDroneContainer()
+        {
+            var container = new TinyIoCContainer();
 
             container.AutoRegisterInterfaces();
 
@@ -48,7 +50,9 @@ namespace NzbDrone
 
             container.InitDatabase();
 
-            Instance = container;
+            ReportingService.RestProvider = container.Resolve<RestProvider>();
+
+            return container;
         }
 
         private static void InitDatabase(this TinyIoCContainer container)
@@ -58,7 +62,7 @@ namespace NzbDrone
             //TODO: move this to factory
             var environmentProvider = new EnvironmentProvider();
             var appDataPath = environmentProvider.GetAppDataPath();
-            
+
             if (!Directory.Exists(appDataPath))
             {
                 Directory.CreateDirectory(appDataPath);
