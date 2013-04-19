@@ -10,7 +10,7 @@ define([
         className: 'form-horizontal',
 
         ui: {
-            switch              : '.switch',
+            bsSwitch              : '.switch',
             tooltip             : '.help-inline i',
             pathInput           : '.x-path',
             sabConfig           : '.x-sab-config',
@@ -25,7 +25,7 @@ define([
         },
 
         onRender: function () {
-            this.ui.switch.bootstrapSwitch();
+            this.ui.bsSwitch.bootstrapSwitch();
             this.ui.tooltip.tooltip({ placement: 'right', html: true });
             this.ui.pathInput.autoComplete('/directories');
 

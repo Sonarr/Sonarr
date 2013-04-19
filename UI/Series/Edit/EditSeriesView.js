@@ -10,7 +10,7 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
             progressbar    : '.progress .bar',
             qualityProfile : '.x-quality-profile',
             backlogSettings: '.x-backlog-setting',
-            switch         : '.switch'
+            bsSwitch         : '.switch'
         },
 
         events: {
@@ -19,7 +19,7 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         },
 
         onRender: function () {
-            this.ui.switch.bootstrapSwitch();
+            this.ui.bsSwitch.bootstrapSwitch();
         },
 
 

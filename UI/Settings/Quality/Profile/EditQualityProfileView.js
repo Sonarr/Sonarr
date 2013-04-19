@@ -7,7 +7,7 @@ define(['app', 'Quality/QualityProfileModel'], function () {
         className: "modal",
 
         ui: {
-            switch: '.switch'
+            bsSwitch: '.switch'
         },
 
         events: {
@@ -15,7 +15,7 @@ define(['app', 'Quality/QualityProfileModel'], function () {
         },
 
         onRender: function () {
-            this.ui.switch.bootstrapSwitch();
+            this.ui.bsSwitch.bootstrapSwitch();
         },
 
         saveQualityProfile: function () {
