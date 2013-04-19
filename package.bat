@@ -1,40 +1,24 @@
 SET PACKAGEROOT=_rawPackage
 SET TARGET=%PACKAGEROOT%\NzbDrone
+SET COPY_FLAGS=/S /V /I /Y
+SET DELETE_FLAGS=/Q /F /S
 
 rd %PACKAGEROOT% /S /Q
-del nzbdrone*.zip /Q /F
+del nzbdrone*.zip %DELETE_FLAGS%
+del _output\FluentValidation.resources.dll %DELETE_FLAGS%
 
 echo ##teamcity[progressMessage 'Packaging release']
 
-xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
+xcopy ServiceHelpers\ServiceInstall\bin\Release\*.exe  %TARGET%\ %COPY_FLAGS%
+xcopy ServiceHelpers\ServiceUninstall\bin\Release\*.exe  %TARGET%\ %COPY_FLAGS%
 
-
-xcopy ServiceHelpers\ServiceInstall\bin\Release\*.exe  %TARGET%\ /E /V /I /Y
-xcopy ServiceHelpers\ServiceUninstall\bin\Release\*.exe  %TARGET%\ /E /V /I /Y
-
-xcopy NzbDrone\bin\Debug\*.*  %TARGET%\ /E /V /I /Y
-xcopy NzbDrone\bin\Release\*.*  %TARGET%\ /E /V /I /Y
-
-xcopy NzbDrone.Update\bin\Debug\*.*  %TARGET%\NzbDrone.Update\ /E /V /I /Y
-xcopy NzbDrone.Update\bin\Release\*.*  %TARGET%\NzbDrone.Update\ /E /V /I /Y
-
+xcopy _output\*.*  %TARGET%\ %COPY_FLAGS%
+xcopy NzbDrone.Update\bin\Release\*.*  %TARGET%\NzbDrone.Update\ %COPY_FLAGS%
 
 CD %PACKAGEROOT%
 
-del nlog.xml /Q /F /S
-del nlog.pdb /Q /F /S
-del Twitterizer2.pdb /Q /F /S
-del *.vshost.exe.* /Q /F /S
-del ninject*.pdb /Q /F /S
-del ninject*.xml /Q /F /S
-del nlog.pdb /Q /F /S
-del Newtonsoft.Json.xml /Q /F /S
-del Newtonsoft.Json.pdb /Q /F /S
-del Mvc*.pdb /Q /F /S
-
-del *debug.js /Q /F /S
-del *-vsdoc.js /Q /F /S
-
+del *.xml %DELETE_FLAGS%
+del *.vshost.exe.* %DELETE_FLAGS%
 
 ..\Libraries\7zip\7za.exe a -tzip ..\NzbDrone.zip *
 

@@ -135,3 +135,5 @@ UpgradeLog*.htm
 NzbDrone.Backbone/templates.js
 NzbDrone.Backbone/Content/bootstrap.css
 _output/
+_rawPackage/
+NzbDrone.zip
