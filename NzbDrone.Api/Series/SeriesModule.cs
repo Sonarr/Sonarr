@@ -6,24 +6,20 @@ using AutoMapper;
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.REST;
 using NzbDrone.Common;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesModule : RestModule<SeriesResource>
+    public class SeriesModule : NzbDroneApiModule//: RestModule<SeriesResource>
     {
         private readonly ISeriesService _seriesService;
-        private readonly IJobController _jobProvider;
 
-        public SeriesModule(ISeriesService seriesService, IJobController jobProvider)
+        public SeriesModule(ISeriesService seriesService)
             : base("/Series")
         {
             _seriesService = seriesService;
-            _jobProvider = jobProvider;
             Get["/"] = x => AllSeries();
             Get["/{id}"] = x => GetSeries((int)x.id);
             Post["/"] = x => AddSeries();
