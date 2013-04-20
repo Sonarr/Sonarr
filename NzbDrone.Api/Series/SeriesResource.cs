@@ -4,7 +4,7 @@ using NzbDrone.Api.REST;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesResource : RestResource<SeriesResource>
+    public class SeriesResource : RestResource
     {
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?

@@ -6,7 +6,7 @@ using NzbDrone.Api.Extensions;
 namespace NzbDrone.Api.REST
 {
     public abstract class RestModule<TResource> : NancyModule
-        where TResource : RestResource<TResource>, new()
+        where TResource : RestResource, new()
     {
         private const string ROOT_ROUTE = "/";
         private const string ID_ROUTE = "/{id}";
@@ -54,6 +54,10 @@ namespace NzbDrone.Api.REST
                 DeleteResource(options.Id);
                 return new Response { StatusCode = HttpStatusCode.OK };
             };
+
+            
+
+
         }
 
         protected Action<int> DeleteResource { get; set; }
@@ -76,11 +80,11 @@ namespace NzbDrone.Api.REST
 
             if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase))
             {
-                resource.ValidateForPost();
+                //resource.ValidateForPost();
             }
             else if (Request.Method.Equals("PUT", StringComparison.InvariantCultureIgnoreCase))
             {
-                resource.ValidateForPut();
+                //resource.ValidateForPut();
             }
 
             return resource;

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Configuration
 {
