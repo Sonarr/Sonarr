@@ -21,12 +21,12 @@ namespace NzbDrone.Api.Series
         public String Overview { get; set; }
         public Int32 Episodes { get; set; }
         public Boolean HasBanner { get; set; }
-        public DateTime NextAiring { get; set; }
+        public DateTime? NextAiring { get; set; }
         public String Details { get; set; }
         public String Network { get; set; }
         public String AirTime { get; set; }
         public String Language { get; set; }
-        public Int32 SeasonCount { get; set; }
+        public Int32 NumberOfSeasons { get; set; }
         public Int32 UtcOffset { get; set; }
         public List<Core.MediaCover.MediaCover> Images { get; set; }
 

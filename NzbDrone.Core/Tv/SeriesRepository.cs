@@ -13,13 +13,17 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void SetTvRageId(int seriesId, int tvRageId);
+        List<SeriesStatistics> SeriesStatistics();
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
+        private readonly IDatabase _database;
+
         public SeriesRepository(IDatabase database)
             : base(database)
         {
+            _database = database;
         }
 
         public bool SeriesPathExists(string path)
@@ -50,6 +54,23 @@ namespace NzbDrone.Core.Tv
         public void SetTvRageId(int seriesId, int tvRageId)
         {
             SetFields(new Series { Id = seriesId, TvRageId = tvRageId }, s => s.TvRageId);
+        }
+        
+        public List<SeriesStatistics> SeriesStatistics()
+        {
+            _database.DataMapper.AddParameter("currentDate", DateTime.UtcNow);
+
+            var queryText = @"SELECT
+                              SeriesId,
+                              SUM(CASE WHEN Airdate <= @currentDate THEN 1 ELSE 0 END) AS EpisodeCount,
+                              SUM(CASE WHEN EpisodeFileId > 0 AND AirDate <= @currentDate THEN 1 ELSE 0 END) as EpisodeFileCount,
+                              MAX(SeasonNumber) as NumberOfSeasons,
+                              MIN(CASE WHEN AirDate < @currentDate THEN NULL ELSE AirDate END) as NextAiring
+                              FROM Episodes
+                              WHERE Ignored = 0
+                              GROUP BY SeriesId";
+
+            return _database.DataMapper.Query<SeriesStatistics>(queryText);
         }
     }
 }

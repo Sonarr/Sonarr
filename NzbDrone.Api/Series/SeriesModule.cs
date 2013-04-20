@@ -31,7 +31,19 @@ namespace NzbDrone.Api.Series
         private Response AllSeries()
         {
             var series = _seriesService.GetAllSeries().ToList();
+            var seriesStats = _seriesService.SeriesStatistics();
             var seriesModels = Mapper.Map<List<Core.Tv.Series>, List<SeriesResource>>(series);
+
+            foreach (var s in seriesModels)
+            {
+                var stats = seriesStats.SingleOrDefault(ss => ss.SeriesId == s.Id);
+                if (stats == null) continue;
+
+                s.EpisodeCount = stats.EpisodeCount;
+                s.EpisodeFileCount = stats.EpisodeFileCount;
+                s.NumberOfSeasons = stats.NumberOfSeasons;
+                s.NextAiring = stats.NextAiring;
+            }
 
             return seriesModels.AsResponse();
         }

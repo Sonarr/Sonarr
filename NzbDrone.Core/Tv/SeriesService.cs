@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Tv
         void UpdateSeries(Series series);
         bool SeriesPathExists(string folder);
         List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
+        List<SeriesStatistics> SeriesStatistics();
     }
 
     public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
@@ -57,7 +58,6 @@ namespace NzbDrone.Core.Tv
             _diskProvider = diskProvider;
             _logger = logger;
         }
-
 
         public bool IsMonitored(int id)
         {
@@ -177,6 +177,11 @@ namespace NzbDrone.Core.Tv
         public List<Series> GetSeriesInList(IEnumerable<int> seriesIds)
         {
             return _seriesRepository.Get(seriesIds).ToList();
+        }
+
+        public List<SeriesStatistics> SeriesStatistics()
+        {
+            return _seriesRepository.SeriesStatistics();
         }
 
         public void HandleAsync(SeriesAddedEvent message)

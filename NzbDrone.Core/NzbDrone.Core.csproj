@@ -386,6 +386,7 @@
     <Compile Include="Providers\RecycleBinProvider.cs" />
     <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
+    <Compile Include="Tv\SeriesStatistics.cs" />
     <Compile Include="Update\AppUpdateJob.cs" />
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />
