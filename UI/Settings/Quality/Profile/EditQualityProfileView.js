@@ -6,16 +6,8 @@ define(['app', 'Quality/QualityProfileModel'], function () {
         tagName  : 'div',
         className: "modal",
 
-        ui: {
-            bsSwitch: '.switch'
-        },
-
         events: {
             'click .x-save': 'saveQualityProfile'
-        },
-
-        onRender: function () {
-            this.ui.bsSwitch.bootstrapSwitch();
         },
 
         saveQualityProfile: function () {

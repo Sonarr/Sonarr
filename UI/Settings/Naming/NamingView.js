@@ -10,7 +10,6 @@ define([
         className: 'form-horizontal',
 
         ui: {
-            bsSwitch : '.switch',
             tooltip: '[class^="help-inline"] i'
         },
 
@@ -19,7 +18,6 @@ define([
         },
 
         onRender: function () {
-            this.ui.bsSwitch.bootstrapSwitch();
             this.ui.tooltip.tooltip({ placement: 'right' });
         }
     });

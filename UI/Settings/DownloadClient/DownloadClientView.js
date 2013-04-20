@@ -25,7 +25,6 @@ define([
         },
 
         onRender: function () {
-            this.ui.bsSwitch.bootstrapSwitch();
             this.ui.tooltip.tooltip({ placement: 'right', html: true });
             this.ui.pathInput.autoComplete('/directories');
 

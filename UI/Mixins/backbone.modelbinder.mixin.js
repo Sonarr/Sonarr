@@ -17,15 +17,18 @@ Marionette.View.prototype.viewName = function () {
     return undefined;
 };
 
+Marionette.ItemView.prototype.self$ = function (selector) {
+    return  this.$(selector).not("[class*='iv-'] " + selector);
+};
+
 Marionette.ItemView.prototype.render = function () {
 
     var result = oldItemViewRender.apply(this, arguments);
 
 
-
     //check to see if el has bindings (name attribute)
     // any element that has a name attribute and isn't child of another view.
-    if (this.$('[name]').not("[class*='iv-'] [name]").length > 0) {
+    if (this.self$('[name]').length > 0) {
         if (!this.model) {
             throw 'view ' + this.viewName() + ' has binding attributes but model is not defined';
         }
@@ -39,7 +42,10 @@ Marionette.ItemView.prototype.render = function () {
         this._modelBinder.bind(this.model, this.el);
     }
 
+    this.self$('.switch').bootstrapSwitch();
     this.$el.addClass('iv-' + this.viewName());
+
+
     return result;
 };
 

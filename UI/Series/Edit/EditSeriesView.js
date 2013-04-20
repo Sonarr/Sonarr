@@ -9,17 +9,12 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         ui: {
             progressbar    : '.progress .bar',
             qualityProfile : '.x-quality-profile',
-            backlogSettings: '.x-backlog-setting',
-            bsSwitch         : '.switch'
+            backlogSettings: '.x-backlog-setting'
         },
 
         events: {
             'click .x-save'  : 'saveSeries',
             'click .x-remove': 'removeSeries'
-        },
-
-        onRender: function () {
-            this.ui.bsSwitch.bootstrapSwitch();
         },
 
 
