@@ -170,6 +170,7 @@
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
+    <Compile Include="TvTests\SeriesRepositoryTests\SeriesStatisticsFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
