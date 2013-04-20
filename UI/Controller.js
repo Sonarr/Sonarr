@@ -2,7 +2,7 @@
 define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
     'Series/Index/SeriesIndexCollectionView', 'Upcoming/UpcomingCollectionView',
     'Calendar/CalendarCollectionView', 'Shared/NotificationView',
-    'Shared/NotFoundView', 'MainMenuView', 'HeaderView',
+    'Shared/NotFoundView', 'MainMenuView',
     'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection',
     'Settings/SettingsLayout', 'Missing/MissingCollectionView'],
     function (app, modalRegion) {

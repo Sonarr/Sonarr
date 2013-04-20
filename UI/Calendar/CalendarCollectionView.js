@@ -55,7 +55,6 @@ define(['app', 'Calendar/CalendarItemView'], function () {
             });
 
             NzbDrone.Calendar.CalendarCollectionView.Instance = this;
-            $(this.ui.calendar).fullCalendar('addEventSource', this.calendar.toJSON());
         },
         getEvents                    : function (start, end, callback) {
             var bbView = NzbDrone.Calendar.CalendarCollectionView.Instance;

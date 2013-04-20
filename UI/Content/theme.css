@@ -1,5 +1,6 @@
 ﻿body {
-    background-color: #f6f6f6;
+    background-color: #252525;
+    background-image: url('../content/images/black_linen_v2.png');s
 }
 
 body p {
@@ -13,14 +14,6 @@ body p.sub {
 body h1, body h2, body h3, body h4, body h5, body h6 {
     text-transform: uppercase;
     font-weight: 300;
-}
-
-#logo {
-    color: #333333;
-}
-
-a#logo:hover {
-    text-decoration: none;
 }
 
 .page {
