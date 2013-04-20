@@ -14,6 +14,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.RootFolders;
+using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -33,7 +34,6 @@ namespace NzbDrone.Core.Tv
         void UpdateSeries(Series series);
         bool SeriesPathExists(string folder);
         List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
-        List<SeriesStatistics> SeriesStatistics();
     }
 
     public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
@@ -177,11 +177,6 @@ namespace NzbDrone.Core.Tv
         public List<Series> GetSeriesInList(IEnumerable<int> seriesIds)
         {
             return _seriesRepository.Get(seriesIds).ToList();
-        }
-
-        public List<SeriesStatistics> SeriesStatistics()
-        {
-            return _seriesRepository.SeriesStatistics();
         }
 
         public void HandleAsync(SeriesAddedEvent message)

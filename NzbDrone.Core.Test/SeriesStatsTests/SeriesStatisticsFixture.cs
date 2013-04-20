@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
+namespace NzbDrone.Core.Test.SeriesStatsTests
 {
     [TestFixture]
-    public class SeriesStatisticsFixture : DbTest<SeriesRepository, Series>
+    public class SeriesStatisticsFixture : DbTest<SeriesStatisticsRepository, Series>
     {
         private Episode _episode;
 
@@ -35,7 +34,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
         }
 
         [Test]
-        public void should_get_episodes()
+        public void should_get_stats_for_series()
         {
             var stats = Subject.SeriesStatistics();
 

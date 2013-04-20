@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
+using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model;
 using NzbDrone.Api.Validation;
@@ -15,11 +16,13 @@ namespace NzbDrone.Api.Series
     public class SeriesModule : NzbDroneRestModule<SeriesResource>
     {
         private readonly ISeriesService _seriesService;
+        private readonly ISeriesStatisticsService _seriesStatisticsService;
 
-        public SeriesModule(ISeriesService seriesService)
+        public SeriesModule(ISeriesService seriesService, ISeriesStatisticsService seriesStatisticsService)
             : base("/Series")
         {
             _seriesService = seriesService;
+            _seriesStatisticsService = seriesStatisticsService;
 
             GetResourceAll = AllSeries;
             GetResourceById = GetSeries;
@@ -39,7 +42,7 @@ namespace NzbDrone.Api.Series
         private List<SeriesResource> AllSeries()
         {
             var series = _seriesService.GetAllSeries().ToList();
-            var seriesStats = _seriesService.SeriesStatistics();
+            var seriesStats = _seriesStatisticsService.SeriesStatistics();
             var seriesModels = Mapper.Map<List<Core.Tv.Series>, List<SeriesResource>>(series);
 
             foreach (var s in seriesModels)

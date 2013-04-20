@@ -349,6 +349,7 @@
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
+    <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\EpisodeStatuses.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
@@ -387,7 +388,8 @@
     <Compile Include="Providers\RecycleBinProvider.cs" />
     <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
-    <Compile Include="Tv\SeriesStatistics.cs" />
+    <Compile Include="SeriesStats\SeriesStatistics.cs" />
+    <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="Update\AppUpdateJob.cs" />
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />

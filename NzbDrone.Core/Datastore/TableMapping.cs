@@ -15,6 +15,7 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
+using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Datastore
