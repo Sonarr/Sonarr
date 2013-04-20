@@ -90,9 +90,11 @@
     <Compile Include="Frontend\StaticResourceMapper.cs" />
     <Compile Include="Missing\MissingResource.cs" />
     <Compile Include="Missing\MissingModule.cs" />
+    <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="Resolvers\EndTimeResolver.cs" />
     <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
+    <Compile Include="REST\ResourceValidator.cs" />
     <Compile Include="REST\RestModule.cs" />
     <Compile Include="REST\RestResource.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />
     <Compile Include="Settings\SettingsModule.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
+    <Compile Include="Validation\IdValidationRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

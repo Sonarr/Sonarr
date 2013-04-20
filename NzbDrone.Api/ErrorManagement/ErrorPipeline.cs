@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FluentValidation;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Extensions;
@@ -23,6 +24,17 @@ namespace NzbDrone.Api.ErrorManagement
             {
                 _logger.WarnException("API Error", apiException);
                 return apiException.ToErrorResponse();
+            }
+
+            var validationException = exception as ValidationException;
+
+            if (validationException != null)
+            {
+                _logger.Warn("Invalid request {0}", validationException.Message);
+                
+                
+                return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
+
             }
 
             _logger.ErrorException("Unexpected error", exception);

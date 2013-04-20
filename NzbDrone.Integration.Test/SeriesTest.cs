@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Series;
 
@@ -23,10 +24,10 @@ namespace NzbDrone.Integration.Test
         }
 
         [Test]
-        [Ignore]
-        public void add_series_without_required_fields_should_return_400()
+        public void add_series_without_required_fields_should_return_badrequest()
         {
-            Series.Post(new SeriesResource());
+            var errors = Series.InvalidPost(new SeriesResource());
+            errors.Should().NotBeEmpty();
         }
 
     }

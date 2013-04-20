@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using FluentAssertions;
+using FluentValidation;
+using FluentValidation.Results;
 using NLog;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client
@@ -33,6 +36,13 @@ namespace NzbDrone.Integration.Test.Client
             return Post<TResource>(request);
         }
 
+        public List<string> InvalidPost(TResource body)
+        {
+            var request = BuildRequest();
+            request.AddBody(body);
+            return Post<List<string>>(request, HttpStatusCode.BadRequest);
+        }
+
         protected RestRequest BuildRequest(string command = "")
         {
             return new RestRequest(_resource + "/" + command.Trim('/'))
@@ -58,8 +68,9 @@ namespace NzbDrone.Integration.Test.Client
             _logger.Info("{0}: {1}", request.Method, _restClient.BuildUri(request));
 
             var response = _restClient.Execute<T>(request);
-
             _logger.Info("Response: {0}", response.Content);
+
+            response.StatusCode.Should().Be(statusCode);
 
             if (response.ErrorException != null)
             {
@@ -67,9 +78,6 @@ namespace NzbDrone.Integration.Test.Client
             }
 
             response.ErrorMessage.Should().BeBlank();
-
-
-            response.StatusCode.Should().Be(statusCode);
 
             return response.Data;
         }

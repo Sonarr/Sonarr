@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extensions;
+using System.Linq;
 
 namespace NzbDrone.Api.REST
 {
     public abstract class RestModule<TResource> : NancyModule
         where TResource : RestResource, new()
     {
+        protected ResourceValidator<TResource> PostValidator { get; private set; }
+        protected ResourceValidator<TResource> PutValidator { get; private set; }
+        protected ResourceValidator<TResource> SharedValidator { get; private set; }
         private const string ROOT_ROUTE = "/";
         private const string ID_ROUTE = "/{id}";
 
@@ -20,6 +25,11 @@ namespace NzbDrone.Api.REST
         protected RestModule(string modulePath)
             : base(modulePath)
         {
+
+            PostValidator = new ResourceValidator<TResource>();
+            PutValidator = new ResourceValidator<TResource>();
+            SharedValidator = new ResourceValidator<TResource>();
+
             Get[ROOT_ROUTE] = options =>
             {
                 EnsureImplementation(GetResourceAll);
@@ -55,7 +65,7 @@ namespace NzbDrone.Api.REST
                 return new Response { StatusCode = HttpStatusCode.OK };
             };
 
-            
+
 
 
         }
@@ -78,13 +88,21 @@ namespace NzbDrone.Api.REST
         {
             var resource = Request.Body.FromJson<TResource>();
 
+            var errors = SharedValidator.Validate(resource).Errors.ToList();
+
+
             if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase))
             {
-                //resource.ValidateForPost();
+                errors.AddRange(PostValidator.Validate(resource).Errors);
             }
             else if (Request.Method.Equals("PUT", StringComparison.InvariantCultureIgnoreCase))
             {
-                //resource.ValidateForPut();
+                errors.AddRange(PutValidator.Validate(resource).Errors);
+            }
+
+            if (errors.Any())
+            {
+                throw new ValidationException(errors);
             }
 
             return resource;
