@@ -10,7 +10,7 @@ Marionette.View.prototype.viewName = function () {
 
         return this.template
             .toLocaleLowerCase()
-            .replace('template','')
+            .replace('template', '')
             .replace(regex, '-');
     }
 
@@ -21,12 +21,25 @@ Marionette.ItemView.prototype.render = function () {
 
     var result = oldItemViewRender.apply(this, arguments);
 
-    this.$el.addClass('iv-' + this.viewName());
 
-    if (this.model) {
-        NzbDrone.ModelBinder.bind(this.model, this.el);
+
+    //check to see if el has bindings (name attribute)
+    // any element that has a name attribute and isn't child of another view.
+    if (this.$('[name]').not("[class*='iv-'] [name]").length > 0) {
+        if (!this.model) {
+            throw 'view ' + this.viewName() + ' has binding attributes but model is not defined';
+        }
+
+        if (!this._modelBinder) {
+            this._modelBinder = new Backbone.ModelBinder();
+        }
+
+        window.console.log('binding ' + this.viewName());
+
+        this._modelBinder.bind(this.model, this.el);
     }
 
+    this.$el.addClass('iv-' + this.viewName());
     return result;
 };
 

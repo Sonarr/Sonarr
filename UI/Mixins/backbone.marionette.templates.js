@@ -13,7 +13,6 @@ Marionette.TemplateCache.get = function (templateId) {
     return function (data) {
 
         try {
-            //console.log('rendering template ' + templateKey);
             return templateFunction(data);
         }
         catch (error) {

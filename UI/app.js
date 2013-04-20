@@ -71,8 +71,6 @@ define('app', function () {
 
         console.log('starting application');
 
-        NzbDrone.ModelBinder = new Backbone.ModelBinder();
-
         //TODO: move this out of here
         Handlebars.registerHelper("formatStatus", function (status, monitored) {
             if (!monitored) {
