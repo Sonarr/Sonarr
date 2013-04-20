@@ -6,16 +6,15 @@ using AutoMapper;
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.REST;
 using NzbDrone.Common;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs.Implementations;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesModule : NzbDroneApiModule
+    public class SeriesModule : RestModule<SeriesResource>
     {
         private readonly ISeriesService _seriesService;
         private readonly IJobController _jobProvider;

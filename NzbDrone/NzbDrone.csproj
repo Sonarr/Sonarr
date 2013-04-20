@@ -118,7 +118,7 @@
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ContainerBuilder.cs" />
+    <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationMode.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

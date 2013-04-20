@@ -69,7 +69,7 @@ namespace NzbDrone.Integration.Test
         [SetUp]
         public void SmokeTestSetup()
         {
-            Container = ContainerBuilder.BuildNzbDroneContainer();
+            Container = MainAppContainerBuilder.BuildContainer();
 
             InitDatabase();
 

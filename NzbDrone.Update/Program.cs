@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using Autofac;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Update.Providers;
+using TinyIoC;
 
 namespace NzbDrone.Update
 {
@@ -11,7 +11,7 @@ namespace NzbDrone.Update
     {
         private readonly UpdateProvider _updateProvider;
         private readonly ProcessProvider _processProvider;
-        private static IContainer _container;
+        private static TinyIoCContainer _container;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -26,10 +26,8 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
-                var builder = new ContainerBuilder();
-                builder.RegisterAssemblyTypes(typeof(UpdateProvider).Assembly).SingleInstance();
-                builder.RegisterAssemblyTypes(typeof(RestProvider).Assembly).SingleInstance();
-                _container = builder.Build();
+
+                _container = UpdateContainerBuilder.Build();
 
                 logger.Info("Updating NzbDrone to version {0}", _container.Resolve<EnvironmentProvider>().Version);
                 _container.Resolve<Program>().Start(args);

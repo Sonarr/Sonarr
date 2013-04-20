@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NzbDrone.Api.QualityProfiles;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Qualities;
+using NzbDrone.Api.REST;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesResource
+    public class SeriesResource : RestResource<SeriesResource>
     {
-        public Int32 Id { get; set; }
-
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
         //Todo: We should get the entire QualityProfile instead of ID and Name separately
