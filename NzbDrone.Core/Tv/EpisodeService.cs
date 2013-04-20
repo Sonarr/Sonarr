@@ -190,6 +190,22 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
+            var allEpisodes = new List<Episode>();
+            allEpisodes.AddRange(newList);
+            allEpisodes.AddRange(updateList);
+
+            var groups = allEpisodes.GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
+
+            foreach (var group in groups)
+            {
+                int episodeCount = 0;
+                foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
+                {
+                    episode.AirDate = episode.AirDate.Value.AddMinutes(episode.Series.Runtime * episodeCount);
+                    episodeCount++;
+                }
+            }
+
             _episodeRepository.InsertMany(newList);
             _episodeRepository.UpdateMany(updateList);
 
@@ -246,19 +262,6 @@ namespace NzbDrone.Core.Tv
                 return true;
 
             return false;
-        }
-
-        private void DeleteEpisodesNotInTvdb(Series series, IEnumerable<Episode> tvdbEpisodes)
-        {
-            //Todo: This will not work as currently implemented - what are we trying to do here?
-            return;
-            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
-            foreach (var episode in tvdbEpisodes)
-            {
-                _episodeRepository.Delete(episode.Id);
-            }
-
-            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
         }
 
         public void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
@@ -337,6 +340,19 @@ namespace NzbDrone.Core.Tv
                 _episodeRepository.SetPostDownloadStatus(episode.Id, PostDownloadStatusType.NoError);
                 _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.Path, episode);
             }
+        }
+
+        private void DeleteEpisodesNotInTvdb(Series series, IEnumerable<Episode> tvdbEpisodes)
+        {
+            //Todo: This will not work as currently implemented - what are we trying to do here?
+            return;
+            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
+            foreach (var episode in tvdbEpisodes)
+            {
+                _episodeRepository.Delete(episode.Id);
+            }
+
+            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
         }
     }
 }
