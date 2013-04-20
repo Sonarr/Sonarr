@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Tv
                               SUM(CASE WHEN Airdate <= @currentDate THEN 1 ELSE 0 END) AS EpisodeCount,
                               SUM(CASE WHEN EpisodeFileId > 0 AND AirDate <= @currentDate THEN 1 ELSE 0 END) as EpisodeFileCount,
                               MAX(SeasonNumber) as NumberOfSeasons,
-                              MIN(CASE WHEN AirDate < @currentDate THEN NULL ELSE AirDate END) as NextAiring
+                              MIN(CASE WHEN AirDate < @currentDate THEN NULL ELSE AirDate END) as NextAiringString
                               FROM Episodes
                               WHERE Ignored = 0
                               GROUP BY SeriesId";

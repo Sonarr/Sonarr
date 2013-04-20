@@ -1,16 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Datastore
 {
     public static class MappingExtensions
     {
-        public static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName) where T : ModelBase
+
+        public static ColumnMapBuilder<T> MapResultSet<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder) where T : ResultSet, new()
         {
+            return mapBuilder
+                .Columns
+                .AutoMapPropertiesWhere(IsMappableProperty);
+        }
+
+
+        public static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null) where T : ModelBase, new()
+        {
+
+
+
             return mapBuilder.Table.MapTable(tableName)
                              .Columns
                              .AutoMapPropertiesWhere(IsMappableProperty)

@@ -57,9 +57,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<Log>().RegisterModel("Logs");
 
-            Mapper.Entity<SeriesStatistics>()
-                  .Columns
-                  .AutoMapPropertiesWhere(MappingExtensions.IsMappableProperty);
+            Mapper.Entity<SeriesStatistics>().MapResultSet();
         }
 
 
