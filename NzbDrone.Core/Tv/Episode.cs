@@ -9,8 +9,8 @@ namespace NzbDrone.Core.Tv
     public class Episode : ModelBase
     {
         public int TvDbEpisodeId { get; set; }
-
         public int SeriesId { get; set; }
+        public int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
@@ -18,9 +18,7 @@ namespace NzbDrone.Core.Tv
         //Todo: Since we're displaying next airing relative to the user's time zone we may want to store this as UTC (with airtime + UTC offset)
         public DateTime? AirDate { get; set; }
 
-
         public string Overview { get; set; }
-
         public Boolean Ignored { get; set; }
         public PostDownloadStatusType PostDownloadStatus { get; set; }
         public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
@@ -34,10 +32,7 @@ namespace NzbDrone.Core.Tv
         {
             get { return EpisodeFile != null; }
         }
-
-        public int EpisodeFileId { get; set; }
-
-
+        
         public EpisodeStatuses Status
         {
             get
@@ -66,6 +61,17 @@ namespace NzbDrone.Core.Tv
                     return EpisodeStatuses.Missing;
 
                 return EpisodeStatuses.NotAired;
+            }
+        }
+
+        public DateTime? EndTime
+        {
+            get
+            {
+                if (!AirDate.HasValue) return null;
+                if (Series == null) return null;
+
+                return AirDate.Value.AddMinutes(Series.Runtime);
             }
         }
 
