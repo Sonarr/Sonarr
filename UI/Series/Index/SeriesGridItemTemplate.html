@@ -24,7 +24,7 @@
             </div>
             <div class="row">&nbsp;</div>
             <div class="row">
-                <div class="span10">
+                <div class="span8">
                     {{#if isContinuing}}
                         {{#if bestDateString}}
                             <span class="label">{{bestDateString}}</span>
@@ -34,6 +34,14 @@
                     {{else}}
                         <span class="label label-important">{{status}}</span>
                     {{/if}}
+                    <span class="label label-info">{{numberOfSeasons}} Seasons</span>
+                </div>
+                <div class="span2">
+                    <div class="progress">
+                        <span class="progressbar-back-text">{{episodeFileCount}} / {{episodeCount}}</span>
+
+                        <div class="bar" style="width:{{percentOfEpisodes}}%"><span class="progressbar-front-text">{{episodeFileCount}} / {{episodeCount}}</span></div>
+                    </div>
                 </div>
             </div>
         </div>
