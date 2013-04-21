@@ -9,6 +9,10 @@ define([
             'click .x-add': 'addSeries'
         },
 
+        initialize: function () {
+            this.model.set('isExisting', true);
+        },
+
         addSeries: function () {
 
             var self = this;
