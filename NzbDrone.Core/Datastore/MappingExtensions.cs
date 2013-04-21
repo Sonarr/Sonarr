@@ -2,6 +2,7 @@
 using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
+using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Datastore
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Datastore
                 return false;
             }
 
-            if (IsSimpleType(propertyInfo.PropertyType) || MapRepository.Instance.TypeConverters.ContainsKey(propertyInfo.PropertyType))
+            if (propertyInfo.PropertyType.IsSimpleType() || MapRepository.Instance.TypeConverters.ContainsKey(propertyInfo.PropertyType))
             {
                 return true;
             }
@@ -51,28 +52,6 @@ namespace NzbDrone.Core.Datastore
             return false;
         }
 
-        public static bool IsSimpleType(Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-            {
-                type = type.GetGenericArguments()[0];
-            }
 
-            return type.IsPrimitive
-                   || type.IsEnum
-                   || type == typeof(string)
-                   || type == typeof(DateTime)
-                   || type == typeof(Decimal);
-        }
-
-        private static bool IsReadable(this PropertyInfo propertyInfo)
-        {
-            return propertyInfo.CanRead && propertyInfo.GetGetMethod(false) != null;
-        }
-
-        private static bool IsWritable(this PropertyInfo propertyInfo)
-        {
-            return propertyInfo.CanWrite && propertyInfo.GetSetMethod(false) != null;
-        }
     }
 }

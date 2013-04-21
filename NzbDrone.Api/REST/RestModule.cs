@@ -40,7 +40,7 @@ namespace NzbDrone.Api.REST
             Get[ID_ROUTE] = options =>
             {
                 EnsureImplementation(GetResourceById);
-                var resource = GetResourceById(options.Id);
+                var resource = GetResourceById((int)options.Id);
                 return resource.AsResponse();
             };
 
@@ -61,7 +61,7 @@ namespace NzbDrone.Api.REST
             Delete[ID_ROUTE] = options =>
             {
                 EnsureImplementation(DeleteResource);
-                DeleteResource(options.Id);
+                DeleteResource((int)options.Id);
                 return new Response { StatusCode = HttpStatusCode.OK };
             };
 

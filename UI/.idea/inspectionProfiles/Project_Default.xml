@@ -66,6 +66,7 @@
       <option name="m_minLength" value="1" />
       <option name="m_maxLength" value="32" />
     </inspection_tool>
+    <inspection_tool class="LossyEncoding" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="NestedAssignmentJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="NestedFunctionCallJS" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="NestedSwitchStatementJS" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -85,6 +86,13 @@
     </inspection_tool>
     <inspection_tool class="SwitchStatementWithNoDefaultBranchJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TailRecursionJS" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="TaskInspection" enabled="true" level="INFO" enabled_by_default="true">
+      <option name="suppressedTasks">
+        <set>
+          <option value="LESS" />
+        </set>
+      </option>
+    </inspection_tool>
     <inspection_tool class="UnterminatedStatementJS" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="ignoreSemicolonAtEndOfBlock" value="true" />
     </inspection_tool>

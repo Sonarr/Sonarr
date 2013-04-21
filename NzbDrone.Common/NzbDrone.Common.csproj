@@ -118,6 +118,7 @@
     <Compile Include="HostController.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
+    <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
