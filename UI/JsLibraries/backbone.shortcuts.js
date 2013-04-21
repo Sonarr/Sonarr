@@ -16,8 +16,13 @@
       _results = [];
       for (shortcut in _ref) {
         callback = _ref[shortcut];
-        if (!_.isFunction(callback)) method = this[callback];
-        if (!method) throw new Error("Method " + callback + " does not exist");
+        if (!_.isFunction(callback)){
+              method = this[callback];
+            if (!method) throw new Error("Method " + callback + " does not exist");
+        }
+        else {
+            method = callback;
+        }
         match = shortcut.match(/^(\S+)\s*(.*)$/);
         shortcutKey = match[1];
         scope = match[2] === "" ? "all" : match[2];

@@ -1,4 +1,4 @@
-// Backbone.ModelBinder v1.0.1
+// Backbone.ModelBinder v1.0.2
 // (c) 2013 Bart Wood
 // Distributed Under MIT License
 
@@ -26,7 +26,7 @@
     };
 
     // Current version of the library.
-    Backbone.ModelBinder.VERSION = '1.0.1';
+    Backbone.ModelBinder.VERSION = '1.0.2';
     Backbone.ModelBinder.Constants = {};
     Backbone.ModelBinder.Constants.ModelToView = 'ModelToView';
     Backbone.ModelBinder.Constants.ViewToModel = 'ViewToModel';
@@ -83,7 +83,7 @@
             this._options['modelSetOptions'].changeSource = 'ModelBinder';
 
             if(!this._options['changeTriggers']){
-                this._options['changeTriggers'] = {'': 'change', '[contenteditable]': 'blur'};
+                this._options['changeTriggers'] = {'*': 'change', '[contenteditable]': 'blur'};
             }
 
             if(!this._options['initialCopyDirection']){
@@ -240,16 +240,10 @@
         },
 
         _unbindViewToModel: function () {
-            if (this._rootEl) {
-                if (this._triggers) {
-                    _.each(this._triggers, function (event, selector) {
-                        $(this._rootEl).undelegate(selector, event, this._onElChanged);
-                    }, this);
-                }
-                else {
-                    $(this._rootEl).undelegate('', 'change', this._onElChanged);
-                    $(this._rootEl).undelegate('[contenteditable]', 'blur', this._onElChanged);
-                }
+            if(this._options && this._options['changeTriggers']){
+                _.each(this._options['changeTriggers'], function (event, selector) {
+                    $(this._rootEl).undelegate(selector, event, this._onElChanged);
+                }, this);
             }
         },
 
@@ -389,7 +383,9 @@
                     break;
                 case 'class':
                     var previousValue = this._model.previous(elementBinding.attributeBinding.attributeName);
-                    if(!_.isUndefined(previousValue)){
+		    var currentValue = this._model.get(elementBinding.attributeBinding.attributeName);
+		    // is current value is now defined then remove the class the may have been set for the undefined value
+                    if(!_.isUndefined(previousValue) || !_.isUndefined(currentValue)){
                         previousValue = this._getConvertedValue(Backbone.ModelBinder.Constants.ModelToView, elementBinding, previousValue);
                         el.removeClass(previousValue);
                     }
