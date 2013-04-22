@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Jobs
         {
             if (IsProcessing)
             {
-                _logger.Trace("Queue is already running. Ignoring scheduler's request.");
+                _logger.Trace("Queue is already running. Ignoring scheduler request.");
                 return;
             }
 

@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
 using System.Linq;
 
@@ -35,6 +37,10 @@ namespace NzbDrone.Integration.Test
         public void should_be_able_to_add_series()
         {
             var series = Series.Lookup("archer").First();
+
+            var rootFolder = RootFolders.Post(new RootFolderResource { Path = Directory.GetCurrentDirectory() });
+
+            series.RootFolderId = rootFolder.Id;
 
             Series.Post(series);
 

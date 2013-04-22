@@ -17,7 +17,12 @@ namespace NzbDrone.Core.Jobs
 
         public override string ToString()
         {
-            return string.Format("[{0}({1})]", JobType.Name, Options);
+            if (Options != null)
+            {
+                return string.Format("[{0}({1})]", JobType.Name, Options);
+            }
+
+            return string.Format("[{0}]", JobType.Name);
         }
 
         public enum JobSourceType
