@@ -1,41 +1,34 @@
-﻿using System.Linq;
-using Nancy;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Core.Providers;
-
+﻿using System.Collections.Generic;
 using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Api.RootFolders
 {
-    public class RootFolderModule : NzbDroneApiModule
+    public class RootFolderModule : NzbDroneRestModule<RootFolderResource>
     {
         private readonly RootFolderService _rootFolderService;
 
         public RootFolderModule(RootFolderService rootFolderService)
-            : base("/rootfolder")
         {
             _rootFolderService = rootFolderService;
 
-            Get["/"] = x => GetRootFolders();
-            Post["/"] = x => AddRootFolder();
-            Delete["/{id}"] = x => DeleteRootFolder((int)x.id);
+            GetResourceAll = GetRootFolders;
+            CreateResource = CreateRootFolder;
+            DeleteResource = DeleteFolder;
         }
 
-        private Response AddRootFolder()
+        private RootFolderResource CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            var dir = _rootFolderService.Add(Request.Body.FromJson<RootFolder>());
-            return dir.AsResponse(HttpStatusCode.Created);
+            return Apply<RootFolder>(_rootFolderService.Add, rootFolderResource);
         }
 
-        private Response GetRootFolders()
+        private List<RootFolderResource> GetRootFolders()
         {
-            return _rootFolderService.All().AsResponse();
+            return Apply(_rootFolderService.All);
         }
 
-        private Response DeleteRootFolder(int folderId)
+        private void DeleteFolder(int id)
         {
-            _rootFolderService.Remove(folderId);
-            return new Response { StatusCode = HttpStatusCode.OK };
+            _rootFolderService.Remove(id);
         }
     }
 }

@@ -10,17 +10,19 @@ namespace NzbDrone.Api.REST
     public abstract class RestModule<TResource> : NancyModule
         where TResource : RestResource, new()
     {
-        protected ResourceValidator<TResource> PostValidator { get; private set; }
-        protected ResourceValidator<TResource> PutValidator { get; private set; }
-        protected ResourceValidator<TResource> SharedValidator { get; private set; }
         private const string ROOT_ROUTE = "/";
         private const string ID_ROUTE = "/{id}";
 
-        protected RestModule()
-            : this(new TResource().ResourceName)
-        {
+        private Action<int> _deleteResource;
+        private Func<int, TResource> _getResourceById;
+        private Func<List<TResource>> _getResourceAll;
+        private Func<TResource, TResource> _createResource;
+        private Func<TResource, TResource> _updateResource;
 
-        }
+        protected ResourceValidator<TResource> PostValidator { get; private set; }
+        protected ResourceValidator<TResource> PutValidator { get; private set; }
+        protected ResourceValidator<TResource> SharedValidator { get; private set; }
+
 
         protected RestModule(string modulePath)
             : base(modulePath)
@@ -29,60 +31,80 @@ namespace NzbDrone.Api.REST
             PostValidator = new ResourceValidator<TResource>();
             PutValidator = new ResourceValidator<TResource>();
             SharedValidator = new ResourceValidator<TResource>();
-
-            Get[ROOT_ROUTE] = options =>
-            {
-                EnsureImplementation(GetResourceAll);
-                var resource = GetResourceAll();
-                return resource.AsResponse();
-            };
-
-            Get[ID_ROUTE] = options =>
-            {
-                EnsureImplementation(GetResourceById);
-                var resource = GetResourceById((int)options.Id);
-                return resource.AsResponse();
-            };
-
-            Post[ROOT_ROUTE] = options =>
-            {
-                EnsureImplementation(CreateResource);
-                var resource = CreateResource(ReadFromRequest());
-                return resource.AsResponse(HttpStatusCode.Created);
-            };
-
-            Put[ROOT_ROUTE] = options =>
-            {
-                EnsureImplementation(UpdateResource);
-                var resource = UpdateResource(ReadFromRequest());
-                return resource.AsResponse(HttpStatusCode.Accepted);
-            };
-
-            Delete[ID_ROUTE] = options =>
-            {
-                EnsureImplementation(DeleteResource);
-                DeleteResource((int)options.Id);
-                return new Response { StatusCode = HttpStatusCode.OK };
-            };
-
-
-
-
         }
 
-        protected Action<int> DeleteResource { get; set; }
-        protected Func<int, TResource> GetResourceById { get; set; }
-        protected Func<List<TResource>> GetResourceAll { get; set; }
-        protected Func<TResource, TResource> CreateResource { get; set; }
-        protected Func<TResource, TResource> UpdateResource { get; set; }
-
-        private void EnsureImplementation(Delegate implementation)
+        protected Action<int> DeleteResource
         {
-            if (implementation == null)
+            private get { return _deleteResource; }
+            set
             {
-                throw new NotImplementedException();
+                _deleteResource = value;
+                Delete[ID_ROUTE] = options =>
+                {
+                    DeleteResource((int)options.Id);
+                    return new Response { StatusCode = HttpStatusCode.OK };
+                };
             }
         }
+
+        protected Func<int, TResource> GetResourceById
+        {
+            private get { return _getResourceById; }
+            set
+            {
+                _getResourceById = value;
+                Get[ID_ROUTE] = options =>
+                {
+                    var resource = GetResourceById((int)options.Id);
+                    return resource.AsResponse();
+                };
+            }
+        }
+
+        protected Func<List<TResource>> GetResourceAll
+        {
+            private get { return _getResourceAll; }
+            set
+            {
+                _getResourceAll = value;
+
+                Get[ROOT_ROUTE] = options =>
+                {
+                    var resource = GetResourceAll();
+                    return resource.AsResponse();
+                };
+            }
+        }
+
+        protected Func<TResource, TResource> CreateResource
+        {
+            private get { return _createResource; }
+            set
+            {
+                _createResource = value;
+                Post[ROOT_ROUTE] = options =>
+                {
+                    var resource = CreateResource(ReadFromRequest());
+                    return resource.AsResponse(HttpStatusCode.Created);
+                };
+
+            }
+        }
+
+        protected Func<TResource, TResource> UpdateResource
+        {
+            private get { return _updateResource; }
+            set
+            {
+                _updateResource = value;
+                Put[ROOT_ROUTE] = options =>
+                {
+                    var resource = UpdateResource(ReadFromRequest());
+                    return resource.AsResponse(HttpStatusCode.Accepted);
+                };
+            }
+        }
+
 
         private TResource ReadFromRequest()
         {

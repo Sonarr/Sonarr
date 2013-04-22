@@ -24,14 +24,14 @@ namespace NzbDrone.Core.Tv
         bool IsMonitored(int id);
         Series UpdateSeriesInfo(int seriesId);
         Series GetSeries(int seriesId);
-        void AddSeries(Series newSeries);
+        Series AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
         Series FindByTitle(string title);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
-        void UpdateSeries(Series series);
+        Series UpdateSeries(Series series);
         bool SeriesPathExists(string folder);
         List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
     }
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.Get(seriesId);
         }
 
-        public void AddSeries(Series newSeries)
+        public Series AddSeries(Series newSeries)
         {
             Ensure.That(() => newSeries).IsNotNull();
 
@@ -115,6 +115,8 @@ namespace NzbDrone.Core.Tv
 
             _seriesRepository.Insert(newSeries);
             _eventAggregator.Publish(new SeriesAddedEvent(newSeries));
+
+            return newSeries;
         }
 
         public void UpdateFromSeriesEditor(IList<Series> editedSeries)
@@ -164,9 +166,9 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.All().ToList();
         }
 
-        public void UpdateSeries(Series series)
+        public Series UpdateSeries(Series series)
         {
-            _seriesRepository.Update(series);
+            return _seriesRepository.Update(series);
         }
 
         public bool SeriesPathExists(string folder)

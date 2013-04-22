@@ -2,16 +2,17 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Series;
+using System.Linq;
 
 namespace NzbDrone.Integration.Test
 {
     [TestFixture]
-    public class SeriesTest : SmokeTestBase
+    public class SeriesIntegrationTest : IntegrationTest
     {
         [Test]
         public void should_have_no_series_on_start_application()
         {
-            Series.GetAll().Should().BeEmpty();
+            Series.All().Should().BeEmpty();
         }
 
         [Test]
@@ -30,5 +31,14 @@ namespace NzbDrone.Integration.Test
             errors.Should().NotBeEmpty();
         }
 
+        [Test]
+        public void should_be_able_to_add_series()
+        {
+            var series = Series.Lookup("archer").First();
+
+            Series.Post(series);
+
+            Series.All().Should().HaveCount(1);
+        }
     }
 }

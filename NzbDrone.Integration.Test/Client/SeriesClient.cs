@@ -7,7 +7,7 @@ namespace NzbDrone.Integration.Test.Client
     public class SeriesClient : ClientBase<SeriesResource>
     {
         public SeriesClient(IRestClient restClient)
-            : base(restClient, "series")
+            : base(restClient)
         {
         }
 

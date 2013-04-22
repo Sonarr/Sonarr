@@ -1,29 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using FluentAssertions;
-using FluentValidation;
-using FluentValidation.Results;
 using NLog;
-using Newtonsoft.Json;
+using NzbDrone.Api.REST;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client
 {
-    public abstract class ClientBase<TResource> where TResource : new()
+    public class ClientBase<TResource> where TResource : RestResource, new()
     {
         private readonly IRestClient _restClient;
         private readonly string _resource;
 
         private readonly Logger _logger;
 
-        protected ClientBase(IRestClient restClient, string resource)
+        public ClientBase(IRestClient restClient, string resource = null)
         {
+            if (resource == null)
+            {
+                resource = new TResource().ResourceName;
+            }
+
             _restClient = restClient;
             _resource = resource;
             _logger = LogManager.GetLogger("REST");
         }
 
-        public List<TResource> GetAll()
+        public List<TResource> All()
         {
             var request = BuildRequest();
             return Get<List<TResource>>(request);
@@ -34,6 +37,12 @@ namespace NzbDrone.Integration.Test.Client
             var request = BuildRequest();
             request.AddBody(body);
             return Post<TResource>(request);
+        }
+
+        public void Delete(int id)
+        {
+            var request = BuildRequest(id.ToString());
+            Delete(request);
         }
 
         public List<string> InvalidPost(TResource body)
@@ -61,6 +70,12 @@ namespace NzbDrone.Integration.Test.Client
         {
             request.Method = Method.POST;
             return Execute<T>(request, statusCode);
+        }
+
+        public void Delete(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            request.Method = Method.DELETE;
+            Execute<object>(request, statusCode);
         }
 
         private T Execute<T>(IRestRequest request, HttpStatusCode statusCode) where T : new()
