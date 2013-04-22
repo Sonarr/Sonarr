@@ -21,7 +21,8 @@ module.exports = function (grunt) {
             //'NzbDrone.Backbone/JsLibraries/jquery.tablesorter.js':
             'UI/JsLibraries/require.js'                  : 'http://raw.github.com/jrburke/requirejs/master/require.js',
             'UI/JsLibraries/sugar.js'                    : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
-            'UI/JsLibraries/underscore.js'               : 'http://underscorejs.org/underscore.js'
+            'UI/JsLibraries/underscore.js'               : 'http://underscorejs.org/underscore.js',
+            'UI/JsLibraries/backbone-pageable'           : 'https://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js'
         },
 
         uglify: {
