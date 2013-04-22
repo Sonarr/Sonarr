@@ -35,11 +35,18 @@
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             },
             isContinuing     : function () {
-                if (this.get('status') === 'Continuing'){
+                if (this.get('status') === 0){
                     return true;
                 }
 
                 return false;
+            },
+            statusText: function () {
+                if (this.get('status') === 0) {
+                    return 'Continuing';
+                }
+
+                return 'Ended';
             }
         },
 
@@ -48,7 +55,8 @@
             episodeCount    : 0,
             qualityProfiles : qualityProfileCollection,
             rootFolders     : rootFolders,
-            isExisting      : false
+            isExisting      : false,
+            status: 0
         }
     });
 

@@ -14,7 +14,7 @@ namespace NzbDrone.Api.Series
 
         //View Only
         public String Title { get; set; }
-        public Int32 SeasonsCount { get; set; }
+        public Int32 SeasonCount { get; set; }
         public Int32 EpisodeCount { get; set; }
         public Int32 EpisodeFileCount { get; set; }
         public SeriesStatusType Status { get; set; }

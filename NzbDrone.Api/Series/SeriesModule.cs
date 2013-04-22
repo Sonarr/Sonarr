@@ -52,7 +52,7 @@ namespace NzbDrone.Api.Series
 
                 s.EpisodeCount = stats.EpisodeCount;
                 s.EpisodeFileCount = stats.EpisodeFileCount;
-                s.SeasonsCount = stats.NumberOfSeasons;
+                s.SeasonCount = stats.SeasonCount;
                 s.NextAiring = stats.NextAiring;
             }
 

@@ -76,7 +76,7 @@ define('app', function () {
             if (!monitored) {
                 return '<i class="icon-pause grid-icon" title="Not Monitored"></i>';
             }
-            if (status === 'Continuing') {
+            if (status === 0) {
                 return '<i class="icon-play grid-icon" title="Continuing"></i>';
             }
 
