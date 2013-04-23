@@ -1,3 +1,4 @@
+"use strict";
 define(['app', 'Quality/QualityProfileCollection', 'Series/Details/SeasonCompositeView', 'Series/SeasonCollection'], function () {
     NzbDrone.Series.Details.SeriesDetailsView = Backbone.Marionette.CompositeView.extend({
 

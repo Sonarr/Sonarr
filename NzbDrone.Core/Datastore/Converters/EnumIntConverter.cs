@@ -2,7 +2,7 @@
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 
-namespace NzbDrone.Core.Datastore
+namespace NzbDrone.Core.Datastore.Converters
 {
     public class EnumIntConverter : IConverter
     {

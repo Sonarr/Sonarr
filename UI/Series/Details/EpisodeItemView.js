@@ -9,8 +9,8 @@ define(['app', 'Series/SeasonModel'], function () {
 
         },
 
-        events  : {
+        events: {
 
-        },
+        }
     });
 });

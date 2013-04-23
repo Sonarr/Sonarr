@@ -22,8 +22,6 @@ namespace NzbDrone.Core.Tv
         public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
-
-        //Todo: This should be UTC
         public DateTime? GrabDate { get; set; }
 
         public bool HasFile

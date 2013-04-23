@@ -192,8 +192,10 @@
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
-    <Compile Include="Datastore\EnumIntConverter.cs" />
+    <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
+    <Compile Include="Datastore\IReadModels.cs" />
+    <Compile Include="Datastore\IWriteModels.cs" />
     <Compile Include="Datastore\LazyList.cs" />
     <Compile Include="Datastore\MappingExtensions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
