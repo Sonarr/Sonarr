@@ -23,7 +23,6 @@ require.config({
         handlebars: {
             exports: 'Handlebars'
         }
-
     }
 });
 
@@ -33,6 +32,7 @@ define('app', function () {
     window.NzbDrone.Config = {};
     window.NzbDrone.Series = {};
     window.NzbDrone.Series.Index = {};
+    window.NzbDrone.Series.Index.List = {};
     window.NzbDrone.Series.Edit = {};
     window.NzbDrone.Series.Delete = {};
     window.NzbDrone.Series.Details = {};
@@ -71,16 +71,48 @@ define('app', function () {
 
         console.log('starting application');
 
-        //TODO: move this out of here
-        Handlebars.registerHelper("formatStatus", function (status, monitored) {
-            if (!monitored) {
-                return '<i class="icon-pause grid-icon" title="Not Monitored"></i>';
-            }
-            if (status === 0) {
-                return '<i class="icon-play grid-icon" title="Continuing"></i>';
-            }
+        //TODO: move these out of here
+        Backgrid.SeriesStatusCell = Backgrid.Cell.extend({
+            className: "series-status-cell",
 
-            return '<i class="icon-stop grid-icon" title="Ended"></i>';
+            render: function () {
+                this.$el.empty();
+                var monitored = this.model.get('monitored');
+                var status = this.model.get('status');
+
+                if (!monitored) {
+                    this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
+                }
+                else if (status === 0) {
+                    this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
+                }
+
+                else {
+                    this.$el.html('<i class="icon-stop grid-icon" title="Ended"></i>');
+                }
+
+                return this;
+            }
+        });
+
+        var AirDateFormatter = Backgrid.AirDateFormatter = function () {};
+        AirDateFormatter.prototype = new Backgrid.CellFormatter();
+        _.extend(AirDateFormatter.prototype, {
+            /**
+             Converts any value to a string using Ecmascript's implicit type
+             conversion. If the given value is `null` or `undefined`, an empty string is
+             returned instead.
+
+             @member Backgrid.StringFormatter
+             @param {*} rawValue
+             @return {string}
+             */
+            fromRaw: function (rawValue) {
+                return 'Hello World';
+
+                if (_.isUndefined(rawValue) || _.isNull(rawValue)) return '';
+                return rawValue + '';
+            }
         });
     });
 

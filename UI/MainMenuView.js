@@ -38,6 +38,7 @@
         },
 
         setActive: function (element) {
+            //Todo: Set active on first load
             this.$('a').removeClass('active');
             $(element).addClass('active');
         },

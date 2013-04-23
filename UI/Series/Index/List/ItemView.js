@@ -9,19 +9,9 @@ define([
 
 ], function () {
 
-    NzbDrone.Series.Index.SeriesItemView = Backbone.Marionette.ItemView.extend({
+    NzbDrone.Series.Index.List.ItemView = Backbone.Marionette.ItemView.extend({
         tagName : 'tr',
-        template: 'Series/Index/SeriesItemTemplate',
-
-        getTemplate: function(){
-            if (this.viewStyle === 1){
-                this.tagName = 'div';
-                return 'Series/Index/SeriesGridItemTemplate';
-            }
-            else {
-                return 'Series/Index/SeriesItemTemplate';
-            }
-        },
+        template: 'Series/Index/List/ItemTemplate',
 
         ui: {
             'progressbar': '.progress .bar'
@@ -34,7 +24,6 @@ define([
 
         initialize: function (options) {
             this.qualityProfileCollection = options.qualityProfiles;
-            this.viewStyle = options.viewStyle;
         },
 
         editSeries: function () {
