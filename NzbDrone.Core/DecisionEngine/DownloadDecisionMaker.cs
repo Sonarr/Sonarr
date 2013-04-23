@@ -38,11 +38,11 @@ namespace NzbDrone.Core.DecisionEngine
         {
             foreach (var report in reports)
             {
-                var parseResult = _parsingService.Map(report);
-                var generalReasons = GetGeneralRejectionReasons(parseResult);
-                var searchReasons = GetSearchRejectionReasons(parseResult, searchDefinitionBase);
+                var remoteEpisode = _parsingService.Map(report);
+                var generalReasons = GetGeneralRejectionReasons(remoteEpisode);
+                var searchReasons = GetSearchRejectionReasons(remoteEpisode, searchDefinitionBase);
 
-                yield return new DownloadDecision(parseResult, generalReasons.Union(searchReasons).ToArray());
+                yield return new DownloadDecision(remoteEpisode, generalReasons.Union(searchReasons).ToArray());
             }
         }
 

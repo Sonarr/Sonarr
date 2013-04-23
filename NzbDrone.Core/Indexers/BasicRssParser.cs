@@ -79,15 +79,15 @@ namespace NzbDrone.Core.Indexers
         {
             var title = GetTitle(item);
 
-            var episodeParseResult = new ReportInfo();
+            var reportInfo = new ReportInfo();
 
-            episodeParseResult.Title = title;
-            episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
-            episodeParseResult.ReleaseGroup = ParseReleaseGroup(title);
+            reportInfo.Title = title;
+            reportInfo.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
+            reportInfo.ReleaseGroup = ParseReleaseGroup(title);
 
-            _logger.Trace("Parsed: {0} from: {1}", episodeParseResult, item.Title.Text);
+            _logger.Trace("Parsed: {0} from: {1}", reportInfo, item.Title.Text);
 
-            return PostProcessor(item, episodeParseResult);
+            return PostProcessor(item, reportInfo);
         }
 
         public static string ParseReleaseGroup(string title)

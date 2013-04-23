@@ -110,7 +110,7 @@ namespace NzbDrone.Core.IndexerSearch
         private List<DownloadDecision> Dispatch(Func<IIndexerBase, IEnumerable<ReportInfo>> searchAction, SearchDefinitionBase definitionBase)
         {
             var indexers = _indexerService.GetAvailableIndexers();
-            var parseResults = new List<ReportInfo>();
+            var reports = new List<ReportInfo>();
 
             Parallel.ForEach(indexers, indexer =>
             {
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.IndexerSearch
                     var indexerReports = searchAction(indexer);
                     lock (indexer)
                     {
-                        parseResults.AddRange(indexerReports);
+                        reports.AddRange(indexerReports);
                     }
                 }
                 catch (Exception e)
@@ -128,9 +128,9 @@ namespace NzbDrone.Core.IndexerSearch
                 }
             });
 
-            _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", parseResults.Count, definitionBase, indexers.Count);
+            _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", reports.Count, definitionBase, indexers.Count);
 
-            return _makeDownloadDecision.GetSearchDecision(parseResults, definitionBase).ToList();
+            return _makeDownloadDecision.GetSearchDecision(reports, definitionBase).ToList();
         }
 
 

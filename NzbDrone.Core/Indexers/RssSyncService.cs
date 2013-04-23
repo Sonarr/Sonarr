@@ -6,7 +6,6 @@ using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.Indexers
 {
-
     public interface IRssSyncService
     {
         void Sync();
@@ -32,10 +31,11 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Info("Starting RSS Sync");
 
-            var parseResults = _rssFetcherAndParser.Fetch();
-            var decisions = _downloadDecisionMaker.GetRssDecision(parseResults);
+            var reports = _rssFetcherAndParser.Fetch();
+            var decisions = _downloadDecisionMaker.GetRssDecision(reports);
 
             //TODO: this will download multiple of same episode if they show up in RSS. need to
+            //proposal: maybe get download decision one by one, that way 
             
             var qualifiedReports = decisions
                          .Where(c => c.Approved)
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Indexers
                 }
             }
 
-            _logger.Info("RSS Sync Completed. Reports found: {0}, Fetches attempted: {1}", parseResults.Count, qualifiedReports.Count());
+            _logger.Info("RSS Sync Completed. Reports found: {0}, Fetches attempted: {1}", reports.Count, qualifiedReports.Count());
         }
     }
 }

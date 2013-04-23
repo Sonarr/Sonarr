@@ -30,14 +30,14 @@ namespace NzbDrone.Core.Indexers.Nzbx
             {
                 try
                 {
-                    var episodeParseResult = new ReportInfo();
-                    episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PostDate).Days;
-                    episodeParseResult.Title = item.Name;
-                    episodeParseResult.NzbUrl = String.Format("http://nzbx.co/nzb?{0}*|*{1}", item.Guid, item.Name);
-                    episodeParseResult.NzbInfoUrl = String.Format("http://nzbx.co/d?{0}", item.Guid);
-                    episodeParseResult.Size = item.Size;
+                    var reportInfo = new ReportInfo();
+                    reportInfo.Age = DateTime.Now.Date.Subtract(item.PostDate).Days;
+                    reportInfo.Title = item.Name;
+                    reportInfo.NzbUrl = String.Format("http://nzbx.co/nzb?{0}*|*{1}", item.Guid, item.Name);
+                    reportInfo.NzbInfoUrl = String.Format("http://nzbx.co/d?{0}", item.Guid);
+                    reportInfo.Size = item.Size;
 
-                    result.Add(episodeParseResult);
+                    result.Add(reportInfo);
                 }
                 catch (Exception itemEx)
                 {

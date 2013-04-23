@@ -100,7 +100,7 @@ namespace NzbDrone.Core.ExternalNotification
                 try
                 {
                     _logger.Trace("Sending download notification to {0}", Name);
-                    OnDownload(message.ParseResult.ToString(), message.Series);
+                    OnDownload(message.ParsedEpisodeInfo.ToString(), message.Series);
                 }
                 catch (Exception e)
                 {
