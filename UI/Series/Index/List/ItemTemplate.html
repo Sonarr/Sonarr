@@ -8,7 +8,9 @@
         <div class="span10">
             <div class="row">
                 <div class="span9">
-                    <h2>{{title}}</h2>
+                    <a href="/series/details/{{id}}" target="_blank">
+                        <h2>{{title}}</h2>
+                    </a>
                 </div>
                 <div class="span1">
                     <div class="pull-right">
@@ -18,23 +20,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="span10">
-                    {{overview}}
-                </div>
+                <a href="/series/details/{{id}}" target="_blank">
+                    <div class="span10">
+                        {{overview}}
+                    </div>
+                </a>
             </div>
             <div class="row">&nbsp;</div>
             <div class="row">
                 <div class="span8">
                     {{#if isContinuing}}
-                        {{#if bestDateString}}
-                            <span class="label">{{bestDateString}}</span>
-                        {{else}}
-                            <span class="label label-inverse">{{statusText}}</span>
-                        {{/if}}
-                        <span class="label label-info">Season {{seasonCount}}</span>
+                    {{#if bestDateString}}
+                    <span class="label">{{bestDateString}}</span>
                     {{else}}
-                        <span class="label label-important">{{statusText}}</span>
-                        <span class="label label-info">{{seasonCount}} Seasons</span>
+                    <span class="label label-inverse">{{statusText}}</span>
+                    {{/if}}
+                    <span class="label label-info">Season {{seasonCount}}</span>
+                    {{else}}
+                    <span class="label label-important">{{statusText}}</span>
+                    <span class="label label-info">{{seasonCount}} Seasons</span>
                     {{/if}}
                 </div>
                 <div class="span2">

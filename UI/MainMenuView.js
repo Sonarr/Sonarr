@@ -1,9 +1,6 @@
-﻿define(['app'], function () {
+﻿"use strict";
+define(['app'], function () {
     NzbDrone.MainMenuView = Backbone.Marionette.ItemView.extend({
-        ui: {
-            seriesSearch: '.search input'
-        },
-
         events: {
             'click a': 'onClick'
         },
@@ -13,10 +10,9 @@
             event.preventDefault();
 
             var target = $(event.target);
-            var href = undefined;
 
             //look down for <a/>
-            href = event.target.getAttribute('href');
+            var href = event.target.getAttribute('href');
 
             //if couldn't find it look up 
             if (!href && target.parent('a') && target.parent('a')[0]) {
@@ -32,7 +28,7 @@
             if (href && href.startsWith('http')) {
                 window.location.href = href;
             } else {
-                NzbDrone.Router.navigate(href, { trigger: true, replace: true });
+                NzbDrone.Router.navigate(href, { trigger: true });
             }
 
         },

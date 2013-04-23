@@ -18,7 +18,8 @@ define([
 
         events: {
             'click .x-edit'  : 'editSeries',
-            'click .x-remove': 'removeSeries'
+            'click .x-remove': 'removeSeries',
+            'click a'        : 'showEpisodeList'
         },
 
         initialize: function (options) {
@@ -38,6 +39,12 @@ define([
             NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
                 view: view
             });
+        },
+
+        showEpisodeList: function (e) {
+            e.preventDefault();
+            NzbDrone.Router.navigate('/series/details/' + this.model.get('id'), { trigger: true});
+
         }
     });
 });
