@@ -35,7 +35,7 @@ define([
                         name: 'title',
                         label: 'Title',
                         editable: false,
-                        cell: 'string',
+                        cell: Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/SeriesTitleTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
@@ -71,7 +71,7 @@ define([
                         label: 'Episodes',
                         editable: false,
                         sortable: false,
-                        cell: 'episodeProgress',
+                        cell: Backgrid.TemplateBackedCell.extend({ template: 'Series/EpisodeProgressTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
@@ -79,7 +79,7 @@ define([
                         label: '',
                         editable: false,
                         sortable: false,
-                        cell: 'controlsColumn',
+                        cell: Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/ControlsColumnTemplate' }),
                         headerCell: 'nzbDrone'
                     }
                 ];

@@ -34,21 +34,8 @@ Backgrid.AirDateCell = Backgrid.Cell.extend({
     }
 });
 
-Backgrid.EpisodeProgressCell = Backgrid.Cell.extend({
-    className: "episode-progress-cell",
-    template: 'Series/EpisodeProgressTemplate',
-
-    render: function () {
-        var data = this.model.toJSON();
-        var html = Marionette.Renderer.render(this.template, data);
-        this.$el.html(html);
-
-        return this;
-    }
-});
-
-Backgrid.ControlsColumnCell = Backgrid.Cell.extend({
-    className: "controls-cell",
+Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
+    className: '',
     template: 'Series/Index/Table/ControlsColumnTemplate',
 
     render: function () {
