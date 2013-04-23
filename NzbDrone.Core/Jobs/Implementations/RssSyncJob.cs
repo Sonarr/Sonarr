@@ -7,13 +7,13 @@ namespace NzbDrone.Core.Jobs.Implementations
 {
     public class RssSyncJob : IJob
     {
-        private readonly ISyncRss _syncRssService;
+        private readonly IRssSyncService _rssSyncServiceService;
         private readonly IConfigService _configService;
 
 
-        public RssSyncJob(ISyncRss syncRssService, IConfigService configService)
+        public RssSyncJob(IRssSyncService rssSyncServiceService, IConfigService configService)
         {
-            _syncRssService = syncRssService;
+            _rssSyncServiceService = rssSyncServiceService;
             _configService = configService;
         }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Jobs.Implementations
 
         public void Start(ProgressNotification notification, dynamic options)
         {
-            _syncRssService.Sync();
+            _rssSyncServiceService.Sync();
         }
     }
 }
