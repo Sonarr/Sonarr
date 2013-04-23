@@ -17,6 +17,7 @@ module.exports = function (grunt) {
             'UI/JsLibraries/handlebars.runtime.js'       : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
             'UI/JsLibraries/jquery.cookie.js'            : 'http://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js',
             'UI/JsLibraries/jquery.js'                   : 'http://code.jquery.com/jquery.js',
+            'UI/JsLibraries/jquery.backstretch.js'       : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
             //'NzbDrone.Backbone/JsLibraries/jquery.tablesorter.bootstrap.js':
             //'NzbDrone.Backbone/JsLibraries/jquery.tablesorter.js':
             'UI/JsLibraries/require.js'                  : 'http://raw.github.com/jrburke/requirejs/master/require.js',

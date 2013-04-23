@@ -1,6 +1,21 @@
-﻿<div>
-    <div class="x-series-details">
-        {{overview}}
+﻿<div class="row series-page-header">
+    <div class="span2">
+        <a href="{{traktUrl}}" target="_blank">
+            <img class="series-poster img-polaroid" src="{{poster}}">
+        </a>
     </div>
-    <div class="x-series-seasons"></div>
+    <div class="span9">
+        <div class="row">
+            <h2>{{title}}</h2>
+        </div>
+        <div class="row">
+            {{overview}}
+        </div>
+        <div class="row">
+            <span class="label label-info">{{network}}</span>
+            <span class="label label-info">{{runtime}} minutes</span>
+        </div>
+    </div>
 </div>
+
+<div class="x-series-seasons"></div>

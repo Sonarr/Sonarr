@@ -8,7 +8,7 @@ define([
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell'
 ],
-    function (app) {
+    function () {
         NzbDrone.Series.Index.SeriesIndexLayout = Backbone.Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -27,7 +27,61 @@ define([
             showTable: function () {
 
                 var columns =
-                [
+                    [
+                        {
+                            name    : 'status',
+                            label   : '',
+                            editable: false,
+                            cell    : 'seriesStatus'
+                        },
+                        {
+                            name    : 'title',
+                            label   : 'Title',
+                            editable: false,
+                            cell    : 'string'
+                        },
+                        {
+                            name    : 'seasonCount',
+                            label   : 'Seasons',
+                            editable: false,
+                            cell    : 'integer'
+                        },
+                        {
+                            name    : 'quality',
+                            label   : 'Quality',
+                            editable: false,
+                            cell    : 'integer'
+                        },
+                        {
+                            name    : 'network',
+                            label   : 'Network',
+                            editable: false,
+                            cell    : 'string'
+                        },
+                        {
+                            name     : 'nextAiring',
+                            label    : 'Next Airing',
+                            editable : false,
+                            cell     : 'datetime',
+                            formatter: new Backgrid.AirDateFormatter()
+                        },
+                        {
+                            name    : 'episodes',
+                            label   : 'Episodes',
+                            editable: false,
+                            sortable: false,
+                            cell    : 'string'
+                        },
+                        {
+                            name    : 'edit',
+                            label   : '',
+                            editable: false,
+                            sortable: false,
+                            cell    : 'string'
+                        }
+                    ];
+
+                var grid = new Backgrid.Grid(
                     {
                         name: 'status',
                         label: '',

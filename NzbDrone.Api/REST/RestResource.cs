@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Api.REST
 {
@@ -6,6 +7,7 @@ namespace NzbDrone.Api.REST
     {
         public int Id { get; set; }
 
+        [JsonIgnore]
         public virtual string ResourceName
         {
             get

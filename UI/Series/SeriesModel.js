@@ -31,17 +31,28 @@
 
                 return undefined;
             },
+            fanArt           : function () {
+                var poster = _.find(this.get('images'), function (image) {
+                    return image.coverType === 3;
+                });
+
+                if (poster) {
+                    return poster.url;
+                }
+
+                return undefined;
+            },
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             },
             isContinuing     : function () {
-                if (this.get('status') === 0){
+                if (this.get('status') === 0) {
                     return true;
                 }
 
                 return false;
             },
-            statusText: function () {
+            statusText       : function () {
                 if (this.get('status') === 0) {
                     return 'Continuing';
                 }
@@ -56,7 +67,7 @@
             qualityProfiles : qualityProfileCollection,
             rootFolders     : rootFolders,
             isExisting      : false,
-            status: 0
+            status          : 0
         }
     });
 
