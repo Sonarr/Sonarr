@@ -58,27 +58,27 @@ define([
                         name: 'nextAiring',
                         label: 'Next Airing',
                         editable: false,
-                        cell: 'datetime',
-                        formatter: new Backgrid.AirDateFormatter()
+                        cell: 'airDate'
                     },
                     {
                         name: 'episodes',
                         label: 'Episodes',
                         editable: false,
                         sortable: false,
-                        cell: 'string'
+                        cell: 'episodeProgress'
                     },
                     {
                         name: 'edit',
                         label: '',
                         editable: false,
                         sortable: false,
-                        cell: 'string'
+                        cell: 'controlsColumn'
                     }
                 ];
 
                 this.series.show(new Backgrid.Grid(
                     {
+                        row: Backgrid.SeriesIndexTableRow,
                         columns : columns,
                         collection : this.seriesCollection,
                         className: 'table table-hover'
