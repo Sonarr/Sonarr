@@ -28,51 +28,59 @@ define([
                         name: 'status',
                         label: '',
                         editable: false,
-                        cell: 'seriesStatus'
+                        cell: 'seriesStatus',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'title',
                         label: 'Title',
                         editable: false,
-                        cell: 'string'
+                        cell: 'string',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'seasonCount',
                         label: 'Seasons',
                         editable: false,
-                        cell: 'integer'
+                        cell: 'integer',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'quality',
                         label: 'Quality',
                         editable: false,
-                        cell: 'integer'
+                        cell: 'integer',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'network',
                         label: 'Network',
                         editable: false,
-                        cell: 'string'
+                        cell: 'string',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'nextAiring',
                         label: 'Next Airing',
                         editable: false,
-                        cell: 'airDate'
+                        cell: 'airDate',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'episodes',
                         label: 'Episodes',
                         editable: false,
                         sortable: false,
-                        cell: 'episodeProgress'
+                        cell: 'episodeProgress',
+                        headerCell: 'nzbDrone'
                     },
                     {
                         name: 'edit',
                         label: '',
                         editable: false,
                         sortable: false,
-                        cell: 'controlsColumn'
+                        cell: 'controlsColumn',
+                        headerCell: 'nzbDrone'
                     }
                 ];
 

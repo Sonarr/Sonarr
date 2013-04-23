@@ -81,3 +81,39 @@ Backgrid.SeriesIndexTableRow = Backgrid.Row.extend({
         });
     }
 });
+
+Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
+    events: {
+        'click': 'onClick'
+    },
+
+    render: function () {
+        this.$el.empty();
+        var test = this.column.get('label');
+        this.$el.append(this.column.get("label"));
+
+        if (this.column.get('sortable')) {
+            this.$el.append(" <i class='icon-sort pull-right'></i>");
+        }
+        this.delegateEvents();
+        return this;
+    },
+
+    direction: function (dir) {
+        if (arguments.length) {
+            if (this._direction) this.$el.children('i').removeClass(this._convertDirectionToIcon(this._direction));
+            if (dir) this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
+            this._direction = dir;
+        }
+
+        return this._direction;
+    },
+
+    _convertDirectionToIcon: function (dir) {
+        if (dir === 'ascending') {
+            return 'icon-sort-up';
+        }
+
+        return 'icon-sort-down';
+    }
+});
