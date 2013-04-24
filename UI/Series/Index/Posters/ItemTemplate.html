@@ -1,29 +1,33 @@
 ﻿<div class="series-posters-item">
     <div class="row">
         <div class="span2">
-            <a href="/series/details/{{titleSlug}}" target="_blank" class="center">
-                <img class="series-poster img-polaroid" src="{{poster}}">
-            </a>
-
-            <div class="center">{{title}}</div>
-
             <div class="center">
-                {{#if isContinuing}}
-                    {{#if bestDateString}}
-                        <span class="label">{{bestDateString}}</span>
-                    {{else}}
-                        <span class="label label-inverse">{{statusText}}</span>
-                    {{/if}}
-                    <span class="label label-info">Season {{seasonCount}}</span>
-                {{else}}
-                    <span class="label label-info">{{seasonCount}} Seasons</span>
-                {{/if}}
+                <div class="series-poster-container">
+                    {{#unless isContinuing}}
+                        <div class="ended-banner">Ended</div>
+                    {{/unless}}
+                    <a href="/series/details/{{titleSlug}}" target="_blank">
+                        <img class="series-poster img-polaroid" src="{{poster}}">
+                    </a>
+                </div>
             </div>
 
-            <!--<div class="progress">-->
-                <!--<span class="progressbar-back-text">{{episodeFileCount}} / {{episodeCount}}</span>-->
-                <!--<div class="bar" style="width:{{percentOfEpisodes}}%"><span class="progressbar-front-text">{{episodeFileCount}} / {{episodeCount}}</span></div>-->
-            <!--</div>-->
+            <div class="center title">{{title}}</div>
+
+            <div class="center">
+                <div class="labels">
+                    {{#if isContinuing}}
+                        {{#if bestDateString}}
+                            <span class="label label-inverse">{{bestDateString}}</span>
+                        {{else}}
+                            <span class="label label-inverse">{{statusText}}</span>
+                        {{/if}}
+                        <span class="label label-info">Season {{seasonCount}}</span>
+                    {{else}}
+                        <span class="label label-info">{{seasonCount}} Seasons</span>
+                    {{/if}}
+                </div>
+            </div>
         </div>
     </div>
 </div>

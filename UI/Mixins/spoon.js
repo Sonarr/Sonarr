@@ -21,5 +21,9 @@ function bestDateString(sourceDate) {
         return date.format('{Weekday}');
     }
 
+    if (date.isAfter(Date.create().addDays(6))) {
+        return date.relative().replace(' from now', '');
+    }
+
     return date.format('{MM}/{dd}/{yyyy}');
 }
