@@ -6,7 +6,7 @@ using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Frontend;
 using NzbDrone.Common;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using TinyIoC;
@@ -30,7 +30,7 @@ namespace NzbDrone.Api
             AutomapperBootstraper.InitializeAutomapper();
             RegisterReporting(container);
 
-            container.Resolve<IEventAggregator>().Publish(new ApplicationStartedEvent());
+            container.Resolve<IMessageAggregator>().Publish(new ApplicationStartedEvent());
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<ErrorPipeline>().HandleException);
         }
@@ -73,7 +73,7 @@ namespace NzbDrone.Api
 
         public void Shutdown()
         {
-            ApplicationContainer.Resolve<IEventAggregator>().Publish(new ApplicationShutdownRequested());
+            ApplicationContainer.Resolve<IMessageAggregator>().Publish(new ApplicationShutdownRequested());
         }
     }
 }

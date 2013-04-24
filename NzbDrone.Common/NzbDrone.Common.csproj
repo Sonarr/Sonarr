@@ -105,10 +105,13 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
-    <Compile Include="Eventing\EventAggregator.cs" />
-    <Compile Include="Eventing\IEvent.cs" />
-    <Compile Include="Eventing\IEventAggregator.cs" />
-    <Compile Include="Eventing\IHandle.cs" />
+    <Compile Include="Messaging\ICommand.cs" />
+    <Compile Include="Messaging\IMessage.cs" />
+    <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="Messaging\MessageAggregator.cs" />
+    <Compile Include="Messaging\IEvent.cs" />
+    <Compile Include="Messaging\IMessageAggregator.cs" />
+    <Compile Include="Messaging\IHandle.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />

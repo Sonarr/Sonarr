@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using NLog;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv;
@@ -24,23 +24,23 @@ namespace NzbDrone.Core.MediaFiles
     {
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
         private readonly IMediaFileRepository _mediaFileRepository;
 
-        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
+        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IEpisodeService episodeService, IMessageAggregator messageAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
             _configService = configService;
             _episodeService = episodeService;
-            _eventAggregator = eventAggregator;
+            _messageAggregator = messageAggregator;
             _logger = logger;
         }
 
         public EpisodeFile Add(EpisodeFile episodeFile)
         {
             var addedFile = _mediaFileRepository.Insert(episodeFile);
-            _eventAggregator.Publish(new EpisodeFileAddedEvent(addedFile));
+            _messageAggregator.Publish(new EpisodeFileAddedEvent(addedFile));
             return addedFile;
         }
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles
         public void Delete(EpisodeFile episodeFile)
         {
             _mediaFileRepository.Delete(episodeFile);
-            _eventAggregator.Publish(new EpisodeFileDeletedEvent(episodeFile));
+            _messageAggregator.Publish(new EpisodeFileDeletedEvent(episodeFile));
         }
 
         public bool Exists(string path)

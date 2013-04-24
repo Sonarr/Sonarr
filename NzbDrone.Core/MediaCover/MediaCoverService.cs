@@ -2,7 +2,7 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 

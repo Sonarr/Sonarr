@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Model;
@@ -21,16 +21,16 @@ namespace NzbDrone.Core.Download
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IConfigService _configService;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
 
 
         public DownloadService(IProvideDownloadClient downloadClientProvider, IConfigService configService,
-            IEventAggregator eventAggregator, Logger logger)
+            IMessageAggregator messageAggregator, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
             _configService = configService;
-            _eventAggregator = eventAggregator;
+            _messageAggregator = messageAggregator;
             _logger = logger;
         }
 
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Download
             if (success)
             {
                 _logger.Info("Report sent to download client. {0}", downloadTitle);
-                _eventAggregator.Publish(new EpisodeGrabbedEvent(episode));
+                _messageAggregator.Publish(new EpisodeGrabbedEvent(episode));
             }
 
             return success;

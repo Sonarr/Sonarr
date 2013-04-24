@@ -1,5 +1,5 @@
 using System;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 
 namespace NzbDrone.Core.Indexers
 {

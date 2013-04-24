@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Core.Providers;
-using NzbDrone.Api.QualityType;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.QualityProfiles

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Qualities

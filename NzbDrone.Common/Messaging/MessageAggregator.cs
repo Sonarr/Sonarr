@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 
-namespace NzbDrone.Common.Eventing
+namespace NzbDrone.Common.Messaging
 {
-    public class EventAggregator : IEventAggregator
+    public class MessageAggregator : IMessageAggregator
     {
         private readonly Logger _logger;
-        private readonly Func<IEnumerable<IHandle>> _handlers;
+        private readonly Func<IEnumerable<IProcessMessage>> _handlers;
 
-        public EventAggregator(Logger logger, Func<IEnumerable<IHandle>> handlers)
+        public MessageAggregator(Logger logger, Func<IEnumerable<IProcessMessage>> handlers)
         {
             _logger = logger;
             _handlers = handlers;
@@ -39,6 +39,11 @@ namespace NzbDrone.Common.Eventing
                         _logger.Debug("{0} <~ {1}", message.GetType().Name, handlerLocal.GetType().Name);
                     });
             }
+        }
+
+        public void Execute<TCommand>(TCommand message) where TCommand : ICommand
+        {
+            throw new NotImplementedException();
         }
     }
 }

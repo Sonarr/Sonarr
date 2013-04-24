@@ -4,7 +4,7 @@ using NLog;
 using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Common;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.ExternalNotification;
@@ -29,7 +29,7 @@ namespace NzbDrone
         {
             AutoRegisterImplementations<ExternalNotificationBase>();
 
-            Container.Register<IEventAggregator, EventAggregator>().AsSingleton();
+            Container.Register<IMessageAggregator, MessageAggregator>().AsSingleton();
             Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
             Container.Register<IAnnouncer, MigrationLogger>().AsSingleton();
             Container.Register<Router>().AsSingleton();

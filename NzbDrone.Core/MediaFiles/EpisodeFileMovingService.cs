@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
@@ -21,17 +21,17 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly DiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public MoveEpisodeFiles(ISeriesRepository seriesRepository, IEpisodeService episodeService, IBuildFileNames buildFileNames, IMediaFileService mediaFileService, IEventAggregator eventAggregator, DiskProvider diskProvider, Logger logger)
+        public MoveEpisodeFiles(ISeriesRepository seriesRepository, IEpisodeService episodeService, IBuildFileNames buildFileNames, IMediaFileService mediaFileService, IMessageAggregator messageAggregator, DiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _episodeService = episodeService;
             _buildFileNames = buildFileNames;
             _mediaFileService = mediaFileService;
-            _eventAggregator = eventAggregator;
+            _messageAggregator = messageAggregator;
             _diskProvider = diskProvider;
             _logger = logger;
         }
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (newDownload)
             {
-                _eventAggregator.Publish(new EpisodeDownloadedEvent(parsedEpisodeInfo, series));
+                _messageAggregator.Publish(new EpisodeDownloadedEvent(parsedEpisodeInfo, series));
             }
 
             return episodeFile;

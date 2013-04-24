@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Test.Common;
@@ -14,7 +14,7 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_be_able_to_resolve_event_handlers()
         {
-            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IHandle>>().Should().NotBeEmpty();
+            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IProcessMessage>>().Should().NotBeEmpty();
         }
 
         [Test]

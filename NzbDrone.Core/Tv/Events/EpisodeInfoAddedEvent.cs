@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 
 namespace NzbDrone.Core.Tv.Events
 {

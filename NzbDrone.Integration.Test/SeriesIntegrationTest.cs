@@ -34,7 +34,7 @@ namespace NzbDrone.Integration.Test
         }
 
         [Test]
-        public void should_be_able_to_add_series()
+        public void should_be_able_to_add_and_delete_series()
         {
             var series = Series.Lookup("archer").First();
 
@@ -45,6 +45,10 @@ namespace NzbDrone.Integration.Test
             Series.Post(series);
 
             Series.All().Should().HaveCount(1);
+
+            Series.Delete(series.Id);
+
+            Series.All().Should().BeEmpty();
         }
     }
 }

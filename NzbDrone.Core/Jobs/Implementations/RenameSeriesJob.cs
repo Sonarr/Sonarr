@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model.Notification;
@@ -14,16 +14,16 @@ namespace NzbDrone.Core.Jobs.Implementations
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly IMoveEpisodeFiles _moveEpisodeFiles;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RenameSeriesJob(IMediaFileService mediaFileService, ISeriesRepository seriesRepository, IEventAggregator eventAggregator, IMoveEpisodeFiles moveEpisodeFiles)
+        public RenameSeriesJob(IMediaFileService mediaFileService, ISeriesRepository seriesRepository, IMessageAggregator messageAggregator, IMoveEpisodeFiles moveEpisodeFiles)
         {
             _mediaFileService = mediaFileService;
             _seriesRepository = seriesRepository;
-            _eventAggregator = eventAggregator;
+            _messageAggregator = messageAggregator;
             _moveEpisodeFiles = moveEpisodeFiles;
         }
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Jobs.Implementations
 
                 //Start AfterRename
 
-                _eventAggregator.Publish(new SeriesRenamedEvent(series));
+                _messageAggregator.Publish(new SeriesRenamedEvent(series));
 
                 notification.CurrentMessage = String.Format("Rename completed for {0}", series.Title);
             }

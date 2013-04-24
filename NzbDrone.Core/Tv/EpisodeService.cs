@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
@@ -45,19 +45,19 @@ namespace NzbDrone.Core.Tv
         private readonly IProvideEpisodeInfo _episodeInfoProxy;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IEpisodeRepository _episodeRepository;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
         public EpisodeService(IProvideEpisodeInfo episodeInfoProxy, ISeasonRepository seasonRepository,
-                              IEpisodeRepository episodeRepository, IEventAggregator eventAggregator,
+                              IEpisodeRepository episodeRepository, IMessageAggregator messageAggregator,
                               IConfigService configService, ISeriesService seriesService, Logger logger)
         {
             _episodeInfoProxy = episodeInfoProxy;
             _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
-            _eventAggregator = eventAggregator;
+            _messageAggregator = messageAggregator;
             _configService = configService;
             _seriesService = seriesService;
             _logger = logger;
@@ -211,12 +211,12 @@ namespace NzbDrone.Core.Tv
 
             if (newList.Any())
             {
-                _eventAggregator.Publish(new EpisodeInfoAddedEvent(newList));
+                _messageAggregator.Publish(new EpisodeInfoAddedEvent(newList));
             }
 
             if (updateList.Any())
             {
-                _eventAggregator.Publish(new EpisodeInfoUpdatedEvent(updateList));
+                _messageAggregator.Publish(new EpisodeInfoUpdatedEvent(updateList));
             }
 
             if (failCount != 0)

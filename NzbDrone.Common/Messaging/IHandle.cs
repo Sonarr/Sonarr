@@ -1,12 +1,10 @@
-﻿using System.Linq;
-
-namespace NzbDrone.Common.Eventing
+﻿namespace NzbDrone.Common.Messaging
 {
     /// <summary>
     ///   Denotes a class which can handle a particular type of message.
     /// </summary>
     /// <typeparam name = "TEvent">The type of message to handle.</typeparam>
-    public interface IHandle<TEvent> : IHandle where TEvent : IEvent
+    public interface IHandle<TEvent> : IProcessMessage where TEvent : IEvent
     {
         /// <summary>
         ///   Handles the message synchronously.
@@ -19,7 +17,7 @@ namespace NzbDrone.Common.Eventing
     ///   Denotes a class which can handle a particular type of message.
     /// </summary>
     /// <typeparam name = "TEvent">The type of message to handle.</typeparam>
-    public interface IHandleAsync<TEvent> : IHandleAsync where TEvent : IEvent
+    public interface IHandleAsync<TEvent> : IProcessMessageAsync where TEvent : IEvent
     {
         /// <summary>
         ///   Handles the message asynchronously.
@@ -27,14 +25,4 @@ namespace NzbDrone.Common.Eventing
         /// <param name = "message">The message.</param>
         void HandleAsync(TEvent message);
     }
-
-    /// <summary>
-    ///   A marker interface for classes that subscribe to messages.
-    /// </summary>
-    public interface IHandle { }
-
-    /// <summary>
-    ///   A marker interface for classes that subscribe to messages.
-    /// </summary>
-    public interface IHandleAsync : IHandle { }
 }

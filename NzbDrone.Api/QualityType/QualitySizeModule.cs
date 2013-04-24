@@ -3,8 +3,6 @@ using System.Linq;
 using AutoMapper;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.QualityProfiles;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.QualityType

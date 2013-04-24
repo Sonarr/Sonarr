@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace NzbDrone.Common.Eventing
+﻿namespace NzbDrone.Common.Messaging
 {
     /// <summary>
     ///   Enables loosely-coupled publication of events.
     /// </summary>
-    public interface IEventAggregator
+    public interface IMessageAggregator
     {
         void Publish<TEvent>(TEvent message) where TEvent : IEvent;
+        void Execute<TCommand>(TCommand message) where TCommand : ICommand;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Timers;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Jobs

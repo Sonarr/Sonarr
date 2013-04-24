@@ -6,7 +6,7 @@ using Marr.Data;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Eventing;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource;
@@ -41,19 +41,19 @@ namespace NzbDrone.Core.Tv
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
         private readonly IProvideSeriesInfo _seriesInfoProxy;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly IRootFolderService _rootFolderService;
         private readonly DiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
-                             IProvideSeriesInfo seriesInfoProxy, IEventAggregator eventAggregator,
+                             IProvideSeriesInfo seriesInfoProxy, IMessageAggregator messageAggregator,
                              IRootFolderService rootFolderService, DiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _seriesInfoProxy = seriesInfoProxy;
-            _eventAggregator = eventAggregator;
+            _messageAggregator = messageAggregator;
             _rootFolderService = rootFolderService;
             _diskProvider = diskProvider;
             _logger = logger;
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Tv
 
             //Todo: We need to get the UtcOffset from TVRage, since its not available from trakt
 
-            _eventAggregator.Publish(new SeriesUpdatedEvent(series));
+            _messageAggregator.Publish(new SeriesUpdatedEvent(series));
 
             return series;
         }
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Tv
             newSeries.BacklogSetting = BacklogSettingType.Inherit;
 
             _seriesRepository.Insert(newSeries);
-            _eventAggregator.Publish(new SeriesAddedEvent(newSeries));
+            _messageAggregator.Publish(new SeriesAddedEvent(newSeries));
 
             return newSeries;
         }
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Tv
         {
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
-            _eventAggregator.Publish(new SeriesDeletedEvent(series, deleteFiles));
+            _messageAggregator.Publish(new SeriesDeletedEvent(series, deleteFiles));
         }
 
         public List<Series> GetAllSeries()
