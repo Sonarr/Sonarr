@@ -2,18 +2,22 @@
 define([
     'app',
     'Series/Index/List/CollectionView',
+    'Config'
     'Series/Index/Posters/CollectionView',
     'Series/Index/EmptyView',
     'Config',
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell'
+    'Shared/Toolbar/ToolbarView',
+    'Config'
 ],
     function () {
         NzbDrone.Series.Index.SeriesIndexLayout = Backbone.Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
             regions: {
-                series: '#x-series'
+                series : '#x-series',
+                toolbar: '#x-toolbar'
             },
 
             ui: {
@@ -175,6 +179,15 @@ define([
             },
 
             onShow: function () {
+
+                var commands = new NzbDrone.Shared.Toolbar.CommandCollection();
+
+                commands.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Add Series", icon: "icon-plus"}));
+                commands.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
+                commands.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
+
+                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarView({collection: commands}));
+
                 switch (this.viewStyle) {
                     case 1:
                         this.showList();

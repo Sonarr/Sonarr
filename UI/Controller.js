@@ -72,7 +72,7 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
             },
 
             _setTitle: function (title) {
-                $('#title-region').html(title);
+                //$('#title-region').html(title);
 
                 if (title.toLocaleLowerCase() === 'nzbdrone') {
                     window.document.title = 'NzbDrone';
