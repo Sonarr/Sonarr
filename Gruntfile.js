@@ -23,8 +23,11 @@ module.exports = function (grunt) {
             'UI/JsLibraries/require.js'                  : 'http://raw.github.com/jrburke/requirejs/master/require.js',
             'UI/JsLibraries/sugar.js'                    : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
             'UI/JsLibraries/underscore.js'               : 'http://underscorejs.org/underscore.js',
-            'UI/JsLibraries/backbone.pageable.js'        : 'https://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
-            'UI/JsLibraries/backbone.backgrid.js'        : 'https://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js'
+            'UI/JsLibraries/backbone.pageable.js'        : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
+            'UI/JsLibraries/backbone.backgrid.js'        : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
+            'UI/JsLibraries/messenger.js'                : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
+            'UI/Content/messenger.css'                   : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
+            'UI/Content/messenger.future.css'            : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css'
         },
 
         uglify: {

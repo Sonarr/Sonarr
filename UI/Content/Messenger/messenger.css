@@ -1,0 +1,93 @@
+/* line 4, ../../src/sass/messenger.sass */
+ul.messenger {
+  margin: 0;
+  padding: 0;
+}
+/* line 8, ../../src/sass/messenger.sass */
+ul.messenger li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 14, ../../src/sass/messenger.sass */
+ul.messenger .messenger-message {
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 17, ../../src/sass/messenger.sass */
+ul.messenger .messenger-message.messenger-hidden {
+  display: none;
+}
+/* line 20, ../../src/sass/messenger.sass */
+ul.messenger .messenger-message .messenger-phrase, ul.messenger .messenger-message .messenger-actions a {
+  padding-right: 5px;
+}
+/* line 23, ../../src/sass/messenger.sass */
+ul.messenger .messenger-message .messenger-actions {
+  float: right;
+}
+/* line 26, ../../src/sass/messenger.sass */
+ul.messenger .messenger-message .messenger-actions a {
+  cursor: pointer;
+  text-decoration: underline;
+}
+/* line 30, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed {
+  position: fixed;
+  z-index: 10000;
+}
+/* line 34, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed .messenger-message {
+  min-width: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 39, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed .message .messenger-actions {
+  float: left;
+}
+/* line 42, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-top {
+  top: 20px;
+}
+/* line 45, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-bottom {
+  bottom: 20px;
+}
+/* line 48, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-top, ul.messenger.messenger-fixed.messenger-on-bottom {
+  left: 50%;
+  width: 800px;
+  margin-left: -400px;
+}
+@media (max-width: 960px) {
+  /* line 48, ../../src/sass/messenger.sass */
+  ul.messenger.messenger-fixed.messenger-on-top, ul.messenger.messenger-fixed.messenger-on-bottom {
+    left: 10%;
+    width: 80%;
+    margin-left: 0px;
+  }
+}
+/* line 58, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-top.messenger-on-right, ul.messenger.messenger-fixed.messenger-on-bottom.messenger-on-right {
+  right: 20px;
+  left: auto;
+}
+/* line 62, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-top.messenger-on-left, ul.messenger.messenger-fixed.messenger-on-bottom.messenger-on-left {
+  left: 20px;
+  margin-left: 0px;
+}
+/* line 66, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-right, ul.messenger.messenger-fixed.messenger-on-left {
+  width: 350px;
+}
+/* line 69, ../../src/sass/messenger.sass */
+ul.messenger.messenger-fixed.messenger-on-right .messenger-actions, ul.messenger.messenger-fixed.messenger-on-left .messenger-actions {
+  float: left;
+}
+/* line 72, ../../src/sass/messenger.sass */
+ul.messenger .messenger-spinner {
+  display: none;
+}

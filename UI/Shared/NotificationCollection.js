@@ -14,6 +14,11 @@ define(['app', 'Shared/NotificationModel'], function () {
              this.push(model);
              */
 
+            window.alert = function (message) {
+                window.Messenger().post(message);
+            };
+
+
             var self = this;
 
             window.onerror = function (msg, url, line) {
