@@ -5,6 +5,10 @@ define([
     NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
         template: 'AddSeries/SearchResultTemplate',
 
+        ui: {
+            qualityProfile: '.x-quality-profile'
+        },
+
         events: {
             'click .x-add': 'addSeries'
         },
@@ -17,7 +21,7 @@ define([
 
             var self = this;
 
-            var quality = this.options.qualityProfile.val();
+            var quality = this.ui.qualityProfile.val();
             var rootFolderId = this.options.rootFolder.id;
             var folder = this.options.folder.name;
 
