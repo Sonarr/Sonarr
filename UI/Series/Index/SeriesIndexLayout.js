@@ -2,7 +2,10 @@
 define([
     'app',
     'Series/Index/List/CollectionView',
-    'Config'
+    'Series/Index/EmptyView',
+    'Config',
+    'Series/Index/Table/AirDateCell',
+    'Series/Index/Table/SeriesStatusCell'
 ],
     function (app) {
         NzbDrone.Series.Index.SeriesIndexLayout = Backbone.Marionette.Layout.extend({
@@ -95,6 +98,10 @@ define([
 
             showList: function () {
                 this.series.show(new NzbDrone.Series.Index.List.CollectionView({ collection: this.seriesCollection }));
+            },
+
+            showEmpty: function () {
+                this.series.show(new NzbDrone.Series.Index.EmptyView());
             },
 
             initialize: function () {
