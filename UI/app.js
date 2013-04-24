@@ -32,7 +32,9 @@ define('app', function () {
     window.NzbDrone.Config = {};
     window.NzbDrone.Series = {};
     window.NzbDrone.Series.Index = {};
+    window.NzbDrone.Series.Index.Table = {};
     window.NzbDrone.Series.Index.List = {};
+    window.NzbDrone.Series.Index.Posters = {};
     window.NzbDrone.Series.Edit = {};
     window.NzbDrone.Series.Delete = {};
     window.NzbDrone.Series.Details = {};

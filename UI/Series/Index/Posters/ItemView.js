@@ -9,8 +9,10 @@ define([
 
 ], function () {
 
-    NzbDrone.Series.Index.List.ItemView = Backbone.Marionette.ItemView.extend({
-        template: 'Series/Index/List/ItemTemplate',
+    NzbDrone.Series.Index.Posters.ItemView = Backbone.Marionette.ItemView.extend({
+        tagName : 'li',
+        template: 'Series/Index/Posters/ItemTemplate',
+
 
         ui: {
             'progressbar': '.progress .bar'

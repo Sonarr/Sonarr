@@ -2,6 +2,7 @@
 define([
     'app',
     'Series/Index/List/CollectionView',
+    'Series/Index/Posters/CollectionView',
     'Series/Index/EmptyView',
     'Config',
     'Series/Index/Table/AirDateCell',
@@ -100,6 +101,10 @@ define([
                 this.series.show(new NzbDrone.Series.Index.List.CollectionView({ collection: this.seriesCollection }));
             },
 
+            showPosters: function () {
+                this.series.show(new NzbDrone.Series.Index.Posters.CollectionView({ collection: this.seriesCollection }));
+            },
+
             showEmpty: function () {
                 this.series.show(new NzbDrone.Series.Index.EmptyView());
             },
@@ -119,6 +124,9 @@ define([
                 switch (this.viewStyle) {
                     case 1:
                         this.showList();
+                        break;
+                    case 2:
+                        this.showPosters();
                         break;
                     default:
                         this.showTable();
@@ -141,6 +149,11 @@ define([
                 if (view === 1) {
                     NzbDrone.Config.SeriesViewStyle(1);
                     this.showList();
+                }
+
+                else if (view === 2) {
+                    NzbDrone.Config.SeriesViewStyle(2);
+                    this.showPosters();
                 }
 
                 else {
