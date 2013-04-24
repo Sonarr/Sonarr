@@ -136,14 +136,11 @@ define([
             changeView: function (e) {
                 e.preventDefault();
                 var view = parseInt($(e.target).data('target'));
+                var target = $(e.target);
 
                 if (isNaN(view)) {
                     view = parseInt($(e.target).parent('a').data('target'));
-                    this.setActive($(e.target).parent('a'));
-                }
-
-                else{
-                    this.setActive($(e.target));
+                    target = $(e.target).parent('a');
                 }
 
                 if (view === 1) {
@@ -160,6 +157,8 @@ define([
                     NzbDrone.Config.SeriesViewStyle(0);
                     this.showTable();
                 }
+
+                this.setActive(target);
             },
 
             setActive: function (element) {
