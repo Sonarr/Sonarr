@@ -1,5 +1,4 @@
 'use strict';
-
 define(['app', 'Series/SeriesModel'], function () {
 
     NzbDrone.Series.Delete.DeleteSeriesView = Backbone.Marionette.ItemView.extend({

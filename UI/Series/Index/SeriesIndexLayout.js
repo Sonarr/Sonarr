@@ -2,6 +2,7 @@
 define([
     'app',
     'Series/Index/List/CollectionView',
+<<<<<<< HEAD
     'Config'
     'Series/Index/Posters/CollectionView',
     'Series/Index/EmptyView',
@@ -9,6 +10,9 @@ define([
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell'
     'Shared/Toolbar/ToolbarView',
+=======
+    'Shared/Toolbar/ToolbarLayout',
+>>>>>>> added support for multi-button groups to toolbar
     'Config'
 ],
     function () {
@@ -180,13 +184,19 @@ define([
 
             onShow: function () {
 
-                var commands = new NzbDrone.Shared.Toolbar.CommandCollection();
+                var menuLeft = new NzbDrone.Shared.Toolbar.CommandCollection();
 
-                commands.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Add Series", icon: "icon-plus"}));
-                commands.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
-                commands.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
+                menuLeft.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Add Series", icon: "icon-plus"}));
+                menuLeft.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
+                menuLeft.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
 
-                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarView({collection: commands}));
+                var menuRight = new NzbDrone.Shared.Toolbar.CommandCollection();
+
+                menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Add Series", icon: "icon-plus"}));
+                menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
+                menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
+
+                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({left: [ menuLeft], right: [menuRight]}));
 
                 switch (this.viewStyle) {
                     case 1:
