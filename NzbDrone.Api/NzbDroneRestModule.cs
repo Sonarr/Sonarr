@@ -30,10 +30,16 @@ namespace NzbDrone.Api
             return model.InjectTo<TResource>();
         }
 
-        protected List<TResource> Apply<TModel>(Func<IEnumerable<TModel>> function) where TModel : ModelBase, new()
+        protected List<TResource> ApplyToList<TModel>(Func<IEnumerable<TModel>> function) where TModel : ModelBase, new()
         {
             var modelList = function();
             return modelList.InjectTo<List<TResource>>();
+        }
+
+        protected TResource Apply<TModel>(Func<TModel> function) where TModel : ModelBase, new()
+        {
+            var modelList = function();
+            return modelList.InjectTo<TResource>();
         }
 
         protected TResource Apply<TModel>(Func<int, TModel> action, int id) where TModel : ModelBase, new()

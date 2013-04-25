@@ -13,6 +13,7 @@ using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
@@ -57,6 +58,8 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<QualitySize>().RegisterModel("QualitySizes");
 
             Mapper.Entity<Log>().RegisterModel("Logs");
+
+            Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
 
             Mapper.Entity<SeriesStatistics>().MapResultSet();
         }

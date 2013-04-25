@@ -16,6 +16,7 @@ namespace NzbDrone.Api.REST
         private Action<int> _deleteResource;
         private Func<int, TResource> _getResourceById;
         private Func<List<TResource>> _getResourceAll;
+        private Func<TResource> _getResourceSingle;
         private Func<TResource, TResource> _createResource;
         private Func<TResource, TResource> _updateResource;
 
@@ -71,6 +72,21 @@ namespace NzbDrone.Api.REST
                 Get[ROOT_ROUTE] = options =>
                 {
                     var resource = GetResourceAll();
+                    return resource.AsResponse();
+                };
+            }
+        }
+
+        protected Func<TResource> GetResourceSingle
+        {
+            private get { return _getResourceSingle; }
+            set
+            {
+                _getResourceSingle = value;
+
+                Get[ROOT_ROUTE] = options =>
+                {
+                    var resource = GetResourceSingle();
                     return resource.AsResponse();
                 };
             }

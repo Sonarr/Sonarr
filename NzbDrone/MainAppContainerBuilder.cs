@@ -35,7 +35,7 @@ namespace NzbDrone
             Container.Register<Router>().AsSingleton();
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>)).AsMultiInstance();
-            Container.Register(typeof(IBasicRepository<NameSpecification>), typeof(BasicRepository<NameSpecification>)).AsMultiInstance();
+            Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>)).AsMultiInstance();
 
             InitDatabase();
 

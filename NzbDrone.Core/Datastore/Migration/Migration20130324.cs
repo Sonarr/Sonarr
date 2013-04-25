@@ -127,6 +127,17 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("TvdbId").AsInt32()
                   .WithColumn("SeasonNumber").AsInt32();
 
+
+            Create.TableForModel("NamingConfig")
+                  .WithColumn("UseSceneName").AsBoolean()
+                  .WithColumn("Separator").AsString()
+                  .WithColumn("NumberStyle").AsInt32()
+                  .WithColumn("IncludeSeriesTitle").AsBoolean()
+                  .WithColumn("MultiEpisodeStyle").AsInt32()
+                  .WithColumn("IncludeEpisodeTitle").AsBoolean()
+                  .WithColumn("IncludeQuality").AsBoolean()
+                  .WithColumn("ReplaceSpaces").AsBoolean()
+                  .WithColumn("SeasonFolderFormat").AsString();
         }
 
         protected override void LogDbUpgrade()

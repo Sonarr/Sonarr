@@ -37,7 +37,7 @@ namespace NzbDrone.Api.Series
         private List<SeriesResource> AllSeries()
         {
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
-            var seriesModels = Apply(_seriesService.GetAllSeries);
+            var seriesModels = ApplyToList(_seriesService.GetAllSeries);
 
             foreach (var s in seriesModels)
             {

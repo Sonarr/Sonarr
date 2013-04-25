@@ -23,7 +23,7 @@ namespace NzbDrone.Api.RootFolders
 
         private List<RootFolderResource> GetRootFolders()
         {
-            return Apply(_rootFolderService.All);
+            return ApplyToList(_rootFolderService.All);
         }
 
         private void DeleteFolder(int id)

@@ -29,10 +29,15 @@ namespace NzbDrone.Core.Datastore
         bool HasItems();
         void DeleteMany(IEnumerable<int> ids);
         void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
+        TModel Single();
     }
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
+
+        //TODO: add assertion to make sure model properly mapped 
+
+
         private readonly IDataMapper _dataMapper;
 
         public BasicRepository(IDatabase database)
@@ -78,6 +83,11 @@ namespace NzbDrone.Core.Datastore
         }
 
         public TModel SingleOrDefault()
+        {
+            return All().SingleOrDefault();
+        }
+
+        public TModel Single()
         {
             return All().Single();
         }

@@ -56,6 +56,13 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
+        public void should_be_able_to_get_single()
+        {
+            Subject.Insert(_basicType);
+            Subject.SingleOrDefault().Should().NotBeNull();
+        }
+
+        [Test]
         public void getting_model_with_invalid_id_should_throw()
         {
             Assert.Throws<InvalidOperationException>(() => Subject.Get(12));

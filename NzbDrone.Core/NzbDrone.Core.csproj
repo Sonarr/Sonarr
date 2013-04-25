@@ -342,7 +342,7 @@
     <Compile Include="Indexers\Nzbx\NzbxRecentItem.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
-    <Compile Include="Organizer\NameSpecification.cs" />
+    <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Parser\Language.cs" />
     <Compile Include="Parser\Model\LocalEpisode.cs" />
     <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />

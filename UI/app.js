@@ -60,9 +60,14 @@ define('app', function () {
     window.NzbDrone.Missing = {};
 
     window.NzbDrone.Events = {
+        //TODO: Move to commands
         OpenModalDialog : 'openModal',
         CloseModalDialog: 'closeModal',
         SeriesAdded: 'seriesAdded'
+    };
+
+    window.NzbDrone.Commands = {
+        SaveSettings : 'saveSettings'
     };
 
     window.NzbDrone.Constants = {

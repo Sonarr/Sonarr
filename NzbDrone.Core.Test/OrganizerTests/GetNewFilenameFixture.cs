@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
     {
         private Series _series;
 
-        private NameSpecification nameSpecification;
+        private NamingConfig namingConfig;
 
         [SetUp]
         public void Setup()
@@ -33,11 +33,11 @@ namespace NzbDrone.Core.Test.OrganizerTests
                     .Build();
 
 
-            nameSpecification = new NameSpecification();
+            namingConfig = new NamingConfig();
 
 
-            Mocker.GetMock<IBasicRepository<NameSpecification>>()
-                  .Setup(c => c.SingleOrDefault()).Returns(nameSpecification);
+            Mocker.GetMock<IBasicRepository<NamingConfig>>()
+                  .Setup(c => c.SingleOrDefault()).Returns(namingConfig);
 
 
         }
@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -76,12 +76,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -103,12 +103,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = false;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " ";
-            nameSpecification.NumberStyle = 1;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = false;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " ";
+            namingConfig.NumberStyle = 1;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -130,12 +130,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = false;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " ";
-            nameSpecification.NumberStyle = 3;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = false;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " ";
+            namingConfig.NumberStyle = 3;
+            namingConfig.ReplaceSpaces = false;
 
 
             var episode = Builder<Episode>.CreateNew()
@@ -158,12 +158,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " ";
-            nameSpecification.NumberStyle = 3;
-            nameSpecification.ReplaceSpaces = true;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " ";
+            namingConfig.NumberStyle = 3;
+            namingConfig.ReplaceSpaces = true;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -185,12 +185,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 3;
-            nameSpecification.ReplaceSpaces = true;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 3;
+            namingConfig.ReplaceSpaces = true;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -212,12 +212,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = false;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = false;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
 
             var episode = Builder<Episode>.CreateNew()
@@ -240,13 +240,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 3;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 3;
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -274,13 +274,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 2;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 2;
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -308,13 +308,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " ";
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 2;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " ";
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 2;
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -342,13 +342,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " ";
-            nameSpecification.NumberStyle = 3;
-            nameSpecification.ReplaceSpaces = true;
-            nameSpecification.MultiEpisodeStyle = 1;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " ";
+            namingConfig.NumberStyle = 3;
+            namingConfig.ReplaceSpaces = true;
+            namingConfig.MultiEpisodeStyle = 1;
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -376,13 +376,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = false;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = true;
-            nameSpecification.MultiEpisodeStyle = 0;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = false;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = true;
+            namingConfig.MultiEpisodeStyle = 0;
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -410,13 +410,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = false;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = true;
-            nameSpecification.MultiEpisodeStyle = 2;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = false;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = true;
+            namingConfig.MultiEpisodeStyle = 2;
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -442,12 +442,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -467,12 +467,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -492,12 +492,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -517,13 +517,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 3;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 3;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Hey, Baby, What's Wrong? (1)")
@@ -551,12 +551,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = ".";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = ".";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -578,12 +578,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = "."; ;
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = "."; ;
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -603,13 +603,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = "."; ;
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.UseSceneName = true;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = "."; ;
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.UseSceneName = true;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -634,13 +634,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = false;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = ".";
-            nameSpecification.NumberStyle = 0;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.UseSceneName = true;
+            namingConfig.IncludeSeriesTitle = false;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = ".";
+            namingConfig.NumberStyle = 0;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.UseSceneName = true;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -665,13 +665,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 3;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 3;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Hey, Baby, What's Wrong? (1)")
@@ -697,13 +697,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 3;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 3;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Hello")
@@ -729,13 +729,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
 
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
-            nameSpecification.MultiEpisodeStyle = 3;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
+            namingConfig.MultiEpisodeStyle = 3;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Hello (3)")
@@ -766,12 +766,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void should_use_airDate_if_series_isDaily()
         {
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = true;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = true;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var series = Builder<Series>
                     .CreateNew()
@@ -795,12 +795,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void should_use_airDate_if_series_isDaily_no_episode_title()
         {
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = false;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = false;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var series = Builder<Series>
                     .CreateNew()
@@ -824,12 +824,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void should_set_airdate_to_unknown_if_not_available()
         {
 
-            nameSpecification.IncludeSeriesName = true;
-            nameSpecification.IncludeEpisodeTitle = true;
-            nameSpecification.AppendQuality = false;
-            nameSpecification.Separator = " - ";
-            nameSpecification.NumberStyle = 2;
-            nameSpecification.ReplaceSpaces = false;
+            namingConfig.IncludeSeriesTitle = true;
+            namingConfig.IncludeEpisodeTitle = true;
+            namingConfig.IncludeQuality = false;
+            namingConfig.Separator = " - ";
+            namingConfig.NumberStyle = 2;
+            namingConfig.ReplaceSpaces = false;
 
             var series = Builder<Series>
                     .CreateNew()

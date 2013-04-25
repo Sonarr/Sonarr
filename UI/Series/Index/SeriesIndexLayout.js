@@ -2,17 +2,12 @@
 define([
     'app',
     'Series/Index/List/CollectionView',
-<<<<<<< HEAD
-    'Config'
     'Series/Index/Posters/CollectionView',
     'Series/Index/EmptyView',
-    'Config',
     'Series/Index/Table/AirDateCell',
-    'Series/Index/Table/SeriesStatusCell'
+    'Series/Index/Table/SeriesStatusCell',
     'Shared/Toolbar/ToolbarView',
-=======
     'Shared/Toolbar/ToolbarLayout',
->>>>>>> added support for multi-button groups to toolbar
     'Config'
 ],
     function () {
@@ -34,128 +29,74 @@ define([
 
             showTable: function () {
 
-                var columns =
-                    [
-                        {
-                            name    : 'status',
-                            label   : '',
-                            editable: false,
-                            cell    : 'seriesStatus'
-                        },
-                        {
-                            name    : 'title',
-                            label   : 'Title',
-                            editable: false,
-                            cell    : 'string'
-                        },
-                        {
-                            name    : 'seasonCount',
-                            label   : 'Seasons',
-                            editable: false,
-                            cell    : 'integer'
-                        },
-                        {
-                            name    : 'quality',
-                            label   : 'Quality',
-                            editable: false,
-                            cell    : 'integer'
-                        },
-                        {
-                            name    : 'network',
-                            label   : 'Network',
-                            editable: false,
-                            cell    : 'string'
-                        },
-                        {
-                            name     : 'nextAiring',
-                            label    : 'Next Airing',
-                            editable : false,
-                            cell     : 'datetime',
-                            formatter: new Backgrid.AirDateFormatter()
-                        },
-                        {
-                            name    : 'episodes',
-                            label   : 'Episodes',
-                            editable: false,
-                            sortable: false,
-                            cell    : 'string'
-                        },
-                        {
-                            name    : 'edit',
-                            label   : '',
-                            editable: false,
-                            sortable: false,
-                            cell    : 'string'
-                        }
-                    ];
-
-                var grid = new Backgrid.Grid(
+                var columns = [
                     {
-                        name: 'status',
-                        label: '',
-                        editable: false,
-                        cell: 'seriesStatus',
+                        name      : 'status',
+                        label     : '',
+                        editable  : false,
+                        cell      : 'seriesStatus',
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'title',
-                        label: 'Title',
-                        editable: false,
-                        cell: Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/SeriesTitleTemplate' }),
+                        name      : 'title',
+                        label     : 'Title',
+                        editable  : false,
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/SeriesTitleTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'seasonCount',
-                        label: 'Seasons',
-                        editable: false,
-                        cell: 'integer',
+                        name      : 'seasonCount',
+                        label     : 'Seasons',
+                        editable  : false,
+                        cell      : 'integer',
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'quality',
-                        label: 'Quality',
-                        editable: false,
-                        cell: 'integer',
+                        name      : 'quality',
+                        label     : 'Quality',
+                        editable  : false,
+                        cell      : 'integer',
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'network',
-                        label: 'Network',
-                        editable: false,
-                        cell: 'string',
+                        name      : 'network',
+                        label     : 'Network',
+                        editable  : false,
+                        cell      : 'string',
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'nextAiring',
-                        label: 'Next Airing',
-                        editable: false,
-                        cell: 'airDate',
+                        name      : 'nextAiring',
+                        label     : 'Next Airing',
+                        editable  : false,
+                        cell      : 'airDate',
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'episodes',
-                        label: 'Episodes',
-                        editable: false,
-                        sortable: false,
-                        cell: Backgrid.TemplateBackedCell.extend({ template: 'Series/EpisodeProgressTemplate' }),
+                        name      : 'episodes',
+                        label     : 'Episodes',
+                        editable  : false,
+                        sortable  : false,
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/EpisodeProgressTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name: 'edit',
-                        label: '',
-                        editable: false,
-                        sortable: false,
-                        cell: Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/ControlsColumnTemplate' }),
+                        name      : 'edit',
+                        label     : '',
+                        editable  : false,
+                        sortable  : false,
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/ControlsColumnTemplate' }),
                         headerCell: 'nzbDrone'
                     }
                 ];
 
+
                 this.series.show(new Backgrid.Grid(
                     {
-                        row: Backgrid.SeriesIndexTableRow,
-                        columns : columns,
-                        collection : this.seriesCollection,
-                        className: 'table table-hover'
+                        row       : Backgrid.SeriesIndexTableRow,
+                        columns   : columns,
+                        collection: this.seriesCollection,
+                        className : 'table table-hover'
                     }));
             },
 
@@ -196,7 +137,7 @@ define([
                 menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
                 menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
 
-                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({left: [ menuLeft], right: [menuRight]}));
+                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({left: [ menuLeft, menuLeft], right: [menuRight]}));
 
                 switch (this.viewStyle) {
                     case 1:

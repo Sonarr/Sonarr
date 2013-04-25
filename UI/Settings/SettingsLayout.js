@@ -150,8 +150,22 @@ define([
             },
 
             save: function () {
-                this.settings.save();
+
+                NzbDrone.vent.trigger(NzbDrone.Commands.SaveSettings);
+
+                this.settings.save(undefined,
+                    {
+                        success: function () {
+                            window.alert('Saved');
+                        },
+                        error  : function () {
+                            window.alert("couldn't save settings");
+                        }
+                    });
+
             }
-        });
-    });
+        })
+        ;
+    })
+;
 

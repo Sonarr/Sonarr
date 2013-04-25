@@ -15,27 +15,58 @@ namespace NzbDrone.Core.Organizer
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
     }
 
+    public interface INamingConfigService
+    {
+        NamingConfig GetConfig();
+        NamingConfig Save(NamingConfig namingConfig);
+    }
+
+    public class NamingConfigService : INamingConfigService
+    {
+        private readonly IBasicRepository<NamingConfig> _repository;
+
+        public NamingConfigService(IBasicRepository<NamingConfig> repository)
+        {
+            _repository = repository;
+        }
+
+
+        public NamingConfig GetConfig()
+        {
+            var config = _repository.SingleOrDefault();
+
+            if (config == null)
+            {
+                _repository.Insert(NamingConfig.Default);
+                config = _repository.Single();
+            }
+
+            return config;
+        }
+
+        public NamingConfig Save(NamingConfig namingConfig)
+        {
+            return _repository.Upsert(namingConfig);
+        }
+    }
+
+
     public class FileNameBuilder : IBuildFileNames
     {
-        private readonly IBasicRepository<NameSpecification> _nameSpecificationRepository;
+        private readonly INamingConfigService _namingConfigService;
         private readonly Logger _logger;
 
-        public FileNameBuilder(IBasicRepository<NameSpecification> nameSpecificationRepository, Logger logger)
+        public FileNameBuilder(INamingConfigService namingConfigService, Logger logger)
         {
-            _nameSpecificationRepository = nameSpecificationRepository;
+            _namingConfigService = namingConfigService;
             _logger = logger;
         }
 
 
-        public NameSpecification GetSpecification()
-        {
-            return _nameSpecificationRepository.SingleOrDefault() ?? NameSpecification.Default;
-        }
-
 
         public string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile)
         {
-            var nameSpec = GetSpecification();
+            var nameSpec = _namingConfigService.GetConfig();
 
             if (nameSpec.UseSceneName)
             {
@@ -58,7 +89,7 @@ namespace NzbDrone.Core.Organizer
 
             var result = String.Empty;
 
-            if (nameSpec.IncludeSeriesName)
+            if (nameSpec.IncludeSeriesTitle)
             {
                 result += series.Title + nameSpec.Separator;
             }
@@ -114,7 +145,7 @@ namespace NzbDrone.Core.Organizer
                     result += nameSpec.Separator + String.Join(" + ", episodeNames.Distinct());
             }
 
-            if (nameSpec.AppendQuality)
+            if (nameSpec.IncludeQuality)
             {
                 result += String.Format(" [{0}]", episodeFile.Quality.Quality);
 
@@ -132,7 +163,7 @@ namespace NzbDrone.Core.Organizer
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
 
-            var nameSpec = GetSpecification();
+            var nameSpec = _namingConfigService.GetConfig();
 
             string path = series.Path;
             if (series.SeasonFolder)

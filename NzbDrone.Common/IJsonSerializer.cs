@@ -30,9 +30,9 @@ namespace NzbDrone.Common
             _jsonNetSerializer = new Newtonsoft.Json.JsonSerializer()
                 {
                     DateTimeZoneHandling = setting.DateTimeZoneHandling,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.Indented,
-                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    NullValueHandling = setting.NullValueHandling,
+                    Formatting = setting.Formatting,
+                    DefaultValueHandling = setting.DefaultValueHandling,
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 };
         }
