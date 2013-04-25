@@ -58,6 +58,15 @@
                 }
 
                 return 'Ended';
+            },
+            shortDate: function () {
+                var date = this.get('nextAiring');
+
+                if (!date) {
+                    return '';
+                }
+
+                return Date.create(date).short();
             }
         },
 

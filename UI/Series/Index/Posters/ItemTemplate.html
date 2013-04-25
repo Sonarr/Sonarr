@@ -12,13 +12,13 @@
                 </div>
             </div>
 
-            <div class="center title">{{title}}</div>
+            <!--<div class="center title">{{title}}</div>-->
 
             <div class="center">
                 <div class="labels">
                     {{#if isContinuing}}
                         {{#if bestDateString}}
-                            <span class="label label-inverse">{{bestDateString}}</span>
+                            <span class="label label-inverse air-date" title="{{shortDate}}">{{bestDateString}}</span>
                         {{else}}
                             <span class="label label-inverse">{{statusText}}</span>
                         {{/if}}

@@ -15,7 +15,8 @@ define([
 
 
         ui: {
-            'progressbar': '.progress .bar'
+            'progressbar': '.progress .bar',
+            'airDate': '.air-date'
         },
 
         events: {
@@ -25,6 +26,10 @@ define([
 
         initialize: function (options) {
             this.qualityProfileCollection = options.qualityProfiles;
+        },
+
+        onRender: function () {
+            this.ui.airDate.tooltip();
         },
 
         editSeries: function () {
