@@ -30,15 +30,15 @@
             <div class="row">
                 <div class="span8">
                     {{#if isContinuing}}
-                    {{#if bestDateString}}
-                    <span class="label">{{bestDateString}}</span>
+                        {{#if bestDateString}}
+                            <span class="label">{{bestDateString}}</span>
+                        {{else}}
+                            <span class="label label-inverse">{{statusText}}</span>
+                        {{/if}}
+                        <span class="label label-info">Season {{seasonCount}}</span>
                     {{else}}
-                    <span class="label label-inverse">{{statusText}}</span>
-                    {{/if}}
-                    <span class="label label-info">Season {{seasonCount}}</span>
-                    {{else}}
-                    <span class="label label-important">{{statusText}}</span>
-                    <span class="label label-info">{{seasonCount}} Seasons</span>
+                        <span class="label label-important">{{statusText}}</span>
+                        <span class="label label-info">{{seasonCount}} Seasons</span>
                     {{/if}}
                 </div>
                 <div class="span2">

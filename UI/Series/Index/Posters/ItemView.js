@@ -16,12 +16,15 @@ define([
 
         ui: {
             'progressbar': '.progress .bar',
-            'airDate': '.air-date'
+            'airDate': '.air-date',
+            'controls': '.series-controls'
         },
 
         events: {
             'click .x-edit'  : 'editSeries',
-            'click .x-remove': 'removeSeries'
+            'click .x-remove': 'removeSeries',
+            'mouseenter .x-series-poster': 'posterHoverAction',
+            'mouseleave .x-series-poster': 'posterHoverAction'
         },
 
         initialize: function (options) {
@@ -45,6 +48,10 @@ define([
             NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
                 view: view
             });
+        },
+
+        posterHoverAction: function () {
+            this.ui.controls.slideToggle();
         }
     });
 });

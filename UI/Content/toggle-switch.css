@@ -1,0 +1,421 @@
+/* ------------------------------------------
+CSS TOGGLE SWITCHES (Ionuț Colceriu)
+Licensed under Unlicense 
+https://github.com/ghinda/css-toggle-switch
+------------------------------------------ */
+
+/* Hide by default */
+
+.switch .slide-button,
+.toggle p span {
+	display: none;
+}
+
+/* Toggle Switches */
+
+/* We can't test for a specific feature,
+ * so we only target browsers with support for media queries.
+ */
+@media only screen {
+
+	/* Checkbox
+	 */
+	.toggle {
+		position: relative;
+		padding: 0;
+		margin-left: 100px;
+	}
+
+	/* Position the label over all the elements, except the slide-button
+	 * Clicking anywhere on the label will change the switch-state
+	 */
+	.toggle label {
+		position: relative;
+		z-index: 3;
+		
+		display: block;
+		width: 100%;
+	}
+
+	/* Don't hide the input from screen-readers and keyboard access
+	 */
+	.toggle input {
+		position: absolute;
+		opacity: 0;
+		z-index: 5;
+	}
+	
+	.toggle p {
+		position: absolute;
+		left: -100px;
+		
+		width: 100%;
+		margin: 0;
+		padding-right: 100px;
+		
+		text-align: left;
+	}
+	
+	.toggle p span {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 5;
+		
+		display: block;
+		width: 50%;
+		margin-left: 100px;
+		
+		text-align: center;
+	}
+	
+	.toggle p span:last-child {
+		left: 50%;
+	}
+
+	.toggle .slide-button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 4;
+		
+		display: block;
+		width: 50%;
+		height: 100%;
+		padding: 0;
+	}
+
+	/* Radio Switch
+	 */
+	.switch {
+		position: relative;
+		padding: 0;
+	}
+	
+	.switch input {
+		position: absolute;
+		opacity: 0;
+	}
+	
+	.switch label {
+		position: relative;
+		z-index: 2;
+		
+		float: left;
+		width: 50%;
+		height: 100%;
+		
+		margin: 0;
+		text-align: center;
+	}
+
+	.switch .slide-button {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 0;
+		z-index: 1;
+		
+		width: 50%;
+		height: 100%;
+	}
+
+	.switch input:last-of-type:checked ~ .slide-button {
+		left: 50%;
+	}
+
+	/* Switch with 3 items */
+	.switch.switch-three label,
+	.switch.switch-three .slide-button {
+		width: 33.3%;
+	}
+
+	.switch.switch-three input:checked:nth-of-type(2) ~ .slide-button {	
+		left: 33.3%;
+	}
+
+	.switch.switch-three input:checked:last-of-type ~ .slide-button {
+		left: 66.6%;
+	}
+	
+	/* Switch with 4 items */
+	.switch.switch-four label,
+	.switch.switch-four .slide-button {
+		width: 25%;
+	}
+
+	.switch.switch-four input:checked:nth-of-type(2) ~ .slide-button {	
+		left: 25%;
+	}
+	
+	.switch.switch-four input:checked:nth-of-type(3) ~ .slide-button {	
+		left: 50%;
+	}
+
+	.switch.switch-four input:checked:last-of-type ~ .slide-button {
+		left: 75%;
+	}
+	
+	/* Switch with 5 items */
+	.switch.switch-five label,
+	.switch.switch-five .slide-button {
+		width: 20%;
+	}
+
+	.switch.switch-five input:checked:nth-of-type(2) ~ .slide-button {	
+		left: 20%;
+	}
+	
+	.switch.switch-five input:checked:nth-of-type(3) ~ .slide-button {	
+		left: 40%;
+	}
+	
+	.switch.switch-five input:checked:nth-of-type(4) ~ .slide-button {	
+		left: 60%;
+	}
+
+	.switch.switch-five input:checked:last-of-type ~ .slide-button {
+		left: 80%;
+	}
+
+	/* Shared */
+	.toggle,
+	.switch {
+		display: block;
+		height: 30px;
+	}
+	
+	.switch *,
+	.toggle * {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		-o-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	
+	.switch .slide-button,
+	.toggle .slide-button {
+		display: block;
+		
+		-webkit-transition: all 0.3s ease-out;
+		-moz-transition: all 0.3s ease-out;
+		-ms-transition: all 0.3s ease-out;
+		-o-transition: all 0.3s ease-out;
+		transition: all 0.3s ease-out;
+	}
+	
+	.toggle label,
+	.toggle p,
+	.switch label {
+		line-height: 30px;
+		vertical-align: middle;
+	}
+	
+	.toggle input:checked ~ .slide-button {
+		right: 50%;
+	}
+	
+	/* Outline the toggles when the inputs are focused */
+	.toggle input:focus ~ .slide-button,
+	.switch input:focus + label {
+		outline: 1px dotted #888;
+	}
+	
+	/* Bugfix for older Webkit, including mobile Webkit. Adapted from:
+	 * http://css-tricks.com/webkit-sibling-bug/
+	 */
+	.switch, .toggle {
+		-webkit-animation: bugfix infinite 1s;
+	}
+	
+	@-webkit-keyframes bugfix { from { position: relative; } to { position: relative; } }
+
+
+	/* Standalone Themes */
+
+
+	/* Candy Theme
+	 * Based on the "Sort Switches / Toggles (PSD)" by Ormal Clarck
+	 * http://www.premiumpixels.com/freebies/sort-switches-toggles-psd/
+	 */
+	 
+	.candy {
+		background-color: #2d3035;
+		
+		color: #fff;
+		font-weight: bold;
+		text-align: center;
+		text-shadow: 1px 1px 1px #191b1e;
+			
+		border-radius: 3px;	
+		
+		box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3), 0 1px 0px rgba(255, 255, 255, 0.2);
+	}
+
+	.candy input:checked + label {
+		color: #333;
+		text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+	}
+		
+	.candy .slide-button {
+		border: 1px solid #333;
+
+		background-color: #70c66b;
+		
+		background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+		background-image:    -moz-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+		background-image:     -ms-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+		background-image:      -o-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+		background-image:         linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+		
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+		
+		border-radius: 3px;
+	}
+
+	.candy p {
+		color: #333;
+		
+		text-shadow: none;
+	}
+
+	.candy span {
+		color: #fff;
+	}
+
+	.candy.blue .slide-button {
+		background-color: #38a3d4;
+	}
+
+	.candy.yellow .slide-button {
+		background-color: #f5e560;
+	}
+
+	/* Android Theme
+	 * Based on Holo
+	 */
+	 
+	.android {
+		background-color: #b6b6b6;
+		
+		color: #fff;
+	}
+
+	.android.toggle {
+		border: 2px solid #b6b6b6;
+	}
+
+	.android.switch {
+		overflow: hidden;
+	}
+		
+	.android.switch .slide-button {
+		background-color: #279fca;
+		
+		-webkit-transform: skew(20deg) translateX(10px);
+		-moz-transform: skew(20deg) translateX(10px);
+		-ms-transform: skew(20deg) translateX(10px);
+		-o-transform: skew(20deg) translateX(10px);
+		transform: skew(20deg);
+	}
+
+	.android.toggle .slide-button {
+		border-radius: 2px;
+		
+		background-color: #848484;
+	}
+
+	/* Selected ON toggle */
+	.android.toggle input:first-of-type:checked ~ .slide-button {
+		background-color: #279fca;
+	}
+
+	.android.switch input:first-of-type:checked ~ .slide-button {
+		-webkit-transform: skew(20deg) translateX(-10px);
+		-moz-transform: skew(20deg) translateX(-10px);
+		-ms-transform: skew(20deg) translateX(-10px);
+		-o-transform: skew(20deg) translateX(-10px);
+		transform: skew(20deg) translateX(-10px);
+	}
+
+	.android p {
+		color: #333;
+	}
+
+	.android span {
+		color: #fff;
+	}
+
+	.android.switch,
+	.android span {
+		text-transform: uppercase;
+	}
+
+	/* iOS Theme
+	 * Similar to iOS but more accessible
+	 */ 
+
+	.ios {
+		background: -webkit-linear-gradient(top, #cfcfcf, #efefef 50%, #f9f9f9 50%, #fefefe);
+		background: -moz-linear-gradient(top, #cfcfcf, #efefef 50%, #f9f9f9 50%, #fefefe);
+		background: -o-linear-gradient(top, #cfcfcf, #efefef 50%, #f9f9f9 50%, #fefefe);
+		background: -ms-linear-gradient(top, #cfcfcf, #efefef 50%, #f9f9f9 50%, #fefefe);
+		background: linear-gradient(top, #cfcfcf, #efefef 50%, #f9f9f9 50%, #fefefe);
+		
+		-webkit-box-shadow: inset 0 2px 2px #b6b6b6, inset 3px 0 3px #b6b6b6;
+		box-shadow: inset 0 2px 2px #b6b6b6, inset 3px 0 3px #b6b6b6;
+
+		border: 1px solid #efefef;
+		border-radius: 3px;
+		
+		color: #7f7f7f;
+		font: bold 14px sans-serif; 
+		text-align: center;
+		text-shadow: none;
+	}
+
+	.ios.toggle .slide-button {
+		border: 1px solid #919191;
+		background: -webkit-linear-gradient(top, #cdcdcd, #fbfbfb);
+		background: -moz-linear-gradient(top, #cdcdcd, #fbfbfb);
+		background: -o-linear-gradient(top, #cdcdcd, #fbfbfb);
+		background: -ms-linear-gradient(top, #cdcdcd, #fbfbfb);
+		background: linear-gradient(top, #cdcdcd, #fbfbfb);
+		
+		border-radius: 3px;
+		
+		-webkit-box-shadow: inset 0 1px 0 #f0f0f0;
+		box-shadow: inset 0 1px 0 #f0f0f0;
+	}
+
+	/* Selected ON toggle */
+	.ios.toggle input:first-of-type:checked ~ p span:first-child,
+	.ios.switch input:checked + label {
+		color: #fff;
+		text-shadow: 0 -1px 0 #1b3b6f;
+	}
+
+	.ios.toggle input:first-of-type:checked ~ .slide-button,
+	.ios.switch .slide-button {
+		background: -webkit-linear-gradient(top, #3672dc, #4085ec 50%, #4d8fef 50%, #76adfc);
+		background: -moz-linear-gradient(top, #3672dc, #4085ec 50%, #4d8fef 50%, #76adfc);
+		background: -o-linear-gradient(top, #3672dc, #4085ec 50%, #4d8fef 50%, #76adfc);
+		background: -ms-linear-gradient(top, #3672dc, #4085ec 50%, #4d8fef 50%, #76adfc);
+		background: linear-gradient(top, #3672dc, #4085ec 50%, #4d8fef 50%, #76adfc);
+		
+		border-radius: 3px;
+		border: 1px solid #1654b5;
+		
+		text-align: center;
+		color: #fff;
+		
+		font: bold 14px sans-serif; 
+		text-shadow: 0 -1px 0 #1b3b6f;
+	}
+	
+	.ios.toggle p span {
+		color: #7f7f7f;
+	}
+	
+}

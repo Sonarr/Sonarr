@@ -2,7 +2,13 @@
     <div class="row">
         <div class="span2">
             <div class="center">
-                <div class="series-poster-container">
+                <div class="series-poster-container x-series-poster">
+                    <div class="series-controls">
+                        <!--<div class="pull-right">-->
+                            <i class="icon-cog x-edit" title="Edit Series"></i>
+                            <i class="icon-remove x-remove" title="Delete Series"></i>
+                        <!--</div>-->
+                    </div>
                     {{#unless isContinuing}}
                         <div class="ended-banner">Ended</div>
                     {{/unless}}
