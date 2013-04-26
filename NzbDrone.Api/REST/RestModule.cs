@@ -11,7 +11,7 @@ namespace NzbDrone.Api.REST
         where TResource : RestResource, new()
     {
         private const string ROOT_ROUTE = "/";
-        private const string ID_ROUTE = "/{id}";
+        private const string ID_ROUTE = @"/(?<id>[\d]{1,7})";
 
         private Action<int> _deleteResource;
         private Func<int, TResource> _getResourceById;
@@ -55,10 +55,16 @@ namespace NzbDrone.Api.REST
             {
                 _getResourceById = value;
                 Get[ID_ROUTE] = options =>
-                {
-                    var resource = GetResourceById((int)options.Id);
-                    return resource.AsResponse();
-                };
+                    {
+                        int id;
+                        if (!Int32.TryParse(options.Id, out id))
+                        {
+                            throw new NotImplementedException();
+                        }
+
+                        var resource = GetResourceById((int)options.Id);
+                        return resource.AsResponse();
+                    };
             }
         }
 
