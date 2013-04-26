@@ -109,13 +109,16 @@ define([
 
             initialize: function (options) {
                 this.settings = options.settings;
+                this.namingSettings = new NzbDrone.Settings.Naming.NamingModel();
+                this.namingSettings.fetch();
+
                 if (options.action) {
                     this.action = options.action.toLowerCase();
                 }
             },
 
             onRender: function () {
-                this.naming.show(new NzbDrone.Settings.Naming.NamingView({model: this.settings}));
+                this.naming.show(new NzbDrone.Settings.Naming.NamingView());
                 this.quality.show(new NzbDrone.Settings.Quality.QualityLayout({settings: this.settings}));
                 this.indexers.show(new NzbDrone.Settings.Indexers.IndexersView({model: this.settings}));
                 this.downloadClient.show(new NzbDrone.Settings.DownloadClient.DownloadClientView({model: this.settings}));

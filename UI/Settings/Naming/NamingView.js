@@ -17,6 +17,7 @@ define(['app', 'Settings/Naming/NamingModel'], function () {
         },
 
         onRender: function () {
+            //TODO: Move this to a mixin
             this.ui.tooltip.tooltip({ placement: 'right' });
         },
 

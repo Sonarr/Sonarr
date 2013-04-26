@@ -5,9 +5,16 @@
         <label class="control-label">Backlog Searching</label>
 
         <div class="controls">
-            <div class="switch">
+            <label class="checkbox toggle well">
                 <input type="checkbox" name="enableBacklogSearching"/>
-            </div>
+                <p>
+                    <span>Yes</span>
+                    <span>No</span>
+                </p>
+
+                <div class="btn btn-primary slide-button"></div>
+            </label>
+
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Should NzbDrone try to download missing episodes automatically?"></i>
                 <i class="icon-exclamation-sign danger" title="Enabling backlog searching can use a lot of bandwidth and is not
@@ -20,9 +27,16 @@
         <label class="control-label">Ignore Deleted Episodes</label>
 
         <div class="controls">
-            <div class="switch">
+            <label class="checkbox toggle well">
                 <input type="checkbox" name="autoIgnorePreviouslyDownloadedEpisodes"/>
-            </div>
+                <p>
+                    <span>Yes</span>
+                    <span>No</span>
+                </p>
+
+                <div class="btn btn-primary slide-button"></div>
+            </label>
+
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Episodes deleted from disk are automatically ignored in NzbDrone"></i>
             </span>
