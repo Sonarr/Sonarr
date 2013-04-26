@@ -1,20 +1,31 @@
 "use strict";
-define(['app'], function () {
+define(['app', 'Config'], function () {
 
     NzbDrone.Shared.Toolbar.RadioButtonView = Backbone.Marionette.ItemView.extend({
         template : 'Shared/Toolbar/ButtonTemplate',
         className: 'btn',
 
         events: {
-            'click': 'invokeCallback'
+            'click': 'onClick'
         },
 
+
+        initialize: function () {
+
+            this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
+        },
 
         onRender: function () {
             if (this.model.get('active')) {
                 this.$el.addClass('active');
                 this.invokeCallback();
             }
+        },
+
+        onClick: function () {
+
+            NzbDrone.Config.SetValue(this.model.get('menuKey'), this.model.get('key'));
+            this.invokeCallback();
         },
 
         invokeCallback: function () {

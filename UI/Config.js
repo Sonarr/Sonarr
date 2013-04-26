@@ -9,8 +9,7 @@ define(['app'], function () {
         if (value !== undefined) {
             NzbDrone.Config.SetValue(key, value);
         }
-
-        else{
+        else {
             return NzbDrone.Config.GetValue(key, 1);
         }
     };
@@ -39,6 +38,8 @@ define(['app'], function () {
         if (!cookie) {
             cookie = {};
         }
+
+        console.log('Config: [{0}] => [{1}] '.format(key, value));
 
         cookie[key] = value;
         NzbDrone.Config.SetCookie(cookie);

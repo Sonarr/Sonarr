@@ -40,7 +40,6 @@ define(['app'], function () {
         },
 
         initialize: function () {
-            console.log('menu');
             this.setElement($('#main-menu-region'));
         }
     });
