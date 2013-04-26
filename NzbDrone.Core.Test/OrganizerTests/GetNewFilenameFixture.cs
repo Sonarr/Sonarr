@@ -1,13 +1,9 @@
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
@@ -18,7 +14,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 {
     [TestFixture]
 
-    public class MediaFileProvider_GetNewFilenameTest : CoreTest<FileNameBuilder>
+    public class FileNameBuilderFixture : CoreTest<FileNameBuilder>
     {
         private Series _series;
 
@@ -36,8 +32,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
             namingConfig = new NamingConfig();
 
 
-            Mocker.GetMock<IBasicRepository<NamingConfig>>()
-                  .Setup(c => c.SingleOrDefault()).Returns(namingConfig);
+            Mocker.GetMock<INamingConfigService>()
+                  .Setup(c => c.GetConfig()).Returns(namingConfig);
 
 
         }
@@ -45,10 +41,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void GetNewFilename_Series_Episode_Quality_S01E05_Dash()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -66,16 +58,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("South Park - S15E06 - City Sushi [HDTV-720p]", result);
+            result.Should().Be("South Park - S15E06 - City Sushi [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_Episode_Quality_1x05_Dash()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -93,16 +81,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("15x06 - City Sushi [HDTV-720p]", result);
+            result.Should().Be("15x06 - City Sushi [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_Series_Quality_01x05_Space()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = false;
             namingConfig.IncludeQuality = true;
@@ -120,23 +104,18 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("South Park 05x06 [HDTV-720p]", result);
+            result.Should().Be("South Park 05x06 [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_Series_s01e05_Space()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = false;
             namingConfig.IncludeQuality = false;
             namingConfig.Separator = " ";
             namingConfig.NumberStyle = 3;
             namingConfig.ReplaceSpaces = false;
-
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -148,16 +127,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("South Park s05e06", result);
+            result.Should().Be("South Park s05e06");
         }
 
         [Test]
         public void GetNewFilename_Series_Episode_s01e05_Periods()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
@@ -175,16 +150,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("South.Park.s05e06.City.Sushi", result);
+            result.Should().Be("South.Park.s05e06.City.Sushi");
         }
 
         [Test]
         public void GetNewFilename_Series_Episode_s01e05_Dash_Periods_Quality()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -202,16 +173,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("South.Park.-.s05e06.-.City.Sushi.[HDTV-720p]", result);
+            result.Should().Be("South.Park.-.s05e06.-.City.Sushi.[HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_S01E05_Dash()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = false;
             namingConfig.IncludeQuality = false;
@@ -230,16 +197,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("S15E06", result);
+            result.Should().Be("S15E06");
         }
 
         [Test]
         public void GetNewFilename_multi_Series_Episode_Quality_S01E05_Scene_Dash()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -264,16 +227,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episodeOne, episodeTwo }, new Series { Title = "The Mentalist" }, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("The Mentalist - S03E23-E24 - Strawberries and Cream [HDTV-720p]", result);
+            result.Should().Be("The Mentalist - S03E23-E24 - Strawberries and Cream [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_multi_Episode_Quality_1x05_Repeat_Dash()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -298,16 +257,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episodeOne, episodeTwo }, new Series { Title = "The Mentalist" }, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("3x23x24 - Strawberries and Cream [HDTV-720p]", result);
+            result.Should().Be("3x23x24 - Strawberries and Cream [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_multi_Episode_Quality_01x05_Repeat_Space()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -332,16 +287,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episodeOne, episodeTwo }, new Series { Title = "The Mentalist" }, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("3x23x24 Strawberries and Cream [HDTV-720p]", result);
+            result.Should().Be("3x23x24 Strawberries and Cream [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_multi_Series_Episode_s01e05_Duplicate_Period()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
@@ -366,16 +317,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episodeOne, episodeTwo }, new Series { Title = "The Mentalist" }, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream", result);
+            result.Should().Be("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream");
         }
 
         [Test]
         public void GetNewFilename_multi_Series_S01E05_Extend_Dash_Period()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = false;
             namingConfig.IncludeQuality = false;
@@ -400,16 +347,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episodeOne, episodeTwo }, new Series { Title = "The Mentalist" }, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("The.Mentalist.-.S03E23-24", result);
+            result.Should().Be("The.Mentalist.-.S03E23-24");
         }
 
         [Test]
         public void GetNewFilename_multi_1x05_Repeat_Dash_Period()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = false;
             namingConfig.IncludeQuality = false;
@@ -434,14 +377,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episodeOne, episodeTwo }, new Series { Title = "The Mentalist" }, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("3x23x24", result);
+            result.Should().Be("3x23x24");
         }
 
         [Test]
         public void GetNewFilename_should_append_proper_when_proper_and_append_quality_is_true()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -465,8 +406,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void GetNewFilename_should_not_append_proper_when_not_proper_and_append_quality_is_true()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -490,8 +429,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void GetNewFilename_should_not_append_proper_when_proper_and_append_quality_is_false()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
@@ -515,8 +452,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void GetNewFilename_should_order_multiple_episode_files_in_numerical_order()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
@@ -547,10 +482,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void GetNewFilename_Series_Episode_Quality_S01E05_Period()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -568,16 +499,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("South Park.S15E06.City Sushi [HDTV-720p]", result);
+            result.Should().Be("South Park.S15E06.City Sushi [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_Episode_Quality_1x05_Period()
         {
-
-
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -595,14 +522,12 @@ namespace NzbDrone.Core.Test.OrganizerTests
             string result = Subject.BuildFilename(new List<Episode> { episode }, _series, new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) });
 
 
-            Assert.AreEqual("15x06.City Sushi [HDTV-720p]", result);
+            result.Should().Be("15x06.City Sushi [HDTV-720p]");
         }
 
         [Test]
         public void GetNewFilename_UseSceneName_when_sceneName_isNull()
         {
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -632,8 +557,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void GetNewFilename_UseSceneName_when_sceneName_isNotNull()
         {
-
-
             namingConfig.IncludeSeriesTitle = false;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = true;
@@ -663,8 +586,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void should_only_have_one_episodeTitle_when_episode_titles_are_the_same()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
@@ -695,8 +616,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void should_have_two_episodeTitles_when_episode_titles_are_not_the_same()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
@@ -727,8 +646,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void should_have_two_episodeTitles_when_distinct_count_is_two()
         {
-
-
             namingConfig.IncludeSeriesTitle = true;
             namingConfig.IncludeEpisodeTitle = true;
             namingConfig.IncludeQuality = false;
