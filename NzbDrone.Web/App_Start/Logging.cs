@@ -18,7 +18,6 @@ namespace NzbDrone.Web.App_Start
             LogManager.Configuration = new XmlLoggingConfiguration(environmentProvider.GetNlogConfigPath(), false);
 
             LogConfiguration.RegisterUdpLogger();
-            LogConfiguration.RegisterRemote();
             LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
             LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
             LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Trace);

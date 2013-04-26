@@ -110,7 +110,6 @@ namespace NzbDrone.Core
         {
             EnvironmentProvider.UGuid = container.Resolve<ConfigProvider>().UGuid;
             ReportingService.RestProvider = container.Resolve<RestProvider>();
-            ReportingService.SetupExceptronDriver();
         }
 
         private void RegisterQuality(IContainer container)

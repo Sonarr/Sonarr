@@ -56,30 +56,5 @@ namespace NzbDrone.Core.Test.Integeration
             dailySeries.Should().NotBeEmpty();
             dailySeries.Should().OnlyContain(c => c > 0);
         }
-
-
-        [Test]
-        public void should_be_able_to_submit_exceptions()
-        {
-            ReportingService.SetupExceptronDriver();
-
-            try
-            {
-                ThrowException();
-            }
-            catch (Exception e)
-            {
-                var log = new LogEventInfo
-                              {
-                                  LoggerName = "LoggerName.LoggerName.LoggerName.LoggerName",
-                                  Exception = e,
-                                  Message = "New message string. New message string.",
-                              };
-
-                var hash = ReportingService.ReportException(log);
-
-                hash.Should().HaveLength(8);
-            }
-        }
     }
 }

@@ -48,12 +48,10 @@ namespace NzbDrone
             var environmentProvider = _container.Resolve<EnvironmentProvider>();
             
             ReportingService.RestProvider = _container.Resolve<RestProvider>();
-            ReportingService.SetupExceptronDriver();
 
             LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
             LogConfiguration.RegisterUdpLogger();
-            LogConfiguration.RegisterRemote();
             LogConfiguration.Reload();
             Logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
         }
