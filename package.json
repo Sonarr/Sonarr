@@ -1,7 +1,7 @@
 {
   "name": "NzbDrone",
   "version": "0.0.0",
-  "description": "NZBDrone\r =====",
+  "description": "NZBDrone",
   "main": "index.js",
   "scripts": {
     "preinstall": "npm install grunt-cli -g"

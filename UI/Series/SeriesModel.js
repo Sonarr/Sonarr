@@ -1,4 +1,5 @@
-﻿define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFolderCollection'], function (app, qualityProfileCollection, rootFolders) {
+﻿"use strict";
+define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFolderCollection'], function (app, qualityProfileCollection, rootFolders) {
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
 
         urlRoot: NzbDrone.Constants.ApiRoot + '/series',
@@ -59,7 +60,7 @@
 
                 return 'Ended';
             },
-            shortDate: function () {
+            shortDate        : function () {
                 var date = this.get('nextAiring');
 
                 if (!date) {

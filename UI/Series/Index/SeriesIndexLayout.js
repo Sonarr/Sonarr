@@ -19,14 +19,6 @@ define([
                 toolbar: '#x-toolbar'
             },
 
-            ui: {
-
-            },
-
-            events: {
-                'click .x-series-change-view': 'changeView'
-            },
-
             showTable: function () {
 
                 var columns = [
@@ -90,7 +82,6 @@ define([
                     }
                 ];
 
-
                 this.series.show(new Backgrid.Grid(
                     {
                         row       : Backgrid.SeriesIndexTableRow,
@@ -113,75 +104,43 @@ define([
             },
 
             initialize: function () {
-                this.viewStyle = NzbDrone.Config.SeriesViewStyle();
                 this.seriesCollection = new NzbDrone.Series.SeriesCollection();
                 this.seriesCollection.fetch();
             },
 
-            onRender: function () {
-                var element = this.$('a[data-target="' + this.viewStyle + '"]').removeClass('active');
-                this.setActive(element);
-            },
-
             onShow: function () {
 
-                var menuLeft = new NzbDrone.Shared.Toolbar.CommandCollection();
+                var viewButtons = {
+                    type         : 'radio',
+                    storeState   : 'true',
+                    menuKey      : 'seriesViewMode',
+                    defaultAction: 'listView',
+                    items        : [
+                        {
+                            key     : 'tableView',
+                            title   : '',
+                            icon    : 'icon-table',
+                            callback: this.showTable
+                        },
+                        {
+                            key     : 'listView',
+                            title   : '',
+                            icon    : 'icon-list',
+                            callback: this.showList
+                        },
+                        {
+                            key     : 'posterView',
+                            title   : '',
+                            icon    : 'icon-picture',
+                            callback: this.showPosters
+                        }
+                    ]
+                };
 
-                menuLeft.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Add Series", icon: "icon-plus"}));
-                menuLeft.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
-                menuLeft.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
-
-                var menuRight = new NzbDrone.Shared.Toolbar.CommandCollection();
-
-                menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Add Series", icon: "icon-plus"}));
-                menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "RSS Sync", icon: "icon-rss"}));
-                menuRight.add(new NzbDrone.Shared.Toolbar.CommandModel({title: "Sync Database", icon: "icon-refresh"}));
-
-                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({left: [ menuLeft, menuLeft], right: [menuRight]}));
-
-                switch (this.viewStyle) {
-                    case 1:
-                        this.showList();
-                        break;
-                    case 2:
-                        this.showPosters();
-                        break;
-                    default:
-                        this.showTable();
-                }
-            },
-
-            changeView: function (e) {
-                e.preventDefault();
-                var view = parseInt($(e.target).data('target'));
-                var target = $(e.target);
-
-                if (isNaN(view)) {
-                    view = parseInt($(e.target).parent('a').data('target'));
-                    target = $(e.target).parent('a');
-                }
-
-                if (view === 1) {
-                    NzbDrone.Config.SeriesViewStyle(1);
-                    this.showList();
-                }
-
-                else if (view === 2) {
-                    NzbDrone.Config.SeriesViewStyle(2);
-                    this.showPosters();
-                }
-
-                else {
-                    NzbDrone.Config.SeriesViewStyle(0);
-                    this.showTable();
-                }
-
-                this.setActive(target);
-            },
-
-            setActive: function (element) {
-                this.$('a').removeClass('active');
-                $(element).addClass('active');
+                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
             }
-        });
-    });
+
+        })
+        ;
+    })
+;

@@ -1,5 +1,5 @@
 "use strict";
-define(['app', 'Shared/Toolbar/ButtonGroupView','Shared/Toolbar/CommandCollection'], function () {
+define(['app', 'Shared/Toolbar/Radio/RadioButtonCollectionView', 'Shared/Toolbar/ButtonCollection'], function () {
     NzbDrone.Shared.Toolbar.ToolbarLayout = Backbone.Marionette.Layout.extend({
         template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 
@@ -11,9 +11,21 @@ define(['app', 'Shared/Toolbar/ButtonGroupView','Shared/Toolbar/CommandCollectio
         },
 
         initialize: function (options) {
+
+            if (!options) {
+                throw 'options needs to be passed';
+            }
+
+            if (!options.context) {
+                throw 'context needs to be passed';
+            }
+
             this.left = options.left;
             this.right = options.right;
+            this.toolbarContext = options.context;
+
         },
+
 
         onShow: function () {
             if (this.left) {
@@ -25,11 +37,42 @@ define(['app', 'Shared/Toolbar/ButtonGroupView','Shared/Toolbar/CommandCollectio
         },
 
         _showToolbarLeft: function (element, index) {
-            this['left_' + (index + 1).toString()].show(new NzbDrone.Shared.Toolbar.ButtonGroupView({collection: element}));
+            this._showToolbar(element, index, 'left');
         },
 
         _showToolbarRight: function (element, index) {
-            this['right_' + (index + 1).toString()].show(new NzbDrone.Shared.Toolbar.ButtonGroupView({collection: element}));
+            this._showToolbar(element, index, 'right');
+        },
+
+
+        _showToolbar: function (buttonGroup, index, position) {
+
+            var groupCollection = new NzbDrone.Shared.Toolbar.ButtonCollection();
+
+            _.each(buttonGroup.items, function (button) {
+
+                if (buttonGroup.storeState && !button.key) {
+                    throw 'must provide key for all buttons when storSstate is enabled';
+                }
+
+                var model = new NzbDrone.Shared.Toolbar.ButtonModel(button);
+                model.set('menuKey', buttonGroup.menuKey);
+                model.ownerContext = this.toolbarContext;
+                groupCollection.add(model);
+
+            }, this);
+
+            var buttonGroupView;
+
+            if (buttonGroup.type === 'radio') {
+                buttonGroupView = new NzbDrone.Shared.Toolbar.RadioButtonCollectionView(
+                    {
+                        collection: groupCollection,
+                        menu      : buttonGroup
+                    });
+            }
+
+            this[position + '_' + (index + 1).toString()].show(buttonGroupView);
         }
     });
 
