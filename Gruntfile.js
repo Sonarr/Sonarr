@@ -13,7 +13,6 @@ module.exports = function (grunt) {
             'UI/JsLibraries/backbone.shortcuts.js'       : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
             //'UI/JsLibraries/bootstrap.js':
             //'UI/JsLibraries/bootstrap.slider.js':
-            'UI/JsLibraries/bootstrap.switch.js'         : 'http://raw.github.com/nostalgiaz/bootstrap-switch/master/static/js/bootstrapSwitch.js',
             'UI/JsLibraries/handlebars.runtime.js'       : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
             'UI/JsLibraries/jquery.cookie.js'            : 'http://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js',
             'UI/JsLibraries/jquery.js'                   : 'http://code.jquery.com/jquery.js',

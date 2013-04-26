@@ -42,7 +42,6 @@ Marionette.ItemView.prototype.render = function () {
         this._modelBinder.bind(this.model, this.el);
     }
 
-    this.self$('.switch').bootstrapSwitch();
     this.$el.addClass('iv-' + this.viewName());
 
 
