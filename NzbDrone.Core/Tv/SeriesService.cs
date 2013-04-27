@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Tv
 
             //Todo: We need to get the UtcOffset from TVRage, since its not available from trakt
 
-            _messageAggregator.Publish(new SeriesUpdatedEvent(series));
+            _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
 
             return series;
         }
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Tv
             newSeries.BacklogSetting = BacklogSettingType.Inherit;
 
             _seriesRepository.Insert(newSeries);
-            _messageAggregator.Publish(new SeriesAddedEvent(newSeries));
+            _messageAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
 
             return newSeries;
         }
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Tv
         {
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
-            _messageAggregator.Publish(new SeriesDeletedEvent(series, deleteFiles));
+            _messageAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles));
         }
 
         public List<Series> GetAllSeries()

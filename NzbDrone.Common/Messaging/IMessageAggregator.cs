@@ -5,7 +5,7 @@
     /// </summary>
     public interface IMessageAggregator
     {
-        void Publish<TEvent>(TEvent message) where TEvent : IEvent;
-        void Execute<TCommand>(TCommand message) where TCommand : ICommand;
+        void PublishEvent<TEvent>(TEvent @event) where TEvent : IEvent;
+        void PublishCommand<TCommand>(TCommand command) where TCommand : ICommand;
     }
 }

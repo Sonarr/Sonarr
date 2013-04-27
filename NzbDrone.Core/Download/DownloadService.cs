@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Download
             if (success)
             {
                 _logger.Info("Report sent to download client. {0}", downloadTitle);
-                _messageAggregator.Publish(new EpisodeGrabbedEvent(episode));
+                _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(episode));
             }
 
             return success;

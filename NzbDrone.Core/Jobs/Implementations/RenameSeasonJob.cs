@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Jobs.Implementations
             }
 
             //Start AfterRename
-            _messageAggregator.Publish(new SeriesRenamedEvent(series));
+            _messageAggregator.PublishEvent(new SeriesRenamedEvent(series));
 
             notification.CurrentMessage = String.Format("Rename completed for {0} Season {1}", series.Title, options.SeasonNumber);
         }

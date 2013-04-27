@@ -211,12 +211,12 @@ namespace NzbDrone.Core.Tv
 
             if (newList.Any())
             {
-                _messageAggregator.Publish(new EpisodeInfoAddedEvent(newList));
+                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList));
             }
 
             if (updateList.Any())
             {
-                _messageAggregator.Publish(new EpisodeInfoUpdatedEvent(updateList));
+                _messageAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
             }
 
             if (failCount != 0)

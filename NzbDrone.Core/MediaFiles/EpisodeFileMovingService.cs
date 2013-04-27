@@ -83,7 +83,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (newDownload)
             {
-                _messageAggregator.Publish(new EpisodeDownloadedEvent(parsedEpisodeInfo, series));
+                _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(parsedEpisodeInfo, series));
             }
 
             return episodeFile;

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common;
@@ -12,10 +13,15 @@ namespace NzbDrone.Api.Extensions
 
         public static T FromJson<T>(this Stream body) where T : class, new()
         {
+            return FromJson<T>(body, typeof(T));
+        }
+
+        public static T FromJson<T>(this Stream body, Type type)
+        {
             var reader = new StreamReader(body, true);
             body.Position = 0;
             var value = reader.ReadToEnd();
-            return Serializer.Deserialize<T>(value);
+            return (T)Serializer.Deserialize(value, type);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)

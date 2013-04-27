@@ -105,6 +105,7 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
+    <Compile Include="Messaging\IExecute.cs" />
     <Compile Include="Messaging\ICommand.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\IProcessMessage.cs" />

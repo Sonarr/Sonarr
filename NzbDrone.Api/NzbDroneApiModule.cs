@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Nancy;
-using Nancy.Responses;
+﻿using Nancy;
 
 namespace NzbDrone.Api
 {
@@ -11,8 +9,5 @@ namespace NzbDrone.Api
         {
             Options["/"] = x => new Response();
         }
-
-
-
     }
 }

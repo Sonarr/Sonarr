@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Client\ClientBase.cs" />
     <Compile Include="Client\SeriesClient.cs" />
+    <Compile Include="CommandIntegerationTests.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RootFolderIntegrationTest.cs" />

@@ -30,7 +30,7 @@ namespace NzbDrone.Api
             AutomapperBootstraper.InitializeAutomapper();
             RegisterReporting(container);
 
-            container.Resolve<IMessageAggregator>().Publish(new ApplicationStartedEvent());
+            container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<ErrorPipeline>().HandleException);
         }
@@ -73,7 +73,7 @@ namespace NzbDrone.Api
 
         public void Shutdown()
         {
-            ApplicationContainer.Resolve<IMessageAggregator>().Publish(new ApplicationShutdownRequested());
+            ApplicationContainer.Resolve<IMessageAggregator>().PublishEvent(new ApplicationShutdownRequested());
         }
     }
 }

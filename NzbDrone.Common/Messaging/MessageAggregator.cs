@@ -17,33 +17,45 @@ namespace NzbDrone.Common.Messaging
             _handlers = handlers;
         }
 
-        public void Publish<TEvent>(TEvent message) where TEvent : IEvent
+        public void PublishEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
-            _logger.Trace("Publishing {0}", message.GetType().Name);
+            _logger.Trace("Publishing {0}", @event.GetType().Name);
 
             //call synchronous handlers first.
             foreach (var handler in _handlers().OfType<IHandle<TEvent>>())
             {
-                _logger.Debug("{0} -> {1}", message.GetType().Name, handler.GetType().Name);
-                handler.Handle(message);
-                _logger.Debug("{0} <- {1}", message.GetType().Name, handler.GetType().Name);
+                try
+                {
+                    _logger.Debug("{0} -> {1}", @event.GetType().Name, handler.GetType().Name);
+                    handler.Handle(@event);
+                    _logger.Debug("{0} <- {1}", @event.GetType().Name, handler.GetType().Name);
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException(string.Format("{0} failed while processing [{1}]", handler.GetType().Name, @event.GetType().Name), e);
+                }
             }
 
             foreach (var handler in _handlers().OfType<IHandleAsync<TEvent>>())
             {
                 var handlerLocal = handler;
                 Task.Factory.StartNew(() =>
-                    {
-                        _logger.Debug("{0} ~> {1}", message.GetType().Name, handlerLocal.GetType().Name);
-                        handlerLocal.HandleAsync(message);
-                        _logger.Debug("{0} <~ {1}", message.GetType().Name, handlerLocal.GetType().Name);
-                    });
+                {
+                    _logger.Debug("{0} ~> {1}", @event.GetType().Name, handlerLocal.GetType().Name);
+                    handlerLocal.HandleAsync(@event);
+                    _logger.Debug("{0} <~ {1}", @event.GetType().Name, handlerLocal.GetType().Name);
+                });
             }
         }
 
-        public void Execute<TCommand>(TCommand message) where TCommand : ICommand
+
+        public void PublishCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
-            throw new NotImplementedException();
+            _logger.Trace("Publishing {0}", command.GetType().Name);
+            var handler = _handlers().OfType<IExecute<TCommand>>().Single();
+            _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
+            handler.Execute(command);
+            _logger.Debug("{0} <- {1}", command.GetType().Name, handler.GetType().Name);
         }
     }
 }

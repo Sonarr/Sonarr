@@ -40,7 +40,7 @@ namespace NzbDrone.Core.MediaFiles
         public EpisodeFile Add(EpisodeFile episodeFile)
         {
             var addedFile = _mediaFileRepository.Insert(episodeFile);
-            _messageAggregator.Publish(new EpisodeFileAddedEvent(addedFile));
+            _messageAggregator.PublishEvent(new EpisodeFileAddedEvent(addedFile));
             return addedFile;
         }
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles
         public void Delete(EpisodeFile episodeFile)
         {
             _mediaFileRepository.Delete(episodeFile);
-            _messageAggregator.Publish(new EpisodeFileDeletedEvent(episodeFile));
+            _messageAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile));
         }
 
         public bool Exists(string path)

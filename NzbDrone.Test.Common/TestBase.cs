@@ -122,12 +122,12 @@ namespace NzbDrone.Test.Common
 
         protected void VerifyEventPublished<TEvent>(Times times) where TEvent : IEvent
         {
-            Mocker.GetMock<IMessageAggregator>().Verify(c => c.Publish(It.IsAny<TEvent>()), times);
+            Mocker.GetMock<IMessageAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), times);
         }
 
         protected void VerifyEventNotPublished<TEvent>() where TEvent : IEvent
         {
-            Mocker.GetMock<IMessageAggregator>().Verify(c => c.Publish(It.IsAny<TEvent>()), Times.Never());
+            Mocker.GetMock<IMessageAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), Times.Never());
         }
     }
 }

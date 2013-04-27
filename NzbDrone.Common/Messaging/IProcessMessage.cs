@@ -1,12 +1,11 @@
 ﻿namespace NzbDrone.Common.Messaging
 {
-    /// <summary>
-    ///   A marker interface for classes that subscribe to messages.
-    /// </summary>
     public interface IProcessMessage { }
 
-    /// <summary>
-    ///   A marker interface for classes that subscribe to messages.
-    /// </summary>
     public interface IProcessMessageAsync : IProcessMessage { }
+
+
+    public interface IProcessMessage<TMessage> : IProcessMessage { }
+
+    public interface IProcessMessageAsync<TMessage> : IProcessMessageAsync { }
 }

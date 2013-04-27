@@ -51,6 +51,7 @@ namespace NzbDrone.Common
             if (implementations.Count == 1)
             {
                 Container.Register(contractType, implementations.Single()).AsMultiInstance();
+                Container.RegisterMultiple(contractType, implementations).AsMultiInstance();
             }
             else
             {

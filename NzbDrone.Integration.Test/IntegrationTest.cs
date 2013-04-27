@@ -6,6 +6,7 @@ using NLog.Targets;
 using NUnit.Framework;
 using Nancy.Hosting.Self;
 using NzbDrone.Api;
+using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
@@ -29,6 +30,7 @@ namespace NzbDrone.Integration.Test
 
         protected SeriesClient Series;
         protected ClientBase<RootFolderResource> RootFolders;
+        protected ClientBase<CommandResource> Commands;
 
         static IntegrationTest()
         {
@@ -84,6 +86,7 @@ namespace NzbDrone.Integration.Test
             RestClient = new RestClient(url + "/api/");
             Series = new SeriesClient(RestClient);
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
+            Commands = new ClientBase<CommandResource>(RestClient);
 
             _host.Start();
         }
@@ -96,4 +99,5 @@ namespace NzbDrone.Integration.Test
             _bootstrapper.Shutdown();
         }
     }
+
 }

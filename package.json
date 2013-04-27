@@ -23,7 +23,7 @@
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
     "grunt-wrap": "*",
-    "grunt-curl": "~0.6.0",
+    "grunt-curl": "*",
     "grunt-notify": "*"
   }
 }
