@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using Newtonsoft.Json;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Nzbx
@@ -14,9 +12,9 @@ namespace NzbDrone.Core.Indexers.Nzbx
         private readonly Logger _logger;
         private readonly JsonSerializer _serializer;
 
-        public NzbxParser(Logger logger)
+        public NzbxParser()
         {
-            _logger = logger;
+            _logger = LogManager.GetCurrentClassLogger();
             _serializer = new JsonSerializer();
         }
 

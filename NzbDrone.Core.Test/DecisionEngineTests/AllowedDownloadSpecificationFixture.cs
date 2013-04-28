@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
 
-            _reports = new List<ReportInfo> {new ReportInfo()};
+            _reports = new List<ReportInfo> { new ReportInfo() };
             _remoteEpisode = new RemoteEpisode();
 
             Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ReportInfo>()))
@@ -98,6 +98,25 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var result = Subject.GetRssDecision(_reports);
             result.Single().Rejections.Should().HaveCount(3);
+        }
+
+
+        [Test]
+        public void should_not_attempt_to_make_decision_if_remote_episode_is_null()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ReportInfo>()))
+                  .Returns<RemoteEpisode>(null);
+
+            var results = Subject.GetRssDecision(_reports).ToList();
+
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+
+            results.Should().BeEmpty();
+        
         }
 
 

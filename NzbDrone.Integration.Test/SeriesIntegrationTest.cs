@@ -41,8 +41,9 @@ namespace NzbDrone.Integration.Test
             var rootFolder = RootFolders.Post(new RootFolderResource { Path = Directory.GetCurrentDirectory() });
 
             series.RootFolderId = rootFolder.Id;
+            series.QualityProfileId = 1;
 
-            Series.Post(series);
+            series = Series.Post(series);
 
             Series.All().Should().HaveCount(1);
 

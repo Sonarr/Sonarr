@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers
         {
             get
             {
-                return false;
+                return true;
             }
         }
 

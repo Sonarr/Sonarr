@@ -5,6 +5,14 @@ namespace NzbDrone.Core.Indexers.Nzbx
 {
     public class Nzbx : Indexer
     {
+        public override IParseFeed Parser
+        {
+            get
+            {
+                return new NzbxParser();
+            }
+        }
+
         public override string Name
         {
             get { return "nzbx"; }

@@ -17,7 +17,15 @@ namespace NzbDrone.Core.Indexers
             get { return Settings.IsValid; }
         }
 
-        protected TSetting Settings { get; private set; }
+        public override bool EnabledByDefault
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public TSetting Settings { get; private set; }
 
         public void Handle(IndexerSettingUpdatedEvent message)
         {

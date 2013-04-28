@@ -25,6 +25,15 @@ namespace NzbDrone.Api.REST
         protected ResourceValidator<TResource> SharedValidator { get; private set; }
 
 
+        protected void ValidateId(int id)
+        {
+            if (id <= 0)
+            {
+                throw new BadRequestException(id + " is not a valid ID");
+            }
+        }
+
+
         protected RestModule(string modulePath)
             : base(modulePath)
         {
@@ -42,6 +51,7 @@ namespace NzbDrone.Api.REST
                 _deleteResource = value;
                 Delete[ID_ROUTE] = options =>
                 {
+                    ValidateId(options.Id);
                     DeleteResource((int)options.Id);
                     return new Response { StatusCode = HttpStatusCode.OK };
                 };
@@ -56,12 +66,7 @@ namespace NzbDrone.Api.REST
                 _getResourceById = value;
                 Get[ID_ROUTE] = options =>
                     {
-                        int id;
-                        if (!Int32.TryParse(options.Id, out id))
-                        {
-                            throw new NotImplementedException();
-                        }
-
+                        ValidateId(options.Id);
                         var resource = GetResourceById((int)options.Id);
                         return resource.AsResponse();
                     };

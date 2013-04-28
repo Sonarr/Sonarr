@@ -29,9 +29,12 @@ namespace NzbDrone.Core.DecisionEngine
             foreach (var report in reports)
             {
                 var parseResult = _parsingService.Map(report);
-                yield return new DownloadDecision(parseResult, GetGeneralRejectionReasons(parseResult).ToArray());
-            }
+                if (parseResult != null)
+                {
 
+                    yield return new DownloadDecision(parseResult, GetGeneralRejectionReasons(parseResult).ToArray());
+                }
+            }
         }
 
         public IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase)

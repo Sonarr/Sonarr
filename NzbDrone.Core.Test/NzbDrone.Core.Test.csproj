@@ -132,6 +132,8 @@
     <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
+    <Compile Include="IndexerTests\IntegerationTests\NzbxIntegerationTests.cs" />
+    <Compile Include="IndexerTests\ParserTests\NzbxParserFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\RenameSeasonJobFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
@@ -261,10 +263,10 @@
     <None Include="..\NzbDrone.Test.Common\App.config">
       <Link>App.config</Link>
     </None>
-    <None Include="Files\RSS\nzbx_search.json">
+    <None Include="Files\Indexers\Nzbx\nzbx_search.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Files\RSS\nzbx_recent.json">
+    <None Include="Files\Indexers\Nzbx\nzbx_recent.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Files\RSS\omgwtfnzbs.xml">

@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Parser
     {
         LocalEpisode GetEpisodes(string fileName, Series series);
         Series GetSeries(string title);
-        RemoteEpisode Map(ReportInfo indexerParseResult);
+        RemoteEpisode Map(ReportInfo reportInfo);
     }
 
     public class ParsingService : IParsingService
@@ -65,9 +65,34 @@ namespace NzbDrone.Core.Parser
             return _seriesService.FindByTitle(searchTitle);
         }
 
-        public RemoteEpisode Map(ReportInfo indexerParseResult)
+        public RemoteEpisode Map(ReportInfo reportInfo)
         {
-            throw new NotImplementedException();
+            var parsedInfo = Parser.ParseTitle(reportInfo.Title);
+
+            if (parsedInfo == null)
+            {
+                return null;
+            }
+
+            var series = _seriesService.FindByTitle(parsedInfo.SeriesTitle);
+
+            if (series == null)
+            {
+                _logger.Trace("No matching series {0}", parsedInfo.SeriesTitle);
+                return null;
+            }
+
+            var remoteEpisode = new RemoteEpisode
+                {
+                    Series = series,
+                    Episodes = GetEpisodes(parsedInfo, series),
+                    FullSeason = parsedInfo.FullSeason,
+                    Language = parsedInfo.Language,
+                    Quality = parsedInfo.Quality,
+                    Report = reportInfo
+                };
+
+            return remoteEpisode;
         }
 
         private List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series)
