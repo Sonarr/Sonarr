@@ -7,6 +7,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -43,10 +44,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
 
-            _reports = new List<ReportInfo> { new ReportInfo() };
-            _remoteEpisode = new RemoteEpisode();
+            _reports = new List<ReportInfo> { new ReportInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
+            _remoteEpisode = new RemoteEpisode { Series = new Series() };
 
-            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ReportInfo>()))
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>()))
                   .Returns(_remoteEpisode);
 
         }
@@ -102,21 +103,50 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
         [Test]
-        public void should_not_attempt_to_make_decision_if_remote_episode_is_null()
+        public void should_not_attempt_to_map_episode_if_not_parsable()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
-
-            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ReportInfo>()))
-                  .Returns<RemoteEpisode>(null);
+            _reports[0].Title = "Not parsable";
 
             var results = Subject.GetRssDecision(_reports).ToList();
+
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>()), Times.Never());
 
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
             _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
 
             results.Should().BeEmpty();
-        
+        }
+
+
+        [Test]
+        public void should_not_attempt_to_make_decision_if_series_is_unknow()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Series = null;
+
+            Subject.GetRssDecision(_reports);
+
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+
+        }
+
+
+        [Test]
+        public void should_return_unknow_series_rejectio_if_series_is_unknow()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Series = null;
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(1);
+
         }
 
 

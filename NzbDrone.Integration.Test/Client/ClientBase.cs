@@ -3,6 +3,7 @@ using System.Net;
 using FluentAssertions;
 using NLog;
 using NzbDrone.Api.REST;
+using NzbDrone.Common;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client
@@ -13,6 +14,7 @@ namespace NzbDrone.Integration.Test.Client
         private readonly string _resource;
 
         private readonly Logger _logger;
+        private readonly JsonSerializer _jsonSerializer;
 
         public ClientBase(IRestClient restClient, string resource = null)
         {
@@ -23,6 +25,11 @@ namespace NzbDrone.Integration.Test.Client
 
             _restClient = restClient;
             _resource = resource;
+
+            _jsonSerializer = new JsonSerializer();
+
+
+
             _logger = LogManager.GetLogger("REST");
         }
 
@@ -60,13 +67,13 @@ namespace NzbDrone.Integration.Test.Client
                 };
         }
 
-        protected T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : new()
+        protected T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()
         {
             request.Method = Method.GET;
             return Execute<T>(request, statusCode);
         }
 
-        public T Post<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Created) where T : new()
+        public T Post<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Created) where T : class, new()
         {
             request.Method = Method.POST;
             return Execute<T>(request, statusCode);
@@ -78,11 +85,11 @@ namespace NzbDrone.Integration.Test.Client
             Execute<object>(request, statusCode);
         }
 
-        private T Execute<T>(IRestRequest request, HttpStatusCode statusCode) where T : new()
+        private T Execute<T>(IRestRequest request, HttpStatusCode statusCode) where T : class, new()
         {
             _logger.Info("{0}: {1}", request.Method, _restClient.BuildUri(request));
 
-            var response = _restClient.Execute<T>(request);
+            var response = _restClient.Execute(request);
             _logger.Info("Response: {0}", response.Content);
 
             response.StatusCode.Should().Be(statusCode);
@@ -94,7 +101,7 @@ namespace NzbDrone.Integration.Test.Client
 
             response.ErrorMessage.Should().BeBlank();
 
-            return response.Data;
+            return _jsonSerializer.Deserialize<T>(response.Content);
         }
 
     }

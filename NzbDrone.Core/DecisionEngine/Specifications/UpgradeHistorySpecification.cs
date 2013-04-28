@@ -33,7 +33,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (bestQualityInHistory != null)
                 {
                     _logger.Trace("Comparing history quality with report. History is {0}", bestQualityInHistory);
-                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, bestQualityInHistory, subject.Quality))
+                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
                         return false;
                 }
             }

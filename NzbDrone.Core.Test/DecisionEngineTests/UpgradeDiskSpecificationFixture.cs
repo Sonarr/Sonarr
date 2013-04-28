@@ -44,14 +44,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultMulti = new RemoteEpisode
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(Quality.DVD, true),
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
                 Episodes = doubleEpisodeList
             };
 
             parseResultSingle = new RemoteEpisode
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(Quality.DVD, true),
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
                 Episodes = singleEpisodeList
             };
         }
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_be_upgradable_if_qualities_are_the_same()
         {
             firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
-            parseResultSingle.Quality = new QualityModel(Quality.WEBDL1080p, false);
+            parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }
 

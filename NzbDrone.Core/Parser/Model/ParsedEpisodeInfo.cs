@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
@@ -9,10 +7,9 @@ namespace NzbDrone.Core.Parser.Model
     public class ParsedEpisodeInfo
     {
         public string SeriesTitle { get; set; }
-        public string OriginalString { get; set; }
         public QualityModel Quality { get; set; }
         public int SeasonNumber { get; set; }
-        public List<int> EpisodeNumbers { get; set; }
+        public int[] EpisodeNumbers { get; set; }
         public DateTime? AirDate { get; set; }
         public Language Language { get; set; }
         

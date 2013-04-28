@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -31,7 +28,6 @@ namespace NzbDrone.Core.Test.Download
                 .Build().ToList();
 
             _parseResult = Builder<RemoteEpisode>.CreateNew()
-                   .With(c => c.Quality = new QualityModel(Quality.DVD))
                    .With(c => c.Series = Builder<Series>.CreateNew().Build())
                    .With(c=>c.Report = Builder<ReportInfo>.CreateNew().Build())
                    .With(c => c.Episodes = episodes)

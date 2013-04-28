@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Parser.Model;
@@ -11,7 +10,7 @@ namespace NzbDrone.Core.Parser
     {
         LocalEpisode GetEpisodes(string fileName, Series series);
         Series GetSeries(string title);
-        RemoteEpisode Map(ReportInfo reportInfo);
+        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo);
     }
 
     public class ParsingService : IParsingService
@@ -65,32 +64,23 @@ namespace NzbDrone.Core.Parser
             return _seriesService.FindByTitle(searchTitle);
         }
 
-        public RemoteEpisode Map(ReportInfo reportInfo)
+        public  RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo)
         {
-            var parsedInfo = Parser.ParseTitle(reportInfo.Title);
+            var remoteEpisode = new RemoteEpisode
+                {
+                    ParsedEpisodeInfo = parsedEpisodeInfo,
+                };
 
-            if (parsedInfo == null)
-            {
-                return null;
-            }
-
-            var series = _seriesService.FindByTitle(parsedInfo.SeriesTitle);
+            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
 
             if (series == null)
             {
-                _logger.Trace("No matching series {0}", parsedInfo.SeriesTitle);
-                return null;
+                _logger.Trace("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
+                return remoteEpisode;
             }
 
-            var remoteEpisode = new RemoteEpisode
-                {
-                    Series = series,
-                    Episodes = GetEpisodes(parsedInfo, series),
-                    FullSeason = parsedInfo.FullSeason,
-                    Language = parsedInfo.Language,
-                    Quality = parsedInfo.Quality,
-                    Report = reportInfo
-                };
+            remoteEpisode.Series = series;
+            remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series);
 
             return remoteEpisode;
         }
@@ -104,7 +94,7 @@ namespace NzbDrone.Core.Parser
                 if (series.SeriesType == SeriesTypes.Standard)
                 {
                     //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
-                    _logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", series.Title, parsedEpisodeInfo.OriginalString);
+                    _logger.Warn("Found daily-style episode for non-daily series: {0}.", series.Title);
                     return new List<Episode>();
                 }
 

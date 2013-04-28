@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.DecisionEngine.Specifications.Search;
@@ -9,8 +10,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IMakeDownloadDecision
     {
-        IEnumerable<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports);
-        IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase);
+        List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports);
+        List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -24,29 +25,19 @@ namespace NzbDrone.Core.DecisionEngine
             _parsingService = parsingService;
         }
 
-        public IEnumerable<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports)
+        public List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports)
         {
-            foreach (var report in reports)
-            {
-                var parseResult = _parsingService.Map(report);
-                if (parseResult != null)
-                {
-
-                    yield return new DownloadDecision(parseResult, GetGeneralRejectionReasons(parseResult).ToArray());
-                }
-            }
+            return GetDecisions(reports, GetGeneralRejectionReasons).ToList();
         }
 
-        public IEnumerable<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase)
+        public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase)
         {
-            foreach (var report in reports)
-            {
-                var remoteEpisode = _parsingService.Map(report);
-                var generalReasons = GetGeneralRejectionReasons(remoteEpisode);
-                var searchReasons = GetSearchRejectionReasons(remoteEpisode, searchDefinitionBase);
-
-                yield return new DownloadDecision(remoteEpisode, generalReasons.Union(searchReasons).ToArray());
-            }
+            return GetDecisions(reports, remoteEpisode =>
+                {
+                    var generalReasons = GetGeneralRejectionReasons(remoteEpisode);
+                    var searchReasons = GetSearchRejectionReasons(remoteEpisode, searchDefinitionBase);
+                    return generalReasons.Union(searchReasons);
+                }).ToList();
         }
 
 
@@ -56,6 +47,29 @@ namespace NzbDrone.Core.DecisionEngine
                 .OfType<IDecisionEngineSpecification>()
                 .Where(spec => !spec.IsSatisfiedBy(report))
                 .Select(spec => spec.RejectionReason);
+        }
+
+        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, Func<RemoteEpisode, IEnumerable<string>> decisionCallback)
+        {
+            foreach (var report in reports)
+            {
+                var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
+
+                if (parsedEpisodeInfo != null)
+                {
+                    var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
+                    remoteEpisode.Report = report;
+
+                    if (remoteEpisode.Series != null)
+                    {
+                        yield return new DownloadDecision(remoteEpisode, decisionCallback(remoteEpisode).ToArray());
+                    }
+                    else
+                    {
+                        yield return new DownloadDecision(remoteEpisode, "Unknown Series");
+                    }
+                }
+            }
         }
 
         private IEnumerable<string> GetSearchRejectionReasons(RemoteEpisode report, SearchDefinitionBase searchDefinitionBase)

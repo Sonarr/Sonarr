@@ -32,7 +32,6 @@ namespace NzbDrone.Core.Test.Datastore
         public class TypeWithNoMappableProperties
         {
             public Series Series { get; set; }
-            public List<string> ListOfStrings { get; set; }
 
             public int ReadOnly { get; private set; }
             public int WriteOnly { private get; set; }

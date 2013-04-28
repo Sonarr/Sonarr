@@ -68,7 +68,6 @@ namespace NzbDrone.Core.Configuration
         string OmgwtfnzbsUsername { get; set; }
         string OmgwtfnzbsApiKey { get; set; }
         Boolean IgnoreArticlesWhenSortingSeries { get; set; }
-        Boolean DownloadClientUseSceneName { get; set; }
         String NzbgetUsername { get; set; }
         String NzbgetPassword { get; set; }
         String NzbgetHost { get; set; }

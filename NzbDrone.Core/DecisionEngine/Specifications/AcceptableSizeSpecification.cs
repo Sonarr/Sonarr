@@ -30,13 +30,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             _logger.Trace("Beginning size check for: {0}", subject);
 
-            if (subject.Quality.Quality == Quality.RAWHD)
+            if (subject.ParsedEpisodeInfo.Quality.Quality == Quality.RAWHD)
             {
                 _logger.Trace("Raw-HD release found, skipping size check.");
                 return true;
             }
 
-            var qualityType = _qualityTypeProvider.Get((int)subject.Quality.Quality);
+            var qualityType = _qualityTypeProvider.Get((int)subject.ParsedEpisodeInfo.Quality.Quality);
 
             if (qualityType.MaxSize == 0)
             {

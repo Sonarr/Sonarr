@@ -408,13 +408,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("IgnoreArticlesWhenSortingSeries", value); }
         }
 
-        public Boolean DownloadClientUseSceneName
-        {
-            get { return GetValueBoolean("DownloadClientUseSceneName", false); }
-
-            set { SetValue("DownloadClientUseSceneName", value); }
-        }
-
         public String NzbgetUsername
         {
             get { return GetValue("NzbgetUsername", "nzbget"); }

@@ -44,14 +44,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultMulti = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                Quality = new QualityModel(Quality.DVD, true),
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
                 Episodes = doubleEpisodeList
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                Quality = new QualityModel(Quality.DVD, true),
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
                 Episodes = singleEpisodeList
             };
 
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_be_upgradable_if_episode_is_of_same_quality_as_existing()
         {
             _fakeSeries.QualityProfile = new QualityProfile { Cutoff = Quality.WEBDL1080p };
-            _parseResultSingle.Quality = new QualityModel(Quality.WEBDL1080p, false);
+            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradableQuality = new QualityModel(Quality.WEBDL1080p, false);
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_upgradableQuality);

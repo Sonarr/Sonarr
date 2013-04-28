@@ -37,10 +37,6 @@ namespace NzbDrone.Core.Download
         public bool DownloadReport(RemoteEpisode episode)
         {
             var downloadTitle = episode.Report.Title;
-            if (!_configService.DownloadClientUseSceneName)
-            {
-                downloadTitle = episode.GetDownloadTitle();
-            }
 
             var provider = _downloadClientProvider.GetDownloadClient();
             var recentEpisode = ContainsRecentEpisode(episode);

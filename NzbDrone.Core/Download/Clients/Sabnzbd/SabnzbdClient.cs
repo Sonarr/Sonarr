@@ -7,19 +7,61 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser.Model;
+using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
+    public class SabRequestBuilder
+    {
+        private readonly IConfigService _configService;
+
+        public SabRequestBuilder(IConfigService configService)
+        {
+            _configService = configService;
+        }
+
+        public IRestRequest AddToQueueRequest(RemoteEpisode remoteEpisode)
+        {
+            string cat = _configService.SabTvCategory;
+            int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabBacklogTvPriority;
+
+            string name = remoteEpisode.Report.NzbUrl.Replace("&", "%26");
+            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Report.Title);
+
+            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
+                name, priority, cat, nzbName);
+
+            string request = GetSabRequest(action);
+
+            return new RestRequest(request);
+        }
+
+
+        private string GetSabRequest(string action)
+        {
+            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
+                                 _configService.SabHost,
+                                 _configService.SabPort,
+                                 action,
+                                 _configService.SabApiKey,
+                                 _configService.SabUsername,
+                                 _configService.SabPassword);
+        }
+    }
+
+
     public class SabnzbdClient : IDownloadClient
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
+        private readonly Logger _logger;
 
-        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider)
+        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _logger = logger;
         }
 
         public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
@@ -36,11 +78,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     name, priority, cat, nzbName);
 
                 string request = GetSabRequest(action);
-                logger.Info("Adding report [{0}] to the queue.", title);
+                _logger.Info("Adding report [{0}] to the queue.", title);
 
                 var response = _httpProvider.DownloadString(request);
 
-                logger.Debug("Queue Response: [{0}]", response);
+                _logger.Debug("Queue Response: [{0}]", response);
 
                 CheckForError(response);
                 return true;
@@ -48,7 +90,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             catch (WebException ex)
             {
-                logger.Error("Error communicating with SAB: " + ex.Message);
+                _logger.Error("Error communicating with SAB: " + ex.Message);
             }
 
             return false;
@@ -62,9 +104,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             CheckForError(response);
 
-            var sabQeueu = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
+            var sabQueue = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
 
-            foreach (var sabQueueItem in sabQeueu)
+            foreach (var sabQueueItem in sabQueue)
             {
                 var queueItem = new QueueItem();
                 queueItem.Id = sabQueueItem.Id;
@@ -163,7 +205,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (Exception ex)
             {
-                logger.DebugException("Failed to Test SABnzbd", ex);
+                _logger.DebugException("Failed to Test SABnzbd", ex);
             }
 
             return String.Empty;

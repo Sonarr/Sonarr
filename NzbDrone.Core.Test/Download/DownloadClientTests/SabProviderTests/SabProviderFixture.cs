@@ -12,11 +12,11 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 {
     [TestFixture]
-    
-    public class SabProviderFixture : CoreTest
+
+    public class SabProviderFixture : CoreTest<SabnzbdClient>
     {
-        private const string url = "http://www.nzbclub.com/nzb_download.aspx?mid=1950232";
-        private const string title = "My Series Name - 5x2-5x3 - My title [Bluray720p] [Proper]";
+        private const string URL = "http://www.nzbclub.com/nzb_download.aspx?mid=1950232";
+        private const string TITLE = "My Series Name - 5x2-5x3 - My title [Bluray720p] [Proper]";
 
         [SetUp]
         public void Setup()
@@ -44,40 +44,34 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns("{ \"status\": true }");
 
-            
-            Mocker.Resolve<SabnzbdClient>().DownloadNzb(url, title, false).Should().BeTrue();
+
+            Subject.DownloadNzb(URL, TITLE, false).Should().BeTrue();
         }
 
         [Test]
         public void add_by_url_should_detect_and_handle_sab_errors()
         {
             WithFailResponse();
-
-            
-            Assert.Throws<ApplicationException>(() => Mocker.Resolve<SabnzbdClient>().DownloadNzb(url, title, false).Should().BeFalse());
-            //ExceptionVerification.ExpectedErrors(1);
+            Assert.Throws<ApplicationException>(() => Subject.DownloadNzb(URL, TITLE, false).Should().BeFalse());
         }
 
         [Test]
         public void should_be_able_to_get_categories_when_config_is_passed_in()
         {
-            
+
             const string host = "192.168.5.22";
             const int port = 1111;
             const string apikey = "5c770e3197e4fe763423ee7c392c25d2";
             const string username = "admin2";
             const string password = "pass2";
 
-
-
             Mocker.GetMock<IHttpProvider>(MockBehavior.Strict)
                     .Setup(s => s.DownloadString("http://192.168.5.22:1111/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d2&ma_username=admin2&ma_password=pass2"))
-                    .Returns(ReadAllText("Files","Categories_json.txt"));
+                    .Returns(ReadAllText("Files", "Categories_json.txt"));
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().GetCategories(host, port, apikey, username, password);
+            var result = Subject.GetCategories(host, port, apikey, username, password);
 
-            
+
             result.Should().NotBeNull();
             result.categories.Should().NotBeEmpty();
         }
@@ -87,12 +81,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<IHttpProvider>(MockBehavior.Strict)
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(ReadAllText("Files","Categories_json.txt"));
+                    .Returns(ReadAllText("Files", "Categories_json.txt"));
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().GetCategories();
 
-            
+            var result = Subject.GetCategories();
+
+
             result.Should().NotBeNull();
             result.categories.Should().NotBeEmpty();
         }
@@ -104,10 +98,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns(ReadAllText("Files", "History.txt"));
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().GetHistory();
 
-            
+            var result = Subject.GetHistory();
+
+
             result.Should().HaveCount(1);
         }
 
@@ -116,12 +110,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(ReadAllText("Files","HistoryEmpty.txt"));
+                    .Returns(ReadAllText("Files", "HistoryEmpty.txt"));
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().GetHistory();
 
-            
+            var result = Subject.GetHistory();
+
+
             result.Should().BeEmpty();
         }
 
@@ -130,10 +124,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(ReadAllText("Files","JsonError.txt"));
+                    .Returns(ReadAllText("Files", "JsonError.txt"));
 
-            
-            Assert.Throws<ApplicationException>(() => Mocker.Resolve<SabnzbdClient>().GetHistory(), "API Key Incorrect");
+
+            Assert.Throws<ApplicationException>(() => Subject.GetHistory(), "API Key Incorrect");
         }
 
         [Test]
@@ -145,10 +139,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=version&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns(response);
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().GetVersion("192.168.5.55", 2222, "5c770e3197e4fe763423ee7c392c25d1", "admin", "pass");
 
-            
+            var result = Subject.GetVersion("192.168.5.55", 2222, "5c770e3197e4fe763423ee7c392c25d1", "admin", "pass");
+
+
             result.Should().NotBeNull();
             result.Version.Should().Be("0.6.9");
         }
@@ -162,10 +156,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=version&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns(response);
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().GetVersion();
 
-            
+            var result = Subject.GetVersion();
+
+
             result.Should().NotBeNull();
             result.Version.Should().Be("0.6.9");
         }
@@ -173,16 +167,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
         [Test]
         public void Test_should_return_version_as_a_string()
         {
-            var response = "{ \"version\": \"0.6.9\" }";
+            const string response = "{ \"version\": \"0.6.9\" }";
 
             Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=version&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns(response);
 
-            
-            var result = Mocker.Resolve<SabnzbdClient>().Test("192.168.5.55", 2222, "5c770e3197e4fe763423ee7c392c25d1", "admin", "pass");
 
-            
+            var result = Subject.Test("192.168.5.55", 2222, "5c770e3197e4fe763423ee7c392c25d1", "admin", "pass");
+
+
             result.Should().Be("0.6.9");
         }
 
@@ -192,7 +186,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
             Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString(It.IsAny<String>())).Throws(new WebException());
 
-            Mocker.Resolve<SabnzbdClient>().DownloadNzb(url, title, false).Should().BeFalse();
+            Subject.DownloadNzb(URL, TITLE, false).Should().BeFalse();
             ExceptionVerification.ExpectedErrors(1);
         }
 
@@ -211,8 +205,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns("{ \"status\": true }");
 
-            
-            Mocker.Resolve<SabnzbdClient>().DownloadNzb(url, title, true).Should().BeTrue();
+
+            Subject.DownloadNzb(URL, TITLE, true).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>()
                     .Verify(v => v.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"), Times.Once());
@@ -233,8 +227,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=-1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                     .Returns("{ \"status\": true }");
 
-            
-            Mocker.Resolve<SabnzbdClient>().DownloadNzb(url, title, false).Should().BeTrue();
+
+            Subject.DownloadNzb(URL, TITLE, false).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>()
                     .Verify(v => v.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=-1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"), Times.Once());

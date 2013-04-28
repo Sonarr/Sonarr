@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -16,7 +14,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
     public class QualityAllowedByProfileSpecificationFixture : CoreTest<QualityAllowedByProfileSpecification>
     {
-        private RemoteEpisode parseResult;
+        private RemoteEpisode remoteEpisode;
 
         public static object[] AllowedTestCases =
         {
@@ -39,29 +37,29 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
-            parseResult = new RemoteEpisode
+            remoteEpisode = new RemoteEpisode
             {
                 Series = fakeSeries,
-                Quality = new QualityModel(Quality.DVD, true),
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
             };
         }
 
         [Test, TestCaseSource("AllowedTestCases")]
         public void should_allow_if_quality_is_defined_in_profile(Quality qualityType)
         {
-            parseResult.Quality.Quality = qualityType;
-            parseResult.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
+            remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
+            remoteEpisode.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
-            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(remoteEpisode).Should().BeTrue();
         }
 
         [Test, TestCaseSource("DeniedTestCases")]
         public void should_not_allow_if_quality_is_not_defined_in_profile(Quality qualityType)
         {
-            parseResult.Quality.Quality = qualityType;
-            parseResult.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
+            remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
+            remoteEpisode.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
-            Subject.IsSatisfiedBy(parseResult).Should().BeFalse();
+            Subject.IsSatisfiedBy(remoteEpisode).Should().BeFalse();
         }
     }
 }

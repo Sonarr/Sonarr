@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -90,11 +89,7 @@ namespace NzbDrone.Core.Parser
                 result = ParseTitle(fileInfo.FullName);
             }
 
-            if (result != null)
-            {
-                result.OriginalString = path;
-            }
-            else
+            if (result == null)
             {
                 Logger.Warn("Unable to parse episode info from path {0}", path);
             }
@@ -124,7 +119,6 @@ namespace NzbDrone.Core.Parser
 
                             result.Language = ParseLanguage(title);
                             result.Quality = ParseQuality(title);
-                            result.OriginalString = title;
                             return result;
                         }
                     }
@@ -172,7 +166,7 @@ namespace NzbDrone.Core.Parser
                 result = new ParsedEpisodeInfo
                     {
                         SeasonNumber = seasons.First(),
-                        EpisodeNumbers = new List<int>()
+                        EpisodeNumbers = new int[0],
                     };
 
                 foreach (Match matchGroup in matchCollection)
@@ -184,7 +178,7 @@ namespace NzbDrone.Core.Parser
                     {
                         var first = Convert.ToInt32(episodeCaptures.First().Value);
                         var last = Convert.ToInt32(episodeCaptures.Last().Value);
-                        result.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToList();
+                        result.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToArray();
                     }
                     else
                     {

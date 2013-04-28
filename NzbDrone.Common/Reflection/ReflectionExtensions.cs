@@ -22,10 +22,11 @@ namespace NzbDrone.Common.Reflection
 
         public static bool IsSimpleType(this Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>) || type.GetGenericTypeDefinition() == typeof(List<>)))
             {
                 type = type.GetGenericArguments()[0];
             }
+
 
             return type.IsPrimitive
                    || type.IsEnum

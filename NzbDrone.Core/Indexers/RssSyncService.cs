@@ -40,8 +40,8 @@ namespace NzbDrone.Core.Indexers
 
             var qualifiedReports = decisions
                          .Where(c => c.Approved)
-                         .Select(c => c.Episode)
-                         .OrderByDescending(c => c.Quality)
+                         .Select(c => c.RemoteEpisode)
+                         .OrderByDescending(c => c.ParsedEpisodeInfo.Quality)
                          .ThenBy(c => c.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
                          .ThenBy(c => c.Report.Age);
 

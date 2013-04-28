@@ -1,43 +1,38 @@
-﻿
-
-using System.Linq;
-using System;
-using System.Collections.Generic;
-using FizzWare.NBuilder;
-using FluentAssertions;
-using Moq;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.DecisionEngine;
-
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    
+
     public class LanguageSpecificationFixture : CoreTest
     {
         private RemoteEpisode parseResult;
 
         private void WithEnglishRelease()
         {
-            parseResult = Builder<RemoteEpisode>
-                    .CreateNew()
-                    .With(p => p.Language = Language.English)
-                    .Build();
+            parseResult = new RemoteEpisode
+                {
+                    ParsedEpisodeInfo = new ParsedEpisodeInfo
+                        {
+                            Language = Language.English
+                        }
+                };
         }
 
         private void WithGermanRelease()
         {
-            parseResult = Builder<RemoteEpisode>
-                    .CreateNew()
-                    .With(p => p.Language = Language.German)
-                    .Build();
+            parseResult = new RemoteEpisode
+            {
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    Language = Language.German
+                }
+            };
         }
 
         [Test]

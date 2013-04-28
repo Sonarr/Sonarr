@@ -88,7 +88,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
-            result.OriginalString.Should().Be(postTitle);
         }
 
         [TestCase(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
@@ -107,7 +106,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
-            result.OriginalString.Should().Be(path);
 
             ExceptionVerification.IgnoreWarns();
         }
@@ -159,7 +157,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
-            result.OriginalString.Should().Be(postTitle);
         }
 
 
@@ -181,7 +178,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
             result.AirDate.Should().Be(airDate);
             result.EpisodeNumbers.Should().BeNull();
-            result.OriginalString.Should().Be(postTitle);
         }
 
         [Test]
@@ -203,9 +199,8 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
-            result.EpisodeNumbers.Count.Should().Be(0);
+            result.EpisodeNumbers.Length.Should().Be(0);
             result.FullSeason.Should().BeTrue();
-            result.OriginalString.Should().Be(postTitle);
         }
 
         [TestCase("Conan", "conan")]
@@ -346,7 +341,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(seriesName));
             result.SeasonNumber.Should().Be(seasonNumber);
             result.FullSeason.Should().BeTrue();
-            result.OriginalString.Should().Be(postTitle);
         }
 
         [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER")]

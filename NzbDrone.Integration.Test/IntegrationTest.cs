@@ -31,15 +31,16 @@ namespace NzbDrone.Integration.Test
         protected SeriesClient Series;
         protected ClientBase<RootFolderResource> RootFolders;
         protected ClientBase<CommandResource> Commands;
+        protected ReleaseClient Releases;
 
         static IntegrationTest()
         {
             if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
             {
                 LogManager.Configuration = new LoggingConfiguration();
-                var consoleTarget = new ConsoleTarget { Layout = "${logger} - ${message} ${exception}" };
+                var consoleTarget = new ConsoleTarget { Layout = "${time} - ${logger} - ${message} ${exception}" };
                 LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, consoleTarget));
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
             }
 
 
@@ -85,6 +86,7 @@ namespace NzbDrone.Integration.Test
 
             RestClient = new RestClient(url + "/api/");
             Series = new SeriesClient(RestClient);
+            Releases = new ReleaseClient(RestClient);
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
             Commands = new ClientBase<CommandResource>(RestClient);
 

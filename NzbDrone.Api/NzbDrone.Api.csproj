@@ -96,6 +96,8 @@
     <Compile Include="Frontend\StaticResourceMapper.cs" />
     <Compile Include="Indexers\IndexerModule.cs" />
     <Compile Include="Indexers\IndexerResource.cs" />
+    <Compile Include="Indexers\ReleaseModule.cs" />
+    <Compile Include="Mapping\CloneInjection.cs" />
     <Compile Include="Mapping\MappingValidation.cs" />
     <Compile Include="Mapping\ResourceMappingException.cs" />
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />

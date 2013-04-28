@@ -6,8 +6,10 @@ using NzbDrone.Api.Indexers;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Test.Common;
 
@@ -21,6 +23,9 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(RootFolder), typeof(RootFolderResource))]
         [TestCase(typeof(NamingConfig), typeof(NamingConfigResource))]
         [TestCase(typeof(IndexerDefinition), typeof(IndexerResource))]
+        [TestCase(typeof(ReportInfo), typeof(ReleaseResource))]
+        [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
+        [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
         public void matching_fields(Type modelType, Type resourceType)
         {
             MappingValidation.ValidateMapping(modelType, resourceType);
