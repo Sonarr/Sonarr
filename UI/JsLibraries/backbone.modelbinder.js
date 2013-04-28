@@ -412,7 +412,8 @@
                         break;
                     case 'checkbox':
                         if (convertedValue) {
-                            el.attr('checked', 'checked');
+                            //Fixing this while we wait for an official update
+                            el.prop('checked', 'checked');
                         }
                         else {
                             el.removeAttr('checked');
