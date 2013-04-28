@@ -1,16 +1,14 @@
-﻿using System;
+using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Contract;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Common.Expansive;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -178,6 +176,37 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(Parser.Parser.NormalizeTitle(title));
             result.AirDate.Should().Be(airDate);
             result.EpisodeNumbers.Should().BeNull();
+        }
+
+
+        [TestCase("Conan {year} {day} {month} Emma Roberts HDTV XviD BFF")]
+        [TestCase("The Tonight Show With Jay Leno {year} {day} {month} 1080i HDTV DD5 1 MPEG2 TrollHD")]
+        [TestCase("The.Daily.Show.{year}.{day}.{month}.Johnny.Knoxville.iTouch-MW")]
+        [TestCase("The Daily Show - {year}-{day}-{month} - Gov. Deval Patrick")]
+        [TestCase("{year}.{day}.{month} - Denis Leary - HD TV.mkv")]
+        [TestCase("The Tonight Show with Jay Leno - {year}-{day}-{month} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
+        [TestCase("2020.NZ.{year}.{day}.{month}.PDTV.XviD-C4TV")]
+        public void should_not_accept_ancient_daily_series(string title)
+        {
+            var yearTooLow = title.Expand(new { year = 1950, month = 10, day = 14 });
+            Parser.Parser.ParseTitle(yearTooLow).Should().BeNull();
+        }
+
+
+        [TestCase("Conan {year} {day} {month} Emma Roberts HDTV XviD BFF")]
+        [TestCase("The Tonight Show With Jay Leno {year} {day} {month} 1080i HDTV DD5 1 MPEG2 TrollHD")]
+        [TestCase("The.Daily.Show.{year}.{day}.{month}.Johnny.Knoxville.iTouch-MW")]
+        [TestCase("The Daily Show - {year}-{day}-{month} - Gov. Deval Patrick")]
+        [TestCase("{year}.{day}.{month} - Denis Leary - HD TV.mkv")]
+        [TestCase("The Tonight Show with Jay Leno - {year}-{day}-{month} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
+        [TestCase("2020.NZ.{year}.{day}.{month}.PDTV.XviD-C4TV")]
+        public void should_not_accept_future_dates(string title)
+        {
+            var twoDaysFromNow = DateTime.Now.AddDays(2);
+
+            var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month, day = twoDaysFromNow.Day });
+
+            Parser.Parser.ParseTitle(validDate).Should().BeNull();
         }
 
         [Test]
@@ -381,6 +410,18 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]
         public void should_not_parse_encypted_posts(string title)
+        {
+            Parser.Parser.ParseTitle(title).Should().BeNull();
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [TestCase("76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe")]
+        [TestCase("Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8")]
+        [TestCase("TDAsqTea7k4o6iofVx3MQGuDK116FSjPobMuh8oB")]
+        [TestCase("yp4nFodAAzoeoRc467HRh1mzuT17qeekmuJ3zFnL")]
+        [TestCase("oxXo8S2272KE1 lfppvxo3iwEJBrBmhlQVK1gqGc")]
+        [TestCase("dPBAtu681Ycy3A4NpJDH6kNVQooLxqtnsW1Umfiv")]
+        public void should_not_parse_crap(string title)
         {
             Parser.Parser.ParseTitle(title).Should().BeNull();
             ExceptionVerification.IgnoreWarns();
