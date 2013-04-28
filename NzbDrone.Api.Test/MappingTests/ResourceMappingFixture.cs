@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Api.Config;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Indexers;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
@@ -19,7 +20,7 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(Core.Tv.Episode), typeof(EpisodeResource))]
         [TestCase(typeof(RootFolder), typeof(RootFolderResource))]
         [TestCase(typeof(NamingConfig), typeof(NamingConfigResource))]
-        [TestCase(typeof(IndexerDefinition), typeof(IndexerRepository))]
+        [TestCase(typeof(IndexerDefinition), typeof(IndexerResource))]
         public void matching_fields(Type modelType, Type resourceType)
         {
             MappingValidation.ValidateMapping(modelType, resourceType);
