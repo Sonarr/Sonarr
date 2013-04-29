@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("House - S06E13 - 5 to 9 [DVD]", "House", 6, 13)]
         [TestCase("The Mentalist - S02E21 - 18-5-4", "The Mentalist", 2, 21)]
         [TestCase("Breaking.In.S01E07.21.0.Jump.Street.720p.WEB-DL.DD5.1.h.264-KiNGS", "Breaking In", 1, 7)]
-        [TestCase("CSI525", "CSI", 5, 25)]
+        [TestCase("CSI.525", "CSI", 5, 25)]
         [TestCase("King of the Hill - 10x12 - 24 Hour Propane People [SDTV]", "King of the Hill", 10, 12)]
         [TestCase("Brew Masters S01E06 3 Beers For Batali DVDRip XviD SPRiNTER", "Brew Masters", 1, 6)]
         [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part01 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void unparsable_path_should_report_the_path()
         {
-            Parser.Parser.ParsePath("C:\\").Should().BeNull();
+            Parser.Parser.ParsePath("C:\\SOMETHING 12345.avi").Should().BeNull();
 
             MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.IsAny<ParseErrorReport>()), Times.Exactly(2));
 
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void unparsable_title_should_report_title()
         {
-            const string TITLE = "SOMETHING";
+            const string TITLE = "SOMETHING 12345";
 
             Parser.Parser.ParseTitle(TITLE).Should().BeNull();
 
@@ -179,13 +179,13 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
 
-        [TestCase("Conan {year} {day} {month} Emma Roberts HDTV XviD BFF")]
-        [TestCase("The Tonight Show With Jay Leno {year} {day} {month} 1080i HDTV DD5 1 MPEG2 TrollHD")]
-        [TestCase("The.Daily.Show.{year}.{day}.{month}.Johnny.Knoxville.iTouch-MW")]
-        [TestCase("The Daily Show - {year}-{day}-{month} - Gov. Deval Patrick")]
-        [TestCase("{year}.{day}.{month} - Denis Leary - HD TV.mkv")]
-        [TestCase("The Tonight Show with Jay Leno - {year}-{day}-{month} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
-        [TestCase("2020.NZ.{year}.{day}.{month}.PDTV.XviD-C4TV")]
+        [TestCase("Conan {year} {month} {day} Emma Roberts HDTV XviD BFF")]
+        [TestCase("The Tonight Show With Jay Leno {year} {month} {day} 1080i HDTV DD5 1 MPEG2 TrollHD")]
+        [TestCase("The.Daily.Show.{year}.{month}.{day}.Johnny.Knoxville.iTouch-MW")]
+        [TestCase("The Daily Show - {year}-{month}-{day} - Gov. Deval Patrick")]
+        [TestCase("{year}.{month}.{day} - Denis Leary - HD TV.mkv")]
+        [TestCase("The Tonight Show with Jay Leno - {year}-{month}-{day} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
+        [TestCase("2020.NZ.{year}.{month}.{day}.PDTV.XviD-C4TV")]
         public void should_not_accept_ancient_daily_series(string title)
         {
             var yearTooLow = title.Expand(new { year = 1950, month = 10, day = 14 });
@@ -193,18 +193,18 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
 
-        [TestCase("Conan {year} {day} {month} Emma Roberts HDTV XviD BFF")]
+        [TestCase("Conan {year} {month} {day} Emma Roberts HDTV XviD BFF")]
         [TestCase("The Tonight Show With Jay Leno {year} {day} {month} 1080i HDTV DD5 1 MPEG2 TrollHD")]
-        [TestCase("The.Daily.Show.{year}.{day}.{month}.Johnny.Knoxville.iTouch-MW")]
-        [TestCase("The Daily Show - {year}-{day}-{month} - Gov. Deval Patrick")]
-        [TestCase("{year}.{day}.{month} - Denis Leary - HD TV.mkv")]
-        [TestCase("The Tonight Show with Jay Leno - {year}-{day}-{month} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
-        [TestCase("2020.NZ.{year}.{day}.{month}.PDTV.XviD-C4TV")]
+        [TestCase("The.Daily.Show.{year}.{month}.{day}.Johnny.Knoxville.iTouch-MW")]
+        [TestCase("The Daily Show - {year}-{month}-{day} - Gov. Deval Patrick")]
+        [TestCase("{year}.{month}.{day} - Denis Leary - HD TV.mkv")]
+        [TestCase("The Tonight Show with Jay Leno - {year}-{month}-{day} - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo")]
+        [TestCase("2020.NZ.{year}.{month}.{day}.PDTV.XviD-C4TV")]
         public void should_not_accept_future_dates(string title)
         {
             var twoDaysFromNow = DateTime.Now.AddDays(2);
 
-            var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month, day = twoDaysFromNow.Day });
+            var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month.ToString("00"), day = twoDaysFromNow.Day });
 
             Parser.Parser.ParseTitle(validDate).Should().BeNull();
         }
@@ -392,14 +392,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().BeNull();
         }
 
-        [TestCase("Fussball Bundesliga 10e2011e30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
-        public void unparsable_should_log_error_but_not_throw(string title)
-        {
-            Parser.Parser.ParseTitle(title);
-            ExceptionVerification.IgnoreWarns();
-            ExceptionVerification.ExpectedErrors(1);
-        }
-
         [TestCase("[112461]-[FULL]-[#a.b.teevee@EFNet]-[ 666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION ]-[02/31] - \"the.devils.address.103.720p-dimension.par2\" yEnc", "666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION")]
         [TestCase("[112438]-[FULL]-[#a.b.teevee@EFNet]-[ Downton_Abbey.3x05.HDTV_x264-FoV ]-[01/26] - \"downton_abbey.3x05.hdtv_x264-fov.nfo\" yEnc", "Downton_Abbey.3x05.HDTV_x264-FoV")]
         [TestCase("[ 21154 ] - [ TrollHD ] - [ 00/73 ] - \"MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb\" yEnc", "MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb")]
@@ -408,19 +400,13 @@ namespace NzbDrone.Core.Test.ParserTests
             BasicRssParser.ParseHeader(title).Should().Be(expected);
         }
 
-        [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]
-        public void should_not_parse_encypted_posts(string title)
-        {
-            Parser.Parser.ParseTitle(title).Should().BeNull();
-            ExceptionVerification.IgnoreWarns();
-        }
-
         [TestCase("76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe")]
         [TestCase("Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8")]
         [TestCase("TDAsqTea7k4o6iofVx3MQGuDK116FSjPobMuh8oB")]
         [TestCase("yp4nFodAAzoeoRc467HRh1mzuT17qeekmuJ3zFnL")]
         [TestCase("oxXo8S2272KE1 lfppvxo3iwEJBrBmhlQVK1gqGc")]
         [TestCase("dPBAtu681Ycy3A4NpJDH6kNVQooLxqtnsW1Umfiv")]
+        [TestCase("password - \"bdc435cb-93c4-4902-97ea-ca00568c3887.337\" yEnc")]
         public void should_not_parse_crap(string title)
         {
             Parser.Parser.ParseTitle(title).Should().BeNull();
