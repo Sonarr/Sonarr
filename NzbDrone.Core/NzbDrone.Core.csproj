@@ -257,8 +257,6 @@
     <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
     <Compile Include="Indexers\BasicRssParser.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
-    <Compile Include="Indexers\FileSharingTalk\FileSharingTalk.cs" />
-    <Compile Include="Indexers\FileSharingTalk\FileSharingTalkParser.cs" />
     <Compile Include="Indexers\Indexer.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
@@ -278,7 +276,6 @@
     <Compile Include="Indexers\Nzbx\NzbxParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
-    <Compile Include="Indexers\FileSharingTalk\FileSharingTalkSettings.cs" />
     <Compile Include="Indexers\IIndexerSettings.cs" />
     <Compile Include="Indexers\NzbsRUs\NzbsrusSettings.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
