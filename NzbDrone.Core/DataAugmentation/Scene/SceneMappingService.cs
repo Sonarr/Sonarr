@@ -3,34 +3,61 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        void UpdateMappings();
-        string GetSceneName(int seriesId, int seasonNumber = -1);
+        string GetSceneName(int tvdbId, int seasonNumber = -1);
         Nullable<int> GetTvDbId(string cleanName);
-        string GetCleanName(int tvdbId);
     }
 
-    public class SceneMappingService : ISceneMappingService,IHandleAsync<ApplicationStartedEvent>
+    public class SceneMappingService : ISceneMappingService,
+        IHandleAsync<ApplicationStartedEvent>,
+        IExecute<UpdateSceneMappingCommand>
     {
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
-        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ISeriesService seriesService, Logger logger)
+        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, Logger logger)
         {
             _repository = repository;
             _sceneMappingProxy = sceneMappingProxy;
-            _seriesService = seriesService;
             _logger = logger;
         }
 
-        public void UpdateMappings()
+        public string GetSceneName(int tvdbId, int seasonNumber = -1)
+        {
+            var mapping = _repository.FindByTvdbId(tvdbId);
+
+            if (mapping == null) return null;
+
+            return mapping.SceneName;
+        }
+
+
+
+        public Nullable<Int32> GetTvDbId(string cleanName)
+        {
+            var mapping = _repository.FindByCleanTitle(cleanName);
+
+            if (mapping == null)
+                return null;
+
+            return mapping.TvdbId;
+        }
+
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            if (!_repository.HasItems())
+            {
+                UpdateMappings();
+            }
+        }
+
+        private void UpdateMappings()
         {
             try
             {
@@ -52,45 +79,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             }
         }
 
-        public string GetSceneName(int seriesId, int seasonNumber = -1)
+        public void Execute(UpdateSceneMappingCommand message)
         {
-            var tvDbId = _seriesService.FindByTvdbId(seriesId).TvdbId;
-
-            var mapping = _repository.FindByTvdbId(tvDbId);
-
-            if (mapping == null) return null;
-
-            return mapping.SceneName;
-        }
-
-
-
-        public Nullable<Int32> GetTvDbId(string cleanName)
-        {
-            var mapping = _repository.FindByCleanTitle(cleanName);
-
-            if (mapping == null)
-                return null;
-
-            return mapping.TvdbId;
-        }
-
-
-        public string GetCleanName(int tvdbId)
-        {
-            var mapping = _repository.FindByTvdbId(tvdbId);
-
-            if (mapping == null) return null;
-
-            return mapping.CleanTitle;
-        }
-
-        public void HandleAsync(ApplicationStartedEvent message)
-        {
-            if (!_repository.HasItems())
-            {
-                UpdateMappings();
-            }
+            UpdateMappings();
         }
     }
 }

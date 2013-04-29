@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
@@ -10,13 +9,6 @@ using NzbDrone.Core.RootFolders;
 
 namespace NzbDrone.Core.Tv
 {
-    public enum SeriesTypes
-    {
-        Standard = 0,
-        Daily = 1,
-        Anime = 2,
-    }
-
     public class Series : ModelBase
     {
         public Series()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.SeriesStats;
 
 namespace NzbDrone.Core.Tv
 {
@@ -13,7 +12,6 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
-        void SetTvRageId(int seriesId, int tvRageId);
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -48,9 +46,5 @@ namespace NzbDrone.Core.Tv
             SetFields(new Series { Id = seriesId, SeriesType = seriesType }, s => s.SeriesType);
         }
 
-        public void SetTvRageId(int seriesId, int tvRageId)
-        {
-            SetFields(new Series { Id = seriesId, TvRageId = tvRageId }, s => s.TvRageId);
-        }
     }
 }

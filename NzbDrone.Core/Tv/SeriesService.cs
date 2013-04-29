@@ -8,6 +8,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
@@ -42,18 +43,20 @@ namespace NzbDrone.Core.Tv
         private readonly IConfigService _configService;
         private readonly IProvideSeriesInfo _seriesInfoProxy;
         private readonly IMessageAggregator _messageAggregator;
+        private readonly ISceneMappingService _sceneMappingService;
         private readonly IRootFolderService _rootFolderService;
         private readonly DiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
-                             IProvideSeriesInfo seriesInfoProxy, IMessageAggregator messageAggregator,
+                             IProvideSeriesInfo seriesInfoProxy, IMessageAggregator messageAggregator, ISceneMappingService sceneMappingService,
                              IRootFolderService rootFolderService, DiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _seriesInfoProxy = seriesInfoProxy;
             _messageAggregator = messageAggregator;
+            _sceneMappingService = sceneMappingService;
             _rootFolderService = rootFolderService;
             _diskProvider = diskProvider;
             _logger = logger;
@@ -146,6 +149,13 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
+            var tvdbId = _sceneMappingService.GetTvDbId(title);
+
+            if (tvdbId.HasValue)
+            {
+                return FindByTvdbId(tvdbId.Value);
+            }
+
             return _seriesRepository.FindByTitle(Parser.Parser.NormalizeTitle(title));
         }
 

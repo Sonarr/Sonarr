@@ -31,8 +31,8 @@ namespace NzbDrone.Api.ErrorManagement
             if (validationException != null)
             {
                 _logger.Warn("Invalid request {0}", validationException.Message);
-                
-                
+
+
                 return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
 
             }
@@ -42,8 +42,8 @@ namespace NzbDrone.Api.ErrorManagement
 
             return new ErrorModel()
                 {
-                        Message = exception.Message,
-                        Description = exception.ToString()
+                    Message = exception.Message,
+                    Description = exception.ToString()
                 }.AsResponse(HttpStatusCode.InternalServerError);
         }
     }

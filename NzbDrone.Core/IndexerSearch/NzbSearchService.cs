@@ -101,8 +101,10 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var spec = new TSpec();
 
+            var tvdbId = _seriesService.GetSeries(seriesId).TvdbId;
+
             spec.SeriesId = seriesId;
-            spec.SceneTitle = _sceneMapping.GetSceneName(seriesId, seasonNumber);
+            spec.SceneTitle = _sceneMapping.GetSceneName(tvdbId, seasonNumber);
 
             return spec;
         }

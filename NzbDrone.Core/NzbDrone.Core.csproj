@@ -186,6 +186,7 @@
     <Compile Include="DataAugmentation\Scene\SceneMappingService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
+    <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
@@ -295,7 +296,6 @@
     <Compile Include="Jobs\Implementations\RenameSeriesJob.cs" />
     <Compile Include="Jobs\Implementations\RssSyncJob.cs" />
     <Compile Include="Jobs\Implementations\UpdateInfoJob.cs" />
-    <Compile Include="Jobs\Implementations\UpdateSceneMappingsJob.cs" />
     <Compile Include="Jobs\Implementations\XemUpdateJob.cs" />
     <Compile Include="Jobs\JobController.cs" />
     <Compile Include="Jobs\JobDefinition.cs" />
@@ -394,6 +394,7 @@
     <Compile Include="Instrumentation\TrimLogsJob.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
+    <Compile Include="Tv\SeriesTypes.cs" />
     <Compile Include="Update\AppUpdateJob.cs" />
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />

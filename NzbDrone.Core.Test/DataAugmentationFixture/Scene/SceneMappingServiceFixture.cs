@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         {
             Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Returns(_fakeMappings);
 
-            Subject.UpdateMappings();
+            Subject.Execute(new UpdateSceneMappingCommand());
 
             AssertMappingUpdated();
         }
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
             Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Throws(new WebException());
 
-            Subject.UpdateMappings();
+            Subject.Execute(new UpdateSceneMappingCommand());
 
             AssertNoUpdate();
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
             Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Returns(new List<SceneMapping>());
 
-            Subject.UpdateMappings();
+            Subject.Execute(new UpdateSceneMappingCommand());
 
             AssertNoUpdate();
 

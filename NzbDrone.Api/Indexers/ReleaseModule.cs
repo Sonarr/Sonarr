@@ -59,7 +59,6 @@ namespace NzbDrone.Api.Indexers
         public Int32 SeasonNumber { get; set; }
         public Language Language { get; set; }
         public DateTime? AirDate { get; set; }
-        public String OriginalString { get; set; }
         public String SeriesTitle { get; set; }
         public int[] EpisodeNumbers { get; set; }
         public Boolean Approved { get; set; }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Core.DecisionEngine.Specifications.Search;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
@@ -18,38 +19,26 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly IEnumerable<IRejectWithReason> _specifications;
         private readonly IParsingService _parsingService;
+        private readonly Logger _logger;
 
-        public DownloadDecisionMaker(IEnumerable<IRejectWithReason> specifications, IParsingService parsingService)
+        public DownloadDecisionMaker(IEnumerable<IRejectWithReason> specifications, IParsingService parsingService, Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
+            _logger = logger;
         }
 
         public List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports)
         {
-            return GetDecisions(reports, GetGeneralRejectionReasons).ToList();
+            return GetDecisions(reports).ToList();
         }
 
         public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase)
         {
-            return GetDecisions(reports, remoteEpisode =>
-                {
-                    var generalReasons = GetGeneralRejectionReasons(remoteEpisode);
-                    var searchReasons = GetSearchRejectionReasons(remoteEpisode, searchDefinitionBase);
-                    return generalReasons.Union(searchReasons);
-                }).ToList();
+            return GetDecisions(reports).ToList();
         }
 
-
-        private IEnumerable<string> GetGeneralRejectionReasons(RemoteEpisode report)
-        {
-            return _specifications
-                .OfType<IDecisionEngineSpecification>()
-                .Where(spec => !spec.IsSatisfiedBy(report))
-                .Select(spec => spec.RejectionReason);
-        }
-
-        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, Func<RemoteEpisode, IEnumerable<string>> decisionCallback)
+        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinition = null)
         {
             foreach (var report in reports)
             {
@@ -62,7 +51,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (remoteEpisode.Series != null)
                     {
-                        yield return new DownloadDecision(remoteEpisode, decisionCallback(remoteEpisode).ToArray());
+                        yield return GetDecisionForReport(remoteEpisode, searchDefinition);
                     }
                     else
                     {
@@ -72,12 +61,40 @@ namespace NzbDrone.Core.DecisionEngine
             }
         }
 
-        private IEnumerable<string> GetSearchRejectionReasons(RemoteEpisode report, SearchDefinitionBase searchDefinitionBase)
+        private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinition = null)
         {
-            return _specifications
-                .OfType<IDecisionEngineSearchSpecification>()
-                .Where(spec => !spec.IsSatisfiedBy(report, searchDefinitionBase))
-                .Select(spec => spec.RejectionReason);
+            var reasons = _specifications.Select(c => EvaluateSpec(c, remoteEpisode, searchDefinition))
+                .Where(c => !string.IsNullOrWhiteSpace(c));
+
+            return new DownloadDecision(remoteEpisode, reasons.ToArray());
+        }
+
+        private string EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinitionBase = null)
+        {
+            try
+            {
+                var searchSpecification = spec as IDecisionEngineSearchSpecification;
+                if (searchSpecification != null && searchDefinitionBase != null)
+                {
+                    if (!searchSpecification.IsSatisfiedBy(remoteEpisode, searchDefinitionBase))
+                    {
+                        return spec.RejectionReason;
+                    }
+                }
+
+                var generalSpecification = spec as IDecisionEngineSpecification;
+                if (generalSpecification != null && !generalSpecification.IsSatisfiedBy(remoteEpisode))
+                {
+                    return spec.RejectionReason;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("Couldn't evaluate decision", e);
+                return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
+            }
+
+            return null;
         }
     }
 }
