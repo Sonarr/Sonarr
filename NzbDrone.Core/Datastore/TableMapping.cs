@@ -41,19 +41,20 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
             Mapper.Entity<History.History>().RegisterModel("History")
+                  .Relationship()
                   .HasOne(h => h.Episode, h => h.EpisodeId);
 
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.Path)
-                  .HasOne(s => s.RootFolder, s => s.RootFolderId);
+                  .Relationship()
+                  .HasOne(s => s.RootFolder, s => s.RootFolderId)
+                  .HasOne(s => s.QualityProfile, s => s.QualityProfileId);
 
             Mapper.Entity<Season>().RegisterModel("Seasons");
             Mapper.Entity<Episode>().RegisterModel("Episodes");
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles");
 
-            Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles")
-                  .For(q => q.DbAllowed).SetColumnName("Allowed")
-                  .Ignore(q => q.Allowed);
+            Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles");
 
             Mapper.Entity<QualitySize>().RegisterModel("QualitySizes");
 
@@ -63,6 +64,9 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<SeriesStatistics>().MapResultSet();
         }
+
+
+
 
 
         private static void RegisterMappers()

@@ -37,12 +37,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail3 = new Mock<IDecisionEngineSpecification>();
 
             _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(true);
+            _pass1.Setup(c => c.RejectionReason).Returns("_pass1");
+
             _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(true);
+            _pass2.Setup(c => c.RejectionReason).Returns("_pass2");
+
             _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(true);
+            _pass3.Setup(c => c.RejectionReason).Returns("_pass3");
+
 
             _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
+            _fail1.Setup(c => c.RejectionReason).Returns("_fail1");
+
             _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
+            _fail2.Setup(c => c.RejectionReason).Returns("_fail2");
+
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
+            _fail3.Setup(c => c.RejectionReason).Returns("_fail3");
 
             _reports = new List<ReportInfo> { new ReportInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
             _remoteEpisode = new RemoteEpisode { Series = new Series() };
@@ -70,6 +81,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _pass1.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
             _pass2.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
             _pass3.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
+        }
+
+
+        [Test]
+        public void should_return_rejected_if_single_specs_fail()
+        {
+            GivenSpecifications(_fail1);
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Single().Approved.Should().BeFalse();
         }
 
         [Test]

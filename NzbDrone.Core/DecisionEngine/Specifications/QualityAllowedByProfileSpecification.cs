@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
             _logger.Trace("Checking if report meets quality requirements. {0}", subject.ParsedEpisodeInfo.Quality);
-            if (!subject.Series.QualityProfile.Allowed.Contains(subject.ParsedEpisodeInfo.Quality.Quality))
+            if (!subject.Series.QualityProfile.Value.Allowed.Contains(subject.ParsedEpisodeInfo.Quality.Quality))
             {
                 _logger.Trace("Quality {0} rejected by Series' quality profile", subject.ParsedEpisodeInfo.Quality);
                 return false;

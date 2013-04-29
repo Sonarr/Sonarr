@@ -73,6 +73,11 @@ namespace NzbDrone.Core.DecisionEngine
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(spec.RejectionReason))
+                {
+                    throw new InvalidOperationException("[Need Rejection Text]");
+                }
+
                 var searchSpecification = spec as IDecisionEngineSearchSpecification;
                 if (searchSpecification != null && searchDefinitionBase != null)
                 {

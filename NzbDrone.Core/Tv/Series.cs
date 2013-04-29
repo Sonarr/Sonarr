@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Tv
         public int RootFolderId { get; set; }
         public string FolderName { get; set; }
         public LazyLoaded<RootFolder> RootFolder { get; set; }
-        
+
         //Todo: Use this to auto link RootFolder and Folder (using the proper path separator)
         public string Path
         {
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Tv
         public int UtcOffset { get; set; }
 
         public DateTime? FirstAired { get; set; }
-        public QualityProfile QualityProfile { get; set; }
+        public LazyLoaded<QualityProfile> QualityProfile { get; set; }
         public DateTime? NextAiring { get; set; }
     }
 }

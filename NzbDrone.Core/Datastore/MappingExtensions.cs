@@ -20,9 +20,6 @@ namespace NzbDrone.Core.Datastore
 
         public static ColumnMapBuilder<T> RegisterModel<T>(this FluentMappings.MappingsFluentEntity<T> mapBuilder, string tableName = null) where T : ModelBase, new()
         {
-
-
-
             return mapBuilder.Table.MapTable(tableName)
                              .Columns
                              .AutoMapPropertiesWhere(IsMappableProperty)

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
@@ -34,7 +36,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void Setup()
         {
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.QualityProfile = (LazyLoaded<QualityProfile>)new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
             remoteEpisode = new RemoteEpisode
@@ -48,7 +50,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_allow_if_quality_is_defined_in_profile(Quality qualityType)
         {
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
-            remoteEpisode.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
+            remoteEpisode.Series.QualityProfile.Value.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
             Subject.IsSatisfiedBy(remoteEpisode).Should().BeTrue();
         }
@@ -57,7 +59,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_allow_if_quality_is_not_defined_in_profile(Quality qualityType)
         {
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
-            remoteEpisode.Series.QualityProfile.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
+            remoteEpisode.Series.QualityProfile.Value.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
             Subject.IsSatisfiedBy(remoteEpisode).Should().BeFalse();
         }

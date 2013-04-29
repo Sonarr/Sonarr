@@ -5,7 +5,7 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Qualities
 {
-    public class Quality : IComparable<Quality>
+    public class Quality : IComparable<Quality>, IEmbeddedDocument
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Qualities
             if (quality == null)
                 throw new ArgumentException("ID does not match a known quality", "id");
 
-            return quality;            
+            return quality;
         }
 
         public static explicit operator Quality(int id)

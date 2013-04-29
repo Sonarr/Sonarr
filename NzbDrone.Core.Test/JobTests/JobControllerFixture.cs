@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿/*
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -14,7 +15,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.JobTests
 {
-    [TestFixture]
+   /* [TestFixture]
     [ExclusivelyUses("JOB_PROVIDER")]
     public class JobControllerFixture : CoreTest<JobController>
     {
@@ -225,6 +226,7 @@ namespace NzbDrone.Core.Test.JobTests
             Subject.Queue.Should().OnlyContain(c => c.Source == JobQueueItem.JobSourceType.Scheduler);
 
             WaitForQueue();
-        }
+        }#1#
     }
 }
+*/
