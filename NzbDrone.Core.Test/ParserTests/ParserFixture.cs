@@ -197,7 +197,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
 
         [TestCase("Conan {year} {month} {day} Emma Roberts HDTV XviD BFF")]
-        [TestCase("The Tonight Show With Jay Leno {year} {day} {month} 1080i HDTV DD5 1 MPEG2 TrollHD")]
+        [TestCase("The Tonight Show With Jay Leno {year} {month} {day} 1080i HDTV DD5 1 MPEG2 TrollHD")]
         [TestCase("The.Daily.Show.{year}.{month}.{day}.Johnny.Knoxville.iTouch-MW")]
         [TestCase("The Daily Show - {year}-{month}-{day} - Gov. Deval Patrick")]
         [TestCase("{year}.{month}.{day} - Denis Leary - HD TV.mkv")]
@@ -207,7 +207,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var twoDaysFromNow = DateTime.Now.AddDays(2);
 
-            var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month.ToString("00"), day = twoDaysFromNow.Day });
+            var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month.ToString("00"), day = twoDaysFromNow.Day.ToString("00") });
 
             Parser.Parser.ParseTitle(validDate).Should().BeNull();
         }
