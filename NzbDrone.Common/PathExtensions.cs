@@ -28,7 +28,7 @@ namespace NzbDrone.Common
                 return info.FullName.TrimEnd('/', '\\', ' ');
             }
 
-            return info.FullName.Trim('/', '\\', ' ');
+            return info.FullName.TrimEnd('/').Trim('\\', ' ');
         }
 
         static string GetProperDirectoryCapitalization(DirectoryInfo dirInfo)
