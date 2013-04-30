@@ -33,6 +33,8 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\Testserver\Test\file.ext   \\", @"\\Testserver\Test\file.ext")]
         public void Normalize_Path_Windows(string dirty, string clean)
         {
+            WindowsOnly();
+
             var result = dirty.CleanPath();
             result.Should().Be(clean);
         }
@@ -46,6 +48,8 @@ namespace NzbDrone.Common.Test
         [TestCase(@"//CAPITAL//lower// ", @"/CAPITAL/lower")]
         public void Normalize_Path_Linux(string dirty, string clean)
         {
+            LinuxOnly();
+
             var result = dirty.CleanPath();
             result.Should().Be(clean);
         }

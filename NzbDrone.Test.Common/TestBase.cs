@@ -103,7 +103,7 @@ namespace NzbDrone.Test.Common
             {
             }
 
-            if (TestContext.CurrentContext.Result.State == TestState.Failure || TestContext.CurrentContext.Result.State == TestState.Error)
+/*            if (TestContext.CurrentContext.Result.State == TestState.Failure || TestContext.CurrentContext.Result.State == TestState.Error)
             {
                 var testName = TestContext.CurrentContext.Test.Name.ToLower();
 
@@ -115,6 +115,23 @@ namespace NzbDrone.Test.Common
                 {
                     throw new IgnoreException("linux specific test");
                 }
+            }*/
+        }
+
+        protected void WindowsOnly()
+        {
+            if (EnvironmentProvider.IsLinux)
+            {
+                throw new IgnoreException("windows specific test");
+            }
+        }
+
+
+        protected void LinuxOnly()
+        {
+            if (!EnvironmentProvider.IsLinux)
+            {
+                throw new IgnoreException("linux specific test");
             }
         }
 

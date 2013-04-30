@@ -41,7 +41,8 @@ namespace NzbDrone.Test.Common
         [TearDown]
         public void LoggingDownBase()
         {
-            if (TestContext.CurrentContext.Result.State == TestState.Failure || TestContext.CurrentContext.Result.State == TestState.Error)
+
+            //if (TestContext.CurrentContext.Result.State == TestState.Failure || TestContext.CurrentContext.Result.State == TestState.Error)
             {
                 ExceptionVerification.AssertNoUnexcpectedLogs();
             }
