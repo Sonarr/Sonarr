@@ -103,7 +103,7 @@ namespace NzbDrone.Test.Common
             {
             }
 
-            if (TestContext.CurrentContext.Result.Status == TestStatus.Failed)
+            if (TestContext.CurrentContext.Result.State == TestState.Failure || TestContext.CurrentContext.Result.State == TestState.Error)
             {
                 var testName = TestContext.CurrentContext.Test.Name.ToLower();
 
