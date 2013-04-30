@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Common
@@ -31,6 +30,24 @@ namespace NzbDrone.Common
 
             return info.FullName.Trim('/', '\\', ' ');
         }
+
+        static string GetProperDirectoryCapitalization(DirectoryInfo dirInfo)
+        {
+            var parentDirInfo = dirInfo.Parent;
+            if (null == parentDirInfo)
+                return dirInfo.Name;
+            return Path.Combine(GetProperDirectoryCapitalization(parentDirInfo),
+                                parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
+        }
+
+        static string GetProperFilePathCapitalization(string filename)
+        {
+            var fileInfo = new FileInfo(filename);
+            DirectoryInfo dirInfo = fileInfo.Directory;
+            return Path.Combine(GetProperDirectoryCapitalization(dirInfo),
+                                dirInfo.GetFiles(fileInfo.Name)[0].Name);
+        }
+
 
         public static string GetAppDataPath(this EnvironmentProvider environmentProvider)
         {
