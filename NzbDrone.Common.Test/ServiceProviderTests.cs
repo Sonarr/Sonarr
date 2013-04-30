@@ -27,6 +27,8 @@ namespace NzbDrone.Common.Test
         [TearDown]
         public void TearDown()
         {
+            WindowsOnly();
+
             if (Subject.ServiceExist(TEMP_SERVICE_NAME))
             {
                 Subject.UnInstall(TEMP_SERVICE_NAME);
