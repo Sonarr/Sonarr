@@ -15,7 +15,7 @@ namespace NzbDrone.Core.RootFolders
         RootFolder Add(RootFolder rootDir);
         void Remove(int id);
         List<UnmappedFolder> GetUnmappedFolders(string path);
-        Dictionary<string, ulong> FreeSpaceOnDrives();
+        Dictionary<string, long> FreeSpaceOnDrives();
         RootFolder Get(int id);
     }
 
@@ -99,9 +99,9 @@ namespace NzbDrone.Core.RootFolders
             return results;
         }
 
-        public virtual Dictionary<string, ulong> FreeSpaceOnDrives()
+        public virtual Dictionary<string, long> FreeSpaceOnDrives()
         {
-            var freeSpace = new Dictionary<string, ulong>();
+            var freeSpace = new Dictionary<string, long>();
 
             var rootDirs = All();
 

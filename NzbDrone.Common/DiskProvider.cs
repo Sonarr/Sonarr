@@ -200,21 +200,49 @@ namespace NzbDrone.Common
             File.SetAccessControl(filename, fs);
         }
 
-        public virtual ulong GetAvilableSpace(string path)
+        public virtual long GetAvilableSpace(string path)
         {
             if (!FolderExists(path))
                 throw new DirectoryNotFoundException(path);
 
-            ulong freeBytesAvailable;
-            ulong totalNumberOfBytes;
-            ulong totalNumberOfFreeBytes;
 
-            bool success = GetDiskFreeSpaceEx(path, out freeBytesAvailable, out totalNumberOfBytes,
-                               out totalNumberOfFreeBytes);
-            if (!success)
-                throw new System.ComponentModel.Win32Exception();
+            var driveInfo = DriveInfo.GetDrives().SingleOrDefault(c => c.IsReady && c.Name.Equals(Path.GetPathRoot(path), StringComparison.CurrentCultureIgnoreCase));
 
-            return freeBytesAvailable;
+            if (driveInfo == null)
+            {
+                if (EnvironmentProvider.IsLinux)
+                {
+                    return 0;
+                }
+             
+                return DriveFreeSpaceEx(path);
+            }
+
+            return driveInfo.AvailableFreeSpace;
+        }
+
+        private static long DriveFreeSpaceEx(string folderName)
+        {
+            if (string.IsNullOrEmpty(folderName))
+            {
+                throw new ArgumentNullException("folderName");
+            }
+
+            if (!folderName.EndsWith("\\"))
+            {
+                folderName += '\\';
+            }
+
+            ulong free = 0;
+            ulong dummy1 = 0;
+            ulong dummy2 = 0;
+
+            if (GetDiskFreeSpaceEx(folderName, out free, out dummy1, out dummy2))
+            {
+                return (long)free;
+            }
+
+            return 0;
         }
 
         public virtual string ReadAllText(string filePath)

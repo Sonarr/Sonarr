@@ -31,7 +31,7 @@ namespace NzbDrone.Common
             return info.FullName.TrimEnd('/').Trim('\\', ' ');
         }
 
-        static string GetProperDirectoryCapitalization(DirectoryInfo dirInfo)
+        private static string GetProperDirectoryCapitalization(DirectoryInfo dirInfo)
         {
             var parentDirInfo = dirInfo.Parent;
             if (null == parentDirInfo)
@@ -40,7 +40,7 @@ namespace NzbDrone.Common
                                 parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
         }
 
-        static string GetProperFilePathCapitalization(string filename)
+        public static string GetActualCasing(this string filename)
         {
             var fileInfo = new FileInfo(filename);
             DirectoryInfo dirInfo = fileInfo.Directory;

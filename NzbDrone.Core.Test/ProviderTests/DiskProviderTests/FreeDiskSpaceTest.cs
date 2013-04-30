@@ -13,10 +13,18 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         public void should_return_free_disk_space()
         {
             var result = Subject.GetAvilableSpace(Directory.GetCurrentDirectory());
-
-            //Checks to ensure that the free space on the first is greater than 0 (It should be in 99.99999999999999% of cases... I hope)
             result.Should().BeGreaterThan(0);
         }
+
+        [Test]
+        public void should_be_able_to_get_space_on_unc()
+        {
+            WindowsOnly();
+
+            var result = Subject.GetAvilableSpace(@"\\localhost\c$\Windows");
+            result.Should().BeGreaterThan(0);
+        }
+
         [Test]
         public void should_throw_if_drive_doesnt_exist()
         {
