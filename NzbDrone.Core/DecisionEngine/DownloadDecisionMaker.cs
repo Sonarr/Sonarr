@@ -42,23 +42,38 @@ namespace NzbDrone.Core.DecisionEngine
         {
             foreach (var report in reports)
             {
-                var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
+                DownloadDecision decision = null;
 
-                if (parsedEpisodeInfo != null)
+                try
                 {
-                    var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
-                    remoteEpisode.Report = report;
+                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
 
-                    if (remoteEpisode.Series != null)
+                    if (parsedEpisodeInfo != null)
                     {
-                        yield return GetDecisionForReport(remoteEpisode, searchDefinition);
-                    }
-                    else
-                    {
-                        yield return new DownloadDecision(remoteEpisode, "Unknown Series");
+                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
+                        remoteEpisode.Report = report;
+
+                        if (remoteEpisode.Series != null)
+                        {
+                            decision = GetDecisionForReport(remoteEpisode, searchDefinition);
+                        }
+                        else
+                        {
+                            decision = new DownloadDecision(remoteEpisode, "Unknown Series");
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("Couldn't process report.", e);
+                }
+
+                if (decision != null)
+                {
+                    yield return decision;
+                }
             }
+
         }
 
         private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinition = null)

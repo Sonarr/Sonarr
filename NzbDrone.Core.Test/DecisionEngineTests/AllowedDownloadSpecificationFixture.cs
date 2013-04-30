@@ -8,6 +8,7 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -159,7 +160,30 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
         [Test]
-        public void should_return_unknow_series_rejectio_if_series_is_unknow()
+        public void broken_report_shouldnt_blowup_the_process()
+        {
+            GivenSpecifications(_pass1);
+
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>()))
+                     .Throws<TestException>();
+
+            _reports = new List<ReportInfo>
+                {
+                    new ReportInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
+                    new ReportInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
+                    new ReportInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"}
+                };
+
+            Subject.GetRssDecision(_reports);
+
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>()), Times.Exactly(_reports.Count));
+
+            ExceptionVerification.ExpectedErrors(3);
+        }
+
+
+        [Test]
+        public void should_return_unknown_series_rejection_if_series_is_unknow()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
 
@@ -170,8 +194,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             result.Should().HaveCount(1);
 
         }
-
-
-
     }
+
 }

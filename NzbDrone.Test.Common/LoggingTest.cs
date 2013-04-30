@@ -2,13 +2,11 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
-using NzbDrone.Common;
 
 namespace NzbDrone.Test.Common
 {
     public abstract class LoggingTest
     {
-
         protected Logger TestLogger = LogManager.GetLogger("TestLogger");
 
         protected static void InitLogging()
