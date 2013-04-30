@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", Quality.DVD, false },
             new object[] { "WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", Quality.DVD, false },
             new object[] { "Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", Quality.HDTV720p, false },
-            new object[] { "Chuck S11E03 has no periods or extention HDTV", Quality.SDTV, false },
+            new object[] { "Chuck S11E03 has no periods or extension HDTV", Quality.SDTV, false },
             new object[] { "Chuck.S04E05.HDTV.XviD-LOL", Quality.SDTV, false },
             new object[] { "The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", Quality.DVD, false },
             new object[] { "The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", Quality.DVD, false },

@@ -229,7 +229,7 @@ namespace NzbDrone.Common
 
         public static bool PathEquals(string firstPath, string secondPath)
         {
-            return String.Equals(firstPath.NormalizePath(), secondPath.NormalizePath(), StringComparison.InvariantCultureIgnoreCase);
+            return String.Equals(firstPath.CleanPath(), secondPath.CleanPath(), StringComparison.InvariantCultureIgnoreCase);
         }
 
         public virtual void FileSetLastWriteTimeUtc(string path, DateTime dateTime)

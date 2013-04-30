@@ -91,7 +91,7 @@
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
     <Compile Include="ExceptionVerification.cs" />
-    <Compile Include="IntegrationTest.cs" />
+    <Compile Include="Categories\IntegrationTestAttribute.cs" />
     <Compile Include="LoggingTest.cs" />
     <Compile Include="MockerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

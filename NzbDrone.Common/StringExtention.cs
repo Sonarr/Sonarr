@@ -1,6 +1,6 @@
 ﻿namespace NzbDrone.Common
 {
-    public static class StringExtention
+    public static class StringExtension
     {
 
         public static object NullSafe(this object target)

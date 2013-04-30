@@ -96,11 +96,11 @@ namespace NzbDrone.Core.Providers
             var episodeFile = new EpisodeFile();
             episodeFile.DateAdded = DateTime.Now;
             episodeFile.SeriesId = series.Id;
-            episodeFile.Path = filePath.NormalizePath();
+            episodeFile.Path = filePath.CleanPath();
             episodeFile.Size = size;
             episodeFile.Quality = parsedEpisode.Quality;
             episodeFile.SeasonNumber = parsedEpisode.SeasonNumber;
-            episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.NormalizePath());
+            episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.CleanPath());
 
             //Todo: We shouldn't actually import the file until we confirm its the only one we want.
             //Todo: Separate episodeFile creation from importing (pass file to import to import)

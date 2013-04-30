@@ -24,20 +24,9 @@ namespace NzbDrone.Core.Indexers.Nzbx
         //    "downvotes": 0
         //}
 
-        public int Id { get; set; }
         public string Name { get; set; }
-        public int TotalPart { get; set; }
-        public int GroupId { get; set; }
         public long Size { get; set; }
         public DateTime PostDate { get; set; }
         public string Guid { get; set; }
-        public string FromName { get; set; }
-        public int Completion { get; set; }
-        public int CategoryId { get; set; }
-        public string ImdbId { get; set; }
-        public string AnidbId { get; set; }
-        public long RageId { get; set; }
-        public int Comments { get; set; }
-        public int Downloads { get; set; }
     }
 }

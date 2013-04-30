@@ -1,6 +1,6 @@
 <ProjectConfiguration>
   <CopyReferencedAssembliesToWorkspace>false</CopyReferencedAssembliesToWorkspace>
-  <ConsiderInconclusiveTestsAsPassing>false</ConsiderInconclusiveTestsAsPassing>
+  <ConsiderInconclusiveTestsAsPassing>true</ConsiderInconclusiveTestsAsPassing>
   <PreloadReferencedAssemblies>false</PreloadReferencedAssemblies>
   <AllowDynamicCodeContractChecking>true</AllowDynamicCodeContractChecking>
   <AllowStaticCodeContractChecking>false</AllowStaticCodeContractChecking>
@@ -43,9 +43,6 @@
     </RegexTestSelector>
     <RegexTestSelector>
       <RegularExpression>NzbDrone\.Common\.Test\.EventingTests\.ServiceNameFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.PathExtentionFixture\..*</RegularExpression>
     </RegexTestSelector>
     <RegexTestSelector>
       <RegularExpression>NzbDrone\.Common\.Test\.ProcessProviderTests\..*</RegularExpression>

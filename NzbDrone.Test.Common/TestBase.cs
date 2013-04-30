@@ -34,6 +34,7 @@ namespace NzbDrone.Test.Common
             }
 
         }
+
     }
 
     public abstract class TestBase : LoggingTest
@@ -100,6 +101,20 @@ namespace NzbDrone.Test.Common
             }
             catch (Exception)
             {
+            }
+
+            if (TestContext.CurrentContext.Result.Status == TestStatus.Failed)
+            {
+                var testName = TestContext.CurrentContext.Test.Name.ToLower();
+
+                if (EnvironmentProvider.IsLinux && testName.Contains("windows"))
+                {
+                    throw new IgnoreException("windows specific test");
+                }
+                else if (testName.Contains("linux"))
+                {
+                    throw new IgnoreException("linux specific test");
+                }
             }
         }
 

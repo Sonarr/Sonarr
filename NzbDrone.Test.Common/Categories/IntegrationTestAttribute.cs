@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
 
-namespace NzbDrone.Test.Common
+namespace NzbDrone.Test.Common.Categories
 {
     public class IntegrationTestAttribute : CategoryAttribute
     {
         public IntegrationTestAttribute()
-            : base("Integration Test")
+            : base("IntegrationTest")
         {
 
         }

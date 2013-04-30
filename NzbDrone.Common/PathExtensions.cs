@@ -6,19 +6,19 @@ namespace NzbDrone.Common
 {
     public static class PathExtensions
     {
-        private const string APP_DATA = "App_Data\\";
-        private const string APP_CONFIG_FILE = "config.xml";
-        private const string NZBDRONE_DB = "nzbdrone.db";
-        private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
+        private static readonly string APP_DATA = "App_Data" + Path.DirectorySeparatorChar;
+        private static readonly string APP_CONFIG_FILE = "config.xml";
+        private static readonly string NZBDRONE_DB = "nzbdrone.db";
+        private static readonly string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
 
-        private const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update\\";
-        private const string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone\\";
-        private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup\\";
-        private const string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
-        private const string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update\\";
-        private const string UPDATE_LOG_FOLDER_NAME = "UpdateLogs\\";
+        private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update" + Path.DirectorySeparatorChar;
+        private static readonly string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone" + Path.DirectorySeparatorChar;
+        private static readonly string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup" + Path.DirectorySeparatorChar;
+        private static readonly string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
+        private static readonly string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update" + Path.DirectorySeparatorChar;
+        private static readonly string UPDATE_LOG_FOLDER_NAME = "UpdateLogs" + Path.DirectorySeparatorChar;
 
-        public static string NormalizePath(this string path)
+        public static string CleanPath(this string path)
         {
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
 

@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileRepository.DeleteMany(files);
         }
 
-        public FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extention)
+        public FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
             string path = series.Path;
             if (series.SeasonFolder)
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.MediaFiles
                 path = Path.Combine(path, seasonFolder);
             }
 
-            path = Path.Combine(path, fileName + extention);
+            path = Path.Combine(path, fileName + extension);
 
             return new FileInfo(path);
         }

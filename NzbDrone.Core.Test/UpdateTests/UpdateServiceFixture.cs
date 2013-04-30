@@ -9,6 +9,7 @@ using NzbDrone.Common.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.UpdateTests
 {
