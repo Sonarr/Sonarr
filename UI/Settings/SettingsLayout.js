@@ -3,7 +3,7 @@ define([
     'app',
     'Settings/Naming/NamingView',
     'Settings/Quality/QualityLayout',
-    'Settings/Indexers/IndexersView',
+    'Settings/Indexers/CollectionView',
     'Settings/DownloadClient/DownloadClientView',
     'Settings/Notifications/NotificationsView',
     'Settings/System/SystemView',
@@ -112,6 +112,9 @@ define([
                 this.namingSettings = new NzbDrone.Settings.Naming.NamingModel();
                 this.namingSettings.fetch();
 
+                this.indexerSettings = new NzbDrone.Settings.Indexers.Collection();
+                this.indexerSettings.fetch();
+
                 if (options.action) {
                     this.action = options.action.toLowerCase();
                 }
@@ -120,7 +123,7 @@ define([
             onRender: function () {
                 this.naming.show(new NzbDrone.Settings.Naming.NamingView());
                 this.quality.show(new NzbDrone.Settings.Quality.QualityLayout({settings: this.settings}));
-                this.indexers.show(new NzbDrone.Settings.Indexers.IndexersView({model: this.settings}));
+                this.indexers.show(new NzbDrone.Settings.Indexers.CollectionView({collection: this.indexerSettings}));
                 this.downloadClient.show(new NzbDrone.Settings.DownloadClient.DownloadClientView({model: this.settings}));
                 this.notifications.show(new NzbDrone.Settings.Notifications.NotificationsView({model: this.settings}));
                 this.system.show(new NzbDrone.Settings.System.SystemView({model: this.settings}));

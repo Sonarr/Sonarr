@@ -1,0 +1,38 @@
+﻿<fieldset>
+    <legend>{{name}}</legend>
+
+    <div class="control-group">
+        <label class="control-label">Enable</label>
+
+        <div class="controls">
+            <label class="checkbox toggle well">
+                <input type="checkbox" name="enable"/>
+                <p>
+                    <span>On</span>
+                    <span>Off</span>
+                </p>
+
+                <div class="btn btn-primary slide-button"></div>
+            </label>
+
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Do you want to use {{name}} to download NZBs?"></i>
+            </span>
+        </div>
+    </div>
+
+    {{debug}}
+
+    {{#each fields}}
+        <div class="control-group">
+            <label class="control-label">{{title}}</label>
+
+            <div class="controls">
+                <input type="text" name="fields.{{@index}}.value"/>
+            <span class="help-inline">
+                <i class="icon-question-sign" title="{{helpText}}"></i>
+            </span>
+            </div>
+        </div>
+    {{/each}}
+</fieldset>

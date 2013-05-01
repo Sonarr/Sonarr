@@ -4,7 +4,7 @@ Marionette.TemplateCache.get = function (templateId) {
 
     var templateKey = templateId.toLowerCase();
 
-    var templateFunction = window.Templates[templateKey.toLowerCase()];
+    var templateFunction = window.Templates[templateKey];
 
     if (!templateFunction) {
         throw 'couldn\'t find pre-compiled template ' + templateKey;
