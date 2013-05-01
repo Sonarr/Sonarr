@@ -9,9 +9,6 @@ define(['app'], function () {
             paddedEpisodeNumber: function () {
                 return this.get('episodeNumber');
             },
-            allDay             : function () {
-                return false;
-            },
             day                : function () {
                 return Date.create(this.get('airDate')).format('{dd}');
             },
@@ -26,12 +23,6 @@ define(['app'], function () {
                 }
 
                 return start.format('{h}.{mm}{tt}');
-            },
-            start              : function () {
-                return this.get('airDate');
-            },
-            end              : function () {
-                return this.get('endTime');
             },
             statusLevel        : function () {
                 var status = this.get('status');
