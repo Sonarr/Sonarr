@@ -5,27 +5,27 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         curl: {
-            'UI/JsLibraries/backbone.js'                 : 'http://backbonejs.org/backbone.js',
-            'UI/JsLibraries/backbone.marionette.js'      : 'http://marionettejs.com/downloads/backbone.marionette.js',
-            'UI/JsLibraries/backbone.modelbinder.js'     : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
-            'UI/JsLibraries/backbone.mutators.js'        : 'http://raw.github.com/asciidisco/Backbone.Mutators/master/backbone.mutators.js',
-            'UI/JsLibraries/backbone.shortcuts.js'       : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
+            'UI/JsLibraries/backbone.js'                    : 'http://backbonejs.org/backbone.js',
+            'UI/JsLibraries/backbone.marionette.js'         : 'http://marionettejs.com/downloads/backbone.marionette.js',
+            'UI/JsLibraries/backbone.modelbinder.js'        : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
+            'UI/JsLibraries/backbone.mutators.js'           : 'http://raw.github.com/asciidisco/Backbone.Mutators/master/backbone.mutators.js',
+            'UI/JsLibraries/backbone.shortcuts.js'          : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
             //'UI/JsLibraries/bootstrap.js':
             //'UI/JsLibraries/bootstrap.slider.js':
-            'UI/JsLibraries/handlebars.runtime.js'       : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
-            'UI/JsLibraries/jquery.cookie.js'            : 'http://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js',
-            'UI/JsLibraries/jquery.js'                   : 'http://code.jquery.com/jquery.js',
-            'UI/JsLibraries/jquery.backstretch.js'       : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
-            'UI/JsLibraries/require.js'                  : 'http://raw.github.com/jrburke/requirejs/master/require.js',
-            'UI/JsLibraries/sugar.js'                    : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
-            'UI/JsLibraries/underscore.js'               : 'http://underscorejs.org/underscore.js',
-            'UI/JsLibraries/backbone.pageable.js'        : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
-            'UI/JsLibraries/backbone.backgrid.js'        : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
-            'UI/JsLibraries/backbone.backgrid.paginator' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
-            'UI/JsLibraries/messenger.js'                : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
-            'UI/Content/messenger.css'                   : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
-            'UI/Content/bootstrap.toggle-switch.css'     : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
-            'UI/Content/messenger.future.css'            : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css'
+            'UI/JsLibraries/handlebars.runtime.js'          : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
+            'UI/JsLibraries/jquery.cookie.js'               : 'http://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js',
+            'UI/JsLibraries/jquery.js'                      : 'http://code.jquery.com/jquery.js',
+            'UI/JsLibraries/jquery.backstretch.js'          : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
+            'UI/JsLibraries/require.js'                     : 'http://raw.github.com/jrburke/requirejs/master/require.js',
+            'UI/JsLibraries/sugar.js'                       : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
+            'UI/JsLibraries/underscore.js'                  : 'http://underscorejs.org/underscore.js',
+            'UI/JsLibraries/backbone.pageable.js'           : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
+            'UI/JsLibraries/backbone.backgrid.js'           : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
+            'UI/JsLibraries/backbone.backgrid.paginator.js' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
+            'UI/JsLibraries/messenger.js'                   : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
+            'UI/Content/messenger.css'                      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
+            'UI/Content/bootstrap.toggle-switch.css'        : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
+            'UI/Content/messenger.future.css'               : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css'
         },
 
         uglify: {
