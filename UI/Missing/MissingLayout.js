@@ -64,7 +64,12 @@ define([
                         row       : NzbDrone.Missing.Row,
                         columns   : columns,
                         collection: this.missingCollection,
-                        className : 'table table-hover'
+                        className : 'table table-hover',
+                        state: {
+                            pageSize: 10,
+                            sortKey: "airDate",
+                            order: 1
+                        }
                     }));
             },
 

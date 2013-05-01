@@ -1,5 +1,5 @@
 ﻿"use strict";
-define(['app'], function () {
+define(['app', 'Series/EpisodeModel'], function () {
     NzbDrone.Missing.Collection = Backbone.PageableCollection.extend({
         url       : NzbDrone.Constants.ApiRoot + '/missing',
         model     : NzbDrone.Series.EpisodeModel,

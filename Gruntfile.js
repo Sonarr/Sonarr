@@ -21,6 +21,7 @@ module.exports = function (grunt) {
             'UI/JsLibraries/underscore.js'               : 'http://underscorejs.org/underscore.js',
             'UI/JsLibraries/backbone.pageable.js'        : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
             'UI/JsLibraries/backbone.backgrid.js'        : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
+            'UI/JsLibraries/backbone.backgrid.paginator' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
             'UI/JsLibraries/messenger.js'                : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
             'UI/Content/messenger.css'                   : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
             'UI/Content/bootstrap.toggle-switch.css'     : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
