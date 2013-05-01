@@ -1,3 +1,4 @@
+"use strict";
 Backgrid.SeriesStatusCell = Backgrid.Cell.extend({
     className: "series-status-cell",
 

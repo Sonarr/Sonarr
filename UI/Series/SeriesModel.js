@@ -47,11 +47,7 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             },
             isContinuing     : function () {
-                if (this.get('status') === 0) {
-                    return true;
-                }
-
-                return false;
+                return this.get('status') === 0;
             },
             statusText       : function () {
                 if (this.get('status') === 0) {

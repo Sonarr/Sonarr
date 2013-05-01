@@ -1,3 +1,4 @@
+"use strict";
 Backgrid.AirDateCell = Backgrid.Cell.extend({
     className: "air-date-cell",
 

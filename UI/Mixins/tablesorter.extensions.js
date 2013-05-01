@@ -1,7 +1,7 @@
 $.tablesorter.addParser({
     // set a unique id 
     id    : 'title',
-    is    : function (s) {
+    is    : function () {
         // return false so this parser is not auto detected 
         return false;
     },
@@ -16,7 +16,7 @@ $.tablesorter.addParser({
 $.tablesorter.addParser({
     // set a unique id 
     id    : 'date',
-    is    : function (s) {
+    is    : function () {
         // return false so this parser is not auto detected 
         return false;
     },
@@ -37,7 +37,7 @@ $.tablesorter.addParser({
 $.tablesorter.addParser({
     // set a unique id 
     id    : 'innerHtml',
-    is    : function (s) {
+    is    : function () {
         // return false so this parser is not auto detected 
         return false;
     },

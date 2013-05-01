@@ -18,7 +18,7 @@ define([
         },
 
         saveSettings: function () {
-            var test = 1;
+
             //this.model.save(undefined, this.syncNotification("Naming Settings Saved", "Couldn't Save Naming Settings"));
         },
 

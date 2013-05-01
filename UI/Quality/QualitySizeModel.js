@@ -1,4 +1,5 @@
-﻿define(['app'], function () {
+﻿"use strict";
+define(['app'], function () {
     NzbDrone.Quality.QualitySizeModel = Backbone.Model.extend({
 
         initialize: function () {

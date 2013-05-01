@@ -1,4 +1,5 @@
-﻿define(['app'], function () {
+﻿"use strict";
+define(['app'], function () {
     NzbDrone.Series.SeasonModel = Backbone.Model.extend({
 
         mutators: {

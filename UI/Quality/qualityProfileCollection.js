@@ -1,4 +1,5 @@
-﻿define(['app', 'Quality/QualityProfileModel'], function () {
+﻿"use strict";
+define(['app', 'Quality/QualityProfileModel'], function () {
 
     var qualityProfileCollection = Backbone.Collection.extend({
         model: NzbDrone.Quality.QualityProfileModel,

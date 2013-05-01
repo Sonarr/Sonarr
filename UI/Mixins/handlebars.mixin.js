@@ -1,6 +1,6 @@
 'use strict';
 
-Handlebars.registerHelper('partial', function(templateName, context){
+Handlebars.registerHelper('partial', function (templateName) {
     //TODO: We should be able to pass in the context, either an object or a property
 
     var templateFunction = Marionette.TemplateCache.get(templateName);

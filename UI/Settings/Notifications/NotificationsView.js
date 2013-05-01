@@ -6,6 +6,6 @@ define([
 ], function () {
 
     NzbDrone.Settings.Notifications.NotificationsView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Notifications/NotificationsTemplate',
+        template: 'Settings/Notifications/NotificationsTemplate'
     });
 });

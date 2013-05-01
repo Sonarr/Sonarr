@@ -1,4 +1,5 @@
-﻿define([
+﻿"use strict";
+define([
     'app',
     'Quality/QualityProfileCollection',
     'Quality/QualitySizeCollection',
