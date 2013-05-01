@@ -7,7 +7,7 @@ Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
     render: function () {
         var data = this.model.toJSON();
         var templateFunction = Marionette.TemplateCache.get(this.template);
-        var html = new Handlebars.SafeString(templateFunction(data));
+        var html = templateFunction(data);
         this.$el.html(html);
 
         return this;
