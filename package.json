@@ -16,14 +16,12 @@
   "readmeFilename": "readme.md",
   "dependencies": {
     "grunt": "*",
-    "grunt-contrib-uglify": "*",
     "grunt-contrib-handlebars": "*",
     "grunt-contrib-watch": "*",
     "grunt-contrib-less": "*",
-    "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
-    "grunt-wrap": "*",
     "grunt-curl": "*",
-    "grunt-notify": "*"
+    "grunt-notify": "*",
+    "grunt-clean": "*"
   }
 }

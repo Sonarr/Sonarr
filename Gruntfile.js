@@ -29,15 +29,10 @@ module.exports = function (grunt) {
             'UI/Content/messenger.future.css'               : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css'
         },
 
-        uglify: {
-            files: {
-                expand: true, // Enable dynamic expansion.
-                cwd   : 'UI/',      // Src matches are relative to this path.
-                src   : ['**/*.js'], // Actual pattern(s) to match.
-                dest  : 'build/',   // Destination path prefix.
-                ext   : '.min.js'
-            }
+        clean: {
+            folder: "_output/UI/"
         },
+
         less  : {
             bootstrap: {
                 src : "UI/Content/bootstrap/bootstrap.less",
@@ -131,19 +126,16 @@ module.exports = function (grunt) {
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-wrap');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-curl');
+    grunt.loadNpmTasks('grunt-clean');
     // Default task(s).
-    grunt.registerTask('default', ['copy', 'less', 'handlebars', 'watch']);
-    grunt.registerTask('package', ['copy', 'less', 'handlebars']);
+    grunt.registerTask('package', ['clean', 'copy', 'less', 'handlebars']);
+    grunt.registerTask('default', ['package', 'watch']); 
     grunt.registerTask('update', ['curl']);
 
 };
