@@ -83,12 +83,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exceptron.Client">
-      <HintPath>..\packages\Exceptron.Client.1.0.20\lib\net20\Exceptron.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptron.NLog">
-      <HintPath>..\packages\Exceptron.Nlog.1.0.11\lib\net20\Exceptron.NLog.dll</HintPath>
-    </Reference>
     <Reference Include="FluentMigrator, Version=1.0.6.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentMigrator.1.0.6.0\lib\40\FluentMigrator.dll</HintPath>

@@ -33,12 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exceptron.Client">
-      <HintPath>..\packages\Exceptron.Client.1.0.20\lib\net20\Exceptron.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptron.NLog">
-      <HintPath>..\packages\Exceptron.NLog.1.0.11\lib\net20\Exceptron.NLog.dll</HintPath>
-    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
