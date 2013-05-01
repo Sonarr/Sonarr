@@ -84,7 +84,6 @@
   <ItemGroup>
     <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
-    <Compile Include="Calendar\CalendarResource.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />

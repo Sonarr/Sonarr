@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Nancy;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Tv;
 
@@ -31,7 +32,7 @@ namespace NzbDrone.Api.Calendar
             if(queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
 
             var episodes = _episodeService.EpisodesBetweenDates(start, end);
-            return Mapper.Map<List<Episode>, List<CalendarResource>>(episodes).AsResponse();
+            return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).AsResponse();
         }
     }
 }

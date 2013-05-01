@@ -28,5 +28,6 @@ namespace NzbDrone.Api.Episodes
         public DateTime? EndTime { get; set; }
         public DateTime? GrabDate { get; set; }
         public PostDownloadStatusType PostDownloadStatus { get; set; }
+        public Core.Tv.Series Series { get; set; }
     }
 }

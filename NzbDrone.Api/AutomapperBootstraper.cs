@@ -36,14 +36,6 @@ namespace NzbDrone.Api
             Mapper.CreateMap<QualitySizeResource, QualitySize>()
                   .ForMember(dest => dest.QualityId, opt => opt.MapFrom(src => src.Id));
 
-
-            //Calendar
-            Mapper.CreateMap<Episode, CalendarResource>()
-                  .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
-                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title))
-                  .ForMember(dest => dest.Start, opt => opt.MapFrom(src => src.AirDate))
-                  .ForMember(dest => dest.End, opt => opt.ResolveUsing<EndTimeResolver>());
-
             //Episode
             Mapper.CreateMap<Episode, EpisodeResource>();
         }

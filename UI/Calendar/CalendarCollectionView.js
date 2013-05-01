@@ -36,7 +36,7 @@ define(['app', 'Calendar/CalendarItemView'], function () {
 
                     element.popover({
                         title    : '{seriesTitle} - {season}x{episode} - {episodeTitle}'.assign({
-                            seriesTitle : event.seriesTitle,
+                            seriesTitle : event.title,
                             season      : event.seasonNumber,
                             episode     : event.episodeNumber.pad(2),
                             episodeTitle: event.episodeTitle
@@ -65,6 +65,14 @@ define(['app', 'Calendar/CalendarItemView'], function () {
             bbView.calendar.fetch({
                 data   : { start: startDate, end: endDate },
                 success: function (calendarCollection) {
+                    _.each(calendarCollection.models, function(element) {
+                        var episodeTitle = element.get('title');
+                        var seriesTitle = element.get('series').title;
+
+                        element.set('title', seriesTitle);
+                        element.set('episodeTitle', episodeTitle);
+                    });
+
                     callback(calendarCollection.toJSON());
                 }
             });
