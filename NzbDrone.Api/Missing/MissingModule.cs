@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Nancy;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Tv;
 
@@ -25,7 +26,9 @@ namespace NzbDrone.Api.Missing
             Boolean.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.IncludeSpecials), out includeSpecials);
 
             var episodes = _episodeService.EpisodesWithoutFiles(includeSpecials);
-            return Mapper.Map<List<Episode>, List<MissingResource>>(episodes).AsResponse();
+
+            //TODO: Include the Series Title
+            return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).AsResponse();
         }
     }
 }

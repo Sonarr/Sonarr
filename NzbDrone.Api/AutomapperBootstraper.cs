@@ -46,11 +46,6 @@ namespace NzbDrone.Api
 
             //Episode
             Mapper.CreateMap<Episode, EpisodeResource>();
-
-            //Missing
-            Mapper.CreateMap<Episode, MissingResource>()
-                  .ForMember(dest => dest.SeriesTitle, opt => opt.MapFrom(src => src.Series.Title))
-                  .ForMember(dest => dest.EpisodeTitle, opt => opt.MapFrom(src => src.Title));
         }
     }
 }

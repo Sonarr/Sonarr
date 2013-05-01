@@ -101,7 +101,6 @@
     <Compile Include="Mapping\MappingValidation.cs" />
     <Compile Include="Mapping\ResourceMappingException.cs" />
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />
-    <Compile Include="Missing\MissingResource.cs" />
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="Resolvers\EndTimeResolver.cs" />

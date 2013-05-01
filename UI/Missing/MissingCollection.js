@@ -1,8 +1,8 @@
 ﻿"use strict";
-define(['app', 'Missing/MissingModel'], function () {
+define(['app', 'Series/EpisodeModel'], function () {
     NzbDrone.Missing.MissingCollection = Backbone.Collection.extend({
         url       : NzbDrone.Constants.ApiRoot + '/missing',
-        model     : NzbDrone.Missing.MissingModel,
+        model     : NzbDrone.Series.EpisodeModel,
         comparator: function (model) {
             return model.get('airDate');
         }
