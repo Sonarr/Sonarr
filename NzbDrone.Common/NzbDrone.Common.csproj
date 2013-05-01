@@ -84,6 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveProvider.cs" />
+    <Compile Include="Cache\Cached.cs" />
+    <Compile Include="Cache\CacheManger.cs" />
+    <Compile Include="Cache\ICached.cs" />
     <Compile Include="ContainerBuilderBase.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />

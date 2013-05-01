@@ -78,6 +78,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheTests\CachedManagerFixture.cs" />
+    <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
     <Compile Include="EventingTests\MessageAggregatorCommandTests.cs" />
     <Compile Include="EventingTests\MessageAggregatorEventTests.cs" />
