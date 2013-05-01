@@ -1,10 +1,13 @@
+"use strict";
+
 Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
     className: '',
     template: 'Series/Index/Table/ControlsColumnTemplate',
 
     render: function () {
         var data = this.model.toJSON();
-        var html = Marionette.Renderer.render(this.template, data);
+        var templateFunction = Marionette.TemplateCache.get(this.template);
+        var html = new Handlebars.SafeString(templateFunction(data));
         this.$el.html(html);
 
         return this;
