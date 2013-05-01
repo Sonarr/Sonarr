@@ -84,7 +84,7 @@ define([
 
                 this.series.show(new Backgrid.Grid(
                     {
-                        row       : Backgrid.SeriesIndexTableRow,
+                        row       : NzbDrone.Series.Index.Table.Row,
                         columns   : columns,
                         collection: this.seriesCollection,
                         className : 'table table-hover'

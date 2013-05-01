@@ -95,7 +95,9 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
-            return _episodeRepository.EpisodesWithoutFiles(includeSpecials);
+            var episodes = _episodeRepository.EpisodesWithoutFiles(includeSpecials);
+
+            return LinkSeriesToEpisodes(episodes);
         }
 
         public List<Episode> GetEpisodesByFileId(int episodeFileId)
@@ -288,14 +290,8 @@ namespace NzbDrone.Core.Tv
         public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end)
         {
             var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
-            var series = _seriesService.GetSeriesInList(episodes.Select(e => e.SeriesId).Distinct());
 
-            episodes.ForEach(e =>
-                                 {
-                                     e.Series = series.SingleOrDefault(s => s.Id == e.SeriesId);
-                                 });
-
-            return episodes;
+            return LinkSeriesToEpisodes(episodes);
         }
 
         public void Handle(EpisodeGrabbedEvent message)
@@ -353,6 +349,18 @@ namespace NzbDrone.Core.Tv
             }
 
             logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
+        }
+
+        private List<Episode> LinkSeriesToEpisodes(List<Episode> episodes)
+        {
+            var series = _seriesService.GetSeriesInList(episodes.Select(e => e.SeriesId).Distinct());
+
+            episodes.ForEach(e =>
+            {
+                e.Series = series.SingleOrDefault(s => s.Id == e.SeriesId);
+            });
+
+            return episodes;
         }
     }
 }

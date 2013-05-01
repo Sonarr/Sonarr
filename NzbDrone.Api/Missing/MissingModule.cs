@@ -28,7 +28,8 @@ namespace NzbDrone.Api.Missing
             var episodes = _episodeService.EpisodesWithoutFiles(includeSpecials);
 
             //TODO: Include the Series Title
-            return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).AsResponse();
+            //TODO: Remove Take(20)
+            return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).Take(20).AsResponse();
         }
     }
 }

@@ -4,7 +4,7 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
     'Calendar/CalendarCollectionView', 'Shared/NotificationView',
     'Shared/NotFoundView', 'MainMenuView',
     'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection',
-    'Settings/SettingsLayout', 'Missing/MissingCollectionView'],
+    'Settings/SettingsLayout', 'Missing/MissingLayout'],
     function (app, modalRegion) {
 
         var controller = Backbone.Marionette.Controller.extend({
@@ -58,12 +58,7 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
             missing: function () {
                 this._setTitle('Missing');
 
-                var missingCollection = new NzbDrone.Missing.MissingCollection();
-                missingCollection.fetch({
-                    success: function () {
-                        NzbDrone.mainRegion.show(new NzbDrone.Missing.MissingCollectionView({collection: missingCollection}));
-                    }
-                });
+                NzbDrone.mainRegion.show(new NzbDrone.Missing.MissingLayout());
             },
 
             notFound: function () {

@@ -14,28 +14,6 @@ Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
     }
 });
 
-Backgrid.SeriesIndexTableRow = Backgrid.Row.extend({
-    events: {
-        'click .x-edit'  : 'editSeries',
-        'click .x-remove': 'removeSeries'
-    },
-
-    editSeries: function () {
-        var view = new NzbDrone.Series.Edit.EditSeriesView({ model: this.model});
-
-        NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
-            view: view
-        });
-    },
-
-    removeSeries: function () {
-        var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
-        NzbDrone.vent.trigger(NzbDrone.Events.OpenModalDialog, {
-            view: view
-        });
-    }
-});
-
 Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
     events: {
         'click': 'onClick'
@@ -43,7 +21,6 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
 
     render: function () {
         this.$el.empty();
-        var test = this.column.get('label');
         this.$el.append(this.column.get("label"));
 
         if (this.column.get('sortable')) {
