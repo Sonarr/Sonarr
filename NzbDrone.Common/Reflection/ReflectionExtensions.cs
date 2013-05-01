@@ -45,5 +45,16 @@ namespace NzbDrone.Common.Reflection
             return propertyInfo.CanWrite && propertyInfo.GetSetMethod(false) != null;
         }
 
+        public static T GetAttribute<T>(this MemberInfo member, bool isRequired = true) where T : Attribute
+        {
+            var attribute = member.GetCustomAttributes(typeof(T), false).SingleOrDefault();
+
+            if (attribute == null && isRequired)
+            {
+                throw new ArgumentException(String.Format("The {0} attribute must be defined on member {1}", typeof(T).Name, member.Name));
+            }
+
+            return (T)attribute;
+        }
     }
 }

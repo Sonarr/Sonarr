@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.REST;
 
 namespace NzbDrone.Api.Indexers
@@ -7,6 +9,7 @@ namespace NzbDrone.Api.Indexers
     {
         public Boolean Enable { get; set; }
         public String Name { get; set; }
-        public String Settings { get; set; }
+
+        public List<Field> Fields { get; set; }
     }
 }

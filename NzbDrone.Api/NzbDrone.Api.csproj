@@ -84,6 +84,9 @@
   <ItemGroup>
     <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
+    <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
+    <Compile Include="ClientSchema\Field.cs" />
+    <Compile Include="ClientSchema\SchemaBuilder.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
