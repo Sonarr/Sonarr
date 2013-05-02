@@ -71,6 +71,7 @@
     <Compile Include="Client\SeriesClient - Copy.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
+    <Compile Include="QualityProfileIntegrationTest.cs" />
     <Compile Include="ReleaseIntegrationTest.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

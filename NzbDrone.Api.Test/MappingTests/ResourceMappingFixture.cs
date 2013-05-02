@@ -22,7 +22,7 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(Core.Tv.Episode), typeof(EpisodeResource))]
         [TestCase(typeof(RootFolder), typeof(RootFolderResource))]
         [TestCase(typeof(NamingConfig), typeof(NamingConfigResource))]
-        [TestCase(typeof(IndexerDefinition), typeof(IndexerResource))]
+        [TestCase(typeof(Indexer), typeof(IndexerResource))]
         [TestCase(typeof(ReportInfo), typeof(ReleaseResource))]
         [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]

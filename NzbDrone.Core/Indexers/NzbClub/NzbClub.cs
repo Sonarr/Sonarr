@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Indexers.NzbClub
             get { return "NzbClub"; }
         }
 
+        public override IParseFeed Parser
+        {
+            get
+            {
+                return new NzbClubParser();
+            }
+        }
+
         public override IEnumerable<string> RecentFeed
         {
             get

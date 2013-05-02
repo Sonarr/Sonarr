@@ -9,7 +9,6 @@ namespace NzbDrone.Api.Indexers
     {
         public Boolean Enable { get; set; }
         public String Name { get; set; }
-
         public List<Field> Fields { get; set; }
     }
 }

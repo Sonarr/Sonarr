@@ -1,8 +1,6 @@
 using System;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.NzbClub
@@ -13,7 +11,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
         {
             if (currentResult != null)
             {
-                var sizeString = Regex.Match(item.Summary.Text, @"Size:\s\d+\.\d{1,2}\s\w{2}\s", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
+                var sizeString = Regex.Match(item.Summary.Text, @"Size:\s\d+\s+\w+", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
                 currentResult.Size = GetReportSize(sizeString);
             }
 

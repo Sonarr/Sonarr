@@ -5,8 +5,6 @@ using System.IO;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
@@ -27,6 +25,7 @@ namespace NzbDrone.Core.Indexers
 
         public IEnumerable<ReportInfo> Process(Stream source)
         {
+            //TODO: replace this BS with plain Linq to XML
             var reader = new SyndicationFeedXmlReader(source);
             var feed = SyndicationFeed.Load(reader).Items;
 

@@ -5,13 +5,11 @@ using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 
-
 namespace NzbDrone.Core.Indexers
 {
-
     public class Indexer
     {
-        public int DefinitionId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool Enable { get; set; }
         public IIndexerSetting Settings { get; set; }
@@ -30,15 +28,14 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _indexerRepository;
         private readonly Logger _logger;
 
-        private readonly IList<IIndexer> _indexers;
+        private readonly List<Func<IIndexer>> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexer> indexers, Logger logger)
+        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<Func<IIndexer>> indexers, Logger logger)
         {
             _indexerRepository = indexerRepository;
             _logger = logger;
             _indexers = indexers.ToList();
         }
-
 
         public List<Indexer> All()
         {
@@ -47,9 +44,8 @@ namespace NzbDrone.Core.Indexers
 
         public List<IIndexer> GetAvailableIndexers()
         {
-            return All().Where(c => c.Enable && c.Settings.IsValid).Select(c=>c.Instance).ToList();
+            return All().Where(c => c.Enable && c.Settings.IsValid).Select(c => c.Instance).ToList();
         }
-
 
         public Indexer Get(string name)
         {
@@ -60,7 +56,7 @@ namespace NzbDrone.Core.Indexers
         private Indexer ToIndexer(IndexerDefinition definition)
         {
             var indexer = new Indexer();
-            indexer.DefinitionId = definition.Id;
+            indexer.Id = definition.Id;
             indexer.Enable = definition.Enable;
             indexer.Instance = GetInstance(definition);
             indexer.Name = definition.Name;
@@ -74,16 +70,13 @@ namespace NzbDrone.Core.Indexers
                 indexer.Settings = NullSetting.Instance;
             }
 
-
             return indexer;
         }
 
         private IIndexer GetInstance(IndexerDefinition indexerDefinition)
         {
-            var existingInstance = _indexers.Single(c => c.GetType().Name.Equals(indexerDefinition.Implementation, StringComparison.CurrentCultureIgnoreCase));
-            var instance = (IIndexer)Activator.CreateInstance(existingInstance.GetType());
+            var instance = _indexers.Single(c => c().GetType().Name.Equals(indexerDefinition.Implementation, StringComparison.InvariantCultureIgnoreCase))();
             instance.InstanceDefinition = indexerDefinition;
-
             return instance;
         }
 
@@ -93,11 +86,7 @@ namespace NzbDrone.Core.Indexers
 
             if (!All().Any())
             {
-                var definitions = _indexers.SelectMany(delegate(IIndexer indexer)
-                    {
-                        return indexer.DefaultDefinitions;
-                    });
-
+                var definitions = _indexers.SelectMany(indexer => indexer().DefaultDefinitions);
                 _indexerRepository.InsertMany(definitions.ToList());
             }
         }

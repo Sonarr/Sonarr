@@ -6,10 +6,10 @@ using NzbDrone.Api.RootFolders;
 namespace NzbDrone.Integration.Test
 {
     [TestFixture]
-    public class RootFolderIntegrationTest : IntegrationTest
+    public class QualityProfileIntegrationTest : IntegrationTest
     {
         [Test]
-        public void should_have_no_root_folder_initially()
+        public void should_have_2_quality_profiles_initially()
         {
             RootFolders.All().Should().BeEmpty();
 
@@ -24,8 +24,7 @@ namespace NzbDrone.Integration.Test
             postResponse.FreeSpace.Should().NotBe(0);
 
             RootFolders.All().Should().OnlyContain(c => c.Id == postResponse.Id);
-
-
+            
             RootFolders.Delete(postResponse.Id);
 
             RootFolders.All().Should().BeEmpty();
