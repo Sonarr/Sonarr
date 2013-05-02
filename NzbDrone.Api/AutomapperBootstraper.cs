@@ -7,6 +7,7 @@ using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
 using NzbDrone.Api.Resolvers;
 using NzbDrone.Api.Series;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -38,6 +39,9 @@ namespace NzbDrone.Api
 
             //Episode
             Mapper.CreateMap<Episode, EpisodeResource>();
+
+            //Episode Paging
+            Mapper.CreateMap<PagingSpec<Episode>, PagingResource<EpisodeResource>>();
         }
     }
 }

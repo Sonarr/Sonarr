@@ -114,7 +114,6 @@ namespace NzbDrone.Core.Datastore
             return model;
         }
 
-
         public void Delete(TModel model)
         {
             _dataMapper.Delete<TModel>(c => c.Id == model.Id);
@@ -185,6 +184,5 @@ namespace NzbDrone.Core.Datastore
                 .Entity(model)
                 .Execute();
         }
-
     }
 }

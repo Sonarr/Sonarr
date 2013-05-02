@@ -71,6 +71,8 @@ namespace NzbDrone.Core.Tv
             }
         }
 
+        public String SeriesTitle { get; private set; }
+
         public Series Series { get; set; }
 
         public EpisodeFile EpisodeFile { get; set; }

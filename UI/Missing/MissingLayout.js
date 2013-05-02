@@ -13,7 +13,8 @@ define([
 
             regions: {
                 missing: '#x-missing',
-                toolbar: '#x-toolbar'
+                toolbar: '#x-toolbar',
+                pager  : '#x-pager'
             },
 
             showTable: function () {
@@ -48,6 +49,12 @@ define([
                         editable  : false,
                         cell      : 'airDate',
                         headerCell: 'nzbDrone'
+//                        headerCell: Backgrid.NzbDroneHeaderCell.extend({
+//                                initialize: function(options) {
+//                                    this.constructor.__super__.initialize.apply(this, [options]);
+//                                    this.direction('descending');
+//                                }
+//                            })
                     },
                     {
                         name      : 'edit',
@@ -66,6 +73,13 @@ define([
                         collection: this.missingCollection,
                         className : 'table table-hover'
                     }));
+
+                this.pager.show(new Backgrid.NzbDronePaginator({
+                    columns: columns,
+                    collection: this.missingCollection
+                }));
+
+                this.missingCollection.getFirstPage();
             },
 
             initialize: function () {

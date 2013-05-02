@@ -58,7 +58,7 @@
        @param {boolean} [options.fastForwardHandleLabels] Whether to render fast forward buttons.
     */
     initialize: function (options) {
-      Backgrid.requireOptions(options, ["columns", "collection"]);
+      //Backgrid.requireOptions(options, ["columns", "collection"]);
 
       this.columns = options.columns;
       if (!(this.columns instanceof Backbone.Collection)) {

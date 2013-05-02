@@ -4,10 +4,6 @@ define(['app', 'Series/EpisodeModel'], function () {
         url       : NzbDrone.Constants.ApiRoot + '/missing',
         model     : NzbDrone.Series.EpisodeModel,
 
-        comparator: function (model) {
-            return model.get('airDate');
-        },
-
         state: {
             pageSize: 10,
             sortKey: "airDate",
@@ -18,12 +14,24 @@ define(['app', 'Series/EpisodeModel'], function () {
             totalPages: null,
             totalRecords: null,
             pageSize: 'pageSize',
-            sortKey: "sortBy",
-            order: "direction",
+            sortKey: "sortKey",
+            order: "sortDir",
             directions: {
                 "-1": "asc",
                 "1": "desc"
             }
+        },
+
+        parseState: function (resp, queryParams, state) {
+            return {totalRecords: resp.totalRecords};
+        },
+
+        parseRecords: function (resp) {
+            if (resp) {
+                return resp.records;
+            }
+
+            return resp;
         }
     });
 });

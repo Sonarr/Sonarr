@@ -4,7 +4,9 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
@@ -19,7 +21,7 @@ namespace NzbDrone.Core.Tv
         Episode GetEpisode(int seriesId, DateTime date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
-        List<Episode> EpisodesWithoutFiles(bool includeSpecials);
+        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         List<Episode> EpisodesWithFiles();
         void RefreshEpisodeInfo(Series series);
@@ -93,11 +95,13 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public List<Episode> EpisodesWithoutFiles(bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
         {
-            var episodes = _episodeRepository.EpisodesWithoutFiles(includeSpecials);
+            var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, includeSpecials);
 
-            return LinkSeriesToEpisodes(episodes);
+            episodeResult.Records = LinkSeriesToEpisodes(episodeResult.Records);
+
+            return episodeResult;
         }
 
         public List<Episode> GetEpisodesByFileId(int episodeFileId)

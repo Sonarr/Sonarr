@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using AutoMapper;
 using Nancy;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Missing
@@ -25,11 +27,35 @@ namespace NzbDrone.Api.Missing
             bool includeSpecials;
             Boolean.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.IncludeSpecials), out includeSpecials);
 
-            var episodes = _episodeService.EpisodesWithoutFiles(includeSpecials);
+            int pageSize;
+            Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.PageSize), out pageSize);
+            if (pageSize == 0) pageSize = 20;
 
-            //TODO: Include the Series Title
-            //TODO: Remove Take(20)
-            return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).Take(20).AsResponse();
+            int page;
+            Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.Page), out page);
+            if (page == 0) page = 1;
+
+            var sortKey = PrimitiveExtensions.ToNullSafeString(Request.Query.SortKey)
+                                                   .Equals("SeriesTitle", StringComparison.InvariantCultureIgnoreCase)
+                                                   ? "SeriesTitle"
+                                                   : "AirDate";
+
+            var sortDirection = PrimitiveExtensions.ToNullSafeString(Request.Query.SortDir)
+                                                   .Equals("Asc", StringComparison.InvariantCultureIgnoreCase)
+                                                   ? ListSortDirection.Ascending
+                                                   : ListSortDirection.Descending;
+
+            var pagingSpec = new PagingSpec<Episode>
+                                 {
+                                     Page = page,
+                                     PageSize = pageSize,
+                                     SortKey = sortKey,
+                                     SortDirection = sortDirection
+                                 };
+
+            var result = _episodeService.EpisodesWithoutFiles(pagingSpec, includeSpecials);
+            
+            return Mapper.Map<PagingSpec<Episode>, PagingResource<EpisodeResource>>(result).AsResponse();
         }
     }
 }
