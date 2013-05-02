@@ -20,7 +20,7 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_be_able_to_resolve_indexers()
         {
-            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IIndexerBase>>().Should().NotBeEmpty();
+            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
         }
 
         [Test]

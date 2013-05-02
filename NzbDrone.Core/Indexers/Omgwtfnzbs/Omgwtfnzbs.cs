@@ -5,11 +5,6 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
     public class Omgwtfnzbs : IndexerWithSetting<OmgwtfnzbsSetting>
     {
-        public Omgwtfnzbs(IProviderIndexerSetting settingProvider)
-            : base(settingProvider)
-        {
-        }
-
         public override string Name
         {
             get { return "omgwtfnzbs"; }
@@ -20,8 +15,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             get
             {
 
-                yield return
-                    String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
+                yield return String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
                                   Settings.Username, Settings.ApiKey);
             }
         }

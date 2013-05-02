@@ -3,18 +3,23 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class Indexer : IIndexerBase
+    public abstract class IndexerBase : IIndexer
     {
-
         public abstract string Name { get; }
 
+        public IndexerDefinition InstanceDefinition { get; set; }
 
-
-        public virtual bool EnabledByDefault
+        public virtual IEnumerable<IndexerDefinition> DefaultDefinitions
         {
             get
             {
-                return true;
+                yield return new IndexerDefinition
+                {
+                    Name = Name,
+                    Enable = true,
+                    Implementation = GetType().Name,
+                    Settings = string.Empty
+                };
             }
         }
 
@@ -25,13 +30,6 @@ namespace NzbDrone.Core.Indexers
                 return new BasicRssParser();
             }
         }
-
-        public virtual bool IsConfigured
-        {
-            get { return true; }
-        }
-
-
 
         public abstract IEnumerable<string> RecentFeed { get; }
 

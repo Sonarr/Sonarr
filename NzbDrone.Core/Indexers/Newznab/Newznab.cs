@@ -1,22 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class Newznab : Indexer
+    public class Newznab : IndexerWithSetting<NewznabSettings>
     {
-        private readonly INewznabService _newznabProvider;
+        private readonly IJsonSerializer _jsonSerializer;
 
-        public Newznab(INewznabService newznabProvider)
+        public Newznab()
         {
-            _newznabProvider = newznabProvider;
+            _jsonSerializer = new JsonSerializer();
         }
 
 
+        public override IEnumerable<IndexerDefinition> DefaultDefinitions
+        {
+            get
+            {
+                var list = new List<IndexerDefinition>();
+
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "Nzbs.org",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("http://nzbs.org")
+                });
+
+
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "Nzb.su",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("https://nzb.su")
+                });
+
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "Dognzb.cr",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("https://dognzb.cr")
+                });
+
+                return list;
+
+            }
+        }
+
+        private string GetSettings(string url)
+        {
+            return _jsonSerializer.Serialize(new NewznabSettings { Url = url });
+        }
+
         public override IEnumerable<string> RecentFeed
         {
-            get { return GetUrls(); }
+            get
+            {
+                var url = String.Format("{0}/api?t=tvsearch&cat=5030,5040,5070,5090s", Settings.Url);
+
+                if (String.IsNullOrWhiteSpace(Settings.ApiKey))
+                {
+                    url += "&apikey=" + Settings.ApiKey;
+                }
+
+                yield return url;
+            }
         }
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
@@ -41,35 +93,15 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public override string Name
         {
-            get { return "Newznab"; }
-        }
-
-
-        private IEnumerable<string> GetUrls()
-        {
-            var urls = new List<string>();
-            var newznabIndexers = _newznabProvider.Enabled();
-
-            foreach (var newznabDefinition in newznabIndexers)
+            get
             {
-                var url = String.Format("{0}/api?t=tvsearch&cat=5030,5040,5070,5090s", newznabDefinition.Url);
-
-                if (String.IsNullOrWhiteSpace(newznabDefinition.ApiKey))
-                {
-                    url += "&apikey=" + newznabDefinition.ApiKey;
-                }
-
-                urls.Add(url);
+                return InstanceDefinition.Name;
             }
-
-            return urls;
         }
-
 
         private static string NewsnabifyTitle(string title)
         {
             return title.Replace("+", "%20");
         }
-
     }
 }

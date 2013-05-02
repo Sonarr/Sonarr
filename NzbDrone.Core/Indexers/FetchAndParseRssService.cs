@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers
         {
             var result = new List<ReportInfo>();
 
-            var indexers = _indexerService.GetAvailableIndexers();
+            var indexers = _indexerService.GetAvailableIndexers().ToList();
 
             if (!indexers.Any())
             {

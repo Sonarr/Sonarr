@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.Nzbx
 {
-    public class Nzbx : Indexer
+    public class Nzbx : IndexerBase
     {
         public override IParseFeed Parser
         {

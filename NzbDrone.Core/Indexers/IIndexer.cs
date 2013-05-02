@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers
 {
-    public interface IIndexerBase
+    public interface IIndexer
     {
         string Name { get; }
-        bool EnabledByDefault { get; }
+
+        IEnumerable<IndexerDefinition> DefaultDefinitions { get; }
+
+        IndexerDefinition InstanceDefinition { get; set; }
 
         IEnumerable<string> RecentFeed { get; }
 
         IParseFeed Parser { get; }
-
-        bool IsConfigured { get; }
 
         IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
         IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);

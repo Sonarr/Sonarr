@@ -8,5 +8,6 @@ namespace NzbDrone.Core.Indexers
         public Boolean Enable { get; set; }
         public String Name { get; set; }
         public String Settings { get; set; }
+        public String Implementation { get; set; }
     }
 }

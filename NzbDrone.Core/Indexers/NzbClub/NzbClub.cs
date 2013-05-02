@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.NzbClub
 {
-    public class NzbClub : Indexer
+    public class NzbClub : IndexerBase
     {
+        public override string Name
+        {
+            get { return "NzbClub"; }
+        }
+
         public override IEnumerable<string> RecentFeed
         {
             get
@@ -16,13 +21,6 @@ namespace NzbDrone.Core.Indexers.NzbClub
                            };
             }
         }
-
-        public override string Name
-        {
-            get { return "NzbClub"; }
-        }
-
-
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {

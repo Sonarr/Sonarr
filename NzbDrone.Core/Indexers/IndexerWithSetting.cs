@@ -1,38 +1,16 @@
-using System;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class IndexerWithSetting<TSetting> :
-        Indexer,
-        IHandle<IndexerSettingUpdatedEvent> where TSetting : IIndexerSetting, new()
+    public abstract class IndexerWithSetting<TSetting> : IndexerBase where TSetting : class, IIndexerSetting, new()
     {
-        protected IndexerWithSetting(IProviderIndexerSetting settingProvider)
-        {
-            Settings = settingProvider.Get<TSetting>(this);
-        }
-
-        public override bool IsConfigured
-        {
-            get { return Settings.IsValid; }
-        }
-
-        public override bool EnabledByDefault
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         public TSetting Settings { get; private set; }
 
-        public void Handle(IndexerSettingUpdatedEvent message)
+        public TSetting ImportSettingsFromJson(string json)
         {
-            if (message.IndexerName.Equals(Name, StringComparison.InvariantCultureIgnoreCase))
-            {
-                Settings = (TSetting)message.IndexerSetting;
-            }
+            Settings = new JsonSerializer().Deserialize<TSetting>(json) ?? new TSetting();
+
+            return Settings;
         }
     }
 }

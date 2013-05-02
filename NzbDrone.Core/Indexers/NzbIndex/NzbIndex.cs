@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.NzbIndex
 {
-    public class NzbIndex : Indexer
+    public class NzbIndex : IndexerBase
     {
         public override IEnumerable<string> RecentFeed
         {
@@ -73,11 +73,5 @@ namespace NzbDrone.Core.Indexers.NzbIndex
 
             return searchUrls;
         }
-
-
-
-
-
-
     }
 }

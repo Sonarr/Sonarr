@@ -109,9 +109,9 @@ namespace NzbDrone.Core.IndexerSearch
             return spec;
         }
 
-        private List<DownloadDecision> Dispatch(Func<IIndexerBase, IEnumerable<ReportInfo>> searchAction, SearchDefinitionBase definitionBase)
+        private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReportInfo>> searchAction, SearchDefinitionBase definitionBase)
         {
-            var indexers = _indexerService.GetAvailableIndexers();
+            var indexers = _indexerService.GetAvailableIndexers().ToList();
             var reports = new List<ReportInfo>();
 
             Parallel.ForEach(indexers, indexer =>

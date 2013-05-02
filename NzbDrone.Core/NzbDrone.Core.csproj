@@ -237,7 +237,7 @@
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\SabQueueItem.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
-    <Compile Include="Indexers\IIndexerBase.cs" />
+    <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
@@ -258,15 +258,13 @@
     <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
     <Compile Include="Indexers\BasicRssParser.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
-    <Compile Include="Indexers\Indexer.cs" />
+    <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\IndexerSettingProvider.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
-    <Compile Include="Indexers\Newznab\NewznabDefinition.cs" />
+    <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
-    <Compile Include="Indexers\Newznab\NewznabRepository.cs" />
-    <Compile Include="Indexers\Newznab\NewznabService.cs" />
     <Compile Include="Indexers\NzbClub\NzbClub.cs" />
     <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
     <Compile Include="Indexers\NzbIndex\NzbIndex.cs" />

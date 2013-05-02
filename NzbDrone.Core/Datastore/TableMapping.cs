@@ -9,7 +9,6 @@ using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
@@ -34,7 +33,6 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
 
             Mapper.Entity<IndexerDefinition>().RegisterModel("IndexerDefinitions");
-            Mapper.Entity<NewznabDefinition>().RegisterModel("NewznabDefinitions");
             Mapper.Entity<JobDefinition>().RegisterModel("JobDefinitions");
             Mapper.Entity<ExternalNotificationDefinition>().RegisterModel("ExternalNotificationDefinitions");
 

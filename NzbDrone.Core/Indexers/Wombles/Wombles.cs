@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class Wombles : Indexer
+    public class Wombles : IndexerBase
     {
         public override IEnumerable<string> RecentFeed
         {
@@ -33,12 +33,6 @@ namespace NzbDrone.Core.Indexers.Wombles
         public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
         {
             return new List<string>();
-        }
-
-
-        public bool EnabledByDefault
-        {
-            get { return true; }
         }
     }
 }

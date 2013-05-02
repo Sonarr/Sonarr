@@ -8,6 +8,13 @@
 
     public class NullSetting : IIndexerSetting
     {
+        public static NullSetting Instance = new NullSetting();
+
+        private NullSetting()
+        {
+
+        }
+
         public bool IsValid
         {
             get

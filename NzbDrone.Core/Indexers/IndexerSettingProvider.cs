@@ -4,7 +4,7 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IProviderIndexerSetting
     {
-        TSetting Get<TSetting>(IIndexerBase indexer) where TSetting : IIndexerSetting, new();
+        TSetting Get<TSetting>(IIndexer indexer) where TSetting : IIndexerSetting, new();
     }
 
     public class IndexerSettingProvider : IProviderIndexerSetting
@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Indexers
             _indexerRepository = indexerRepository;
         }
 
-        public TSetting Get<TSetting>(IIndexerBase indexer) where TSetting : IIndexerSetting, new()
+        public TSetting Get<TSetting>(IIndexer indexer) where TSetting : IIndexerSetting, new()
         {
             var indexerDef = _indexerRepository.Find(indexer.Name);
 

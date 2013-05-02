@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ServiceModel.Syndication;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Newznab
@@ -25,7 +23,9 @@ namespace NzbDrone.Core.Indexers.Newznab
             if (currentResult != null)
             {
                 if (item.Links.Count > 1)
+                {
                     currentResult.Size = item.Links[1].Length;
+                }
 
                 currentResult.Indexer = GetName(item);
             }

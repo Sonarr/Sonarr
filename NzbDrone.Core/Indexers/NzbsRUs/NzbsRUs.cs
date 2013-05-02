@@ -5,20 +5,13 @@ namespace NzbDrone.Core.Indexers.NzbsRUs
 {
     public class Nzbsrus : IndexerWithSetting<NzbsrusSetting>
     {
-        private readonly NzbsrusSetting _setting;
-
-        public Nzbsrus(IProviderIndexerSetting settingProvider):base(settingProvider)
-        {
-
-        }
-
         public override IEnumerable<string> RecentFeed
         {
             get
             {
                 yield return string.Format("https://www.nzbsrus.com/rssfeed.php?cat=91,75&i={0}&h={1}",
-                        _setting.Uid,
-                        _setting.Hash);
+                        Settings.Uid,
+                        Settings.Hash);
 
             }
         }

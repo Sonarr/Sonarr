@@ -8,12 +8,21 @@ using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Indexers
 {
+
+    public class Indexer
+    {
+        public int DefinitionId { get; set; }
+        public string Name { get; set; }
+        public bool Enable { get; set; }
+        public IIndexerSetting Settings { get; set; }
+        public IIndexer Instance { get; set; }
+    }
+
     public interface IIndexerService
     {
-        List<IndexerDefinition> All();
-        List<IIndexerBase> GetAvailableIndexers();
-        void Save(IndexerDefinition indexer);
-        IndexerDefinition Get(string name);
+        List<Indexer> All();
+        List<IIndexer> GetAvailableIndexers();
+        Indexer Get(string name);
     }
 
     public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
@@ -21,9 +30,9 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _indexerRepository;
         private readonly Logger _logger;
 
-        private readonly IList<IIndexerBase> _indexers;
+        private readonly IList<IIndexer> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexerBase> indexers, Logger logger)
+        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexer> indexers, Logger logger)
         {
             _indexerRepository = indexerRepository;
             _logger = logger;
@@ -31,48 +40,65 @@ namespace NzbDrone.Core.Indexers
         }
 
 
-        public List<IndexerDefinition> All()
+        public List<Indexer> All()
         {
-            return _indexerRepository.All().ToList();
+            return _indexerRepository.All().Select(ToIndexer).ToList();
         }
 
-        public List<IIndexerBase> GetAvailableIndexers()
+        public List<IIndexer> GetAvailableIndexers()
         {
-            var enabled = All().Where(c => c.Enable).Select(c => c.Name);
-            var configureIndexers = _indexers.Where(c => c.IsConfigured);
-
-            return configureIndexers.Where(c => enabled.Contains(c.Name)).ToList();
+            return All().Where(c => c.Enable && c.Settings.IsValid).Select(c=>c.Instance).ToList();
         }
 
-        public void Save(IndexerDefinition indexer)
+
+        public Indexer Get(string name)
         {
-            _indexerRepository.Update(indexer);
+            return ToIndexer(_indexerRepository.Get(name));
         }
 
-        public IndexerDefinition Get(string name)
+
+        private Indexer ToIndexer(IndexerDefinition definition)
         {
-            return _indexerRepository.Get(name);
+            var indexer = new Indexer();
+            indexer.DefinitionId = definition.Id;
+            indexer.Enable = definition.Enable;
+            indexer.Instance = GetInstance(definition);
+            indexer.Name = definition.Name;
+
+            if (indexer.Instance.GetType().GetMethod("ImportSettingsFromJson") != null)
+            {
+                indexer.Settings = ((dynamic)indexer.Instance).ImportSettingsFromJson(definition.Settings);
+            }
+            else
+            {
+                indexer.Settings = NullSetting.Instance;
+            }
+
+
+            return indexer;
+        }
+
+        private IIndexer GetInstance(IndexerDefinition indexerDefinition)
+        {
+            var existingInstance = _indexers.Single(c => c.GetType().Name.Equals(indexerDefinition.Implementation, StringComparison.CurrentCultureIgnoreCase));
+            var instance = (IIndexer)Activator.CreateInstance(existingInstance.GetType());
+            instance.InstanceDefinition = indexerDefinition;
+
+            return instance;
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             _logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
 
-            var currentIndexers = All();
-
-            foreach (var feedProvider in _indexers)
+            if (!All().Any())
             {
-                IIndexerBase indexerLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.Name.Equals(indexerLocal.Name, StringComparison.InvariantCultureIgnoreCase)))
-                {
-                    var settings = new IndexerDefinition
+                var definitions = _indexers.SelectMany(delegate(IIndexer indexer)
                     {
-                        Enable = indexerLocal.EnabledByDefault,
-                        Name = indexerLocal.Name.ToLower()
-                    };
+                        return indexer.DefaultDefinitions;
+                    });
 
-                    _indexerRepository.Insert(settings);
-                }
+                _indexerRepository.InsertMany(definitions.ToList());
             }
         }
     }
