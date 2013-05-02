@@ -660,15 +660,19 @@ namespace Marr.Data
                         // and multiple entities are created from each view record.
                         foreach (EntityGraph lvl in graph)
                         {
-                            // If is child relationship entity, and childrenToLoad are specified, and entity is not listed,
-                            // then skip this entity.
-                            if (childrenToLoad.Count > 0 && !lvl.IsRoot && !childrenToLoad.ContainsMember(lvl.Member)) // lvl.Member.Name
+                            if (lvl.IsParentReference)
                             {
+                                // A child specified a circular reference to its previously loaded parent
+                                lvl.AddParentReference();
+                            }
+                            else if (childrenToLoad.Count > 0 && !lvl.IsRoot && !childrenToLoad.ContainsMember(lvl.Member))
+                            {
+                                // A list of relationships-to-load was specified and this relationship was not included
                                 continue;
                             }
-
-                            if (lvl.IsNewGroup(reader))
+                            else if (lvl.IsNewGroup(reader))
                             {
+                                // Create a new entity with the data reader
                                 var newEntity = mappingHelper.CreateAndLoadEntity(lvl.EntityType, lvl.Columns, reader, true);
 
                                 // Add entity to the appropriate place in the object graph
