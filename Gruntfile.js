@@ -22,6 +22,7 @@ module.exports = function (grunt) {
             'UI/JsLibraries/backbone.pageable.js'           : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
             'UI/JsLibraries/backbone.backgrid.js'           : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
             'UI/JsLibraries/backbone.backgrid.paginator.js' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
+            'UI/JsLibraries/backbone.backgrid.filter.js' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
             'UI/JsLibraries/messenger.js'                   : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
             'UI/Content/messenger.css'                      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
             'UI/Content/bootstrap.toggle-switch.css'        : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
