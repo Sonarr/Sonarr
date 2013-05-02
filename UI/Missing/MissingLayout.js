@@ -49,12 +49,6 @@ define([
                         editable  : false,
                         cell      : 'airDate',
                         headerCell: 'nzbDrone'
-//                        headerCell: Backgrid.NzbDroneHeaderCell.extend({
-//                                initialize: function(options) {
-//                                    this.constructor.__super__.initialize.apply(this, [options]);
-//                                    this.direction('descending');
-//                                }
-//                            })
                     },
                     {
                         name      : 'edit',

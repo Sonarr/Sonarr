@@ -25,6 +25,25 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
 
         if (this.column.get('sortable')) {
             this.$el.append(" <i class='icon-sort pull-right'></i>");
+
+            if (this.collection.state) {
+                var sortKey = this.collection.state.sortKey;
+                var sortDir = this._convertIntToDirection(this.collection.state.order);
+
+                if (sortKey === this.column.get('name')) {
+                    this.$el.children('i').addClass(this._convertDirectionToIcon(sortDir));
+                    this._direction = sortDir;
+                }
+            }
+            else if (this.collection.defaultSortKey) {
+                var sortKey = this.collection.defaultSortKey;
+                var sortDir = this._convertIntToDirection(this.collection.defaultSortDir);
+
+                if (sortKey === this.column.get('name')) {
+                    this.$el.children('i').addClass(this._convertDirectionToIcon(sortDir));
+                    this._direction = sortDir;
+                }
+            }
         }
         this.delegateEvents();
         return this;
@@ -57,9 +76,6 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
                     return 1;
                 });
             }
-            else if (this.direction() === "descending") {
-                this.sort(columnName, "ascending");
-            }
             else {
                 this.sort(columnName, "ascending", function (left, right) {
                     var leftVal = left.get(columnName);
@@ -80,6 +96,14 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
         }
 
         return 'icon-sort-down';
+    },
+
+    _convertIntToDirection: function (dir) {
+        if (dir === '-1') {
+            return 'ascending';
+        }
+
+        return 'descending';
     }
 });
 
