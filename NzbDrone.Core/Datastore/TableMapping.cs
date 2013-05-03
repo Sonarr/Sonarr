@@ -49,7 +49,10 @@ namespace NzbDrone.Core.Datastore
                   .HasOne(s => s.QualityProfile, s => s.QualityProfileId);
 
             Mapper.Entity<Season>().RegisterModel("Seasons");
-            Mapper.Entity<Episode>().RegisterModel("Episodes");
+
+            Mapper.Entity<Episode>().RegisterModel("Episodes")
+                  .Ignore(e => e.SeriesTitle);
+
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles");
 
             Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles");

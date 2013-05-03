@@ -1,14 +1,15 @@
 ﻿"use strict";
 define(['app', 'Series/SeriesModel'], function () {
-    NzbDrone.Series.SeriesCollection = Backbone.Collection.extend({
+    NzbDrone.Series.SeriesCollection = Backbone.PageableCollection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/series',
         model: NzbDrone.Series.SeriesModel,
 
-        defaultSortKey: 'title',
-        defaultSortDir: '-1',
+        mode: 'client',
 
-        comparator: function (model) {
-            return model.get(this.defaultSortKey);
+        state: {
+            sortKey: "title",
+            order: -1,
+            pageSize: 1000000
         }
     });
 });

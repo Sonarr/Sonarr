@@ -35,15 +35,6 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
                     this._direction = sortDir;
                 }
             }
-            else if (this.collection.defaultSortKey) {
-                var sortKey = this.collection.defaultSortKey;
-                var sortDir = this._convertIntToDirection(this.collection.defaultSortDir);
-
-                if (sortKey === this.column.get('name')) {
-                    this.$el.children('i').addClass(this._convertDirectionToIcon(sortDir));
-                    this._direction = sortDir;
-                }
-            }
         }
         this.delegateEvents();
         return this;

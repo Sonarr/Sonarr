@@ -354,4 +354,4 @@
 
   });
 
-}(jQuery, _, Backbone, Backgrid, lunr));
+}(jQuery, _, Backbone, Backgrid));

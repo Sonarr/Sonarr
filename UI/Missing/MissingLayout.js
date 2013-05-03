@@ -77,7 +77,6 @@ define([
 
             initialize: function () {
                 this.missingCollection = new NzbDrone.Missing.Collection();
-                this.missingCollection.fetch();
             },
 
             onShow: function () {
