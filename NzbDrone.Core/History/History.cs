@@ -17,7 +17,7 @@ namespace NzbDrone.Core.History
         public string NzbInfoUrl { get; set; }
         public string ReleaseGroup { get; set; }
 
-        public Episode Episode { get; set; }
-        public Series Series { get; set; } 
+        public LazyLoaded<Episode> Episode { get; set; }
+        public LazyLoaded<Series> Series { get; set; } 
     }
 }

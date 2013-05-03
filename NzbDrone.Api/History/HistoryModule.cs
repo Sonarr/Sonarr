@@ -65,8 +65,8 @@ namespace NzbDrone.Api.History
                                                        {
                                                            Id = 1,
                                                            Date = DateTime.UtcNow.AddHours(-5),
-                                                           Episode = episode,
-                                                           Series = series,
+//                                                           Episode = episode,
+//                                                           Series = series,
                                                            Indexer = "nzbs.org",
                                                            Quality = new QualityModel(Quality.HDTV720p)
                                                        }
