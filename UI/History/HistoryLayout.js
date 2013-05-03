@@ -1,17 +1,17 @@
 "use strict";
 define([
     'app',
-    'Missing/Collection',
+    'History/Collection',
     'Series/Index/Table/AirDateCell',
-    'Series/Index/Table/SeriesStatusCell',
+    'Shared/Toolbar/ToolbarView',
     'Shared/Toolbar/ToolbarLayout'
 ],
     function () {
-        NzbDrone.Missing.MissingLayout = Backbone.Marionette.Layout.extend({
-            template: 'Missing/MissingLayoutTemplate',
+        NzbDrone.History.HistoryLayout = Backbone.Marionette.Layout.extend({
+            template: 'History/HistoryLayoutTemplate',
 
             regions: {
-                missing: '#x-missing',
+                history: '#x-history',
                 toolbar: '#x-toolbar',
                 pager  : '#x-pager'
             },
@@ -23,7 +23,7 @@ define([
                         name      : 'seriesTitle',
                         label     : 'Series Title',
                         editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' }),
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/SeriesTitleTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
@@ -31,7 +31,7 @@ define([
                         label     : 'Episode',
                         editable  : false,
                         sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' }),
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/EpisodeColumnTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
@@ -54,28 +54,28 @@ define([
                         label     : '',
                         editable  : false,
                         sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/ControlsColumnTemplate' }),
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/ControlsColumnTemplate' }),
                         headerCell: 'nzbDrone'
                     }
                 ];
 
-                this.missing.show(new Backgrid.Grid(
+                this.history.show(new Backgrid.Grid(
                     {
-                        row       : NzbDrone.Missing.Row,
+                        row       : NzbDrone.History.Row,
                         columns   : columns,
-                        collection: this.missingCollection,
+                        collection: this.historyCollection,
                         className : 'table table-hover'
                     }));
 
                 this.pager.show(new Backgrid.NzbDronePaginator({
                     columns: columns,
-                    collection: this.missingCollection
+                    collection: this.historyCollection
                 }));
             },
 
             initialize: function () {
-                this.missingCollection = new NzbDrone.Missing.Collection();
-                this.missingCollection.fetch();
+                this.historyCollection = new NzbDrone.History.Collection();
+                this.historyCollection.fetch();
             },
 
             onShow: function () {

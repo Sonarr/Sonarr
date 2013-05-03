@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Tv
     {
         bool SeriesPathExists(string path);
         List<Series> Search(string title);
+
         Series FindByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);

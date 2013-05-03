@@ -17,6 +17,7 @@ require(['app', 'Controller'], function (app, controller) {
             'settings'                   : 'settings',
             'settings/:action(/:query)'  : 'settings',
             'missing'                    : 'missing',
+            'history'                    : 'history',
             ':whatever'                  : 'notFound'
         }
     });

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Marr.Data;
-using NzbDrone.Core.Datastore;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.History
+namespace NzbDrone.Api.History
 {
-    public class History : ModelBase
+    public class HistoryResource : RestResource
     {
         public int EpisodeId { get; set; }
         public int SeriesId { get; set; }
@@ -18,6 +16,6 @@ namespace NzbDrone.Core.History
         public string ReleaseGroup { get; set; }
 
         public Episode Episode { get; set; }
-        public Series Series { get; set; } 
+        public Core.Tv.Series Series { get; set; } 
     }
 }

@@ -96,6 +96,8 @@
     <Compile Include="Frontend\IndexModule.cs" />
     <Compile Include="Frontend\StaticResourceProvider.cs" />
     <Compile Include="Frontend\StaticResourceMapper.cs" />
+    <Compile Include="History\HistoryResource.cs" />
+    <Compile Include="History\HistoryModule.cs" />
     <Compile Include="Indexers\IndexerModule.cs" />
     <Compile Include="Indexers\IndexerResource.cs" />
     <Compile Include="Indexers\ReleaseModule.cs" />

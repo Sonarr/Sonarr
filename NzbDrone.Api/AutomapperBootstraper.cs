@@ -2,6 +2,7 @@
 using AutoMapper;
 using NzbDrone.Api.Calendar;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.History;
 using NzbDrone.Api.Missing;
 using NzbDrone.Api.QualityProfiles;
 using NzbDrone.Api.QualityType;
@@ -42,6 +43,10 @@ namespace NzbDrone.Api
 
             //Episode Paging
             Mapper.CreateMap<PagingSpec<Episode>, PagingResource<EpisodeResource>>();
+
+            //History
+            Mapper.CreateMap<Core.History.History, HistoryResource>();
+            Mapper.CreateMap<PagingSpec<Core.History.History>, PagingResource<HistoryResource>>();
         }
     }
 }

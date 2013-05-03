@@ -10,6 +10,11 @@ define(['app', 'Series/SeriesModel'], function () {
             sortKey: "title",
             order: -1,
             pageSize: 1000000
+        },
+
+        queryParams: {
+            sortKey: null,
+            order: null
         }
     });
 });

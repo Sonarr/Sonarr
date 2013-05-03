@@ -58,6 +58,7 @@ define('app', function () {
     window.NzbDrone.Settings.System = {};
     window.NzbDrone.Settings.Misc = {};
     window.NzbDrone.Missing = {};
+    window.NzbDrone.History = {};
 
     window.NzbDrone.Events = {
         //TODO: Move to commands
