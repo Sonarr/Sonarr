@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Api.Config;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.History;
 using NzbDrone.Api.Indexers;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.RootFolders;
@@ -26,6 +27,7 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(ReportInfo), typeof(ReleaseResource))]
         [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
+        [TestCase(typeof(Core.History.History), typeof(HistoryResource))]
         public void matching_fields(Type modelType, Type resourceType)
         {
             MappingValidation.ValidateMapping(modelType, resourceType);
