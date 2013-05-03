@@ -13,64 +13,64 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class DatabaseRelationshipFixture : DbTest
     {
-/*        [Test]
-        [Explicit]
-        public void benchmark()
-        {
-            var series = Builder<Series>.CreateNew()
-                                        .With(c => c.Id = 0)
-                                        .Build();
+        /*        [Test]
+                [Explicit]
+                public void benchmark()
+                {
+                    var series = Builder<Series>.CreateNew()
+                                                .With(c => c.Id = 0)
+                                                .Build();
 
-            Marr.Data.MapRepository.Instance.EnableTraceLogging = false;
+                    Marr.Data.MapRepository.Instance.EnableTraceLogging = false;
 
-            Db.Insert(series);
+                    Db.Insert(series);
 
-            var covers = Builder<MediaCover.MediaCover>.CreateListOfSize(5)
-                .All()
-                .With(c => c.SeriesId = series.Id)
-                .With(c => c.Id = 0)
-                .Build()
-                .ToList();
+                    var covers = Builder<MediaCover.MediaCover>.CreateListOfSize(5)
+                        .All()
+                        .With(c => c.SeriesId = series.Id)
+                        .With(c => c.Id = 0)
+                        .Build()
+                        .ToList();
 
-            Db.InsertMany(covers);
+                    Db.InsertMany(covers);
 
-            var loadedSeries = Db.Single<Series>();
+                    var loadedSeries = Db.Single<Series>();
 
-            var sw = Stopwatch.StartNew();
-            for (int i = 0; i < 10000; i++)
-            {
-                loadedSeries = Db.Single<Series>();
-                var list = loadedSeries.Covers.Value;
-            }
+                    var sw = Stopwatch.StartNew();
+                    for (int i = 0; i < 10000; i++)
+                    {
+                        loadedSeries = Db.Single<Series>();
+                        var list = loadedSeries.Covers.Value;
+                    }
 
-            sw.Stop();
+                    sw.Stop();
 
-            Console.WriteLine(sw.Elapsed);
+                    Console.WriteLine(sw.Elapsed);
 
-            loadedSeries.Covers.Value.Should().HaveSameCount(covers);
-        }
+                    loadedSeries.Covers.Value.Should().HaveSameCount(covers);
+                }
 
-        [Test]
-        public void one_to_many()
-        {
-            var series = Builder<Series>.CreateNew()
-                                        .With(c => c.Id = 0)
-                                        .Build();
+                [Test]
+                public void one_to_many()
+                {
+                    var series = Builder<Series>.CreateNew()
+                                                .With(c => c.Id = 0)
+                                                .Build();
 
-            Db.Insert(series);
+                    Db.Insert(series);
 
-            var covers = Builder<MediaCover.MediaCover>.CreateListOfSize(5)
-                .All()
-                .With(c => c.SeriesId = series.Id)
-                .With(c => c.Id = 0)
-                .Build()
-                .ToList();
+                    var covers = Builder<MediaCover.MediaCover>.CreateListOfSize(5)
+                        .All()
+                        .With(c => c.SeriesId = series.Id)
+                        .With(c => c.Id = 0)
+                        .Build()
+                        .ToList();
 
-            Db.InsertMany(covers);
+                    Db.InsertMany(covers);
 
-            var loadedSeries = Db.Single<Series>();
-            loadedSeries.Covers.Value.Should().HaveSameCount(covers);
-        }*/
+                    var loadedSeries = Db.Single<Series>();
+                    loadedSeries.Covers.Value.Should().HaveSameCount(covers);
+                }*/
 
         [Test]
         public void one_to_one()
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.Datastore
             var loadedEpisode = Db.Single<History.History>().Episode.Value;
 
             loadedEpisode.Should().NotBeNull();
-            loadedEpisode.ShouldHave().AllProperties().EqualTo(episode);
+            loadedEpisode.ShouldHave().AllProperties().But(c => c.SeriesTitle).EqualTo(episode);
         }
 
 
