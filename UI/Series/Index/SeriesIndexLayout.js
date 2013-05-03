@@ -6,7 +6,6 @@ define([
     'Series/Index/EmptyView',
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell',
-    'Shared/Toolbar/ToolbarView',
     'Shared/Toolbar/ToolbarLayout',
     'Config'
 ],

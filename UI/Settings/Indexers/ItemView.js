@@ -7,13 +7,8 @@ define([
 ], function () {
 
     NzbDrone.Settings.Indexers.ItemView = Backbone.Marionette.ItemView.extend({
-        template: 'Settings/Indexers/ItemTemplate',
+        template  : 'Settings/Indexers/ItemTemplate',
         initialize: function () {
-            this.model.set('fields',  [
-                { key: 'username', title: 'Username', helpText: 'HALP!', value: 'mark' },
-                { key: 'apiKey', title: 'API Key', helpText: 'HALP!', value: 'private' }
-            ]);
-
             NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this.saveSettings, this);
         },
 

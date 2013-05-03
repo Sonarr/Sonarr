@@ -4,7 +4,6 @@ define([
     'Missing/Collection',
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell',
-    'Shared/Toolbar/ToolbarView',
     'Shared/Toolbar/ToolbarLayout'
 ],
     function () {
