@@ -3,7 +3,7 @@ define(['app', 'Shared/NotificationCollection', 'Series/SeriesCollection'], func
 
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
-        template : "AddSeries/SearchResultTemplate",
+        template: "AddSeries/SearchResultTemplate",
 
         ui: {
             qualityProfile: '.x-quality-profile',
@@ -30,6 +30,7 @@ define(['app', 'Shared/NotificationCollection', 'Series/SeriesCollection'], func
             var self = this;
 
             this.model.save(undefined, {
+                url    : NzbDrone.Series.SeriesCollection.prototype.url,
                 success: function () {
                     var notificationModel = new NzbDrone.Shared.NotificationModel({
                         title  : 'Added',
