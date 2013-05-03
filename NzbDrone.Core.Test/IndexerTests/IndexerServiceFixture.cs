@@ -18,21 +18,21 @@ namespace NzbDrone.Core.Test.IndexerTests
 {
     public class IndexerServiceFixture : DbTest<IndexerService, IndexerDefinition>
     {
-        private List<Func<IIndexer>> _indexers;
+        private List<IIndexer> _indexers;
 
         [SetUp]
         public void Setup()
         {
-            _indexers = new List<Func<IIndexer>>();
+            _indexers = new List<IIndexer>();
 
-            _indexers.Add(() => new Newznab());
-            _indexers.Add(() => new Nzbsrus());
-            _indexers.Add(() => new NzbClub());
-            _indexers.Add(() => new NzbIndex());
-            _indexers.Add(() => new Omgwtfnzbs());
-            _indexers.Add(() => new Wombles());
+            _indexers.Add(new Newznab());
+            _indexers.Add(new Nzbsrus());
+            _indexers.Add(new NzbClub());
+            _indexers.Add(new NzbIndex());
+            _indexers.Add(new Omgwtfnzbs());
+            _indexers.Add(new Wombles());
 
-            Mocker.SetConstant<IEnumerable<Func<IIndexer>>>(_indexers);
+            Mocker.SetConstant<IEnumerable<IIndexer>>(_indexers);
 
         }
 

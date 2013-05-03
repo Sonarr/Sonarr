@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _indexerRepository;
         private readonly Logger _logger;
 
-        private readonly List<Func<IIndexer>> _indexers;
+        private readonly List<IIndexer> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<Func<IIndexer>> indexers, Logger logger)
+        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexer> indexers, Logger logger)
         {
             _indexerRepository = indexerRepository;
             _logger = logger;
@@ -75,7 +75,10 @@ namespace NzbDrone.Core.Indexers
 
         private IIndexer GetInstance(IndexerDefinition indexerDefinition)
         {
-            var instance = _indexers.Single(c => c().GetType().Name.Equals(indexerDefinition.Implementation, StringComparison.InvariantCultureIgnoreCase))();
+            var type = _indexers.Single(c => c.GetType().Name.Equals(indexerDefinition.Implementation, StringComparison.InvariantCultureIgnoreCase)).GetType();
+
+            var instance = (IIndexer)Activator.CreateInstance(type);
+
             instance.InstanceDefinition = indexerDefinition;
             return instance;
         }
@@ -86,7 +89,7 @@ namespace NzbDrone.Core.Indexers
 
             if (!All().Any())
             {
-                var definitions = _indexers.SelectMany(indexer => indexer().DefaultDefinitions);
+                var definitions = _indexers.SelectMany(indexer => indexer.DefaultDefinitions);
                 _indexerRepository.InsertMany(definitions.ToList());
             }
         }
