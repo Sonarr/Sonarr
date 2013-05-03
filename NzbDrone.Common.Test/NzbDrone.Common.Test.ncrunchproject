@@ -23,38 +23,8 @@
     <NamedTestSelector>
       <TestName>NzbDrone.Common.Test.EnviromentProviderTest.ApplicationPath_should_find_root_in_current_folder</TestName>
     </NamedTestSelector>
-    <NamedTestSelector>
-      <TestName>NzbDrone.Common.Test.ProcessProviderTests.Should_be_able_to_kill_procces</TestName>
-    </NamedTestSelector>
-    <NamedTestSelector>
-      <TestName>NzbDrone.Common.Test.ProcessProviderTests.Should_be_able_to_start_process</TestName>
-    </NamedTestSelector>
-    <NamedTestSelector>
-      <TestName>NzbDrone.Common.Test.ServiceProviderTests.Service_should_be_installed_and_then_uninstalled</TestName>
-    </NamedTestSelector>
-    <NamedTestSelector>
-      <TestName>NzbDrone.Common.Test.ServiceProviderTests.Should_be_able_to_start_and_stop_service</TestName>
-    </NamedTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.ConfigFileProviderTest\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.EnvironmentProviderTest\..*</RegularExpression>
-    </RegexTestSelector>
     <RegexTestSelector>
       <RegularExpression>NzbDrone\.Common\.Test\.EventingTests\.ServiceNameFixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.ProcessProviderTests\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.ReportingService_ReportParseError_Fixture\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.ServiceProviderTests\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.WebClientTests\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>

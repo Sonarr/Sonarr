@@ -21,11 +21,13 @@ namespace NzbDrone.Api.Indexers
 
             var result = new List<IndexerResource>(indexers.Count);
 
-            foreach (var indexerDefinition in indexers)
+            foreach (var indexer in indexers)
             {
-                var resource = new IndexerResource();
-                resource.InjectFrom(indexerDefinition);
-                resource.Fields = SchemaBuilder.GenerateSchema(indexerDefinition.Settings);
+                var indexerResource = new IndexerResource();
+                indexerResource.InjectFrom(indexer);
+                indexerResource.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
+
+                result.Add(indexerResource);
             }
 
             return result;

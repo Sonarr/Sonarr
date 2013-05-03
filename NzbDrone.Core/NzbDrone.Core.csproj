@@ -176,6 +176,7 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
     <Compile Include="Configuration\IConfigService.cs" />

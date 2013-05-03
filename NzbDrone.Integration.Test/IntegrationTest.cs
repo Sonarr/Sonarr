@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Nancy.Hosting.Self;
 using NzbDrone.Api;
 using NzbDrone.Api.Commands;
+using NzbDrone.Api.Indexers;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
@@ -32,6 +33,7 @@ namespace NzbDrone.Integration.Test
         protected ClientBase<RootFolderResource> RootFolders;
         protected ClientBase<CommandResource> Commands;
         protected ReleaseClient Releases;
+        protected IndexerClient Indexers;
 
         static IntegrationTest()
         {
@@ -89,6 +91,7 @@ namespace NzbDrone.Integration.Test
             Releases = new ReleaseClient(RestClient);
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
             Commands = new ClientBase<CommandResource>(RestClient);
+            Indexers = new IndexerClient(RestClient);
 
             _host.Start();
         }

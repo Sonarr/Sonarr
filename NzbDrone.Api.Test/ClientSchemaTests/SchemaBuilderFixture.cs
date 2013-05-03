@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.ClientSchema;
+using NzbDrone.Core.Annotations;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Api.Test.ClientSchemaTests
@@ -41,5 +42,7 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
 
         [FieldDefinition(1, Label = "Last Name", HelpText = "Your Last Name")]
         public string LastName { get; set; }
+
+        public string Other { get; set; }
     }
 }

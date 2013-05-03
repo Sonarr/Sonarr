@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Common.Reflection;
+using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Api.ClientSchema
 {
@@ -13,24 +14,28 @@ namespace NzbDrone.Api.ClientSchema
 
             foreach (var propertyInfo in properties)
             {
-                var fieldAttribute = propertyInfo.GetAttribute<FieldDefinitionAttribute>();
+                var fieldAttribute = propertyInfo.GetAttribute<FieldDefinitionAttribute>(false);
 
-                var field = new Field()
-                    {
-                        Name = propertyInfo.Name,
-                        Label = fieldAttribute.Label,
-                        HelpText = fieldAttribute.HelpText,
-                        Order = fieldAttribute.Order,
-
-                    };
-
-                var value = propertyInfo.GetValue(model, null);
-                if (value != null)
+                if (fieldAttribute != null)
                 {
-                    field.Value = value.ToString();
-                }
 
-                result.Add(field);
+                    var field = new Field()
+                        {
+                            Name = propertyInfo.Name,
+                            Label = fieldAttribute.Label,
+                            HelpText = fieldAttribute.HelpText,
+                            Order = fieldAttribute.Order,
+
+                        };
+
+                    var value = propertyInfo.GetValue(model, null);
+                    if (value != null)
+                    {
+                        field.Value = value.ToString();
+                    }
+
+                    result.Add(field);
+                }
             }
 
             return result;

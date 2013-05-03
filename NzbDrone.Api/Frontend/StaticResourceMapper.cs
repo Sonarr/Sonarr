@@ -15,7 +15,7 @@ namespace NzbDrone.Api.Frontend
             path = path.Trim(Path.DirectorySeparatorChar).ToLower();
 
 
-            return Path.Combine("ui", path);
+            return Path.Combine(Directory.GetCurrentDirectory(), "ui", path);
         }
     }
 }
