@@ -26,7 +26,7 @@ require.config({
     }
 });
 
-define('app', function () {
+define('app', ['Instrumentation/ErrorHandler'], function () {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Config = {};
@@ -63,11 +63,11 @@ define('app', function () {
         //TODO: Move to commands
         OpenModalDialog : 'openModal',
         CloseModalDialog: 'closeModal',
-        SeriesAdded: 'seriesAdded'
+        SeriesAdded     : 'seriesAdded'
     };
 
     window.NzbDrone.Commands = {
-        SaveSettings : 'saveSettings'
+        SaveSettings: 'saveSettings'
     };
 
     window.NzbDrone.Constants = {
