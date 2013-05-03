@@ -1,6 +1,6 @@
 ﻿"use strict";
 define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
-    'Series/Index/SeriesIndexLayout', 'Upcoming/UpcomingCollectionView',
+    'Series/Index/SeriesIndexLayout',
     'Calendar/CalendarCollectionView', 'Shared/NotificationView',
     'Shared/NotFoundView', 'MainMenuView',
     'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection',
@@ -30,11 +30,6 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
             addSeries: function (action) {
                 this._setTitle('Add Series');
                 NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout({action: action}));
-            },
-
-            upcoming: function () {
-                this._setTitle('Upcoming');
-                NzbDrone.mainRegion.show(new NzbDrone.Upcoming.UpcomingCollectionView());
             },
 
             calendar: function () {

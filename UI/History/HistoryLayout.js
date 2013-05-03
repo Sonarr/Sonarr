@@ -3,7 +3,6 @@ define([
     'app',
     'History/Collection',
     'Series/Index/Table/AirDateCell',
-    'Shared/Toolbar/ToolbarView',
     'Shared/Toolbar/ToolbarLayout'
 ],
     function () {
