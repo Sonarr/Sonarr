@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using Nancy;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Validation;
+using NzbDrone.Api.Extensions;
 
 namespace NzbDrone.Api.Series
 {
@@ -25,13 +27,28 @@ namespace NzbDrone.Api.Series
             UpdateResource = UpdateSeries;
             DeleteResource = DeleteSeries;
 
+            Get["/{slug}"] = o => GetSeries((string)o.slug.ToString());
 
             SharedValidator.RuleFor(s => s.RootFolderId).ValidId();
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
 
+
+
             PostValidator.RuleFor(s => s.Title).NotEmpty();
 
+        }
+
+        private Response GetSeries(string slug)
+        {
+            var series = _seriesService.FindBySlug(slug);
+
+            if (series == null)
+            {
+                return new NotFoundResponse();
+            }
+
+            return series.AsResponse();
         }
 
         private List<SeriesResource> AllSeries()

@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
+        Series FindBySlug(string slug);
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -47,5 +48,9 @@ namespace NzbDrone.Core.Tv
             SetFields(new Series { Id = seriesId, SeriesType = seriesType }, s => s.SeriesType);
         }
 
+        public Series FindBySlug(string slug)
+        {
+            return Query.SingleOrDefault(c => c.TitleSlug == slug.ToLower());
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Tv
         Series UpdateSeries(Series series);
         bool SeriesPathExists(string folder);
         List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
+        Series FindBySlug(string slug);
     }
 
     public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
@@ -145,6 +146,13 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvdbId(int tvdbId)
         {
             return _seriesRepository.FindByTvdbId(tvdbId);
+        }
+
+
+        public Series FindBySlug(string slug)
+        {
+            var series = _seriesRepository.FindBySlug(slug);
+            return series;
         }
 
         public Series FindByTitle(string title)
