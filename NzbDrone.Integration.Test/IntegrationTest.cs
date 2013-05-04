@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
+using Moq;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
-using Nancy.Hosting.Self;
 using NzbDrone.Api;
 using NzbDrone.Api.Commands;
-using NzbDrone.Api.Indexers;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
@@ -21,7 +20,7 @@ namespace NzbDrone.Integration.Test
     public abstract class IntegrationTest
     {
         private NancyBootstrapper _bootstrapper;
-        private NancyHost _host;
+        private IHostController _hostController;
         protected RestClient RestClient { get; private set; }
 
         private static readonly Logger Logger = LogManager.GetLogger("TEST");
@@ -82,24 +81,27 @@ namespace NzbDrone.Integration.Test
 
             _bootstrapper = new NancyBootstrapper(Container);
 
-            const string url = "http://localhost:1313";
 
-            _host = new NancyHost(new Uri(url), _bootstrapper);
+            var _hostConfig = new Mock<ConfigFileProvider>();
+            _hostConfig.SetupGet(c => c.Port).Returns(1313);
 
-            RestClient = new RestClient(url + "/api/");
+            _hostController = new OwinHostController(_hostConfig.Object, _bootstrapper, Logger);
+
+
+            RestClient = new RestClient(_hostController.AppUrl + "/api/");
             Series = new SeriesClient(RestClient);
             Releases = new ReleaseClient(RestClient);
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
             Commands = new ClientBase<CommandResource>(RestClient);
             Indexers = new IndexerClient(RestClient);
 
-            _host.Start();
+            _hostController.StartServer();
         }
 
         [TearDown]
         public void SmokeTestTearDown()
         {
-            _host.Stop();
+            _hostController.StopServer();
 
             _bootstrapper.Shutdown();
         }

@@ -62,5 +62,12 @@ namespace NzbDrone.Integration.Test
             Series.Get("non-existing-slug", HttpStatusCode.NotFound);
         }
 
+        [Test]
+        [Ignore]
+        public void invalid_id_should_return_404()
+        {
+            //TODO: fix
+            Series.Get(99, HttpStatusCode.NotFound);
+        }
     }
 }
