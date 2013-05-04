@@ -26,7 +26,7 @@ define(function () {
             var message = {
                 message        : messageText,
                 type           : 'error',
-                hideAfter: 1000,
+                hideAfter      : 1000,
                 showCloseButton: true
             };
 
@@ -55,18 +55,17 @@ define(function () {
 
         var message = {
             type           : 'error',
-            hideAfter: 1000,
+            hideAfter      : 1000,
             showCloseButton: true
         };
 
         if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
             message.message = 'NzbDrone Server Not Reachable. make sure NzbDrone is running.';
         } else {
-            message.message = ajaxOptions.type + " " + ajaxOptions.url + " : " + xmlHttpRequest.statusText;
+            message.message = "[{0}] {1} : {2}".format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
         }
 
         window.Messenger().post(message);
-        alert('test');
         return false;
     });
 

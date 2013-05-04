@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using FluentValidation;
 using NLog;
 using Nancy;
@@ -37,7 +36,7 @@ namespace NzbDrone.Api.ErrorManagement
 
             }
 
-            _logger.ErrorException("Unexpected error", exception);
+            _logger.FatalException("Request Failed", exception);
 
 
             return new ErrorModel()
