@@ -47,9 +47,20 @@ namespace NzbDrone.Integration.Test
 
             Series.All().Should().HaveCount(1);
 
+
+            Series.Get(series.Id).Should().NotBeNull();
+            Series.Get(series.TitleSlug).Should().NotBeNull();
+
             Series.Delete(series.Id);
 
             Series.All().Should().BeEmpty();
         }
+
+        [Test]
+        public void wrong_slug_should_return_404()
+        {
+            Series.Get("non-existing-slug", HttpStatusCode.NotFound);
+        }
+
     }
 }

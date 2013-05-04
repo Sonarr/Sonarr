@@ -69,7 +69,7 @@
   <ItemGroup>
     <Compile Include="Client\ClientBase.cs" />
     <Compile Include="Client\IndexerClient.cs" />
-    <Compile Include="Client\SeriesClient - Copy.cs" />
+    <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
     <Compile Include="IndexerIntegrationFixture.cs" />

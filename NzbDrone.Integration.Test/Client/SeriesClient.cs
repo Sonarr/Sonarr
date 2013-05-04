@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using NzbDrone.Api.Series;
 using RestSharp;
 
@@ -16,6 +17,13 @@ namespace NzbDrone.Integration.Test.Client
             var request = BuildRequest("lookup?term={term}");
             request.AddUrlSegment("term", term);
             return Get<List<SeriesResource>>(request);
+        }
+
+
+        public SeriesResource Get(string slug, HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            var request = BuildRequest(slug);
+            return Get<SeriesResource>(request, statusCode);
         }
 
     }
