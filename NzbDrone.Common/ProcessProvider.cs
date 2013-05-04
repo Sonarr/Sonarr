@@ -110,5 +110,10 @@ namespace NzbDrone.Common
                            Name = process.ProcessName
                        };
         }
+
+        public void KillAll(string nzbdrone)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

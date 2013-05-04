@@ -12,17 +12,15 @@ namespace NzbDrone.Update.Providers
         private readonly ServiceProvider _serviceProvider;
         private readonly ProcessProvider _processProvider;
         private readonly EnvironmentProvider _environmentProvider;
-        private readonly IHostController _hostController;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public UpdateProvider(DiskProvider diskProvider, ServiceProvider serviceProvider,
-            ProcessProvider processProvider, EnvironmentProvider environmentProvider, IHostController hostController)
+            ProcessProvider processProvider, EnvironmentProvider environmentProvider)
         {
             _diskProvider = diskProvider;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
             _environmentProvider = environmentProvider;
-            _hostController = hostController;
         }
 
         public UpdateProvider()
@@ -79,7 +77,7 @@ namespace NzbDrone.Update.Providers
             }
 
             logger.Info("Killing all orphan IISExpress processes");
-            _hostController.StopServer();
+            _processProvider.KillAll("NzbDrone");
 
             logger.Info("Creating backup of existing installation");
             _diskProvider.CopyDirectory(targetFolder, _environmentProvider.GetUpdateBackUpFolder());

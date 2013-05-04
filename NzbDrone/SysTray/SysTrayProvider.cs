@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace NzbDrone.Common.SysTray
+namespace NzbDrone.SysTray
 {
     public class SysTrayProvider
     {

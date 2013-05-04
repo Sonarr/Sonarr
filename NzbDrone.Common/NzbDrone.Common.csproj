@@ -59,18 +59,6 @@
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin.Host.HttpListener">
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.0.21.0-pre\lib\net40\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.0.21.0-pre\lib\net40\Microsoft.Owin.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Owin">
-      <HintPath>..\packages\Nancy.Owin.0.16.1\lib\net40\Nancy.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.3\lib\net35\Newtonsoft.Json.dll</HintPath>
@@ -79,15 +67,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -131,7 +114,6 @@
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
-    <Compile Include="HostController.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
@@ -153,10 +135,6 @@
     <Compile Include="RestProvider.cs" />
     <Compile Include="SecurityProvider.cs" />
     <Compile Include="ServiceProvider.cs" />
-    <Compile Include="SysTray\SysTrayApp.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SysTray\SysTrayProvider.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TryParseExtension.cs" />
     <Compile Include="UdpProvider.cs" />

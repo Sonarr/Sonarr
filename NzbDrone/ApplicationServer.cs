@@ -2,6 +2,7 @@
 using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Owin;
 
 namespace NzbDrone
 {

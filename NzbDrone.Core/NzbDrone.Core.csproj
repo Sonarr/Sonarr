@@ -300,7 +300,6 @@
     <Compile Include="Jobs\JobRepository.cs" />
     <Compile Include="Jobs\JobTimer.cs" />
     <Compile Include="Lifecycle\AppShutdownJob.cs" />
-    <Compile Include="Lifecycle\AppRestartJob.cs" />
     <Compile Include="Lifecycle\ApplicationStartedEvent.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />

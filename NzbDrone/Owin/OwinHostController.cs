@@ -5,36 +5,37 @@ using Microsoft.Owin.Hosting;
 using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Owin;
+using NzbDrone.Common;
+using NzbDrone.Owin.MiddleWare;
 using Owin;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Owin
 {
-    public interface IHostController
-    {
-        string AppUrl { get; }
-        void StartServer();
-        void RestartServer();
-        void StopServer();
-    }
-
-
     public class OwinHostController : IHostController
     {
         private readonly ConfigFileProvider _configFileProvider;
-        private readonly INancyBootstrapper _bootstrapper;
+        private readonly IEnumerable<IOwinMiddleWare> _owinMiddleWares;
         private readonly Logger _logger;
         private IDisposable _host;
 
-        public OwinHostController(ConfigFileProvider configFileProvider, INancyBootstrapper bootstrapper, Logger logger)
+        public OwinHostController(ConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares, Logger logger)
         {
             _configFileProvider = configFileProvider;
-            _bootstrapper = bootstrapper;
+            _owinMiddleWares = owinMiddleWares;
             _logger = logger;
         }
 
         public void StartServer()
         {
-            _host = WebApplication.Start(AppUrl, builder => RunNancy(builder, _bootstrapper));
+            _host = WebApplication.Start(AppUrl, BuildApp);
+        }
+
+        private void BuildApp(IAppBuilder appBuilder)
+        {
+            foreach (var middleWare in _owinMiddleWares)
+            {
+                middleWare.Attach(appBuilder);
+            }
         }
 
         private static IAppBuilder RunNancy(IAppBuilder builder, INancyBootstrapper bootstrapper)
@@ -67,5 +68,4 @@ namespace NzbDrone.Common
         }
 
     }
-
 }

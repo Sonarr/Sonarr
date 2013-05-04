@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Moq;
 using NLog;
 using NLog.Config;
@@ -11,6 +12,8 @@ using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Integration.Test.Client;
+using NzbDrone.Owin;
+using NzbDrone.Owin.MiddleWare;
 using RestSharp;
 using TinyIoC;
 
@@ -85,7 +88,7 @@ namespace NzbDrone.Integration.Test
             var _hostConfig = new Mock<ConfigFileProvider>();
             _hostConfig.SetupGet(c => c.Port).Returns(1313);
 
-            _hostController = new OwinHostController(_hostConfig.Object, _bootstrapper, Logger);
+            _hostController = new OwinHostController(_hostConfig.Object, new[] { new NancyMiddleWare(_bootstrapper) }, Logger);
 
 
             RestClient = new RestClient(_hostController.AppUrl + "/api/");

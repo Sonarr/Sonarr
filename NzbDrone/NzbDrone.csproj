@@ -91,6 +91,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin.Host.HttpListener">
       <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.0.21.0-pre\lib\net40\Microsoft.Owin.Host.HttpListener.dll</HintPath>
     </Reference>
@@ -115,7 +116,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
@@ -127,9 +130,18 @@
     <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationMode.cs" />
     <Compile Include="AppMain.cs" />
+    <Compile Include="Owin\MiddleWare\NancyMiddleWare.cs" />
+    <Compile Include="Owin\IHostController.cs" />
+    <Compile Include="Owin\MiddleWare\IOwinMiddleWare.cs" />
+    <Compile Include="Owin\MiddleWare\SignalRMiddleWare.cs" />
+    <Compile Include="Owin\OwinHostController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PriorityMonitor.cs" />
     <Compile Include="Router.cs" />
+    <Compile Include="SysTray\SysTrayApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SysTray\SysTrayProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
