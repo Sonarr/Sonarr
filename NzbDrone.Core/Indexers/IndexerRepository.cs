@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Indexers
@@ -12,8 +13,8 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerRepository : BasicRepository<IndexerDefinition>, IIndexerRepository
     {
-        public IndexerRepository(IDatabase database)
-            : base(database)
+        public IndexerRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

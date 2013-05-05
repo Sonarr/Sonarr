@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using Marr.Data;
 using Marr.Data.QGen;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Model;
 
@@ -31,8 +32,8 @@ namespace NzbDrone.Core.Tv
     {
         private readonly IDataMapper _dataMapper;
 
-        public EpisodeRepository(IDatabase database)
-            : base(database)
+        public EpisodeRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
             _dataMapper = database.DataMapper;
         }

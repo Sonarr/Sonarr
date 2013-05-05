@@ -1,5 +1,5 @@
 ﻿"use strict";
-define(function () {
+(function () {
 
     /*  var model = new NzbDrone.Shared.NotificationModel();
      model.set('title','test notification');
@@ -11,9 +11,6 @@ define(function () {
     window.alert = function (message) {
         window.Messenger().post(message);
     };
-
-
-    var self = this;
 
     window.onerror = function (msg, url, line) {
 
@@ -69,5 +66,5 @@ define(function () {
         return false;
     });
 
-});
+})();
 

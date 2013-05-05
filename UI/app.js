@@ -26,7 +26,7 @@ require.config({
     }
 });
 
-define('app', ['Instrumentation/ErrorHandler'], function () {
+define('app', function () {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Config = {};

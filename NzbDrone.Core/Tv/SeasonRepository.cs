@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
 
@@ -16,10 +16,9 @@ namespace NzbDrone.Core.Tv
 
     public class SeasonRepository : BasicRepository<Season>, ISeasonRepository
     {
-        private readonly IDbConnection _database;
 
-        public SeasonRepository(IDatabase database)
-            : base(database)
+        public SeasonRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

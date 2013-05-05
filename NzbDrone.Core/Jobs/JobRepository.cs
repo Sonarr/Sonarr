@@ -19,8 +19,8 @@ namespace NzbDrone.Core.Jobs
         private readonly IEnumerable<IJob> _jobs;
         private readonly Logger _logger;
 
-        public JobRepository(IDatabase database, IEnumerable<IJob> jobs, Logger logger)
-            : base(database)
+        public JobRepository(IDatabase database, IEnumerable<IJob> jobs, Logger logger, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
             _jobs = jobs;
             _logger = logger;

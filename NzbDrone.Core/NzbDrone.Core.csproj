@@ -195,6 +195,7 @@
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
+    <Compile Include="Datastore\Events\ModelEvent.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\IReadModels.cs" />
     <Compile Include="Datastore\IWriteModels.cs" />

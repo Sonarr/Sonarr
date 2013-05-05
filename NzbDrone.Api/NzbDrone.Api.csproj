@@ -63,6 +63,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.4.0.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.0.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy, Version=0.16.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nancy.0.16.1\lib\net40\Nancy.dll</HintPath>
@@ -119,6 +122,7 @@
     <Compile Include="RootFolders\RootFolderModule.cs" />
     <Compile Include="RootFolders\RootFolderResource.cs" />
     <Compile Include="Seasons\SeasonModule.cs" />
+    <Compile Include="Series\SeriesConnection.cs" />
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />
@@ -139,6 +143,9 @@
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
     <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />
     <Compile Include="Config\SettingsModule.cs" />
+    <Compile Include="SignalR\BasicResourceConnection.cs" />
+    <Compile Include="SignalR\SignalrDependencyResolver.cs" />
+    <Compile Include="SignalR\NzbDronePersistentConnection.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Validation\IdValidationRule.cs" />
   </ItemGroup>

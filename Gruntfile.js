@@ -16,13 +16,16 @@ module.exports = function (grunt) {
             'UI/JsLibraries/jquery.cookie.js'               : 'http://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js',
             'UI/JsLibraries/jquery.js'                      : 'http://code.jquery.com/jquery.js',
             'UI/JsLibraries/jquery.backstretch.js'          : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
+
+            'UI/JsLibraries/jquery.signalR.js'              : 'https://raw.github.com/SignalR/SignalR/master/samples/Microsoft.AspNet.SignalR.Hosting.AspNet.Samples/Scripts/jquery.signalR.js',
+
             'UI/JsLibraries/require.js'                     : 'http://raw.github.com/jrburke/requirejs/master/require.js',
             'UI/JsLibraries/sugar.js'                       : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
             'UI/JsLibraries/underscore.js'                  : 'http://underscorejs.org/underscore.js',
             'UI/JsLibraries/backbone.pageable.js'           : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
             'UI/JsLibraries/backbone.backgrid.js'           : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
             'UI/JsLibraries/backbone.backgrid.paginator.js' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
-            'UI/JsLibraries/backbone.backgrid.filter.js' : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
+            'UI/JsLibraries/backbone.backgrid.filter.js'    : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
             'UI/JsLibraries/messenger.js'                   : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
             'UI/JsLibraries/lunr.js'                        : 'http://raw.github.com/olivernn/lunr.js/master/lunr.js',
             'UI/Content/messenger.css'                      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',

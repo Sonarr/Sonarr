@@ -3,6 +3,7 @@ using FluentMigrator.Runner;
 using NLog;
 using Nancy.Bootstrapper;
 using NzbDrone.Api;
+using NzbDrone.Api.SignalR;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
@@ -36,6 +37,8 @@ namespace NzbDrone
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>)).AsMultiInstance();
             Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>)).AsMultiInstance();
+
+            AutoRegisterImplementations<NzbDronePersistentConnection>();
 
             InitDatabase();
 

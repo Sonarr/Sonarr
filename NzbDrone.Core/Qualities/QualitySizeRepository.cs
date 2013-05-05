@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Qualities
@@ -11,8 +12,8 @@ namespace NzbDrone.Core.Qualities
 
     public class QualitySizeRepository : BasicRepository<QualitySize>, IQualitySizeRepository
     {
-        public QualitySizeRepository(IDatabase database)
-            : base(database)
+        public QualitySizeRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

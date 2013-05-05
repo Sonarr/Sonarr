@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Instrumentation
@@ -12,8 +13,8 @@ namespace NzbDrone.Core.Instrumentation
 
     public class LogRepository : BasicRepository<Log>, ILogRepository
     {
-        public LogRepository(IDatabase database)
-            : base(database)
+        public LogRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

@@ -1,5 +1,6 @@
 using System.Data;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Configuration
@@ -12,8 +13,8 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigRepository : BasicRepository<Config>, IConfigRepository
     {
-        public ConfigRepository(IDatabase database)
-            : base(database)
+        public ConfigRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

@@ -16,7 +16,8 @@ namespace NzbDrone.Api.Frontend
             if(
                 Request.Path.Contains(".")
                 || Request.Path.StartsWith("/static", StringComparison.CurrentCultureIgnoreCase) 
-                || Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase))
+                || Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase)
+                || Request.Path.StartsWith("/signalr", StringComparison.CurrentCultureIgnoreCase))
             {
                 return new NotFoundResponse();
             }

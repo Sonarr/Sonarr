@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Tv
@@ -18,8 +19,8 @@ namespace NzbDrone.Core.Tv
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
-        public SeriesRepository(IDatabase database)
-            : base(database)
+        public SeriesRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 
@@ -14,8 +15,8 @@ namespace NzbDrone.Core.History
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
     {
-        public HistoryRepository(IDatabase database)
-            : base(database)
+        public HistoryRepository(IDatabase database, IMessageAggregator messageAggregator)
+            : base(database, messageAggregator)
         {
         }
 

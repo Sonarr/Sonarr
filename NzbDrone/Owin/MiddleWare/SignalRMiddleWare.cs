@@ -1,26 +1,31 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Nancy.Bootstrapper;
-using Nancy.Owin;
+using Microsoft.AspNet.SignalR;
+using NzbDrone.Api.SignalR;
 using Owin;
+using TinyIoC;
 
 namespace NzbDrone.Owin.MiddleWare
 {
     public class SignalRMiddleWare : IOwinMiddleWare
     {
-        private readonly INancyBootstrapper _nancyBootstrapper;
+        private readonly IEnumerable<NzbDronePersistentConnection> _persistentConnections;
 
-        public SignalRMiddleWare(INancyBootstrapper nancyBootstrapper)
+        public int Order { get { return 0; } }
+
+        public SignalRMiddleWare(IEnumerable<NzbDronePersistentConnection> persistentConnections, TinyIoCContainer container)
         {
-            _nancyBootstrapper = nancyBootstrapper;
+            _persistentConnections = persistentConnections;
+
+            SignalrDependencyResolver.Register(container);
         }
 
         public void Attach(IAppBuilder appBuilder)
         {
-            return;
-            var nancyOwinHost = new NancyOwinHost(null, _nancyBootstrapper);
-            appBuilder.Use((Func<Func<IDictionary<string, object>, Task>, Func<IDictionary<string, object>, Task>>)(next => (Func<IDictionary<string, object>, Task>)nancyOwinHost.Invoke), new object[0]);
+            foreach (var nzbDronePersistentConnection in _persistentConnections)
+            {
+                appBuilder.MapConnection("signalr/series", nzbDronePersistentConnection.GetType(), new ConnectionConfiguration { EnableCrossDomain = true });
+            }
+
         }
     }
 }

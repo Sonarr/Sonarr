@@ -8,6 +8,7 @@ using Nancy.Owin;
 using NzbDrone.Common;
 using NzbDrone.Owin.MiddleWare;
 using Owin;
+using System.Linq;
 
 namespace NzbDrone.Owin
 {
@@ -27,13 +28,20 @@ namespace NzbDrone.Owin
 
         public void StartServer()
         {
-            _host = WebApplication.Start(AppUrl, BuildApp);
+            var options = new StartOptions
+                {
+                    App = GetType().AssemblyQualifiedName,
+                    Port = _configFileProvider.Port
+                };
+
+            _host = WebApplication.Start(options, BuildApp);
         }
 
         private void BuildApp(IAppBuilder appBuilder)
         {
-            foreach (var middleWare in _owinMiddleWares)
+            foreach (var middleWare in _owinMiddleWares.OrderBy(c => c.Order))
             {
+                _logger.Debug("Attaching {0} to host", middleWare.GetType().Name);
                 middleWare.Attach(appBuilder);
             }
         }

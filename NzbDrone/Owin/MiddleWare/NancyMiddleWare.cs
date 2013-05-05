@@ -16,6 +16,8 @@ namespace NzbDrone.Owin.MiddleWare
             _nancyBootstrapper = nancyBootstrapper;
         }
 
+        public int Order { get { return 1; } }
+
         public void Attach(IAppBuilder appBuilder)
         {
             var nancyOwinHost = new NancyOwinHost(null, _nancyBootstrapper);

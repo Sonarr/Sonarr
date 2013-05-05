@@ -8,7 +8,7 @@ namespace NzbDrone.Common
 {
     public abstract class ContainerBuilderBase
     {
-        protected TinyIoCContainer Container;
+        protected readonly TinyIoCContainer Container;
         private readonly List<Type> _loadedTypes;
 
         protected ContainerBuilderBase(params string[] assemblies)

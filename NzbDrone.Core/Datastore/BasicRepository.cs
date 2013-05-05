@@ -5,6 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.QGen;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Tv;
 
 
@@ -34,14 +36,16 @@ namespace NzbDrone.Core.Datastore
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
+        private readonly IMessageAggregator _messageAggregator;
 
         //TODO: add assertion to make sure model properly mapped 
 
 
         private readonly IDataMapper _dataMapper;
 
-        public BasicRepository(IDatabase database)
+        public BasicRepository(IDatabase database, IMessageAggregator messageAggregator)
         {
+            _messageAggregator = messageAggregator;
             _dataMapper = database.DataMapper;
         }
 
@@ -99,7 +103,9 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't insert model with existing ID");
             }
 
-            var id = _dataMapper.Insert(model);
+            _dataMapper.Insert(model);
+            _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, ModelEvent<TModel>.RepositoryAction.Created));
+
             return model;
         }
 
