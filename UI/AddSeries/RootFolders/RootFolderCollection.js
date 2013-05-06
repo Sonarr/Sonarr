@@ -6,5 +6,5 @@ define(['app', 'AddSeries/RootFolders/RootFolderModel'], function () {
         model: NzbDrone.AddSeries.RootFolders.RootFolderModel
     });
 
-    return new rootFolderCollection();
+    return new rootFolderCollection().BindSignalR();
 });

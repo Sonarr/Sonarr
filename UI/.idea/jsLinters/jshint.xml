@@ -61,7 +61,7 @@
     <option passfail="false" />
     <option white="false" />
     <option maxerr="50" />
-    <option predef="NzbDrone, define, Backbone, _, window,Handlebars, console,require,$,Marionette, Backgrid, jQuery" />
+    <option predef="NzbDrone, define, Backbone, _, window,Handlebars, console,require,$,Marionette, Backgrid, jQuery, signalR" />
   </component>
 </project>
 

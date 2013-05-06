@@ -23,7 +23,8 @@ namespace NzbDrone.Owin.MiddleWare
         {
             foreach (var nzbDronePersistentConnection in _persistentConnections)
             {
-                appBuilder.MapConnection("signalr/series", nzbDronePersistentConnection.GetType(), new ConnectionConfiguration { EnableCrossDomain = true });
+                var url = string.Format("signalr/{0}", nzbDronePersistentConnection.Resource.Trim('/'));
+                appBuilder.MapConnection(url, nzbDronePersistentConnection.GetType(), new ConnectionConfiguration { EnableCrossDomain = true });
             }
 
         }

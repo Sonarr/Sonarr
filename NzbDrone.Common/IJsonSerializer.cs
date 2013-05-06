@@ -9,6 +9,7 @@ namespace NzbDrone.Common
     {
         T Deserialize<T>(string json) where T : class, new();
         string Serialize(object obj);
+        void Serialize<TModel>(TModel model, TextWriter textWriter);
         void Serialize<TModel>(TModel model, Stream outputStream);
         object Deserialize(string json, Type type);
     }
@@ -55,11 +56,16 @@ namespace NzbDrone.Common
         }
 
 
-        public void Serialize<TModel>(TModel model, Stream outputStream)
+        public void Serialize<TModel>(TModel model, TextWriter outputStream)
         {
-            var jsonTextWriter = new JsonTextWriter(new StreamWriter(outputStream));
+            var jsonTextWriter = new JsonTextWriter(outputStream);
             _jsonNetSerializer.Serialize(jsonTextWriter, model);
             jsonTextWriter.Flush();
+        }
+
+        public void Serialize<TModel>(TModel model, Stream outputStream)
+        {
+            Serialize(model, new StreamWriter(outputStream));
         }
 
 

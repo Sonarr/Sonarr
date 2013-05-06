@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Json;
 using TinyIoC;
 
 namespace NzbDrone.Api.SignalR
@@ -13,6 +14,8 @@ namespace NzbDrone.Api.SignalR
         public static void Register(TinyIoCContainer container)
         {
             GlobalHost.DependencyResolver = new SignalrDependencyResolver(container);
+            
+            container.Register<IJsonSerializer, Serializer>().AsSingleton();
         }
 
         private SignalrDependencyResolver(TinyIoCContainer container)

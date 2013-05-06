@@ -1,7 +1,15 @@
 "use strict";
-(function ($) {
 
-    var connection = $.connection('/signalr/series');
+Backbone.Collection.prototype.BindSignalR = function (options) {
+
+    if (!options || !options.url) {
+        console.assert(this.url, 'url must be provided or collection must have url');
+        options = {
+            url: this.url.replace('api', 'signalr')
+        };
+    }
+
+    var self = this;
 
     var _getStatus = function (status) {
         switch (status) {
@@ -19,18 +27,21 @@
 
     };
 
+
+    var connection = $.connection(options.url);
+
     connection.stateChanged(function (change) {
-
-        console.log('signalR [{0}]'.format(_getStatus(change.newState)));
+        console.debug('{0} [{1}]'.format(options.url, _getStatus(change.newState)));
     });
 
-    connection.received(function (data) {
-        console.log(data);
+    connection.received(function () {
+        self.fetch();
     });
 
-    connection.error(function (error) {
-        console.warn(error);
-    });
+    connection.start({ transport: ['longPolling'] });
 
-    connection.start();
-})(jQuery);
+    return this;
+};
+
+
+

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
@@ -13,6 +14,7 @@ namespace NzbDrone.Api.SignalR
         where T : ModelBase
     {
         private readonly Logger _logger;
+
 
         public BasicResourceConnection()
         {
@@ -33,7 +35,8 @@ namespace NzbDrone.Api.SignalR
 
         public void HandleAsync(ModelEvent<T> message)
         {
-            Connection.Broadcast(message);
+            var context =((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
+            context.Connection.Broadcast(message);
         }
     }
 }
