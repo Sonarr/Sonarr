@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
 namespace NzbDrone.Common
@@ -20,25 +21,17 @@ namespace NzbDrone.Common
 
         public JsonSerializer()
         {
-            var setting = new JsonSerializerSettings
-                {
-                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.Indented,
-                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate
-                };
-
             _jsonNetSerializer = new Newtonsoft.Json.JsonSerializer()
                 {
-                    DateTimeZoneHandling = setting.DateTimeZoneHandling,
-                    NullValueHandling = setting.NullValueHandling,
-                    Formatting = setting.Formatting,
-                    DefaultValueHandling = setting.DefaultValueHandling,
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                    NullValueHandling = NullValueHandling.Include,
+                    Formatting = Formatting.Indented,
+                    DefaultValueHandling = DefaultValueHandling.Include,
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 };
+
+            _jsonNetSerializer.Converters.Add(new StringEnumConverter { CamelCaseText = true });
         }
-
-
 
         public T Deserialize<T>(string json) where T : class, new()
         {

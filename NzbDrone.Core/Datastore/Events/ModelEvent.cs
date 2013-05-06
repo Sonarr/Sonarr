@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Datastore.Events
 
         public enum RepositoryAction
         {
-            Created,
-            Updated,
-            Deleted
+            Created = 1,
+            Updated = 2,
+            Deleted = 3
         }
     }
 

@@ -11,12 +11,22 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
         regions: {
             searchResult: '#search-result'
         },
-        collection: new NzbDrone.Series.SeriesCollection(),
 
         initialize: function () {
+
+            this.collection = new NzbDrone.Series.SeriesCollection();
+
+            this.collection.parse = function (response) {
+                _.each(response, function (model) {
+                   model.id = null;
+                });
+
+                return response;
+            };
+
             NzbDrone.AddSeries.New.AddNewSeriesContext = this;
 
-            NzbDrone.vent.on(NzbDrone.Events.SeriesAdded, function (options){
+            NzbDrone.vent.on(NzbDrone.Events.SeriesAdded, function (options) {
                 if (!options.existing) {
                     NzbDrone.AddSeries.New.AddNewSeriesContext.ui.seriesSearch.val('');
 

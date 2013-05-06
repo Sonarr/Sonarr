@@ -1,6 +1,6 @@
 "use strict";
 
-Backbone.Collection.prototype.BindSignalR = function (options) {
+_.extend(Backbone.Collection.prototype, {BindSignalR: function (options) {
 
     if (!options || !options.url) {
         console.assert(this.url, 'url must be provided or collection must have url');
@@ -34,14 +34,15 @@ Backbone.Collection.prototype.BindSignalR = function (options) {
         console.debug('{0} [{1}]'.format(options.url, _getStatus(change.newState)));
     });
 
-    connection.received(function () {
+    connection.received(function (model) {
+        console.debug(model);
         self.fetch();
     });
 
     connection.start({ transport: ['longPolling'] });
 
     return this;
-};
+}});
 
 
 

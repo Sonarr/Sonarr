@@ -23,7 +23,7 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
             },
             poster           : function () {
                 var poster = _.find(this.get('images'), function (image) {
-                    return image.coverType === 1;
+                    return image.coverType === 'poster';
                 });
 
                 if (poster) {
@@ -47,14 +47,7 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             },
             isContinuing     : function () {
-                return this.get('status') === 0;
-            },
-            statusText       : function () {
-                if (this.get('status') === 0) {
-                    return 'Continuing';
-                }
-
-                return 'Ended';
+                return this.get('status') === 'continuing';
             },
             shortDate        : function () {
                 var date = this.get('nextAiring');
