@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface;
 
 namespace NzbDrone.Api.Filters
 {
-    public class ValidApiRequestAttribute : Attribute, IHasRequestFilter
+    public sealed class ValidApiRequestAttribute : Attribute, IHasRequestFilter
     {
         public ApplyTo ApplyTo { get; set; }
         public int Priority { get; set; }

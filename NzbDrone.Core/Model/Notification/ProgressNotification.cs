@@ -83,13 +83,26 @@ namespace NzbDrone.Core.Model.Notification
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            if (Status == ProgressNotificationStatus.InProgress)
-            {
-                Logger.Warn("Background task '{0}' was unexpectedly abandoned.", Title);
-                Status = ProgressNotificationStatus.Failed;
-            }
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+         protected virtual void Dispose(bool disposing)
+        {
+             if(disposing)
+             {
+                 if(Status == ProgressNotificationStatus.InProgress)
+                 {
+                     Logger.Warn("Background task '{0}' was unexpectedly abandoned.", Title);
+                     Status = ProgressNotificationStatus.Failed;
+                 }
+             }
         }
 
         #endregion
