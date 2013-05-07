@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 Page = 1,
                                                 PageSize = 10,
                                                 SortKey = "AirDate",
-                                                SortDirection = ListSortDirection.Ascending
+                                                SortDirection = SortDirection.Ascending
                                             }, false);
             episodes.Records.Should().HaveCount(1);
         }
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 Page = 1,
                                                 PageSize = 10,
                                                 SortKey = "AirDate",
-                                                SortDirection = ListSortDirection.Ascending
+                                                SortDirection = SortDirection.Ascending
                                             }, true);
             episodes.Records.Should().HaveCount(2);
         }

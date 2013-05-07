@@ -67,25 +67,25 @@ namespace NzbDrone.Core.Tv
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
         {
+            var currentTime = DateTime.UtcNow;
+            var startingSeasonNumber = 1;
+
             if (includeSpecials)
             {
-                throw new NotImplementedException("Including specials is not available");
+                startingSeasonNumber = 0;
             }
             
-            //This causes an issue if done within the LINQ Query
-            var currentTime = DateTime.UtcNow;
-
             pagingSpec.Records = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                             .Where(e => e.EpisodeFileId == 0)
-                             .AndWhere(e => e.SeasonNumber > 0)
-                             .AndWhere(e => e.AirDate <= currentTime)
-                             .OrderBy(pagingSpec.OrderByClause(), pagingSpec.SortDirection)
-                             .Skip(pagingSpec.PagingOffset())
-                             .Take(pagingSpec.PageSize)
-                             .ToList();
+                                      .Where(e => e.EpisodeFileId == 0)
+                                      .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
+                                      .AndWhere(e => e.AirDate <= currentTime)
+                                      .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                                      .Skip(pagingSpec.PagingOffset())
+                                      .Take(pagingSpec.PageSize)
+                                      .ToList();
 
             //TODO: Use the same query for count and records
-            pagingSpec.TotalRecords = Query.Where(e => e.EpisodeFileId == 0 && e.SeasonNumber > 0 && e.AirDate <= currentTime).GetRowCount();
+            pagingSpec.TotalRecords = Query.Where(e => e.EpisodeFileId == 0 && e.SeasonNumber >= startingSeasonNumber && e.AirDate <= currentTime).Count();
 
             return pagingSpec;
         }

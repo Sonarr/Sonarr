@@ -35,15 +35,13 @@ namespace NzbDrone.Api.Missing
             Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.Page), out page);
             if (page == 0) page = 1;
 
-            var sortKey = PrimitiveExtensions.ToNullSafeString(Request.Query.SortKey)
-                                                   .Equals("Series.Title", StringComparison.InvariantCultureIgnoreCase)
-                                                   ? "Series.Title"
-                                                   : "AirDate";
+            var sortKey = PrimitiveExtensions.ToNullSafeString(Request.Query.SortKey);
+            if (String.IsNullOrEmpty(sortKey)) sortKey = "AirDate";
 
             var sortDirection = PrimitiveExtensions.ToNullSafeString(Request.Query.SortDir)
                                                    .Equals("Asc", StringComparison.InvariantCultureIgnoreCase)
-                                                   ? ListSortDirection.Ascending
-                                                   : ListSortDirection.Descending;
+                                                   ? SortDirection.Ascending
+                                                   : SortDirection.Descending;
 
             var pagingSpec = new PagingSpec<Episode>
                                  {

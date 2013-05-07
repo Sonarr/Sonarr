@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
@@ -78,13 +77,13 @@ namespace Marr.Data.QGen
 
         internal SortBuilder<T> Order(Type declaringType, string propertyName)
         {
-            _sortExpressions.Add(new SortColumn<T>(declaringType, propertyName, ListSortDirection.Ascending));
+            _sortExpressions.Add(new SortColumn<T>(declaringType, propertyName, SortDirection.Asc));
             return this;
         }
 
         internal SortBuilder<T> OrderByDescending(Type declaringType, string propertyName)
         {
-            _sortExpressions.Add(new SortColumn<T>(declaringType, propertyName, ListSortDirection.Descending));
+            _sortExpressions.Add(new SortColumn<T>(declaringType, propertyName, SortDirection.Desc));
             return this;
         }
         
@@ -104,11 +103,11 @@ namespace Marr.Data.QGen
 
         public virtual SortBuilder<T> OrderBy(Expression<Func<T, object>> sortExpression)
         {
-            _sortExpressions.Add(new SortColumn<T>(sortExpression, ListSortDirection.Ascending));
+            _sortExpressions.Add(new SortColumn<T>(sortExpression, SortDirection.Asc));
             return this;
         }
 
-        public virtual SortBuilder<T> OrderBy(Expression<Func<T, object>> sortExpression, ListSortDirection sortDirection)
+        public virtual SortBuilder<T> OrderBy(Expression<Func<T, object>> sortExpression, SortDirection sortDirection)
         {
             _sortExpressions.Add(new SortColumn<T>(sortExpression, sortDirection));
             return this;
@@ -116,17 +115,17 @@ namespace Marr.Data.QGen
 
         public virtual SortBuilder<T> OrderByDescending(Expression<Func<T, object>> sortExpression)
         {
-            _sortExpressions.Add(new SortColumn<T>(sortExpression, ListSortDirection.Descending));
+            _sortExpressions.Add(new SortColumn<T>(sortExpression, SortDirection.Desc));
             return this;
         }
 
         public virtual SortBuilder<T> ThenBy(Expression<Func<T, object>> sortExpression)
         {
-            _sortExpressions.Add(new SortColumn<T>(sortExpression, ListSortDirection.Ascending));
+            _sortExpressions.Add(new SortColumn<T>(sortExpression, SortDirection.Asc));
             return this;
         }
 
-        public virtual SortBuilder<T> ThenBy(Expression<Func<T, object>> sortExpression, ListSortDirection sortDirection)
+        public virtual SortBuilder<T> ThenBy(Expression<Func<T, object>> sortExpression, SortDirection sortDirection)
         {
             _sortExpressions.Add(new SortColumn<T>(sortExpression, sortDirection));
             return this;
@@ -134,7 +133,7 @@ namespace Marr.Data.QGen
 
         public virtual SortBuilder<T> ThenByDescending(Expression<Func<T, object>> sortExpression)
         {
-            _sortExpressions.Add(new SortColumn<T>(sortExpression, ListSortDirection.Descending));
+            _sortExpressions.Add(new SortColumn<T>(sortExpression, SortDirection.Desc));
             return this;
         }
 
@@ -165,6 +164,15 @@ namespace Marr.Data.QGen
         #region - GetRowCount -
 
         public virtual int GetRowCount()
+        {
+            return _baseBuilder.GetRowCount();
+        }
+
+        #endregion
+
+        #region - Count -
+
+        public virtual int Count()
         {
             return _baseBuilder.GetRowCount();
         }
@@ -211,7 +219,7 @@ namespace Marr.Data.QGen
                 string columnName = DataHelper.GetColumnName(sort.DeclaringType, sort.PropertyName, useAltName);
                 sb.Append(_dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName)));
 
-                if (sort.Direction == ListSortDirection.Descending)
+                if (sort.Direction == SortDirection.Desc)
                     sb.Append(" DESC");
             }
 

@@ -20,6 +20,13 @@ namespace NzbDrone.Core.Datastore
             return (pagingSpec.Page - 1)*pagingSpec.PageSize;
         }
 
+        public static Marr.Data.QGen.SortDirection ToSortDirection<TModel>(this PagingSpec<TModel> pagingSpec)
+        {
+            if (pagingSpec.SortDirection == SortDirection.Descending) return Marr.Data.QGen.SortDirection.Desc;
+
+            return Marr.Data.QGen.SortDirection.Asc;
+        }
+
         private static Expression<Func<TModel, object>> CreateExpression<TModel>(string propertyName)
         {
             Type type = typeof(TModel);
