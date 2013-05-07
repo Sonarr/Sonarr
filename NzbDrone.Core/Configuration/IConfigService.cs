@@ -11,12 +11,6 @@ namespace NzbDrone.Core.Configuration
     {
         IEnumerable<Config> All();
         Dictionary<String, Object> AllWithDefaults();
-        String NzbsOrgUId { get; set; }
-        String NzbsOrgHash { get; set; }
-        String NzbsrusUId { get; set; }
-        String NzbsrusHash { get; set; }
-        String FileSharingTalkUid { get; set; }
-        String FileSharingTalkSecret { get; set; }
         String SabHost { get; set; }
         int SabPort { get; set; }
         String SabApiKey { get; set; }
@@ -65,8 +59,6 @@ namespace NzbDrone.Core.Configuration
         string PneumaticDirectory { get; set; }
         string RecycleBin { get; set; }
         int RssSyncInterval { get; set; }
-        string OmgwtfnzbsUsername { get; set; }
-        string OmgwtfnzbsApiKey { get; set; }
         Boolean IgnoreArticlesWhenSortingSeries { get; set; }
         String NzbgetUsername { get; set; }
         String NzbgetPassword { get; set; }

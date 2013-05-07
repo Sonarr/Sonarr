@@ -43,48 +43,6 @@ namespace NzbDrone.Core.Configuration
             return dict;
         }
 
-        public String NzbsOrgUId
-        {
-            get { return GetValue("NzbsOrgUId"); }
-
-            set { SetValue("NzbsOrgUId", value); }
-        }
-
-        public String NzbsOrgHash
-        {
-            get { return GetValue("NzbsOrgHash"); }
-
-            set { SetValue("NzbsOrgHash", value); }
-        }
-
-        public String NzbsrusUId
-        {
-            get { return GetValue("NzbsrusUId"); }
-
-            set { SetValue("NzbsrusUId", value); }
-        }
-
-        public String NzbsrusHash
-        {
-            get { return GetValue("NzbsrusHash"); }
-
-            set { SetValue("NzbsrusHash", value); }
-        }
-
-        public String FileSharingTalkUid
-        {
-            get { return GetValue("FileSharingTalkUid"); }
-
-            set { SetValue("FileSharingTalkUid", value); }
-        }
-
-        public String FileSharingTalkSecret
-        {
-            get { return GetValue("FileSharingTalkSecret"); }
-
-            set { SetValue("FileSharingTalkSecret", value); }
-        }
-
         public String SabHost
         {
             get { return GetValue("SabHost", "localhost"); }
@@ -389,17 +347,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RssSyncInterval", value); }
         }
 
-        public string OmgwtfnzbsUsername
-        {
-            get { return GetValue("OmgwtfnzbsUsername", String.Empty); }
-            set { SetValue("OmgwtfnzbsUsername", value); }
-        }
-
-        public string OmgwtfnzbsApiKey
-        {
-            get { return GetValue("OmgwtfnzbsApiKey", String.Empty); }
-            set { SetValue("OmgwtfnzbsApiKey", value); }
-        }
 
         public Boolean IgnoreArticlesWhenSortingSeries
         {
