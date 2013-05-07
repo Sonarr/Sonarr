@@ -23,7 +23,7 @@ namespace NzbDrone.Common
         {
             Logger.Trace("Finding process with Id:{0}", id);
 
-            var processInfo = ConvertToProcessInfo(Process.GetProcesses().Where(p => p.Id == id).FirstOrDefault());
+            var processInfo = ConvertToProcessInfo(Process.GetProcesses().FirstOrDefault(p => p.Id == id));
 
             if (processInfo == null)
             {
