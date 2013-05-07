@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NLog;
@@ -111,9 +112,14 @@ namespace NzbDrone.Common
                        };
         }
 
-        public void KillAll(string nzbdrone)
+        public virtual void KillAll(string processName)
         {
-            throw new System.NotImplementedException();
+            var processToKill = GetProcessByName(processName);
+
+            foreach (var processInfo in processToKill)
+            {
+                Kill(processInfo.Id);
+            }
         }
     }
 }

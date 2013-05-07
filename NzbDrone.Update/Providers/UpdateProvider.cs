@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 
@@ -63,21 +62,9 @@ namespace NzbDrone.Update.Providers
 
             //TODO:Should be able to restart service if anything beyond this point fails
             logger.Info("Killing all running processes");
-            var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProcessName);
-            foreach (var processInfo in processes)
-            {
-                _processProvider.Kill(processInfo.Id);
-            }
 
-            var consoleProcesses = _processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProcessName);
-            foreach (var processInfo in consoleProcesses)
-            {
-                appType = AppType.Console;
-                _processProvider.Kill(processInfo.Id);
-            }
-
-            logger.Info("Killing all orphan IISExpress processes");
-            _processProvider.KillAll("NzbDrone");
+            _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
+            _processProvider.KillAll(ProcessProvider.NzbDroneProcessName);
 
             logger.Info("Creating backup of existing installation");
             _diskProvider.CopyDirectory(targetFolder, _environmentProvider.GetUpdateBackUpFolder());

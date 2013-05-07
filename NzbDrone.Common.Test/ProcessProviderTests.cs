@@ -11,16 +11,13 @@ using NzbDrone.Test.Dummy;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class ProcessProviderTests : TestBase
+    public class ProcessProviderTests : TestBase<ProcessProvider>
     {
-
-        ProcessProvider _processProvider;
 
         [SetUp]
         public void Setup()
         {
             Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c => c.Kill());
-            _processProvider = new ProcessProvider();
         }
 
         [TearDown]
@@ -33,14 +30,14 @@ namespace NzbDrone.Common.Test
         [TestCase(123332324)]
         public void Kill_should_not_fail_on_invalid_process_is(int processId)
         {
-            _processProvider.Kill(processId);
+            Subject.Kill(processId);
             ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
         public void GetById_should_return_null_if_process_doesnt_exist()
         {
-            _processProvider.GetProcessById(1234567).Should().BeNull();
+            Subject.GetProcessById(1234567).Should().BeNull();
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -50,7 +47,7 @@ namespace NzbDrone.Common.Test
         [TestCase(9999)]
         public void GetProcessById_should_return_null_for_invalid_process(int processId)
         {
-            _processProvider.GetProcessById(processId).Should().BeNull();
+            Subject.GetProcessById(processId).Should().BeNull();
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -59,7 +56,7 @@ namespace NzbDrone.Common.Test
         public void Should_be_able_to_kill_procces()
         {
             var dummyProcess = StartDummyProcess();
-            _processProvider.Kill(dummyProcess.Id);
+            Subject.Kill(dummyProcess.Id);
             dummyProcess.HasExited.Should().BeTrue();
         }
 
@@ -68,19 +65,31 @@ namespace NzbDrone.Common.Test
         {
             var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
 
-            
-            _processProvider.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
-                .BeEmpty("Dummy process is already running");
-            _processProvider.Start(startInfo).Should().NotBeNull();
 
-            _processProvider.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
+            Subject.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
+                .BeEmpty("Dummy process is already running");
+            Subject.Start(startInfo).Should().NotBeNull();
+
+            Subject.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
                 .HaveCount(1, "excepted one dummy process to be already running");
+        }
+
+        [Test]
+        public void kill_all_should_kill_all_process_with_name()
+        {
+            var dummy1 = StartDummyProcess();
+            var dummy2 = StartDummyProcess();
+
+            Subject.KillAll(dummy1.ProcessName);
+
+            dummy1.HasExited.Should().BeTrue();
+            dummy2.HasExited.Should().BeTrue();
         }
 
         public Process StartDummyProcess()
         {
             var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
-            return _processProvider.Start(startInfo);
+            return Subject.Start(startInfo);
         }
 
         [Test]

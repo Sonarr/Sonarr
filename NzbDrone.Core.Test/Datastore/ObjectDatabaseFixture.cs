@@ -108,7 +108,6 @@ namespace NzbDrone.Core.Test.Datastore
                 {
                     Name = "Address",
                     Interval = 12
-
                 };
 
             Subject.Insert(childModel);
@@ -118,8 +117,7 @@ namespace NzbDrone.Core.Test.Datastore
 
             Subject.SetFields(childModel, t => t.Name);
 
-            Db.All<JobDefinition>().Single().Name.Should().Be("Address");
-            Db.All<JobDefinition>().Single().Name.Should().Be("B");
+            Db.All<JobDefinition>().Single().Name.Should().Be("A");
             Db.All<JobDefinition>().Single().Interval.Should().Be(12);
         }
 

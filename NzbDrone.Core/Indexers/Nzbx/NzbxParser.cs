@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Core.Parser.Model;
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Indexers.Nzbx
             var jsonReader = new JsonTextReader(new StreamReader(source));
             var feed = _serializer.Deserialize<List<NzbxRecentItem>>(jsonReader);
 
-            foreach (var item in feed)
+            foreach (var item in feed.Where(c => !string.IsNullOrWhiteSpace(c.Name)))
             {
                 try
                 {

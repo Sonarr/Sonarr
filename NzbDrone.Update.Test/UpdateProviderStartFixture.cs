@@ -101,9 +101,8 @@ namespace NzbDrone.Update.Test
             
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
-            
-            Mocker.GetMock<ProcessProvider>().Verify(c => c.Kill(proccesses[0].Id), Times.Once());
-            Mocker.GetMock<ProcessProvider>().Verify(c => c.Kill(proccesses[1].Id), Times.Once());
+
+            Mocker.GetMock<ProcessProvider>().Verify(c => c.KillAll(ProcessProvider.NzbDroneProcessName), Times.Once());
         }
 
         [Test]
