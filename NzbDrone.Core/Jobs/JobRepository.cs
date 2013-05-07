@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Jobs
 
         public void Handle(ApplicationStartedEvent message)
         {
-            var currentJobs = All().ToList();
+           /* var currentJobs = All().ToList();
 
 
             var timers = new[]
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Jobs
                 currentDefinition.Interval = job.Interval;
 
                 Upsert(currentDefinition);
-            }
+            }*/
         }
     }
 }

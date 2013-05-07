@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Jobs
         {
             _timer.Interval = 1000 * 30;
             _timer.Elapsed += (o, args) => ExecuteCommands();
-            _timer.Start();
+            //_timer.Start();
         }
 
         private void ExecuteCommands()
