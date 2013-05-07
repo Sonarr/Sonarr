@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Tv.Events;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.MediaFiles
 {
-    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>
+    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IExecute<CleanUpRecycleBinCommand>
     {
         private readonly DiskProvider _diskProvider;
         private readonly IConfigService _configService;
@@ -139,7 +139,15 @@ namespace NzbDrone.Core.Providers
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            DeleteDirectory(message.Series.Path);
+            if (message.DeleteFiles)
+            {
+                DeleteDirectory(message.Series.Path);
+            }
+        }
+
+        public void Execute(CleanUpRecycleBinCommand message)
+        {
+            Cleanup();
         }
     }
 }

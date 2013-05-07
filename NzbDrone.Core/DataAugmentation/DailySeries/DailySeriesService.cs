@@ -4,6 +4,8 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
 {
     public class DailySeriesService
     {
+        //TODO: add timer command
+
         private readonly IDailySeriesDataProxy _proxy;
         private readonly ISeriesService _seriesService;
 

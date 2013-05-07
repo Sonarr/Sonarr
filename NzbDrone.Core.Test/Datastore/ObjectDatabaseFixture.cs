@@ -106,21 +106,19 @@ namespace NzbDrone.Core.Test.Datastore
         {
             var childModel = new JobDefinition
                 {
-                    Type = "Address",
-                    Name = "Name",
+                    Name = "Address",
                     Interval = 12
 
                 };
 
             Subject.Insert(childModel);
 
-            childModel.Type = "A";
-            childModel.Name = "B";
+            childModel.Name = "A";
             childModel.Interval = 0;
 
             Subject.SetFields(childModel, t => t.Name);
 
-            Db.All<JobDefinition>().Single().Type.Should().Be("Address");
+            Db.All<JobDefinition>().Single().Name.Should().Be("Address");
             Db.All<JobDefinition>().Single().Name.Should().Be("B");
             Db.All<JobDefinition>().Single().Interval.Should().Be(12);
         }

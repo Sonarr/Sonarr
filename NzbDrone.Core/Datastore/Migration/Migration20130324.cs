@@ -92,8 +92,6 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("Name").AsString().Unique();
 
             Create.TableForModel("JobDefinitions")
-                  .WithColumn("Enable").AsBoolean()
-                  .WithColumn("Type").AsString().Unique()
                   .WithColumn("Name").AsString().Unique()
                   .WithColumn("Interval").AsInt32()
                   .WithColumn("LastExecution").AsDateTime()

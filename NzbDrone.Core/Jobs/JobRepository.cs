@@ -4,7 +4,9 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -16,60 +18,60 @@ namespace NzbDrone.Core.Jobs
 
     public class JobRepository : BasicRepository<JobDefinition>, IJobRepository, IHandle<ApplicationStartedEvent>
     {
-        private readonly IEnumerable<IJob> _jobs;
         private readonly Logger _logger;
 
-        public JobRepository(IDatabase database, IEnumerable<IJob> jobs, Logger logger, IMessageAggregator messageAggregator)
+        public JobRepository(IDatabase database, Logger logger, IMessageAggregator messageAggregator)
             : base(database, messageAggregator)
         {
-            _jobs = jobs;
             _logger = logger;
         }
 
         public JobDefinition GetDefinition(Type type)
         {
-            return Query.Single(c => c.Type == type.FullName);
+            return Query.Single(c => c.Name == type.FullName);
         }
 
 
         public IList<JobDefinition> GetPendingJobs()
         {
-            return Query.Where(c => c.Enable == true && c.Interval != 2).ToList().Where(c => c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
+            return Query.Where(c => c.Interval != 0).ToList().Where(c => c.LastExecution < DateTime.Now.AddMinutes(-c.Interval)).ToList();
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             var currentJobs = All().ToList();
-            _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count());
 
-            foreach (var currentJob in currentJobs)
-            {
-                if (_jobs.All(c => c.GetType().ToString() != currentJob.Type))
+
+            var timers = new[]
                 {
-                    _logger.Debug("Removing job from database '{0}'", currentJob.Name);
-                    Delete(currentJob.Id);
+                    new JobDefinition{ Interval = 25, Name = typeof(RssSyncCommand).FullName},
+                    new JobDefinition{ Interval = 24*60, Name = typeof(UpdateXemMappings).FullName}
+                };
+
+
+            _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", timers.Count(), currentJobs.Count());
+
+            foreach (var job in currentJobs)
+            {
+                if (!timers.Any(c => c.Name == job.Name))
+                {
+                    _logger.Debug("Removing job from database '{0}'", job.Name);
+                    Delete(job.Id);
                 }
             }
 
-            foreach (var job in _jobs)
+            foreach (var job in timers)
             {
-                var jobDefinition = currentJobs.SingleOrDefault(c => c.Type == job.GetType().ToString());
+                var currentDefinition = currentJobs.SingleOrDefault(c => c.Name == job.GetType().ToString());
 
-                if (jobDefinition == null)
+                if (currentDefinition == null)
                 {
-                    jobDefinition = new JobDefinition
-                    {
-                        Type = job.GetType().ToString(),
-                        LastExecution = DateTime.Now
-                    };
+                    currentDefinition = job;
                 }
 
-                jobDefinition.Enable = job.DefaultInterval.TotalSeconds > 0;
-                jobDefinition.Name = job.Name;
+                currentDefinition.Interval = job.Interval;
 
-                jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
-
-                Upsert(jobDefinition);
+                Upsert(currentDefinition);
             }
         }
     }

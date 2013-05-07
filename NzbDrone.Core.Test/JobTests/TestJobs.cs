@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Linq;
 using System.Threading;
 using NzbDrone.Core.Jobs;
@@ -66,3 +67,4 @@ namespace NzbDrone.Core.Test.JobTests
         }
     }
 }
+*/

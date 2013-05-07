@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿/*
 using System;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
@@ -42,11 +42,10 @@ namespace NzbDrone.Core.Test.JobTests
             Storage.All().Should().HaveCount(1);
             StoredModel.Interval.Should().Be((Int32)_fakeJob.DefaultInterval.TotalMinutes);
             StoredModel.Name.Should().Be(_fakeJob.Name);
-            StoredModel.Type.Should().Be(_fakeJob.GetType().ToString());
+            StoredModel.Name.Should().Be(_fakeJob.GetType().ToString());
             StoredModel.LastExecution.Should().HaveYear(DateTime.Now.Year);
             StoredModel.LastExecution.Should().HaveMonth(DateTime.Now.Month);
             StoredModel.LastExecution.Should().HaveDay(DateTime.Today.Day);
-            StoredModel.Enable.Should().BeTrue();
         }
 
         [Test]
@@ -63,13 +62,13 @@ namespace NzbDrone.Core.Test.JobTests
 
             //Make sure deleted job is stored
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(c => c.Type == deletedJob.Type);
+            AllStoredModels.Should().Contain(c => c.Name == deletedJob.Name);
 
             Initialize();
 
             //Make sure init has cleaned up the deleted job
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().NotContain(c => c.Type == deletedJob.Type);
+            AllStoredModels.Should().NotContain(c => c.Name == deletedJob.Name);
         }
 
         [Test]
@@ -87,13 +86,13 @@ namespace NzbDrone.Core.Test.JobTests
 
             //Make sure deleted job is stored
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(c => c.Type == deletedJob.Type);
+            AllStoredModels.Should().Contain(c => c.Name == deletedJob.Name);
 
             Initialize();
 
             //Make sure init has cleaned up the deleted job
             AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().NotContain(c => c.Type == deletedJob.Type);
+            AllStoredModels.Should().NotContain(c => c.Name == deletedJob.Name);
         }
 
         [Test]
@@ -103,9 +102,8 @@ namespace NzbDrone.Core.Test.JobTests
             var oldJob = Builder<JobDefinition>.CreateNew()
                 .With(c => c.Id = 0)
                 .With(c => c.Name = "OldName")
-                .With(c => c.Type = typeof(FakeJob).ToString())
+                .With(c => c.Name = typeof(FakeJob).ToString())
                 .With(c => c.Interval = 0)
-                .With(c => c.Enable = true)
                 .With(c => c.Success = true)
                 .With(c => c.LastExecution = DateTime.Now.AddDays(-7).Date)
                 .Build();
@@ -121,25 +119,11 @@ namespace NzbDrone.Core.Test.JobTests
 
 
             AllStoredModels.Should().HaveCount(1);
-            StoredModel.Type.Should().Be(newJob.GetType().FullName);
+            StoredModel.Name.Should().Be(newJob.GetType().FullName);
             StoredModel.Name.Should().Be(newJob.Name);
             StoredModel.Interval.Should().Be((int)newJob.DefaultInterval.TotalMinutes);
-            StoredModel.Enable.Should().Be(true);
             StoredModel.Success.Should().Be(oldJob.Success);
             StoredModel.LastExecution.Should().Be(oldJob.LastExecution);
-        }
-
-        [Test]
-        public void jobs_with_zero_interval_are_registered_as_disabled()
-        {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { _disabledJob };
-            Mocker.SetConstant(fakeJobs);
-
-            Initialize();
-
-
-            Storage.All().Should().HaveCount(1);
-            Storage.All().First().Enable.Should().BeFalse();
         }
 
 
@@ -149,7 +133,6 @@ namespace NzbDrone.Core.Test.JobTests
             var oldJob = Builder<JobDefinition>.CreateNew()
              .With(c => c.Id = 0)
              .With(c => c.Interval = 1)
-             .With(c => c.Enable = true)
              .With(c => c.Success = true)
              .With(c => c.LastExecution = DateTime.Now.AddMinutes(-5))
              .Build();
@@ -168,7 +151,6 @@ namespace NzbDrone.Core.Test.JobTests
             var recent = Builder<JobDefinition>.CreateNew()
              .With(c => c.Id = 0)
              .With(c => c.Interval = 60)
-             .With(c => c.Enable = true)
              .With(c => c.Success = true)
              .With(c => c.LastExecution = DateTime.Now.AddMinutes(-5))
              .Build();
@@ -193,7 +175,8 @@ namespace NzbDrone.Core.Test.JobTests
 
 
                     disabledJob.ExecutionCount.Should().Be(0);
-                }*/
+                }#1#
 
     }
 }
+*/

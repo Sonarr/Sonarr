@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Providers
 {
-    public class XemProvider
+    public class XemProvider :IExecute<UpdateXemMappings>
     {
         private readonly IEpisodeService _episodeService;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
@@ -116,6 +117,11 @@ namespace NzbDrone.Core.Providers
             {
                 _logger.WarnException("Error updating scene numbering mappings for: " + series, ex);
             }
+        }
+
+        public void Execute(UpdateXemMappings message)
+        {
+            UpdateMappings();
         }
     }
 }
