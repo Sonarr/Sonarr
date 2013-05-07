@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using FluentMigrator.Runner;
 using Marr.Data;
 using Marr.Data.QGen;
 using NzbDrone.Common.Messaging;
@@ -65,40 +67,25 @@ namespace NzbDrone.Core.Tv
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
         {
-            //TODO: Join in the series title so we can do sorting on it
-            if (!pagingSpec.SortKey.Equals("SeriesTitle", StringComparison.InvariantCultureIgnoreCase) &&
-                !pagingSpec.SortKey.Equals("AirDate", StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new ArgumentException("Invalid SortKey: " + pagingSpec.SortKey, "pagingSpec");
-            }
-
             if (includeSpecials)
             {
                 throw new NotImplementedException("Including specials is not available");
             }
-
-            var orderSql = String.Format("{0} {1}", pagingSpec.SortKey,
-                                         pagingSpec.SortDirection == ListSortDirection.Ascending ? "ASC" : "DESC");
-
-            var limitSql = String.Format("{0},{1}", (pagingSpec.Page - 1) * pagingSpec.PageSize, pagingSpec.PageSize);
-
+            
+            //This causes an issue if done within the LINQ Query
             var currentTime = DateTime.UtcNow;
-            _dataMapper.AddParameter("currentTime", currentTime);
 
-            var sql = String.Format(@"SELECT Episodes.*, Series.Title as SeriesTitle
-                                      FROM Episodes
-                                      INNER JOIN Series
-                                      ON Episodes.SeriesId = Series.Id
-                                      WHERE EpisodeFileId = 0
-                                      AND SeasonNumber > 0
-                                      AND AirDate <= @currentTime
-                                      ORDER BY {0}
-                                      LIMIT {1}",
-                                      orderSql, limitSql
-                                   );
+            pagingSpec.Records = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                             .Where(e => e.EpisodeFileId == 0)
+                             .AndWhere(e => e.SeasonNumber > 0)
+                             .AndWhere(e => e.AirDate <= currentTime)
+                             .OrderBy(pagingSpec.OrderByClause(), pagingSpec.SortDirection)
+                             .Skip(pagingSpec.PagingOffset())
+                             .Take(pagingSpec.PageSize)
+                             .ToList();
 
-            pagingSpec.Records = _dataMapper.Query<Episode>(sql);
-            pagingSpec.TotalRecords = Query.Count(e => e.EpisodeFileId == 0 && e.SeasonNumber > 0 && e.AirDate <= currentTime);
+            //TODO: Use the same query for count and records
+            pagingSpec.TotalRecords = Query.Where(e => e.EpisodeFileId == 0 && e.SeasonNumber > 0 && e.AirDate <= currentTime).GetRowCount();
 
             return pagingSpec;
         }

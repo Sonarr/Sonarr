@@ -69,6 +69,24 @@ namespace NzbDrone.Api.History
 //                                                           Series = series,
                                                            Indexer = "nzbs.org",
                                                            Quality = new QualityModel(Quality.HDTV720p)
+                                                       },
+                                                    new Core.History.History
+                                                        {
+                                                            Id = 2,
+                                                            Date = DateTime.UtcNow.AddDays(-1),
+        //                                                           Episode = episode,
+        //                                                           Series = series,
+                                                            Indexer = "nzbs.org",
+                                                            Quality = new QualityModel(Quality.SDTV, true)
+                                                        },
+                                                    new Core.History.History
+                                                       {
+                                                           Id = 3,
+                                                           Date = DateTime.UtcNow.AddDays(-5),
+//                                                           Episode = episode,
+//                                                           Series = series,
+                                                           Indexer = "nzbs.org",
+                                                           Quality = new QualityModel(Quality.WEBDL1080p)
                                                        }
                                                }
                              };

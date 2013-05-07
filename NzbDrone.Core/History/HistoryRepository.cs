@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using NzbDrone.Common.Messaging;
@@ -39,5 +40,7 @@ namespace NzbDrone.Core.History
 
             return null;
         }
+
+        //public List<History> GetPagedHistory() 
     }
 }

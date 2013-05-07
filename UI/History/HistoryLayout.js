@@ -19,10 +19,17 @@ define([
 
                 var columns = [
                     {
+                        name      : 'indexer',
+                        label     : '',
+                        editable  : false,
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/IndexerTemplate' }),
+                        headerCell: 'nzbDrone'
+                    },
+                    {
                         name      : 'seriesTitle',
                         label     : 'Series Title',
                         editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/SeriesTitleTemplate' }),
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
@@ -30,11 +37,11 @@ define([
                         label     : 'Episode',
                         editable  : false,
                         sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/EpisodeColumnTemplate' }),
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name      : 'title',
+                        name      : 'episode.title',
                         label     : 'Episode Title',
                         editable  : false,
                         sortable  : false,
@@ -42,8 +49,15 @@ define([
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name      : 'airDate',
-                        label     : 'Air Date',
+                        name      : 'quality',
+                        label     : 'Quality',
+                        editable  : false,
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/QualityTemplate' }),
+                        headerCell: 'nzbDrone'
+                    },
+                    {
+                        name      : 'date',
+                        label     : 'Grabbed',
                         editable  : false,
                         cell      : 'airDate',
                         headerCell: 'nzbDrone'

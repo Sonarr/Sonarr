@@ -1,6 +1,6 @@
 ﻿"use strict";
 define(['app', 'History/Model'], function () {
-    NzbDrone.Missing.Collection = Backbone.PageableCollection.extend({
+    NzbDrone.History.Collection = Backbone.PageableCollection.extend({
         url       : NzbDrone.Constants.ApiRoot + '/history',
         model     : NzbDrone.History.Model,
 

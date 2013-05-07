@@ -36,8 +36,8 @@ namespace NzbDrone.Api.Missing
             if (page == 0) page = 1;
 
             var sortKey = PrimitiveExtensions.ToNullSafeString(Request.Query.SortKey)
-                                                   .Equals("SeriesTitle", StringComparison.InvariantCultureIgnoreCase)
-                                                   ? "SeriesTitle"
+                                                   .Equals("Series.Title", StringComparison.InvariantCultureIgnoreCase)
+                                                   ? "Series.Title"
                                                    : "AirDate";
 
             var sortDirection = PrimitiveExtensions.ToNullSafeString(Request.Query.SortDir)

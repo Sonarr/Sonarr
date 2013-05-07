@@ -67,10 +67,6 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<SeriesStatistics>().MapResultSet();
         }
 
-
-
-
-
         private static void RegisterMappers()
         {
             RegisterEmbeddedConverter();

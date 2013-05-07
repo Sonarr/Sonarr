@@ -56,6 +56,9 @@ namespace Marr.Data.QGen
                 case DB_SqlCeClient:
                     return new RowCountQueryDecorator(innerQuery);
 
+                case DB_SQLiteClient:
+                    return new SqliteRowCountQueryDecorator(innerQuery);
+
                 default:
                     throw new NotImplementedException("Row count has not yet been implemented for this provider.");
             }
@@ -73,6 +76,9 @@ namespace Marr.Data.QGen
 
                 case DB_SqlCeClient:
                     return new PagingQueryDecorator(innerQuery, skip, take);
+
+                case DB_SQLiteClient:
+                    return new SqlitePagingQueryDecorator(innerQuery, skip, take);
 
                 default:
                     throw new NotImplementedException("Paging has not yet been implemented for this provider.");

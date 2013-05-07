@@ -72,6 +72,8 @@
     <Compile Include="IDataMapper.cs" />
     <Compile Include="LazyLoaded.cs" />
     <Compile Include="Mapping\FluentMappings.cs" />
+    <Compile Include="QGen\SqliteRowCountQueryDecorator.cs" />
+    <Compile Include="QGen\SqlitePagingQueryDecorator.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="UnitOfWorkSharedContext.cs" />
     <Compile Include="Mapping\ColumnMapBuilder.cs" />

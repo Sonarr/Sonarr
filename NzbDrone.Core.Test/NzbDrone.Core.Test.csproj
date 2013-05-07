@@ -120,6 +120,7 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
+    <Compile Include="Datastore\PagingSpecExtenstionsTests\OrderByClauseFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />

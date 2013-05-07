@@ -20,7 +20,7 @@ define([
 
                 var columns = [
                     {
-                        name      : 'seriesTitle',
+                        name      : 'series.Title',
                         label     : 'Series Title',
                         editable  : false,
                         cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' }),
