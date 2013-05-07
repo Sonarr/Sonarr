@@ -195,19 +195,19 @@ namespace NzbDrone.Common
 
 		private void RegisterUrl(int portNumber)
 		{
-		    var arguments = String.Format("http add urlacl http://+:{0}/ user=EVERYONE", portNumber);
+		    var arguments = String.Format("http add urlacl http://*:{0}/ user=EVERYONE", portNumber);
 		    RunNetsh(arguments);
 		}
 
 		private void UnregisterUrl(int portNumber)
 		{
-		    var arguments = String.Format("http delete urlacl http://+:{0}/", portNumber);
+		    var arguments = String.Format("http delete urlacl http://*:{0}/", portNumber);
             RunNetsh(arguments);
 		}
 
         private bool CheckIfUrlIsRegisteredUrl(int portNumber)
         {
-            var url = String.Format("http://+:{0}/", portNumber);
+            var url = String.Format("http://*:{0}/", portNumber);
             var arguments = String.Format("http show urlacl url=\"{0}\"", url);
             var output = RunNetsh(arguments);
 
