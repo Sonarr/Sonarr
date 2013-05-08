@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NzbDrone.Common.Messaging;
 using TinyIoC;
 
 namespace NzbDrone.Common
@@ -27,9 +28,16 @@ namespace NzbDrone.Common
 
         private void AutoRegisterInterfaces()
         {
-            var interfaces = _loadedTypes.Where(t => t.IsInterface);
+            var simpleInterfaces = _loadedTypes.Where(t => t.IsInterface).ToList();
+            var appliedInterfaces = _loadedTypes.SelectMany(t => t.GetInterfaces()).Where(i => i.Assembly.FullName.Contains("NzbDrone")).ToList();
 
-            foreach (var contract in interfaces)
+            var contracts = simpleInterfaces.Union(appliedInterfaces)
+                .Except(new List<Type> { typeof(IMessage), typeof(ICommand), typeof(IEvent) });
+
+
+            var count = contracts.Count();
+
+            foreach (var contract in simpleInterfaces.Union(contracts))
             {
                 AutoRegisterImplementations(contract);
             }

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using NLog;
 
@@ -9,24 +8,20 @@ namespace NzbDrone.Common.Messaging
     public class MessageAggregator : IMessageAggregator
     {
         private readonly Logger _logger;
-        private readonly Func<IEnumerable<IProcessMessage>> _handlerFactory;
+        private readonly IServiceFactory _serviceFactory;
 
-        public MessageAggregator(Logger logger, Func<IEnumerable<IProcessMessage>> handlers)
+        public MessageAggregator(Logger logger, IServiceFactory serviceFactory)
         {
             _logger = logger;
-            _handlerFactory = handlers;
+            _serviceFactory = serviceFactory;
         }
 
         public void PublishEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
             _logger.Trace("Publishing {0}", @event.GetType().Name);
 
-
-            var handlers = _handlerFactory().ToList();
-
-
             //call synchronous handlers first.
-            foreach (var handler in handlers.OfType<IHandle<TEvent>>())
+            foreach (var handler in _serviceFactory.BuildAll<IHandle<TEvent>>())
             {
                 try
                 {
@@ -40,7 +35,7 @@ namespace NzbDrone.Common.Messaging
                 }
             }
 
-            foreach (var handler in handlers.OfType<IHandleAsync<TEvent>>())
+            foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<TEvent>>())
             {
                 var handlerLocal = handler;
                 Task.Factory.StartNew(() =>
@@ -55,10 +50,27 @@ namespace NzbDrone.Common.Messaging
 
         public void PublishCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
+            var handlerContract = typeof(IExecute<>).MakeGenericType(command.GetType());
+
             _logger.Trace("Publishing {0}", command.GetType().Name);
-            var handler = _handlerFactory().OfType<IExecute<TCommand>>().Single();
+
+            var handler = _serviceFactory.Build(handlerContract);
+
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
-            handler.Execute(command);
+            
+            try
+            {
+                handlerContract.GetMethod("Execute").Invoke(handler, new object[] { command });
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException != null)
+                {
+                    throw e.InnerException;
+                }
+                throw;
+            }
+
             _logger.Debug("{0} <- {1}", command.GetType().Name, handler.GetType().Name);
         }
     }

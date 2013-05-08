@@ -116,7 +116,9 @@
     <Compile Include="Expansive\TreeNodeList.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
+    <Compile Include="Messaging\MessageExtensions.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
+    <Compile Include="ServiceFactory.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
@@ -160,9 +162,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Expansive\license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

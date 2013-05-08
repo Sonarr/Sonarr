@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         curl: {
-            'UI/JsLibraries/backbone.js'                    : 'http://backbonejs.org/backbone.js',
+            'UI/JsLibraries/backbone.js'                    : 'http://documentcloud.github.io/backbone/backbone.js',
             'UI/JsLibraries/backbone.marionette.js'         : 'http://marionettejs.com/downloads/backbone.marionette.js',
             'UI/JsLibraries/backbone.modelbinder.js'        : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
             'UI/JsLibraries/backbone.mutators.js'           : 'http://raw.github.com/asciidisco/Backbone.Mutators/master/backbone.mutators.js',

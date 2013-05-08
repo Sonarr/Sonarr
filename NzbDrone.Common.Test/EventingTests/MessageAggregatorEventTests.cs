@@ -8,33 +8,42 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.EventingTests
 {
     [TestFixture]
-    public class MessageAggregatorEventTests : TestBase
+    public class MessageAggregatorEventTests : TestBase<MessageAggregator>
     {
+        private Mock<IHandle<EventA>> HandlerA1;
+        private Mock<IHandle<EventA>> HandlerA2;
+
+        private Mock<IHandle<EventB>> HandlerB1;
+        private Mock<IHandle<EventB>> HandlerB2;
+
+
+        [SetUp]
+        public void Setup()
+        {
+            HandlerA1 = new Mock<IHandle<EventA>>();
+            HandlerA2 = new Mock<IHandle<EventA>>();
+            HandlerB1 = new Mock<IHandle<EventB>>();
+            HandlerB2 = new Mock<IHandle<EventB>>();
+
+            Mocker.GetMock<IServiceFactory>()
+                  .Setup(c => c.BuildAll<IHandle<EventA>>())
+                  .Returns(new List<IHandle<EventA>> { HandlerA1.Object, HandlerA2.Object });
+
+            Mocker.GetMock<IServiceFactory>()
+                  .Setup(c => c.BuildAll<IHandle<EventB>>())
+                  .Returns(new List<IHandle<EventB>> { HandlerB1.Object, HandlerB2.Object });
+
+        }
+
         [Test]
         public void should_publish_event_to_handlers()
         {
             var eventA = new EventA();
 
+            Subject.PublishEvent(eventA);
 
-            var intHandler = new Mock<IHandle<EventA>>();
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { intHandler.Object });
-            aggregator.PublishEvent(eventA);
-
-            intHandler.Verify(c => c.Handle(eventA), Times.Once());
-        }
-
-        [Test]
-        public void should_publish_to_more_than_one_handler()
-        {
-            var eventA = new EventA();
-
-            var intHandler1 = new Mock<IHandle<EventA>>();
-            var intHandler2 = new Mock<IHandle<EventA>>();
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { intHandler1.Object, intHandler2.Object });
-            aggregator.PublishEvent(eventA);
-
-            intHandler1.Verify(c => c.Handle(eventA), Times.Once());
-            intHandler2.Verify(c => c.Handle(eventA), Times.Once());
+            HandlerA1.Verify(c => c.Handle(eventA), Times.Once());
+            HandlerA2.Verify(c => c.Handle(eventA), Times.Once());
         }
 
         [Test]
@@ -42,14 +51,14 @@ namespace NzbDrone.Common.Test.EventingTests
         {
             var eventA = new EventA();
 
-            var aHandler = new Mock<IHandle<EventA>>();
-            var bHandler = new Mock<IHandle<EventB>>();
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { aHandler.Object, bHandler.Object });
 
-            aggregator.PublishEvent(eventA);
+            Subject.PublishEvent(eventA);
 
-            aHandler.Verify(c => c.Handle(eventA), Times.Once());
-            bHandler.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
+            HandlerA1.Verify(c => c.Handle(eventA), Times.Once());
+            HandlerA2.Verify(c => c.Handle(eventA), Times.Once());
+
+            HandlerB1.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
+            HandlerB2.Verify(c => c.Handle(It.IsAny<EventB>()), Times.Never());
         }
 
 
@@ -58,19 +67,14 @@ namespace NzbDrone.Common.Test.EventingTests
         {
             var eventA = new EventA();
 
-            var intHandler1 = new Mock<IHandle<EventA>>();
-            var intHandler2 = new Mock<IHandle<EventA>>();
-            var intHandler3 = new Mock<IHandle<EventA>>();
 
-            intHandler2.Setup(c => c.Handle(It.IsAny<EventA>()))
+            HandlerA1.Setup(c => c.Handle(It.IsAny<EventA>()))
                        .Throws(new NotImplementedException());
 
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { intHandler1.Object, intHandler2.Object , intHandler3.Object});
-            aggregator.PublishEvent(eventA);
+            Subject.PublishEvent(eventA);
 
-            intHandler1.Verify(c => c.Handle(eventA), Times.Once());
-            intHandler3.Verify(c => c.Handle(eventA), Times.Once());
-
+            HandlerA1.Verify(c => c.Handle(eventA), Times.Once());
+            HandlerA2.Verify(c => c.Handle(eventA), Times.Once());
 
             ExceptionVerification.ExpectedErrors(1);
         }

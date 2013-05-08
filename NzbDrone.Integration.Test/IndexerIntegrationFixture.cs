@@ -1,7 +1,5 @@
-﻿using System.IO;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.RootFolders;
 
 namespace NzbDrone.Integration.Test
 {
@@ -13,10 +11,8 @@ namespace NzbDrone.Integration.Test
         {
             var indexers = Indexers.All();
 
-
             indexers.Should().NotBeEmpty();
             indexers.Should().NotContain(c => string.IsNullOrWhiteSpace(c.Name));
-
         }
     }
 }

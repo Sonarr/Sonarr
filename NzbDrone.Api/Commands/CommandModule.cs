@@ -23,13 +23,13 @@ namespace NzbDrone.Api.Commands
         {
             var commandType = _commands.Single(c => c.GetType().Name.Replace("Command", "").Equals(resource.Command, StringComparison.InvariantCultureIgnoreCase))
                                        .GetType();
-            var command = (object)Request.Body.FromJson<ICommand>(commandType);
-            var method = typeof(IMessageAggregator).GetMethod("PublishCommand");
-            var genericMethod = method.MakeGenericMethod(commandType);
-            genericMethod.Invoke(_messageAggregator, new[] { command });
+
+
+            var command = Request.Body.FromJson<ICommand>(commandType);
+
+            _messageAggregator.PublishCommand(command);
 
             return resource;
-
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Messaging;
@@ -8,31 +7,35 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.EventingTests
 {
     [TestFixture]
-    public class MessageAggregatorCommandTests : TestBase
+    public class MessageAggregatorCommandTests : TestBase<MessageAggregator>
     {
+        private Mock<IExecute<CommandA>> _executorA;
+        private Mock<IExecute<CommandB>> _executorB;
+
+        [SetUp]
+        public void Setup()
+        {
+            _executorA = new Mock<IExecute<CommandA>>();
+            _executorB = new Mock<IExecute<CommandB>>();
+
+            Mocker.GetMock<IServiceFactory>()
+                  .Setup(c => c.Build(typeof(IExecute<CommandA>)))
+                  .Returns(_executorA.Object);
+
+            Mocker.GetMock<IServiceFactory>()
+                  .Setup(c => c.Build(typeof(IExecute<CommandB>)))
+                  .Returns(_executorB.Object);
+
+        }
+
         [Test]
         public void should_publish_command_to_executor()
         {
             var commandA = new CommandA();
 
-            var executor = new Mock<IExecute<CommandA>>();
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { executor.Object });
-            aggregator.PublishCommand(commandA);
+            Subject.PublishCommand(commandA);
 
-            executor.Verify(c => c.Execute(commandA), Times.Once());
-        }
-
-
-        [Test]
-        public void should_throw_if_more_than_one_handler()
-        {
-            var commandA = new CommandA();
-
-            var executor1 = new Mock<IExecute<CommandA>>();
-            var executor2 = new Mock<IExecute<CommandA>>();
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { executor1.Object, executor2.Object });
-
-            Assert.Throws<InvalidOperationException>(() => aggregator.PublishCommand(commandA));
+            _executorA.Verify(c => c.Execute(commandA), Times.Once());
         }
 
         [Test]
@@ -40,14 +43,11 @@ namespace NzbDrone.Common.Test.EventingTests
         {
             var commandA = new CommandA();
 
-            var executor1 = new Mock<IExecute<CommandA>>();
-            var executor2 = new Mock<IExecute<CommandB>>();
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { executor1.Object, executor2.Object });
 
-            aggregator.PublishCommand(commandA);
+            Subject.PublishCommand(commandA);
 
-            executor1.Verify(c => c.Execute(commandA), Times.Once());
-            executor2.Verify(c => c.Execute(It.IsAny<CommandB>()), Times.Never());
+            _executorA.Verify(c => c.Execute(commandA), Times.Once());
+            _executorB.Verify(c => c.Execute(It.IsAny<CommandB>()), Times.Never());
         }
 
         [Test]
@@ -55,13 +55,10 @@ namespace NzbDrone.Common.Test.EventingTests
         {
             var commandA = new CommandA();
 
-            var executor = new Mock<IExecute<CommandA>>();
-
-            executor.Setup(c => c.Execute(It.IsAny<CommandA>()))
+            _executorA.Setup(c => c.Execute(It.IsAny<CommandA>()))
                        .Throws(new NotImplementedException());
 
-            var aggregator = new MessageAggregator(TestLogger, () => new List<IProcessMessage> { executor.Object });
-            Assert.Throws<NotImplementedException>(() => aggregator.PublishCommand(commandA));
+            Assert.Throws<NotImplementedException>(() => Subject.PublishCommand(commandA));
         }
     }
 
