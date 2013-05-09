@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Test.Common;
 using FluentAssertions;
-using TinyIoC;
+using System.Linq;
 
 namespace NzbDrone.App.Test
 {
@@ -17,8 +18,11 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_be_able_to_resolve_event_handlers()
         {
-            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IProcessMessage>>().Should().NotBeEmpty();
+            MainAppContainerBuilder.BuildContainer().ResolveAll<IEnumerable<IProcessMessage>>().Should().NotBeEmpty();
         }
+
+
+
 
         [Test]
         public void should_be_able_to_resolve_indexers()
@@ -49,6 +53,18 @@ namespace NzbDrone.App.Test
 
             executor.Should().NotBeNull();
             executor.Should().BeAssignableTo<IExecute<RssSyncCommand>>();
+        }
+
+        [Test]
+        [Ignore("need to fix this at some point")]
+        public void should_return_same_instance_of_singletons()
+        {
+            var container = MainAppContainerBuilder.BuildContainer();
+
+            var first = container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
+            var second = container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
+
+            first.Should().BeSameAs(second);
         }
     }
 }

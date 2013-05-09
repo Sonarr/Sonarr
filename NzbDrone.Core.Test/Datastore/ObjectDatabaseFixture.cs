@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -12,15 +11,29 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-    [TestFixture]
-    public class ObjectDatabaseFixture : DbTest<BasicRepository<JobDefinition>, JobDefinition>
+
+    public class DatabaseFixture : DbTest
     {
-        private JobDefinition _sampleType;
+        [Test]
+        public void SingleOrDefault_should_return_null_on_empty_db()
+        {
+            Mocker.Resolve<IDatabase>()
+                  .DataMapper.Query<Series>()
+                  .SingleOrDefault(c => c.CleanTitle == "SomeTitle")
+                  .Should()
+                  .BeNull();
+        }
+    }
+
+    [TestFixture]
+    public class ObjectDatabaseFixture : DbTest<BasicRepository<ScheduledTask>, ScheduledTask>
+    {
+        private ScheduledTask _sampleType;
 
         [SetUp]
         public void SetUp()
         {
-            _sampleType = Builder<JobDefinition>
+            _sampleType = Builder<ScheduledTask>
                     .CreateNew()
                     .With(s => s.Id = 0)
                     .Build();
@@ -31,7 +44,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_write_to_database()
         {
             Subject.Insert(_sampleType);
-            Db.All<JobDefinition>().Should().HaveCount(1);
+            Db.All<ScheduledTask>().Should().HaveCount(1);
         }
 
         [Test]
@@ -51,7 +64,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void should_be_able_to_store_empty_list()
         {
-            var series = new List<JobDefinition>();
+            var series = new List<ScheduledTask>();
 
             Subject.InsertMany(series);
         }
@@ -70,9 +83,12 @@ namespace NzbDrone.Core.Test.Datastore
             _sampleType.Id = 0;
             Subject.Insert(_sampleType);
 
-            Db.All<JobDefinition>().Should().HaveCount(1);
+            Db.All<ScheduledTask>().Should().HaveCount(1);
             _sampleType.Id.Should().Be(1);
         }
+
+
+
 
 
 
@@ -82,7 +98,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             _sampleType.Id = 0;
             Subject.Insert(_sampleType);
-            var item = Db.All<JobDefinition>();
+            var item = Db.All<ScheduledTask>();
 
             item.Should().HaveCount(1);
             item.First().Id.Should().NotBe(0);
@@ -94,7 +110,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_find_object_by_id()
         {
             Subject.Insert(_sampleType);
-            var item = Db.All<JobDefinition>().Single(c => c.Id == _sampleType.Id);
+            var item = Db.All<ScheduledTask>().Single(c => c.Id == _sampleType.Id);
 
             item.Id.Should().NotBe(0);
             item.Id.Should().Be(_sampleType.Id);
@@ -104,7 +120,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void set_fields_should_only_update_selected_filed()
         {
-            var childModel = new JobDefinition
+            var childModel = new ScheduledTask
                 {
                     Name = "Address",
                     Interval = 12
@@ -117,8 +133,8 @@ namespace NzbDrone.Core.Test.Datastore
 
             Subject.SetFields(childModel, t => t.Name);
 
-            Db.All<JobDefinition>().Single().Name.Should().Be("A");
-            Db.All<JobDefinition>().Single().Interval.Should().Be(12);
+            Db.All<ScheduledTask>().Single().Name.Should().Be("A");
+            Db.All<ScheduledTask>().Single().Interval.Should().Be(12);
         }
 
         [Test]
@@ -128,7 +144,7 @@ namespace NzbDrone.Core.Test.Datastore
             var rootFolder = Db.Insert(new RootFolders.RootFolder() { Path = "C:\test" });
 
             var series = Builder<Series>.CreateNew()
-                .With(c=>c.RootFolderId = rootFolder.Id)
+                .With(c => c.RootFolderId = rootFolder.Id)
                 .BuildNew();
 
             Db.Insert(series);

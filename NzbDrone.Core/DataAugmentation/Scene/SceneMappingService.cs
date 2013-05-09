@@ -16,6 +16,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         IHandleAsync<ApplicationStartedEvent>,
         IExecute<UpdateSceneMappingCommand>
     {
+
+        private static readonly object mutex = new object();
+
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
         private readonly Logger _logger;
@@ -62,15 +65,18 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             try
             {
                 var mappings = _sceneMappingProxy.Fetch();
-
-                if (mappings.Any())
+                
+                lock (mutex)
                 {
-                    _repository.Purge();
-                    _repository.InsertMany(mappings);
-                }
-                else
-                {
-                    _logger.Warn("Received empty list of mapping. will not update.");
+                    if (mappings.Any())
+                    {
+                        _repository.Purge();
+                        _repository.InsertMany(mappings);
+                    }
+                    else
+                    {
+                        _logger.Warn("Received empty list of mapping. will not update.");
+                    }
                 }
             }
             catch (Exception ex)

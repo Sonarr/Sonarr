@@ -12,15 +12,15 @@ namespace NzbDrone.Core.Test.Datastore
 
     [TestFixture]
     public class
-        BasicRepositoryFixture : DbTest<BasicRepository<JobDefinition>, JobDefinition>
+        BasicRepositoryFixture : DbTest<BasicRepository<ScheduledTask>, ScheduledTask>
     {
-        private JobDefinition _basicType;
+        private ScheduledTask _basicType;
 
 
         [SetUp]
         public void Setup()
         {
-            _basicType = Builder<JobDefinition>
+            _basicType = Builder<ScheduledTask>
                     .CreateNew()
                     .With(c => c.Id = 0)
                     .Build();
@@ -33,6 +33,18 @@ namespace NzbDrone.Core.Test.Datastore
             Subject.All().Should().HaveCount(1);
         }
 
+        [Test]
+        public void purge_should_delete_all()
+        {
+            Subject.InsertMany(Builder<ScheduledTask>.CreateListOfSize(10).BuildListOfNew());
+
+            AllStoredModels.Should().HaveCount(10);
+
+            Subject.Purge();
+
+            AllStoredModels.Should().BeEmpty();
+
+        }
 
 
         [Test]
@@ -60,6 +72,12 @@ namespace NzbDrone.Core.Test.Datastore
         {
             Subject.Insert(_basicType);
             Subject.SingleOrDefault().Should().NotBeNull();
+        }
+
+        [Test]
+        public void single_or_default_on_empty_table_should_return_null()
+        {
+            Subject.SingleOrDefault().Should().BeNull();
         }
 
         [Test]

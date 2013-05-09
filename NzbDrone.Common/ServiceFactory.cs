@@ -28,7 +28,7 @@ namespace NzbDrone.Common
 
         public IEnumerable<T> BuildAll<T>() where T : class
         {
-            return _container.ResolveAll<T>();
+            return _container.ResolveAll<T>().GroupBy(c => c.GetType().FullName).Select(g => g.First());
         }
 
         public object Build(Type contract)

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using TinyIoC;
+using NzbDrone.Common.Reflection;
 
 namespace NzbDrone.Common
 {
@@ -58,7 +60,15 @@ namespace NzbDrone.Common
             }
             if (implementations.Count == 1)
             {
-                Container.Register(contractType, implementations.Single()).AsMultiInstance();
+                if (implementations.Single().HasAttribute<SingletonAttribute>())
+                {
+                    Container.Register(contractType, implementations.Single()).AsSingleton();
+                }
+                else
+                {
+                    Container.Register(contractType, implementations.Single()).AsMultiInstance();
+                }
+
                 Container.RegisterMultiple(contractType, implementations).AsMultiInstance();
             }
             else

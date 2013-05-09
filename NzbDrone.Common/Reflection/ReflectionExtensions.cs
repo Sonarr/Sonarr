@@ -56,5 +56,10 @@ namespace NzbDrone.Common.Reflection
 
             return (T)attribute;
         }
+
+        public static bool HasAttribute<TAttribute>(this Type type)
+        {
+            return type.GetCustomAttributes(typeof(TAttribute), true).Any();
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Messaging
         {
             if (!typeof(ICommand).IsAssignableFrom(commandType))
             {
-                throw new ArgumentException("commandType must implement IExecute");
+                throw new ArgumentException("commandType must implement ICommand");
             }
 
             return string.Format("I{0}Executor", commandType.Name);

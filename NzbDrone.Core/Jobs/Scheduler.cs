@@ -1,39 +1,40 @@
 ﻿using System;
 using System.Timers;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Jobs
 {
-    public class JobTimer :
+    [Singleton]
+    public class Scheduler :
         IHandle<ApplicationStartedEvent>,
         IHandle<ApplicationShutdownRequested>
     {
-        private readonly IJobRepository _jobRepository;
+        private readonly ITaskManager _taskManager;
         private readonly IMessageAggregator _messageAggregator;
-        private readonly Timer _timer;
+        private static readonly Timer Timer = new Timer();
 
-        public JobTimer(IJobRepository jobRepository, IMessageAggregator messageAggregator)
+        public Scheduler(ITaskManager taskManager, IMessageAggregator messageAggregator)
         {
-            _jobRepository = jobRepository;
+            _taskManager = taskManager;
             _messageAggregator = messageAggregator;
-            _timer = new Timer();
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
-            _timer.Interval = 1000 * 30;
-            _timer.Elapsed += (o, args) => ExecuteCommands();
-            //_timer.Start();
+            Timer.Interval = 1000 * 30;
+            Timer.Elapsed += (o, args) => ExecuteCommands();
+            Timer.Start();
         }
 
         private void ExecuteCommands()
         {
-            var jobs = _jobRepository.GetPendingJobs();
+            var tasks = _taskManager.GetPending();
 
-            foreach (var jobDefinition in jobs)
+            foreach (var task in tasks)
             {
-                var commandType = Type.GetType(jobDefinition.Name);
+                var commandType = Type.GetType(task.Name);
                 var command = (ICommand)Activator.CreateInstance(commandType);
 
                 _messageAggregator.PublishCommand(command);
@@ -42,7 +43,9 @@ namespace NzbDrone.Core.Jobs
 
         public void Handle(ApplicationShutdownRequested message)
         {
-            _timer.Stop();
+            Timer.Stop();
         }
     }
+
+
 }

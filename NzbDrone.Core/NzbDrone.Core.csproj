@@ -244,6 +244,7 @@
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
+    <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
@@ -285,10 +286,10 @@
     <Compile Include="Indexers\Wombles\Wombles.cs" />
     <Compile Include="Indexers\Wombles\WomblesParser.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
-    <Compile Include="Jobs\JobDefinition.cs" />
+    <Compile Include="Jobs\ScheduledTask.cs" />
     <Compile Include="Jobs\JobQueueItem.cs" />
     <Compile Include="Jobs\JobRepository.cs" />
-    <Compile Include="Jobs\JobTimer.cs" />
+    <Compile Include="Jobs\Scheduler.cs" />
     <Compile Include="Lifecycle\ApplicationStartedEvent.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
