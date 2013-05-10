@@ -72,29 +72,29 @@ namespace NzbDrone.Core.Test.Datastore
                     loadedSeries.Covers.Value.Should().HaveSameCount(covers);
                 }*/
 
-        [Test]
-        public void one_to_one()
-        {
-            var episode = Builder<Episode>.CreateNew()
-                                                       .With(c => c.Id = 0)
-                                                       .Build();
-
-            Db.Insert(episode);
-
-
-            var history = Builder<History.History>.CreateNew()
-                            .With(c => c.Id = 0)
-                            .With(c => c.EpisodeId = episode.Id)
-                            .With(c => c.Quality = new QualityModel())
-                            .Build();
-
-            Db.Insert(history);
-
-            var loadedEpisode = Db.Single<History.History>().Episode.Value;
-
-            loadedEpisode.Should().NotBeNull();
-            loadedEpisode.ShouldHave().AllProperties().But(c => c.SeriesTitle).EqualTo(episode);
-        }
+//        [Test]
+//        public void one_to_one()
+//        {
+//            var episode = Builder<Episode>.CreateNew()
+//                                                       .With(c => c.Id = 0)
+//                                                       .Build();
+//
+//            Db.Insert(episode);
+//
+//
+//            var history = Builder<History.History>.CreateNew()
+//                            .With(c => c.Id = 0)
+//                            .With(c => c.EpisodeId = episode.Id)
+//                            .With(c => c.Quality = new QualityModel())
+//                            .Build();
+//
+//            Db.Insert(history);
+//
+//            var loadedEpisode = Db.Single<History.History>().Episode.Value;
+//
+//            loadedEpisode.Should().NotBeNull();
+//            loadedEpisode.ShouldHave().AllProperties().But(c => c.SeriesTitle).EqualTo(episode);
+//        }
 
 
         [Test]
