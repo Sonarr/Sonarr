@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Marr.Data.QGen;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
@@ -12,6 +13,7 @@ namespace NzbDrone.Core.History
     {
         void Trim();
         QualityModel GetBestQualityInHistory(int episodeId);
+        PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -41,6 +43,20 @@ namespace NzbDrone.Core.History
             return null;
         }
 
-        //public List<History> GetPagedHistory() 
+        public PagingSpec<History> Paged(PagingSpec<History> pagingSpec)
+        {
+            var pagingQuery = Query.Join<History, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
+                                   .Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
+                                   .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                                   .Skip(pagingSpec.PagingOffset())
+                                   .Take(pagingSpec.PageSize);
+
+            pagingSpec.Records = pagingQuery.ToList();
+
+            //TODO: Use the same query for count and records
+            pagingSpec.TotalRecords = Count();
+
+            return pagingSpec;
+        }
     }
 }

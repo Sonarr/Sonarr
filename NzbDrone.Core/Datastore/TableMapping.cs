@@ -39,9 +39,11 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
             Mapper.Entity<History.History>().RegisterModel("History")
-                  .Relationship()
-                  .HasOne(h => h.Episode, h => h.EpisodeId)
-                  .HasOne(h => h.Series, h => h.SeriesId);
+                  .Relationships
+                  .AutoMapICollectionOrComplexProperties();
+//                  .Relationship();
+//                  .HasOne(h => h.Episode, h => h.EpisodeId)
+//                  .HasOne(h => h.Series, h => h.SeriesId);
 
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.Path)

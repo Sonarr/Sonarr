@@ -44,7 +44,7 @@ namespace NzbDrone.Api.History
                                                    ? SortDirection.Ascending
                                                    : SortDirection.Descending;
 
-            var pagingSpec = new PagingSpec<Episode>
+            var pagingSpec = new PagingSpec<Core.History.History>
                                  {
                                      Page = page,
                                      PageSize = pageSize,
@@ -52,44 +52,7 @@ namespace NzbDrone.Api.History
                                      SortDirection = sortDirection
                                  };
 
-            var series = new Core.Tv.Series { Title = "30 Rock", TitleSlug = "30-rock" };
-            var episode = new Episode { Title = "Test", SeasonNumber = 1, EpisodeNumber = 5 };
-
-            var result = new PagingSpec<Core.History.History>
-                             {
-                                 Records = new List<Core.History.History>
-                                               {
-                                                   new Core.History.History
-                                                       {
-                                                           Id = 1,
-                                                           Date = DateTime.UtcNow.AddHours(-5),
-//                                                           Episode = episode,
-//                                                           Series = series,
-                                                           Indexer = "nzbs.org",
-                                                           Quality = new QualityModel(Quality.HDTV720p)
-                                                       },
-                                                    new Core.History.History
-                                                        {
-                                                            Id = 2,
-                                                            Date = DateTime.UtcNow.AddDays(-1),
-        //                                                           Episode = episode,
-        //                                                           Series = series,
-                                                            Indexer = "nzbs.org",
-                                                            Quality = new QualityModel(Quality.SDTV, true)
-                                                        },
-                                                    new Core.History.History
-                                                       {
-                                                           Id = 3,
-                                                           Date = DateTime.UtcNow.AddDays(-5),
-//                                                           Episode = episode,
-//                                                           Series = series,
-                                                           Indexer = "nzbs.org",
-                                                           Quality = new QualityModel(Quality.WEBDL1080p)
-                                                       }
-                                               }
-                             };
-
-            result.TotalRecords = result.Records.Count;
+            var result = _historyService.Paged(pagingSpec);
             
             return Mapper.Map<PagingSpec<Core.History.History>, PagingResource<HistoryResource>>(result).AsResponse();
         }

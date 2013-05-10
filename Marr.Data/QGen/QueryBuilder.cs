@@ -389,9 +389,21 @@ namespace Marr.Data.QGen
             return SortBuilder;
         }
 
+        public virtual SortBuilder<T> OrderBy(Expression<Func<T, object>> sortExpression, SortDirection sortDirection)
+        {
+            SortBuilder.OrderBy(sortExpression, sortDirection);
+            return SortBuilder;
+        }
+
         public virtual SortBuilder<T> ThenBy(Expression<Func<T, object>> sortExpression)
         {
             SortBuilder.OrderBy(sortExpression);
+            return SortBuilder;
+        }
+
+        public virtual SortBuilder<T> ThenBy(Expression<Func<T, object>> sortExpression, SortDirection sortDirection)
+        {
+            SortBuilder.OrderBy(sortExpression, sortDirection);
             return SortBuilder;
         }
 

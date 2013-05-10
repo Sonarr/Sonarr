@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
 
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.History
         void Purge();
         void Trim();
         QualityModel GetBestQualityInHistory(int episodeId);
+        PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>
@@ -31,6 +33,11 @@ namespace NzbDrone.Core.History
         public List<History> All()
         {
             return _historyRepository.All().ToList();
+        }
+
+        public PagingSpec<History> Paged(PagingSpec<History> pagingSpec)
+        {
+            return _historyRepository.Paged(pagingSpec);
         }
 
         public void Purge()

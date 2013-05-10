@@ -26,7 +26,7 @@ define([
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name      : 'seriesTitle',
+                        name      : 'Series.Title',
                         label     : 'Series Title',
                         editable  : false,
                         cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' }),
@@ -41,11 +41,11 @@ define([
                         headerCell: 'nzbDrone'
                     },
                     {
-                        name      : 'episode.title',
+                        name      : 'Episode.Title',
                         label     : 'Episode Title',
                         editable  : false,
                         sortable  : false,
-                        cell      : 'string',
+                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/EpisodeTitleTemplate' }),
                         headerCell: 'nzbDrone'
                     },
                     {

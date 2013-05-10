@@ -45,9 +45,7 @@ namespace NzbDrone.Api
             Mapper.CreateMap<PagingSpec<Episode>, PagingResource<EpisodeResource>>();
 
             //History
-            Mapper.CreateMap<Core.History.History, HistoryResource>()
-                .ForMember(dest => dest.Episode, opt => opt.Ignore())
-                .ForMember(dest => dest.Series, opt => opt.Ignore());
+            Mapper.CreateMap<Core.History.History, HistoryResource>();
             Mapper.CreateMap<PagingSpec<Core.History.History>, PagingResource<HistoryResource>>();
         }
     }

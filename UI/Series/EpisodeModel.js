@@ -7,7 +7,7 @@ define(['app'], function () {
                 return bestDateString(this.get('airDate'));
             },
             paddedEpisodeNumber: function () {
-                return this.get('episodeNumber');
+                return this.get('episodeNumber').pad(2);
             },
             day                : function () {
                 return Date.create(this.get('airDate')).format('{dd}');

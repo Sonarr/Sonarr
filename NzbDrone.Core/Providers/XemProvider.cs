@@ -22,10 +22,6 @@ namespace NzbDrone.Core.Providers
             _seriesRepository = seriesRepository;
         }
 
-        public XemProvider()
-        {
-        }
-
         public virtual void UpdateMappings()
         {
             _logger.Trace("Starting scene numbering update");
