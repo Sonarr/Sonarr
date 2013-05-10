@@ -30,13 +30,13 @@ namespace NzbDrone.Core.Test.UpdateTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
-            Mocker.GetMock<ConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
+            Mocker.GetMock<IEnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
             Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns(_updatePackage);
 
-            Mocker.GetMock<ProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
+            Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
 
-            _sandboxFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateSandboxFolder();
+            _sandboxFolder = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateSandboxFolder();
         }
 
 
@@ -44,21 +44,21 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void should_delete_sandbox_before_update_if_folder_exists()
         {
-            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(true);
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(true);
 
             Subject.InstallAvailableUpdate();
 
-            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true));
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true));
         }
 
         [Test]
         public void should_not_delete_sandbox_before_update_if_folder_doesnt_exists()
         {
-            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(false);
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(false);
 
             Subject.InstallAvailableUpdate();
 
-            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true), Times.Never());
         }
 
 
@@ -85,25 +85,25 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void Should_copy_update_client_to_root_of_sandbox()
         {
-            var updateClientFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientFolder();
+            var updateClientFolder = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateClientFolder();
 
             Subject.InstallAvailableUpdate();
 
 
-            Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(updateClientFolder, _sandboxFolder));
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.MoveDirectory(updateClientFolder, _sandboxFolder));
         }
 
         [Test]
         public void should_start_update_client()
         {
-            var updateClientPath = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientExePath();
+            var updateClientPath = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateClientExePath();
 
 
 
             Subject.InstallAvailableUpdate();
 
 
-            Mocker.GetMock<ProcessProvider>().Verify(
+            Mocker.GetMock<IProcessProvider>().Verify(
                c => c.Start(It.Is<ProcessStartInfo>(p =>
                        p.FileName == updateClientPath &&
                        p.Arguments == "12 " + _clientGuid.ToString())
@@ -126,11 +126,11 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             UseRealHttp();
 
-            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateSandboxFolder());
+            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateSandboxFolder());
 
             updateSubFolder.Exists.Should().BeFalse();
 
-            Mocker.Resolve<DiskProvider>();
+            Mocker.Resolve<IDiskProvider>();
             Mocker.Resolve<ArchiveProvider>();
 
             Subject.InstallAvailableUpdate();

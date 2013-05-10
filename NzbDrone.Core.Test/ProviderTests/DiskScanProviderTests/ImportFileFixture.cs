@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         {
             _fileSize = size;
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                     .Setup(d => d.GetSize(It.IsAny<String>()))
                     .Returns(size);
         }
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             var result = Subject.ImportFile(_fakeSeries, "file.ext");
 
             VerifyFileImport(result);
-            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
         }
 
         [Test]

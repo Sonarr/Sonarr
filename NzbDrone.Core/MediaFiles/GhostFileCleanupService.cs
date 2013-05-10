@@ -13,10 +13,10 @@ namespace NzbDrone.Core.MediaFiles
     public class GhostFileCleanupService : ICleanGhostFiles
     {
         private readonly IMediaFileService _mediaFileService;
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public GhostFileCleanupService(IMediaFileService mediaFileService, DiskProvider diskProvider, Logger logger)
+        public GhostFileCleanupService(IMediaFileService mediaFileService, IDiskProvider diskProvider, Logger logger)
         {
             _mediaFileService = mediaFileService;
             _diskProvider = diskProvider;

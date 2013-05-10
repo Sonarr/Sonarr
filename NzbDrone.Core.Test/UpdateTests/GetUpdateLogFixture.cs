@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             WithTempAsAppPath();
 
-            _updateLogFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateLogFolder();
+            _updateLogFolder = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateLogFolder();
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFiles(_updateLogFolder, SearchOption.TopDirectoryOnly))
                 .Returns(new[] 
                 {
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.UpdateTests
                     "C:\\nzbdrone\\update\\2011.12.20-21-08.txt" 
                 });
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.FolderExists(_updateLogFolder))
                 .Returns(true);
         }
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void get_logs_should_return_empty_list_if_directory_doesnt_exist()
         {
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.FolderExists(_updateLogFolder))
                 .Returns(false);
 

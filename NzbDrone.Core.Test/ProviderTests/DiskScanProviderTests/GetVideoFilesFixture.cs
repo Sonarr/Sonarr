@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                             @"C:\Test\movie.exe"
                         };
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(s => s.GetFiles(It.IsAny<String>(), SearchOption.AllDirectories))
                 .Returns(_files);
         }
@@ -39,8 +39,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Subject.GetVideoFiles(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Once());
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Never());
         }
 
         [Test]
@@ -50,8 +50,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Subject.GetVideoFiles(path, true);
 
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Once());
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Never());
         }
 
         [Test]
@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Subject.GetVideoFiles(path, false);
 
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Never());
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(s => s.GetFiles(path, SearchOption.AllDirectories), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(s => s.GetFiles(path, SearchOption.TopDirectoryOnly), Times.Once());
         }
 
         [Test]

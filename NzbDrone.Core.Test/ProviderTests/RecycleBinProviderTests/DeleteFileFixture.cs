@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.DeleteFile(path), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(path), Times.Once());
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.MoveFile(path, @"C:\Test\Recycle Bin\S01E01.avi"), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFile(path, @"C:\Test\Recycle Bin\S01E01.avi"), Times.Once());
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFile(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.FileSetLastWriteTimeUtc(@"C:\Test\Recycle Bin\S01E01.avi", It.IsAny<DateTime>()), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTimeUtc(@"C:\Test\Recycle Bin\S01E01.avi", It.IsAny<DateTime>()), Times.Once());
         }
     }
 }

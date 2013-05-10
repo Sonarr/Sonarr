@@ -5,11 +5,22 @@ using System.Reflection;
 
 namespace NzbDrone.Common
 {
-    public class EnvironmentProvider
+    public interface IEnvironmentProvider
+    {
+        bool IsUserInteractive { get; }
+        string WorkingDirectory { get; }
+        string StartUpPath { get; }
+        String SystemTemp { get; }
+        Version Version { get; }
+        DateTime BuildDateTime { get; }
+        Version GetOsVersion();
+    }
+
+    public class EnvironmentProvider : IEnvironmentProvider
     {
         private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
-        private static readonly EnvironmentProvider Instance = new EnvironmentProvider();
+        private static readonly IEnvironmentProvider Instance = new EnvironmentProvider();
 
         public static bool IsProduction
         {

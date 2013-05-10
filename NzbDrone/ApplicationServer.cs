@@ -14,17 +14,17 @@ namespace NzbDrone
 
     public class NzbDroneServiceFactory : ServiceBase, INzbDroneServiceFactory
     {
-        private readonly ConfigFileProvider _configFileProvider;
-        private readonly EnvironmentProvider _environmentProvider;
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
         private readonly IHostController _hostController;
-        private readonly ProcessProvider _processProvider;
+        private readonly IProcessProvider _processProvider;
         private readonly PriorityMonitor _priorityMonitor;
         private readonly SecurityProvider _securityProvider;
         private readonly Logger _logger;
 
-        public NzbDroneServiceFactory(ConfigFileProvider configFileProvider, IHostController hostController,
-                          EnvironmentProvider environmentProvider,
-                           ProcessProvider processProvider, PriorityMonitor priorityMonitor,
+        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController,
+                          IEnvironmentProvider environmentProvider,
+                           IProcessProvider processProvider, PriorityMonitor priorityMonitor,
                            SecurityProvider securityProvider, Logger logger)
         {
             _configFileProvider = configFileProvider;

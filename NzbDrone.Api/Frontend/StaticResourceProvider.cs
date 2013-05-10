@@ -13,11 +13,11 @@ namespace NzbDrone.Api.Frontend
 
     public class StaticResourceProvider : IProcessStaticResource
     {
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly IMapHttpRequestsToDisk _requestMapper;
         private readonly Logger _logger;
 
-        public StaticResourceProvider(DiskProvider diskProvider, IMapHttpRequestsToDisk requestMapper, Logger logger)
+        public StaticResourceProvider(IDiskProvider diskProvider, IMapHttpRequestsToDisk requestMapper, Logger logger)
         {
             _diskProvider = diskProvider;
             _requestMapper = requestMapper;

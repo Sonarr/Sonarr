@@ -2,20 +2,20 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Composition;
 using NzbDrone.Update.Providers;
-using TinyIoC;
 
 namespace NzbDrone.Update
 {
     public class Program
     {
         private readonly UpdateProvider _updateProvider;
-        private readonly ProcessProvider _processProvider;
-        private static TinyIoCContainer _container;
+        private readonly IProcessProvider _processProvider;
+        private static IContainer _container;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public Program(UpdateProvider updateProvider, ProcessProvider processProvider)
+        public Program(UpdateProvider updateProvider, IProcessProvider processProvider)
         {
             _updateProvider = updateProvider;
             _processProvider = processProvider;
@@ -29,7 +29,7 @@ namespace NzbDrone.Update
 
                 _container = UpdateContainerBuilder.Build();
 
-                logger.Info("Updating NzbDrone to version {0}", _container.Resolve<EnvironmentProvider>().Version);
+                logger.Info("Updating NzbDrone to version {0}", _container.Resolve<IEnvironmentProvider>().Version);
                 _container.Resolve<Program>().Start(args);
             }
             catch (Exception e)
@@ -44,8 +44,8 @@ namespace NzbDrone.Update
         {
             try
             {
-                var environmentProvider = _container.Resolve<EnvironmentProvider>();
-                var diskProvider = _container.Resolve<DiskProvider>();
+                var environmentProvider = _container.Resolve<IEnvironmentProvider>();
+                var diskProvider = _container.Resolve<IDiskProvider>();
                 logger.Info("Copying log files to application directory.");
                 diskProvider.CopyDirectory(environmentProvider.GetSandboxLogFolder(), environmentProvider.GetUpdateLogFolder());
             }

@@ -134,7 +134,6 @@ namespace NzbDrone.Core.Parser
             }
 
             Logger.Trace("Unable to parse {0}", title);
-            ReportingService.ReportParseError(title);
             return null;
         }
 

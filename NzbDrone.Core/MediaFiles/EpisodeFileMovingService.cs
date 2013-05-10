@@ -22,10 +22,10 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IBuildFileNames _buildFileNames;
         private readonly IMediaFileService _mediaFileService;
         private readonly IMessageAggregator _messageAggregator;
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public MoveEpisodeFiles(ISeriesRepository seriesRepository, IEpisodeService episodeService, IBuildFileNames buildFileNames, IMediaFileService mediaFileService, IMessageAggregator messageAggregator, DiskProvider diskProvider, Logger logger)
+        public MoveEpisodeFiles(ISeriesRepository seriesRepository, IEpisodeService episodeService, IBuildFileNames buildFileNames, IMediaFileService mediaFileService, IMessageAggregator messageAggregator, IDiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _episodeService = episodeService;

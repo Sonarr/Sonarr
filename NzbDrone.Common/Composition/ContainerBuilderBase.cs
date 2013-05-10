@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
-using TinyIoC;
 using NzbDrone.Common.Reflection;
+using TinyIoC;
 
-namespace NzbDrone.Common
+
+namespace NzbDrone.Common.Composition
 {
     public abstract class ContainerBuilderBase
     {
-        protected readonly TinyIoCContainer Container;
         private readonly List<Type> _loadedTypes;
+
+        public IContainer Container { get; private set; }
 
         protected ContainerBuilderBase(params string[] assemblies)
         {
-            Container = new TinyIoCContainer();
+            Container = new Container(new TinyIoCContainer());
 
             _loadedTypes = new List<Type>();
 
@@ -30,16 +31,13 @@ namespace NzbDrone.Common
 
         private void AutoRegisterInterfaces()
         {
-            var simpleInterfaces = _loadedTypes.Where(t => t.IsInterface).ToList();
-            var appliedInterfaces = _loadedTypes.SelectMany(t => t.GetInterfaces()).Where(i => i.Assembly.FullName.Contains("NzbDrone")).ToList();
+            var loadedInterfaces = _loadedTypes.Where(t => t.IsInterface).ToList();
+            var implementedInterfaces = _loadedTypes.SelectMany(t => t.GetInterfaces()).Where(i => !i.Assembly.FullName.StartsWith("System")).ToList();
 
-            var contracts = simpleInterfaces.Union(appliedInterfaces)
-                .Except(new List<Type> { typeof(IMessage), typeof(ICommand), typeof(IEvent) });
+            var contracts = loadedInterfaces.Union(implementedInterfaces).Where(c => !c.IsGenericTypeDefinition && !string.IsNullOrWhiteSpace(c.FullName))
+                .Except(new List<Type> { typeof(IMessage), typeof(ICommand), typeof(IEvent), typeof(IContainer) }).Distinct().OrderBy(c => c.FullName);
 
-
-            var count = contracts.Count();
-
-            foreach (var contract in simpleInterfaces.Union(contracts))
+            foreach (var contract in contracts)
             {
                 AutoRegisterImplementations(contract);
             }
@@ -52,7 +50,14 @@ namespace NzbDrone.Common
 
         private void AutoRegisterImplementations(Type contractType)
         {
-            var implementations = GetImplementations(contractType).ToList();
+            if (contractType.Name.Contains("oots"))
+            {
+                int adawd = 12;
+            }
+
+            var implementations = GetImplementations(contractType).Where(c => !c.IsGenericTypeDefinition).ToList();
+
+
 
             if (implementations.Count == 0)
             {
@@ -60,20 +65,20 @@ namespace NzbDrone.Common
             }
             if (implementations.Count == 1)
             {
-                if (implementations.Single().HasAttribute<SingletonAttribute>())
+                var impl = implementations.Single();
+
+                if (impl.HasAttribute<SingletonAttribute>())
                 {
-                    Container.Register(contractType, implementations.Single()).AsSingleton();
+                    Container.RegisterSingleton(contractType, impl);
                 }
                 else
                 {
-                    Container.Register(contractType, implementations.Single()).AsMultiInstance();
+                    Container.Register(contractType, impl);
                 }
-
-                Container.RegisterMultiple(contractType, implementations).AsMultiInstance();
             }
             else
             {
-                Container.RegisterMultiple(contractType, implementations).AsMultiInstance();
+                Container.RegisterAll(contractType, implementations);
             }
         }
 

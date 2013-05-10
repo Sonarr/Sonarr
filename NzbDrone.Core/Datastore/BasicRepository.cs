@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.QGen;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Tv;
 
 
 namespace NzbDrone.Core.Datastore
@@ -190,5 +188,6 @@ namespace NzbDrone.Core.Datastore
                 .Entity(model)
                 .Execute();
         }
+
     }
 }

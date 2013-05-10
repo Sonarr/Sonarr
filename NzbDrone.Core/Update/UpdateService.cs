@@ -20,18 +20,18 @@ namespace NzbDrone.Core.Update
 public class UpdateService : IUpdateService
 {
     private readonly IUpdatePackageProvider _updatePackageProvider;
-    private readonly EnvironmentProvider _environmentProvider;
+    private readonly IEnvironmentProvider _environmentProvider;
 
-    private readonly DiskProvider _diskProvider;
+    private readonly IDiskProvider _diskProvider;
     private readonly IHttpProvider _httpProvider;
-    private readonly ConfigFileProvider _configFileProvider;
+    private readonly IConfigFileProvider _configFileProvider;
     private readonly ArchiveProvider _archiveProvider;
-    private readonly ProcessProvider _processProvider;
+    private readonly IProcessProvider _processProvider;
     private readonly Logger _logger;
 
 
-    public UpdateService(IUpdatePackageProvider updatePackageProvider, EnvironmentProvider environmentProvider, DiskProvider diskProvider,
-        IHttpProvider httpProvider, ConfigFileProvider configFileProvider, ArchiveProvider archiveProvider, ProcessProvider processProvider, Logger logger)
+    public UpdateService(IUpdatePackageProvider updatePackageProvider, IEnvironmentProvider environmentProvider, IDiskProvider diskProvider,
+        IHttpProvider httpProvider, IConfigFileProvider configFileProvider, ArchiveProvider archiveProvider, IProcessProvider processProvider, Logger logger)
     {
         _updatePackageProvider = updatePackageProvider;
         _environmentProvider = environmentProvider;

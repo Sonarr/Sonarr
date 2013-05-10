@@ -30,24 +30,24 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(_videoFiles);
 
-            Mocker.GetMock<DiskProvider>().Setup(c => c.GetDirectories(It.IsAny<string>()))
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(It.IsAny<string>()))
                   .Returns(_subFolders);
         }
 
         private void WithOldWrite()
         {
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetLastFolderWrite(It.IsAny<String>()))
                 .Returns(DateTime.Now.AddDays(-5));
         }
 
         private void WithRecentFolderWrite()
         {
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetLastFolderWrite(It.IsAny<String>()))
                 .Returns(DateTime.UtcNow);
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetLastFileWrite(It.IsAny<String>()))
                 .Returns(DateTime.UtcNow);
         }
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         public void should_skip_if_folder_is_in_use_by_another_process()
         {
 
-            Mocker.GetMock<DiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<FileInfo>()))
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<FileInfo>()))
                   .Returns(true);
 
             Subject.ProcessDropFolder("c:\\drop\\");

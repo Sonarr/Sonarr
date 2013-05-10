@@ -10,12 +10,12 @@ using NzbDrone.Api;
 using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
+using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.Owin;
 using NzbDrone.Owin.MiddleWare;
 using RestSharp;
-using TinyIoC;
 
 namespace NzbDrone.Integration.Test
 {
@@ -28,7 +28,7 @@ namespace NzbDrone.Integration.Test
 
         private static readonly Logger Logger = LogManager.GetLogger("TEST");
 
-        protected TinyIoCContainer Container { get; private set; }
+        protected IContainer Container { get; private set; }
 
 
         protected SeriesClient Series;
@@ -72,7 +72,7 @@ namespace NzbDrone.Integration.Test
             Logger.Info("DB Na: {0}", dbPath);
 
 
-            Container.Register((c, p) => c.Resolve<IDbFactory>().Create(dbPath));
+            Container.Register(c => c.Resolve<IDbFactory>().Create(dbPath));
         }
 
         [SetUp]
@@ -82,10 +82,10 @@ namespace NzbDrone.Integration.Test
 
             InitDatabase();
 
-            _bootstrapper = new NancyBootstrapper(Container);
+            _bootstrapper = new NancyBootstrapper(Container.TinyContainer);
 
 
-            var _hostConfig = new Mock<ConfigFileProvider>();
+            var _hostConfig = new Mock<IConfigFileProvider>();
             _hostConfig.SetupGet(c => c.Port).Returns(1313);
 
             _hostController = new OwinHostController(_hostConfig.Object, new[] { new NancyMiddleWare(_bootstrapper) }, Logger);

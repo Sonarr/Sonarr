@@ -15,11 +15,11 @@ namespace NzbDrone.Core.Providers
 
     public class VideoFileInfoReader : IVideoFileInfoReader
     {
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
 
-        public VideoFileInfoReader(DiskProvider diskProvider, Logger logger)
+        public VideoFileInfoReader(IDiskProvider diskProvider, Logger logger)
         {
             _diskProvider = diskProvider;
             _logger = logger;

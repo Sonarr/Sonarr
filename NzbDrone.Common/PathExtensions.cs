@@ -49,62 +49,62 @@ namespace NzbDrone.Common
         }
 
 
-        public static string GetAppDataPath(this EnvironmentProvider environmentProvider)
+        public static string GetAppDataPath(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.WorkingDirectory, APP_DATA);
         }
 
-        public static string GetConfigPath(this EnvironmentProvider environmentProvider)
+        public static string GetConfigPath(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.WorkingDirectory, APP_CONFIG_FILE);
         }
 
-        public static string GetMediaCoverPath(this EnvironmentProvider environmentProvider)
+        public static string GetMediaCoverPath(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), "MediaCover");
         }
 
-        public static string GetUpdateLogFolder(this EnvironmentProvider environmentProvider)
+        public static string GetUpdateLogFolder(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.WorkingDirectory, UPDATE_LOG_FOLDER_NAME);
         }
 
-        public static string GetUpdateSandboxFolder(this EnvironmentProvider environmentProvider)
+        public static string GetUpdateSandboxFolder(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.SystemTemp, UPDATE_SANDBOX_FOLDER_NAME);
         }
 
-        public static string GetUpdateBackUpFolder(this EnvironmentProvider environmentProvider)
+        public static string GetUpdateBackUpFolder(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_BACKUP_FOLDER_NAME);
         }
 
-        public static string GetUpdatePackageFolder(this EnvironmentProvider environmentProvider)
+        public static string GetUpdatePackageFolder(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_PACKAGE_FOLDER_NAME);
         }
 
-        public static string GetUpdateClientFolder(this EnvironmentProvider environmentProvider)
+        public static string GetUpdateClientFolder(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetUpdatePackageFolder(), UPDATE_CLIENT_FOLDER_NAME);
         }
 
-        public static string GetUpdateClientExePath(this EnvironmentProvider environmentProvider)
+        public static string GetUpdateClientExePath(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
         }
 
-        public static string GetSandboxLogFolder(this EnvironmentProvider environmentProvider)
+        public static string GetSandboxLogFolder(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_LOG_FOLDER_NAME);
         }
 
-        public static string GetConfigBackupFile(this EnvironmentProvider environmentProvider)
+        public static string GetConfigBackupFile(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), BACKUP_ZIP_FILE);
         }
 
-        public static string GetNzbDroneDatabase(this EnvironmentProvider environmentProvider)
+        public static string GetNzbDroneDatabase(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_DB);
         }

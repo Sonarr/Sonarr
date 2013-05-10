@@ -21,13 +21,13 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly ICleanGhostFiles _ghostFileCleaner;
         private readonly IMediaFileService _mediaFileService;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IParsingService _parsingService;
 
-        public DiskScanService(DiskProvider diskProvider, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService, IVideoFileInfoReader videoFileInfoReader,
+        public DiskScanService(IDiskProvider diskProvider, ICleanGhostFiles ghostFileCleaner, IMediaFileService mediaFileService, IVideoFileInfoReader videoFileInfoReader,
             IParsingService parsingService)
         {
             _diskProvider = diskProvider;

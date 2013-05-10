@@ -7,7 +7,38 @@ using NLog;
 
 namespace NzbDrone.Common
 {
-    public class DiskProvider
+    public interface IDiskProvider
+    {
+        DateTime GetLastFolderWrite(string path);
+        DateTime GetLastFileWrite(string path);
+        void EnsureFolder(string path);
+        bool FolderExists(string path);
+        bool FileExists(string path);
+        string[] GetDirectories(string path);
+        string[] GetFiles(string path, SearchOption searchOption);
+        long GetDirectorySize(string path);
+        long GetSize(string path);
+        String CreateFolder(string path);
+        void CopyDirectory(string source, string target);
+        void MoveDirectory(string source, string destination);
+        void DeleteFile(string path);
+        void MoveFile(string source, string destination);
+        void DeleteFolder(string path, bool recursive);
+        DateTime DirectoryDateCreated(string path);
+        IEnumerable<FileInfo> GetFileInfos(string path, string pattern, SearchOption searchOption);
+        void InheritFolderPermissions(string filename);
+        long GetAvilableSpace(string path);
+        string ReadAllText(string filePath);
+        void WriteAllText(string filename, string contents);
+        void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
+        void DirectorySetLastWriteTimeUtc(string path, DateTime dateTime);
+        bool IsFolderLocked(string path);
+        bool IsFileLocked(FileInfo file);
+        bool IsChildOfPath(string child, string parent);
+        string GetPathRoot(string path);
+    }
+
+    public class DiskProvider : IDiskProvider
     {
         enum TransferAction
         {
@@ -214,7 +245,7 @@ namespace NzbDrone.Common
                 {
                     return 0;
                 }
-             
+
                 return DriveFreeSpaceEx(path);
             }
 

@@ -8,10 +8,10 @@ namespace NzbDrone.Core.Providers
 {
     public class BackupProvider
     {
-        private readonly EnvironmentProvider _environmentProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
       
-        public BackupProvider(EnvironmentProvider environmentProvider)
+        public BackupProvider(IEnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
         }

@@ -14,12 +14,12 @@ namespace NzbDrone.Owin
 {
     public class OwinHostController : IHostController
     {
-        private readonly ConfigFileProvider _configFileProvider;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly IEnumerable<IOwinMiddleWare> _owinMiddleWares;
         private readonly Logger _logger;
         private IDisposable _host;
 
-        public OwinHostController(ConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares, Logger logger)
+        public OwinHostController(IConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _owinMiddleWares = owinMiddleWares;

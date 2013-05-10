@@ -54,7 +54,7 @@ namespace NzbDrone.Update.Test
         {
             const string ProcessPath = @"C:\NzbDrone\nzbdrone.exe";
 
-            Mocker.GetMock<ProcessProvider>().Setup(c => c.GetProcessById(12))
+            Mocker.GetMock<IProcessProvider>().Setup(c => c.GetProcessById(12))
                 .Returns(new ProcessInfo() { StartPath = ProcessPath });
 
             

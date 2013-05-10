@@ -5,14 +5,14 @@ using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Frontend;
-using NzbDrone.Common;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using TinyIoC;
 
 namespace NzbDrone.Api
 {
+    [Singleton]
     public class NancyBootstrapper : TinyIoCNancyBootstrapper
     {
         private readonly TinyIoCContainer _tinyIoCContainer;
@@ -28,18 +28,12 @@ namespace NzbDrone.Api
         {
             _logger.Info("Starting NzbDrone API");
             AutomapperBootstraper.InitializeAutomapper();
-            RegisterReporting(container);
 
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
-            ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<ErrorPipeline>().HandleException);
+            ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }
 
-        private void RegisterReporting(TinyIoCContainer container)
-        {
-            EnvironmentProvider.UGuid = container.Resolve<ConfigService>().UGuid;
-            ReportingService.RestProvider = container.Resolve<RestProvider>();
-        }
 
         protected override TinyIoCContainer GetApplicationContainer()
         {

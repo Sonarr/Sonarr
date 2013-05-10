@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(m => m.FolderExists(It.IsAny<string>()))
                   .Returns(true);
 
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
 
         private void WithNoneExistingFolder()
         {
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(m => m.FolderExists(It.IsAny<string>()))
                 .Returns(false);
         }
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
 
             result.Should().NotBeNull();
             result.Should().BeEmpty();
-            Mocker.GetMock<DiskProvider>().Verify(c => c.GetDirectories(It.IsAny<String>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.GetDirectories(It.IsAny<String>()), Times.Never());
         }
 
         [Test]

@@ -122,18 +122,18 @@ namespace NzbDrone.Core.Test.Datastore
         {
             var childModel = new ScheduledTask
                 {
-                    Name = "Address",
+                    TypeName = "Address",
                     Interval = 12
                 };
 
             Subject.Insert(childModel);
 
-            childModel.Name = "A";
+            childModel.TypeName = "A";
             childModel.Interval = 0;
 
-            Subject.SetFields(childModel, t => t.Name);
+            Subject.SetFields(childModel, t => t.TypeName);
 
-            Db.All<ScheduledTask>().Single().Name.Should().Be("A");
+            Db.All<ScheduledTask>().Single().TypeName.Should().Be("A");
             Db.All<ScheduledTask>().Single().Interval.Should().Be(12);
         }
 

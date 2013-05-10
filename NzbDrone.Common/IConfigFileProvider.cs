@@ -6,13 +6,25 @@ using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
 {
-    public class ConfigFileProvider
+    public interface IConfigFileProvider
     {
-        private readonly EnvironmentProvider _environmentProvider;
+        Guid Guid { get; }
+        int Port { get; set; }
+        bool LaunchBrowser { get; set; }
+        AuthenticationType AuthenticationType { get; set; }
+        int GetValueInt(string key, int defaultValue);
+        bool GetValueBoolean(string key, bool defaultValue);
+        string GetValue(string key, object defaultValue);
+        void SetValue(string key, object value);
+    }
+
+    public class ConfigFileProvider : IConfigFileProvider
+    {
+        private readonly IEnvironmentProvider _environmentProvider;
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(EnvironmentProvider environmentProvider)
+        public ConfigFileProvider(IEnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
             _configFile = _environmentProvider.GetConfigPath();
@@ -20,10 +32,6 @@ namespace NzbDrone.Common
             CreateDefaultConfigFile();
         }
 
-        public ConfigFileProvider()
-        {
-
-        }
 
         public virtual Guid Guid
         {

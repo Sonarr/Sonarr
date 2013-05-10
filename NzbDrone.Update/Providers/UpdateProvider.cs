@@ -2,19 +2,20 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone.Update.Providers
 {
     public class UpdateProvider
     {
-        private readonly DiskProvider _diskProvider;
-        private readonly ServiceProvider _serviceProvider;
-        private readonly ProcessProvider _processProvider;
-        private readonly EnvironmentProvider _environmentProvider;
+        private readonly IDiskProvider _diskProvider;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IProcessProvider _processProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateProvider(DiskProvider diskProvider, ServiceProvider serviceProvider,
-            ProcessProvider processProvider, EnvironmentProvider environmentProvider)
+        public UpdateProvider(IDiskProvider diskProvider, IServiceProvider serviceProvider,
+            IProcessProvider processProvider, IEnvironmentProvider environmentProvider)
         {
             _diskProvider = diskProvider;
             _serviceProvider = serviceProvider;

@@ -1,9 +1,11 @@
 ﻿using System;
 using FluentMigrator.Runner;
 using NLog;
+using NzbDrone.Common.Composition;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
+    [Singleton]
     public class MigrationLogger : IAnnouncer
     {
         private readonly Logger _logger;

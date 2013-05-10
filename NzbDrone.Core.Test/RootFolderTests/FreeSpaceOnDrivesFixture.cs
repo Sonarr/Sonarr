@@ -25,11 +25,11 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" } });
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
                   .Returns(@"C:\");
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetAvilableSpace(@"C:\"))
                   .Returns(123456);
 
@@ -46,11 +46,11 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" },
                                              new RootFolder { Id = 2, Path = @"C:\Test\TV2" }});
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetPathRoot(It.IsAny<String>()))
                   .Returns(@"C:\");
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetAvilableSpace(@"C:\"))
                   .Returns(123456);
 
@@ -67,15 +67,15 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" },
                                              new RootFolder { Id = 2, Path = @"D:\Test\TV" }});
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
                   .Returns(@"C:\");
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetPathRoot(@"D:\Test\TV"))
                   .Returns(@"D:\");
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetAvilableSpace(It.IsAny<string>()))
                   .Returns(123456);
 
@@ -91,11 +91,11 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder> { new RootFolder { Id = 1, Path = @"C:\Test\TV" } });
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetPathRoot(@"C:\Test\TV"))
                   .Returns(@"C:\");
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetAvilableSpace(It.IsAny<string>()))
                   .Throws(new DirectoryNotFoundException());
 

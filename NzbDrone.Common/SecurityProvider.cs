@@ -20,13 +20,13 @@ namespace NzbDrone.Common
 
 	public class SecurityProvider : ISecurityProvider
 	{
-		private readonly ConfigFileProvider _configFileProvider;
-		private readonly EnvironmentProvider _environmentProvider;
-		private readonly ProcessProvider _processProvider;
+		private readonly IConfigFileProvider _configFileProvider;
+		private readonly IEnvironmentProvider _environmentProvider;
+		private readonly IProcessProvider _processProvider;
 	    private readonly Logger _logger;
 
-	    public SecurityProvider(ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
-                                    ProcessProvider processProvider, Logger logger)
+	    public SecurityProvider(IConfigFileProvider configFileProvider, IEnvironmentProvider environmentProvider,
+                                    IProcessProvider processProvider, Logger logger)
 		{
 			_configFileProvider = configFileProvider;
 			_environmentProvider = environmentProvider;

@@ -6,11 +6,11 @@ using NzbDrone.Api.Extensions;
 
 namespace NzbDrone.Api.ErrorManagement
 {
-    public class ErrorPipeline
+    public class NzbDroneErrorPipeline
     {
         private readonly Logger _logger;
 
-        public ErrorPipeline(Logger logger)
+        public NzbDroneErrorPipeline(Logger logger)
         {
             _logger = logger;
         }

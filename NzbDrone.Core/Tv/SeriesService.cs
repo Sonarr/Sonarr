@@ -46,12 +46,12 @@ namespace NzbDrone.Core.Tv
         private readonly IMessageAggregator _messageAggregator;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IRootFolderService _rootFolderService;
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
                              IProvideSeriesInfo seriesInfoProxy, IMessageAggregator messageAggregator, ISceneMappingService sceneMappingService,
-                             IRootFolderService rootFolderService, DiskProvider diskProvider, Logger logger)
+                             IRootFolderService rootFolderService, IDiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;

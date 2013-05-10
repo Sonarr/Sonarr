@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                   .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                   .Returns(fi);
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FileExists(currentFilename))
                   .Returns(true);
 

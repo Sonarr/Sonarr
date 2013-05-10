@@ -1,5 +1,5 @@
 ﻿using NzbDrone.Common;
-using TinyIoC;
+using NzbDrone.Common.Composition;
 
 namespace NzbDrone.Update
 {
@@ -11,7 +11,7 @@ namespace NzbDrone.Update
 
         }
 
-        public static TinyIoCContainer Build()
+        public static IContainer Build()
         {
             return new UpdateContainerBuilder().Container;
         }

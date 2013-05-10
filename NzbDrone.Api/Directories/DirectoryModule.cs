@@ -8,9 +8,9 @@ namespace NzbDrone.Api.Directories
 {
     public class DirectoryModule : NzbDroneApiModule
     {
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
 
-        public DirectoryModule(DiskProvider diskProvider)
+        public DirectoryModule(IDiskProvider diskProvider)
             : base("/directories")
         {
             _diskProvider = diskProvider;

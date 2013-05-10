@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
@@ -13,12 +14,14 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly ITaskManager _taskManager;
         private readonly IMessageAggregator _messageAggregator;
+        private readonly Logger _logger;
         private static readonly Timer Timer = new Timer();
 
-        public Scheduler(ITaskManager taskManager, IMessageAggregator messageAggregator)
+        public Scheduler(ITaskManager taskManager, IMessageAggregator messageAggregator, Logger logger)
         {
             _taskManager = taskManager;
             _messageAggregator = messageAggregator;
+            _logger = logger;
         }
 
         public void Handle(ApplicationStartedEvent message)
@@ -34,10 +37,23 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var task in tasks)
             {
-                var commandType = Type.GetType(task.Name);
-                var command = (ICommand)Activator.CreateInstance(commandType);
+                try
+                {
+                    var commandType = Type.GetType(task.TypeName);
+                    var command = (ICommand)Activator.CreateInstance(commandType);
 
-                _messageAggregator.PublishCommand(command);
+                    _messageAggregator.PublishCommand(command);
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("Error occured while execution task " + task.TypeName, e);
+                }
+                finally
+                {
+                    _taskManager.SetLastExecutionTime(task.Id);
+                }
+
+
             }
         }
 

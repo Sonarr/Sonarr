@@ -15,14 +15,14 @@ namespace NzbDrone.Core.Providers
 
     public class DropFolderImportService : IDropFolderImportService
     {
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
         private readonly ISeriesService _seriesService;
         private readonly IMoveEpisodeFiles _episodeFileMover;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
-        public DropFolderImportService(DiskProvider diskProvider,
+        public DropFolderImportService(IDiskProvider diskProvider,
             IDiskScanService diskScanService,
             ISeriesService seriesService,
             IMoveEpisodeFiles episodeFileMover,

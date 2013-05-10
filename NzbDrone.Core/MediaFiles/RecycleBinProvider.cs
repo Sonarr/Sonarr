@@ -11,12 +11,12 @@ namespace NzbDrone.Core.MediaFiles
 {
     public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IExecute<CleanUpRecycleBinCommand>
     {
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public RecycleBinProvider(DiskProvider diskProvider, IConfigService configService)
+        public RecycleBinProvider(IDiskProvider diskProvider, IConfigService configService)
         {
             _diskProvider = diskProvider;
             _configService = configService;

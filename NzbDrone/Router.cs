@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Composition;
 using NzbDrone.SysTray;
+using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone
 {
+    [Singleton]
     public class Router
     {
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
         private readonly IConsoleService _consoleService;
-        private readonly EnvironmentProvider _environmentProvider;
-        private readonly SysTrayProvider _sysTrayProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
+        private readonly ISystemTrayApp _systemTrayProvider;
         private readonly Logger _logger;
 
-        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, ServiceProvider serviceProvider,
-                        IConsoleService consoleService, EnvironmentProvider environmentProvider, SysTrayProvider sysTrayProvider, Logger logger)
+        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider,
+                        IConsoleService consoleService, IEnvironmentProvider environmentProvider, ISystemTrayApp systemTrayProvider, Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
             _environmentProvider = environmentProvider;
-            _sysTrayProvider = sysTrayProvider;
+            _systemTrayProvider = systemTrayProvider;
             _logger = logger;
         }
 
@@ -60,7 +63,7 @@ namespace NzbDrone
                         }
                         else
                         {
-                            _sysTrayProvider.Start();
+                            _systemTrayProvider.Start();
                         }
 
                         break;

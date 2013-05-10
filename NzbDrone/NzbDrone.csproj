@@ -153,7 +153,6 @@
     <Compile Include="SysTray\SysTrayApp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SysTray\SysTrayProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

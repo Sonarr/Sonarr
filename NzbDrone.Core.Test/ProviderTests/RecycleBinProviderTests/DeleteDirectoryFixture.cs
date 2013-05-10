@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteDirectory(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.DeleteFolder(path, true), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFolder(path, true), Times.Once());
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteDirectory(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.MoveDirectory(path, @"C:\Test\Recycle Bin\30 Rock"), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveDirectory(path, @"C:\Test\Recycle Bin\30 Rock"), Times.Once());
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteDirectory(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.DirectorySetLastWriteTimeUtc(@"C:\Test\Recycle Bin\30 Rock", It.IsAny<DateTime>()), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DirectorySetLastWriteTimeUtc(@"C:\Test\Recycle Bin\30 Rock", It.IsAny<DateTime>()), Times.Once());
         }
 
         [Test]
@@ -76,12 +76,12 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             WithRecycleBin();
             var path = @"C:\Test\TV\30 Rock";
 
-            Mocker.GetMock<DiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock", SearchOption.AllDirectories))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock", SearchOption.AllDirectories))
                                             .Returns(new[]{ "File1", "File2", "File3" });
 
             Mocker.Resolve<RecycleBinProvider>().DeleteDirectory(path);
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.FileSetLastWriteTimeUtc(It.IsAny<String>(), It.IsAny<DateTime>()), Times.Exactly(3));
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTimeUtc(It.IsAny<String>(), It.IsAny<DateTime>()), Times.Exactly(3));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
         private void WithExistingFile()
         {
-            Mocker.GetMock<DiskProvider>().Setup(c => c.FileExists(nzbPath)).Returns(true);
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(nzbPath)).Returns(true);
         }
 
         private void WithFailedDownload()

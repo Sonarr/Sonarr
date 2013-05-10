@@ -18,10 +18,10 @@ namespace NzbDrone.Update.Test
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<EnvironmentProvider>()
+            Mocker.GetMock<IEnvironmentProvider>()
                 .Setup(c => c.StartUpPath).Returns(@"C:\Temp\NzbDrone_update\");
 
-            Mocker.GetMock<EnvironmentProvider>()
+            Mocker.GetMock<IEnvironmentProvider>()
                 .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
         }
 
@@ -49,11 +49,11 @@ namespace NzbDrone.Update.Test
             const string sandboxFolder = @"C:\Temp\NzbDrone_update\nzbdrone";
             const string targetFolder = "c:\\NzbDrone\\";
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.FolderExists(targetFolder))
                 .Returns(true);
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                .Setup(c => c.FolderExists(sandboxFolder))
                .Returns(false);
 

@@ -7,19 +7,32 @@ using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
 {
-    public class ProcessProvider
+    public interface IProcessProvider
+    {
+        ProcessInfo GetCurrentProcess();
+        ProcessInfo GetProcessById(int id);
+        IEnumerable<ProcessInfo> GetProcessByName(string name);
+        void Start(string path);
+        Process Start(ProcessStartInfo startInfo);
+        void WaitForExit(Process process);
+        void Kill(int processId);
+        void SetPriority(int processId, ProcessPriorityClass priority);
+        void KillAll(string processName);
+    }
+
+    public class ProcessProvider : IProcessProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public const string NzbDroneProcessName = "NzbDrone";
         public const string NzbDroneConsoleProcessName = "NzbDrone.Console";
 
-        public virtual ProcessInfo GetCurrentProcess()
+        public  ProcessInfo GetCurrentProcess()
         {
             return ConvertToProcessInfo(Process.GetCurrentProcess());
         }
 
-        public virtual ProcessInfo GetProcessById(int id)
+        public  ProcessInfo GetProcessById(int id)
         {
             Logger.Trace("Finding process with Id:{0}", id);
 
@@ -37,17 +50,17 @@ namespace NzbDrone.Common
             return processInfo;
         }
 
-        public virtual IEnumerable<ProcessInfo> GetProcessByName(string name)
+        public  IEnumerable<ProcessInfo> GetProcessByName(string name)
         {
             return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
         }
 
-        public virtual void Start(string path)
+        public  void Start(string path)
         {
             Process.Start(path);
         }
 
-        public virtual Process Start(ProcessStartInfo startInfo)
+        public  Process Start(ProcessStartInfo startInfo)
         {
             Logger.Info("Starting process. [{0}]", startInfo.FileName);
 
@@ -59,13 +72,13 @@ namespace NzbDrone.Common
             return process;
         }
 
-        public virtual void WaitForExit(Process process)
+        public  void WaitForExit(Process process)
         {
             Logger.Trace("Waiting for process {0} to exit.", process.ProcessName);
             process.WaitForExit();
         }
 
-        public virtual void Kill(int processId)
+        public  void Kill(int processId)
         {
             if (processId == 0 || Process.GetProcesses().All(p => p.Id != processId))
             {
@@ -87,7 +100,7 @@ namespace NzbDrone.Common
             Logger.Info("[{0}]: Process terminated successfully", process.Id);
         }
 
-        public virtual void SetPriority(int processId, ProcessPriorityClass priority)
+        public  void SetPriority(int processId, ProcessPriorityClass priority)
         {
             var process = Process.GetProcessById(processId);
 
@@ -112,7 +125,7 @@ namespace NzbDrone.Common
                        };
         }
 
-        public virtual void KillAll(string processName)
+        public  void KillAll(string processName)
         {
             var processToKill = GetProcessByName(processName);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Jobs
     public interface ITaskManager
     {
         IList<ScheduledTask> GetPending();
+        void SetLastExecutionTime(int taskId);
     }
 
     public class TaskManager : IHandle<ApplicationStartedEvent>, ITaskManager
@@ -30,12 +32,17 @@ namespace NzbDrone.Core.Jobs
             return _scheduledTaskRepository.GetPendingJobs();
         }
 
+        public void SetLastExecutionTime(int taskId)
+        {
+            _scheduledTaskRepository.SetLastExecutionTime(taskId, DateTime.UtcNow);
+        }
+
         public void Handle(ApplicationStartedEvent message)
         {
             var defaultTasks = new[]
                 {
-                    new ScheduledTask{ Interval = 25, Name = typeof(RssSyncCommand).FullName},
-                    new ScheduledTask{ Interval = 24*60, Name = typeof(UpdateXemMappings).FullName}
+                    new ScheduledTask{ Interval = 25, TypeName = typeof(RssSyncCommand).FullName},
+                    new ScheduledTask{ Interval = 24*60, TypeName = typeof(UpdateXemMappings).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();
@@ -46,16 +53,16 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var job in currentTasks)
             {
-                if (!defaultTasks.Any(c => c.Name == job.Name))
+                if (!defaultTasks.Any(c => c.TypeName == job.TypeName))
                 {
-                    _logger.Debug("Removing job from database '{0}'", job.Name);
+                    _logger.Debug("Removing job from database '{0}'", job.TypeName);
                     _scheduledTaskRepository.Delete(job.Id);
                 }
             }
 
             foreach (var defaultTask in defaultTasks)
             {
-                var currentDefinition = currentTasks.SingleOrDefault(c => c.Name == defaultTask.Name);
+                var currentDefinition = currentTasks.SingleOrDefault(c => c.TypeName == defaultTask.TypeName);
 
                 if (currentDefinition == null)
                 {

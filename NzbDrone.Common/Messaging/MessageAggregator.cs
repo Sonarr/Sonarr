@@ -2,9 +2,11 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common.Composition;
 
 namespace NzbDrone.Common.Messaging
 {
+    [Singleton]
     public class MessageAggregator : IMessageAggregator
     {
         private readonly Logger _logger;

@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         [SetUp]
         public void SetUp()
         {
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
              .Setup(e => e.FileExists(It.Is<String>(c => c != DeletedPath)))
              .Returns(true);
         }

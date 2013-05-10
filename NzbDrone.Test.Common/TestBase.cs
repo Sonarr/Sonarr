@@ -82,7 +82,6 @@ namespace NzbDrone.Test.Common
             TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
 
             MockedRestProvider = new Mock<RestProvider>();
-            ReportingService.RestProvider = MockedRestProvider.Object;
 
             Directory.CreateDirectory(TempFolder);
         }
@@ -137,7 +136,7 @@ namespace NzbDrone.Test.Common
 
         protected void WithTempAsAppPath()
         {
-            Mocker.GetMock<EnvironmentProvider>()
+            Mocker.GetMock<IEnvironmentProvider>()
                 .SetupGet(c => c.WorkingDirectory)
                 .Returns(VirtualPath);
         }

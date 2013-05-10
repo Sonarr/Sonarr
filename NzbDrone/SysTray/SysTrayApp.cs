@@ -7,27 +7,29 @@ using NzbDrone.Owin;
 
 namespace NzbDrone.SysTray
 {
-    public class SysTrayApp : Form
+    public interface ISystemTrayApp
     {
-        private readonly ProcessProvider _processProvider;
+        void Start();
+    }
+
+    public class SystemTrayApp : Form, ISystemTrayApp
+    {
+        private readonly IProcessProvider _processProvider;
         private readonly IHostController _hostController;
-        private readonly EnvironmentProvider _environmentProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
-        public SysTrayApp(ProcessProvider processProvider, IHostController hostController, EnvironmentProvider environmentProvider)
+        public SystemTrayApp(IProcessProvider processProvider, IHostController hostController, IEnvironmentProvider environmentProvider)
         {
             _processProvider = processProvider;
             _hostController = hostController;
             _environmentProvider = environmentProvider;
         }
 
-        public SysTrayApp()
-        {
-        }
 
-        public void Create()
+        public void Start()
         {
             _trayMenu.MenuItems.Add("Launch Browser", LaunchBrowser);
             _trayMenu.MenuItems.Add("-");
@@ -38,6 +40,9 @@ namespace NzbDrone.SysTray
 
             _trayIcon.ContextMenu = _trayMenu;
             _trayIcon.Visible = true;
+
+
+            Application.Run(this);
         }
 
         protected override void OnClosed(EventArgs e)

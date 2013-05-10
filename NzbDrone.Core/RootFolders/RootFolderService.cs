@@ -23,10 +23,10 @@ namespace NzbDrone.Core.RootFolders
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IBasicRepository<RootFolder> _rootFolderRepository;
-        private readonly DiskProvider _diskProvider;
+        private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
 
-        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, DiskProvider diskProvider,ISeriesRepository seriesRepository)
+        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, IDiskProvider diskProvider,ISeriesRepository seriesRepository)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;

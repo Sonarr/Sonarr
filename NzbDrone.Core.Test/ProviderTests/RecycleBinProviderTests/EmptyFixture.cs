@@ -31,10 +31,10 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         {
             Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(RecycleBin);
 
-            Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectories(RecycleBin))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetDirectories(RecycleBin))
                     .Returns(new [] { @"C:\Test\RecycleBin\Folder1", @"C:\Test\RecycleBin\Folder2", @"C:\Test\RecycleBin\Folder3" });
 
-            Mocker.GetMock<DiskProvider>().Setup(s => s.GetFiles(RecycleBin, SearchOption.TopDirectoryOnly))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(RecycleBin, SearchOption.TopDirectoryOnly))
                     .Returns(new [] { @"C:\Test\RecycleBin\File1.avi", @"C:\Test\RecycleBin\File2.mkv" });
         }
 
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().Empty();
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.GetDirectories(It.IsAny<String>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.GetDirectories(It.IsAny<String>()), Times.Never());
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         {          
             Mocker.Resolve<RecycleBinProvider>().Empty();
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Exactly(3));
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Exactly(3));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         {
             Mocker.Resolve<RecycleBinProvider>().Empty();
 
-            Mocker.GetMock<DiskProvider>().Verify(v => v.DeleteFile(It.IsAny<String>()), Times.Exactly(2));
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.DeleteFile(It.IsAny<String>()), Times.Exactly(2));
         }
     }
 }

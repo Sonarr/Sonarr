@@ -9,12 +9,12 @@ namespace NzbDrone
 {
     public class PriorityMonitor
     {
-        private readonly ProcessProvider _processProvider;
+        private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
 
         private Timer _processPriorityCheckTimer;
 
-        public PriorityMonitor(ProcessProvider processProvider, Logger logger)
+        public PriorityMonitor(IProcessProvider processProvider, Logger logger)
         {
             _processProvider = processProvider;
             _logger = logger;

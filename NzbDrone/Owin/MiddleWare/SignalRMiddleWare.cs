@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNet.SignalR;
 using NzbDrone.Api.SignalR;
+using NzbDrone.Common.Composition;
 using Owin;
-using TinyIoC;
 
 namespace NzbDrone.Owin.MiddleWare
 {
@@ -12,7 +12,7 @@ namespace NzbDrone.Owin.MiddleWare
 
         public int Order { get { return 0; } }
 
-        public SignalRMiddleWare(IEnumerable<NzbDronePersistentConnection> persistentConnections, TinyIoCContainer container)
+        public SignalRMiddleWare(IEnumerable<NzbDronePersistentConnection> persistentConnections, IContainer container)
         {
             _persistentConnections = persistentConnections;
 

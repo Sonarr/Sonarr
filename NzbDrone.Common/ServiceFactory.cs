@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using TinyIoC;
+using NzbDrone.Common.Composition;
 
 namespace NzbDrone.Common
 {
@@ -14,9 +14,9 @@ namespace NzbDrone.Common
 
     public class ServiceFactory : IServiceFactory
     {
-        private readonly TinyIoCContainer _container;
+        private readonly IContainer _container;
 
-        public ServiceFactory(TinyIoCContainer container)
+        public ServiceFactory(IContainer container)
         {
             _container = container;
         }

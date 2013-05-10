@@ -19,11 +19,11 @@ namespace NzbDrone.Common
 
     public class HttpProvider : IHttpProvider
     {
-        private readonly EnvironmentProvider _environmentProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly string _userAgent;
 
-        public HttpProvider(EnvironmentProvider environmentProvider)
+        public HttpProvider(IEnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
             _userAgent = String.Format("NzbDrone {0}", _environmentProvider.Version);

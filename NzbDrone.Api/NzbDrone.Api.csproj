@@ -131,7 +131,7 @@
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="ErrorManagement\ErrorHandler.cs" />
     <Compile Include="ErrorManagement\ErrorModel.cs" />
-    <Compile Include="ErrorManagement\ErrorPipeline.cs" />
+    <Compile Include="ErrorManagement\NzbDroneErrorPipeline.cs" />
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NzbDroneApiModule.cs" />

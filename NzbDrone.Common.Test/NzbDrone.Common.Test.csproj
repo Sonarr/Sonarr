@@ -84,7 +84,6 @@
     <Compile Include="EventingTests\MessageAggregatorCommandTests.cs" />
     <Compile Include="EventingTests\MessageAggregatorEventTests.cs" />
     <Compile Include="ReflectionExtensions.cs" />
-    <Compile Include="ReportingService_ReportParseError_Fixture.cs" />
     <Compile Include="PathExtensionFixture.cs" />
     <Compile Include="DiskProviderFixture.cs" />
     <Compile Include="EnviromentProviderTest.cs" />

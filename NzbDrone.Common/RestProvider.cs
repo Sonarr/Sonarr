@@ -15,10 +15,10 @@ namespace NzbDrone.Common
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly EnvironmentProvider _environmentProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
 
 
-        public RestProvider(EnvironmentProvider environmentProvider)
+        public RestProvider(IEnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
         }

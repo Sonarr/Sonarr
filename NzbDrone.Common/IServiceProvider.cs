@@ -8,7 +8,19 @@ using NLog;
 
 namespace NzbDrone.Common
 {
-    public class ServiceProvider
+    public interface IServiceProvider
+    {
+        bool ServiceExist(string name);
+        bool IsServiceRunning(string name);
+        void Install(string serviceName);
+        void UnInstall(string serviceName);
+        void Run(ServiceBase service);
+        ServiceController GetService(string serviceName);
+        void Stop(string serviceName);
+        void Start(string serviceName);
+    }
+
+    public class ServiceProvider : IServiceProvider
     {
         public const string NZBDRONE_SERVICE_NAME = "NzbDrone";
 

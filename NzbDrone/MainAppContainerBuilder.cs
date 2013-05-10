@@ -1,17 +1,14 @@
 ﻿using System.IO;
-using FluentMigrator.Runner;
 using NLog;
 using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Api.SignalR;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
-using TinyIoC;
 
 namespace NzbDrone
 {
@@ -19,7 +16,7 @@ namespace NzbDrone
     {
         private static readonly Logger Logger = LogManager.GetLogger("ContainerBuilderBase");
 
-        public static TinyIoCContainer BuildContainer()
+        public static IContainer BuildContainer()
         {
             return new MainAppContainerBuilder().Container;
         }
@@ -29,20 +26,17 @@ namespace NzbDrone
             : base("NzbDrone", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
             AutoRegisterImplementations<ExternalNotificationBase>();
-
-            Container.Register<IMessageAggregator, MessageAggregator>().AsSingleton();
-            Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
-            Container.Register<IAnnouncer, MigrationLogger>().AsSingleton();
-            Container.Register<Router>().AsSingleton();
-
-            Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>)).AsMultiInstance();
-            Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>)).AsMultiInstance();
-
             AutoRegisterImplementations<NzbDronePersistentConnection>();
+
+            Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>));
+            Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>));
+
+            Container.Register<INancyBootstrapper, NancyBootstrapper>();
 
             InitDatabase();
 
-            ReportingService.RestProvider = Container.Resolve<RestProvider>();
+
+
         }
 
         private void InitDatabase()
@@ -58,7 +52,7 @@ namespace NzbDrone
                 Directory.CreateDirectory(appDataPath);
             }
 
-            Container.Register((c, p) => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase()));
+            Container.Register(c => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase()));
         }
     }
 }
