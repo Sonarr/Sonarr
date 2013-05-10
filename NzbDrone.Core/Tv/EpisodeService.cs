@@ -99,8 +99,6 @@ namespace NzbDrone.Core.Tv
         {
             var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, includeSpecials);
 
-            episodeResult.Records = LinkSeriesToEpisodes(episodeResult.Records);
-
             return episodeResult;
         }
 

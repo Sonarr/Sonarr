@@ -75,14 +75,15 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
             
-            pagingSpec.Records = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+            var pagingQuery = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
                                       .Where(e => e.EpisodeFileId == 0)
                                       .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
                                       .AndWhere(e => e.AirDate <= currentTime)
                                       .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
                                       .Skip(pagingSpec.PagingOffset())
-                                      .Take(pagingSpec.PageSize)
-                                      .ToList();
+                                      .Take(pagingSpec.PageSize);
+
+            pagingSpec.Records = pagingQuery.ToList();
 
             //TODO: Use the same query for count and records
             pagingSpec.TotalRecords = Query.Where(e => e.EpisodeFileId == 0 && e.SeasonNumber >= startingSeasonNumber && e.AirDate <= currentTime).Count();

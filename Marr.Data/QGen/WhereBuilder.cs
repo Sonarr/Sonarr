@@ -182,7 +182,12 @@ namespace Marr.Data.QGen
                 }
 
                 string columnName = DataHelper.GetColumnName(declaringType, member.Name, _useAltName);
-                return _dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName));
+
+                if (!_useAltName)
+                    return _dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName));
+
+                else
+                    return _dialect.CreateToken(string.Format("{0}", columnName));
             }
             else
             {

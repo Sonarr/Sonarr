@@ -217,7 +217,12 @@ namespace Marr.Data.QGen
                 }
 
                 string columnName = DataHelper.GetColumnName(sort.DeclaringType, sort.PropertyName, useAltName);
-                sb.Append(_dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName)));
+
+                if (!_useAltName)
+                    sb.Append(_dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName)));
+
+                else
+                    sb.Append(_dialect.CreateToken(string.Format("{0}", columnName)));
 
                 if (sort.Direction == SortDirection.Desc)
                     sb.Append(" DESC");

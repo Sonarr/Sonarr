@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Datastore
             return mapBuilder.Table.MapTable(tableName)
                              .Columns
                              .AutoMapPropertiesWhere(IsMappableProperty)
+                             .PrefixAltNames(String.Format("{0}_", typeof(T).Name))
                              .For(c => c.Id)
                              .SetPrimaryKey()
                              .SetReturnValue()

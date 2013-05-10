@@ -52,7 +52,8 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Season>().RegisterModel("Seasons");
 
             Mapper.Entity<Episode>().RegisterModel("Episodes")
-                  .Ignore(e => e.SeriesTitle);
+                  .Ignore(e => e.SeriesTitle)
+                  .Relationships.AutoMapICollectionOrComplexProperties();
 
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles");
 

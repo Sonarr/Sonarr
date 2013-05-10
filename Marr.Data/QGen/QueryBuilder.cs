@@ -365,7 +365,7 @@ namespace Marr.Data.QGen
 
         public virtual SortBuilder<T> Where(Expression<Func<T, bool>> filterExpression)
         {
-            _whereBuilder = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, false, true);
+            _whereBuilder = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, _useAltName, true);
             return SortBuilder;
         }
 
