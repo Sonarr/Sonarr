@@ -16,15 +16,6 @@ namespace NzbDrone.App.Test
     public class ContainerFixture : TestBase
     {
         [Test]
-        public void should_be_able_to_resolve_event_handlers()
-        {
-            MainAppContainerBuilder.BuildContainer().ResolveAll<IEnumerable<IProcessMessage>>().Should().NotBeEmpty();
-        }
-
-
-
-
-        [Test]
         public void should_be_able_to_resolve_indexers()
         {
             MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
