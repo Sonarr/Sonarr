@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using Marr.Data;
 using Marr.Data.Reflection;
+using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 
@@ -12,6 +13,7 @@ namespace NzbDrone.Core.Datastore
         IDatabase Create(string dbPath, MigrationType migrationType = MigrationType.Main);
     }
 
+    [Singleton]
     public class DbFactory : IDbFactory
     {
         private readonly IMigrationController _migrationController;
@@ -31,14 +33,19 @@ namespace NzbDrone.Core.Datastore
             var connectionString = GetConnectionString(dbPath);
 
             _migrationController.MigrateToLatest(connectionString, migrationType);
-            var dataMapper = new DataMapper(SQLiteFactory.Instance, connectionString)
-                {
-                    SqlMode = SqlModes.Text,
-                };
+
 
             MapRepository.Instance.ReflectionStrategy = new SimpleReflectionStrategy();
 
-            return new Database(dataMapper);
+            return new Database(() =>
+                {
+                    var dataMapper = new DataMapper(SQLiteFactory.Instance, connectionString)
+                    {
+                        SqlMode = SqlModes.Text,
+                    };
+
+                    return dataMapper;
+                });
         }
 
         private string GetConnectionString(string dbPath)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using NzbDrone.Common.Messaging;
@@ -32,9 +33,10 @@ namespace NzbDrone.Common.Composition
         private void AutoRegisterInterfaces()
         {
             var loadedInterfaces = _loadedTypes.Where(t => t.IsInterface).ToList();
-            var implementedInterfaces = _loadedTypes.SelectMany(t => t.GetInterfaces()).Where(i => !i.Assembly.FullName.StartsWith("System")).ToList();
+            var implementedInterfaces = _loadedTypes.SelectMany(t => t.GetInterfaces());
 
             var contracts = loadedInterfaces.Union(implementedInterfaces).Where(c => !c.IsGenericTypeDefinition && !string.IsNullOrWhiteSpace(c.FullName))
+                .Where(c => !c.FullName.StartsWith("System"))
                 .Except(new List<Type> { typeof(IMessage), typeof(IEvent), typeof(IContainer) }).Distinct().OrderBy(c => c.FullName);
 
             foreach (var contract in contracts)
@@ -50,11 +52,6 @@ namespace NzbDrone.Common.Composition
 
         private void AutoRegisterImplementations(Type contractType)
         {
-            if (contractType.Name.Contains("oots"))
-            {
-                int adawd = 12;
-            }
-
             var implementations = GetImplementations(contractType).Where(c => !c.IsGenericTypeDefinition).ToList();
 
 
@@ -67,6 +64,9 @@ namespace NzbDrone.Common.Composition
             {
                 var impl = implementations.Single();
 
+                Trace.WriteLine(string.Format("Registering {0} -> {1}", contractType.FullName, impl.Name));
+
+
                 if (impl.HasAttribute<SingletonAttribute>())
                 {
                     Container.RegisterSingleton(contractType, impl);
@@ -78,6 +78,8 @@ namespace NzbDrone.Common.Composition
             }
             else
             {
+                Trace.WriteLine(string.Format("Registering {0} -> {1}", contractType.FullName, implementations.Count));
+
                 Container.RegisterAll(contractType, implementations);
             }
         }

@@ -10,12 +10,19 @@ namespace NzbDrone.Core.Datastore
 
     public class Database : IDatabase
     {
+        private readonly Func<IDataMapper> _dataMapperFactory;
 
-        public Database(IDataMapper dataMapper)
+        public Database(Func<IDataMapper> dataMapperFactory)
         {
-            DataMapper = dataMapper;
+            _dataMapperFactory = dataMapperFactory;
         }
 
-        public IDataMapper DataMapper { get; private set; }
+        public IDataMapper DataMapper
+        {
+            get
+            {
+                return _dataMapperFactory();
+            }
+        }
     }
 }

@@ -51,7 +51,10 @@ namespace NzbDrone.Common.Composition
 
         public void Register<TService>(Func<IContainer, TService> factory) where TService : class
         {
-            _container.Register((c, n) => factory(this));
+            _container.Register((c, n) =>
+                {
+                    return factory(this);
+                });
         }
 
         public void RegisterSingleton<TService, TImplementation>()

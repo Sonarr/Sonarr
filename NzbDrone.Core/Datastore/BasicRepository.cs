@@ -34,42 +34,46 @@ namespace NzbDrone.Core.Datastore
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
+        private readonly IDatabase _database;
         private readonly IMessageAggregator _messageAggregator;
 
         //TODO: add assertion to make sure model properly mapped 
 
 
-        private readonly IDataMapper _dataMapper;
+        private IDataMapper DataMapper
+        {
+            get { return _database.DataMapper; }
+        }
 
         public BasicRepository(IDatabase database, IMessageAggregator messageAggregator)
         {
+            _database = database;
             _messageAggregator = messageAggregator;
-            _dataMapper = database.DataMapper;
         }
 
         protected QueryBuilder<TModel> Query
         {
-            get { return _dataMapper.Query<TModel>(); }
+            get { return DataMapper.Query<TModel>(); }
         }
 
         protected void Delete(Expression<Func<TModel, bool>> filter)
         {
-            _dataMapper.Delete(filter);
+            DataMapper.Delete(filter);
         }
 
         public IEnumerable<TModel> All()
         {
-            return _dataMapper.Query<TModel>().ToList();
+            return DataMapper.Query<TModel>().ToList();
         }
 
         public int Count()
         {
-            return _dataMapper.Query<TModel>().GetRowCount();
+            return DataMapper.Query<TModel>().GetRowCount();
         }
 
         public TModel Get(int id)
         {
-            return _dataMapper.Query<TModel>().Single(c => c.Id == id);
+            return DataMapper.Query<TModel>().Single(c => c.Id == id);
         }
 
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
@@ -101,7 +105,7 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't insert model with existing ID");
             }
 
-            _dataMapper.Insert(model);
+            DataMapper.Insert(model);
             _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, ModelEvent<TModel>.RepositoryAction.Created));
 
             return model;
@@ -114,13 +118,13 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Can't update model with ID 0");
             }
 
-            _dataMapper.Update(model, c => c.Id == model.Id);
+            DataMapper.Update(model, c => c.Id == model.Id);
             return model;
         }
 
         public void Delete(TModel model)
         {
-            _dataMapper.Delete<TModel>(c => c.Id == model.Id);
+            DataMapper.Delete<TModel>(c => c.Id == model.Id);
         }
 
         public void InsertMany(IList<TModel> models)
@@ -157,7 +161,7 @@ namespace NzbDrone.Core.Datastore
 
         public void Delete(int id)
         {
-            _dataMapper.Delete<TModel>(c => c.Id == id);
+            DataMapper.Delete<TModel>(c => c.Id == id);
         }
 
         public void DeleteMany(IEnumerable<int> ids)
@@ -167,7 +171,7 @@ namespace NzbDrone.Core.Datastore
 
         public void Purge()
         {
-            _dataMapper.Delete<TModel>(c => c.Id > -1);
+            DataMapper.Delete<TModel>(c => c.Id > -1);
         }
 
         public bool HasItems()
@@ -182,7 +186,7 @@ namespace NzbDrone.Core.Datastore
                 throw new InvalidOperationException("Attempted to updated model without ID");
             }
 
-            _dataMapper.Update<TModel>()
+            DataMapper.Update<TModel>()
                 .Where(c => c.Id == model.Id)
                 .ColumnsIncluding(properties)
                 .Entity(model)

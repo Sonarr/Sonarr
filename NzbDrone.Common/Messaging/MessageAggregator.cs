@@ -20,20 +20,22 @@ namespace NzbDrone.Common.Messaging
 
         public void PublishEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
-            _logger.Trace("Publishing {0}", @event.GetType().Name);
+            var eventName = GetEventName(@event.GetType());
+
+            _logger.Trace("Publishing {0}", eventName);
 
             //call synchronous handlers first.
             foreach (var handler in _serviceFactory.BuildAll<IHandle<TEvent>>())
             {
                 try
                 {
-                    _logger.Debug("{0} -> {1}", @event.GetType().Name, handler.GetType().Name);
+                    _logger.Debug("{0} -> {1}", eventName, handler.GetType().Name);
                     handler.Handle(@event);
-                    _logger.Debug("{0} <- {1}", @event.GetType().Name, handler.GetType().Name);
+                    _logger.Debug("{0} <- {1}", eventName, handler.GetType().Name);
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException(string.Format("{0} failed while processing [{1}]", handler.GetType().Name, @event.GetType().Name), e);
+                    _logger.ErrorException(string.Format("{0} failed while processing [{1}]", handler.GetType().Name, eventName), e);
                 }
             }
 
@@ -42,11 +44,22 @@ namespace NzbDrone.Common.Messaging
                 var handlerLocal = handler;
                 Task.Factory.StartNew(() =>
                 {
-                    _logger.Debug("{0} ~> {1}", @event.GetType().Name, handlerLocal.GetType().Name);
+                    _logger.Debug("{0} ~> {1}", eventName, handlerLocal.GetType().Name);
                     handlerLocal.HandleAsync(@event);
-                    _logger.Debug("{0} <~ {1}", @event.GetType().Name, handlerLocal.GetType().Name);
+                    _logger.Debug("{0} <~ {1}", eventName, handlerLocal.GetType().Name);
                 });
             }
+        }
+
+
+        private static string GetEventName(Type eventType)
+        {
+            if (!eventType.IsGenericType)
+            {
+                return eventType.Name;
+            }
+
+            return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
         }
 
 
@@ -59,7 +72,7 @@ namespace NzbDrone.Common.Messaging
             var handler = _serviceFactory.Build(handlerContract);
 
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
-            
+
             try
             {
                 handlerContract.GetMethod("Execute").Invoke(handler, new object[] { command });
