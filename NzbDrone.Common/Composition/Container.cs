@@ -11,13 +11,7 @@ namespace NzbDrone.Common.Composition
         public Container(TinyIoCContainer container)
         {
             _container = container;
-            //_container.Options.AllowOverridingRegistrations = true;
-
-
-            //_container.RegisterSingle(LogManager.GetCurrentClassLogger());
-
             _container.Register<IContainer>(this);
-            //container.RegisterWithContext(dependencyContext => LogManager.GetLogger(dependencyContext.ImplementationType.Name));
         }
 
         public void Register<TService, TImplementation>()

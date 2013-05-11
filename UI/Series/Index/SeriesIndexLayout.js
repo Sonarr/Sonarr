@@ -111,7 +111,7 @@ define([
 
                 var viewButtons = {
                     type         : 'radio',
-                    storeState   : 'true',
+                    storeState   : true,
                     menuKey      : 'seriesViewMode',
                     defaultAction: 'listView',
                     items        : [
@@ -136,7 +136,34 @@ define([
                     ]
                 };
 
-                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
+
+                var leftSideButtons = {
+                    type      : 'default',
+                    storeState: false,
+                    items     : [
+                        {
+                            title: 'Add Series',
+                            icon : 'icon-plus',
+                            route: 'series/add'
+                        },
+                        {
+                            title  : 'RSS Sync',
+                            icon   : 'icon-rss',
+                            command: 'rsssync'
+                        },
+                        {
+                            title  : 'Update Library',
+                            icon   : 'icon-refresh',
+                            command: 'updatelibrary'
+                        }
+                    ]
+                };
+
+                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({
+                    right  : [ viewButtons],
+                    left   : [ leftSideButtons],
+                    context: this
+                }));
             }
 
         })

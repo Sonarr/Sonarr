@@ -1,5 +1,5 @@
 "use strict";
-define(['app', 'Shared/Toolbar/Radio/RadioButtonCollectionView', 'Shared/Toolbar/ButtonCollection'], function () {
+define(['app', 'Shared/Toolbar/Radio/RadioButtonCollectionView','Shared/Toolbar/Button/ButtonCollectionView', 'Shared/Toolbar/ButtonCollection'], function () {
     NzbDrone.Shared.Toolbar.ToolbarLayout = Backbone.Marionette.Layout.extend({
         template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 
@@ -64,12 +64,25 @@ define(['app', 'Shared/Toolbar/Radio/RadioButtonCollectionView', 'Shared/Toolbar
 
             var buttonGroupView;
 
-            if (buttonGroup.type === 'radio') {
-                buttonGroupView = new NzbDrone.Shared.Toolbar.RadioButtonCollectionView(
-                    {
-                        collection: groupCollection,
-                        menu      : buttonGroup
-                    });
+            switch (buttonGroup.type) {
+                case 'radio':
+                {
+                    buttonGroupView = new NzbDrone.Shared.Toolbar.RadioButtonCollectionView(
+                        {
+                            collection: groupCollection,
+                            menu      : buttonGroup
+                        });
+                    break;
+                }
+                default :
+                {
+                    buttonGroupView = new NzbDrone.Shared.Toolbar.ButtonCollectionView(
+                        {
+                            collection: groupCollection,
+                            menu      : buttonGroup
+                        });
+                    break;
+                }
             }
 
             this[position + '_' + (index + 1).toString()].show(buttonGroupView);
