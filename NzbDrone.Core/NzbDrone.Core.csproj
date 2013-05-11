@@ -192,6 +192,7 @@
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
+    <Compile Include="Datastore\Converters\UtcDateTimeConverter.cs" />
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />

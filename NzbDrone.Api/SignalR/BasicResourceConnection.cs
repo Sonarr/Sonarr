@@ -23,19 +23,13 @@ namespace NzbDrone.Api.SignalR
 
         protected override Task OnConnected(IRequest request, string connectionId)
         {
-            _logger.Debug("SignalR client connected. ID:{0}", connectionId);
+            _logger.Trace("SignalR client connected. ID:{0}", connectionId);
             return base.OnConnected(request, connectionId);
-        }
-
-        public override Task ProcessRequest(Microsoft.AspNet.SignalR.Hosting.HostContext context)
-        {
-            _logger.Debug("Request: {0}", context);
-            return base.ProcessRequest(context);
         }
 
         public void HandleAsync(ModelEvent<T> message)
         {
-            var context =((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
+            var context = ((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
             context.Connection.Broadcast(message);
         }
     }

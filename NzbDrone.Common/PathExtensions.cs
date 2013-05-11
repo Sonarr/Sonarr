@@ -31,6 +31,12 @@ namespace NzbDrone.Common
             return info.FullName.TrimEnd('/').Trim('\\', ' ');
         }
 
+
+        public static bool ContainsInvalidPathChars(this string text)
+        {
+            return text.IndexOfAny(Path.GetInvalidPathChars()) >= 0;
+        }
+
         private static string GetProperDirectoryCapitalization(DirectoryInfo dirInfo)
         {
             var parentDirInfo = dirInfo.Parent;

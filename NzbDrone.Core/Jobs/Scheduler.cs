@@ -35,6 +35,8 @@ namespace NzbDrone.Core.Jobs
         {
             var tasks = _taskManager.GetPending();
 
+            _logger.Trace("Pending Tasks: {0}", tasks.Count);
+
             foreach (var task in tasks)
             {
                 try
@@ -46,7 +48,7 @@ namespace NzbDrone.Core.Jobs
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("Error occured while execution task " + task.TypeName, e);
+                    _logger.ErrorException("Error occurred while execution task " + task.TypeName, e);
                 }
                 finally
                 {

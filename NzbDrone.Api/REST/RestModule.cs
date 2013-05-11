@@ -135,6 +135,7 @@ namespace NzbDrone.Api.REST
 
         private TResource ReadFromRequest()
         {
+            //TODO: handle when request is null
             var resource = Request.Body.FromJson<TResource>();
 
             var errors = SharedValidator.Validate(resource).Errors.ToList();

@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Jobs
 
         public IList<ScheduledTask> GetPending()
         {
-            return _scheduledTaskRepository.GetPendingJobs();
+            return _scheduledTaskRepository.All().Where(c => c.LastExecution.AddMinutes(c.Interval) < DateTime.UtcNow).ToList();
         }
 
         public void SetLastExecutionTime(int taskId)

@@ -322,7 +322,7 @@ namespace NzbDrone.Core.Parser
             }
             //Based on extension
 
-            if (result.Quality == Quality.Unknown)
+            if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
             {
                 try
                 {

@@ -88,10 +88,18 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
 
+        [Test]
+        public void should_read_and_write_in_utc()
+        {
+            var storedTime = DateTime.UtcNow;
 
+            _sampleType.LastExecution =storedTime;
 
+            Subject.Insert(_sampleType);
 
-
+            StoredModel.LastExecution.Kind.Should().Be(DateTimeKind.Utc);
+            StoredModel.LastExecution.ToLongTimeString().Should().Be(storedTime.ToLongTimeString());
+        }
 
         [Test]
         public void should_have_id_when_returned_from_database()
