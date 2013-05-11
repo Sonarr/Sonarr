@@ -12,10 +12,9 @@ namespace NzbDrone.Core.Jobs
     public interface ITaskManager
     {
         IList<ScheduledTask> GetPending();
-        void SetLastExecutionTime(int taskId);
     }
 
-    public class TaskManager : IHandle<ApplicationStartedEvent>, ITaskManager
+    public class TaskManager : IHandle<ApplicationStartedEvent>, IHandleAsync<CommandExecutedEvent>, ITaskManager
     {
         private readonly IScheduledTaskRepository _scheduledTaskRepository;
         private readonly Logger _logger;
@@ -30,11 +29,6 @@ namespace NzbDrone.Core.Jobs
         public IList<ScheduledTask> GetPending()
         {
             return _scheduledTaskRepository.All().Where(c => c.LastExecution.AddMinutes(c.Interval) < DateTime.UtcNow).ToList();
-        }
-
-        public void SetLastExecutionTime(int taskId)
-        {
-            _scheduledTaskRepository.SetLastExecutionTime(taskId, DateTime.UtcNow);
         }
 
         public void Handle(ApplicationStartedEvent message)
@@ -71,6 +65,12 @@ namespace NzbDrone.Core.Jobs
                 }
 
             }
+        }
+
+        public void HandleAsync(CommandExecutedEvent message)
+        {
+            var commandId = _scheduledTaskRepository.GetDefinition(message.Command.GetType()).Id;
+            _scheduledTaskRepository.SetLastExecutionTime(commandId, DateTime.UtcNow);
         }
     }
 }

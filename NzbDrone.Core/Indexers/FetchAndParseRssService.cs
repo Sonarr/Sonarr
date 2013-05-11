@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Debug("Available indexers {0}", indexers.Count);
 
-            Parallel.ForEach(indexers, indexer =>
+            Parallel.ForEach(indexers, new ParallelOptions { MaxDegreeOfParallelism = 10 }, indexer =>
                 {
                     var indexerFeed = _feedFetcher.FetchRss(indexer);
 

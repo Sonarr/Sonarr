@@ -33,29 +33,32 @@ namespace NzbDrone.Core.Jobs
 
         private void ExecuteCommands()
         {
-            var tasks = _taskManager.GetPending();
-
-            _logger.Trace("Pending Tasks: {0}", tasks.Count);
-
-            foreach (var task in tasks)
+            try
             {
-                try
-                {
-                    var commandType = Type.GetType(task.TypeName);
-                    var command = (ICommand)Activator.CreateInstance(commandType);
+                Timer.Enabled = false;
 
-                    _messageAggregator.PublishCommand(command);
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("Error occurred while execution task " + task.TypeName, e);
-                }
-                finally
-                {
-                    _taskManager.SetLastExecutionTime(task.Id);
-                }
+                var tasks = _taskManager.GetPending();
 
+                _logger.Trace("Pending Tasks: {0}", tasks.Count);
 
+                foreach (var task in tasks)
+                {
+                    try
+                    {
+                        var commandType = Type.GetType(task.TypeName);
+                        var command = (ICommand)Activator.CreateInstance(commandType);
+
+                        _messageAggregator.PublishCommand(command);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.ErrorException("Error occurred while execution task " + task.TypeName, e);
+                    }
+                }
+            }
+            finally
+            {
+                Timer.Enabled = true;
             }
         }
 

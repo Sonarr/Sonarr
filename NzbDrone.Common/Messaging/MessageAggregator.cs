@@ -75,15 +75,22 @@ namespace NzbDrone.Common.Messaging
 
             try
             {
-                handlerContract.GetMethod("Execute").Invoke(handler, new object[] { command });
+                handlerContract.GetMethod("Execute").Invoke(handler, new object[] {command});
+                PublishEvent(new CommandCompletedEvent(command));
             }
             catch (TargetInvocationException e)
             {
+                PublishEvent(new CommandFailedEvent(command, e));
+
                 if (e.InnerException != null)
                 {
                     throw e.InnerException;
                 }
                 throw;
+            }
+            finally
+            {
+                PublishEvent(new CommandExecutedEvent(command));
             }
 
             _logger.Debug("{0} <- {1}", command.GetType().Name, handler.GetType().Name);

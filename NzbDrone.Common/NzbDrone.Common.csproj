@@ -103,6 +103,9 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
+    <Compile Include="Messaging\CommandCompletedEvent.cs" />
+    <Compile Include="Messaging\CommandStartedEvent.cs" />
+    <Compile Include="Messaging\CommandFailedEvent.cs" />
     <Compile Include="Messaging\IExecute.cs" />
     <Compile Include="Messaging\ICommand.cs" />
     <Compile Include="Messaging\IMessage.cs" />
@@ -120,6 +123,8 @@
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="Messaging\MessageExtensions.cs" />
+    <Compile Include="Messaging\TestCommand.cs" />
+    <Compile Include="Messaging\TestCommandExecutor.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="StringExtention.cs" />
