@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
-            if (clrValue != null)
+            if (clrValue != null && clrValue != DBNull.Value)
             {
                 return ((DateTime)clrValue).ToUniversalTime();
             }

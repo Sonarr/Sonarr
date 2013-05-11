@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Test.Datastore
             _basicType = Builder<ScheduledTask>
                     .CreateNew()
                     .With(c => c.Id = 0)
+                    .With(c => c.LastExecution = DateTime.UtcNow)
                     .Build();
         }
 

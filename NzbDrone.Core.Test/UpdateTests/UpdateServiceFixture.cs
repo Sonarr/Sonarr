@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             updateSubFolder.Exists.Should().BeFalse();
 
-            Mocker.Resolve<IDiskProvider>();
+            Mocker.Resolve<DiskProvider>();
             Mocker.Resolve<ArchiveProvider>();
 
             Subject.InstallAvailableUpdate();
