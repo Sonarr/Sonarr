@@ -147,14 +147,25 @@ define([
                             route: 'series/add'
                         },
                         {
-                            title  : 'RSS Sync',
-                            icon   : 'icon-rss',
-                            command: 'rsssync'
+                            title         : 'RSS Sync',
+                            icon          : 'icon-rss',
+                            command       : 'rsssync',
+                            successMessage: 'RSS Sync Completed',
+                            errorMessage  : 'RSS Sync Failed!'
                         },
                         {
-                            title  : 'Update Library',
-                            icon   : 'icon-refresh',
-                            command: 'updatelibrary'
+                            title         : 'Update Library',
+                            icon          : 'icon-refresh',
+                            command       : 'updatelibrary',
+                            successMessage: 'Library was updated!',
+                            errorMessage  : 'Library update failed!'
+                        },
+                        {
+                            title         : 'Test Action',
+                            icon          : 'icon-asterisk',
+                            command       : 'test',
+                            successMessage: 'Test Completed',
+                            errorMessage  : 'Test Failed!'
                         }
                     ]
                 };

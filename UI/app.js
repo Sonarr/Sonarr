@@ -30,32 +30,49 @@ define('app', function () {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Config = {};
-    window.NzbDrone.Series = {};
-    window.NzbDrone.Series.Index = {};
-    window.NzbDrone.Series.Index.Table = {};
-    window.NzbDrone.Series.Index.List = {};
-    window.NzbDrone.Series.Index.Posters = {};
-    window.NzbDrone.Series.Edit = {};
-    window.NzbDrone.Series.Delete = {};
-    window.NzbDrone.Series.Details = {};
-    window.NzbDrone.AddSeries = {};
-    window.NzbDrone.AddSeries.New = {};
-    window.NzbDrone.AddSeries.Existing = {};
-    window.NzbDrone.AddSeries.RootFolders = {};
+
+    window.NzbDrone.Series = {
+        Index  : {
+            Table  : {},
+            List   : {},
+            Posters: {}
+
+        },
+        Edit   : {},
+        Delete : {},
+        Details: {}
+    };
+
+    window.NzbDrone.AddSeries = {
+        New        : {},
+        Existing   : {},
+        RootFolders: {}
+    };
+
+
     window.NzbDrone.Quality = {};
-    window.NzbDrone.Shared = {};
-    window.NzbDrone.Shared.Toolbar = {};
+
+    window.NzbDrone.Commands = {};
+
+    window.NzbDrone.Shared = {
+        Toolbar  : {},
+        Messenger: {}
+    };
     window.NzbDrone.Calendar = {};
-    window.NzbDrone.Settings = {};
-    window.NzbDrone.Settings.Naming = {};
-    window.NzbDrone.Settings.Quality = {};
-    window.NzbDrone.Settings.Quality.Size = {};
-    window.NzbDrone.Settings.Quality.Profile = {};
-    window.NzbDrone.Settings.Indexers = {};
-    window.NzbDrone.Settings.DownloadClient = {};
-    window.NzbDrone.Settings.Notifications = {};
-    window.NzbDrone.Settings.System = {};
-    window.NzbDrone.Settings.Misc = {};
+
+    window.NzbDrone.Settings = {
+        Naming        : {},
+        Quality       : {
+            Size   : {},
+            Profile: {}
+        },
+        Indexers      : {},
+        DownloadClient: {},
+        Notifications : {},
+        System        : {},
+        Misc          : {}
+    };
+
     window.NzbDrone.Missing = {};
     window.NzbDrone.History = {};
 
