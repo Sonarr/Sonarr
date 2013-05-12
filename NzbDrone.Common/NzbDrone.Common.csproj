@@ -103,6 +103,7 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
+    <Compile Include="Serializer\JsonSerializer.cs" />
     <Compile Include="Messaging\CommandCompletedEvent.cs" />
     <Compile Include="Messaging\CommandStartedEvent.cs" />
     <Compile Include="Messaging\CommandFailedEvent.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
-    <Compile Include="Serializer\JsonSerializer.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="Messaging\MessageExtensions.cs" />
     <Compile Include="Messaging\TestCommand.cs" />

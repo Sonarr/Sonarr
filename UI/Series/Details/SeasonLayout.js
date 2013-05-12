@@ -25,7 +25,7 @@ define(['app'], function () {
                 name     : 'airDate',
                 label    : 'Air Date',
                 editable : false,
-                cell     : 'datetime'
+                cell     : 'date'
                 //formatter: new Backgrid.AirDateFormatter()
             }
         ],
