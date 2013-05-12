@@ -47,11 +47,12 @@
     if(/String|Number|Boolean/.test(name)) {
       type = name.toLowerCase();
     }
-    fn = (name === 'Array' && array.isArray) || function(obj) {
+    fn = (name === 'Array' && array.isArray) || function(obj, klass) {
       if(type && typeof obj === type) {
         return true;
       }
-      return className(obj) === '[object '+name+']';
+      klass = klass || className(obj);
+      return klass === '[object '+name+']';
     }
     typeChecks[name] = fn;
     return fn;
@@ -192,11 +193,25 @@
     return obj && typeof obj === 'object';
   }
 
-  function isObject(obj) {
+  function isPlainObject(obj, klass) {
+    klass = klass || className(obj);
+    try {
+      // Not own constructor property must be Object
+      // This code was borrowed from jQuery.isPlainObject
+      if (obj.constructor &&
+            !hasOwnProperty(obj, 'constructor') &&
+            !hasOwnProperty(obj.constructor.prototype, 'isPrototypeOf')) {
+        return false;
+      }
+    } catch (e) {
+      // IE8,9 Will throw exceptions on certain host objects.
+      return false;
+    }
     // === on the constructor is not safe across iframes
     // 'hasOwnProperty' ensures that the object also inherits
     // from Object, which is false for DOMElements in IE.
-    return !!obj && className(obj) === '[object Object]' && 'hasOwnProperty' in obj;
+    // AP: CAN THIS NOW BE REMOVED WITH THE CODE ABOVE IN PLACE???
+    return !!obj && klass === '[object Object]' && 'hasOwnProperty' in obj;
   }
 
   function hasOwnProperty(obj, key) {
@@ -343,8 +358,8 @@
     if(type === 'string') return thing;
 
     klass         = internalToString.call(thing)
-    thingIsObject = isObject(thing);
     thingIsArray  = klass === '[object Array]';
+    thingIsObject = isObjectPrimitive(thing) && !thingIsArray;
 
     if(thing != null && thingIsObject || thingIsArray) {
       // This method for checking for cyclic structures was egregiously stolen from
@@ -364,7 +379,7 @@
         }
       }
       stack.push(thing);
-      value = string(thing.constructor);
+      value = thing.valueOf() + string(thing.constructor);
       arr = thingIsArray ? thing : object.keys(thing).sort();
       for(i = 0, len = arr.length; i < len; i++) {
         key = thingIsArray ? i : arr[i];
@@ -388,9 +403,11 @@
   }
 
   function objectIsMatchedByValue(obj) {
+    // Only known objects are matched by value. This is notably excluding functions, DOM Elements, and instances of
+    // user-created classes. The latter can arguably be matched by value, but distinguishing between these and
+    // host objects -- which should never be compared by value -- is very tricky so not dealing with it here.
     var klass = className(obj);
-    return /^\[object Date|Array|String|Number|RegExp|Boolean|Arguments\]$/.test(klass) ||
-           isObject(obj);
+    return /^\[object Date|Array|String|Number|RegExp|Boolean|Arguments\]$/.test(klass) || isPlainObject(obj, klass);
   }
 
 
@@ -600,7 +617,7 @@
      * @method map(<map>, [scope])
      * @returns Array
      * @short Maps the array to another array containing the values that are the result of calling <map> on each element.
-     * @extra [scope] is the %this% object. In addition to providing this method for browsers that don't support it natively, this enhanced method also directly accepts a string, which is a shortcut for a function that gets that property (or invokes a function) on each element.
+     * @extra [scope] is the %this% object. When <map> is a function, it receives three arguments: the current element, the current index, and a reference to the array. In addition to providing this method for browsers that don't support it natively, this enhanced method also directly accepts a string, which is a shortcut for a function that gets that property (or invokes a function) on each element.
      * @example
      *
      +   [1,2,3].map(function(n) {
@@ -912,13 +929,17 @@
     if(el === match) {
       // Match strictly equal values up front.
       return true;
-    } else if(isRegExp(match) && isString(el)) {
+    } else if(isRegExp(match)) {
       // Match against a regexp
       return regexp(match).test(el);
+    } else if(isDate(match)) {
+      // Match against a date. isEqual below should also
+      // catch this but matching directly up front for speed.
+      return isDate(el) && match.getTime() === el.getTime();
     } else if(isFunction(match)) {
       // Match against a filtering function
       return match.apply(scope, params);
-    } else if(isObject(match) && isObjectPrimitive(el)) {
+    } else if(isPlainObject(match) && isObjectPrimitive(el)) {
       // Match against a hash or array.
       iterateOverObject(match, function(key, value) {
         if(!multiMatch(el[key], match[key], scope, [el[key], el])) {
@@ -2237,7 +2258,7 @@
 
   var DateUnits = [
     {
-      unit: 'year',
+      name: 'year',
       method: 'FullYear',
       ambiguous: true,
       multiplier: function(d) {
@@ -2246,7 +2267,7 @@
       }
     },
     {
-      unit: 'month',
+      name: 'month',
       error: 0.919, // Feb 1-28 over 1 month
       method: 'Month',
       ambiguous: true,
@@ -2262,14 +2283,14 @@
       }
     },
     {
-      unit: 'week',
+      name: 'week',
       method: 'ISOWeek',
       multiplier: function() {
         return 7 * 24 * 60 * 60 * 1000;
       }
     },
     {
-      unit: 'day',
+      name: 'day',
       error: 0.958, // DST traversal over 1 day
       method: 'Date',
       ambiguous: true,
@@ -2278,28 +2299,28 @@
       }
     },
     {
-      unit: 'hour',
+      name: 'hour',
       method: 'Hours',
       multiplier: function() {
         return 60 * 60 * 1000;
       }
     },
     {
-      unit: 'minute',
+      name: 'minute',
       method: 'Minutes',
       multiplier: function() {
         return 60 * 1000;
       }
     },
     {
-      unit: 'second',
+      name: 'second',
       method: 'Seconds',
       multiplier: function() {
         return 1000;
       }
     },
     {
-      unit: 'millisecond',
+      name: 'millisecond',
       method: 'Milliseconds',
       multiplier: function() {
         return 1;
@@ -2354,8 +2375,8 @@
       });
     },
 
-    getEnglishUnit: function(n) {
-      return English['units'][this['units'].indexOf(n) % 8];
+    getUnitIndex: function(n) {
+      return this['units'].indexOf(n) % 8;
     },
 
     getRelativeFormat: function(adu) {
@@ -2408,7 +2429,7 @@
     addFormat: function(src, allowsTime, match, variant, iso) {
       var to = match || [], loc = this, time, timeMarkers, lastIsNumeral;
 
-      src = src.replace(/\s+/g, '[-,. ]*');
+      src = src.replace(/\s+/g, '[,. ]*');
       src = src.replace(/\{([^,]+?)\}/g, function(all, k) {
         var value, arr, result,
             opt   = k.match(/\?$/),
@@ -2517,7 +2538,7 @@
     }
 
     function getNum() {
-      var arr = ['\\d+'].concat(loc['articles']);
+      var arr = ['-?\\d+'].concat(loc['articles']);
       if(loc['numbers']) arr = arr.concat(loc['numbers']);
       return arrayToAlternates(arr);
     }
@@ -2621,8 +2642,8 @@
   // Date argument helpers
 
   function collectDateArguments(args, allowDuration) {
-    var obj, arr;
-    if(isObject(args[0])) {
+    var obj;
+    if(isObjectPrimitive(args[0])) {
       return args;
     } else if (isNumber(args[0]) && !isNumber(args[1])) {
       return [args[0]];
@@ -2631,7 +2652,7 @@
     }
     obj = {};
     DateArgumentUnits.forEach(function(u,i) {
-      obj[u.unit] = args[i];
+      obj[u.name] = args[i];
     });
     return [obj];
   }
@@ -2646,6 +2667,19 @@
       params[match[2].toLowerCase()] = num;
     }
     return params;
+  }
+
+  // Date iteration helpers
+
+  function iterateOverDateUnits(fn, from, to) {
+    var i, unit;
+    if(isUndefined(to)) to = DateUnitsReversed.length;
+    for(i = from || 0; i < to; i++) {
+      unit = DateUnitsReversed[i];
+      if(fn(unit.name, unit, i) === false) {
+        break;
+      }
+    }
   }
 
   // Date parsing helpers
@@ -2693,7 +2727,66 @@
   }
 
   function getExtendedDate(f, localeCode, prefer, forceUTC) {
-    var d = new date(), relative = false, baseLocalization, loc, format, set, unit, weekday, num, tmp, after;
+    var d, relative, baseLocalization, afterCallbacks, loc, set, unit, unitIndex, weekday, num, tmp;
+
+    d = new date();
+    afterCallbacks = [];
+
+    function afterDateSet(fn) {
+      afterCallbacks.push(fn);
+    }
+
+    function fireCallbacks() {
+      afterCallbacks.forEach(function(fn) {
+        fn.call();
+      });
+    }
+
+    function setWeekdayOfMonth() {
+      var w = d.getWeekday();
+      d.setWeekday((7 * (set['num'] - 1)) + (w > weekday ? weekday + 7 : weekday));
+    }
+
+    function setUnitEdge() {
+      var modifier = loc.modifiersByName[set['edge']];
+      iterateOverDateUnits(function(name) {
+        if(isDefined(set[name])) {
+          unit = name;
+          return false;
+        }
+      }, 4);
+      if(unit === 'year') set.specificity = 'month';
+      else if(unit === 'month' || unit === 'week') set.specificity = 'day';
+      d[(modifier.value < 0 ? 'endOf' : 'beginningOf') + simpleCapitalize(unit)]();
+      // This value of -2 is arbitrary but it's a nice clean way to hook into this system.
+      if(modifier.value === -2) d.reset();
+    }
+
+    function separateAbsoluteUnits() {
+      var params;
+      iterateOverDateUnits(function(name, u, i) {
+        if(name === 'day') name = 'date';
+        if(isDefined(set[name])) {
+          // If there is a time unit set that is more specific than
+          // the matched unit we have a string like "5:30am in 2 minutes",
+          // which is meaningless, so invalidate the date...
+          if(i >= unitIndex) {
+            invalidateDate(d);
+            return false;
+          }
+          // ...otherwise set the params to set the absolute date
+          // as a callback after the relative date has been set.
+          params = params || {};
+          params[name] = set[name];
+          delete set[name];
+        }
+      });
+      if(params) {
+        afterDateSet(function() {
+          d.set(params, true);
+        });
+      }
+    }
 
     d.utc(forceUTC);
 
@@ -2703,7 +2796,7 @@
       d.utc(f.isUTC()).setTime(f.getTime());
     } else if(isNumber(f)) {
       d.setTime(f);
-    } else if(isObject(f)) {
+    } else if(isObjectPrimitive(f)) {
       d.set(f, true);
       set = f;
     } else if(isString(f)) {
@@ -2719,15 +2812,15 @@
         iterateOverObject(baseLocalization.getFormats(), function(i, dif) {
           var match = f.match(dif.reg);
           if(match) {
-            format = dif;
-            loc = format.locale;
-            set = getFormatMatch(match, format.to, loc);
+
+            loc = dif.locale;
+            set = getFormatMatch(match, dif.to, loc);
+            loc.cachedFormat = dif;
+
 
             if(set['utc']) {
               d.utc();
             }
-
-            loc.cachedFormat = format;
 
             if(set.timestamp) {
               set = set.timestamp;
@@ -2735,7 +2828,7 @@
             }
 
             // If there's a variant (crazy Endian American format), swap the month and day.
-            if(format.variant && !isString(set['month']) && (isString(set['date']) || baseLocalization.hasVariant(localeCode))) {
+            if(dif.variant && !isString(set['month']) && (isString(set['date']) || baseLocalization.hasVariant(localeCode))) {
               tmp = set['month'];
               set['month'] = set['date'];
               set['date']  = tmp;
@@ -2771,13 +2864,10 @@
               delete set['day'];
               if(set['num'] && set['month']) {
                 // If we have "the 2nd tuesday of June", set the day to the beginning of the month, then
-                // look ahead to set the weekday after all other properties have been set. The weekday needs
-                // to be set after the actual set because it requires overriding the "prefer" argument which
+                // set the weekday after all other properties have been set. The weekday needs to be set
+                // after the actual set because it requires overriding the "prefer" argument which
                 // could unintentionally send the year into the future, past, etc.
-                after = function() {
-                  var w = d.getWeekday();
-                  d.setWeekday((7 * (set['num'] - 1)) + (w > weekday ? weekday + 7 : weekday));
-                }
+                afterDateSet(setWeekdayOfMonth);
                 set['day'] = 1;
               } else {
                 set['weekday'] = weekday;
@@ -2808,27 +2898,22 @@
 
             // Date has a unit like "days", "months", etc. are all relative to the current date.
             if(set['unit']) {
-              relative = true;
-              num = loc.getNumber(set['num']);
-              unit = loc.getEnglishUnit(set['unit']);
+              relative  = true;
+              num       = loc.getNumber(set['num']);
+              unitIndex = loc.getUnitIndex(set['unit']);
+              unit      = English['units'][unitIndex];
+
+              // Formats like "the 15th of last month" or "6:30pm of next week"
+              // contain absolute units in addition to relative ones, so separate
+              // them here, remove them from the params, and set up a callback to
+              // set them after the relative ones have been set.
+              separateAbsoluteUnits();
 
               // Shift and unit, ie "next month", "last week", etc.
-              if(set['shift'] || set['edge']) {
+              if(set['shift']) {
                 num *= (tmp = loc.modifiersByName[set['shift']]) ? tmp.value : 0;
-
-                // Relative month and static date: "the 15th of last month"
-                if(unit === 'month' && isDefined(set['date'])) {
-                  d.set({ 'day': set['date'] }, true);
-                  delete set['date'];
-                }
-
-                // Relative year and static month/date: "June 15th of last year"
-                if(unit === 'year' && isDefined(set['month'])) {
-                  d.set({ 'month': set['month'], 'day': set['date'] }, true);
-                  delete set['month'];
-                  delete set['date'];
-                }
               }
+
               // Unit and sign, ie "months ago", "weeks from now", etc.
               if(set['sign'] && (tmp = loc.modifiersByName[set['sign']])) {
                 num *= tmp.value;
@@ -2844,22 +2929,28 @@
               set[unit] = (set[unit] || 0) + num;
             }
 
+            // If there is an "edge" it needs to be set after the
+            // other fields are set. ie "the end of February"
+            if(set['edge']) {
+              afterDateSet(setUnitEdge);
+            }
+
             if(set['year_sign'] === '-') {
               set['year'] *= -1;
             }
 
-            DateUnitsReversed.slice(1,4).forEach(function(u, i) {
-              var value = set[u.unit], fraction = value % 1;
+            iterateOverDateUnits(function(name, unit, i) {
+              var value = set[name], fraction = value % 1;
               if(fraction) {
-                set[DateUnitsReversed[i].unit] = round(fraction * (u.unit === 'second' ? 1000 : 60));
-                set[u.unit] = floor(value);
+                set[DateUnitsReversed[i - 1].name] = round(fraction * (name === 'second' ? 1000 : 60));
+                set[name] = floor(value);
               }
-            });
+            }, 1, 4);
             return false;
           }
         });
       }
-      if(!format) {
+      if(!set) {
         // The Date constructor does something tricky like checking the number
         // of arguments so simply passing in undefined won't work.
         if(f !== 'now') {
@@ -2880,26 +2971,7 @@
         }
         updateDate(d, set, true, false, prefer);
       }
-
-      // If there is an "edge" it needs to be set after the
-      // other fields are set. ie "the end of February"
-      if(set && set['edge']) {
-        tmp = loc.modifiersByName[set['edge']];
-        iterateOverObject(DateUnitsReversed.slice(4), function(i, u) {
-          if(isDefined(set[u.unit])) {
-            unit = u.unit;
-            return false;
-          }
-        });
-        if(unit === 'year') set.specificity = 'month';
-        else if(unit === 'month' || unit === 'week') set.specificity = 'day';
-        d[(tmp.value < 0 ? 'endOf' : 'beginningOf') + simpleCapitalize(unit)]();
-        // This value of -2 is arbitrary but it's a nice clean way to hook into this system.
-        if(tmp.value === -2) d.reset();
-      }
-      if(after) {
-        after();
-      }
+      fireCallbacks();
       // A date created by parsing a string presumes that the format *itself* is UTC, but
       // not that the date, once created, should be manipulated as such. In other words,
       // if you are creating a date object from a server time "2012-11-15T12:00:00Z",
@@ -2932,15 +3004,15 @@
   }
 
   function getAdjustedUnit(ms) {
-    var next, ams = math.abs(ms), value = ams, unit = 0;
-    DateUnitsReversed.slice(1).forEach(function(u, i) {
-      next = floor(round(ams / u.multiplier() * 10) / 10);
+    var next, ams = math.abs(ms), value = ams, unitIndex = 0;
+    iterateOverDateUnits(function(name, unit, i) {
+      next = floor(round(ams / unit.multiplier() * 10) / 10);
       if(next >= 1) {
         value = next;
-        unit = i + 1;
+        unitIndex = i;
       }
-    });
-    return [value, unit, ms];
+    }, 1);
+    return [value, unitIndex, ms];
   }
 
   function getRelativeWithMonthFallback(date) {
@@ -3019,7 +3091,7 @@
     if(!p.date.isValid()) return false;
     if(p.set && p.set.specificity) {
       DateUnits.forEach(function(u, i) {
-        if(u.unit === p.set.specificity) {
+        if(u.name === p.set.specificity) {
           accuracy = u.multiplier(p.date, d - p.date) - 1;
         }
       });
@@ -3097,31 +3169,30 @@
     // because the order needs to be reversed in order to get the lowest specificity,
     // also because higher order units can be overwritten by lower order units, such
     // as setting hour: 3, minute: 345, etc.
-    iterateOverObject(DateUnitsReversed, function(i,u) {
-      var isDay = u.unit === 'day';
-      if(uniqueParamExists(u.unit, isDay)) {
-        params.specificity = u.unit;
+    iterateOverDateUnits(function(name, unit, i) {
+      var isDay = name === 'day';
+      if(uniqueParamExists(name, isDay)) {
+        params.specificity = name;
         specificityIndex = +i;
         return false;
-      } else if(reset && u.unit !== 'week' && (!isDay || !paramExists('week'))) {
+      } else if(reset && name !== 'week' && (!isDay || !paramExists('week'))) {
         // Days are relative to months, not weeks, so don't reset if a week exists.
-        callDateSet(d, u.method, (isDay ? 1 : 0));
+        callDateSet(d, unit.method, (isDay ? 1 : 0));
       }
     });
 
-
     // Now actually set or advance the date in order, higher units first.
-    DateUnits.forEach(function(u,i) {
-      var unit = u.unit, method = u.method, higherUnit = DateUnits[i - 1], value;
-      value = getParam(unit)
+    DateUnits.forEach(function(u, i) {
+      var name = u.name, method = u.method, higherUnit = DateUnits[i - 1], value;
+      value = getParam(name)
       if(isUndefined(value)) return;
       if(advance) {
-        if(unit === 'week') {
+        if(name === 'week') {
           value  = (params['day'] || 0) + (value * 7);
           method = 'Date';
         }
         value = (value * advance) + callDateGet(d, method);
-      } else if(unit === 'month' && paramExists('day')) {
+      } else if(name === 'month' && paramExists('day')) {
         // When setting the month, there is a chance that we will traverse into a new month.
         // This happens in DST shifts, for example June 1st DST jumping to January 1st
         // (non-DST) will have a shift of -1:00 which will traverse into the previous year.
@@ -3139,7 +3210,7 @@
         callDateSet(d, 'Date', 15);
       }
       callDateSet(d, method, value);
-      if(advance && unit === 'month') {
+      if(advance && name === 'month') {
         checkMonthTraversal(d, value);
       }
     });
@@ -3153,13 +3224,13 @@
     }
 
     if(canDisambiguate()) {
-      iterateOverObject(DateUnitsReversed.slice(specificityIndex + 1), function(i,u) {
-        var ambiguous = u.ambiguous || (u.unit === 'week' && paramExists('weekday'));
-        if(ambiguous && !uniqueParamExists(u.unit, u.unit === 'day')) {
-          d[u.addMethod](prefer);
+      iterateOverDateUnits(function(name, unit) {
+        var ambiguous = unit.ambiguous || (name === 'week' && paramExists('weekday'));
+        if(ambiguous && !uniqueParamExists(name, name === 'day')) {
+          d[unit.addMethod](prefer);
           return false;
         }
-      });
+      }, specificityIndex + 1);
     }
     return d;
   }
@@ -3213,6 +3284,10 @@
       localeCode = args[1];
     }
     return getExtendedDate(f, localeCode, prefer, forceUTC).date;
+  }
+
+  function invalidateDate(d) {
+    d.setTime();
   }
 
   function buildDateUnits() {
@@ -3420,7 +3495,7 @@
 
   function buildDateMethods() {
     extendSimilar(date, true, false, DateUnits, function(methods, u, i) {
-      var unit = u.unit, caps = simpleCapitalize(unit), multiplier = u.multiplier(), since, until;
+      var name = u.name, caps = simpleCapitalize(name), multiplier = u.multiplier(), since, until;
       u.addMethod = 'add' + caps + 's';
       // "since/until now" only count "past" an integer, i.e. "2 days ago" is
       // anything between 2 - 2.999 days. The default margin of error is 0.999,
@@ -3450,27 +3525,27 @@
       until = function(f, localeCode) {
         return applyErrorMargin(date.create(f, localeCode).getTime() - this.getTime());
       };
-      methods[unit+'sAgo']     = until;
-      methods[unit+'sUntil']   = until;
-      methods[unit+'sSince']   = since;
-      methods[unit+'sFromNow'] = since;
+      methods[name+'sAgo']     = until;
+      methods[name+'sUntil']   = until;
+      methods[name+'sSince']   = since;
+      methods[name+'sFromNow'] = since;
       methods[u.addMethod] = function(num, reset) {
         var set = {};
-        set[unit] = num;
+        set[name] = num;
         return this.advance(set, reset);
       };
       buildNumberToDateAlias(u, multiplier);
       if(i < 3) {
         ['Last','This','Next'].forEach(function(shift) {
           methods['is' + shift + caps] = function() {
-            return this.is(shift + ' ' + unit);
+            return this.is(shift + ' ' + name);
           };
         });
       }
       if(i < 4) {
         methods['beginningOf' + caps] = function() {
           var set = {};
-          switch(unit) {
+          switch(name) {
             case 'year':  set['year']    = callDateGet(this, 'FullYear'); break;
             case 'month': set['month']   = callDateGet(this, 'Month');    break;
             case 'day':   set['day']     = callDateGet(this, 'Date');     break;
@@ -3480,7 +3555,7 @@
         };
         methods['endOf' + caps] = function() {
           var set = { 'hours': 23, 'minutes': 59, 'seconds': 59, 'milliseconds': 999 };
-          switch(unit) {
+          switch(name) {
             case 'year':  set['month']   = 11; set['day'] = 31; break;
             case 'month': set['day']     = this.daysInMonth();  break;
             case 'week':  set['weekday'] = 6;                   break;
@@ -3657,6 +3732,7 @@
      * @extra For example %"Sunday"% can be either "the Sunday coming up" or "the Sunday last" depending on context. Note that dates explicitly in the future ("next Sunday") will remain in the future. This method simply provides a hint when ambiguity exists. UTC-based dates can be created through the %utc% object. For more, see @date_format.
      * @set
      *   Date.utc.past
+     *
      * @example
      *
      *   Date.past('July')          -> July of this year or last depending on the current month
@@ -4092,7 +4168,7 @@
       unit = unit || 'hours';
       if(unit === 'date') unit = 'days';
       recognized = DateUnits.some(function(u) {
-        return unit === u.unit || unit === u.unit + 's';
+        return unit === u.name || unit === u.name + 's';
       });
       params[unit] = unit.match(/^days?/) ? 1 : 0;
       return recognized ? this.set(params, true) : this;
@@ -4301,20 +4377,20 @@
    *
    ***/
   function buildNumberToDateAlias(u, multiplier) {
-    var unit = u.unit, methods = {};
+    var name = u.name, methods = {};
     function base() { return round(this * multiplier); }
     function after() { return createDate(arguments)[u.addMethod](this);  }
     function before() { return createDate(arguments)[u.addMethod](-this); }
-    methods[unit] = base;
-    methods[unit + 's'] = base;
-    methods[unit + 'Before'] = before;
-    methods[unit + 'sBefore'] = before;
-    methods[unit + 'Ago'] = before;
-    methods[unit + 'sAgo'] = before;
-    methods[unit + 'After'] = after;
-    methods[unit + 'sAfter'] = after;
-    methods[unit + 'FromNow'] = after;
-    methods[unit + 'sFromNow'] = after;
+    methods[name] = base;
+    methods[name + 's'] = base;
+    methods[name + 'Before'] = before;
+    methods[name + 'sBefore'] = before;
+    methods[name + 'Ago'] = before;
+    methods[name + 'sAgo'] = before;
+    methods[name + 'After'] = after;
+    methods[name + 'sAfter'] = after;
+    methods[name + 'FromNow'] = after;
+    methods[name + 'sFromNow'] = after;
     number.extend(methods);
   }
 
@@ -4367,14 +4443,14 @@
       { 'name': 'shift', 'src': 'next', 'value': 1 }
     ],
     'dateParse': [
-      '{num} {unit} {sign}',
-      '{sign} {num} {unit}',
       '{month} {year}',
       '{shift} {unit=5-7}',
       '{0?} {date}{1}',
       '{0?} {edge} of {shift?} {unit=4-7?}{month?}{year?}'
     ],
     'timeParse': [
+      '{num} {unit} {sign}',
+      '{sign} {num} {unit}',
       '{0} {num}{1} {day} of {month} {year?}',
       '{weekday?} {month} {date}{1?} {year?}',
       '{date} {month} {year}',
@@ -4507,7 +4583,9 @@
      *
      ***/
     'span': function() {
-      return this.isValid() ? getRangeMemberNumericValue(this.end) - getRangeMemberNumericValue(this.start) + 1 : NaN;
+      return this.isValid() ? math.abs(
+        getRangeMemberNumericValue(this.end) - getRangeMemberNumericValue(this.start)
+      ) + 1 : NaN;
     },
 
     /***
@@ -4664,29 +4742,28 @@
   });
 
   /***
+   * Number module
+   ***
+   * @method Number.range([start], [end])
+   * @returns Range
+   * @short Creates a new range between [start] and [end].
+   ***
+   * String module
+   ***
+   * @method String.range([start], [end])
+   * @returns Range
+   * @short Creates a new range between [start] and [end].
+   ***
    * Date module
+   ***
+   * @method Date.range([start], [end])
+   * @returns Range
+   * @short Creates a new range between [start] and [end].
+   * @extra If either [start] or [end] are null, they will default to the current date.
    ***/
-
   [number, string, date].forEach(function(klass) {
      extend(klass, false, false, {
 
-       /***
-       * @method Number.range([start], [end])
-       * @returns Range
-       * @short Creates a new range between [start] and [end].
-       *
-       ***
-       * @method String.range([start], [end])
-       * @returns Range
-       * @short Creates a new range between [start] and [end].
-       *
-       ***
-       * @method Date.range([start], [end])
-       * @returns Range
-       * @short Creates a new range between [start] and [end].
-       * @extra If either [start] or [end] are null, they will default to the current date.
-       *
-       ***/
       'range': function(start, end) {
         if(klass.create) {
           start = klass.create(start);
@@ -4704,10 +4781,6 @@
    *
    ***/
 
-  var numberRangeStep = function(num, fn, step) {
-    return number.range(this, num).step(step, fn);
-  };
-
   number.extend({
 
     /***
@@ -4724,7 +4797,24 @@
      *   (2).upto(8, null, 2) -> [2, 4, 6, 8]
      *
      ***/
-    'upto': numberRangeStep,
+    'upto': function(num, fn, step) {
+      return number.range(this, num).step(step, fn);
+    },
+
+     /***
+     * @method clamp([start], [end])
+     * @returns Number
+     * @short Constrains the number so that it is between [start] and [end].
+     * @extra This alias will build a range object that can be accessed directly using %Number.range% and has an equivalent %clamp% method.
+     *
+     ***/
+    'clamp': function(start, end) {
+      return new Range(start, end).clamp(this);
+    }
+
+  });
+
+  extend(number, true, false, {
 
     /***
      * @method downto(<num>, [fn], [step] = 1)
@@ -4740,22 +4830,15 @@
      *   (8).downto(2, null, 2) -> [8, 6, 4, 2]
      *
      ***/
-    'downto': numberRangeStep,
-
-     /***
-     * @method clamp([start], [end])
-     * @returns Number
-     * @short Constrains the number so that it is between [start] and [end].
-     * @extra This alias will build a range object that can be accessed directly using %Number.range% and has an equivalent %clamp% method.
-     *
-     ***/
-    'clamp': function(start, end) {
-      return new Range(start, end).clamp(this);
-    }
+    'downto': number.prototype.upto
 
   });
 
 
+  /***
+   * Array module
+   *
+   ***/
 
   extend(array, false, function(a) { return a instanceof Range; }, {
 
@@ -5428,7 +5511,7 @@
   function objectToQueryString(base, obj) {
     var tmp;
     // If a custom toString exists bail here and use that instead
-    if(isArray(obj) || (isObject(obj) && obj.toString === internalToString)) {
+    if(isArray(obj) || (isObjectPrimitive(obj) && obj.toString === internalToString)) {
       tmp = [];
       iterateOverObject(obj, function(key, value) {
         if(base) {
@@ -5582,7 +5665,7 @@
   extend(object, false, false, {
 
     'isObject': function(obj) {
-      return isObject(obj);
+      return isPlainObject(obj);
     },
 
     'isNaN': function(obj) {
@@ -5711,15 +5794,23 @@
      ***/
     'clone': function(obj, deep) {
       var target;
-      // Preserve internal UTC flag when applicable.
-      if(isDate(obj) && obj.clone) {
-        return obj.clone();
-      } else if(!isObjectPrimitive(obj)) {
+      if(!isObjectPrimitive(obj)) {
         return obj;
-      } else if (obj instanceof Hash) {
+      }
+      klass = className(obj);
+      if(isDate(obj, klass) && obj.clone) {
+        // Preserve internal UTC flag when applicable.
+        return obj.clone();
+      } else if(isDate(obj, klass) || isRegExp(obj, klass)) {
+        return new obj.constructor(obj);
+      } else if(obj instanceof Hash) {
         target = new Hash;
+      } else if(isArray(obj, klass)) {
+        target = [];
+      } else if(isPlainObject(obj, klass)) {
+        target = {};
       } else {
-        target = new obj.constructor;
+        throw new TypeError('Invalid target.');
       }
       return object.merge(target, obj, deep);
     },
@@ -5950,18 +6041,63 @@
     }
   }
 
-  function padString(str, p, left, right) {
-    var padding = string(p);
-    if(padding != p) {
-      padding = '';
+  function padString(num, padding) {
+    if(isNaN(num)) {
+      throw new TypeError('Invalid Number.');
     }
-    if(!isNumber(left))  left = 1;
-    if(!isNumber(right)) right = 1;
-    return padding.repeat(left) + str + padding.repeat(right);
+    if(isUndefined(padding)) {
+      padding = ' ';
+    }
+    return repeatString(num, padding);
+  }
+
+  function truncateString(str, length, from, ellipsis, split) {
+    var str1, str2, len1, len2;
+    if(str.length <= length) {
+      return str;
+    }
+    ellipsis = isUndefined(ellipsis) ? '...' : ellipsis;
+    switch(from) {
+      case 'left':
+        str2 = split ? truncateOnWord(str, length, true) : str.slice(str.length - length);
+        return ellipsis + str2;
+      case 'middle':
+        len1 = ceil(length / 2);
+        len2 = floor(length / 2);
+        str1 = split ? truncateOnWord(str, len1) : str.slice(0, len1);
+        str2 = split ? truncateOnWord(str, len2, true) : str.slice(str.length - len2);
+        return str1 + ellipsis + str2;
+      default:
+        str1 = split ? truncateOnWord(str, length) : str.slice(0, length);
+        return str1 + ellipsis;
+    }
+  }
+
+  function truncateOnWord(str, limit, fromLeft) {
+    if(fromLeft) {
+      return truncateOnWord(str.reverse(), limit).reverse();
+    }
+    var reg = regexp('(?=[' + getTrimmableCharacters() + '])');
+    var words = str.split(reg);
+    var count = 0;
+    return words.filter(function(word) {
+      count += word.length;
+      return count <= limit;
+    }).join('');
   }
 
   function chr(num) {
     return string.fromCharCode(num);
+  }
+
+  function numberOrIndex(str, n, from) {
+    if(isString(n)) {
+      n = str.indexOf(n);
+      if(n === -1) {
+        n = from ? str.length : 0;
+      }
+    }
+    return n;
   }
 
   var btoa, atob;
@@ -6463,8 +6599,8 @@
      *   'lucky charms'.from(7)  -> 'harms'
      *
      ***/
-    'from': function(num) {
-      return this.slice(num);
+    'from': function(from) {
+      return this.slice(numberOrIndex(this, from, true));
     },
 
     /***
@@ -6477,9 +6613,9 @@
      *   'lucky charms'.to(7)  -> 'lucky ch'
      *
      ***/
-    'to': function(num) {
-      if(isUndefined(num)) num = this.length;
-      return this.slice(0, num);
+    'to': function(to) {
+      if(isUndefined(to)) to = this.length;
+      return this.slice(0, numberOrIndex(this, to));
     },
 
     /***
@@ -6592,7 +6728,7 @@
     },
 
     /***
-     * @method truncate(<length>, [split] = true, [from] = 'right', [ellipsis] = '...')
+     * @method truncate(<length>, [from] = 'right', [ellipsis] = '...')
      * @returns String
      * @short Truncates a string.
      * @extra If [split] is %false%, will not split words up, and instead discard the word where the truncation occurred. [from] can also be %"middle"% or %"left"%.
@@ -6604,46 +6740,31 @@
      *   'just sittin on the dock of the bay'.truncate(20, true, 'left')   -> '...the dock of the bay'
      *
      ***/
-    'truncate': function(length, split, from, ellipsis) {
-      var pos,
-        prepend = '',
-        append = '',
-        str = this.toString(),
-        chars = '[' + getTrimmableCharacters() + ']+',
-        space = '[^' + getTrimmableCharacters() + ']*',
-        reg = regexp(chars + space + '$');
-      ellipsis = isUndefined(ellipsis) ? '...' : string(ellipsis);
-      if(str.length <= length) {
-        return str;
-      }
-      switch(from) {
-        case 'left':
-          pos = str.length - length;
-          prepend = ellipsis;
-          str = str.slice(pos);
-          reg = regexp('^' + space + chars);
-          break;
-        case 'middle':
-          pos    = floor(length / 2);
-          append = ellipsis + str.slice(str.length - pos).trimLeft();
-          str    = str.slice(0, pos);
-          break;
-        default:
-          pos = length;
-          append = ellipsis;
-          str = str.slice(0, pos);
-      }
-      if(split === false && this.slice(pos, pos + 1).match(/\S/)) {
-        str = str.remove(reg);
-      }
-      return prepend + str + append;
+    'truncate': function(length, from, ellipsis) {
+      return truncateString(this, length, from, ellipsis);
     },
 
     /***
-     * @method pad[Side](<padding> = '', [num] = 1)
+     * @method truncateOnWord(<length>, [from] = 'right', [ellipsis] = '...')
      * @returns String
-     * @short Pads either/both sides of the string.
-     * @extra [num] is the number of characters on each side, and [padding] is the character to pad with.
+     * @short Truncates a string.
+     * @extra If [split] is %false%, will not split words up, and instead discard the word where the truncation occurred. [from] can also be %"middle"% or %"left"%.
+     * @example
+     *
+     *   'just sittin on the dock of the bay'.truncate(20)                 -> 'just sittin on the do...'
+     *   'just sittin on the dock of the bay'.truncate(20, false)          -> 'just sittin on the...'
+     *   'just sittin on the dock of the bay'.truncate(20, true, 'middle') -> 'just sitt...of the bay'
+     *   'just sittin on the dock of the bay'.truncate(20, true, 'left')   -> '...the dock of the bay'
+     *
+     ***/
+    'truncateOnWord': function(length, from, ellipsis) {
+      return truncateString(this, length, from, ellipsis, true);
+    },
+
+    /***
+     * @method pad[Side](<num> = null, [padding] = ' ')
+     * @returns String
+     * @short Pads the string out with [padding] to be exactly <num> characters.
      *
      * @set
      *   pad
@@ -6652,22 +6773,26 @@
      *
      * @example
      *
-     *   'wasabi'.pad('-')         -> '-wasabi-'
-     *   'wasabi'.pad('-', 2)      -> '--wasabi--'
-     *   'wasabi'.padLeft('-', 2)  -> '--wasabi'
-     *   'wasabi'.padRight('-', 2) -> 'wasabi--'
+     *   'wasabi'.pad(8)           -> ' wasabi '
+     *   'wasabi'.padLeft(8)       -> '  wasabi'
+     *   'wasabi'.padRight(8)      -> 'wasabi  '
+     *   'wasabi'.padRight(8, '-') -> 'wasabi--'
      *
      ***/
-    'pad': function(padding, num) {
-      return repeatString(num, padding) + this + repeatString(num, padding);
+    'pad': function(num, padding) {
+      var half, front, back;
+      half  = (num - this.length) / 2;
+      front = floor(half);
+      back  = ceil(half);
+      return padString(front, padding) + this + padString(back, padding);
     },
 
-    'padLeft': function(padding, num) {
-      return repeatString(num, padding) + this;
+    'padLeft': function(num, padding) {
+      return padString(num - this.length, padding) + this;
     },
 
-    'padRight': function(padding, num) {
-      return this + repeatString(num, padding);
+    'padRight': function(num, padding) {
+      return this + padString(num - this.length, padding);
     },
 
     /***
@@ -6747,7 +6872,7 @@
     /***
      * @method capitalize([all] = false)
      * @returns String
-     * @short Capitalizes the first character in the string.
+     * @short Capitalizes the first character in the string and downcases all other letters.
      * @extra If [all] is true, all words in the string will be capitalized.
      * @example
      *
@@ -6781,8 +6906,8 @@
      ***/
     'assign': function() {
       var assign = {};
-      multiArgs(arguments, function(a, i) {
-        if(isObject(a)) {
+      flattenedArgs(arguments, function(a, i) {
+        if(isObjectPrimitive(a)) {
           simpleMerge(assign, a);
         } else {
           assign[i + 1] = a;

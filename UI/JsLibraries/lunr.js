@@ -1,5 +1,5 @@
 /**
- * lunr - http://lunrjs.com - A bit like Solr, but much smaller and not as bright - 0.3.0
+ * lunr - http://lunrjs.com - A bit like Solr, but much smaller and not as bright - 0.3.1
  * Copyright (C) 2013 Oliver Nightingale
  * MIT Licensed
  * @license
@@ -50,7 +50,7 @@ var lunr = function (config) {
   return idx
 }
 
-lunr.version = "0.3.0"
+lunr.version = "0.3.1"
 
 if (typeof module !== 'undefined') {
   module.exports = lunr
@@ -761,8 +761,11 @@ lunr.Index.prototype.add = function (doc) {
  * @memberOf Index
  */
 lunr.Index.prototype.remove = function (doc) {
-  var docRef = doc[this._ref],
-      docTokens = this.documentStore.get(docRef)
+  var docRef = doc[this._ref]
+
+  if (!this.documentStore.has(docRef)) return
+
+  var docTokens = this.documentStore.get(docRef)
 
   this.documentStore.remove(docRef)
 
