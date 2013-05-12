@@ -50,4 +50,4 @@ Function PackageTests()
 }
 
 Build
-Package
+PackageTests
