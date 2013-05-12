@@ -50,6 +50,15 @@
       Backbone.View.prototype.initialize.apply(this, arguments);
       this.name = options.name || this.name;
       this.placeholder = options.placeholder || this.placeholder;
+
+      var collection = this.collection, self = this;
+      if (Backbone.PageableCollection &&
+          collection instanceof Backbone.PageableCollection &&
+          collection.mode == "server") {
+        collection.queryParams[this.name] = function () {
+          return self.$el.find("input[type=text]").val();
+        };
+      }
     },
 
     /**
@@ -59,9 +68,8 @@
     */
     search: function (e) {
       if (e) e.preventDefault();
-      var $text = $(e.target).find("input[type=text]");
       var data = {};
-      data[$text.attr("name")] = $text.val();
+      data[this.name] = this.$el.find("input[type=text]").val();
       this.collection.fetch({data: data});
     },
 

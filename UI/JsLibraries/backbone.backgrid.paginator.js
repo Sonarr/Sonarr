@@ -52,23 +52,12 @@
        Initializer.
 
        @param {Object} options
-       @param {Backbone.Collection.<Backgrid.Column>|Array.<Backgrid.Column>|Array.<Object>} options.columns
-       Column metadata.
        @param {Backbone.Collection} options.collection
        @param {boolean} [options.fastForwardHandleLabels] Whether to render fast forward buttons.
     */
     initialize: function (options) {
-      //Backgrid.requireOptions(options, ["columns", "collection"]);
+      Backgrid.requireOptions(options, ["collection"]);
 
-      this.columns = options.columns;
-      if (!(this.columns instanceof Backbone.Collection)) {
-        this.columns = new Backgrid.Columns(this.columns);
-      }
-
-      var columns = this.columns;
-      this.listenTo(columns, "add", this.render);
-      this.listenTo(columns, "remove", this.render);
-      this.listenTo(columns, "change:renderable", this.render);
       var collection = this.collection;
       var fullCollection = collection.fullCollection;
       if (fullCollection) {
@@ -92,31 +81,35 @@
     changePage: function (e) {
       e.preventDefault();
 
-      var label = $(e.target).text();
-      var ffLabels = this.fastForwardHandleLabels;
+      var $li = $(e.target).parent();
+      if (!$li.hasClass("active") && !$li.hasClass("disabled")) {
 
-      var collection = this.collection;
+        var label = $(e.target).text();
+        var ffLabels = this.fastForwardHandleLabels;
 
-      if (ffLabels) {
-        switch (label) {
-        case ffLabels.first:
-          collection.getFirstPage();
-          return;
-        case ffLabels.prev:
-          if (collection.hasPrevious()) collection.getPreviousPage();
-          return;
-        case ffLabels.next:
-          if (collection.hasNext()) collection.getNextPage();
-          return;
-        case ffLabels.last:
-          collection.getLastPage();
-          return;
+        var collection = this.collection;
+
+        if (ffLabels) {
+          switch (label) {
+          case ffLabels.first:
+            collection.getFirstPage();
+            return;
+          case ffLabels.prev:
+            collection.getPreviousPage();
+            return;
+          case ffLabels.next:
+            collection.getNextPage();
+            return;
+          case ffLabels.last:
+            collection.getLastPage();
+            return;
+          }
         }
-      }
 
-      var state = collection.state;
-      var pageIndex = $(e.target).text() * 1;
-      collection.getPage(state.firstPage === 0 ? pageIndex - 1 : pageIndex);
+        var state = collection.state;
+        var pageIndex = +label;
+        collection.getPage(state.firstPage === 0 ? pageIndex - 1 : pageIndex);
+      }
     },
 
     /**
@@ -132,12 +125,13 @@
       var state = collection.state;
 
       // convert all indices to 0-based here
-      var lastPage = state.lastPage ? state.lastPage : state.firstPage;
-      lastPage = state.firstPage === 0 ? lastPage : lastPage - 1;
-      var currentPage = state.firstPage === 0 ? state.currentPage : state.currentPage - 1;
+      var firstPage = state.firstPage;
+      var lastPage = +state.lastPage;
+      lastPage = Math.max(0, firstPage ? lastPage - 1 : lastPage);
+      var currentPage = Math.max(state.currentPage, state.firstPage);
+      currentPage = firstPage ? currentPage - 1 : currentPage;
       var windowStart = Math.floor(currentPage / this.windowSize) * this.windowSize;
-      var windowEnd = windowStart + this.windowSize;
-      windowEnd = windowEnd <= lastPage ? windowEnd : lastPage + 1;
+      var windowEnd = Math.min(lastPage + 1, windowStart + this.windowSize);
 
       if (collection.mode !== "infinite") {
         for (var i = windowStart; i < windowEnd; i++) {
@@ -185,8 +179,7 @@
     },
 
     /**
-       Render the paginator handles inside an unordered list placed inside a
-       cell that spans all the columns.
+       Render the paginator handles inside an unordered list.
     */
     render: function () {
       this.$el.empty();

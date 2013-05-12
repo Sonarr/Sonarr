@@ -1,5 +1,5 @@
 /*
-  backbone-pageable 1.2.2
+  backbone-pageable 1.2.3
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -65,6 +65,7 @@
   var _isUndefined = _.isUndefined;
   var _result = _.result;
   var ceil = Math.ceil;
+  var floor = Math.floor;
   var max = Math.max;
 
   var BBColProto = Backbone.Collection.prototype;
@@ -302,6 +303,8 @@
       state.currentPage = state.currentPage == null ?
         state.firstPage :
         state.currentPage;
+
+      if (!_isArray(models)) models = models ? [models] : [];
 
       if (mode != "server" && state.totalRecords == null && !_isEmpty(models)) {
         state.totalRecords = models.length;
@@ -846,6 +849,28 @@
       if (mode == "infinite") options.url = this.links[pageNum];
 
       return this.fetch(_omit(options, "fetch"));
+    },
+
+    /**
+       Fetch the page for the provided item offset in server mode, or reset the current page of this
+       collection to the page for the provided item offset in client mode.
+
+       @param {Object} options {@link #getPage} options.
+
+       @chainable
+       @return {XMLHttpRequest|Backbone.PageableCollection} The XMLHttpRequest
+       from fetch or this.
+    */
+    getPageByOffset: function (offset, options) {
+      if (offset < 0) {
+        throw new RangeError("`offset must be > 0`");
+      }
+      offset = finiteInt(offset);
+
+      var page = floor(offset / this.state.pageSize);
+      if (this.state.firstPage !== 0) page++;
+      if (page > this.state.lastPage) page = this.state.lastPage;
+      return this.getPage(page, options);
     },
 
     /**
