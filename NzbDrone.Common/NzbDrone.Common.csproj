@@ -120,7 +120,7 @@
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
-    <Compile Include="IJsonSerializer.cs" />
+    <Compile Include="Serializer\JsonSerializer.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="Messaging\MessageExtensions.cs" />
     <Compile Include="Messaging\TestCommand.cs" />

@@ -6,6 +6,7 @@ using NLog;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common

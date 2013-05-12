@@ -8,10 +8,10 @@ namespace NzbDrone.Api.SignalR
     [Singleton]
     public class Serializer : IJsonSerializer
     {
-        private readonly Common.IJsonSerializer _nzbDroneSerializer;
+        private readonly Common.Serializer.IJsonSerializer _nzbDroneSerializer;
         private readonly JsonNetSerializer _signalRSerializer;
 
-        public Serializer(Common.IJsonSerializer nzbDroneSerializer)
+        public Serializer(Common.Serializer.IJsonSerializer nzbDroneSerializer)
         {
             _signalRSerializer = new JsonNetSerializer();
             _nzbDroneSerializer = nzbDroneSerializer;

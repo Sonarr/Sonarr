@@ -2,6 +2,7 @@
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Datastore.Converters
 {

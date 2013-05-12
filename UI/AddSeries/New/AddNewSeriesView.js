@@ -18,7 +18,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
 
             this.collection.parse = function (response) {
                 _.each(response, function (model) {
-                   model.id = null;
+                   model.id = undefined;
                 });
 
                 return response;

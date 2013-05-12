@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Libraries.Test.Json

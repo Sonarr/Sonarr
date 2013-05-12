@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Serializer
 {
     public interface IJsonSerializer
     {
@@ -24,7 +24,7 @@ namespace NzbDrone.Common
             _jsonNetSerializer = new Newtonsoft.Json.JsonSerializer()
                 {
                     DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                    NullValueHandling = NullValueHandling.Include,
+                    NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Formatting.Indented,
                     DefaultValueHandling = DefaultValueHandling.Include,
                     ContractResolver = new CamelCasePropertyNamesContractResolver()

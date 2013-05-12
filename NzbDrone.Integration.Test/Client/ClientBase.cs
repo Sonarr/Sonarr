@@ -4,6 +4,7 @@ using FluentAssertions;
 using NLog;
 using NzbDrone.Api.REST;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client

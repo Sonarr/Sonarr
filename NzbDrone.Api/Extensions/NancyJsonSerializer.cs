@@ -2,6 +2,7 @@
 using System.IO;
 using Nancy;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Api.Extensions
 {

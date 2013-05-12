@@ -4,6 +4,7 @@ using System.Linq;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;

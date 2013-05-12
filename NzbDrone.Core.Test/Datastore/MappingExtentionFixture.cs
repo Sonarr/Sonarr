@@ -4,6 +4,7 @@ using FluentAssertions;
 using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.Tv;

@@ -1,4 +1,5 @@
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Indexers
 {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
