@@ -1,3 +1,8 @@
+param (
+    [switch]$runTests = $false
+ )
+
+
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
 $testSearchPattern = '*.Test\bin\x86\Release'
@@ -25,6 +30,8 @@ Function CleanFolder($path)
 
     Write-Host Removing FluentValidation.Resources  files
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
+
+    get-childitem $path -File -Filter app.config | foreach ($_) {remove-item $_.fullname}
   
     Write-Host Removing Empty folders
     while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) {
@@ -47,7 +54,23 @@ Function PackageTests()
     }
 
     CleanFolder $testPackageFolder
+
+    get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
+
 }
 
 Build
 PackageTests
+
+if($runTests)
+{
+    $testFiles
+
+    get-childitem $testPackageFolder -File -Filter *test.dll | foreach ($_) {
+       $testFiles = $testFiles + $_.FullName + " "
+       
+    }
+
+     $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
+     Invoke-Expression  $nunitExe 
+}
