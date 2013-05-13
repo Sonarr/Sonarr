@@ -1,6 +1,11 @@
 ﻿'use strict';
 define([
-    'app', 'AddSeries/RootFolders/RootFolderCollection', 'Quality/QualityProfileCollection', 'Shared/NotificationCollection', 'AddSeries/Existing/UnmappedFolderModel', 'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection, notificationCollection) {
+    'app', 'AddSeries/RootFolders/RootFolderCollection',
+    'Quality/QualityProfileCollection',
+    'Shared/NotificationCollection',
+    'AddSeries/Existing/UnmappedFolderModel',
+    'AddSeries/Collection',
+    'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection, notificationCollection) {
 
     NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
         template: 'AddSeries/SearchResultTemplate',
@@ -29,7 +34,7 @@ define([
             this.model.set('rootFolderId', rootFolderId);
             this.model.set('folder', folder);
 
-            var seriesCollection = new NzbDrone.Series.SeriesCollection();
+            var seriesCollection = new NzbDrone.AddSeries.Collection();
             seriesCollection.add(this.model);
 
             this.model.save(undefined, {
@@ -68,7 +73,7 @@ define([
         },
 
         initialize: function () {
-            this.collection = new NzbDrone.Series.SeriesCollection();
+            this.collection = new NzbDrone.AddSeries.Collection();
             this.collection.bind('reset', this.collectionReset, this);
 
             this.on("itemview:seriesAdded", function(){
@@ -77,7 +82,6 @@ define([
         },
 
         onRender: function () {
-            this.collection.url = NzbDrone.Constants.ApiRoot + '/series/lookup';
             this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
         },
 

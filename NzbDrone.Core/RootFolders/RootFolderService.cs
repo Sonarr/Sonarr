@@ -12,6 +12,7 @@ namespace NzbDrone.Core.RootFolders
     public interface IRootFolderService
     {
         List<RootFolder> All();
+        List<RootFolder> AllWithUnmappedFolders();
         RootFolder Add(RootFolder rootDir);
         void Remove(int id);
         List<UnmappedFolder> GetUnmappedFolders(string path);
@@ -37,14 +38,21 @@ namespace NzbDrone.Core.RootFolders
         {
             var rootFolders = _rootFolderRepository.All().ToList();
 
+            return rootFolders;
+        }
+
+        public virtual List<RootFolder> AllWithUnmappedFolders()
+        {
+            var rootFolders = _rootFolderRepository.All().ToList();
+
             rootFolders.ForEach(folder =>
+            {
+                if (_diskProvider.FolderExists(folder.Path))
                 {
-                    if (_diskProvider.FolderExists(folder.Path))
-                    {
-                        folder.FreeSpace = _diskProvider.GetAvilableSpace(folder.Path);
-                        folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
-                    }
-                });
+                    folder.FreeSpace = _diskProvider.GetAvilableSpace(folder.Path);
+                    folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
+                }
+            });
 
             return rootFolders;
         }

@@ -1,5 +1,6 @@
 ﻿"use strict";
-define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView'], function () {
+define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView',
+        'AddSeries/Collection'], function () {
     NzbDrone.AddSeries.New.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/New/AddNewSeriesTemplate',
         route   : 'Series/add/new',
@@ -14,16 +15,9 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
 
         initialize: function () {
 
-            this.collection = new NzbDrone.Series.SeriesCollection();
+            this.collection = new NzbDrone.AddSeries.Collection();
 
-            this.collection.parse = function (response) {
-                _.each(response, function (model) {
                    model.id = undefined;
-                });
-
-                return response;
-            };
-
             NzbDrone.AddSeries.New.AddNewSeriesContext = this;
 
             NzbDrone.vent.on(NzbDrone.Events.SeriesAdded, function (options) {
@@ -46,7 +40,6 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
                     self.$el.data('timeout', window.setTimeout(self.search, 500, self));
                 });
 
-            this.collection.url = NzbDrone.Constants.ApiRoot + '/series/lookup';
             this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
         },
 
