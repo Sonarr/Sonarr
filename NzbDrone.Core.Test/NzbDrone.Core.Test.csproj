@@ -142,7 +142,7 @@
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
-    <Compile Include="MediaFileTests\GhostFileCleanupFixture.cs" />
+    <Compile Include="MediaFileTests\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />
     <Compile Include="MetadataSourceTests\TracktProxyFixture.cs" />
@@ -160,6 +160,7 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
     <Compile Include="ProviderTests\PlexProviderTest.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesRepositoryReadFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithoutFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesBetweenDatesFixture.cs" />
     <Compile Include="TvTests\SeasonProviderTest.cs" />

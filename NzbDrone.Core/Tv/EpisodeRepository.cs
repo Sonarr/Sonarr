@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using FluentMigrator.Runner;
 using Marr.Data;
 using Marr.Data.QGen;
 using NzbDrone.Common.Messaging;
@@ -26,7 +22,6 @@ namespace NzbDrone.Core.Tv
         List<Episode> EpisodesWithFiles();
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
         void SetIgnoreFlat(Episode episode, bool ignoreFlag);
-        void SetPostDownloadStatus(int episodeId, PostDownloadStatusType status);
         void SetFileId(int episodeId, int fileId);
     }
 
@@ -62,7 +57,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> GetEpisodeByFileId(int fileId)
         {
-            return Query.Where(s => s.EpisodeFile != null && s.EpisodeFile.Id == fileId).ToList();
+            return Query.Where(e => e.EpisodeFileId == fileId).ToList();
         }
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
@@ -74,7 +69,7 @@ namespace NzbDrone.Core.Tv
             {
                 startingSeasonNumber = 0;
             }
-            
+
             var pagingQuery = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
                                       .Where(e => e.EpisodeFileId == 0)
                                       .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
@@ -98,7 +93,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesWithFiles()
         {
-            return Query.Where(s => s.EpisodeFile != null).ToList();
+            return Query.Where(s => s.EpisodeFileId != 0).ToList();
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
@@ -111,11 +106,6 @@ namespace NzbDrone.Core.Tv
         {
             episode.Ignored = ignoreFlag;
             SetFields(episode, p => p.Ignored);
-        }
-
-        public void SetPostDownloadStatus(int episodeId, PostDownloadStatusType status)
-        {
-            SetFields(new Episode { Id = episodeId, PostDownloadStatus = status }, episode => episode.PostDownloadStatus);
         }
 
         public void SetFileId(int episodeId, int fileId)

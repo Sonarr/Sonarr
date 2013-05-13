@@ -247,7 +247,9 @@
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
+    <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
+    <Compile Include="MediaFiles\Commands\DiskScanCommand.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
@@ -296,7 +298,7 @@
     <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
-    <Compile Include="MediaFiles\GhostFileCleanupService.cs" />
+    <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
     <Compile Include="MetadataSource\IProvideEpisodeInfo.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
@@ -404,7 +406,7 @@
     <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\IDiskScanService.cs">
+    <Compile Include="MediaFiles\DiskScanService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Download\Clients\BlackholeProvider.cs">

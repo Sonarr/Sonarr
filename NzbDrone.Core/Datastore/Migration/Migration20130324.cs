@@ -59,8 +59,6 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("Ignored").AsBoolean().Nullable()
                 .WithColumn("EpisodeFileId").AsInt32().Nullable()
                 .WithColumn("AirDate").AsDateTime().Nullable()
-                .WithColumn("GrabDate").AsDateTime().Nullable()
-                .WithColumn("PostDownloadStatus").AsInt32().Nullable()
                 .WithColumn("AbsoluteEpisodeNumber").AsInt32().Nullable()
                 .WithColumn("SceneAbsoluteEpisodeNumber").AsInt32().Nullable()
                 .WithColumn("SceneSeasonNumber").AsInt32().Nullable()

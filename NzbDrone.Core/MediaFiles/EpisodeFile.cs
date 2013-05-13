@@ -6,20 +6,6 @@ namespace NzbDrone.Core.MediaFiles
 {
     public class EpisodeFile : ModelBase
     {
-        public EpisodeFile()
-        {
-
-        }
-
-        public EpisodeFile(EpisodeFile source)
-        {
-            Id = source.Id;
-            SeriesId = source.SeriesId;
-            SeasonNumber = source.SeasonNumber;
-            Path = source.Path;
-            Size = source.Size;
-        }
-
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
         public string Path { get; set; }

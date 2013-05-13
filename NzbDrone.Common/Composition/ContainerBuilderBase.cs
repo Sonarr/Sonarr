@@ -18,8 +18,6 @@ namespace NzbDrone.Common.Composition
 
         protected ContainerBuilderBase(params string[] assemblies)
         {
-            Container = new Container(new TinyIoCContainer());
-
             _loadedTypes = new List<Type>();
 
             foreach (var assembly in assemblies)
@@ -27,6 +25,7 @@ namespace NzbDrone.Common.Composition
                 _loadedTypes.AddRange(Assembly.Load(assembly).GetTypes());
             }
 
+            Container = new Container(new TinyIoCContainer(), _loadedTypes);
             AutoRegisterInterfaces();
         }
 
@@ -52,7 +51,7 @@ namespace NzbDrone.Common.Composition
 
         private void AutoRegisterImplementations(Type contractType)
         {
-            var implementations = GetImplementations(contractType).Where(c => !c.IsGenericTypeDefinition).ToList();
+            var implementations = Container.GetImplementations(contractType).Where(c => !c.IsGenericTypeDefinition).ToList();
 
 
 
@@ -84,14 +83,5 @@ namespace NzbDrone.Common.Composition
             }
         }
 
-        private IEnumerable<Type> GetImplementations(Type contractType)
-        {
-            return _loadedTypes
-                .Where(implementation =>
-                       contractType.IsAssignableFrom(implementation) &&
-                       !implementation.IsInterface &&
-                       !implementation.IsAbstract
-                );
-        }
     }
 }

@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers
 
             var misnamedFilesSelect = episodesWithFiles.AsParallel().Where(
                 w =>
-                w.First().EpisodeFile.Path !=
+                w.First().EpisodeFile.Value.Path !=
                 _buildFileNames.BuildFilename(w.Select(e => e).ToList(), w.First().Series, w.First().EpisodeFile)).Skip(Math.Max(pageSize * (pageNumber - 1), 0)).Take(pageSize);
 
             //Process the episodes
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Providers
                     var properName = _buildFileNames.BuildFilename(episodes, firstEpisode.Series,
                                                                    firstEpisode.EpisodeFile);
 
-                    var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Path);
+                    var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Value.Path);
 
                     if (properName != currentName)
                     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TinyIoC;
 
 namespace NzbDrone.Common.Composition
@@ -7,10 +8,12 @@ namespace NzbDrone.Common.Composition
     public class Container : IContainer
     {
         private readonly TinyIoCContainer _container;
+        private readonly List<Type> _loadedTypes;
 
-        public Container(TinyIoCContainer container)
+        public Container(TinyIoCContainer container, List<Type> loadedTypes)
         {
             _container = container;
+            _loadedTypes = loadedTypes;
             _container.Register<IContainer>(this);
         }
 
@@ -91,6 +94,16 @@ namespace NzbDrone.Common.Composition
         public bool IsTypeRegistered(Type type)
         {
             return _container.CanResolve(type);
+        }
+
+        public IEnumerable<Type> GetImplementations(Type contractType)
+        {
+            return _loadedTypes
+                .Where(implementation =>
+                       contractType.IsAssignableFrom(implementation) &&
+                       !implementation.IsInterface &&
+                       !implementation.IsAbstract
+                );
         }
     }
 }

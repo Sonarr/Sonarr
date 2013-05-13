@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -23,7 +22,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
         private long _fileSize = 80.Megabytes();
         private Series _fakeSeries;
-        private List<Episode> _fakeEpisodes;
+        private Episode[] _fakeEpisodes;
         private Episode _fakeEpisode;
 
         [SetUp]
@@ -35,14 +34,16 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             _fakeEpisode = Builder<Episode>
                     .CreateNew()
+                    .With(c => c.EpisodeFileId = 0)
                     .Build();
 
 
             _fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                                         .All()
                                         .With(c => c.SeasonNumber = 3)
+                                        .With(c => c.EpisodeFileId = 1)
                                         .With(e => e.EpisodeFile = new EpisodeFile())
-                                        .BuildList();
+                                        .BuildList().ToArray();
 
             GivenNewFile();
 
@@ -69,8 +70,20 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         }
 
 
-        private void GivenEpisodes(IEnumerable<Episode> episodes, QualityModel quality)
+        private void GivenEpisodes(Episode[] episodes, QualityModel quality)
         {
+            foreach (var episode in episodes)
+            {
+                if (episode.EpisodeFile == null)
+                {
+                    episode.EpisodeFileId = 0;
+                }
+                else
+                {
+                    episode.EpisodeFileId = episode.EpisodeFile.Value.Id;
+                }
+            }
+
             Mocker.GetMock<IParsingService>()
                   .Setup(c => c.GetEpisodes(It.IsAny<string>(), It.IsAny<Series>()))
                   .Returns(new LocalEpisode
@@ -102,6 +115,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void import_new_file_with_same_quality_should_succeed()
         {
             _fakeEpisode.EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.SDTV) };
+
             GivenEpisodes(new[] { _fakeEpisode }, new QualityModel(Quality.SDTV));
 
             var result = Subject.ImportFile(_fakeSeries, "file.ext");
@@ -112,6 +126,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void import_new_file_with_better_quality_should_succeed()
         {
             _fakeEpisode.EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.SDTV) };
+
             GivenEpisodes(new[] { _fakeEpisode }, new QualityModel(Quality.HDTV1080p));
 
             var result = Subject.ImportFile(_fakeSeries, "file.ext");
@@ -121,7 +136,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [Test]
         public void import_new_file_episode_has_better_quality_should_skip()
         {
-            _fakeEpisode.EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV1080p) };
+            _fakeEpisode.EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV1080p), Id = 1 };
+
             GivenEpisodes(new[] { _fakeEpisode }, new QualityModel(Quality.SDTV));
 
             var result = Subject.ImportFile(_fakeSeries, "file.ext");
@@ -158,7 +174,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [Test]
         public void import_file_with_no_episode_in_db_should_skip()
         {
-            GivenEpisodes(new List<Episode>(), new QualityModel());
+            GivenEpisodes(new Episode[0], new QualityModel());
 
             var result = Subject.ImportFile(_fakeSeries, "file.ext");
 
@@ -185,8 +201,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [Test]
         public void skip_import_new_multi_part_file_episode_existing_has_better_quality()
         {
-            _fakeEpisodes[0].EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV1080p) };
-            _fakeEpisodes[1].EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV1080p) };
+            _fakeEpisodes[0].EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV1080p), Id = 1 };
+            _fakeEpisodes[1].EpisodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV1080p), Id = 1 };
 
             GivenEpisodes(_fakeEpisodes, new QualityModel(Quality.SDTV));
 

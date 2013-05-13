@@ -26,5 +26,7 @@ namespace NzbDrone.Common.Composition
         void Register(Type registrationType, object instance);
         void RegisterAll(Type registrationType, IEnumerable<Type> implementationList);
         bool IsTypeRegistered(Type type);
+
+        IEnumerable<Type> GetImplementations(Type contractType);
     }
 }

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
-            foreach (var file in subject.Episodes.Select(c => c.EpisodeFile).Where(c => c != null))
+            foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
                 _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
 

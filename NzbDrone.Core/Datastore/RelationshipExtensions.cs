@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Datastore
         {
             return relationshipBuilder.For(portalExpression.GetMemberName())
                                 .LazyLoad((db, parent) => db.Query<TChild>()
-                                .Single(c => c.Id == childIdSelector(parent)));
+                                .SingleOrDefault(c => c.Id == childIdSelector(parent)));
 
         }
 

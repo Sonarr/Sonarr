@@ -34,8 +34,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
             secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
 
-            var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = null } };
-            var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = secondFile }, new Episode { EpisodeFile = null } };
+            var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
+            var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
 
             var fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
@@ -64,6 +64,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void WithSecondFileUpgradable()
         {
             secondFile.Quality = new QualityModel(Quality.SDTV);
+        }
+
+        [Test]
+        public void should_return_true_if_episode_has_no_existing_file()
+        {
+            parseResultSingle.Episodes.ForEach(c => c.EpisodeFileId = 0);
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
         }
 
         [Test]

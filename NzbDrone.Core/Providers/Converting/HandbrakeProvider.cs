@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Providers.Converting
             var outputFile = _configService.GetValue("iPodConvertDir", "");
 
             var handBrakePreset = _configService.GetValue("HandBrakePreset", "iPhone & iPod Touch");
-            var handBrakeCommand = String.Format("-i \"{0}\" -o \"{1}\" --preset=\"{2}\"", episode.EpisodeFile.Path, outputFile, handBrakePreset);
+            var handBrakeCommand = String.Format("-i \"{0}\" -o \"{1}\" --preset=\"{2}\"", episode.EpisodeFile.Value.Path, outputFile, handBrakePreset);
             var handBrakeFile = @"C:\Program Files (x86)\Handbrake\HandBrakeCLI.exe";
 
             try

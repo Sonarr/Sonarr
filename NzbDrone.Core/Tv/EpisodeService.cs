@@ -29,16 +29,14 @@ namespace NzbDrone.Core.Tv
         List<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber);
         void SetEpisodeIgnore(int episodeId, bool isIgnored);
         bool IsFirstOrLastEpisodeOfSeason(int episodeId);
-        void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus);
         void UpdateEpisodes(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
     }
 
     public class EpisodeService : IEpisodeService,
-        IHandle<EpisodeGrabbedEvent>,
         IHandle<EpisodeFileDeletedEvent>,
         IHandle<EpisodeFileAddedEvent>,
-    IHandleAsync<SeriesDeletedEvent>,
+        IHandleAsync<SeriesDeletedEvent>,
         IHandleAsync<SeriesAddedEvent>
     {
 
@@ -166,7 +164,7 @@ namespace NzbDrone.Core.Tv
                         episodeToUpdate.EpisodeFileId > 0)
                     {
                         logger.Info("Unlinking episode file because TheTVDB changed the episode number...");
-                        episodeToUpdate.EpisodeFile = null;
+                        episodeToUpdate.EpisodeFileId = 0;
                     }
 
                     episodeToUpdate.SeriesId = series.Id;
@@ -268,22 +266,6 @@ namespace NzbDrone.Core.Tv
             return false;
         }
 
-        public void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
-        {
-            if (episodeIds.Count == 0) throw new ArgumentException("episodeIds should contain one or more episode ids.");
-
-
-            foreach (var episodeId in episodeIds)
-            {
-                var episode = _episodeRepository.Get(episodeId);
-                episode.PostDownloadStatus = postDownloadStatus;
-                _episodeRepository.Update(episode);
-            }
-
-
-            logger.Trace("Updating PostDownloadStatus for {0} episode(s) to {1}", episodeIds.Count, postDownloadStatus);
-        }
-
         public void UpdateEpisodes(List<Episode> episodes)
         {
             _episodeRepository.UpdateMany(episodes);
@@ -294,16 +276,6 @@ namespace NzbDrone.Core.Tv
             var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
 
             return LinkSeriesToEpisodes(episodes);
-        }
-
-        public void Handle(EpisodeGrabbedEvent message)
-        {
-            foreach (var episode in message.Episode.Episodes)
-            {
-                logger.Trace("Marking episode {0} as fetched.", episode.Id);
-                episode.GrabDate = DateTime.UtcNow;
-                _episodeRepository.Update(episode);
-            }
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
@@ -317,10 +289,8 @@ namespace NzbDrone.Core.Tv
             foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
             {
                 _logger.Trace("Detaching episode {0} from file.", episode.Id);
-                episode.EpisodeFile = null;
+                episode.EpisodeFileId = 0;
                 episode.Ignored = _configService.AutoIgnorePreviouslyDownloadedEpisodes;
-                episode.GrabDate = null;
-                episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
                 UpdateEpisode(episode);
             }
         }
@@ -335,7 +305,6 @@ namespace NzbDrone.Core.Tv
             foreach (var episode in message.EpisodeFile.Episodes.Value)
             {
                 _episodeRepository.SetFileId(episode.Id, message.EpisodeFile.Id);
-                _episodeRepository.SetPostDownloadStatus(episode.Id, PostDownloadStatusType.NoError);
                 _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.Path, episode);
             }
         }

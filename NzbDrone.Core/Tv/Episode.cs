@@ -1,4 +1,5 @@
 ﻿using System;
+using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Model;
@@ -18,37 +19,20 @@ namespace NzbDrone.Core.Tv
 
         public string Overview { get; set; }
         public Boolean Ignored { get; set; }
-        public PostDownloadStatusType PostDownloadStatus { get; set; }
         public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
-        public DateTime? GrabDate { get; set; }
 
         public bool HasFile
         {
-            get { return EpisodeFile != null; }
+            get { return EpisodeFileId != 0; }
         }
-        
+
         public EpisodeStatuses Status
         {
             get
             {
                 if (HasFile) return EpisodeStatuses.Ready;
-
-                if (GrabDate != null)
-                {
-                    if (PostDownloadStatus == PostDownloadStatusType.Unpacking)
-                        return EpisodeStatuses.Unpacking;
-
-                    if (PostDownloadStatus == PostDownloadStatusType.Failed)
-                        return EpisodeStatuses.Failed;
-
-                    if (GrabDate.Value.AddDays(1) >= DateTime.Now)
-                        return EpisodeStatuses.Downloading;
-                }
-
-                if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
-                    return EpisodeStatuses.Downloading;
 
                 if (AirDate != null && AirDate.Value.Date == DateTime.Today)
                     return EpisodeStatuses.AirsToday;
@@ -75,7 +59,7 @@ namespace NzbDrone.Core.Tv
 
         public Series Series { get; set; }
 
-        public EpisodeFile EpisodeFile { get; set; }
+        public LazyLoaded<EpisodeFile> EpisodeFile { get; set; }
 
         public override string ToString()
         {

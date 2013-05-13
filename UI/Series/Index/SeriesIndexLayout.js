@@ -156,7 +156,7 @@ define([
                         {
                             title         : 'Update Library',
                             icon          : 'icon-refresh',
-                            command       : 'updatelibrary',
+                            command       : 'diskscan',
                             successMessage: 'Library was updated!',
                             errorMessage  : 'Library update failed!'
                         },

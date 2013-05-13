@@ -69,8 +69,12 @@ namespace NzbDrone.Core.Jobs
 
         public void HandleAsync(CommandExecutedEvent message)
         {
-            var commandId = _scheduledTaskRepository.GetDefinition(message.Command.GetType()).Id;
-            _scheduledTaskRepository.SetLastExecutionTime(commandId, DateTime.UtcNow);
+            var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
+
+            if (scheduledTask != null)
+            {
+                _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, DateTime.UtcNow);
+            }
         }
     }
 }
