@@ -7,7 +7,6 @@ using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.NzbClub;
-using NzbDrone.Core.Indexers.NzbIndex;
 using NzbDrone.Core.Indexers.NzbsRUs;
 using NzbDrone.Core.Indexers.Omgwtfnzbs;
 using NzbDrone.Core.Indexers.Wombles;
@@ -28,7 +27,6 @@ namespace NzbDrone.Core.Test.IndexerTests
             _indexers.Add(new Newznab());
             _indexers.Add(new Nzbsrus());
             _indexers.Add(new NzbClub());
-            _indexers.Add(new NzbIndex());
             _indexers.Add(new Omgwtfnzbs());
             _indexers.Add(new Wombles());
 

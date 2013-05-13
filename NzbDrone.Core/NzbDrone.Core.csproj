@@ -275,8 +275,6 @@
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
     <Compile Include="Indexers\NzbClub\NzbClub.cs" />
     <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
-    <Compile Include="Indexers\NzbIndex\NzbIndex.cs" />
-    <Compile Include="Indexers\NzbIndex\NzbIndexParser.cs" />
     <Compile Include="Indexers\NzbsRUs\NzbsRUs.cs" />
     <Compile Include="Indexers\NzbsRUs\NzbsrusParser.cs" />
     <Compile Include="Indexers\Nzbx\Nzbx.cs" />
