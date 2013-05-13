@@ -17,14 +17,12 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
-        private readonly IJsonSerializer _jsonSerializer;
         private readonly Logger _logger;
 
-        public DailySeriesDataProxy(IHttpProvider httpProvider, IConfigService configService, IJsonSerializer jsonSerializer, Logger logger)
+        public DailySeriesDataProxy(IHttpProvider httpProvider, IConfigService configService, Logger logger)
         {
             _httpProvider = httpProvider;
             _configService = configService;
-            _jsonSerializer = jsonSerializer;
             _logger = logger;
         }
 
@@ -34,7 +32,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
             {
                 var dailySeriesIds = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/DailySeries/AllIds");
 
-                var seriesIds = _jsonSerializer.Deserialize<List<int>>(dailySeriesIds);
+                var seriesIds = Json.Deserialize<List<int>>(dailySeriesIds);
 
                 return seriesIds;
             }

@@ -103,7 +103,7 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
-    <Compile Include="Serializer\JsonSerializer.cs" />
+    <Compile Include="Serializer\Json.cs" />
     <Compile Include="Messaging\CommandCompletedEvent.cs" />
     <Compile Include="Messaging\CommandStartedEvent.cs" />
     <Compile Include="Messaging\CommandFailedEvent.cs" />

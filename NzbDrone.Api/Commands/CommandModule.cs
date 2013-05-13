@@ -25,7 +25,7 @@ namespace NzbDrone.Api.Commands
             var commandType =
                 _container.GetImplementations(typeof(ICommand))
                           .Single(c => c.Name.Replace("Command", "")
-                               .Equals(resource.Command, StringComparison.InvariantCultureIgnoreCase));
+                          .Equals(resource.Command, StringComparison.InvariantCultureIgnoreCase));
 
 
             var command = Request.Body.FromJson<ICommand>(commandType);

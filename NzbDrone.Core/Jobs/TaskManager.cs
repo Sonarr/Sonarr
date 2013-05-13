@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Jobs
@@ -36,7 +37,8 @@ namespace NzbDrone.Core.Jobs
             var defaultTasks = new[]
                 {
                     new ScheduledTask{ Interval = 25, TypeName = typeof(RssSyncCommand).FullName},
-                    new ScheduledTask{ Interval = 24*60, TypeName = typeof(UpdateXemMappings).FullName}
+                    new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappings).FullName},
+                    new ScheduledTask{ Interval = 6*60, TypeName = typeof(DiskScanCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();

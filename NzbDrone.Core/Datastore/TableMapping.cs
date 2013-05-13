@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Datastore
                                                           .Where(c => c.GetInterfaces().Any(i => i == typeof(IEmbeddedDocument)));
 
 
-            var embeddedConvertor = new EmbeddedDocumentConverter(new JsonSerializer());
+            var embeddedConvertor = new EmbeddedDocumentConverter();
             var genericListDefinition = typeof(List<>).GetGenericTypeDefinition();
             foreach (var embeddedType in embeddedTypes)
             {

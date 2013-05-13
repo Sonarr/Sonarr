@@ -2,15 +2,13 @@
 using System.IO;
 using Nancy;
 using Nancy.Responses;
-using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Api.Extensions
 {
     public static class JsonExtensions
     {
-        private static readonly JsonSerializer Serializer = new JsonSerializer();
-        private static readonly NancyJsonSerializer NancySerializer = new NancyJsonSerializer(Serializer);
+        private static readonly NancyJsonSerializer NancySerializer = new NancyJsonSerializer();
 
         public static T FromJson<T>(this Stream body) where T : class, new()
         {
@@ -22,7 +20,7 @@ namespace NzbDrone.Api.Extensions
             var reader = new StreamReader(body, true);
             body.Position = 0;
             var value = reader.ReadToEnd();
-            return (T)Serializer.Deserialize(value, type);
+            return (T)Json.Deserialize(value, type);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)

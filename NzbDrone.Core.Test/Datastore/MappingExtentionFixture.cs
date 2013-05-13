@@ -41,8 +41,8 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void Setup()
         {
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<EmbeddedType>), new EmbeddedDocumentConverter(new JsonSerializer()));
-            MapRepository.Instance.RegisterTypeConverter(typeof(EmbeddedType), new EmbeddedDocumentConverter(new JsonSerializer()));
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<EmbeddedType>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(EmbeddedType), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
             
         }

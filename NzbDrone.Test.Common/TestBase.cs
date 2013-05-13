@@ -76,7 +76,6 @@ namespace NzbDrone.Test.Common
 
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
-            Mocker.SetConstant<IJsonSerializer>(new JsonSerializer());
 
             LogManager.ReconfigExistingLoggers();
 
@@ -147,17 +146,17 @@ namespace NzbDrone.Test.Common
             return Path.Combine(Directory.GetCurrentDirectory(), "Files", fileName);
         }
 
-        protected void VerifyEventPublished<TEvent>() where TEvent : IEvent
+        protected void VerifyEventPublished<TEvent>() where TEvent : class, IEvent
         {
             VerifyEventPublished<TEvent>(Times.Once());
         }
 
-        protected void VerifyEventPublished<TEvent>(Times times) where TEvent : IEvent
+        protected void VerifyEventPublished<TEvent>(Times times) where TEvent : class, IEvent
         {
             Mocker.GetMock<IMessageAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), times);
         }
 
-        protected void VerifyEventNotPublished<TEvent>() where TEvent : IEvent
+        protected void VerifyEventNotPublished<TEvent>() where TEvent : class, IEvent
         {
             Mocker.GetMock<IMessageAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), Times.Never());
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Messaging;
@@ -39,6 +40,17 @@ namespace NzbDrone.Common.Test.EventingTests
         }
 
         [Test]
+        public void should_publish_command_by_with_optional_arg_with_name()
+        {
+            Mocker.GetMock<IServiceFactory>().Setup(c => c.GetImplementations(typeof(ICommand)))
+                  .Returns(new List<Type> { typeof(CommandA), typeof(CommandB) });
+
+            Subject.PublishCommand(typeof(CommandA).FullName);
+            _executorA.Verify(c => c.Execute(It.IsAny<CommandA>()), Times.Once());
+        }
+
+
+        [Test]
         public void should_not_publish_to_incompatible_executor()
         {
             var commandA = new CommandA();
@@ -64,7 +76,10 @@ namespace NzbDrone.Common.Test.EventingTests
 
     public class CommandA : ICommand
     {
+        public CommandA(int id = 0)
+        {
 
+        }
     }
 
     public class CommandB : ICommand

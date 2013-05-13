@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Messaging
 {
@@ -18,8 +21,10 @@ namespace NzbDrone.Common.Messaging
             _serviceFactory = serviceFactory;
         }
 
-        public void PublishEvent<TEvent>(TEvent @event) where TEvent : IEvent
+        public void PublishEvent<TEvent>(TEvent @event) where TEvent : class ,IEvent
         {
+            Ensure.That(() => @event).IsNotNull();
+
             var eventName = GetEventName(@event.GetType());
 
             _logger.Trace("Publishing {0}", eventName);
@@ -63,8 +68,10 @@ namespace NzbDrone.Common.Messaging
         }
 
 
-        public void PublishCommand<TCommand>(TCommand command) where TCommand : ICommand
+        public void PublishCommand<TCommand>(TCommand command) where TCommand : class, ICommand
         {
+            Ensure.That(() => command).IsNotNull();
+
             var handlerContract = typeof(IExecute<>).MakeGenericType(command.GetType());
 
             _logger.Trace("Publishing {0}", command.GetType().Name);
@@ -75,7 +82,7 @@ namespace NzbDrone.Common.Messaging
 
             try
             {
-                handlerContract.GetMethod("Execute").Invoke(handler, new object[] {command});
+                handlerContract.GetMethod("Execute").Invoke(handler, new object[] { command });
                 PublishEvent(new CommandCompletedEvent(command));
             }
             catch (TargetInvocationException e)
@@ -94,6 +101,16 @@ namespace NzbDrone.Common.Messaging
             }
 
             _logger.Debug("{0} <- {1}", command.GetType().Name, handler.GetType().Name);
+        }
+
+        public void PublishCommand(string commandTypeName)
+        {
+            var commandType = _serviceFactory.GetImplementations(typeof(ICommand))
+                .Single(c => c.FullName.Equals(commandTypeName, StringComparison.InvariantCultureIgnoreCase));
+
+            //json.net is better at creating objects
+            var command = Json.Deserialize("{}", commandType);
+            PublishCommand((ICommand)command);
         }
     }
 }

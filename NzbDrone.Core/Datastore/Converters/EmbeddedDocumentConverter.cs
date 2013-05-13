@@ -8,12 +8,6 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class EmbeddedDocumentConverter : IConverter
     {
-        private readonly IJsonSerializer _serializer;
-
-        public EmbeddedDocumentConverter(IJsonSerializer serializer)
-        {
-            _serializer = serializer;
-        }
 
         public object FromDB(ColumnMap map, object dbValue)
         {
@@ -29,14 +23,14 @@ namespace NzbDrone.Core.Datastore.Converters
                 return null;
             }
 
-            return  _serializer.Deserialize(stringValue, map.FieldType);
+            return  Json.Deserialize(stringValue, map.FieldType);
         }
 
         public object ToDB(object clrValue)
         {
             if (clrValue == null) return null;
 
-            var json = _serializer.Serialize(clrValue);
+            var json = Json.Serialize(clrValue);
             return json;
         }
 

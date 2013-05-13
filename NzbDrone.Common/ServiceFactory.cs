@@ -10,6 +10,7 @@ namespace NzbDrone.Common
         T Build<T>() where T : class;
         IEnumerable<T> BuildAll<T>() where T : class;
         object Build(Type contract);
+        IEnumerable<Type> GetImplementations(Type contract);
     }
 
     public class ServiceFactory : IServiceFactory
@@ -34,6 +35,11 @@ namespace NzbDrone.Common
         public object Build(Type contract)
         {
             return _container.Resolve(contract);
+        }
+
+        public IEnumerable<Type> GetImplementations(Type contract)
+        {
+            return _container.GetImplementations(contract);
         }
     }
 }

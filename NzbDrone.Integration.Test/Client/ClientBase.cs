@@ -15,7 +15,6 @@ namespace NzbDrone.Integration.Test.Client
         private readonly string _resource;
 
         private readonly Logger _logger;
-        private readonly JsonSerializer _jsonSerializer;
 
         public ClientBase(IRestClient restClient, string resource = null)
         {
@@ -26,10 +25,6 @@ namespace NzbDrone.Integration.Test.Client
 
             _restClient = restClient;
             _resource = resource;
-
-            _jsonSerializer = new JsonSerializer();
-
-
 
             _logger = LogManager.GetLogger("REST");
         }
@@ -109,7 +104,7 @@ namespace NzbDrone.Integration.Test.Client
 
             response.ErrorMessage.Should().BeBlank();
 
-            return _jsonSerializer.Deserialize<T>(response.Content);
+            return Json.Deserialize<T>(response.Content);
         }
 
     }

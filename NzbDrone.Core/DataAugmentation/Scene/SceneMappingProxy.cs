@@ -14,19 +14,19 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IConfigService _configService;
-        private readonly IJsonSerializer _jsonSerializer;
+        
 
-        public SceneMappingProxy(IHttpProvider httpProvider, IConfigService configService, IJsonSerializer jsonSerializer)
+        public SceneMappingProxy(IHttpProvider httpProvider, IConfigService configService)
         {
             _httpProvider = httpProvider;
             _configService = configService;
-            _jsonSerializer = jsonSerializer;
+            
         }
 
         public List<SceneMapping> Fetch()
         {
             var mappingsJson = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/SceneMapping/Active");
-            return _jsonSerializer.Deserialize<List<SceneMapping>>(mappingsJson);
+            return Json.Deserialize<List<SceneMapping>>(mappingsJson);
         }
     }
 }

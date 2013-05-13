@@ -8,12 +8,6 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : IndexerWithSetting<NewznabSettings>
     {
-        private readonly IJsonSerializer _jsonSerializer;
-
-        public Newznab()
-        {
-            _jsonSerializer = new JsonSerializer();
-        }
 
 
         public override IEnumerable<IndexerDefinition> DefaultDefinitions
@@ -54,7 +48,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private string GetSettings(string url)
         {
-            return _jsonSerializer.Serialize(new NewznabSettings { Url = url });
+            return Json.Serialize(new NewznabSettings { Url = url });
         }
 
         public override IEnumerable<string> RecentFeed
