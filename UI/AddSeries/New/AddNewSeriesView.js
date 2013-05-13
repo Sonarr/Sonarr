@@ -16,8 +16,6 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
         initialize: function () {
 
             this.collection = new NzbDrone.AddSeries.Collection();
-
-                   model.id = undefined;
             NzbDrone.AddSeries.New.AddNewSeriesContext = this;
 
             NzbDrone.vent.on(NzbDrone.Events.SeriesAdded, function (options) {

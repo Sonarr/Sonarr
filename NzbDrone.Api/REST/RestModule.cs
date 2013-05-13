@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using System.Linq;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.REST
 {
@@ -16,6 +18,7 @@ namespace NzbDrone.Api.REST
         private Action<int> _deleteResource;
         private Func<int, TResource> _getResourceById;
         private Func<List<TResource>> _getResourceAll;
+        private Func<PagingResource<TResource>, PagingResource<TResource>> _getResourcePaged;
         private Func<TResource> _getResourceSingle;
         private Func<TResource, TResource> _createResource;
         private Func<TResource, TResource> _updateResource;
@@ -24,7 +27,6 @@ namespace NzbDrone.Api.REST
         protected ResourceValidator<TResource> PutValidator { get; private set; }
         protected ResourceValidator<TResource> SharedValidator { get; private set; }
 
-
         protected void ValidateId(int id)
         {
             if (id <= 0)
@@ -32,7 +34,6 @@ namespace NzbDrone.Api.REST
                 throw new BadRequestException(id + " is not a valid ID");
             }
         }
-
 
         protected RestModule(string modulePath)
             : base(modulePath)
@@ -88,6 +89,21 @@ namespace NzbDrone.Api.REST
             }
         }
 
+        protected Func<PagingResource<TResource>, PagingResource<TResource>> GetResourcePaged
+        {
+            private get { return _getResourcePaged; }
+            set
+            {
+                _getResourcePaged = value;
+
+                Get[ROOT_ROUTE] = options =>
+                {
+                    var resource = GetResourcePaged(ReadPagingResourceFromRequest());
+                    return resource.AsResponse();
+                };
+            }
+        }
+
         protected Func<TResource> GetResourceSingle
         {
             private get { return _getResourceSingle; }
@@ -132,14 +148,12 @@ namespace NzbDrone.Api.REST
             }
         }
 
-
         private TResource ReadFromRequest()
         {
             //TODO: handle when request is null
             var resource = Request.Body.FromJson<TResource>();
 
             var errors = SharedValidator.Validate(resource).Errors.ToList();
-
 
             if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -156,6 +170,35 @@ namespace NzbDrone.Api.REST
             }
 
             return resource;
+        }
+
+        private PagingResource<TResource> ReadPagingResourceFromRequest()
+        {
+            int pageSize;
+            Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.PageSize), out pageSize);
+            if (pageSize == 0) pageSize = 10;
+            
+            int page;
+            Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.Page), out page);
+            if (page == 0) page = 1;
+
+            var sortKey = PrimitiveExtensions.ToNullSafeString(Request.Query.SortKey);
+            if (String.IsNullOrEmpty(sortKey)) sortKey = "AirDate";
+
+            var sortDirection = PrimitiveExtensions.ToNullSafeString(Request.Query.SortDir)
+                                                   .Equals("Asc", StringComparison.InvariantCultureIgnoreCase)
+                                                   ? SortDirection.Ascending
+                                                   : SortDirection.Descending;
+
+            var pagingResource = new PagingResource<TResource>
+                                     {
+                                         PageSize = pageSize,
+                                         Page = page,
+                                         SortKey = sortKey,
+                                         SortDirection = sortDirection
+                                     };
+
+            return pagingResource;
         }
     }
 }

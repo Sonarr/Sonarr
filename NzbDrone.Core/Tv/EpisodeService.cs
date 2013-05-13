@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Tv
         Episode GetEpisode(int seriesId, DateTime date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
-        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
+        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         List<Episode> EpisodesWithFiles();
         void RefreshEpisodeInfo(Series series);
@@ -93,9 +93,9 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec)
         {
-            var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, includeSpecials);
+            var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, false);
 
             return episodeResult;
         }

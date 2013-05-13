@@ -48,5 +48,19 @@ namespace NzbDrone.Api
             return model.InjectTo<TResource>();
         }
 
+        protected PagingResource<TResource> ApplyToPage<TModel>(Func<PagingSpec<TModel>, PagingSpec<TModel>> function, PagingSpec<TModel> pagingSpec) where TModel : ModelBase, new()
+        {
+            pagingSpec = function(pagingSpec);
+
+            return new PagingResource<TResource>
+                       {
+                           Page = pagingSpec.Page,
+                           PageSize = pagingSpec.PageSize,
+                           SortDirection = pagingSpec.SortDirection,
+                           SortKey = pagingSpec.SortKey,
+                           TotalRecords = pagingSpec.TotalRecords,
+                           Records = pagingSpec.Records.InjectTo<List<TResource>>()
+                       };
+        }
     }
 }
