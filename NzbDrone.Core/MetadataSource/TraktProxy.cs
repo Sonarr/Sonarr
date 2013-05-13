@@ -52,11 +52,11 @@ namespace NzbDrone.Core.MetadataSource
             series.TvRageId = show.tvrage_id;
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
-            series.FirstAired = show.first_aired;
+            series.FirstAired =FromEpoc(show.first_aired_utc);
             series.Overview = show.overview;
             series.Runtime = show.runtime;
             series.Network = show.network;
-            series.AirTime = show.air_time;
+            series.AirTime = show.air_time_utc;
             series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
             series.Status = GetSeriesStatus(show.status);
 
@@ -75,14 +75,14 @@ namespace NzbDrone.Core.MetadataSource
             episode.EpisodeNumber = traktEpisode.number;
             episode.TvDbEpisodeId = traktEpisode.tvdb_id;
             episode.Title = traktEpisode.title;
-            episode.AirDate = traktEpisode.first_aired;
+            episode.AirDate =FromEpoc(traktEpisode.first_aired_utc);
 
             return episode;
         }
 
         private static string GetPosterThumbnailUrl(string posterUrl)
         {
-            if(posterUrl.Contains("poster-small.jpg")) return posterUrl;
+            if (posterUrl.Contains("poster-small.jpg")) return posterUrl;
 
             var extension = Path.GetExtension(posterUrl);
             var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
@@ -94,6 +94,13 @@ namespace NzbDrone.Core.MetadataSource
             if (string.IsNullOrWhiteSpace(status)) return SeriesStatusType.Continuing;
             if (status.Equals("Ended", StringComparison.InvariantCultureIgnoreCase)) return SeriesStatusType.Ended;
             return SeriesStatusType.Continuing;
+        }
+
+        private static DateTime? FromEpoc(long ticks)
+        {
+            if (ticks == 0) return null;
+
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(ticks);
         }
     }
 }

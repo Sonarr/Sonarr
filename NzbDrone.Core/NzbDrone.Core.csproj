@@ -304,16 +304,10 @@
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
     <Compile Include="MetadataSource\TraktProxy.cs" />
-    <Compile Include="MetadataSource\Trakt\Actor.cs" />
     <Compile Include="MetadataSource\Trakt\Episode.cs" />
     <Compile Include="MetadataSource\Trakt\Images.cs" />
-    <Compile Include="MetadataSource\Trakt\People.cs" />
-    <Compile Include="MetadataSource\Trakt\Ratings.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\Show.cs" />
-    <Compile Include="MetadataSource\Trakt\Stats.cs" />
-    <Compile Include="MetadataSource\Trakt\TopEpisode.cs" />
-    <Compile Include="MetadataSource\Trakt\TopWatcher.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
     <Compile Include="Instrumentation\LogService.cs" />

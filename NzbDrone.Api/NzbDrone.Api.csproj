@@ -112,8 +112,6 @@
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="PagingResource.cs" />
-    <Compile Include="Resolvers\EndTimeResolver.cs" />
-    <Compile Include="Resolvers\NextAiringResolver.cs" />
     <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="REST\BadRequestException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />

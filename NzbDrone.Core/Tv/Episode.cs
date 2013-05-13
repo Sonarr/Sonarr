@@ -44,17 +44,6 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        public DateTime? EndTime
-        {
-            get
-            {
-                if (!AirDate.HasValue) return null;
-                if (Series == null) return null;
-
-                return AirDate.Value.AddMinutes(Series.Runtime);
-            }
-        }
-
         public String SeriesTitle { get; private set; }
 
         public Series Series { get; set; }

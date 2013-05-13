@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("Network").AsString().Nullable()
                 .WithColumn("CustomStartDate").AsDateTime().Nullable()
                 .WithColumn("UseSceneNumbering").AsBoolean()
-                .WithColumn("UtcOffSet").AsInt32()
                 .WithColumn("FirstAired").AsDateTime().Nullable()
                 .WithColumn("NextAiring").AsDateTime().Nullable();
 

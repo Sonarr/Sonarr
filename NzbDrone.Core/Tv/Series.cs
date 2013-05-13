@@ -55,11 +55,7 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        //Todo: This should be a double since there are timezones that aren't on a full hour offset
-        public int UtcOffset { get; set; }
-
         public DateTime? FirstAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
-        public DateTime? NextAiring { get; set; }
     }
 }

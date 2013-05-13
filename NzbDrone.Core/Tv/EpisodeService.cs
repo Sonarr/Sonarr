@@ -172,16 +172,9 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.TvDbEpisodeId = episode.TvDbEpisodeId;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
-                    episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
                     episodeToUpdate.Title = episode.Title;
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
-
-                    if (!String.IsNullOrWhiteSpace(series.AirTime) && episodeToUpdate.AirDate.HasValue)
-                    {
-                        episodeToUpdate.AirDate = episodeToUpdate.AirDate.Value.Add(Convert.ToDateTime(series.AirTime).TimeOfDay)
-                                                                               .AddHours(series.UtcOffset * -1);
-                    }
 
                     successCount++;
                 }
