@@ -30,7 +30,23 @@ module.exports = function (grunt) {
             'UI/JsLibraries/lunr.js'                        : 'http://raw.github.com/olivernn/lunr.js/master/lunr.js',
             'UI/Content/messenger.css'                      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
             'UI/Content/bootstrap.toggle-switch.css'        : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
-            'UI/Content/messenger.future.css'               : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css'
+            'UI/Content/messenger.future.css'               : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css',
+        
+            'UI/Content/FontAwesome/fontawesome.otf'         : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/FontAwesome.otf?raw=true',
+            'UI/Content/FontAwesome/fontawesome-webfont.eot' : 'https://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.eot?raw=true',
+            'UI/Content/FontAwesome/fontawesome-webfont.svg' : 'https://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.svg?raw=true',
+            'UI/Content/FontAwesome/fontawesome-webfont.ttf' : 'https://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.ttf?raw=true',
+            'UI/Content/FontAwesome/fontawesome-webfont.woff': 'https://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.woff?raw=true',
+            
+            'UI/Content/FontAwesome/bootstrap.less'          : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/bootstrap.less',
+            'UI/Content/FontAwesome/core.less'               : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/core.less',
+            'UI/Content/FontAwesome/extras.less'             : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/extras.less',
+            'UI/Content/FontAwesome/font-awesome-ie7.less'   : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/font-awesome-ie7.less',
+            'UI/Content/FontAwesome/font-awesome.less'       : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/font-awesome.less',
+            'UI/Content/FontAwesome/icons.less'              : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/icons.less',
+            'UI/Content/FontAwesome/mixins.less'             : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/mixins.less',
+            'UI/Content/FontAwesome/path.less'               : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/path.less',
+            'UI/Content/FontAwesome/variables.less'           : 'https://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/variables.less'
         },
 
         clean: {
@@ -46,7 +62,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src   : ['UI/**/*.less', '!**/Bootstrap/**'],
+                        src   : ['UI/**/*.less', '!**/Bootstrap/**','!**/FontAwesome/**'],
                         dest  : '_output/',
                         ext   : '.css'
                     }
@@ -89,18 +105,18 @@ module.exports = function (grunt) {
                 dest: '_output/'
             },
             fonts  : {
-                src : 'UI/**/Fonts/*.*',
+                src : 'UI/**/FontAwesome/*.*',
                 dest: '_output/'
             }
         },
 
         watch: {
             bootstrap  : {
-                files: '<%= less.bootstrap.src %>',
+                files: ['<%= less.bootstrap.src %>', 'UI/**/FontAwesome/**'],
                 tasks: ['less:bootstrap']
             },
             generalLess: {
-                files: ['UI/**/*.less', '!**/Bootstrap/**'],
+                files: ['UI/**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
                 tasks: ['less:general']
             },
             handlebars : {
