@@ -45,8 +45,6 @@ namespace NzbDrone.Core.Indexers
                          .ThenBy(c => c.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
                          .ThenBy(c => c.Report.Age);
 
-
-
             foreach (var episodeParseResult in qualifiedReports)
             {
                 try

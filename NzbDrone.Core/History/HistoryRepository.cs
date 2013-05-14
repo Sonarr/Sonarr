@@ -29,7 +29,6 @@ namespace NzbDrone.Core.History
             Delete(c=> c.Date < cutoff);
         }
 
-
         public List<QualityModel> GetBestQualityInHistory(int episodeId)
         {
             var history = Query.Where(c => c.EpisodeId == episodeId);

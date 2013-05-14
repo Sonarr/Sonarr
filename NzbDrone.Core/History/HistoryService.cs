@@ -64,6 +64,7 @@ namespace NzbDrone.Core.History
                     Indexer = message.Episode.Report.Indexer,
                     Quality = message.Episode.ParsedEpisodeInfo.Quality,
                     NzbTitle = message.Episode.Report.Title,
+                    SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
                     NzbInfoUrl = message.Episode.Report.NzbInfoUrl,
                     ReleaseGroup = message.Episode.Report.ReleaseGroup,
