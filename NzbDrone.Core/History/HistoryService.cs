@@ -51,7 +51,7 @@ namespace NzbDrone.Core.History
 
         public virtual QualityModel GetBestQualityInHistory(int episodeId)
         {
-            return _historyRepository.GetBestQualityInHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
+            return _historyRepository.GetEpisodeHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
         }
 
         public void Handle(EpisodeGrabbedEvent message)
