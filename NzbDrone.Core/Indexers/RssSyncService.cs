@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
@@ -35,9 +36,6 @@ namespace NzbDrone.Core.Indexers
             var reports = _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
 
-            //TODO: this will download multiple of same episode if they show up in RSS. need to
-            //proposal: maybe get download decision one by one, that way 
-
             var qualifiedReports = decisions
                          .Where(c => c.Approved)
                          .Select(c => c.RemoteEpisode)
@@ -45,11 +43,16 @@ namespace NzbDrone.Core.Indexers
                          .ThenBy(c => c.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
                          .ThenBy(c => c.Report.Age);
 
+            var downloadedReports = new List<int>();
+
             foreach (var episodeParseResult in qualifiedReports)
             {
                 try
                 {
+                    if (downloadedReports.Intersect(episodeParseResult.Episodes.Select(e => e.Id)).Any()) continue;
+
                     _downloadService.DownloadReport(episodeParseResult);
+                    downloadedReports.AddRange(episodeParseResult.Episodes.Select(e => e.Id));
                 }
                 catch (Exception e)
                 {
