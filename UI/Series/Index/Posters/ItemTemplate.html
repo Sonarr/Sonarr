@@ -4,15 +4,13 @@
             <div class="center">
                 <div class="series-poster-container x-series-poster">
                     <div class="series-controls">
-                        <!--<div class="pull-right">-->
-                            <i class="icon-cog x-edit" title="Edit Series"></i>
-                            <i class="icon-remove x-remove" title="Delete Series"></i>
-                        <!--</div>-->
+                        <i class="icon-cog x-edit" title="Edit Series"></i>
+                        <i class="icon-remove x-remove" title="Delete Series"></i>
                     </div>
                     {{#unless isContinuing}}
                         <div class="ended-banner">Ended</div>
                     {{/unless}}
-                    <a href="/series/details/{{titleSlug}}" target="_blank">
+                    <a href="/series/details/{{titleSlug}}">
                         <img class="series-poster img-polaroid" src="{{poster}}">
                     </a>
                 </div>
@@ -26,7 +24,7 @@
                         {{#if bestDateString}}
                             <span class="label label-inverse air-date" title="{{shortDate}}">{{bestDateString}}</span>
                         {{else}}
-                            <span class="label label-inverse">{{status}}</span>
+                            <span class="label label-inverse">Continuing</span>
                         {{/if}}
                         <span class="label label-info">Season {{seasonCount}}</span>
                     {{else}}

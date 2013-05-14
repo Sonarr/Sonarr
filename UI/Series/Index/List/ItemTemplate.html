@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="row">
-                <a href="/series/details/{{id}}" target="_blank">
+                <a href="/series/details/{{id}}">
                     <div class="span10">
                         {{overview}}
                     </div>
@@ -33,11 +33,11 @@
                         {{#if bestDateString}}
                             <span class="label">{{bestDateString}}</span>
                         {{else}}
-                            <span class="label label-inverse">{{status}}</span>
+                            <span class="label label-inverse">Continuing</span>
                         {{/if}}
                         <span class="label label-info">Season {{seasonCount}}</span>
                     {{else}}
-                        <span class="label label-important">{{status}}</span>
+                        <span class="label label-important">Ended</span>
                         <span class="label label-info">{{seasonCount}} Seasons</span>
                     {{/if}}
                 </div>

@@ -52,7 +52,7 @@ namespace NzbDrone.Core.MetadataSource
             series.TvRageId = show.tvrage_id;
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
-            series.FirstAired =FromEpoc(show.first_aired_utc);
+            series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
             series.Runtime = show.runtime;
             series.Network = show.network;
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.MetadataSource
             episode.EpisodeNumber = traktEpisode.number;
             episode.TvDbEpisodeId = traktEpisode.tvdb_id;
             episode.Title = traktEpisode.title;
-            episode.AirDate =FromEpoc(traktEpisode.first_aired_utc);
+            episode.AirDate = FromIso(traktEpisode.first_aired_iso);
 
             return episode;
         }
@@ -96,11 +96,21 @@ namespace NzbDrone.Core.MetadataSource
             return SeriesStatusType.Continuing;
         }
 
-        private static DateTime? FromEpoc(long ticks)
+        private static DateTime? FromEpoch(long ticks)
         {
             if (ticks == 0) return null;
 
-            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(ticks);
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(ticks);
+        }
+
+        private static DateTime? FromIso(string iso)
+        {
+            DateTime result;
+
+            if (!DateTime.TryParse(iso, out result))
+                return null;
+
+            return result.ToUniversalTime();
         }
     }
 }

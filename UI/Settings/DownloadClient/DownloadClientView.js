@@ -75,8 +75,5 @@ define([
                     throw "unknown download client id" + clientId;
             }
         }
-
-
-
     });
 });

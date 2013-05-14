@@ -10,7 +10,7 @@ Backgrid.SeriesStatusCell = Backgrid.Cell.extend({
         if (!monitored) {
             this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
         }
-        else if (status === 0) {
+        else if (status === 'continuing') {
             this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
         }
 

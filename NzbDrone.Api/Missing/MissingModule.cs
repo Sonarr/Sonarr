@@ -1,19 +1,21 @@
-﻿using NzbDrone.Core.Datastore;
+﻿using NzbDrone.Api.Episodes;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Missing
 {
-    public class MissingModule : NzbDroneRestModule<MissingResource>
+    public class MissingModule : NzbDroneRestModule<EpisodeResource>
     {
         private readonly IEpisodeService _episodeService;
 
         public MissingModule(IEpisodeService episodeService)
+            :base("missing")
         {
             _episodeService = episodeService;
             GetResourcePaged = GetMissingEpisodes;
         }
 
-        private PagingResource<MissingResource> GetMissingEpisodes(PagingResource<MissingResource> pagingResource)
+        private PagingResource<EpisodeResource> GetMissingEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
             var pagingSpec = new PagingSpec<Episode>
             {

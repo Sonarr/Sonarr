@@ -108,7 +108,9 @@ define([
             },
 
             initialize: function (options) {
-                this.settings = options.settings;
+                this.settings = new NzbDrone.Settings.SettingsModel();
+                this.settings.fetch();
+
                 this.namingSettings = new NzbDrone.Settings.Naming.NamingModel();
                 this.namingSettings.fetch();
 

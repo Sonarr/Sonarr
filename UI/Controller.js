@@ -42,13 +42,7 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
 
             settings: function (action) {
                 this._setTitle('Settings');
-
-                var settingsModel = new NzbDrone.Settings.SettingsModel();
-                settingsModel.fetch({
-                    success: function (settings) {
-                        NzbDrone.mainRegion.show(new NzbDrone.Settings.SettingsLayout({settings: settings, action: action}));
-                    }
-                });
+                NzbDrone.mainRegion.show(new NzbDrone.Settings.SettingsLayout({action: action}));
             },
 
             missing: function () {
