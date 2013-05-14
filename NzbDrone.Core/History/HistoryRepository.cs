@@ -12,7 +12,7 @@ namespace NzbDrone.Core.History
     public interface IHistoryRepository : IBasicRepository<History>
     {
         void Trim();
-        List<QualityModel> GetBestQualityInHistory(int episodeId);
+        List<QualityModel> GetEpisodeHistory(int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
     }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.History
             Delete(c=> c.Date < cutoff);
         }
 
-        public List<QualityModel> GetBestQualityInHistory(int episodeId)
+        public List<QualityModel> GetEpisodeHistory(int episodeId)
         {
             var history = Query.Where(c => c.EpisodeId == episodeId);
 
