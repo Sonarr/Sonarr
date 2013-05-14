@@ -23,7 +23,6 @@ namespace NzbDrone.Core.History
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
 
-
         public HistoryService(IHistoryRepository historyRepository, Logger logger)
         {
             _historyRepository = historyRepository;
@@ -52,7 +51,7 @@ namespace NzbDrone.Core.History
 
         public virtual QualityModel GetBestQualityInHistory(int episodeId)
         {
-            return _historyRepository.GetBestQualityInHistory(episodeId);
+            return _historyRepository.GetBestQualityInHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
         }
 
         public void Handle(EpisodeGrabbedEvent message)
