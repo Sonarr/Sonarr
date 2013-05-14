@@ -87,16 +87,16 @@ namespace NzbDrone.Core.Configuration
 
         public SabPriorityType SabBacklogTvPriority
         {
-            get { return (SabPriorityType)GetValueInt("SabBacklogTvPriority"); }
+            get { return GetValueEnum("SabBacklogTvPriority", SabPriorityType.Default); }
 
-            set { SetValue("SabBacklogTvPriority", (int)value); }
+            set { SetValue("SabBacklogTvPriority", value); }
         }
 
         public SabPriorityType SabRecentTvPriority
         {
-            get { return (SabPriorityType)GetValueInt("SabRecentTvPriority"); }
+            get { return GetValueEnum("SabRecentTvPriority", SabPriorityType.Default); }
 
-            set { SetValue("SabRecentTvPriority", (int)value); }
+            set { SetValue("SabRecentTvPriority", value); }
         }
 
         public String DownloadClientTvDirectory
@@ -275,9 +275,9 @@ namespace NzbDrone.Core.Configuration
 
         public DownloadClientType DownloadClient
         {
-            get { return (DownloadClientType)GetValueInt("DownloadClient"); }
+            get { return GetValueEnum("DownloadClientType", DownloadClientType.Sabnzbd); }
 
-            set { SetValue("DownloadClient", (int)value); }
+            set { SetValue("DownloadClient", value); }
         }
 
         public string BlackholeDirectory
@@ -347,7 +347,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RssSyncInterval", value); }
         }
 
-
         public Boolean IgnoreArticlesWhenSortingSeries
         {
             get { return GetValueBoolean("IgnoreArticlesWhenSortingSeries", true); }
@@ -399,16 +398,16 @@ namespace NzbDrone.Core.Configuration
 
         public PriorityType NzbgetBacklogTvPriority
         {
-            get { return (PriorityType)GetValueInt("NzbgetBacklogTvPriority"); }
+            get { return GetValueEnum("NzbgetBacklogTvPriority", PriorityType.Normal); }
 
-            set { SetValue("NzbgetBacklogTvPriority", (int)value); }
+            set { SetValue("NzbgetBacklogTvPriority", value); }
         }
 
         public PriorityType NzbgetRecentTvPriority
         {
-            get { return (PriorityType)GetValueInt("NzbgetRecentTvPriority"); }
+            get { return GetValueEnum("NzbgetRecentTvPriority", PriorityType.Normal); }
 
-            set { SetValue("NzbgetRecentTvPriority", (int)value); }
+            set { SetValue("NzbgetRecentTvPriority", value); }
         }
 
         public string NzbRestrictions
@@ -436,6 +435,11 @@ namespace NzbDrone.Core.Configuration
         private int GetValueInt(string key, int defaultValue = 0)
         {
             return Convert.ToInt32(GetValue(key, defaultValue));
+        }
+
+        public T GetValueEnum<T>(string key, T defaultValue)
+        {
+            return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
 
         public string GetValue(string key, object defaultValue, bool persist = false)
@@ -491,6 +495,11 @@ namespace NzbDrone.Core.Configuration
             }
 
             ClearCache();
+        }
+
+        public void SetValue(string key, Enum value)
+        {
+            SetValue(key, value.ToString().ToLower());
         }
 
         public void SaveValues(Dictionary<string, object> configValues)
