@@ -2,31 +2,30 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.MediaFiles
 {
-    public interface IDropFolderImportService
-    {
-        void ProcessDropFolder(string dropFolder);
-    }
-
-    public class DropFolderImportService : IDropFolderImportService
+    public class DownloadedEpisodesImportService : IExecute<DownloadedEpisodesScanCommand>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
         private readonly ISeriesService _seriesService;
         private readonly IMoveEpisodeFiles _episodeFileMover;
         private readonly IParsingService _parsingService;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public DropFolderImportService(IDiskProvider diskProvider,
+        public DownloadedEpisodesImportService(IDiskProvider diskProvider,
             IDiskScanService diskScanService,
             ISeriesService seriesService,
             IMoveEpisodeFiles episodeFileMover,
             IParsingService parsingService,
+            IConfigService configService,
             Logger logger)
         {
             _diskProvider = diskProvider;
@@ -34,40 +33,8 @@ namespace NzbDrone.Core.Providers
             _seriesService = seriesService;
             _episodeFileMover = episodeFileMover;
             _parsingService = parsingService;
+            _configService = configService;
             _logger = logger;
-        }
-
-        public virtual void ProcessDropFolder(string dropFolder)
-        {
-            foreach (var subfolder in _diskProvider.GetDirectories(dropFolder))
-            {
-                try
-                {
-                    if (!_seriesService.SeriesPathExists(subfolder))
-                    {
-                        ProcessSubFolder(new DirectoryInfo(subfolder));
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("An error has occurred while importing folder: " + subfolder, e);
-                }
-            }
-
-            foreach (var videoFile in _diskScanService.GetVideoFiles(dropFolder, false))
-            {
-                try
-                {
-                    var series = _parsingService.GetSeries(videoFile);
-                    ProcessVideoFile(videoFile, series);
-                }
-                catch (Exception ex)
-                {
-                    _logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
-                }
-            }
-
-            //TODO: cleanup empty folders
         }
 
         public void ProcessSubFolder(DirectoryInfo subfolderInfo)
@@ -94,7 +61,6 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-
         public void ProcessVideoFile(string videoFile, Series series)
         {
             if (_diskProvider.GetLastFileWrite(videoFile).AddMinutes(2) > DateTime.UtcNow)
@@ -117,5 +83,46 @@ namespace NzbDrone.Core.Providers
             }
         }
 
+        public void Execute(DownloadedEpisodesScanCommand message)
+        {
+            //TODO: We should also process the download client's category folder
+            var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
+
+            if (String.IsNullOrEmpty(downloadedEpisodesFolder))
+            {
+                _logger.Warn("Downloaded Episodes Folder is not configured");
+                return;
+            }
+
+            foreach (var subfolder in _diskProvider.GetDirectories(downloadedEpisodesFolder))
+            {
+                try
+                {
+                    if (!_seriesService.SeriesPathExists(subfolder))
+                    {
+                        ProcessSubFolder(new DirectoryInfo(subfolder));
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("An error has occurred while importing folder: " + subfolder, e);
+                }
+            }
+
+            foreach (var videoFile in _diskScanService.GetVideoFiles(downloadedEpisodesFolder, false))
+            {
+                try
+                {
+                    var series = _parsingService.GetSeries(videoFile);
+                    ProcessVideoFile(videoFile, series);
+                }
+                catch (Exception ex)
+                {
+                    _logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
+                }
+            }
+
+            //TODO: cleanup empty folders
+        }
     }
 }

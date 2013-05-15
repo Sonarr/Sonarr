@@ -249,6 +249,7 @@
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
     <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
+    <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
     <Compile Include="MediaFiles\Commands\DiskScanCommand.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
@@ -459,7 +460,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExternalNotification\PlexProvider.cs" />
-    <Compile Include="Providers\DropfolderImportService.cs">
+    <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\ProwlProvider.cs">

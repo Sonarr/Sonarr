@@ -99,11 +99,11 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SabRecentTvPriority", value); }
         }
 
-        public String DownloadClientTvDirectory
+        public String DownloadedEpisodesFolder
         {
-            get { return GetValue("DownloadClientTvDirectory"); }
+            get { return GetValue("DownloadedEpisodesFolder"); }
 
-            set { SetValue("DownloadClientTvDirectory", value); }
+            set { SetValue("DownloadedEpisodesFolder", value); }
         }
 
         public bool UseSeasonFolder

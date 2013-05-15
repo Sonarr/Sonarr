@@ -38,11 +38,11 @@ namespace NzbDrone.Core.Jobs
                 {
                     new ScheduledTask{ Interval = 25, TypeName = typeof(RssSyncCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappings).FullName},
-                    new ScheduledTask{ Interval = 6*60, TypeName = typeof(DiskScanCommand).FullName}
+                    new ScheduledTask{ Interval = 6*60, TypeName = typeof(DiskScanCommand).FullName},
+                    new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();
-
 
             _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", defaultTasks.Count(), currentTasks.Count());
 

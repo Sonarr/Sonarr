@@ -67,6 +67,4 @@ namespace NzbDrone.Core.Jobs
             Timer.Stop();
         }
     }
-
-
 }
