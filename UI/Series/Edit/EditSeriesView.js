@@ -3,8 +3,6 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
 
     NzbDrone.Series.Edit.EditSeriesView = Backbone.Marionette.ItemView.extend({
         template : 'Series/Edit/EditSeriesTemplate',
-        tagName  : 'div',
-        className: "modal",
 
         ui: {
             progressbar    : '.progress .bar',

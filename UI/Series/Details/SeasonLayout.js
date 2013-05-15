@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app'], function () {
+define(['app', 'Series/Details/EpisodeDetailCell'], function () {
     NzbDrone.Series.Details.SeasonLayout = Backbone.Marionette.Layout.extend({
         template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -8,6 +8,11 @@ define(['app'], function () {
         },
 
         columns: [
+            {
+                name    : 'details',
+                editable: false,
+                cell    : NzbDrone.Series.Details.EpisodeDetailCell
+            },
             {
                 name    : 'episodeNumber',
                 label   : '#',
@@ -22,10 +27,10 @@ define(['app'], function () {
                 cell    : 'string'
             },
             {
-                name     : 'airDate',
-                label    : 'Air Date',
-                editable : false,
-                cell     : 'date'
+                name    : 'airDate',
+                label   : 'Air Date',
+                editable: false,
+                cell    : 'date'
                 //formatter: new Backgrid.AirDateFormatter()
             }
         ],

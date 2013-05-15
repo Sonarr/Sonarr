@@ -1,16 +1,15 @@
 ﻿"use strict";
-define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
+define(['app', 'AddSeries/AddSeriesLayout',
     'Series/Index/SeriesIndexLayout',
     'Calendar/CalendarCollectionView', 'Shared/NotificationView',
     'Shared/NotFoundView', 'MainMenuView',
     'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection',
     'Settings/SettingsLayout', 'Missing/MissingLayout',
     'History/HistoryLayout'],
-    function (app, modalRegion) {
-
+    function () {
         var controller = Backbone.Marionette.Controller.extend({
 
-            series: function () {
+            series       : function () {
                 this._setTitle('NzbDrone');
                 NzbDrone.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexLayout());
             },
@@ -72,23 +71,6 @@ define(['app', 'Shared/ModalRegion', 'AddSeries/AddSeriesLayout',
                     window.document.title = title + ' - NzbDrone';
                 }
             }
-        });
-
-        //Modal dialog initializer
-        NzbDrone.addInitializer(function () {
-
-            NzbDrone.addRegions({ modalRegion: modalRegion });
-
-            NzbDrone.vent.on(NzbDrone.Events.OpenModalDialog, function (options) {
-                console.log('opening modal dialog ' + options.view.template);
-                NzbDrone.modalRegion.show(options.view);
-            });
-
-            NzbDrone.vent.on(NzbDrone.Events.CloseModalDialog, function () {
-                console.log('closing modal dialog');
-                NzbDrone.modalRegion.close();
-            });
-
         });
 
         return new controller();

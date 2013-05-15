@@ -26,7 +26,7 @@ require.config({
     }
 });
 
-define('app', function () {
+define('app', ['shared/modal/region'], function (ModalRegion) {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Config = {};
@@ -47,6 +47,10 @@ define('app', function () {
         New        : {},
         Existing   : {},
         RootFolders: {}
+    };
+
+    window.NzbDrone.Episode = {
+        Search: {}
     };
 
 
@@ -77,9 +81,6 @@ define('app', function () {
     window.NzbDrone.History = {};
 
     window.NzbDrone.Events = {
-        //TODO: Move to commands
-        OpenModalDialog : 'openModal',
-        CloseModalDialog: 'closeModal',
         SeriesAdded     : 'seriesAdded'
     };
 
@@ -99,7 +100,8 @@ define('app', function () {
 
     NzbDrone.addRegions({
         mainRegion        : '#main-region',
-        notificationRegion: '#notification-region'
+        notificationRegion: '#notification-region',
+        modalRegion       : ModalRegion
     });
 
     window.NzbDrone.start();
