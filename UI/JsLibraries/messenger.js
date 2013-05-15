@@ -1,4 +1,4 @@
-/*! messenger 1.3.0 2013-03-21 */
+/*! messenger 1.3.1 2013-05-14 */
 /*
  * This file begins the output concatenated into messenger.js
  *
@@ -299,7 +299,7 @@ window.Messenger.Events = (function() {
 })();
 
 (function() {
-  var $, ActionMessenger, BaseView, Events, RetryingMessage, _, _Message, _Messenger, _ref, _ref1,
+  var $, ActionMessenger, BaseView, Events, RetryingMessage, _, _Message, _Messenger, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice,
@@ -307,9 +307,9 @@ window.Messenger.Events = (function() {
 
   $ = jQuery;
 
-  _ = _ != null ? _ : window.Messenger._;
+  _ = (_ref = window._) != null ? _ref : window.Messenger._;
 
-  Events = (_ref = typeof Backbone !== "undefined" && Backbone !== null ? Backbone.Events : void 0) != null ? _ref : window.Messenger.Events;
+  Events = (_ref1 = typeof Backbone !== "undefined" && Backbone !== null ? Backbone.Events : void 0) != null ? _ref1 : window.Messenger.Events;
 
   BaseView = (function() {
 
@@ -426,7 +426,7 @@ window.Messenger.Events = (function() {
     };
 
     _Message.prototype.update = function(opts) {
-      var _ref1,
+      var _ref2,
         _this = this;
       if (_.isString(opts)) {
         opts = {
@@ -436,7 +436,7 @@ window.Messenger.Events = (function() {
       $.extend(this.options, opts);
       this.lastUpdate = new Date();
       this.rendered = false;
-      this.events = (_ref1 = this.options.events) != null ? _ref1 : {};
+      this.events = (_ref2 = this.options.events) != null ? _ref2 : {};
       this.render();
       this.actionsToEvents();
       this.delegateEvents();
@@ -487,12 +487,12 @@ window.Messenger.Events = (function() {
     };
 
     _Message.prototype.actionsToEvents = function() {
-      var act, name, _ref1, _results,
+      var act, name, _ref2, _results,
         _this = this;
-      _ref1 = this.options.actions;
+      _ref2 = this.options.actions;
       _results = [];
-      for (name in _ref1) {
-        act = _ref1[name];
+      for (name in _ref2) {
+        act = _ref2[name];
         _results.push(this.events["click [data-action=\"" + name + "\"] a"] = (function(act) {
           return function(e) {
             e.preventDefault();
@@ -506,11 +506,11 @@ window.Messenger.Events = (function() {
     };
 
     _Message.prototype.checkClickable = function() {
-      var evt, name, _ref1, _results;
-      _ref1 = this.events;
+      var evt, name, _ref2, _results;
+      _ref2 = this.events;
       _results = [];
-      for (name in _ref1) {
-        evt = _ref1[name];
+      for (name in _ref2) {
+        evt = _ref2[name];
         if (name === 'click') {
           _results.push(this.$message.addClass('messenger-clickable'));
         } else {
@@ -521,20 +521,20 @@ window.Messenger.Events = (function() {
     };
 
     _Message.prototype.undelegateEvents = function() {
-      var _ref1;
+      var _ref2;
       _Message.__super__.undelegateEvents.apply(this, arguments);
-      return (_ref1 = this.$message) != null ? _ref1.removeClass('messenger-clickable') : void 0;
+      return (_ref2 = this.$message) != null ? _ref2.removeClass('messenger-clickable') : void 0;
     };
 
     _Message.prototype.parseActions = function() {
-      var act, actions, n_act, name, _ref1, _ref2;
+      var act, actions, n_act, name, _ref2, _ref3;
       actions = [];
-      _ref1 = this.options.actions;
-      for (name in _ref1) {
-        act = _ref1[name];
+      _ref2 = this.options.actions;
+      for (name in _ref2) {
+        act = _ref2[name];
         n_act = $.extend({}, act);
         n_act.name = name;
-        if ((_ref2 = n_act.label) == null) {
+        if ((_ref3 = n_act.label) == null) {
           n_act.label = name;
         }
         actions.push(n_act);
@@ -543,7 +543,7 @@ window.Messenger.Events = (function() {
     };
 
     _Message.prototype.template = function(opts) {
-      var $action, $actions, $cancel, $link, $message, $text, action, _i, _len, _ref1,
+      var $action, $actions, $cancel, $link, $message, $text, action, _i, _len, _ref2,
         _this = this;
       $message = $("<div class='messenger-message message alert " + opts.type + " message-" + opts.type + " alert-" + opts.type + "'>");
       if (opts.showCloseButton) {
@@ -559,9 +559,9 @@ window.Messenger.Events = (function() {
       if (opts.actions.length) {
         $actions = $('<div class="messenger-actions">');
       }
-      _ref1 = opts.actions;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        action = _ref1[_i];
+      _ref2 = opts.actions;
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        action = _ref2[_i];
         $action = $('<span>');
         $action.attr('data-action', "" + action.name);
         $link = $('<a>');
@@ -619,24 +619,24 @@ window.Messenger.Events = (function() {
     };
 
     RetryingMessage.prototype.clearTimers = function() {
-      var name, timer, _ref1, _ref2;
-      _ref1 = this._timers;
-      for (name in _ref1) {
-        timer = _ref1[name];
+      var name, timer, _ref2, _ref3;
+      _ref2 = this._timers;
+      for (name in _ref2) {
+        timer = _ref2[name];
         clearTimeout(timer);
       }
       this._timers = {};
-      return (_ref2 = this.$message) != null ? _ref2.removeClass('messenger-retry-soon messenger-retry-later') : void 0;
+      return (_ref3 = this.$message) != null ? _ref3.removeClass('messenger-retry-soon messenger-retry-later') : void 0;
     };
 
     RetryingMessage.prototype.render = function() {
-      var action, name, _ref1, _results;
+      var action, name, _ref2, _results;
       RetryingMessage.__super__.render.apply(this, arguments);
       this.clearTimers();
-      _ref1 = this.options.actions;
+      _ref2 = this.options.actions;
       _results = [];
-      for (name in _ref1) {
-        action = _ref1[name];
+      for (name in _ref2) {
+        action = _ref2[name];
         if (action.auto) {
           _results.push(this.startCountdown(name, action));
         } else {
@@ -676,13 +676,13 @@ window.Messenger.Events = (function() {
     };
 
     RetryingMessage.prototype.startCountdown = function(name, action) {
-      var $phrase, remaining, tick, _ref1,
+      var $phrase, remaining, tick, _ref2,
         _this = this;
       if (this._timers[name] != null) {
         return;
       }
       $phrase = this.$message.find("[data-action='" + name + "'] .messenger-phrase");
-      remaining = (_ref1 = action.delay) != null ? _ref1 : 3;
+      remaining = (_ref2 = action.delay) != null ? _ref2 : 3;
       if (remaining <= 10) {
         this.$message.removeClass('messenger-retry-later');
         this.$message.addClass('messenger-retry-soon');
@@ -765,13 +765,13 @@ window.Messenger.Events = (function() {
     };
 
     _Messenger.prototype._enforceIdConstraint = function(msg) {
-      var entry, _i, _len, _msg, _ref1;
+      var entry, _i, _len, _msg, _ref2;
       if (msg.options.id == null) {
         return;
       }
-      _ref1 = this.history;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        entry = _ref1[_i];
+      _ref2 = this.history;
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        entry = _ref2[_i];
         _msg = entry.msg;
         if ((_msg.options.id != null) && _msg.options.id === msg.options.id && msg !== _msg) {
           if (msg.options.singleton) {
@@ -785,13 +785,13 @@ window.Messenger.Events = (function() {
     };
 
     _Messenger.prototype.newMessage = function(opts) {
-      var msg, _ref1, _ref2, _ref3,
+      var msg, _ref2, _ref3, _ref4,
         _this = this;
       if (opts == null) {
         opts = {};
       }
       opts.messenger = this;
-      _Message = (_ref1 = (_ref2 = Messenger.themes[(_ref3 = opts.theme) != null ? _ref3 : this.options.theme]) != null ? _ref2.Message : void 0) != null ? _ref1 : RetryingMessage;
+      _Message = (_ref2 = (_ref3 = Messenger.themes[(_ref4 = opts.theme) != null ? _ref4 : this.options.theme]) != null ? _ref3.Message : void 0) != null ? _ref2 : RetryingMessage;
       msg = new _Message(opts);
       msg.on('show', function() {
         if (opts.scrollTo && _this.$el.css('position') !== 'fixed') {
@@ -803,13 +803,13 @@ window.Messenger.Events = (function() {
     };
 
     _Messenger.prototype.updateMessageSlotClasses = function() {
-      var anyShown, last, rec, willBeFirst, _i, _len, _ref1;
+      var anyShown, last, rec, willBeFirst, _i, _len, _ref2;
       willBeFirst = true;
       last = null;
       anyShown = false;
-      _ref1 = this.history;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        rec = _ref1[_i];
+      _ref2 = this.history;
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        rec = _ref2[_i];
         rec.$slot.removeClass('first last shown');
         if (rec.msg.shown && rec.msg.rendered) {
           rec.$slot.addClass('shown');
@@ -828,11 +828,11 @@ window.Messenger.Events = (function() {
     };
 
     _Messenger.prototype.hideAll = function() {
-      var rec, _i, _len, _ref1, _results;
-      _ref1 = this.history;
+      var rec, _i, _len, _ref2, _results;
+      _ref2 = this.history;
       _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        rec = _ref1[_i];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        rec = _ref2[_i];
         _results.push(rec.msg.hide());
       }
       return _results;
@@ -927,7 +927,7 @@ window.Messenger.Events = (function() {
     };
 
     ActionMessenger.prototype._parseEvents = function(events) {
-      var desc, firstSpace, func, label, out, type, _ref1;
+      var desc, firstSpace, func, label, out, type, _ref2;
       if (events == null) {
         events = {};
       }
@@ -937,7 +937,7 @@ window.Messenger.Events = (function() {
         firstSpace = label.indexOf(' ');
         type = label.substring(0, firstSpace);
         desc = label.substring(firstSpace + 1);
-        if ((_ref1 = out[type]) == null) {
+        if ((_ref2 = out[type]) == null) {
           out[type] = {};
         }
         out[type][desc] = func;
@@ -965,7 +965,7 @@ window.Messenger.Events = (function() {
     };
 
     ActionMessenger.prototype.run = function() {
-      var args, attr, events, m_opts, msg, opts, promiseAttrs, _i, _len, _ref1, _ref2,
+      var args, attr, events, m_opts, msg, opts, promiseAttrs, _i, _len, _ref2, _ref3,
         _this = this;
       m_opts = arguments[0], opts = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
       if (opts == null) {
@@ -973,7 +973,7 @@ window.Messenger.Events = (function() {
       }
       m_opts = $.extend(true, {}, this.messageDefaults, this.doDefaults, m_opts != null ? m_opts : {});
       events = this._parseEvents(m_opts.events);
-      msg = (_ref1 = m_opts.messageInstance) != null ? _ref1 : this.newMessage(m_opts);
+      msg = (_ref2 = m_opts.messageInstance) != null ? _ref2 : this.newMessage(m_opts);
       if (m_opts.id != null) {
         msg.options.id = m_opts.id;
       }
@@ -984,20 +984,20 @@ window.Messenger.Events = (function() {
         }));
       }
       _.each(['error', 'success'], function(type) {
-        var old, _ref2, _ref3;
-        if ((_ref2 = opts[type]) != null ? _ref2._originalHandler : void 0) {
+        var old, _ref3, _ref4;
+        if ((_ref3 = opts[type]) != null ? _ref3._originalHandler : void 0) {
           opts[type] = opts[type]._originalHandler;
         }
-        old = (_ref3 = opts[type]) != null ? _ref3 : function() {};
+        old = (_ref4 = opts[type]) != null ? _ref4 : function() {};
         opts[type] = function() {
-          var data, msgOpts, msgText, r, reason, resp, xhr, _ref10, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+          var data, msgOpts, msgText, r, reason, resp, xhr, _ref10, _ref11, _ref5, _ref6, _ref7, _ref8, _ref9;
           resp = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          _ref4 = _this._normalizeResponse.apply(_this, resp), reason = _ref4[0], data = _ref4[1], xhr = _ref4[2];
+          _ref5 = _this._normalizeResponse.apply(_this, resp), reason = _ref5[0], data = _ref5[1], xhr = _ref5[2];
           if (type === 'success' && !(msg.errorCount != null) && m_opts.showSuccessWithoutError === false) {
             m_opts['successMessage'] = null;
           }
           if (type === 'error') {
-            if ((_ref5 = m_opts.errorCount) == null) {
+            if ((_ref6 = m_opts.errorCount) == null) {
               m_opts.errorCount = 0;
             }
             m_opts.errorCount += 1;
@@ -1007,20 +1007,20 @@ window.Messenger.Events = (function() {
             msg.hide();
             return;
           }
-          if (type === 'error' && ((m_opts.ignoredErrorCodes != null) && (_ref6 = xhr != null ? xhr.status : void 0, __indexOf.call(m_opts.ignoredErrorCodes, _ref6) >= 0))) {
+          if (type === 'error' && ((m_opts.ignoredErrorCodes != null) && (_ref7 = xhr != null ? xhr.status : void 0, __indexOf.call(m_opts.ignoredErrorCodes, _ref7) >= 0))) {
             msg.hide();
             return;
           }
           msgOpts = $.extend({}, m_opts, {
             message: msgText,
             type: type,
-            events: (_ref7 = events[type]) != null ? _ref7 : {},
+            events: (_ref8 = events[type]) != null ? _ref8 : {},
             hideOnNavigate: type === 'success'
           });
-          if (typeof ((_ref8 = msgOpts.retry) != null ? _ref8.allow : void 0) === 'number') {
+          if (typeof ((_ref9 = msgOpts.retry) != null ? _ref9.allow : void 0) === 'number') {
             msgOpts.retry.allow--;
           }
-          if (type === 'error' && (xhr != null ? xhr.status : void 0) >= 500 && ((_ref9 = msgOpts.retry) != null ? _ref9.allow : void 0)) {
+          if (type === 'error' && (xhr != null ? xhr.status : void 0) >= 500 && ((_ref10 = msgOpts.retry) != null ? _ref10.allow : void 0)) {
             if (msgOpts.retry.delay == null) {
               if (msgOpts.errorCount < 4) {
                 msgOpts.retry.delay = 10;
@@ -1029,7 +1029,7 @@ window.Messenger.Events = (function() {
               }
             }
             if (msgOpts.hideAfter) {
-              if ((_ref10 = msgOpts._hideAfter) == null) {
+              if ((_ref11 = msgOpts._hideAfter) == null) {
                 msgOpts._hideAfter = msgOpts.hideAfter;
               }
               msgOpts.hideAfter = msgOpts._hideAfter + msgOpts.retry.delay;
@@ -1076,7 +1076,7 @@ window.Messenger.Events = (function() {
         if (msg[attr] != null) {
           delete msg[attr];
         }
-        msg[attr] = (_ref2 = msg._actionInstance) != null ? _ref2[attr] : void 0;
+        msg[attr] = (_ref3 = msg._actionInstance) != null ? _ref3[attr] : void 0;
       }
       return msg;
     };
@@ -1095,7 +1095,7 @@ window.Messenger.Events = (function() {
   })(_Messenger);
 
   $.fn.messenger = function() {
-    var $el, args, func, instance, opts, _ref1, _ref2, _ref3;
+    var $el, args, func, instance, opts, _ref2, _ref3, _ref4;
     func = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
     if (func == null) {
       func = {};
@@ -1104,7 +1104,7 @@ window.Messenger.Events = (function() {
     if (!(func != null) || !_.isString(func)) {
       opts = func;
       if (!($el.data('messenger') != null)) {
-        _Messenger = (_ref1 = (_ref2 = Messenger.themes[opts.theme]) != null ? _ref2.Messenger : void 0) != null ? _ref1 : ActionMessenger;
+        _Messenger = (_ref2 = (_ref3 = Messenger.themes[opts.theme]) != null ? _ref3.Messenger : void 0) != null ? _ref2 : ActionMessenger;
         $el.data('messenger', instance = new _Messenger($.extend({
           el: $el
         }, opts)));
@@ -1112,7 +1112,7 @@ window.Messenger.Events = (function() {
       }
       return $el.data('messenger');
     } else {
-      return (_ref3 = $el.data('messenger'))[func].apply(_ref3, args);
+      return (_ref4 = $el.data('messenger'))[func].apply(_ref4, args);
     }
   };
 
@@ -1163,7 +1163,7 @@ window.Messenger.Events = (function() {
   $.extend(Messenger, {
     Message: RetryingMessage,
     Messenger: ActionMessenger,
-    themes: (_ref1 = Messenger.themes) != null ? _ref1 : {}
+    themes: (_ref2 = Messenger.themes) != null ? _ref2 : {}
   });
 
   $.globalMessenger = window.Messenger = Messenger;
