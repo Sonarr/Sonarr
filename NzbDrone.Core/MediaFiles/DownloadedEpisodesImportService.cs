@@ -55,6 +55,11 @@ namespace NzbDrone.Core.MediaFiles
                     if (!_seriesService.SeriesPathExists(subfolder))
                     {
                         ProcessSubFolder(new DirectoryInfo(subfolder));
+
+                        if (_diskProvider.GetDirectorySize(subfolder) < 50.Megabytes())
+                        {
+                            _diskProvider.DeleteFolder(subfolder, true);
+                        }
                     }
                 }
                 catch (Exception e)
