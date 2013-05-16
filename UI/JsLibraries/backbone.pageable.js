@@ -1,5 +1,5 @@
 /*
-  backbone-pageable 1.2.3
+  backbone-pageable 1.2.4
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -260,8 +260,8 @@
        @param {Object} [options]
 
        @param {function(*, *): number} [options.comparator] If specified, this
-       comparator is set to the current page under server mode, or the
-       #fullCollection otherwise.
+       comparator is set to the current page under server mode, or the #fullCollection
+       otherwise.
 
        @param {boolean} [options.full] If `false` and either a
        `options.comparator` or `sortKey` is defined, the comparator is attached
@@ -281,7 +281,9 @@
 
        @param {Object} [options.queryParam]
     */
-    initialize: function (models, options) {
+    constructor: function (models, options) {
+
+      Backbone.Collection.apply(this, arguments);
 
       options = options || {};
 
