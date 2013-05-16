@@ -34,8 +34,9 @@ Function CleanFolder($path)
     get-childitem $path -File -Filter app.config | foreach ($_) {remove-item $_.fullname}
   
     Write-Host Removing Empty folders
-    while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) {
-        Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Remove-Item
+    while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) 
+    {
+        Get-ChildItem $path -Directory -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Remove-Item
     }
 }
 
@@ -73,13 +74,17 @@ Function Nunit()
      Invoke-Expression  $nunitExe 
 }
 
-Function Grunt()
+Function RunGrunt()
 {
-   grunt package
+   $npmInstall = 'npm install'
+   $gruntPackage = 'grunt package'
+
+   Invoke-Expression $npmInstall
+   Invoke-Expression $gruntPackage
 }
 
 Build
-Grunt
+RunGrunt
 PackageTests
 
 if($runTests)
