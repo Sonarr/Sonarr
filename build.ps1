@@ -59,10 +59,8 @@ Function PackageTests()
 
 }
 
-Build
-PackageTests
 
-if($runTests)
+Function Nunit()
 {
     $testFiles
 
@@ -73,4 +71,18 @@ if($runTests)
 
      $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
      Invoke-Expression  $nunitExe 
+}
+
+Function Grunt()
+{
+   grunt package
+}
+
+Build
+Grunt
+PackageTests
+
+if($runTests)
+{
+    Nunit
 }
