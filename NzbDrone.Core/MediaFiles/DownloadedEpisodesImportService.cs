@@ -37,6 +37,48 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
+        public void ProcessDownloadedEpiosdesFolder()
+        {
+            //TODO: We should also process the download client's category folder
+            var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
+
+            if (String.IsNullOrEmpty(downloadedEpisodesFolder))
+            {
+                _logger.Warn("Downloaded Episodes Folder is not configured");
+                return;
+            }
+
+            foreach (var subfolder in _diskProvider.GetDirectories(downloadedEpisodesFolder))
+            {
+                try
+                {
+                    if (!_seriesService.SeriesPathExists(subfolder))
+                    {
+                        ProcessSubFolder(new DirectoryInfo(subfolder));
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("An error has occurred while importing folder: " + subfolder, e);
+                }
+            }
+
+            foreach (var videoFile in _diskScanService.GetVideoFiles(downloadedEpisodesFolder, false))
+            {
+                try
+                {
+                    var series = _parsingService.GetSeries(videoFile);
+                    ProcessVideoFile(videoFile, series);
+                }
+                catch (Exception ex)
+                {
+                    _logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
+                }
+            }
+
+            //TODO: cleanup empty folders
+        }
+
         public void ProcessSubFolder(DirectoryInfo subfolderInfo)
         {
             if (_diskProvider.GetLastFolderWrite(subfolderInfo.FullName).AddMinutes(2) > DateTime.UtcNow)
@@ -85,44 +127,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public void Execute(DownloadedEpisodesScanCommand message)
         {
-            //TODO: We should also process the download client's category folder
-            var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
-
-            if (String.IsNullOrEmpty(downloadedEpisodesFolder))
-            {
-                _logger.Warn("Downloaded Episodes Folder is not configured");
-                return;
-            }
-
-            foreach (var subfolder in _diskProvider.GetDirectories(downloadedEpisodesFolder))
-            {
-                try
-                {
-                    if (!_seriesService.SeriesPathExists(subfolder))
-                    {
-                        ProcessSubFolder(new DirectoryInfo(subfolder));
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("An error has occurred while importing folder: " + subfolder, e);
-                }
-            }
-
-            foreach (var videoFile in _diskScanService.GetVideoFiles(downloadedEpisodesFolder, false))
-            {
-                try
-                {
-                    var series = _parsingService.GetSeries(videoFile);
-                    ProcessVideoFile(videoFile, series);
-                }
-                catch (Exception ex)
-                {
-                    _logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
-                }
-            }
-
-            //TODO: cleanup empty folders
+            ProcessDownloadedEpiosdesFolder();
         }
     }
 }
