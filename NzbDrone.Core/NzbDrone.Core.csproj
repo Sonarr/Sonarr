@@ -505,6 +505,7 @@
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tv\SeriesStatusType.cs" />
+    <Compile Include="Update\Commands\CheckForUpdateCommand.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
     <Compile Include="Update\UpdateService.cs" />

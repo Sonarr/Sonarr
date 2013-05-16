@@ -6,18 +6,19 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Update;
+using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
 {
     public interface IUpdateService
     {
-        void InstallAvailableUpdate();
         Dictionary<DateTime, string> GetUpdateLogFiles();
     }
 }
 
-public class UpdateService : IUpdateService
+public class UpdateService : IUpdateService, IExecute<ApplicationUpdateCommand>
 {
     private readonly IUpdatePackageProvider _updatePackageProvider;
     private readonly IEnvironmentProvider _environmentProvider;
@@ -43,19 +44,6 @@ public class UpdateService : IUpdateService
         _logger = logger;
     }
 
-    public void InstallAvailableUpdate()
-    {
-        var latestAvailable = _updatePackageProvider.GetLatestUpdate();
-
-        if (latestAvailable == null || latestAvailable.Version <= _environmentProvider.Version)
-        {
-            _logger.Debug("No update available.");
-            return;
-        }
-
-        InstallUpdate(latestAvailable);
-
-    }
 
     private void InstallUpdate(UpdatePackage updatePackage)
     {
@@ -108,5 +96,17 @@ public class UpdateService : IUpdateService
 
         return list;
     }
-}
 
+    public void Execute(ApplicationUpdateCommand message)
+    {
+        var latestAvailable = _updatePackageProvider.GetLatestUpdate();
+
+        if (latestAvailable == null || latestAvailable.Version <= _environmentProvider.Version)
+        {
+            _logger.Debug("No update available.");
+            return;
+        }
+
+        InstallUpdate(latestAvailable);
+    }
+}
