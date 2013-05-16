@@ -13,7 +13,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
-    public class DropFolderImportServiceFixture : CoreTest<DropFolderImportService>
+    public class DropFolderImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
     {
         private EpisodeFile _fakeEpisodeFile;
 
