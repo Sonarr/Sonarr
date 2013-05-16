@@ -80,8 +80,6 @@ namespace NzbDrone.Core.MediaFiles
                     _logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
                 }
             }
-
-            //TODO: cleanup empty folders
         }
 
         public void ProcessSubFolder(DirectoryInfo subfolderInfo)
