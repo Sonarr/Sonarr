@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.Update.Commands
 {
-    public class CheckForUpdateCommand : ICommand
+    public class ApplicationUpdateCommand : ICommand
     {
     }
 }

@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(true);
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IDiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true));
         }
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(_sandboxFolder)).Returns(false);
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
             Mocker.GetMock<IDiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true), Times.Never());
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive));
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
             Mocker.GetMock<ArchiveProvider>().Verify(c => c.ExtractArchive(updateArchive, _sandboxFolder));
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             var updateClientFolder = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateClientFolder();
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
 
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
 
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns<UpdatePackage>(null);
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
             ExceptionVerification.AssertNoUnexcpectedLogs();
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Mocker.Resolve<DiskProvider>();
             Mocker.Resolve<ArchiveProvider>();
 
-            Subject.Execute(new CheckForUpdateCommand());
+            Subject.Execute(new ApplicationUpdateCommand());
 
 
             updateSubFolder.Refresh();
