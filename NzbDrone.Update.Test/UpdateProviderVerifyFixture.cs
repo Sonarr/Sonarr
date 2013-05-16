@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
-
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -18,9 +16,6 @@ namespace NzbDrone.Update.Test
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IEnvironmentProvider>()
-                .Setup(c => c.StartUpPath).Returns(@"C:\Temp\NzbDrone_update\");
-
             Mocker.GetMock<IEnvironmentProvider>()
                 .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
         }

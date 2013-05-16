@@ -9,8 +9,7 @@ namespace NzbDrone.Common
     {
         bool IsUserInteractive { get; }
         string WorkingDirectory { get; }
-        string StartUpPath { get; }
-        String SystemTemp { get; }
+        string SystemTemp { get; }
         Version Version { get; }
         DateTime BuildDateTime { get; }
         Version GetOsVersion();
@@ -34,8 +33,6 @@ namespace NzbDrone.Common
                 if (lowerProcessName.Contains("nunit")) return false;
                 if (lowerProcessName.Contains("jetbrain")) return false;
                 if (lowerProcessName.Contains("resharper")) return false;
-
-                if (Instance.StartUpPath.ToLower().Contains("_rawpackage")) return false;
 
                 return true;
             }
@@ -79,7 +76,7 @@ namespace NzbDrone.Common
 
         public virtual string WorkingDirectory
         {
-            get { return Directory.GetCurrentDirectory(); }
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NzbDrone"); }
         }
 
         public virtual string StartUpPath
