@@ -1,5 +1,16 @@
 "use strict";
 
+Backgrid.Column.prototype.defaults = {
+    name: undefined,
+    label: undefined,
+    sortable: true,
+    editable: false,
+    renderable: true,
+    formatter: undefined,
+    cell: undefined,
+    headerCell: 'nzbDrone'
+};
+
 Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
     className: '',
     template: 'Series/Index/Table/ControlsColumnTemplate',

@@ -15,73 +15,59 @@ define([
                 pager  : '#x-pager'
             },
 
-            showTable: function () {
+            columns: [
+                {
+                    name      : 'indexer',
+                    label     : '',
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/IndexerTemplate' })
+                },
+                {
+                    name      : 'Series.Title',
+                    label     : 'Series Title',
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' })
+                },
+                {
+                    name      : 'episode',
+                    label     : 'Episode',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' })
+                },
+                {
+                    name      : 'Episode.Title',
+                    label     : 'Episode Title',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/EpisodeTitleTemplate' })
+                },
+                {
+                    name      : 'quality',
+                    label     : 'Quality',
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/QualityTemplate' })
+                },
+                {
+                    name      : 'date',
+                    label     : 'Grabbed',
+                    cell      : 'airDate'
+                },
+                {
+                    name      : 'edit',
+                    label     : '',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/ControlsColumnTemplate' })
+                }
+            ],
 
-                var columns = [
-                    {
-                        name      : 'indexer',
-                        label     : '',
-                        editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/IndexerTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'Series.Title',
-                        label     : 'Series Title',
-                        editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'episode',
-                        label     : 'Episode',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'Episode.Title',
-                        label     : 'Episode Title',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/EpisodeTitleTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'quality',
-                        label     : 'Quality',
-                        editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/QualityTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'date',
-                        label     : 'Grabbed',
-                        editable  : false,
-                        cell      : 'airDate',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'edit',
-                        label     : '',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/ControlsColumnTemplate' }),
-                        headerCell: 'nzbDrone'
-                    }
-                ];
+            showTable: function () {
 
                 this.history.show(new Backgrid.Grid(
                     {
                         row       : NzbDrone.History.Row,
-                        columns   : columns,
+                        columns   : this.columns,
                         collection: this.historyCollection,
                         className : 'table table-hover'
                     }));
 
                 this.pager.show(new Backgrid.NzbDronePaginator({
-                    columns: columns,
+                    columns: this.columns,
                     collection: this.historyCollection
                 }));
             },

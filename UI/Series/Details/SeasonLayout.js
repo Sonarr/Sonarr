@@ -10,26 +10,23 @@ define(['app', 'Series/Details/EpisodeDetailCell'], function () {
         columns: [
             {
                 name    : 'details',
-                editable: false,
+                label   : 'Details',
                 cell    : NzbDrone.Series.Details.EpisodeDetailCell
             },
             {
                 name    : 'episodeNumber',
                 label   : '#',
-                editable: false,
                 cell    : 'integer'
             },
 
             {
                 name    : 'title',
                 label   : 'Title',
-                editable: false,
                 cell    : 'string'
             },
             {
                 name    : 'airDate',
                 label   : 'Air Date',
-                editable: false,
                 cell    : 'date'
                 //formatter: new Backgrid.AirDateFormatter()
             }

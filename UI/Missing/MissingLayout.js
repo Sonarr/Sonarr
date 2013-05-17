@@ -16,59 +16,48 @@ define([
                 pager  : '#x-pager'
             },
 
+            columns: [
+                {
+                    name      : 'series.Title',
+                    label     : 'Series Title',
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' })
+                },
+                {
+                    name      : 'episode',
+                    label     : 'Episode',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' })
+                },
+                {
+                    name      : 'title',
+                    label     : 'Episode Title',
+                    sortable  : false,
+                    cell      : 'string'
+                },
+                {
+                    name      : 'airDate',
+                    label     : 'Air Date',
+                    cell      : 'airDate'
+                },
+                {
+                    name      : 'edit',
+                    label     : '',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/ControlsColumnTemplate' })
+                }
+            ],
+
             showTable: function () {
-
-                var columns = [
-                    {
-                        name      : 'series.Title',
-                        label     : 'Series Title',
-                        editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'episode',
-                        label     : 'Episode',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'title',
-                        label     : 'Episode Title',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : 'string',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'airDate',
-                        label     : 'Air Date',
-                        editable  : false,
-                        cell      : 'airDate',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'edit',
-                        label     : '',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/ControlsColumnTemplate' }),
-                        headerCell: 'nzbDrone'
-                    }
-                ];
-
                 this.missing.show(new Backgrid.Grid(
                     {
                         row       : NzbDrone.Missing.Row,
-                        columns   : columns,
+                        columns   : this.columns,
                         collection: this.missingCollection,
                         className : 'table table-hover'
                     }));
 
                 this.pager.show(new Backgrid.NzbDronePaginator({
-                    columns: columns,
+                    columns: this.columns,
                     collection: this.missingCollection
                 }));
             },

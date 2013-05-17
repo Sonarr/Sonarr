@@ -18,73 +18,57 @@ define([
                 toolbar: '#x-toolbar'
             },
 
-            showTable: function () {
+            columns: [
+                {
+                    name      : 'status',
+                    label     : '',
+                    cell      : 'seriesStatus'
+                },
+                {
+                    name      : 'title',
+                    label     : 'Title',
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/SeriesTitleTemplate' })
+                },
+                {
+                    name      : 'seasonCount',
+                    label     : 'Seasons',
+                    cell      : 'integer'
+                },
+                {
+                    name      : 'quality',
+                    label     : 'Quality',
+                    cell      : 'integer'
+                },
+                {
+                    name      : 'network',
+                    label     : 'Network',
+                    cell      : 'string'
+                },
+                {
+                    name      : 'nextAiring',
+                    label     : 'Next Airing',
+                    cell      : 'airDate'
+                },
+                {
+                    name      : 'episodes',
+                    label     : 'Episodes',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/EpisodeProgressTemplate' })
+                },
+                {
+                    name      : 'edit',
+                    label     : '',
+                    sortable  : false,
+                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/ControlsColumnTemplate' })
+                }
+            ],
 
-                var columns = [
-                    {
-                        name      : 'status',
-                        label     : '',
-                        editable  : false,
-                        cell      : 'seriesStatus',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'title',
-                        label     : 'Title',
-                        editable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/SeriesTitleTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'seasonCount',
-                        label     : 'Seasons',
-                        editable  : false,
-                        cell      : 'integer',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'quality',
-                        label     : 'Quality',
-                        editable  : false,
-                        cell      : 'integer',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'network',
-                        label     : 'Network',
-                        editable  : false,
-                        cell      : 'string',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'nextAiring',
-                        label     : 'Next Airing',
-                        editable  : false,
-                        cell      : 'airDate',
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'episodes',
-                        label     : 'Episodes',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/EpisodeProgressTemplate' }),
-                        headerCell: 'nzbDrone'
-                    },
-                    {
-                        name      : 'edit',
-                        label     : '',
-                        editable  : false,
-                        sortable  : false,
-                        cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/ControlsColumnTemplate' }),
-                        headerCell: 'nzbDrone'
-                    }
-                ];
+            showTable: function () {
 
                 this.series.show(new Backgrid.Grid(
                     {
                         row       : NzbDrone.Series.Index.Table.Row,
-                        columns   : columns,
+                        columns   : this.columns,
                         collection: this.seriesCollection,
                         className : 'table table-hover'
                     }));
