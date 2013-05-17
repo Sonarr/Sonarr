@@ -75,7 +75,7 @@ namespace NzbDrone.Core.MediaCover
 
         private string GetSeriesCoverPath(int seriesId)
         {
-            return Path.Combine(_coverRootFolder, seriesId.ToString("0000"));
+            return Path.Combine(_coverRootFolder, seriesId.ToString());
         }
     }
 }

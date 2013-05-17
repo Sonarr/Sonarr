@@ -2,11 +2,6 @@ using System.IO;
 
 namespace NzbDrone.Api.Frontend
 {
-    public interface IMapHttpRequestsToDisk
-    {
-        string Map(string resourceUrl);
-    }
-
     public class StaticResourceMapper : IMapHttpRequestsToDisk
     {
         public string Map(string resourceUrl)
@@ -17,5 +12,7 @@ namespace NzbDrone.Api.Frontend
 
             return Path.Combine("ui", path);
         }
+
+        public RequestType IHandle { get { return RequestType.StaticResources; } }
     }
 }

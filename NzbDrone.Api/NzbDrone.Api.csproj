@@ -97,6 +97,8 @@
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
+    <Compile Include="Frontend\MediaCoverMapper.cs" />
+    <Compile Include="Frontend\IMapHttpRequestsToDisk.cs" />
     <Compile Include="Frontend\IndexModule.cs" />
     <Compile Include="Frontend\StaticResourceProvider.cs" />
     <Compile Include="Frontend\StaticResourceMapper.cs" />

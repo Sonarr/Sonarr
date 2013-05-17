@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using Nancy;
@@ -14,13 +16,13 @@ namespace NzbDrone.Api.Frontend
     public class StaticResourceProvider : IProcessStaticResource
     {
         private readonly IDiskProvider _diskProvider;
-        private readonly IMapHttpRequestsToDisk _requestMapper;
+        private readonly IEnumerable<IMapHttpRequestsToDisk> _requestMappers;
         private readonly Logger _logger;
 
-        public StaticResourceProvider(IDiskProvider diskProvider, IMapHttpRequestsToDisk requestMapper, Logger logger)
+        public StaticResourceProvider(IDiskProvider diskProvider, IEnumerable<IMapHttpRequestsToDisk> requestMappers, Logger logger)
         {
             _diskProvider = diskProvider;
-            _requestMapper = requestMapper;
+            _requestMappers = requestMappers;
             _logger = logger;
         }
 
@@ -28,9 +30,21 @@ namespace NzbDrone.Api.Frontend
         {
             var path = context.Request.Url.Path.ToLower();
 
+            if (path.StartsWith("/mediacover"))
+            {
+                var filePath = _requestMappers.Single(r => r.IHandle == RequestType.MediaCovers).Map(path);
+
+                if (_diskProvider.FileExists(filePath))
+                {
+                    return new StreamResponse(() => File.OpenRead(filePath), "image/jpeg");
+                }
+
+                _logger.Warn("Couldn't find file [{0}] for [{1}]", filePath, path);
+            }
+
             if (IsStaticResource(path))
             {
-                var filePath = _requestMapper.Map(path);
+                var filePath = _requestMappers.Single(r => r.IHandle == RequestType.StaticResources).Map(path);
 
                 if (_diskProvider.FileExists(filePath))
                 {
