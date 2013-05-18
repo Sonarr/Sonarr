@@ -30,45 +30,26 @@ namespace NzbDrone.Api.Frontend
         {
             var path = context.Request.Url.Path.ToLower();
 
-            if (path.StartsWith("/mediacover"))
-            {
-                var filePath = _requestMappers.Single(r => r.IHandle == RequestType.MediaCovers).Map(path);
-
-                if (_diskProvider.FileExists(filePath))
-                {
-                    return new StreamResponse(() => File.OpenRead(filePath), "image/jpeg");
-                }
-
-                _logger.Warn("Couldn't find file [{0}] for [{1}]", filePath, path);
-            }
-
-            if (IsStaticResource(path))
-            {
-                var filePath = _requestMappers.Single(r => r.IHandle == RequestType.StaticResources).Map(path);
-
-                if (_diskProvider.FileExists(filePath))
-                {
-                    return new GenericFileResponse(filePath);
-                }
-                
-                _logger.Warn("Couldn't find file [{0}] for [{1}]", filePath, path);
-            }
-
-            return null;
-        }
-
-
-        private static readonly string[] Extensions = new[] { ".css", ".js", ".html", ".htm", ".jpg", ".jpeg", ".icon", ".gif", ".png", ".woff", ".ttf" };
-
-
-        private bool IsStaticResource(string path)
-        {
             if (string.IsNullOrWhiteSpace(path))
             {
-                return false;
+                return null;
             }
 
-            return Extensions.Any(path.EndsWith);
+            foreach (var requestMapper in _requestMappers)
+            {
+                if (requestMapper.CanHandle(path))
+                {
+                    var filePath = requestMapper.Map(path);
+
+                    if (_diskProvider.FileExists(filePath))
+                    {
+                        return new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
+                    }
+                }
+            }
+
+            _logger.Warn("Couldn't find a matching file for: {0}", path);
+            return null;
         }
     }
 }

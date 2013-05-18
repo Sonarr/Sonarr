@@ -1,9 +1,12 @@
 using System.IO;
+using System.Linq;
 
 namespace NzbDrone.Api.Frontend
 {
     public class StaticResourceMapper : IMapHttpRequestsToDisk
     {
+        private static readonly string[] Extensions = new[] { ".css", ".js", ".html", ".htm", ".jpg", ".jpeg", ".icon", ".gif", ".png", ".woff", ".ttf" };
+
         public string Map(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
@@ -13,6 +16,14 @@ namespace NzbDrone.Api.Frontend
             return Path.Combine("ui", path);
         }
 
-        public RequestType IHandle { get { return RequestType.StaticResources; } }
+        public bool CanHandle(string resourceUrl)
+        {
+            if (string.IsNullOrWhiteSpace(resourceUrl))
+            {
+                return false;
+            }
+
+            return Extensions.Any(resourceUrl.EndsWith);
+        }
     }
 }

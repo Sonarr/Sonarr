@@ -20,6 +20,9 @@ namespace NzbDrone.Api.Frontend
             return Path.Combine(_environmentProvider.GetAppDataPath(), path);
         }
 
-        public RequestType IHandle { get { return RequestType.MediaCovers; } }
+        public bool CanHandle(string resourceUrl)
+        {
+            return resourceUrl.StartsWith("/mediacover");
+        }
     }
 }

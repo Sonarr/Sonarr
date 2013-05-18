@@ -8,12 +8,6 @@ namespace NzbDrone.Api.Frontend
     public interface IMapHttpRequestsToDisk
     {
         string Map(string resourceUrl);
-        RequestType IHandle { get; }
-    }
-
-    public enum RequestType
-    {
-        StaticResources,
-        MediaCovers
+        bool CanHandle(string resourceUrl);
     }
 }
