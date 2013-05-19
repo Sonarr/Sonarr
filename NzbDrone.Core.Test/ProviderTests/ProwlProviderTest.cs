@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Notifications.Prowl;
 using NzbDrone.Core.Providers;
 
 using NzbDrone.Core.Test.Framework;

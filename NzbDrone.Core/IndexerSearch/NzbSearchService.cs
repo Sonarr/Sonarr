@@ -134,7 +134,5 @@ namespace NzbDrone.Core.IndexerSearch
 
             return _makeDownloadDecision.GetSearchDecision(reports, definitionBase).ToList();
         }
-
-
     }
 }

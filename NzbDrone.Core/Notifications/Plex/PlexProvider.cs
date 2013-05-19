@@ -6,46 +6,33 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Core.ExternalNotification
+namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexProvider
     {
         private readonly IHttpProvider _httpProvider;
-        private readonly IConfigService _configService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public PlexProvider(IHttpProvider httpProvider, IConfigService configService)
+        public PlexProvider(IHttpProvider httpProvider)
         {
             _httpProvider = httpProvider;
-            _configService = configService;
         }
 
-        public PlexProvider()
+        public virtual void Notify(PlexClientSettings settings, string header, string message)
         {
-            
-        }
-
-        public virtual void Notify(string header, string message)
-        {
-            //Foreach plex client send a notification
-            foreach(var host in _configService.PlexClientHosts.Split(','))
+            try
             {
-                try
-                {
-                    var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
-                    SendCommand(host.Trim(), command, _configService.PlexUsername, _configService.PlexPassword);
-                }
-                catch(Exception ex)
-                {
-                    logger.WarnException("Failed to send notification to Plex Client: " + host.Trim(), ex);
-                }
+                var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
+                SendCommand(settings.Host, command, settings.Username, settings.Password);
+            }
+            catch(Exception ex)
+            {
+                logger.WarnException("Failed to send notification to Plex Client: " + settings.Host, ex);
             }
         }
 
-        public virtual void UpdateLibrary()
+        public virtual void UpdateLibrary(string host)
         {
-            var host = _configService.PlexServerHost;
-
             try
             {
                 logger.Trace("Sending Update Request to Plex Server");
@@ -91,14 +78,11 @@ namespace NzbDrone.Core.ExternalNotification
             return _httpProvider.DownloadString(url);
         }
 
-        public virtual void TestNotification(string hosts, string username, string password)
+        public virtual void TestNotification(string host, string username, string password)
         {
-            foreach (var host in hosts.Split(','))
-            {
-                logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
-                var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
-                SendCommand(host.Trim(), command, _configService.PlexUsername, _configService.PlexPassword);
-            }
+            logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
+            var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
+            SendCommand(host.Trim(), command, username, password);
         }
     }
 }

@@ -4,11 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
@@ -20,16 +16,14 @@ namespace NzbDrone.Core.Download
     public class DownloadService : IDownloadService
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
-        private readonly IConfigService _configService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
 
 
-        public DownloadService(IProvideDownloadClient downloadClientProvider, IConfigService configService,
+        public DownloadService(IProvideDownloadClient downloadClientProvider,
             IMessageAggregator messageAggregator, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
-            _configService = configService;
             _messageAggregator = messageAggregator;
             _logger = logger;
         }

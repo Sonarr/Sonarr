@@ -83,10 +83,12 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("NzbInfoUrl").AsString().Nullable()
                   .WithColumn("ReleaseGroup").AsString().Nullable();
 
-            Create.TableForModel("ExternalNotificationDefinitions")
-                  .WithColumn("Enable").AsBoolean()
-                  .WithColumn("Type").AsString().Unique()
-                  .WithColumn("Name").AsString().Unique();
+            Create.TableForModel("NotificationDefinitions")
+                  .WithColumn("Name").AsString()
+                  .WithColumn("OnGrab").AsBoolean()
+                  .WithColumn("OnDownload").AsBoolean()
+                  .WithColumn("Settings").AsString()
+                  .WithColumn("Implementation").AsString();
 
             Create.TableForModel("ScheduledTasks")
                   .WithColumn("TypeName").AsString().Unique()

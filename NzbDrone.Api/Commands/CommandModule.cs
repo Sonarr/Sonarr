@@ -4,6 +4,8 @@ using System.Linq;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Api.Commands
 {

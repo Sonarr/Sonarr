@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,14 +8,8 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.ExternalNotification;
-using NzbDrone.Core.Model.Xbmc;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Xbmc;
-
+using NzbDrone.Core.Notifications.Plex;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -25,32 +17,27 @@ namespace NzbDrone.Core.Test.ProviderTests
     
     public class PlexProviderTest : CoreTest
     {
-        private void WithSingleClient()
-        {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexClientHosts)
-                    .Returns("localhost:3000");
-        }
-
-        private void WithMultipleClients()
-        {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexClientHosts)
-                    .Returns("localhost:3000, 192.168.0.10:3000");
-        }
+        private PlexClientSettings _clientSettings;
 
         public void WithClientCredentials()
         {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexUsername)
-                    .Returns("plex");
+            _clientSettings.Username = "plex";
+            _clientSettings.Password = "plex";
+        }
 
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.PlexPassword)
-                    .Returns("plex");
+        [SetUp]
+        public void Setup()
+        {
+            _clientSettings = new PlexClientSettings
+                                  {
+                                      Host = "localhost",
+                                      Port = 3000
+                                  };
         }
 
         [Test]
         public void GetSectionKeys_should_return_single_section_key_when_only_one_show_section()
-        {
-            
-            
+        {           
             var response = "<MediaContainer size=\"1\" mediaTagPrefix=\"/system/bundle/media/flags/\" mediaTagVersion=\"1329809559\" title1=\"Plex Library\" identifier=\"com.plexapp.plugins.library\"><Directory refreshing=\"0\" key=\"5\" type=\"show\" title=\"TV Shows\" art=\"/:/resources/show-fanart.jpg\" agent=\"com.plexapp.agents.thetvdb\" scanner=\"Plex Series Scanner\" language=\"en\" updatedAt=\"1329810350\"><Location path=\"C:/Test/TV\"/></Directory></MediaContainer>";
             Stream stream = new MemoryStream(ASCIIEncoding.Default.GetBytes(response));
 
@@ -123,10 +110,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void Notify_should_send_notification_for_single_client_when_only_one_is_configured()
+        public void Notify_should_send_notification()
         {
-            
-            WithSingleClient();
 
             const string header = "Test Header";
             const string message = "Test Message";
@@ -138,37 +123,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .Returns("ok");
 
             
-            Mocker.Resolve<PlexProvider>().Notify(header, message);
+            Mocker.Resolve<PlexProvider>().Notify(_clientSettings, header, message);
 
             
             fakeHttp.Verify(v => v.DownloadString(expectedUrl), Times.Once());
         }
 
         [Test]
-        public void Notify_should_send_notifcation_to_all_configured_clients()
-        {
-            
-            WithMultipleClients();
-
-            const string header = "Test Header";
-            const string message = "Test Message";
-
-            var fakeHttp = Mocker.GetMock<IHttpProvider>();
-            fakeHttp.Setup(s => s.DownloadString(It.IsAny<string>()))
-                    .Returns("ok");
-
-            
-            Mocker.Resolve<PlexProvider>().Notify(header, message);
-
-            
-            fakeHttp.Verify(v => v.DownloadString(It.IsAny<string>()), Times.Exactly(2));
-        }
-
-        [Test]
         public void Notify_should_send_notification_with_credentials_when_configured()
         {
-            
-            WithSingleClient();
             WithClientCredentials();
 
             const string header = "Test Header";
@@ -181,31 +144,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .Returns("ok");
 
             
-            Mocker.Resolve<PlexProvider>().Notify(header, message);
+            Mocker.Resolve<PlexProvider>().Notify(_clientSettings, header, message);
 
             
             fakeHttp.Verify(v => v.DownloadString(expectedUrl, "plex", "plex"), Times.Once());
-        }
-
-        [Test]
-        public void Notify_should_send_notification_with_credentials_when_configured_for_all_clients()
-        {
-            
-            WithMultipleClients();
-            WithClientCredentials();
-
-            const string header = "Test Header";
-            const string message = "Test Message";
-
-            var fakeHttp = Mocker.GetMock<IHttpProvider>();
-            fakeHttp.Setup(s => s.DownloadString(It.IsAny<string>(), "plex", "plex"))
-                    .Returns("ok");
-
-            
-            Mocker.Resolve<PlexProvider>().Notify(header, message);
-
-            
-            fakeHttp.Verify(v => v.DownloadString(It.IsAny<string>(), "plex", "plex"), Times.Exactly(2));
         }
     }
 }

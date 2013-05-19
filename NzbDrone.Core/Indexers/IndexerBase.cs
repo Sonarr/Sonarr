@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Indexers
                     Name = Name,
                     Enable = true,
                     Implementation = GetType().Name,
-                    Settings = string.Empty
+                    Settings = String.Empty
                 };
             }
         }
@@ -32,7 +32,6 @@ namespace NzbDrone.Core.Indexers
         }
 
         public abstract IEnumerable<string> RecentFeed { get; }
-
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);
         public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber);

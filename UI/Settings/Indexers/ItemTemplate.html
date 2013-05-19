@@ -22,15 +22,6 @@
     </div>
 
     {{#each fields}}
-        <div class="control-group">
-            <label class="control-label">{{label}}</label>
-
-            <div class="controls">
-                <input type="text" name="fields.{{@index}}.value"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="{{helpText}}"></i>
-            </span>
-            </div>
-        </div>
+        {{formField}}
     {{/each}}
 </fieldset>

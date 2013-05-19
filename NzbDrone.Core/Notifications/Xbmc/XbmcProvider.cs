@@ -7,118 +7,105 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
-using NzbDrone.Core.Providers.Xbmc;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Notifications.Xbmc
 {
     public class XbmcProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly EventClientProvider _eventClientProvider;
 
-        public XbmcProvider(IConfigService configService, IHttpProvider httpProvider, EventClientProvider eventClientProvider)
+        public XbmcProvider(IHttpProvider httpProvider, EventClientProvider eventClientProvider)
         {
-            _configService = configService;
             _httpProvider = httpProvider;
             _eventClientProvider = eventClientProvider;
         }
 
-        public XbmcProvider()
-        {
-
-        }
-
-        public virtual void Notify(string header, string message)
+        public virtual void Notify(XbmcSettings settings, string header, string message)
         {
             //Always use EventServer, until Json has real support for it
-            foreach (var host in _configService.XbmcHosts.Split(','))
-            {
-                Logger.Trace("Sending Notifcation to XBMC Host: {0}", host);
-                _eventClientProvider.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", GetHostWithoutPort(host));
-            }
+            var host = settings.Host;
+            Logger.Trace("Sending Notifcation to XBMC Host: {0}", host);
+            _eventClientProvider.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", host);
         }
 
-        public virtual void Update(Series series)
+        public virtual void Update(XbmcSettings settings, Series series)
         {
             //Use Json for Eden/Nightly or depricated HTTP for 10.x (Dharma) to get the proper path
             //Perform update with EventServer (Json currently doesn't support updating a specific path only - July 2011)
 
-            var username = _configService.XbmcUsername;
-            var password = _configService.XbmcPassword;
+            var username = settings.Username;
+            var password = settings.Password;
+            var host = settings.Host;
 
-            foreach (var host in _configService.XbmcHosts.Split(','))
+            Logger.Trace("Determining version of XBMC Host: {0}", host);
+            var version = GetJsonVersion(host, username, password);
+
+            //If Dharma
+            if (version == new XbmcVersion(2))
             {
-                Logger.Trace("Determining version of XBMC Host: {0}", host);
-                var version = GetJsonVersion(host, username, password);
-
-                //If Dharma
-                if (version == new XbmcVersion(2))
+                //Check for active player only when we should skip updates when playing
+                if (!settings.AlwaysUpdate)
                 {
-                    //Check for active player only when we should skip updates when playing
-                    if (!_configService.XbmcUpdateWhenPlaying)
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                    var activePlayers = GetActivePlayersDharma(host, username, password);
+
+                    //If video is currently playing, then skip update
+                    if (activePlayers["video"])
                     {
-                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                        var activePlayers = GetActivePlayersDharma(host, username, password);
-
-                        //If video is currently playing, then skip update
-                        if (activePlayers["video"])
-                        {
-                            Logger.Debug("Video is currently playing, skipping library update");
-                            continue;
-                        }
+                        Logger.Debug("Video is currently playing, skipping library update");
+                        return;
                     }
+                }
+                UpdateWithHttp(series, host, username, password);
+            }
 
-                    UpdateWithHttp(series, host, username, password);
+            //If Eden or newer (attempting to make it future compatible)
+            else if (version == new XbmcVersion(3) || version == new XbmcVersion(4))
+            {
+                //Check for active player only when we should skip updates when playing
+                if (!settings.AlwaysUpdate)
+                {
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                    var activePlayers = GetActivePlayersEden(host, username, password);
+
+                    //If video is currently playing, then skip update
+                    if (activePlayers.Any(a => a.Type.Equals("video")))
+                    {
+                        Logger.Debug("Video is currently playing, skipping library update");
+                        return;
+                    }
                 }
 
-                //If Eden or newer (attempting to make it future compatible)
-                else if (version == new XbmcVersion(3) || version == new XbmcVersion(4))
+                UpdateWithJsonExecBuiltIn(series, host, username, password);
+            }
+
+            else if (version >= new XbmcVersion(5))
+            {
+                //Check for active player only when we should skip updates when playing
+                if (!settings.AlwaysUpdate)
                 {
-                    //Check for active player only when we should skip updates when playing
-                    if (!_configService.XbmcUpdateWhenPlaying)
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                    var activePlayers = GetActivePlayersEden(host, username, password);
+
+                    //If video is currently playing, then skip update
+                    if (activePlayers.Any(a => a.Type.Equals("video")))
                     {
-                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                        var activePlayers = GetActivePlayersEden(host, username, password);
-
-                        //If video is currently playing, then skip update
-                        if (activePlayers.Any(a => a.Type.Equals("video")))
-                        {
-                            Logger.Debug("Video is currently playing, skipping library update");
-                            continue;
-                        }
+                        Logger.Debug("Video is currently playing, skipping library update");
+                        return;
                     }
-
-                    UpdateWithJsonExecBuiltIn(series, host, username, password);
                 }
 
-                else if (version >= new XbmcVersion(5))
-                {
-                    //Check for active player only when we should skip updates when playing
-                    if (!_configService.XbmcUpdateWhenPlaying)
-                    {
-                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                        var activePlayers = GetActivePlayersEden(host, username, password);
-
-                        //If video is currently playing, then skip update
-                        if (activePlayers.Any(a => a.Type.Equals("video")))
-                        {
-                            Logger.Debug("Video is currently playing, skipping library update");
-                            continue;
-                        }
-                    }
-
-                    UpdateWithJsonVideoLibraryScan(series, host, username, password);
-                }
+                UpdateWithJsonVideoLibraryScan(series, host, username, password);
+            }
 
                 //Log Version zero if check failed
-                else
-                    Logger.Trace("Unknown version: [{0}], skipping.", version);
-            }
+            else
+                Logger.Trace("Unknown version: [{0}], skipping.", version);
+        
         }
 
         public virtual bool UpdateWithJsonExecBuiltIn(Series series, string host, string username, string password)
@@ -245,16 +232,14 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public virtual void Clean()
+        public virtual void Clean(XbmcSettings settings)
         {
             //Use EventServer, once Dharma is extinct use Json?
 
-            foreach (var host in _configService.XbmcHosts.Split(','))
-            {
-                Logger.Trace("Sending DB Clean Request to XBMC Host: {0}", host);
-                var command = "ExecBuiltIn(CleanLibrary(video))";
-                _eventClientProvider.SendAction(GetHostWithoutPort(host), ActionType.ExecBuiltin, command);
-            }
+            var host = settings.Host;
+            Logger.Trace("Sending DB Clean Request to XBMC Host: {0}", host);
+            var command = "ExecBuiltIn(CleanLibrary(video))";
+            _eventClientProvider.SendAction(host, ActionType.ExecBuiltin, command);
         }
 
         public virtual string SendCommand(string host, string command, string username, string password)
@@ -451,7 +436,7 @@ namespace NzbDrone.Core.Providers
             foreach (var host in hosts.Split(','))
             {
                 Logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
-                _eventClientProvider.SendNotification("Test Notification", "Success! Notifications are setup correctly", IconType.Jpeg, "NzbDrone.jpg", GetHostWithoutPort(host));
+                _eventClientProvider.SendNotification("Test Notification", "Success! Notifications are setup correctly", IconType.Jpeg, "NzbDrone.jpg", host);
             }
         }
 
@@ -464,11 +449,6 @@ namespace NzbDrone.Core.Providers
                 if (version == new XbmcVersion())
                     throw new Exception("Failed to get JSON version in test");
             }
-        }
-
-        private string GetHostWithoutPort(string address)
-        {
-            return address.Split(':')[0];
         }
     }
 }

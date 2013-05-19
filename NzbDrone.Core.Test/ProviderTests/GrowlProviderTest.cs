@@ -4,8 +4,9 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Notifications;
+using NzbDrone.Core.Notifications.Growl;
 using NzbDrone.Core.Providers;
 
 using NzbDrone.Core.Test.Framework;

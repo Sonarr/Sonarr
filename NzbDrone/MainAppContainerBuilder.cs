@@ -6,7 +6,7 @@ using NzbDrone.Api.SignalR;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.ExternalNotification;
+using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
 
@@ -25,7 +25,7 @@ namespace NzbDrone
         private MainAppContainerBuilder()
             : base("NzbDrone", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
-            AutoRegisterImplementations<ExternalNotificationBase>();
+            AutoRegisterImplementations<NotificationBase>();
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>));

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 
@@ -11,6 +10,7 @@ namespace NzbDrone.Core.Configuration
     {
         IEnumerable<Config> All();
         Dictionary<String, Object> AllWithDefaults();
+        string UpdateUrl { get; set; }
         String SabHost { get; set; }
         int SabPort { get; set; }
         String SabApiKey { get; set; }
@@ -23,26 +23,8 @@ namespace NzbDrone.Core.Configuration
         bool UseSeasonFolder { get; set; }
         string SortingSeasonFolderFormat { get; set; }
         int DefaultQualityProfile { get; set; }
-        Boolean XbmcUpdateLibrary { get; set; }
-        Boolean XbmcCleanLibrary { get; set; }
-        Boolean XbmcUpdateWhenPlaying { get; set; }
-        string XbmcHosts { get; set; }
-        string XbmcUsername { get; set; }
-        string XbmcPassword { get; set; }
-        string UpdateUrl { get; set; }
-        string SmtpServer { get; set; }
-        int SmtpPort { get; set; }
-        Boolean SmtpUseSsl { get; set; }
-        string SmtpUsername { get; set; }
-        string SmtpPassword { get; set; }
-        string SmtpFromAddress { get; set; }
-        string SmtpToAddresses { get; set; }
         string TwitterAccessToken { get; set; }
         string TwitterAccessTokenSecret { get; set; }
-        string GrowlHost { get; set; }
-        string GrowlPassword { get; set; }
-        string ProwlApiKeys { get; set; }
-        int ProwlPriority { get; set; }
         bool EnableBacklogSearching { get; set; }
         bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
         int Retention { get; set; }
@@ -50,11 +32,6 @@ namespace NzbDrone.Core.Configuration
         DownloadClientType DownloadClient { get; set; }
         string BlackholeDirectory { get; set; }
         string ServiceRootUrl { get; }
-        Boolean PlexUpdateLibrary { get; set; }
-        string PlexServerHost { get; set; }
-        string PlexClientHosts { get; set; }
-        string PlexUsername { get; set; }
-        string PlexPassword { get; set; }
         Boolean MetadataUseBanners { get; set; }
         string PneumaticDirectory { get; set; }
         string RecycleBin { get; set; }

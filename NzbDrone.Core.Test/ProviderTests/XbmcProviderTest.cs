@@ -8,11 +8,10 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Xbmc;
-
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
@@ -22,6 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests
     
     public class XbmcProviderTest : CoreTest
     {
+        private XbmcSettings _settings;
         private string EdenActivePlayers;
 
         private void WithNoActivePlayers()
@@ -47,6 +47,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         private void WithAllPlayersActive()
         {
             EdenActivePlayers = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":[{\"playerid\":1,\"type\":\"audio\"},{\"playerid\":2,\"type\":\"picture\"},{\"playerid\":3,\"type\":\"video\"}]}";
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            _settings = new XbmcSettings
+                            {
+                                Host = "localhost",
+                                Port = 8080,
+                                AlwaysUpdate = false,
+                                CleanLibrary = false,
+                                UpdateLibrary = true
+                            };
         }
 
         [Test]
@@ -290,21 +303,13 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Notify_true()
         {
-            
-            
-
             var header = "NzbDrone Test";
             var message = "Test Message!";
 
-            var fakeConfig = Mocker.GetMock<IConfigService>();
-            fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");
-
-            //var fakeUdpProvider = Mocker.GetMock<EventClient>();
             var fakeEventClient = Mocker.GetMock<EventClientProvider>();
             fakeEventClient.Setup(s => s.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", "localhost")).Returns(true);
 
-            
-            Mocker.Resolve<XbmcProvider>().Notify(header, message);
+            Mocker.Resolve<XbmcProvider>().Notify(_settings, header, message);
 
             
             Mocker.VerifyAllMocks();
@@ -437,19 +442,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Clean()
         {
-            
-            
-
-            var fakeConfig = Mocker.GetMock<IConfigService>();
-            fakeConfig.SetupGet(s => s.XbmcHosts).Returns("localhost:8080");
-
             var fakeEventClient = Mocker.GetMock<EventClientProvider>();
             fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(CleanLibrary(video))")).Returns(true);
 
-            
-            Mocker.Resolve<XbmcProvider>().Clean();
-
-            
+            Mocker.Resolve<XbmcProvider>().Clean(_settings);
             Mocker.VerifyAllMocks();
         }
 

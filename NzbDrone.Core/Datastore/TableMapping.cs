@@ -8,11 +8,11 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
-using NzbDrone.Core.ExternalNotification;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<IndexerDefinition>().RegisterModel("IndexerDefinitions");
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
-            Mapper.Entity<ExternalNotificationDefinition>().RegisterModel("ExternalNotificationDefinitions");
+            Mapper.Entity<NotificationDefinition>().RegisterModel("NotificationDefinitions");
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 

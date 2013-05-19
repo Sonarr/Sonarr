@@ -40,7 +40,5 @@ namespace NzbDrone.Core.Indexers.NzbsRUs
         {
             return new List<string>();
         }
-
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.IO;
 
-namespace NzbDrone.Core.Providers.Xbmc
+namespace NzbDrone.Core.Notifications.Xbmc
 {
     public class ResourceManager
     {

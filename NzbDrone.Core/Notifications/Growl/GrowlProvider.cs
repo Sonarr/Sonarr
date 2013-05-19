@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Growl.Connector;
 using NLog;
+using GrowlNotification = Growl.Connector.Notification;
 
-namespace NzbDrone.Core.ExternalNotification
+namespace NzbDrone.Core.Notifications.Growl
 {
     public class GrowlProvider
     {
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.ExternalNotification
         {
             var notificationType = _notificationTypes.Single(n => n.Name == notificationTypeName);
 
-            var notification = new Notification("NzbDrone", notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
+            var notification = new GrowlNotification("NzbDrone", notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
 
             _growlConnector = new GrowlConnector(password, hostname, port);
 

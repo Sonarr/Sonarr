@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
 using NLog;
 using Prowlin;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Notifications.Prowl
 {
     public class ProwlProvider
     {
@@ -34,11 +33,11 @@ namespace NzbDrone.Core.Providers
             return false;
         }
 
-        public virtual bool SendNotification(string title, string message, string apiKeys, NotificationPriority priority = NotificationPriority.Normal, string url = null)
+        public virtual bool SendNotification(string title, string message, string apiKey, NotificationPriority priority = NotificationPriority.Normal, string url = null)
         {
             try
             {
-                var notification = new Notification
+                var notification = new Prowlin.Notification
                                    {
                                        Application = "NzbDrone",
                                        Description = message,
@@ -47,8 +46,7 @@ namespace NzbDrone.Core.Providers
                                        Url = url
                                    };
 
-                foreach (var apiKey in apiKeys.Split(','))
-                    notification.AddApiKey(apiKey.Trim());
+                notification.AddApiKey(apiKey.Trim());
 
                 var client = new ProwlClient();
 
@@ -63,7 +61,7 @@ namespace NzbDrone.Core.Providers
             catch (Exception ex)
             {
                 Logger.TraceException(ex.Message, ex);
-                Logger.Warn("Invalid API Key(s): {0}", apiKeys);
+                Logger.Warn("Invalid API Key: {0}", apiKey);
             }
 
             return false;

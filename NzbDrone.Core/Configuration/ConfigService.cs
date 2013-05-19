@@ -126,92 +126,10 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DefaultQualityProfile", value); }
         }
 
-        public Boolean XbmcUpdateLibrary
-        {
-            get { return GetValueBoolean("XbmcUpdateLibrary"); }
-
-            set { SetValue("XbmcUpdateLibrary", value); }
-        }
-
-        public Boolean XbmcCleanLibrary
-        {
-            get { return GetValueBoolean("XbmcCleanLibrary"); }
-
-            set { SetValue("XbmcCleanLibrary", value); }
-        }
-
-        public Boolean XbmcUpdateWhenPlaying
-        {
-            get { return GetValueBoolean("XbmcUpdateWhenPlaying"); }
-
-            set { SetValue("XbmcUpdateWhenPlaying", value); }
-        }
-
-        public string XbmcHosts
-        {
-            get { return GetValue("XbmcHosts", "localhost:8080"); }
-            set { SetValue("XbmcHosts", value); }
-        }
-
-        public string XbmcUsername
-        {
-            get { return GetValue("XbmcUsername", "xbmc"); }
-            set { SetValue("XbmcUsername", value); }
-        }
-
-        public string XbmcPassword
-        {
-            get { return GetValue("XbmcPassword", String.Empty); }
-            set { SetValue("XbmcPassword", value); }
-        }
-
         public string UpdateUrl
         {
             get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }
             set { SetValue("UpdateUrl", value); }
-        }
-
-        public string SmtpServer
-        {
-            get { return GetValue("SmtpServer", String.Empty); }
-            set { SetValue("SmtpServer", value); }
-        }
-
-        public int SmtpPort
-        {
-            get { return GetValueInt("SmtpPort", 25); }
-            set { SetValue("SmtpPort", value); }
-        }
-
-        public Boolean SmtpUseSsl
-        {
-            get { return GetValueBoolean("SmtpUseSsl"); }
-
-            set { SetValue("SmtpUseSsl", value); }
-        }
-
-        public string SmtpUsername
-        {
-            get { return GetValue("SmtpUsername", String.Empty); }
-            set { SetValue("SmtpUsername", value); }
-        }
-
-        public string SmtpPassword
-        {
-            get { return GetValue("SmtpPassword", String.Empty); }
-            set { SetValue("SmtpPassword", value); }
-        }
-
-        public string SmtpFromAddress
-        {
-            get { return GetValue("SmtpFromAddress", String.Empty); }
-            set { SetValue("SmtpFromAddress", value); }
-        }
-
-        public string SmtpToAddresses
-        {
-            get { return GetValue("SmtpToAddresses", String.Empty); }
-            set { SetValue("SmtpToAddresses", value); }
         }
 
         public string TwitterAccessToken
@@ -224,30 +142,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
             set { SetValue("TwitterAccessTokenSecret", value); }
-        }
-
-        public string GrowlHost
-        {
-            get { return GetValue("GrowlHost", "localhost:23053"); }
-            set { SetValue("GrowlHost", value); }
-        }
-
-        public string GrowlPassword
-        {
-            get { return GetValue("GrowlPassword", String.Empty); }
-            set { SetValue("GrowlPassword", value); }
-        }
-
-        public string ProwlApiKeys
-        {
-            get { return GetValue("ProwlApiKeys", String.Empty); }
-            set { SetValue("ProwlApiKeys", value); }
-        }
-
-        public int ProwlPriority
-        {
-            get { return GetValueInt("ProwlPriority", 0); }
-            set { SetValue("ProwlPriority", value); }
         }
 
         public bool EnableBacklogSearching
@@ -289,37 +183,6 @@ namespace NzbDrone.Core.Configuration
         public string ServiceRootUrl
         {
             get { return "http://services.nzbdrone.com"; }
-        }
-
-        public Boolean PlexUpdateLibrary
-        {
-            get { return GetValueBoolean("PlexUpdateLibrary"); }
-
-            set { SetValue("PlexUpdateLibrary", value); }
-        }
-
-        public string PlexServerHost
-        {
-            get { return GetValue("PlexServerHost", "localhost:32400"); }
-            set { SetValue("PlexServerHost", value); }
-        }
-
-        public string PlexClientHosts
-        {
-            get { return GetValue("PlexClientHosts", "localhost:3000"); }
-            set { SetValue("PlexClientHosts", value); }
-        }
-
-        public string PlexUsername
-        {
-            get { return GetValue("PlexUsername"); }
-            set { SetValue("PlexUsername", value); }
-        }
-
-        public string PlexPassword
-        {
-            get { return GetValue("PlexPassword"); }
-            set { SetValue("PlexPassword", value); }
         }
 
         public Boolean MetadataUseBanners

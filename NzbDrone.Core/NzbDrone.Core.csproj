@@ -254,7 +254,12 @@
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
-    <Compile Include="ExternalNotification\ExternalNotificationRepository.cs" />
+    <Compile Include="Notifications\Growl\GrowlSettings.cs" />
+    <Compile Include="Notifications\NotificationSettingsProvider.cs" />
+    <Compile Include="Notifications\INotification.cs" />
+    <Compile Include="Notifications\Notification.cs" />
+    <Compile Include="Notifications\NotificationService.cs" />
+    <Compile Include="Notifications\NotificationRepository.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="History\HistoryRepository.cs" />
@@ -282,7 +287,7 @@
     <Compile Include="Indexers\Nzbx\NzbxParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
-    <Compile Include="Indexers\IIndexerSettings.cs" />
+    <Compile Include="Indexers\IIndexerSetting.cs" />
     <Compile Include="Indexers\NzbsRUs\NzbsrusSettings.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
@@ -307,6 +312,14 @@
     <Compile Include="MetadataSource\Trakt\Images.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\Show.cs" />
+    <Compile Include="Notifications\INotifcationSettings.cs" />
+    <Compile Include="Notifications\NotificationWithSetting.cs" />
+    <Compile Include="Notifications\Plex\PlexServer.cs" />
+    <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
+    <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
+    <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
+    <Compile Include="Notifications\Smtp\SmtpSettings.cs" />
+    <Compile Include="Notifications\Xbmc\XbmcSettings.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
@@ -417,25 +430,25 @@
     <Compile Include="Tv\EpisodeRepository.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\ExternalNotificationBase.cs">
+    <Compile Include="Notifications\NotificationBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\Growl.cs">
+    <Compile Include="Notifications\Growl\Growl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\Plex.cs">
+    <Compile Include="Notifications\Plex\PlexClient.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\Prowl.cs">
+    <Compile Include="Notifications\Prowl\Prowl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\Smtp.cs">
+    <Compile Include="Notifications\Smtp\Smtp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\Xbmc.cs">
+    <Compile Include="Notifications\Xbmc\Xbmc.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\GrowlProvider.cs">
+    <Compile Include="Notifications\Growl\GrowlProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="History\HistoryService.cs">
@@ -459,11 +472,11 @@
     <Compile Include="Providers\NotificationProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\PlexProvider.cs" />
+    <Compile Include="Notifications\Plex\PlexProvider.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\ProwlProvider.cs">
+    <Compile Include="Notifications\Prowl\ProwlProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Qualities\QualityProfileService.cs">
@@ -479,19 +492,19 @@
     <Compile Include="Tv\SeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\SmtpProvider.cs">
+    <Compile Include="Notifications\Smtp\SmtpProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\XbmcProvider.cs">
+    <Compile Include="Notifications\Xbmc\XbmcProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\Xbmc\EventClientProvider.cs">
+    <Compile Include="Notifications\Xbmc\EventClientProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\Xbmc\ResourceManager.cs">
+    <Compile Include="Notifications\Xbmc\ResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExternalNotification\ExternalNotificationDefinition.cs" />
+    <Compile Include="Notifications\NotificationDefinition.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
