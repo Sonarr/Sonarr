@@ -5,7 +5,7 @@ using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Qualities;
 
-namespace NzbDrone.Api.QualityType
+namespace NzbDrone.Api.Qualities
 {
     public class QualitySizeModule : NzbDroneApiModule
     {

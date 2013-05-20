@@ -32,6 +32,7 @@ namespace NzbDrone.Common.Reflection
                    || type.IsEnum
                    || type == typeof(string)
                    || type == typeof(DateTime)
+                   || type == typeof(Version)
                    || type == typeof(Decimal);
         }
 

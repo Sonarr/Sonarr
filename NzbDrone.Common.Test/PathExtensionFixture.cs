@@ -108,12 +108,6 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void GetSandboxLogFolder()
-        {
-            GetEnvironmentProvider().GetSandboxLogFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\UpdateLogs\");
-        }
-
-        [Test]
         public void GetUpdateLogFolder()
         {
             GetEnvironmentProvider().GetUpdateLogFolder().Should().BeEquivalentTo(@"C:\NzbDrone\UpdateLogs\");

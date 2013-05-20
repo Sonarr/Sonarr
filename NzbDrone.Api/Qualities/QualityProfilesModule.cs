@@ -4,7 +4,7 @@ using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Qualities;
 
-namespace NzbDrone.Api.QualityProfiles
+namespace NzbDrone.Api.Qualities
 {
     public class QualityProfilesModule : NzbDroneApiModule
     {
@@ -23,19 +23,19 @@ namespace NzbDrone.Api.QualityProfiles
         private Response OnGet()
         {
             var profiles = _qualityProvider.All();
-            return Mapper.Map<List<QualityProfile>, List<QualityProfileModel>>(profiles).AsResponse();
+            return Mapper.Map<List<QualityProfile>, List<QualityProfileResource>>(profiles).AsResponse();
         }
 
         private Response OnGet(int id)
         {
             var profile = _qualityProvider.Get(id);
-            return Mapper.Map<QualityProfile, QualityProfileModel>(profile).AsResponse();
+            return Mapper.Map<QualityProfile, QualityProfileResource>(profile).AsResponse();
         }
 
         private Response OnPost()
         {
-            var request = Request.Body.FromJson<QualityProfileModel>();
-            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
+            var request = Request.Body.FromJson<QualityProfileResource>();
+            var profile = Mapper.Map<QualityProfileResource, QualityProfile>(request);
             request.Id = _qualityProvider.Add(profile).Id;
 
             return request.AsResponse();
@@ -44,8 +44,8 @@ namespace NzbDrone.Api.QualityProfiles
         //Update
         private Response OnPut()
         {
-            var request = Request.Body.FromJson<QualityProfileModel>();
-            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(request);
+            var request = Request.Body.FromJson<QualityProfileResource>();
+            var profile = Mapper.Map<QualityProfileResource, QualityProfile>(request);
             _qualityProvider.Update(profile);
 
             return request.AsResponse();

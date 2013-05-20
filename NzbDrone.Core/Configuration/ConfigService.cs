@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Configuration
 
         public string UpdateUrl
         {
-            get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/_release/"); }
+            get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }
             set { SetValue("UpdateUrl", value); }
         }
 

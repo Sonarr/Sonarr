@@ -45,10 +45,7 @@ namespace NzbDrone.Core.Jobs
                 {
                     try
                     {
-                        var commandType = Type.GetType(task.TypeName);
-                        var command = (ICommand)Activator.CreateInstance(commandType);
-
-                        _messageAggregator.PublishCommand(command);
+                        _messageAggregator.PublishCommand(task.TypeName);
                     }
                     catch (Exception e)
                     {

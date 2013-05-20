@@ -7,106 +7,125 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
 {
-    public interface IUpdateService
+    public interface IUpdateService : IExecute<ApplicationUpdateCommand>
     {
         Dictionary<DateTime, string> GetUpdateLogFiles();
-    }
-}
-
-public class UpdateService : IUpdateService, IExecute<ApplicationUpdateCommand>
-{
-    private readonly IUpdatePackageProvider _updatePackageProvider;
-    private readonly IEnvironmentProvider _environmentProvider;
-
-    private readonly IDiskProvider _diskProvider;
-    private readonly IHttpProvider _httpProvider;
-    private readonly IConfigFileProvider _configFileProvider;
-    private readonly ArchiveProvider _archiveProvider;
-    private readonly IProcessProvider _processProvider;
-    private readonly Logger _logger;
-
-
-    public UpdateService(IUpdatePackageProvider updatePackageProvider, IEnvironmentProvider environmentProvider, IDiskProvider diskProvider,
-        IHttpProvider httpProvider, IConfigFileProvider configFileProvider, ArchiveProvider archiveProvider, IProcessProvider processProvider, Logger logger)
-    {
-        _updatePackageProvider = updatePackageProvider;
-        _environmentProvider = environmentProvider;
-        _diskProvider = diskProvider;
-        _httpProvider = httpProvider;
-        _configFileProvider = configFileProvider;
-        _archiveProvider = archiveProvider;
-        _processProvider = processProvider;
-        _logger = logger;
+        UpdatePackage AvailableUpdate();
     }
 
-
-    private void InstallUpdate(UpdatePackage updatePackage)
+    public class UpdateService : IUpdateService
     {
-        var packageDestination = Path.Combine(_environmentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
+        private readonly IUpdatePackageProvider _updatePackageProvider;
+        private readonly IEnvironmentProvider _environmentProvider;
 
-        if (_diskProvider.FolderExists(_environmentProvider.GetUpdateSandboxFolder()))
+        private readonly IDiskProvider _diskProvider;
+        private readonly IHttpProvider _httpProvider;
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly ArchiveProvider _archiveProvider;
+        private readonly IProcessProvider _processProvider;
+        private readonly Logger _logger;
+
+
+        public UpdateService(IUpdatePackageProvider updatePackageProvider, IEnvironmentProvider environmentProvider,
+                             IDiskProvider diskProvider,
+                             IHttpProvider httpProvider, IConfigFileProvider configFileProvider,
+                             ArchiveProvider archiveProvider, IProcessProvider processProvider, Logger logger)
         {
-            _logger.Info("Deleting old update files");
-            _diskProvider.DeleteFolder(_environmentProvider.GetUpdateSandboxFolder(), true);
+            _updatePackageProvider = updatePackageProvider;
+            _environmentProvider = environmentProvider;
+            _diskProvider = diskProvider;
+            _httpProvider = httpProvider;
+            _configFileProvider = configFileProvider;
+            _archiveProvider = archiveProvider;
+            _processProvider = processProvider;
+            _logger = logger;
         }
 
-        _logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
-        _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
-        _logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
-        _logger.Info("Extracting Update package");
-        _archiveProvider.ExtractArchive(packageDestination, _environmentProvider.GetUpdateSandboxFolder());
-        _logger.Info("Update package extracted successfully");
-
-        _logger.Info("Preparing client");
-        _diskProvider.MoveDirectory(_environmentProvider.GetUpdateClientFolder(), _environmentProvider.GetUpdateSandboxFolder());
-
-
-        _logger.Info("Starting update client");
-        var startInfo = new ProcessStartInfo
+        private void InstallUpdate(UpdatePackage updatePackage)
         {
-            FileName = _environmentProvider.GetUpdateClientExePath(),
-            Arguments = string.Format("{0} {1}", _processProvider.GetCurrentProcess().Id, _configFileProvider.Guid)
-        };
+            var updateSandboxFolder = _environmentProvider.GetUpdateSandboxFolder();
 
-        var process = _processProvider.Start(startInfo);
+            var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
 
-        _processProvider.WaitForExit(process);
-    }
-
-    public Dictionary<DateTime, string> GetUpdateLogFiles()
-    {
-        var list = new Dictionary<DateTime, string>();
-
-        if (_diskProvider.FolderExists(_environmentProvider.GetUpdateLogFolder()))
-        {
-            var provider = CultureInfo.InvariantCulture;
-            var files = _diskProvider.GetFiles(_environmentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly).ToList();
-
-            foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c => c.Name))
+            if (_diskProvider.FolderExists(updateSandboxFolder))
             {
-                list.Add(DateTime.ParseExact(file.Name.Replace(file.Extension, string.Empty), "yyyy.MM.dd-H-mm", provider), file.FullName);
+                _logger.Info("Deleting old update files");
+                _diskProvider.DeleteFolder(updateSandboxFolder, true);
+            }
+
+            _logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
+            _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
+            _logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
+
+            _logger.Info("Extracting Update package");
+            _archiveProvider.ExtractArchive(packageDestination, updateSandboxFolder);
+            _logger.Info("Update package extracted successfully");
+
+            _logger.Info("Preparing client");
+            _diskProvider.MoveDirectory(_environmentProvider.GetUpdateClientFolder(),
+                                        updateSandboxFolder);
+
+
+            _logger.Info("Starting update client");
+            var startInfo = new ProcessStartInfo
+                {
+                    FileName = _environmentProvider.GetUpdateClientExePath(),
+                    Arguments = string.Format("{0} {1}", _processProvider.GetCurrentProcess().Id, _configFileProvider.Guid)
+                };
+
+            var process = _processProvider.Start(startInfo);
+
+            _processProvider.WaitForExit(process);
+        }
+
+        public Dictionary<DateTime, string> GetUpdateLogFiles()
+        {
+            var list = new Dictionary<DateTime, string>();
+
+            if (_diskProvider.FolderExists(_environmentProvider.GetUpdateLogFolder()))
+            {
+                var provider = CultureInfo.InvariantCulture;
+                var files =
+                    _diskProvider.GetFiles(_environmentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly)
+                                 .ToList();
+
+                foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c => c.Name))
+                {
+                    list.Add(
+                        DateTime.ParseExact(file.Name.Replace(file.Extension, string.Empty), "yyyy.MM.dd-H-mm", provider),
+                        file.FullName);
+                }
+            }
+
+            return list;
+        }
+
+        public UpdatePackage AvailableUpdate()
+        {
+            var latestAvailable = _updatePackageProvider.GetLatestUpdate();
+
+            if (latestAvailable == null || latestAvailable.Version <= _environmentProvider.Version)
+            {
+                _logger.Debug("No update available.");
+                return null;
+            }
+
+            return latestAvailable;
+        }
+
+        public void Execute(ApplicationUpdateCommand message)
+        {
+            var latestAvailable = AvailableUpdate();
+
+            if (latestAvailable != null)
+            {
+                InstallUpdate(latestAvailable);
             }
         }
-
-        return list;
-    }
-
-    public void Execute(ApplicationUpdateCommand message)
-    {
-        var latestAvailable = _updatePackageProvider.GetLatestUpdate();
-
-        if (latestAvailable == null || latestAvailable.Version <= _environmentProvider.Version)
-        {
-            _logger.Debug("No update available.");
-            return;
-        }
-
-        InstallUpdate(latestAvailable);
     }
 }

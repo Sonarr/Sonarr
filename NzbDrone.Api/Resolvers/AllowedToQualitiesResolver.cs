@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using NzbDrone.Api.QualityProfiles;
+using NzbDrone.Api.Qualities;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Resolvers

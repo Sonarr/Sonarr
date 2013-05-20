@@ -135,10 +135,10 @@
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NzbDroneApiModule.cs" />
-    <Compile Include="QualityProfiles\QualityProfileModel.cs" />
-    <Compile Include="QualityProfiles\QualityProfilesModule.cs" />
-    <Compile Include="QualityType\QualitySizeResource.cs" />
-    <Compile Include="QualityType\QualitySizeModule.cs" />
+    <Compile Include="Qualities\QualityProfileResource.cs" />
+    <Compile Include="Qualities\QualityProfilesModule.cs" />
+    <Compile Include="Qualities\QualitySizeResource.cs" />
+    <Compile Include="Qualities\QualitySizeModule.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
     <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
@@ -149,6 +149,7 @@
     <Compile Include="SignalR\SignalrDependencyResolver.cs" />
     <Compile Include="SignalR\NzbDronePersistentConnection.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
+    <Compile Include="Update\UpdateModule.cs" />
     <Compile Include="Validation\IdValidationRule.cs" />
   </ItemGroup>
   <ItemGroup>

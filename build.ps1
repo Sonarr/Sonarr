@@ -77,15 +77,9 @@ Function Nunit()
 Function RunGrunt()
 {
    $gruntPath = [environment]::getfolderpath("applicationdata") + '\npm\node_modules\grunt-cli\bin\grunt'
-
-    if(!(Test-Path $gruntPath))
-    {
-      Invoke-Expression  'npm install grunt-cli -g'
-    }
-
-    Invoke-Expression  'npm install'
+   Invoke-Expression  'npm install'
     
-    Invoke-Expression  ('node ' + $gruntPath + ' package')
+   Invoke-Expression  ('node ' + $gruntPath + ' package')
 }
 
 Build

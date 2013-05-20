@@ -5,7 +5,7 @@ namespace NzbDrone.Update
 {
     public class UpdateContainerBuilder : ContainerBuilderBase
     {
-        public UpdateContainerBuilder()
+        private UpdateContainerBuilder()
             : base("NzbDrone.Update", "NzbDrone.Common")
         {
 

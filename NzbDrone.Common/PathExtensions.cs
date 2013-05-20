@@ -5,7 +5,6 @@ namespace NzbDrone.Common
 {
     public static class PathExtensions
     {
-        private static readonly string APP_DATA = "App_Data" + Path.DirectorySeparatorChar;
         private static readonly string APP_CONFIG_FILE = "config.xml";
         private static readonly string NZBDRONE_DB = "nzbdrone.db";
         private static readonly string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
@@ -57,12 +56,17 @@ namespace NzbDrone.Common
 
         public static string GetAppDataPath(this IEnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.WorkingDirectory, APP_DATA);
+            return environmentProvider.WorkingDirectory;
+        }
+
+        public static string GetLogFolder(this IEnvironmentProvider environmentProvider)
+        {
+            return Path.Combine(environmentProvider.GetAppDataPath(), "logs");
         }
 
         public static string GetConfigPath(this IEnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.WorkingDirectory, APP_CONFIG_FILE);
+            return Path.Combine(environmentProvider.GetAppDataPath(), APP_CONFIG_FILE);
         }
 
         public static string GetMediaCoverPath(this IEnvironmentProvider environmentProvider)
@@ -72,7 +76,7 @@ namespace NzbDrone.Common
 
         public static string GetUpdateLogFolder(this IEnvironmentProvider environmentProvider)
         {
-            return Path.Combine(environmentProvider.WorkingDirectory, UPDATE_LOG_FOLDER_NAME);
+            return Path.Combine(environmentProvider.GetAppDataPath(), UPDATE_LOG_FOLDER_NAME);
         }
 
         public static string GetUpdateSandboxFolder(this IEnvironmentProvider environmentProvider)
@@ -98,11 +102,6 @@ namespace NzbDrone.Common
         public static string GetUpdateClientExePath(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
-        }
-
-        public static string GetSandboxLogFolder(this IEnvironmentProvider environmentProvider)
-        {
-            return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_LOG_FOLDER_NAME);
         }
 
         public static string GetConfigBackupFile(this IEnvironmentProvider environmentProvider)

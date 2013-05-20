@@ -11,11 +11,11 @@ namespace NzbDrone.Common.Instrumentation
     [LayoutRenderer("version")]
     public class VersionLayoutRenderer : LayoutRenderer
     {
-        private static readonly string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private static readonly string Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            builder.Append(version);
+            builder.Append(Version);
         }
     }
 }

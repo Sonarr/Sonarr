@@ -1,7 +1,7 @@
 ﻿using System;
 using NzbDrone.Api.REST;
 
-namespace NzbDrone.Api.QualityType
+namespace NzbDrone.Api.Qualities
 {
     public class QualitySizeResource : RestResource
     {

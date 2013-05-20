@@ -4,8 +4,7 @@ using NzbDrone.Api.Calendar;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.History;
 using NzbDrone.Api.Missing;
-using NzbDrone.Api.QualityProfiles;
-using NzbDrone.Api.QualityType;
+using NzbDrone.Api.Qualities;
 using NzbDrone.Api.Resolvers;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore;
@@ -20,11 +19,11 @@ namespace NzbDrone.Api
         public static void InitializeAutomapper()
         {
             //QualityProfiles
-            Mapper.CreateMap<QualityProfile, QualityProfileModel>()
+            Mapper.CreateMap<QualityProfile, QualityProfileResource>()
                   .ForMember(dest => dest.Qualities,
                              opt => opt.ResolveUsing<AllowedToQualitiesResolver>().FromMember(src => src.Allowed));
 
-            Mapper.CreateMap<QualityProfileModel, QualityProfile>()
+            Mapper.CreateMap<QualityProfileResource, QualityProfile>()
                   .ForMember(dest => dest.Allowed,
                              opt => opt.ResolveUsing<QualitiesToAllowedResolver>().FromMember(src => src.Qualities));
 

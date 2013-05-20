@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace NzbDrone.Api.QualityProfiles
+namespace NzbDrone.Api.Qualities
 {
-    public class QualityProfileModel
+    public class QualityProfileResource
     {
         public Int32 Id { get; set; }
         public String Name { get; set; }

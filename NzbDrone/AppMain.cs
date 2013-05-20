@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using NLog;
+using NzbDrone.Core.Update;
+using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone
 {
@@ -42,6 +44,14 @@ namespace NzbDrone
                 }
 
                 var container = MainAppContainerBuilder.BuildContainer();
+                try
+                {
+                    container.Resolve<IUpdateService>().Execute(new ApplicationUpdateCommand());
+                }
+                catch (Exception e)
+                {
+                    logger.ErrorException("Application update failed.", e);
+                }
 
                 container.Resolve<Router>().Route(args);
             }

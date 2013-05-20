@@ -37,28 +37,10 @@ namespace NzbDrone.Update
                 logger.FatalException("An error has occurred while applying update package.", e);
             }
 
-            TransferUpdateLogs();
         }
-
-        private static void TransferUpdateLogs()
-        {
-            try
-            {
-                var environmentProvider = _container.Resolve<IEnvironmentProvider>();
-                var diskProvider = _container.Resolve<IDiskProvider>();
-                logger.Info("Copying log files to application directory.");
-                diskProvider.CopyDirectory(environmentProvider.GetSandboxLogFolder(), environmentProvider.GetUpdateLogFolder());
-            }
-            catch (Exception e)
-            {
-                logger.FatalException("Can't copy upgrade log files to target folder", e);
-            }
-        }
-
 
         public void Start(string[] args)
         {
-            VerfityArguments(args);
             int processId = ParseProcessId(args);
 
             var exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
@@ -78,14 +60,6 @@ namespace NzbDrone.Update
 
             logger.Debug("NzbDrone processId:{0}", id);
             return id;
-        }
-
-        private void VerfityArguments(string[] args)
-        {
-            if (args == null || args.Length != 2)
-                throw new ArgumentException("Wrong number of parameters were passed in.");
-
-            logger.Debug("Arguments verified. [{0}] , [{1}]", args[0], args[1]);
         }
     }
 }

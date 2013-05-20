@@ -107,6 +107,9 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
+    <Compile Include="Instrumentation\ApplicationLogLayoutRenderer.cs" />
+    <Compile Include="Instrumentation\DirSeparatorLayoutRenderer.cs" />
+    <Compile Include="Instrumentation\UpdateLogLayoutRenderer.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="Messaging\CommandCompletedEvent.cs" />
     <Compile Include="Messaging\CommandStartedEvent.cs" />
