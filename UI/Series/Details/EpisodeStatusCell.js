@@ -17,6 +17,14 @@ define(['app', 'Episode/Layout'], function () {
                     icon = 'icon-ok';
 
                 }
+                else {
+                    if (this.model.get('hasAired')) {
+                        icon = 'icon-warning-sign';
+                    }
+                    else {
+                        icon = 'icon-time';
+                    }
+                }
 
                 this.$el.html('<i class="{0}"/>'.format(icon));
             }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app', 'Series/Details/EpisodeDetailCell'], function () {
+define(['app', 'Series/Details/EpisodeStatusCell'], function () {
     NzbDrone.Series.Details.SeasonLayout = Backbone.Marionette.Layout.extend({
         template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -8,27 +8,28 @@ define(['app', 'Series/Details/EpisodeDetailCell'], function () {
         },
 
         columns: [
+
             {
-                name    : 'details',
-                label   : 'Details',
-                cell    : NzbDrone.Series.Details.EpisodeDetailCell
-            },
-            {
-                name    : 'episodeNumber',
-                label   : '#',
-                cell    : 'integer'
+                name : 'episodeNumber',
+                label: '#',
+                cell : 'integer'
             },
 
             {
-                name    : 'title',
-                label   : 'Title',
-                cell    : 'string'
+                name : 'title',
+                label: 'Title',
+                cell : 'string'
             },
             {
-                name    : 'airDate',
-                label   : 'Air Date',
-                cell    : 'date'
+                name : 'airDate',
+                label: 'Air Date',
+                cell : 'date'
                 //formatter: new Backgrid.AirDateFormatter()
+            } ,
+            {
+                name : 'status',
+                label: 'Status',
+                cell : NzbDrone.Series.Details.EpisodeStatusCell
             }
         ],
 

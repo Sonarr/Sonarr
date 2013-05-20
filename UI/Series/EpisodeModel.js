@@ -43,12 +43,15 @@ define(['app'], function () {
                 }
 
                 return 'primary';
+            },
+            hasAired           : function () {
+                return Date.create(this.get('airDate')).isBefore(Date.create());
             }
         },
 
         defaults: {
             seasonNumber: 0,
-            status: 0
+            status      : 0
         }
     });
 });
