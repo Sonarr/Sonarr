@@ -8,7 +8,6 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
 
@@ -27,7 +26,6 @@ namespace NzbDrone
         private MainAppContainerBuilder()
             : base("NzbDrone", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
-            AutoRegisterImplementations<NotificationBase>();
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>));
@@ -36,9 +34,6 @@ namespace NzbDrone
             Container.Register<INancyBootstrapper, NancyBootstrapper>();
 
             InitDatabase();
-
-
-
         }
 
         private void InitDatabase()

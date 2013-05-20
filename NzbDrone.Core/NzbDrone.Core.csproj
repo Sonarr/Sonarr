@@ -313,7 +313,6 @@
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\Show.cs" />
     <Compile Include="Notifications\INotifcationSettings.cs" />
-    <Compile Include="Notifications\NotificationWithSetting.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />

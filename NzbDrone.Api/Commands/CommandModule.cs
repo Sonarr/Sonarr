@@ -24,6 +24,8 @@ namespace NzbDrone.Api.Commands
 
         private CommandResource RunCommand(CommandResource resource)
         {
+            _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(new RemoteEpisode()));
+
             var commandType =
                 _container.GetImplementations(typeof(ICommand))
                           .Single(c => c.Name.Replace("Command", "")

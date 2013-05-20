@@ -3,7 +3,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
-    public class Xbmc : NotificationWithSetting<XbmcSettings>
+    public class Xbmc : NotificationBase<XbmcSettings>
     {
         private readonly XbmcProvider _xbmcProvider;
 

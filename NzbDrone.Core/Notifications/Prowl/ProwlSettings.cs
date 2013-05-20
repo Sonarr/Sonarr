@@ -12,13 +12,13 @@ namespace NzbDrone.Core.Notifications.Prowl
         public String ApiKey { get; set; }
 
         [FieldDefinition(1, Label = "Priority", HelpText = "Priority to send messages at")]
-        public Int32 Priority { get; set; }
+        public Nullable<Int32> Priority { get; set; }
 
         public bool IsValid
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(ApiKey) && Priority > 0;
+                return !string.IsNullOrWhiteSpace(ApiKey) && Priority != null & Priority >= -2 && Priority <= 2;
             }
         }
     }

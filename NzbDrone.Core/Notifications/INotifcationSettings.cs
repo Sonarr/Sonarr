@@ -9,22 +9,4 @@ namespace NzbDrone.Core.Notifications
     {
         bool IsValid { get; }
     }
-
-    public class NullSetting : INotifcationSettings
-    {
-        public static NullSetting Instance = new NullSetting();
-
-        private NullSetting()
-        {
-
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
-    }
 }

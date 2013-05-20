@@ -5,7 +5,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Smtp
 {
-    public class Smtp : NotificationWithSetting<SmtpSettings>
+    public class Smtp : NotificationBase<SmtpSettings>
     {
         private readonly SmtpProvider _smtpProvider;
 

@@ -39,6 +39,7 @@ namespace NzbDrone.Core.Notifications
 
         public List<Notification> All()
         {
+            var test = _notificationRepository.All();//.Select(ToNotification).ToList();
             return _notificationRepository.All().Select(ToNotification).ToList();
         }
 
@@ -50,15 +51,7 @@ namespace NzbDrone.Core.Notifications
             notification.OnDownload = definition.OnDownload;
             notification.Instance = GetInstance(definition);
             notification.Name = definition.Name;
-
-            if (notification.Instance.GetType().GetMethod("ImportSettingsFromJson") != null)
-            {
-                notification.Settings = ((dynamic)notification.Instance).ImportSettingsFromJson(definition.Settings);
-            }
-            else
-            {
-                notification.Settings = NullSetting.Instance;
-            }
+            notification.Settings = ((dynamic)notification.Instance).ImportSettingsFromJson(definition.Settings);
 
             return notification;
         }

@@ -4,7 +4,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
-    public class PlexClient : NotificationWithSetting<PlexClientSettings>
+    public class PlexClient : NotificationBase<PlexClientSettings>
     {
         private readonly PlexProvider _plexProvider;
 

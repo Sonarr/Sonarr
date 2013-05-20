@@ -3,7 +3,7 @@ using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
-    public class Prowl : NotificationWithSetting<ProwlSettings>
+    public class Prowl : NotificationBase<ProwlSettings>
     {
         private readonly ProwlProvider _prowlProvider;
 

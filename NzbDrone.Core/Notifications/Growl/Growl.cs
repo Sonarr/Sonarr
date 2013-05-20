@@ -5,7 +5,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
-    public class Growl : NotificationWithSetting<GrowlSettings>
+    public class Growl : NotificationBase<GrowlSettings>
     {
         private readonly GrowlProvider _growlProvider;
 
