@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
@@ -45,7 +46,7 @@ namespace NzbDrone.Update.Providers
         public virtual void Start(string targetFolder)
         {
             Verify(targetFolder);
-            AppType appType = AppType.Normal;
+            var appType = AppType.Normal;
 
             logger.Info("Stopping all running services");
 
@@ -64,7 +65,12 @@ namespace NzbDrone.Update.Providers
             //TODO:Should be able to restart service if anything beyond this point fails
             logger.Info("Killing all running processes");
 
-            _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
+            if (_processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProcessName).Any())
+            {
+                appType = AppType.Console;
+                _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
+            }
+
             _processProvider.KillAll(ProcessProvider.NzbDroneProcessName);
 
             logger.Info("Creating backup of existing installation");

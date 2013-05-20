@@ -16,9 +16,7 @@ namespace NzbDrone.Update.Test
     {
         private const string UPDATE_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone\";
         private const string BACKUP_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone_backup\";
-        private const string SANDBOX_LOG_FOLDER = @"C:\Temp\nzbdrone_update\UpdateLogs\";
         private const string TARGET_FOLDER = @"C:\NzbDrone\";
-        private const string UPDATE_LOG_FOLDER = @"C:\NzbDrone\UpdateLogs\";
 
         Mock<IEnvironmentProvider> _environmentProvider;
 
