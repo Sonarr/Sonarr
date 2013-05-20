@@ -12,6 +12,7 @@ namespace NzbDrone.Common
         string SystemTemp { get; }
         Version Version { get; }
         DateTime BuildDateTime { get; }
+        string StartUpPath { get; }
         Version GetOsVersion();
     }
 

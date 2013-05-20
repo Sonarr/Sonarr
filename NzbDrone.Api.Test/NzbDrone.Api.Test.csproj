@@ -75,7 +75,6 @@
     <Compile Include="ClientSchemaTests\SchemaBuilderFixture.cs" />
     <Compile Include="MappingTests\ReflectionExtensionFixture.cs" />
     <Compile Include="MappingTests\ResourceMappingFixture.cs" />
-    <Compile Include="StaticResourceMapperFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

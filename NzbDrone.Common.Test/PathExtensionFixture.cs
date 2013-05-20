@@ -73,7 +73,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void AppDataDirectory_path_test()
         {
-            GetEnvironmentProvider().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\App_Data\");
+            GetEnvironmentProvider().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\");
         }
 
 
