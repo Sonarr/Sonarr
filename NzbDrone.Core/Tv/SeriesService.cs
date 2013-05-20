@@ -101,18 +101,20 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(() => newSeries).IsNotNull();
 
-            if (String.IsNullOrWhiteSpace(newSeries.FolderName))
-            {
-                newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
-                _diskProvider.CreateFolder(Path.Combine(_rootFolderService.Get(newSeries.RootFolderId).Path, newSeries.FolderName));
-            }
+            newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
+            newSeries.RootFolder = _rootFolderService.Get(newSeries.RootFolderId);
+
+            _diskProvider.CreateFolder(newSeries.Path);
 
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
 
             newSeries.Monitored = true;
             newSeries.CleanTitle = Parser.Parser.NormalizeTitle(newSeries.Title);
+
             if (newSeries.QualityProfileId == 0)
+            {
                 newSeries.QualityProfileId = _configService.DefaultQualityProfile;
+            }
 
             newSeries.SeasonFolder = _configService.UseSeasonFolder;
             newSeries.BacklogSetting = BacklogSettingType.Inherit;

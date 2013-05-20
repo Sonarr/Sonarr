@@ -2,7 +2,7 @@
 define(['app', 'Series/SeriesModel'], function () {
 
     NzbDrone.Series.Delete.DeleteSeriesView = Backbone.Marionette.ItemView.extend({
-        template : 'Series/Delete/DeleteSeriesTemplate',
+        template: 'Series/Delete/DeleteSeriesTemplate',
 
         events: {
             'click .x-confirm-delete': 'removeSeries'
@@ -18,6 +18,7 @@ define(['app', 'Series/SeriesModel'], function () {
 
             this.model.destroy({
                 data   : { 'deleteFiles': deleteFiles },
+                wait   : true,
                 success: function (model) {
                     model.collection.remove(model);
                 }

@@ -13,9 +13,5 @@ namespace NzbDrone.Core.MediaFiles.Commands
                 SeriesId = seriesId;
             }
         }
-
-        public DiskScanCommand()
-        {
-        }
     }
 }

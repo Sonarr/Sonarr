@@ -9,6 +9,7 @@ using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles
         string[] GetVideoFiles(string path, bool allDirectories = true);
     }
 
-    public class DiskScanService : IDiskScanService, IExecute<DiskScanCommand>
+    public class DiskScanService : IDiskScanService, IExecute<DiskScanCommand>, IHandle<EpisodeInfoAddedEvent>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
@@ -142,6 +143,11 @@ namespace NzbDrone.Core.MediaFiles
             {
                 Scan(series);
             }
+        }
+
+        public void Handle(EpisodeInfoAddedEvent message)
+        {
+            Scan(message.Series);
         }
     }
 }

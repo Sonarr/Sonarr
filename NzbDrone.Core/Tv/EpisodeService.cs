@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Tv
 
             if (newList.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList));
+                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
             }
 
             if (updateList.Any())
