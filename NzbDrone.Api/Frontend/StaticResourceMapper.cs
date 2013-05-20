@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using NzbDrone.Common;
@@ -26,6 +27,11 @@ namespace NzbDrone.Api.Frontend
         public bool CanHandle(string resourceUrl)
         {
             if (string.IsNullOrWhiteSpace(resourceUrl))
+            {
+                return false;
+            }
+
+            if (resourceUrl.StartsWith("/mediacover", StringComparison.CurrentCultureIgnoreCase))
             {
                 return false;
             }

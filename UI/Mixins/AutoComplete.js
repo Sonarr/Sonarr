@@ -15,7 +15,8 @@ define(['app'], function () {
                     }
                 });
             },
-            minLength: 3
+            minLength: 3,
+            items :20
         });
     };
 
