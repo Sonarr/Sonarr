@@ -3,6 +3,8 @@
 define(['app', 'Episode/Layout'], function () {
     NzbDrone.Series.Details.EpisodeStatusCell = Backgrid.Cell.extend({
 
+        className: 'episode-status-cell',
+
         events: {
             'click': 'showDetails'
         },

@@ -12,7 +12,9 @@ define(['app', 'Series/Details/EpisodeStatusCell'], function () {
             {
                 name : 'episodeNumber',
                 label: '#',
-                cell : 'integer'
+                cell : Backgrid.IntegerCell.extend({
+                    className: 'episode-number-cell'
+                })
             },
 
             {
@@ -23,8 +25,9 @@ define(['app', 'Series/Details/EpisodeStatusCell'], function () {
             {
                 name : 'airDate',
                 label: 'Air Date',
-                cell : 'date'
-                //formatter: new Backgrid.AirDateFormatter()
+                cell : Backgrid.DateCell.extend({
+                    className: 'episode-air-date-cell'
+                })
             } ,
             {
                 name : 'status',
