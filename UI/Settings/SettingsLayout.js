@@ -5,7 +5,7 @@ define([
     'Settings/Quality/QualityLayout',
     'Settings/Indexers/CollectionView',
     'Settings/DownloadClient/DownloadClientView',
-    'Settings/Notifications/NotificationsView',
+    'Settings/Notifications/CollectionView',
     'Settings/System/SystemView',
     'Settings/Misc/MiscView'
 ],
@@ -117,6 +117,9 @@ define([
                 this.indexerSettings = new NzbDrone.Settings.Indexers.Collection();
                 this.indexerSettings.fetch();
 
+                this.notificationSettings = new NzbDrone.Settings.Notifications.Collection();
+                this.notificationSettings.fetch();
+
                 if (options.action) {
                     this.action = options.action.toLowerCase();
                 }
@@ -127,7 +130,7 @@ define([
                 this.quality.show(new NzbDrone.Settings.Quality.QualityLayout({settings: this.settings}));
                 this.indexers.show(new NzbDrone.Settings.Indexers.CollectionView({collection: this.indexerSettings}));
                 this.downloadClient.show(new NzbDrone.Settings.DownloadClient.DownloadClientView({model: this.settings}));
-                this.notifications.show(new NzbDrone.Settings.Notifications.NotificationsView({model: this.settings}));
+                this.notifications.show(new NzbDrone.Settings.Notifications.CollectionView({collection: this.notificationSettings}));
                 this.system.show(new NzbDrone.Settings.System.SystemView({model: this.settings}));
                 this.misc.show(new NzbDrone.Settings.Misc.MiscView({model: this.settings}));
             },

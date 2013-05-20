@@ -39,7 +39,6 @@ namespace NzbDrone.Core.Notifications
 
         public List<Notification> All()
         {
-            var test = _notificationRepository.All();//.Select(ToNotification).ToList();
             return _notificationRepository.All().Select(ToNotification).ToList();
         }
 

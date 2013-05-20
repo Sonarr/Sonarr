@@ -21,14 +21,21 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             const string header = "NzbDrone [TV] - Grabbed";
 
-            _xbmcProvider.Notify(Settings, header, message);
+            if (Settings.Notify)
+            {
+                _xbmcProvider.Notify(Settings, header, message);
+            }
         }
 
         public override void OnDownload(string message, Series series)
         {
             const string header = "NzbDrone [TV] - Downloaded";
 
-            _xbmcProvider.Notify(Settings, header, message);
+            if (Settings.Notify)
+            {
+                _xbmcProvider.Notify(Settings, header, message);
+            }
+
             UpdateAndClean(series);
         }
 

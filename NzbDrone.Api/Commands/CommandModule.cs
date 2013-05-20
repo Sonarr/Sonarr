@@ -4,8 +4,6 @@ using System.Linq;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Api.Commands
 {
@@ -24,8 +22,6 @@ namespace NzbDrone.Api.Commands
 
         private CommandResource RunCommand(CommandResource resource)
         {
-            _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(new RemoteEpisode()));
-
             var commandType =
                 _container.GetImplementations(typeof(ICommand))
                           .Single(c => c.Name.Replace("Command", "")

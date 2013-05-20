@@ -25,7 +25,7 @@ namespace NzbDrone.Api.ClientSchema
                             Label = fieldAttribute.Label,
                             HelpText = fieldAttribute.HelpText,
                             Order = fieldAttribute.Order,
-
+                            Type = fieldAttribute.Type.ToString().ToLowerInvariant()
                         };
 
                     var value = propertyInfo.GetValue(model, null);

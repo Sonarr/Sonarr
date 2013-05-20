@@ -12,6 +12,14 @@ Handlebars.registerHelper('formField', function () {
         return Handlebars.helpers.partial.apply(this, ['Form/TextboxTemplate']);
     }
 
+    if (this.type === 'password') {
+        return Handlebars.helpers.partial.apply(this, ['Form/PasswordTemplate']);
+    }
+
+    if (this.type === 'checkbox') {
+        return Handlebars.helpers.partial.apply(this, ['Form/CheckboxTemplate']);
+    }
+
     return Handlebars.helpers.partial.apply(this, ['Form/TextboxTemplate']);
 });
 

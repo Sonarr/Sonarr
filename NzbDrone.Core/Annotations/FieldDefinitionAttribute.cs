@@ -13,5 +13,13 @@ namespace NzbDrone.Core.Annotations
         public int Order { get; private set; }
         public string Label { get; set; }
         public string HelpText { get; set; }
+        public FieldType Type { get; set; }
+    }
+
+    public enum FieldType
+    {
+        Textbox,
+        Password,
+        Checkbox
     }
 }
