@@ -54,9 +54,17 @@ namespace NzbDrone.Update.Providers
                && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
                 appType = AppType.Service;
-                _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
-            }
 
+                try
+                {
+                    _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
+
+                }
+                catch (InvalidOperationException e)
+                {
+                    logger.WarnException("couldn't stop service", e);
+                }
+            }
             else
             {
                 appType = AppType.Normal;

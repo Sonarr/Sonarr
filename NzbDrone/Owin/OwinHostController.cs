@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Owin.Hosting;
 using NLog;
-using Nancy.Bootstrapper;
-using Nancy.Owin;
 using NzbDrone.Common;
 using NzbDrone.Owin.MiddleWare;
 using Owin;
