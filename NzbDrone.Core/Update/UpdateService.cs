@@ -81,6 +81,8 @@ namespace NzbDrone.Core.Update
             var process = _processProvider.Start(startInfo);
 
             _processProvider.WaitForExit(process);
+
+            _logger.Error("Update process failed");
         }
 
         public Dictionary<DateTime, string> GetUpdateLogFiles()

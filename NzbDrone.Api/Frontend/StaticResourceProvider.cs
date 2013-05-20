@@ -35,20 +35,20 @@ namespace NzbDrone.Api.Frontend
                 return null;
             }
 
-            foreach (var requestMapper in _requestMappers)
-            {
-                if (requestMapper.CanHandle(path))
-                {
-                    var filePath = requestMapper.Map(path);
+            var mapper = _requestMappers.SingleOrDefault(m => m.CanHandle(path));
 
-                    if (_diskProvider.FileExists(filePath))
-                    {
-                        return new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
-                    }
+            if (mapper != null)
+            {
+                var filePath = mapper.Map(path);
+
+                if (_diskProvider.FileExists(filePath))
+                {
+                    return new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
                 }
+
+                _logger.Warn("File {0} not found", filePath);
             }
 
-            _logger.Warn("Couldn't find a matching file for: {0}", path);
             return null;
         }
     }
