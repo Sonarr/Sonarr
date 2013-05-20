@@ -84,9 +84,10 @@ namespace NzbDrone.Core.MediaFiles
 
         public void ProcessSubFolder(DirectoryInfo subfolderInfo)
         {
-            if (_diskProvider.GetLastFolderWrite(subfolderInfo.FullName).AddMinutes(2) > DateTime.UtcNow)
+            var lastFolderWrite = _diskProvider.GetLastFolderWrite(subfolderInfo.FullName);
+            if (lastFolderWrite.AddMinutes(2) > DateTime.UtcNow)
             {
-                _logger.Trace("[{0}] is too fresh. skipping", subfolderInfo.FullName);
+                _logger.Trace("[{0}] is too fresh. skipping. Last write {1} UTC", subfolderInfo.FullName, lastFolderWrite);
                 return;
             }
 
@@ -108,9 +109,11 @@ namespace NzbDrone.Core.MediaFiles
 
         public void ProcessVideoFile(string videoFile, Series series)
         {
-            if (_diskProvider.GetLastFileWrite(videoFile).AddMinutes(2) > DateTime.UtcNow)
+            var lastWrite = _diskProvider.GetLastFileWrite(videoFile);
+
+            if (lastWrite.AddMinutes(2) > DateTime.UtcNow)
             {
-                _logger.Trace("[{0}] is too fresh. skipping", videoFile);
+                _logger.Trace("[{0}] is too fresh. skipping. Last Write {1} UTC", videoFile, lastWrite);
                 return;
             }
 
