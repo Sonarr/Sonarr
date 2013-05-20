@@ -506,8 +506,8 @@
             }
             pageCol.state = pageCol._checkState(state);
             if (collection == pageCol) fullCol.trigger(event, fullCol, options);
-            resetQuickly(pageCol, fullCol.models.slice(pageStart, pageEnd),
-                         _extend({}, options, {parse: false}));
+            else resetQuickly(pageCol, fullCol.models.slice(pageStart, pageEnd),
+                              _extend({}, options, {parse: false}));
           }
         }
 

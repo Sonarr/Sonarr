@@ -38,7 +38,7 @@
 
             this._model = model;
             this._rootEl = rootEl;
-	        this._setOptions(options);
+            this._setOptions(options);
 
             if (!this._model) this._throwException('model must be specified');
             if (!this._rootEl) this._throwException('rootEl must be specified');
@@ -58,10 +58,10 @@
             this._bindViewToModel();
         },
 
-	    bindCustomTriggers: function (model, rootEl, triggers, attributeBindings, modelSetOptions) {
-           this._triggers = triggers;
-           this.bind(model, rootEl, attributeBindings, modelSetOptions)
-    	},
+        bindCustomTriggers: function (model, rootEl, triggers, attributeBindings, modelSetOptions) {
+            this._triggers = triggers;
+            this.bind(model, rootEl, attributeBindings, modelSetOptions)
+        },
 
         unbind:function () {
             this._unbindModelToView();
@@ -74,7 +74,9 @@
         },
 
         _setOptions: function(options){
-            this._options = _.extend({}, Backbone.ModelBinder.options, options);
+            this._options = _.extend({
+                boundAttribute: 'name'
+            }, Backbone.ModelBinder.options, options);
 
             // initialize default options
             if(!this._options['modelSetOptions']){
@@ -122,24 +124,25 @@
             }
         },
 
-        // If the bindings are not specified, the default binding is performed on the name attribute
+        // If the bindings are not specified, the default binding is performed on the specified attribute, name by default
         _initializeDefaultBindings: function(){
-            var elCount, namedEls, namedEl, name, attributeBinding;
-            this._attributeBindings = {};
-            namedEls = $('[name]', this._rootEl);
+            var elCount, elsWithAttribute, matchedEl, name, attributeBinding;
 
-            for(elCount = 0; elCount < namedEls.length; elCount++){
-                namedEl = namedEls[elCount];
-                name = $(namedEl).attr('name');
+            this._attributeBindings = {};
+            elsWithAttribute = $('[' + this._options['boundAttribute'] + ']', this._rootEl);
+
+            for(elCount = 0; elCount < elsWithAttribute.length; elCount++){
+                matchedEl = elsWithAttribute[elCount];
+                name = $(matchedEl).attr(this._options['boundAttribute']);
 
                 // For elements like radio buttons we only want a single attribute binding with possibly multiple element bindings
                 if(!this._attributeBindings[name]){
                     attributeBinding =  {attributeName: name};
-                    attributeBinding.elementBindings = [{attributeBinding: attributeBinding, boundEls: [namedEl]}];
+                    attributeBinding.elementBindings = [{attributeBinding: attributeBinding, boundEls: [matchedEl]}];
                     this._attributeBindings[name] = attributeBinding;
                 }
                 else{
-                    this._attributeBindings[name].elementBindings.push({attributeBinding: this._attributeBindings[name], boundEls: [namedEl]});
+                    this._attributeBindings[name].elementBindings.push({attributeBinding: this._attributeBindings[name], boundEls: [matchedEl]});
                 }
             }
         },
@@ -370,7 +373,7 @@
                     el.text(convertedValue);
                     break;
                 case 'enabled':
-                    el.attr('disabled', !convertedValue);
+                    el.prop('disabled', !convertedValue);
                     break;
                 case 'displayed':
                     el[convertedValue ? 'show' : 'hide']();
@@ -383,8 +386,8 @@
                     break;
                 case 'class':
                     var previousValue = this._model.previous(elementBinding.attributeBinding.attributeName);
-		    var currentValue = this._model.get(elementBinding.attributeBinding.attributeName);
-		    // is current value is now defined then remove the class the may have been set for the undefined value
+                    var currentValue = this._model.get(elementBinding.attributeBinding.attributeName);
+                    // is current value is now defined then remove the class the may have been set for the undefined value
                     if(!_.isUndefined(previousValue) || !_.isUndefined(currentValue)){
                         previousValue = this._getConvertedValue(Backbone.ModelBinder.Constants.ModelToView, elementBinding, previousValue);
                         el.removeClass(previousValue);
@@ -404,22 +407,21 @@
                 switch (el.attr('type')) {
                     case 'radio':
                         if (el.val() === convertedValue) {
-                            el.attr('checked', 'checked');
+                            // must defer the change trigger or the change will actually fire with the old value
+                            el.prop('checked') || _.defer(function() { el.trigger('change'); });
+                            el.prop('checked', true);
                         }
                         else {
-                            el.removeAttr('checked');
+                            // must defer the change trigger or the change will actually fire with the old value
+                            el.prop('checked', false);
                         }
                         break;
                     case 'checkbox':
-                        if (convertedValue) {
-                            //Fixing this while we wait for an official update
-                            el.prop('checked', 'checked');
-                        }
-                        else {
-                            el.removeAttr('checked');
-                        }
+                         // must defer the change trigger or the change will actually fire with the old value
+                         el.prop('checked') === !!convertedValue || _.defer(function() { el.trigger('change') });
+                         el.prop('checked', !!convertedValue);
                         break;
-                    case 'file':                         
+                    case 'file':
                         break;
                     default:
                         el.val(convertedValue);
