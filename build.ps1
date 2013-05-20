@@ -26,12 +26,12 @@ Function Build()
 Function CleanFolder($path)
 {
     Write-Host Removing XMLDoc files
-    get-childitem $path -File -Filter *.xml | foreach ($_) {remove-item $_.fullname}
+    get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {remove-item $_.fullname}
 
     Write-Host Removing FluentValidation.Resources  files
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
 
-    get-childitem $path -File -Filter app.config | foreach ($_) {remove-item $_.fullname}
+    get-childitem $path -File -Filter app.config -Recurse  | foreach ($_) {remove-item $_.fullname}
   
     Write-Host Removing Empty folders
     while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) 
