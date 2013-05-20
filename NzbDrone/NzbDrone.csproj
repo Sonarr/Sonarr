@@ -138,7 +138,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MainAppContainerBuilder.cs" />
-    <Compile Include="ApplicationMode.cs" />
+    <Compile Include="ApplicationModes.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Owin\MiddleWare\NancyMiddleWare.cs" />
     <Compile Include="Owin\IHostController.cs" />

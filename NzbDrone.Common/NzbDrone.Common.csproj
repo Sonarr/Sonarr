@@ -149,11 +149,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="RestProvider.cs" />
-    <Compile Include="SecurityProvider.cs" />
+    <Compile Include="FirewallAdapter.cs" />
     <Compile Include="IServiceProvider.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TryParseExtension.cs" />
     <Compile Include="UdpProvider.cs" />
+    <Compile Include="UrlAclAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

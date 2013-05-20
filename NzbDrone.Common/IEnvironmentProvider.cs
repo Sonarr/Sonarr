@@ -2,12 +2,15 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Principal;
+using NLog;
 
 namespace NzbDrone.Common
 {
     public interface IEnvironmentProvider
     {
         bool IsUserInteractive { get; }
+        bool IsAdmin { get; }
         string WorkingDirectory { get; }
         string SystemTemp { get; }
         Version Version { get; }
@@ -18,9 +21,16 @@ namespace NzbDrone.Common
 
     public class EnvironmentProvider : IEnvironmentProvider
     {
+        private readonly Logger _logger;
         private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
         private static readonly IEnvironmentProvider Instance = new EnvironmentProvider();
+
+
+        public EnvironmentProvider()
+        {
+            _logger = LogManager.GetCurrentClassLogger();
+        }
 
         public static bool IsProduction
         {
@@ -73,6 +83,23 @@ namespace NzbDrone.Common
         public virtual bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }
+        }
+
+        public bool IsAdmin
+        {
+            get
+            {
+                try
+                {
+                    var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                }
+                catch (Exception ex)
+                {
+                    _logger.WarnException("Error checking if the current user is an administrator.", ex);
+                    return false;
+                }
+            }
         }
 
         public virtual string WorkingDirectory
