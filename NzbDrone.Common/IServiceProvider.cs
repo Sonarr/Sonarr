@@ -41,7 +41,7 @@ namespace NzbDrone.Common
             var service = ServiceController.GetServices()
                 .SingleOrDefault(s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
 
-            return service != null && service.Status == ServiceControllerStatus.Running;
+            return service != null && (service.Status == ServiceControllerStatus.Running || service.Status == ServiceControllerStatus.StartPending);
         }
 
         public virtual void Install(string serviceName)

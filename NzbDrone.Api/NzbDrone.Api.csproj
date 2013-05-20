@@ -150,6 +150,7 @@
     <Compile Include="SignalR\Serializer.cs" />
     <Compile Include="SignalR\SignalrDependencyResolver.cs" />
     <Compile Include="SignalR\NzbDronePersistentConnection.cs" />
+    <Compile Include="System\SystemModule.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
     <Compile Include="Validation\IdValidationRule.cs" />
