@@ -46,12 +46,6 @@ namespace NzbDrone.Owin
             }
         }
 
-        private static IAppBuilder RunNancy(IAppBuilder builder, INancyBootstrapper bootstrapper)
-        {
-            var nancyOwinHost = new NancyOwinHost(null, bootstrapper);
-            return builder.Use((Func<Func<IDictionary<string, object>, Task>, Func<IDictionary<string, object>, Task>>)(next => (Func<IDictionary<string, object>, Task>)nancyOwinHost.Invoke), new object[0]);
-        }
-
         public string AppUrl
         {
             get { return string.Format("http://localhost:{0}", _configFileProvider.Port); }
