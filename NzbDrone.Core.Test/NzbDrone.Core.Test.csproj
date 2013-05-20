@@ -193,7 +193,6 @@
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="OrganizerTests\GetNewFilenameFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
-    <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
     <Compile Include="TvTests\QualityModelFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />

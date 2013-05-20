@@ -336,7 +336,6 @@
     <Compile Include="Download\Clients\Nzbget\PriorityType.cs" />
     <Compile Include="Download\Clients\Nzbget\VersionModel.cs" />
     <Compile Include="Indexers\Nzbx\NzbxRecentItem.cs" />
-    <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Parser\Language.cs" />
@@ -351,7 +350,6 @@
     <Compile Include="Qualities\QualityProfileRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
-    <Compile Include="Tv\EpisodeStatuses.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />

@@ -28,22 +28,6 @@ namespace NzbDrone.Core.Tv
             get { return EpisodeFileId != 0; }
         }
 
-        public EpisodeStatuses Status
-        {
-            get
-            {
-                if (HasFile) return EpisodeStatuses.Ready;
-
-                if (AirDate != null && AirDate.Value.Date == DateTime.Today)
-                    return EpisodeStatuses.AirsToday;
-
-                if (AirDate != null && AirDate.Value.Date < DateTime.Now)
-                    return EpisodeStatuses.Missing;
-
-                return EpisodeStatuses.NotAired;
-            }
-        }
-
         public String SeriesTitle { get; private set; }
 
         public Series Series { get; set; }

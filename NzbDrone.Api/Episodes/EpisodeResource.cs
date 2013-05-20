@@ -1,8 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
@@ -15,7 +13,6 @@ namespace NzbDrone.Api.Episodes
         public Int32 EpisodeNumber { get; set; }
         public String Title { get; set; }
         public DateTime? AirDate { get; set; }
-        public EpisodeStatuses Status { get; set; }
         public String Overview { get; set; }
         public EpisodeFile EpisodeFile { get; set; }
 
@@ -27,7 +24,6 @@ namespace NzbDrone.Api.Episodes
         public Int32? AbsoluteEpisodeNumber { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? GrabDate { get; set; }
-        public PostDownloadStatusType PostDownloadStatus { get; set; }
         public Core.Tv.Series Series { get; set; }
         public String SeriesTitle { get; set; }
     }
