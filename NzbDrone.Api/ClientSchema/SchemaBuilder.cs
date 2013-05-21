@@ -31,7 +31,7 @@ namespace NzbDrone.Api.ClientSchema
                     var value = propertyInfo.GetValue(model, null);
                     if (value != null)
                     {
-                        field.Value = value.ToString();
+                        field.Value = value;
                     }
 
                     result.Add(field);
