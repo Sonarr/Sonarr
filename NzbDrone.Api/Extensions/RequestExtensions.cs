@@ -17,10 +17,16 @@ namespace NzbDrone.Api.Extensions
 
         public static T FromJson<T>(this Stream body, Type type)
         {
+            return (T)FromJson(body, type);
+        }
+
+
+        public static object FromJson(this Stream body, Type type)
+        {
             var reader = new StreamReader(body, true);
             body.Position = 0;
             var value = reader.ReadToEnd();
-            return (T)Json.Deserialize(value, type);
+            return Json.Deserialize(value, type);
         }
 
         public static JsonResponse<TModel> AsResponse<TModel>(this TModel model, HttpStatusCode statusCode = HttpStatusCode.OK)

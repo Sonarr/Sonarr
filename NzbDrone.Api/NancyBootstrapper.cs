@@ -7,6 +7,7 @@ using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Frontend;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
 using TinyIoC;
 
@@ -28,6 +29,8 @@ namespace NzbDrone.Api
         {
             _logger.Info("Starting NzbDrone API");
             AutomapperBootstraper.InitializeAutomapper();
+
+            container.Resolve<DatabaseTarget>().Register();
 
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 

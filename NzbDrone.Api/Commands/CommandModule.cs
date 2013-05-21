@@ -29,9 +29,7 @@ namespace NzbDrone.Api.Commands
                           .Single(c => c.Name.Replace("Command", "")
                           .Equals(resource.Command, StringComparison.InvariantCultureIgnoreCase));
 
-
-            var command = Request.Body.FromJson<ICommand>(commandType);
-
+            dynamic command = Request.Body.FromJson(commandType);
             _messageAggregator.PublishCommand(command);
 
             return resource;

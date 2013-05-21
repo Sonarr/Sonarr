@@ -3,7 +3,6 @@ using NLog.Config;
 using NLog;
 using NLog.Layouts;
 using NLog.Targets;
-using NzbDrone.Common;
 
 namespace NzbDrone.Core.Instrumentation
 {
@@ -21,11 +20,16 @@ namespace NzbDrone.Core.Instrumentation
         {
             Layout = new SimpleLayout("${callsite:className=false:fileName=false:includeSourcePath=false:methodName=true}");
 
+            Rule = new LoggingRule("*", LogLevel.Debug, this);
+
             LogManager.Configuration.AddTarget("DbLogger", this);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, this));
+            LogManager.Configuration.LoggingRules.Add(Rule);
             LogManager.ConfigurationReloaded += (sender, args) => Register();
+            LogManager.ReconfigExistingLoggers();
         }
 
+
+        public LoggingRule Rule { get; set; }
 
         protected override void Write(LogEventInfo logEvent)
         {

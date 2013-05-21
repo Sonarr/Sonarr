@@ -5,7 +5,9 @@ using NzbDrone.Api;
 using NzbDrone.Api.SignalR;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
@@ -53,6 +55,12 @@ namespace NzbDrone
             }
 
             Container.Register(c => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase()));
+
+            Container.Register<ILogRepository>(c =>
+                {
+                    var db = c.Resolve<IDbFactory>().Create(environmentProvider.GetLogDatabase(), MigrationType.Log);
+                    return new LogRepository(db, c.Resolve<IMessageAggregator>());
+                });
         }
     }
 }

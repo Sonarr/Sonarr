@@ -7,6 +7,7 @@ namespace NzbDrone.Common
     {
         private static readonly string APP_CONFIG_FILE = "config.xml";
         private static readonly string NZBDRONE_DB = "nzbdrone.db";
+        private static readonly string NZBDRONE_LOG_DB = "logs.db";
         private static readonly string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
 
         private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update" + Path.DirectorySeparatorChar;
@@ -112,6 +113,11 @@ namespace NzbDrone.Common
         public static string GetNzbDroneDatabase(this IEnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_DB);
+        }
+
+        public static string GetLogDatabase(this IEnvironmentProvider environmentProvider)
+        {
+            return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_LOG_DB);
         }
     }
 }
