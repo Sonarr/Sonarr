@@ -4,7 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Test.Common;
-using NzbDrone.Update.Providers;
+using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update.Test
 {
@@ -25,7 +25,7 @@ namespace NzbDrone.Update.Test
         [TestCase(" ")]
         public void update_should_throw_target_folder_is_blank(string target)
         {
-            Assert.Throws<ArgumentException>(() => Mocker.Resolve<UpdateProvider>().Start(target))
+            Assert.Throws<ArgumentException>(() => Mocker.Resolve<InstallUpdateService>().Start(target))
             .Message.Should().StartWith("Target folder can not be null or empty");
         }
 
@@ -34,7 +34,7 @@ namespace NzbDrone.Update.Test
         {
             string targetFolder = "c:\\NzbDrone\\";
 
-            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<UpdateProvider>().Start(targetFolder))
+            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<InstallUpdateService>().Start(targetFolder))
             .Message.Should().StartWith("Target folder doesn't exist");
         }
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Update.Test
                .Setup(c => c.FolderExists(sandboxFolder))
                .Returns(false);
 
-            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<UpdateProvider>().Start(targetFolder))
+            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<InstallUpdateService>().Start(targetFolder))
                 .Message.Should().StartWith("Update folder doesn't exist");
         }
     }

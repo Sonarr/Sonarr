@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -7,7 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Test.Common;
-using NzbDrone.Update.Providers;
+using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update.Test
 {
@@ -58,7 +59,7 @@ namespace NzbDrone.Update.Test
             WithServiceRunning(true);
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
@@ -71,7 +72,7 @@ namespace NzbDrone.Update.Test
             WithServiceRunning(false);
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Never());
@@ -81,7 +82,7 @@ namespace NzbDrone.Update.Test
         public void should_not_stop_nzbdrone_service_if_service_isnt_installed()
         {
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             Mocker.GetMock<IServiceProvider>().Verify(c => c.Stop(It.IsAny<string>()), Times.Never());
@@ -97,7 +98,7 @@ namespace NzbDrone.Update.Test
                 .Returns(proccesses);
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
 
             Mocker.GetMock<IProcessProvider>().Verify(c => c.KillAll(ProcessProvider.NzbDroneProcessName), Times.Once());
@@ -111,7 +112,7 @@ namespace NzbDrone.Update.Test
                 .Returns(new List<ProcessInfo>());
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             Mocker.GetMock<IProcessProvider>().Verify(c => c.Kill(It.IsAny<int>()), Times.Never());
@@ -123,7 +124,7 @@ namespace NzbDrone.Update.Test
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.CopyDirectory(TARGET_FOLDER, BACKUP_FOLDER));
 
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
         }
 
         [Test]
@@ -135,7 +136,7 @@ namespace NzbDrone.Update.Test
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.DeleteFolder(UPDATE_FOLDER, true));
 
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
         }
 
         [Test]
@@ -146,7 +147,7 @@ namespace NzbDrone.Update.Test
                 .Throws(new IOException());
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             Mocker.GetMock<IDiskProvider>()
@@ -161,7 +162,7 @@ namespace NzbDrone.Update.Test
             WithServiceRunning(true);
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             VerifyServiceRestart();
@@ -174,7 +175,7 @@ namespace NzbDrone.Update.Test
             WithServiceRunning(false);
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             VerifyProcessRestart();
@@ -191,7 +192,7 @@ namespace NzbDrone.Update.Test
                 .Throws(new IOException());
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             VerifyServiceRestart();
@@ -209,7 +210,7 @@ namespace NzbDrone.Update.Test
                 .Throws(new IOException());
 
             
-            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+            Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
 
             
             VerifyProcessRestart();
@@ -237,3 +238,4 @@ namespace NzbDrone.Update.Test
 
     }
 }
+*/

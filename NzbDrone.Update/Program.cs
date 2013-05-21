@@ -3,21 +3,21 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
-using NzbDrone.Update.Providers;
+using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update
 {
     public class Program
     {
-        private readonly UpdateProvider _updateProvider;
+        private readonly IInstallUpdateService _installUpdateService;
         private readonly IProcessProvider _processProvider;
         private static IContainer _container;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public Program(UpdateProvider updateProvider, IProcessProvider processProvider)
+        public Program(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
-            _updateProvider = updateProvider;
+            _installUpdateService = installUpdateService;
             _processProvider = processProvider;
         }
 
@@ -47,13 +47,13 @@ namespace NzbDrone.Update
             string targetFolder = exeFileInfo.Directory.FullName;
 
             logger.Info("Starting update process. Target Path:{0}", targetFolder);
-            _updateProvider.Start(targetFolder);
+            _installUpdateService.Start(targetFolder);
         }
 
         private int ParseProcessId(string[] args)
         {
             int id;
-            if (!Int32.TryParse(args[0], out id) || id <= 0)
+            if (args ==null || !Int32.TryParse(args[0], out id) || id <= 0)
             {
                 throw new ArgumentOutOfRangeException("Invalid process id: " + args[0]);
             }
