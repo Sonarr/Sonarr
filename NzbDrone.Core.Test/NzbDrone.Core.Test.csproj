@@ -328,10 +328,6 @@
     <Content Include="Files\Xem\Mappings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="log.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Files\RSS\SizeParsing\nzbx_recent.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
