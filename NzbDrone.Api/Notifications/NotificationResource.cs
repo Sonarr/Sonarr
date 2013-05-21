@@ -11,5 +11,6 @@ namespace NzbDrone.Api.Notifications
         public Boolean OnGrab { get; set; }
         public Boolean OnDownload { get; set; }
         public List<Field> Fields { get; set; }
+        public String Implementation { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using Newtonsoft.Json;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.Notifications
     public interface INotificationService
     {
         List<Notification> All();
+        Notification Get(int id);
     }
 
     public class NotificationService
@@ -42,6 +44,11 @@ namespace NzbDrone.Core.Notifications
             return _notificationRepository.All().Select(ToNotification).ToList();
         }
 
+        public Notification Get(int id)
+        {
+            return ToNotification(_notificationRepository.Get(id));
+        }
+
         private Notification ToNotification(NotificationDefinition definition)
         {
             var notification = new Notification();
@@ -50,6 +57,7 @@ namespace NzbDrone.Core.Notifications
             notification.OnDownload = definition.OnDownload;
             notification.Instance = GetInstance(definition);
             notification.Name = definition.Name;
+            notification.Implementation = definition.Implementation;
             notification.Settings = ((dynamic)notification.Instance).ImportSettingsFromJson(definition.Settings);
 
             return notification;

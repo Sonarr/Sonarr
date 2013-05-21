@@ -13,5 +13,6 @@ namespace NzbDrone.Core.Notifications
         public bool OnDownload { get; set; }
         public INotifcationSettings Settings { get; set; }
         public INotification Instance { get; set; }
+        public string Implementation { get; set; }
     }
 }

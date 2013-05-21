@@ -1,0 +1,67 @@
+﻿<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Edit</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label">Name</label>
+
+            <div class="controls">
+                <input type="text" name="name"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">On Grab</label>
+
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="onGrab"/>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
+
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Do you want to get notifications when episodes are grabbed?"></i>
+            </span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">On Download</label>
+
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="onDownload"/>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
+
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Do you want to get notifications when episodes are downloaded?"></i>
+            </span>
+            </div>
+        </div>
+
+        {{#each fields}}
+            {{debug}}
+            {{order}}
+            {{value}}
+            {{formField}}
+        {{/each}}
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-left x-remove">delete</button>
+    <button class="btn" data-dismiss="modal">cancel</button>
+    <button class="btn btn-primary x-save">save</button>
+</div>

@@ -16,16 +16,16 @@ define([
         },
 
         events: {
-            'click .x-edit'  : 'editSeries',
-            'click .x-remove': 'removeSeries'
+            'click .x-edit'  : 'edit',
+            'click .x-remove': 'remove'
         },
 
-        editSeries: function () {
+        edit: function () {
             var view = new NzbDrone.Settings.Quality.Profile.EditQualityProfileView({ model: this.model});
             NzbDrone.modalRegion.show(view);
         },
 
-        removeSeries: function () {
+        remove: function () {
             var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
             NzbDrone.modalRegion.show(view);
         }

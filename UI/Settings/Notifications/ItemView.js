@@ -2,32 +2,28 @@
 
 define([
     'app',
-    'Settings/Notifications/Collection'
+    'Settings/Notifications/Collection',
+    'Settings/Notifications/EditView'
 
 ], function () {
 
     NzbDrone.Settings.Notifications.ItemView = Backbone.Marionette.ItemView.extend({
         template  : 'Settings/Notifications/ItemTemplate',
-        initialize: function () {
-            NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this.saveSettings, this);
+        tagName: 'tr',
+
+        events: {
+            'click .x-edit'  : 'edit',
+            'click .x-remove': 'remove'
         },
 
-        saveSettings: function () {
-
-            //this.model.save(undefined, this.syncNotification("Naming Settings Saved", "Couldn't Save Naming Settings"));
+        edit: function () {
+            var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model});
+            NzbDrone.modalRegion.show(view);
         },
 
-
-        syncNotification: function (success, error) {
-            return {
-                success: function () {
-                    window.alert(success);
-                },
-
-                error: function () {
-                    window.alert(error);
-                }
-            };
+        remove: function () {
+            var view = new NzbDrone.Settings.Notifications.DeleteView({ model: this.model});
+            NzbDrone.modalRegion.show(view);
         }
     });
 });
