@@ -60,14 +60,11 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var defaultTask in defaultTasks)
             {
-                var currentDefinition = currentTasks.SingleOrDefault(c => c.TypeName == defaultTask.TypeName);
+                var currentDefinition = currentTasks.SingleOrDefault(c => c.TypeName == defaultTask.TypeName) ?? defaultTask;
 
-                if (currentDefinition == null)
-                {
-                    currentDefinition = defaultTask;
-                    _scheduledTaskRepository.Upsert(currentDefinition);
-                }
+                currentDefinition.Interval = defaultTask.Interval;
 
+                _scheduledTaskRepository.Upsert(currentDefinition);
             }
         }
 
