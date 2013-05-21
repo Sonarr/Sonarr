@@ -27,8 +27,8 @@ namespace NzbDrone.Owin
         {
             var options = new StartOptions
                 {
-                    App = GetType().AssemblyQualifiedName,
-                    Port = _configFileProvider.Port
+                    Url = "http://*:" + _configFileProvider.Port,
+                    App = GetType().AssemblyQualifiedName
                 };
 
             _host = WebApplication.Start(options, BuildApp);

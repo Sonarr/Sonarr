@@ -40,7 +40,7 @@ namespace NzbDrone.Common.Test.EventingTests
         }
 
         [Test]
-        public void should_publish_command_by_with_optional_arg_with_name()
+        public void should_publish_command_by_with_optional_arg_using_name()
         {
             Mocker.GetMock<IServiceFactory>().Setup(c => c.GetImplementations(typeof(ICommand)))
                   .Returns(new List<Type> { typeof(CommandA), typeof(CommandB) });
