@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Instrumentation
         {
             Layout = new SimpleLayout("${callsite:className=false:fileName=false:includeSourcePath=false:methodName=true}");
 
-            Rule = new LoggingRule("*", LogLevel.Debug, this);
+            Rule = new LoggingRule("*", LogLevel.Trace, this);
 
             LogManager.Configuration.AddTarget("DbLogger", this);
             LogManager.Configuration.LoggingRules.Add(Rule);

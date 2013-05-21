@@ -31,6 +31,8 @@ namespace NzbDrone.Owin
                     App = GetType().AssemblyQualifiedName
                 };
 
+            _logger.Info("starting server on {0}", options.Url);
+
             _host = WebApplication.Start(options, BuildApp);
         }
 
