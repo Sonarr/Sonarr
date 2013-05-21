@@ -13,14 +13,13 @@ namespace NzbDrone.Core.Datastore.Events
             Model = model;
             Action = action;
         }
+    }
 
-
-        public enum RepositoryAction
-        {
-            Created = 1,
-            Updated = 2,
-            Deleted = 3
-        }
+    public enum RepositoryAction
+    {
+        Created = 1,
+        Updated = 2,
+        Deleted = 3
     }
 
 

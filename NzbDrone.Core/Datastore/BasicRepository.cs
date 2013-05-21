@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Datastore
             }
 
             DataMapper.Insert(model);
-            _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, ModelEvent<TModel>.RepositoryAction.Created));
+            PublishModelEvent(model, RepositoryAction.Created);
 
             return model;
         }
@@ -191,6 +191,12 @@ namespace NzbDrone.Core.Datastore
                 .ColumnsIncluding(properties)
                 .Entity(model)
                 .Execute();
+        }
+
+
+        protected virtual void PublishModelEvent(TModel model, RepositoryAction action)
+        {
+            _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
         }
 
     }
