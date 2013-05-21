@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app', 'Series/Details/EpisodeStatusCell'], function () {
+define(['app', 'Series/Details/EpisodeStatusCell', 'Series/Details/EpisodeTitleCell'], function () {
     NzbDrone.Series.Details.SeasonLayout = Backbone.Marionette.Layout.extend({
         template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -20,7 +20,7 @@ define(['app', 'Series/Details/EpisodeStatusCell'], function () {
             {
                 name : 'title',
                 label: 'Title',
-                cell : 'string'
+                cell : NzbDrone.Series.Details.EpisodeTitleCell
             },
             {
                 name : 'airDate',

@@ -50,7 +50,9 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
     };
 
     window.NzbDrone.Episode = {
-        Search: {}
+        Search  : {},
+        Summary : {},
+        Activity: {}
     };
 
 
@@ -81,7 +83,7 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
     window.NzbDrone.History = {};
 
     window.NzbDrone.Events = {
-        SeriesAdded     : 'seriesAdded'
+        SeriesAdded: 'seriesAdded'
     };
 
     window.NzbDrone.Commands = {

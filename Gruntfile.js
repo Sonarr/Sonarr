@@ -91,8 +91,8 @@ module.exports = function (grunt) {
 
         copy: {
             index  : {
-                src : 'UI/index.html',
-                dest: '_output/UI/index.html'
+                src : 'UI/**/index.html',
+                dest: '_output/'
             },
             scripts: {
                 src : 'UI/**/*.js',
@@ -114,7 +114,7 @@ module.exports = function (grunt) {
 
         watch: {
             bootstrap  : {
-                files: ['<%= less.bootstrap.src %>', 'UI/**/FontAwesome/**'],
+                files: ['UI/**/Bootstrap/**', 'UI/**/FontAwesome/**'],
                 tasks: ['less:bootstrap']
             },
             generalLess: {

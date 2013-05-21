@@ -5,9 +5,6 @@ define(['app', 'Episode/Layout'], function () {
 
         className: 'episode-status-cell',
 
-        events: {
-            'click': 'showDetails'
-        },
         render: function () {
             this.$el.empty();
 
@@ -32,11 +29,6 @@ define(['app', 'Episode/Layout'], function () {
             }
 
             return this;
-        },
-
-        showDetails: function () {
-            var view = new NzbDrone.Episode.Layout({ model: this.model });
-            NzbDrone.modalRegion.show(view);
         }
     });
 });
