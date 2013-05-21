@@ -8,6 +8,17 @@
      this.push(model);
      */
 
+
+    if (!window.console) {
+        window.console = {};
+    }
+
+    if (!window.console.debug) {
+        window.console.debug = function () {
+
+        };
+    }
+
     window.alert = function (message) {
         window.Messenger().post(message);
     };
