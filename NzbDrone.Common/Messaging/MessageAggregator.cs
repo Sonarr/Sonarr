@@ -76,23 +76,18 @@ namespace NzbDrone.Common.Messaging
 
             _logger.Trace("Publishing {0}", command.GetType().Name);
 
-            var handler = _serviceFactory.Build(handlerContract);
+            var handler = (IExecute<TCommand>)_serviceFactory.Build(handlerContract);
 
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
 
             try
             {
-                handlerContract.GetMethod("Execute").Invoke(handler, new object[] { command });
+                handler.Execute(command);
                 PublishEvent(new CommandCompletedEvent(command));
             }
-            catch (TargetInvocationException e)
+            catch (Exception e)
             {
                 PublishEvent(new CommandFailedEvent(command, e));
-
-                if (e.InnerException != null)
-                {
-                    throw e.InnerException;
-                }
                 throw;
             }
             finally
@@ -108,9 +103,8 @@ namespace NzbDrone.Common.Messaging
             var commandType = _serviceFactory.GetImplementations(typeof(ICommand))
                 .Single(c => c.FullName.Equals(commandTypeName, StringComparison.InvariantCultureIgnoreCase));
 
-            //json.net is better at creating objects
-            var command = Json.Deserialize("{}", commandType);
-            PublishCommand((ICommand)command);
+            dynamic command = Json.Deserialize("{}", commandType);
+            PublishCommand(command);
         }
     }
 }
