@@ -98,6 +98,9 @@ namespace NzbDrone.Core.Parser
                     return new List<Episode>();
                 }
 
+                
+                //TODO: this will fail since parsed date will be local, and stored date will be UTC
+                //which means they will probebly end up on diffrent dates
                 var episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.AirDate.Value);
 
                 if (episodeInfo != null)

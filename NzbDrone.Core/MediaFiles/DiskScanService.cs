@@ -55,7 +55,14 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var filePath in mediaFileList)
             {
-                ImportFile(series, filePath);
+                try
+                {
+                    ImportFile(series, filePath);
+                }
+                catch (Exception e)
+                {
+                    Logger.ErrorException("Couldn't import file " + filePath, e);
+                }
             }
 
             //Todo: Find the "best" episode file for all found episodes and import that one
@@ -141,7 +148,14 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var series in seriesToScan)
             {
-                Scan(series);
+                try
+                {
+                    Scan(series);
+                }
+                catch (Exception e)
+                {
+                    Logger.ErrorException("Diskscan failed for " + series.Title, e);
+                }
             }
         }
 
