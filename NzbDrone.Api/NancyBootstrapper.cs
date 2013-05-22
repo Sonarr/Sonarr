@@ -39,12 +39,9 @@ namespace NzbDrone.Api
 
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
-            if (container.Resolve<IConfigFileProvider>().AuthenticationType == AuthenticationType.Basic)
-            {
-                pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(
-                                                        container.Resolve<IUserValidator>(),
-                                                        "NzbDrone"));
-            }
+            pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(
+                                                    container.Resolve<IUserValidator>(),
+                                                    "NzbDrone"));
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }

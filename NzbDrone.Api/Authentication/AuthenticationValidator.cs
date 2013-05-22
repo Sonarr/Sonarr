@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Nancy.Authentication.Basic;
+﻿using Nancy.Authentication.Basic;
 using Nancy.Security;
 using NzbDrone.Common;
+using NzbDrone.Common.Model;
 
 namespace NzbDrone.Api.Authentication
 {
@@ -19,10 +16,15 @@ namespace NzbDrone.Api.Authentication
 
         public IUserIdentity Validate(string username, string password)
         {
+            if (_configFileProvider.AuthenticationType == AuthenticationType.Anonymous)
+            {
+                return new NzbDroneUser { UserName = "Anonymous" };
+            }
+
             if (_configFileProvider.BasicAuthUsername.Equals(username) &&
                 _configFileProvider.BasicAuthPassword.Equals(password))
             {
-                return new NzbDroneUser { UserName = username};
+                return new NzbDroneUser { UserName = username };
             }
 
             return null;
