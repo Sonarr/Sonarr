@@ -4,6 +4,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -72,29 +73,41 @@ namespace NzbDrone.Core.Test.Datastore
                     loadedSeries.Covers.Value.Should().HaveSameCount(covers);
                 }*/
 
-//        [Test]
-//        public void one_to_one()
-//        {
-//            var episode = Builder<Episode>.CreateNew()
-//                                                       .With(c => c.Id = 0)
-//                                                       .Build();
-//
-//            Db.Insert(episode);
-//
-//
-//            var history = Builder<History.History>.CreateNew()
-//                            .With(c => c.Id = 0)
-//                            .With(c => c.EpisodeId = episode.Id)
-//                            .With(c => c.Quality = new QualityModel())
-//                            .Build();
-//
-//            Db.Insert(history);
-//
-//            var loadedEpisode = Db.Single<History.History>().Episode.Value;
-//
-//            loadedEpisode.Should().NotBeNull();
-//            loadedEpisode.ShouldHave().AllProperties().But(c => c.SeriesTitle).EqualTo(episode);
-//        }
+        [Test]
+        public void one_to_one()
+        {
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                           .BuildNew();
+
+            Db.Insert(episodeFile);
+
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.EpisodeFileId = episodeFile.Id)
+                .BuildNew();
+
+            Db.Insert(episode);
+
+
+
+
+
+            var loadedEpisodeFile = Db.Single<Episode>().EpisodeFile.Value;
+
+            loadedEpisodeFile.Should().NotBeNull();
+            loadedEpisodeFile.ShouldHave().AllProperties().But(c => c.DateAdded).EqualTo(episodeFile);
+        }
+
+        [Test]
+        public void one_to_one_should_not_query_db_if_foreign_key_is_zero()
+        {
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.EpisodeFileId = 0)
+                .BuildNew();
+
+            Db.Insert(episode);
+
+            Db.Single<Episode>().EpisodeFile.Value.Should().BeNull();
+        }
 
 
         [Test]

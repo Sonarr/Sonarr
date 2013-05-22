@@ -13,8 +13,10 @@ namespace NzbDrone.Core.Datastore
             where TChild : ModelBase
         {
             return relationshipBuilder.For(portalExpression.GetMemberName())
-                                .LazyLoad((db, parent) => db.Query<TChild>()
-                                .SingleOrDefault(c => c.Id == childIdSelector(parent)));
+                                .LazyLoad(
+                                            query: (db, parent) => db.Query<TChild>().SingleOrDefault(c => c.Id == childIdSelector(parent)),
+                                            condition: parent => childIdSelector(parent) > 0
+                                         );
 
         }
 

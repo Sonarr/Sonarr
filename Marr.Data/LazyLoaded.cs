@@ -70,14 +70,15 @@ namespace Marr.Data
     internal class LazyLoaded<TParent, TChild> : LazyLoaded<TChild>
     {
         private TParent _parent;
-        private Func<IDataMapper, TParent, TChild> _query;
-        
         private Func<IDataMapper> _dbCreator;
 
-        internal LazyLoaded(Func<IDataMapper, TParent, TChild> query) 
-            : base()
+        private readonly Func<IDataMapper, TParent, TChild> _query;
+        private readonly Func<TParent, bool> _condition;
+
+        internal LazyLoaded(Func<IDataMapper, TParent, TChild> query, Func<TParent, bool> condition = null)
         {
             _query = query;
+            _condition = condition;
         }
 
         public LazyLoaded(TChild val) 
@@ -107,11 +108,16 @@ namespace Marr.Data
         {
             if (!_isLoaded)
             {
-                using (IDataMapper db = _dbCreator())
+                if (_condition != null && _condition(_parent))
                 {
-                    _child = _query(db, _parent);
-                    _isLoaded = true;
+                    using (IDataMapper db = _dbCreator())
+                    {
+                        _child = _query(db, _parent);
+                    }
                 }
+
+                _child = default(TChild);
+                _isLoaded = true;
             }
         }
 

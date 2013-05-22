@@ -62,12 +62,13 @@ namespace Marr.Data.Mapping
         /// </summary>
         /// <typeparam name="TChild"></typeparam>
         /// <param name="query"></param>
+        /// <param name="condition">condition in which a child could exist. eg. avoid call to db if foreign key is 0 or null</param>
         /// <returns></returns>
-        public RelationshipBuilder<TEntity> LazyLoad<TChild>(Func<IDataMapper, TEntity, TChild> query)
+        public RelationshipBuilder<TEntity> LazyLoad<TChild>(Func<IDataMapper, TEntity, TChild> query, Func<TEntity, bool> condition = null)
         {
             AssertCurrentPropertyIsSet();
 
-            Relationships[_currentPropertyName].LazyLoaded = new LazyLoaded<TEntity, TChild>(query);
+            Relationships[_currentPropertyName].LazyLoaded = new LazyLoaded<TEntity, TChild>(query, condition);
             return this;
         }
 
