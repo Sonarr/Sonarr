@@ -1,4 +1,5 @@
 ﻿using Nancy;
+using Nancy.Security;
 
 namespace NzbDrone.Api
 {
@@ -7,6 +8,7 @@ namespace NzbDrone.Api
         protected NzbDroneApiModule(string resource)
             : base("/api/" + resource.Trim('/'))
         {
+            this.RequiresAuthentication();
             Options["/"] = x => new Response();
         }
     }

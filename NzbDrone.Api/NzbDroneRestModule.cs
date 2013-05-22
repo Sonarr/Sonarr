@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Nancy.Security;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Validation;
 using NzbDrone.Core.Datastore;
@@ -12,7 +13,7 @@ namespace NzbDrone.Api
         protected NzbDroneRestModule()
             : this(new TResource().ResourceName)
         {
-
+            this.RequiresAuthentication();
         }
 
         protected NzbDroneRestModule(string resource)

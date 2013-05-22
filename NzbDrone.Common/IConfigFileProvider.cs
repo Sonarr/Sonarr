@@ -12,6 +12,8 @@ namespace NzbDrone.Common
         int Port { get; set; }
         bool LaunchBrowser { get; set; }
         AuthenticationType AuthenticationType { get; set; }
+        string BasicAuthUsername { get; set; }
+        string BasicAuthPassword { get; set; }
         int GetValueInt(string key, int defaultValue);
         bool GetValueBoolean(string key, bool defaultValue);
         string GetValue(string key, object defaultValue);
@@ -31,7 +33,6 @@ namespace NzbDrone.Common
 
             CreateDefaultConfigFile();
         }
-
 
         public virtual Guid Guid
         {
@@ -61,10 +62,21 @@ namespace NzbDrone.Common
 
         public virtual AuthenticationType AuthenticationType
         {
-            get { return (AuthenticationType)GetValueInt("AuthenticationType", 0); }
-            set { SetValue("AuthenticationType", (int)value); }
+            get { return GetValueEnum("AuthenticationType", AuthenticationType.Anonymous); }
+            set { SetValue("AuthenticationType", value); }
         }
 
+        public virtual string BasicAuthUsername
+        {
+            get { return GetValue("BasicAuthUsername", ""); }
+            set { SetValue("BasicAuthUsername", value); }
+        }
+
+        public virtual string BasicAuthPassword
+        {
+            get { return GetValue("BasicAuthPassword", ""); }
+            set { SetValue("BasicAuthPassword", value); }
+        }
 
         public virtual int GetValueInt(string key, int defaultValue)
         {
@@ -74,6 +86,11 @@ namespace NzbDrone.Common
         public virtual bool GetValueBoolean(string key, bool defaultValue)
         {
             return Convert.ToBoolean(GetValue(key, defaultValue));
+        }
+
+        private T GetValueEnum<T>(string key, T defaultValue)
+        {
+            return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
 
         public virtual string GetValue(string key, object defaultValue)
@@ -96,7 +113,6 @@ namespace NzbDrone.Common
             return defaultValue.ToString();
         }
 
-
         public virtual void SetValue(string key, object value)
         {
             var xDoc = XDocument.Load(_configFile);
@@ -113,6 +129,11 @@ namespace NzbDrone.Common
                 parentContainer.Descendants(key).Single().Value = value.ToString();
 
             xDoc.Save(_configFile);
+        }
+
+        private void SetValue(string key, Enum value)
+        {
+            SetValue(key, value.ToString().ToLower());
         }
 
         private void CreateDefaultConfigFile()

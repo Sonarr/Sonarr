@@ -23,6 +23,9 @@ namespace NzbDrone.Api.ErrorManagement
                 return;
             }
 
+            if (statusCode == HttpStatusCode.Unauthorized)
+                return;
+
             if (context.Response.ContentType == "text/html" || context.Response.ContentType == "text/plain")
                 context.Response = new ErrorModel
                     {

@@ -1,5 +1,6 @@
 using System;
 using Nancy;
+using Nancy.Security;
 
 namespace NzbDrone.Api.Frontend
 {
@@ -7,6 +8,7 @@ namespace NzbDrone.Api.Frontend
     {
         public IndexModule()
         {
+            this.RequiresAuthentication();
             //Serve anything that doesn't have an extension
             Get[@"/(.*)"] = x => Index();
         }

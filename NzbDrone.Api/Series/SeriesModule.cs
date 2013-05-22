@@ -32,9 +32,6 @@ namespace NzbDrone.Api.Series
             SharedValidator.RuleFor(s => s.RootFolderId).ValidId();
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
-
-
-
             PostValidator.RuleFor(s => s.Title).NotEmpty();
 
         }
