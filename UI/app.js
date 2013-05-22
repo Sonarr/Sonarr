@@ -30,6 +30,7 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Config = {};
+    window.NzbDrone.Form = {};
 
     window.NzbDrone.Series = {
         Index  : {

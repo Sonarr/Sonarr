@@ -1,10 +1,16 @@
 ﻿"use strict";
-define(['app', 'AddSeries/AddSeriesLayout',
+define(['app',
+    'Form/FormBuilder',
+    'AddSeries/AddSeriesLayout',
     'Series/Index/SeriesIndexLayout',
-    'Calendar/CalendarCollectionView', 'Shared/NotificationView',
-    'Shared/NotFoundView', 'MainMenuView',
-    'Series/Details/SeriesDetailsView', 'Series/EpisodeCollection',
-    'Settings/SettingsLayout', 'Missing/MissingLayout',
+    'Calendar/CalendarCollectionView',
+    'Shared/NotificationView',
+    'Shared/NotFoundView',
+    'MainMenuView',
+    'Series/Details/SeriesDetailsView',
+    'Series/EpisodeCollection',
+    'Settings/SettingsLayout',
+    'Missing/MissingLayout',
     'History/HistoryLayout'],
     function () {
         var controller = Backbone.Marionette.Controller.extend({
