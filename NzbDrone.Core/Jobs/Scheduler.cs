@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Timers;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using Timer = System.Timers.Timer;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -16,6 +18,7 @@ namespace NzbDrone.Core.Jobs
         private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
         private static readonly Timer Timer = new Timer();
+        private static CancellationTokenSource _cancellationTokenSource;
 
         public Scheduler(ITaskManager taskManager, IMessageAggregator messageAggregator, Logger logger)
         {
@@ -26,8 +29,9 @@ namespace NzbDrone.Core.Jobs
 
         public void Handle(ApplicationStartedEvent message)
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             Timer.Interval = 1000 * 30;
-            Timer.Elapsed += (o, args) => ExecuteCommands();
+            Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token);
             Timer.Start();
         }
 
@@ -43,6 +47,8 @@ namespace NzbDrone.Core.Jobs
 
                 foreach (var task in tasks)
                 {
+                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                     try
                     {
                         _messageAggregator.PublishCommand(task.TypeName);
@@ -55,12 +61,16 @@ namespace NzbDrone.Core.Jobs
             }
             finally
             {
-                Timer.Enabled = true;
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    Timer.Enabled = true;
+                }
             }
         }
 
         public void Handle(ApplicationShutdownRequested message)
         {
+            _cancellationTokenSource.Cancel(true);
             Timer.Stop();
         }
     }
