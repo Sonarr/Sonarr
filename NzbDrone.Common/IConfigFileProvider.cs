@@ -17,6 +17,7 @@ namespace NzbDrone.Common
         int GetValueInt(string key, int defaultValue);
         bool GetValueBoolean(string key, bool defaultValue);
         string GetValue(string key, object defaultValue);
+        T GetValueEnum<T>(string key, T defaultValue);
         void SetValue(string key, object value);
     }
 
@@ -88,7 +89,7 @@ namespace NzbDrone.Common
             return Convert.ToBoolean(GetValue(key, defaultValue));
         }
 
-        private T GetValueEnum<T>(string key, T defaultValue)
+        public T GetValueEnum<T>(string key, T defaultValue)
         {
             return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
@@ -99,7 +100,6 @@ namespace NzbDrone.Common
             var config = xDoc.Descendants("Config").Single();
 
             var parentContainer = config;
-
 
             var valueHolder = parentContainer.Descendants(key).ToList();
 
@@ -131,7 +131,7 @@ namespace NzbDrone.Common
             xDoc.Save(_configFile);
         }
 
-        private void SetValue(string key, Enum value)
+        public void SetValue(string key, Enum value)
         {
             SetValue(key, value.ToString().ToLower());
         }

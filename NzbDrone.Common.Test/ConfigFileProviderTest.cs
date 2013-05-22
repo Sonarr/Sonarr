@@ -127,25 +127,19 @@ namespace NzbDrone.Common.Test
         [Test]
         public void GetAuthenticationType_No_Existing_Value()
         {
-
-
             var result = Subject.AuthenticationType;
-
 
             result.Should().Be(AuthenticationType.Anonymous);
         }
 
         [Test]
-        public void GetAuthenticationType_Windows()
+        public void GetAuthenticationType_Basic()
         {
-
-            Subject.SetValue("AuthenticationType", 1);
-
-
+            Subject.SetValue("AuthenticationType", AuthenticationType.Basic);
+            
             var result = Subject.AuthenticationType;
-
-
-            result.Should().Be(AuthenticationType.Windows);
+            
+            result.Should().Be(AuthenticationType.Basic);
         }
 
         [Test]
