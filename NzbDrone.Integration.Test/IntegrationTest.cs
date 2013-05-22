@@ -15,11 +15,13 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.Owin;
 using NzbDrone.Owin.MiddleWare;
+using NzbDrone.Test.Common.Categories;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test
 {
     [TestFixture]
+    [IntegrationTest]
     public abstract class IntegrationTest
     {
         private NancyBootstrapper _bootstrapper;

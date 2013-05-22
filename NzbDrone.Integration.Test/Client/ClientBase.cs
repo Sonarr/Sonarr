@@ -95,14 +95,14 @@ namespace NzbDrone.Integration.Test.Client
             var response = _restClient.Execute(request);
             _logger.Info("Response: {0}", response.Content);
 
-            response.StatusCode.Should().Be(statusCode);
-
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
             }
 
             response.ErrorMessage.Should().BeBlank();
+
+            response.StatusCode.Should().Be(statusCode);
 
             return Json.Deserialize<T>(response.Content);
         }
