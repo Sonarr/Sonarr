@@ -194,10 +194,17 @@ namespace NzbDrone.Core.Datastore
         }
 
 
-        protected virtual void PublishModelEvent(TModel model, RepositoryAction action)
+        private void PublishModelEvent(TModel model, RepositoryAction action)
         {
-            _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
+            if (PublishModelEvents)
+            {
+                _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
+            }
         }
 
+        protected virtual bool PublishModelEvents
+        {
+            get { return false; }
+        }
     }
 }
