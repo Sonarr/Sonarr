@@ -115,8 +115,11 @@ namespace Marr.Data
                         _child = _query(db, _parent);
                     }
                 }
+                else
+                {
+                    _child = default(TChild);
+                }
 
-                _child = default(TChild);
                 _isLoaded = true;
             }
         }
