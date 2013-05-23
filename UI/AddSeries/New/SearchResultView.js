@@ -20,6 +20,8 @@ define(['app', 'Series/SeriesCollection'], function (app) {
         },
 
         addSeries: function () {
+            var icon = this.ui.addButton.find('icon');
+            icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
 
             var quality = this.ui.qualityProfile.val();
             var rootFolderId = this.ui.rootFolder.val();
@@ -32,11 +34,15 @@ define(['app', 'Series/SeriesCollection'], function (app) {
             this.model.save(undefined, {
                 url    : NzbDrone.Series.SeriesCollection.prototype.url,
                 success: function () {
+                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     NzbDrone.Shared.Messenger.show({
                         message: 'Added: ' + self.model.get('title')
                     });
 
                     NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: false, series: self.model });
+                },
+                fail: function () {
+                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                 }
             });
         }

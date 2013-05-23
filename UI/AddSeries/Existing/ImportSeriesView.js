@@ -10,7 +10,8 @@ define([
         template: 'AddSeries/SearchResultTemplate',
 
         ui: {
-            qualityProfile: '.x-quality-profile'
+            qualityProfile: '.x-quality-profile',
+            addButton     : '.x-add'
         },
 
         events: {
@@ -22,6 +23,8 @@ define([
         },
 
         addSeries: function () {
+            var icon = this.ui.addButton.find('icon');
+            icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
 
             var self = this;
 
@@ -35,6 +38,7 @@ define([
 
             this.model.save(undefined, {
                 success: function () {
+                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     NzbDrone.Shared.Messenger.show({
                         message: 'Added: ' + self.model.get('title')
                     });
@@ -42,6 +46,9 @@ define([
                     NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: true, series: self.model });
                     self.trigger('seriesAdded');
                     self.close();
+                },
+                fail: function () {
+                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                 }
             });
         }
