@@ -33,9 +33,9 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Config>().RegisterModel("Config");
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
 
-            Mapper.Entity<IndexerDefinition>().RegisterModel("IndexerDefinitions");
+            Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers");
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
-            Mapper.Entity<NotificationDefinition>().RegisterModel("NotificationDefinitions");
+            Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
