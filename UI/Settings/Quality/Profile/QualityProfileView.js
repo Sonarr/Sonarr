@@ -17,7 +17,7 @@ define([
 
         events: {
             'click .x-edit'  : 'edit',
-            'click .x-remove': 'remove'
+            'click .x-remove': 'removeQuality'
         },
 
         edit: function () {
@@ -25,7 +25,7 @@ define([
             NzbDrone.modalRegion.show(view);
         },
 
-        remove: function () {
+        removeQuality: function () {
             var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
             NzbDrone.modalRegion.show(view);
         }

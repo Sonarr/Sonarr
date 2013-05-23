@@ -13,7 +13,7 @@ define([
 
         events: {
             'click .x-edit'  : 'edit',
-            'click .x-remove': 'remove'
+            'click .x-remove': 'removeNotification'
         },
 
         edit: function () {
@@ -21,7 +21,7 @@ define([
             NzbDrone.modalRegion.show(view);
         },
 
-        remove: function () {
+        removeNotification: function () {
             var view = new NzbDrone.Settings.Notifications.DeleteView({ model: this.model});
             NzbDrone.modalRegion.show(view);
         }
