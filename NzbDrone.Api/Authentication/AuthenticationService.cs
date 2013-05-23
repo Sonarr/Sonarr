@@ -5,20 +5,32 @@ using NzbDrone.Common.Model;
 
 namespace NzbDrone.Api.Authentication
 {
-    public class AuthenticationValidator : IUserValidator
+    public interface IAuthenticationService : IUserValidator
+    {
+        AuthenticationType AuthenticationType { get; }
+    }
+
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IConfigFileProvider _configFileProvider;
+        private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
 
-        public AuthenticationValidator(IConfigFileProvider configFileProvider)
+
+        public AuthenticationService(IConfigFileProvider configFileProvider)
         {
             _configFileProvider = configFileProvider;
         }
 
+        public AuthenticationType AuthenticationType
+        {
+            get { return _configFileProvider.AuthenticationType; }
+        }
+
         public IUserIdentity Validate(string username, string password)
         {
-            if (_configFileProvider.AuthenticationType == AuthenticationType.Anonymous)
+            if (AuthenticationType == AuthenticationType.Anonymous)
             {
-                return new NzbDroneUser { UserName = "Anonymous" };
+                return AnonymousUser;
             }
 
             if (_configFileProvider.BasicAuthUsername.Equals(username) &&

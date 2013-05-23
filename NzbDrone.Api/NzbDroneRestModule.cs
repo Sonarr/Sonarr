@@ -13,7 +13,6 @@ namespace NzbDrone.Api
         protected NzbDroneRestModule()
             : this(new TResource().ResourceName)
         {
-            this.RequiresAuthentication();
         }
 
         protected NzbDroneRestModule(string resource)
