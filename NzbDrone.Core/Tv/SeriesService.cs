@@ -101,11 +101,13 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(() => newSeries).IsNotNull();
 
-            newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
-            newSeries.RootFolder = _rootFolderService.Get(newSeries.RootFolderId);
-
-            _diskProvider.CreateFolder(newSeries.Path);
-
+            if (String.IsNullOrWhiteSpace(newSeries.FolderName))
+            {
+                newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
+                newSeries.RootFolder = _rootFolderService.Get(newSeries.RootFolderId);
+                _diskProvider.CreateFolder(newSeries.Path);
+            }
+            
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
 
             newSeries.Monitored = true;
