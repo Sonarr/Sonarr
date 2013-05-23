@@ -32,7 +32,6 @@ namespace NzbDrone.Core.Test.UpdateTests
         public void Setup()
         {
             Mocker.GetMock<IEnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
-            Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
             Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns(_updatePackage);
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });

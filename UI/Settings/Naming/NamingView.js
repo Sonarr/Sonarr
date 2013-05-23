@@ -3,7 +3,6 @@ define(['app', 'Settings/Naming/NamingModel'], function () {
 
     NzbDrone.Settings.Naming.NamingView = Backbone.Marionette.ItemView.extend({
         template : 'Settings/Naming/NamingTemplate',
-        className: 'form-horizontal',
 
         ui: {
             tooltip: '[class^="help-inline"] i'

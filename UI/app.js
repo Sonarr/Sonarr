@@ -76,7 +76,7 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
         Indexers      : {},
         DownloadClient: {},
         Notifications : {},
-        System        : {},
+        General        : {},
         Misc          : {}
     };
 

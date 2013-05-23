@@ -2,6 +2,7 @@
 using Nancy.Security;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication
 {

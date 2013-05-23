@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Owin.Hosting;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Owin.MiddleWare;
 using Owin;
 using System.Linq;

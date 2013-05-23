@@ -23,8 +23,6 @@ namespace NzbDrone.Core.Configuration
         bool UseSeasonFolder { get; set; }
         string SortingSeasonFolderFormat { get; set; }
         int DefaultQualityProfile { get; set; }
-        string TwitterAccessToken { get; set; }
-        string TwitterAccessTokenSecret { get; set; }
         bool EnableBacklogSearching { get; set; }
         bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
         int Retention { get; set; }

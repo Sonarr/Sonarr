@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Model;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
@@ -143,15 +144,18 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void Guid_should_return_the_same_every_time()
+        public void SaveDictionary_should_save_proper_value()
         {
+            int port = 20555;
 
-            var firstResponse = Subject.Guid;
-            var secondResponse = Subject.Guid;
+            var dic = Subject.GetConfigDictionary();
+            dic["Port"] = 20555;
+
+            Subject.SaveConfigDictionary(dic);
 
 
-
-            secondResponse.Should().Be(firstResponse);
+            Subject.Port.Should().Be(port);
         }
+
     }
 }

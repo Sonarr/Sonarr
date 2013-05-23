@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Cache;
 
@@ -58,6 +59,21 @@ namespace NzbDrone.Common.Test.CacheTests
         public void remove_none_existing_should_break_things()
         {
             _cachedString.Remove("Test");
+        }
+
+        [Test]
+        public void get_without_callback_should_throw_on_invalid_key()
+        {
+            Assert.Throws<KeyNotFoundException>(() => _cachedString.Get("InvalidKey"));
+        }
+
+        [Test]
+        public void should_be_able_to_update_key()
+        {
+            _cachedString.Set("Key", "Old");
+            _cachedString.Set("Key", "New");
+
+            _cachedString.Get("Key").Should().Be("New");
         }
     }
 

@@ -5,6 +5,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Test.Common.AutoMoq;
@@ -20,6 +21,8 @@ namespace NzbDrone.Test.Common
         public void CoreTestSetup()
         {
             _subject = null;
+
+            Mocker.SetConstant<ICacheManger>(new CacheManger());
         }
 
         protected TSubject Subject

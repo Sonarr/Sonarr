@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
     <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Constants.cs" />

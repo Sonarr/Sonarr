@@ -11,6 +11,7 @@ using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.Owin;

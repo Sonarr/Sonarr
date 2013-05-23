@@ -2,6 +2,8 @@
 using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Host;
 using NzbDrone.Owin;
 
 namespace NzbDrone

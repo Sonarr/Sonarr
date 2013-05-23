@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Common.Cache
@@ -16,7 +17,12 @@ namespace NzbDrone.Common.Cache
         public void Set(string key, T value)
         {
             Ensure.That(() => key).IsNotNullOrWhiteSpace();
-            _store.TryAdd(key, value);
+            _store[key] = value;
+        }
+
+        public T Get(string key)
+        {
+            return Get(key, () => { throw new KeyNotFoundException(key); });
         }
 
         public T Get(string key, Func<T> function)

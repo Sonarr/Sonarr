@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using NLog;
+using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Host
 {
     public interface IUrlAclAdapter
     {

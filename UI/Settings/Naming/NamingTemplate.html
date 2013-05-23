@@ -1,191 +1,198 @@
-﻿<fieldset>
-    <legend>Episode Naming</legend>
+﻿<div class="form-horizontal">
+    <fieldset>
+        <legend>Episode Naming</legend>
 
-    <div class="control-group">
-        <label class="control-label">Use Scene Name</label>
+        <div class="control-group">
+            <label class="control-label">Use Scene Name</label>
 
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="useSceneName"/>
-                <p>
-                    <span>On</span>
-                    <span>Off</span>
-                </p>
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="useSceneName"/>
 
-                <div class="btn btn-primary slide-button"></div>
-            </label>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
 
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Use the scene name, ignoring all other naming settings"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Include Series Title</label>
+        <div class="control-group">
+            <label class="control-label">Include Series Title</label>
 
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="includeSeriesTitle"/>
-                <p>
-                    <span>On</span>
-                    <span>Off</span>
-                </p>
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="includeSeriesTitle"/>
 
-                <div class="btn btn-primary slide-button"></div>
-            </label>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
 
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Should filenames contain the series name when renamed?"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Include Episode Title</label>
+        <div class="control-group">
+            <label class="control-label">Include Episode Title</label>
 
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="includeEpisodeTitle"/>
-                <p>
-                    <span>On</span>
-                    <span>Off</span>
-                </p>
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="includeEpisodeTitle"/>
 
-                <div class="btn btn-primary slide-button"></div>
-            </label>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
 
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Should filenames contain the episode name when renamed?"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Include Quality</label>
+        <div class="control-group">
+            <label class="control-label">Include Quality</label>
 
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="includeQuality"/>
-                <p>
-                    <span>On</span>
-                    <span>Off</span>
-                </p>
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="includeQuality"/>
 
-                <div class="btn btn-primary slide-button"></div>
-            </label>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
 
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Should filenames have the include the quality?"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Replace Spaces</label>
+        <div class="control-group">
+            <label class="control-label">Replace Spaces</label>
 
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="replaceSpaces"/>
-                <p>
-                    <span>On</span>
-                    <span>Off</span>
-                </p>
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="replaceSpaces"/>
 
-                <div class="btn btn-primary slide-button"></div>
-            </label>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"></div>
+                </label>
 
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Do you want to replace spaces in the filename with periods?"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Season Folder Format</label>
+        <div class="control-group">
+            <label class="control-label">Season Folder Format</label>
 
-        <div class="controls">
-            <input type="text" placeholder="Season %s" name="seasonFolderFormat"/>
+            <div class="controls">
+                <input type="text" placeholder="Season %s" name="seasonFolderFormat"/>
             <span class="help-inline">
                 <i class="icon-question-sign" title="How should season folders be named? (Use %0s to pad to two digits)"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Separator</label>
+        <div class="control-group">
+            <label class="control-label">Separator</label>
 
-        <div class="controls">
-            <select class="inputClass x-backlog-setting" name="separator">
-                <option value=" - ">Dash</option>
-                <option value=" ">Space</option>
-                <option value=".">Period</option>
-            </select>
+            <div class="controls">
+                <select class="inputClass x-backlog-setting" name="separator">
+                    <option value=" - ">Dash</option>
+                    <option value=" ">Space</option>
+                    <option value=".">Period</option>
+                </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="How should NzbDrone separate sections of the filename?"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Numbering Style</label>
+        <div class="control-group">
+            <label class="control-label">Numbering Style</label>
 
-        <div class="controls">
-            <select class="inputClass x-backlog-setting" name="numberStyle">
-                <option value="0">1x05</option>
-                <option value="1">01x05</option>
-                <option value="2">S01E05</option>
-                <option value="3">s01e05</option>
-            </select>
+            <div class="controls">
+                <select class="inputClass x-backlog-setting" name="numberStyle">
+                    <option value="0">1x05</option>
+                    <option value="1">01x05</option>
+                    <option value="2">S01E05</option>
+                    <option value="3">s01e05</option>
+                </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="What numbering style do you want?"></i>
             </span>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label">Multi-Episode Style</label>
+        <div class="control-group">
+            <label class="control-label">Multi-Episode Style</label>
 
-        <div class="controls">
-            <select class="inputClass x-backlog-setting" name="multiEpisodeStyle">
-                <option value="0">Extend</option>
-                <option value="1">Duplicate</option>
-                <option value="2">Repeat</option>
-                <option value="3">Scene</option>
-            </select>
+            <div class="controls">
+                <select class="inputClass x-backlog-setting" name="multiEpisodeStyle">
+                    <option value="0">Extend</option>
+                    <option value="1">Duplicate</option>
+                    <option value="2">Repeat</option>
+                    <option value="3">Scene</option>
+                </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="How will multi-episode files be named?"></i>
             </span>
-        </div>
-    </div>
-</fieldset>
-
-<fieldset>
-    <legend>Metadata</legend>
-
-    <div class="control-group">
-        <label class="control-label">XBMC</label>
-
-        <div class="controls">
-            <div class="switch">
-                <input type="checkbox" name="metadataXbmcEnabled"/>
             </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Metadata</legend>
+
+        <div class="control-group">
+            <label class="control-label">XBMC</label>
+
+            <div class="controls">
+                <div class="switch">
+                    <input type="checkbox" name="metadataXbmcEnabled"/>
+                </div>
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Enable creating metadata for XBMC"></i>
             </span>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <label class="control-label">Use Banners</label>
-
-        <div class="controls">
-            <div class="switch">
-                <input type="checkbox" name="metadataUseBanners"/>
             </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Use Banners</label>
+
+            <div class="controls">
+                <div class="switch">
+                    <input type="checkbox" name="metadataUseBanners"/>
+                </div>
             <span class="help-inline-checkbox">
                 <i class="icon-question-sign" title="Use banners instead of posters?"></i>
             </span>
+            </div>
         </div>
-    </div>
-</fieldset>
+    </fieldset>
+</div>

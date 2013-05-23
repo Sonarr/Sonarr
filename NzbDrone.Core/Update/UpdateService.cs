@@ -7,6 +7,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
@@ -75,7 +76,7 @@ namespace NzbDrone.Core.Update
             var startInfo = new ProcessStartInfo
                 {
                     FileName = _environmentProvider.GetUpdateClientExePath(),
-                    Arguments = string.Format("{0} {1}", _processProvider.GetCurrentProcess().Id, _configFileProvider.Guid)
+                    Arguments = string.Format("{0} {1}", _processProvider.GetCurrentProcess().Id)
                 };
 
             var process = _processProvider.Start(startInfo);

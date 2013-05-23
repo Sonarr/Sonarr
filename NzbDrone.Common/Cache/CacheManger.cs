@@ -3,20 +3,32 @@ using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Common.Cache
 {
-    public static class CacheManger
+    public interface ICacheManger
     {
-        private static readonly ICached<object> Cache;
+        ICached<T> GetCache<T>(Type type);
+        ICached<T> GetCache<T>(object host);
+    }
 
-        static CacheManger()
+    public class CacheManger : ICacheManger
+    {
+        private readonly ICached<object> _cache;
+
+        public CacheManger()
         {
-            Cache = new Cached<object>();
+            _cache = new Cached<object>();
+
         }
 
-        public static ICached<T> GetCache<T>(Type type)
+        public ICached<T> GetCache<T>(Type type)
         {
             Ensure.That(() => type).IsNotNull();
 
-            return (ICached<T>)Cache.Get(type.FullName, () => new Cached<T>());
+            return (ICached<T>)_cache.Get(type.FullName, () => new Cached<T>());
+        }
+
+        public ICached<T> GetCache<T>(object host)
+        {
+            return GetCache<T>(host.GetType());
         }
     }
 }

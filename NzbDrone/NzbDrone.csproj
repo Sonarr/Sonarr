@@ -89,6 +89,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentMigrator.1.0.6.0\tools\FluentMigrator.Runner.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.NetFwTypeLib">
+      <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.0.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -137,6 +141,8 @@
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Host\FirewallAdapter.cs" />
+    <Compile Include="Host\UrlAclAdapter.cs" />
     <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationModes.cs" />
     <Compile Include="AppMain.cs" />

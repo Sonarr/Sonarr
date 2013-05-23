@@ -9,5 +9,6 @@ namespace NzbDrone.Common.Cache
         bool ContainsKey(string key);
         void Clear();
         void Remove(string key);
+        T Get(string key);
     }
 }

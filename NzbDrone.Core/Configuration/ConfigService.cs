@@ -43,6 +43,23 @@ namespace NzbDrone.Core.Configuration
             return dict;
         }
 
+        public void SaveValues(Dictionary<string, object> configValues)
+        {
+            var allWithDefaults = AllWithDefaults();
+
+            foreach (var configValue in configValues)
+            {
+                object currentValue;
+                allWithDefaults.TryGetValue(configValue.Key, out currentValue);
+                if (currentValue == null) continue;
+
+                var equal = configValue.Value.ToString().Equals(currentValue.ToString());
+
+                if (!equal)
+                    SetValue(configValue.Key, configValue.Value.ToString());
+            }
+        }
+
         public String SabHost
         {
             get { return GetValue("SabHost", "localhost"); }
@@ -130,18 +147,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }
             set { SetValue("UpdateUrl", value); }
-        }
-
-        public string TwitterAccessToken
-        {
-            get { return GetValue("TwitterAccessToken", String.Empty); }
-            set { SetValue("TwitterAccessToken", value); }
-        }
-
-        public string TwitterAccessTokenSecret
-        {
-            get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
-            set { SetValue("TwitterAccessTokenSecret", value); }
         }
 
         public bool EnableBacklogSearching
@@ -365,22 +370,7 @@ namespace NzbDrone.Core.Configuration
             SetValue(key, value.ToString().ToLower());
         }
 
-        public void SaveValues(Dictionary<string, object> configValues)
-        {
-            var allWithDefaults = AllWithDefaults();
 
-            foreach (var configValue in configValues)
-            {
-                object currentValue;
-                allWithDefaults.TryGetValue(configValue.Key, out currentValue);
-                if (currentValue == null) continue;
-
-                var equal = configValue.Value.ToString().Equals(currentValue.ToString());
-
-                if (!equal)
-                    SetValue(configValue.Key, configValue.Value.ToString());
-            }
-        }
 
         private void EnsureCache()
         {

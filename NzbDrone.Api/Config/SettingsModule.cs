@@ -55,16 +55,34 @@ namespace NzbDrone.Api.Config
     public class SettingsModule : NzbDroneApiModule
     {
         private readonly IConfigService _configService;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public SettingsModule(IConfigService configService)
+        public SettingsModule(IConfigService configService, IConfigFileProvider configFileProvider)
             : base("/settings")
         {
             _configService = configService;
-            Get["/"] = x => GetAllSettings();
-            Post["/"] = x => SaveSettings();
+            _configFileProvider = configFileProvider;
+            Get["/"] = x => GetGeneralSettings();
+            Post["/"] = x => SaveGeneralSettings();
+
+            Get["/host"] = x => GetHostSettings();          
+            Post["/host"] = x => SaveHostSettings();
         }
 
-        private Response GetAllSettings()
+        private Response SaveHostSettings()
+        {
+            var request = Request.Body.FromJson<Dictionary<string, object>>();
+            _configFileProvider.SaveConfigDictionary(request);
+
+            return GetHostSettings();
+        }
+
+        private Response GetHostSettings()
+        {
+            return _configFileProvider.GetConfigDictionary().AsResponse();
+        }
+
+        private Response GetGeneralSettings()
         {
             var collection = Request.Query.Collection;
 
@@ -74,7 +92,7 @@ namespace NzbDrone.Api.Config
             return _configService.AllWithDefaults().AsResponse();
         }
 
-        private Response SaveSettings()
+        private Response SaveGeneralSettings()
         {
             var request = Request.Body.FromJson<Dictionary<string, object>>();
             _configService.SaveValues(request);

@@ -6,7 +6,8 @@ define([
     'Settings/Indexers/CollectionView',
     'Settings/DownloadClient/DownloadClientView',
     'Settings/Notifications/CollectionView',
-    'Settings/System/SystemView',
+    'Settings/General/GeneralView',
+    'Settings/General/GeneralSettingsModel',
     'Settings/Misc/MiscView'
 ],
     function () {
@@ -19,7 +20,7 @@ define([
                 indexers      : '#indexers',
                 downloadClient: '#download-client',
                 notifications : '#notifications',
-                system        : '#system',
+                general       : '#general',
                 misc          : '#misc'
             },
 
@@ -29,7 +30,7 @@ define([
                 indexersTab      : '.x-indexers-tab',
                 downloadClientTab: '.x-download-client-tab',
                 notificationsTab : '.x-notifications-tab',
-                systemTab        : '.x-system-tab',
+                generalTab       : '.x-general-tab',
                 miscTab          : '.x-misc-tab'
             },
 
@@ -39,7 +40,7 @@ define([
                 'click .x-indexers-tab'       : 'showIndexers',
                 'click .x-download-client-tab': 'showDownloadClient',
                 'click .x-notifications-tab'  : 'showNotifications',
-                'click .x-system-tab'         : 'showSystem',
+                'click .x-general-tab'        : 'showGeneral',
                 'click .x-misc-tab'           : 'showMisc',
                 'click .x-save-settings'      : 'save'
             },
@@ -89,13 +90,13 @@ define([
                 NzbDrone.Router.navigate('settings/notifications');
             },
 
-            showSystem: function (e) {
+            showGeneral: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
 
-                this.ui.systemTab.tab('show');
-                NzbDrone.Router.navigate('settings/system');
+                this.ui.generalTab.tab('show');
+                NzbDrone.Router.navigate('settings/general');
             },
 
             showMisc: function (e) {
@@ -110,6 +111,9 @@ define([
             initialize: function (options) {
                 this.settings = new NzbDrone.Settings.SettingsModel();
                 this.settings.fetch();
+
+                this.generalSettings = new NzbDrone.Settings.General.GeneralSettingsModel();
+                this.generalSettings.fetch();
 
                 this.namingSettings = new NzbDrone.Settings.Naming.NamingModel();
                 this.namingSettings.fetch();
@@ -131,7 +135,7 @@ define([
                 this.indexers.show(new NzbDrone.Settings.Indexers.CollectionView({collection: this.indexerSettings}));
                 this.downloadClient.show(new NzbDrone.Settings.DownloadClient.DownloadClientView({model: this.settings}));
                 this.notifications.show(new NzbDrone.Settings.Notifications.CollectionView({collection: this.notificationSettings}));
-                this.system.show(new NzbDrone.Settings.System.SystemView({model: this.settings}));
+                this.general.show(new NzbDrone.Settings.General.GeneralView({model: this.generalSettings}));
                 this.misc.show(new NzbDrone.Settings.Misc.MiscView({model: this.settings}));
             },
 
@@ -149,8 +153,8 @@ define([
                     case 'notifications':
                         this.showNotifications();
                         break;
-                    case 'system':
-                        this.showSystem();
+                    case 'general':
+                        this.showGeneral();
                         break;
                     case 'misc':
                         this.showMisc();
