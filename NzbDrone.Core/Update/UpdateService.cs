@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Update
             var startInfo = new ProcessStartInfo
                 {
                     FileName = _environmentProvider.GetUpdateClientExePath(),
-                    Arguments = string.Format("{0} {1}", _processProvider.GetCurrentProcess().Id)
+                    Arguments = _processProvider.GetCurrentProcess().Id.ToString()
                 };
 
             var process = _processProvider.Start(startInfo);

@@ -53,9 +53,9 @@ namespace NzbDrone.Update
         private int ParseProcessId(string[] args)
         {
             int id;
-            if (args ==null || !Int32.TryParse(args[0], out id) || id <= 0)
+            if (args == null || !Int32.TryParse(args[0], out id) || id <= 0)
             {
-                throw new ArgumentOutOfRangeException("Invalid process id: " + args[0]);
+                throw new ArgumentOutOfRangeException("args", "Invalid process ID");
             }
 
             logger.Debug("NzbDrone processId:{0}", id);

@@ -19,8 +19,6 @@ namespace NzbDrone.Core.Test.UpdateTests
     {
         private string _sandboxFolder;
 
-        private readonly Guid _clientGuid = Guid.NewGuid();
-
         private readonly UpdatePackage _updatePackage = new UpdatePackage
         {
             FileName = "NzbDrone.kay.one.0.6.0.2031.zip",
@@ -100,19 +98,12 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void should_start_update_client()
         {
-            var updateClientPath = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateClientExePath();
-
-
-
             Subject.Execute(new ApplicationUpdateCommand());
-
-
 
             Mocker.GetMock<IProcessProvider>().Verify(
                c => c.Start(It.Is<ProcessStartInfo>(p =>
-                       p.FileName == updateClientPath &&
-                       p.Arguments == "12 " + _clientGuid.ToString())
-                       ));
+                       !string.IsNullOrWhiteSpace(p.FileName) &&
+                       p.Arguments == "12")));
         }
 
         [Test]
