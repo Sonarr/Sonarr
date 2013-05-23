@@ -87,6 +87,7 @@ namespace NzbDrone.Core.RootFolders
                 throw new ArgumentException("Invalid path provided", "path");
 
             var results = new List<UnmappedFolder>();
+            var series = _seriesRepository.All();
 
             if (!_diskProvider.FolderExists(path))
             {
@@ -96,7 +97,7 @@ namespace NzbDrone.Core.RootFolders
 
             foreach (string seriesFolder in _diskProvider.GetDirectories(path))
             {
-                if (!_seriesRepository.SeriesPathExists(seriesFolder))
+                if (!series.Any(s => s.Path == seriesFolder))
                 {
                     var di = new DirectoryInfo(seriesFolder.Normalize());
                     results.Add(new UnmappedFolder{ Name = di.Name, Path = di.FullName });
