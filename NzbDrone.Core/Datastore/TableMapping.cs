@@ -82,7 +82,6 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(DateTime), new UtcDateTimeConverter());
         }
 
         private static void RegisterEmbeddedConverter()
