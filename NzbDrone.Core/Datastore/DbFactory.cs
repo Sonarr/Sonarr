@@ -50,7 +50,13 @@ namespace NzbDrone.Core.Datastore
 
         private string GetConnectionString(string dbPath)
         {
-            return String.Format("Data Source={0};Version=3;", dbPath);
+            var connectionBuilder = new SQLiteConnectionStringBuilder();
+
+            connectionBuilder.DataSource = dbPath;
+            connectionBuilder.CacheSize = (int)-10.Megabytes();
+            connectionBuilder.DateTimeKind = DateTimeKind.Utc;
+
+            return connectionBuilder.ConnectionString;
         }
     }
 }
