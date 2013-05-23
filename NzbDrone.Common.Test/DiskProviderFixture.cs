@@ -91,7 +91,7 @@ namespace NzbDrone.Common.Test
 
 
         [Test]
-        public void CopyFolder_should_overright_existing_folder()
+        public void CopyFolder_should_overwrite_existing_folder()
         {
 
 
@@ -109,7 +109,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void MoveFolder_should_overright_existing_folder()
+        public void MoveFolder_should_overwrite_existing_folder()
         {
 
 
@@ -137,7 +137,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\Server\pool", @"\\Server\pool\")]
         [TestCase(@"\\Server\pool\", @"\\Server\pool\")]
         [TestCase(@"\\smallcheese\DRIVE_G\TV-C\Simspsons", @"\\smallcheese\DRIVE_G\TV-C\Simspsons")]
-        public void paths_should_be_equeal(string first, string second)
+        public void paths_should_be_equal(string first, string second)
         {
             if (first.StartsWith("\\"))
             {
@@ -150,7 +150,7 @@ namespace NzbDrone.Common.Test
 
         [TestCase(@"D:\Test", @"C:\Test\")]
         [TestCase(@"D:\Test\Test", @"C:\TestTest\")]
-        public void paths_should_not_be_equeal(string first, string second)
+        public void paths_should_not_be_equal(string first, string second)
         {
             DiskProvider.PathEquals(first, second).Should().BeFalse();
         }
@@ -166,6 +166,8 @@ namespace NzbDrone.Common.Test
         public void folder_should_return_correct_value_for_last_write()
         {
             var appPath = new EnvironmentProvider().WorkingDirectory;
+            TestLogger.Info("Path is: {0}", appPath);
+
             Subject.GetLastFolderWrite(appPath).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-10));
             Subject.GetLastFolderWrite(appPath).Should().BeBefore(DateTime.UtcNow);
         }
