@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Notifications.Plex
             try
             {
                 var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
-                SendCommand(settings.Host, command, settings.Username, settings.Password);
+                SendCommand(settings.Host, settings.Port, command, settings.Username, settings.Password);
             }
             catch(Exception ex)
             {
@@ -66,9 +66,9 @@ namespace NzbDrone.Core.Notifications.Plex
             _httpProvider.DownloadString(url);
         }
 
-        public virtual string SendCommand(string host, string command, string username, string password)
+        public virtual string SendCommand(string host, int port, string command, string username, string password)
         {
-            var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
+            var url = String.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command={2}", host, port, command);
 
             if (!String.IsNullOrEmpty(username))
             {
@@ -78,11 +78,11 @@ namespace NzbDrone.Core.Notifications.Plex
             return _httpProvider.DownloadString(url);
         }
 
-        public virtual void TestNotification(string host, string username, string password)
+        public virtual void TestNotification(string host, int port, string username, string password)
         {
             logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
             var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
-            SendCommand(host.Trim(), command, username, password);
+            SendCommand(host, port, command, username, password);
         }
     }
 }
