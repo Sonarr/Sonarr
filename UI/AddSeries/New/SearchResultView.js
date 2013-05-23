@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app', 'Shared/NotificationCollection', 'Series/SeriesCollection'], function (app, notificationCollection) {
+define(['app', 'Series/SeriesCollection'], function (app) {
 
     NzbDrone.AddSeries.New.SearchItemView = Backbone.Marionette.ItemView.extend({
 
@@ -32,13 +32,10 @@ define(['app', 'Shared/NotificationCollection', 'Series/SeriesCollection'], func
             this.model.save(undefined, {
                 url    : NzbDrone.Series.SeriesCollection.prototype.url,
                 success: function () {
-                    var notificationModel = new NzbDrone.Shared.NotificationModel({
-                        title  : 'Added',
-                        message: self.model.get('title'),
-                        level  : 'success'
+                    NzbDrone.Shared.Messenger.show({
+                        message: 'Added: ' + self.model.get('title')
                     });
 
-                    notificationCollection.push(notificationModel);
                     NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: false, series: self.model });
                 }
             });

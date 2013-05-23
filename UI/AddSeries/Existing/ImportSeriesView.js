@@ -2,10 +2,9 @@
 define([
     'app', 'AddSeries/RootFolders/RootFolderCollection',
     'Quality/QualityProfileCollection',
-    'Shared/NotificationCollection',
     'AddSeries/Existing/UnmappedFolderModel',
     'AddSeries/Collection',
-    'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection, notificationCollection) {
+    'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection) {
 
     NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
         template: 'AddSeries/SearchResultTemplate',
@@ -34,19 +33,12 @@ define([
             this.model.set('rootFolderId', rootFolderId);
             this.model.set('folder', folder);
 
-            var seriesCollection = new NzbDrone.AddSeries.Collection();
-            seriesCollection.add(this.model);
-
             this.model.save(undefined, {
                 success: function () {
-                    var notificationModel = new NzbDrone.Shared.NotificationModel({
-                        tvDbId : self.model.get('tvDbId'),
-                        title  : 'Added',
-                        message: self.model.get('title'),
-                        level  : 'success'
+                    NzbDrone.Shared.Messenger.show({
+                        message: 'Added: ' + self.model.get('title')
                     });
 
-                    notificationCollection.push(notificationModel);
                     NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: true, series: self.model });
                     self.trigger('seriesAdded');
                     self.close();
