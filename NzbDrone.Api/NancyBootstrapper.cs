@@ -5,6 +5,7 @@ using Nancy.Authentication.Basic;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
+using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Frontend;
@@ -36,12 +37,9 @@ namespace NzbDrone.Api
             AutomapperBootstraper.InitializeAutomapper();
 
             container.Resolve<DatabaseTarget>().Register();
-
+            container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
-            pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(
-                                                    container.Resolve<IUserValidator>(),
-                                                    "NzbDrone"));
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }

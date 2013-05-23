@@ -89,7 +89,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\AuthenticationValidator.cs" />
+    <Compile Include="Authentication\AuthenticationService.cs" />
+    <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />

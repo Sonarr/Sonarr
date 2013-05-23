@@ -8,7 +8,6 @@ namespace NzbDrone.Api
         protected NzbDroneApiModule(string resource)
             : base("/api/" + resource.Trim('/'))
         {
-            this.RequiresAuthentication();
             Options["/"] = x => new Response();
         }
     }
