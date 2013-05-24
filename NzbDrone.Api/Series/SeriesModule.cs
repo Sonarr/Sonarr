@@ -29,11 +29,13 @@ namespace NzbDrone.Api.Series
 
             Get["/{slug}"] = o => GetSeries((string)o.slug.ToString());
 
-            SharedValidator.RuleFor(s => s.Path).NotEmpty();
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
-            PostValidator.RuleFor(s => s.Title).NotEmpty();
+            PutValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
+            PutValidator.RuleFor(s => s.RootFolderPath).NotEmpty().When(s => String.IsNullOrEmpty(s.Path));
 
+            PostValidator.RuleFor(s => s.Title).NotEmpty();
+            PostValidator.RuleFor(s => s.Path).NotEmpty();
         }
 
         private Response GetSeries(string slug)
