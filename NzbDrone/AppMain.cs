@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using NLog;
+using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone
 {
@@ -14,6 +16,8 @@ namespace NzbDrone
         {
             try
             {
+                new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Warn);
+
                 logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
 
                 AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));

@@ -56,7 +56,6 @@ namespace NzbDrone.Core.Datastore
             connectionBuilder.CacheSize = (int)-10.Megabytes();
             connectionBuilder.DateTimeKind = DateTimeKind.Utc;
             connectionBuilder.JournalMode = SQLiteJournalModeEnum.Wal;
-            connectionBuilder.Pooling = true;
 
             return connectionBuilder.ConnectionString;
         }

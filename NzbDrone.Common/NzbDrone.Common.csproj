@@ -58,6 +58,10 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Loggly, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\loggly-csharp.2.2\lib\Loggly.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -101,8 +105,11 @@
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnsureThat\StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
+    <Compile Include="HashUtil.cs" />
     <Compile Include="Instrumentation\ApplicationLogLayoutRenderer.cs" />
     <Compile Include="Instrumentation\DirSeparatorLayoutRenderer.cs" />
+    <Compile Include="Instrumentation\LogEventExtensions.cs" />
+    <Compile Include="Instrumentation\LogglyTarget.cs" />
     <Compile Include="Instrumentation\UpdateLogLayoutRenderer.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="Messaging\CommandCompletedEvent.cs" />
