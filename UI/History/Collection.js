@@ -5,7 +5,7 @@ define(['app', 'History/Model'], function () {
         model     : NzbDrone.History.Model,
 
         state: {
-            pageSize: 10,
+            pageSize: 15,
             sortKey: "date",
             order: 1
         },

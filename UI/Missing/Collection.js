@@ -5,7 +5,7 @@ define(['app', 'Series/EpisodeModel'], function () {
         model     : NzbDrone.Series.EpisodeModel,
 
         state: {
-            pageSize: 10,
+            pageSize: 15,
             sortKey: "airDate",
             order: 1
         },
