@@ -21,17 +21,11 @@ namespace NzbDrone.Api.SignalR
             {
                 _signalRSerializer.Serialize(value, writer);
             }
-
         }
 
-        public object Parse(string json, Type targetType)
+        public object Parse(TextReader reader, Type targetType)
         {
-            if (targetType.FullName.StartsWith("NzbDrone"))
-            {
-                return Json.Deserialize(json, targetType);
-            }
-
-            return _signalRSerializer.Parse(json, targetType);
+            return Json.Deserialize(reader.ReadToEnd(), targetType);
         }
     }
 }
