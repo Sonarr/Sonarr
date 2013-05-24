@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat.Resources;
@@ -106,9 +107,9 @@ namespace NzbDrone.Common.EnsureThat
 
             if (EnvironmentProvider.IsLinux)
             {
-                if (!param.Value.StartsWith("\\"))
+                if (!param.Value.StartsWith(Path.DirectorySeparatorChar.ToString()))
                 {
-                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with \\", param.Value));
+                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with /", param.Value));
                 }
             }
             else
@@ -119,7 +120,7 @@ namespace NzbDrone.Common.EnsureThat
                 }
 
                 //Network path
-                if (param.Value.StartsWith("\\")) return param;
+                if (param.Value.StartsWith(Path.DirectorySeparatorChar.ToString())) return param;
 
                 if (!windowsPathRegex.IsMatch(param.Value))
                 {
