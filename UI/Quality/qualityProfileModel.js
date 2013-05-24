@@ -1,6 +1,6 @@
 ﻿"use strict";
 define(['app'], function () {
-    NzbDrone.Quality.QualityProfileModel = Backbone.Model.extend({
+    NzbDrone.Quality.QualityProfileModel = Backbone.DeepModel.extend({
 
         mutators: {
             allowed: function () {

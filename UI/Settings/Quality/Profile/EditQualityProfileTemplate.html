@@ -34,14 +34,21 @@
 
 
         <!--Todo: Why is a null allowed being treated as a true?-->
+        {{debug}}
         {{#each qualities}}
             <div class="control-group">
                 <label class="control-label">{{name}}</label>
 
                 <div class="controls">
-                    <div class="switch" data-on-label="Yes" data-off-label="No">
-                        <input type="checkbox" name="allowed" />
-                    </div>
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="qualities.{{@index}}.allowed"/>
+                        <p>
+                            <span>Yes</span>
+                            <span>No</span>
+                        </p>
+
+                        <div class="btn btn-primary slide-button"></div>
+                    </label>
                 </div>
             </div>
         {{/each}}
