@@ -142,7 +142,7 @@ namespace NzbDrone.Common.Test
             if (first.StartsWith("\\"))
             {
                 //verify the linux equivalent.
-                DiskProvider.PathEquals(first.Replace("\\", "/"), second.Replace("\\", "/")).Should().BeTrue();
+                DiskProvider.PathEquals(first, second).Should().BeTrue();
             }
 
             DiskProvider.PathEquals(first, second).Should().BeTrue();
@@ -166,7 +166,10 @@ namespace NzbDrone.Common.Test
         public void folder_should_return_correct_value_for_last_write()
         {
             var appPath = new EnvironmentProvider().WorkingDirectory;
+
             TestLogger.Info("Path is: {0}", appPath);
+
+            Subject.WriteAllText(Path.Combine(appPath,"newfile.txt"), "");
 
             Subject.GetLastFolderWrite(appPath).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-10));
             Subject.GetLastFolderWrite(appPath).Should().BeBefore(DateTime.UtcNow);

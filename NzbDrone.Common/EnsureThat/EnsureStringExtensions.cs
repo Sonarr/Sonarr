@@ -94,5 +94,41 @@ namespace NzbDrone.Common.EnsureThat
 
             return param;
         }
+
+        private static readonly Regex windowsInvalidPathRegex = new Regex(@"[/,*,<,>,"",|]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex windowsPathRegex = new Regex(@"^[a-z]:\\", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        [DebuggerStepThrough]
+        public static Param<string> IsValidPath(this Param<string> param)
+        {
+            if (string.IsNullOrWhiteSpace(param.Value))
+                throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
+
+            if (EnvironmentProvider.IsLinux)
+            {
+                if (!param.Value.StartsWith("\\"))
+                {
+                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with \\", param.Value));
+                }
+            }
+            else
+            {
+                if (windowsInvalidPathRegex.IsMatch(param.Value))
+                {
+                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. It contains invalid characters", param.Value));
+                }
+
+                //Network path
+                if (param.Value.StartsWith("\\")) return param;
+
+                if (!windowsPathRegex.IsMatch(param.Value))
+                {
+                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. paths must be a full path eg. C:\\Windows", param.Value));
+                }
+            }
+
+
+            return param;
+        }
     }
 }
