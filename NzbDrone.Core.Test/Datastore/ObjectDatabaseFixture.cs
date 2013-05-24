@@ -144,25 +144,6 @@ namespace NzbDrone.Core.Test.Datastore
             Db.All<ScheduledTask>().Single().TypeName.Should().Be("A");
             Db.All<ScheduledTask>().Single().Interval.Should().Be(12);
         }
-
-        [Test]
-        public void should_load_lazy_objects()
-        {
-
-            var rootFolder = Db.Insert(new RootFolders.RootFolder() { Path = "C:\test" });
-
-            var series = Builder<Series>.CreateNew()
-                .With(c => c.RootFolderId = rootFolder.Id)
-                .BuildNew();
-
-            Db.Insert(series);
-
-
-            Db.Single<Series>().RootFolder.Should().NotBeNull();
-            Db.Single<Series>().RootFolder.Value.Should().NotBeNull();
-            Db.Single<Series>().RootFolder.Value.Path.Should().Be(rootFolder.Path);
-
-        }
     }
 
 }

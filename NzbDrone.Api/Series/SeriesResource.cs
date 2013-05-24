@@ -26,11 +26,8 @@ namespace NzbDrone.Api.Series
         public Int32 UtcOffset { get; set; }
         public List<Core.MediaCover.MediaCover> Images { get; set; }
 
-        public String Path { get; set; }
-
         //View & Edit
-        public int RootFolderId { get; set; }
-        public string FolderName { get; set; }
+        public String Path { get; set; }
         public Int32 QualityProfileId { get; set; }
 
         //Editing Only
@@ -50,8 +47,6 @@ namespace NzbDrone.Api.Series
         public String CleanTitle { get; set; }
         public String ImdbId { get; set; }
         public String TitleSlug { get; set; }
-
-
-
+        public String RootFolderPath { get; set; }
     }
 }

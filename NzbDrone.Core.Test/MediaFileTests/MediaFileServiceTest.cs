@@ -33,8 +33,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "30 Rock")
-                .With(s => s.RootFolder = new LazyLoaded<RootFolder>(new RootFolder { Path = @"C:\Test" }))
-                .With(s => s.FolderName = "30 Rock")
+                .With(s => s.Path = @"C:\Test\30 Rock")
                 .With(s => s.SeasonFolder = useSeasonFolder)
                 .Build();
 

@@ -29,7 +29,6 @@ namespace NzbDrone.Api.Series
 
             Get["/{slug}"] = o => GetSeries((string)o.slug.ToString());
 
-            SharedValidator.RuleFor(s => s.RootFolderId).ValidId();
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
             PostValidator.RuleFor(s => s.Title).NotEmpty();

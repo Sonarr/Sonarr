@@ -47,9 +47,8 @@ namespace NzbDrone.Core.Datastore
 //                  .HasOne(h => h.Series, h => h.SeriesId);
 
             Mapper.Entity<Series>().RegisterModel("Series")
-                  .Ignore(s => s.Path)
+                  .Ignore(s => s.RootFolderPath)
                   .Relationship()
-                  .HasOne(s => s.RootFolder, s => s.RootFolderId)
                   .HasOne(s => s.QualityProfile, s => s.QualityProfileId);
 
             Mapper.Entity<Season>().RegisterModel("Seasons");

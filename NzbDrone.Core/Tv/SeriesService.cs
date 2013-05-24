@@ -101,10 +101,11 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(() => newSeries).IsNotNull();
 
-            if (String.IsNullOrWhiteSpace(newSeries.FolderName))
+            if (String.IsNullOrWhiteSpace(newSeries.Path))
             {
-                newSeries.FolderName = FileNameBuilder.CleanFilename(newSeries.Title);
-                newSeries.RootFolder = _rootFolderService.Get(newSeries.RootFolderId);
+                var folderName = FileNameBuilder.CleanFilename(newSeries.Title);
+                newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
+
                 _diskProvider.CreateFolder(newSeries.Path);
             }
             

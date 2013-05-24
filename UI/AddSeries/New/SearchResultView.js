@@ -24,10 +24,10 @@ define(['app', 'Series/SeriesCollection'], function (app) {
             icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
 
             var quality = this.ui.qualityProfile.val();
-            var rootFolderId = this.ui.rootFolder.val();
+            var rootFolderPath = this.ui.rootFolder.children(':selected').text();
 
             this.model.set('qualityProfileId', quality);
-            this.model.set('rootFolderId', rootFolderId);
+            this.model.set('rootFolderPath', rootFolderPath);
 
             var self = this;
 

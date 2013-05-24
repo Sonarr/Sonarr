@@ -38,15 +38,12 @@ namespace NzbDrone.Integration.Test
         {
             var series = Series.Lookup("archer").First();
 
-            var rootFolder = RootFolders.Post(new RootFolderResource { Path = Directory.GetCurrentDirectory() });
-
-            series.RootFolderId = rootFolder.Id;
             series.QualityProfileId = 1;
+            series.Path = @"C:\Test\Archer";
 
             series = Series.Post(series);
 
             Series.All().Should().HaveCount(1);
-
 
             Series.Get(series.Id).Should().NotBeNull();
             Series.Get(series.TitleSlug).Should().NotBeNull();

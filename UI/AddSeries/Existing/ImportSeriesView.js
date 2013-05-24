@@ -29,12 +29,10 @@ define([
             var self = this;
 
             var quality = this.ui.qualityProfile.val();
-            var rootFolderId = this.options.rootFolder.id;
-            var folderName = this.options.folder.name;
+            var path = this.options.folder.path;
 
             this.model.set('qualityProfileId', quality);
-            this.model.set('rootFolderId', rootFolderId);
-            this.model.set('folderName', folderName);
+            this.model.set('path', path);
 
             this.model.save(undefined, {
                 success: function () {

@@ -36,24 +36,9 @@ namespace NzbDrone.Core.Tv
         public DateTime? CustomStartDate { get; set; }
         public bool UseSceneNumbering { get; set; }
         public string TitleSlug { get; set; }
+        public string Path { get; set; }
 
-        public int RootFolderId { get; set; }
-        public string FolderName { get; set; }
-        public LazyLoaded<RootFolder> RootFolder { get; set; }
-
-        //Todo: Use this to auto link RootFolder and Folder (using the proper path separator)
-        public string Path
-        {
-            get
-            {
-                if (RootFolder == null || RootFolder.Value == null || String.IsNullOrWhiteSpace(RootFolder.Value.Path))
-                {
-                    return null;
-                }
-
-                return System.IO.Path.Combine(RootFolder.Value.Path, FolderName);
-            }
-        }
+        public string RootFolderPath { get; set; }
 
         public DateTime? FirstAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }

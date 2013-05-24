@@ -4,8 +4,8 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 namespace NzbDrone.Core.Datastore.Migration
 {
     [Tags("")]
-    [Migration(20130324)]
-    public class Migration20130324 : NzbDroneMigrationBase
+    [Migration(1)]
+    public class InitialSetup : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
         {
@@ -27,8 +27,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("Overview").AsString().Nullable()
                 .WithColumn("AirTime").AsString().Nullable()
                 .WithColumn("Images").AsString()
-                .WithColumn("RootFolderId").AsInt32()
-                .WithColumn("FolderName").AsString()
+                .WithColumn("Path").AsString()
                 .WithColumn("Monitored").AsBoolean()
                 .WithColumn("QualityProfileId").AsInt32()
                 .WithColumn("SeasonFolder").AsBoolean()
@@ -83,7 +82,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("NzbInfoUrl").AsString().Nullable()
                   .WithColumn("ReleaseGroup").AsString().Nullable();
 
-            Create.TableForModel("NotificationDefinitions")
+            Create.TableForModel("Notifications")
                   .WithColumn("Name").AsString()
                   .WithColumn("OnGrab").AsBoolean()
                   .WithColumn("OnDownload").AsBoolean()
@@ -95,7 +94,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("Interval").AsInt32()
                   .WithColumn("LastExecution").AsDateTime();
 
-            Create.TableForModel("IndexerDefinitions")
+            Create.TableForModel("Indexers")
                   .WithColumn("Enable").AsBoolean()
                   .WithColumn("Name").AsString().Unique()
                   .WithColumn("Implementation").AsString()
