@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nancy.Security;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Validation;
 using NzbDrone.Core.Datastore;

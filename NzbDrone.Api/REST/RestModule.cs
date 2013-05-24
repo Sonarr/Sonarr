@@ -145,6 +145,14 @@ namespace NzbDrone.Api.REST
                     var resource = UpdateResource(ReadFromRequest());
                     return resource.AsResponse(HttpStatusCode.Accepted);
                 };
+
+                Put[ID_ROUTE] = options =>
+                    {
+                        var model = ReadFromRequest();
+                        model.Id = options.Id;
+                        var resource = UpdateResource(model);
+                        return resource.AsResponse(HttpStatusCode.Accepted);
+                    };
             }
         }
 
@@ -152,6 +160,11 @@ namespace NzbDrone.Api.REST
         {
             //TODO: handle when request is null
             var resource = Request.Body.FromJson<TResource>();
+
+            if (resource == null)
+            {
+                throw new BadRequestException("Request body can't be empty");
+            }
 
             var errors = SharedValidator.Validate(resource).Errors.ToList();
 

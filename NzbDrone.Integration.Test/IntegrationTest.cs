@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Moq;
@@ -13,6 +14,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.Owin;
 using NzbDrone.Owin.MiddleWare;
@@ -84,6 +86,11 @@ namespace NzbDrone.Integration.Test
             Container = MainAppContainerBuilder.BuildContainer();
 
             InitDatabase();
+
+            var taskManagerMock = new Mock<ITaskManager>();
+            taskManagerMock.Setup(c => c.GetPending()).Returns(new List<ScheduledTask>());
+
+            Container.TinyContainer.Register(taskManagerMock.Object);
 
             _bootstrapper = new NancyBootstrapper(Container.TinyContainer);
 
