@@ -1,6 +1,8 @@
-﻿using Nancy;
+﻿using System.Threading;
+using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.MetadataSource;
+using System.Linq;
 
 namespace NzbDrone.Api.Series
 {
@@ -19,7 +21,7 @@ namespace NzbDrone.Api.Series
         private Response GetQualityType()
         {
             var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
-            return tvDbResults.AsResponse();
+            return tvDbResults.FirstOrDefault().AsResponse();
         }
     }
 }

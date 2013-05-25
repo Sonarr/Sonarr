@@ -65,11 +65,14 @@ define([
 
             onRender: function () {
 
-                rootFolderCollection.fetch();
+                var self = this;
+
+                rootFolderCollection.fetch({success: function () {
+                    self.importExisting.show(new NzbDrone.AddSeries.Existing.RootFolderCompositeView({model: rootFolderCollection.at(0)}));
+                }});
                 qualityProfileCollection.fetch();
 
                 this.addNew.show(new NzbDrone.AddSeries.New.AddNewSeriesView());
-                this.importExisting.show(new NzbDrone.AddSeries.Existing.ImportSeriesView());
                 this.rootFolders.show(new NzbDrone.AddSeries.RootDirView());
 
                 this.listenTo(rootFolderCollection, 'add', this.evaluateActions, this);

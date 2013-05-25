@@ -45,7 +45,7 @@ define([
                     self.trigger('seriesAdded');
                     self.close();
                 },
-                fail: function () {
+                fail   : function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                 }
             });
@@ -59,7 +59,7 @@ define([
         itemView         : NzbDrone.AddSeries.Existing.FolderMatchResultView,
 
         events: {
-            'click .x-btn-search': 'search',
+            'click .x-btn-search'  : 'search',
             'keydown .x-txt-search': 'keyDown'
         },
 
@@ -73,7 +73,7 @@ define([
             this.collection = new NzbDrone.AddSeries.Collection();
             this.collection.bind('reset', this.collectionReset, this);
 
-            this.on("itemview:seriesAdded", function(){
+            this.on("itemview:seriesAdded", function () {
                 this.close();
             });
         },
@@ -85,6 +85,8 @@ define([
         search: function () {
             var icon = this.ui.searchButton.find('icon');
 
+            var deferred = $.Deferred();
+
             this.collection.reset();
             icon.removeClass('icon-search').addClass('icon-spin icon-spinner disabled');
 
@@ -92,23 +94,27 @@ define([
                 data   : { term: this.ui.searchText.val() },
                 success: function (collection) {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+                    deferred.resolve();
                 },
                 fail   : function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+                    deferred.reject();
                 }
             });
+
+            return deferred.promise();
         },
 
         keyDown: function (e) {
             //Check for enter being pressed
-            var code = (e.keyCode ? e.keyCode : e.which);
-            if(code === 13) {
+            var code = (e.keyCode ? e.keyCode :e.which);
+            if (code === 13) {
                 this.search();
             }
         },
 
         collectionReset: function () {
-            _.each(this.collection.models, function (model){
+            _.each(this.collection.models, function (model) {
                 model.set('isExisting', true);
             });
         },
@@ -141,15 +147,27 @@ define([
 
         refreshItems: function () {
             this.collection.importItems(this.model);
+        },
+
+        showCollection: function () {
+            this.showAndSearch(0);
+        },
+
+        showAndSearch: function (index) {
+
+            var model = this.collection.at(index);
+            if (model) {
+                var that = this;
+                var currentIndex = index;
+                this.addItemView(model, this.getItemView(), index);
+                console.log('start');
+                $.when(this.children.findByModel(model).search())
+                    .then(function () {
+                        console.log('done');
+                        that.showAndSearch(currentIndex + 1);
+                    });
+            }
         }
-    });
 
-    NzbDrone.AddSeries.Existing.ImportSeriesView = Backbone.Marionette.CollectionView.extend({
-
-        itemView: NzbDrone.AddSeries.Existing.RootFolderCompositeView,
-
-        initialize: function () {
-            this.collection = rootFolders;
-        }
     });
 });
