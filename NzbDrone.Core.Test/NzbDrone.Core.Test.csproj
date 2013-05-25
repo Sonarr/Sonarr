@@ -146,6 +146,7 @@
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />
     <Compile Include="MetadataSourceTests\TracktProxyFixture.cs" />
+    <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
     <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="Qualities\QualityFixture.cs" />

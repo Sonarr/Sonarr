@@ -4,7 +4,7 @@ define(['app', 'Series/EpisodeModel'], function () {
         url       : NzbDrone.Constants.ApiRoot + '/calendar',
         model     : NzbDrone.Series.EpisodeModel,
         comparator: function (model) {
-            return model.get('start');
+            return model.get('airDate');
         }
     });
 });

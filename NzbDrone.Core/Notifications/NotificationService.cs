@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Notifications
     {
         List<Notification> All();
         Notification Get(int id);
+        List<Notification> Schema();
     }
 
     public class NotificationService
@@ -47,6 +48,32 @@ namespace NzbDrone.Core.Notifications
         public Notification Get(int id)
         {
             return ToNotification(_notificationRepository.Get(id));
+        }
+
+        public List<Notification> Schema()
+        {
+            var notifications = new List<Notification>();
+
+            int i = 1;
+            foreach (var notification in _notifications)
+            {
+                i++;
+                var type = notification.GetType();
+
+                var newNotification = new Notification();
+                newNotification.Instance = (INotification)_container.Resolve(type);
+                newNotification.Id = i;
+                newNotification.Name = notification.Name;
+
+                var instanceType = newNotification.Instance.GetType();
+                var baseGenArgs = instanceType.BaseType.GetGenericArguments();
+                newNotification.Settings = (INotifcationSettings) Activator.CreateInstance(baseGenArgs[0]);
+                newNotification.Implementation = type.Name;
+
+                notifications.Add(newNotification);
+            }
+
+            return notifications;
         }
 
         private Notification ToNotification(NotificationDefinition definition)
