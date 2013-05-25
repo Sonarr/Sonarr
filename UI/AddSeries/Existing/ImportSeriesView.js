@@ -20,6 +20,7 @@ define([
 
         initialize: function () {
             this.model.set('isExisting', true);
+            this.model.set('id', undefined);
         },
 
         addSeries: function () {
