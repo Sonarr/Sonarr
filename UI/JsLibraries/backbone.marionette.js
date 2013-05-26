@@ -1,6 +1,6 @@
 // MarionetteJS (Backbone.Marionette)
 // ----------------------------------
-// v1.0.2
+// v1.0.3
 //
 // Copyright (c)2013 Derick Bailey, Muted Solutions, LLC.
 // Distributed under MIT license
@@ -518,7 +518,7 @@ Marionette.extend = Backbone.Model.extend;
 // --------------------
 
 // Retrieve an object, function or other value from a target
-// object or it's `options`, with `options` taking precedence.
+// object or its `options`, with `options` taking precedence.
 Marionette.getOption = function(target, optionName){
   if (!target || !optionName){ return; }
   var value;
@@ -658,7 +658,7 @@ Marionette.MonitorDOMRefresh = (function(){
     var methodNames = methods.split(/\s+/);
 
     _.each(methodNames,function(methodName) {
-      var method = target[method];
+      var method = target[methodName];
       target.stopListening(entity, evt, method, target);
     });
   }
@@ -899,18 +899,24 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
 
     this.ensureEl();
 
-    if (view !== this.currentView) {
+    var isViewClosed = view.isClosed || _.isUndefined(view.$el);
+
+    var isDifferentView = view !== this.currentView;
+
+    if (isDifferentView) {
       this.close();
-      view.render();
-      this.open(view);
-    } else {
-      view.render();
     }
 
-    Marionette.triggerMethod.call(view, "show");
-    Marionette.triggerMethod.call(this, "show", view);
+    view.render();
 
+    if (isDifferentView || isViewClosed) {
+      this.open(view);
+    }
+    
     this.currentView = view;
+
+    Marionette.triggerMethod.call(this, "show", view);
+    Marionette.triggerMethod.call(view, "show");
   },
 
   ensureEl: function(){
@@ -1061,14 +1067,20 @@ Marionette.RegionManager = (function(Marionette){
     // internal method to store regions
     _store: function(name, region){
       this._regions[name] = region;
-      this.length = _.size(this._regions);
+      this._setLength();
     },
 
     // internal method to remove a region
     _remove: function(name, region){
       region.close();
       delete this._regions[name];
+      this._setLength();
       this.triggerMethod("region:remove", name, region);
+    },
+
+    // set the number of regions current held
+    _setLength: function(){
+      this.length = _.size(this._regions);
     }
 
   });
@@ -1147,7 +1159,7 @@ _.extend(Marionette.TemplateCache, {
 });
 
 // TemplateCache instance methods, allowing each
-// template cache object to manage it's own state
+// template cache object to manage its own state
 // and know whether or not it has been loaded
 _.extend(Marionette.TemplateCache.prototype, {
 
@@ -1202,7 +1214,20 @@ Marionette.Renderer = {
   // template function. Override this method to provide your own
   // custom rendering and template handling for all of Marionette.
   render: function(template, data){
-    var templateFunc = typeof template === 'function' ? template : Marionette.TemplateCache.get(template);
+
+    if (!template) {
+      var error = new Error("Cannot render the template since it's false, null or undefined.");
+      error.name = "TemplateNotFoundError";
+      throw error;
+    }
+
+    var templateFunc;
+    if (typeof template === "function"){
+      templateFunc = template;
+    } else {
+      templateFunc = Marionette.TemplateCache.get(template);
+    }
+
     return templateFunc(data);
   }
 };
@@ -1268,7 +1293,7 @@ Marionette.View = Backbone.View.extend({
       // build the event handler function for the DOM event
       triggerEvents[key] = function(e){
 
-        // stop the event in it's tracks
+        // stop the event in its tracks
         if (e && e.preventDefault){ e.preventDefault(); }
         if (e && e.stopPropagation){ e.stopPropagation(); }
 
@@ -1394,9 +1419,6 @@ Marionette.View = Backbone.View.extend({
 // with underscore.js templates, serializing the view's model or collection,
 // and calling several methods on extended views, such as `onRender`.
 Marionette.ItemView =  Marionette.View.extend({
-  constructor: function(){
-    Marionette.View.prototype.constructor.apply(this, slice(arguments));
-  },
 
   // Serialize the model or collection for the view. If a model is
   // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
@@ -1433,6 +1455,7 @@ Marionette.ItemView =  Marionette.View.extend({
 
     var template = this.getTemplate();
     var html = Marionette.Renderer.render(template, data);
+
     this.$el.html(html);
     this.bindUIElements();
 
@@ -1726,11 +1749,6 @@ Marionette.CollectionView = Marionette.View.extend({
 // Extends directly from CollectionView and also renders an
 // an item view as `modelView`, for the top leaf
 Marionette.CompositeView = Marionette.CollectionView.extend({
-  constructor: function(options){
-    Marionette.CollectionView.apply(this, slice(arguments));
-
-    this.itemView = this.getItemView();
-  },
 
   // Configured the initial events that the composite view
   // binds to. Override this method to prevent the initial
@@ -1817,7 +1835,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // `itemViewContainer` (a jQuery selector). Override this method to
   // provide custom logic of how the child item view instances have their
   // HTML appended to the composite view instance.
-  appendHtml: function(cv, iv){
+  appendHtml: function(cv, iv, index){
     var $container = this.getItemViewContainer(cv);
     $container.append(iv.el);
   },

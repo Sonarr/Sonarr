@@ -19,7 +19,6 @@ module.exports = function (grunt) {
 
             'UI/JsLibraries/jquery.js'                       : 'http://code.jquery.com/jquery.js',
             'UI/JsLibraries/jquery.backstretch.js'           : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
-            'UI/JsLibraries/jquery.cookie.js'                : 'http://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js',
             'UI/JsLibraries/jquery.signalR.js'               : 'https://raw.github.com/SignalR/SignalR/master/samples/Microsoft.AspNet.SignalR.Hosting.AspNet.Samples/Scripts/jquery.signalR.js',
 
 
