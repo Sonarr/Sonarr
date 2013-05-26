@@ -1,5 +1,8 @@
 ﻿"use strict";
-define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/SearchResultView', 'Shared/SpinnerView',
+define(['app',
+        'AddSeries/RootFolders/RootFolderCollection',
+        'AddSeries/SearchResultView',
+        'Shared/SpinnerView',
         'AddSeries/Collection'], function () {
     NzbDrone.AddSeries.New.AddNewSeriesView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/New/AddNewSeriesTemplate',
@@ -38,7 +41,7 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'AddSeries/New/Sear
                     self.$el.data('timeout', window.setTimeout(self.search, 500, self));
                 });
 
-            this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
+            this.resultView = new NzbDrone.AddSeries.SearchResultCollectionView({ collection: this.collection });
         },
 
         search: function (context) {

@@ -4,69 +4,27 @@ define([
     'Quality/QualityProfileCollection',
     'AddSeries/Existing/UnmappedFolderModel',
     'AddSeries/Collection',
+    'AddSeries/SearchResultView',
     'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection) {
-
-    NzbDrone.AddSeries.Existing.FolderMatchResultView = Backbone.Marionette.ItemView.extend({
-        template: 'AddSeries/SearchResultTemplate',
-
-        ui: {
-            qualityProfile: '.x-quality-profile',
-            addButton     : '.x-add'
-        },
-
-        events: {
-            'click .x-add': 'addSeries'
-        },
-
-        initialize: function () {
-            this.model.set('isExisting', true);
-        },
-
-        addSeries: function () {
-            var icon = this.ui.addButton.find('icon');
-            icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
-
-            var self = this;
-
-            var quality = this.ui.qualityProfile.val();
-            var path = this.options.folder.path;
-
-            this.model.set('qualityProfileId', quality);
-            this.model.set('path', path);
-
-            this.model.save(undefined, {
-                success: function () {
-                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-                    NzbDrone.Shared.Messenger.show({
-                        message: 'Added: ' + self.model.get('title')
-                    });
-
-                    NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: true, series: self.model });
-                    self.trigger('seriesAdded');
-                    self.close();
-                },
-                fail   : function () {
-                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-                }
-            });
-        }
-    });
 
     NzbDrone.AddSeries.Existing.UnmappedFolderCompositeView = Backbone.Marionette.CompositeView.extend({
 
         template         : 'AddSeries/Existing/UnmappedFolderCompositeViewTemplate',
         itemViewContainer: '.x-folder-name-match-results',
-        itemView         : NzbDrone.AddSeries.Existing.FolderMatchResultView,
+        itemView         : NzbDrone.AddSeries.SearchResultView,
 
         events: {
             'click .x-btn-search'  : 'search',
+            'click .x-load-more'   : '_loadMore',
             'keydown .x-txt-search': 'keyDown'
         },
 
         ui: {
             searchButton: '.x-btn-search',
             searchText  : '.x-txt-search',
-            profileList : '.x-lst-quality-profile'
+            profileList : '.x-lst-quality-profile',
+            searchBar   : '.x-search-bar',
+            loadMore    : '.x-load-more'
         },
 
         initialize: function () {
@@ -79,22 +37,31 @@ define([
         },
 
         onRender: function () {
-            this.resultView = new NzbDrone.AddSeries.SearchResultView({ collection: this.collection });
+            this.ui.loadMore.show();
         },
 
         search: function () {
             var icon = this.ui.searchButton.find('icon');
+            icon.removeClass('icon-search').addClass('icon-spin icon-spinner disabled');
 
+            var self = this;
             var deferred = $.Deferred();
 
             this.collection.reset();
-            icon.removeClass('icon-search').addClass('icon-spin icon-spinner disabled');
 
-            this.collection.fetch({
+            this.searchCollection = new NzbDrone.AddSeries.Collection();
+
+            this.searchCollection.fetch({
                 data   : { term: this.ui.searchText.val() },
                 success: function (collection) {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     deferred.resolve();
+                    self.collection.add(self.searchCollection.shift());
+
+                    if (self.showall) {
+                        self._showAll();
+                    }
+
                 },
                 fail   : function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
@@ -105,6 +72,7 @@ define([
             return deferred.promise();
         },
 
+
         keyDown: function (e) {
             //Check for enter being pressed
             var code = (e.keyCode ? e.keyCode :e.which);
@@ -113,9 +81,19 @@ define([
             }
         },
 
-        collectionReset: function () {
-            _.each(this.collection.models, function (model) {
-                model.set('isExisting', true);
+        _loadMore: function () {
+            this.showall = true;
+
+            this.ui.searchBar.fadeIn();
+            this.ui.loadMore.fadeOut();
+
+            this._showAll();
+        },
+
+        _showAll: function () {
+            var self = this;
+            this.searchCollection.each(function (searchResult) {
+                self.collection.add(searchResult);
             });
         },
 
@@ -123,7 +101,8 @@ define([
             return {
                 qualityProfile: this.ui.profileList,
                 rootFolder    : this.model.get('rootFolder'),
-                folder        : this.model.get('folder')
+                folder        : this.model.get('folder'),
+                isExisting    : true
             };
         }
     });
@@ -160,14 +139,13 @@ define([
                 var that = this;
                 var currentIndex = index;
                 this.addItemView(model, this.getItemView(), index);
-                console.log('start');
                 $.when(this.children.findByModel(model).search())
                     .then(function () {
-                        console.log('done');
                         that.showAndSearch(currentIndex + 1);
                     });
             }
         }
 
     });
-});
+})
+;

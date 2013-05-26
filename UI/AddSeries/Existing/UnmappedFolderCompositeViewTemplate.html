@@ -1,8 +1,11 @@
 ﻿<div class="unmapped-folder-view">
-    <div class="row">
-        <div class="x-folder-name-match-results folder-name-matches"/>
+    <div class="text-center">
+        <h2>
+            <icon class="icon-folder-open"></icon>
+            {{folder.path}}
+        </h2>
     </div>
-    <div class="row" style="visibility: collapse;">
+    <div class="row x-search-bar" style="display: none;">
         <div class="folder-header span11">
             <div class="input-prepend">
                 <i class="add-on icon-search"></i>
@@ -14,8 +17,10 @@
             </div>
         </div>
     </div>
-    <div class="row text-center">
-        load more
+    <div class="row">
+        <div class="x-folder-name-match-results folder-name-matches"/>
     </div>
-
+    <div class="text-center new-series-loadmore x-load-more" style="display: none;">
+        <i class="icon-angle-down"/> more
+    </div>
 </div>

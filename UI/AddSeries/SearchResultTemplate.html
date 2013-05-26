@@ -8,28 +8,28 @@
         <div class="span9">
 
             <div class="row">
-                {{#unless isExisting}}
-                    <select class="span6 x-root-folder">
-                        {{#each rootFolders.models}}
-                            <option value="{{id}}">{{attributes.path}}</option>
-                        {{/each}}
-                    </select>
-                {{/unless}}
-                <select class="span2 x-quality-profile">
-                    {{#each qualityProfiles.models}}
-                        <option value="{{id}}">{{attributes.name}}</option>
-                    {{/each}}
-                </select>
-
-                <div class="btn btn-success x-add pull-right">
-                    <icon class="icon-plus"></icon>
-                </div>
-            </div>
-            <div class="row">
                 <h2>{{title}}</h2>
             </div>
-            <div class="row">
+            <div class="row new-series-overview x-overview">
                 {{overview}}
+            </div>
+            <div class="row">
+                <div class="btn btn-success x-add pull-right new-series-add">
+                    Add
+                    <icon class="icon-plus"></icon>
+                </div>
+                {{#unless isExisting}}
+                <select class="span6 x-root-folder">
+                    {{#each rootFolders.models}}
+                    <option value="{{id}}">{{attributes.path}}</option>
+                    {{/each}}
+                </select>
+                {{/unless}}
+                <select class="span2 x-quality-profile pull-right">
+                    {{#each qualityProfiles.models}}
+                    <option value="{{id}}">{{attributes.name}}</option>
+                    {{/each}}
+                </select>
             </div>
         </div>
     </div>

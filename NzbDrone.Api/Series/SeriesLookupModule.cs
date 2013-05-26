@@ -23,7 +23,7 @@ namespace NzbDrone.Api.Series
         private Response Search()
         {
             var tvDbResults = _searchProxy.SearchForNewSeries((string)Request.Query.term);
-            return MapToResource(tvDbResults).FirstOrDefault().AsResponse();
+            return MapToResource(tvDbResults).AsResponse();
         }
 
 

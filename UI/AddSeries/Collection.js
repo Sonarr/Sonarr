@@ -5,9 +5,11 @@ define(['app', 'Series/SeriesModel'], function () {
         model: NzbDrone.Series.SeriesModel,
 
         parse: function (response) {
-            if (response) {
-                response.id = undefined;
-            }
+
+            _.each(response, function (model) {
+                model.id = undefined;
+            });
+
             return response;
         }
     });
