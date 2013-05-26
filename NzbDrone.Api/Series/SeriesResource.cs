@@ -26,6 +26,9 @@ namespace NzbDrone.Api.Series
         public Int32 UtcOffset { get; set; }
         public List<Core.MediaCover.MediaCover> Images { get; set; }
 
+        public String RemotePoster { get; set; }
+
+
         //View & Edit
         public String Path { get; set; }
         public Int32 QualityProfileId { get; set; }

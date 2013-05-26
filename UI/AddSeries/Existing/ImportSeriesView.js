@@ -18,6 +18,10 @@ define([
             'click .x-add': 'addSeries'
         },
 
+        initialize: function () {
+            this.model.set('isExisting', true);
+        },
+
         addSeries: function () {
             var icon = this.ui.addButton.find('icon');
             icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
