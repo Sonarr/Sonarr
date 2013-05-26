@@ -12,10 +12,10 @@ define([
         className: 'btn',
 
         events: {
-            'click': 'add'
+            'click': 'addNotification'
         },
 
-        add: function () {
+        addNotification: function () {
             this.model.set('id', undefined);
             var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model});
             NzbDrone.modalRegion.show(view);
