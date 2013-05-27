@@ -64,7 +64,7 @@
     </Reference>
     <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
+      <HintPath>..\Libraries\DataTables.Mvc.Core.dll</HintPath>
     </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>

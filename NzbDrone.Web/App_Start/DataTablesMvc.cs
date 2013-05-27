@@ -10,7 +10,7 @@ namespace NzbDrone.Web.App_Start
     {
         public static void Start()
         {
-            if (!ModelBinders.Binders.ContainsKey(typeof(DataTablesPageRequest)))
+            if(!ModelBinders.Binders.ContainsKey(typeof(DataTablesPageRequest)))
                 ModelBinders.Binders.Add(typeof(DataTablesPageRequest), new DataTablesModelBinder());
         }
     }
