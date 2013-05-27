@@ -279,7 +279,7 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.Bluray720p;
                 return result;
             }
-            if (normalizedName.Contains("webdl"))
+            if (normalizedName.Contains("webdl") || normalizedName.Contains("webrip"))
             {
                 if (normalizedName.Contains("1080p"))
                 {
