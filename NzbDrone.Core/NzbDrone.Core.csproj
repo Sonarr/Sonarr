@@ -131,7 +131,7 @@
     </Reference>
     <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
+      <HintPath>..\Libraries\DataTables.Mvc.Core.dll</HintPath>
     </Reference>
     <Reference Include="DeskMetrics.NET">
       <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
