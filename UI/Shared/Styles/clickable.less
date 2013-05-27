@@ -1,0 +1,3 @@
+.clickable {
+  cursor: pointer;
+}

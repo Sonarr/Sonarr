@@ -25,9 +25,8 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
         className: 'table table-hover'
     });
 
-    NzbDrone.AddSeries.RootDirView = Backbone.Marionette.Layout.extend({
-        template: 'AddSeries/RootFolders/RootFolderTemplate',
-        route   : 'series/add/rootdir',
+    NzbDrone.AddSeries.RootFolders.Layout = Backbone.Marionette.Layout.extend({
+        template: 'AddSeries/RootFolders/LayoutTemplate',
 
         ui: {
             pathInput: '.x-path input'
@@ -75,8 +74,6 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
                 console.log(term);
                 context.collection.fetch({ data: { term: term } });
             }
-
-
         }
     });
 

@@ -107,21 +107,13 @@ define([
         }
     });
 
-    NzbDrone.AddSeries.Existing.RootFolderCompositeView = Backbone.Marionette.CompositeView.extend({
+    NzbDrone.AddSeries.Existing.ListView = Backbone.Marionette.CollectionView.extend({
 
-        template         : "AddSeries/Existing/RootFolderCompositeViewTemplate",
-        itemViewContainer: ".x-existing-folder-container",
-        itemView         : NzbDrone.AddSeries.Existing.UnmappedFolderCompositeView,
+        itemView: NzbDrone.AddSeries.Existing.UnmappedFolderCompositeView,
 
         initialize: function () {
-
-            if (!this.model) {
-                throw "model is required.";
-            }
-
             this.collection = new NzbDrone.AddSeries.Existing.UnmappedFolderCollection();
             this.refreshItems();
-            this.listenTo(qualityProfileCollection, 'reset', this.refreshItems, this);
         },
 
         refreshItems: function () {
@@ -147,5 +139,4 @@ define([
         }
 
     });
-})
-;
+});

@@ -4,12 +4,11 @@ define(['app',
         'AddSeries/SearchResultView',
         'Shared/SpinnerView',
         'AddSeries/Collection'], function () {
-    NzbDrone.AddSeries.New.AddNewSeriesView = Backbone.Marionette.Layout.extend({
-        template: 'AddSeries/New/AddNewSeriesTemplate',
-        route   : 'Series/add/new',
+    NzbDrone.AddSeries.AddSeriesView = Backbone.Marionette.Layout.extend({
+        template: 'AddSeries/AddSeriesTemplate',
 
         ui: {
-            seriesSearch: '.search input'
+            seriesSearch: '.x-series-search'
         },
 
         regions: {

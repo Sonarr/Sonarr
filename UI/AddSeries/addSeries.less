@@ -1,4 +1,5 @@
 ﻿@import "../shared/Styles/card.less";
+@import "../shared/Styles/clickable.less";
 
 .result-list {
 
@@ -13,19 +14,26 @@
   }
 }
 
-.nz-input-large {
+.add-series-import-btn {
+  margin: 0px 40px;
+  width: 1080px;
+}
+
+.add-series-search {
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+
   *[class*='icon-'] {
     font-size: 28px;
     height: 30px;
     width: 40px;
     padding-top: 14px;
-    padding-left: 10px;
   }
   input {
     height: 50px;
   }
+
 }
 
 .folder-name-matches {
@@ -83,13 +91,10 @@
 }
 
 .new-series-loadmore {
+  .card;
+  .clickable;
   font-size: 30px;
   font-weight: 300;
-
-  cursor: pointer;
-
-  background: #fcf8e3;
-
   padding-top: 10px;
   padding-bottom: 10px;
 }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app', 'Series/SeriesCollection'], function (app) {
+define(['app', 'Series/SeriesCollection', 'AddSeries/RootFolders/RootFolderTemplateHelper'], function () {
 
     NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.ItemView.extend({
 

@@ -19,11 +19,7 @@
                     <icon class="icon-plus"></icon>
                 </div>
                 {{#unless isExisting}}
-                <select class="span6 x-root-folder">
-                    {{#each rootFolders.models}}
-                    <option value="{{id}}">{{attributes.path}}</option>
-                    {{/each}}
-                </select>
+                    {{rootFolderSelection}}
                 {{/unless}}
                 <select class="span2 x-quality-profile pull-right">
                     {{#each qualityProfiles.models}}
