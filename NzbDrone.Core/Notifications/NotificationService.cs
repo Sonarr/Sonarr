@@ -57,7 +57,6 @@ namespace NzbDrone.Core.Notifications
             int i = 1;
             foreach (var notification in _notifications)
             {
-                i++;
                 var type = notification.GetType();
 
                 var newNotification = new Notification();
@@ -71,9 +70,10 @@ namespace NzbDrone.Core.Notifications
                 newNotification.Implementation = type.Name;
 
                 notifications.Add(newNotification);
+                i++;
             }
 
-            return notifications;
+            return notifications.OrderBy(n => n.Name).ToList();
         }
 
         private Notification ToNotification(NotificationDefinition definition)
