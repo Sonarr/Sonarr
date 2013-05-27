@@ -317,7 +317,7 @@
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
-    <Compile Include="Notifications\Smtp\SmtpSettings.cs" />
+    <Compile Include="Notifications\Email\EmailSettings.cs" />
     <Compile Include="Notifications\Xbmc\XbmcSettings.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
@@ -439,7 +439,7 @@
     <Compile Include="Notifications\Prowl\Prowl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Smtp\Smtp.cs">
+    <Compile Include="Notifications\Email\Email.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Notifications\Xbmc\Xbmc.cs">
@@ -489,7 +489,7 @@
     <Compile Include="Tv\SeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Smtp\SmtpProvider.cs">
+    <Compile Include="Notifications\Email\EmailProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Notifications\Xbmc\XbmcProvider.cs">

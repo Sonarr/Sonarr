@@ -1,15 +1,13 @@
 ﻿using System;
-using NLog;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Notifications.Smtp
+namespace NzbDrone.Core.Notifications.Email
 {
-    public class Smtp : NotificationBase<SmtpSettings>
+    public class Email : NotificationBase<EmailSettings>
     {
-        private readonly SmtpProvider _smtpProvider;
+        private readonly EmailProvider _smtpProvider;
 
-        public Smtp(SmtpProvider smtpProvider)
+        public Email(EmailProvider smtpProvider)
         {
             _smtpProvider = smtpProvider;
         }

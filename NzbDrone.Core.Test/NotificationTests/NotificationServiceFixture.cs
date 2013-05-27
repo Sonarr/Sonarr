@@ -7,10 +7,10 @@ using NUnit.Framework;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Notifications;
+using NzbDrone.Core.Notifications.Email;
 using NzbDrone.Core.Notifications.Growl;
 using NzbDrone.Core.Notifications.Plex;
 using NzbDrone.Core.Notifications.Prowl;
-using NzbDrone.Core.Notifications.Smtp;
 using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Test.Framework;
 
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             _notifications.Add(new Xbmc(null, null));
             _notifications.Add(new PlexClient(null));
             _notifications.Add(new PlexServer(null));
-            _notifications.Add(new Smtp(null));
+            _notifications.Add(new Email(null));
             _notifications.Add(new Growl(null));
             _notifications.Add(new Prowl(null));
 
@@ -58,8 +58,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             Mocker.GetMock<IContainer>().Setup(s => s.Resolve(typeof(PlexServer)))
                   .Returns(new PlexServer(null));
 
-            Mocker.GetMock<IContainer>().Setup(s => s.Resolve(typeof(Smtp)))
-                  .Returns(new Smtp(null));
+            Mocker.GetMock<IContainer>().Setup(s => s.Resolve(typeof(Email)))
+                  .Returns(new Email(null));
 
             Mocker.GetMock<IContainer>().Setup(s => s.Resolve(typeof(Growl)))
                   .Returns(new Growl(null));

@@ -3,20 +3,18 @@ using System.Net;
 using System.Net.Mail;
 using NLog;
 
-namespace NzbDrone.Core.Notifications.Smtp
+namespace NzbDrone.Core.Notifications.Email
 {
-    public class SmtpProvider
+    public class EmailProvider
     {
         private readonly Logger _logger;
 
-        public SmtpProvider(Logger logger)
+        public EmailProvider(Logger logger)
         {
             _logger = logger;
         }
 
-//        var subject = "NzbDrone SMTP Test Notification";
-//        var body = "This is a test email from NzbDrone, if you received this message you properly configured your SMTP settings! (Now save them!)";
-        public virtual void SendEmail(SmtpSettings settings, string subject, string body, bool htmlBody = false)
+        public virtual void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false)
         {
             var email = new MailMessage();
             email.From = new MailAddress(settings.From);
