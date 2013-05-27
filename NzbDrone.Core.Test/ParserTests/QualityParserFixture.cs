@@ -78,7 +78,9 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "Dexter - S01E01 - Title [HDTV-720p]", QualityTypes.HDTV720p, false },
             new object[] { "Dexter - S01E01 - Title [HDTV-1080p]", QualityTypes.HDTV1080p, false },
             new object[] { "POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.RAWHD, false },
-            new object[] { "How I Met Your Mother S01E18 Nothing Good Happens After 2 A.M. 720p HDTV DD5.1 MPEG2-TrollHD", QualityTypes.RAWHD, false }
+            new object[] { "How I Met Your Mother S01E18 Nothing Good Happens After 2 A.M. 720p HDTV DD5.1 MPEG2-TrollHD", QualityTypes.RAWHD, false },
+            new object[] { "Arrested.Development.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS", QualityTypes.WEBDL1080p, false },
+            new object[] { "Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP", QualityTypes.WEBDL720p, false }
         };
 
         public static object[] SelfQualityParserCases =
