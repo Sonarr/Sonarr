@@ -5,7 +5,6 @@ define(function () {
         el: "#modal-region",
 
         constructor: function () {
-            _.bindAll(this);
             Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
             this.on("show", this.showModal, this);
         },
@@ -17,17 +16,13 @@ define(function () {
         },
 
         showModal: function (view) {
-            view.on("close", this.hideModal, this);
             this.$el.addClass('modal hide fade');
 
             //need tab index so close on escape works
             //https://github.com/twitter/bootstrap/issues/4663
-            this.$el.attr('tabindex','-1');
+            this.$el.attr('tabindex', '-1');
             this.$el.modal({'show': true, 'keyboard': true});
-        },
-
-        hideModal: function () {
-            this.$el.modal('hide');
         }
+
     });
 });
