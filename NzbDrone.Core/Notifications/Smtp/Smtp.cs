@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Notifications.Smtp
 
         public override string Name
         {
-            get { return "SMTP"; }
+            get { return "Email"; }
         }
 
         public override void OnGrab(string message)

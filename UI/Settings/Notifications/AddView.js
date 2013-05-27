@@ -8,8 +8,7 @@ define([
 
     NzbDrone.Settings.Notifications.AddItemView = Backbone.Marionette.ItemView.extend({
         template : 'Settings/Notifications/AddItemTemplate',
-        tagName  : 'button',
-        className: 'btn',
+        tagName  : 'li',
 
         events: {
             'click': 'addNotification'
@@ -17,6 +16,7 @@ define([
 
         addNotification: function () {
             this.model.set('id', undefined);
+            this.model.set('name', '');
             var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model});
             NzbDrone.modalRegion.show(view);
         }
@@ -24,7 +24,7 @@ define([
 
     NzbDrone.Settings.Notifications.AddView = Backbone.Marionette.CompositeView.extend({
         itemView                : NzbDrone.Settings.Notifications.AddItemView,
-        itemViewContainer       : '#notifications-to-add',
+        itemViewContainer       : '.notifications .items',
         template                : 'Settings/Notifications/AddTemplate'
     });
 });
