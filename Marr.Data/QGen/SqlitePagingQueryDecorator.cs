@@ -30,6 +30,19 @@ namespace Marr.Data.QGen
 
         public string Generate()
         {
+            if (_innerQuery.IsView || _innerQuery.IsJoin)
+            {
+                return ComplexPaging();
+            }
+            else
+            {
+                return SimplePaging();
+            }
+        }
+
+        private string SimplePaging()
+        {
+            // Create paged query
             StringBuilder sql = new StringBuilder();
 
             _innerQuery.BuildSelectClause(sql);
@@ -38,6 +51,28 @@ namespace Marr.Data.QGen
             _innerQuery.BuildWhereClause(sql);
             _innerQuery.BuildOrderClause(sql);
             sql.AppendLine(String.Format(" LIMIT {0},{1}", _skip, _take));
+
+            return sql.ToString();
+        }
+
+        private string ComplexPaging()
+        {
+            var baseTable = _innerQuery.Tables.First();
+
+
+            StringBuilder sql = new StringBuilder();
+
+            _innerQuery.BuildSelectClause(sql);
+            sql.Append(" FROM (");
+            BuildSimpleInnerSelect(sql);
+            _innerQuery.BuildFromClause(sql);
+            _innerQuery.BuildWhereClause(sql);
+            sql.AppendLine(String.Format("LIMIT {0},{1}", _skip, _take));
+            sql.AppendFormat(") AS {0} ", _innerQuery.Dialect.CreateToken(baseTable.Alias));
+
+            _innerQuery.BuildJoinClauses(sql);
+            
+            _innerQuery.BuildOrderClause(sql);
 
             return sql.ToString();
         }
@@ -85,6 +120,27 @@ namespace Marr.Data.QGen
                     }
                 }
             }
+        }
+
+        private void BuildSimpleInnerSelect(StringBuilder sql)
+        {
+            sql.Append("SELECT ");
+            int startIndex = sql.Length;
+
+            // COLUMNS
+            var join = _innerQuery.Tables.First();
+
+            for (int i = 0; i < join.Columns.Count; i++)
+            {
+                var c = join.Columns[i];
+
+                if (sql.Length > startIndex)
+                    sql.Append(",");
+
+                string token = c.ColumnInfo.Name;
+                sql.Append(_innerQuery.Dialect.CreateToken(token));
+            }
+
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Marr.Data.QGen
         private MapRepository _repos;
         private DbCommand _command;
         private string _paramPrefix;
-        private bool isLeftSide = true;
+        private bool _isLeftSide = true;
         protected bool _useAltName;
         protected Dialect _dialect;
         protected StringBuilder _sb;
@@ -67,12 +67,12 @@ namespace Marr.Data.QGen
         {
             _sb.Append("(");
 
-            isLeftSide = true;
+            _isLeftSide = true;
             Visit(expression.Left);
 
-            _sb.AppendFormat(" {0} ", Decode(expression.NodeType));
+            _sb.AppendFormat(" {0} ", Decode(expression));
 
-            isLeftSide = false;
+            _isLeftSide = false;
             Visit(expression.Right);
 
             _sb.Append(")");
@@ -107,7 +107,7 @@ namespace Marr.Data.QGen
 
         protected override Expression VisitMemberAccess(MemberExpression expression)
         {
-            if (isLeftSide)
+            if (_isLeftSide)
             {
                 string fqColumn = GetFullyQualifiedColumnName(expression.Member, expression.Expression.Type);
                 _sb.Append(fqColumn);
@@ -127,12 +127,20 @@ namespace Marr.Data.QGen
 
         protected override Expression VisitConstant(ConstantExpression expression)
         {
-            // Add parameter to Command.Parameters
-            string paramName = string.Concat(_paramPrefix, "P", _command.Parameters.Count.ToString());
+            if (expression.Value != null)
+            {
+                // Add parameter to Command.Parameters
+                string paramName = string.Concat(_paramPrefix, "P", _command.Parameters.Count.ToString());
 
-            _sb.Append(paramName);
+                _sb.Append(paramName);
 
-            var parameter = new ParameterChainMethods(_command, paramName, expression.Value).Parameter;
+                var parameter = new ParameterChainMethods(_command, paramName, expression.Value).Parameter;
+            }
+            else
+            {
+                _sb.Append("NULL");
+            }
+
             return expression;
         }
 
@@ -182,12 +190,7 @@ namespace Marr.Data.QGen
                 }
 
                 string columnName = DataHelper.GetColumnName(declaringType, member.Name, _useAltName);
-
-                if (!_useAltName)
-                    return _dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName));
-
-                else
-                    return _dialect.CreateToken(string.Format("{0}", columnName));
+                return _dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName));
             }
             else
             {
@@ -196,9 +199,22 @@ namespace Marr.Data.QGen
             }
         }
 
-        private string Decode(ExpressionType expType)
+        private string Decode(BinaryExpression expression)
         {
-            switch (expType)
+            bool isRightSideNullConstant = expression.Right.NodeType == 
+                ExpressionType.Constant && 
+                ((ConstantExpression)expression.Right).Value == null;
+
+            if (isRightSideNullConstant)
+            {
+                switch (expression.NodeType)
+                {
+                    case ExpressionType.Equal: return "IS";
+                    case ExpressionType.NotEqual: return "IS NOT";
+                }
+            }
+
+            switch (expression.NodeType)
             {
                 case ExpressionType.AndAlso: return "AND";
                 case ExpressionType.And: return "AND";
@@ -210,7 +226,7 @@ namespace Marr.Data.QGen
                 case ExpressionType.NotEqual: return "<>";
                 case ExpressionType.OrElse: return "OR";
                 case ExpressionType.Or: return "OR";
-                default: throw new NotSupportedException(string.Format("{0} statement is not supported", expType.ToString()));
+                default: throw new NotSupportedException(string.Format("{0} statement is not supported", expression.NodeType.ToString()));
             }
         }
 
@@ -223,7 +239,7 @@ namespace Marr.Data.QGen
 
             MemberExpression memberExp = (body.Object as MemberExpression);
             string fqColumn = GetFullyQualifiedColumnName(memberExp.Member, memberExp.Expression.Type);
-            _sb.AppendFormat("({0} LIKE '%' + {1} + '%')", fqColumn, paramName);
+            _sb.AppendFormat(_dialect.ContainsFormat, fqColumn, paramName);
         }
 
         private void Write_StartsWith(MethodCallExpression body)
@@ -235,7 +251,7 @@ namespace Marr.Data.QGen
 
             MemberExpression memberExp = (body.Object as MemberExpression);
             string fqColumn = GetFullyQualifiedColumnName(memberExp.Member, memberExp.Expression.Type);
-            _sb.AppendFormat("({0} LIKE {1} + '%')", fqColumn, paramName);
+            _sb.AppendFormat(_dialect.StartsWithFormat, fqColumn, paramName);
         }
 
         private void Write_EndsWith(MethodCallExpression body)
@@ -247,7 +263,7 @@ namespace Marr.Data.QGen
 
             MemberExpression memberExp = (body.Object as MemberExpression);
             string fqColumn = GetFullyQualifiedColumnName(memberExp.Member, memberExp.Expression.Type);
-            _sb.AppendFormat("({0} LIKE '%' + {1})", fqColumn, paramName);
+            _sb.AppendFormat(_dialect.EndsWithFormat, fqColumn, paramName);
         }
 
         /// <summary>

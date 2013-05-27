@@ -170,15 +170,6 @@ namespace Marr.Data.QGen
 
         #endregion
 
-        #region - Count -
-
-        public virtual int Count()
-        {
-            return _baseBuilder.GetRowCount();
-        }
-
-        #endregion
-
         #region - ToList / ToString / BuildQuery -
 
         public virtual List<T> ToList()
@@ -218,7 +209,7 @@ namespace Marr.Data.QGen
 
                 string columnName = DataHelper.GetColumnName(sort.DeclaringType, sort.PropertyName, useAltName);
 
-                if (!_useAltName)
+                if (!useAltName)
                     sb.Append(_dialect.CreateToken(string.Format("{0}.{1}", table.Alias, columnName)));
 
                 else

@@ -72,7 +72,7 @@ namespace Marr.Data.Reflection
         }
 
         /// <summary>
-        /// Instantiantes a type using the FastReflector library for increased speed.
+        /// Instantiantes a type using the Fasterflect library for increased speed.
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>

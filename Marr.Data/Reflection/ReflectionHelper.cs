@@ -16,9 +16,7 @@ License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 using System;
 using System.Reflection;
 
-// ReSharper disable CheckNamespace
 namespace Marr.Data
-// ReSharper restore CheckNamespace
 {
     public class ReflectionHelper
     {

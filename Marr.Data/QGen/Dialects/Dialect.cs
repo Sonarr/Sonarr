@@ -55,5 +55,20 @@ namespace Marr.Data.QGen.Dialects
                 return true;
             }
         }
+
+        public virtual string StartsWithFormat
+        {
+            get { return "({0} LIKE {1} + '%')"; }
+        }
+
+        public virtual string EndsWithFormat
+        {
+            get { return "({0} LIKE '%' + {1})"; }
+        }
+
+        public virtual string ContainsFormat
+        {
+            get { return "({0} LIKE '%' + {1} + '%')"; }
+        }
     }
 }
