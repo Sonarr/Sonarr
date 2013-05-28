@@ -3,7 +3,6 @@ define([
     'app',
     'Quality/QualityProfileCollection',
     'Quality/QualitySizeCollection',
-    'Settings/Quality/QualityView',
     'Settings/Quality/Profile/QualityProfileCollectionView',
     'Settings/Quality/Size/QualitySizeCollectionView'
 ],
@@ -33,7 +32,6 @@ define([
             },
 
             onRender: function () {
-                this.qualityStandard.show(new NzbDrone.Settings.Quality.QualityView({model: this.settings, qualityProfiles: qualityProfileCollection}));
                 this.qualityProfile.show(new NzbDrone.Settings.Quality.Profile.QualityProfileCollectionView({collection: qualityProfileCollection}));
                 this.qualitySize.show(new NzbDrone.Settings.Quality.Size.QualitySizeCollectionView({collection: this.qualitySizeCollection}));
             }

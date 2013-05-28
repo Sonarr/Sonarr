@@ -30,7 +30,6 @@ namespace NzbDrone.Api.Series
             Get["/{slug}"] = o => GetSeries((string)o.slug.ToString());
 
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
-
             SharedValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
             SharedValidator.RuleFor(s => s.RootFolderPath).NotEmpty().When(s => String.IsNullOrEmpty(s.Path));
 

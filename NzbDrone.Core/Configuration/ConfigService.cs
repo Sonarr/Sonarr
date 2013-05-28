@@ -136,13 +136,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("Sorting_SeasonFolderFormat", value); }
         }
 
-        public int DefaultQualityProfile
-        {
-            get { return GetValueInt("DefaultQualityProfile", 1); }
-
-            set { SetValue("DefaultQualityProfile", value); }
-        }
-
         public string UpdateUrl
         {
             get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }

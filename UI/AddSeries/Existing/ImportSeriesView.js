@@ -1,7 +1,6 @@
 ﻿'use strict';
 define([
     'app', 'AddSeries/RootFolders/RootFolderCollection',
-    'Quality/QualityProfileCollection',
     'AddSeries/Existing/UnmappedFolderModel',
     'AddSeries/Collection',
     'AddSeries/SearchResultView',
@@ -22,7 +21,6 @@ define([
         ui: {
             searchButton: '.x-btn-search',
             searchText  : '.x-txt-search',
-            profileList : '.x-lst-quality-profile',
             searchBar   : '.x-search-bar',
             loadMore    : '.x-load-more'
         },
@@ -99,7 +97,6 @@ define([
 
         itemViewOptions: function () {
             return {
-                qualityProfile: this.ui.profileList,
                 rootFolder    : this.model.get('rootFolder'),
                 folder        : this.model.get('folder').path,
                 isExisting    : true

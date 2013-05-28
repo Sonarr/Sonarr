@@ -1,5 +1,10 @@
 ﻿'use strict';
-define(['app', 'Series/SeriesCollection', 'AddSeries/RootFolders/RootFolderTemplateHelper'], function () {
+define(['app',
+    'Quality/QualityProfileCollection',
+    'Config',
+    'Series/SeriesCollection',
+    'AddSeries/RootFolders/RootFolderTemplateHelper',
+    'Quality/QualityProfileTemplateHelper'], function (app, qualityProfiles) {
 
     NzbDrone.AddSeries.SearchResultView = Backbone.Marionette.ItemView.extend({
 
@@ -13,7 +18,8 @@ define(['app', 'Series/SeriesCollection', 'AddSeries/RootFolders/RootFolderTempl
         },
 
         events: {
-            'click .x-add': 'addSeries'
+            'click .x-add'             : 'addSeries',
+            'change .x-quality-profile': '_qualityProfileChanged'
         },
 
         initialize: function () {
@@ -24,11 +30,32 @@ define(['app', 'Series/SeriesCollection', 'AddSeries/RootFolders/RootFolderTempl
 
             this.model.set('isExisting', this.options.isExisting);
             this.model.set('path', this.options.folder);
+
+            NzbDrone.vent.on(NzbDrone.Config.Events.ConfigUpdatedEvent, this._onConfigUpdated, this);
+        },
+
+
+        _onConfigUpdated: function (options) {
+
+            if (options.key === NzbDrone.Config.Keys.DefaultQualityProfileId) {
+                this.$('.x-quality-profile').val(options.value);
+            }
+        },
+
+        _qualityProfileChanged: function () {
+            NzbDrone.Config.SetValue(NzbDrone.Config.Keys.DefaultQualityProfileId, this.ui.qualityProfile.val());
         },
 
         onRender: function () {
             this.listenTo(this.model, 'change', this.render);
+
+            var defaultQuality = NzbDrone.Config.GetValue(NzbDrone.Config.Keys.DefaultQualityProfileId);
+
+            if (qualityProfiles.get(defaultQuality)) {
+                this.ui.qualityProfile.val(defaultQuality);
+            }
         },
+
 
         addSeries: function () {
             var icon = this.ui.addButton.find('icon');

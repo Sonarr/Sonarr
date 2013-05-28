@@ -19,13 +19,11 @@
                     <icon class="icon-plus"></icon>
                 </div>
                 {{#unless isExisting}}
-                    {{rootFolderSelection}}
+                {{rootFolderSelection}}
                 {{/unless}}
-                <select class="span2 x-quality-profile pull-right">
-                    {{#each qualityProfiles.models}}
-                    <option value="{{id}}">{{attributes.name}}</option>
-                    {{/each}}
-                </select>
+                <div class='pull-right'>
+                    {{qualityProfileSelection}}
+                </div>
             </div>
         </div>
     </div>

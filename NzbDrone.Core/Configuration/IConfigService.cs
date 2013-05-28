@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Configuration
         String DownloadedEpisodesFolder { get; set; }
         bool UseSeasonFolder { get; set; }
         string SortingSeasonFolderFormat { get; set; }
-        int DefaultQualityProfile { get; set; }
         bool EnableBacklogSearching { get; set; }
         bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
         int Retention { get; set; }

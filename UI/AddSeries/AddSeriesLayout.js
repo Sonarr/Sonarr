@@ -1,13 +1,13 @@
 ﻿"use strict";
 define([
     'app',
-    'AddSeries/RootFolders/RootFolderCollection',
     'Quality/QualityProfileCollection',
+    'AddSeries/RootFolders/RootFolderCollection',
     'AddSeries/RootFolders/RootFolderView',
     'AddSeries/AddSeriesView',
     'AddSeries/Existing/ImportSeriesView'
 ],
-    function (app, rootFolderCollection, qualityProfileCollection) {
+    function (app, qualityProfileCollection, rootFolderCollection) {
         NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
             template: 'AddSeries/addSeriesLayoutTemplate',
 

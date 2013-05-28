@@ -1,13 +1,8 @@
 ﻿'use strict';
-define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfiles) {
+define(['app'], function () {
 
 
     NzbDrone.AddSeries.Existing.UnmappedFolderModel = Backbone.Model.extend({
-
-        defaults: {
-            quality: qualityProfiles
-        }
-
     });
 
     NzbDrone.AddSeries.Existing.UnmappedFolderCollection = Backbone.Collection.extend({
