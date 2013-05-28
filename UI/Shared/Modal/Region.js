@@ -22,6 +22,12 @@ define(function () {
             //https://github.com/twitter/bootstrap/issues/4663
             this.$el.attr('tabindex', '-1');
             this.$el.modal({'show': true, 'keyboard': true});
+        },
+
+
+        closeModal: function () {
+            this.$el.modal('hide');
+            this.close();
         }
 
     });

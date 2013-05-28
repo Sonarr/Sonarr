@@ -47,12 +47,3 @@ Marionette.ItemView.prototype.render = function () {
 
     return result;
 };
-
-Marionette.CollectionView.prototype.render = function () {
-
-    if (this.model) {
-        NzbDrone.ModelBinder.bind(this.model, this.el);
-    }
-
-    return oldItemCollectionViewRender.apply(this, arguments);
-};

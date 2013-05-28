@@ -1,9 +1,9 @@
 ﻿"use strict";
 define(['app',
-        'AddSeries/RootFolders/RootFolderCollection',
-        'AddSeries/SearchResultView',
-        'Shared/SpinnerView',
-        'AddSeries/Collection'], function () {
+    'AddSeries/RootFolders/RootFolderCollection',
+    'AddSeries/SearchResultView',
+    'Shared/SpinnerView',
+    'AddSeries/Collection'], function () {
     NzbDrone.AddSeries.AddSeriesView = Backbone.Marionette.Layout.extend({
         template: 'AddSeries/AddSeriesTemplate',
 
@@ -16,18 +16,7 @@ define(['app',
         },
 
         initialize: function () {
-
             this.collection = new NzbDrone.AddSeries.Collection();
-            NzbDrone.AddSeries.New.AddNewSeriesContext = this;
-
-            NzbDrone.vent.on(NzbDrone.Events.SeriesAdded, function (options) {
-                if (!options.existing) {
-                    NzbDrone.AddSeries.New.AddNewSeriesContext.ui.seriesSearch.val('');
-
-                    //Todo: Figure out why this is inconsistent
-                    options.series.collection.reset();
-                }
-            });
         },
 
         onRender: function () {

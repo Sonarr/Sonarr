@@ -19,20 +19,26 @@ define([
                 'click .x-import': '_importSeries'
             },
 
-            onRender: function () {
+            initialize: function () {
+                this.rootFolderLayout = new NzbDrone.AddSeries.RootFolders.Layout();
+                this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
 
-                /*         rootFolderCollection.fetch({success: function () {
-                 self.importExisting.show(new NzbDrone.AddSeries.Existing.RootDirListView({model: rootFolderCollection.at(0)}));
-                 }});*/
+            },
+
+            _folderSelected: function (options) {
+                NzbDrone.modalRegion.closeModal();
+                this.workspace.show(new NzbDrone.AddSeries.Existing.ListView({model: options.model}));
+            },
+
+            onRender: function () {
                 qualityProfileCollection.fetch();
                 rootFolderCollection.fetch();
 
                 this.workspace.show(new NzbDrone.AddSeries.AddSeriesView());
             },
 
-
             _importSeries: function () {
-                NzbDrone.modalRegion.show(new NzbDrone.AddSeries.RootFolders.Layout());
+                NzbDrone.modalRegion.show(this.rootFolderLayout);
             }
         });
     });

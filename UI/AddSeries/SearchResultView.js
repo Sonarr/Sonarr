@@ -17,9 +17,13 @@ define(['app', 'Series/SeriesCollection', 'AddSeries/RootFolders/RootFolderTempl
         },
 
         initialize: function () {
-            if (this.isExisting) {
-                this.modal.set('isExisting', true);
+
+            if (!this.model) {
+                throw 'model is required';
             }
+
+            this.model.set('isExisting', this.options.isExisting);
+            this.model.set('path', this.options.folder);
         },
 
         onRender: function () {
@@ -41,12 +45,14 @@ define(['app', 'Series/SeriesCollection', 'AddSeries/RootFolders/RootFolderTempl
             this.model.save(undefined, {
                 url    : NzbDrone.Series.SeriesCollection.prototype.url,
                 success: function () {
+                    self.close();
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     NzbDrone.Shared.Messenger.show({
                         message: 'Added: ' + self.model.get('title')
                     });
 
-                    NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { existing: false, series: self.model });
+                    NzbDrone.vent.trigger(NzbDrone.Events.SeriesAdded, { series: self.model });
+                    self.model.collection.remove(self.model);
                 },
                 fail   : function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');

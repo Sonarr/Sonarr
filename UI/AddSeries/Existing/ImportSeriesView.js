@@ -5,7 +5,7 @@ define([
     'AddSeries/Existing/UnmappedFolderModel',
     'AddSeries/Collection',
     'AddSeries/SearchResultView',
-    'Series/SeriesModel'], function (app, rootFolders, qualityProfileCollection) {
+    'Series/SeriesModel'], function () {
 
     NzbDrone.AddSeries.Existing.UnmappedFolderCompositeView = Backbone.Marionette.CompositeView.extend({
 
@@ -31,9 +31,9 @@ define([
             this.collection = new NzbDrone.AddSeries.Collection();
             this.collection.bind('reset', this.collectionReset, this);
 
-            this.on("itemview:seriesAdded", function () {
+            this.on("item:removed", function () {
                 this.close();
-            });
+            }, this);
         },
 
         onRender: function () {
@@ -53,7 +53,7 @@ define([
 
             this.searchCollection.fetch({
                 data   : { term: this.ui.searchText.val() },
-                success: function (collection) {
+                success: function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     deferred.resolve();
                     self.collection.add(self.searchCollection.shift());
@@ -101,7 +101,7 @@ define([
             return {
                 qualityProfile: this.ui.profileList,
                 rootFolder    : this.model.get('rootFolder'),
-                folder        : this.model.get('folder'),
+                folder        : this.model.get('folder').path,
                 isExisting    : true
             };
         }

@@ -8,14 +8,18 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
         tagName : 'tr',
 
         events: {
-            'click .x-remove': 'removeFolder'
+            'click .x-remove': 'removeFolder',
+            'click .x-folder': 'folderSelected'
         },
 
         removeFolder: function () {
             this.model.destroy({ wait: true });
             this.model.collection.remove(this.model);
-        }
+        },
 
+        folderSelected: function () {
+            this.trigger('folderSelected', this.model);
+        }
     });
 
     NzbDrone.AddSeries.RootDirListView = Backbone.Marionette.CollectionView.extend({
@@ -40,14 +44,22 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
             'click .x-add': 'addFolder'
         },
 
+        initialize: function () {
+            this.collection = rootFolders;
+            this.rootfolderListView = new NzbDrone.AddSeries.RootDirListView({ collection: rootFolders });
+            this.rootfolderListView.on('itemview:folderSelected', this._onFolderSelected, this);
+        },
+
 
         onRender: function () {
 
-            this.collection = rootFolders;
-            this.currentDirs.show(new NzbDrone.AddSeries.RootDirListView({ collection: this.collection }));
+            this.currentDirs.show(this.rootfolderListView);
             this.ui.pathInput.autoComplete('/directories');
         },
 
+        _onFolderSelected: function (options) {
+            this.trigger('folderSelected', options);
+        },
 
         addFolder: function () {
             var newDir = new NzbDrone.AddSeries.RootFolders.RootFolderModel(
@@ -55,25 +67,12 @@ define(['app', 'AddSeries/RootFolders/RootFolderCollection', 'Mixins/AutoComplet
                     Path: this.ui.pathInput.val()
                 });
 
-            var self = this;
 
-            this.collection.create(newDir, {
+            rootFolders.create(newDir, {
                 wait: true, success: function () {
-                    self.collection.fetch();
+                    rootFolders.fetch();
                 }
             });
-        },
-
-        search: function (context) {
-
-            var term = context.ui.seriesSearch.val();
-
-            if (term === "") {
-                context.collection.reset();
-            } else {
-                console.log(term);
-                context.collection.fetch({ data: { term: term } });
-            }
         }
     });
 
