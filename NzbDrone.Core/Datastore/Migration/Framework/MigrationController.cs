@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
