@@ -16,10 +16,10 @@ namespace NzbDrone.Api.Notifications
         {
             _notificationService = notificationService;
 
-            GetResourceAll = GetAll;
+            GetResourceAll = GetSchema;
         }
 
-        private List<NotificationResource> GetAll()
+        private List<NotificationResource> GetSchema()
         {
             //Need to get all the possible Notification's same as we would for settiings (but keep them empty)
 

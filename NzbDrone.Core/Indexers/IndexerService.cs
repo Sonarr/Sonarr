@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Indexers
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Indexers
         List<Indexer> All();
         List<IIndexer> GetAvailableIndexers();
         Indexer Get(string name);
+        List<Indexer> Schema();
     }
 
     public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
@@ -52,6 +54,20 @@ namespace NzbDrone.Core.Indexers
             return ToIndexer(_indexerRepository.Get(name));
         }
 
+        public List<Indexer> Schema()
+        {
+            var indexers = new List<Indexer>();
+
+            var newznab = new Indexer();
+            newznab.Instance = new Newznab.Newznab();
+            newznab.Id = 1;
+            newznab.Name = "Newznab";
+            newznab.Settings = new NewznabSettings();
+
+            indexers.Add(newznab);
+
+            return indexers.OrderBy(n => n.Name).ToList();
+        }
 
         private Indexer ToIndexer(IndexerDefinition definition)
         {
