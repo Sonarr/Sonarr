@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Indexers
 
             indexers.Add(newznab);
 
-            return indexers.OrderBy(n => n.Name).ToList();
+            return indexers;
         }
 
         private Indexer ToIndexer(IndexerDefinition definition)

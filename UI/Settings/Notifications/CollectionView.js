@@ -10,11 +10,11 @@ define(['app', 'Settings/Notifications/ItemView', 'Settings/Notifications/AddVie
         },
 
         openSchemaModal: function () {
-            var schema = new NzbDrone.Settings.Notifications.Collection();
-            schema.url = '/api/notification/schema';
-            schema.fetch();
+            var schemaCollection = new NzbDrone.Settings.Notifications.Collection();
+            schemaCollection.url = '/api/notification/schema';
+            schemaCollection.fetch();
 
-            var view = new NzbDrone.Settings.Notifications.AddView({ collection: schema});
+            var view = new NzbDrone.Settings.Notifications.AddView({ collection: schemaCollection});
             NzbDrone.modalRegion.show(view);
         }
     });

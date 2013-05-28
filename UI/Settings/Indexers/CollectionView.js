@@ -14,9 +14,9 @@ define(['app',
 
         openSchemaModal: function () {
             //TODO: Is there a better way to deal with changing URLs?
-            var schema = new NzbDrone.Settings.Indexers.Collection();
-            schema.url = '/api/indexer/schema';
-            schema.fetch({
+            var schemaCollection = new NzbDrone.Settings.Indexers.Collection();
+            schemaCollection.url = '/api/indexer/schema';
+            schemaCollection.fetch({
                 success: function (collection) {
                     collection.url = '/api/indexer';
                     var model = _.first(collection.models);
