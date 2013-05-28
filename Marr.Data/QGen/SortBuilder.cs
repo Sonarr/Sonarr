@@ -45,28 +45,28 @@ namespace Marr.Data.QGen
 
         public virtual SortBuilder<T> OrWhere(Expression<Func<T, bool>> filterExpression)
         {
-            var orWhere = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, _useAltName, true);
+            var orWhere = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, false, true);
             _whereBuilder.Append(orWhere, WhereAppendType.OR);
             return this;
         }
 
         public virtual SortBuilder<T> OrWhere(string whereClause)
         {
-            var orWhere = new WhereBuilder<T>(whereClause, _useAltName);
+            var orWhere = new WhereBuilder<T>(whereClause, false);
             _whereBuilder.Append(orWhere, WhereAppendType.OR);
             return this;
         }
 
         public virtual SortBuilder<T> AndWhere(Expression<Func<T, bool>> filterExpression)
         {
-            var andWhere = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, _useAltName, true);
+            var andWhere = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, false, true);
             _whereBuilder.Append(andWhere, WhereAppendType.AND);
             return this;
         }
 
         public virtual SortBuilder<T> AndWhere(string whereClause)
         {
-            var andWhere = new WhereBuilder<T>(whereClause, _useAltName);
+            var andWhere = new WhereBuilder<T>(whereClause, false);
             _whereBuilder.Append(andWhere, WhereAppendType.AND);
             return this;
         }
