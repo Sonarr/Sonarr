@@ -7,7 +7,7 @@ namespace NzbDrone.Api.ClientSchema
 {
     public static class SchemaDeserializer
     {
-        public static object DeserializeSchema(object model, List<Field> fields)
+        public static T DeserializeSchema<T>(T model, List<Field> fields)
         {
             var properties = model.GetType().GetSimpleProperties();
 

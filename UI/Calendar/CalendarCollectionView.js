@@ -56,6 +56,7 @@ define(['app', 'Calendar/CalendarItemView'], function () {
 
             NzbDrone.Calendar.CalendarCollectionView.Instance = this;
         },
+
         getEvents                    : function (start, end, callback) {
             var bbView = NzbDrone.Calendar.CalendarCollectionView.Instance;
 

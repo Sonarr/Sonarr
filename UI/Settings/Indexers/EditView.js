@@ -29,7 +29,7 @@ define([
                     });
 
                     context.indexerCollection.add(context.model);
-                    context.$el.parent().modal('hide');
+                    NzbDrone.modalRegion.closeModal();
                 },
 
                 error: function () {

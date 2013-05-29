@@ -13,7 +13,7 @@ define(['app', 'Quality/QualityProfileModel'], function () {
 
             this.model.save();
             this.trigger('saved');
-            this.$el.parent().modal('hide');
+            NzbDrone.modalRegion.closeModal();
         }
     });
 

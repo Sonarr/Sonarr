@@ -54,7 +54,8 @@ namespace NzbDrone.Api.REST
                 {
                     ValidateId(options.Id);
                     DeleteResource((int)options.Id);
-                    return new Response { StatusCode = HttpStatusCode.OK };
+
+                    return new object().AsResponse();
                 };
             }
         }

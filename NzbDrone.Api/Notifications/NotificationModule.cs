@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.ClientSchema;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.Notifications;
 using Omu.ValueInjecter;
 
@@ -46,16 +47,24 @@ namespace NzbDrone.Api.Notifications
             notification = _notificationService.Create(notification);
             notificationResource.Id = notification.Id;
 
-            return notificationResource;
+            var responseResource = new NotificationResource();
+            responseResource.InjectFrom(notification);
+            responseResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+
+            return responseResource;
         }
 
         private NotificationResource Update(NotificationResource notificationResource)
         {
             var notification = GetNotification(notificationResource);
             notification.Id = notificationResource.Id;
-            _notificationService.Update(notification);
+            notification = _notificationService.Update(notification);
 
-            return notificationResource;
+            var responseResource = new NotificationResource();
+            responseResource.InjectFrom(notification);
+            responseResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+
+            return responseResource;
         }
 
         private void DeleteNotification(int id)
@@ -70,16 +79,13 @@ namespace NzbDrone.Api.Notifications
                                         i.Implementation.Equals(notificationResource.Implementation,
                                         StringComparison.InvariantCultureIgnoreCase));
 
-            //TODO: How should be handle this error?
             if (notification == null)
             {
-                throw new InvalidOperationException();
+                throw new BadRequestException("Invalid Notification Implementation");
             }
 
-            notification.Name = notificationResource.Name;
-            notification.OnGrab = notificationResource.OnGrab;
-            notificationResource.OnDownload = notificationResource.OnDownload;
-            notification.Settings = (INotifcationSettings)SchemaDeserializer.DeserializeSchema(notification.Settings, notificationResource.Fields);
+            notification.InjectFrom(notificationResource);
+            notification.Settings = SchemaDeserializer.DeserializeSchema(notification.Settings, notificationResource.Fields);
 
             return notification;
         }

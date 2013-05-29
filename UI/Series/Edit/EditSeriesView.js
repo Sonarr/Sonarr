@@ -26,7 +26,7 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
 
             this.model.save();
             this.trigger('saved');
-            this.$el.parent().modal('hide');
+            NzbDrone.modalRegion.closeModal();
         },
 
         removeSeries: function () {

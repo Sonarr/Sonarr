@@ -9,6 +9,7 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications
 {
@@ -82,14 +83,9 @@ namespace NzbDrone.Core.Notifications
 
         public Notification Create(Notification notification)
         {
-            var definition = new NotificationDefinition()
-            {
-                Name = notification.Name,
-                OnGrab = notification.OnGrab,
-                OnDownload = notification.OnDownload,
-                Implementation = notification.Implementation,
-                Settings = Json.Serialize(notification.Settings)
-            };
+            var definition = new NotificationDefinition();
+            definition.InjectFrom(notification);
+            definition.Settings = Json.Serialize(notification.Settings);
 
             definition = _notificationRepository.Insert(definition);
             notification.Id = definition.Id;
@@ -100,11 +96,7 @@ namespace NzbDrone.Core.Notifications
         public Notification Update(Notification notification)
         {
             var definition = _notificationRepository.Get(notification.Id);
-
-            definition.Name = notification.Name;
-            definition.OnGrab = notification.OnGrab;
-            definition.OnDownload = notification.OnDownload;
-            definition.Implementation = notification.Implementation;
+            definition.InjectFrom(notification);
             definition.Settings = Json.Serialize(notification.Settings);
 
             _notificationRepository.Update(definition);

@@ -33,7 +33,7 @@ define([
                     });
 
                     context.notificationCollection.add(context.model, { merge: true });
-                    context.$el.parent().modal('hide');
+                    NzbDrone.modalRegion.closeModal();
                 },
 
                 error: function () {
