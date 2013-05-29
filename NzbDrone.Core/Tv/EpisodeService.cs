@@ -5,11 +5,8 @@ using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -18,7 +15,9 @@ namespace NzbDrone.Core.Tv
     {
         Episode GetEpisode(int id);
         Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
+        Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
         Episode GetEpisode(int seriesId, DateTime date);
+        Episode FindEpisode(int seriesId, DateTime date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
@@ -75,12 +74,26 @@ namespace NzbDrone.Core.Tv
             {
                 return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
             }
-            return _episodeRepository.Get(seriesId, seasonNumber, episodeNumber);
+            return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
+        }
+
+        public Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useSceneNumbering = false)
+        {
+            if (useSceneNumbering)
+            {
+                return _episodeRepository.FindEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
+            }
+            return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
         }
 
         public Episode GetEpisode(int seriesId, DateTime date)
         {
             return _episodeRepository.Get(seriesId, date);
+        }
+
+        public Episode FindEpisode(int seriesId, DateTime date)
+        {
+            return _episodeRepository.Find(seriesId, date);
         }
 
         public List<Episode> GetEpisodeBySeries(int seriesId)

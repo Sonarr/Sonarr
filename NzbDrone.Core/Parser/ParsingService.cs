@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Parser
             return _seriesService.FindByTitle(searchTitle);
         }
 
-        public  RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo)
+        public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo)
         {
             var remoteEpisode = new RemoteEpisode
                 {
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Parser
 
                 if (series.UseSceneNumbering && parsedEpisodeInfo.SceneSource)
                 {
-                    episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber, true);
+                    episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber, true);
                 }
 
                 if (episodeInfo == null)
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Parser
                     episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
                     if (episodeInfo == null && parsedEpisodeInfo.AirDate != null)
                     {
-                        episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.AirDate.Value);
+                        episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.AirDate.Value);
                     }
                 }
 
