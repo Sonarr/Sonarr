@@ -7,6 +7,7 @@ define([
 ], function () {
 
     NzbDrone.Settings.Indexers.ItemView = Backbone.Marionette.ItemView.extend({
-        template  : 'Settings/Indexers/ItemTemplate'
+        template  : 'Settings/Indexers/ItemTemplate',
+        tagName   : 'li'
     });
 });
