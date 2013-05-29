@@ -1,5 +1,5 @@
 /*
-  backbone-pageable 1.2.4
+  backbone-pageable 1.3.0
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -89,33 +89,6 @@
       else params[k] = v;
     }
     return params;
-  }
-
-  // Quickly reset a collection by temporarily detaching the comparator of the
-  // given collection, reset and then attach the comparator back to the
-  // collection and sort.
-
-  // @param {Backbone.Collection} collection
-  // @param {...*} resetArgs
-  // @return {Backbone.Collection} collection The same collection instance after
-  // reset.
-  function resetQuickly () {
-
-    var collection = arguments[0];
-    var resetArgs = _.toArray(arguments).slice(1);
-
-    var comparator = collection.comparator;
-    collection.comparator = null;
-
-    try {
-      collection.reset.apply(collection, resetArgs);
-    }
-    finally {
-      collection.comparator = comparator;
-      if (comparator) collection.sort();
-    }
-
-    return collection;
   }
 
   var PARAM_TRIM_RE = /[\s'"]/g;
@@ -323,13 +296,14 @@
       }
 
       if (mode != "server") {
+        var fullCollection = this.fullCollection;
 
         if (comparator && options.full) {
           delete this.comparator;
-          var fullCollection = this.fullCollection;
           fullCollection.comparator = comparator;
-          fullCollection.sort();
         }
+
+        if (options.full) fullCollection.sort();
 
         // make sure the models in the current page and full collection have the
         // same references
@@ -393,6 +367,7 @@
     _makeCollectionEventHandler: function (pageCol, fullCol) {
 
       return function collectionEventHandler (event, model, collection, options) {
+
         var handlers = pageCol._handlers;
         _each(_keys(handlers), function (event) {
           var handler = handlers[event];
@@ -486,28 +461,37 @@
           else delete options.onAdd;
         }
 
-        if (event == "reset" || event == "sort") {
+        if (event == "reset") {
           options = collection;
           collection = model;
 
-          if (collection == pageCol && event == "reset") {
+          // Reset that's not a result of getPage
+          if (collection === pageCol && options.from == null &&
+              options.to == null) {
             var head = fullCol.models.slice(0, pageStart);
             var tail = fullCol.models.slice(pageStart + pageCol.models.length);
-            options = _extend(options, {silent: true});
-            resetQuickly(fullCol, head.concat(pageCol.models).concat(tail),
-                         options);
+            fullCol.reset(head.concat(pageCol.models).concat(tail), options);
           }
-
-          if (event == "reset" || collection == fullCol) {
+          else if (collection === fullCol) {
             if (!(state.totalRecords = fullCol.models.length)) {
               state.totalRecords = null;
               state.totalPages = null;
+            }
+            if (pageCol.mode == "client") {
               state.lastPage = state.currentPage = state.firstPage;
             }
             pageCol.state = pageCol._checkState(state);
-            if (collection == pageCol) fullCol.trigger(event, fullCol, options);
-            else resetQuickly(pageCol, fullCol.models.slice(pageStart, pageEnd),
-                              _extend({}, options, {parse: false}));
+            pageCol.reset(fullCol.models.slice(pageStart, pageEnd),
+                          _extend({}, options, {parse: false}));
+          }
+        }
+
+        if (event == "sort") {
+          options = collection;
+          collection = model;
+          if (collection === fullCol) {
+            pageCol.reset(fullCol.models.slice(pageStart, pageEnd),
+                          _extend({}, options, {parse: false}));
           }
         }
 
@@ -839,13 +823,15 @@
 
       this.state = this._checkState(_extend({}, state, {currentPage: pageNum}));
 
+      options.from = currentPage, options.to = pageNum;
+
       var pageStart = (firstPage === 0 ? pageNum : pageNum - 1) * pageSize;
       var pageModels = fullCollection && fullCollection.length ?
         fullCollection.models.slice(pageStart, pageStart + pageSize) :
         [];
       if ((mode == "client" || (mode == "infinite" && !_isEmpty(pageModels))) &&
           !options.fetch) {
-        return resetQuickly(this, pageModels, _omit(options, "fetch"));
+        return this.reset(pageModels, _omit(options, "fetch"));
       }
 
       if (mode == "infinite") options.url = this.links[pageNum];
@@ -1155,7 +1141,7 @@
         data[kvp[0]] = v;
       }
 
-      var fullCollection = this.fullCollection, links = this.links;
+      var fullCol = this.fullCollection, links = this.links;
 
       if (mode != "server") {
 
@@ -1171,27 +1157,27 @@
           var models = col.models;
           var currentPage = state.currentPage;
 
-          if (mode == "client") resetQuickly(fullCollection, models, opts);
+          if (mode == "client") fullCol.reset(models, opts);
           else if (links[currentPage]) { // refetching a page
             var pageSize = state.pageSize;
             var pageStart = (state.firstPage === 0 ?
                              currentPage :
                              currentPage - 1) * pageSize;
-            var fullModels = fullCollection.models;
+            var fullModels = fullCol.models;
             var head = fullModels.slice(0, pageStart);
             var tail = fullModels.slice(pageStart + pageSize);
             fullModels = head.concat(models).concat(tail);
-            var updateFunc = fullCollection.set || fullCollection.update;
-            updateFunc.call(fullCollection, fullModels,
-                            _extend({silent: true, sort: false}, opts));
-            if (fullCollection.comparator) fullCollection.sort();
-            fullCollection.trigger("reset", fullCollection, opts);
+            var updateFunc = fullCol.set || fullCol.update;
+            // Must silent update and trigger reset later because the event
+            // sychronization handler is temporarily taken out during either add
+            // or remove, which Collection#set does, so the pageable collection
+            // will be out of sync if not silenced because adding will trigger
+            // the sychonization event handler
+            updateFunc.call(fullCol, fullModels, _extend({silent: true}, opts));
+            fullCol.trigger("reset", fullCol, opts);
           }
-          else { // fetching new page
-            fullCollection.add(models, _extend({at: fullCollection.length,
-                                                silent: true}, opts));
-            fullCollection.trigger("reset", fullCollection, opts);
-          }
+          // fetching new page
+          else fullCol.add(models, _extend({at: fullCol.length}, opts));
 
           if (success) success(col, resp, opts);
         };
