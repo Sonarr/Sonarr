@@ -135,6 +135,7 @@
     <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
+    <Compile Include="IndexerTests\FetchAndParseRssServiceFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\NzbxIntegrationTests.cs" />
     <Compile Include="IndexerTests\IntegrationTests\NzbClubIntegrationTests.cs" />
