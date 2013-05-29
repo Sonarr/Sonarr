@@ -1,7 +1,6 @@
 ﻿using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
-using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Datastore.Converters
@@ -23,15 +22,14 @@ namespace NzbDrone.Core.Datastore.Converters
                 return null;
             }
 
-            return  Json.Deserialize(stringValue, map.FieldType);
+            return Json.Deserialize(stringValue, map.FieldType);
         }
 
         public object ToDB(object clrValue)
         {
             if (clrValue == null) return null;
 
-            var json = Json.Serialize(clrValue);
-            return json;
+            return clrValue.ToJson();
         }
 
         public Type DbType

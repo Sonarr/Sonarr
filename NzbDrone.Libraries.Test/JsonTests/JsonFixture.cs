@@ -17,9 +17,7 @@ namespace NzbDrone.Libraries.Test.JsonTests
         {
             var quality = new TypeWithNumbers { Id = 12 };
 
-            var json = Json.Serialize(quality);
-
-            Json.Deserialize<TypeWithNumbers>(json);
+            Json.Deserialize<TypeWithNumbers>(quality.ToJson());
         }
     }
 }

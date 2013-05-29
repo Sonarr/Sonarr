@@ -69,7 +69,7 @@ namespace NzbDrone.Common.Instrumentation
             dictionary.Add("message", logEvent.GetFormattedMessage());
             dictionary.Add("ver", _environmentProvider.Version.ToString());
 
-            _logger.Log(Json.Serialize(dictionary));
+            _logger.Log(dictionary.ToJson());
         }
     }
 }

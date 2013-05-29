@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Indexers
                                      Name = indexer.Name,
                                      Enable = indexer.Enable,
                                      Implementation = indexer.Implementation,
-                                     Settings = Json.Serialize(indexer.Settings)
+                                     Settings = indexer.Settings.ToJson()
                                  };
 
             definition = _indexerRepository.Insert(definition);

@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private string GetSettings(string url)
         {
-            return Json.Serialize(new NewznabSettings { Url = url });
+            return new NewznabSettings { Url = url }.ToJson();
         }
 
         public override IEnumerable<string> RecentFeed

@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Serializer
             return JsonConvert.DeserializeObject(json, type);
         }
 
-        public static string Serialize(object obj)
+        public static string ToJson(this object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }

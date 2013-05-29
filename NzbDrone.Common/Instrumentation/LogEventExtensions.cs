@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Instrumentation
     {
         public static string GetHash(this LogEventInfo logEvent)
         {
-            var stackString = Json.Serialize(logEvent.StackTrace);
+            var stackString = logEvent.StackTrace.ToJson();
             var hashSeed = String.Concat(logEvent.LoggerName, logEvent.Exception.GetType().ToString(), stackString, logEvent.Level);
             return HashUtil.CalculateCrc(hashSeed);
         }

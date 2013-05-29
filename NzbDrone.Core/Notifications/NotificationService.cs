@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Notifications
 
                 var instanceType = newNotification.Instance.GetType();
                 var baseGenArgs = instanceType.BaseType.GetGenericArguments();
-                newNotification.Settings = (INotifcationSettings) Activator.CreateInstance(baseGenArgs[0]);
+                newNotification.Settings = (INotifcationSettings)Activator.CreateInstance(baseGenArgs[0]);
                 newNotification.Implementation = type.Name;
 
                 notifications.Add(newNotification);
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Notifications
         {
             var definition = new NotificationDefinition();
             definition.InjectFrom(notification);
-            definition.Settings = Json.Serialize(notification.Settings);
+            definition.Settings = notification.Settings.ToJson();
 
             definition = _notificationRepository.Insert(definition);
             notification.Id = definition.Id;
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Notifications
         {
             var definition = _notificationRepository.Get(notification.Id);
             definition.InjectFrom(notification);
-            definition.Settings = Json.Serialize(notification.Settings);
+            definition.Settings = notification.Settings.ToJson();
 
             _notificationRepository.Update(definition);
 

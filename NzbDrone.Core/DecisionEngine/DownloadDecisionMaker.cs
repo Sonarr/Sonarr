@@ -6,6 +6,7 @@ using NzbDrone.Core.DecisionEngine.Specifications.Search;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -110,8 +111,8 @@ namespace NzbDrone.Core.DecisionEngine
             }
             catch (Exception e)
             {
-                e.Data.Add("report", remoteEpisode.Report);
-                e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo);
+                e.Data.Add("report", remoteEpisode.Report.ToJson());
+                e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
                 _logger.ErrorException("Couldn't evaluate decision", e);
                 return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
             }
