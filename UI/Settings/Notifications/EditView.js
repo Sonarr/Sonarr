@@ -2,7 +2,8 @@
 
 define([
     'app',
-    'Settings/Notifications/Model'
+    'Settings/Notifications/Model',
+    'Settings/Notifications/DeleteView'
 
 ], function () {
 
@@ -10,19 +11,25 @@ define([
         template  : 'Settings/Notifications/EditTemplate',
 
         events: {
-            'click .x-save': 'save'
+            'click .x-save': '_saveNotification',
+            'click .x-remove': '_deleteNotification'
         },
 
         initialize: function (options) {
             this.notificationCollection = options.notificationCollection;
         },
 
-        save: function () {
+        _saveNotification: function () {
             var name = this.model.get('name');
             var success = 'Notification Saved: ' + name;
             var fail = 'Failed to save notification: ' + name;
 
             this.model.save(undefined, this.syncNotification(success, fail, this));
+        },
+
+        _deleteNotification: function () {
+            var view = new NzbDrone.Settings.Notifications.DeleteView({ model: this.model });
+            NzbDrone.modalRegion.show(view);
         },
 
         syncNotification: function (success, error, context) {
