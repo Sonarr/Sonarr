@@ -13,8 +13,9 @@ define(['app', 'Settings/Notifications/ItemView', 'Settings/Notifications/AddVie
             var schemaCollection = new NzbDrone.Settings.Notifications.Collection();
             schemaCollection.url = '/api/notification/schema';
             schemaCollection.fetch();
+            schemaCollection.url = '/api/notification';
 
-            var view = new NzbDrone.Settings.Notifications.AddView({ collection: schemaCollection});
+            var view = new NzbDrone.Settings.Notifications.AddView({ collection: schemaCollection, notificationCollection: this.collection});
             NzbDrone.modalRegion.show(view);
         }
     });

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
 
@@ -17,7 +18,17 @@ namespace NzbDrone.Api.ClientSchema
                 if (fieldAttribute != null)
                 {
                     var field = fields.Find(f => f.Name == propertyInfo.Name);
-                    propertyInfo.SetValue(model, field.Value, null);
+                    
+                    if (propertyInfo.PropertyType == typeof (Int32))
+                    {
+                        var intValue = Convert.ToInt32(field.Value);
+                        propertyInfo.SetValue(model, intValue, null);
+                    }
+
+                    else
+                    {
+                        propertyInfo.SetValue(model, field.Value, null);
+                    }
                 }
             }
 

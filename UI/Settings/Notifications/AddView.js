@@ -14,10 +14,14 @@ define([
             'click': 'addNotification'
         },
 
+        initialize: function (options) {
+            this.notificationCollection = options.notificationCollection;
+        },
+
         addNotification: function () {
             this.model.set('id', undefined);
             this.model.set('name', '');
-            var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model});
+            var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model, notificationCollection: this.notificationCollection });
             NzbDrone.modalRegion.show(view);
         }
     });
@@ -25,6 +29,16 @@ define([
     NzbDrone.Settings.Notifications.AddView = Backbone.Marionette.CompositeView.extend({
         itemView                : NzbDrone.Settings.Notifications.AddItemView,
         itemViewContainer       : '.notifications .items',
-        template                : 'Settings/Notifications/AddTemplate'
+        template                : 'Settings/Notifications/AddTemplate',
+
+        itemViewOptions: function () {
+            return {
+                notificationCollection: this.notificationCollection
+            };
+        },
+
+        initialize: function (options) {
+            this.notificationCollection = options.notificationCollection;
+        }
     });
 });

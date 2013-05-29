@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Api.ClientSchema;
-using NzbDrone.Common.Reflection;
-using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Notifications;
 using Omu.ValueInjecter;
 
@@ -16,7 +16,9 @@ namespace NzbDrone.Api.Notifications
             _notificationService = notificationService;
 
             GetResourceAll = GetAll;
+            CreateResource = Create;
             UpdateResource = Update;
+            DeleteResource = DeleteNotification;
         }
 
         private List<NotificationResource> GetAll()
@@ -37,32 +39,49 @@ namespace NzbDrone.Api.Notifications
             return result;
         }
 
-        private NotificationResource Update(NotificationResource notificationResource)
+        private NotificationResource Create(NotificationResource notificationResource)
         {
-            //Todo: Convert Resource back to Settings
+            var notification = GetNotification(notificationResource);
 
-            var notification = _notificationService.Get(notificationResource.Id);
-
-            notification.OnGrab = notificationResource.OnGrab;
-            notification.OnDownload = notificationResource.OnDownload;
-
-            var properties = notification.Settings.GetType().GetSimpleProperties();
-
-            foreach (var propertyInfo in properties)
-            {
-                var fieldAttribute = propertyInfo.GetAttribute<FieldDefinitionAttribute>(false);
-
-                if (fieldAttribute != null)
-                {
-                    //Find coresponding field
-
-                    var field = notificationResource.Fields.Find(f => f.Name == propertyInfo.Name);
-
-                    propertyInfo.SetValue(notification.Settings, field.Value, null);
-                }
-            }
+            notification = _notificationService.Create(notification);
+            notificationResource.Id = notification.Id;
 
             return notificationResource;
+        }
+
+        private NotificationResource Update(NotificationResource notificationResource)
+        {
+            var notification = GetNotification(notificationResource);
+            notification.Id = notificationResource.Id;
+            _notificationService.Update(notification);
+
+            return notificationResource;
+        }
+
+        private void DeleteNotification(int id)
+        {
+            _notificationService.Delete(id);
+        }
+
+        private Notification GetNotification(NotificationResource notificationResource)
+        {
+            var notification = _notificationService.Schema()
+                               .SingleOrDefault(i =>
+                                        i.Implementation.Equals(notificationResource.Implementation,
+                                        StringComparison.InvariantCultureIgnoreCase));
+
+            //TODO: How should be handle this error?
+            if (notification == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            notification.Name = notificationResource.Name;
+            notification.OnGrab = notificationResource.OnGrab;
+            notificationResource.OnDownload = notificationResource.OnDownload;
+            notification.Settings = (INotifcationSettings)SchemaDeserializer.DeserializeSchema(notification.Settings, notificationResource.Fields);
+
+            return notification;
         }
     }
 }

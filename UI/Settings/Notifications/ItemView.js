@@ -3,7 +3,8 @@
 define([
     'app',
     'Settings/Notifications/Collection',
-    'Settings/Notifications/EditView'
+    'Settings/Notifications/EditView',
+    'Settings/Notifications/DeleteView'
 
 ], function () {
 
@@ -13,15 +14,15 @@ define([
 
         events: {
             'click .x-edit'  : 'edit',
-            'click .x-remove': 'removeNotification'
+            'click .x-delete': 'deleteNotification'
         },
 
         edit: function () {
-            var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model});
+            var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model, notificationCollection: this.model.collection});
             NzbDrone.modalRegion.show(view);
         },
 
-        removeNotification: function () {
+        deleteNotification: function () {
             var view = new NzbDrone.Settings.Notifications.DeleteView({ model: this.model});
             NzbDrone.modalRegion.show(view);
         }

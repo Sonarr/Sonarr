@@ -13,18 +13,27 @@ define([
             'click .x-save': 'save'
         },
 
-        save: function () {
-            this.model.save();
-
-//            window.alert('saving');
-//            this.model.save(undefined, this.syncNotification("Notification Settings Saved", "Couldn't Save Notification Settings"));
+        initialize: function (options) {
+            this.notificationCollection = options.notificationCollection;
         },
 
+        save: function () {
+            var name = this.model.get('name');
+            var success = 'Notification Saved: ' + name;
+            var fail = 'Failed to save notification: ' + name;
 
-        syncNotification: function (success, error) {
+            this.model.save(undefined, this.syncNotification(success, fail, this));
+        },
+
+        syncNotification: function (success, error, context) {
             return {
                 success: function () {
-                    window.alert(success);
+                    NzbDrone.Shared.Messenger.show({
+                        message: success
+                    });
+
+                    context.notificationCollection.add(context.model, { merge: true });
+                    context.$el.parent().modal('hide');
                 },
 
                 error: function () {

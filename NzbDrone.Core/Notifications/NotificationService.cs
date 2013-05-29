@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 
@@ -16,6 +17,9 @@ namespace NzbDrone.Core.Notifications
         List<Notification> All();
         Notification Get(int id);
         List<Notification> Schema();
+        Notification Create(Notification notification);
+        Notification Update(Notification notification);
+        void Delete(int id);
     }
 
     public class NotificationService
@@ -74,6 +78,43 @@ namespace NzbDrone.Core.Notifications
             }
 
             return notifications.OrderBy(n => n.Name).ToList();
+        }
+
+        public Notification Create(Notification notification)
+        {
+            var definition = new NotificationDefinition()
+            {
+                Name = notification.Name,
+                OnGrab = notification.OnGrab,
+                OnDownload = notification.OnDownload,
+                Implementation = notification.Implementation,
+                Settings = Json.Serialize(notification.Settings)
+            };
+
+            definition = _notificationRepository.Insert(definition);
+            notification.Id = definition.Id;
+
+            return notification;
+        }
+
+        public Notification Update(Notification notification)
+        {
+            var definition = _notificationRepository.Get(notification.Id);
+
+            definition.Name = notification.Name;
+            definition.OnGrab = notification.OnGrab;
+            definition.OnDownload = notification.OnDownload;
+            definition.Implementation = notification.Implementation;
+            definition.Settings = Json.Serialize(notification.Settings);
+
+            _notificationRepository.Update(definition);
+
+            return notification;
+        }
+
+        public void Delete(int id)
+        {
+            _notificationRepository.Delete(id);
         }
 
         private Notification ToNotification(NotificationDefinition definition)
