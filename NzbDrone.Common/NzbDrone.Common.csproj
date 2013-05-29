@@ -103,7 +103,7 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
-    <Compile Include="EnsureThat\StringExtensions.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="HashUtil.cs" />
     <Compile Include="Instrumentation\ApplicationLogLayoutRenderer.cs" />
