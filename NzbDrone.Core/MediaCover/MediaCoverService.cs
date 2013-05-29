@@ -14,14 +14,17 @@ namespace NzbDrone.Core.MediaCover
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IDiskProvider _diskProvider;
+        private readonly ICoverExistsSpecification _coverExistsSpecification;
         private readonly Logger _logger;
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IEnvironmentProvider environmentProvider, Logger logger)
+        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IEnvironmentProvider environmentProvider,
+            ICoverExistsSpecification coverExistsSpecification, Logger logger)
         {
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
+            _coverExistsSpecification = coverExistsSpecification;
             _logger = logger;
 
             _coverRootFolder = environmentProvider.GetMediaCoverPath();
@@ -37,7 +40,7 @@ namespace NzbDrone.Core.MediaCover
             foreach (var cover in series.Images)
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
-                if (!_diskProvider.FileExists(fileName))
+                if (!_coverExistsSpecification.AlreadyExists(cover.Url, fileName))
                 {
                     DownloadCover(series, cover);
                 }

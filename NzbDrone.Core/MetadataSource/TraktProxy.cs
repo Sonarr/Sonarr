@@ -87,7 +87,7 @@ namespace NzbDrone.Core.MetadataSource
 
             var extension = Path.GetExtension(posterUrl);
             var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
-            return withoutExtension + "-138" + extension;
+            return withoutExtension + "-300" + extension;
         }
 
         private static SeriesStatusType GetSeriesStatus(string status)

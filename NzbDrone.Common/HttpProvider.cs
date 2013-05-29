@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -12,6 +13,8 @@ namespace NzbDrone.Common
         string DownloadString(string address);
         string DownloadString(string address, string username, string password);
         string DownloadString(string address, ICredentials identity);
+        Dictionary<string, string> DownloadHeader(string url);
+
         Stream DownloadStream(string url, NetworkCredential credential = null);
         void DownloadFile(string url, string fileName);
         string PostCommand(string address, string username, string password, string command);
@@ -19,6 +22,9 @@ namespace NzbDrone.Common
 
     public class HttpProvider : IHttpProvider
     {
+
+        public const string ContentLenghtHeader = "Content-Length";
+
         private readonly IEnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly string _userAgent;
@@ -54,6 +60,22 @@ namespace NzbDrone.Common
             }
         }
 
+        public Dictionary<string, string> DownloadHeader(string url)
+        {
+            var headers = new Dictionary<string, string>();
+            var request = WebRequest.Create(url);
+            request.Method = "HEAD";
+
+            var response = request.GetResponse();
+
+            foreach (var key in headers.Keys)
+            {
+                headers.Add(key, response.Headers[key]);
+            }
+
+            return headers;
+        }
+
         public Stream DownloadStream(string url, NetworkCredential credential = null)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
@@ -70,7 +92,7 @@ namespace NzbDrone.Common
             try
             {
                 var fileInfo = new FileInfo(fileName);
-                if (!fileInfo.Directory.Exists)
+                if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
                 {
                     fileInfo.Directory.Create();
                 }

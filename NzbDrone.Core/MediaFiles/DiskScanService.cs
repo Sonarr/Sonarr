@@ -86,7 +86,7 @@ namespace NzbDrone.Core.MediaFiles
                 return null;
             }
 
-            var size = _diskProvider.GetSize(filePath);
+            var size = _diskProvider.GetFileSize(filePath);
 
             if (series.SeriesType == SeriesTypes.Daily || parsedEpisode.SeasonNumber > 0)
             {

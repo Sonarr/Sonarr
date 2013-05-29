@@ -142,6 +142,7 @@
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
+    <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />

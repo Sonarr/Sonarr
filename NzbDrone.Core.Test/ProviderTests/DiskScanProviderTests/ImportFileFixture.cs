@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             _fileSize = size;
 
             Mocker.GetMock<IDiskProvider>()
-                    .Setup(d => d.GetSize(It.IsAny<String>()))
+                    .Setup(d => d.GetFileSize(It.IsAny<String>()))
                     .Returns(size);
         }
 

@@ -249,6 +249,7 @@
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
+    <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
     <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
     <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />

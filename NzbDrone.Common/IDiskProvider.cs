@@ -18,7 +18,7 @@ namespace NzbDrone.Common
         string[] GetDirectories(string path);
         string[] GetFiles(string path, SearchOption searchOption);
         long GetDirectorySize(string path);
-        long GetSize(string path);
+        long GetFileSize(string path);
         String CreateFolder(string path);
         void CopyDirectory(string source, string target);
         void MoveDirectory(string source, string destination);
@@ -131,7 +131,7 @@ namespace NzbDrone.Common
             return GetFiles(path, SearchOption.AllDirectories).Sum(e => new FileInfo(e).Length);
         }
 
-        public virtual long GetSize(string path)
+        public virtual long GetFileSize(string path)
         {
             Ensure.That(() => path).IsValidPath();
 
