@@ -56,6 +56,11 @@ namespace NzbDrone.Common.Instrumentation
                 dictionary.Add("ex", logEvent.Exception.ToString());
                 dictionary.Add("extyp", logEvent.Exception.GetType().Name);
                 dictionary.Add("hash", logEvent.GetHash());
+
+                foreach (var key in logEvent.Exception.Data.Keys)
+                {
+                    dictionary.Add(key.ToString(), logEvent.Exception.Data[key]);
+                }
             }
 
             dictionary.Add("logger", logEvent.LoggerName);

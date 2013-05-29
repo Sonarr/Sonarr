@@ -110,6 +110,8 @@ namespace NzbDrone.Core.DecisionEngine
             }
             catch (Exception e)
             {
+                e.Data.Add("report", remoteEpisode.Report);
+                e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo);
                 _logger.ErrorException("Couldn't evaluate decision", e);
                 return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
             }
