@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
@@ -13,6 +15,7 @@ namespace NzbDrone.Api.Indexers
         {
             _indexerService = indexerService;
             GetResourceAll = GetAll;
+            CreateResource = Create;
         }
 
         private List<IndexerResource> GetAll()
@@ -31,6 +34,29 @@ namespace NzbDrone.Api.Indexers
             }
 
             return result;
+        }
+
+        private IndexerResource Create(IndexerResource indexerResource)
+        {
+            var indexer = _indexerService.Schema()
+                               .SingleOrDefault(i =>
+                                        i.Implementation.Equals(indexerResource.Implementation,                                         
+                                        StringComparison.InvariantCultureIgnoreCase));
+
+            //TODO: How should be handle this error?
+            if (indexer == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            indexer.Name = indexerResource.Name;
+            indexer.Enable = indexerResource.Enable;
+            indexer.Settings = (IIndexerSetting)SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
+
+            indexer = _indexerService.Create(indexer);
+            indexerResource.Id = indexer.Id;
+
+            return indexerResource;
         }
     }
 }

@@ -5,23 +5,22 @@ define(['app', 'Settings/SettingsModel', 'Shared/Messenger'], function () {
             template: 'Settings/General/GeneralTemplate',
 
             initialize: function () {
-
                 NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this.saveSettings, this);
             },
 
             saveSettings: function () {
                 if (!this.model.isSaved) {
-                    this.model.save(undefined, this.syncNotification("Naming Settings Saved", "Couldn't Save Naming Settings"));
+                    this.model.save(undefined, this.syncNotification("General Settings Saved", "Couldn't Save General Settings"));
                 }
             },
 
             syncNotification: function (success, error) {
                 return {
                     success: function () {
-                        NzbDrone.Shared.Messenger.show({message: 'General Settings Saved'});
+                        NzbDrone.Shared.Messenger.show({message: success});
                     },
                     error  : function () {
-                        NzbDrone.Shared.Messenger.show({message: "Couldn't Save General Settings", type: 'error'});
+                        NzbDrone.Shared.Messenger.show({message: error, type: 'error'});
                     }
                 };
             }

@@ -95,6 +95,7 @@
     <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
+    <Compile Include="ClientSchema\SchemaDeserializer.cs" />
     <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
     <Compile Include="ClientSchema\Field.cs" />
     <Compile Include="ClientSchema\SchemaBuilder.cs" />

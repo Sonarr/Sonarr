@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
 
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Indexers
         public bool Enable { get; set; }
         public IIndexerSetting Settings { get; set; }
         public IIndexer Instance { get; set; }
+        public string Implementation { get; set; }
     }
 
     public interface IIndexerService
@@ -23,6 +25,7 @@ namespace NzbDrone.Core.Indexers
         List<IIndexer> GetAvailableIndexers();
         Indexer Get(string name);
         List<Indexer> Schema();
+        Indexer Create(Indexer indexer);
     }
 
     public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
@@ -63,10 +66,27 @@ namespace NzbDrone.Core.Indexers
             newznab.Id = 1;
             newznab.Name = "Newznab";
             newznab.Settings = new NewznabSettings();
+            newznab.Implementation = "Newznab";
 
             indexers.Add(newznab);
 
             return indexers;
+        }
+
+        public Indexer Create(Indexer indexer)
+        {
+            var definition = new IndexerDefinition
+                                 {
+                                     Name = indexer.Name,
+                                     Enable = indexer.Enable,
+                                     Implementation = indexer.Implementation,
+                                     Settings = Json.Serialize(indexer.Settings)
+                                 };
+
+            definition = _indexerRepository.Insert(definition);
+            indexer.Id = definition.Id;
+
+            return indexer;
         }
 
         private Indexer ToIndexer(IndexerDefinition definition)
@@ -76,6 +96,7 @@ namespace NzbDrone.Core.Indexers
             indexer.Enable = definition.Enable;
             indexer.Instance = GetInstance(definition);
             indexer.Name = definition.Name;
+            indexer.Implementation = definition.Implementation;
 
             if (indexer.Instance.GetType().GetMethod("ImportSettingsFromJson") != null)
             {

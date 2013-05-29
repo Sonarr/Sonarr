@@ -13,18 +13,23 @@ define([
             'click .x-save': 'save'
         },
 
-        save: function () {
-            this.model.save();
-
-//            window.alert('saving');
-//            this.model.save(undefined, this.syncNotification("Notification Settings Saved", "Couldn't Save Notification Settings"));
+        initialize: function (options) {
+            this.indexerCollection = options.indexerCollection;
         },
 
+        save: function () {
+            this.model.save(undefined, this.syncNotification("Indexer Saved", "Couldn't Save Indexer", this));
+        },
 
-        syncNotification: function (success, error) {
+        syncNotification: function (success, error, context) {
             return {
                 success: function () {
-                    window.alert(success);
+                    NzbDrone.Shared.Messenger.show({
+                        message: success
+                    });
+
+                    context.indexerCollection.add(context.model);
+                    context.$el.parent().modal('hide');
                 },
 
                 error: function () {
