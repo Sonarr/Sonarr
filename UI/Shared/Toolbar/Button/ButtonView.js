@@ -52,7 +52,10 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
                     }
                 });
 
-                commandPromise.fail(function () {
+                commandPromise.fail(function (options) {
+                    if (options.readyState === 0 || options.status === 0) {
+                        return;
+                    }
                     if (self.model.get('errorMessage')) {
                         NzbDrone.Shared.Messenger.show({
                             message: self.model.get('errorMessage'),
@@ -62,9 +65,11 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
                 });
 
                 commandPromise.always(function () {
-                    self.$el.removeClass('disabled');
-                    self.ui.icon.removeClass('icon-spinner icon-spin');
-                    self.idle = true;
+                    if (!self.isClosed) {
+                        self.$el.removeClass('disabled');
+                        self.ui.icon.removeClass('icon-spinner icon-spin');
+                        self.idle = true;
+                    }
                 });
             }
         },

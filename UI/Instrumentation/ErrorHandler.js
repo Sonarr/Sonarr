@@ -68,7 +68,8 @@
         };
 
         if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
-            message.message = 'NzbDrone Server Not Reachable. make sure NzbDrone is running.';
+            return false;
+            //message.message = 'NzbDrone Server Not Reachable. make sure NzbDrone is running.';
         } else {
             message.message = "[{0}] {1} : {2}".format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
         }
