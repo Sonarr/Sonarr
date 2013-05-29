@@ -5,10 +5,10 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabSettings : IIndexerSetting
     {
-        [FieldDefinition(0, Label = "URL", HelpText = "NewzNab Host Url")]
+        [FieldDefinition(0, Label = "URL")]
         public String Url { get; set; }
 
-        [FieldDefinition(1, Label = "API Key", HelpText = "Your API Key")]
+        [FieldDefinition(1, Label = "API Key")]
         public String ApiKey { get; set; }
 
         public bool IsValid

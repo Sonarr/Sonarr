@@ -5,10 +5,10 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
     public class OmgwtfnzbsSetting : IIndexerSetting
     {
-        [FieldDefinition(0, Label = "Username", HelpText = "Your Username")]
+        [FieldDefinition(0, Label = "Username")]
         public String Username { get; set; }
 
-        [FieldDefinition(1, Label = "API Key", HelpText = "Your API Key")]
+        [FieldDefinition(1, Label = "API Key")]
         public String ApiKey { get; set; }
 
         public bool IsValid
