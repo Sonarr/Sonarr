@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             }
         }
 
-
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<string>();
@@ -68,7 +67,5 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             return searchUrls;
         }
-
-
     }
 }

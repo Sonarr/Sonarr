@@ -17,7 +17,7 @@ namespace NzbDrone.Core.MetadataSource
         public List<Series> SearchForNewSeries(string title)
         {
             var client = BuildClient("search", "shows");
-            var restRequest = new RestRequest(title.ToSlug().Replace("-", "+"));
+            var restRequest = new RestRequest(title.ToSearchTerm());
             var response = client.Execute<List<Show>>(restRequest);
 
             return response.Data.Select(MapSeries).ToList();

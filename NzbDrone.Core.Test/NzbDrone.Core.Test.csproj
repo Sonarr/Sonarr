@@ -192,7 +192,7 @@
     <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
     <Compile Include="ProviderTests\EventClientProviderTest.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
-    <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
+    <Compile Include="SeriesStatsTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
@@ -204,7 +204,7 @@
     <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileServiceTest.cs" />
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
-    <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
+    <Compile Include="SeriesStatsTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTests\ParserFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

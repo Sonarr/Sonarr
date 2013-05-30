@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.ClientSchema;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
@@ -46,7 +47,7 @@ namespace NzbDrone.Api.Indexers
 
             if (indexer == null)
             {
-                throw new BadRequestException("Invalid Notification Implementation");
+                throw new BadRequestException("Invalid Indexer Implementation");
             }
 
             indexer.Name = indexerResource.Name;
@@ -55,11 +56,10 @@ namespace NzbDrone.Api.Indexers
 
             indexer = _indexerService.Create(indexer);
 
-            var responseResource = new IndexerResource();
-            responseResource.InjectFrom(indexer);
-            responseResource.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
+            var response = indexer.InjectTo<IndexerResource>();
+            response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
 
-            return responseResource;
+            return response;
         }
     }
 }

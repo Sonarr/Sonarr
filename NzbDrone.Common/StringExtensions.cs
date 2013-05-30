@@ -15,8 +15,8 @@ namespace NzbDrone.Common
             return string.Format(format, formattingArgs.Cast<object>());
         }
 
-
         private static readonly Regex InvalidCharRegex = new Regex(@"[^a-z0-9\s-]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-z0-9\s-\.]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static string ToSlug(this string phrase)
@@ -27,6 +27,18 @@ namespace NzbDrone.Common
             phrase = CollapseSpace.Replace(phrase, " ").Trim();
             phrase = phrase.Replace(" ", "-");
 
+            return phrase;
+        }
+
+        public static string ToSearchTerm(this string phrase)
+        {
+            phrase = phrase.RemoveAccent().ToLower();
+
+            phrase = phrase.Replace("&", "and");
+            phrase = InvalidSearchCharRegex.Replace(phrase, string.Empty);
+            phrase = CollapseSpace.Replace(phrase, " ").Trim();
+            phrase = phrase.Replace(" ", "+");
+            
             return phrase;
         }
 

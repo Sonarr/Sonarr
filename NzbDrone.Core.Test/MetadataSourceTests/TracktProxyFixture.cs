@@ -11,16 +11,18 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
     [TestFixture]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
-        [TestCase("The Simpsons")]
-        [TestCase("South Park")]
-        [TestCase("Franklin & Bash")]
-        public void successful_search(string title)
+        [TestCase("The Simpsons", "The Simpsons")]
+        [TestCase("South Park", "South Park")]
+        [TestCase("Franklin & Bash", "Franklin & Bash")]
+        [TestCase("Mr. D", "Mr. D")]
+        [TestCase("Rob & Big", "Rob and Big")]
+        public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
 
             result.Should().NotBeEmpty();
 
-            result[0].Title.Should().Be(title);
+            result[0].Title.Should().Be(expected);
         }
 
 

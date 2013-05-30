@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.ClientSchema;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Notifications;
 using Omu.ValueInjecter;
@@ -47,11 +48,10 @@ namespace NzbDrone.Api.Notifications
             notification = _notificationService.Create(notification);
             notificationResource.Id = notification.Id;
 
-            var responseResource = new NotificationResource();
-            responseResource.InjectFrom(notification);
-            responseResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+            var response = notification.InjectTo<NotificationResource>();
+            response.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
 
-            return responseResource;
+            return response;
         }
 
         private NotificationResource Update(NotificationResource notificationResource)
@@ -60,11 +60,10 @@ namespace NzbDrone.Api.Notifications
             notification.Id = notificationResource.Id;
             notification = _notificationService.Update(notification);
 
-            var responseResource = new NotificationResource();
-            responseResource.InjectFrom(notification);
-            responseResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+            var response = notification.InjectTo<NotificationResource>();
+            response.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
 
-            return responseResource;
+            return response;
         }
 
         private void DeleteNotification(int id)
