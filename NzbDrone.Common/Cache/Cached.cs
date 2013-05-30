@@ -64,5 +64,20 @@ namespace NzbDrone.Common.Cache
             T value;
             _store.TryRemove(key, out value);
         }
+
+        public ICollection<T> Values
+        {
+            get
+            {
+                return _store.Values;
+            }
+        }
+        public ICollection<string> Keys
+        {
+            get
+            {
+                return _store.Keys;
+            }
+        }
     }
 }

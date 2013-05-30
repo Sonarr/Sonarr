@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Datastore
         TModel Single();
     }
 
+
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
         private readonly IDatabase _database;
@@ -200,6 +201,16 @@ namespace NzbDrone.Core.Datastore
             {
                 _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
             }
+        }
+
+        protected virtual void OnModelChanged(IEnumerable<TModel> models)
+        {
+
+        }
+
+        protected virtual void OnModelDeleted(IEnumerable<TModel> models)
+        {
+
         }
 
         protected virtual bool PublishModelEvents
