@@ -24,7 +24,7 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
             SharedValidator.RuleFor(c => c.NumberStyle).InclusiveBetween(0, 3);
             SharedValidator.RuleFor(c => c.SeasonFolderFormat).NotEmpty();
-            SharedValidator.RuleFor(c => c.Separator).NotEmpty();
+            SharedValidator.RuleFor(c => c.Separator).Matches(@"\s|\s\-\s|\.");
         }
 
         private NamingConfigResource UpdateNamingConfig(NamingConfigResource resource)
