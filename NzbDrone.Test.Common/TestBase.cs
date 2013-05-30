@@ -22,7 +22,6 @@ namespace NzbDrone.Test.Common
         {
             _subject = null;
 
-            Mocker.SetConstant<ICacheManger>(new CacheManger());
         }
 
         protected TSubject Subject
@@ -77,6 +76,7 @@ namespace NzbDrone.Test.Common
         {
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
 
+            Mocker.SetConstant<ICacheManger>(new CacheManger());
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
 
@@ -85,6 +85,7 @@ namespace NzbDrone.Test.Common
             TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
 
             MockedRestProvider = new Mock<RestProvider>();
+
 
             Directory.CreateDirectory(TempFolder);
         }
