@@ -25,6 +25,13 @@ namespace NzbDrone.Common.Cache
             return Get(key, () => { throw new KeyNotFoundException(key); });
         }
 
+        public T Find(string key)
+        {
+            T value;
+            _store.TryGetValue(key, out value);
+            return value;
+        }
+
         public T Get(string key, Func<T> function)
         {
             Ensure.That(() => key).IsNotNullOrWhiteSpace();

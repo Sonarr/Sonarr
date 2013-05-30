@@ -6,8 +6,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingRepository : IBasicRepository<SceneMapping>
     {
-        SceneMapping FindByTvdbId(int tvdbId);
-        SceneMapping FindByCleanTitle(string cleanTitle);
 
     }
 
@@ -18,14 +16,5 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         {
         }
 
-        public SceneMapping FindByTvdbId(int tvdbId)
-        {
-            return Query.SingleOrDefault(c => c.TvdbId == tvdbId);
-        }
-
-        public SceneMapping FindByCleanTitle(string cleanTitle)
-        {
-            return Query.SingleOrDefault(c => c.CleanTitle == cleanTitle);
-        }
     }
 }

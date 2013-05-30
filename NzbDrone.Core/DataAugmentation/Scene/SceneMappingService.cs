@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 
@@ -22,33 +23,43 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
         private readonly Logger _logger;
+        private readonly ICached<SceneMapping> _getSceneNameCache;
+        private readonly ICached<SceneMapping> _gettvdbIdCache;
 
-        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, Logger logger)
+        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ICacheManger cacheManger, Logger logger)
         {
             _repository = repository;
             _sceneMappingProxy = sceneMappingProxy;
+
+            _getSceneNameCache = cacheManger.GetCache<SceneMapping>(GetType(), "scene_name");
+            _gettvdbIdCache = cacheManger.GetCache<SceneMapping>(GetType(), "tvdb_id");
             _logger = logger;
         }
 
         public string GetSceneName(int tvdbId, int seasonNumber = -1)
         {
-            var mapping = _repository.FindByTvdbId(tvdbId);
+            lock (mutex)
+            {
+                var mapping = _getSceneNameCache.Find(tvdbId.ToString());
 
-            if (mapping == null) return null;
+                if (mapping == null) return null;
 
-            return mapping.SceneName;
+                return mapping.SceneName;
+            }
         }
-
 
 
         public Nullable<Int32> GetTvDbId(string cleanName)
         {
-            var mapping = _repository.FindByCleanTitle(cleanName);
+            lock (mutex)
+            {
+                var mapping = _gettvdbIdCache.Find(cleanName);
 
-            if (mapping == null)
-                return null;
+                if (mapping == null)
+                    return null;
 
-            return mapping.TvdbId;
+                return mapping.TvdbId;
+            }
         }
 
 
@@ -65,13 +76,22 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             try
             {
                 var mappings = _sceneMappingProxy.Fetch();
-                
+
                 lock (mutex)
                 {
                     if (mappings.Any())
                     {
                         _repository.Purge();
                         _repository.InsertMany(mappings);
+
+                        _gettvdbIdCache.Clear();
+                        _getSceneNameCache.Clear();
+
+                        foreach (var sceneMapping in mappings)
+                        {
+                            _getSceneNameCache.Set(sceneMapping.TvdbId.ToString(), sceneMapping);
+                            _gettvdbIdCache.Set(sceneMapping.CleanTitle, sceneMapping);
+                        }
                     }
                     else
                     {

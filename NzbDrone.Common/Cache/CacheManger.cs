@@ -5,8 +5,8 @@ namespace NzbDrone.Common.Cache
 {
     public interface ICacheManger
     {
-        ICached<T> GetCache<T>(Type type);
-        ICached<T> GetCache<T>(object host);
+        ICached<T> GetCache<T>(Type host, string name);
+        ICached<T> GetCache<T>(Type host);
     }
 
     public class CacheManger : ICacheManger
@@ -19,16 +19,18 @@ namespace NzbDrone.Common.Cache
 
         }
 
-        public ICached<T> GetCache<T>(Type type)
+        public ICached<T> GetCache<T>(Type host)
         {
-            Ensure.That(() => type).IsNotNull();
-
-            return (ICached<T>)_cache.Get(type.FullName, () => new Cached<T>());
+            Ensure.That(() => host).IsNotNull();
+            return GetCache<T>(host, host.FullName);
         }
 
-        public ICached<T> GetCache<T>(object host)
+        public ICached<T> GetCache<T>(Type host, string name)
         {
-            return GetCache<T>(host.GetType());
+            Ensure.That(() => host).IsNotNull();
+            Ensure.That(() => name).IsNotNullOrWhiteSpace();
+
+            return (ICached<T>)_cache.Get(host.FullName + "_" + name, () => new Cached<T>());
         }
     }
 }

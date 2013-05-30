@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Configuration
         public ConfigFileProvider(IEnvironmentProvider environmentProvider, ICacheManger cacheManger)
         {
             _environmentProvider = environmentProvider;
-            _cache = cacheManger.GetCache<string>(this);
+            _cache = cacheManger.GetCache<string>(this.GetType());
             _configFile = _environmentProvider.GetConfigPath();
         }
 

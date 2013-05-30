@@ -75,6 +75,24 @@ namespace NzbDrone.Common.Test.CacheTests
 
             _cachedString.Get("Key").Should().Be("New");
         }
+
+        [Test]
+        public void should_store_null()
+        {
+            int hitCount = 0;
+
+
+            for (int i = 0; i < 10; i++)
+            {
+                _cachedString.Get("key", () =>
+                {
+                    hitCount++;
+                    return null;
+                }); 
+            }
+
+            hitCount.Should().Be(1);
+        }
     }
 
     public class Worker
