@@ -116,8 +116,9 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
         {
-            return Query//.Join<Episode, Series>(JoinType.None, e => e.Series, (e, s) => e.SeriesId == s.Id);
-                          .Where<Episode>(e => e.AirDate >= startDate && e.AirDate <= endDate).ToList();
+            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                        .Where<Episode>(e => e.AirDate >= startDate)
+                        .AndWhere(e => e.AirDate <= endDate).ToList();
         }
 
         public void SetIgnoreFlat(Episode episode, bool ignoreFlag)

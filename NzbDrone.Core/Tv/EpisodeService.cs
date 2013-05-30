@@ -281,7 +281,7 @@ namespace NzbDrone.Core.Tv
         {
             var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
 
-            return LinkSeriesToEpisodes(episodes);
+            return episodes;
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
