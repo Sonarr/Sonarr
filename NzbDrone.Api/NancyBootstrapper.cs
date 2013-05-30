@@ -19,7 +19,6 @@ using TinyIoC;
 
 namespace NzbDrone.Api
 {
-    [Singleton]
     public class NancyBootstrapper : TinyIoCNancyBootstrapper
     {
         private readonly TinyIoCContainer _tinyIoCContainer;

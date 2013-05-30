@@ -3,13 +3,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Messaging
 {
-    [Singleton]
     public class MessageAggregator : IMessageAggregator
     {
         private readonly Logger _logger;

@@ -64,22 +64,12 @@ namespace NzbDrone.Common.Composition
                 var impl = implementations.Single();
 
                 Trace.WriteLine(string.Format("Registering {0} -> {1}", contractType.FullName, impl.Name));
-
-
-                if (impl.HasAttribute<SingletonAttribute>())
-                {
-                    Container.RegisterSingleton(contractType, impl);
-                }
-                else
-                {
-                    Container.Register(contractType, impl);
-                }
+                Container.RegisterSingleton(contractType, impl);
             }
             else
             {
                 Trace.WriteLine(string.Format("Registering {0} -> {1}", contractType.FullName, implementations.Count));
-
-                Container.RegisterAll(contractType, implementations);
+                Container.RegisterAllAsSingleton(contractType, implementations);
             }
         }
 

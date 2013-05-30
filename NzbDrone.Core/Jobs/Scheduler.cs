@@ -9,7 +9,6 @@ using Timer = System.Timers.Timer;
 
 namespace NzbDrone.Core.Jobs
 {
-    [Singleton]
     public class Scheduler :
         IHandle<ApplicationStartedEvent>,
         IHandle<ApplicationShutdownRequested>

@@ -2,7 +2,6 @@
 using System.Data.SQLite;
 using Marr.Data;
 using Marr.Data.Reflection;
-using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 
@@ -13,7 +12,6 @@ namespace NzbDrone.Core.Datastore
         IDatabase Create(string dbPath, MigrationType migrationType = MigrationType.Main);
     }
 
-    [Singleton]
     public class DbFactory : IDbFactory
     {
         private readonly IMigrationController _migrationController;

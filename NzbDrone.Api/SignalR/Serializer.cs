@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNet.SignalR.Json;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Api.SignalR
 {
-    [Singleton]
     public class Serializer : IJsonSerializer
     {
         private readonly JsonNetSerializer _signalRSerializer = new JsonNetSerializer();

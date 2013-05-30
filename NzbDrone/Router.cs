@@ -9,7 +9,6 @@ using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone
 {
-    [Singleton]
     public class Router
     {
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;

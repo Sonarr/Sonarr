@@ -24,7 +24,7 @@ namespace NzbDrone.Common.Composition
         IEnumerable<T> ResolveAll<T>() where T : class;
         IEnumerable<object> ResolveAll(Type type);
         void Register(Type registrationType, object instance);
-        void RegisterAll(Type registrationType, IEnumerable<Type> implementationList);
+        void RegisterAllAsSingleton(Type registrationType, IEnumerable<Type> implementationList);
         bool IsTypeRegistered(Type type);
 
         IEnumerable<Type> GetImplementations(Type contractType);

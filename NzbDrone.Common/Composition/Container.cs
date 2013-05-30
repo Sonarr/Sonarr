@@ -86,9 +86,9 @@ namespace NzbDrone.Common.Composition
             _container.Register(registrationType, instance);
         }
 
-        public void RegisterAll(Type registrationType, IEnumerable<Type> implementationList)
+        public void RegisterAllAsSingleton(Type registrationType, IEnumerable<Type> implementationList)
         {
-            _container.RegisterMultiple(registrationType, implementationList);
+            _container.RegisterMultiple(registrationType, implementationList).AsSingleton();
         }
 
         public bool IsTypeRegistered(Type type)
