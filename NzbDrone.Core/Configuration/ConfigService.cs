@@ -172,7 +172,7 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClient", value); }
         }
 
-        public string BlackholeDirectory
+        public string BlackholeFolder
         {
             get { return GetValue("BlackholeDirectory", String.Empty); }
             set { SetValue("BlackholeDirectory", value); }
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("MetadataUseBanners", value); }
         }
 
-        public string PneumaticDirectory
+        public string PneumaticFolder
         {
             get { return GetValue("PneumaticDirectory", String.Empty); }
             set { SetValue("PneumaticDirectory", value); }

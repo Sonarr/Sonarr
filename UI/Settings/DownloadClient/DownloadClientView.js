@@ -39,32 +39,32 @@ define([
         refreshUIVisibility: function (clientId) {
 
             if (!clientId) {
-                clientId = "0";
+                clientId = "sabnzbd";
             }
 
             switch (clientId.toString()) {
-                case "0":
+                case "sabnzbd":
                     this.ui.sabConfig.show();
                     this.ui.blackholeConfig.hide();
                     this.ui.pneumaticConfig.hide();
                     this.ui.nzbGetConfig.hide();
                     break;
 
-                case "1":
+                case "blackhole":
                     this.ui.sabConfig.hide();
                     this.ui.blackholeConfig.show();
                     this.ui.pneumaticConfig.hide();
                     this.ui.nzbGetConfig.hide();
                     break;
 
-                case "2":
+                case "pneumatic":
                     this.ui.sabConfig.hide();
                     this.ui.blackholeConfig.hide();
                     this.ui.pneumaticConfig.show();
                     this.ui.nzbGetConfig.hide();
                     break;
 
-                case "3":
+                case "nzbget":
                     this.ui.sabConfig.hide();
                     this.ui.blackholeConfig.hide();
                     this.ui.pneumaticConfig.hide();

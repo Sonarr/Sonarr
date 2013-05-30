@@ -27,10 +27,10 @@ namespace NzbDrone.Core.Configuration
         int Retention { get; set; }
         Guid UGuid { get; }
         DownloadClientType DownloadClient { get; set; }
-        string BlackholeDirectory { get; set; }
+        string BlackholeFolder { get; set; }
         string ServiceRootUrl { get; }
         Boolean MetadataUseBanners { get; set; }
-        string PneumaticDirectory { get; set; }
+        string PneumaticFolder { get; set; }
         string RecycleBin { get; set; }
         int RssSyncInterval { get; set; }
         Boolean IgnoreArticlesWhenSortingSeries { get; set; }

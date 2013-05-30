@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Download.Clients
             {
                 title = FileNameBuilder.CleanFilename(title);
 
-                var filename = Path.Combine(_configService.BlackholeDirectory, title + ".nzb");
+                var filename = Path.Combine(_configService.BlackholeFolder, title + ".nzb");
 
                 if (_diskProvider.FileExists(filename))
                 {

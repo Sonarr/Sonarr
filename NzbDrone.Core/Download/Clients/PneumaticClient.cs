@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Download.Clients
                 title = FileNameBuilder.CleanFilename(title);
 
                 //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
-                var filename = Path.Combine(_configService.PneumaticDirectory, title + ".nzb");
+                var filename = Path.Combine(_configService.PneumaticFolder, title + ".nzb");
 
                 if (_diskProvider.FileExists(filename))
                 {

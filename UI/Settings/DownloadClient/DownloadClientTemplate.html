@@ -6,10 +6,10 @@
 
         <div class="controls">
             <select class="inputClass x-download-client" name="downloadClient">
-                <option value="0">SABnzbd</option>
-                <option value="1">Blackhole</option>
-                <option value="2">Pneumatic</option>
-                <option value="3">NZBGet</option>
+                <option value="sabnzbd">SABnzbd</option>
+                <option value="blackhole">Blackhole</option>
+                <option value="pneumatic">Pneumatic</option>
+                <option value="nzbget">NZBGet</option>
             </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="What method do you download NZBs with?"></i>
@@ -114,12 +114,12 @@
 
         <div class="controls">
             <select name="sabBacklogTvPriority">
-                <option>Default</option>
-                <option>Paused</option>
-                <option>Low</option>
-                <option>Normal</option>
-                <option>High</option>
-                <option>Force</option>
+                <option value="default">Default</option>
+                <option value="paused">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="force">Force</option>
             </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="Priority to use when sending episodes older than 7 days to SABnzbd"></i>
@@ -132,12 +132,12 @@
 
         <div class="controls">
             <select name="sabRecentTvPriority">
-                <option>Default</option>
-                <option>Paused</option>
-                <option>Low</option>
-                <option>Normal</option>
-                <option>High</option>
-                <option>Force</option>
+                <option value="default">Default</option>
+                <option value="paused">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="force">Force</option>
             </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="Priority to use when sending episodes that aired within the last 7 days to SABnzbd"></i>
@@ -160,12 +160,12 @@
 <fieldset class="x-blackhole-config">
     <legend>Blackhole</legend>
     <div class="control-group">
-        <label class="control-label">Blackhole Directory</label>
+        <label class="control-label">Blackhole Folder</label>
 
         <div class="controls">
-            <input type="text" name="blackholeDirectory" class="x-path"/>
+            <input type="text" name="blackholeFolder" class="x-path"/>
             <span class="help-inline">
-                <i class="icon-question-sign" title="The directory where your download client will pickup .nzb files"></i>
+                <i class="icon-question-sign" title="The folder where your download client will pickup .nzb files"></i>
             </span>
         </div>
     </div>
@@ -174,12 +174,12 @@
 <fieldset class="x-pneumatic-config">
     <legend>Pneumatic</legend>
     <div class="control-group">
-        <label class="control-label">Nzb Directory</label>
+        <label class="control-label">Nzb Folder</label>
 
         <div class="controls">
-            <input type="text" name="pneumaticDirectory" class="x-path"/>
+            <input type="text" name="pneumaticFolder" class="x-path"/>
             <span class="help-inline">
-                <i class="icon-question-sign" title="Directory to save NZBs for Pneumatic<br/>must be accessible from XBMC"></i>
+                <i class="icon-question-sign" title="Folder to save NZBs for Pneumatic<br/>must be accessible from XBMC"></i>
             </span>
         </div>
     </div>
@@ -258,12 +258,12 @@
 
         <div class="controls">
             <select name="nzbgetBacklogTvPriority">
-                <option>Default</option>
-                <option>Paused</option>
-                <option>Low</option>
-                <option>Normal</option>
-                <option>High</option>
-                <option>Force</option>
+                <option value="default">Default</option>
+                <option value="pasued">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="force">Force</option>
             </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="Priority to use when sending episodes older than 7 days to NZBGet"></i>
@@ -276,12 +276,12 @@
 
         <div class="controls">
             <select name="nzbgetRecentTvPriority">
-                <option>Default</option>
-                <option>Paused</option>
-                <option>Low</option>
-                <option>Normal</option>
-                <option>High</option>
-                <option>Force</option>
+                <option value="default">Default</option>
+                <option value="pasued">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="force">Force</option>
             </select>
             <span class="help-inline">
                 <i class="icon-question-sign" title="Priority to use when sending episodes that aired within the last 7 days to NZBGet"></i>
