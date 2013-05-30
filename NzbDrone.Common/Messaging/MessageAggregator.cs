@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
@@ -12,11 +11,14 @@ namespace NzbDrone.Common.Messaging
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
+        private readonly TaskFactory _taskFactory;
 
         public MessageAggregator(Logger logger, IServiceFactory serviceFactory)
         {
             _logger = logger;
             _serviceFactory = serviceFactory;
+            var scheduler = new LimitedConcurrencyLevelTaskScheduler(2);
+            _taskFactory = new TaskFactory(scheduler);
         }
 
         public void PublishEvent<TEvent>(TEvent @event) where TEvent : class ,IEvent
@@ -45,12 +47,13 @@ namespace NzbDrone.Common.Messaging
             foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<TEvent>>())
             {
                 var handlerLocal = handler;
-                Task.Factory.StartNew(() =>
+
+                _taskFactory.StartNew(() =>
                 {
                     _logger.Debug("{0} ~> {1}", eventName, handlerLocal.GetType().Name);
                     handlerLocal.HandleAsync(@event);
                     _logger.Debug("{0} <~ {1}", eventName, handlerLocal.GetType().Name);
-                });
+                }, TaskCreationOptions.PreferFairness);
             }
         }
 

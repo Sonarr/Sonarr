@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Test.Common;
+using FluentAssertions;
 
 namespace NzbDrone.Common.Test.EventingTests
 {
@@ -16,6 +18,8 @@ namespace NzbDrone.Common.Test.EventingTests
         private Mock<IHandle<EventB>> HandlerB1;
         private Mock<IHandle<EventB>> HandlerB2;
 
+        private Mock<IHandleAsync<EventA>> AsyncHandlerA1;
+
 
         [SetUp]
         public void Setup()
@@ -24,6 +28,8 @@ namespace NzbDrone.Common.Test.EventingTests
             HandlerA2 = new Mock<IHandle<EventA>>();
             HandlerB1 = new Mock<IHandle<EventB>>();
             HandlerB2 = new Mock<IHandle<EventB>>();
+
+            AsyncHandlerA1 = new Mock<IHandleAsync<EventA>>();
 
             Mocker.GetMock<IServiceFactory>()
                   .Setup(c => c.BuildAll<IHandle<EventA>>())
@@ -79,6 +85,50 @@ namespace NzbDrone.Common.Test.EventingTests
             ExceptionVerification.ExpectedErrors(1);
         }
 
+
+        [Test]
+        public void should_queue_multiple_async_events()
+        {
+            var eventA = new EventA();
+
+
+
+            var handlers = new List<IHandleAsync<EventA>>
+                {
+                    AsyncHandlerA1.Object, 
+                    AsyncHandlerA1.Object,
+                    AsyncHandlerA1.Object,
+                    AsyncHandlerA1.Object,
+                    AsyncHandlerA1.Object,
+                    AsyncHandlerA1.Object, 
+                    AsyncHandlerA1.Object,
+                };
+
+            Mocker.GetMock<IServiceFactory>()
+          .Setup(c => c.BuildAll<IHandle<EventA>>())
+          .Returns(new List<IHandle<EventA>>());
+
+            Mocker.GetMock<IServiceFactory>()
+                  .Setup(c => c.BuildAll<IHandleAsync<EventA>>())
+                  .Returns(handlers);
+
+            var counter = new ConcurrencyCounter(handlers.Count);
+
+
+            AsyncHandlerA1.Setup(c => c.HandleAsync(It.IsAny<EventA>()))
+                .Callback<EventA>(c =>
+                    {
+                        var id = counter.Start();
+                        Thread.Sleep(1000);
+                        counter.Stop(id);
+                    });
+
+            Subject.PublishEvent(eventA);
+
+            counter.WaitForAllItems();
+
+            counter.MaxThreads.Should().Be(2);
+        }
     }
 
 

@@ -112,21 +112,33 @@ namespace NzbDrone.Core.IndexerSearch
             var indexers = _indexerService.GetAvailableIndexers().ToList();
             var reports = new List<ReportInfo>();
 
-            Parallel.ForEach(indexers, indexer =>
+
+            var taskList = new List<Task>();
+            var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
+
+            foreach (var indexer in indexers)
             {
-                try
+                var indexerLocal = indexer;
+
+                taskList.Add(taskFactory.StartNew(() =>
                 {
-                    var indexerReports = searchAction(indexer);
-                    lock (indexer)
+                    try
                     {
-                        reports.AddRange(indexerReports);
+                        var indexerReports = searchAction(indexerLocal);
+
+                        lock (reports)
+                        {
+                            reports.AddRange(indexerReports);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException(String.Format("An error has occurred while searching for {0} from: {1}", definitionBase, indexer.Name), e);
-                }
-            });
+                    catch (Exception e)
+                    {
+                        _logger.ErrorException("Error while searching for " + definitionBase, e);
+                    }
+                }));
+            }
+
+            Task.WaitAll(taskList.ToArray());
 
             _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", reports.Count, definitionBase, indexers.Count);
 

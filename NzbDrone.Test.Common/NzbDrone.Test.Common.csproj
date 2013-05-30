@@ -90,6 +90,7 @@
     <Compile Include="AutoMoq\AutoMoqer.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
+    <Compile Include="ConcurrencyCounter.cs" />
     <Compile Include="ExceptionVerification.cs" />
     <Compile Include="Categories\IntegrationTestAttribute.cs" />
     <Compile Include="LoggingTest.cs" />

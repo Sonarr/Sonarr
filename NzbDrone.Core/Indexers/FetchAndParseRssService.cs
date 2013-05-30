@@ -38,15 +38,28 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Debug("Available indexers {0}", indexers.Count);
 
-            Parallel.ForEach(indexers, new ParallelOptions { MaxDegreeOfParallelism = 10 }, indexer =>
-                {
-                    var indexerFeed = _feedFetcher.FetchRss(indexer);
 
-                    lock (result)
-                    {
-                        result.AddRange(indexerFeed);
-                    }
-                });
+            var taskList = new List<Task>();
+            var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
+
+            foreach (var indexer in indexers)
+            {
+                var indexerLocal = indexer;
+
+                var task = taskFactory.StartNew(() =>
+                     {
+                         var indexerFeed = _feedFetcher.FetchRss(indexerLocal);
+
+                         lock (result)
+                         {
+                             result.AddRange(indexerFeed);
+                         }
+                     });
+
+                taskList.Add(task);
+            }
+
+            Task.WaitAll(taskList.ToArray());
 
             _logger.Debug("Found {0} reports", result.Count);
 
