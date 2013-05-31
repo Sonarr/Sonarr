@@ -75,7 +75,10 @@ namespace NzbDrone.Api.Qualities
             return new QualityProfileResource
                 {
                     Cutoff = profile.Cutoff.InjectTo<QualityResource>(),
-                    Qualities = Quality.All().InjectTo<List<QualityResource>>(),
+                    Available = Quality.All()
+                        .Where(c => !profile.Allowed.Any(q => c.Id == q.Id))
+                        .InjectTo<List<QualityResource>>(),
+
                     Allowed = profile.Allowed.InjectTo<List<QualityResource>>(),
                     Name = profile.Name,
                     Id = profile.Id

@@ -5,7 +5,6 @@ define(['app'], function () {
         defaults: {
             id    : null,
             name  : '',
-            //'qualities.allowed': false,
             cutoff: null
         }
     });

@@ -8,7 +8,7 @@ namespace NzbDrone.Api.Qualities
     {
         public String Name { get; set; }
         public QualityResource Cutoff { get; set; }
-        public List<QualityResource> Qualities { get; set; }
+        public List<QualityResource> Available { get; set; }
         public List<QualityResource> Allowed { get; set; }
     }
 
