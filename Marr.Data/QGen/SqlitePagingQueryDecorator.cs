@@ -66,13 +66,14 @@ namespace Marr.Data.QGen
             sql.Append(" FROM (");
             BuildSimpleInnerSelect(sql);
             _innerQuery.BuildFromClause(sql);
+            _innerQuery.BuildJoinClauses(sql);
             _innerQuery.BuildWhereClause(sql);
-            sql.AppendLine(String.Format("LIMIT {0},{1}", _skip, _take));
+            BuildGroupBy(sql);
+            BuildOrderBy(sql);
+            sql.AppendFormat(" LIMIT {0},{1}", _skip, _take);
             sql.AppendFormat(") AS {0} ", _innerQuery.Dialect.CreateToken(baseTable.Alias));
 
             _innerQuery.BuildJoinClauses(sql);
-            
-            _innerQuery.BuildOrderClause(sql);
 
             return sql.ToString();
         }
@@ -137,10 +138,24 @@ namespace Marr.Data.QGen
                 if (sql.Length > startIndex)
                     sql.Append(",");
 
-                string token = c.ColumnInfo.Name;
+                string token = string.Concat(join.Alias, ".", c.ColumnInfo.Name);
                 sql.Append(_innerQuery.Dialect.CreateToken(token));
             }
 
+        }
+
+        private void BuildOrderBy(StringBuilder sql)
+        {
+            sql.Append(_innerQuery.OrderBy.BuildQuery(false));
+        }
+
+        private void BuildGroupBy(StringBuilder sql)
+        {
+            var baseTable = _innerQuery.Tables.First();
+            var primaryKeyColumn = baseTable.Columns.Single(c => c.ColumnInfo.IsPrimaryKey);
+
+            string token = _innerQuery.Dialect.CreateToken(string.Concat(baseTable.Alias, ".", _innerQuery.NameOrAltName(primaryKeyColumn.ColumnInfo)));
+            sql.AppendFormat(" GROUP BY {0}", token);
         }
     }
 }
