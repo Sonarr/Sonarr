@@ -8,8 +8,9 @@ namespace NzbDrone.Api.Qualities
     {
         public Int32 Id { get; set; }
         public String Name { get; set; }
-        public Int32 Cutoff { get; set; }
+        public QualityResource Cutoff { get; set; }
         public List<QualityResource> Qualities { get; set; }
+        public List<QualityResource> Allowed { get; set; }
     }
 
     public class QualityResource : RestResource
@@ -17,6 +18,5 @@ namespace NzbDrone.Api.Qualities
         public Int32 Id { get; set; }
         public Int32 Weight { get; set; }
         public String Name { get; set; }
-        public Boolean Allowed { get; set; }
     }
 }

@@ -83,6 +83,8 @@ ul.messenger.messenger-fixed.messenger-on-top.messenger-on-left, ul.messenger.me
 ul.messenger.messenger-fixed.messenger-on-right, ul.messenger.messenger-fixed.messenger-on-left {
     width: auto;
     min-width: 350px;
+    max-width: 800px;
+    word-wrap: break-word;
 }
 /* line 69, ../../src/sass/messenger.sass */
 ul.messenger.messenger-fixed.messenger-on-right .messenger-actions, ul.messenger.messenger-fixed.messenger-on-left .messenger-actions {

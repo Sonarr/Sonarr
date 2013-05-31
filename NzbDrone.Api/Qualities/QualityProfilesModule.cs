@@ -1,9 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Mapping;
+using System.Linq;
 
 namespace NzbDrone.Api.Qualities
 {
+
+    public static class LazyLoadedExtensions
+    {
+        public static IEnumerable<int> GetForeignKeys(this IEnumerable<ModelBase> models)
+        {
+            return models.Select(c => c.Id).Distinct();
+        }
+    }
+
     public class QualityProfilesModule : NzbDroneRestModule<QualityProfileResource>
     {
         private readonly QualityProfileService _qualityProvider;
@@ -22,7 +34,6 @@ namespace NzbDrone.Api.Qualities
             CreateResource = Create;
 
             DeleteResource = DeleteProfile;
-
         }
 
         private QualityProfileResource Create(QualityProfileResource resource)
@@ -46,13 +57,29 @@ namespace NzbDrone.Api.Qualities
 
         private QualityProfileResource GetById(int id)
         {
-            return ToResource(() => _qualityProvider.Get(id));
+            return QualityToResource(_qualityProvider.Get(id));
         }
 
         private List<QualityProfileResource> GetAll()
         {
-            return ToListResource(_qualityProvider.All);
+            var allProfiles = _qualityProvider.All();
+
+
+            var profiles = allProfiles.Select(QualityToResource).ToList();
+
+            return profiles;
         }
 
+        private static QualityProfileResource QualityToResource(QualityProfile profile)
+        {
+            return new QualityProfileResource
+                {
+                    Cutoff = profile.Cutoff.InjectTo<QualityResource>(),
+                    Qualities = Quality.All().InjectTo<List<QualityResource>>(),
+                    Allowed = profile.Allowed.InjectTo<List<QualityResource>>(),
+                    Name = profile.Name,
+                    Id = profile.Id
+                };
+        }
     }
 }
