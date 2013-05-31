@@ -17,7 +17,7 @@
     }
 
     Backbone.ModelBinder = function(){
-        _.bindAll(this);
+        _.bindAll.apply(_, [this].concat(_.functions(this)));
     };
 
     // Static setter for class level options
@@ -85,7 +85,7 @@
             this._options['modelSetOptions'].changeSource = 'ModelBinder';
 
             if(!this._options['changeTriggers']){
-                this._options['changeTriggers'] = {'*': 'change', '[contenteditable]': 'blur'};
+                this._options['changeTriggers'] = {'': 'change', '[contenteditable]': 'blur'};
             }
 
             if(!this._options['initialCopyDirection']){

@@ -1,5 +1,5 @@
 /**
- * lunr - http://lunrjs.com - A bit like Solr, but much smaller and not as bright - 0.3.2
+ * lunr - http://lunrjs.com - A bit like Solr, but much smaller and not as bright - 0.3.3
  * Copyright (C) 2013 Oliver Nightingale
  * MIT Licensed
  * @license
@@ -50,11 +50,34 @@ var lunr = function (config) {
   return idx
 }
 
-lunr.version = "0.3.2"
+lunr.version = "0.3.3"
 
 if (typeof module !== 'undefined') {
   module.exports = lunr
 }
+/*!
+ * lunr.utils
+ * Copyright (C) 2013 Oliver Nightingale
+ */
+
+/**
+ * A namespace containing utils for the rest of the lunr library
+ */
+lunr.utils = {}
+
+/**
+ * Print a warning message to the console.
+ *
+ * @param {String} message The message to be printed.
+ * @memberOf Utils
+ */
+lunr.utils.warn = (function (global) {
+  return function (message) {
+    if (global.console && console.warn) {
+      console.warn(message)
+    }
+  }
+})(this)
 /*!
  * lunr.tokenizer
  * Copyright (C) 2013 Oliver Nightingale
@@ -141,8 +164,8 @@ lunr.Pipeline.registeredFunctions = {}
  * @memberOf Pipeline
  */
 lunr.Pipeline.registerFunction = function (fn, label) {
-  if (console && console.warn && (label in this.registeredFunctions)) {
-    console.warn('Overwriting existing registered function: ' + label)
+  if (label in this.registeredFunctions) {
+    lunr.utils.warn('Overwriting existing registered function: ' + label)
   }
 
   fn.label = label
@@ -159,8 +182,8 @@ lunr.Pipeline.registerFunction = function (fn, label) {
 lunr.Pipeline.warnIfFunctionNotRegistered = function (fn) {
   var isRegistered = fn.label && (fn.label in this.registeredFunctions)
 
-  if (!isRegistered && console && console.warn) {
-    console.warn('Function is not registered with pipeline. This may cause problems when serialising the index.\n', fn)
+  if (!isRegistered) {
+    lunr.utils.warn('Function is not registered with pipeline. This may cause problems when serialising the index.\n', fn)
   }
 }
 
@@ -650,8 +673,8 @@ lunr.Index = function () {
  * @memberOf Index
  */
 lunr.Index.load = function (serialisedData) {
-  if (serialisedData.version !== lunr.version && console && console.warn) {
-    console.warn('version mismatch: current ' + lunr.version + ' importing ' + serialisedData.version)
+  if (serialisedData.version !== lunr.version) {
+    lunr.utils.warn('version mismatch: current ' + lunr.version + ' importing ' + serialisedData.version)
   }
 
   var idx = new this
