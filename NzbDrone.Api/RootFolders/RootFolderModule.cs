@@ -18,12 +18,12 @@ namespace NzbDrone.Api.RootFolders
 
         private RootFolderResource CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            return Apply<RootFolder>(_rootFolderService.Add, rootFolderResource);
+            return ToResource<RootFolder>(_rootFolderService.Add, rootFolderResource);
         }
 
         private List<RootFolderResource> GetRootFolders()
         {
-            return ApplyToList(_rootFolderService.AllWithUnmappedFolders);
+            return ToListResource(_rootFolderService.AllWithUnmappedFolders);
         }
 
         private void DeleteFolder(int id)

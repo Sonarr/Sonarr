@@ -1,60 +1,58 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
-using Nancy;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Qualities
 {
-    public class QualityProfilesModule : NzbDroneApiModule
+    public class QualityProfilesModule : NzbDroneRestModule<QualityProfileResource>
     {
         private readonly QualityProfileService _qualityProvider;
 
         public QualityProfilesModule(QualityProfileService qualityProvider)
-            : base("/QualityProfiles")
+            : base("/qualityProfiles")
         {
             _qualityProvider = qualityProvider;
-            Get["/"] = x => OnGet();
-            Get["/{Id}"] = x => OnGet((int)x.Id);
-            Put["/"] = x => OnPut();
-            Delete["/{Id}"] = x => OnDelete((int)x.Id);
+
+            GetResourceAll = GetAll;
+
+            GetResourceById = GetById;
+
+            UpdateResource = Update;
+
+            CreateResource = Create;
+
+            DeleteResource = DeleteProfile;
+
         }
 
-        private Response OnGet()
+        private QualityProfileResource Create(QualityProfileResource resource)
         {
-            var profiles = _qualityProvider.All();
-            return Mapper.Map<List<QualityProfile>, List<QualityProfileResource>>(profiles).AsResponse();
+            var model = resource.InjectTo<QualityProfile>();
+            model = _qualityProvider.Add(model);
+            return GetById(model.Id);
         }
 
-        private Response OnGet(int id)
-        {
-            var profile = _qualityProvider.Get(id);
-            return Mapper.Map<QualityProfile, QualityProfileResource>(profile).AsResponse();
-        }
-
-        private Response OnPost()
-        {
-            var request = Request.Body.FromJson<QualityProfileResource>();
-            var profile = Mapper.Map<QualityProfileResource, QualityProfile>(request);
-            request.Id = _qualityProvider.Add(profile).Id;
-
-            return request.AsResponse();
-        }
-
-        //Update
-        private Response OnPut()
-        {
-            var request = Request.Body.FromJson<QualityProfileResource>();
-            var profile = Mapper.Map<QualityProfileResource, QualityProfile>(request);
-            _qualityProvider.Update(profile);
-
-            return request.AsResponse();
-        }
-
-        private Response OnDelete(int id)
+        private void DeleteProfile(int id)
         {
             _qualityProvider.Delete(id);
-            return new Response();
         }
+
+        private QualityProfileResource Update(QualityProfileResource resource)
+        {
+            var model = resource.InjectTo<QualityProfile>();
+            _qualityProvider.Update(model);
+            return GetById(resource.Id);
+        }
+
+        private QualityProfileResource GetById(int id)
+        {
+            return ToResource(() => _qualityProvider.Get(id));
+        }
+
+        private List<QualityProfileResource> GetAll()
+        {
+            return ToListResource(_qualityProvider.All);
+        }
+
     }
 }

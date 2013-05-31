@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using Nancy;
-using NzbDrone.Api.Extensions;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
-    public class EpisodeModule : NzbDroneApiModule
+    public class EpisodeModule : NzbDroneRestModule<EpisodeResource>
     {
         private readonly IEpisodeService _episodeService;
 
@@ -15,16 +12,26 @@ namespace NzbDrone.Api.Episodes
             : base("/episodes")
         {
             _episodeService = episodeService;
-            Get["/"] = x => GetEpisodesForSeries();
+
+            GetResourceAll = GetEpisodes;
         }
 
-        private Response GetEpisodesForSeries()
+        private List<EpisodeResource> GetEpisodes()
         {
-            var seriesId = (int)Request.Query.SeriesId;
-            var seasonNumber = (int)Request.Query.SeasonNumber;
+            var seriesId = (int?)Request.Query.SeriesId;
+            var seasonNumber = (int?)Request.Query.SeasonNumber;
 
-            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
-            return Mapper.Map<List<Episode>, List<EpisodeResource>>(episodes).AsResponse();
+            if (seriesId == null)
+            {
+                throw new BadRequestException("seriesId is missing");
+            }
+
+            if (seasonNumber == null)
+            {
+                return ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value));
+            }
+
+            return ToListResource(() => _episodeService.GetEpisodesBySeason(seriesId.Value, seasonNumber.Value));
         }
     }
 }

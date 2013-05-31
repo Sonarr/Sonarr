@@ -51,7 +51,7 @@ namespace NzbDrone.Api.Series
         private List<SeriesResource> AllSeries()
         {
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
-            var seriesModels = ApplyToList(_seriesService.GetAllSeries);
+            var seriesModels = ToListResource(_seriesService.GetAllSeries);
 
             foreach (var s in seriesModels)
             {
@@ -69,7 +69,7 @@ namespace NzbDrone.Api.Series
 
         private SeriesResource GetSeries(int id)
         {
-            return Apply(_seriesService.GetSeries, id);
+            return ToResource(_seriesService.GetSeries, id);
         }
 
         private SeriesResource AddSeries(SeriesResource seriesResource)
@@ -79,12 +79,12 @@ namespace NzbDrone.Api.Series
             //(we can just create the folder and it won't blow up if it already exists)
             //We also need to remove any special characters from the filename before attempting to create it           
 
-            return Apply<Core.Tv.Series>(_seriesService.AddSeries, seriesResource);
+            return ToResource<Core.Tv.Series>(_seriesService.AddSeries, seriesResource);
         }
 
         private SeriesResource UpdateSeries(SeriesResource seriesResource)
         {
-            return Apply<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
+            return ToResource<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
         }
 
         private void DeleteSeries(int id)

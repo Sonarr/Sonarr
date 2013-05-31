@@ -22,26 +22,26 @@ namespace NzbDrone.Api
         }
 
 
-        protected TResource Apply<TModel>(Func<TModel, TModel> function, TResource resource) where TModel : ModelBase, new()
+        protected TResource ToResource<TModel>(Func<TModel, TModel> function, TResource resource) where TModel : ModelBase, new()
         {
             var model = resource.InjectTo<TModel>();
             function(model);
             return model.InjectTo<TResource>();
         }
 
-        protected List<TResource> ApplyToList<TModel>(Func<IEnumerable<TModel>> function) where TModel : ModelBase, new()
+        protected List<TResource> ToListResource<TModel>(Func<IEnumerable<TModel>> function) where TModel : ModelBase, new()
         {
             var modelList = function();
             return modelList.InjectTo<List<TResource>>();
         }
 
-        protected TResource Apply<TModel>(Func<TModel> function) where TModel : ModelBase, new()
+        protected TResource ToResource<TModel>(Func<TModel> function) where TModel : ModelBase, new()
         {
             var modelList = function();
             return modelList.InjectTo<TResource>();
         }
 
-        protected TResource Apply<TModel>(Func<int, TModel> action, int id) where TModel : ModelBase, new()
+        protected TResource ToResource<TModel>(Func<int, TModel> action, int id) where TModel : ModelBase, new()
         {
             var model = action(id);
             return model.InjectTo<TResource>();

@@ -1,49 +1,39 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using Nancy;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Qualities
 {
-    public class QualitySizeModule : NzbDroneApiModule
+    public class QualitySizeModule : NzbDroneRestModule<QualitySizeResource>
     {
         private readonly QualitySizeService _qualityTypeProvider;
 
         public QualitySizeModule(QualitySizeService qualityTypeProvider)
-            : base("/qualitysizes")
         {
             _qualityTypeProvider = qualityTypeProvider;
 
-            Get["/"] = x => GetQualityType();
-            Get["/{id}"] = x => GetQualityType(x.Id);
-            Put["/"] = x => PutQualityType();
+            GetResourceAll = GetAll;
+
+            GetResourceById = GetById;
+
+            UpdateResource = Update;
         }
 
-        private Response PutQualityType()
+        private QualitySizeResource Update(QualitySizeResource resource)
         {
-            var model = Request.Body.FromJson<QualitySizeResource>();
-
-            var type = Mapper.Map<QualitySizeResource, QualitySize>(model);
-            _qualityTypeProvider.Update(type);
-
-            return model.AsResponse();
-
+            var model = resource.InjectTo<QualitySize>();
+            _qualityTypeProvider.Update(model);
+            return GetById(resource.Id);
         }
 
-        private Response GetQualityType(int id)
+        private QualitySizeResource GetById(int id)
         {
-            var type = _qualityTypeProvider.Get(id);
-            return Mapper.Map<QualitySize, QualitySizeResource>(type).AsResponse();
+            return ToResource(() => _qualityTypeProvider.Get(id));
         }
 
-        private Response GetQualityType()
+        private List<QualitySizeResource> GetAll()
         {
-            var types = _qualityTypeProvider.All().Where(qualityType => qualityType.QualityId != 0 && qualityType.QualityId != 10).ToList();
-            var responseModel = Mapper.Map<List<QualitySize>, List<QualitySizeResource>>(types);
-
-            return responseModel.AsResponse();
+            return ToListResource(_qualityTypeProvider.All);
         }
     }
 }

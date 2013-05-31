@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Extensions;
@@ -189,17 +188,17 @@ namespace NzbDrone.Api.REST
         private PagingResource<TResource> ReadPagingResourceFromRequest()
         {
             int pageSize;
-            Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.PageSize), out pageSize);
+            Int32.TryParse(Request.Query.PageSize.ToString(), out pageSize);
             if (pageSize == 0) pageSize = 10;
-            
+
             int page;
-            Int32.TryParse(PrimitiveExtensions.ToNullSafeString(Request.Query.Page), out page);
+            Int32.TryParse(Request.Query.Page.ToString(), out page);
             if (page == 0) page = 1;
 
-            var sortKey = PrimitiveExtensions.ToNullSafeString(Request.Query.SortKey);
+            var sortKey = Request.Query.SortKey.ToString();
             if (String.IsNullOrEmpty(sortKey)) sortKey = "AirDate";
 
-            var sortDirection = PrimitiveExtensions.ToNullSafeString(Request.Query.SortDir)
+            var sortDirection = Request.Query.SortDir.ToString()
                                                    .Equals("Asc", StringComparison.InvariantCultureIgnoreCase)
                                                    ? SortDirection.Ascending
                                                    : SortDirection.Descending;

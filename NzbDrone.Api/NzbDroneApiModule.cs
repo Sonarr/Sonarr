@@ -1,5 +1,4 @@
 ﻿using Nancy;
-using Nancy.Security;
 
 namespace NzbDrone.Api
 {

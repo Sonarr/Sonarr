@@ -29,12 +29,12 @@ namespace NzbDrone.Api.Config
 
         private NamingConfigResource UpdateNamingConfig(NamingConfigResource resource)
         {
-            return Apply<NamingConfig>(_namingConfigService.Save, resource);
+            return ToResource<NamingConfig>(_namingConfigService.Save, resource);
         }
 
         private NamingConfigResource GetNamingConfig()
         {
-            return Apply(_namingConfigService.GetConfig);
+            return ToResource(_namingConfigService.GetConfig);
         }
     }
 

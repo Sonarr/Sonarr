@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using AutoMapper;
-using Nancy;
-using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Core.Datastore;
+﻿using NzbDrone.Core.Datastore;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.History
 {

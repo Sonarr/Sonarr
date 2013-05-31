@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Api.REST;
 
 namespace NzbDrone.Api.Qualities
 {
-    public class QualityProfileResource
+    public class QualityProfileResource : RestResource
     {
         public Int32 Id { get; set; }
         public String Name { get; set; }
         public Int32 Cutoff { get; set; }
-        public List<QualityProfileType> Qualities { get; set; }
+        public List<QualityResource> Qualities { get; set; }
     }
 
-    public class QualityProfileType
+    public class QualityResource : RestResource
     {
         public Int32 Id { get; set; }
         public Int32 Weight { get; set; }

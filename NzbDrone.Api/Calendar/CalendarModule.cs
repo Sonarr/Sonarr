@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
-using Nancy;
 using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Calendar
 {
-    public class CalendarModule : NzbDroneApiModule
+    public class CalendarModule : NzbDroneRestModule<EpisodeResource>
     {
         private readonly IEpisodeService _episodeService;
 
@@ -17,10 +14,11 @@ namespace NzbDrone.Api.Calendar
             : base("/calendar")
         {
             _episodeService = episodeService;
-            Get["/"] = x => GetEpisodesBetweenStartAndEndDate();
+
+            GetResourceAll = GetPaged;
         }
 
-        private Response GetEpisodesBetweenStartAndEndDate()
+        private List<EpisodeResource> GetPaged()
         {
             var start = DateTime.Today.AddDays(-1);
             var end = DateTime.Today.AddDays(7);
@@ -30,10 +28,11 @@ namespace NzbDrone.Api.Calendar
 
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
 
-            if(queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
+            if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
 
             var episodes = _episodeService.EpisodesBetweenDates(start, end);
-            return episodes.InjectTo<List<EpisodeResource>>().AsResponse();
+
+            return ToListResource(() => episodes);
         }
     }
 }

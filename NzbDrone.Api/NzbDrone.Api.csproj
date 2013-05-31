@@ -55,10 +55,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="FluentValidation, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.4.0.0.0\lib\Net40\FluentValidation.dll</HintPath>
@@ -93,7 +89,6 @@
     <Compile Include="Authentication\AuthenticationService.cs" />
     <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
-    <Compile Include="AutomapperBootstraper.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
     <Compile Include="ClientSchema\SchemaDeserializer.cs" />
     <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
@@ -126,7 +121,6 @@
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="PagingResource.cs" />
-    <Compile Include="Resolvers\NullableDatetimeToString.cs" />
     <Compile Include="REST\BadRequestException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />
     <Compile Include="REST\RestModule.cs" />
@@ -152,9 +146,6 @@
     <Compile Include="Qualities\QualitySizeResource.cs" />
     <Compile Include="Qualities\QualitySizeModule.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
-    <Compile Include="Resolvers\AllowedToQualitiesResolver.cs" />
-    <Compile Include="Resolvers\QualitiesToAllowedResolver.cs" />
-    <Compile Include="Resolvers\QualityTypesToIntResolver.cs" />
     <Compile Include="Config\SettingsModule.cs" />
     <Compile Include="SignalR\BasicResourceConnection.cs" />
     <Compile Include="SignalR\Serializer.cs" />

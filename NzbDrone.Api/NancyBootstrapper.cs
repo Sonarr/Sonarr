@@ -33,7 +33,6 @@ namespace NzbDrone.Api
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             _logger.Info("Starting NzbDrone API");
-            AutomapperBootstraper.InitializeAutomapper();
 
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
