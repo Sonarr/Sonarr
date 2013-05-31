@@ -17,7 +17,8 @@ namespace NzbDrone.Api.Indexers
         {
             _indexerService = indexerService;
             GetResourceAll = GetAll;
-            CreateResource = Create;
+            CreateResource = CreateIndexer;
+            UpdateResource = UpdateIndexer;
         }
 
         private List<IndexerResource> GetAll()
@@ -38,11 +39,35 @@ namespace NzbDrone.Api.Indexers
             return result;
         }
 
-        private IndexerResource Create(IndexerResource indexerResource)
+        private IndexerResource CreateIndexer(IndexerResource indexerResource)
+        {
+            var indexer = GetIndexer(indexerResource);
+            indexer = _indexerService.Create(indexer);
+
+            var response = indexer.InjectTo<IndexerResource>();
+            response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
+
+            return response;
+        }
+
+        private IndexerResource UpdateIndexer(IndexerResource indexerResource)
+        {
+            var indexer = _indexerService.Get(indexerResource.Id);
+            indexer.InjectFrom(indexerResource);
+            indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
+            indexer = _indexerService.Update(indexer);
+
+            var response = indexer.InjectTo<IndexerResource>();
+            response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
+
+            return response;
+        }
+
+        private Indexer GetIndexer(IndexerResource indexerResource)
         {
             var indexer = _indexerService.Schema()
                                .SingleOrDefault(i =>
-                                        i.Implementation.Equals(indexerResource.Implementation,                                         
+                                        i.Implementation.Equals(indexerResource.Implementation,
                                         StringComparison.InvariantCultureIgnoreCase));
 
             if (indexer == null)
@@ -50,16 +75,10 @@ namespace NzbDrone.Api.Indexers
                 throw new BadRequestException("Invalid Indexer Implementation");
             }
 
-            indexer.Name = indexerResource.Name;
-            indexer.Enable = indexerResource.Enable;
+            indexer.InjectFrom(indexerResource);
             indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
 
-            indexer = _indexerService.Create(indexer);
-
-            var response = indexer.InjectTo<IndexerResource>();
-            response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
-
-            return response;
+            return indexer;
         }
     }
 }

@@ -35,17 +35,21 @@ define(['app',
         },
 
         saveSettings: function () {
-            //TODO: check if any models in the collection have changed and sync them only
-//            this.collection.sync();
-//            if (!this.model.isSaved) {
-//                this.model.save(undefined, this.syncNotification("Naming Settings Saved", "Couldn't Save Naming Settings"));
-//            }
+            var self = this;
+
+            //For now loop through and save all the models
+
+            _.each(this.collection.models, function (model, index, list) {
+                var name = model.get('name');
+                var error = 'Failed to save indexer: ' + name;
+
+                model.save(undefined, self.syncNotification(error));
+            });
         },
 
-        syncNotification: function (success, error) {
+        syncNotification: function (error) {
             return {
                 success: function () {
-                    NzbDrone.Shared.Messenger.show({message: 'General Settings Saved'});
                 },
                 error  : function () {
                     NzbDrone.Shared.Messenger.show({message: "Couldn't Save General Settings", type: 'error'});

@@ -6,6 +6,7 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -23,9 +24,11 @@ namespace NzbDrone.Core.Indexers
     {
         List<Indexer> All();
         List<IIndexer> GetAvailableIndexers();
+        Indexer Get(int id);
         Indexer Get(string name);
         List<Indexer> Schema();
         Indexer Create(Indexer indexer);
+        Indexer Update(Indexer indexer);
     }
 
     public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
@@ -52,6 +55,11 @@ namespace NzbDrone.Core.Indexers
             return All().Where(c => c.Enable && c.Settings.IsValid).Select(c => c.Instance).ToList();
         }
 
+        public Indexer Get(int id)
+        {
+            return ToIndexer(_indexerRepository.Get(id));
+        }
+
         public Indexer Get(string name)
         {
             return ToIndexer(_indexerRepository.Get(name));
@@ -73,6 +81,7 @@ namespace NzbDrone.Core.Indexers
             return indexers;
         }
 
+
         public Indexer Create(Indexer indexer)
         {
             var definition = new IndexerDefinition
@@ -85,6 +94,16 @@ namespace NzbDrone.Core.Indexers
 
             definition = _indexerRepository.Insert(definition);
             indexer.Id = definition.Id;
+
+            return indexer;
+        }
+
+        public Indexer Update(Indexer indexer)
+        {
+            var definition = _indexerRepository.Get(indexer.Id);
+            definition.InjectFrom(indexer);
+            definition.Settings = indexer.Settings.ToJson();
+            _indexerRepository.Update(definition);
 
             return indexer;
         }
