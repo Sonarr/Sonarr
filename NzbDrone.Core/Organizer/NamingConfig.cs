@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Organizer
                 return new NamingConfig
                     {
                         UseSceneName = false,
-                        Separator = "-",
+                        Separator = " - ",
                         NumberStyle = 0,
                         IncludeSeriesTitle = true,
                         MultiEpisodeStyle = 0,
