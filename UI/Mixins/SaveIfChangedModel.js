@@ -1,4 +1,3 @@
-//try to add ajax data as query string to DELETE calls.
 "use strict";
 (function () {
 
