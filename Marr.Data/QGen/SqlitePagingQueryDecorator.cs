@@ -154,7 +154,7 @@ namespace Marr.Data.QGen
             var baseTable = _innerQuery.Tables.First();
             var primaryKeyColumn = baseTable.Columns.Single(c => c.ColumnInfo.IsPrimaryKey);
 
-            string token = _innerQuery.Dialect.CreateToken(string.Concat(baseTable.Alias, ".", _innerQuery.NameOrAltName(primaryKeyColumn.ColumnInfo)));
+            string token = _innerQuery.Dialect.CreateToken(string.Concat(baseTable.Alias, ".", primaryKeyColumn.ColumnInfo.Name));
             sql.AppendFormat(" GROUP BY {0}", token);
         }
     }

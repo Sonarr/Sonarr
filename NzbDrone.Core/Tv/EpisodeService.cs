@@ -62,7 +62,6 @@ namespace NzbDrone.Core.Tv
             _logger = logger;
         }
 
-
         public Episode GetEpisode(int id)
         {
             return _episodeRepository.Get(id);
