@@ -152,7 +152,6 @@ namespace NzbDrone.Core.Qualities
         {
             return new List<Quality>
                        {
-                               Unknown,
                                SDTV,
                                WEBDL480p,
                                DVD,
@@ -168,6 +167,8 @@ namespace NzbDrone.Core.Qualities
 
         public static Quality FindById(int id)
         {
+            if (id == 0) return Unknown;
+
             var quality = All().SingleOrDefault(q => q.Id == id);
 
             if (quality == null)

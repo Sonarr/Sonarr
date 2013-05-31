@@ -45,18 +45,13 @@ namespace NzbDrone.Core.Qualities
             return _qualitySizeRepository.GetByQualityId(qualityId);
         }
 
-        public void Init()
-        {
-           
-        }
-
         public void Handle(ApplicationStartedEvent message)
         {
             var existing = All();
 
             _logger.Debug("Setting up default quality sizes");
 
-            foreach (var quality in Quality.All().Where(q => q.Id > 0))
+            foreach (var quality in Quality.All())
             {
                 if (!existing.Any(s => s.QualityId == quality.Id))
                 {

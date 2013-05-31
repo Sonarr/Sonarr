@@ -8,16 +8,16 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Qualities
 {
     [TestFixture]
-    
+
     public class QualitySizeServiceFixture : CoreTest<QualitySizeService>
     {
         [Test]
         public void Init_should_add_all_sizes()
         {
             Subject.Handle(new ApplicationStartedEvent());
-            
+
             Mocker.GetMock<IQualitySizeRepository>()
-                .Verify(v => v.Insert(It.IsAny<QualitySize>()), Times.Exactly(Quality.All().Count - 1));
+                .Verify(v => v.Insert(It.IsAny<QualitySize>()), Times.Exactly(Quality.All().Count));
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.Qualities
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualitySizeRepository>()
-                .Verify(v => v.Insert(It.IsAny<QualitySize>()), Times.Exactly(Quality.All().Count - 2));
+                .Verify(v => v.Insert(It.IsAny<QualitySize>()), Times.Exactly(Quality.All().Count - 1));
         }
     }
 }

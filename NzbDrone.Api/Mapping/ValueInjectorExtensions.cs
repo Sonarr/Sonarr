@@ -28,14 +28,14 @@ namespace NzbDrone.Api.Mapping
 
                 foreach (var sourceItem in (IEnumerable)source)
                 {
-                    var e = Activator.CreateInstance(listSubType).InjectFrom(sourceItem);
+                    var e = Activator.CreateInstance(listSubType).InjectFrom<CloneInjection>(sourceItem);
                     addMethod.Invoke(result, new[] { e });
                 }
 
                 return result;
             }
 
-            return (TTarget)new TTarget().InjectFrom(source);
+            return (TTarget)new TTarget().InjectFrom<CloneInjection>(source);
         }
     }
 }
