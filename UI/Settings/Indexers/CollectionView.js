@@ -36,23 +36,26 @@ define(['app',
 
         saveSettings: function () {
             var self = this;
-
-            //For now loop through and save all the models
-
+            
             _.each(this.collection.models, function (model, index, list) {
                 var name = model.get('name');
                 var error = 'Failed to save indexer: ' + name;
 
-                model.save(undefined, self.syncNotification(error));
+                model.saveIfChanged(self.syncNotification(undefined, error));
             });
         },
 
-        syncNotification: function (error) {
+        syncNotification: function (success, error) {
             return {
                 success: function () {
+                    if (success) {
+                        NzbDrone.Shared.Messenger.show({message: success});
+                    }
                 },
                 error  : function () {
-                    NzbDrone.Shared.Messenger.show({message: "Couldn't Save General Settings", type: 'error'});
+                    if (error) {
+                        NzbDrone.Shared.Messenger.show({message: error, type: 'error'});
+                    }
                 }
             };
         }
