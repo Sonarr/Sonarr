@@ -464,9 +464,6 @@
     <Compile Include="MediaFiles\MediaFileService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\MisnamedProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\NotificationProvider.cs">
       <SubType>Code</SubType>
     </Compile>

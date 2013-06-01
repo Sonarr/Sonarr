@@ -187,7 +187,6 @@
     <Compile Include="HelperTests\SortHelperTest.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
-    <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
     <Compile Include="ProviderTests\EventClientProviderTest.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />

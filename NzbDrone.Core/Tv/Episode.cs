@@ -23,25 +23,9 @@ namespace NzbDrone.Core.Tv
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
 
-        public bool HasFile
-        {
-            get { return EpisodeFileId != 0; }
-        }
-
         public String SeriesTitle { get; private set; }
-
-        public LazyLoaded<Series> Series { get; set; }
 
         public LazyLoaded<EpisodeFile> EpisodeFile { get; set; }
 
-        public override string ToString()
-        {
-            string seriesTitle = Series == null ? "[NULL]" : Series.Value.Title;
-
-            if (Series != null && Series.Value.SeriesType == SeriesTypes.Daily && AirDate.HasValue)
-                return string.Format("{0} - {1:yyyy-MM-dd}", seriesTitle, AirDate.Value);
-
-            return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);
-        }
     }
 }

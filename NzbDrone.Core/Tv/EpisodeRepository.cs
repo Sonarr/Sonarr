@@ -83,13 +83,12 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            var pagingQuery = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                                      .Where(e => e.EpisodeFileId == 0)
-                                      .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                                      .AndWhere(e => e.AirDate <= currentTime)
-                                      .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                                      .Skip(pagingSpec.PagingOffset())
-                                      .Take(pagingSpec.PageSize);
+            var pagingQuery = Query.Where(e => e.EpisodeFileId == 0)
+                                   .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
+                                   .AndWhere(e => e.AirDate <= currentTime)
+                                   .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                                   .Skip(pagingSpec.PagingOffset())
+                                   .Take(pagingSpec.PageSize);
 
             pagingSpec.Records = pagingQuery.ToList();
 
@@ -116,8 +115,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
         {
-            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                        .Where<Episode>(e => e.AirDate >= startDate)
+            return Query.Where<Episode>(e => e.AirDate >= startDate)
                         .AndWhere(e => e.AirDate <= endDate).ToList();
         }
 

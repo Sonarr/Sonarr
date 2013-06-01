@@ -180,7 +180,6 @@ namespace NzbDrone.Core.Tv
                     }
 
                     episodeToUpdate.SeriesId = series.Id;
-                    episodeToUpdate.Series = series;
                     episodeToUpdate.TvDbEpisodeId = episode.TvDbEpisodeId;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
@@ -208,7 +207,7 @@ namespace NzbDrone.Core.Tv
                 int episodeCount = 0;
                 foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
                 {
-                    episode.AirDate = episode.AirDate.Value.AddMinutes(episode.Series.Value.Runtime * episodeCount);
+                    episode.AirDate = episode.AirDate.Value.AddMinutes(series.Runtime * episodeCount);
                     episodeCount++;
                 }
             }
@@ -325,18 +324,6 @@ namespace NzbDrone.Core.Tv
             }
 
             logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
-        }
-
-        private List<Episode> LinkSeriesToEpisodes(List<Episode> episodes)
-        {
-            var series = _seriesService.GetSeriesInList(episodes.Select(e => e.SeriesId).Distinct());
-
-            episodes.ForEach(e =>
-            {
-                e.Series = series.SingleOrDefault(s => s.Id == e.SeriesId);
-            });
-
-            return episodes;
         }
     }
 }
