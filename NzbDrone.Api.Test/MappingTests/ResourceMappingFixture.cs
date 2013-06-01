@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Marr.Data;
 using NUnit.Framework;
@@ -19,6 +21,7 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Update;
 using NzbDrone.Test.Common;
+using System.Linq;
 
 namespace NzbDrone.Api.Test.MappingTests
 {
@@ -72,6 +75,44 @@ namespace NzbDrone.Api.Test.MappingTests
 
             modelWithLazy.Guid.IsLoaded.Should().BeTrue();
         }
+
+        [Test]
+        public void should_be_able_to_map_lists()
+        {
+            var modelList = Builder<TestModel>.CreateListOfSize(10).Build();
+
+            var resourceList = modelList.InjectTo<List<TestResource>>();
+
+            resourceList.Should().HaveSameCount(modelList);
+        }
+
+        [Test]
+        public void should_map_wrapped_models()
+        {
+            var modelList = Builder<TestModel>.CreateListOfSize(10).Build().ToList();
+
+            var wrapper = new TestModelWrapper
+                {
+                    TestlList = modelList
+                };
+
+            wrapper.InjectTo<TestResourceWrapper>();
+        }
+
+
+        [Test]
+        public void should_map_qualityprofile()
+        {
+
+            var profileResource = new QualityProfileResource
+                {
+                    Allowed = Builder<QualityResource>.CreateListOfSize(1).Build().ToList(),
+                };
+
+
+            profileResource.InjectTo<QualityProfile>();
+
+        }
     }
 
     public class ModelWithLazy
@@ -86,14 +127,32 @@ namespace NzbDrone.Api.Test.MappingTests
 
     public class TestLazyLoaded<T> : LazyLoaded<T>
     {
-        public TestLazyLoaded()
-        {
-
-        }
-
         public override void Prepare(Func<IDataMapper> dataMapperFactory, object parent)
         {
             throw new InvalidOperationException();
         }
+    }
+
+
+    public class TestModelWrapper
+    {
+        public List<TestModel> TestlList { get; set; }
+    }
+
+    public class TestResourceWrapper
+    {
+        public List<TestResource> TestList { get; set; }
+    }
+
+    public class TestModel
+    {
+        public string Field1 { get; set; }
+        public string Field2 { get; set; }
+    }
+
+    public class TestResource
+    {
+        public string Field1 { get; set; }
+        public string Field2 { get; set; }
     }
 }

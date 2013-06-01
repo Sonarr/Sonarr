@@ -17,11 +17,9 @@ namespace NzbDrone.Api.Mapping
 
         protected override object SetValue(ConventionInfo conventionInfo)
         {
-            //for value types and string just return the value as is
             if (conventionInfo.SourceProp.Type.IsValueType || conventionInfo.SourceProp.Type == typeof(string))
                 return conventionInfo.SourceProp.Value;
 
-            //handle arrays
             if (conventionInfo.SourceProp.Type.IsArray)
             {
                 var array = (Array)conventionInfo.SourceProp.Value;
@@ -39,11 +37,9 @@ namespace NzbDrone.Api.Mapping
                 return clone;
             }
 
-
             if (conventionInfo.SourceProp.Type.IsGenericType)
             {
                 var genericInterfaces = conventionInfo.SourceProp.Type.GetGenericTypeDefinition().GetInterfaces();
-                //handle IEnumerable<> also ICollection<> IList<> List<>
                 if (genericInterfaces.Any(d => d == typeof(IEnumerable)))
                 {
                     return MapLists(conventionInfo);
@@ -59,7 +55,7 @@ namespace NzbDrone.Api.Mapping
             }
 
             //for simple object types create a new instace and apply the clone injection on it
-            return Activator.CreateInstance(conventionInfo.SourceProp.Type)
+            return Activator.CreateInstance(conventionInfo.TargetProp.Type)
                             .InjectFrom<CloneInjection>(conventionInfo.SourceProp.Value);
         }
 
@@ -80,20 +76,26 @@ namespace NzbDrone.Api.Mapping
 
         private static object MapLists(ConventionInfo conventionInfo)
         {
-            var t = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
-            if (t.IsValueType || t == typeof(string)) return conventionInfo.SourceProp.Value;
-
-            var tlist = typeof(List<>).MakeGenericType(t);
-            var list = Activator.CreateInstance(tlist);
-
-            var addMethod = tlist.GetMethod("Add");
-            foreach (var o in (IEnumerable)conventionInfo.SourceProp.Value)
+            var genericArgument = conventionInfo.TargetProp.Type.GetGenericArguments()[0];
+            if (genericArgument.IsValueType || genericArgument == typeof(string))
             {
-                var e = Activator.CreateInstance(t).InjectFrom<CloneInjection>(o);
-                addMethod.Invoke(list, new[] { e }); // in 4.0 you can use dynamic and just do list.Add(e);
+                return conventionInfo.SourceProp.Value;
             }
 
-            return list;
+
+            var listType = typeof(List<>).MakeGenericType(genericArgument);
+            var addMethod = listType.GetMethod("Add");
+
+            var result = Activator.CreateInstance(listType);
+
+            foreach (var sourceItem in (IEnumerable)conventionInfo.SourceProp.Value)
+            {
+                var e = Activator.CreateInstance(genericArgument).InjectFrom<CloneInjection>(sourceItem);
+                addMethod.Invoke(result, new[] {e });
+            }
+
+            return result;
+
         }
     }
 }
