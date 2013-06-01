@@ -18,6 +18,7 @@ Marionette.TemplateCache.get = function (templateId) {
         catch (error) {
             console.error('template render failed for ' + templateKey + ' ' + error);
             console.error(data);
+            throw error;
         }
     };
 };

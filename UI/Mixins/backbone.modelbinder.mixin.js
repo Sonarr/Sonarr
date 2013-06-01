@@ -25,6 +25,7 @@ Marionette.ItemView.prototype.render = function () {
 
     var result = oldItemViewRender.apply(this, arguments);
 
+    this.$el.removeClass('iv-' + this.viewName());
 
     //check to see if el has bindings (name attribute)
     // any element that has a name attribute and isn't child of another view.
