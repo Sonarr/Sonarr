@@ -21,20 +21,10 @@ define(['app', 'Settings/Naming/NamingModel'], function () {
         },
 
         saveSettings: function () {
-            this.model.save(undefined, this.syncNotification("Naming Settings Saved", "Couldn't Save Naming Settings"));
-        },
-
-
-        syncNotification: function (success, error) {
-            return {
-                success: function () {
-                    window.alert(success);
-                },
-
-                error: function () {
-                    window.alert(error);
-                }
-            };
+            this.model.save(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+                successMessage: 'Naming Settings saved',
+                errorMessage: "Failed to save Naming Settings"
+            }));
         }
     });
 })

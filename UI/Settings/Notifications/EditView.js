@@ -24,7 +24,12 @@ define([
             var success = 'Notification Saved: ' + name;
             var fail = 'Failed to save notification: ' + name;
 
-            this.model.save(undefined, this.syncNotification(success, fail, this));
+            this.model.save(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+                successMessage: success,
+                errorMessage: fail,
+                successCallback: this._saveSuccess,
+                context: this
+            }));
         },
 
         _deleteNotification: function () {
@@ -32,21 +37,9 @@ define([
             NzbDrone.modalRegion.show(view);
         },
 
-        syncNotification: function (success, error, context) {
-            return {
-                success: function () {
-                    NzbDrone.Shared.Messenger.show({
-                        message: success
-                    });
-
-                    context.notificationCollection.add(context.model, { merge: true });
-                    NzbDrone.modalRegion.closeModal();
-                },
-
-                error: function () {
-                    window.alert(error);
-                }
-            };
+        _saveSuccess: function () {
+            this.notificationCollection.add(this.model, { merge: true });
+            NzbDrone.modalRegion.closeModal();
         }
     });
 });

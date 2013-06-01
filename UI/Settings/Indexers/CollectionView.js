@@ -1,7 +1,8 @@
 ﻿'use strict';
 define(['app',
         'Settings/Indexers/ItemView',
-        'Settings/Indexers/EditView'],
+        'Settings/Indexers/EditView',
+        'Settings/SyncNotification'],
     function () {
     NzbDrone.Settings.Indexers.CollectionView = Backbone.Marionette.CompositeView.extend({
         itemView                : NzbDrone.Settings.Indexers.ItemView,
@@ -35,29 +36,11 @@ define(['app',
         },
 
         saveSettings: function () {
-            var self = this;
-            
             _.each(this.collection.models, function (model, index, list) {
-                var name = model.get('name');
-                var error = 'Failed to save indexer: ' + name;
-
-                model.saveIfChanged(self.syncNotification(undefined, error));
+                model.saveIfChanged(NzbDrone.Settings.SyncNotificaiton.callback({
+                    errorMessage: 'Failed to save indexer: ' + model.get('name')
+                }));
             });
-        },
-
-        syncNotification: function (success, error) {
-            return {
-                success: function () {
-                    if (success) {
-                        NzbDrone.Shared.Messenger.show({message: success});
-                    }
-                },
-                error  : function () {
-                    if (error) {
-                        NzbDrone.Shared.Messenger.show({message: error, type: 'error'});
-                    }
-                }
-            };
         }
     });
 });

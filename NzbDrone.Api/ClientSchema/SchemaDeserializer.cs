@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Common;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
 
@@ -22,6 +23,12 @@ namespace NzbDrone.Api.ClientSchema
                     if (propertyInfo.PropertyType == typeof (Int32))
                     {
                         var intValue = Convert.ToInt32(field.Value);
+                        propertyInfo.SetValue(model, intValue, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof(Nullable<Int32>))
+                    {
+                        var intValue = field.Value.ToString().ParseInt32();
                         propertyInfo.SetValue(model, intValue, null);
                     }
 

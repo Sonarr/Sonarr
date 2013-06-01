@@ -10,19 +10,11 @@ define(['app', 'Settings/SettingsModel', 'Shared/Messenger'], function () {
 
             saveSettings: function () {
                 if (!this.model.isSaved) {
-                    this.model.save(undefined, this.syncNotification("General Settings Saved", "Couldn't Save General Settings"));
+                    this.model.save(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+                        successMessage: 'General Settings saved',
+                        errorMessage: "Failed to save General Settings"
+                    }));
                 }
-            },
-
-            syncNotification: function (success, error) {
-                return {
-                    success: function () {
-                        NzbDrone.Shared.Messenger.show({message: success});
-                    },
-                    error  : function () {
-                        NzbDrone.Shared.Messenger.show({message: error, type: 'error'});
-                    }
-                };
             }
         }
     );
