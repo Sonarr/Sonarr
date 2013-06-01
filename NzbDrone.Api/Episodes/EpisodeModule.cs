@@ -19,19 +19,13 @@ namespace NzbDrone.Api.Episodes
         private List<EpisodeResource> GetEpisodes()
         {
             var seriesId = (int?)Request.Query.SeriesId;
-            var seasonNumber = (int?)Request.Query.SeasonNumber;
 
             if (seriesId == null)
             {
                 throw new BadRequestException("seriesId is missing");
             }
 
-            if (seasonNumber == null)
-            {
-                return ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value));
-            }
-
-            return ToListResource(() => _episodeService.GetEpisodesBySeason(seriesId.Value, seasonNumber.Value));
+            return ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value));
         }
     }
 }

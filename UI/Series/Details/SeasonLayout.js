@@ -36,23 +36,22 @@ define(['app', 'Series/Details/EpisodeStatusCell', 'Series/Details/EpisodeTitleC
             }
         ],
 
-        initialize: function () {
-            this.episodeCollection = new NzbDrone.Series.EpisodeCollection();
-            this.episodeCollection.fetch({data: {
-                seriesId    : this.model.get('seriesId'),
-                seasonNumber: this.model.get('seasonNumber')
-            }});
+        initialize: function (options) {
+
+            if (!options.episodeCollection) {
+                throw 'episodeCollection is needed';
+            }
+
+            this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
         },
 
         onShow: function () {
-
             this.episodeGrid.show(new Backgrid.Grid(
                 {
                     columns   : this.columns,
                     collection: this.episodeCollection,
                     className : 'table table-hover'
                 }));
-
         }
     });
 });

@@ -1,4 +1,6 @@
-﻿.progress {
+﻿@import "bootstrap/bootstrap";
+
+.progress {
   width: 125px;
   position: relative;
   margin-bottom: 2px;
@@ -20,20 +22,24 @@
     overflow: hidden;
   }
 }
+
 html {
   overflow: -moz-scrollbars-vertical;
   overflow-y: scroll;
 }
+
 .input-append {
   .add-on {
     margin-left: 0;
   }
 }
+
 .line &>[class^="icon-"], .line &>[class*=" icon-"] {
   margin-top: 1em;
   height: 1em;
   line-height: 1em;
 }
+
 #localSeriesLookup {
   width: 220px;
   border: 0px;
@@ -42,6 +48,7 @@ html {
   padding: 4px;
   font-size: 13px;
 }
+
 #footer-region {
   font-size: 16px;
   text-decoration: none;
@@ -51,11 +58,13 @@ html {
     text-decoration: underline;
   }
 }
+
 #in-sub-nav {
   ul {
     margin: 0 0 80px 0;
   }
 }
+
 #notification-region {
   pre {
     font-size: 12px;
@@ -67,14 +76,21 @@ html {
     padding-right: 10px;
   }
 }
-.nz-spinner {
-  font-size: 56px;
-  text-align: center;
+
+.nz-loading {
+  .text-center;
+  font-size: 40px;
+  font-weight: 300;
   padding: 30px;
 }
 
+.nz-spinner {
+  .text-center;
+  font-size: 56px;
+  padding: 30px;
+}
 
-.page-toolbar{
+.page-toolbar {
   margin-top: 10px;
   margin-bottom: 30px;
 }

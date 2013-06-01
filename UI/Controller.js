@@ -7,7 +7,7 @@ define(['app',
     'Shared/NotificationView',
     'Shared/NotFoundView',
     'MainMenuView',
-    'Series/Details/SeriesDetailsView',
+    'Series/Details/SeriesDetailsLayout',
     'Series/EpisodeCollection',
     'Settings/SettingsLayout',
     'Missing/MissingLayout',
@@ -27,7 +27,7 @@ define(['app',
                 series.fetch({
                     success: function (seriesModel) {
                         self._setTitle(seriesModel.get('title'));
-                        NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsView({ model: seriesModel }));
+                        NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsLayout({ model: seriesModel }));
                     }
                 });
             },
