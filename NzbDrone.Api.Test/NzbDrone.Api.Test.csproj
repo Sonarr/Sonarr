@@ -73,11 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientSchemaTests\SchemaBuilderFixture.cs" />
-    <Compile Include="MappingTests\ReflectionExtensionFixture.cs" />
     <Compile Include="MappingTests\ResourceMappingFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
       <Project>{FD286DF8-2D3A-4394-8AD5-443FADE55FB2}</Project>
       <Name>NzbDrone.Api</Name>

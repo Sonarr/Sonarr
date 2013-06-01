@@ -89,6 +89,7 @@
     <Compile Include="DiskProviderFixture.cs" />
     <Compile Include="EnviromentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
+    <Compile Include="ReflectionTests\ReflectionExtensionFixture.cs" />
     <Compile Include="ServiceFactoryFixture.cs" />
     <Compile Include="ServiceProviderTests.cs" />
     <Compile Include="WebClientTests.cs" />

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Marr.Data;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Mapping
@@ -41,22 +42,16 @@ namespace NzbDrone.Api.Mapping
 
             if (conventionInfo.SourceProp.Type.IsGenericType)
             {
+                var genericInterfaces = conventionInfo.SourceProp.Type.GetGenericTypeDefinition().GetInterfaces();
                 //handle IEnumerable<> also ICollection<> IList<> List<>
-                if (conventionInfo.SourceProp.Type.GetGenericTypeDefinition().GetInterfaces().Any(d => d == typeof(IEnumerable)))
+                if (genericInterfaces.Any(d => d == typeof(IEnumerable)))
                 {
-                    var t = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
-                    if (t.IsValueType || t == typeof(string)) return conventionInfo.SourceProp.Value;
+                    return MapLists(conventionInfo);
+                }
 
-                    var tlist = typeof(List<>).MakeGenericType(t);
-                    var list = Activator.CreateInstance(tlist);
-
-                    var addMethod = tlist.GetMethod("Add");
-                    foreach (var o in (IEnumerable)conventionInfo.SourceProp.Value)
-                    {
-                        var e = Activator.CreateInstance(t).InjectFrom<CloneInjection>(o);
-                        addMethod.Invoke(list, new[] { e }); // in 4.0 you can use dynamic and just do list.Add(e);
-                    }
-                    return list;
+                if (genericInterfaces.Any(i => i == typeof(ILazyLoaded)))
+                {
+                    return MapLazy(conventionInfo);
                 }
 
                 //unhandled generic type, you could also return null or throw
@@ -66,6 +61,39 @@ namespace NzbDrone.Api.Mapping
             //for simple object types create a new instace and apply the clone injection on it
             return Activator.CreateInstance(conventionInfo.SourceProp.Type)
                             .InjectFrom<CloneInjection>(conventionInfo.SourceProp.Value);
+        }
+
+        private static object MapLazy(ConventionInfo conventionInfo)
+        {
+
+            var genericArgument = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
+
+            dynamic lazy = conventionInfo.SourceProp.Value;
+
+            if (lazy.IsLoaded && conventionInfo.TargetProp.Type.IsAssignableFrom(genericArgument))
+            {
+                return lazy.Value;
+            }
+
+            return null;
+        }
+
+        private static object MapLists(ConventionInfo conventionInfo)
+        {
+            var t = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
+            if (t.IsValueType || t == typeof(string)) return conventionInfo.SourceProp.Value;
+
+            var tlist = typeof(List<>).MakeGenericType(t);
+            var list = Activator.CreateInstance(tlist);
+
+            var addMethod = tlist.GetMethod("Add");
+            foreach (var o in (IEnumerable)conventionInfo.SourceProp.Value)
+            {
+                var e = Activator.CreateInstance(t).InjectFrom<CloneInjection>(o);
+                addMethod.Invoke(list, new[] { e }); // in 4.0 you can use dynamic and just do list.Add(e);
+            }
+
+            return list;
         }
     }
 }

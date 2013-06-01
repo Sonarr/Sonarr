@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Tv
                 int episodeCount = 0;
                 foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
                 {
-                    episode.AirDate = episode.AirDate.Value.AddMinutes(episode.Series.Runtime * episodeCount);
+                    episode.AirDate = episode.AirDate.Value.AddMinutes(episode.Series.Value.Runtime * episodeCount);
                     episodeCount++;
                 }
             }

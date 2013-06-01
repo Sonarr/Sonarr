@@ -404,12 +404,6 @@
     <Compile Include="Providers\BackupProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\Converting\AtomicParsleyProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Providers\Converting\HandbrakeProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Configuration\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>

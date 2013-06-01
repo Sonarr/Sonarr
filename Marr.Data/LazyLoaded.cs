@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Common;
 
 namespace Marr.Data
 {
     public interface ILazyLoaded : ICloneable
     {
-        void Prepare(Func<IDataMapper> dbCreator, object parent);
+        bool IsLoaded { get; }
+        void Prepare(Func<IDataMapper> dataMapperFactory, object parent);
         void LazyLoad();
     }
 
@@ -18,8 +15,7 @@ namespace Marr.Data
     /// <typeparam name="TChild"></typeparam>
     public class LazyLoaded<TChild> : ILazyLoaded
     {
-        protected TChild _child;
-        protected bool _isLoaded;
+        protected TChild _value;
 
         public LazyLoaded()
         {
@@ -27,8 +23,8 @@ namespace Marr.Data
 
         public LazyLoaded(TChild val)
         {
-            _child = val;
-            _isLoaded = true;
+            _value = val;
+            IsLoaded = true;
         }
 
         public TChild Value
@@ -36,11 +32,13 @@ namespace Marr.Data
             get
             {
                 LazyLoad();
-                return _child;
+                return _value;
             }
         }
 
-        public virtual void Prepare(Func<IDataMapper> dbCreator, object parent)
+        public bool IsLoaded { get; protected set; }
+
+        public virtual void Prepare(Func<IDataMapper> dataMapperFactory, object parent)
         { }
 
         public virtual void LazyLoad()
@@ -50,7 +48,7 @@ namespace Marr.Data
         {
             return new LazyLoaded<TChild>(val);
         }
-        
+
         public static implicit operator TChild(LazyLoaded<TChild> lazy)
         {
             return lazy.Value;
@@ -58,7 +56,7 @@ namespace Marr.Data
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
     }
 
@@ -70,7 +68,7 @@ namespace Marr.Data
     internal class LazyLoaded<TParent, TChild> : LazyLoaded<TChild>
     {
         private TParent _parent;
-        private Func<IDataMapper> _dbCreator;
+        private Func<IDataMapper> _dbMapperFactory;
 
         private readonly Func<IDataMapper, TParent, TChild> _query;
         private readonly Func<TParent, bool> _condition;
@@ -81,46 +79,41 @@ namespace Marr.Data
             _condition = condition;
         }
 
-        public LazyLoaded(TChild val) 
+        public LazyLoaded(TChild val)
             : base(val)
         {
-            _child = val;
-            _isLoaded = true;
+            _value = val;
+            IsLoaded = true;
         }
 
         /// <summary>
         /// The second part of the initialization happens when the entity is being built.
         /// </summary>
-        /// <param name="dbCreator">Knows how to instantiate a new IDataMapper.</param>
+        /// <param name="dataMapperFactory">Knows how to instantiate a new IDataMapper.</param>
         /// <param name="parent">The parent entity.</param>
-        public override void Prepare(Func<IDataMapper> dbCreator, object parent)
+        public override void Prepare(Func<IDataMapper> dataMapperFactory, object parent)
         {
-            _dbCreator = dbCreator;
+            _dbMapperFactory = dataMapperFactory;
             _parent = (TParent)parent;
-        }
-
-        public bool IsLoaded
-        {
-            get { return _isLoaded; }
         }
 
         public override void LazyLoad()
         {
-            if (!_isLoaded)
+            if (!IsLoaded)
             {
                 if (_condition != null && _condition(_parent))
                 {
-                    using (IDataMapper db = _dbCreator())
+                    using (IDataMapper db = _dbMapperFactory())
                     {
-                        _child = _query(db, _parent);
+                        _value = _query(db, _parent);
                     }
                 }
                 else
                 {
-                    _child = default(TChild);
+                    _value = default(TChild);
                 }
 
-                _isLoaded = true;
+                IsLoaded = true;
             }
         }
 

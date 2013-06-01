@@ -160,6 +160,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{f2be0fdf-6e47-4827-a420-dd4ef82407f8}</Project>
       <Name>NzbDrone.Common</Name>

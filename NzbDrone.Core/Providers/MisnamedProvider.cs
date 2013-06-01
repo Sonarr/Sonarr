@@ -50,8 +50,7 @@ namespace NzbDrone.Core.Providers
                                 CurrentName = currentName,
                                 EpisodeFileId = firstEpisode.EpisodeFileId,
                                 ProperName = properName,
-                                SeriesId = firstEpisode.SeriesId,
-                                SeriesTitle = firstEpisode.Series.Title
+                                SeriesTitle = firstEpisode.Series.Value.Title
                             });
                     }
                 });
