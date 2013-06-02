@@ -6,6 +6,7 @@ using Marr.Data;
 using Marr.Data.QGen;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Common;
 
 
 namespace NzbDrone.Core.Datastore
@@ -79,12 +80,14 @@ namespace NzbDrone.Core.Datastore
 
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
         {
-            var idList = ids.ToList();
-            var result = Query.Where(String.Format("Id IN ({0})", String.Join(",", idList))).ToList();
-            var resultCount = result.Count;
+            var query = String.Format("Id IN ({0})", String.Join(",", ids));
 
-            if (resultCount != idList.Count || result.Select(r => r.Id).Distinct().Count() != resultCount)
-                throw new InvalidOperationException("Unexpected result from query");
+            var result = Query.Where(query).ToList();
+
+            if (result.Count != ids.Count())
+            {
+                throw new ApplicationException("Expected query to return {0} rows but returned {1}".Inject(ids.Count(), result.Count));
+            }
 
             return result;
         }

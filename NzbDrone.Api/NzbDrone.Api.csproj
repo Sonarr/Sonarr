@@ -86,6 +86,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Authentication\AuthenticationService.cs" />
     <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="Indexers\IndexerModule.cs" />
     <Compile Include="Indexers\IndexerResource.cs" />
     <Compile Include="Indexers\ReleaseModule.cs" />
+    <Compile Include="Extensions\LazyExtensions.cs" />
     <Compile Include="Mapping\CloneInjection.cs" />
     <Compile Include="Mapping\MappingValidation.cs" />
     <Compile Include="Mapping\ResourceMappingException.cs" />
