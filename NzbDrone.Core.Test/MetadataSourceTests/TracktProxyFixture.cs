@@ -38,25 +38,22 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         {
             var details = Subject.GetSeriesInfo(75978);
 
-            ValidateSeries(details);
-        }
 
-        [Test]
-        public void should_be_able_to_get_list_of_episodes()
-        {
-            var details = Subject.GetEpisodeInfo(75978);
+            ValidateSeries(details.Item1);
 
-            details.Should().NotBeEmpty();
+            var episodes = details.Item2;
 
-            details.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+            episodes.Should().NotBeEmpty();
+
+            episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
                 .Max(e => e.Count()).Should().Be(1);
 
-            details.Select(c => c.TvDbEpisodeId).Should().OnlyHaveUniqueItems();
+            episodes.Select(c => c.TvDbEpisodeId).Should().OnlyHaveUniqueItems();
 
-            details.Should().Contain(c => c.SeasonNumber > 0);
-            details.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
+            episodes.Should().Contain(c => c.SeasonNumber > 0);
+            episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
 
-            foreach (var episode in details)
+            foreach (var episode in episodes)
             {
                 episode.AirDate.Should().HaveValue();
                 episode.AirDate.Value.Kind.Should().Be(DateTimeKind.Utc);
@@ -64,7 +61,9 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
                 episode.Title.Should().NotBeBlank();
                 episode.TvDbEpisodeId.Should().NotBe(0);
             }
+
         }
+
 
 
 

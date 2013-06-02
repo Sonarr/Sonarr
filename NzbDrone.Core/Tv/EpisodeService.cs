@@ -6,7 +6,6 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -23,42 +22,32 @@ namespace NzbDrone.Core.Tv
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         List<Episode> EpisodesWithFiles();
-        void RefreshEpisodeInfo(Series series);
         void UpdateEpisode(Episode episode);
         List<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber);
         void SetEpisodeIgnore(int episodeId, bool isIgnored);
         bool IsFirstOrLastEpisodeOfSeason(int episodeId);
         void UpdateEpisodes(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
+        void InsertMany(List<Episode> episodes);
+        void UpdateMany(List<Episode> episodes);
     }
 
     public class EpisodeService : IEpisodeService,
         IHandle<EpisodeFileDeletedEvent>,
         IHandle<EpisodeFileAddedEvent>,
-        IHandleAsync<SeriesDeletedEvent>,
-        IHandleAsync<SeriesAddedEvent>
+        IHandleAsync<SeriesDeletedEvent>
     {
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IProvideEpisodeInfo _episodeInfoProxy;
-        private readonly ISeasonRepository _seasonRepository;
         private readonly IEpisodeRepository _episodeRepository;
-        private readonly IMessageAggregator _messageAggregator;
         private readonly IConfigService _configService;
-        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public EpisodeService(IProvideEpisodeInfo episodeInfoProxy, ISeasonRepository seasonRepository,
-                              IEpisodeRepository episodeRepository, IMessageAggregator messageAggregator,
-                              IConfigService configService, ISeriesService seriesService, Logger logger)
+        public EpisodeService(IEpisodeRepository episodeRepository, IConfigService configService, Logger logger)
         {
-            _episodeInfoProxy = episodeInfoProxy;
-            _seasonRepository = seasonRepository;
             _episodeRepository = episodeRepository;
-            _messageAggregator = messageAggregator;
             _configService = configService;
-            _seriesService = seriesService;
             _logger = logger;
         }
 
@@ -122,121 +111,7 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.EpisodesWithFiles();
         }
 
-        public void RefreshEpisodeInfo(Series series)
-        {
-            logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.Id));
-            var successCount = 0;
-            var failCount = 0;
 
-            var tvdbEpisodes = _episodeInfoProxy.GetEpisodeInfo(series.TvdbId);
-
-            var seriesEpisodes = GetEpisodeBySeries(series.Id);
-            var updateList = new List<Episode>();
-            var newList = new List<Episode>();
-
-            foreach (var episode in tvdbEpisodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
-            {
-                try
-                {
-                    logger.Trace("Updating info for [{0}] - S{1:00}E{2:00}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
-
-                    //first check using tvdbId, this should cover cases when and episode number in a season is changed
-
-                    var episodes = seriesEpisodes.Where(e => e.TvDbEpisodeId == episode.TvDbEpisodeId).ToList();
-                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId);
-
-                    //not found, try using season/episode number
-                    if (episodeToUpdate == null)
-                    {
-                        episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
-                    }
-
-                    if (episodeToUpdate == null)
-                    {
-                        episodeToUpdate = new Episode();
-                        newList.Add(episodeToUpdate);
-
-                        //If it is Episode Zero Ignore it (specials, sneak peeks.)
-                        if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
-                        {
-                            episodeToUpdate.Ignored = true;
-                        }
-                        else
-                        {
-                            episodeToUpdate.Ignored = _seasonRepository.IsIgnored(series.Id, episode.SeasonNumber);
-                        }
-                    }
-                    else
-                    {
-                        updateList.Add(episodeToUpdate);
-                    }
-
-                    if ((episodeToUpdate.EpisodeNumber != episode.EpisodeNumber ||
-                         episodeToUpdate.SeasonNumber != episode.SeasonNumber) &&
-                        episodeToUpdate.EpisodeFileId > 0)
-                    {
-                        logger.Info("Unlinking episode file because TheTVDB changed the episode number...");
-                        episodeToUpdate.EpisodeFileId = 0;
-                    }
-
-                    episodeToUpdate.SeriesId = series.Id;
-                    episodeToUpdate.TvDbEpisodeId = episode.TvDbEpisodeId;
-                    episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
-                    episodeToUpdate.SeasonNumber = episode.SeasonNumber;
-                    episodeToUpdate.Title = episode.Title;
-                    episodeToUpdate.Overview = episode.Overview;
-                    episodeToUpdate.AirDate = episode.AirDate;
-
-                    successCount++;
-                }
-                catch (Exception e)
-                {
-                    logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}", series.Title), e);
-                    failCount++;
-                }
-            }
-
-            var allEpisodes = new List<Episode>();
-            allEpisodes.AddRange(newList);
-            allEpisodes.AddRange(updateList);
-
-            var groups = allEpisodes.GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
-
-            foreach (var group in groups)
-            {
-                int episodeCount = 0;
-                foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
-                {
-                    episode.AirDate = episode.AirDate.Value.AddMinutes(series.Runtime * episodeCount);
-                    episodeCount++;
-                }
-            }
-
-            _episodeRepository.InsertMany(newList);
-            _episodeRepository.UpdateMany(updateList);
-
-            if (newList.Any())
-            {
-                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
-            }
-
-            if (updateList.Any())
-            {
-                _messageAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
-            }
-
-            if (failCount != 0)
-            {
-                logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
-                            series.Title, successCount, failCount);
-            }
-            else
-            {
-                logger.Info("Finished episode refresh for series: {0}.", series.Title);
-            }
-
-            DeleteEpisodesNotInTvdb(series, tvdbEpisodes);
-        }
 
         public void UpdateEpisode(Episode episode)
         {
@@ -282,6 +157,16 @@ namespace NzbDrone.Core.Tv
             return episodes;
         }
 
+        public void InsertMany(List<Episode> episodes)
+        {
+            _episodeRepository.InsertMany(episodes);
+        }
+
+        public void UpdateMany(List<Episode> episodes)
+        {
+            _episodeRepository.InsertMany(episodes);
+        }
+
         public void HandleAsync(SeriesDeletedEvent message)
         {
             var episodes = GetEpisodeBySeries(message.Series.Id);
@@ -299,11 +184,6 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        public void HandleAsync(SeriesAddedEvent message)
-        {
-            RefreshEpisodeInfo(message.Series);
-        }
-
         public void Handle(EpisodeFileAddedEvent message)
         {
             foreach (var episode in message.EpisodeFile.Episodes.Value)
@@ -313,17 +193,6 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private void DeleteEpisodesNotInTvdb(Series series, IEnumerable<Episode> tvdbEpisodes)
-        {
-            //Todo: This will not work as currently implemented - what are we trying to do here?
-            return;
-            logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
-            foreach (var episode in tvdbEpisodes)
-            {
-                _episodeRepository.Delete(episode.Id);
-            }
 
-            logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
-        }
     }
 }

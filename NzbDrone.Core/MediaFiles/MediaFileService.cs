@@ -23,16 +23,14 @@ namespace NzbDrone.Core.MediaFiles
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IConfigService _configService;
-        private readonly IEpisodeService _episodeService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
         private readonly IMediaFileRepository _mediaFileRepository;
 
-        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IEpisodeService episodeService, IMessageAggregator messageAggregator, Logger logger)
+        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IMessageAggregator messageAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
             _configService = configService;
-            _episodeService = episodeService;
             _messageAggregator = messageAggregator;
             _logger = logger;
         }
@@ -57,7 +55,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public bool Exists(string path)
         {
-            return GetFileByPath(path) != null;
+            return _mediaFileRepository.Exists(path);
         }
 
         public EpisodeFile GetFileByPath(string path)

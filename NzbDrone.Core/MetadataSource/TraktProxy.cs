@@ -7,12 +7,11 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Tv;
 using RestSharp;
-using NzbDrone.Common.EnsureThat;
 using Episode = NzbDrone.Core.Tv.Episode;
 
 namespace NzbDrone.Core.MetadataSource
 {
-    public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo, IProvideEpisodeInfo
+    public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo
     {
         public List<Series> SearchForNewSeries(string title)
         {
@@ -23,22 +22,16 @@ namespace NzbDrone.Core.MetadataSource
             return response.Data.Select(MapSeries).ToList();
         }
 
-        public Series GetSeriesInfo(int tvDbSeriesId)
-        {
-            var client = BuildClient("show", "summary");
-            var restRequest = new RestRequest(tvDbSeriesId.ToString());
-            var response = client.Execute<Show>(restRequest);
-
-            return MapSeries(response.Data);
-        }
-
-        public IList<Episode> GetEpisodeInfo(int tvDbSeriesId)
+        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId)
         {
             var client = BuildClient("show", "summary");
             var restRequest = new RestRequest(tvDbSeriesId.ToString() + "/extended");
             var response = client.Execute<Show>(restRequest);
 
-            return response.Data.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
+            var episodes = response.Data.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
+            var series = MapSeries(response.Data);
+
+            return new Tuple<Series, List<Episode>>(series, episodes);
         }
 
         private static IRestClient BuildClient(string resource, string method)

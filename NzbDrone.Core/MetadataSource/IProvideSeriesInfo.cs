@@ -1,9 +1,11 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System;
+using System.Collections.Generic;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MetadataSource
 {
     public interface IProvideSeriesInfo
     {
-        Series GetSeriesInfo(int tvDbSeriesId);
+        Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId);
     }
 }

@@ -311,7 +311,6 @@
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
     <Compile Include="MediaFiles\MediaFileRepository.cs" />
-    <Compile Include="MetadataSource\IProvideEpisodeInfo.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
     <Compile Include="MetadataSource\TraktProxy.cs" />
@@ -513,6 +512,7 @@
     <Compile Include="Tv\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tv\SeriesStatusType.cs" />
+    <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />

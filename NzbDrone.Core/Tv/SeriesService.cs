@@ -8,10 +8,8 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -19,7 +17,6 @@ namespace NzbDrone.Core.Tv
     public interface ISeriesService
     {
         bool IsMonitored(int id);
-        Series UpdateSeriesInfo(int seriesId);
         Series GetSeries(int seriesId);
         Series AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
@@ -34,27 +31,21 @@ namespace NzbDrone.Core.Tv
         Series FindBySlug(string slug);
     }
 
-    public class SeriesService : ISeriesService, IHandleAsync<SeriesAddedEvent>
+    public class SeriesService : ISeriesService
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
-        private readonly IProvideSeriesInfo _seriesInfoProxy;
         private readonly IMessageAggregator _messageAggregator;
         private readonly ISceneMappingService _sceneMappingService;
-        private readonly IRootFolderService _rootFolderService;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService,
-                             IProvideSeriesInfo seriesInfoProxy, IMessageAggregator messageAggregator, ISceneMappingService sceneMappingService,
-                             IRootFolderService rootFolderService, IDiskProvider diskProvider, Logger logger)
+        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService, IMessageAggregator messageAggregator, ISceneMappingService sceneMappingService, IDiskProvider diskProvider, Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
-            _seriesInfoProxy = seriesInfoProxy;
             _messageAggregator = messageAggregator;
             _sceneMappingService = sceneMappingService;
-            _rootFolderService = rootFolderService;
             _diskProvider = diskProvider;
             _logger = logger;
         }
@@ -64,29 +55,7 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.Get(id).Monitored;
         }
 
-        public Series UpdateSeriesInfo(int seriesId)
-        {
-            var series = _seriesRepository.Get(seriesId);
-            var seriesInfo = _seriesInfoProxy.GetSeriesInfo(series.TvdbId);
 
-            series.Title = seriesInfo.Title;
-            series.AirTime = seriesInfo.AirTime;
-            series.Overview = seriesInfo.Overview;
-            series.Status = seriesInfo.Status;
-            series.CleanTitle = Parser.Parser.NormalizeTitle(seriesInfo.Title);
-            series.LastInfoSync = DateTime.Now;
-            series.Runtime = seriesInfo.Runtime;
-            series.Images = seriesInfo.Images;
-            series.Network = seriesInfo.Network;
-            series.FirstAired = seriesInfo.FirstAired;
-            _seriesRepository.Update(series);
-
-            //Todo: We need to get the UtcOffset from TVRage, since its not available from trakt
-
-            _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
-
-            return series;
-        }
 
         public Series GetSeries(int seriesId)
         {
@@ -193,11 +162,6 @@ namespace NzbDrone.Core.Tv
         public List<Series> GetSeriesInList(IEnumerable<int> seriesIds)
         {
             return _seriesRepository.Get(seriesIds).ToList();
-        }
-
-        public void HandleAsync(SeriesAddedEvent message)
-        {
-            UpdateSeriesInfo(message.Series.Id);
         }
     }
 }

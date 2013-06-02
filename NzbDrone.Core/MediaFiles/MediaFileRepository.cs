@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
@@ -11,6 +10,7 @@ namespace NzbDrone.Core.MediaFiles
         EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
+        bool Exists(string path);
     }
 
 
@@ -25,6 +25,11 @@ namespace NzbDrone.Core.MediaFiles
         public EpisodeFile GetFileByPath(string path)
         {
             return Query.SingleOrDefault(c => c.Path == path);
+        }
+
+        public bool Exists(string path)
+        {
+            return Query.Any(c => c.Path == path);
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)

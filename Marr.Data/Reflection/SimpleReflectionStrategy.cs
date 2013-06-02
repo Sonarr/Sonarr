@@ -1,20 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Reflection;
-using Marr.Data;
 
 namespace Marr.Data.Reflection
 {
     public class SimpleReflectionStrategy : IReflectionStrategy
     {
+
+        private static readonly Dictionary<string, MemberInfo> MemberCache = new Dictionary<string, MemberInfo>();
+
+
+        private static MemberInfo GetMember(Type entityType, string name)
+        {
+            MemberInfo member;
+            var key = entityType.FullName + name;
+            if (!MemberCache.TryGetValue(key, out member))
+            {
+                member = entityType.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
+                MemberCache[key] = member;
+            }
+
+            return member;
+        }
+
         /// <summary>
         /// Sets an entity field value by name to the passed in 'val'.
         /// </summary>
         public void SetFieldValue<T>(T entity, string fieldName, object val)
         {
-            MemberInfo member = entity.GetType().GetMember(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
+            var member = GetMember(entity.GetType(), fieldName);
 
             try
             {
@@ -22,13 +36,17 @@ namespace Marr.Data.Reflection
                 if (val == DBNull.Value)
                 {
                     if (member.MemberType == MemberTypes.Field)
-                        (member as FieldInfo).SetValue(entity, ReflectionHelper.GetDefaultValue((member as FieldInfo).FieldType));
-
+                    {
+                        (member as FieldInfo).SetValue(entity,
+                                                       ReflectionHelper.GetDefaultValue((member as FieldInfo).FieldType));
+                    }
                     else if (member.MemberType == MemberTypes.Property)
                     {
                         var pi = (member as PropertyInfo);
                         if (pi.CanWrite)
-                            (member as PropertyInfo).SetValue(entity, ReflectionHelper.GetDefaultValue((member as PropertyInfo).PropertyType), null);
+                            (member as PropertyInfo).SetValue(entity,
+                                                              ReflectionHelper.GetDefaultValue(
+                                                                  (member as PropertyInfo).PropertyType), null);
 
                     }
                 }
@@ -58,13 +76,13 @@ namespace Marr.Data.Reflection
         /// </summary>
         public object GetFieldValue(object entity, string fieldName)
         {
-            MemberInfo member = entity.GetType().GetMember(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
+            var member = GetMember(entity.GetType(), fieldName);
 
             if (member.MemberType == MemberTypes.Field)
             {
                 return (member as FieldInfo).GetValue(entity);
             }
-            else if (member.MemberType == MemberTypes.Property)
+            if (member.MemberType == MemberTypes.Property)
             {
                 if ((member as PropertyInfo).CanRead)
                     return (member as PropertyInfo).GetValue(entity, null);
