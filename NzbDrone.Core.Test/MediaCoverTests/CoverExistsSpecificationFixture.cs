@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {
@@ -66,7 +67,9 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         public void should_return_true_if_there_is_no_size_header_and_file_exist()
         {
             GivenExistingFileSize(100);
-            Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeTrue();
+            Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeFalse();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

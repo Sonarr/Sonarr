@@ -1,5 +1,6 @@
 ﻿using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.MediaCover
 {
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.MediaCover
 
             string sizeString;
 
-            if (headers.TryGetValue(headers[HttpProvider.ContentLenghtHeader], out sizeString))
+            if (headers.TryGetValue(HttpProvider.ContentLenghtHeader, out sizeString))
             {
                 int size;
                 int.TryParse(sizeString, out size);
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.MediaCover
                 return fileSize == size;
             }
 
-            _logger.Warn("Couldn't read content length header {0}", headers[HttpProvider.ContentLenghtHeader]);
+            _logger.Warn("Couldn't find content-length header {0}", headers.ToJson());
 
             return false;
         }

@@ -6,6 +6,7 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Tv
 {
@@ -43,10 +44,16 @@ namespace NzbDrone.Core.Tv
 
                 foreach (var series in allSeries)
                 {
-                    RefreshSeriesInfo(series);
+                    try
+                    {
+                        RefreshSeriesInfo(series);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.ErrorException("Couldn't refresh info for {0}".Inject(series.Title), e);
+                    }
                 }
             }
-
         }
 
         public void HandleAsync(SeriesAddedEvent message)

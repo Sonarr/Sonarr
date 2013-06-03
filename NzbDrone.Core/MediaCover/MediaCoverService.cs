@@ -53,7 +53,7 @@ namespace NzbDrone.Core.MediaCover
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
 
-                _logger.Info("Downloading {0} for {1}", cover.CoverType, series.Title);
+                _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series.Title, cover.Url);
                 _httpProvider.DownloadFile(cover.Url, fileName);
             }
             catch (Exception e)
