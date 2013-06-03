@@ -99,13 +99,9 @@ namespace NzbDrone.Core.Tv
                 {
                     _logger.Trace("Updating info for [{0}] - S{1:00}E{2:00}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
 
-                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId);
-
-                    //not found, try using season/episode number
-                    if (episodeToUpdate == null)
-                    {
-                        episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
-                    }
+                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e =>
+                        e.TvDbEpisodeId == episode.TvDbEpisodeId ||
+                        (e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber));
 
                     if (episodeToUpdate == null)
                     {

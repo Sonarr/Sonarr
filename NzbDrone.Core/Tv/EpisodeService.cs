@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Tv
 
         public void UpdateMany(List<Episode> episodes)
         {
-            _episodeRepository.InsertMany(episodes);
+            _episodeRepository.UpdateMany(episodes);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
