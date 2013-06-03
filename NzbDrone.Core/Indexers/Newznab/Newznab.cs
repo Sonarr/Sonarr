@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Indexers.Newznab
@@ -57,7 +56,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 var url = String.Format("{0}/api?t=tvsearch&cat=5030,5040,5070,5090s", Settings.Url);
 
-                if (String.IsNullOrWhiteSpace(Settings.ApiKey))
+                if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
                 {
                     url += "&apikey=" + Settings.ApiKey;
                 }
