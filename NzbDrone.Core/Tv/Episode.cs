@@ -2,7 +2,6 @@
 using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Model;
 
 
 namespace NzbDrone.Core.Tv

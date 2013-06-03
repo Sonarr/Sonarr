@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Tv
                          episodeToUpdate.SeasonNumber != episode.SeasonNumber) &&
                         episodeToUpdate.EpisodeFileId > 0)
                     {
-                        _logger.Info("Unlinking episode file because the episode number has changed");
+                        _logger.Debug("Un-linking episode file because the episode number has changed");
                         episodeToUpdate.EpisodeFileId = 0;
                     }
 

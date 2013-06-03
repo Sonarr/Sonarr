@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Datastore
         {
             if (model.Id != 0)
             {
-                throw new InvalidOperationException("Can't insert model with existing ID");
+                throw new InvalidOperationException("Can't insert model with existing ID " + model.Id);
             }
 
             DataMapper.Insert(model);

@@ -64,6 +64,12 @@ namespace NzbDrone.Core.Test.MediaFileTests
         }
 
         [Test]
+        public void exists_should_return_false_if_file_doesnt_exist()
+        {
+            Subject.Exists(@"C:\Test\EpisodeFile.avi").Should().BeFalse();
+        }
+
+        [Test]
         public void GetFileByPath_should_return_EpisodeFile_if_file_exists_in_database()
         {
             var path = @"C:\Test\EpisodeFile.avi";
