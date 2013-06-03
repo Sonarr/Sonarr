@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Test.Datastore.ReflectionStrategyFixture
     [TestFixture]
     public class Benchmarks
     {
-        private const int iterations = 5000000;
+/*        private const int iterations = 5000000;
         private object _target;
         private IReflectionStrategy _simpleReflectionStrategy;
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.Datastore.ReflectionStrategyFixture
         {
 
 
-        }
+        }*/
 
     }
 }
