@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Fasterflect;
 
@@ -6,13 +7,26 @@ namespace Marr.Data.Reflection
 {
     public class CachedReflectionStrategy : IReflectionStrategy
     {
+        private static readonly Dictionary<string, MemberInfo> MemberCache = new Dictionary<string, MemberInfo>();
+        private static MemberInfo GetMember(Type entityType, string name)
+        {
+            MemberInfo member;
+            var key = entityType.FullName + name;
+            if (!MemberCache.TryGetValue(key, out member))
+            {
+                member = entityType.GetMember(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
+                MemberCache[key] = member;
+            }
+
+            return member;
+        }
 
         /// <summary>
         /// Sets an entity field value by name to the passed in 'val'.
         /// </summary>
         public void SetFieldValue<T>(T entity, string fieldName, object val)
         {
-            MemberInfo member = entity.GetType().GetMember(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
+            MemberInfo member = GetMember(entity.GetType(), fieldName);
 
             try
             {
@@ -56,7 +70,8 @@ namespace Marr.Data.Reflection
         /// </summary>
         public object GetFieldValue(object entity, string fieldName)
         {
-            MemberInfo member = entity.GetType().GetMember(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)[0];
+            MemberInfo member = GetMember(entity.GetType(), fieldName);
+
 
             if (member.MemberType == MemberTypes.Field)
             {

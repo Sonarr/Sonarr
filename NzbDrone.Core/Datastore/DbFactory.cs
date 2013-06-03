@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Datastore
             _migrationController.MigrateToLatest(connectionString, migrationType);
 
 
-            MapRepository.Instance.ReflectionStrategy = new SimpleReflectionStrategy();
+            MapRepository.Instance.ReflectionStrategy = new DelegateReflectionStrategy();
 
             return new Database(() =>
                 {

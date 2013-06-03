@@ -220,6 +220,7 @@
     <Compile Include="Datastore\PagingSpec.cs" />
     <Compile Include="Datastore\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\RelationshipExtensions.cs" />
+    <Compile Include="Datastore\DelegateReflectionStrategy.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
