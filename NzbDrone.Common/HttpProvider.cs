@@ -13,7 +13,7 @@ namespace NzbDrone.Common
         string DownloadString(string address);
         string DownloadString(string address, string username, string password);
         string DownloadString(string address, ICredentials identity);
-        Dictionary<string, string> DownloadHeader(string url);
+        Dictionary<string, string> GetHeader(string url);
 
         Stream DownloadStream(string url, NetworkCredential credential = null);
         void DownloadFile(string url, string fileName);
@@ -60,7 +60,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public Dictionary<string, string> DownloadHeader(string url)
+        public Dictionary<string, string> GetHeader(string url)
         {
             var headers = new Dictionary<string, string>();
             var request = WebRequest.Create(url);
@@ -68,7 +68,7 @@ namespace NzbDrone.Common
 
             var response = request.GetResponse();
 
-            foreach (var key in headers.Keys)
+            foreach (var key in response.Headers.AllKeys)
             {
                 headers.Add(key, response.Headers[key]);
             }

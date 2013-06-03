@@ -29,7 +29,7 @@ namespace NzbDrone.Core.MediaCover
                 return false;
             }
 
-            var headers = _httpProvider.DownloadHeader(url);
+            var headers = _httpProvider.GetHeader(url);
 
             string sizeString;
 

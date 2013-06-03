@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         {
             _headers = new Dictionary<string, string>();
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFileSize(It.IsAny<string>())).Returns(100);
-            Mocker.GetMock<IHttpProvider>().Setup(c => c.DownloadHeader(It.IsAny<string>())).Returns(_headers);
+            Mocker.GetMock<IHttpProvider>().Setup(c => c.GetHeader(It.IsAny<string>())).Returns(_headers);
 
         }
 
