@@ -14,17 +14,13 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
+using Marr.Data.Reflection;
 
 namespace Marr.Data.Mapping
 {
     public class Relationship
     {
-        private IRelationshipInfo _relationshipInfo;
-        private MemberInfo _member;
-        private ILazyLoaded _lazyLoaded;
 
         public Relationship(MemberInfo member)
             : this(member, new RelationshipInfo())
@@ -32,14 +28,14 @@ namespace Marr.Data.Mapping
 
         public Relationship(MemberInfo member, IRelationshipInfo relationshipInfo)
         {
-            _member = member;
+            Member = member;
 
-            Type memberType = ReflectionHelper.GetMemberType(member);
+            MemberType = ReflectionHelper.GetMemberType(member);
 
             // Try to determine the RelationshipType
             if (relationshipInfo.RelationType == RelationshipTypes.AutoDetect)
             {
-                if (typeof(System.Collections.ICollection).IsAssignableFrom(memberType))
+                if (typeof(System.Collections.ICollection).IsAssignableFrom(MemberType))
                 {
                     relationshipInfo.RelationType = RelationshipTypes.Many;
                 }
@@ -54,67 +50,48 @@ namespace Marr.Data.Mapping
             {
                 if (relationshipInfo.RelationType == RelationshipTypes.Many)
                 {
-                    if (memberType.IsGenericType)
+                    if (MemberType.IsGenericType)
                     {
                         // Assume a Collection<T> or List<T> and return T
-                        relationshipInfo.EntityType = memberType.GetGenericArguments()[0];
+                        relationshipInfo.EntityType = MemberType.GetGenericArguments()[0];
                     }
                     else
                     {
                         throw new ArgumentException(string.Format(
                             "The DataMapper could not determine the RelationshipAttribute EntityType for {0}.",
-                            memberType.Name));
+                            MemberType.Name));
                     }
                 }
                 else
                 {
-                    relationshipInfo.EntityType = memberType;
+                    relationshipInfo.EntityType = MemberType;
                 }
             }
 
-            _relationshipInfo = relationshipInfo;
+            RelationshipInfo = relationshipInfo;
+
+
+
+            Setter = MapRepository.Instance.ReflectionStrategy.BuildSetter(member.DeclaringType, member.Name);
         }
 
-        public IRelationshipInfo RelationshipInfo
-        {
-            get { return _relationshipInfo; }
-        }
+        public IRelationshipInfo RelationshipInfo { get; private set; }
 
-        public MemberInfo Member
-        {
-            get { return _member; }
-        }
+        public MemberInfo Member { get; private set; }
 
-        public Type MemberType
-        {
-            get
-            {
-                // Assumes that a relationship can only have a member type of Field or Property
-                if (Member.MemberType == MemberTypes.Field)
-                    return (Member as FieldInfo).FieldType;
-                else
-                    return (Member as PropertyInfo).PropertyType;
-            }
-        }
+        public Type MemberType { get; private set; }
 
         public bool IsLazyLoaded
         {
             get
             {
-                return _lazyLoaded != null;
+                return LazyLoaded != null;
             }
         }
 
-        public ILazyLoaded LazyLoaded
-        {
-            get
-            {
-                return _lazyLoaded;
-            }
-            set
-            {
-                _lazyLoaded = value;
-            }
-        }
+        public ILazyLoaded LazyLoaded { get; set; }
+
+        public GetterDelegate Getter { get; set; }
+        public SetterDelegate Setter { get; set; }
     }
 }

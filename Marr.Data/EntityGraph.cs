@@ -74,7 +74,7 @@ namespace Marr.Data
             {
                 _columns = _repos.GetColumns(entityType);
             }
-            
+
             _relationships = _repos.GetRelationships(entityType);
             _children = new List<EntityGraph>();
             Member = relationship != null ? relationship.Member : null;
@@ -161,7 +161,7 @@ namespace Marr.Data
         {
             get { return _children; }
         }
-        
+
         /// <summary>
         /// Adds an entity to the appropriate place in the object graph.
         /// </summary>
@@ -184,13 +184,13 @@ namespace Marr.Data
             }
             else // RelationTypes.One
             {
-                _repos.ReflectionStrategy.SetFieldValue(_parent._entity, _relationship.Member.Name, entityInstance);
+                _relationship.Setter(_parent._entity, entityInstance);
             }
 
             EntityReference entityRef = new EntityReference(entityInstance);
             _entityReferences.Add(GroupingKeyColumns.GroupingKey, entityRef);
 
-            InitOneToManyChildLists(entityRef);           
+            InitOneToManyChildLists(entityRef);
         }
 
         /// <summary>
@@ -199,9 +199,9 @@ namespace Marr.Data
         public void AddParentReference()
         {
             var parentReference = FindParentReference();
-            _repos.ReflectionStrategy.SetFieldValue(_parent._entity, _relationship.Member.Name, parentReference);
+            _relationship.Setter(_parent._entity, parentReference);
         }
-        
+
         /// <summary>
         /// Concatenates the values of the GroupingKeys property and compares them
         /// against the LastKeyGroup property.  Returns true if the values are different,
@@ -296,8 +296,8 @@ namespace Marr.Data
                     try
                     {
                         IList list = (IList)_repos.ReflectionStrategy.CreateInstance(relationship.MemberType);
-                        _repos.ReflectionStrategy.SetFieldValue(entityRef.Entity, relationship.Member.Name, list);
-                        
+                        relationship.Setter(entityRef.Entity, list);
+
                         // Save a reference to each 1-M list
                         entityRef.AddChildList(relationship.Member.Name, list);
                     }
@@ -398,13 +398,13 @@ public struct KeyGroupInfo
         _hasNullKey = hasNullKey;
     }
 
-    public string GroupingKey 
-    { 
-        get { return _groupingKey; } 
+    public string GroupingKey
+    {
+        get { return _groupingKey; }
     }
 
-    public bool HasNullKey 
+    public bool HasNullKey
     {
-        get { return _hasNullKey; } 
+        get { return _hasNullKey; }
     }
 }

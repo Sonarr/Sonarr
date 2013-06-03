@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Marr.Data.Reflection
 {
     public interface IReflectionStrategy
     {
-        void SetFieldValue<T>(T entity, string fieldName, object val);
         object GetFieldValue(object entity, string fieldName);
+
+        GetterDelegate BuildGetter(Type type, string memberName);
+        SetterDelegate BuildSetter(Type type, string memberName);
+
         object CreateInstance(Type type);
     }
+
+    public delegate void SetterDelegate(object instance, object value);
+    public delegate object GetterDelegate(object instance);
 }

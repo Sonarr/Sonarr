@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Datastore
 
         static DbFactory()
         {
+            MapRepository.Instance.ReflectionStrategy = new SimpleReflectionStrategy();
             TableMapping.Map();
         }
 
@@ -31,9 +32,6 @@ namespace NzbDrone.Core.Datastore
             var connectionString = GetConnectionString(dbPath);
 
             _migrationController.MigrateToLatest(connectionString, migrationType);
-
-
-            MapRepository.Instance.ReflectionStrategy = new DelegateReflectionStrategy();
 
             return new Database(() =>
                 {

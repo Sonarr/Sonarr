@@ -53,8 +53,8 @@ namespace Marr.Data
             TypeConverters = new Dictionary<Type, IConverter>();
 
             // Register a default IReflectionStrategy
-            ReflectionStrategy = new CachedReflectionStrategy();
-            
+            ReflectionStrategy = new SimpleReflectionStrategy();
+
             // Register a default type converter for Enums
             TypeConverters.Add(typeof(Enum), new Converters.EnumStringConverter());
 
@@ -180,7 +180,7 @@ namespace Marr.Data
 
             return Relationships[type];
         }
-        
+
         #endregion
 
         #region - Reflection Strategy -
@@ -190,6 +190,7 @@ namespace Marr.Data
         /// By default the CachedReflector will be used, which provides a performance increase over the SimpleReflector.  
         /// However, the SimpleReflector can be used in Medium Trust enviroments.
         /// </summary>
+        /// 
         public IReflectionStrategy ReflectionStrategy { get; set; }
 
         #endregion

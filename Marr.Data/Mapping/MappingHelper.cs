@@ -53,13 +53,15 @@ namespace Marr.Data.Mapping
                     object dbValue = reader.GetValue(ordinal);
 
                     // Handle conversions
-                    IConverter conversion = _repos.GetConverter(dataMap.FieldType);
-                    if (conversion != null)
+                    if (dataMap.Converter != null)
                     {
-                        dbValue = conversion.FromDB(dataMap, dbValue);
+                        dbValue = dataMap.Converter.FromDB(dataMap, dbValue);
                     }
 
-                    _repos.ReflectionStrategy.SetFieldValue(ent, dataMap.FieldName, dbValue);
+                    if (dbValue != DBNull.Value)
+                    {
+                        dataMap.Setter(ent, dbValue);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -91,9 +93,9 @@ namespace Marr.Data.Mapping
                 var relationships = _repos.Relationships[entType];
                 foreach (var rel in relationships.Where(r => r.IsLazyLoaded))
                 {
-                    ILazyLoaded lazyLoaded = (ILazyLoaded)rel.LazyLoaded.Clone();
+                    var lazyLoaded = (ILazyLoaded)rel.LazyLoaded.Clone();
                     lazyLoaded.Prepare(dbCreate, ent);
-                    _repos.ReflectionStrategy.SetFieldValue(ent, rel.Member.Name, lazyLoaded);
+                    rel.Setter(ent, lazyLoaded);
                 }
             }
         }
@@ -138,21 +140,18 @@ namespace Marr.Data.Mapping
                 param.Size = columnMap.ColumnInfo.Size;
                 param.Direction = columnMap.ColumnInfo.ParamDirection;
 
-                object val = _repos.ReflectionStrategy.GetFieldValue(entity, columnMap.FieldName);
+                object val = columnMap.Getter(entity);
 
-                param.Value = val == null ? DBNull.Value : val; // Convert nulls to DBNulls
+                param.Value = val ?? DBNull.Value; // Convert nulls to DBNulls
 
-                var repos = MapRepository.Instance;
-
-                IConverter conversion = repos.GetConverter(columnMap.FieldType);
-                if (conversion != null)
+                if (columnMap.Converter != null)
                 {
-                    param.Value = conversion.ToDB(param.Value);
+                    param.Value = columnMap.Converter.ToDB(param.Value);
                 }
 
                 // Set the appropriate DbType property depending on the parameter type
                 // Note: the columnMap.DBType property was set when the ColumnMap was created
-                repos.DbTypeBuilder.SetDbType(param, columnMap.DBType);
+                MapRepository.Instance.DbTypeBuilder.SetDbType(param, columnMap.DBType);
 
                 _db.Command.Parameters.Add(param);
             }
@@ -166,7 +165,7 @@ namespace Marr.Data.Mapping
             foreach (ColumnMap dataMap in mappings)
             {
                 object output = _db.Command.Parameters[dataMap.ColumnInfo.Name].Value;
-                _repos.ReflectionStrategy.SetFieldValue(entity, dataMap.FieldName, output);
+                dataMap.Setter(entity, output);
             }
         }
 
@@ -177,7 +176,7 @@ namespace Marr.Data.Mapping
         {
             foreach (ColumnMap dataMap in mappings)
             {
-                _repos.ReflectionStrategy.SetFieldValue(entity, dataMap.FieldName, Convert.ChangeType(value, dataMap.FieldType));
+                dataMap.Setter(entity, Convert.ChangeType(value, dataMap.FieldType));
             }
         }
 

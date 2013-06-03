@@ -14,11 +14,9 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
 using System.Reflection;
 using Marr.Data.Converters;
+using Marr.Data.Reflection;
 
 namespace Marr.Data.Mapping
 {
@@ -27,6 +25,7 @@ namespace Marr.Data.Mapping
     /// </summary>
     public class ColumnMap
     {
+
         /// <summary>
         /// Creates a column map with an empty ColumnInfo object.
         /// </summary>
@@ -38,32 +37,34 @@ namespace Marr.Data.Mapping
         public ColumnMap(MemberInfo member, IColumnInfo columnInfo)
         {
             FieldName = member.Name;
+            ColumnInfo = columnInfo;
 
             // If the column name is not specified, the field name will be used.
             if (string.IsNullOrEmpty(columnInfo.Name))
                 columnInfo.Name = member.Name;
 
             FieldType = ReflectionHelper.GetMemberType(member);
-
             Type paramNetType = FieldType;
-            MapRepository repository = MapRepository.Instance;
 
-            IConverter converter = repository.GetConverter(FieldType);
-            if (converter != null)
+            Converter = MapRepository.Instance.GetConverter(FieldType);
+            if (Converter != null)
             {
-                // Handle conversions
-                paramNetType = converter.DbType;
+                paramNetType = Converter.DbType;
             }
 
-            // Get database specific DbType and store with column map in cache    
-            DBType = repository.DbTypeBuilder.GetDbType(paramNetType);
+            DBType = MapRepository.Instance.DbTypeBuilder.GetDbType(paramNetType);
 
-            ColumnInfo = columnInfo;
+            Getter = MapRepository.Instance.ReflectionStrategy.BuildGetter(member.DeclaringType, FieldName);
+            Setter = MapRepository.Instance.ReflectionStrategy.BuildSetter(member.DeclaringType, FieldName);
         }
-        
+
         public string FieldName { get; set; }
         public Type FieldType { get; set; }
         public Enum DBType { get; set; }
         public IColumnInfo ColumnInfo { get; set; }
+
+        public GetterDelegate Getter { get; private set; }
+        public SetterDelegate Setter { get; private set; }
+        public IConverter Converter { get; private set; }
     }
 }
