@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MetadataSource;
+using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -33,15 +34,16 @@ namespace NzbDrone.Core.Tv
         {
             if (message.SeriesId.HasValue)
             {
-                RefreshSeriesInfo(message.SeriesId.Value);
+                var series = _seriesService.GetSeries(message.SeriesId.Value);
+                RefreshSeriesInfo(series);
             }
             else
             {
-                var ids = _seriesService.GetAllSeries().OrderBy(c => c.LastInfoSync).Select(c => c.Id).ToList();
+                var allSeries = _seriesService.GetAllSeries().OrderBy(c => c.LastInfoSync).ToList();
 
-                foreach (var id in ids)
+                foreach (var series in allSeries)
                 {
-                    RefreshSeriesInfo(id);
+                    RefreshSeriesInfo(series);
                 }
             }
 
@@ -49,13 +51,14 @@ namespace NzbDrone.Core.Tv
 
         public void HandleAsync(SeriesAddedEvent message)
         {
-            RefreshSeriesInfo(message.Series.Id);
+            RefreshSeriesInfo(message.Series);
         }
 
-        private Series RefreshSeriesInfo(int seriesId)
+        private void RefreshSeriesInfo(Series series)
         {
-            var series = _seriesService.GetSeries(seriesId);
             var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
+
+            RefreshEpisodeInfo(series, tuple.Item2);
 
             var seriesInfo = tuple.Item1;
 
@@ -64,7 +67,7 @@ namespace NzbDrone.Core.Tv
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;
             series.CleanTitle = Parser.Parser.NormalizeTitle(seriesInfo.Title);
-            series.LastInfoSync = DateTime.Now;
+            series.LastInfoSync = DateTime.UtcNow;
             series.Runtime = seriesInfo.Runtime;
             series.Images = seriesInfo.Images;
             series.Network = seriesInfo.Network;
@@ -73,13 +76,10 @@ namespace NzbDrone.Core.Tv
 
             //Todo: We need to get the UtcOffset from TVRage, since its not available from trakt
 
-            RefreshEpisodeInfo(series, tuple.Item2);
-
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
-            return series;
         }
 
-        private void RefreshEpisodeInfo(Series series, List<Episode> remoteEpisodes)
+        private void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
             _logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.Id));
             var successCount = 0;
@@ -204,15 +204,5 @@ namespace NzbDrone.Core.Tv
 
                     _logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
                 }*/
-    }
-
-    public class RefreshSeriesCommand : ICommand
-    {
-        public int? SeriesId { get; private set; }
-
-        public RefreshSeriesCommand(int? seriesId)
-        {
-            SeriesId = seriesId;
-        }
     }
 }
