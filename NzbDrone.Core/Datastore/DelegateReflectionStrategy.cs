@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Datastore
     {
         private static readonly Dictionary<string, PropertySetterDelegate> SetterCache = new Dictionary<string, PropertySetterDelegate>();
         private static readonly Dictionary<string, PropertyGetterDelegate> GetterCache = new Dictionary<string, PropertyGetterDelegate>();
+        private static readonly IReflectionStrategy readStrat = new SimpleReflectionStrategy();
 
         private static PropertySetterDelegate SetterFunction(Type entityType, string name)
         {
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Datastore
 
         public object GetFieldValue(object entity, string fieldName)
         {
-            return GetterFunction(entity.GetType(), fieldName);
+            return readStrat.GetFieldValue(entity, fieldName);
         }
 
         public object CreateInstance(Type type)
