@@ -84,7 +84,6 @@
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\IContainer.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
     <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />

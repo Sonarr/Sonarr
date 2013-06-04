@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Common;
 using NzbDrone.Core.Tv;
@@ -11,13 +12,13 @@ namespace NzbDrone.Api.Calendar
     public class CalendarModule : NzbDroneRestModule<EpisodeResource>
     {
         private readonly IEpisodeService _episodeService;
-        private readonly SeriesService _seriesService;
+        private readonly SeriesRepository _seriesRepository;
 
-        public CalendarModule(IEpisodeService episodeService, SeriesService seriesService)
+        public CalendarModule(IEpisodeService episodeService, SeriesRepository seriesRepository)
             : base("/calendar")
         {
             _episodeService = episodeService;
-            _seriesService = seriesService;
+            _seriesRepository = seriesRepository;
 
             GetResourceAll = GetPaged;
         }
@@ -33,13 +34,10 @@ namespace NzbDrone.Api.Calendar
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
             if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
 
-            var episodes = _episodeService.EpisodesBetweenDates(start, end);
-            var episodeResources = ToListResource(() => episodes);
+            var resources = ToListResource(() => _episodeService.EpisodesBetweenDates(start, end))
+                .LoadSubtype(e => e.SeriesId, _seriesRepository);
 
-            var series = _seriesService.GetSeriesInList(episodeResources.SelectDistinct(e => e.SeriesId));
-            episodeResources.Join(series, episode => episode.SeriesId, s => s.Id, episode => episode.Series);
-
-            return episodeResources;
+            return resources.ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
@@ -9,13 +10,13 @@ namespace NzbDrone.Api.Missing
     public class MissingModule : NzbDroneRestModule<EpisodeResource>
     {
         private readonly IEpisodeService _episodeService;
-        private readonly SeriesService _seriesService;
+        private readonly SeriesRepository _seriesRepository;
 
-        public MissingModule(IEpisodeService episodeService, SeriesService seriesService)
+        public MissingModule(IEpisodeService episodeService, SeriesRepository seriesRepository)
             :base("missing")
         {
             _episodeService = episodeService;
-            _seriesService = seriesService;
+            _seriesRepository = seriesRepository;
             GetResourcePaged = GetMissingEpisodes;
         }
 
@@ -29,12 +30,10 @@ namespace NzbDrone.Api.Missing
                 SortDirection = pagingResource.SortDirection
             };
 
-            var episodeResources = ApplyToPage(_episodeService.EpisodesWithoutFiles, pagingSpec);
+            var resource = ApplyToPage(_episodeService.EpisodesWithoutFiles, pagingSpec);
+            resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
 
-            var series = _seriesService.GetSeriesInList(episodeResources.Records.SelectDistinct(e => e.SeriesId));
-            episodeResources.Records.Join(series, episode => episode.SeriesId, s => s.Id, episode => episode.Series);
-
-            return episodeResources;
+            return resource;
         }
     }
 }
