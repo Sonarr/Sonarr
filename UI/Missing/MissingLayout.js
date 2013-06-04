@@ -20,6 +20,7 @@ define([
                 {
                     name      : 'series.Title',
                     label     : 'Series Title',
+                    sortable  : false,
                     cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' })
                 },
                 {
