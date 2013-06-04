@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Tv
 
         private void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
-            _logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.Id));
+            _logger.Info("Starting series info refresh for: {0}", series.Title.WithDefault(series.Id));
             var successCount = 0;
             var failCount = 0;
 
@@ -104,12 +104,12 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    _logger.Trace("Updating info for [{0}] - S{1:00}E{2:00}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
+                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId);
 
-                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e =>
-                        e.TvDbEpisodeId == episode.TvDbEpisodeId ||
-                        (e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber));
-
+                    if (episodeToUpdate == null)
+                    {
+                        episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    }
                     if (episodeToUpdate == null)
                     {
                         episodeToUpdate = new Episode();

@@ -143,13 +143,6 @@ define([
                             command       : 'refreshseries',
                             successMessage: 'Library was updated!',
                             errorMessage  : 'Library update failed!'
-                        },
-                        {
-                            title         : 'Test Action',
-                            icon          : 'icon-asterisk',
-                            command       : 'test',
-                            successMessage: 'Test Completed',
-                            errorMessage  : 'Test Failed!'
                         }
                     ]
                 };
