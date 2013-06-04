@@ -24,17 +24,23 @@ define(['app'], function () {
 
                 return start.format('{h}.{mm}{tt}');
             },
+            end               : function () {
+                var start = Date.create(this.get('airDate'));
+                var runtime = this.get('series').runtime;
+
+                return start.addMinutes(runtime);
+            },
             statusLevel        : function () {
-                var status = this.get('status');
+                var episodeFileId = this.get('episodeFileId');
                 var currentTime = Date.create();
-                var start = Date.create(this.get('start'));
+                var start = Date.create(this.get('airDate'));
                 var end = Date.create(this.get('end'));
 
                 if (currentTime.isBetween(start, end)) {
                     return 'warning';
                 }
 
-                if (start.isBefore(currentTime) || status === 'Missing') {
+                if (start.isBefore(currentTime) && episodeFileId === 0) {
                     return 'danger';
                 }
 

@@ -70,12 +70,10 @@ define(['app', 'Calendar/CalendarItemView'], function () {
                         var episodeTitle = element.get('title');
                         var seriesTitle = element.get('series').title;
                         var start = element.get('airDate');
-                        var end = element.get('endTime');
 
                         element.set('title', seriesTitle);
                         element.set('episodeTitle', episodeTitle);
                         element.set('start', start);
-                        element.set('end', end);
                         element.set('allDay', false);
                     });
 
