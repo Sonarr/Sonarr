@@ -568,6 +568,31 @@ namespace Marr.Data.QGen
             return this;
         }
 
+        public virtual bool Any(Expression<Func<T, bool>> filterExpression)
+        {
+            bool useAltNames = _isFromView || _isGraph;
+            bool addTablePrefixToColumns = true;
+            _whereBuilder = new WhereBuilder<T>(_db.Command, _dialect, filterExpression, _tables, useAltNames, addTablePrefixToColumns);
+            return Any();
+        }
+
+        public virtual bool Any()
+        {
+            SqlModes previousSqlMode = _db.SqlMode;
+
+            // Generate a row count query
+            string where = _whereBuilder != null ? _whereBuilder.ToString() : string.Empty;
+
+            bool useAltNames = _isFromView || _isGraph || _isJoin;
+            IQuery query = QueryFactory.CreateRowCountSelectQuery(_tables, _db, where, SortBuilder, useAltNames);
+            string queryText = query.Generate();
+
+            _db.SqlMode = SqlModes.Text;
+            int count = Convert.ToInt32(_db.ExecuteScalar(queryText));
+
+            _db.SqlMode = previousSqlMode;
+            return count > 0;
+        }
 
         #endregion
 
