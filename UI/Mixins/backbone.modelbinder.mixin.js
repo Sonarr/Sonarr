@@ -1,6 +1,6 @@
 'use strict';
 
-var oldItemViewRender = Marionette.ItemView.prototype.render;
+var oldMarionetteItemViewRender = Marionette.ItemView.prototype.render;
 var oldItemCollectionViewRender = Marionette.CollectionView.prototype.render;
 
 
@@ -21,9 +21,32 @@ Marionette.ItemView.prototype.self$ = function (selector) {
     return  this.$(selector).not("[class*='iv-'] " + selector);
 };
 
+
+Marionette.ItemView.prototype._handleRelativeLink = function (event) {
+    console.log('clikc');
+    event.preventDefault();
+    var $target = $(event.target);
+
+    var href = event.target.getAttribute('href');
+
+    if (!href && $target.parent('a') && $target.parent('a')[0]) {
+
+        var linkElement = $target.parent('a')[0];
+
+        href = linkElement.getAttribute('href');
+    }
+
+    if (!href) {
+        throw 'couldnt find route target';
+    }
+
+    NzbDrone.Router.navigate(href, { trigger: true });
+};
+
+
 Marionette.ItemView.prototype.render = function () {
 
-    var result = oldItemViewRender.apply(this, arguments);
+    var result = oldMarionetteItemViewRender.apply(this, arguments);
 
     this.$el.removeClass('iv-' + this.viewName());
 
@@ -38,13 +61,11 @@ Marionette.ItemView.prototype.render = function () {
             this._modelBinder = new Backbone.ModelBinder();
         }
 
-        window.console.log('binding ' + this.viewName());
-
         this._modelBinder.bind(this.model, this.el);
     }
 
+    this.$('a[href^="/"]').children().click(this._handleRelativeLink);
     this.$el.addClass('iv-' + this.viewName());
-
 
     return result;
 };
