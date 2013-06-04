@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             get
             {
-                var url = String.Format("{0}/api?t=tvsearch&cat=5030,5040,5070,5090s", Settings.Url);
+                var url = String.Format("{0}/api?t=tvsearch&cat=5000", Settings.Url);
 
                 if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
                 {

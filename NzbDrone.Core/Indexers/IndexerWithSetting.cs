@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Indexers
 {
     public abstract class IndexerWithSetting<TSetting> : IndexerBase where TSetting : class, IIndexerSetting, new()
     {
-        public TSetting Settings { get; private set; }
+        public TSetting Settings { get; set; }
 
         public TSetting ImportSettingsFromJson(string json)
         {
