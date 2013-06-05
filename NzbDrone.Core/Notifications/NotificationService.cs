@@ -9,6 +9,7 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Parser.Model;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications
@@ -133,13 +134,21 @@ namespace NzbDrone.Core.Notifications
             return instance;
         }
 
+        private string GetMessage(ParsedEpisodeInfo parsedEpisodeInfo)
+        {
+            return String.Format("{0} - {1}{2}",
+                                 parsedEpisodeInfo.SeriesTitle,
+                                 parsedEpisodeInfo.SeasonNumber,
+                                 String.Concat(parsedEpisodeInfo.EpisodeNumbers.Select(i => String.Format("x{0:00}", i))));
+        }
+
         public void Handle(EpisodeGrabbedEvent message)
         {
             All().Where(n => n.OnGrab)
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnGrab("Grabbed!")
+                                        .OnGrab(GetMessage(message.Episode.ParsedEpisodeInfo))
                         );
         }
 
@@ -149,7 +158,7 @@ namespace NzbDrone.Core.Notifications
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnDownload("Downloaded!", message.Series)
+                                        .OnDownload(GetMessage(message.ParsedEpisodeInfo), message.Series)
                         );
         }
 
@@ -159,7 +168,7 @@ namespace NzbDrone.Core.Notifications
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnDownload("Renamed!", message.Series)
+                                        .OnDownload(message.Series.Title, message.Series)
                         );
         }
     }
