@@ -10,7 +10,7 @@ define(['app', 'Calendar/CalendarItemView'], function () {
             calendar: '#calendar'
         },
 
-        initialize : function () {
+        initialize                   : function () {
             //should use this.collection?
             this.calendar = new NzbDrone.Calendar.CalendarCollection();
         },
@@ -57,7 +57,13 @@ define(['app', 'Calendar/CalendarItemView'], function () {
             NzbDrone.Calendar.CalendarCollectionView.Instance = this;
         },
 
-        getEvents                    : function (start, end, callback) {
+
+        onShow: function () {
+            this.$('.fc-button-today').click();
+        },
+
+
+        getEvents: function (start, end, callback) {
             var bbView = NzbDrone.Calendar.CalendarCollectionView.Instance;
 
             var startDate = Date.create(start).format(Date.ISO8601_DATETIME);
@@ -66,7 +72,7 @@ define(['app', 'Calendar/CalendarItemView'], function () {
             bbView.calendar.fetch({
                 data   : { start: startDate, end: endDate },
                 success: function (calendarCollection) {
-                    _.each(calendarCollection.models, function(element) {
+                    _.each(calendarCollection.models, function (element) {
                         var episodeTitle = element.get('title');
                         var seriesTitle = element.get('series').title;
                         var start = element.get('airDate');
