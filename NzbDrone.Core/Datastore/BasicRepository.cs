@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Datastore
         void DeleteMany(IEnumerable<int> ids);
         void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
         TModel Single();
+        PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec);
     }
 
 
@@ -195,6 +196,21 @@ namespace NzbDrone.Core.Datastore
                 .ColumnsIncluding(properties)
                 .Entity(model)
                 .Execute();
+        }
+
+
+        public virtual PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec)
+        {
+            var pagingQuery = Query.OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                                   .Skip(pagingSpec.PagingOffset())
+                                   .Take(pagingSpec.PageSize);
+
+            pagingSpec.Records = pagingQuery.ToList();
+
+            //TODO: Use the same query for count and records
+            pagingSpec.TotalRecords = Count();
+
+            return pagingSpec;
         }
 
 

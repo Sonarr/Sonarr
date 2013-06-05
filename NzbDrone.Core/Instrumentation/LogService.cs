@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Instrumentation
 {
@@ -6,6 +7,7 @@ namespace NzbDrone.Core.Instrumentation
     {
         void DeleteAll();
         void Trim();
+        PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec);
     }
 
     public class LogService : ILogService
@@ -25,6 +27,11 @@ namespace NzbDrone.Core.Instrumentation
         public void Trim()
         {
             _logRepository.Trim();
+        }
+
+        public PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec)
+        {
+            return _logRepository.GetPaged(pagingSpec);
         }
     }
 }

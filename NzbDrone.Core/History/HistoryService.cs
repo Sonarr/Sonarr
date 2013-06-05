@@ -36,7 +36,7 @@ namespace NzbDrone.Core.History
 
         public PagingSpec<History> Paged(PagingSpec<History> pagingSpec)
         {
-            return _historyRepository.Paged(pagingSpec);
+            return _historyRepository.GetPaged(pagingSpec);
         }
 
         public void Purge()

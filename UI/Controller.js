@@ -10,6 +10,7 @@ define(['app',
     'Series/Details/SeriesDetailsLayout',
     'Series/EpisodeCollection',
     'Settings/SettingsLayout',
+    'Logs/Layout',
     'Missing/MissingLayout',
     'History/HistoryLayout'],
     function () {
@@ -62,10 +63,16 @@ define(['app',
                 NzbDrone.mainRegion.show(new NzbDrone.History.HistoryLayout());
             },
 
+            logs: function () {
+                this._setTitle('logs');
+                NzbDrone.mainRegion.show(new NzbDrone.Logs.Layout());
+            },
+
             notFound: function () {
                 this._setTitle('Not Found');
                 NzbDrone.mainRegion.show(new NzbDrone.Shared.NotFoundView(this));
             },
+
 
             _setTitle: function (title) {
                 //$('#title-region').html(title);

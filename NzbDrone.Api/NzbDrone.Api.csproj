@@ -115,6 +115,8 @@
     <Compile Include="Indexers\IndexerResource.cs" />
     <Compile Include="Indexers\ReleaseModule.cs" />
     <Compile Include="Extensions\LazyExtensions.cs" />
+    <Compile Include="Logs\LogModule.cs" />
+    <Compile Include="Logs\LogResource.cs" />
     <Compile Include="Mapping\CloneInjection.cs" />
     <Compile Include="Mapping\MappingValidation.cs" />
     <Compile Include="Mapping\ResourceMappingException.cs" />

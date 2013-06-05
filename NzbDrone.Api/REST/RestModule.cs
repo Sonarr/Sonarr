@@ -195,21 +195,25 @@ namespace NzbDrone.Api.REST
             Int32.TryParse(Request.Query.Page.ToString(), out page);
             if (page == 0) page = 1;
 
-            var sortKey = Request.Query.SortKey.ToString();
-            if (String.IsNullOrEmpty(sortKey)) sortKey = "AirDate";
-
-            var sortDirection = Request.Query.SortDir.ToString()
-                                                   .Equals("Asc", StringComparison.InvariantCultureIgnoreCase)
-                                                   ? SortDirection.Ascending
-                                                   : SortDirection.Descending;
 
             var pagingResource = new PagingResource<TResource>
-                                     {
-                                         PageSize = pageSize,
-                                         Page = page,
-                                         SortKey = sortKey,
-                                         SortDirection = sortDirection
-                                     };
+            {
+                PageSize = pageSize,
+                Page = page,
+            };
+
+            if (Request.Query.SortKey != null)
+            {
+                pagingResource.SortKey = Request.Query.SortKey.ToString();
+
+                if (Request.Query.SortDir != null)
+                {
+                    pagingResource.SortDirection = Request.Query.SortDir.ToString()
+                                                          .Equals("Asc", StringComparison.InvariantCultureIgnoreCase)
+                                                       ? SortDirection.Ascending
+                                                       : SortDirection.Descending;
+                }
+            }
 
             return pagingResource;
         }
