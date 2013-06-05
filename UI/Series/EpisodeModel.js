@@ -24,11 +24,14 @@ define(['app'], function () {
 
                 return start.format('{h}.{mm}{tt}');
             },
-            end               : function () {
-                var start = Date.create(this.get('airDate'));
-                var runtime = this.get('series').runtime;
+            end                : function () {
 
-                return start.addMinutes(runtime);
+                if (this.has('series')) {
+                    var start = Date.create(this.get('airDate'));
+                    var runtime = this.get('series').runtime;
+
+                    return start.addMinutes(runtime);
+                }
             },
             statusLevel        : function () {
                 var episodeFileId = this.get('episodeFileId');
