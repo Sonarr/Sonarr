@@ -3,6 +3,8 @@
         <h1>{{day}}</h1>
         <h4>{{month}}</h4>
     </div>
-    <h4>{{series.title}}</h4>
+    <a href="series/details/{{series.titleSlug}}">
+        <h4>{{series.title}}</h4>
+    </a>
     <p>{{startTime}} {{bestDateString}}<span class="pull-right">{{seasonNumber}}x{{paddedEpisodeNumber}}</span><br>{{episodeTitle}}</p>
 </div>

@@ -44,6 +44,9 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
                 }
 
                 return Date.create(date).short();
+            },
+            route : function(){
+                return '/series/details/' + this.get('titleSlug');
             }
         },
 
