@@ -11,6 +11,7 @@ define(['app',
     'Series/EpisodeCollection',
     'Settings/SettingsLayout',
     'Logs/Layout',
+    'Release/Layout',
     'Missing/MissingLayout',
     'History/HistoryLayout'],
     function () {
@@ -61,6 +62,11 @@ define(['app',
                 this._setTitle('History');
 
                 NzbDrone.mainRegion.show(new NzbDrone.History.HistoryLayout());
+            },
+
+            rss: function () {
+                this._setTitle('RSS');
+                NzbDrone.mainRegion.show(new NzbDrone.Release.Layout());
             },
 
             logs: function () {

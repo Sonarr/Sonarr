@@ -17,6 +17,7 @@ require(['app', 'Controller'], function (app, controller) {
             'missing'                    : 'missing',
             'history'                    : 'history',
             'logs'                       : 'logs',
+            'rss'                        : 'rss',
             ':whatever'                  : 'notFound'
         }
     });

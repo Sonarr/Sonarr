@@ -83,6 +83,7 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
     window.NzbDrone.Missing = {};
     window.NzbDrone.History = {};
     window.NzbDrone.Logs = {};
+    window.NzbDrone.Release = {};
     window.NzbDrone.Mixins = {};
 
     window.NzbDrone.Events = {
