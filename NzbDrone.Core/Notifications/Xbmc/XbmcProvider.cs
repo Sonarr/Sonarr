@@ -39,19 +39,19 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             var username = settings.Username;
             var password = settings.Password;
-            var host = settings.Host;
+            var address = String.Format("{0}:{1}", settings.Host, settings.Port);
 
-            Logger.Trace("Determining version of XBMC Host: {0}", host);
-            var version = GetJsonVersion(host, username, password);
+            Logger.Trace("Determining version of XBMC Host: {0}", address);
+            var version = GetJsonVersion(address, username, password);
 
-            //If Dharma
+            //Dharma
             if (version == new XbmcVersion(2))
             {
                 //Check for active player only when we should skip updates when playing
                 if (!settings.AlwaysUpdate)
                 {
-                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                    var activePlayers = GetActivePlayersDharma(host, username, password);
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", address);
+                    var activePlayers = GetActivePlayersDharma(address, username, password);
 
                     //If video is currently playing, then skip update
                     if (activePlayers["video"])
@@ -60,17 +60,17 @@ namespace NzbDrone.Core.Notifications.Xbmc
                         return;
                     }
                 }
-                UpdateWithHttp(series, host, username, password);
+                UpdateWithHttp(series, address, username, password);
             }
 
-            //If Eden or newer (attempting to make it future compatible)
+            //Eden
             else if (version == new XbmcVersion(3) || version == new XbmcVersion(4))
             {
                 //Check for active player only when we should skip updates when playing
                 if (!settings.AlwaysUpdate)
                 {
-                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                    var activePlayers = GetActivePlayersEden(host, username, password);
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", address);
+                    var activePlayers = GetActivePlayersEden(address, username, password);
 
                     //If video is currently playing, then skip update
                     if (activePlayers.Any(a => a.Type.Equals("video")))
@@ -80,16 +80,17 @@ namespace NzbDrone.Core.Notifications.Xbmc
                     }
                 }
 
-                UpdateWithJsonExecBuiltIn(series, host, username, password);
+                UpdateWithJsonExecBuiltIn(series, address, username, password);
             }
 
+            //Frodo or newer (attempting to make it future compatible)
             else if (version >= new XbmcVersion(5))
             {
                 //Check for active player only when we should skip updates when playing
                 if (!settings.AlwaysUpdate)
                 {
-                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                    var activePlayers = GetActivePlayersEden(host, username, password);
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", address);
+                    var activePlayers = GetActivePlayersEden(address, username, password);
 
                     //If video is currently playing, then skip update
                     if (activePlayers.Any(a => a.Type.Equals("video")))
@@ -99,7 +100,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                     }
                 }
 
-                UpdateWithJsonVideoLibraryScan(series, host, username, password);
+                UpdateWithJsonVideoLibraryScan(series, address, username, password);
             }
 
                 //Log Version zero if check failed
@@ -163,7 +164,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                     Logger.Trace("Failed to get TV Shows from XBMC");
 
                 else
-                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.Id || s.Label == series.Title);
+                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.TvdbId || s.Label == series.Title);
 
                 var postJson = new JObject();
                 postJson.Add(new JProperty("jsonrpc", "2.0"));

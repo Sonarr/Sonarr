@@ -10,6 +10,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications
@@ -134,10 +135,10 @@ namespace NzbDrone.Core.Notifications
             return instance;
         }
 
-        private string GetMessage(ParsedEpisodeInfo parsedEpisodeInfo)
+        private string GetMessage(ParsedEpisodeInfo parsedEpisodeInfo, Series series)
         {
             return String.Format("{0} - {1}{2}",
-                                 parsedEpisodeInfo.SeriesTitle,
+                                 series.Title,
                                  parsedEpisodeInfo.SeasonNumber,
                                  String.Concat(parsedEpisodeInfo.EpisodeNumbers.Select(i => String.Format("x{0:00}", i))));
         }
@@ -148,7 +149,7 @@ namespace NzbDrone.Core.Notifications
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnGrab(GetMessage(message.Episode.ParsedEpisodeInfo))
+                                        .OnGrab(GetMessage(message.Episode.ParsedEpisodeInfo, message.Episode.Series))
                         );
         }
 
@@ -158,7 +159,7 @@ namespace NzbDrone.Core.Notifications
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnDownload(GetMessage(message.ParsedEpisodeInfo), message.Series)
+                                        .OnDownload(GetMessage(message.ParsedEpisodeInfo, message.Series), message.Series)
                         );
         }
 

@@ -72,7 +72,13 @@ namespace NzbDrone.Core.MediaFiles
             {
                 try
                 {
-                    var series = _parsingService.GetSeries(videoFile);
+                    var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(videoFile));
+
+                    if (series == null)
+                    {
+                        _logger.Trace("Unknown Series for file: {0}", videoFile);
+                    }
+
                     ProcessVideoFile(videoFile, series);
                 }
                 catch (Exception ex)
