@@ -398,6 +398,7 @@ Global
 		{B1784698-592E-4132-BDFA-9817409E3A96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B1784698-592E-4132-BDFA-9817409E3A96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B1784698-592E-4132-BDFA-9817409E3A96}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1784698-592E-4132-BDFA-9817409E3A96}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
