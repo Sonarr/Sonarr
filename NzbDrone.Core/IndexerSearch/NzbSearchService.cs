@@ -42,7 +42,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         public List<DownloadDecision> SearchSingle(int seriesId, int seasonNumber, int episodeNumber)
         {
-            var searchSpec = Get<SingleEpisodeSearchDefinition>(seriesId, seasonNumber);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(seriesId, seasonNumber);
 
             if (_seriesService.GetSeries(seriesId).UseSceneNumbering)
             {
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         public List<DownloadDecision> SearchDaily(int seriesId, DateTime airDate)
         {
-            var searchSpec = Get<DailyEpisodeSearchDefinition>(seriesId);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(seriesId);
             searchSpec.Airtime = airDate;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
@@ -69,19 +69,19 @@ namespace NzbDrone.Core.IndexerSearch
 
         public List<DownloadDecision> SearchSeason(int seriesId, int seasonNumber)
         {
-            var searchSpec = Get<SeasonSearchDefinition>(seriesId, seasonNumber);
+            var searchSpec = Get<SeasonSearchCriteria>(seriesId, seasonNumber);
             searchSpec.SeasonNumber = seasonNumber;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> PartialSeasonSearch(SeasonSearchDefinition search)
+        private List<DownloadDecision> PartialSeasonSearch(SeasonSearchCriteria search)
         {
             var episodesNumbers = _episodeService.GetEpisodesBySeason(search.SeriesId, search.SeasonNumber).Select(c => c.EpisodeNumber);
             var prefixes = episodesNumbers
                 .Select(i => i / 10)
                 .Distinct()
-                .Select(prefix => new PartialSeasonSearchDefinition(search, prefix));
+                .Select(prefix => new PartialSeasonSearchCriteria(search, prefix));
 
             var result = new List<DownloadDecision>();
 
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.IndexerSearch
             return result;
         }
 
-        private TSpec Get<TSpec>(int seriesId, int seasonNumber = -1) where TSpec : SearchDefinitionBase, new()
+        private TSpec Get<TSpec>(int seriesId, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.IndexerSearch
             return spec;
         }
 
-        private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReportInfo>> searchAction, SearchDefinitionBase definitionBase)
+        private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReportInfo>> searchAction, SearchCriteriaBase criteriaBase)
         {
             var indexers = _indexerService.GetAvailableIndexers().ToList();
             var reports = new List<ReportInfo>();
@@ -133,16 +133,16 @@ namespace NzbDrone.Core.IndexerSearch
                     }
                     catch (Exception e)
                     {
-                        _logger.ErrorException("Error while searching for " + definitionBase, e);
+                        _logger.ErrorException("Error while searching for " + criteriaBase, e);
                     }
                 }));
             }
 
             Task.WaitAll(taskList.ToArray());
 
-            _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", reports.Count, definitionBase, indexers.Count);
+            _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", reports.Count, criteriaBase, indexers.Count);
 
-            return _makeDownloadDecision.GetSearchDecision(reports, definitionBase).ToList();
+            return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
         }
     }
 }

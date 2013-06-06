@@ -2,7 +2,7 @@ using System;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
-    public class DailyEpisodeSearchDefinition : SearchDefinitionBase
+    public class DailyEpisodeSearchCriteria : SearchCriteriaBase
     {
         public DateTime Airtime { get; set; }
 

@@ -1,6 +1,6 @@
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
-    public class SeasonSearchDefinition : SearchDefinitionBase
+    public class SeasonSearchCriteria : SearchCriteriaBase
     {
         public int SeasonNumber { get; set; }
 

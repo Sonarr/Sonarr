@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
-    public abstract class SearchDefinitionBase
+    public abstract class SearchCriteriaBase
     {
         private static readonly Regex NoneWord = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex BeginningThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);

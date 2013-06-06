@@ -14,10 +14,10 @@ namespace NzbDrone.Core.Indexers
     {
         IList<ReportInfo> FetchRss(IIndexer indexer);
 
-        IList<ReportInfo> Fetch(IIndexer indexer, SeasonSearchDefinition searchDefinition);
-        IList<ReportInfo> Fetch(IIndexer indexer, SingleEpisodeSearchDefinition searchDefinition);
-        IList<ReportInfo> Fetch(IIndexer indexer, PartialSeasonSearchDefinition searchDefinition);
-        IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchDefinition searchDefinition);
+        IList<ReportInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
+        IList<ReportInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
+        IList<ReportInfo> Fetch(IIndexer indexer, PartialSeasonSearchCriteria searchCriteria);
+        IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
     }
 
     public class FetchFeedService : IFetchFeedFromIndexers
@@ -44,51 +44,51 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        public IList<ReportInfo> Fetch(IIndexer indexer, SeasonSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchDefinition);
+            _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchDefinition.SceneTitle, searchDefinition.SeasonNumber);
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.SceneTitle, searchCriteria.SeasonNumber);
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchDefinition, result.Count);
+            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
             return result;
         }
 
-        public IList<ReportInfo> Fetch(IIndexer indexer, SingleEpisodeSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchDefinition);
+            _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetEpisodeSearchUrls(searchDefinition.SceneTitle, searchDefinition.SeasonNumber, searchDefinition.EpisodeNumber);
+            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.SceneTitle, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchDefinition, result.Count);
+            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
             return result;
 
         }
 
-        public IList<ReportInfo> Fetch(IIndexer indexer, PartialSeasonSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexer indexer, PartialSeasonSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchDefinition);
+            _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchDefinition.SceneTitle, searchDefinition.SeasonNumber);
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.SceneTitle, searchCriteria.SeasonNumber);
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchDefinition, result.Count);
+            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
             return result;
         }
 
-        public IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchDefinition searchDefinition)
+        public IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchDefinition);
+            _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchDefinition.SceneTitle, searchDefinition.Airtime);
+            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.SceneTitle, searchCriteria.Airtime);
             var result = Fetch(indexer, searchUrls);
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchDefinition, result.Count);
+            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
             return result;
         }
 

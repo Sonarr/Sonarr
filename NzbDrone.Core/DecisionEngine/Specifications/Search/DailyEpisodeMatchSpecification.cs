@@ -23,9 +23,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return "Episode doesn't match";
             }
         }
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinitionBase)
+        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase)
         {
-            var dailySearchSpec = searchDefinitionBase as DailyEpisodeSearchDefinition;
+            var dailySearchSpec = searchCriteriaBase as DailyEpisodeSearchCriteria;
 
             if (dailySearchSpec == null) return true;
 

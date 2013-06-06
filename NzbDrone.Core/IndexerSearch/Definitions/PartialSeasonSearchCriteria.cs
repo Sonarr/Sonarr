@@ -1,10 +1,10 @@
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
-    public class PartialSeasonSearchDefinition : SeasonSearchDefinition
+    public class PartialSeasonSearchCriteria : SeasonSearchCriteria
     {
         public int Prefix { get; set; }
 
-        public PartialSeasonSearchDefinition(SeasonSearchDefinition seasonSearch, int prefix)
+        public PartialSeasonSearchCriteria(SeasonSearchCriteria seasonSearch, int prefix)
         {
             Prefix = prefix;
             SceneTitle = seasonSearch.SceneTitle;

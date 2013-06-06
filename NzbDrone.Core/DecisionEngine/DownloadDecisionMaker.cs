@@ -13,7 +13,7 @@ namespace NzbDrone.Core.DecisionEngine
     public interface IMakeDownloadDecision
     {
         List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports);
-        List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase);
+        List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -34,12 +34,12 @@ namespace NzbDrone.Core.DecisionEngine
             return GetDecisions(reports).ToList();
         }
 
-        public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinitionBase)
+        public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase)
         {
             return GetDecisions(reports).ToList();
         }
 
-        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, SearchDefinitionBase searchDefinition = null)
+        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteria = null)
         {
             foreach (var report in reports)
             {
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                         if (remoteEpisode.Series != null)
                         {
-                            decision = GetDecisionForReport(remoteEpisode, searchDefinition);
+                            decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
                         else
                         {
@@ -77,15 +77,15 @@ namespace NzbDrone.Core.DecisionEngine
 
         }
 
-        private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinition = null)
+        private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null)
         {
-            var reasons = _specifications.Select(c => EvaluateSpec(c, remoteEpisode, searchDefinition))
+            var reasons = _specifications.Select(c => EvaluateSpec(c, remoteEpisode, searchCriteria))
                 .Where(c => !string.IsNullOrWhiteSpace(c));
 
             return new DownloadDecision(remoteEpisode, reasons.ToArray());
         }
 
-        private string EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchDefinitionBase searchDefinitionBase = null)
+        private string EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase = null)
         {
             try
             {
@@ -95,9 +95,9 @@ namespace NzbDrone.Core.DecisionEngine
                 }
 
                 var searchSpecification = spec as IDecisionEngineSearchSpecification;
-                if (searchSpecification != null && searchDefinitionBase != null)
+                if (searchSpecification != null && searchCriteriaBase != null)
                 {
-                    if (!searchSpecification.IsSatisfiedBy(remoteEpisode, searchDefinitionBase))
+                    if (!searchSpecification.IsSatisfiedBy(remoteEpisode, searchCriteriaBase))
                     {
                         return spec.RejectionReason;
                     }
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 e.Data.Add("report", remoteEpisode.Report.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.ErrorException("Couldn't evaluate decision", e);
+                _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Report.Title, e);
                 return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
             }
 
