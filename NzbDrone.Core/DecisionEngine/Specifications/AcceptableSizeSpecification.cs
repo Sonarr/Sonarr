@@ -26,15 +26,24 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
+
             _logger.Trace("Beginning size check for: {0}", subject);
 
-            if (subject.ParsedEpisodeInfo.Quality.Quality == Quality.RAWHD)
+            var quality = subject.ParsedEpisodeInfo.Quality.Quality;
+
+            if (quality == Quality.RAWHD)
             {
                 _logger.Trace("Raw-HD release found, skipping size check.");
                 return true;
             }
 
-            var qualityType = _qualityTypeProvider.Get((int)subject.ParsedEpisodeInfo.Quality.Quality);
+            if (quality == Quality.Unknown)
+            {
+                _logger.Trace("Unknown quality. skipping size check.");
+                return false;
+            }
+
+            var qualityType = _qualityTypeProvider.Get(quality.Id);
 
             if (qualityType.MaxSize == 0)
             {
@@ -43,12 +52,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
 
             var maxSize = qualityType.MaxSize.Megabytes();
-            var series = subject.Series;
 
             //Multiply maxSize by Series.Runtime
-            maxSize = maxSize * series.Runtime;
-
-            maxSize = maxSize * subject.Episodes.Count;
+            maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
 
             //Check if there was only one episode parsed
             //and it is the first or last episode of the season

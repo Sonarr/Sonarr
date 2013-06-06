@@ -379,5 +379,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
         }
+
+
+        [Test]
+        public void should_always_return_false_if_unknow()
+        {
+            var parseResult = new RemoteEpisode
+            {
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.Unknown, false) },
+            };
+
+            Subject.IsSatisfiedBy(parseResult).Should().BeFalse();
+
+
+            Mocker.GetMock<IQualitySizeService>().Verify(c=>c.Get(It.IsAny<int>()),Times.Never());
+        }
     }
 }

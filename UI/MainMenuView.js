@@ -1,6 +1,6 @@
 ﻿"use strict";
 define(['app'], function () {
-    NzbDrone.MainMenuView = Backbone.Marionette.ItemView.extend({
+    var MainMenuView = Backbone.Marionette.ItemView.extend({
         events: {
             'click a': 'onClick'
         },
@@ -37,6 +37,6 @@ define(['app'], function () {
         }
     });
 
+    return new MainMenuView();
 
-    return new NzbDrone.MainMenuView();
 });
