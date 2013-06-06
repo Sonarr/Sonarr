@@ -24,13 +24,6 @@ define(['app'], function () {
             } else {
                 this.setActive(event.target);
             }
-
-            if (href && href.startsWith('http')) {
-                window.location.href = href;
-            } else {
-                NzbDrone.Router.navigate(href, { trigger: true });
-            }
-
         },
 
         setActive: function (element) {

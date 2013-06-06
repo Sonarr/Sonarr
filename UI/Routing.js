@@ -1,5 +1,5 @@
 ﻿"use strict";
-require(['app', 'Controller'], function (app, controller) {
+require(['app', 'Controller', 'RouteBinder'], function (app, controller, routeBinder) {
 
     NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
@@ -27,6 +27,7 @@ require(['app', 'Controller'], function (app, controller) {
         NzbDrone.Router = new NzbDrone.Router();
         Backbone.history.start({ pushState: true });
 
+        routeBinder.bind();
     });
 });
 
