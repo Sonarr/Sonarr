@@ -4,17 +4,13 @@ define(['app', 'Series/SeriesModel'], function () {
         url  : NzbDrone.Constants.ApiRoot + '/series',
         model: NzbDrone.Series.SeriesModel,
 
-        mode: 'client',
+        comparator: function(model) {
+            return model.get('title');
+        },
 
         state: {
             sortKey: "title",
-            order: -1,
-            pageSize: 1000000
-        },
-
-        queryParams: {
-            sortKey: null,
-            order: null
+            order: -1
         }
     });
 });
