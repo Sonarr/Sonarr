@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
@@ -19,7 +20,14 @@ namespace NzbDrone.Core.Qualities
 
         public QualitySize GetByQualityId(int qualityId)
         {
-            return Query.Single(q => q.QualityId == qualityId);
+            try
+            {
+                return Query.Single(q => q.QualityId == qualityId);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new InvalidOperationException("Sequence contains no element with qualityId = " + qualityId.ToString());
+            }
         }
     }
 }
