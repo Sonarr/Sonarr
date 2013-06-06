@@ -17,6 +17,7 @@ namespace NzbDrone
             try
             {
                 new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Warn);
+                ExceptronTarget.Register();
 
                 logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
 

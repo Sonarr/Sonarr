@@ -72,6 +72,7 @@
       <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
@@ -102,6 +103,7 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Messaging\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
@@ -164,6 +166,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Expansive\license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exceptron.Client\Exceptron.Client.csproj">
+      <Project>{B1784698-592E-4132-BDFA-9817409E3A96}</Project>
+      <Name>Exceptron.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

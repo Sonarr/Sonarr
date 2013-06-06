@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>https://github.com/Exceptron/Exceptron.Net</projectUrl>
+    <iconUrl>https://www.exceptron.com/logos/Exceptron128.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Exceptron.Client is a .NET wrapper for exceptron's REST API. exceptron help you report your application error to a central location for review, reporting and analytics.</description>
+    <language>en-US</language>
+    <copyright>Copyright © 2012</copyright>
+    <tags>Exception Logging Analytics Reporting Exceptron</tags>
+  </metadata>
+  <files>
+    <file src="NuGet\web.config.transform" target="content" />
+  </files>
+</package>

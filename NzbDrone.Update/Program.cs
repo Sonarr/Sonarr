@@ -3,6 +3,7 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update
@@ -26,6 +27,9 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
+                new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Debug);
+
+                ExceptronTarget.Register();
 
                 _container = UpdateContainerBuilder.Build();
 
