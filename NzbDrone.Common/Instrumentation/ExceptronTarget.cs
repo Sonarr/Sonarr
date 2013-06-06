@@ -48,7 +48,7 @@ namespace NzbDrone.Common.Instrumentation
                 config.ApiKey = "cc4728a35aa9414f9a0baa8eed56bc67";
             }
 
-            ExceptronClient = new ExceptronClient(config, Environment.Version);
+            ExceptronClient = new ExceptronClient(config, new EnvironmentProvider().Version);
         }
 
 
