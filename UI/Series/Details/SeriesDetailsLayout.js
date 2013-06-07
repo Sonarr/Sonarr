@@ -1,5 +1,5 @@
 "use strict";
-define(['app', 'Series/Details/SeasonCollectionView','Shared/LoadingView'], function () {
+define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView'], function () {
         NzbDrone.Series.Details.SeriesDetailsLayout = Backbone.Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -9,9 +9,18 @@ define(['app', 'Series/Details/SeasonCollectionView','Shared/LoadingView'], func
                 seasons: '#seasons'
             },
 
-            onShow: function () {
+            ui: {
+                header: '.x-header'
+            },
 
+            initialize: function () {
+                $('body').addClass('backdrop');
+            },
+
+            onShow: function () {
                 var self = this;
+
+                $.backstretch(this.model.get('fanArt'));
 
                 this.seasons.show(new NzbDrone.Shared.LoadingView());
 
@@ -30,6 +39,7 @@ define(['app', 'Series/Details/SeasonCollectionView','Shared/LoadingView'], func
 
             onClose: function () {
                 $('.backstretch').remove();
+                $('body').removeClass('backdrop');
             }
         });
     }
