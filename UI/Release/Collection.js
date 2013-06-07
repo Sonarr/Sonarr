@@ -6,6 +6,10 @@ define(['app', 'Release/Model'], function () {
 
         mode: 'client',
 
+        state: {
+            pageSize: 2000
+        },
+
         fetchEpisodeReleases: function (episodeId) {
             return this.fetch({  data: { episodeId: episodeId  }});
         }

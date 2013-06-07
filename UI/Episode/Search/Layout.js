@@ -1,5 +1,5 @@
 "use strict";
-define(['app'], function () {
+define(['app', 'Shared/Cells/FileSizeCell'], function () {
 
     NzbDrone.Episode.Search.Layout = Backbone.Marionette.Layout.extend({
         template: 'Episode/Search/LayoutTemplate',
@@ -19,7 +19,7 @@ define(['app'], function () {
                 name    : 'size',
                 label   : 'Size',
                 sortable: true,
-                cell    : Backgrid.IntegerCell
+                cell    : NzbDrone.Shared.Cells.FileSizeCell
             },
             {
                 name    : 'title',
@@ -28,29 +28,13 @@ define(['app'], function () {
                 cell    : Backgrid.StringCell
             },
             {
-                name : 'seasonNumber',
-                label: 'season',
-                cell : Backgrid.IntegerCell
-            },
-            {
-                name : 'episodeNumber',
-                label: 'episode',
-                cell : Backgrid.StringCell
-            },
-            {
                 name : 'approved',
                 label: 'Approved',
                 cell : Backgrid.BooleanCell
             }
         ],
 
-
-
-        initialize: function () {
-
-        },
-
-        onShow :function(){
+        onShow: function () {
             if (!this.isClosed) {
                 this.grid.show(new Backgrid.Grid(
                     {
