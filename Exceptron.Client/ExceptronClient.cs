@@ -68,7 +68,7 @@ namespace Exceptron.Client
 
             if (string.IsNullOrEmpty(exceptronConfiguration.ApiKey))
                 throw new ArgumentException("An API Key was not provided");
-            
+
             Configuration = exceptronConfiguration;
 
             RestClient = new RestClient();
@@ -255,7 +255,7 @@ namespace Exceptron.Client
                 var currentFrame = new Frame
                 {
                     i = index,
-                    fn = frame.GetFileName(),
+                    //fn = frame.GetFileName(),
                     ln = frame.GetFileLineNumber(),
                     m = method.ToString(),
                 };
