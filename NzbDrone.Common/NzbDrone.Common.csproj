@@ -103,6 +103,7 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Messaging\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="StringExtensions.cs" />

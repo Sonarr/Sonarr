@@ -16,12 +16,13 @@ namespace NzbDrone
         {
             try
             {
+                GlobalExceptionHandlers.Register();
+
                 new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Warn);
-                ExceptronTarget.Register();
+
 
                 logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
 
-                AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));
 
                 //Check if full version .NET is installed.
                 try
@@ -61,14 +62,9 @@ namespace NzbDrone
             }
             catch (Exception e)
             {
-                AppDomainException(e);
+                logger.FatalException("Epic Fail " + e.Message, e);
             }
         }
 
-        public static void AppDomainException(Exception exception)
-        {
-            Console.WriteLine("EPIC FAIL: {0}", exception);
-            logger.FatalException("EPIC FAIL: " + exception.Message, exception);
-        }
     }
 }

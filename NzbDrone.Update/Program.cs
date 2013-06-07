@@ -27,10 +27,9 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
+                GlobalExceptionHandlers.Register();
+
                 new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Debug);
-
-                ExceptronTarget.Register();
-
                 _container = UpdateContainerBuilder.Build();
 
                 logger.Info("Updating NzbDrone to version {0}", _container.Resolve<IEnvironmentProvider>().Version);
@@ -40,7 +39,6 @@ namespace NzbDrone.Update
             {
                 logger.FatalException("An error has occurred while applying update package.", e);
             }
-
         }
 
         public void Start(string[] args)
