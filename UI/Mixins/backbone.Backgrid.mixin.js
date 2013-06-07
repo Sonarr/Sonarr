@@ -1,19 +1,19 @@
 "use strict";
 
 Backgrid.Column.prototype.defaults = {
-    name: undefined,
-    label: undefined,
-    sortable: true,
-    editable: false,
+    name      : undefined,
+    label     : undefined,
+    sortable  : true,
+    editable  : false,
     renderable: true,
-    formatter: undefined,
-    cell: undefined,
+    formatter : undefined,
+    cell      : undefined,
     headerCell: 'nzbDrone'
 };
 
 Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
     className: '',
-    template: 'Series/Index/Table/ControlsColumnTemplate',
+    template : 'Series/Index/Table/ControlsColumnTemplate',
 
     render: function () {
         var data = this.model.toJSON();
@@ -53,8 +53,12 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
 
     direction: function (dir) {
         if (arguments.length) {
-            if (this._direction) this.$el.children('i').removeClass(this._convertDirectionToIcon(this._direction));
-            if (dir) this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
+            if (this._direction) {
+                this.$el.children('i').removeClass(this._convertDirectionToIcon(this._direction));
+            }
+            if (dir) {
+                this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
+            }
             this._direction = dir;
         }
 
@@ -74,7 +78,9 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
                     if (leftVal === rightVal) {
                         return 0;
                     }
-                    else if (leftVal > rightVal) { return -1; }
+                    else if (leftVal > rightVal) {
+                        return -1;
+                    }
                     return 1;
                 });
             }
@@ -85,7 +91,9 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
                     if (leftVal === rightVal) {
                         return 0;
                     }
-                    else if (leftVal < rightVal) { return -1; }
+                    else if (leftVal < rightVal) {
+                        return -1;
+                    }
                     return 1;
                 });
             }
@@ -120,9 +128,9 @@ Backgrid.NzbDronePaginator = Backgrid.Extension.Paginator.extend({
 
     fastForwardHandleLabels: {
         first: '<i class="icon-fast-backward"></i>',
-        prev: '<i class="icon-backward"></i>',
-        next: '<i class="icon-forward"></i>',
-        last: '<i class="icon-fast-forward"></i>'
+        prev : '<i class="icon-backward"></i>',
+        next : '<i class="icon-forward"></i>',
+        last : '<i class="icon-fast-forward"></i>'
     },
 
     changePage: function (e) {
@@ -134,7 +142,7 @@ Backgrid.NzbDronePaginator = Backgrid.Extension.Paginator.extend({
             return;
         }
 
-        if (!$(target).is('a')){
+        if (!$(target).is('a')) {
             target = target.parent('a');
         }
 
@@ -166,7 +174,7 @@ Backgrid.NzbDronePaginator = Backgrid.Extension.Paginator.extend({
 
         var state = collection.state;
         var pageIndex = $(e.target).text() * 1;
-        collection.getPage(state.firstPage === 0 ? pageIndex - 1 : pageIndex);
+        collection.getPage(state.firstPage === 0 ? pageIndex - 1 :pageIndex);
     },
 
     preventLinkClick: function (e) {

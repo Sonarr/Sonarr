@@ -15,7 +15,7 @@ define(function () {
             return $el;
         },
 
-        showModal: function (view) {
+        showModal: function () {
             this.$el.addClass('modal hide fade');
 
             //need tab index so close on escape works
