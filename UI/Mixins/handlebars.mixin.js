@@ -20,5 +20,5 @@ Handlebars.registerHelper("debug", function(optionalValue) {
 });
 
 Handlebars.registerHelper("fileSize", function(size) {
-   return size.bytes();
+   return size.bytes(1);
 });

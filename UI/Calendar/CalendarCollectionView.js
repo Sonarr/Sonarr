@@ -16,6 +16,7 @@ define(['app', 'Calendar/CalendarItemView'], function () {
         },
         onCompositeCollectionRendered: function () {
             $(this.ui.calendar).empty().fullCalendar({
+                defaultView   : 'basicWeek',
                 allDayDefault : false,
                 ignoreTimezone: false,
                 weekMode      : 'variable',
