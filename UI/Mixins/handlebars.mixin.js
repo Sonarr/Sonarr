@@ -18,3 +18,7 @@ Handlebars.registerHelper("debug", function(optionalValue) {
         console.log(optionalValue);
     }
 });
+
+Handlebars.registerHelper("fileSize", function(size) {
+   return size.bytes();
+});
