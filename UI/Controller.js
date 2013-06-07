@@ -3,7 +3,7 @@ define(['app',
     'Form/FormBuilder',
     'AddSeries/AddSeriesLayout',
     'Series/Index/SeriesIndexLayout',
-    'Calendar/CalendarCollectionView',
+    'Calendar/CalendarLayout',
     'Shared/NotificationView',
     'Shared/NotFoundView',
     'MainMenuView',
@@ -43,9 +43,7 @@ define(['app',
 
             calendar: function () {
                 this._setTitle('Calendar');
-                var calendarCollection = new NzbDrone.Calendar.CalendarCollection();
-                calendarCollection.fetch();
-                NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarCollectionView({collection: calendarCollection}));
+                NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarLayout());
             },
 
 

@@ -1,21 +1,12 @@
 ﻿'use strict';
 
-define(['app', 'Calendar/CalendarItemView'], function () {
-    NzbDrone.Calendar.CalendarCollectionView = Backbone.Marionette.CompositeView.extend({
-        itemView         : NzbDrone.Calendar.CalendarItemView,
-        itemViewContainer: '#events',
-        template         : 'Calendar/CalendarCollectionTemplate',
-
-        ui: {
-            calendar: '#calendar'
-        },
-
+define(['app', 'Calendar/Collection'], function () {
+    NzbDrone.Calendar.CalendarView = Backbone.Marionette.ItemView.extend({
         initialize                   : function () {
-            //should use this.collection?
-            this.calendar = new NzbDrone.Calendar.CalendarCollection();
+            this.collection = new NzbDrone.Calendar.Collection();
         },
-        onCompositeCollectionRendered: function () {
-            $(this.ui.calendar).empty().fullCalendar({
+        render: function () {
+            $(this.$el).empty().fullCalendar({
                 defaultView   : 'basicWeek',
                 allDayDefault : false,
                 ignoreTimezone: false,
@@ -55,22 +46,20 @@ define(['app', 'Calendar/CalendarItemView'], function () {
                 }
             });
 
-            NzbDrone.Calendar.CalendarCollectionView.Instance = this;
+            NzbDrone.Calendar.CalendarView.Instance = this;
         },
-
 
         onShow: function () {
             this.$('.fc-button-today').click();
         },
 
-
         getEvents: function (start, end, callback) {
-            var bbView = NzbDrone.Calendar.CalendarCollectionView.Instance;
+            var bbView = NzbDrone.Calendar.CalendarView.Instance;
 
             var startDate = Date.create(start).format(Date.ISO8601_DATETIME);
             var endDate = Date.create(end).format(Date.ISO8601_DATETIME);
 
-            bbView.calendar.fetch({
+            bbView.collection.fetch({
                 data   : { start: startDate, end: endDate },
                 success: function (calendarCollection) {
                     _.each(calendarCollection.models, function (element) {
