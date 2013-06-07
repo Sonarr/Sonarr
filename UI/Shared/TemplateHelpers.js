@@ -32,7 +32,7 @@ define(['app'], function () {
 
         var shortDate = Date.create(date).short();
         var formattedDate = NzbDrone.Shared.FormatHelpers.DateHelper(date);
-        var result = '<div title="' + shortDate + '">' + formattedDate + '</div >';
+        var result = '<span title="' + shortDate + '">' + formattedDate + '</span>';
 
         return new Handlebars.SafeString(result);
     });
