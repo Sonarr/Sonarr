@@ -47,7 +47,7 @@
     <option couch="false" />
     <option devel="false" />
     <option dojo="false" />
-    <option jquery="false" />
+    <option jquery="true" />
     <option mootools="false" />
     <option node="false" />
     <option nonstandard="false" />

@@ -5,6 +5,7 @@
     <inspection_tool class="AssignmentResultUsedJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AssignmentToForLoopParameterJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AssignmentToFunctionParameterJS" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="BadExpressionStatementJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="BreakStatementJS" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
     <inspection_tool class="BreakStatementWithLabelJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ChainedEqualityJS" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -18,6 +19,7 @@
       <option name="m_limit" value="10" />
     </inspection_tool>
     <inspection_tool class="DefaultNotLastCaseInSwitchJS" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="DuplicateCaseLabelJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="DuplicateConditionJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DynamicallyGeneratedCodeJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyTryBlockJS" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -30,6 +32,7 @@
       <option name="m_minLength" value="4" />
       <option name="m_maxLength" value="32" />
     </inspection_tool>
+    <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="HtmlFormInputWithoutLabel" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="HtmlPresentationalElement" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
@@ -63,9 +66,14 @@
     <inspection_tool class="IfStatementWithTooManyBranchesJS" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="m_limit" value="3" />
     </inspection_tool>
+    <inspection_tool class="JSDuplicatedDeclaration" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSLastCommaInArrayLiteral" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JSPotentiallyInvalidUsageOfThis" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
-    <inspection_tool class="JSUnresolvedVariable" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="JSUndeclaredVariable" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSUnnecessarySemicolon" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSUnresolvedFunction" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSUnresolvedVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JSUnusedGlobalSymbols" enabled="false" level="INFO" enabled_by_default="false" />
     <inspection_tool class="LabeledStatementJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="LocalVariableNamingConventionJS" enabled="true" level="WARNING" enabled_by_default="true">
@@ -87,6 +95,10 @@
       <option name="m_minLength" value="1" />
       <option name="m_maxLength" value="32" />
     </inspection_tool>
+    <inspection_tool class="ParametersPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="m_limit" value="4" />
+    </inspection_tool>
+    <inspection_tool class="ReservedWordUsedAsNameJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ReuseOfLocalVariableJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StatementsPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_limit" value="30" />
@@ -100,6 +112,7 @@
         </set>
       </option>
     </inspection_tool>
+    <inspection_tool class="ThisExpressionReferencesGlobalObjectJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ThreeNegationsPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnterminatedStatementJS" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="ignoreSemicolonAtEndOfBlock" value="true" />
