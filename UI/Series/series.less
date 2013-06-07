@@ -1,4 +1,5 @@
 @import "../Shared/Styles/card.less";
+@import "../Shared/Styles/clickable.less";
 
 .series-item {
   padding-bottom: 30px;
@@ -16,6 +17,18 @@
   }
 }
 
+.series-page-header {
+  .card;
+  padding: 30px 0px;
+}
+
+.series-season {
+  .card;
+  margin: 80px 10px;
+  padding: 20px 40px;
+
+}
+
 .series-posters {
   list-style-type: none;
 
@@ -23,16 +36,13 @@
     display: inline-block;
     vertical-align: top;
   }
-  .series-page-header {
-    padding-bottom: 50px;
-  }
 
   .series-posters-item {
 
     .card;
-
+    .clickable;
     margin-bottom: 20px;
-    height: 260px;
+    height: 300px;
 
     .center {
       display: block;
@@ -58,7 +68,7 @@
     .labels {
       display: inline-block;
       opacity: 0.75;
-      width: 138px;
+      width: 170px;
 
       :hover {
         cursor: default;
@@ -72,10 +82,6 @@
       .tooltip {
         opacity: 1;
       }
-    }
-    .series-season {
-      padding-bottom: 20px;
-
     }
   }
 
@@ -115,6 +121,6 @@
 
 }
 
-.series-detail-summary {
+.series-detail-overview {
   margin-bottom: 50px;
 }
