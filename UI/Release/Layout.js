@@ -3,7 +3,10 @@ define([
     'app',
     'Release/Collection',
     'Shared/SpinnerView',
-    'Shared/Toolbar/ToolbarLayout'
+    'Shared/Toolbar/ToolbarLayout',
+    'Shared/Cells/EpisodeNumberCell',
+    'Shared/Cells/FileSizeCell',
+    'Shared/Cells/ApprovalStatusCell'
 ],
     function () {
         NzbDrone.Release.Layout = Backbone.Marionette.Layout.extend({
@@ -25,7 +28,7 @@ define([
                     name    : 'size',
                     label   : 'Size',
                     sortable: true,
-                    cell    : Backgrid.IntegerCell
+                    cell    : NzbDrone.Shared.Cells.FileSizeCell
                 },
                 {
                     name    : 'title',
@@ -34,24 +37,22 @@ define([
                     cell    : Backgrid.StringCell
                 },
                 {
-                    name : 'seasonNumber',
-                    label: 'season',
-                    cell : Backgrid.IntegerCell
+                    name    : 'episodeNumbers',
+                    season  : 'seasonNumber',
+                    airDate : 'airDate',
+                    episodes: 'episodeNumbers',
+                    label   : 'season',
+                    cell    : NzbDrone.Shared.Cells.EpisodeNumberCell
                 },
                 {
-                    name : 'episodeNumber',
-                    label: 'episode',
-                    cell : Backgrid.StringCell
-                },
-                {
-                    name : 'approved',
-                    label: 'Approved',
-                    cell : Backgrid.BooleanCell
+                    name : 'rejections',
+                    label: 'decision',
+                    cell : NzbDrone.Shared.Cells.ApprovalStatusCell
                 }
             ],
 
             showTable: function () {
-                    if (!this.isClosed) {
+                if (!this.isClosed) {
                     this.grid.show(new Backgrid.Grid(
                         {
                             row       : Backgrid.Row,

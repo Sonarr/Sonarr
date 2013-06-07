@@ -13,6 +13,7 @@ namespace NzbDrone.Api.Indexers
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly ISearchForNzb _nzbSearchService;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
+        private static List<DownloadDecision> results;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser, ISearchForNzb nzbSearchService, IMakeDownloadDecision downloadDecisionMaker)
         {
@@ -41,10 +42,14 @@ namespace NzbDrone.Api.Indexers
 
         private List<ReleaseResource> GetRss()
         {
-            var reports = _rssFetcherAndParser.Fetch();
-            var decisions = _downloadDecisionMaker.GetRssDecision(reports);
+            if (results == null)
+            {
+                var reports = _rssFetcherAndParser.Fetch();
+                var decisions = _downloadDecisionMaker.GetRssDecision(reports);
+                results = decisions;
+            }
 
-            return MapDecisions(decisions);
+            return MapDecisions(results);
         }
 
         private static List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
