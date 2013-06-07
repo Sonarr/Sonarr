@@ -29,6 +29,9 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             },
+            imdbUrl         : function () {
+                return "http://imdb.com/title/" + this.get('imdbId');
+            },
             isContinuing     : function () {
                 return this.get('status') === 'continuing';
             },
