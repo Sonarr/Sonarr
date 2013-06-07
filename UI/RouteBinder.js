@@ -46,6 +46,11 @@ define(['app'], function () {
             if (!href.startsWith('http')) {
                 NzbDrone.Router.navigate(href, { trigger: true });
             }
+
+            else {
+                //Open in new tab
+                window.open(href, '_blank');
+            }
         }
     };
 
