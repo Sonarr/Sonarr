@@ -8,7 +8,7 @@ define(['app'], function () {
         return new Handlebars.SafeString(templateFunction(this));
     });
 
-    Handlebars.registerHelper("debug", function(optionalValue) {
+    Handlebars.registerHelper("debug", function (optionalValue) {
         console.log("Current Context");
         console.log("====================");
         console.log(this);
@@ -20,11 +20,11 @@ define(['app'], function () {
         }
     });
 
-    Handlebars.registerHelper("fileSize", function(size) {
+    Handlebars.registerHelper("fileSize", function (size) {
         return NzbDrone.Shared.FormatHelpers.FileSizeHelper(size);
     });
 
-    Handlebars.registerHelper("date", function(date) {
+    Handlebars.registerHelper("date", function (date) {
         //TODO: show actual date in tooltip
         if (!date) {
             return '';
@@ -35,5 +35,9 @@ define(['app'], function () {
         var result = '<span title="' + shortDate + '">' + formattedDate + '</span>';
 
         return new Handlebars.SafeString(result);
+    });
+
+    Handlebars.registerHelper('defaultImg', function () {
+        return new Handlebars.SafeString(' onerror="this.src=\'/content/images/poster-dark.jpg\';"');
     });
 });
