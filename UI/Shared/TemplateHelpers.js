@@ -21,7 +21,7 @@ define(['app'], function () {
     });
 
     Handlebars.registerHelper("fileSize", function (size) {
-        return NzbDrone.Shared.FormatHelpers.FileSizeHelper(size);
+        return new Handlebars.SafeString(NzbDrone.Shared.FormatHelpers.FileSizeHelper(size));
     });
 
     Handlebars.registerHelper("date", function (date) {

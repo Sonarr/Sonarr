@@ -67,7 +67,9 @@ define(['app', 'Shared/SpinnerView', 'Episode/Summary/View', 'Episode/Search/Lay
             var promise = releases.fetchEpisodeReleases(this.model.id);
 
             promise.done(function () {
-                self.search.show(new NzbDrone.Episode.Search.Layout({collection: releases}));
+                if (!self.isClosed) {
+                    self.search.show(new NzbDrone.Episode.Search.Layout({collection: releases}));
+                }
             });
         }
 

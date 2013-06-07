@@ -21,7 +21,10 @@ define(function () {
             //need tab index so close on escape works
             //https://github.com/twitter/bootstrap/issues/4663
             this.$el.attr('tabindex', '-1');
-            this.$el.modal({'show': true, 'keyboard': true});
+            this.$el.modal({
+                'show'    : true,
+                'keyboard': true,
+                'backdrop': 'static'});
         },
 
 

@@ -3,8 +3,7 @@
 define(['app'], function () {
     NzbDrone.Shared.FormatHelpers.FileSizeHelper = function (sourceSize) {
         var size = Number(sourceSize);
-        this.$el.html(size.bytes(1));
-        return this;
+        return size.bytes(1);
     };
 
     NzbDrone.Shared.FormatHelpers.DateHelper = function (sourceDate) {
