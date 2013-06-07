@@ -8,5 +8,6 @@ NzbDrone.Shared.Cells.FileSizeCell = Backgrid.Cell.extend({
         this.$el.html(NzbDrone.Shared.FormatHelpers.FileSizeHelper(size));
         this.delegateEvents();
         return this;
+        return this;
     }
 });
