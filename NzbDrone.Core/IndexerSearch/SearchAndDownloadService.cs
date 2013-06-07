@@ -12,7 +12,7 @@ namespace NzbDrone.Core.IndexerSearch
         void SearchSeason(int seriesId, int seasonNumber);
     }
 
-    public class SearchAndDownloadService : ISearchAndDownload
+   /* public class SearchAndDownloadService : ISearchAndDownload
     {
         private readonly ISearchForNzb _searchService;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.IndexerSearch
             _downloadDecisionMaker = downloadDecisionMaker;
         }
 
-        public void SearchSingle(int seriesId, int seasonNumber, int episodeNumber)
+        public void FetchSearchSingle(int seriesId, int seasonNumber, int episodeNumber)
         {
             var result = _searchService.SearchSingle(seriesId, seasonNumber, episodeNumber);
         }
@@ -37,5 +37,5 @@ namespace NzbDrone.Core.IndexerSearch
         {
             throw new NotImplementedException();
         }
-    }
+    }*/
 }

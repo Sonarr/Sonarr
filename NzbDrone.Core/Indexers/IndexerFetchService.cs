@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.SceneTitle, searchCriteria.SeasonNumber);
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeasonNumber);
             var result = Fetch(indexer, searchUrls);
 
 
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.SceneTitle, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
+            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
             var result = Fetch(indexer, searchUrls);
 
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.SceneTitle, searchCriteria.SeasonNumber);
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeasonNumber);
             var result = Fetch(indexer, searchUrls);
 
 
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.SceneTitle, searchCriteria.Airtime);
+            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Airtime);
             var result = Fetch(indexer, searchUrls);
 
             _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);

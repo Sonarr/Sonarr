@@ -10,8 +10,17 @@ define(['app'], function () {
             $(document).on('click', 'a[href]', this._handleClick);
         },
 
+        _isInTab: function (element) {
+            return;
+        },
+
         _handleClick: function (event) {
             var $target = $(event.target);
+
+            //check if tab nav
+            if ($target.parents('.nav-tabs').length) {
+                return;
+            }
 
             if ($target.hasClass('no-router')) {
                 return;

@@ -26,5 +26,11 @@
     <RegexTestSelector>
       <RegularExpression>NzbDrone\.Common\.Test\.EventingTests\.ServiceNameFixture\..*</RegularExpression>
     </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Common\.Test\.ProcessProviderTests\..*</RegularExpression>
+    </RegexTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Common\.Test\.ServiceFactoryFixture\..*</RegularExpression>
+    </RegexTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>

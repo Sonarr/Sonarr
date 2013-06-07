@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Api.Mapping;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser;
 using Omu.ValueInjecter;
 using System.Linq;
 
@@ -13,13 +11,32 @@ namespace NzbDrone.Api.Indexers
     public class ReleaseModule : NzbDroneRestModule<ReleaseResource>
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
+        private readonly ISearchForNzb _nzbSearchService;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
 
-        public ReleaseModule(IFetchAndParseRss rssFetcherAndParser, IMakeDownloadDecision downloadDecisionMaker)
+        public ReleaseModule(IFetchAndParseRss rssFetcherAndParser, ISearchForNzb nzbSearchService, IMakeDownloadDecision downloadDecisionMaker)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
+            _nzbSearchService = nzbSearchService;
             _downloadDecisionMaker = downloadDecisionMaker;
-            GetResourceAll = GetRss;
+            GetResourceAll = GetReleases;
+        }
+
+
+        private List<ReleaseResource> GetReleases()
+        {
+            if (Request.Query.episodeId != null)
+            {
+                return GetEpisodeReleases(Request.Query.episodeId);
+            }
+
+            return GetRss();
+        }
+
+        private List<ReleaseResource> GetEpisodeReleases(int episodeId)
+        {
+            var decisions = _nzbSearchService.EpisodeSearch(episodeId);
+            return MapDecisions(decisions);
         }
 
         private List<ReleaseResource> GetRss()
@@ -27,6 +44,11 @@ namespace NzbDrone.Api.Indexers
             var reports = _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
 
+            return MapDecisions(decisions);
+        }
+
+        private static List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
+        {
             var result = new List<ReleaseResource>();
 
             foreach (var downloadDecision in decisions)
@@ -43,25 +65,5 @@ namespace NzbDrone.Api.Indexers
 
             return result;
         }
-    }
-
-    public class ReleaseResource : RestResource
-    {
-        public Int32 Age { get; set; }
-        public Int64 Size { get; set; }
-        public String Indexer { get; set; }
-        public String NzbInfoUrl { get; set; }
-        public String NzbUrl { get; set; }
-        public String ReleaseGroup { get; set; }
-        public String Title { get; set; }
-        public Boolean FullSeason { get; set; }
-        public Boolean SceneSource { get; set; }
-        public Int32 SeasonNumber { get; set; }
-        public Language Language { get; set; }
-        public DateTime? AirDate { get; set; }
-        public String SeriesTitle { get; set; }
-        public int[] EpisodeNumbers { get; set; }
-        public Boolean Approved { get; set; }
-        public List<string> Rejections { get; set; }
     }
 }

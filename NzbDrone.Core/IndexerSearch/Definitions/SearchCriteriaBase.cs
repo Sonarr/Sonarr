@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
@@ -21,6 +22,8 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         private static string GetQueryTitle(string title)
         {
+            Ensure.That(() => title).IsNotNullOrWhiteSpace();
+
             var cleanTitle = BeginningThe.Replace(title, String.Empty);
 
             cleanTitle = cleanTitle

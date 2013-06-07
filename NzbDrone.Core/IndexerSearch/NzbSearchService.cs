@@ -14,9 +14,8 @@ namespace NzbDrone.Core.IndexerSearch
 {
     public interface ISearchForNzb
     {
-        List<DownloadDecision> SearchSingle(int seriesId, int seasonNumber, int episodeNumber);
-        List<DownloadDecision> SearchDaily(int seriesId, DateTime airDate);
-        List<DownloadDecision> SearchSeason(int seriesId, int seasonNumber);
+        List<DownloadDecision> EpisodeSearch(int episodeId);
+        List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber);
     }
 
     public class NzbSearchService : ISearchForNzb
@@ -40,7 +39,23 @@ namespace NzbDrone.Core.IndexerSearch
             _logger = logger;
         }
 
-        public List<DownloadDecision> SearchSingle(int seriesId, int seasonNumber, int episodeNumber)
+
+
+        public List<DownloadDecision> EpisodeSearch(int episodeId)
+        {
+            var episode = _episodeService.GetEpisode(episodeId);
+            var series = _seriesService.GetSeries(episode.SeriesId);
+
+            if (series.SeriesType == SeriesTypes.Daily)
+            {
+                return SearchDaily(episode.SeriesId, episode.AirDate.Value.Date);
+            }
+
+            return SearchSingle(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+        }
+
+
+        private List<DownloadDecision> SearchSingle(int seriesId, int seasonNumber, int episodeNumber)
         {
             var searchSpec = Get<SingleEpisodeSearchCriteria>(seriesId, seasonNumber);
 
@@ -59,7 +74,7 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        public List<DownloadDecision> SearchDaily(int seriesId, DateTime airDate)
+        private List<DownloadDecision> SearchDaily(int seriesId, DateTime airDate)
         {
             var searchSpec = Get<DailyEpisodeSearchCriteria>(seriesId);
             searchSpec.Airtime = airDate;
@@ -67,7 +82,7 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        public List<DownloadDecision> SearchSeason(int seriesId, int seasonNumber)
+        public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
             var searchSpec = Get<SeasonSearchCriteria>(seriesId, seasonNumber);
             searchSpec.SeasonNumber = seasonNumber;
@@ -99,10 +114,15 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var spec = new TSpec();
 
-            var tvdbId = _seriesService.GetSeries(seriesId).TvdbId;
+            var series = _seriesService.GetSeries(seriesId);
 
             spec.SeriesId = seriesId;
-            spec.SceneTitle = _sceneMapping.GetSceneName(tvdbId, seasonNumber);
+            spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId, seasonNumber);
+
+            if (string.IsNullOrWhiteSpace(spec.SceneTitle))
+            {
+                spec.SceneTitle = series.Title;
+            }
 
             return spec;
         }

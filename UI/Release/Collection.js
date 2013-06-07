@@ -4,6 +4,10 @@ define(['app', 'Release/Model'], function () {
         url  : NzbDrone.Constants.ApiRoot + '/release',
         model: NzbDrone.Release.Model,
 
-        mode : 'client'
+        mode: 'client',
+
+        fetchEpisodeReleases: function (episodeId) {
+            return this.fetch({  data: { episodeId: episodeId  }});
+        }
     });
 });

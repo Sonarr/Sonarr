@@ -1,5 +1,5 @@
 "use strict";
-define(['app', 'Episode/Summary/View'], function () {
+define(['app', 'Shared/SpinnerView', 'Episode/Summary/View', 'Episode/Search/Layout', 'Release/Collection'], function () {
 
     NzbDrone.Episode.Layout = Backbone.Marionette.Layout.extend({
         template: 'Episode/LayoutTemplate',
@@ -27,6 +27,7 @@ define(['app', 'Episode/Summary/View'], function () {
 
         onShow: function () {
             this.showSummary();
+            this._releaseSearchActivated = false;
         },
 
 
@@ -53,7 +54,21 @@ define(['app', 'Episode/Summary/View'], function () {
                 e.preventDefault();
             }
 
+            if (this._releaseSearchActivated) {
+                return;
+            }
+
+            var self = this;
+
             this.ui.search.tab('show');
+            this.search.show(new NzbDrone.Shared.SpinnerView());
+
+            var releases = new NzbDrone.Release.Collection();
+            var promise = releases.fetchEpisodeReleases(this.model.id);
+
+            promise.done(function () {
+                self.search.show(new NzbDrone.Episode.Search.Layout({collection: releases}));
+            });
         }
 
     });
