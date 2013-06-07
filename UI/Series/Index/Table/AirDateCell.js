@@ -6,7 +6,7 @@ Backgrid.AirDateCell = Backgrid.Cell.extend({
         this.$el.empty();
         var airDate = this.model.get(this.column.get("name"));
 
-        this.$el.html(bestDateString(airDate));
+        this.$el.html(NzbDrone.Shared.FormatHelpers.DateHelper(airDate));
 
         return this;
     }

@@ -30,8 +30,8 @@
             <div class="row">
                 <div class="span8">
                     {{#if isContinuing}}
-                        {{#if bestDateString}}
-                            <span class="label">{{bestDateString}}</span>
+                        {{#if nextAiring}}
+                            <span class="label">{{date nextAiring}}</span>
                         {{else}}
                             <span class="label label-inverse">Continuing</span>
                         {{/if}}

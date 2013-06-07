@@ -21,8 +21,8 @@
             <div class="center">
                 <div class="labels">
                     {{#if isContinuing}}
-                        {{#if bestDateString}}
-                            <span class="label label-inverse air-date" title="{{shortDate}}">{{bestDateString}}</span>
+                        {{#if nextAiring}}
+                            <span class="label label-inverse">{{date nextAiring}}</span>
                         {{else}}
                             <span class="label label-inverse">Continuing</span>
                         {{/if}}

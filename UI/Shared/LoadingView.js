@@ -6,5 +6,3 @@ define(['app'], function () {
         className: 'nz-loading row'
     });
 });
-
-

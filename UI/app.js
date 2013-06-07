@@ -64,7 +64,8 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
     window.NzbDrone.Shared = {
         Toolbar  : {},
         Messenger: {},
-        Cells: {}
+        Cells: {},
+        FormatHelpers: {}
 
     };
     window.NzbDrone.Calendar = {};

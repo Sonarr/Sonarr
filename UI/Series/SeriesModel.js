@@ -5,10 +5,6 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
         urlRoot: NzbDrone.Constants.ApiRoot + '/series',
 
         mutators: {
-            bestDateString: function () {
-                return bestDateString(this.get('nextAiring'));
-            },
-
             percentOfEpisodes: function () {
                 var episodeCount = this.get('episodeCount');
                 var episodeFileCount = this.get('episodeFileCount');
