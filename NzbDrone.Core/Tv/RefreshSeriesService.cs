@@ -65,8 +65,6 @@ namespace NzbDrone.Core.Tv
         {
             var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
 
-            RefreshEpisodeInfo(series, tuple.Item2);
-
             var seriesInfo = tuple.Item1;
 
             series.Title = seriesInfo.Title;
@@ -81,7 +79,7 @@ namespace NzbDrone.Core.Tv
             series.FirstAired = seriesInfo.FirstAired;
             _seriesService.UpdateSeries(series);
 
-            //Todo: We need to get the UtcOffset from TVRage, since its not available from trakt
+            RefreshEpisodeInfo(series, tuple.Item2);
 
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
         }
@@ -146,6 +144,8 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.Title = episode.Title;
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
+
+                    if (episodeToUpdate.AirDate < series.FirstAired) episodeToUpdate.AirDate = null;
 
                     successCount++;
                 }
