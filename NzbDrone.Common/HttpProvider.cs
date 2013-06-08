@@ -80,6 +80,7 @@ namespace NzbDrone.Common
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.UserAgent = _userAgent;
+            request.Timeout = 20 * 1000;
 
             request.Credentials = credential;
             var response = request.GetResponse();

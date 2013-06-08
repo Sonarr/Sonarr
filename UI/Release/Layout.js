@@ -19,10 +19,10 @@ define([
 
             columns: [
                 {
-                    name    : 'age',
-                    label   : 'Age',
+                    name    : 'indexer',
+                    label   : 'Indexer',
                     sortable: true,
-                    cell    : Backgrid.IntegerCell
+                    cell    : Backgrid.StringCell
                 },
                 {
                     name    : 'size',
