@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
@@ -17,8 +18,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         IHandleAsync<ApplicationStartedEvent>,
         IExecute<UpdateSceneMappingCommand>
     {
-
-        private static readonly object mutex = new object();
 
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
@@ -38,71 +37,76 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public string GetSceneName(int tvdbId, int seasonNumber = -1)
         {
-            lock (mutex)
-            {
-                var mapping = _getSceneNameCache.Find(tvdbId.ToString());
+            var mapping = _getSceneNameCache.Find(tvdbId.ToString());
 
-                if (mapping == null) return null;
+            if (mapping == null) return null;
 
-                return mapping.SceneName;
-            }
+            return mapping.SearchTerm;
         }
 
 
         public Nullable<Int32> GetTvDbId(string cleanName)
         {
-            lock (mutex)
-            {
-                var mapping = _gettvdbIdCache.Find(cleanName);
+            var mapping = _gettvdbIdCache.Find(cleanName.CleanSeriesTitle());
 
-                if (mapping == null)
-                    return null;
+            if (mapping == null)
+                return null;
 
-                return mapping.TvdbId;
-            }
+            return mapping.TvdbId;
         }
 
-
-        public void HandleAsync(ApplicationStartedEvent message)
-        {
-            if (!_repository.HasItems())
-            {
-                UpdateMappings();
-            }
-        }
 
         private void UpdateMappings()
         {
+            _logger.Info("Updating Scene mapping");
+
             try
             {
                 var mappings = _sceneMappingProxy.Fetch();
 
-                lock (mutex)
+                if (mappings.Any())
                 {
-                    if (mappings.Any())
-                    {
-                        _repository.Purge();
-                        _repository.InsertMany(mappings);
+                    _repository.Purge();
 
-                        _gettvdbIdCache.Clear();
-                        _getSceneNameCache.Clear();
-
-                        foreach (var sceneMapping in mappings)
-                        {
-                            _getSceneNameCache.Set(sceneMapping.TvdbId.ToString(), sceneMapping);
-                            _gettvdbIdCache.Set(sceneMapping.CleanTitle, sceneMapping);
-                        }
-                    }
-                    else
+                    foreach (var sceneMapping in mappings)
                     {
-                        _logger.Warn("Received empty list of mapping. will not update.");
+                        sceneMapping.ParseTerm = sceneMapping.ParseTerm.CleanSeriesTitle();
                     }
+
+                    _repository.InsertMany(mappings);
+
+                }
+                else
+                {
+                    _logger.Warn("Received empty list of mapping. will not update.");
                 }
             }
             catch (Exception ex)
             {
                 _logger.ErrorException("Failed to Update Scene Mappings:", ex);
             }
+
+            RefreshCache();
+        }
+
+        private void RefreshCache()
+        {
+            var mappings = _repository.All();
+
+            _gettvdbIdCache.Clear();
+            _getSceneNameCache.Clear();
+
+            foreach (var sceneMapping in mappings)
+            {
+                _getSceneNameCache.Set(sceneMapping.TvdbId.ToString(), sceneMapping);
+                _gettvdbIdCache.Set(sceneMapping.ParseTerm.CleanSeriesTitle(), sceneMapping);
+            }
+        }
+
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            UpdateMappings();
         }
 
         public void Execute(UpdateSceneMappingCommand message)

@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Datastore.Migration
 {
     [Tags("")]
     [Migration(2)]
-    public class Remove_tvrage_imdb_unique_constraint : NzbDroneMigrationBase
+    public class remove_tvrage_imdb_unique_constraint : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
         {

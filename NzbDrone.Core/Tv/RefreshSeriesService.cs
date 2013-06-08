@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Tv
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;
-            series.CleanTitle = Parser.Parser.NormalizeTitle(seriesInfo.Title);
+            series.CleanTitle = Parser.Parser.CleanSeriesTitle(seriesInfo.Title);
             series.LastInfoSync = DateTime.UtcNow;
             series.Runtime = seriesInfo.Runtime;
             series.Images = seriesInfo.Images;

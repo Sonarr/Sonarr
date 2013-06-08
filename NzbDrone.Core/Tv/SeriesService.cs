@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Tv
             _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
 
             newSeries.Monitored = true;
-            newSeries.CleanTitle = Parser.Parser.NormalizeTitle(newSeries.Title);
+            newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
 
             newSeries.SeasonFolder = _configService.UseSeasonFolder;
             newSeries.BacklogSetting = BacklogSettingType.Inherit;
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Tv
                 return FindByTvdbId(tvdbId.Value);
             }
 
-            return _seriesRepository.FindByTitle(Parser.Parser.NormalizeTitle(title));
+            return _seriesRepository.FindByTitle(Parser.Parser.CleanSeriesTitle(title));
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesTypes)

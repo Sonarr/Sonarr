@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Parser
                     };
             }
 
-            result.SeriesTitle = NormalizeTitle(seriesName);
+            result.SeriesTitle = CleanSeriesTitle(seriesName);
 
             Logger.Trace("Episode Parsed. {0}", result);
 
@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Parser
 
             if (parseResult == null)
             {
-                return NormalizeTitle(title);
+                return CleanSeriesTitle(title);
             }
 
             return parseResult.SeriesTitle;
@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Parser
             Logger.Trace("Trying to parse quality for {0}", name);
 
             name = name.Trim();
-            var normalizedName = NormalizeTitle(name);
+            var normalizedName = CleanSeriesTitle(name);
             var result = new QualityModel { Quality = Quality.Unknown };
             result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
@@ -472,7 +472,7 @@ namespace NzbDrone.Core.Parser
             return true;
         }
 
-        public static string NormalizeTitle(string title)
+        public static string CleanSeriesTitle(this string title)
         {
             long number = 0;
 

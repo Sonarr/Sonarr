@@ -34,8 +34,8 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
             mappings.Should().NotBeEmpty();
 
-            mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.CleanTitle));
-            mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.SceneName));
+            mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.SearchTerm));
+            mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.ParseTerm));
             mappings.Should().NotContain(c => c.TvdbId == 0);
         }
 

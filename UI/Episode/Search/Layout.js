@@ -1,5 +1,5 @@
 "use strict";
-define(['app', 'Shared/Cells/FileSizeCell'], function () {
+define(['app', 'Shared/Cells/FileSizeCell', 'Shared/Cells/ApprovalStatusCell'], function () {
 
     NzbDrone.Episode.Search.Layout = Backbone.Marionette.Layout.extend({
         template: 'Episode/Search/LayoutTemplate',
@@ -28,9 +28,9 @@ define(['app', 'Shared/Cells/FileSizeCell'], function () {
                 cell    : Backgrid.StringCell
             },
             {
-                name : 'approved',
-                label: 'Approved',
-                cell : Backgrid.BooleanCell
+                name : 'rejections',
+                label: 'decision',
+                cell : NzbDrone.Shared.Cells.ApprovalStatusCell
             }
         ],
 

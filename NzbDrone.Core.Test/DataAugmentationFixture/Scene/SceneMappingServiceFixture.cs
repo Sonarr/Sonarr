@@ -6,12 +6,13 @@ using NUnit.Framework;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using FluentAssertions;
 
 namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 {
     [TestFixture]
 
-    public class SceneMappingServiceFixture : DbTest<SceneMappingService, SceneMapping>
+    public class SceneMappingServiceFixture : CoreTest<SceneMappingService>
     {
 
         private List<SceneMapping> _fakeMappings;
@@ -20,6 +21,18 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         public void Setup()
         {
             _fakeMappings = Builder<SceneMapping>.CreateListOfSize(5).BuildListOfNew();
+
+            _fakeMappings[0].SearchTerm = "Words";
+            _fakeMappings[1].SearchTerm = "That";
+            _fakeMappings[2].SearchTerm = "Can";
+            _fakeMappings[3].SearchTerm = "Be";
+            _fakeMappings[4].SearchTerm = "Cleaned";
+
+            _fakeMappings[0].ParseTerm = "Words";
+            _fakeMappings[1].ParseTerm = "That";
+            _fakeMappings[2].ParseTerm = "Can";
+            _fakeMappings[3].ParseTerm = "Be";
+            _fakeMappings[4].ParseTerm = "Cleaned";
         }
 
    
@@ -28,6 +41,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         public void UpdateMappings_purge_existing_mapping_and_add_new_ones()
         {
             Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Returns(_fakeMappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
@@ -75,7 +89,16 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             Mocker.GetMock<ISceneMappingProxy>().Verify(c => c.Fetch(), Times.Once());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(), Times.Once());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Once());
+
+
+            foreach (var sceneMapping in _fakeMappings)
+            {
+                Subject.GetSceneName(sceneMapping.TvdbId).Should().Be(sceneMapping.SearchTerm);
+                Subject.GetTvDbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
+            }
         }
+
+
 
     }
 }
