@@ -90,38 +90,61 @@ define([
                 ]
             },
 
-            showTable: function () {
+            _showTable: function () {
+                var view = new Backgrid.Grid(
+                                {
+                                    row       : NzbDrone.Series.Index.Table.Row,
+                                    columns   : this.columns,
+                                    collection: this.seriesCollection,
+                                    className : 'table table-hover'
+                                });
 
-                this.series.show(new Backgrid.Grid(
-                    {
-                        row       : NzbDrone.Series.Index.Table.Row,
-                        columns   : this.columns,
-                        collection: this.seriesCollection,
-                        className : 'table table-hover'
-                    }));
+                this._fetchCollection(view);
             },
 
-            showList: function () {
-                this.series.show(new NzbDrone.Series.Index.List.CollectionView({ collection: this.seriesCollection }));
+            _showList: function () {
+                var view = new NzbDrone.Series.Index.List.CollectionView();
+                this._fetchCollection(view);
             },
 
-            showPosters: function () {
-                this.series.show(new NzbDrone.Series.Index.Posters.CollectionView({ collection: this.seriesCollection }));
+            _showPosters: function () {
+                var view = new NzbDrone.Series.Index.Posters.CollectionView();
+                this._fetchCollection(view);
             },
 
-            showEmpty: function () {
+            _showEmpty: function () {
                 this.series.show(new NzbDrone.Series.Index.EmptyView());
+            },
+
+            _fetchCollection: function (view) {
+                var self = this;
+
+                if (this.seriesCollection.models.length === 0) {
+                    this.series.show(new NzbDrone.Shared.LoadingView());
+
+                    this.seriesCollection.fetch()
+                        .done(function () {
+                            if (self.seriesCollection.models.length === 0) {
+                                self._showEmpty();
+                            }
+                            else {
+                                view.collection = self.seriesCollection;
+                                self.series.show(view);
+                            }
+                        });
+                }
+
+                else {
+                    view.collection = this.seriesCollection;
+                    this.series.show(view);
+                }
             },
 
             initialize: function () {
                 this.seriesCollection = new NzbDrone.Series.SeriesCollection();
-                this.seriesCollection.fetch();
             },
 
             onShow: function () {
-
-                //This gets cleared immediately because of the viewButton callback
-                this.series.show(new NzbDrone.Shared.LoadingView());
 
                 //TODO: Move this outside of the function - 'this' is not available for the call back though (use string like events?)
                 var viewButtons = {
@@ -134,19 +157,19 @@ define([
                             key     : 'tableView',
                             title   : '',
                             icon    : 'icon-table',
-                            callback: this.showTable
+                            callback: this._showTable
                         },
                         {
                             key     : 'listView',
                             title   : '',
                             icon    : 'icon-list',
-                            callback: this.showList
+                            callback: this._showList
                         },
                         {
                             key     : 'posterView',
                             title   : '',
                             icon    : 'icon-picture',
-                            callback: this.showPosters
+                            callback: this._showPosters
                         }
                     ]
                 };
@@ -157,6 +180,5 @@ define([
                     context: this
                 }));
             }
-
         });
     });
