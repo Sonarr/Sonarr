@@ -35,7 +35,8 @@ Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
         this.$el.append(this.column.get("label"));
 
         if (this.column.get('sortable')) {
-            this.$el.append(" <i class='icon-sort pull-right'></i>");
+            this.$el.addClass('clickable');
+            this.$el.append(" <i class='pull-right'></i>");
 
             if (this.collection.state) {
                 var sortKey = this.collection.state.sortKey;
