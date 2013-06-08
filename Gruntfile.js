@@ -74,6 +74,7 @@ module.exports = function (grunt) {
         handlebars: {
             options: {
                 namespace  : "Templates",
+                partialRegex: /Partial.html/,
                 wrapped    : true,
                 processName: function (fileName) {
                     return fileName
@@ -83,14 +84,14 @@ module.exports = function (grunt) {
                 }
             },
             files  : {
-                src : ['UI/**/*emplate.html'],
+                src : ['UI/**/*emplate.html','UI/**/*Partial.html'],
                 dest: '_output/UI/templates.js'
             }
         },
 
         copy: {
             index  : {
-                src : 'UI/**/index.html',
+                src : 'UI/index.html',
                 dest: '_output/'
             },
             scripts: {
@@ -144,7 +145,7 @@ module.exports = function (grunt) {
                 files: '<%= copy.images.src %>',
                 tasks: ['copy:images']
             },
-            copyImages : {
+            copyJpg : {
                 files: '<%= copy.jpg.src %>',
                 tasks: ['copy:jpg']
             },
