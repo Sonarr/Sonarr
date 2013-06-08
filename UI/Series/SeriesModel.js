@@ -1,5 +1,5 @@
 ﻿"use strict";
-define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFolderCollection'], function (app, qualityProfileCollection, rootFolders) {
+define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfiles) {
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
 
         urlRoot: NzbDrone.Constants.ApiRoot + '/series',
@@ -29,7 +29,7 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');
             },
-            imdbUrl         : function () {
+            imdbUrl          : function () {
                 return "http://imdb.com/title/" + this.get('imdbId');
             },
             isContinuing     : function () {
@@ -44,16 +44,19 @@ define(['app', 'Quality/QualityProfileCollection', 'AddSeries/RootFolders/RootFo
 
                 return Date.create(date).short();
             },
-            route : function(){
+            route            : function () {
                 return '/series/details/' + this.get('titleSlug');
+                //return '/series/details/' + this.get('id');
+            },
+
+            qualityProfile: function () {
+                return qualityProfiles.get(this.get('qualityProfileId')).toJSON();
             }
         },
 
         defaults: {
             episodeFileCount: 0,
             episodeCount    : 0,
-            qualityProfiles : qualityProfileCollection,
-            rootFolders     : rootFolders,
             isExisting      : false,
             status          : 0
         }

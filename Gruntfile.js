@@ -11,6 +11,7 @@ module.exports = function (grunt) {
             'UI/JsLibraries/backbone.mutators.js'            : 'http://raw.github.com/asciidisco/Backbone.Mutators/master/backbone.mutators.js',
             'UI/JsLibraries/backbone.shortcuts.js'           : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
             'UI/JsLibraries/backbone.relational.js'          : 'http://raw.github.com/PaulUithol/Backbone-relational/0.8.5/backbone-relational.js',
+            'UI/JsLibraries/backbone.associations.js'        : 'http://raw.github.com/dhruvaray/backbone-associations/master/backbone-associations.js',
 
             'UI/JsLibraries/backbone.pageable.js'            : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
             'UI/JsLibraries/backbone.backgrid.js'            : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',

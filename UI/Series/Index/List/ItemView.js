@@ -18,11 +18,7 @@ define([
 
         events: {
             'click .x-edit'  : 'editSeries',
-            'click .x-remove': 'removeSeries',
-        },
-
-        initialize: function (options) {
-            this.qualityProfileCollection = options.qualityProfiles;
+            'click .x-remove': 'removeSeries'
         },
 
         editSeries: function () {

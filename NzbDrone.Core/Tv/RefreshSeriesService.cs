@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(newList);
             allEpisodes.AddRange(updateList);
 
-            var groups = allEpisodes.GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
+            var groups = allEpisodes.Where(c=>c.AirDate.HasValue).GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
 
             foreach (var group in groups)
             {

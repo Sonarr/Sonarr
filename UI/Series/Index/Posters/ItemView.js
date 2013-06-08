@@ -2,7 +2,6 @@
 
 define([
     'app',
-    'Quality/QualityProfileCollection',
     'Series/SeriesCollection',
     'Series/Edit/EditSeriesView',
     'Series/Delete/DeleteSeriesView'
@@ -26,9 +25,6 @@ define([
             'mouseleave .x-series-poster': 'posterHoverAction'
         },
 
-        initialize: function (options) {
-            this.qualityProfileCollection = options.qualityProfiles;
-        },
 
         editSeries: function () {
             var view = new NzbDrone.Series.Edit.EditSeriesView({ model: this.model});
