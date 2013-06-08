@@ -3,7 +3,8 @@ define([
     'app',
     'History/Collection',
     'Series/Index/Table/AirDateCell',
-    'Shared/Toolbar/ToolbarLayout'
+    'Shared/Toolbar/ToolbarLayout',
+    'Shared/LoadingView'
 ],
     function () {
         NzbDrone.History.HistoryLayout = Backbone.Marionette.Layout.extend({
@@ -56,7 +57,7 @@ define([
                 }
             ],
 
-            showTable: function () {
+            _showTable: function () {
 
                 this.history.show(new Backgrid.Grid(
                     {
@@ -72,13 +73,17 @@ define([
                 }));
             },
 
-            initialize: function () {
-                this.historyCollection = new NzbDrone.History.Collection();
-                this.historyCollection.fetch();
-            },
-
             onShow: function () {
-                this.showTable();
+                var self = this;
+
+                this.history.show(new NzbDrone.Shared.LoadingView());
+
+                this.historyCollection = new NzbDrone.History.Collection();
+                this.historyCollection.fetch()
+                                      .done(function () {
+                                          self._showTable();
+                                      });
+
                 //this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
             }
 

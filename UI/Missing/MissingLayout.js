@@ -4,7 +4,8 @@ define([
     'Missing/Collection',
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell',
-    'Shared/Toolbar/ToolbarLayout'
+    'Shared/Toolbar/ToolbarLayout',
+    'Shared/LoadingView'
 ],
     function () {
         NzbDrone.Missing.MissingLayout = Backbone.Marionette.Layout.extend({
@@ -48,7 +49,7 @@ define([
                 }
             ],
 
-            showTable: function () {
+            _showTable: function () {
                 this.missing.show(new Backgrid.Grid(
                     {
                         row       : NzbDrone.Missing.Row,
@@ -63,17 +64,16 @@ define([
                 }));
             },
 
-            initialize: function () {
-                this.missingCollection = new NzbDrone.Missing.Collection();
-                this.missingCollection.fetch();
-            },
-
             onShow: function () {
-                this.showTable();
-                //this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
-            }
+                var self = this;
 
-        })
-        ;
-    })
-;
+                this.missing.show(new NzbDrone.Shared.LoadingView());
+
+                this.missingCollection = new NzbDrone.Missing.Collection();
+                this.missingCollection.fetch()
+                                      .done(function () {
+                                          self._showTable();
+                                      });
+            }
+        });
+    });

@@ -7,7 +7,8 @@ define([
     'Series/Index/Table/AirDateCell',
     'Series/Index/Table/SeriesStatusCell',
     'Shared/Toolbar/ToolbarLayout',
-    'Config'
+    'Config',
+    'Shared/LoadingView'
 ],
     function () {
         NzbDrone.Series.Index.SeriesIndexLayout = Backbone.Marionette.Layout.extend({
@@ -63,6 +64,32 @@ define([
                 }
             ],
 
+            leftSideButtons: {
+                type      : 'default',
+                storeState: false,
+                items     : [
+                    {
+                        title: 'Add Series',
+                        icon : 'icon-plus',
+                        route: 'series/add'
+                    },
+                    {
+                        title         : 'RSS Sync',
+                        icon          : 'icon-rss',
+                        command       : 'rsssync',
+                        successMessage: 'RSS Sync Completed',
+                        errorMessage  : 'RSS Sync Failed!'
+                    },
+                    {
+                        title         : 'Update Library',
+                        icon          : 'icon-refresh',
+                        command       : 'refreshseries',
+                        successMessage: 'Library was updated!',
+                        errorMessage  : 'Library update failed!'
+                    }
+                ]
+            },
+
             showTable: function () {
 
                 this.series.show(new Backgrid.Grid(
@@ -93,12 +120,16 @@ define([
 
             onShow: function () {
 
+                //This gets cleared immediately because of the viewButton callback
+                this.series.show(new NzbDrone.Shared.LoadingView());
+
+                //TODO: Move this outside of the function - 'this' is not available for the call back though (use string like events?)
                 var viewButtons = {
                     type         : 'radio',
-                    storeState   : true,
-                    menuKey      : 'seriesViewMode',
-                    defaultAction: 'listView',
-                    items        : [
+                        storeState   : true,
+                        menuKey      : 'seriesViewMode',
+                        defaultAction: 'listView',
+                        items        : [
                         {
                             key     : 'tableView',
                             title   : '',
@@ -120,41 +151,12 @@ define([
                     ]
                 };
 
-
-                var leftSideButtons = {
-                    type      : 'default',
-                    storeState: false,
-                    items     : [
-                        {
-                            title: 'Add Series',
-                            icon : 'icon-plus',
-                            route: 'series/add'
-                        },
-                        {
-                            title         : 'RSS Sync',
-                            icon          : 'icon-rss',
-                            command       : 'rsssync',
-                            successMessage: 'RSS Sync Completed',
-                            errorMessage  : 'RSS Sync Failed!'
-                        },
-                        {
-                            title         : 'Update Library',
-                            icon          : 'icon-refresh',
-                            command       : 'refreshseries',
-                            successMessage: 'Library was updated!',
-                            errorMessage  : 'Library update failed!'
-                        }
-                    ]
-                };
-
                 this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({
                     right  : [ viewButtons],
-                    left   : [ leftSideButtons],
+                    left   : [ this.leftSideButtons],
                     context: this
                 }));
             }
 
-        })
-        ;
-    })
-;
+        });
+    });
