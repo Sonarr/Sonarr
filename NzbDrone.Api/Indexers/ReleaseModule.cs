@@ -42,7 +42,7 @@ namespace NzbDrone.Api.Indexers
 
         private List<ReleaseResource> GetRss()
         {
-            if (results == null)
+            //if (results == null)
             {
                 var reports = _rssFetcherAndParser.Fetch();
                 var decisions = _downloadDecisionMaker.GetRssDecision(reports);

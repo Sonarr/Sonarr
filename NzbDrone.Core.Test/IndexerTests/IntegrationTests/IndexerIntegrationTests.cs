@@ -4,6 +4,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.NzbClub;
 using NzbDrone.Core.Indexers.Nzbx;
+using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void SetUp()
         {
             UseRealHttp();
-            
+
         }
 
         [Test]
@@ -44,6 +45,17 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
 
         [Test]
+        public void wombles_rss()
+        {
+            var indexer = new Wombles();
+
+            var result = Subject.FetchRss(indexer);
+
+            ValidateResult(result, skipSize: true, skipInfo: true);
+        }
+
+
+        [Test]
         [Explicit("needs newznab api key")]
         public void nzbsorg_rss()
         {
@@ -58,25 +70,26 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
             var result = Subject.FetchRss(indexer);
 
-            result.Should().NotBeEmpty();
-            result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title));
-            result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbUrl));
-
-            //TODO: uncomment these after moving to restsharp for rss
-            //result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbInfoUrl));
-            //result.Should().OnlyContain(c => c.Size > 0);
-
+            ValidateResult(result);
         }
 
 
 
-        private void ValidateResult(IList<ReportInfo> reports)
+        private void ValidateResult(IList<ReportInfo> reports, bool skipSize = false, bool skipInfo = false)
         {
             reports.Should().NotBeEmpty();
             reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title));
-            reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbInfoUrl));
             reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbUrl));
-            reports.Should().OnlyContain(c => c.Size > 0);
+
+            if (!skipInfo)
+            {
+                reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbInfoUrl));
+            }
+
+            if (!skipSize)
+            {
+                reports.Should().OnlyContain(c => c.Size > 0);
+            }
         }
 
     }

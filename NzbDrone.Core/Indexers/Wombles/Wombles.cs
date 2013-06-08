@@ -5,9 +5,17 @@ namespace NzbDrone.Core.Indexers.Wombles
 {
     public class Wombles : IndexerBase
     {
+        public override IParseFeed Parser
+        {
+            get
+            {
+                return new WomblesParser();
+            }
+        }
+
         public override IEnumerable<string> RecentFeed
         {
-            get { yield return string.Format("http://nzb.isasecret.com/rss"); }
+            get { yield return "http://nzb.isasecret.com/rss/?sec=TV&fr=false"; }
         }
 
         public override string Name

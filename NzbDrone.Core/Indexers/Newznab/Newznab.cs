@@ -7,7 +7,13 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : IndexerWithSetting<NewznabSettings>
     {
-
+        public override IParseFeed Parser
+        {
+            get
+            {
+                return new NewznabParser(this);
+            }
+        }
 
         public override IEnumerable<IndexerDefinition> DefaultDefinitions
         {
