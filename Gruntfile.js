@@ -93,7 +93,7 @@ module.exports = function (grunt) {
 
         copy: {
             index  : {
-                src : 'UI/index.html',
+                src : 'UI/*ndex.html',
                 dest: '_output/'
             },
             scripts: {
