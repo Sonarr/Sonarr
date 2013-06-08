@@ -1,0 +1,12 @@
+﻿<ul>
+    {{debug}}
+    {{#each handles}}
+        <li {{#if className}}class="{{className}}"{{/if}}>
+            {{#if pageNumber}}
+                <span>{{label}}</span>
+            {{else}}
+            <i class="pager-btn clickable {{label}}" data-action="{{action}}"></i>
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>
