@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void should_import_file()
         {
-            Subject.ProcessDownloadedEpiosdesFolder();
+            Subject.ProcessDownloadedEpisodesFolder();
 
             VerifyImport();
         }
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             WithRecentFolderWrite();
 
-            Subject.ProcessDownloadedEpiosdesFolder();
+            Subject.ProcessDownloadedEpisodesFolder();
 
             VerifyNoImport();
         }
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             WithOldWrite();
 
-            Subject.ProcessDownloadedEpiosdesFolder();
+            Subject.ProcessDownloadedEpisodesFolder();
 
             Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
                   .Returns(_fakeEpisodeFile);
 
-            Subject.ProcessDownloadedEpiosdesFolder();
+            Subject.ProcessDownloadedEpisodesFolder();
 
             Mocker.GetMock<IMoveEpisodeFiles>().Verify(c => c.MoveEpisodeFile(_fakeEpisodeFile, true), Times.Once());
         }
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
                  .Returns<EpisodeFile>(null);
 
-            Subject.ProcessDownloadedEpiosdesFolder();
+            Subject.ProcessDownloadedEpisodesFolder();
 
             Mocker.GetMock<IMoveEpisodeFiles>().Verify(c => c.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<bool>()), Times.Never());
         }
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<FileInfo>()))
                   .Returns(true);
 
-            Subject.ProcessDownloadedEpiosdesFolder();
+            Subject.ProcessDownloadedEpisodesFolder();
             VerifyNoImport();
         }
 

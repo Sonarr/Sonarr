@@ -9,7 +9,6 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
-        List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
         bool Exists(string path);
     }
 
@@ -37,10 +36,5 @@ namespace NzbDrone.Core.MediaFiles
             return Query.Where(c => c.SeriesId == seriesId).ToList();
         }
 
-        public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
-        {
-            return Query.Where(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber).ToList();
-
-        }
     }
 }

@@ -3,8 +3,6 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HistoryTests
@@ -29,6 +27,19 @@ namespace NzbDrone.Core.Test.HistoryTests
 
             AllStoredModels.Should().HaveCount(10);
             AllStoredModels.Should().OnlyContain(s => s.Date > DateTime.Now.AddDays(-30));
+        }
+
+        [Test]
+        public void should_read_write_dictionary()
+        {
+            var history = Builder<History.History>.CreateNew().BuildNew();
+
+            history.Data.Add("key1","value1");
+            history.Data.Add("key2","value2");
+
+            Subject.Insert(history);
+
+            StoredModel.Data.Should().HaveCount(2);
         }
     }
 }

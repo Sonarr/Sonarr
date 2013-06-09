@@ -5,6 +5,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IMoveEpisodeFiles _episodeFileMover;
         private readonly IParsingService _parsingService;
         private readonly IConfigService _configService;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -26,6 +28,7 @@ namespace NzbDrone.Core.MediaFiles
             IMoveEpisodeFiles episodeFileMover,
             IParsingService parsingService,
             IConfigService configService,
+            IMessageAggregator messageAggregator,
             Logger logger)
         {
             _diskProvider = diskProvider;
@@ -34,10 +37,11 @@ namespace NzbDrone.Core.MediaFiles
             _episodeFileMover = episodeFileMover;
             _parsingService = parsingService;
             _configService = configService;
+            _messageAggregator = messageAggregator;
             _logger = logger;
         }
 
-        public void ProcessDownloadedEpiosdesFolder()
+        public void ProcessDownloadedEpisodesFolder()
         {
             //TODO: We should also process the download client's category folder
             var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
@@ -135,11 +139,13 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _episodeFileMover.MoveEpisodeFile(episodeFile, true);
             }
+
+            _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)
         {
-            ProcessDownloadedEpiosdesFolder();
+            ProcessDownloadedEpisodesFolder();
         }
     }
 }

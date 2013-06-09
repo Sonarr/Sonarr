@@ -17,7 +17,6 @@ namespace NzbDrone.Core.MediaFiles
         bool Exists(string path);
         EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
-        List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
     }
 
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
@@ -66,11 +65,6 @@ namespace NzbDrone.Core.MediaFiles
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
         {
             return _mediaFileRepository.GetFilesBySeries(seriesId);
-        }
-
-        public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
-        {
-            return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

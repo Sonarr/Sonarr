@@ -40,9 +40,9 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<History.History>().RegisterModel("History")
                   .Relationships
                   .AutoMapICollectionOrComplexProperties();
-//                  .Relationship();
-//                  .HasOne(h => h.Episode, h => h.EpisodeId)
-//                  .HasOne(h => h.Series, h => h.SeriesId);
+            //                  .Relationship();
+            //                  .HasOne(h => h.Episode, h => h.EpisodeId)
+            //                  .HasOne(h => h.Series, h => h.SeriesId);
 
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.RootFolderPath)
@@ -79,6 +79,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
         }
 
         private static void RegisterEmbeddedConverter()

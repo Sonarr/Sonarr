@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.History
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.History
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
     }
 
-    public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>
+    public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -61,14 +62,33 @@ namespace NzbDrone.Core.History
                 var history = new History
                 {
                     Date = DateTime.Now,
-                    Indexer = message.Episode.Report.Indexer,
                     Quality = message.Episode.ParsedEpisodeInfo.Quality,
-                    NzbTitle = message.Episode.Report.Title,
+                    SourceTitle = message.Episode.Report.Title,
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
-                    NzbInfoUrl = message.Episode.Report.NzbInfoUrl,
-                    ReleaseGroup = message.Episode.Report.ReleaseGroup,
                 };
+
+                history.Data.Add("Indexer", message.Episode.Report.Indexer);
+                history.Data.Add("NzbInfoUrl", message.Episode.Report.NzbInfoUrl);
+                history.Data.Add("ReleaseGroup", message.Episode.Report.ReleaseGroup);
+                history.Data.Add("Age", message.Episode.Report.Age.ToString());
+
+                _historyRepository.Insert(history);
+            }
+        }
+
+        public void Handle(EpisodeImportedEvent message)
+        {
+            foreach (var episode in message.EpisodeFile.Episodes.Value)
+            {
+                var history = new History
+                    {
+                        Date = DateTime.Now,
+                        Quality = message.EpisodeFile.Quality,
+                        SourceTitle = message.EpisodeFile.Path,
+                        SeriesId = message.EpisodeFile.SeriesId,
+                        EpisodeId = episode.Id,
+                    };
 
                 _historyRepository.Insert(history);
             }

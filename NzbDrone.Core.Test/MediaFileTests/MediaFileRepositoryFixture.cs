@@ -34,28 +34,6 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
         }
 
-        [Test]
-        public void get_files_by_season()
-        {
-            var files = Builder<EpisodeFile>.CreateListOfSize(20)
-                   .All()
-                   .With(c => c.Id = 0)
-                   .With(s => s.SeasonNumber = 10)
-                   .TheFirst(10)
-                   .With(c => c.SeriesId = 1)
-                   .TheNext(10)
-                   .With(c => c.SeriesId = 2)
-                   .Random(10)
-                   .With(s => s.SeasonNumber = 20)
-                   .Build();
-
-
-            Db.InsertMany(files);
-
-
-            Subject.GetFilesBySeason(1, 20).Should().OnlyContain(c => c.SeriesId == 1 && c.SeasonNumber == 20);
-        }
-
 
         [Test]
         public void GetFileByPath_should_return_null_if_file_does_not_exist_in_database()
