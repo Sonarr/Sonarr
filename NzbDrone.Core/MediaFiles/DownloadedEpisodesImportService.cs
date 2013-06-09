@@ -117,7 +117,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        public void ProcessVideoFile(string videoFile, Series series)
+        private void ProcessVideoFile(string videoFile, Series series)
         {
             var lastWrite = _diskProvider.GetLastFileWrite(videoFile);
 
@@ -138,9 +138,8 @@ namespace NzbDrone.Core.MediaFiles
             if (episodeFile != null)
             {
                 _episodeFileMover.MoveEpisodeFile(episodeFile, true);
+                _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
             }
-
-            _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)

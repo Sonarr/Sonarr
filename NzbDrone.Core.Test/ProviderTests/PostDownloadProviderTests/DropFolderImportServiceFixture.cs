@@ -6,9 +6,9 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
@@ -96,6 +96,18 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
+        public void should_trigger_import_event_on_import()
+        {
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
+                  .Returns(_fakeEpisodeFile);
+
+            Subject.ProcessDownloadedEpisodesFolder();
+
+            VerifyEventPublished<EpisodeImportedEvent>();
+
+        }
+
+        [Test]
         public void should_not_attempt_move_if_nothing_is_imported()
         {
             Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
@@ -104,6 +116,19 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Subject.ProcessDownloadedEpisodesFolder();
 
             Mocker.GetMock<IMoveEpisodeFiles>().Verify(c => c.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<bool>()), Times.Never());
+        }
+
+
+        [Test]
+        public void should_not_publish_import_event_if_nothing_is_imported()
+        {
+            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
+                 .Returns<EpisodeFile>(null);
+
+            Subject.ProcessDownloadedEpisodesFolder();
+
+
+            VerifyEventNotPublished<EpisodeImportedEvent>();
         }
 
         [Test]
