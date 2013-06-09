@@ -1,18 +1,11 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.XemCommunicationProviderTests
 {

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        bool DownloadReport(RemoteEpisode episode);
+        bool DownloadReport(RemoteEpisode remoteEpisode);
     }
 
     public class DownloadService : IDownloadService
@@ -28,27 +24,23 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public bool DownloadReport(RemoteEpisode episode)
+        public bool DownloadReport(RemoteEpisode remoteEpisode)
         {
-            var downloadTitle = episode.Report.Title;
+            var downloadTitle = remoteEpisode.Report.Title;
 
             var provider = _downloadClientProvider.GetDownloadClient();
-            var recentEpisode = ContainsRecentEpisode(episode);
 
-            bool success = provider.DownloadNzb(episode.Report.NzbUrl, downloadTitle, recentEpisode);
+            bool success = provider.DownloadNzb(remoteEpisode.Report.NzbUrl, downloadTitle, remoteEpisode.IsRecentEpisode());
 
             if (success)
             {
                 _logger.Info("Report sent to download client. {0}", downloadTitle);
-                _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(episode));
+                _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
             }
 
             return success;
         }
 
-        private static bool ContainsRecentEpisode(RemoteEpisode episode)
-        {
-            return episode.Episodes.Any(e => e.AirDate >= DateTime.Today.AddDays(-7));
-        }
+
     }
 }

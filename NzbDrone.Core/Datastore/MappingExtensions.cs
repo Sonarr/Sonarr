@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
@@ -28,6 +29,13 @@ namespace NzbDrone.Core.Datastore
                              .SetPrimaryKey()
                              .SetReturnValue()
                              .SetAutoIncrement();
+        }
+
+        public static RelationshipBuilder<T> AutoMapChildModels<T>(this ColumnMapBuilder<T> mapBuilder)
+        {
+            return mapBuilder.Relationships.AutoMapPropertiesWhere(m =>
+                    m.MemberType == MemberTypes.Property &&
+                    typeof(ModelBase).IsAssignableFrom(((PropertyInfo) m).PropertyType));
         }
 
         public static bool IsMappableProperty(MemberInfo memberInfo)

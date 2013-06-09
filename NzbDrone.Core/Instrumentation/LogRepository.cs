@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Trim()
         {
-            var oldIds = Query.Where(c => c.Time < DateTime.Now.AddDays(-30).Date).Select(c => c.Id);
+            var oldIds = Query.Where(c => c.Time < DateTime.UtcNow.AddDays(-30).Date).Select(c => c.Id);
             DeleteMany(oldIds);
         }
     }

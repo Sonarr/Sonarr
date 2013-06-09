@@ -1,21 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Framework
 {
     public abstract class CoreTest : TestBase
     {
-        protected static ProgressNotification MockNotification
-        {
-            get
-            {
-                return new ProgressNotification("Mock notification");
-            }
-        }
+
 
         protected FileStream OpenRead(params string[] path)
         {

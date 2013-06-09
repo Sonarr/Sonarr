@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Parser
                         var result = ParseMatchCollection(match);
                         if (result != null)
                         {
-                            //Check if episode is in the future (most likley a parse error)
+                            //Check if episode is in the future (most likely a parse error)
                             if (result.AirDate > DateTime.Now.AddDays(1).Date || result.AirDate < new DateTime(1970, 1, 1))
                                 break;
 

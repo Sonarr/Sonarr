@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Configuration;
@@ -38,11 +40,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
             Mapper.Entity<History.History>().RegisterModel("History")
-                  .Relationships
-                  .AutoMapICollectionOrComplexProperties();
-            //                  .Relationship();
-            //                  .HasOne(h => h.Episode, h => h.EpisodeId)
-            //                  .HasOne(h => h.Series, h => h.SeriesId);
+                .AutoMapChildModels();
 
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.RootFolderPath)
@@ -55,7 +53,6 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(e => e.SeriesTitle)
                   .Relationship()
                   .HasOne(episode => episode.EpisodeFile, episode => episode.EpisodeFileId);
-            //.Relationships.AutoMapICollectionOrComplexProperties();
 
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles")
                   .Relationships.AutoMapICollectionOrComplexProperties();
@@ -76,6 +73,7 @@ namespace NzbDrone.Core.Datastore
             RegisterEmbeddedConverter();
 
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(DateTime), new UtcConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());

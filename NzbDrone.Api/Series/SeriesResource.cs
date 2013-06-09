@@ -40,7 +40,6 @@ namespace NzbDrone.Api.Series
         public DateTime? CustomStartDate { get; set; }
 
         public Boolean UseSceneNumbering { get; set; }
-        public Int32 Id { get; set; }
         public Int32 Runtime { get; set; }
         public Int32 TvdbId { get; set; }
         public Int32 TvRageId { get; set; }

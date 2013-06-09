@@ -174,7 +174,6 @@
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradableSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
     <Compile Include="ProviderTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\GrowlProviderTest.cs" />

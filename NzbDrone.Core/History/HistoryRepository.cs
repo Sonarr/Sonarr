@@ -24,7 +24,7 @@ namespace NzbDrone.Core.History
 
         public void Trim()
         {
-            var cutoff = DateTime.Now.AddDays(-30).Date;
+            var cutoff = DateTime.UtcNow.AddDays(-30).Date;
             Delete(c=> c.Date < cutoff);
         }
 

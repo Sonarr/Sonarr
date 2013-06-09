@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using Omu.ValueInjecter;
 using System.Linq;
 
@@ -13,14 +16,28 @@ namespace NzbDrone.Api.Indexers
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly ISearchForNzb _nzbSearchService;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
-        private static List<DownloadDecision> results;
+        private readonly IDownloadService _downloadService;
+        private readonly IParsingService _parsingService;
 
-        public ReleaseModule(IFetchAndParseRss rssFetcherAndParser, ISearchForNzb nzbSearchService, IMakeDownloadDecision downloadDecisionMaker)
+        public ReleaseModule(IFetchAndParseRss rssFetcherAndParser, ISearchForNzb nzbSearchService, IMakeDownloadDecision downloadDecisionMaker, IDownloadService downloadService, IParsingService parsingService)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _nzbSearchService = nzbSearchService;
             _downloadDecisionMaker = downloadDecisionMaker;
+            _downloadService = downloadService;
+            _parsingService = parsingService;
             GetResourceAll = GetReleases;
+            CreateResource = DownloadRelease;
+        }
+
+        private ReleaseResource DownloadRelease(ReleaseResource release)
+        {
+            var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>());
+            remoteEpisode.Report = release.InjectTo<ReportInfo>();
+
+            _downloadService.DownloadReport(remoteEpisode);
+
+            return release;
         }
 
 
@@ -42,14 +59,10 @@ namespace NzbDrone.Api.Indexers
 
         private List<ReleaseResource> GetRss()
         {
-            //if (results == null)
-            {
-                var reports = _rssFetcherAndParser.Fetch();
-                var decisions = _downloadDecisionMaker.GetRssDecision(reports);
-                results = decisions;
-            }
+            var reports = _rssFetcherAndParser.Fetch();
+            var decisions = _downloadDecisionMaker.GetRssDecision(reports);
 
-            return MapDecisions(results);
+            return MapDecisions(decisions);
         }
 
         private static List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)

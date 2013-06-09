@@ -61,7 +61,7 @@ namespace NzbDrone.Core.History
             {
                 var history = new History
                 {
-                    Date = DateTime.Now,
+                    Date = DateTime.UtcNow,
                     Quality = message.Episode.ParsedEpisodeInfo.Quality,
                     SourceTitle = message.Episode.Report.Title,
                     SeriesId = episode.SeriesId,
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.History
             {
                 var history = new History
                     {
-                        Date = DateTime.Now,
+                        Date = DateTime.UtcNow,
                         Quality = message.EpisodeFile.Quality,
                         SourceTitle = message.EpisodeFile.Path,
                         SeriesId = message.EpisodeFile.SeriesId,

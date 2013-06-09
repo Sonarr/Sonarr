@@ -198,6 +198,7 @@
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
+    <Compile Include="Datastore\Converters\UtcConverter.cs" />
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
@@ -467,9 +468,6 @@
     <Compile Include="MediaFiles\MediaFileService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\NotificationProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Notifications\Plex\PlexProvider.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
       <SubType>Code</SubType>
@@ -505,8 +503,6 @@
     <Compile Include="Notifications\NotificationDefinition.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
-    <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
-    <Compile Include="Model\Notification\ProgressNotification.cs" />
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="History\History.cs" />

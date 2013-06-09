@@ -105,7 +105,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var episodeFile = new EpisodeFile();
-            episodeFile.DateAdded = DateTime.Now;
+            episodeFile.DateAdded = DateTime.UtcNow;
             episodeFile.SeriesId = series.Id;
             episodeFile.Path = filePath.CleanPath();
             episodeFile.Size = size;

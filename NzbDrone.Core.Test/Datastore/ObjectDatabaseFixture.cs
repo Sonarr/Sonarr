@@ -102,6 +102,19 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
+        public void should_convert_all_dates_to_utc()
+        {
+            var storedTime = DateTime.Now;
+
+            _sampleType.LastExecution = storedTime;
+
+            Subject.Insert(_sampleType);
+
+            StoredModel.LastExecution.Kind.Should().Be(DateTimeKind.Utc);
+            StoredModel.LastExecution.ToLongTimeString().Should().Be(storedTime.ToUniversalTime().ToLongTimeString());
+        }
+
+        [Test]
         public void should_have_id_when_returned_from_database()
         {
             _sampleType.Id = 0;
