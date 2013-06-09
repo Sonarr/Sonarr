@@ -21,5 +21,10 @@ namespace Exceptron.Client.Message
         /// Class name for current frame
         /// </summary>
         public string c { get; set; }
+
+        /// <summary>
+        /// File name for current frame
+        /// </summary>
+        public string fn { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Web;
@@ -252,14 +253,20 @@ namespace Exceptron.Client
                 var method = frame.GetMethod();
                 var declaringType = method.DeclaringType;
 
+                var fileName = frame.GetFileName();
+
+                if (!string.IsNullOrWhiteSpace(fileName))
+                {
+                    fileName = new FileInfo(fileName).Name;
+                }
+
                 var currentFrame = new Frame
                 {
                     i = index,
-                    //fn = frame.GetFileName(),
+                    fn = fileName,
                     ln = frame.GetFileLineNumber(),
                     m = method.ToString(),
                 };
-
 
                 currentFrame.m = currentFrame.m.Substring(currentFrame.m.IndexOf(' ')).Trim();
 
