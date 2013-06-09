@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app', 'Series/Details/EpisodeStatusCell', 'Series/Details/EpisodeTitleCell'], function () {
+define(['app', 'Series/Details/EpisodeStatusCell', 'Series/Details/EpisodeTitleCell','Shared/Cells/ToggleCell'], function () {
     NzbDrone.Series.Details.SeasonLayout = Backbone.Marionette.Layout.extend({
         template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -9,6 +9,13 @@ define(['app', 'Series/Details/EpisodeStatusCell', 'Series/Details/EpisodeTitleC
 
         columns: [
 
+            {
+                name : 'ignored',
+                label: '',
+                cell : NzbDrone.Shared.Cells.ToggleCell,
+                trueClass : 'icon-bookmark-empty',
+                falseClass :'icon-bookmark'
+            },
             {
                 name : 'episodeNumber',
                 label: '#',
@@ -50,7 +57,7 @@ define(['app', 'Series/Details/EpisodeStatusCell', 'Series/Details/EpisodeTitleC
                 {
                     columns   : this.columns,
                     collection: this.episodeCollection,
-                    className : 'table table-hover'
+                    className : 'table table-hover season-grid'
                 }));
         }
     });

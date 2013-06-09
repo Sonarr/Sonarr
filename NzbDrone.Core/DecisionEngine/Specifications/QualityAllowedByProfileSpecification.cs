@@ -1,6 +1,4 @@
 using NLog;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications

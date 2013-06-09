@@ -50,7 +50,14 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
             },
 
             qualityProfile: function () {
-                return qualityProfiles.get(this.get('qualityProfileId')).toJSON();
+
+                var profile = qualityProfiles.get(this.get('qualityProfileId'));
+
+                if(profile){
+                    return profile.toJSON();
+                }
+
+                return undefined;
             }
         },
 

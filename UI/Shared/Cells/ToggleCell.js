@@ -1,33 +1,38 @@
 "use strict";
 
 define(['app', 'Episode/Layout'], function () {
-    NzbDrone.Series.Details.EpisodeIgnoreCell = Backgrid.Cell.extend({
+    NzbDrone.Shared.Cells.ToggleCell = Backgrid.Cell.extend({
 
-        className: 'episode-status-cell',
+        className: 'toggle-cell clickable',
+
+        events: {
+            'click': '_onClick'
+        },
+
+
+        _onClick: function () {
+            var name = this.column.get('name');
+            this.model.set(name, !this.model.get(name));
+            this.render();
+
+            this.model.save();
+        },
+
 
         render: function () {
             this.$el.empty();
 
-            if (this.model) {
 
-                var icon;
+            this.$el.html('<i />');
 
-                if (this.model.get('episodeFile')) {
-                    icon = 'icon-ok';
+            var name = this.column.get('name');
 
-                }
-                else {
-                    if (this.model.get('hasAired')) {
-                        icon = 'icon-warning-sign';
-                    }
-                    else {
-                        icon = 'icon-time';
-                    }
-                }
-
-                this.$el.html('<i class="{0}"/>'.format(icon));
+            if (this.model.get(name)) {
+                this.$('i').addClass(this.column.get('trueClass'));
             }
-
+            else {
+                this.$('i').addClass(this.column.get('falseClass'));
+            }
             return this;
         }
     });

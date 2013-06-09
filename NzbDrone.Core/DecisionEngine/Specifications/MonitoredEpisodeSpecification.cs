@@ -1,22 +1,15 @@
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class MonitoredEpisodeSpecification : IDecisionEngineSpecification
     {
-        private readonly IEpisodeService _episodeService;
-        private readonly ISeriesRepository _seriesRepository;
         private readonly Logger _logger;
 
-        public MonitoredEpisodeSpecification(IEpisodeService episodeService, ISeriesRepository seriesRepository, Logger logger)
+        public MonitoredEpisodeSpecification(Logger logger)
         {
-            _episodeService = episodeService;
-            _seriesRepository = seriesRepository;
             _logger = logger;
         }
 
@@ -24,7 +17,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             get
             {
-                return "Series is not monitored";
+                return "Series is not monitored or Episode is ignored";
             }
         }
 
