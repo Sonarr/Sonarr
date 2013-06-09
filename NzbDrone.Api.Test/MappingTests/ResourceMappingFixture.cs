@@ -40,7 +40,6 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
         [TestCase(typeof(Core.History.History), typeof(HistoryResource))]
         [TestCase(typeof(UpdatePackage), typeof(UpdateResource))]
-        [TestCase(typeof(QualityProfile), typeof(QualityProfileResource))]
         [TestCase(typeof(Quality), typeof(QualityResource))]
         [TestCase(typeof(Log), typeof(LogResource))]
         public void matching_fields(Type modelType, Type resourceType)

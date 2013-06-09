@@ -11,19 +11,6 @@ Backgrid.Column.prototype.defaults = {
     headerCell: 'nzbDrone'
 };
 
-Backgrid.TemplateBackedCell = Backgrid.Cell.extend({
-    className: '',
-    template : 'Series/Index/Table/ControlsColumnTemplate',
-
-    render: function () {
-        var data = this.model.toJSON();
-        var templateFunction = Marionette.TemplateCache.get(this.template);
-        var html = templateFunction(data);
-        this.$el.html(html);
-
-        return this;
-    }
-});
 
 Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
     events: {

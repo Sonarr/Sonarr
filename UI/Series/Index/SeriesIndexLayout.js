@@ -4,7 +4,9 @@ define([
     'Series/Index/List/CollectionView',
     'Series/Index/Posters/CollectionView',
     'Series/Index/EmptyView',
-    'Series/Index/Table/AirDateCell',
+    'Cells/AirDateCell',
+    'Cells/SeriesTitleCell',
+    'Cells/TemplatedCell',
     'Series/Index/Table/SeriesStatusCell',
     'Shared/Toolbar/ToolbarLayout',
     'Config',
@@ -21,46 +23,48 @@ define([
 
             columns: [
                 {
-                    name      : 'status',
-                    label     : '',
-                    cell      : 'seriesStatus'
+                    name : 'status',
+                    label: '',
+                    cell : 'seriesStatus'
                 },
                 {
-                    name      : 'title',
-                    label     : 'Title',
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/SeriesTitleTemplate' })
+                    name : 'this',
+                    label: 'Title',
+                    cell : NzbDrone.Cells.SeriesTitleCell
                 },
                 {
-                    name      : 'seasonCount',
-                    label     : 'Seasons',
-                    cell      : 'integer'
+                    name : 'seasonCount',
+                    label: 'Seasons',
+                    cell : 'integer'
                 },
                 {
-                    name      : 'quality',
-                    label     : 'Quality',
-                    cell      : 'integer'
+                    name : 'quality',
+                    label: 'Quality',
+                    cell : 'integer'
                 },
                 {
-                    name      : 'network',
-                    label     : 'Network',
-                    cell      : 'string'
+                    name : 'network',
+                    label: 'Network',
+                    cell : 'string'
                 },
                 {
-                    name      : 'nextAiring',
-                    label     : 'Next Airing',
-                    cell      : 'airDate'
+                    name : 'nextAiring',
+                    label: 'Next Airing',
+                    cell : NzbDrone.Cells.AirDateCell
                 },
                 {
-                    name      : 'episodes',
-                    label     : 'Episodes',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/EpisodeProgressTemplate' })
+                    name    : 'this',
+                    label   : 'Episodes',
+                    sortable: false,
+                    template: 'Series/EpisodeProgressTemplate',
+                    cell    : NzbDrone.Cells.TemplatedCell
                 },
                 {
-                    name      : 'edit',
-                    label     : '',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Series/Index/Table/ControlsColumnTemplate' })
+                    name    : 'this',
+                    label   : '',
+                    sortable: false,
+                    template: 'Series/Index/Table/ControlsColumnTemplate',
+                    cell    : NzbDrone.Cells.TemplatedCell
                 }
             ],
 
@@ -92,12 +96,12 @@ define([
 
             _showTable: function () {
                 var view = new Backgrid.Grid(
-                                {
-                                    row       : NzbDrone.Series.Index.Table.Row,
-                                    columns   : this.columns,
-                                    collection: this.seriesCollection,
-                                    className : 'table table-hover'
-                                });
+                    {
+                        row       : NzbDrone.Series.Index.Table.Row,
+                        columns   : this.columns,
+                        collection: this.seriesCollection,
+                        className : 'table table-hover'
+                    });
 
                 this._fetchCollection(view);
             },
@@ -149,10 +153,10 @@ define([
                 //TODO: Move this outside of the function - 'this' is not available for the call back though (use string like events?)
                 var viewButtons = {
                     type         : 'radio',
-                        storeState   : true,
-                        menuKey      : 'seriesViewMode',
-                        defaultAction: 'listView',
-                        items        : [
+                    storeState   : true,
+                    menuKey      : 'seriesViewMode',
+                    defaultAction: 'listView',
+                    items        : [
                         {
                             key     : 'tableView',
                             title   : '',

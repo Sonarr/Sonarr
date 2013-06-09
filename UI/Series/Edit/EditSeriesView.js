@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/QualityProfileCollection'], function () {
+define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/QualityProfileCollection'], function (app, seriesModel, deleteSeriesView, qualityProfiles) {
 
     NzbDrone.Series.Edit.EditSeriesView = Backbone.Marionette.ItemView.extend({
         template : 'Series/Edit/EditSeriesTemplate',
@@ -13,6 +13,13 @@ define(['app', 'Series/SeriesModel', 'Series/Delete/DeleteSeriesView', 'Quality/
         events: {
             'click .x-save'  : 'saveSeries',
             'click .x-remove': 'removeSeries'
+        },
+
+
+        initialize : function(){
+
+            this.model.set('qualityProfiles',qualityProfiles);
+
         },
 
 

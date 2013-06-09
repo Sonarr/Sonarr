@@ -1,5 +1,5 @@
 "use strict";
-define(['app'], function () {
+define(['app','Series/SeriesModel'], function () {
     NzbDrone.Series.EpisodeModel = Backbone.Model.extend({
 
         mutators: {
@@ -53,6 +53,13 @@ define(['app'], function () {
             hasAired           : function () {
                 return Date.create(this.get('airDate')).isBefore(Date.create());
             }
+        },
+
+
+        parse: function (model) {
+            model.series = new NzbDrone.Series.SeriesModel(model.series);
+
+            return model;
         },
 
         defaults: {

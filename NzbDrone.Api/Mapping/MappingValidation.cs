@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using NzbDrone.Api.REST;
 using NzbDrone.Common.Reflection;
-using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.Mapping
 {
@@ -11,7 +10,7 @@ namespace NzbDrone.Api.Mapping
     {
         public static void ValidateMapping(Type modelType, Type resourceType)
         {
-            var errors = modelType.GetSimpleProperties().Select(p => GetError(resourceType, p)).Where(c => c != null).ToList();
+            var errors = modelType.GetSimpleProperties().Where(c=>!c.GetGetMethod().IsStatic).Select(p => GetError(resourceType, p)).Where(c => c != null).ToList();
 
             if (errors.Any())
             {
@@ -48,9 +47,9 @@ namespace NzbDrone.Api.Mapping
                 return string.Format("public {0} {1} {{ get; set; }}", modelProperty.PropertyType.Name, modelProperty.Name);
             }
 
-            if (resourceProperty.PropertyType != modelProperty.PropertyType)
+            if (resourceProperty.PropertyType != modelProperty.PropertyType && !typeof(RestResource).IsAssignableFrom(resourceProperty.PropertyType))
             {
-                return string.Format("Excpected {0}.{1} to have type of {2} but found {3}", resourceType.Name, resourceProperty.Name, modelProperty.PropertyType, resourceProperty.PropertyType);
+                return string.Format("Expected {0}.{1} to have type of {2} but found {3}", resourceType.Name, resourceProperty.Name, modelProperty.PropertyType, resourceProperty.PropertyType);
             }
 
             return null;

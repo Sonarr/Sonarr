@@ -1,7 +1,7 @@
 "use strict";
 
 define(['app', 'Episode/Layout'], function () {
-    NzbDrone.Shared.Cells.ToggleCell = Backgrid.Cell.extend({
+    NzbDrone.Cells.ToggleCell = Backgrid.Cell.extend({
 
         className: 'toggle-cell clickable',
 

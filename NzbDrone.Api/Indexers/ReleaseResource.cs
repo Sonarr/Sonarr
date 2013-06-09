@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Indexers
 {
     public class ReleaseResource : RestResource
     {
+        public QualityModel Quality { get; set; }
         public Int32 Age { get; set; }
         public Int64 Size { get; set; }
         public String Indexer { get; set; }

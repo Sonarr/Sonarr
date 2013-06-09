@@ -2,7 +2,13 @@
 define([
     'app',
     'History/Collection',
-    'Series/Index/Table/AirDateCell',
+    'Cells/RelativeDateCell',
+    'Cells/IndexerCell',
+    'Cells/TemplatedCell',
+    'Cells/SeriesTitleCell',
+    'Cells/EpisodeNumberCell',
+    'Cells/EpisodeTitleCell',
+    'Cells/QualityCell',
     'Shared/Toolbar/ToolbarLayout',
     'Shared/LoadingView'
 ],
@@ -18,42 +24,36 @@ define([
 
             columns: [
                 {
-                    name      : 'indexer',
-                    label     : '',
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/IndexerTemplate' })
+                    name : 'indexer',
+                    label: '',
+                    cell : NzbDrone.Cells.IndexerCell
                 },
                 {
-                    name      : 'Series.Title',
-                    label     : 'Series Title',
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' })
+                    name    : 'series',
+                    label   : 'Series',
+                    cell    : NzbDrone.Cells.SeriesTitleCell
                 },
                 {
-                    name      : 'episode',
-                    label     : 'Episode',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' })
+                    name    : 'episode',
+                    label   : 'Episode',
+                    sortable: false,
+                    cell    : NzbDrone.Cells.EpisodeNumberCell
                 },
                 {
-                    name      : 'Episode.Title',
-                    label     : 'Episode Title',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/EpisodeTitleTemplate' })
+                    name    : 'episode',
+                    label   : 'Episode Title',
+                    sortable: false,
+                    cell    : NzbDrone.Cells.EpisodeTitleCell
                 },
                 {
-                    name      : 'quality',
-                    label     : 'Quality',
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/QualityTemplate' })
+                    name : 'quality',
+                    label: 'Quality',
+                    cell    : NzbDrone.Cells.QualityCell
                 },
                 {
-                    name      : 'date',
-                    label     : 'Grabbed',
-                    cell      : 'airDate'
-                },
-                {
-                    name      : 'edit',
-                    label     : '',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'History/ControlsColumnTemplate' })
+                    name : 'date',
+                    label: 'Date',
+                    cell : NzbDrone.Cells.RelativeDateCell
                 }
             ],
 
@@ -68,7 +68,7 @@ define([
                     }));
 
                 this.pager.show(new Backgrid.NzbDronePaginator({
-                    columns: this.columns,
+                    columns   : this.columns,
                     collection: this.historyCollection
                 }));
             },
@@ -80,9 +80,9 @@ define([
 
                 this.historyCollection = new NzbDrone.History.Collection();
                 this.historyCollection.fetch()
-                                      .done(function () {
-                                          self._showTable();
-                                      });
+                    .done(function () {
+                        self._showTable();
+                    });
 
                 //this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
             }

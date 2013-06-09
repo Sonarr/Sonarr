@@ -2,9 +2,14 @@
 define([
     'app',
     'Missing/Collection',
-    'Series/Index/Table/AirDateCell',
+    'Missing/Row',
+    'Cells/AirDateCell',
     'Series/Index/Table/SeriesStatusCell',
     'Shared/Toolbar/ToolbarLayout',
+    'Cells/SeriesTitleCell',
+    'Cells/EpisodeNumberCell',
+    'Cells/EpisodeTitleCell',
+    'Cells/AirDateCell',
     'Shared/LoadingView'
 ],
     function () {
@@ -19,33 +24,27 @@ define([
 
             columns: [
                 {
-                    name      : 'series.Title',
-                    label     : 'Series Title',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/SeriesTitleTemplate' })
+                    name    : 'series',
+                    label   : 'Series Title',
+                    sortable: false,
+                    cell    : NzbDrone.Cells.SeriesTitleCell
                 },
                 {
-                    name      : 'episode',
-                    label     : 'Episode',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/EpisodeColumnTemplate' })
+                    name    : 'this',
+                    label   : 'Episode',
+                    sortable: false,
+                    cell    : NzbDrone.Cells.EpisodeNumberCell
                 },
                 {
-                    name      : 'title',
-                    label     : 'Episode Title',
-                    sortable  : false,
-                    cell      : 'string'
+                    name    : 'this',
+                    label   : 'Episode Title',
+                    sortable: false,
+                    cell    : NzbDrone.Cells.EpisodeTitleCell
                 },
                 {
-                    name      : 'airDate',
-                    label     : 'Air Date',
-                    cell      : 'airDate'
-                },
-                {
-                    name      : 'edit',
-                    label     : '',
-                    sortable  : false,
-                    cell      : Backgrid.TemplateBackedCell.extend({ template: 'Missing/ControlsColumnTemplate' })
+                    name : 'airDate',
+                    label: 'Air Date',
+                    cell : NzbDrone.Cells.AirDateCell
                 }
             ],
 
@@ -59,7 +58,7 @@ define([
                     }));
 
                 this.pager.show(new Backgrid.NzbDronePaginator({
-                    columns: this.columns,
+                    columns   : this.columns,
                     collection: this.missingCollection
                 }));
             },
@@ -71,9 +70,9 @@ define([
 
                 this.missingCollection = new NzbDrone.Missing.Collection();
                 this.missingCollection.fetch()
-                                      .done(function () {
-                                          self._showTable();
-                                      });
+                    .done(function () {
+                        self._showTable();
+                    });
             }
         });
     });

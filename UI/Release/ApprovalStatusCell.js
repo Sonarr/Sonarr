@@ -1,5 +1,5 @@
 "use strict";
-NzbDrone.Shared.Cells.ApprovalStatusCell = Backgrid.Cell.extend({
+NzbDrone.Release.ApprovalStatusCell = Backgrid.Cell.extend({
 
     className: "approval-status-cell",
 

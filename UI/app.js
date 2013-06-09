@@ -62,12 +62,14 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
     window.NzbDrone.Commands = {};
 
     window.NzbDrone.Shared = {
-        Toolbar  : {},
-        Messenger: {},
-        Cells: {},
+        Toolbar      : {},
+        Messenger    : {},
         FormatHelpers: {}
 
     };
+
+    window.NzbDrone.Cells = {};
+
     window.NzbDrone.Calendar = {};
 
     window.NzbDrone.Settings = {
@@ -79,7 +81,7 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
         Indexers      : {},
         DownloadClient: {},
         Notifications : {},
-        General        : {},
+        General       : {},
         Misc          : {}
     };
 
