@@ -1,5 +1,11 @@
 "use strict";
-define(['app', 'Cells/FileSizeCell', 'Release/ApprovalStatusCell', 'Release/DownloadReportCell' ], function () {
+define([
+    'app',
+    'Cells/FileSizeCell',
+    'Cells/QualityCell',
+    'Release/ApprovalStatusCell',
+    'Release/DownloadReportCell'
+], function () {
 
     NzbDrone.Episode.Search.Layout = Backbone.Marionette.Layout.extend({
         template: 'Episode/Search/LayoutTemplate',
@@ -16,17 +22,24 @@ define(['app', 'Cells/FileSizeCell', 'Release/ApprovalStatusCell', 'Release/Down
                 cell    : Backgrid.IntegerCell
             },
             {
+                name    : 'title',
+                label   : 'Title',
+                sortable: true,
+                cell    : Backgrid.StringCell
+            },
+            {
                 name    : 'size',
                 label   : 'Size',
                 sortable: true,
                 cell    : NzbDrone.Cells.FileSizeCell
             },
             {
-                name    : 'title',
-                label   : 'Title',
+                name    : 'quality',
+                label   : 'Quality',
                 sortable: true,
-                cell    : Backgrid.StringCell
+                cell    : NzbDrone.Cells.QualityCell
             },
+
             {
                 name : 'rejections',
                 label: 'decision',

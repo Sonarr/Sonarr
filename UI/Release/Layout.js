@@ -7,7 +7,8 @@ define([
     'Shared/Toolbar/ToolbarLayout',
     'Cells/EpisodeNumberCell',
     'Cells/FileSizeCell',
-    'Cells/IndexerCell'
+    'Cells/IndexerCell',
+    'Cells/QualityCell'
 ],
     function () {
         NzbDrone.Release.Layout = Backbone.Marionette.Layout.extend({
@@ -25,12 +26,7 @@ define([
                     sortable: true,
                     cell    : NzbDrone.Cells.IndexerCell
                 },
-                {
-                    name    : 'size',
-                    label   : 'Size',
-                    sortable: true,
-                    cell    : NzbDrone.Cells.FileSizeCell
-                },
+
                 {
                     name    : 'title',
                     label   : 'Title',
@@ -43,6 +39,19 @@ define([
                     label   : 'season',
                     cell    : NzbDrone.Cells.EpisodeNumberCell
                 },
+                {
+                    name    : 'size',
+                    label   : 'Size',
+                    sortable: true,
+                    cell    : NzbDrone.Cells.FileSizeCell
+                },
+                {
+                    name    : 'quality',
+                    label   : 'Quality',
+                    sortable: true,
+                    cell    : NzbDrone.Cells.QualityCell
+                },
+
                 {
                     name : 'rejections',
                     label: 'decision',
