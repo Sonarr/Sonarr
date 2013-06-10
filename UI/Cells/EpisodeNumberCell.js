@@ -10,14 +10,14 @@ define(['app', 'Cells/NzbDroneCell'], function () {
             this.$el.empty();
 
             var airDateField = this.column.get('airDate') || 'airDate';
-            var seasonFiled = this.column.get('seasonNumber') || 'seasonNumber';
-            var episodeFiled = this.column.get('episodes') || 'episodeNumber';
+            var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
+            var episodeField = this.column.get('episodes') || 'episodeNumber';
 
             if (this.cellValue) {
 
                 var airDate = this.cellValue.get(airDateField);
-                var seasonNumber = this.cellValue.get(seasonFiled);
-                var episodes = this.cellValue.get(episodeFiled);
+                var seasonNumber = this.cellValue.get(seasonField);
+                var episodes = this.cellValue.get(episodeField);
 
                 var result = 'Unknown';
 

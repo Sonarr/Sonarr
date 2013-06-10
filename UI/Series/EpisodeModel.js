@@ -4,6 +4,7 @@ define(['app', 'Series/SeriesModel'], function () {
 
         mutators: {
             paddedEpisodeNumber: function () {
+                var test = this.get('episodeNumber');
                 return this.get('episodeNumber').pad(2);
             },
             day                : function () {
@@ -64,6 +65,16 @@ define(['app', 'Series/SeriesModel'], function () {
 
         toJSON: function () {
             var json = _.clone(this.attributes);
+
+            _.each(this.mutators, _.bind(function (mutator, name) {
+                // check if we have some getter mutations
+                if (_.isObject(this.mutators[name]) === true && _.isFunction(this.mutators[name].get)) {
+                    json[name] = _.bind(this.mutators[name].get, this)();
+                } else {
+                    json[name] = _.bind(this.mutators[name], this)();
+                }
+            }, this));
+            
             json.series = this.get('series').toJSON();
 
             return json;
