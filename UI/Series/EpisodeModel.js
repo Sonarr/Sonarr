@@ -74,9 +74,11 @@ define(['app', 'Series/SeriesModel'], function () {
                     json[name] = _.bind(this.mutators[name], this)();
                 }
             }, this));
-            
-            json.series = this.get('series').toJSON();
-
+           
+            if (this.has('series'))
+            {
+                json.series = this.get('series').toJSON();
+            }
             return json;
         },
 

@@ -1,6 +1,8 @@
 "use strict";
-define(['app'], function () {
-    NzbDrone.Cells.RelativeDateCell = Backgrid.Cell.extend({
+define(['app','Cells/NzbDroneCell'], function () {
+    NzbDrone.Cells.RelativeDateCell = NzbDrone.Cells.NzbDroneCell.extend({
+
+        className : 'relative-date-cell',
 
         render: function () {
 
