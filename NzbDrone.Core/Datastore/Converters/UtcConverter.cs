@@ -13,6 +13,11 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
+            if (clrValue == DBNull.Value)
+            {
+                return clrValue;
+            }
+
             var dateTime = (DateTime)clrValue;
             return dateTime.ToUniversalTime();
         }

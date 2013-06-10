@@ -28,9 +28,13 @@ define(['app'], function () {
 
             var value = this.model.get(name);
 
+            if(!value){
+                return undefined;
+            }
+
             //if not a model
             if (!value.get) {
-                return value = new Backbone.Model(value);
+                value = new Backbone.Model(value);
             }
 
             return value;

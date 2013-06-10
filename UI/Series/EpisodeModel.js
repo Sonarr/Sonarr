@@ -1,5 +1,5 @@
 "use strict";
-define(['app','Series/SeriesModel'], function () {
+define(['app', 'Series/SeriesModel'], function () {
     NzbDrone.Series.EpisodeModel = Backbone.Model.extend({
 
         mutators: {
@@ -60,6 +60,13 @@ define(['app','Series/SeriesModel'], function () {
             model.series = new NzbDrone.Series.SeriesModel(model.series);
 
             return model;
+        },
+
+        toJSON: function () {
+            var json = _.clone(this.attributes);
+            json.series = this.get('series').toJSON();
+
+            return json;
         },
 
         defaults: {

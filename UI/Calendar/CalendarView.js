@@ -64,7 +64,7 @@ define(['app', 'Calendar/Collection'], function () {
                 success: function (calendarCollection) {
                     _.each(calendarCollection.models, function (element) {
                         var episodeTitle = element.get('title');
-                        var seriesTitle = element.get('series').title;
+                        var seriesTitle = element.get('series').get('title');
                         var start = element.get('airDate');
 
                         element.set('title', seriesTitle);

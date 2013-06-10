@@ -7,26 +7,41 @@ define(['app', 'Cells/NzbDroneCell'], function () {
 
         render: function () {
 
-            var airDate = this.cellValue.get('airDate') || this.get(this.column.get("airDate"));
-            var seasonNumber = this.cellValue.get('seasonNumber') || this.model.get(this.column.get("seasonNumber"));
-            var episodes = this.cellValue.get('episodeNumber') || this.model.get(this.column.get("episodes"));
+            this.$el.empty();
 
-            var result = 'Unknown';
+            var airDateField = this.column.get('airDate') || 'airDate';
+            var seasonFiled = this.column.get('seasonNumber') || 'seasonNumber';
+            var episodeFiled = this.column.get('episodes') || 'episodeNumber';
 
-            if (airDate) {
+            if (this.cellValue) {
 
-                result = new Date(airDate).toLocaleDateString();
+                var airDate = this.cellValue.get(airDateField);
+                var seasonNumber = this.cellValue.get(seasonFiled);
+                var episodes = this.cellValue.get(episodeFiled);
+
+                var result = 'Unknown';
+
+                if (episodes) {
+
+                    var paddedEpisodes;
+
+                    if (episodes.constructor === Array) {
+                        paddedEpisodes = _.map(episodes,function (episodeNumber) {
+                            return episodeNumber.pad(2);
+                        }).join();
+                    }
+                    else {
+                        paddedEpisodes = episodes.pad(2);
+                    }
+
+                    result = 'S{0}-E{1}'.format(seasonNumber.pad(2), paddedEpisodes);
+                }
+                else if (airDate) {
+                    result = new Date(airDate).toLocaleDateString();
+                }
+
+                this.$el.html(result);
             }
-            else {
-
-                var paddedEpisodes = _.map(episodes, function (episodeNumber) {
-                    return episodeNumber.pad(2);
-                });
-
-                result = 'S{0}-E{1}'.format(seasonNumber, paddedEpisodes.join());
-            }
-
-            this.$el.html(result);
             this.delegateEvents();
             return this;
         }
