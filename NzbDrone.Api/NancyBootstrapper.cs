@@ -38,6 +38,7 @@ namespace NzbDrone.Api
             container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
+            pipelines.AfterRequest.AddItemToStartOfPipeline(GzipCompressionPipeline.Handle);
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }

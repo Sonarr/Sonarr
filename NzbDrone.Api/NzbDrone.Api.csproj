@@ -102,6 +102,7 @@
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
+    <Compile Include="Extensions\GZipPipeline.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Frontend\MediaCoverMapper.cs" />
     <Compile Include="Frontend\IMapHttpRequestsToDisk.cs" />
