@@ -2,8 +2,8 @@
 define([
     'app',
     'History/Collection',
+    'History/EventTypeCell',
     'Cells/RelativeDateCell',
-    'Cells/IndexerCell',
     'Cells/TemplatedCell',
     'Cells/SeriesTitleCell',
     'Cells/EpisodeNumberCell',
@@ -24,9 +24,9 @@ define([
 
             columns: [
                 {
-                    name : 'indexer',
-                    label: '',
-                    cell : NzbDrone.Cells.IndexerCell
+                    name: 'eventType',
+                    label:'',
+                    cell : NzbDrone.History.EventTypeCell
                 },
                 {
                     name    : 'series',

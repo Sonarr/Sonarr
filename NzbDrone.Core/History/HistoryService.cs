@@ -61,6 +61,7 @@ namespace NzbDrone.Core.History
             {
                 var history = new History
                 {
+                    EventType =  HistoryEventType.Grabbed,
                     Date = DateTime.UtcNow,
                     Quality = message.Episode.ParsedEpisodeInfo.Quality,
                     SourceTitle = message.Episode.Report.Title,
@@ -83,6 +84,7 @@ namespace NzbDrone.Core.History
             {
                 var history = new History
                     {
+                        EventType = HistoryEventType.DownloadFolderImported,
                         Date = DateTime.UtcNow,
                         Quality = message.EpisodeFile.Quality,
                         SourceTitle = message.EpisodeFile.Path,

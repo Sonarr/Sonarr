@@ -22,18 +22,18 @@ define(['app'], function () {
 
             var name = this.column.get('name');
 
-            if(name === 'this'){
+            if (name === 'this') {
                 return this.model;
             }
 
             var value = this.model.get(name);
 
-            if(!value){
+            if (!value) {
                 return undefined;
             }
 
             //if not a model
-            if (!value.get) {
+            if (!value.get && typeof value === 'object') {
                 value = new Backbone.Model(value);
             }
 

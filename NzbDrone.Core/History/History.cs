@@ -21,7 +21,18 @@ namespace NzbDrone.Core.History
         public Episode Episode { get; set; }
         public Series Series { get; set; }
 
+        public HistoryEventType EventType { get; set; }
+
         public Dictionary<string, string> Data { get; set; }
+    }
+
+
+    public enum HistoryEventType
+    {
+        Unknown = 0,
+        Grabbed = 1,
+        SeriesFolderImported = 2,
+        DownloadFolderImported = 3
     }
 
 }
