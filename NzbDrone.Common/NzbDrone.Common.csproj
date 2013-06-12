@@ -138,7 +138,7 @@
     <Compile Include="Messaging\TestCommandExecutor.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="ServiceFactory.cs" />
-    <Compile Include="StringExtention.cs" />
+    <Compile Include="StringExtension.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="Contract\ReportBase.cs" />
@@ -155,7 +155,6 @@
     <Compile Include="IServiceProvider.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TryParseExtension.cs" />
-    <Compile Include="UdpProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

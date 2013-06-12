@@ -329,6 +329,11 @@
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
     <Compile Include="Notifications\Email\EmailSettings.cs" />
+    <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
+    <Compile Include="Notifications\Xbmc\IApiProvider.cs" />
+    <Compile Include="Notifications\Xbmc\InvalidXbmcVersionException.cs" />
+    <Compile Include="Notifications\Xbmc\JsonApiProvider.cs" />
+    <Compile Include="Notifications\Xbmc\TestXbmcCommand.cs" />
     <Compile Include="Notifications\Xbmc\XbmcSettings.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
@@ -379,12 +384,10 @@
     <Compile Include="Download\Clients\Sabnzbd\SabModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabVersionModel.cs" />
-    <Compile Include="Model\Xbmc\ActionType.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersDharmaResult.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersEdenResult.cs" />
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
-    <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Model\Xbmc\XbmcJsonResult.cs" />
     <Compile Include="Model\Xbmc\XbmcVersion.cs" />
     <Compile Include="Model\Xem\XemResult.cs" />
@@ -492,10 +495,7 @@
     <Compile Include="Notifications\Email\EmailProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Xbmc\XbmcProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Xbmc\EventClientProvider.cs">
+    <Compile Include="Notifications\Xbmc\XbmcService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Notifications\Xbmc\ResourceManager.cs">

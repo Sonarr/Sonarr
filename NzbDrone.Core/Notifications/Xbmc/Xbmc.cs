@@ -5,9 +5,9 @@ namespace NzbDrone.Core.Notifications.Xbmc
 {
     public class Xbmc : NotificationBase<XbmcSettings>
     {
-        private readonly XbmcProvider _xbmcProvider;
+        private readonly IXbmcService _xbmcProvider;
 
-        public Xbmc(XbmcProvider xbmcProvider, Logger logger)
+        public Xbmc(IXbmcService xbmcProvider, Logger logger)
         {
             _xbmcProvider = xbmcProvider;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.Notifications.Xbmc
@@ -32,6 +33,9 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [FieldDefinition(7, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Checkbox)]
         public Boolean AlwaysUpdate { get; set; }
 
+        [JsonIgnore]
+        public String Address { get { return String.Format("{0}:{1}", Host, Port); } }
+        
         public bool IsValid
         {
             get
