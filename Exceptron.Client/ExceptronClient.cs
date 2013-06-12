@@ -255,11 +255,6 @@ namespace Exceptron.Client
 
                 var fileName = frame.GetFileName();
 
-                if (!string.IsNullOrWhiteSpace(fileName))
-                {
-                    fileName = new FileInfo(fileName).Name;
-                }
-
                 var currentFrame = new Frame
                 {
                     i = index,

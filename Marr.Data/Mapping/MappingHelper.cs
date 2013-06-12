@@ -65,8 +65,8 @@ namespace Marr.Data.Mapping
                 }
                 catch (Exception ex)
                 {
-                    string msg = string.Format("The DataMapper was unable to load the following field: '{0}'.",
-                        dataMap.ColumnInfo.Name);
+                    string msg = string.Format("The DataMapper was unable to load the following field: '{0}'. {1}",
+                        dataMap.ColumnInfo.Name, ex.Message);
 
                     throw new DataMappingException(msg, ex);
                 }
