@@ -11,8 +11,14 @@ define([
         template  : 'Settings/Notifications/EditTemplate',
 
         events: {
-            'click .x-save': '_saveNotification',
-            'click .x-remove': '_deleteNotification'
+            'click .x-save'   : '_saveNotification',
+            'click .x-remove' : '_deleteNotification',
+            'click .x-test'   : '_test'
+        },
+
+        ui: {
+            testButton : '.x-test',
+            testIcon   : '.x-test-icon'
         },
 
         initialize: function (options) {
@@ -40,6 +46,50 @@ define([
         _saveSuccess: function () {
             this.notificationCollection.add(this.model, { merge: true });
             NzbDrone.modalRegion.closeModal();
+        },
+
+        _test: function () {
+            var command = this.model.get('command');
+            if (command) {
+                this.idle = false;
+                this.ui.testButton.addClass('disabled');
+                this.ui.testIcon.removeClass('icon-question');
+                this.ui.testIcon.addClass('icon-spinner icon-spin');
+
+                var properties = {};
+
+                _.each(this.model.attributes.fields, function (field) {
+                    properties[field.name] = field.value;
+                });
+
+                var self = this;
+                var commandPromise = NzbDrone.Commands.Execute(command, properties);
+                commandPromise.done(function () {
+                    NzbDrone.Shared.Messenger.show({
+                        message: 'Notification settings tested successfully'
+                    });
+                });
+
+                commandPromise.fail(function (options) {
+                    if (options.readyState === 0 || options.status === 0) {
+                        return;
+                    }
+
+                    NzbDrone.Shared.Messenger.show({
+                        message: 'Failed to test notification settings',
+                        type   : 'error'
+                    });
+                });
+
+                commandPromise.always(function () {
+                    if (!self.isClosed) {
+                        self.ui.testButton.removeClass('disabled');
+                        self.ui.testIcon.addClass('icon-question');
+                        self.ui.testIcon.removeClass('icon-spinner icon-spin');
+                        self.idle = true;
+                    }
+                });
+            }
         }
     });
 });

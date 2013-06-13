@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
@@ -21,8 +22,6 @@ namespace NzbDrone.Api.Notifications
 
         private List<NotificationResource> GetSchema()
         {
-            //Need to get all the possible Notification's same as we would for settiings (but keep them empty)
-
             var notifications = _notificationService.Schema();
 
             var result = new List<NotificationResource>(notifications.Count);
@@ -32,6 +31,7 @@ namespace NzbDrone.Api.Notifications
                 var notificationResource = new NotificationResource();
                 notificationResource.InjectFrom(notification);
                 notificationResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+                notificationResource.Command = String.Format("test{0}", notification.Implementation.ToLowerInvariant());
 
                 result.Add(notificationResource);
             }

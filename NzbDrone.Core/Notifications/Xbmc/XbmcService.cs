@@ -107,10 +107,15 @@ namespace NzbDrone.Core.Notifications.Xbmc
                                    Username = message.Username,
                                    Password = message.Password
                                };
-
+             
             Logger.Trace("Determining version of XBMC Host: {0}", settings.Address);
             var version = GetJsonVersion(settings);
             Logger.Trace("Version is: {0}", version);
+
+            if (version == new XbmcVersion(0))
+            {
+                throw new InvalidXbmcVersionException("Verion received from XBMC is invalid, please correct your settings.");
+            }
 
             Notify(settings, "Test Notification", "Success! XBMC has been successfully configured!");
         }
