@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
 
@@ -34,12 +36,25 @@ namespace NzbDrone.Api.ClientSchema
                         field.Value = value;
                     }
 
+                    if (fieldAttribute.Type == FieldType.Select)
+                    {
+                        field.SelectOptions = GetSelectOptions(fieldAttribute.SelectOptions);
+                    }
+
                     result.Add(field);
                 }
             }
 
             return result;
 
+        }
+
+        private static List<SelectOption> GetSelectOptions(Type selectOptions)
+        {
+            var options = from Enum e in Enum.GetValues(selectOptions)
+                         select new SelectOption { Value = Convert.ToInt32(e), Name = e.ToString() };
+
+            return options.OrderBy(o => o.Value).ToList();
         }
     }
 }

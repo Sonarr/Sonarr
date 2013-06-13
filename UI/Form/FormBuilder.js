@@ -22,6 +22,10 @@ define(['app'], function () {
             return Handlebars.helpers.partial.apply(field, ['Form/CheckboxTemplate']);
         }
 
+        if (field.type === 'select') {
+            return Handlebars.helpers.partial.apply(field, ['Form/SelectTemplate']);
+        }
+
         return Handlebars.helpers.partial.apply(field, ['Form/TextboxTemplate']);
     };
 });

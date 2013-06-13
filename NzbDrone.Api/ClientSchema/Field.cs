@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Api.ClientSchema
+﻿using System.Collections.Generic;
+
+namespace NzbDrone.Api.ClientSchema
 {
     public class Field
     {
@@ -8,5 +10,6 @@
         public string HelpText { get; set; }
         public object Value { get; set; }
         public string Type { get; set; }
+        public List<SelectOption> SelectOptions { get; set; }
     }
 }

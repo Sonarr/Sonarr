@@ -1,0 +1,16 @@
+<div class="control-group">
+    <label class="control-label">{{label}}</label>
+
+    <div class="controls">
+        <select name="fields.{{order}}.value">
+            {{#each selectOptions}}
+                <option value="{{value}}">{{name}}</option>
+            {{/each}}
+        </select>
+        {{#if helpText}}
+            <span class="help-inline">
+                <i class="icon-question-sign" title="{{helpText}}"></i>
+            </span>
+        {{/if}}
+    </div>
+</div>

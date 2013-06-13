@@ -14,12 +14,14 @@ namespace NzbDrone.Core.Annotations
         public string Label { get; set; }
         public string HelpText { get; set; }
         public FieldType Type { get; set; }
+        public Type SelectOptions { get; set; }
     }
 
     public enum FieldType
     {
         Textbox,
         Password,
-        Checkbox
+        Checkbox,
+        Select
     }
 }

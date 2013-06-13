@@ -332,6 +332,7 @@
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
     <Compile Include="Notifications\Plex\TestPlexClientCommand.cs" />
     <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
+    <Compile Include="Notifications\Prowl\ProwlPriority.cs" />
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
     <Compile Include="Notifications\Email\EmailSettings.cs" />
     <Compile Include="Notifications\Prowl\TestProwlCommand.cs" />
