@@ -49,8 +49,8 @@ define([
         },
 
         _test: function () {
-            var command = this.model.get('command');
-            if (command) {
+            var testCommand = this.model.get('testCommand');
+            if (testCommand) {
                 this.idle = false;
                 this.ui.testButton.addClass('disabled');
                 this.ui.testIcon.removeClass('icon-question');
@@ -58,12 +58,12 @@ define([
 
                 var properties = {};
 
-                _.each(this.model.attributes.fields, function (field) {
+                _.each(this.model.get('fields'), function (field) {
                     properties[field.name] = field.value;
                 });
 
                 var self = this;
-                var commandPromise = NzbDrone.Commands.Execute(command, properties);
+                var commandPromise = NzbDrone.Commands.Execute(testCommand, properties);
                 commandPromise.done(function () {
                     NzbDrone.Shared.Messenger.show({
                         message: 'Notification settings tested successfully'
