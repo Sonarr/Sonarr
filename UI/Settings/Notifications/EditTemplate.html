@@ -57,19 +57,15 @@
         </div>
 
         {{formBuilder}}
-
-        <div class="control-group">
-            <label class="control-label">Test</label>
-            <div class="controls">
-                <button class="btn x-test"><i class="icon-question x-test-icon"/> Test</button>
-            </div>
-        </div>
+        index
     </div>
 </div>
 <div class="modal-footer">
     {{#if id}}
         <button class="btn btn-danger pull-left x-remove">delete</button>
     {{/if}}
+    <button class="btn x-test">test <i class="x-test-icon"/></button>
+
     <button class="btn" data-dismiss="modal">cancel</button>
     <button class="btn btn-primary x-save">save</button>
 </div>

@@ -53,7 +53,6 @@ define([
             if (testCommand) {
                 this.idle = false;
                 this.ui.testButton.addClass('disabled');
-                this.ui.testIcon.removeClass('icon-question');
                 this.ui.testIcon.addClass('icon-spinner icon-spin');
 
                 var properties = {};
@@ -84,7 +83,6 @@ define([
                 commandPromise.always(function () {
                     if (!self.isClosed) {
                         self.ui.testButton.removeClass('disabled');
-                        self.ui.testIcon.addClass('icon-question');
                         self.ui.testIcon.removeClass('icon-spinner icon-spin');
                         self.idle = true;
                     }
