@@ -5,14 +5,19 @@ namespace NzbDrone.Core.Notifications.Email
 {
     public class Email : NotificationBase<EmailSettings>
     {
-        private readonly EmailProvider _smtpProvider;
+        private readonly IEmailService _smtpProvider;
 
-        public Email(EmailProvider smtpProvider)
+        public Email(IEmailService smtpProvider)
         {
             _smtpProvider = smtpProvider;
         }
 
         public override string Name
+        {
+            get { return "Email"; }
+        }
+
+        public override string ImplementationName
         {
             get { return "Email"; }
         }

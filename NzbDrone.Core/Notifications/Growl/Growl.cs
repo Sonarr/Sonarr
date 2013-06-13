@@ -7,14 +7,19 @@ namespace NzbDrone.Core.Notifications.Growl
 {
     public class Growl : NotificationBase<GrowlSettings>
     {
-        private readonly GrowlProvider _growlProvider;
+        private readonly IGrowlService _growlProvider;
 
-        public Growl(GrowlProvider growlProvider)
+        public Growl(IGrowlService growlProvider)
         {
             _growlProvider = growlProvider;
         }
 
         public override string Name
+        {
+            get { return "Growl"; }
+        }
+
+        public override string ImplementationName
         {
             get { return "Growl"; }
         }

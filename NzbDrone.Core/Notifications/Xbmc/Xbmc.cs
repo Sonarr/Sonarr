@@ -17,6 +17,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             get { return "XBMC"; }
         }
 
+        public override string ImplementationName
+        {
+            get { return "XBMC"; }
+        }
+
         public override void OnGrab(string message)
         {
             const string header = "NzbDrone [TV] - Grabbed";

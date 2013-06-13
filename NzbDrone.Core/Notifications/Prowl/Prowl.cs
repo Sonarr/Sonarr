@@ -5,14 +5,19 @@ namespace NzbDrone.Core.Notifications.Prowl
 {
     public class Prowl : NotificationBase<ProwlSettings>
     {
-        private readonly ProwlProvider _prowlProvider;
+        private readonly IProwlService _prowlProvider;
 
-        public Prowl(ProwlProvider prowlProvider)
+        public Prowl(IProwlService prowlProvider)
         {
             _prowlProvider = prowlProvider;
         }
 
         public override string Name
+        {
+            get { return "Prowl"; }
+        }
+
+        public override string ImplementationName
         {
             get { return "Prowl"; }
         }

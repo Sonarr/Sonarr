@@ -185,7 +185,6 @@
     <Compile Include="DecisionEngineTests\QualityUpgradableSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
-    <Compile Include="NotificationTests\GrowlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />

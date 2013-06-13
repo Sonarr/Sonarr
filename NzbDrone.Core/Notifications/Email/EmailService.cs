@@ -2,19 +2,26 @@
 using System.Net;
 using System.Net.Mail;
 using NLog;
+using NzbDrone.Common.Messaging;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications.Email
 {
-    public class EmailProvider
+    public interface IEmailService
+    {
+        void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false);
+    }
+
+    public class EmailService : IEmailService, IExecute<TestEmailCommand>
     {
         private readonly Logger _logger;
 
-        public EmailProvider(Logger logger)
+        public EmailService(Logger logger)
         {
             _logger = logger;
         }
 
-        public virtual void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false)
+        public void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false)
         {
             var email = new MailMessage();
             email.From = new MailAddress(settings.From);
@@ -32,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Email
 
             try
             {
-                Send(email, settings.Server, settings.Port, settings.UseSsl, credentials);
+                Send(email, settings.Server, settings.Port, settings.Ssl, credentials);
             }
             catch(Exception ex)
             {
@@ -41,7 +48,7 @@ namespace NzbDrone.Core.Notifications.Email
             }
         }
 
-        public virtual void Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
+        private void Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
         {
             try
             {
@@ -59,6 +66,16 @@ namespace NzbDrone.Core.Notifications.Email
                 _logger.ErrorException("There was an error sending an email.", ex);
                 throw;
             }
+        }
+
+        public void Execute(TestEmailCommand message)
+        {
+            var settings = new EmailSettings();
+            settings.InjectFrom(message);
+
+            var body = "Success! You have properly configured your email notification settings";
+
+            SendEmail(settings, "NzbDrone - Test Notification", body);
         }
     }
 }

@@ -42,8 +42,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
                     .Returns(stream);
 
-            
-            var result = Mocker.Resolve<PlexProvider>().GetSectionKeys("localhost:32400");
+            var result = Mocker.Resolve<PlexService>().GetSectionKeys(new PlexServerSettings { Host = "localhost", Port = 32400 });
 
             
             result.Should().HaveCount(1);
@@ -62,7 +61,7 @@ namespace NzbDrone.Core.Test.NotificationTests
                     .Returns(stream);
 
             
-            var result = Mocker.Resolve<PlexProvider>().GetSectionKeys("localhost:32400");
+            var result = Mocker.Resolve<PlexService>().GetSectionKeys(new PlexServerSettings { Host = "localhost", Port = 32400 });
 
             
             result.Should().HaveCount(1);
@@ -80,8 +79,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadStream("http://localhost:32400/library/sections", null))
                     .Returns(stream);
 
-            
-            var result = Mocker.Resolve<PlexProvider>().GetSectionKeys("localhost:32400");
+
+            var result = Mocker.Resolve<PlexService>().GetSectionKeys(new PlexServerSettings { Host = "localhost", Port = 32400 });
 
             
             result.Should().HaveCount(2);
@@ -100,8 +99,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadString("http://localhost:32400/library/sections/5/refresh"))
                     .Returns(response);
 
-            
-            Mocker.Resolve<PlexProvider>().UpdateSection("localhost:32400", 5);
+
+            Mocker.Resolve<PlexService>().UpdateSection(new PlexServerSettings { Host = "localhost", Port = 32400 }, 5);
 
             
             
@@ -121,7 +120,7 @@ namespace NzbDrone.Core.Test.NotificationTests
                     .Returns("ok");
 
             
-            Mocker.Resolve<PlexProvider>().Notify(_clientSettings, header, message);
+            Mocker.Resolve<PlexService>().Notify(_clientSettings, header, message);
 
             
             fakeHttp.Verify(v => v.DownloadString(expectedUrl), Times.Once());
@@ -142,7 +141,7 @@ namespace NzbDrone.Core.Test.NotificationTests
                     .Returns("ok");
 
             
-            Mocker.Resolve<PlexProvider>().Notify(_clientSettings, header, message);
+            Mocker.Resolve<PlexService>().Notify(_clientSettings, header, message);
 
             
             fakeHttp.Verify(v => v.DownloadString(expectedUrl, "plex", "plex"), Times.Once());

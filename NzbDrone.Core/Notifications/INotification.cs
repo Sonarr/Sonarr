@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Notifications
     public interface INotification
     {
         string Name { get; }
+        string ImplementationName { get; }
 
         NotificationDefinition InstanceDefinition { get; set; }
 

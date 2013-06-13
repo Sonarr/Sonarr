@@ -6,14 +6,19 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexClient : NotificationBase<PlexClientSettings>
     {
-        private readonly PlexProvider _plexProvider;
+        private readonly IPlexService _plexProvider;
 
-        public PlexClient(PlexProvider plexProvider)
+        public PlexClient(IPlexService plexProvider)
         {
             _plexProvider = plexProvider;
         }
 
         public override string Name
+        {
+            get { return "Plex Client"; }
+        }
+
+        public override string ImplementationName
         {
             get { return "Plex Client"; }
         }

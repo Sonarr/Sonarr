@@ -20,7 +20,6 @@ define([
 
         addNotification: function () {
             this.model.set('id', undefined);
-            this.model.set('name', '');
             var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model, notificationCollection: this.notificationCollection });
             NzbDrone.modalRegion.show(view);
         }

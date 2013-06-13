@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Notifications
     public abstract class NotificationBase<TSetting> : INotification where TSetting : class, INotifcationSettings, new()
     {
         public abstract string Name { get; }
+        public abstract string ImplementationName { get; }
 
         public NotificationDefinition InstanceDefinition { get; set; }
 

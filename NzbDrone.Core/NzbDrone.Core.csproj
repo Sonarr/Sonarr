@@ -266,7 +266,9 @@
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
+    <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
+    <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />
     <Compile Include="Notifications\NotificationSettingsProvider.cs" />
     <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\Notification.cs" />
@@ -324,11 +326,15 @@
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\Show.cs" />
     <Compile Include="Notifications\INotifcationSettings.cs" />
+    <Compile Include="Notifications\Plex\TestPlexServerCommand.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
+    <Compile Include="Notifications\Plex\TestPlexClientCommand.cs" />
+    <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
     <Compile Include="Notifications\Email\EmailSettings.cs" />
+    <Compile Include="Notifications\Prowl\TestProwlCommand.cs" />
     <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\IApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\InvalidXbmcVersionException.cs" />
@@ -454,7 +460,7 @@
     <Compile Include="Notifications\Xbmc\Xbmc.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Growl\GrowlProvider.cs">
+    <Compile Include="Notifications\Growl\GrowlService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="History\HistoryService.cs">
@@ -472,11 +478,11 @@
     <Compile Include="MediaFiles\MediaFileService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Plex\PlexProvider.cs" />
+    <Compile Include="Notifications\Plex\PlexService.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Prowl\ProwlProvider.cs">
+    <Compile Include="Notifications\Prowl\ProwlService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Qualities\QualityProfileService.cs">
@@ -492,7 +498,7 @@
     <Compile Include="Tv\SeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Email\EmailProvider.cs">
+    <Compile Include="Notifications\Email\EmailService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Notifications\Xbmc\XbmcService.cs">

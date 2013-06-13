@@ -6,14 +6,19 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexServer : NotificationBase<PlexServerSettings>
     {
-        private readonly PlexProvider _plexProvider;
+        private readonly IPlexService _plexProvider;
 
-        public PlexServer(PlexProvider plexProvider)
+        public PlexServer(IPlexService plexProvider)
         {
             _plexProvider = plexProvider;
         }
 
         public override string Name
+        {
+            get { return "Plex Server"; }
+        }
+
+        public override string ImplementationName
         {
             get { return "Plex Server"; }
         }
@@ -36,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             if (Settings.UpdateLibrary)
             {
-                _plexProvider.UpdateLibrary(Settings.Host);
+                _plexProvider.UpdateLibrary(Settings);
             }
         }
     }

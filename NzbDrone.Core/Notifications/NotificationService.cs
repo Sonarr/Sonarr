@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Notifications
                 var newNotification = new Notification();
                 newNotification.Instance = (INotification)_container.Resolve(type);
                 newNotification.Id = i;
-                newNotification.Name = notification.Name;
+                newNotification.ImplementationName = notification.ImplementationName;
 
                 var instanceType = newNotification.Instance.GetType();
                 var baseGenArgs = instanceType.BaseType.GetGenericArguments();
@@ -120,6 +120,7 @@ namespace NzbDrone.Core.Notifications
             notification.Instance = GetInstance(definition);
             notification.Name = definition.Name;
             notification.Implementation = definition.Implementation;
+            notification.ImplementationName = notification.Instance.ImplementationName;
             notification.Settings = ((dynamic)notification.Instance).ImportSettingsFromJson(definition.Settings);
 
             return notification;
