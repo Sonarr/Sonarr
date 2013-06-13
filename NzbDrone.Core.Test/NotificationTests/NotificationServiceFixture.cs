@@ -71,8 +71,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             notifications.Should().NotBeEmpty();
             notifications.Should().NotContain(c => c.Settings == null);
             notifications.Should().NotContain(c => c.Instance == null);
-            notifications.Should().NotContain(c => c.Name == null);
-            notifications.Select(c => c.Name).Should().OnlyHaveUniqueItems();
+            notifications.Should().NotContain(c => c.ImplementationName == null);
+            notifications.Select(c => c.ImplementationName).Should().OnlyHaveUniqueItems();
             notifications.Select(c => c.Instance).Should().OnlyHaveUniqueItems();
             notifications.Select(c => c.Id).Should().OnlyHaveUniqueItems();
         }
