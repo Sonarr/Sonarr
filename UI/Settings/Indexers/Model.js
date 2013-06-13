@@ -1,5 +1,6 @@
 ﻿"use strict";
-define(['app', 'Mixins/SaveIfChangedModel'], function () {
+define(['app',
+        'Mixins/SaveIfChangedModel'], function () {
     NzbDrone.Settings.Indexers.Model = Backbone.DeepModel.extend({
     });
 

@@ -14,7 +14,8 @@ define(['app',
         },
 
         initialize: function () {
-            NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this.saveSettings, this);
+            NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this._saveSettings, this);
+            this.savedCount = 0;
         },
 
         openSchemaModal: function () {
@@ -35,12 +36,25 @@ define(['app',
             });
         },
 
-        saveSettings: function () {
+        _saveSettings: function () {
+            var self = this;
+
             _.each(this.collection.models, function (model, index, list) {
                 model.saveIfChanged(NzbDrone.Settings.SyncNotificaiton.callback({
-                    errorMessage: 'Failed to save indexer: ' + model.get('name')
+                    errorMessage: 'Failed to save indexer: ' + model.get('name'),
+                    successCallback: self._saveSuccessful,
+                    context: self
                 }));
             });
+
+            if (self.savedCount > 0) {
+                NzbDrone.Shared.Messenger.show({message: 'Indexer settings saved'});
+            }
+
+            this.savedCount = 0;
+        },
+        _saveSuccessful: function () {
+            this.savedCount++;
         }
     });
 });

@@ -1,12 +1,10 @@
 ﻿'use strict';
-define(['app', 'Settings/Naming/NamingModel'], function () {
+define(['app',
+        'Settings/Naming/NamingModel',
+        'Settings/SyncNotification'], function () {
 
     NzbDrone.Settings.Naming.NamingView = Backbone.Marionette.ItemView.extend({
         template : 'Settings/Naming/NamingTemplate',
-
-        ui: {
-            tooltip: '[class^="help-inline"] i'
-        },
 
         initialize: function () {
             this.model = new NzbDrone.Settings.Naming.NamingModel();
@@ -15,13 +13,8 @@ define(['app', 'Settings/Naming/NamingModel'], function () {
             NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this.saveSettings, this);
         },
 
-        onRender: function () {
-            //TODO: Move this to a mixin
-            this.ui.tooltip.tooltip({ placement: 'right' });
-        },
-
         saveSettings: function () {
-            this.model.save(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+            this.model.saveIfChanged(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
                 successMessage: 'Naming Settings saved',
                 errorMessage: "Failed to save Naming Settings"
             }));

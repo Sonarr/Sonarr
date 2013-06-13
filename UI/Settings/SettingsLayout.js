@@ -168,19 +168,11 @@ define([
 
                 NzbDrone.vent.trigger(NzbDrone.Commands.SaveSettings);
 
-                this.settings.save(undefined,
-                    {
-                        success: function () {
-                            window.alert('Saved');
-                        },
-                        error  : function () {
-                            window.alert("couldn't save settings");
-                        }
-                    });
-
+                this.settings.saveIfChanged(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+                    successMessage: 'Settings saved',
+                    errorMessage: "Failed to save settings"
+                }));
             }
-        })
-        ;
-    })
-;
+        });
+    });
 
