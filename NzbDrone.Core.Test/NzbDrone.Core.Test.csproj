@@ -150,12 +150,10 @@
     <Compile Include="MetadataSourceTests\TracktProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
-    <Compile Include="NotificationTests\Xbmc\HttpApiProviderFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\CheckForErrorFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\GetSeriesPathFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\UpdateFixture.cs" />
-    <Compile Include="NotificationTests\Xbmc\JsonApiProviderFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\ActivePlayersFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\CheckForErrorFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\GetSeriesPathFixture.cs" />
@@ -198,7 +196,6 @@
     <Compile Include="HelperTests\SortHelperTest.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
-    <Compile Include="NotificationTests\Xbmc\XbmcServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />

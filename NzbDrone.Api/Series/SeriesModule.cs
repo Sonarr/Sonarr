@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Nancy;
+using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Validation;
@@ -14,12 +15,14 @@ namespace NzbDrone.Api.Series
     {
         private readonly ISeriesService _seriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
+        private readonly IMapCoversToLocal _coverMapper;
 
-        public SeriesModule(ISeriesService seriesService, ISeriesStatisticsService seriesStatisticsService)
+        public SeriesModule(ISeriesService seriesService, ISeriesStatisticsService seriesStatisticsService, IMapCoversToLocal coverMapper)
             : base("/Series")
         {
             _seriesService = seriesService;
             _seriesStatisticsService = seriesStatisticsService;
+            _coverMapper = coverMapper;
 
             GetResourceAll = AllSeries;
             GetResourceById = GetSeries;
@@ -51,9 +54,9 @@ namespace NzbDrone.Api.Series
         private List<SeriesResource> AllSeries()
         {
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
-            var seriesModels = ToListResource(_seriesService.GetAllSeries);
+            var seriesResources = ToListResource(_seriesService.GetAllSeries);
 
-            foreach (var s in seriesModels)
+            foreach (var s in seriesResources)
             {
                 var stats = seriesStats.SingleOrDefault(ss => ss.SeriesId == s.Id);
                 if (stats == null) continue;
@@ -64,12 +67,18 @@ namespace NzbDrone.Api.Series
                 s.NextAiring = stats.NextAiring;
             }
 
-            return seriesModels;
+            MapCoversToLocal(seriesResources.ToArray());
+
+            return seriesResources;
         }
 
         private SeriesResource GetSeries(int id)
         {
-            return ToResource(_seriesService.GetSeries, id);
+            var resource = ToResource(_seriesService.GetSeries, id);
+
+            MapCoversToLocal(resource);
+
+            return resource;
         }
 
         private SeriesResource AddSeries(SeriesResource seriesResource)
@@ -91,6 +100,14 @@ namespace NzbDrone.Api.Series
         {
             var deleteFiles = Convert.ToBoolean(Request.Headers["deleteFiles"].FirstOrDefault());
             _seriesService.DeleteSeries(id, deleteFiles);
+        }
+
+        private void MapCoversToLocal(params SeriesResource[] series)
+        {
+            foreach (var seriesResource in series)
+            {
+                _coverMapper.ConvertToLocalUrls(seriesResource.Id, seriesResource.Images);
+            }
         }
     }
 

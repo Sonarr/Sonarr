@@ -17,14 +17,27 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
 
                 return percent;
             },
-            banner           : function () {
-                return "/mediacover/" + this.get('id') + "/banner.jpg";
-            },
             poster           : function () {
-                return "/mediacover/" + this.get('id') + "/poster.jpg";
+                var poster = _.find(this.get('images'), function (image) {
+                    return image.coverType === 'poster';
+                });
+
+                if (poster) {
+                    return poster.url;
+                }
+
+                return undefined;
             },
             fanArt           : function () {
-                return "/mediacover/" + this.get('id') + "/fanart.jpg";
+                var poster = _.find(this.get('images'), function (image) {
+                    return image.coverType === 3;
+                });
+
+                if (poster) {
+                    return poster.url;
+                }
+
+                return undefined;
             },
             traktUrl         : function () {
                 return "http://trakt.tv/show/" + this.get('titleSlug');

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -11,7 +9,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.Notifications.Plex;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.NotificationTests
 {
     [TestFixture]
     

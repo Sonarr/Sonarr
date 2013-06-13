@@ -1,20 +1,8 @@
-﻿using System;
-
-using FizzWare.NBuilder;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Notifications;
+﻿using NUnit.Framework;
 using NzbDrone.Core.Notifications.Growl;
-using NzbDrone.Core.Providers;
-
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
-
-
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.NotificationTests
 {
     [Explicit]
     [TestFixture]

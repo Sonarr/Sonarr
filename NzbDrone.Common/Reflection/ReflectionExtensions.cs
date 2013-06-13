@@ -33,8 +33,7 @@ namespace NzbDrone.Common.Reflection
                    || type == typeof(string)
                    || type == typeof(DateTime)
                    || type == typeof(Version)
-                   || type == typeof(Decimal)
-                   || type.GetInterface("IEmbeddedDocument") != null;
+                   || type == typeof(Decimal);
         }
 
         public static bool IsReadable(this PropertyInfo propertyInfo)

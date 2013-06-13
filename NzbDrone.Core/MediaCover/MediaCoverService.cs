@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -10,7 +11,8 @@ namespace NzbDrone.Core.MediaCover
 {
     public class MediaCoverService :
         IHandleAsync<SeriesUpdatedEvent>,
-        IHandleAsync<SeriesDeletedEvent>
+        IHandleAsync<SeriesDeletedEvent>,
+        IMapCoversToLocal
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IDiskProvider _diskProvider;
@@ -80,5 +82,26 @@ namespace NzbDrone.Core.MediaCover
         {
             return Path.Combine(_coverRootFolder, seriesId.ToString());
         }
+
+        public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
+        {
+            foreach (var mediaCover in covers)
+            {
+                var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
+
+                mediaCover.Url = @"/mediacover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
+
+                if (_diskProvider.FileExists(filePath))
+                {
+                    var lastWrite = _diskProvider.GetLastFileWrite(filePath);
+                    mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
+                }
+            }
+        }
+    }
+
+    public interface IMapCoversToLocal
+    {
+        void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
     }
 }
