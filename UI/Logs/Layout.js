@@ -2,7 +2,8 @@
 define([
     'app',
     'Logs/Collection',
-    'Shared/Toolbar/ToolbarLayout'
+    'Shared/Toolbar/ToolbarLayout',
+    'Shared/Grid/Pager'
 ],
     function () {
         NzbDrone.Logs.Layout = Backbone.Marionette.Layout.extend({
@@ -50,7 +51,7 @@ define([
                         className : 'table table-hover'
                     }));
 
-                this.pager.show(new Backgrid.NzbDronePaginator({
+                this.pager.show(new NzbDrone.Shared.Grid.Pager({
                     columns   : this.columns,
                     collection: this.collection
                 }));

@@ -10,6 +10,7 @@ define([
     'Cells/EpisodeNumberCell',
     'Cells/EpisodeTitleCell',
     'Cells/AirDateCell',
+    'Shared/Grid/Pager',
     'Shared/LoadingView'
 ],
     function () {
@@ -57,7 +58,7 @@ define([
                         className : 'table table-hover'
                     }));
 
-                this.pager.show(new Backgrid.NzbDronePaginator({
+                this.pager.show(new NzbDrone.Shared.Grid.Pager({
                     columns   : this.columns,
                     collection: this.missingCollection
                 }));

@@ -1,19 +1,22 @@
 "use strict";
-NzbDrone.Release.ApprovalStatusCell = Backgrid.Cell.extend({
 
-    className: "approval-status-cell",
+require(['app', 'backgrid'], function () {
+    NzbDrone.Release.ApprovalStatusCell = Backgrid.Cell.extend({
 
-    render: function () {
-        var rejections = this.model.get(this.column.get("name"));
+        className: "approval-status-cell",
 
-        var result = '';
+        render: function () {
+            var rejections = this.model.get(this.column.get("name"));
 
-        _.each(rejections, function (reason) {
-            result += reason + ' ';
-        });
+            var result = '';
 
-        this.$el.html(result);
-        this.delegateEvents();
-        return this;
-    }
+            _.each(rejections, function (reason) {
+                result += reason + ' ';
+            });
+
+            this.$el.html(result);
+            this.delegateEvents();
+            return this;
+        }
+    });
 });

@@ -10,6 +10,8 @@ define([
     'Cells/EpisodeTitleCell',
     'Cells/QualityCell',
     'Shared/Toolbar/ToolbarLayout',
+    'Shared/Grid/Pager',
+    'Shared/Grid/HeaderCell',
     'Shared/LoadingView'
 ],
     function () {
@@ -67,7 +69,7 @@ define([
                         className : 'table table-hover'
                     }));
 
-                this.pager.show(new Backgrid.NzbDronePaginator({
+                this.pager.show(new NzbDrone.Shared.Grid.Pager({
                     columns   : this.columns,
                     collection: this.historyCollection
                 }));

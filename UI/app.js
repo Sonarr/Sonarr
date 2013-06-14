@@ -3,9 +3,11 @@ require.config({
 
     paths: {
         'backbone'  : 'JsLibraries/backbone',
+        '$'         : 'JsLibraries/jquery',
         'underscore': 'JsLibraries/underscore',
         'marionette': 'JsLibraries/backbone.marionette',
-        'handlebars': 'JsLibraries/handlebars'
+        'handlebars': 'JsLibraries/handlebars',
+        'libs'      : 'JsLibraries/'
     },
 
     shim: {
@@ -13,7 +15,7 @@ require.config({
             exports: '_'
         },
         backbone  : {
-            deps   : ['underscore'],
+            deps   : ['underscore', '$'],
             exports: 'Backbone'
         },
         marionette: {
@@ -22,11 +24,19 @@ require.config({
         },
         handlebars: {
             exports: 'Handlebars'
+        },
+
+        backbone_backgrid :{
+            exports: 'backgrid'
+        },
+
+        backgrid  : {
+            deps: ['backbone', 'libs/backbone.backgrid', 'libs/backbone.backgrid.paginator']
         }
     }
 });
 
-define('app', ['shared/modal/region'], function (ModalRegion) {
+define(['backbone','backgrid'], function (ModalRegion) {
 
     window.NzbDrone = new Backbone.Marionette.Application();
     window.NzbDrone.Config = {};
@@ -64,7 +74,8 @@ define('app', ['shared/modal/region'], function (ModalRegion) {
     window.NzbDrone.Shared = {
         Toolbar      : {},
         Messenger    : {},
-        FormatHelpers: {}
+        FormatHelpers: {},
+        Grid         : {}
 
     };
 
