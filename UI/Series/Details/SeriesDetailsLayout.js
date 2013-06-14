@@ -20,7 +20,12 @@ define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView'], fun
             onShow: function () {
                 var self = this;
 
-                $.backstretch(this.model.get('fanArt'));
+                if (this.model.has('fanArt')) {
+                    $.backstretch(this.model.get('fanArt'));
+                }
+                else {
+                    $('body').removeClass('backdrop');
+                }
 
                 this.seasons.show(new NzbDrone.Shared.LoadingView());
 

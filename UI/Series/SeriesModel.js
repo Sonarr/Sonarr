@@ -30,7 +30,7 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
             },
             fanArt           : function () {
                 var poster = _.find(this.get('images'), function (image) {
-                    return image.coverType === 3;
+                    return image.coverType === 'fanart';
                 });
 
                 if (poster) {
