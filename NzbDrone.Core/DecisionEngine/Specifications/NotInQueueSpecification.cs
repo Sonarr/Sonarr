@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
-            var queue = downloadClient.GetQueue().Select(q => Parser.Parser.ParseTitle(q.Title));
+            var queue = downloadClient.GetQueue().Select(queueItem => Parser.Parser.ParseTitle(queueItem.Title)).Where(episodeInfo => episodeInfo != null);
 
             return !IsInQueue(subject, queue);
         }
