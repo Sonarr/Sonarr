@@ -58,7 +58,7 @@ namespace Marr.Data.Mapping
                         dbValue = dataMap.Converter.FromDB(dataMap, dbValue);
                     }
 
-                    if (dbValue != DBNull.Value)
+                    if (dbValue != DBNull.Value && dbValue != null)
                     {
                         dataMap.Setter(ent, dbValue);
                     }
