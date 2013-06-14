@@ -1,15 +1,15 @@
 'use strict';
-define(['app'], function () {
-    Handlebars.registerHelper('formBuilder', function (){
+define(['app', 'handlebars'], function (App,Handlebars) {
+    Handlebars.registerHelper('formBuilder', function () {
         var ret = "";
-        _.each(this.fields, function(field){
+        _.each(this.fields, function (field) {
             ret += NzbDrone.Form.FieldBuilder(field);
         });
 
         return new Handlebars.SafeString(ret);
     });
 
-    NzbDrone.Form.FieldBuilder = function(field) {
+    NzbDrone.Form.FieldBuilder = function (field) {
         if (!field.type) {
             return Handlebars.helpers.partial.apply(field, ['Form/TextboxTemplate']);
         }

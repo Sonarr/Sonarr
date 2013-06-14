@@ -76,9 +76,10 @@ module.exports = function (grunt) {
 
         handlebars: {
             options: {
-                namespace  : "Templates",
+                namespace   : "Templates",
                 partialRegex: /Partial.html/,
-                wrapped    : true,
+                wrapped     : true,
+                amd         : true,
                 processName: function (fileName) {
                     return fileName
                         .replace('UI/', '')

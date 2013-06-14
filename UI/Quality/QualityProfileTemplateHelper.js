@@ -1,6 +1,6 @@
 'use strict';
 
-define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfiles) {
+define(['app', 'Quality/QualityProfileCollection','handlebars'], function (app, qualityProfiles,Handlebars) {
 
     Handlebars.registerHelper('qualityProfileSelection', function () {
 

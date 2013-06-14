@@ -1,6 +1,6 @@
 'use strict';
 
-define(['app', 'AddSeries/RootFolders/RootFolderCollection'], function (app, rootFolders) {
+define(['app', 'AddSeries/RootFolders/RootFolderCollection','handlebars'], function (app, rootFolders, Handlebars) {
 
     Handlebars.registerHelper('rootFolderSelection', function () {
         //TODO: We should be able to pass in the context, either an object or a property

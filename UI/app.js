@@ -3,6 +3,7 @@ require.config({
 
     paths: {
         'backbone'          : 'JsLibraries/backbone',
+        'handlebars'        : 'JsLibraries/handlebars.runtime',
         'bootstrap'         : 'JsLibraries/bootstrap',
         'bootstrap.slider'  : 'JsLibraries/bootstrap.slider',
         'backbone.mutators' : 'JsLibraries/backbone.mutators',
@@ -15,7 +16,6 @@ require.config({
         '$'                 : 'JsLibraries/jquery',
         'underscore'        : 'JsLibraries/underscore',
         'marionette'        : 'JsLibraries/backbone.marionette',
-        'handlebars'        : 'JsLibraries/handlebars',
         'signalR'           : 'JsLibraries/jquery.signalR',
         'libs'              : 'JsLibraries/'
     },
@@ -60,10 +60,6 @@ require.config({
             init   : function () {
                 require(['mixins/backbone.marionette.templates']);
             }
-        },
-
-        handlebars: {
-            exports: 'Handlebars'
         },
 
         signalR: {

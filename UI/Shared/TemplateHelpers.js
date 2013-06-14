@@ -1,6 +1,6 @@
 "use strict";
 
-define(['app'], function () {
+define(['app','handlebars'], function (App,Handlebars) {
     Handlebars.registerHelper('partial', function (templateName) {
         //TODO: We should be able to pass in the context, either an object or a property
 
