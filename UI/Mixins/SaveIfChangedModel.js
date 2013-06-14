@@ -1,8 +1,8 @@
 "use strict";
-(function () {
+define(['app'], function () {
 
     NzbDrone.Mixins.SaveIfChangedModel = {
-//        originalInitialize: this.initialize,
+        //        originalInitialize: this.initialize,
 
         initialize: function () {
             this.isSaved = true;
@@ -15,9 +15,9 @@
                 this.isSaved = true;
             }, this);
 
-//            if (originalInitialize) {
-//                originalInitialize.call(this);
-//            }
+            //            if (originalInitialize) {
+            //                originalInitialize.call(this);
+            //            }
         },
 
         saveIfChanged: function (options) {
@@ -26,4 +26,6 @@
             }
         }
     };
-}());
+
+    return NzbDrone.Missing.SaveIfChangedModel;
+});

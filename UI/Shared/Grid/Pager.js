@@ -1,20 +1,8 @@
 "use strict";
-
-Backgrid.Column.prototype.defaults = {
-    name      : undefined,
-    label     : undefined,
-    sortable  : true,
-    editable  : false,
-    renderable: true,
-    formatter : undefined,
-    cell      : undefined,
-    headerCell: 'nzbDrone'
-};
-
-
 define([
     'app',
-    'JsLibraries/backbone.backgrid.paginator'
+    'backgrid',
+    'backgrid.paginator'
 ], function () {
 
     NzbDrone.Shared.Grid.Pager = Backgrid.Extension.Paginator.extend({
@@ -153,4 +141,6 @@ define([
             return this;
         }
     });
+
+    return NzbDrone.Shared.Grid.Pager;
 });

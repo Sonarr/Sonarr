@@ -1,6 +1,6 @@
 "use strict";
 
-define(['app', 'Shared/FormatHelpers'], function () {
+define(['app', 'Shared/FormatHelpers','backgrid'], function () {
     NzbDrone.Cells.FileSizeCell = Backgrid.Cell.extend({
 
         className: "file-size-cell",

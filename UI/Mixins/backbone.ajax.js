@@ -1,6 +1,6 @@
 //try to add ajax data as query string to DELETE calls.
 "use strict";
-(function () {
+define(['jquery'], function () {
 
     var original = Backbone.ajax;
 
@@ -20,4 +20,4 @@
 
         return original.apply(this, arguments);
     };
-}());
+});

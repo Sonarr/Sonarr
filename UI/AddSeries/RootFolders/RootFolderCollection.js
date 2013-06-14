@@ -1,5 +1,5 @@
 ﻿"use strict";
-define(['app', 'AddSeries/RootFolders/RootFolderModel'], function () {
+define(['app', 'AddSeries/RootFolders/RootFolderModel','mixins/backbone.signalr.mixin'], function () {
 
     var rootFolderCollection = Backbone.Collection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/rootfolder',

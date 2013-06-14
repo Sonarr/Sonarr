@@ -1,5 +1,5 @@
 ﻿"use strict";
-define(['app'], function () {
-    NzbDrone.Settings.Notifications.Model = Backbone.DeepModel.extend({
+define(['app', 'backbone.deepmodel'], function (App, DeepModel) {
+    NzbDrone.Settings.Notifications.Model = DeepModel.DeepModel.extend({
     });
 });

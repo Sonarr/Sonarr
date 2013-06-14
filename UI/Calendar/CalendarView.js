@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-define(['app', 'Calendar/Collection'], function () {
+define(['app', 'Calendar/Collection','fullcalendar'], function () {
     NzbDrone.Calendar.CalendarView = Backbone.Marionette.ItemView.extend({
         initialize                   : function () {
             this.collection = new NzbDrone.Calendar.Collection();

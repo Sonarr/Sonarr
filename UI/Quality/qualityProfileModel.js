@@ -1,6 +1,6 @@
 ﻿"use strict";
-define(['app'], function () {
-    NzbDrone.Quality.QualityProfileModel = Backbone.DeepModel.extend({
+define(['app', 'backbone.deepmodel'], function (App, DeepModel) {
+    NzbDrone.Quality.QualityProfileModel = DeepModel.DeepModel.extend({
 
         defaults: {
             id    : null,

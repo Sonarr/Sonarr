@@ -1,6 +1,6 @@
 ﻿"use strict";
-define(['app', 'Series/SeasonModel'], function () {
-    NzbDrone.Series.SeasonCollection = Backbone.PageableCollection.extend({
+define(['app', 'Series/SeasonModel', 'backbone.pageable'], function (App, SeasonModel, PageAbleCollection) {
+    NzbDrone.Series.SeasonCollection = PageAbleCollection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/season',
         model: NzbDrone.Series.SeasonModel,
 

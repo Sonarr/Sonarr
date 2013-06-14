@@ -1,5 +1,5 @@
 "use strict";
-define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView'], function () {
+define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView','backstrech'], function () {
         NzbDrone.Series.Details.SeriesDetailsLayout = Backbone.Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',

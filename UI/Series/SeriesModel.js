@@ -66,7 +66,7 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
 
                 var profile = qualityProfiles.get(this.get('qualityProfileId'));
 
-                if(profile){
+                if (profile) {
                     return profile.toJSON();
                 }
 
@@ -81,5 +81,7 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
             status          : 0
         }
     });
+
+    return NzbDrone.Series.SeriesModel;
 
 });

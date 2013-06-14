@@ -2,43 +2,110 @@
 require.config({
 
     paths: {
-        'backbone'  : 'JsLibraries/backbone',
-        '$'         : 'JsLibraries/jquery',
-        'underscore': 'JsLibraries/underscore',
-        'marionette': 'JsLibraries/backbone.marionette',
-        'handlebars': 'JsLibraries/handlebars',
-        'libs'      : 'JsLibraries/'
+        'backbone'          : 'JsLibraries/backbone',
+        'bootstrap'         : 'JsLibraries/bootstrap',
+        'bootstrap.slider'  : 'JsLibraries/bootstrap.slider',
+        'backbone.mutators' : 'JsLibraries/backbone.mutators',
+        'backbone.deepmodel': 'JsLibraries/backbone.deep.model',
+        'backbone.pageable' : 'JsLibraries/backbone.pageable',
+        'backgrid'          : 'JsLibraries/backbone.backgrid',
+        'backgrid.paginator': 'JsLibraries/backbone.backgrid.paginator',
+        'fullcalendar'      : 'JsLibraries/fullcalendar',
+        'backstrech'        : 'JsLibraries/jquery.backstretch',
+        '$'                 : 'JsLibraries/jquery',
+        'underscore'        : 'JsLibraries/underscore',
+        'marionette'        : 'JsLibraries/backbone.marionette',
+        'handlebars'        : 'JsLibraries/handlebars',
+        'signalR'           : 'JsLibraries/jquery.signalR',
+        'libs'              : 'JsLibraries/'
     },
 
     shim: {
-        underscore: {
-            exports: '_'
+
+        $: {
+            exports: '$'
         },
-        backbone  : {
+
+        bootstrap: {
+            deps: ['$']
+        },
+
+        'bootstrap.slider': {
+            deps: ['$']
+        },
+
+        backstrech: {
+            deps: ['$']
+        },
+
+        'underscore': {
+            dep    : ['$'],
+            exports: '_',
+            init   : function () {
+                require(['mixins/underscore.mixin.deepExtend']);
+            }
+        },
+
+        backbone: {
             deps   : ['underscore', '$'],
-            exports: 'Backbone'
+            exports: 'Backbone',
+            init   : function () {
+                require(['libs/backbone.mutators']);
+            }
         },
+
         marionette: {
             deps   : ['backbone'],
-            exports: 'Marionette'
+            exports: 'Marionette',
+            init   : function () {
+                require(['mixins/backbone.marionette.templates']);
+            }
         },
+
         handlebars: {
             exports: 'Handlebars'
         },
 
-        backbone_backgrid :{
-            exports: 'backgrid'
+        signalR: {
+            dep: ['$']
         },
 
-        backgrid  : {
-            deps: ['backbone', 'libs/backbone.backgrid', 'libs/backbone.backgrid.paginator']
+        'backbone.pageable': {
+            dep : ['backbone'],
+            init: function () {
+                console.log(this);
+            }
+        },
+
+        backgrid            : {
+            deps: ['backbone'],
+            init: function () {
+                Backgrid.Column.prototype.defaults = {
+                    name      : undefined,
+                    label     : undefined,
+                    sortable  : true,
+                    editable  : false,
+                    renderable: true,
+                    formatter : undefined,
+                    cell      : undefined,
+                    headerCell: 'nzbDrone'
+                };
+            }
+        },
+        'backgrid.paginator': {
+            deps: ['backgrid']
         }
     }
 });
 
-define(['backbone','backgrid'], function (ModalRegion) {
+define([
+    'marionette',
+    'shared/modal/region',
+    'Instrumentation/StringFormat',
+    'Instrumentation/ErrorHandler'
+], function (Marionette, ModalRegion) {
 
-    window.NzbDrone = new Backbone.Marionette.Application();
+    window.NzbDrone = new Marionette.Application();
     window.NzbDrone.Config = {};
     window.NzbDrone.Form = {};
 

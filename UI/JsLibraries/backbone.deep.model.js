@@ -1,124 +1,3 @@
-/*jshint expr:true eqnull:true */
-/**
- *
- * Backbone.DeepModel v0.10.4
- *
- * Copyright (c) 2013 Charles Davison, Pow Media Ltd
- *
- * https://github.com/powmedia/backbone-deep-model
- * Licensed under the MIT License
- */
-
-/**
- * Underscore mixins for deep objects
- *
- * Based on https://gist.github.com/echong/3861963
- */
-(function() {
-  var arrays, basicObjects, deepClone, deepExtend, deepExtendCouple, isBasicObject,
-    __slice = [].slice;
-
-  deepClone = function(obj) {
-    var func, isArr;
-    if (!_.isObject(obj) || _.isFunction(obj)) {
-      return obj;
-    }
-    if (obj instanceof Backbone.Collection || obj instanceof Backbone.Model) {
-      return obj;
-    }
-    if (_.isDate(obj)) {
-      return new Date(obj.getTime());
-    }
-    if (_.isRegExp(obj)) {
-      return new RegExp(obj.source, obj.toString().replace(/.*\//, ""));
-    }
-    isArr = _.isArray(obj || _.isArguments(obj));
-    func = function(memo, value, key) {
-      if (isArr) {
-        memo.push(deepClone(value));
-      } else {
-        memo[key] = deepClone(value);
-      }
-      return memo;
-    };
-    return _.reduce(obj, func, isArr ? [] : {});
-  };
-
-  isBasicObject = function(object) {
-    if (object == null) return false;
-    return (object.prototype === {}.prototype || object.prototype === Object.prototype) && _.isObject(object) && !_.isArray(object) && !_.isFunction(object) && !_.isDate(object) && !_.isRegExp(object) && !_.isArguments(object);
-  };
-
-  basicObjects = function(object) {
-    return _.filter(_.keys(object), function(key) {
-      return isBasicObject(object[key]);
-    });
-  };
-
-  arrays = function(object) {
-    return _.filter(_.keys(object), function(key) {
-      return _.isArray(object[key]);
-    });
-  };
-
-  deepExtendCouple = function(destination, source, maxDepth) {
-    var combine, recurse, sharedArrayKey, sharedArrayKeys, sharedObjectKey, sharedObjectKeys, _i, _j, _len, _len1;
-    if (maxDepth == null) {
-      maxDepth = 20;
-    }
-    if (maxDepth <= 0) {
-      console.warn('_.deepExtend(): Maximum depth of recursion hit.');
-      return _.extend(destination, source);
-    }
-    sharedObjectKeys = _.intersection(basicObjects(destination), basicObjects(source));
-    recurse = function(key) {
-      return source[key] = deepExtendCouple(destination[key], source[key], maxDepth - 1);
-    };
-    for (_i = 0, _len = sharedObjectKeys.length; _i < _len; _i++) {
-      sharedObjectKey = sharedObjectKeys[_i];
-      recurse(sharedObjectKey);
-    }
-    sharedArrayKeys = _.intersection(arrays(destination), arrays(source));
-    combine = function(key) {
-      return source[key] = _.union(destination[key], source[key]);
-    };
-    for (_j = 0, _len1 = sharedArrayKeys.length; _j < _len1; _j++) {
-      sharedArrayKey = sharedArrayKeys[_j];
-      combine(sharedArrayKey);
-    }
-    return _.extend(destination, source);
-  };
-
-  deepExtend = function() {
-    var finalObj, maxDepth, objects, _i;
-    objects = 2 <= arguments.length ? __slice.call(arguments, 0, _i = arguments.length - 1) : (_i = 0, []), maxDepth = arguments[_i++];
-    if (!_.isNumber(maxDepth)) {
-      objects.push(maxDepth);
-      maxDepth = 20;
-    }
-    if (objects.length <= 1) {
-      return objects[0];
-    }
-    if (maxDepth <= 0) {
-      return _.extend.apply(this, objects);
-    }
-    finalObj = objects.shift();
-    while (objects.length > 0) {
-      finalObj = deepExtendCouple(finalObj, deepClone(objects.shift()), maxDepth);
-    }
-    return finalObj;
-  };
-
-  _.mixin({
-    deepClone: deepClone,
-    isBasicObject: isBasicObject,
-    basicObjects: basicObjects,
-    arrays: arrays,
-    deepExtend: deepExtend
-  });
-
-}).call(this);
-
 /**
  * Main source
  */
@@ -132,7 +11,7 @@
         factory(_, Backbone);
     }
 }(function(_, Backbone) {
-    
+
     /**
      * Takes a nested object and returns a shallow object keyed with the path names
      * e.g. { "level1.level2": "value" }
@@ -184,7 +63,7 @@
             if (result == null && i < n - 1) {
                 result = {};
             }
-            
+
             if (typeof result === 'undefined') {
                 if (return_exists)
                 {
@@ -233,7 +112,7 @@
     }
 
     function deleteNested(obj, path) {
-      setNested(obj, path, null, { unset: true });
+        setNested(obj, path, null, { unset: true });
     }
 
     var DeepModel = Backbone.Model.extend({
@@ -260,7 +139,7 @@
 
         // Return a copy of the model's `attributes` object.
         toJSON: function(options) {
-          return _.deepClone(this.attributes);
+            return _.deepClone(this.attributes);
         },
 
         // Override get
@@ -274,17 +153,17 @@
         set: function(key, val, options) {
             var attr, attrs, unset, changes, silent, changing, prev, current;
             if (key == null) return this;
-            
+
             // Handle both `"key", value` and `{key: value}` -style arguments.
             if (typeof key === 'object') {
-              attrs = key;
-              options = val || {};
+                attrs = key;
+                options = val || {};
             } else {
-              (attrs = {})[key] = val;
+                (attrs = {})[key] = val;
             }
 
             options || (options = {});
-            
+
             // Run validation.
             if (!this._validate(attrs, options)) return false;
 
@@ -296,8 +175,8 @@
             this._changing  = true;
 
             if (!changing) {
-              this._previousAttributes = _.deepClone(this.attributes); //<custom>: Replaced _.clone with _.deepClone
-              this.changed = {};
+                this._previousAttributes = _.deepClone(this.attributes); //<custom>: Replaced _.clone with _.deepClone
+                this.changed = {};
             }
             current = this.attributes, prev = this._previousAttributes;
 
@@ -310,50 +189,64 @@
 
             // For each `set` attribute, update or delete the current value.
             for (attr in attrs) {
-              val = attrs[attr];
+                val = attrs[attr];
 
-              //<custom code>: Using getNested, setNested and deleteNested
-              if (!_.isEqual(getNested(current, attr), val)) changes.push(attr);
-              if (!_.isEqual(getNested(prev, attr), val)) {
-                setNested(this.changed, attr, val);
-              } else {
-                deleteNested(this.changed, attr);
-              }
-              unset ? deleteNested(current, attr) : setNested(current, attr, val);
-              //</custom code>
+                //<custom code>: Using getNested, setNested and deleteNested
+                if (!_.isEqual(getNested(current, attr), val)) changes.push(attr);
+                if (!_.isEqual(getNested(prev, attr), val)) {
+                    setNested(this.changed, attr, val);
+                } else {
+                    deleteNested(this.changed, attr);
+                }
+                unset ? deleteNested(current, attr) : setNested(current, attr, val);
+                //</custom code>
             }
 
             // Trigger all relevant attribute changes.
             if (!silent) {
-              if (changes.length) this._pending = true;
+                if (changes.length) this._pending = true;
 
-              //<custom code>
-              var separator = DeepModel.keyPathSeparator;
+                //<custom code>
+                var separator = DeepModel.keyPathSeparator;
+                var alreadyTriggered = {}; // * @restorer
 
-              for (var i = 0, l = changes.length; i < l; i++) {
-                var key = changes[i];
+                for (var i = 0, l = changes.length; i < l; i++) {
+                    var key = changes[i];
 
-                this.trigger('change:' + key, this, getNested(current, key), options);
+                    if (!alreadyTriggered.hasOwnProperty(key) || !alreadyTriggered[key]) { // * @restorer
+                        alreadyTriggered[key] = true; // * @restorer
+                        this.trigger('change:' + key, this, getNested(current, key), options);
+                    } // * @restorer
 
-                var fields = key.split(separator);
+                    var fields = key.split(separator);
 
-                //Trigger change events for parent keys with wildcard (*) notation
-                for(var n = fields.length - 1; n > 0; n--) {
-                  var parentKey = _.first(fields, n).join(separator),
-                      wildcardKey = parentKey + separator + '*';
+                    //Trigger change events for parent keys with wildcard (*) notation
+                    for(var n = fields.length - 1; n > 0; n--) {
+                        var parentKey = _.first(fields, n).join(separator),
+                            wildcardKey = parentKey + separator + '*';
 
-                  this.trigger('change:' + wildcardKey, this, getNested(current, parentKey), options);
+                        if (!alreadyTriggered.hasOwnProperty(wildcardKey) || !alreadyTriggered[wildcardKey]) { // * @restorer
+                            alreadyTriggered[wildcardKey] = true; // * @restorer
+                            this.trigger('change:' + wildcardKey, this, getNested(current, parentKey), options);
+                        } // * @restorer
+
+                        // + @restorer
+                        if (!alreadyTriggered.hasOwnProperty(parentKey) || !alreadyTriggered[parentKey]) {
+                            alreadyTriggered[parentKey] = true;
+                            this.trigger('change:' + parentKey, this, getNested(current, parentKey), options);
+                        }
+                        // - @restorer
+                    }
+                    //</custom code>
                 }
-                //</custom code>
-              }
             }
 
             if (changing) return this;
             if (!silent) {
-              while (this._pending) {
-                this._pending = false;
-                this.trigger('change', this, options);
-              }
+                while (this._pending) {
+                    this._pending = false;
+                    this.trigger('change', this, options);
+                }
             }
             this._pending = false;
             this._changing = false;
@@ -363,17 +256,17 @@
         // Clear all attributes on the model, firing `"change"` unless you choose
         // to silence it.
         clear: function(options) {
-          var attrs = {};
-          var shallowAttributes = objToPaths(this.attributes);
-          for (var key in shallowAttributes) attrs[key] = void 0;
-          return this.set(attrs, _.extend({}, options, {unset: true}));
+            var attrs = {};
+            var shallowAttributes = objToPaths(this.attributes);
+            for (var key in shallowAttributes) attrs[key] = void 0;
+            return this.set(attrs, _.extend({}, options, {unset: true}));
         },
 
         // Determine if the model has changed since the last `"change"` event.
         // If you specify an attribute name, determine if that attribute has changed.
         hasChanged: function(attr) {
-          if (attr == null) return !_.isEmpty(this.changed);
-          return getNested(this.changed, attr) !== undefined;
+            if (attr == null) return !_.isEmpty(this.changed);
+            return getNested(this.changed, attr) !== undefined;
         },
 
         // Return an object containing all the attributes that have changed, or
@@ -383,41 +276,41 @@
         // You can also pass an attributes object to diff against the model,
         // determining if there *would be* a change.
         changedAttributes: function(diff) {
-          //<custom code>: objToPaths
-          if (!diff) return this.hasChanged() ? objToPaths(this.changed) : false;
-          //</custom code>
+            //<custom code>: objToPaths
+            if (!diff) return this.hasChanged() ? objToPaths(this.changed) : false;
+            //</custom code>
 
-          var old = this._changing ? this._previousAttributes : this.attributes;
-          
-          //<custom code>
-          diff = objToPaths(diff);
-          old = objToPaths(old);
-          //</custom code>
+            var old = this._changing ? this._previousAttributes : this.attributes;
 
-          var val, changed = false;
-          for (var attr in diff) {
-            if (_.isEqual(old[attr], (val = diff[attr]))) continue;
-            (changed || (changed = {}))[attr] = val;
-          }
-          return changed;
+            //<custom code>
+            diff = objToPaths(diff);
+            old = objToPaths(old);
+            //</custom code>
+
+            var val, changed = false;
+            for (var attr in diff) {
+                if (_.isEqual(old[attr], (val = diff[attr]))) continue;
+                (changed || (changed = {}))[attr] = val;
+            }
+            return changed;
         },
 
         // Get the previous value of an attribute, recorded at the time the last
         // `"change"` event was fired.
         previous: function(attr) {
-          if (attr == null || !this._previousAttributes) return null;
+            if (attr == null || !this._previousAttributes) return null;
 
-          //<custom code>
-          return getNested(this._previousAttributes, attr);
-          //</custom code>
+            //<custom code>
+            return getNested(this._previousAttributes, attr);
+            //</custom code>
         },
 
         // Get all of the attributes of the model at the time of the previous
         // `"change"` event.
         previousAttributes: function() {
-          //<custom code>
-          return _.deepClone(this._previousAttributes);
-          //</custom code>
+            //<custom code>
+            return _.deepClone(this._previousAttributes);
+            //</custom code>
         }
     });
 
@@ -431,8 +324,7 @@
 
     //For use in NodeJS
     if (typeof module != 'undefined') module.exports = DeepModel;
-    
+
     return Backbone;
 
 }));
-

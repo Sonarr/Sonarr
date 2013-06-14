@@ -1,6 +1,6 @@
 ﻿"use strict";
-define(['app', 'History/Model'], function () {
-    NzbDrone.History.Collection = Backbone.PageableCollection.extend({
+define(['app', 'History/Model', 'backbone.pageable'], function (App, HistoryModel, PageableCollection) {
+    NzbDrone.History.Collection = PageableCollection.extend({
         url       : NzbDrone.Constants.ApiRoot + '/history',
         model     : NzbDrone.History.Model,
 

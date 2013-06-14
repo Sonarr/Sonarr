@@ -1,5 +1,5 @@
 "use strict";
-define(['app'], function () {
+define(['app','backgrid'], function () {
     NzbDrone.Cells.IndexerCell = Backgrid.Cell.extend({
 
         class : 'indexer-cell',

@@ -2,7 +2,8 @@
 
 define([
     'app',
-    'Quality/QualitySizeCollection'
+    'Quality/QualitySizeCollection',
+    'bootstrap.slider'
 
 ], function () {
 

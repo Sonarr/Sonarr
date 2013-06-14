@@ -1,6 +1,6 @@
 "use strict";
 
-define(['app'], function () {
+define(['app','backgrid'], function () {
     NzbDrone.Cells.NzbDroneCell = Backgrid.Cell.extend({
 
         _originalInit: Backgrid.Cell.prototype.initialize,

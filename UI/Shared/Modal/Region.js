@@ -1,6 +1,5 @@
 "use strict";
-define(function () {
-
+define(['marionette'], function () {
     return Backbone.Marionette.Region.extend({
         el: "#modal-region",
 
