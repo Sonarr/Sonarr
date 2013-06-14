@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone.Update.UpdateEngine
 {
@@ -27,19 +29,43 @@ namespace NzbDrone.Update.UpdateEngine
             _logger.Info("Starting NzbDrone");
             if (appType == AppType.Service)
             {
-                _logger.Info("Starting NzbDrone service");
-                _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                try
+                {
+                    StartService();
+
+                }
+                catch (InvalidOperationException e)
+                {
+                    _logger.Warn("Couldn't start NzbDrone Service (Most likely due to permission issues). falling back to console.", e);
+                    StartConsole(installationFolder);
+                }
             }
             else if (appType == AppType.Console)
             {
-                _logger.Info("Starting NzbDrone with Console");
-                _processProvider.Start(Path.Combine(installationFolder, "NzbDrone.Console.exe"));
+                StartConsole(installationFolder);
             }
             else
             {
-                _logger.Info("Starting NzbDrone without Console");
-                _processProvider.Start(Path.Combine(installationFolder, "NzbDrone.exe"));
+                StartWinform(installationFolder);
             }
+        }
+
+        private void StartService()
+        {
+            _logger.Info("Starting NzbDrone service");
+            _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
+        }
+
+        private void StartWinform(string installationFolder)
+        {
+            _logger.Info("Starting NzbDrone without Console");
+            _processProvider.Start(Path.Combine(installationFolder, "NzbDrone.exe"));
+        }
+
+        private void StartConsole(string installationFolder)
+        {
+            _logger.Info("Starting NzbDrone with Console");
+            _processProvider.Start(Path.Combine(installationFolder, "NzbDrone.Console.exe"));
         }
     }
 }

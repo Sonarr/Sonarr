@@ -85,8 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StartNzbDroneService.cs" />
     <Compile Include="ProgramFixture.cs" />
-    <Compile Include="UpdateProviderVerifyFixture.cs" />
+    <Compile Include="InstallUpdateServiceFixture.cs" />
     <Compile Include="UpdateProviderStartFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
