@@ -8,7 +8,21 @@ namespace NzbDrone.Api.Frontend
     public class StaticResourceMapper : IMapHttpRequestsToDisk
     {
         private readonly IEnvironmentProvider _environmentProvider;
-        private static readonly string[] Extensions = new[] { ".css", ".js", ".html", ".htm", ".jpg", ".jpeg", ".icon", ".gif", ".png", ".woff", ".ttf" };
+        private static readonly string[] Extensions = new[] { 
+                                                              ".css",
+                                                              ".js",
+                                                              ".html",
+                                                              ".htm",
+                                                              ".jpg",
+                                                              ".jpeg",
+                                                              ".ico",
+                                                              ".icon",
+                                                              ".gif",
+                                                              ".png",
+                                                              ".woff",
+                                                              ".ttf",
+                                                              ".eot"
+                                                            };
 
         public StaticResourceMapper(IEnvironmentProvider environmentProvider)
         {
