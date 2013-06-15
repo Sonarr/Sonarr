@@ -1,6 +1,6 @@
 "use strict";
-define(['marionette'], function () {
-    return Backbone.Marionette.Region.extend({
+define(['marionette', 'bootstrap'], function (Marionette) {
+    return Marionette.Region.extend({
         el: "#modal-region",
 
         constructor: function () {

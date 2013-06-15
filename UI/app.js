@@ -39,38 +39,33 @@ require.config({
         },
 
         'underscore': {
-            dep    : ['$'],
-            exports: '_',
-            init   : function () {
-                require(['mixins/underscore.mixin.deepExtend']);
-            }
+            deps   : ['$'],
+            exports: '_'
         },
 
         backbone: {
             deps   : ['underscore', '$'],
-            exports: 'Backbone',
-            init   : function () {
-                require(['libs/backbone.mutators']);
-            }
+            exports: 'Backbone'
+        },
+
+        'backbone.deepmodel': {
+            deps: ['mixins/underscore.mixin.deepExtend']
         },
 
         marionette: {
-            deps   : ['backbone'],
+            deps   : ['backbone', 'mixins/backbone.marionette.templates'],
             exports: 'Marionette',
-            init   : function () {
-                require(['mixins/backbone.marionette.templates']);
+            init   : function (Backbone, TemplateMixin) {
+                TemplateMixin.call(Marionette.TemplateCache);
             }
         },
 
         signalR: {
-            dep: ['$']
+            deps: ['$']
         },
 
         'backbone.pageable': {
-            dep : ['backbone'],
-            init: function () {
-                console.log(this);
-            }
+            deps: ['backbone']
         },
 
         backgrid            : {
@@ -100,6 +95,9 @@ define([
     'Instrumentation/StringFormat',
     'Instrumentation/ErrorHandler'
 ], function (Marionette, ModalRegion) {
+
+    require(['libs/backbone.mutators']);
+
 
     window.NzbDrone = new Marionette.Application();
     window.NzbDrone.Config = {};

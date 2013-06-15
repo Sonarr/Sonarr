@@ -1,26 +1,30 @@
 ﻿"use strict";
 
-define(['app', 'marionette', 'handlebars', 'templates'], function (App, Marionette, HandleBars, Templates) {
-    Marionette.TemplateCache.get = function (templateId) {
+define(['templates'], function (Templates) {
+    return function () {
+        this.get = function (templateId) {
 
-        var templateKey = templateId.toLowerCase();
+            var templateKey = templateId.toLowerCase();
 
-        var templateFunction = Templates[templateKey];
+            var templateFunction = Templates[templateKey];
 
-        if (!templateFunction) {
-            throw 'couldn\'t find pre-compiled template ' + templateKey;
-        }
-
-        return function (data) {
-
-            try {
-                return templateFunction(data);
+            if (!templateFunction) {
+                throw 'couldn\'t find pre-compiled template ' + templateKey;
             }
-            catch (error) {
-                console.error('template render failed for ' + templateKey + ' ' + error);
-                console.error(data);
-                throw error;
-            }
+
+            return function (data) {
+
+                try {
+                    return templateFunction(data);
+                }
+                catch (error) {
+                    console.error('template render failed for ' + templateKey + ' ' + error);
+                    console.error(data);
+                    throw error;
+                }
+            };
         };
     };
 });
+
+

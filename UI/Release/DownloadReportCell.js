@@ -1,6 +1,6 @@
 "use strict";
 
-define(['app'], function () {
+define(['app','backgrid'], function () {
     NzbDrone.Release.DownloadReportCell = Backgrid.Cell.extend({
 
         className: "download-report-cell",

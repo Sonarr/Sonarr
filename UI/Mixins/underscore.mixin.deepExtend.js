@@ -98,12 +98,15 @@
         return finalObj;
     };
 
-    _.mixin({
-        deepClone: deepClone,
-        isBasicObject: isBasicObject,
-        basicObjects: basicObjects,
-        arrays: arrays,
-        deepExtend: deepExtend
+    require(['underscore'], function (_) {
+
+        _.mixin({
+            deepClone    : deepClone,
+            isBasicObject: isBasicObject,
+            basicObjects : basicObjects,
+            arrays       : arrays,
+            deepExtend   : deepExtend
+        });
     });
 
 }).call(this);

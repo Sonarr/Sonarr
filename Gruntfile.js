@@ -76,7 +76,7 @@ module.exports = function (grunt) {
 
         handlebars: {
             options: {
-                namespace   : "Templates",
+                namespace   : "T",
                 partialRegex: /Partial.html/,
                 wrapped     : true,
                 amd         : true,
