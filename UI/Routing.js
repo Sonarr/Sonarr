@@ -28,6 +28,7 @@ require(['app', 'Controller', 'RouteBinder'], function (app, controller, routeBi
         Backbone.history.start({ pushState: true });
 
         routeBinder.bind();
+        NzbDrone.footerRegion.show(new NzbDrone.Shared.Footer.View());
     });
 });
 

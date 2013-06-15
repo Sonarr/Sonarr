@@ -15,7 +15,8 @@ define(['app',
     'Missing/MissingLayout',
     'History/HistoryLayout',
     'Shared/FormatHelpers',
-    'Shared/TemplateHelpers'],
+    'Shared/TemplateHelpers',
+    'Shared/Footer/View'],
     function () {
         var controller = Backbone.Marionette.Controller.extend({
 

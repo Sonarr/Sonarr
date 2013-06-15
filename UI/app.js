@@ -127,7 +127,6 @@ define([
         Activity: {}
     };
 
-
     window.NzbDrone.Quality = {};
 
     window.NzbDrone.Commands = {};
@@ -136,8 +135,8 @@ define([
         Toolbar      : {},
         Messenger    : {},
         FormatHelpers: {},
-        Grid         : {}
-
+        Grid         : {},
+        Footer       : {}
     };
 
     window.NzbDrone.Cells = {};
@@ -172,7 +171,8 @@ define([
     };
 
     window.NzbDrone.Constants = {
-        ApiRoot: '/api'
+        ApiRoot: '/api',
+        Version: '0.0.0.0'
     };
 
     window.NzbDrone.addInitializer(function () {
@@ -184,7 +184,8 @@ define([
     NzbDrone.addRegions({
         mainRegion        : '#main-region',
         notificationRegion: '#notification-region',
-        modalRegion       : ModalRegion
+        modalRegion       : ModalRegion,
+        footerRegion      : '#footer-region'
     });
 
     window.NzbDrone.start();
