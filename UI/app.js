@@ -172,7 +172,8 @@ define([
 
     window.NzbDrone.Constants = {
         ApiRoot: '/api',
-        Version: '0.0.0.0'
+        Version: '0.0.0.0',
+        BuildDate: '2013-01-01T00:00:00Z'
     };
 
     window.NzbDrone.addInitializer(function () {

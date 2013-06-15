@@ -8,6 +8,7 @@ define(['app',
         initialize: function () {
             this.model = new NzbDrone.Shared.Footer.Model();
             this.model.set('version', NzbDrone.Constants.Version);
+            this.model.set('buildDate', NzbDrone.Constants.BuildDate);
         }
     });
 
