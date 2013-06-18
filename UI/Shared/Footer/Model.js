@@ -1,7 +1,7 @@
 "use strict";
 define(['app'], function () {
 
-    NzbDrone.Shared.Footer.Model = Backbone.Model.extend({
+    return Backbone.Model.extend({
         defaults: {
             'version'   : '0.0.0.0',
             'buildDate' : Date.create()
@@ -15,6 +15,4 @@ define(['app'], function () {
             }
         }
     });
-
-    return NzbDrone.Shared.Footer.Model;
 });

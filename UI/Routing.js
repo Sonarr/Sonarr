@@ -1,9 +1,9 @@
 ﻿"use strict";
-require(['app', 'Controller', 'RouteBinder'], function (app, controller, routeBinder) {
+require(['app', 'Controller', 'RouteBinder', 'Shared/Footer/View'], function (App, Controller, RouteBinder, FooterView) {
 
     NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 
-        controller: controller,
+        controller: Controller,
         appRoutes : {
             ''                           : 'series',
             'series'                     : 'series',
@@ -27,8 +27,8 @@ require(['app', 'Controller', 'RouteBinder'], function (app, controller, routeBi
         NzbDrone.Router = new NzbDrone.Router();
         Backbone.history.start({ pushState: true });
 
-        routeBinder.bind();
-        NzbDrone.footerRegion.show(new NzbDrone.Shared.Footer.View());
+        RouteBinder.bind();
+        NzbDrone.footerRegion.show(new FooterView());
     });
 });
 

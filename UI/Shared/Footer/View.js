@@ -1,16 +1,14 @@
 ﻿"use strict";
 define(['app',
-        'Shared/Footer/Model'], function () {
-    NzbDrone.Shared.Footer.View = Backbone.Marionette.ItemView.extend({
+        'Shared/Footer/Model'], function (App, FooterModel) {
+    return Backbone.Marionette.ItemView.extend({
 
         template: 'Shared/Footer/Template',
 
         initialize: function () {
-            this.model = new NzbDrone.Shared.Footer.Model();
+            this.model = new FooterModel();
             this.model.set('version', NzbDrone.Constants.Version);
             this.model.set('buildDate', NzbDrone.Constants.BuildDate);
         }
     });
-
-    return new NzbDrone.Shared.Footer.View();
 });
