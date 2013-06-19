@@ -61,6 +61,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[)\d{2})(?<episode>\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Supports Season 01 Episode 03
+                new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?Season\W?)(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)(?:Episode\W)(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Supports Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
@@ -69,7 +73,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W|_))|\W|_|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\||""",
+        private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\|",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);

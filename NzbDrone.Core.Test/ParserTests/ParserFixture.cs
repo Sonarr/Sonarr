@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Test.ParserTests
          * [TestCase("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 10)]
          * [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
          * [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "", 7, new[] { 22, 23 }, 2)]
+         * (Game of Thrones s03 e - "Game of Thrones Season 3 Episode 10"
          */
 
         [TestCase("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]
@@ -78,6 +79,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The_Big_Bang_Theory_-_6x12_-_The_Egg_Salad_Equivalency_[HDTV-720p]", "The Big Bang Theory", 6, 12)]
         [TestCase("Top_Gear.19x06.720p_HDTV_x264-FoV", "Top Gear", 19, 6)]
         [TestCase("Portlandia.S03E10.Alexandra.720p.WEB-DL.AAC2.0.H.264-CROM.mkv", "Portlandia", 3, 10)]
+        [TestCase("(Game of Thrones s03 e - \"Game of Thrones Season 3 Episode 10\"", "Game of Thrones", 3, 10)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -221,7 +223,6 @@ namespace NzbDrone.Core.Test.ParserTests
 
             Parser.Parser.ParseTitle(title).Should().BeNull();
         }
-
 
         [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
         [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
