@@ -17,17 +17,17 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
-        private readonly IDownloadApprovedReportsService _downloadApprovedReportsService;
+        private readonly IDownloadApprovedReports _downloadApprovedReports;
         private readonly Logger _logger;
 
         public RssSyncService(IFetchAndParseRss rssFetcherAndParser,
                               IMakeDownloadDecision downloadDecisionMaker,
-                              IDownloadApprovedReportsService downloadApprovedReportsService,
+                              IDownloadApprovedReports downloadApprovedReports,
                               Logger logger)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _downloadDecisionMaker = downloadDecisionMaker;
-            _downloadApprovedReportsService = downloadApprovedReportsService;
+            _downloadApprovedReports = downloadApprovedReports;
             _logger = logger;
         }
 
@@ -38,9 +38,9 @@ namespace NzbDrone.Core.Indexers
 
             var reports = _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
-            var qualifiedReports = _downloadApprovedReportsService.DownloadApproved(decisions);
+            var qualifiedReports = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.Info("RSS Sync Completed. Reports found: {0}, Fetches attempted: {1}", reports.Count, qualifiedReports.Count());
+            _logger.Info("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, qualifiedReports.Count());
         }
 
         public void Execute(RssSyncCommand message)

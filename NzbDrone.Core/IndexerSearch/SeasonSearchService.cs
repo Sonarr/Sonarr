@@ -10,18 +10,18 @@ namespace NzbDrone.Core.IndexerSearch
     public class SeasonSearchService : IExecute<SeasonSearchCommand>
     {
         private readonly ISearchForNzb _nzbSearchService;
-        private readonly IDownloadApprovedReportsService _downloadApprovedReportsService;
+        private readonly IDownloadApprovedReports _downloadApprovedReports;
 
-        public SeasonSearchService(ISearchForNzb nzbSearchService, IDownloadApprovedReportsService downloadApprovedReportsService)
+        public SeasonSearchService(ISearchForNzb nzbSearchService, IDownloadApprovedReports downloadApprovedReports)
         {
             _nzbSearchService = nzbSearchService;
-            _downloadApprovedReportsService = downloadApprovedReportsService;
+            _downloadApprovedReports = downloadApprovedReports;
         }
 
         public void Execute(SeasonSearchCommand message)
         {
             var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, message.SeasonNumber);
-            var qualified = _downloadApprovedReportsService.DownloadApproved(decisions);
+            _downloadApprovedReports.DownloadApproved(decisions);
         }
     }
 }
