@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Providers;
@@ -42,7 +43,8 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappings).FullName},
                     new ScheduledTask{ Interval = 6*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
-                    new ScheduledTask{ Interval = 5, TypeName = typeof(ApplicationUpdateCommand).FullName}
+                    new ScheduledTask{ Interval = 5, TypeName = typeof(ApplicationUpdateCommand).FullName},
+                    new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();

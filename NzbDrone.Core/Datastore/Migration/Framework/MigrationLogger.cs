@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentMigrator.Runner;
 using NLog;
-using NzbDrone.Common.Composition;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {

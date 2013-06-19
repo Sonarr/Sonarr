@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.Diagnostics;
-using Marr.Data;
+﻿using System.Diagnostics;
 
 namespace NzbDrone.Core.Datastore
 {

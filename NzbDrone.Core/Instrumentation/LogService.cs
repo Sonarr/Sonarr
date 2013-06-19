@@ -1,16 +1,15 @@
-﻿using System.Linq;
+﻿using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Instrumentation.Commands;
 
 namespace NzbDrone.Core.Instrumentation
 {
     public interface ILogService
     {
-        void DeleteAll();
-        void Trim();
         PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec);
     }
 
-    public class LogService : ILogService
+    public class LogService : ILogService, IExecute<TrimLogCommand>
     {
         private readonly ILogRepository _logRepository;
 
@@ -19,19 +18,14 @@ namespace NzbDrone.Core.Instrumentation
             _logRepository = logRepository;
         }
 
-        public void DeleteAll()
-        {
-            _logRepository.Purge();
-        }
-
-        public void Trim()
-        {
-            _logRepository.Trim();
-        }
-
         public PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec)
         {
             return _logRepository.GetPaged(pagingSpec);
+        }
+
+        public void Execute(TrimLogCommand message)
+        {
+            _logRepository.Trim();
         }
     }
 }

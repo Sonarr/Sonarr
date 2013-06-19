@@ -14,18 +14,18 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public override void Up()
         {
-            if ((MigrationType)ApplicationContext == MigrationType.Main)
+            switch ((MigrationType)ApplicationContext)
             {
-                MainDbUpgrade();
-            }
-            else if ((MigrationType)ApplicationContext == MigrationType.Log)
-            {
-                LogDbUpgrade();
-            }
-            else
-            {
-                LogDbUpgrade();
-                MainDbUpgrade();
+                case MigrationType.Main:
+                    MainDbUpgrade();
+                    return;
+                case MigrationType.Log:
+                    LogDbUpgrade();
+                    return;
+                default:
+                    LogDbUpgrade();
+                    MainDbUpgrade();
+                    return;
             }
         }
 

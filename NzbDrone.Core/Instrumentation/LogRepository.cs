@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Linq;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 
@@ -20,8 +18,8 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Trim()
         {
-            var oldIds = Query.Where(c => c.Time < DateTime.UtcNow.AddDays(-30).Date).Select(c => c.Id);
-            DeleteMany(oldIds);
+            var trimDate = DateTime.UtcNow.AddDays(-15).Date;
+            Delete(c => c.Time <= trimDate);
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Configuration;

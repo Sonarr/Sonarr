@@ -204,14 +204,13 @@
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
-    <Compile Include="Datastore\IReadModels.cs" />
-    <Compile Include="Datastore\IWriteModels.cs" />
     <Compile Include="Datastore\LazyList.cs" />
     <Compile Include="Datastore\MappingExtensions.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
     <Compile Include="Datastore\Migration\005_added_eventtype_to_history.cs" />
+    <Compile Include="Datastore\Migration\006_add_index_to_log_time.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
@@ -255,6 +254,7 @@
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
+    <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
     <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
