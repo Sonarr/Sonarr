@@ -5,4 +5,6 @@ define(['app'], function () {
         template : 'Shared/LoadingTemplate',
         className: 'nz-loading row'
     });
+
+    return  NzbDrone.Shared.LoadingView;
 });

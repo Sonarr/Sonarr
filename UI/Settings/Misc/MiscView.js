@@ -1,11 +1,8 @@
 ﻿'use strict';
 
-define([
-    'app', 'Settings/SettingsModel'
+define(['marionette', 'Mixins/AsModelBoundview', 'bootstrap'], function (Marionette, AsModelBoundView) {
 
-], function () {
-
-    NzbDrone.Settings.Misc.MiscView = Backbone.Marionette.ItemView.extend({
+    var view = Marionette.ItemView.extend({
         template : 'Settings/Misc/MiscTemplate',
         className: 'form-horizontal',
 
@@ -17,4 +14,6 @@ define([
             this.ui.tooltip.tooltip({ placement: 'right', html: true });
         }
     });
+
+    return AsModelBoundView.call(view);
 });

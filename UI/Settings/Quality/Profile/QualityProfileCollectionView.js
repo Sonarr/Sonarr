@@ -1,20 +1,9 @@
 ﻿'use strict';
 
-define(['app', 'Settings/Quality/Profile/QualityProfileView'], function () {
-    NzbDrone.Settings.Quality.Profile.QualityProfileCollectionView = Backbone.Marionette.CompositeView.extend({
-        itemView         : NzbDrone.Settings.Quality.Profile.QualityProfileView,
+define(['marionette', 'Settings/Quality/Profile/QualityProfileView'], function (Marionette, QualityProfileView) {
+    return Marionette.CompositeView.extend({
+        itemView         : QualityProfileView,
         itemViewContainer: 'tbody',
-        template         : 'Settings/Quality/Profile/QualityProfileCollectionTemplate',
-
-        initialize: function (options) {
-        },
-
-        ui: {
-
-        },
-
-        onCompositeCollectionRendered: function () {
-
-        }
+        template         : 'Settings/Quality/Profile/QualityProfileCollectionTemplate'
     });
 });

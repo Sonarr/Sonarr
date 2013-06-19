@@ -10,7 +10,7 @@ define(['app','backgrid'], function () {
             this._originalInit.apply(this, arguments);
             this.cellValue = this._getValue();
 
-            this.model.on('change', this._refresh, this);
+            this.listenTo(this.model, 'change', this._refresh);
         },
 
         _refresh: function () {

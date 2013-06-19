@@ -7,4 +7,6 @@ define(['app', 'Series/Index/Posters/ItemView', 'Config'], function () {
         itemViewContainer       : '#x-series-posters',
         template                : 'Series/Index/Posters/CollectionTemplate'
     });
+
+    return  NzbDrone.Series.Index.Posters.CollectionView;
 });

@@ -18,5 +18,7 @@ define(['app'], function () {
             seasonNumber: 0
         }
     });
+
+    return NzbDrone.Series.SeasonModel;
 });
 

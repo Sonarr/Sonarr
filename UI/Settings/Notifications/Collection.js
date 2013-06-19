@@ -1,7 +1,7 @@
 ﻿"use strict";
-define(['app', 'Settings/Notifications/Model'], function () {
-    NzbDrone.Settings.Notifications.Collection = Backbone.Collection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/notification',
-        model: NzbDrone.Settings.Notifications.Model
+define(['app', 'Settings/Notifications/Model'], function (App, NotificationModel) {
+    return Backbone.Collection.extend({
+        url  : App.Constants.ApiRoot + '/notification',
+        model: NotificationModel
     });
 });

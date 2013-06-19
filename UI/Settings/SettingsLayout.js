@@ -1,17 +1,37 @@
 ﻿"use strict";
 define([
     'app',
+    'marionette',
+    'Settings/SettingsModel',
+    'Settings/General/GeneralSettingsModel',
     'Settings/Naming/NamingView',
+    'Settings/Naming/NamingModel',
     'Settings/Quality/QualityLayout',
     'Settings/Indexers/CollectionView',
+    'Settings/Indexers/Collection',
     'Settings/DownloadClient/DownloadClientView',
     'Settings/Notifications/CollectionView',
+    'Settings/Notifications/Collection',
     'Settings/General/GeneralView',
-    'Settings/General/GeneralSettingsModel',
-    'Settings/Misc/MiscView'
+    'Settings/Misc/MiscView',
+    'Settings/SyncNotification'
 ],
-    function () {
-        NzbDrone.Settings.SettingsLayout = Backbone.Marionette.Layout.extend({
+    function (App,
+        Marionette,
+        SettingsModel,
+        GeneralSettingsModel,
+        NamingView,
+        NamingModel,
+        QualityLayout,
+        IndexerCollectionView,
+        IndexerCollection,
+        DownloadClientView,
+        NotificationCollectionView,
+        NotificationCollection,
+        GeneralView,
+        MiscView,
+        SyncNotification) {
+        return Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
 
             regions: {
@@ -51,7 +71,7 @@ define([
                 }
 
                 this.ui.namingTab.tab('show');
-                NzbDrone.Router.navigate('settings/naming');
+                App.Router.navigate('settings/naming');
             },
 
             showQuality: function (e) {
@@ -60,7 +80,7 @@ define([
                 }
 
                 this.ui.qualityTab.tab('show');
-                NzbDrone.Router.navigate('settings/quality');
+                App.Router.navigate('settings/quality');
             },
 
             showIndexers: function (e) {
@@ -69,7 +89,7 @@ define([
                 }
 
                 this.ui.indexersTab.tab('show');
-                NzbDrone.Router.navigate('settings/indexers');
+                App.Router.navigate('settings/indexers');
             },
 
             showDownloadClient: function (e) {
@@ -78,7 +98,7 @@ define([
                 }
 
                 this.ui.downloadClientTab.tab('show');
-                NzbDrone.Router.navigate('settings/downloadclient');
+                App.Router.navigate('settings/downloadclient');
             },
 
             showNotifications: function (e) {
@@ -87,7 +107,7 @@ define([
                 }
 
                 this.ui.notificationsTab.tab('show');
-                NzbDrone.Router.navigate('settings/notifications');
+                App.Router.navigate('settings/notifications');
             },
 
             showGeneral: function (e) {
@@ -96,7 +116,7 @@ define([
                 }
 
                 this.ui.generalTab.tab('show');
-                NzbDrone.Router.navigate('settings/general');
+                App.Router.navigate('settings/general');
             },
 
             showMisc: function (e) {
@@ -105,23 +125,23 @@ define([
                 }
 
                 this.ui.miscTab.tab('show');
-                NzbDrone.Router.navigate('settings/misc');
+                App.Router.navigate('settings/misc');
             },
 
             initialize: function (options) {
-                this.settings = new NzbDrone.Settings.SettingsModel();
+                this.settings = new SettingsModel();
                 this.settings.fetch();
 
-                this.generalSettings = new NzbDrone.Settings.General.GeneralSettingsModel();
+                this.generalSettings = new GeneralSettingsModel();
                 this.generalSettings.fetch();
 
-                this.namingSettings = new NzbDrone.Settings.Naming.NamingModel();
+                this.namingSettings = new NamingModel();
                 this.namingSettings.fetch();
 
-                this.indexerSettings = new NzbDrone.Settings.Indexers.Collection();
+                this.indexerSettings = new IndexerCollection();
                 this.indexerSettings.fetch();
 
-                this.notificationSettings = new NzbDrone.Settings.Notifications.Collection();
+                this.notificationSettings = new NotificationCollection();
                 this.notificationSettings.fetch();
 
                 if (options.action) {
@@ -130,13 +150,13 @@ define([
             },
 
             onRender: function () {
-                this.naming.show(new NzbDrone.Settings.Naming.NamingView());
-                this.quality.show(new NzbDrone.Settings.Quality.QualityLayout({settings: this.settings}));
-                this.indexers.show(new NzbDrone.Settings.Indexers.CollectionView({collection: this.indexerSettings}));
-                this.downloadClient.show(new NzbDrone.Settings.DownloadClient.DownloadClientView({model: this.settings}));
-                this.notifications.show(new NzbDrone.Settings.Notifications.CollectionView({collection: this.notificationSettings}));
-                this.general.show(new NzbDrone.Settings.General.GeneralView({model: this.generalSettings}));
-                this.misc.show(new NzbDrone.Settings.Misc.MiscView({model: this.settings}));
+                this.naming.show(new NamingView());
+                this.quality.show(new QualityLayout({settings: this.settings}));
+                this.indexers.show(new IndexerCollectionView({collection: this.indexerSettings}));
+                this.downloadClient.show(new DownloadClientView({model: this.settings}));
+                this.notifications.show(new NotificationCollectionView({collection: this.notificationSettings}));
+                this.general.show(new GeneralView({model: this.generalSettings}));
+                this.misc.show(new MiscView({model: this.settings}));
             },
 
             onShow: function () {
@@ -166,11 +186,11 @@ define([
 
             save: function () {
 
-                NzbDrone.vent.trigger(NzbDrone.Commands.SaveSettings);
+                App.vent.trigger(App.Commands.SaveSettings);
 
-                this.settings.saveIfChanged(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+                this.settings.saveIfChanged(undefined, SyncNotification.callback({
                     successMessage: 'Settings saved',
-                    errorMessage: "Failed to save settings"
+                    errorMessage  : "Failed to save settings"
                 }));
             }
         });

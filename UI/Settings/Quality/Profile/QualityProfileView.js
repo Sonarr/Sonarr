@@ -2,12 +2,12 @@
 
 define([
     'app',
-    'Quality/QualityProfileCollection',
+    'marionette',
     'Settings/Quality/Profile/EditQualityProfileView'
 
-], function () {
+], function (App, Marionette, EditProfileView) {
 
-    NzbDrone.Settings.Quality.Profile.QualityProfileView = Backbone.Marionette.ItemView.extend({
+    return Marionette.ItemView.extend({
         template: 'Settings/Quality/Profile/QualityProfileTemplate',
         tagName : 'tr',
 
@@ -21,8 +21,8 @@ define([
         },
 
         edit: function () {
-            var view = new NzbDrone.Settings.Quality.Profile.EditQualityProfileView({ model: this.model});
-            NzbDrone.modalRegion.show(view);
+            var view = new EditProfileView({ model: this.model});
+            App.modalRegion.show(view);
         },
 
         removeQuality: function () {

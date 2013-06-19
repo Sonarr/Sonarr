@@ -1,9 +1,10 @@
 ﻿"use strict";
 define(['app',
-        'Mixins/SaveIfChangedModel'], function () {
-    NzbDrone.Settings.SettingsModel = Backbone.Model.extend({
-        url: NzbDrone.Constants.ApiRoot + '/settings'
+    'backbone',
+    'Mixins/SaveIfChangedModel'], function (App, Backbone, AsChangeTrackingModel) {
+    var model = Backbone.Model.extend({
+        url: App.Constants.ApiRoot + '/settings'
     });
 
-    _.extend(NzbDrone.Settings.SettingsModel.prototype, NzbDrone.Mixins.SaveIfChangedModel);
+    return AsChangeTrackingModel.call(model);
 });

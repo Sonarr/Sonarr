@@ -1,13 +1,14 @@
 ﻿"use strict";
 define([
     'app',
+    'marionette',
     'Quality/QualityProfileCollection',
-    'Quality/QualitySizeCollection',
     'Settings/Quality/Profile/QualityProfileCollectionView',
+    'Quality/QualitySizeCollection',
     'Settings/Quality/Size/QualitySizeCollectionView'
 ],
-    function (app, qualityProfileCollection) {
-        NzbDrone.Settings.Quality.QualityLayout = Backbone.Marionette.Layout.extend({
+    function (App, Marionette, QualityProfileCollection, QualityProfileCollectionView, QualitySizeCollection, QualitySizeCollectionView) {
+        return Marionette.Layout.extend({
             template: 'Settings/Quality/QualityLayoutTemplate',
 
             regions: {
@@ -16,24 +17,16 @@ define([
                 qualitySize    : '#quality-size'
             },
 
-            ui: {
-
-            },
-
-            events: {
-
-            },
-
             initialize: function (options) {
                 this.settings = options.settings;
-                qualityProfileCollection.fetch();
-                this.qualitySizeCollection = new NzbDrone.Quality.QualitySizeCollection();
+                QualityProfileCollection.fetch();
+                this.qualitySizeCollection = new QualitySizeCollection();
                 this.qualitySizeCollection.fetch();
             },
 
             onRender: function () {
-                this.qualityProfile.show(new NzbDrone.Settings.Quality.Profile.QualityProfileCollectionView({collection: qualityProfileCollection}));
-                this.qualitySize.show(new NzbDrone.Settings.Quality.Size.QualitySizeCollectionView({collection: this.qualitySizeCollection}));
+                this.qualityProfile.show(new QualityProfileCollectionView({collection: QualityProfileCollection}));
+                this.qualitySize.show(new QualitySizeCollectionView({collection: this.qualitySizeCollection}));
             }
         });
     });

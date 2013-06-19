@@ -87,4 +87,6 @@ define(['app', 'Series/SeriesModel'], function () {
             status      : 0
         }
     });
+
+    return NzbDrone.Series.EpisodeModel;
 });

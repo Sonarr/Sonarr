@@ -1,7 +1,7 @@
 ﻿'use strict';
-define(['app', 'Quality/QualityProfileModel'], function () {
+define(['app', 'marionette', 'Mixins/AsModelBoundView'], function (App, Marionette, AsModelBoundView) {
 
-    NzbDrone.Settings.Quality.Profile.EditQualityProfileView = Backbone.Marionette.ItemView.extend({
+    var view = Marionette.ItemView.extend({
         template: 'Settings/Quality/Profile/EditQualityProfileTemplate',
 
         events: {
@@ -51,8 +51,10 @@ define(['app', 'Quality/QualityProfileModel'], function () {
 
             this.model.save();
             this.trigger('saved');
-            NzbDrone.modalRegion.closeModal();
+            App.modalRegion.closeModal();
         }
     });
+
+    return AsModelBoundView.call(view);
 
 });

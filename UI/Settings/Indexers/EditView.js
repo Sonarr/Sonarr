@@ -2,12 +2,14 @@
 
 define([
     'app',
-    'Settings/Indexers/Model'
+    'marionette',
+    'Shared/Messenger',
+    'Mixins/AsModelBoundView'
 
-], function () {
+], function (App, Marionette, Messenger, AsModelBoundView) {
 
-    NzbDrone.Settings.Indexers.EditView = Backbone.Marionette.ItemView.extend({
-        template  : 'Settings/Indexers/EditTemplate',
+    var view = Marionette.ItemView.extend({
+        template: 'Settings/Indexers/EditTemplate',
 
         events: {
             'click .x-save': 'save'
@@ -24,12 +26,12 @@ define([
         syncNotification: function (success, error, context) {
             return {
                 success: function () {
-                    NzbDrone.Shared.Messenger.show({
+                    Messenger.show({
                         message: success
                     });
 
                     context.indexerCollection.add(context.model);
-                    NzbDrone.modalRegion.closeModal();
+                    App.modalRegion.closeModal();
                 },
 
                 error: function () {
@@ -38,4 +40,7 @@ define([
             };
         }
     });
+
+    return AsModelBoundView.call(view);
+
 });

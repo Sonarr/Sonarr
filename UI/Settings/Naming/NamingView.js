@@ -1,24 +1,28 @@
 ﻿'use strict';
 define(['app',
-        'Settings/Naming/NamingModel',
-        'Settings/SyncNotification'], function () {
+    'marionette',
+    'Settings/Naming/NamingModel',
+    'Settings/SyncNotification',
+    'Mixins/AsModelBoundView'], function (App, Marionette, NamingModel, SyncNotification, AsModelBoundView) {
 
-    NzbDrone.Settings.Naming.NamingView = Backbone.Marionette.ItemView.extend({
-        template : 'Settings/Naming/NamingTemplate',
+    var view = Marionette.ItemView.extend({
+        template: 'Settings/Naming/NamingTemplate',
 
         initialize: function () {
-            this.model = new NzbDrone.Settings.Naming.NamingModel();
+            this.model = new NamingModel();
             this.model.fetch();
 
-            NzbDrone.vent.on(NzbDrone.Commands.SaveSettings, this.saveSettings, this);
+            this.listenTo(App.vent, App.Commands.SaveSettings, this.saveSettings);
+
         },
 
         saveSettings: function () {
-            this.model.saveIfChanged(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
+            this.model.saveIfChanged(undefined, SyncNotification.callback({
                 successMessage: 'Naming Settings saved',
-                errorMessage: "Failed to save Naming Settings"
+                errorMessage  : "Failed to save Naming Settings"
             }));
         }
     });
-})
-;
+
+    return AsModelBoundView.call(view);
+});

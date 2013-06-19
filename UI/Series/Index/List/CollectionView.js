@@ -7,4 +7,6 @@ define(['app', 'Series/Index/List/ItemView', 'Config'], function () {
         itemViewContainer       : '#x-series-list',
         template                : 'Series/Index/List/CollectionTemplate'
     });
+
+    return NzbDrone.Series.Index.List.CollectionView;
 });

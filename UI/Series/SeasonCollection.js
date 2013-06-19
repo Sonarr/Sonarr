@@ -17,4 +17,7 @@ define(['app', 'Series/SeasonModel', 'backbone.pageable'], function (App, Season
             order  : null
         }
     });
+
+
+    return   NzbDrone.Series.SeasonCollection;
 });

@@ -13,4 +13,6 @@ define(['app', 'Series/SeriesModel'], function () {
             order: -1
         }
     });
+
+    return NzbDrone.Series.SeriesCollection;
 });

@@ -1,13 +1,8 @@
 ﻿'use strict';
 
-define([
-    'app',
-    'Quality/QualitySizeCollection',
-    'bootstrap.slider'
+define(['marionette', 'bootstrap.slider'], function (Marionette) {
 
-], function () {
-
-    NzbDrone.Settings.Quality.Size.QualitySizeView = Backbone.Marionette.ItemView.extend({
+    return Marionette.ItemView.extend({
         template : 'Settings/Quality/Size/QualitySizeTemplate',
         className: 'quality-size-item',
 

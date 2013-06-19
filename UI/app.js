@@ -2,22 +2,23 @@
 require.config({
 
     paths: {
-        'backbone'          : 'JsLibraries/backbone',
-        'handlebars'        : 'JsLibraries/handlebars.runtime',
-        'bootstrap'         : 'JsLibraries/bootstrap',
-        'bootstrap.slider'  : 'JsLibraries/bootstrap.slider',
-        'backbone.mutators' : 'JsLibraries/backbone.mutators',
-        'backbone.deepmodel': 'JsLibraries/backbone.deep.model',
-        'backbone.pageable' : 'JsLibraries/backbone.pageable',
-        'backgrid'          : 'JsLibraries/backbone.backgrid',
-        'backgrid.paginator': 'JsLibraries/backbone.backgrid.paginator',
-        'fullcalendar'      : 'JsLibraries/fullcalendar',
-        'backstrech'        : 'JsLibraries/jquery.backstretch',
-        '$'                 : 'JsLibraries/jquery',
-        'underscore'        : 'JsLibraries/underscore',
-        'marionette'        : 'JsLibraries/backbone.marionette',
-        'signalR'           : 'JsLibraries/jquery.signalR',
-        'libs'              : 'JsLibraries/'
+        'backbone'            : 'JsLibraries/backbone',
+        'handlebars'          : 'JsLibraries/handlebars.runtime',
+        'bootstrap'           : 'JsLibraries/bootstrap',
+        'bootstrap.slider'    : 'JsLibraries/bootstrap.slider',
+        'backbone.mutators'   : 'JsLibraries/backbone.mutators',
+        'backbone.deepmodel'  : 'JsLibraries/backbone.deep.model',
+        'backbone.pageable'   : 'JsLibraries/backbone.pageable',
+        'backbone.modelbinder': 'JsLibraries/backbone.modelbinder',
+        'backgrid'            : 'JsLibraries/backbone.backgrid',
+        'backgrid.paginator'  : 'JsLibraries/backbone.backgrid.paginator',
+        'fullcalendar'        : 'JsLibraries/fullcalendar',
+        'backstrech'          : 'JsLibraries/jquery.backstretch',
+        '$'                   : 'JsLibraries/jquery',
+        'underscore'          : 'JsLibraries/underscore',
+        'marionette'          : 'JsLibraries/backbone.marionette',
+        'signalR'             : 'JsLibraries/jquery.signalR',
+        'libs'                : 'JsLibraries/'
     },
 
     shim: {
@@ -53,10 +54,15 @@ require.config({
         },
 
         marionette: {
-            deps   : ['backbone', 'mixins/backbone.marionette.templates'],
+            deps   : [
+                'backbone',
+                'mixins/backbone.marionette.templates',
+                'mixins/AsNamedView'
+            ],
             exports: 'Marionette',
-            init   : function (Backbone, TemplateMixin) {
+            init   : function (Backbone, TemplateMixin, AsNamedView) {
                 TemplateMixin.call(Marionette.TemplateCache);
+                AsNamedView.call(Marionette.ItemView.prototype);
             }
         },
 
@@ -143,19 +149,6 @@ define([
 
     window.NzbDrone.Calendar = {};
 
-    window.NzbDrone.Settings = {
-        Naming        : {},
-        Quality       : {
-            Size   : {},
-            Profile: {}
-        },
-        Indexers      : {},
-        DownloadClient: {},
-        Notifications : {},
-        General       : {},
-        Misc          : {}
-    };
-
     window.NzbDrone.Missing = {};
     window.NzbDrone.History = {};
     window.NzbDrone.Logs = {};
@@ -171,8 +164,8 @@ define([
     };
 
     window.NzbDrone.Constants = {
-        ApiRoot: '/api',
-        Version: '0.0.0.0',
+        ApiRoot  : '/api',
+        Version  : '0.0.0.0',
         BuildDate: '2013-01-01T00:00:00Z'
     };
 

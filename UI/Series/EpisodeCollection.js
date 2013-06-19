@@ -12,4 +12,7 @@ define(['app', 'Series/EpisodeModel'], function () {
             return new NzbDrone.Series.EpisodeCollection(filtered);
         }
     });
+
+
+    return   NzbDrone.Series.EpisodeCollection;
 });

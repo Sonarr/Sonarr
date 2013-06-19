@@ -2,23 +2,27 @@
 
 define([
     'app',
+    'marionette',
     'Settings/Notifications/Model',
-    'Settings/Notifications/DeleteView'
+    'Settings/Notifications/DeleteView',
+    'Settings/SyncNotification',
+    'Shared/Messenger',
+    'Mixins/AsModelBoundView'
 
-], function () {
+], function (App, Marionette, NotificationModel, DeleteView, SyncNotification, Messenger, AsModelBoundView) {
 
-    NzbDrone.Settings.Notifications.EditView = Backbone.Marionette.ItemView.extend({
-        template  : 'Settings/Notifications/EditTemplate',
+    var model = Marionette.ItemView.extend({
+        template: 'Settings/Notifications/EditTemplate',
 
         events: {
-            'click .x-save'   : '_saveNotification',
-            'click .x-remove' : '_deleteNotification',
-            'click .x-test'   : '_test'
+            'click .x-save'  : '_saveNotification',
+            'click .x-remove': '_deleteNotification',
+            'click .x-test'  : '_test'
         },
 
         ui: {
-            testButton : '.x-test',
-            testIcon   : '.x-test-icon'
+            testButton: '.x-test',
+            testIcon  : '.x-test-icon'
         },
 
         initialize: function (options) {
@@ -30,22 +34,22 @@ define([
             var success = 'Notification Saved: ' + name;
             var fail = 'Failed to save notification: ' + name;
 
-            this.model.save(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
-                successMessage: success,
-                errorMessage: fail,
+            this.model.save(undefined, SyncNotification.callback({
+                successMessage : success,
+                errorMessage   : fail,
                 successCallback: this._saveSuccess,
-                context: this
+                context        : this
             }));
         },
 
         _deleteNotification: function () {
-            var view = new NzbDrone.Settings.Notifications.DeleteView({ model: this.model });
-            NzbDrone.modalRegion.show(view);
+            var view = new DeleteView({ model: this.model });
+            App.modalRegion.show(view);
         },
 
         _saveSuccess: function () {
             this.notificationCollection.add(this.model, { merge: true });
-            NzbDrone.modalRegion.closeModal();
+            App.modalRegion.closeModal();
         },
 
         _test: function () {
@@ -62,9 +66,9 @@ define([
                 });
 
                 var self = this;
-                var commandPromise = NzbDrone.Commands.Execute(testCommand, properties);
+                var commandPromise = App.Commands.Execute(testCommand, properties);
                 commandPromise.done(function () {
-                    NzbDrone.Shared.Messenger.show({
+                    Messenger.show({
                         message: 'Notification settings tested successfully'
                     });
                 });
@@ -74,7 +78,7 @@ define([
                         return;
                     }
 
-                    NzbDrone.Shared.Messenger.show({
+                    Messenger.show({
                         message: 'Failed to test notification settings',
                         type   : 'error'
                     });
@@ -90,4 +94,6 @@ define([
             }
         }
     });
+
+    return AsModelBoundView.call(model);
 });

@@ -1,7 +1,7 @@
 ﻿'use strict';
-define(['app', 'Settings/SettingsModel', 'Shared/Messenger'], function () {
+define(['app', 'Mixins/AsModelBoundView'], function (App, AsModelBoundView) {
 
-    NzbDrone.Settings.General.GeneralView = Backbone.Marionette.ItemView.extend({
+    var view = Backbone.Marionette.ItemView.extend({
             template: 'Settings/General/GeneralTemplate',
 
             initialize: function () {
@@ -12,11 +12,13 @@ define(['app', 'Settings/SettingsModel', 'Shared/Messenger'], function () {
                 if (!this.model.isSaved) {
                     this.model.save(undefined, NzbDrone.Settings.SyncNotificaiton.callback({
                         successMessage: 'General Settings saved',
-                        errorMessage: "Failed to save General Settings"
+                        errorMessage  : "Failed to save General Settings"
                     }));
                 }
             }
         }
     );
+
+    return AsModelBoundView.call(view);
 });
 

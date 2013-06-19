@@ -4,6 +4,7 @@ define([
     'Series/Index/List/CollectionView',
     'Series/Index/Posters/CollectionView',
     'Series/Index/EmptyView',
+    'Series/SeriesCollection',
     'Cells/AirDateCell',
     'Cells/SeriesTitleCell',
     'Cells/TemplatedCell',
@@ -12,7 +13,20 @@ define([
     'Config',
     'Shared/LoadingView'
 ],
-    function () {
+    function (
+        App,
+        ListCollectionView,
+        PosterCollectionView,
+        EmptyView,
+        SeriesCollection,
+        AirDateCell,
+        SeriesTitleCell,
+        TemplatedCell,
+        SeriesStatusCell,
+        ToolbarLayout,
+        Config,
+        LoadingView)
+    {
         NzbDrone.Series.Index.SeriesIndexLayout = Backbone.Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -30,7 +44,7 @@ define([
                 {
                     name : 'this',
                     label: 'Title',
-                    cell : NzbDrone.Cells.SeriesTitleCell
+                    cell : SeriesTitleCell
                 },
                 {
                     name : 'seasonCount',
@@ -50,21 +64,21 @@ define([
                 {
                     name : 'nextAiring',
                     label: 'Next Airing',
-                    cell : NzbDrone.Cells.AirDateCell
+                    cell : AirDateCell
                 },
                 {
                     name    : 'this',
                     label   : 'Episodes',
                     sortable: false,
                     template: 'Series/EpisodeProgressTemplate',
-                    cell    : NzbDrone.Cells.TemplatedCell
+                    cell    : TemplatedCell
                 },
                 {
                     name    : 'this',
                     label   : '',
                     sortable: false,
                     template: 'Series/Index/Table/ControlsColumnTemplate',
-                    cell    : NzbDrone.Cells.TemplatedCell
+                    cell    : TemplatedCell
                 }
             ],
 
@@ -107,24 +121,24 @@ define([
             },
 
             _showList: function () {
-                var view = new NzbDrone.Series.Index.List.CollectionView();
+                var view = new ListCollectionView();
                 this._fetchCollection(view);
             },
 
             _showPosters: function () {
-                var view = new NzbDrone.Series.Index.Posters.CollectionView();
+                var view = new PosterCollectionView();
                 this._fetchCollection(view);
             },
 
             _showEmpty: function () {
-                this.series.show(new NzbDrone.Series.Index.EmptyView());
+                this.series.show(new EmptyView());
             },
 
             _fetchCollection: function (view) {
                 var self = this;
 
                 if (this.seriesCollection.models.length === 0) {
-                    this.series.show(new NzbDrone.Shared.LoadingView());
+                    this.series.show(new LoadingView());
 
                     this.seriesCollection.fetch()
                         .done(function () {
@@ -145,7 +159,7 @@ define([
             },
 
             initialize: function () {
-                this.seriesCollection = new NzbDrone.Series.SeriesCollection();
+                this.seriesCollection = new SeriesCollection();
             },
 
             onShow: function () {
@@ -178,11 +192,13 @@ define([
                     ]
                 };
 
-                this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({
+                this.toolbar.show(new ToolbarLayout({
                     right  : [ viewButtons],
                     left   : [ this.leftSideButtons],
                     context: this
                 }));
             }
         });
+
+        return NzbDrone.Series.Index.SeriesIndexLayou;
     });

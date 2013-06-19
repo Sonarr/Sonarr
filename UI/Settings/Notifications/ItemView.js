@@ -2,15 +2,15 @@
 
 define([
     'app',
-    'Settings/Notifications/Collection',
+    'marionette',
     'Settings/Notifications/EditView',
     'Settings/Notifications/DeleteView'
 
-], function () {
+], function (App, Marionette, EditView, DeleteView) {
 
-    NzbDrone.Settings.Notifications.ItemView = Backbone.Marionette.ItemView.extend({
-        template  : 'Settings/Notifications/ItemTemplate',
-        tagName: 'tr',
+    return Marionette.ItemView.extend({
+        template: 'Settings/Notifications/ItemTemplate',
+        tagName : 'tr',
 
         events: {
             'click .x-edit'  : 'edit',
@@ -18,13 +18,13 @@ define([
         },
 
         edit: function () {
-            var view = new NzbDrone.Settings.Notifications.EditView({ model: this.model, notificationCollection: this.model.collection});
-            NzbDrone.modalRegion.show(view);
+            var view = new EditView({ model: this.model, notificationCollection: this.model.collection});
+            App.modalRegion.show(view);
         },
 
         deleteNotification: function () {
-            var view = new NzbDrone.Settings.Notifications.DeleteView({ model: this.model});
-            NzbDrone.modalRegion.show(view);
+            var view = new DeleteView({ model: this.model});
+            App.modalRegion.show(view);
         }
     });
 });

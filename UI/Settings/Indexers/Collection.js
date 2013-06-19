@@ -1,7 +1,7 @@
 ﻿"use strict";
-define(['app', 'Settings/Indexers/Model'], function () {
-    NzbDrone.Settings.Indexers.Collection = Backbone.Collection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/indexer',
-        model: NzbDrone.Settings.Indexers.Model
+define(['app', 'Settings/Indexers/Model'], function (App, IndexerModel) {
+    return Backbone.Collection.extend({
+        url  : App.Constants.ApiRoot + '/indexer',
+        model: IndexerModel
     });
 });

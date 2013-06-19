@@ -1,6 +1,6 @@
 "use strict";
-define(['app'], function () {
-    NzbDrone.Shared.Messenger = {
+define(function () {
+    return {
         show: function (options) {
 
             if (!options.type) {

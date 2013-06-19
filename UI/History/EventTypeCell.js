@@ -10,8 +10,8 @@ define(['app', 'Cells/NzbDroneCell' ], function () {
 
             if (this.cellValue) {
 
-                var icon = 'icon-question';
-                var toolTip = 'unknow event';
+                var icon;
+                var toolTip;
 
                 switch (this.cellValue) {
                     case 'grabbed':
@@ -22,10 +22,14 @@ define(['app', 'Cells/NzbDroneCell' ], function () {
                         icon = 'icon-hdd';
                         toolTip = 'Existing episode file added to library';
                         break;
-                    case 'DownloadFolderImported':
+                    case 'downloadFolderImported':
                         icon = 'icon-download-alt';
-                        toolTip = 'Episode downloaded succesfully and picked up from download client';
+                        toolTip = 'Episode downloaded successfully and picked up from download client';
                         break;
+                    default :
+                        icon = 'icon-question';
+                        toolTip = 'unknown event';
+
                 }
 
                 this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, toolTip));

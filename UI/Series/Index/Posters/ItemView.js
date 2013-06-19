@@ -40,4 +40,6 @@ define([
             this.ui.controls.slideToggle();
         }
     });
+
+    return NzbDrone.Series.Index.Posters.ItemView;
 });

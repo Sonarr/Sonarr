@@ -1,5 +1,10 @@
 "use strict";
-define(['app', 'Shared/Toolbar/Radio/RadioButtonCollectionView','Shared/Toolbar/Button/ButtonCollectionView', 'Shared/Toolbar/ButtonCollection'], function () {
+define([
+    'app',
+    'Shared/Toolbar/Radio/RadioButtonCollectionView',
+    'Shared/Toolbar/Button/ButtonCollectionView',
+    'Shared/Toolbar/ButtonCollection'
+], function () {
     NzbDrone.Shared.Toolbar.ToolbarLayout = Backbone.Marionette.Layout.extend({
         template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 
@@ -88,6 +93,8 @@ define(['app', 'Shared/Toolbar/Radio/RadioButtonCollectionView','Shared/Toolbar/
             this[position + '_' + (index + 1).toString()].show(buttonGroupView);
         }
     });
+
+    return  NzbDrone.Shared.Toolbar.ToolbarLayout;
 
 });
 

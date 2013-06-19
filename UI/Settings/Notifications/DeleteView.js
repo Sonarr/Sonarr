@@ -1,7 +1,6 @@
 'use strict';
-define(['app', 'Settings/Notifications/Model'], function () {
-
-    NzbDrone.Settings.Notifications.DeleteView = Backbone.Marionette.ItemView.extend({
+define(['app', 'marionette'], function (App, Marionette) {
+    return Marionette.ItemView.extend({
         template: 'Settings/Notifications/DeleteTemplate',
 
         events: {
@@ -9,12 +8,10 @@ define(['app', 'Settings/Notifications/Model'], function () {
         },
 
         removeNotification: function () {
-            var self = this;
-
             this.model.destroy({
                 wait   : true,
-                success: function (model) {
-                    NzbDrone.modalRegion.closeModal();
+                success: function () {
+                    App.modalRegion.closeModal();
                 }
             });
         }

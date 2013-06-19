@@ -28,4 +28,7 @@ define(['app', 'Series/SeriesModel'], function () {
 
         }
     });
+
+    return  NzbDrone.Series.Delete.DeleteSeriesView;
+
 });

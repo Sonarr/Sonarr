@@ -1,7 +1,8 @@
 ﻿"use strict";
-define(['app'], function () {
-    NzbDrone.Settings.General.GeneralSettingsModel = Backbone.Model.extend({
-        url: NzbDrone.Constants.ApiRoot + '/settings/host',
+define(['app', 'backbone', 'Mixins/AsChangeTrackingModel'], function (App, Backbone, AsChangeTrackingModel) {
+    var model = Backbone.Model.extend({
+
+        url: App.Constants.ApiRoot + '/settings/host',
 
         initialize: function () {
             this.on('change', function () {
@@ -13,4 +14,6 @@ define(['app'], function () {
             }, this);
         }
     });
+
+    return AsChangeTrackingModel.call(model);
 });

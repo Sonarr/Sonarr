@@ -4,4 +4,6 @@ define(['app', 'Quality/QualitySizeModel'], function () {
         model: NzbDrone.Quality.QualitySizeModel,
         url  : NzbDrone.Constants.ApiRoot + '/qualitysize'
     });
+
+    return  NzbDrone.Quality.QualitySizeCollection;
 });

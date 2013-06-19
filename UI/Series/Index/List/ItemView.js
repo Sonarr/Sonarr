@@ -8,7 +8,6 @@ define([
     'Series/Delete/DeleteSeriesView'
 
 ], function () {
-
     NzbDrone.Series.Index.List.ItemView = Backbone.Marionette.ItemView.extend({
         template: 'Series/Index/List/ItemTemplate',
 
@@ -31,4 +30,6 @@ define([
             NzbDrone.modalRegion.show(view);
         }
     });
+
+    return NzbDrone.Series.Index.List.ItemView;
 });

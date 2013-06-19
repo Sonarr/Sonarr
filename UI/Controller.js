@@ -1,5 +1,6 @@
 ﻿"use strict";
 define(['app',
+    'Settings/SettingsLayout',
     'Form/FormBuilder',
     'AddSeries/AddSeriesLayout',
     'Series/Index/SeriesIndexLayout',
@@ -9,7 +10,6 @@ define(['app',
     'MainMenuView',
     'Series/Details/SeriesDetailsLayout',
     'Series/EpisodeCollection',
-    'Settings/SettingsLayout',
     'Logs/Layout',
     'Release/Layout',
     'Missing/MissingLayout',
@@ -17,12 +17,12 @@ define(['app',
     'Shared/FormatHelpers',
     'Shared/TemplateHelpers',
     'Shared/Footer/View'],
-    function () {
+    function (App, SettingsLayout) {
         var controller = Backbone.Marionette.Controller.extend({
 
             series       : function () {
                 this._setTitle('NzbDrone');
-                NzbDrone.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexLayout());
+                App.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexLayout());
             },
             seriesDetails: function (query) {
 
@@ -32,52 +32,52 @@ define(['app',
                 series.fetch({
                     success: function (seriesModel) {
                         self._setTitle(seriesModel.get('title'));
-                        NzbDrone.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsLayout({ model: seriesModel }));
+                        App.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsLayout({ model: seriesModel }));
                     }
                 });
             },
 
             addSeries: function (action) {
                 this._setTitle('Add Series');
-                NzbDrone.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout({action: action}));
+                App.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout({action: action}));
             },
 
             calendar: function () {
                 this._setTitle('Calendar');
-                NzbDrone.mainRegion.show(new NzbDrone.Calendar.CalendarLayout());
+                App.mainRegion.show(new NzbDrone.Calendar.CalendarLayout());
             },
 
 
             settings: function (action) {
                 this._setTitle('Settings');
-                NzbDrone.mainRegion.show(new NzbDrone.Settings.SettingsLayout({action: action}));
+                App.mainRegion.show(new SettingsLayout({action: action}));
             },
 
             missing: function () {
                 this._setTitle('Missing');
 
-                NzbDrone.mainRegion.show(new NzbDrone.Missing.MissingLayout());
+                App.mainRegion.show(new NzbDrone.Missing.MissingLayout());
             },
 
             history: function () {
                 this._setTitle('History');
 
-                NzbDrone.mainRegion.show(new NzbDrone.History.HistoryLayout());
+                App.mainRegion.show(new NzbDrone.History.HistoryLayout());
             },
 
             rss: function () {
                 this._setTitle('RSS');
-                NzbDrone.mainRegion.show(new NzbDrone.Release.Layout());
+                App.mainRegion.show(new NzbDrone.Release.Layout());
             },
 
             logs: function () {
                 this._setTitle('logs');
-                NzbDrone.mainRegion.show(new NzbDrone.Logs.Layout());
+                App.mainRegion.show(new NzbDrone.Logs.Layout());
             },
 
             notFound: function () {
                 this._setTitle('Not Found');
-                NzbDrone.mainRegion.show(new NzbDrone.Shared.NotFoundView(this));
+                App.mainRegion.show(new NzbDrone.Shared.NotFoundView(this));
             },
 
 

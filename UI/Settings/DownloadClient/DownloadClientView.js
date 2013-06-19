@@ -1,16 +1,16 @@
 ﻿'use strict';
 
 define([
-    'app', 'Settings/SettingsModel','bootstrap'
+    'app', 'marionette', 'Mixins/AsModelBoundView', 'bootstrap'
 
-], function () {
+], function (App, Marionette, AsModelBoundView) {
 
-    NzbDrone.Settings.DownloadClient.DownloadClientView = Backbone.Marionette.ItemView.extend({
+    var view = Marionette.ItemView.extend({
         template : 'Settings/DownloadClient/DownloadClientTemplate',
         className: 'form-horizontal',
 
         ui: {
-            bsSwitch              : '.switch',
+            bsSwitch            : '.switch',
             tooltip             : '.help-inline i',
             pathInput           : '.x-path',
             sabConfig           : '.x-sab-config',
@@ -76,4 +76,6 @@ define([
             }
         }
     });
+
+    return AsModelBoundView.call(view);
 });
