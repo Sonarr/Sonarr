@@ -36,7 +36,7 @@ namespace NzbDrone
 
         public void Route(ApplicationModes applicationModes)
         {
-            if (!_runtimeInfo.IsUserInteractive)
+            if (!_runtimeInfo.IsUserInteractive && !OsInfo.IsLinux)
             {
                 applicationModes = ApplicationModes.Service;
             }
