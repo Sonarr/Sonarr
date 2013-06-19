@@ -10,10 +10,17 @@ define(
                 originalBeforeClose = this.prototype.onBeforeClose;
 
             this.prototype.onRender = function () {
-                if (this.model) {
-                    this._modelBinder = new ModelBinder();
-                    this._modelBinder.bind(this.model, this.el);
+
+                if (!this.model) {
+                    throw 'View has no model for binding';
                 }
+
+                if (!this._modelBinder) {
+                    this._modelBinder = new ModelBinder();
+                }
+
+                this._modelBinder.bind(this.model, this.el);
+
                 if (originalOnRender) {
                     originalOnRender.call(this);
                 }
