@@ -19,7 +19,11 @@ namespace NzbDrone.Api.Indexers
         private readonly IDownloadService _downloadService;
         private readonly IParsingService _parsingService;
 
-        public ReleaseModule(IFetchAndParseRss rssFetcherAndParser, ISearchForNzb nzbSearchService, IMakeDownloadDecision downloadDecisionMaker, IDownloadService downloadService, IParsingService parsingService)
+        public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
+            ISearchForNzb nzbSearchService,
+            IMakeDownloadDecision downloadDecisionMaker,
+            IDownloadService downloadService,
+            IParsingService parsingService)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _nzbSearchService = nzbSearchService;
@@ -39,7 +43,6 @@ namespace NzbDrone.Api.Indexers
 
             return release;
         }
-
 
         private List<ReleaseResource> GetReleases()
         {

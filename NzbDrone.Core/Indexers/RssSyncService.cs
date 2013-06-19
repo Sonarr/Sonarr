@@ -17,14 +17,17 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
-        private readonly IDownloadService _downloadService;
+        private readonly IDownloadApprovedReportsService _downloadApprovedReportsService;
         private readonly Logger _logger;
 
-        public RssSyncService(IFetchAndParseRss rssFetcherAndParser, IMakeDownloadDecision downloadDecisionMaker, IDownloadService downloadService, Logger logger)
+        public RssSyncService(IFetchAndParseRss rssFetcherAndParser,
+                              IMakeDownloadDecision downloadDecisionMaker,
+                              IDownloadApprovedReportsService downloadApprovedReportsService,
+                              Logger logger)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _downloadDecisionMaker = downloadDecisionMaker;
-            _downloadService = downloadService;
+            _downloadApprovedReportsService = downloadApprovedReportsService;
             _logger = logger;
         }
 
@@ -35,30 +38,7 @@ namespace NzbDrone.Core.Indexers
 
             var reports = _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
-
-            var qualifiedReports = decisions
-                         .Where(c => c.Approved)
-                         .Select(c => c.RemoteEpisode)
-                         .OrderByDescending(c => c.ParsedEpisodeInfo.Quality)
-                         .ThenBy(c => c.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
-                         .ThenBy(c => c.Report.Age);
-
-            var downloadedReports = new List<int>();
-
-            foreach (var episodeParseResult in qualifiedReports)
-            {
-                try
-                {
-                    if (downloadedReports.Intersect(episodeParseResult.Episodes.Select(e => e.Id)).Any()) continue;
-
-                    _downloadService.DownloadReport(episodeParseResult);
-                    downloadedReports.AddRange(episodeParseResult.Episodes.Select(e => e.Id));
-                }
-                catch (Exception e)
-                {
-                    _logger.WarnException("Couldn't add report to download queue. " + episodeParseResult, e);
-                }
-            }
+            var qualifiedReports = _downloadApprovedReportsService.DownloadApproved(decisions);
 
             _logger.Info("RSS Sync Completed. Reports found: {0}, Fetches attempted: {1}", reports.Count, qualifiedReports.Count());
         }

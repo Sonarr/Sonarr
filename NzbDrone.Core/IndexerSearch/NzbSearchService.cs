@@ -28,7 +28,13 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly IMakeDownloadDecision _makeDownloadDecision;
         private readonly Logger _logger;
 
-        public NzbSearchService(IIndexerService indexerService, IFetchFeedFromIndexers feedFetcher, ISceneMappingService sceneMapping, ISeriesService seriesService, IEpisodeService episodeService, IMakeDownloadDecision makeDownloadDecision, Logger logger)
+        public NzbSearchService(IIndexerService indexerService,
+                                IFetchFeedFromIndexers feedFetcher,
+                                ISceneMappingService sceneMapping,
+                                ISeriesService seriesService,
+                                IEpisodeService episodeService,
+                                IMakeDownloadDecision makeDownloadDecision,
+                                Logger logger)
         {
             _indexerService = indexerService;
             _feedFetcher = feedFetcher;
@@ -38,8 +44,6 @@ namespace NzbDrone.Core.IndexerSearch
             _makeDownloadDecision = makeDownloadDecision;
             _logger = logger;
         }
-
-
 
         public List<DownloadDecision> EpisodeSearch(int episodeId)
         {
@@ -53,7 +57,6 @@ namespace NzbDrone.Core.IndexerSearch
 
             return SearchSingle(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
         }
-
 
         private List<DownloadDecision> SearchSingle(int seriesId, int seasonNumber, int episodeNumber)
         {
