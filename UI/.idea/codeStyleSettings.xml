@@ -5,10 +5,16 @@
       <value>
         <option name="LINE_SEPARATOR" value="&#13;&#10;" />
         <option name="RIGHT_MARGIN" value="190" />
+        <option name="HTML_ATTRIBUTE_WRAP" value="0" />
+        <option name="HTML_KEEP_LINE_BREAKS" value="false" />
+        <option name="HTML_KEEP_BLANK_LINES" value="1" />
         <option name="HTML_ALIGN_ATTRIBUTES" value="false" />
+        <option name="HTML_INLINE_ELEMENTS" value="" />
+        <option name="HTML_DONT_ADD_BREAKS_IF_INLINE_CONTENT" value="" />
         <CssCodeStyleSettings>
           <option name="HEX_COLOR_LOWER_CASE" value="true" />
           <option name="HEX_COLOR_LONG_FORMAT" value="true" />
+          <option name="VALUE_ALIGNMENT" value="1" />
         </CssCodeStyleSettings>
         <JSCodeStyleSettings>
           <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
@@ -22,9 +28,18 @@
           </indentOptions>
         </codeStyleSettings>
         <codeStyleSettings language="JavaScript">
+          <option name="KEEP_LINE_BREAKS" value="false" />
           <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+          <option name="ELSE_ON_NEW_LINE" value="true" />
+          <option name="CATCH_ON_NEW_LINE" value="true" />
+          <option name="FINALLY_ON_NEW_LINE" value="true" />
           <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
           <option name="SPACE_AFTER_COLON" value="false" />
+          <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
+          <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
+          <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
+          <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="2" />
           <option name="IF_BRACE_FORCE" value="3" />
           <option name="DOWHILE_BRACE_FORCE" value="3" />
           <option name="WHILE_BRACE_FORCE" value="3" />
