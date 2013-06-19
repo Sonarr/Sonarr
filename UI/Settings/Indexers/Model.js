@@ -1,9 +1,11 @@
 ﻿"use strict";
 define([
-    'backbone.deepmodel', 'Mixins/AsChangeTrackingModel'], function (DeepModel, AsChangeTrackingModel) {
-    var model = DeepModel.DeepModel.extend({
+    'Settings/SettingsModelBase'], function (ModelBase) {
+    return ModelBase.extend({
+
+        successMessage: 'Indexer Saved',
+        errorMessage  : 'Couldn\'t save indexer'
+
 
     });
-
-    return AsChangeTrackingModel.call(model);
 });

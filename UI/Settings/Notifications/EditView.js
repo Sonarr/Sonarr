@@ -5,11 +5,10 @@ define([
     'marionette',
     'Settings/Notifications/Model',
     'Settings/Notifications/DeleteView',
-    'Settings/SyncNotification',
     'Shared/Messenger',
     'Mixins/AsModelBoundView'
 
-], function (App, Marionette, NotificationModel, DeleteView, SyncNotification, Messenger, AsModelBoundView) {
+], function (App, Marionette, NotificationModel, DeleteView, Messenger, AsModelBoundView) {
 
     var model = Marionette.ItemView.extend({
         template: 'Settings/Notifications/EditTemplate',
@@ -30,16 +29,11 @@ define([
         },
 
         _saveNotification: function () {
-            var name = this.model.get('name');
-            var success = 'Notification Saved: ' + name;
-            var fail = 'Failed to save notification: ' + name;
+            var promise = this.model.saveSettings();
 
-            this.model.save(undefined, SyncNotification.callback({
-                successMessage : success,
-                errorMessage   : fail,
-                successCallback: this._saveSuccess,
-                context        : this
-            }));
+            if (promise) {
+                promise.done(this._saveSuccess);
+            }
         },
 
         _deleteNotification: function () {

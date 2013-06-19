@@ -13,24 +13,9 @@ define([
     'Settings/Notifications/CollectionView',
     'Settings/Notifications/Collection',
     'Settings/General/GeneralView',
-    'Settings/Misc/MiscView',
-    'Settings/SyncNotification'
+    'Settings/Misc/MiscView'
 ],
-    function (App,
-        Marionette,
-        SettingsModel,
-        GeneralSettingsModel,
-        NamingView,
-        NamingModel,
-        QualityLayout,
-        IndexerCollectionView,
-        IndexerCollection,
-        DownloadClientView,
-        NotificationCollectionView,
-        NotificationCollection,
-        GeneralView,
-        MiscView,
-        SyncNotification) {
+    function (App, Marionette, SettingsModel, GeneralSettingsModel, NamingView, NamingModel, QualityLayout, IndexerCollectionView, IndexerCollection, DownloadClientView, NotificationCollectionView, NotificationCollection, GeneralView, MiscView) {
         return Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
 
@@ -185,13 +170,7 @@ define([
             },
 
             save: function () {
-
                 App.vent.trigger(App.Commands.SaveSettings);
-
-                this.settings.saveIfChanged(undefined, SyncNotification.callback({
-                    successMessage: 'Settings saved',
-                    errorMessage  : "Failed to save settings"
-                }));
             }
         });
     });

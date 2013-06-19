@@ -1,10 +1,12 @@
 ﻿"use strict";
 
-define(['marionette'], function () {
+define(['marionette', 'Mixins/AsModelBoundView'], function (Marionette, AsModelBoundView) {
 
-    return Marionette.ItemView.extend({
+    var view = Marionette.ItemView.extend({
         template: 'Settings/Indexers/ItemTemplate',
         tagName : 'li'
     });
+
+    return AsModelBoundView.call(view);
 
 });

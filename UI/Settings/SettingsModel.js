@@ -1,10 +1,9 @@
 ﻿"use strict";
 define(['app',
-    'backbone',
-    'Mixins/SaveIfChangedModel'], function (App, Backbone, AsChangeTrackingModel) {
-    var model = Backbone.Model.extend({
-        url: App.Constants.ApiRoot + '/settings'
+    'Settings/SettingsModelBase'], function (App, SettingsModelBase) {
+    return SettingsModelBase.extend({
+        url           : App.Constants.ApiRoot + '/settings',
+        successMessage: 'Settings saved',
+        errorMessage  : "Failed to save settings"
     });
-
-    return AsChangeTrackingModel.call(model);
 });

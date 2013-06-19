@@ -3,10 +3,8 @@
 define([
     'app',
     'marionette',
-    'Shared/Messenger',
     'Mixins/AsModelBoundView'
-
-], function (App, Marionette, Messenger, AsModelBoundView) {
+], function (App, Marionette, AsModelBoundView) {
 
     var view = Marionette.ItemView.extend({
         template: 'Settings/Indexers/EditTemplate',
@@ -20,27 +18,9 @@ define([
         },
 
         save: function () {
-            this.model.save(undefined, this.syncNotification("Indexer Saved", "Couldn't Save Indexer", this));
-        },
-
-        syncNotification: function (success, error, context) {
-            return {
-                success: function () {
-                    Messenger.show({
-                        message: success
-                    });
-
-                    context.indexerCollection.add(context.model);
-                    App.modalRegion.closeModal();
-                },
-
-                error: function () {
-                    window.alert(error);
-                }
-            };
+            this.model.saveSettings();
         }
     });
 
     return AsModelBoundView.call(view);
-
 });

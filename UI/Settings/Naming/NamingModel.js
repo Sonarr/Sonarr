@@ -1,10 +1,10 @@
 ﻿"use strict";
 define(['app',
-    'Mixins/AsChangeTrackingModel'], function (App, AsChangeTrackingModel) {
-    var model = Backbone.Model.extend({
-        url: App.Constants.ApiRoot + '/config/naming'
+    'Settings/SettingsModelBase'], function (App, ModelBase) {
+    return  ModelBase.extend({
+        url           : App.Constants.ApiRoot + '/config/naming',
+        successMessage: 'Naming settings saved',
+        errorMessage  : 'Couldn\'t save naming settings'
     });
-
-    return AsChangeTrackingModel.call(model);
 
 });
