@@ -134,7 +134,7 @@ namespace NzbDrone.Common
             get
             {
                 var fileLocation = Assembly.GetCallingAssembly().Location;
-                return new FileInfo(fileLocation).CreationTime;
+                return new FileInfo(fileLocation).LastWriteTimeUtc;
             }
         }
 

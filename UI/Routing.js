@@ -1,5 +1,5 @@
 ﻿"use strict";
-require(['app', 'Controller', 'RouteBinder', 'Shared/Footer/View'], function (App, Controller, RouteBinder, FooterView) {
+require(['Controller', 'RouteBinder', 'Shared/Footer/View'], function (Controller, RouteBinder, FooterView) {
 
     NzbDrone.Router = Backbone.Marionette.AppRouter.extend({
 

@@ -24,13 +24,13 @@ namespace NzbDrone.Api.System
         {
             return new
                 {
-                    Version = _environmentProvider.Version,
+                    Version = _environmentProvider.Version.ToString(),
                     AppData = _environmentProvider.GetAppDataPath(),
                     IsAdmin = _environmentProvider.IsAdmin,
                     IsUserInteractive = _environmentProvider.IsUserInteractive,
                     BuildTime = _environmentProvider.BuildDateTime,
                     StartupPath = _environmentProvider.StartUpPath,
-                    OsVersion = _environmentProvider.GetOsVersion(),
+                    OsVersion = _environmentProvider.GetOsVersion().ToString(),
                     IsMono = EnvironmentProvider.IsMono,
                     IsProduction = EnvironmentProvider.IsProduction,
                     IsDebug = EnvironmentProvider.IsDebug,

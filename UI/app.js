@@ -1,8 +1,11 @@
 ﻿"use strict";
 require.config({
 
+    urlArgs: 'bust=' + window.ServerStatus.version,
+
     paths: {
         'backbone'            : 'JsLibraries/backbone',
+        'sugar'               : 'JsLibraries/sugar',
         'handlebars'          : 'JsLibraries/handlebars.runtime',
         'bootstrap'           : 'JsLibraries/bootstrap',
         'bootstrap.slider'    : 'JsLibraries/bootstrap.slider',
@@ -24,58 +27,100 @@ require.config({
     shim: {
 
         $: {
-            exports: '$'
+            exports: '$',
+            init   : function () {
+                window.Constants = {
+                    ApiRoot: '/api'
+                };
+            }
         },
 
         bootstrap: {
-            deps: ['$']
+            deps:
+                [
+                    '$'
+                ]
         },
 
         'bootstrap.slider': {
-            deps: ['$']
+            deps:
+                [
+                    '$'
+                ]
         },
 
         backstrech: {
-            deps: ['$']
+            deps:
+                [
+                    '$'
+                ]
         },
 
         'underscore': {
-            deps   : ['$'],
+            deps   :
+                [
+                    '$'
+                ],
             exports: '_'
         },
 
         backbone: {
-            deps   : ['underscore', '$'],
+            deps   :
+                [
+                    'underscore',
+                    '$'
+                ],
             exports: 'Backbone'
         },
 
+
         'backbone.deepmodel': {
-            deps: ['mixins/underscore.mixin.deepExtend']
+            deps:
+                [
+                    'mixins/underscore.mixin.deepExtend'
+                ]
         },
 
         marionette: {
-            deps   : [
-                'backbone',
-                'mixins/backbone.marionette.templates',
-                'mixins/AsNamedView'
-            ],
+            deps:
+                [
+                    'backbone',
+                    'handlebars',
+                    'mixins/backbone.marionette.templates',
+                    'mixins/AsNamedView',
+
+                    'Handlebars/Helpers/DateTime'
+                ],
+
             exports: 'Marionette',
-            init   : function (Backbone, TemplateMixin, AsNamedView) {
+            init   : function (Backbone, Handlebars, TemplateMixin, AsNamedView, DateTimeHelpers) {
                 TemplateMixin.call(Marionette.TemplateCache);
                 AsNamedView.call(Marionette.ItemView.prototype);
+                DateTimeHelpers.register(Handlebars);
+
             }
         },
 
+
         signalR: {
-            deps: ['$']
+            deps:
+                [
+                    '$'
+                ]
         },
 
         'backbone.pageable': {
-            deps: ['backbone']
+            deps:
+                [
+                    'backbone'
+                ]
         },
 
         backgrid            : {
-            deps: ['backbone'],
+            deps:
+                [
+                    'backbone'
+                ],
             init: function () {
                 Backgrid.Column.prototype.defaults = {
                     name      : undefined,
@@ -90,102 +135,112 @@ require.config({
             }
         },
         'backgrid.paginator': {
-            deps: ['backgrid']
+            deps:
+                [
+                    'backgrid'
+                ]
         }
     }
 });
 
-define([
-    'marionette',
-    'shared/modal/region',
-    'Instrumentation/StringFormat',
-    'Instrumentation/ErrorHandler'
-], function (Marionette, ModalRegion) {
+define(
+    [
+        'marionette',
+        'shared/modal/region',
+        'Instrumentation/StringFormat',
+        'Instrumentation/ErrorHandler'
+    ], function (Marionette, ModalRegion) {
 
-    require(['libs/backbone.mutators']);
+        require(
+            [
+                'libs/backbone.mutators'
+            ]);
 
 
-    window.NzbDrone = new Marionette.Application();
-    window.NzbDrone.Config = {};
-    window.NzbDrone.Form = {};
+        window.NzbDrone = new Marionette.Application();
+        window.NzbDrone.Config = {};
+        window.NzbDrone.Form = {};
 
-    window.NzbDrone.Series = {
-        Index  : {
-            Table  : {},
-            List   : {},
-            Posters: {}
+        window.NzbDrone.Series = {
+            Index  : {
+                Table  : {},
+                List   : {},
+                Posters: {}
 
-        },
-        Edit   : {},
-        Delete : {},
-        Details: {}
-    };
+            },
+            Edit   : {},
+            Delete : {},
+            Details: {}
+        };
 
-    window.NzbDrone.AddSeries = {
-        New        : {},
-        Existing   : {},
-        RootFolders: {}
-    };
+        window.NzbDrone.AddSeries = {
+            New        : {},
+            Existing   : {},
+            RootFolders: {}
+        };
 
-    window.NzbDrone.Episode = {
-        Search  : {},
-        Summary : {},
-        Activity: {}
-    };
+        window.NzbDrone.Episode = {
+            Search  : {},
+            Summary : {},
+            Activity: {}
+        };
 
-    window.NzbDrone.Quality = {};
+        window.NzbDrone.Quality = {};
 
-    window.NzbDrone.Commands = {};
+        window.NzbDrone.Commands = {};
 
-    window.NzbDrone.Shared = {
-        Toolbar      : {},
-        Messenger    : {},
-        FormatHelpers: {},
-        Grid         : {},
-        Footer       : {}
-    };
+        window.NzbDrone.Shared = {
+            Toolbar      : {},
+            Messenger    : {},
+            FormatHelpers: {},
+            Grid         : {}
+        };
 
-    window.NzbDrone.Cells = {};
+        window.NzbDrone.Cells = {};
 
-    window.NzbDrone.Calendar = {};
+        window.NzbDrone.Calendar = {};
 
-    window.NzbDrone.Missing = {};
-    window.NzbDrone.History = {};
-    window.NzbDrone.Logs = {};
-    window.NzbDrone.Release = {};
-    window.NzbDrone.Mixins = {};
+        window.NzbDrone.Missing = {};
+        window.NzbDrone.History = {};
+        window.NzbDrone.Logs = {};
+        window.NzbDrone.Release = {};
+        window.NzbDrone.Mixins = {};
 
-    window.NzbDrone.Events = {
-        SeriesAdded: 'seriesAdded'
-    };
+        window.NzbDrone.Events = {
+            SeriesAdded: 'seriesAdded'
+        };
 
-    window.NzbDrone.Commands = {
-        SaveSettings: 'saveSettings'
-    };
+        window.NzbDrone.Commands = {
+            SaveSettings: 'saveSettings'
+        };
 
-    window.NzbDrone.Constants = {
-        ApiRoot  : '/api',
-        Version  : '0.0.0.0',
-        BuildDate: '2013-01-01T00:00:00Z'
-    };
+        window.NzbDrone.Constants = {
+            ApiRoot: '/api'
+        };
 
-    window.NzbDrone.addInitializer(function () {
+        window.NzbDrone.addInitializer(function () {
 
-        console.log('starting application');
+            console.log('starting application');
 
+        });
+
+        NzbDrone.addRegions({
+            mainRegion        : '#main-region',
+            notificationRegion: '#notification-region',
+            modalRegion       : ModalRegion,
+            footerRegion      : '#footer-region'
+        });
+
+        window.NzbDrone.start();
+
+
+        window.require(
+            [
+                'Routing'
+            ]);
+
+        return NzbDrone;
     });
-
-    NzbDrone.addRegions({
-        mainRegion        : '#main-region',
-        notificationRegion: '#notification-region',
-        modalRegion       : ModalRegion,
-        footerRegion      : '#footer-region'
-    });
-
-    window.NzbDrone.start();
-
-    return NzbDrone;
-});
 
 
 
