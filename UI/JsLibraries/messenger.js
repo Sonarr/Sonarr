@@ -1,4 +1,4 @@
-/*! messenger 1.3.2 */
+/*! messenger 1.3.3 */
 /*
  * This file begins the output concatenated into messenger.js
  *
@@ -993,13 +993,12 @@ window.Messenger.Events = (function() {
       }
       handlers = {};
       _.each(['error', 'success'], function(type) {
-        var _ref3;
-        if ((_ref3 = opts[type]) != null ? _ref3._originalHandler : void 0) {
-          opts[type] = opts[type]._originalHandler;
-        }
         return handlers[type] = function() {
-          var data, defaultOpts, handlerResp, msgOpts, reason, resp, responseOpts, xhr, _base, _ref10, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+          var data, defaultOpts, handlerResp, msgOpts, reason, resp, responseOpts, xhr, _base, _ref10, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
           resp = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          if ((_ref3 = opts[type]) != null ? _ref3._originalHandler : void 0) {
+            opts[type] = opts[type]._originalHandler;
+          }
           _ref4 = _this._normalizeResponse.apply(_this, resp), reason = _ref4[0], data = _ref4[1], xhr = _ref4[2];
           if (type === 'success' && !(msg.errorCount != null) && m_opts.showSuccessWithoutError === false) {
             m_opts['successMessage'] = null;
@@ -1076,7 +1075,7 @@ window.Messenger.Events = (function() {
           }
           msg.update(msgOpts);
           if (responseOpts && msgOpts.message) {
-            $.globalMessenger();
+            Messenger();
             return msg.show();
           } else {
             return msg.hide();
