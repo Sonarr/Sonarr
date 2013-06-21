@@ -1,7 +1,7 @@
 ﻿"use strict";
 define(
     [
-        'App',
+        'app',
         'backbone',
         'Series/SeriesModel'
     ], function (App, Backbone, SeriesModel) {

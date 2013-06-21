@@ -1,23 +1,25 @@
 ﻿"use strict";
-define(['app',
-    'Settings/SettingsLayout',
-    'Form/FormBuilder',
-    'AddSeries/AddSeriesLayout',
-    'Series/Index/SeriesIndexLayout',
-    'Calendar/CalendarLayout',
-    'Shared/NotificationView',
-    'Shared/NotFoundView',
-    'MainMenuView',
-    'Series/Details/SeriesDetailsLayout',
-    'Series/EpisodeCollection',
-    'Logs/Layout',
-    'Release/Layout',
-    'Missing/MissingLayout',
-    'History/HistoryLayout',
-    'Shared/FormatHelpers',
-    'Shared/TemplateHelpers',
-    'Shared/Footer/View'],
-    function (App, SettingsLayout) {
+define(
+    [
+        'app',
+        'Settings/SettingsLayout',
+        'AddSeries/AddSeriesLayout',
+        'Form/FormBuilder',
+        'Series/Index/SeriesIndexLayout',
+        'Calendar/CalendarLayout',
+        'Shared/NotificationView',
+        'Shared/NotFoundView',
+        'MainMenuView',
+        'Series/Details/SeriesDetailsLayout',
+        'Series/EpisodeCollection',
+        'Logs/Layout',
+        'Release/Layout',
+        'Missing/MissingLayout',
+        'History/HistoryLayout',
+        'Shared/FormatHelpers',
+        'Shared/TemplateHelpers',
+        'Shared/Footer/View'
+    ], function (App, SettingsLayout, AddSeriesLayout) {
         var controller = Backbone.Marionette.Controller.extend({
 
             series       : function () {
@@ -39,7 +41,7 @@ define(['app',
 
             addSeries: function (action) {
                 this._setTitle('Add Series');
-                App.mainRegion.show(new NzbDrone.AddSeries.AddSeriesLayout({action: action}));
+                App.mainRegion.show(new AddSeriesLayout({action: action}));
             },
 
             calendar: function () {

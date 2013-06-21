@@ -3,11 +3,12 @@ define(
     [
         'app',
         'marionette',
-        'Config',
+        'Quality/QualityProfileCollection',
+        'AddSeries/RootFolders/Collection',
         'Series/SeriesCollection',
-        'Shared/Messenger',
-        'Quality/QualityProfileCollection'
-    ], function (App, Marionette, Config, SeriesCollection, Messenger, QualityProfiles) {
+        'Config',
+        'Shared/Messenger'
+    ], function (App, Marionette, QualityProfiles, RootFolders, SeriesCollection, Config, Messenger) {
 
         return Marionette.ItemView.extend({
 
@@ -88,8 +89,15 @@ define(
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     }
                 });
+            },
+
+            serializeData: function () {
+                var data = this.model.toJSON();
+                data.rootFolders = RootFolders.toJSON();
+                data.qualityProfiles = QualityProfiles.toJSON();
+
+                return data;
             }
         });
-
 
     });

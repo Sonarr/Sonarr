@@ -4,8 +4,8 @@ define(
     [
         'marionette',
         'AddSeries/RootFolders/CollectionView',
-        'AddSeries/RootFolders/Model',
         'AddSeries/RootFolders/Collection',
+        'AddSeries/RootFolders/Model',
         'Mixins/AutoComplete'
     ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel) {
 

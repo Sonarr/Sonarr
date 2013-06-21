@@ -148,10 +148,9 @@ define(
     [
         'marionette',
         'shared/modal/region',
-        'router',
         'Instrumentation/StringFormat',
         'Instrumentation/ErrorHandler'
-    ], function (Marionette, ModalRegion, Router, RouteBinder) {
+    ], function (Marionette, ModalRegion) {
 
         require(
             [
@@ -173,12 +172,6 @@ define(
             Edit   : {},
             Delete : {},
             Details: {}
-        };
-
-        window.NzbDrone.AddSeries = {
-            New        : {},
-            Existing   : {},
-            RootFolders: {}
         };
 
         window.NzbDrone.Episode = {
@@ -236,16 +229,12 @@ define(
         window.NzbDrone.start();
 
 
-        NzbDrone.Router = new Router();
-        Backbone.history.start({ pushState: true });
-
-        RouteBinder.bind(NzbDrone.Router);
         //NzbDrone.footerRegion.show(new FooterView());
 
 
         window.require(
             [
-                'Routing'
+                'Router'
             ]);
 
         return NzbDrone;

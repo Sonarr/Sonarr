@@ -1,23 +1,18 @@
 "use strict";
 define(function () {
-
     //This module will automatically route all links through backbone router rather than
     //causing links to reload pages.
 
     var routeBinder = {
 
         bind: function (router) {
-
-            this._router = router;
-
-            $(document).on('click', 'a[href]', this._handleClick);
+            var self = this;
+            $(document).on('click', 'a[href]', function (event) {
+                self._handleClick(event, router);
+            });
         },
 
-        _isInTab: function (element) {
-            return;
-        },
-
-        _handleClick: function (event) {
+        _handleClick: function (event, router) {
             var $target = $(event.target);
 
             //check if tab nav
@@ -47,7 +42,7 @@ define(function () {
 
 
             if (!href.startsWith('http')) {
-                this._router.navigate(href, { trigger: true });
+                router.navigate(href, { trigger: true });
             }
 
             else {

@@ -1,14 +1,18 @@
 "use strict";
-define(['app'], function () {
-    NzbDrone.AddSeries.RootFolders.RootFolderModel = Backbone.Model.extend({
-        mutators: {
-            freeSpaceString: function () {
-                return this.get('freeSpace').bytes(2) + " Free";
-            }
-        },
+define(
+    [
+        'backbone',
+        'sugar'
+    ], function (Backbone) {
+        return Backbone.Model.extend({
+            mutators: {
+                freeSpaceString: function () {
+                    return this.get('freeSpace').bytes(2) + " Free";
+                }
+            },
 
-        defaults: {
-            freeSpace: 0
-        }
+            defaults: {
+                freeSpace: 0
+            }
+        });
     });
-});

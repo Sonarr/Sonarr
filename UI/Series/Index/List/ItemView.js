@@ -5,7 +5,8 @@ define([
     'Quality/QualityProfileCollection',
     'Series/SeriesCollection',
     'Series/Edit/EditSeriesView',
-    'Series/Delete/DeleteSeriesView'
+    'Series/Delete/DeleteSeriesView',
+    'Shared/FormatHelpers'
 
 ], function () {
     NzbDrone.Series.Index.List.ItemView = Backbone.Marionette.ItemView.extend({

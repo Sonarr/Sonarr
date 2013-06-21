@@ -1,15 +1,17 @@
 ﻿"use strict";
 define(
     [
-        'app',
+        'backbone',
         'AddSeries/RootFolders/Model',
         'mixins/backbone.signalr.mixin'
-    ], function () {
+    ], function (Backbone, RootFolderModel) {
 
         var rootFolderCollection = Backbone.Collection.extend({
             url  : NzbDrone.Constants.ApiRoot + '/rootfolder',
-            model: NzbDrone.AddSeries.RootFolders.RootFolderModel
+            model: RootFolderModel
         });
 
-        return new rootFolderCollection().BindSignalR();
+        var collection = new rootFolderCollection().BindSignalR();
+
+        return collection;
     });
