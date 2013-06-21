@@ -1,7 +1,7 @@
 ﻿"use strict";
 require.config({
 
-    urlArgs: 'bust=' + window.ServerStatus.version,
+    urlArgs: 'v=' + window.ServerStatus.version,
 
     paths: {
         'backbone'            : 'JsLibraries/backbone',
@@ -22,6 +22,7 @@ require.config({
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
         'libs'                : 'JsLibraries/'
+
     },
 
     shim: {
@@ -147,9 +148,10 @@ define(
     [
         'marionette',
         'shared/modal/region',
+        'router',
         'Instrumentation/StringFormat',
         'Instrumentation/ErrorHandler'
-    ], function (Marionette, ModalRegion) {
+    ], function (Marionette, ModalRegion, Router, RouteBinder) {
 
         require(
             [
@@ -232,6 +234,13 @@ define(
         });
 
         window.NzbDrone.start();
+
+
+        NzbDrone.Router = new Router();
+        Backbone.history.start({ pushState: true });
+
+        RouteBinder.bind(NzbDrone.Router);
+        //NzbDrone.footerRegion.show(new FooterView());
 
 
         window.require(

@@ -1,16 +1,21 @@
 ﻿"use strict";
-define(['app', 'Series/SeriesModel'], function () {
-    NzbDrone.AddSeries.Collection = Backbone.Collection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/series/lookup',
-        model: NzbDrone.Series.SeriesModel,
+define(
+    [
+        'App',
+        'backbone',
+        'Series/SeriesModel'
+    ], function (App, Backbone, SeriesModel) {
+        return Backbone.Collection.extend({
+            url  : Constants.ApiRoot + '/series/lookup',
+            model: SeriesModel,
 
-        parse: function (response) {
+            parse: function (response) {
 
-            _.each(response, function (model) {
-                model.id = undefined;
-            });
+                _.each(response, function (model) {
+                    model.id = undefined;
+                });
 
-            return response;
-        }
+                return response;
+            }
+        });
     });
-});

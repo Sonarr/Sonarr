@@ -32,4 +32,6 @@ define(['app'], function () {
 
         return date.format('{MM}/{dd}/{yyyy}');
     };
+
+    return NzbDrone.Shared.FormatHelpers;
 });

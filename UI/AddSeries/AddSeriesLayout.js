@@ -1,14 +1,16 @@
 ﻿"use strict";
-define([
-    'app',
-    'Quality/QualityProfileCollection',
-    'AddSeries/RootFolders/RootFolderCollection',
-    'AddSeries/RootFolders/RootFolderView',
-    'AddSeries/AddSeriesView',
-    'AddSeries/Existing/ImportSeriesView'
-],
-    function (app, qualityProfileCollection, rootFolderCollection) {
-        NzbDrone.AddSeries.AddSeriesLayout = Backbone.Marionette.Layout.extend({
+define(
+    [
+        'app',
+        'marionette',
+        'AddSeries/RootFolders/Layout',
+        'AddSeries/Existing/CollectionView',
+        'AddSeries/AddSeriesView',
+        'Quality/QualityProfileCollection',
+        'AddSeries/RootFolders/Collection'
+    ], function (App, Marionette, RootFolderLayout, ExistingSeriesCollectionView, AddSeriesView, qualityProfileCollection, rootFolderCollection) {
+
+        return Marionette.Layout.extend({
             template: 'AddSeries/addSeriesLayoutTemplate',
 
             regions: {
@@ -20,25 +22,24 @@ define([
             },
 
             initialize: function () {
-                this.rootFolderLayout = new NzbDrone.AddSeries.RootFolders.Layout();
+                this.rootFolderLayout = new RootFolderLayout();
                 this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
 
+                qualityProfileCollection.fetch();
+                rootFolderCollection.fetch();
+            },
+
+            onShow: function () {
+                this.workspace.show(new AddSeriesView());
             },
 
             _folderSelected: function (options) {
-                NzbDrone.modalRegion.closeModal();
-                this.workspace.show(new NzbDrone.AddSeries.Existing.ListView({model: options.model}));
-            },
-
-            onRender: function () {
-                qualityProfileCollection.fetch();
-                rootFolderCollection.fetch();
-
-                this.workspace.show(new NzbDrone.AddSeries.AddSeriesView());
+                App.modalRegion.closeModal();
+                this.workspace.show(new ExistingSeriesCollectionView({model: options.model}));
             },
 
             _importSeries: function () {
-                NzbDrone.modalRegion.show(this.rootFolderLayout);
+                App.modalRegion.show(this.rootFolderLayout);
             }
         });
     });

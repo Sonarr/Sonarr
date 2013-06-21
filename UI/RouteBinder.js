@@ -1,12 +1,15 @@
 "use strict";
-define(['app'], function () {
+define(function () {
 
     //This module will automatically route all links through backbone router rather than
     //causing links to reload pages.
 
     var routeBinder = {
 
-        bind: function () {
+        bind: function (router) {
+
+            this._router = router;
+
             $(document).on('click', 'a[href]', this._handleClick);
         },
 
@@ -44,7 +47,7 @@ define(['app'], function () {
 
 
             if (!href.startsWith('http')) {
-                NzbDrone.Router.navigate(href, { trigger: true });
+                this._router.navigate(href, { trigger: true });
             }
 
             else {
