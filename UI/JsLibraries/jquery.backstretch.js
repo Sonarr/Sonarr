@@ -1,6 +1,6 @@
-/*! Backstretch - v2.0.3 - 2012-11-30
+/*! Backstretch - v2.0.4 - 2013-06-19
 * http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2012 Scott Robbin; Licensed MIT */
+* Copyright (c) 2013 Scott Robbin; Licensed MIT */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -9,7 +9,7 @@
    * ========================= */
 
   $.fn.backstretch = function (images, options) {
-    // We need at least one image
+    // We need at least one image or method name
     if (images === undefined || images.length === 0) {
       $.error("No images were supplied for Backstretch");
     }
@@ -26,8 +26,18 @@
       var $this = $(this)
         , obj = $this.data('backstretch');
 
-      // If we've already attached Backstretch to this element, remove the old instance.
+      // Do we already have an instance attached to this element?
       if (obj) {
+
+        // Is this a method they're trying to execute?
+        if (typeof images == 'string' && typeof obj[images] == 'function') {
+          // Call the method
+          obj[images](options);
+
+          // No need to do anything further
+          return;
+        }
+
         // Merge the old options with the new
         options = $.extend(obj.options, options);
 
@@ -88,6 +98,7 @@
         , border: 'none'
         , width: 'auto'
         , height: 'auto'
+        , maxHeight: 'none'
         , maxWidth: 'none'
         , zIndex: -999999
       }
@@ -119,8 +130,11 @@
      * Root: Convenience reference to help calculate the correct height.
      */
     this.$container = $(container);
-    this.$wrap = $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+
+    // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
+    var $existing = this.$container.children(".backstretch").first();
+    this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
 
     // Non-body elements need some style adjustments
     if (!this.isBody) {
@@ -197,20 +211,23 @@
       }
 
       // Show the slide at a certain position
-    , show: function (index) {
+    , show: function (newIndex) {
+
         // Validate index
-        if (Math.abs(index) > this.images.length - 1) {
+        if (Math.abs(newIndex) > this.images.length - 1) {
           return;
-        } else {
-          this.index = index;
         }
 
         // Vars
         var self = this
           , oldImage = self.$wrap.find('img').addClass('deleteable')
-          , evt = $.Event('backstretch.show', {
-              relatedTarget: self.$container[0]
-            });
+          , evtOptions = { relatedTarget: self.$container[0] };
+
+        // Trigger the "before" event
+        self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
+
+        // Set the new index
+        this.index = newIndex;
 
         // Pause the slideshow
         clearInterval(self.interval);
@@ -235,8 +252,11 @@
                             self.cycle();
                           }
 
-                          // Trigger the event
-                          self.$container.trigger(evt, self);
+                          // Trigger the "after" and "show" events
+                          // "show" is being deprecated
+                          $(['after', 'show']).each(function () {
+                            self.$container.trigger($.Event('backstretch.' + this, evtOptions), [self, newIndex]);
+                          });
                         });
 
                         // Resize
@@ -245,7 +265,7 @@
                       .appendTo(self.$wrap);
 
         // Hack for IE img onload event
-        self.$img.attr('src', self.images[index]);
+        self.$img.attr('src', self.images[newIndex]);
         return self;
       }
 
