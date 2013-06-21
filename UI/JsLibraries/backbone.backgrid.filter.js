@@ -6,9 +6,11 @@
   Licensed under the MIT @license.
 */
 
-(function ($, _, Backbone, Backgrid, lunr) {
+(function (root) {
 
   "use strict";
+
+  var Backbone = root.Backbone, Backgrid = root.Backgrid, lunr = root.lunr;
 
   /**
      ServerSideFilter is a search form widget that submits a query to the server
@@ -36,14 +38,17 @@
     /** @property {string} [name='q'] Query key */
     name: "q",
 
-    /** @property The HTML5 placeholder to appear beneath the search box. */
+    /**
+       @property {string} [placeholder] The HTML5 placeholder to appear beneath
+       the search box.
+    */
     placeholder: null,
 
     /**
        @param {Object} options
        @param {Backbone.Collection} options.collection
-       @param {String} [options.name]
-       @param {String} [options.placeholder]
+       @param {string} [options.name]
+       @param {string} [options.placeholder]
     */
     initialize: function (options) {
       Backgrid.requireOptions(options, ["collection"]);
@@ -51,14 +56,19 @@
       this.name = options.name || this.name;
       this.placeholder = options.placeholder || this.placeholder;
 
+      // Persist the query on pagination
       var collection = this.collection, self = this;
       if (Backbone.PageableCollection &&
           collection instanceof Backbone.PageableCollection &&
           collection.mode == "server") {
         collection.queryParams[this.name] = function () {
-          return self.$el.find("input[type=text]").val();
+          return self.searchBox().val() || null;
         };
       }
+    },
+
+    searchBox: function () {
+      return this.$el.find("input[type=text]");
     },
 
     /**
@@ -68,9 +78,22 @@
     */
     search: function (e) {
       if (e) e.preventDefault();
+
       var data = {};
-      data[this.name] = this.$el.find("input[type=text]").val();
-      this.collection.fetch({data: data});
+
+      // go back to the first page on search
+      var collection = this.collection;
+      if (Backbone.PageableCollection &&
+          collection instanceof Backbone.PageableCollection &&
+          collection.mode == "server") {
+        collection.state.currentPage = 1;
+      }
+      else {
+        var query = this.searchBox().val();
+        if (query) data[this.name] = query;
+      }
+
+      collection.fetch({data: data, reset: true});
     },
 
     /**
@@ -79,8 +102,8 @@
     */
     clear: function (e) {
       if (e) e.preventDefault();
-      this.$("input[type=text]").val(null);
-      this.collection.fetch();
+      this.searchBox().val(null);
+      this.collection.fetch({reset: true});
     },
 
     /**
@@ -115,8 +138,7 @@
         e.preventDefault();
         this.clear();
       },
-      "change input[type=text]": "search",
-      "keyup input[type=text]": "search",
+      "keydown input[type=text]": "search",
       "submit": function (e) {
         e.preventDefault();
         this.search();
@@ -124,14 +146,14 @@
     },
 
     /**
-       @property {?Array.<string>} A list of model field names to search
-       for matches. If null, all of the fields will be searched.
+       @property {?Array.<string>} [fields] A list of model field names to
+       search for matches. If null, all of the fields will be searched.
     */
     fields: null,
 
     /**
-       @property wait The time in milliseconds to wait since for since the last
-       change to the search box's value before searching. This value can be
+       @property [wait=149] The time in milliseconds to wait since for since the
+       last change to the search box's value before searching. This value can be
        adjusted depending on how often the search box is used and how large the
        search index is.
     */
@@ -143,9 +165,9 @@
 
        @param {Object} options
        @param {Backbone.Collection} options.collection
-       @param {String} [options.placeholder]
-       @param {String} [options.fields]
-       @param {String} [options.wait=149]
+       @param {string} [options.placeholder]
+       @param {string} [options.fields]
+       @param {string} [options.wait=149]
     */
     initialize: function (options) {
       ServerSideFilter.prototype.initialize.apply(this, arguments);
@@ -155,11 +177,8 @@
 
       this._debounceMethods(["search", "clear"]);
 
-      var collection = this.collection;
+      var collection = this.collection = this.collection.fullCollection || this.collection;
       var shadowCollection = this.shadowCollection = collection.clone();
-      shadowCollection.url = collection.url;
-      shadowCollection.sync = collection.sync;
-      shadowCollection.parse = collection.parse;
 
       this.listenTo(collection, "add", function (model, collection, options) {
         shadowCollection.add(model, options);
@@ -167,9 +186,15 @@
       this.listenTo(collection, "remove", function (model, collection, options) {
         shadowCollection.remove(model, options);
       });
-      this.listenTo(collection, "sort reset", function (collection, options) {
+      this.listenTo(collection, "sort", function (col) {
+        if (!this.searchBox().val()) shadowCollection.reset(col.models);
+      });
+      this.listenTo(collection, "reset", function (col, options) {
         options = _.extend({reindex: true}, options || {});
-        if (options.reindex) shadowCollection.reset(collection.models);
+        if (options.reindex && col === collection &&
+            options.from == null && options.to == null) {
+          shadowCollection.reset(col.models);
+        }
       });
     },
 
@@ -218,7 +243,9 @@
        when all the matches have been found.
     */
     search: function () {
-      var matcher = _.bind(this.makeMatcher(this.$("input[type=text]").val()), this);
+      var matcher = _.bind(this.makeMatcher(this.searchBox().val()), this);
+      var col = this.collection;
+      if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
       this.collection.reset(this.shadowCollection.filter(matcher), {reindex: false});
     },
 
@@ -226,7 +253,7 @@
        Clears the search box and reset the collection to its original.
     */
     clear: function () {
-      this.$("input[type=text]").val(null);
+      this.searchBox().val(null);
       this.collection.reset(this.shadowCollection.models, {reindex: false});
     }
 
@@ -262,7 +289,7 @@
 
        @param {Object} options
        @param {Backbone.Collection} options.collection
-       @param {String} [options.placeholder]
+       @param {string} [options.placeholder]
        @param {string} [options.ref] ｀lunrjs` document reference attribute name.
        @param {Object} [options.fields] A hash of `lunrjs` index field names and
        boost value.
@@ -273,7 +300,7 @@
 
       this.ref = options.ref || this.ref;
 
-      var collection = this.collection;
+      var collection = this.collection = this.collection.fullCollection || this.collection;
       this.listenTo(collection, "add", this.addToIndex);
       this.listenTo(collection, "remove", this.removeFromIndex);
       this.listenTo(collection, "reset", this.resetIndex);
@@ -351,15 +378,17 @@
        query answer.
     */
     search: function () {
-      var searchResults = this.index.search(this.$("input[type=text]").val());
+      var searchResults = this.index.search(this.searchBox().val());
       var models = [];
       for (var i = 0; i < searchResults.length; i++) {
         var result = searchResults[i];
         models.push(this.shadowCollection.get(result.ref));
       }
-      this.collection.reset(models, {reindex: false});
+      var col = this.collection;
+      if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
+      col.reset(models, {reindex: false});
     }
 
   });
 
-}(jQuery, _, Backbone, Backgrid, lunr));
+}(this));
