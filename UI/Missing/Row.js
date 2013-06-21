@@ -1,16 +1,16 @@
 "use strict";
-define(['app','backgrid'], function () {
+define(
+    [
+        'backgrid'
+    ], function (Backgrid) {
 
-    NzbDrone.Missing.Row = Backgrid.Row.extend({
-        events: {
-            'click .x-search': 'search'
-        },
-
-        search: function () {
-            window.alert('Episode Search');
-        }
+        return Backgrid.Row.extend({
+            events: {
+                'click .x-search': 'search'
+            },
+            search: function () {
+                window.alert('Episode Search');
+            }
+        });
     });
-    return NzbDrone.Mixins.Row;
-
-});
 

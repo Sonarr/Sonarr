@@ -68,10 +68,14 @@ require.config({
         backbone: {
             deps   :
                 [
+                    'mixins/backbone.ajax',
                     'underscore',
                     '$'
                 ],
-            exports: 'Backbone'
+            exports: 'Backbone',
+            init   : function (AjaxMixin) {
+                AjaxMixin.apply(Backbone);
+            }
         },
 
 
@@ -87,7 +91,7 @@ require.config({
                 [
                     'backbone',
                     'handlebars',
-                    'mixins/backbone.marionette.templates',
+                    'Handlebars/backbone.marionette.templates',
                     'mixins/AsNamedView',
 
                     'Handlebars/Helpers/DateTime'
@@ -122,6 +126,9 @@ require.config({
                 [
                     'backbone'
                 ],
+
+            exports: 'Backgrid',
+
             init: function () {
                 Backgrid.Column.prototype.defaults = {
                     name      : undefined,
@@ -199,7 +206,6 @@ define(
         window.NzbDrone.History = {};
         window.NzbDrone.Logs = {};
         window.NzbDrone.Release = {};
-        window.NzbDrone.Mixins = {};
 
         window.NzbDrone.Events = {
             SeriesAdded: 'seriesAdded'
@@ -214,9 +220,7 @@ define(
         };
 
         window.NzbDrone.addInitializer(function () {
-
             console.log('starting application');
-
         });
 
         NzbDrone.addRegions({
