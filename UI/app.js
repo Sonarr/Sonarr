@@ -238,7 +238,8 @@ define(
 
         window.require(
             [
-                'Router'
+                'Router',
+                'jQuery/TooltipBinder'
             ]);
 
         return NzbDrone;

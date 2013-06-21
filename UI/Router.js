@@ -4,7 +4,7 @@ require(
         'app',
         'marionette',
         'Controller',
-        'RouteBinder'
+        'jQuery/RouteBinder'
     ], function (App, Marionette, Controller, RouterBinder) {
 
         NzbDrone.Router = Marionette.AppRouter.extend({

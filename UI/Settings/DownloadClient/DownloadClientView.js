@@ -25,9 +25,7 @@ define([
         },
 
         onRender: function () {
-            this.ui.tooltip.tooltip({ placement: 'right', html: true });
             this.ui.pathInput.autoComplete('/directories');
-
             this.refreshUIVisibility(this.model.get('downloadClient'));
         },
 
