@@ -19,6 +19,9 @@
   // Internal toString
   var internalToString = object.prototype.toString;
 
+  // Internal hasOwnProperty
+  var hasOwnProperty = object.hasOwnProperty;
+
   // The global context
   var globalContext = typeof global !== 'undefined' ? global : this;
 
@@ -100,7 +103,7 @@
     initializeClass(klass);
     iterateOverObject(methods, function(name, method) {
       var original = extendee[name];
-      var existed  = hasOwnProperty(extendee, name);
+      var existed  = hasOwnProperty.call(extendee, name);
       if(typeof override === 'function') {
         method = wrapNative(extendee[name], method, override);
       }
@@ -199,8 +202,8 @@
       // Not own constructor property must be Object
       // This code was borrowed from jQuery.isPlainObject
       if (obj.constructor &&
-            !hasOwnProperty(obj, 'constructor') &&
-            !hasOwnProperty(obj.constructor.prototype, 'isPrototypeOf')) {
+            !hasOwnProperty.call(obj, 'constructor') &&
+            !hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf')) {
         return false;
       }
     } catch (e) {
@@ -210,18 +213,13 @@
     // === on the constructor is not safe across iframes
     // 'hasOwnProperty' ensures that the object also inherits
     // from Object, which is false for DOMElements in IE.
-    // AP: CAN THIS NOW BE REMOVED WITH THE CODE ABOVE IN PLACE???
     return !!obj && klass === '[object Object]' && 'hasOwnProperty' in obj;
-  }
-
-  function hasOwnProperty(obj, key) {
-    return object['hasOwnProperty'].call(obj, key);
   }
 
   function iterateOverObject(obj, fn) {
     var key;
     for(key in obj) {
-      if(!hasOwnProperty(obj, key)) continue;
+      if(!hasOwnProperty.call(obj, key)) continue;
       if(fn.call(obj, key, obj[key], obj) === false) break;
     }
   }
@@ -297,7 +295,14 @@
   }
 
   function repeatString(times, str) {
-    return array(math.max(0, isDefined(times) ? times : 1) + 1).join(str || '');
+    var result = '';
+    if(isUndefined(times)) {
+      times = 1;
+    }
+    while(times-- > 0) {
+      result += str;
+    }
+    return result;
   }
 
 
@@ -358,8 +363,8 @@
     if(type === 'string') return thing;
 
     klass         = internalToString.call(thing)
-    thingIsArray  = klass === '[object Array]';
-    thingIsObject = isObjectPrimitive(thing) && !thingIsArray;
+    thingIsObject = isPlainObject(thing, klass);
+    thingIsArray  = isArray(thing, klass);
 
     if(thing != null && thingIsObject || thingIsArray) {
       // This method for checking for cyclic structures was egregiously stolen from
@@ -1346,12 +1351,9 @@
      *
      ***/
     'removeAt': function(start, end) {
-      var i, len;
       if(isUndefined(start)) return this;
-      if(isUndefined(end)) end = start;
-      for(i = 0, len = end - start; i <= len; i++) {
-        this.splice(start, 1);
-      }
+      if(isUndefined(end))   end = start;
+      this.splice(start, end - start + 1);
       return this;
     },
 
@@ -2143,7 +2145,7 @@
   var SixtyReg   = '[0-5]\\d' + DecimalReg;
   var RequiredTime = '({t})?\\s*('+HoursReg+')(?:{h}('+SixtyReg+')?{m}(?::?('+SixtyReg+'){s})?\\s*(?:({t})|(Z)|(?:([+-])(\\d{2,2})(?::?(\\d{2,2}))?)?)?|\\s*({t}))';
 
-  var KanjiDigits     = '〇一二三四五六七八九十百千万';
+  var KanjiDigits = '〇一二三四五六七八九十百千万';
   var FullWidthDigits = '０１２３４５６７８９';
   var AsianDigitMap = {};
   var AsianDigitReg;
@@ -2151,110 +2153,40 @@
   var DateArgumentUnits;
   var DateUnitsReversed;
   var CoreDateFormats = [];
+  var CompiledOutputFormats = {};
 
-  var DateOutputFormats = [
-    {
-      token: 'f{1,4}|ms|milliseconds',
-      format: function(d) {
-        return callDateGet(d, 'Milliseconds');
-      }
+  var DateFormatTokens = {
+
+    'yyyy': function(d) {
+      return callDateGet(d, 'FullYear');
     },
-    {
-      token: 'ss?|seconds',
-      format: function(d, len) {
-        return callDateGet(d, 'Seconds');
-      }
+
+    'yy': function(d) {
+      return callDateGet(d, 'FullYear') % 100;
     },
-    {
-      token: 'mm?|minutes',
-      format: function(d, len) {
-        return callDateGet(d, 'Minutes');
-      }
+
+    'ord': function(d) {
+      var date = callDateGet(d, 'Date');
+      return date + getOrdinalizedSuffix(date);
     },
-    {
-      token: 'hh?|hours|12hr',
-      format: function(d) {
-        return getShortHour(d);
-      }
+
+    'tz': function(d) {
+      return d.getUTCOffset();
     },
-    {
-      token: 'HH?|24hr',
-      format: function(d) {
-        return callDateGet(d, 'Hours');
-      }
+
+    'isotz': function(d) {
+      return d.getUTCOffset(true);
     },
-    {
-      token: 'dd?|date|day',
-      format: function(d) {
-        return callDateGet(d, 'Date');
-      }
+
+    'Z': function(d) {
+      return d.getUTCOffset();
     },
-    {
-      token: 'dow|weekday',
-      word: true,
-      format: function(d, loc, n, t) {
-        var dow = callDateGet(d, 'Day');
-        return loc['weekdays'][dow + (n - 1) * 7];
-      }
-    },
-    {
-      token: 'MM?',
-      format: function(d) {
-        return callDateGet(d, 'Month') + 1;
-      }
-    },
-    {
-      token: 'mon|month',
-      word: true,
-      format: function(d, loc, n, len) {
-        var month = callDateGet(d, 'Month');
-        return loc['months'][month + (n - 1) * 12];
-      }
-    },
-    {
-      token: 'y{2,4}|year',
-      format: function(d) {
-        return callDateGet(d, 'FullYear');
-      }
-    },
-    {
-      token: '[Tt]{1,2}',
-      format: function(d, loc, n, format) {
-        if(loc['ampm'].length == 0) return '';
-        var hours = callDateGet(d, 'Hours');
-        var str = loc['ampm'][floor(hours / 12)];
-        if(format.length === 1) str = str.slice(0,1);
-        if(format.slice(0,1) === 'T') str = str.toUpperCase();
-        return str;
-      }
-    },
-    {
-      token: 'z{1,4}|tz|timezone',
-      text: true,
-      format: function(d, loc, n, format) {
-        var tz = d.getUTCOffset();
-        if(format == 'z' || format == 'zz') {
-          tz = tz.replace(/(\d{2})(\d{2})/, function(f,h,m) {
-            return padNumber(h, format.length);
-          });
-        }
-        return tz;
-      }
-    },
-    {
-      token: 'iso(tz|timezone)',
-      format: function(d) {
-        return d.getUTCOffset(true);
-      }
-    },
-    {
-      token: 'ord',
-      format: function(d) {
-        var date = callDateGet(d, 'Date');
-        return date + getOrdinalizedSuffix(date);
-      }
+
+    'ZZ': function(d) {
+      return d.getUTCOffset().replace(/(\d{2})$/, ':$1');
     }
-  ];
+
+  };
 
   var DateUnits = [
     {
@@ -2490,7 +2422,7 @@
     if(!isString(localeCode)) localeCode = '';
     loc = Localizations[localeCode] || Localizations[localeCode.slice(0,2)];
     if(fallback === false && !loc) {
-      throw new Error('Invalid locale.');
+      throw new TypeError('Invalid locale.');
     }
     return loc || CurrentLocalization;
   }
@@ -2658,7 +2590,7 @@
   }
 
   function getDateParamsFromString(str, num) {
-    var params = {};
+    var match, params = {};
     match = str.match(/^(\d+)?\s?(\w+?)s?$/i);
     if(match) {
       if(isUndefined(num)) {
@@ -3038,17 +2970,105 @@
   }
 
 
+  // Date format token helpers
+
+  function createMeridianTokens(slice, caps) {
+    var fn = function(d, localeCode) {
+      var hours = callDateGet(d, 'Hours');
+      return getLocalization(localeCode)['ampm'][floor(hours / 12)] || '';
+    }
+    createFormatToken('t', fn, 1);
+    createFormatToken('tt', fn);
+    createFormatToken('T', fn, 1, 1);
+    createFormatToken('TT', fn, null, 2);
+  }
+
+  function createWeekdayTokens(slice, caps) {
+    var fn = function(d, localeCode) {
+      var dow = callDateGet(d, 'Day');
+      return getLocalization(localeCode)['weekdays'][dow];
+    }
+    createFormatToken('dow', fn, 3);
+    createFormatToken('Dow', fn, 3, 1);
+    createFormatToken('weekday', fn);
+    createFormatToken('Weekday', fn, null, 1);
+  }
+
+  function createMonthTokens(slice, caps) {
+    createMonthToken('mon', 0, 3);
+    createMonthToken('month', 0);
+
+    // For inflected month forms, namely Russian.
+    createMonthToken('month2', 1);
+    createMonthToken('month3', 2);
+  }
+
+  function createMonthToken(token, multiplier, slice) {
+    var fn = function(d, localeCode) {
+      var month = callDateGet(d, 'Month');
+      return getLocalization(localeCode)['months'][month + (multiplier * 12)];
+    };
+    createFormatToken(token, fn, slice);
+    createFormatToken(simpleCapitalize(token), fn, slice, 1);
+  }
+
+  function createFormatToken(t, fn, slice, caps) {
+    DateFormatTokens[t] = function(d, localeCode) {
+      var str = fn(d, localeCode);
+      if(slice) str = str.slice(0, slice);
+      if(caps)  str = str.slice(0, caps).toUpperCase() + str.slice(caps);
+      return str;
+    }
+  }
+
+  function createPaddedToken(t, fn, ms) {
+    DateFormatTokens[t] = fn;
+    DateFormatTokens[t + t] = function (d, localeCode) {
+      return padNumber(fn(d, localeCode), 2);
+    };
+    if(ms) {
+      DateFormatTokens[t + t + t] = function (d, localeCode) {
+        return padNumber(fn(d, localeCode), 3);
+      };
+      DateFormatTokens[t + t + t + t] = function (d, localeCode) {
+        return padNumber(fn(d, localeCode), 4);
+      };
+    }
+  }
+
+
   // Date formatting helpers
 
+  function buildCompiledOutputFormat(format) {
+    var match = format.match(/(\{\w+\})|[^{}]+/g);
+    CompiledOutputFormats[format] = match.map(function(p) {
+      p.replace(/\{(\w+)\}/, function(full, token) {
+        p = DateFormatTokens[token] || token;
+        return token;
+      });
+      return p;
+    });
+  }
+
+  function executeCompiledOutputFormat(date, format, localeCode) {
+    var compiledFormat, length, i, t, result = '';
+    compiledFormat = CompiledOutputFormats[format];
+    for(i = 0, length = compiledFormat.length; i < length; i++) {
+      t = compiledFormat[i];
+      result += isFunction(t) ? t(date, localeCode) : t;
+    }
+    return result;
+  }
+
   function formatDate(date, format, relative, localeCode) {
-    var adu, loc = getLocalization(localeCode), caps = regexp(/^[A-Z]/), value, shortcut;
+    var adu;
     if(!date.isValid()) {
       return 'Invalid Date';
     } else if(Date[format]) {
       format = Date[format];
     } else if(isFunction(format)) {
       adu = getRelativeWithMonthFallback(date);
-      format = format.apply(date, adu.concat(loc));
+      format = format.apply(date, adu.concat(getLocalization(localeCode)));
     }
     if(!format && relative) {
       adu = adu || getRelativeWithMonthFallback(date);
@@ -3058,32 +3078,25 @@
         adu[1] = 1;
         adu[0] = 1;
       }
-      return loc.getRelativeFormat(adu);
+      return getLocalization(localeCode).getRelativeFormat(adu);
+    }
+    format = format || 'long';
+    if(format === 'short' || format === 'long' || format === 'full') {
+      format = getLocalization(localeCode)[format];
     }
 
-    format = format || 'long';
-    format = loc[format] || format;
+    if(!CompiledOutputFormats[format]) {
+      buildCompiledOutputFormat(format);
+    }
 
-    DateOutputFormats.forEach(function(dof) {
-      format = format.replace(regexp('\\{('+dof.token+')(\\d)?\\}', dof.word ? 'i' : ''), function(m,t,d) {
-        var val = dof.format(date, loc, d || 1, t), l = t.length, one = t.match(/^(.)\1+$/);
-        if(dof.word) {
-          if(l === 3) val = val.slice(0,3);
-          if(one || t.match(caps)) val = simpleCapitalize(val);
-        } else if(one && !dof.text) {
-          val = (isNumber(val) ? padNumber(val, l) : val.toString()).slice(-l);
-        }
-        return val;
-      });
-    });
-    return format;
+    return executeCompiledOutputFormat(date, format, localeCode);
   }
 
   // Date comparison helpers
 
-  function compareDate(d, find, buffer, forceUTC) {
+  function compareDate(d, find, localeCode, buffer, forceUTC) {
     var p, t, min, max, minOffset, maxOffset, override, capitalized, accuracy = 0, loBuffer = 0, hiBuffer = 0;
-    p = getExtendedDate(find, null, null, forceUTC);
+    p = getExtendedDate(find, localeCode, null, forceUTC);
     if(buffer > 0) {
       loBuffer = hiBuffer = buffer;
       override = true;
@@ -3287,7 +3300,7 @@
   }
 
   function invalidateDate(d) {
-    d.setTime();
+    d.setTime(NaN);
   }
 
   function buildDateUnits() {
@@ -3538,7 +3551,7 @@
       if(i < 3) {
         ['Last','This','Next'].forEach(function(shift) {
           methods['is' + shift + caps] = function() {
-            return this.is(shift + ' ' + name);
+            return compareDate(this, shift + ' ' + name, 'en');
           };
         });
       }
@@ -3585,7 +3598,55 @@
     English.compiledFormats = English.compiledFormats.slice(7).concat(CoreDateFormats);
   }
 
-  function buildDateOutputShortcuts() {
+  function buildFormatTokens() {
+
+    createPaddedToken('f', function(d) {
+      return callDateGet(d, 'Milliseconds');
+    }, true);
+
+    createPaddedToken('s', function(d) {
+      return callDateGet(d, 'Seconds');
+    });
+
+    createPaddedToken('m', function(d) {
+      return callDateGet(d, 'Minutes');
+    });
+
+    createPaddedToken('h', function(d) {
+      return callDateGet(d, 'Hours') % 12 || 12;
+    });
+
+    createPaddedToken('H', function(d) {
+      return callDateGet(d, 'Hours');
+    });
+
+    createPaddedToken('d', function(d) {
+      return callDateGet(d, 'Date');
+    });
+
+    createPaddedToken('M', function(d) {
+      return callDateGet(d, 'Month') + 1;
+    });
+
+    createMeridianTokens();
+    createWeekdayTokens();
+    createMonthTokens();
+
+    // Aliases
+    DateFormatTokens['ms']           = DateFormatTokens['f'];
+    DateFormatTokens['milliseconds'] = DateFormatTokens['f'];
+    DateFormatTokens['seconds']      = DateFormatTokens['s'];
+    DateFormatTokens['minutes']      = DateFormatTokens['m'];
+    DateFormatTokens['hours']        = DateFormatTokens['h'];
+    DateFormatTokens['24hr']         = DateFormatTokens['H'];
+    DateFormatTokens['12hr']         = DateFormatTokens['h'];
+    DateFormatTokens['date']         = DateFormatTokens['d'];
+    DateFormatTokens['day']          = DateFormatTokens['d'];
+    DateFormatTokens['year']         = DateFormatTokens['yyyy'];
+
+  }
+
+  function buildFormatShortcuts() {
     extendSimilar(date, true, false, 'short,long,full', function(methods, name) {
       methods[name] = function(localeCode) {
         return formatDate(this, name, false, localeCode);
@@ -4111,12 +4172,12 @@
      *   });                                      -> ex. 5 months ago
      *
      ***/
-    'relative': function(f, localeCode) {
-      if(isString(f)) {
-        localeCode = f;
-        f = null;
+    'relative': function(fn, localeCode) {
+      if(isString(fn)) {
+        localeCode = fn;
+        fn = null;
       }
-      return formatDate(this, f, true, localeCode);
+      return formatDate(this, fn, true, localeCode);
     },
 
      /***
@@ -4150,7 +4211,7 @@
           case (tmp = English['months'].indexOf(d) % 12) > -1:  return callDateGet(comp, 'Month') === tmp;
         }
       }
-      return compareDate(this, d, margin, utc);
+      return compareDate(this, d, null, margin, utc);
     },
 
      /***
@@ -4467,7 +4528,8 @@
   buildDateUnits();
   buildDateMethods();
   buildCoreInputFormats();
-  buildDateOutputShortcuts();
+  buildFormatTokens();
+  buildFormatShortcuts();
   buildAsianDigits();
   buildRelativeAliases();
   buildUTCAliases();
@@ -5489,7 +5551,7 @@
       allKeys.forEach(function(k) {
         paramIsArray = !k || k.match(/^\d+$/);
         if(!key && isArray(obj)) key = obj.length;
-        if(!hasOwnProperty(obj, key)) {
+        if(!hasOwnProperty.call(obj, key)) {
           obj[key] = paramIsArray ? [] : {};
         }
         obj = obj[key];
@@ -5536,7 +5598,7 @@
     if(isRegExp(match)) {
       return match.test(key);
     } else if(isObjectPrimitive(match)) {
-      return hasOwnProperty(match, key);
+      return hasOwnProperty.call(match, key);
     } else {
       return key === string(match);
     }
@@ -5726,7 +5788,7 @@
       // their properties not being enumerable in < IE8.
       if(target && typeof source != 'string') {
         for(key in source) {
-          if(!hasOwnProperty(source, key) || !target) continue;
+          if(!hasOwnProperty.call(source, key) || !target) continue;
           val = source[key];
           // Conflict!
           if(isDefined(target[key])) {
@@ -5793,7 +5855,7 @@
      *
      ***/
     'clone': function(obj, deep) {
-      var target;
+      var target, klass;
       if(!isObjectPrimitive(obj)) {
         return obj;
       }
@@ -5810,7 +5872,7 @@
       } else if(isPlainObject(obj, klass)) {
         target = {};
       } else {
-        throw new TypeError('Invalid target.');
+        throw new TypeError('Clone must be a basic data type.');
       }
       return object.merge(target, obj, deep);
     },
@@ -5891,7 +5953,7 @@
      *
      ***/
     'has': function (obj, key) {
-      return hasOwnProperty(obj, key);
+      return hasOwnProperty.call(obj, key);
     },
 
     /***
@@ -6914,7 +6976,7 @@
         }
       });
       return this.replace(/\{([^{]+?)\}/g, function(m, key) {
-        return hasOwnProperty(assign, key) ? assign[key] : m;
+        return hasOwnProperty.call(assign, key) ? assign[key] : m;
       });
     }
 
@@ -6934,7 +6996,6 @@
   });
 
   buildBase64('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=');
-
 
   /***
    *
@@ -7226,7 +7287,6 @@
   Inflector.irregular('sex', 'sexes');
   Inflector.irregular('move', 'moves');
   Inflector.irregular('save', 'saves');
-  Inflector.irregular('save', 'saves');
   Inflector.irregular('cow', 'kine');
   Inflector.irregular('goose', 'geese');
   Inflector.irregular('zombie', 'zombies');
@@ -7285,7 +7345,7 @@
       var str = runReplacements(this, humans), acronym;
       str = str.replace(/_id$/g, '');
       str = str.replace(/(_)?([a-z\d]*)/gi, function(match, _, word){
-        acronym = hasOwnProperty(acronyms, word) ? acronyms[word] : null;
+        acronym = hasOwnProperty.call(acronyms, word) ? acronyms[word] : null;
         return (_ ? ' ' : '') + (acronym || word.toLowerCase());
       });
       return capitalize(str);
