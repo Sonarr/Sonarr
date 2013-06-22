@@ -25,7 +25,7 @@ define(['app','backgrid' ], function () {
                     }
                 }
 
-                this.$el.html('<i class='{0}'/>'.format(icon));
+                this.$el.html('<i class="{0}"/>'.format(icon));
             }
 
             return this;

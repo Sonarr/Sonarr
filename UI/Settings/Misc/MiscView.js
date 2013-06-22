@@ -4,12 +4,7 @@ define(['marionette', 'Mixins/AsModelBoundview'], function (Marionette, AsModelB
 
     var view = Marionette.ItemView.extend({
         template : 'Settings/Misc/MiscTemplate',
-        className: 'form-horizontal',
-
-        ui: {
-            tooltip: '[class^='help-inline'] i'
-        }
-
+        className: 'form-horizontal'
     });
 
     return AsModelBoundView.call(view);

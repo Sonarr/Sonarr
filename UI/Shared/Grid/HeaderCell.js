@@ -14,7 +14,7 @@ define(['app','backgrid'], function () {
 
             if (this.column.get('sortable')) {
                 this.$el.addClass('clickable');
-                this.$el.append(' <i class='pull-right'></i>');
+                this.$el.append(' <i class="pull-right"></i>');
 
                 if (this.collection.state) {
                     var sortKey = this.collection.state.sortKey;

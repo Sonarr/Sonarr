@@ -13,16 +13,16 @@ define(['app','backgrid'], function () {
 
             var self = this;
 
-            this.$el.html('<i class ='icon-spinner icon-spin' />');
+            this.$el.html('<i class =\'icon-spinner icon-spin\' />');
             this.model.save()
                 .always(function () {
-                    self.$el.html('<i class ='icon-download-alt' />');
+                    self.$el.html('<i class =\'icon-download-alt\' />');
                 });
         },
 
         render: function () {
 
-            this.$el.html('<i class ='icon-download-alt' />');
+            this.$el.html('<i class =\'icon-download-alt\' />');
             return this;
 
         }
