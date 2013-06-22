@@ -17,7 +17,6 @@ define(
 
             removeFolder: function () {
                 this.model.destroy({ wait: true });
-                this.model.collection.remove(this.model);
             },
 
             folderSelected: function () {

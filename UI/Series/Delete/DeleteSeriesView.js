@@ -1,34 +1,34 @@
 'use strict';
-define(['app', 'Series/SeriesModel'], function () {
+define(
+    [
+        'app',
+        'Series/SeriesModel'
+    ], function () {
 
-    NzbDrone.Series.Delete.DeleteSeriesView = Backbone.Marionette.ItemView.extend({
-        template: 'Series/Delete/DeleteSeriesTemplate',
+        NzbDrone.Series.Delete.DeleteSeriesView = Backbone.Marionette.ItemView.extend({
+            template: 'Series/Delete/DeleteSeriesTemplate',
 
-        events: {
-            'click .x-confirm-delete': 'removeSeries'
-        },
+            events: {
+                'click .x-confirm-delete': 'removeSeries'
+            },
 
-        ui: {
-            deleteFiles: '.x-delete-files'
-        },
+            ui: {
+                deleteFiles: '.x-delete-files'
+            },
 
-        removeSeries: function () {
+            removeSeries: function () {
 
-            var deleteFiles = this.ui.deleteFiles.prop('checked');
+                var deleteFiles = this.ui.deleteFiles.prop('checked');
 
-            this.model.destroy({
-                data   : { 'deleteFiles': deleteFiles },
-                wait   : true,
-                success: function (model) {
-                    model.collection.remove(model);
-                }
-            });
+                this.model.destroy({
+                    data: { 'deleteFiles': deleteFiles },
+                    wait: true
+                }).done(function () {
+                        NzbDrone.modalRegion.close();
+                    });
+            }
+        });
 
-            NzbDrone.modalRegion.close();
+        return  NzbDrone.Series.Delete.DeleteSeriesView;
 
-        }
     });
-
-    return  NzbDrone.Series.Delete.DeleteSeriesView;
-
-});

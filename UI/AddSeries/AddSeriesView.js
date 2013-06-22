@@ -14,15 +14,18 @@ define(
             template: 'AddSeries/AddSeriesTemplate',
 
             ui: {
-                seriesSearch: '.x-series-search'
+                seriesSearch: '.x-series-search',
+                searchBar   : '.x-search-bar',
+                loadMore    : '.x-load-more'
             },
 
             regions: {
                 searchResult: '#search-result'
             },
 
-            initialize: function () {
+            initialize: function (options) {
                 this.collection = new AddSeriesCollection();
+                this.isExisting = options.isExisting;
             },
 
             onRender: function () {
@@ -30,31 +33,45 @@ define(
 
                 this.ui.seriesSearch.data('timeout', null).keyup(function () {
                     window.clearTimeout(self.$el.data('timeout'));
-                    self.$el.data('timeout', window.setTimeout(self.search, 500, self));
+                    self.$el.data('timeout', window.setTimeout(function () {
+                        self.search.call(self, {
+                            term: self.ui.seriesSearch.val()
+                        });
+                    }, 500));
                 });
 
-                this.resultView = new SearchResultCollectionView({ collection: this.collection });
+                if (this.isExisting) {
+                    this.ui.searchBar.hide();
+                }
+
+                this.resultView = new SearchResultCollectionView({
+                    fullResult: this.collection,
+                    isExisting: this.isExisting
+                });
             },
 
-            search: function (context) {
+            search: function (options) {
 
-                context.abortExistingRequest();
+                var self = this;
 
-                var term = context.ui.seriesSearch.val();
-                context.collection.reset();
+                this.abortExistingRequest();
 
-                if (term === '') {
-                    context.searchResult.close();
+                this.collection.reset();
+
+                if (!options || options.term === '') {
+                    this.searchResult.close();
                 }
                 else {
-                    context.searchResult.show(new SpinnerView());
+                    this.searchResult.show(new SpinnerView());
+                    this.currentSearchRequest = this.collection.fetch({
+                        data: { term: options.term }
+                    }).done(function () {
+                            self.searchResult.show(self.resultView);
 
-                    context.currentSearchRequest = context.collection.fetch({
-                        data   : { term: term },
-                        success: function () {
-                            context.searchResult.show(context.resultView);
-                        }
-                    });
+                            if (!self.showingAll && self.isExisting) {
+                                self.ui.loadMore.show();
+                            }
+                        });
                 }
             },
 

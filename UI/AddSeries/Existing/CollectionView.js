@@ -2,13 +2,13 @@
 define(
     [
         'marionette',
-        'AddSeries/Existing/CompositeView',
+        'AddSeries/AddSeriesView',
         'AddSeries/Existing/UnmappedFolderCollection'
-    ], function (Marionette, UnmappedFolderCompositeView, UnmappedFolderCollection) {
+    ], function (Marionette, AddSeriesView, UnmappedFolderCollection) {
 
         return Marionette.CollectionView.extend({
 
-            itemView: UnmappedFolderCompositeView,
+            itemView: AddSeriesView,
 
             initialize: function () {
                 this.collection = new UnmappedFolderCollection();
@@ -26,14 +26,20 @@ define(
             _showAndSearch: function (index) {
 
                 var model = this.collection.at(index);
+
                 if (model) {
                     var that = this;
                     var currentIndex = index;
+                    var folderName = model.get('folder').name;
                     this.addItemView(model, this.getItemView(), index);
-                    $.when(this.children.findByModel(model).search()).then(function () {
+                    $.when(this.children.findByModel(model).search({term: folderName})).then(function () {
                         that._showAndSearch(currentIndex + 1);
                     });
                 }
+            },
+
+            itemViewOptions: {
+                isExisting: true
             }
 
         });
