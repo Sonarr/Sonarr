@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 
 define(['app'], function () {
 
@@ -7,8 +7,8 @@ define(['app'], function () {
             source   : function (filter, callback) {
                 $.ajax({
                     url     : NzbDrone.Constants.ApiRoot + resource,
-                    dataType: "json",
-                    type    : "GET",
+                    dataType: 'json',
+                    type    : 'GET',
                     data    : { query: filter },
                     success : function (data) {
                         callback(data);

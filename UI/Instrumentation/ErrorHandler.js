@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 (function () {
 
     /*  var model = new NzbDrone.Shared.NotificationModel();
@@ -29,7 +29,7 @@
 
             var a = document.createElement('a');
             a.href = url;
-            var messageText = a.pathname.split('/').pop() + ' : ' + line + "</br>" + msg;
+            var messageText = a.pathname.split('/').pop() + ' : ' + line + '</br>' + msg;
 
             var message = {
                 message        : messageText,
@@ -41,7 +41,7 @@
             window.Messenger().post(message);
 
         } catch (error) {
-            console.log("An error occurred while reporting error. " + error);
+            console.log('An error occurred while reporting error. ' + error);
             console.log(msg);
             window.alert('Couldn\'t report JS error.  ' + msg);
         }
@@ -71,7 +71,7 @@
             return false;
             //message.message = 'NzbDrone Server Not Reachable. make sure NzbDrone is running.';
         } else {
-            message.message = "[{0}] {1} : {2}".format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
+            message.message = '[{0}] {1} : {2}'.format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
         }
 
         window.Messenger().post(message);

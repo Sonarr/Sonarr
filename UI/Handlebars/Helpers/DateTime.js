@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 define(
     [
         'sugar'
     ], {
         register: function (handlebars) {
-            handlebars.registerHelper("ShortDate", function (input) {
+            handlebars.registerHelper('ShortDate', function (input) {
                 if (!input) {
                     return '';
                 }

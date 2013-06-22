@@ -18,8 +18,8 @@ define(['app', 'Calendar/Collection','fullcalendar'], function () {
                     right : 'month,basicWeek'
                 },
                 buttonText    : {
-                    prev: '<i class="icon-arrow-left"></i>',
-                    next: '<i class="icon-arrow-right"></i>'
+                    prev: '<i class='icon-arrow-left'></i>',
+                    next: '<i class='icon-arrow-right'></i>'
                 },
                 events        : this.getEvents,
                 eventRender   : function (event, element) {

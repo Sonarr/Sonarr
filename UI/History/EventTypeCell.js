@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 define(['app', 'Cells/NzbDroneCell' ], function () {
     NzbDrone.History.EventTypeCell = NzbDrone.Cells.NzbDroneCell.extend({
@@ -32,7 +32,7 @@ define(['app', 'Cells/NzbDroneCell' ], function () {
 
                 }
 
-                this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, toolTip));
+                this.$el.html('<i class='{0}' title='{1}'/>'.format(icon, toolTip));
             }
 
             return this;

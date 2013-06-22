@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app','Cells/NzbDroneCell'], function () {
     NzbDrone.Cells.RelativeDateCell = NzbDrone.Cells.NzbDroneCell.extend({
 

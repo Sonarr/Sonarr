@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app', 'Shared/SpinnerView', 'Episode/Summary/View', 'Episode/Search/Layout', 'Release/Collection'], function () {
 
     NzbDrone.Episode.Layout = Backbone.Marionette.Layout.extend({

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app',  'Series/Details/SeasonLayout', 'Series/SeasonCollection', 'Series/EpisodeCollection'], function () {
     NzbDrone.Series.Details.SeasonCollectionView = Backbone.Marionette.CollectionView.extend({
 

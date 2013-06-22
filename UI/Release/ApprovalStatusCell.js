@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 require(['app', 'backgrid'], function () {
     NzbDrone.Release.ApprovalStatusCell = Backgrid.Cell.extend({
 
-        className: "approval-status-cell",
+        className: 'approval-status-cell',
 
         render: function () {
-            var rejections = this.model.get(this.column.get("name"));
+            var rejections = this.model.get(this.column.get('name'));
 
             var result = '';
 

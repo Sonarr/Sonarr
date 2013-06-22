@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app','backgrid'], function () {
     NzbDrone.Series.Index.Table.Row = Backgrid.Row.extend({
         events: {

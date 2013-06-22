@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app','Series/SeriesModel', 'Series/EpisodeModel'], function () {
     NzbDrone.History.Model = Backbone.Model.extend({
         mutators: {

@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 require.config({
 
     urlArgs: 'v=' + window.ServerStatus.version,

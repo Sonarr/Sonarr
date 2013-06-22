@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfiles) {
     NzbDrone.Series.SeriesModel = Backbone.Model.extend({
 
@@ -40,10 +40,10 @@ define(['app', 'Quality/QualityProfileCollection'], function (app, qualityProfil
                 return undefined;
             },
             traktUrl         : function () {
-                return "http://trakt.tv/show/" + this.get('titleSlug');
+                return 'http://trakt.tv/show/' + this.get('titleSlug');
             },
             imdbUrl          : function () {
-                return "http://imdb.com/title/" + this.get('imdbId');
+                return 'http://imdb.com/title/' + this.get('imdbId');
             },
             isContinuing     : function () {
                 return this.get('status') === 'continuing';

@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Series/SeriesModel'], function () {
     NzbDrone.Series.SeriesCollection = Backbone.Collection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/series',
@@ -9,7 +9,7 @@ define(['app', 'Series/SeriesModel'], function () {
         },
 
         state: {
-            sortKey: "title",
+            sortKey: 'title',
             order: -1
         }
     });

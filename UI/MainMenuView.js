@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app'], function () {
     var MainMenuView = Backbone.Marionette.ItemView.extend({
         events: {

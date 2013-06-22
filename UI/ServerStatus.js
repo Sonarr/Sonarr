@@ -1,5 +1,5 @@
 var statusText = $.ajax({
-    type : "GET",
+    type : 'GET',
     url  : '/api/system/status',
     async: false
 }).responseText;

@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 define(['app', 'Cells/NzbDroneCell'], function () {
     NzbDrone.Cells.EpisodeNumberCell = NzbDrone.Cells.NzbDroneCell.extend({
 
-        className: "episode-number-cell",
+        className: 'episode-number-cell',
 
         render: function () {
 

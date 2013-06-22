@@ -1,7 +1,7 @@
 'use strict';
 define(['app', 'handlebars'], function (App,Handlebars) {
     Handlebars.registerHelper('formBuilder', function () {
-        var ret = "";
+        var ret = '';
         _.each(this.fields, function (field) {
             ret += NzbDrone.Form.FieldBuilder(field);
         });

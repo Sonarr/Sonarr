@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], function () {
 
     NzbDrone.Shared.Toolbar.ButtonView = Backbone.Marionette.ItemView.extend({

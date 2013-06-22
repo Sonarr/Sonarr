@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define([
     'app',
     'backgrid',
@@ -10,7 +10,7 @@ define([
         template: 'Shared/Grid/PagerTemplate',
 
         events: {
-            "click .pager-btn": "changePage"
+            'click .pager-btn': 'changePage'
         },
 
         windowSize: 1,
@@ -77,12 +77,12 @@ define([
             var windowStart = Math.floor(currentPage / this.windowSize) * this.windowSize;
             var windowEnd = Math.min(lastPage + 1, windowStart + this.windowSize);
 
-            if (collection.mode !== "infinite") {
+            if (collection.mode !== 'infinite') {
                 for (var i = windowStart; i < windowEnd; i++) {
                     handles.push({
                         label     : i + 1,
-                        title     : "No. " + (i + 1),
-                        className : currentPage === i ? "active" :undefined,
+                        title     : 'No. ' + (i + 1),
+                        className : currentPage === i ? 'active' :undefined,
                         pageNumber: i + 1
                     });
                 }
@@ -94,7 +94,7 @@ define([
                 if (ffLabels.prev) {
                     handles.unshift({
                         label    : ffLabels.prev,
-                        className: collection.hasPrevious() ? void 0 :"disabled",
+                        className: collection.hasPrevious() ? void 0 :'disabled',
                         action   : 'prev'
                     });
                 }
@@ -102,7 +102,7 @@ define([
                 if (ffLabels.first) {
                     handles.unshift({
                         label    : ffLabels.first,
-                        className: collection.hasPrevious() ? void 0 :"disabled",
+                        className: collection.hasPrevious() ? void 0 :'disabled',
                         action   : 'first'
                     });
                 }
@@ -110,7 +110,7 @@ define([
                 if (ffLabels.next) {
                     handles.push({
                         label    : ffLabels.next,
-                        className: collection.hasNext() ? void 0 :"disabled",
+                        className: collection.hasNext() ? void 0 :'disabled',
                         action   : 'next'
                     });
                 }
@@ -118,7 +118,7 @@ define([
                 if (ffLabels.last) {
                     handles.push({
                         label    : ffLabels.last,
-                        className: collection.hasNext() ? void 0 :"disabled",
+                        className: collection.hasNext() ? void 0 :'disabled',
                         action   : 'last'
                     });
                 }

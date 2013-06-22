@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define([
     'Settings/SettingsModelBase'], function (ModelBase) {
     return ModelBase.extend({

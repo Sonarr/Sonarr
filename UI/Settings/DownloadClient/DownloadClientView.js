@@ -37,32 +37,32 @@ define([
         refreshUIVisibility: function (clientId) {
 
             if (!clientId) {
-                clientId = "sabnzbd";
+                clientId = 'sabnzbd';
             }
 
             switch (clientId.toString()) {
-                case "sabnzbd":
+                case 'sabnzbd':
                     this.ui.sabConfig.show();
                     this.ui.blackholeConfig.hide();
                     this.ui.pneumaticConfig.hide();
                     this.ui.nzbGetConfig.hide();
                     break;
 
-                case "blackhole":
+                case 'blackhole':
                     this.ui.sabConfig.hide();
                     this.ui.blackholeConfig.show();
                     this.ui.pneumaticConfig.hide();
                     this.ui.nzbGetConfig.hide();
                     break;
 
-                case "pneumatic":
+                case 'pneumatic':
                     this.ui.sabConfig.hide();
                     this.ui.blackholeConfig.hide();
                     this.ui.pneumaticConfig.show();
                     this.ui.nzbGetConfig.hide();
                     break;
 
-                case "nzbget":
+                case 'nzbget':
                     this.ui.sabConfig.hide();
                     this.ui.blackholeConfig.hide();
                     this.ui.pneumaticConfig.hide();
@@ -70,7 +70,7 @@ define([
                     break;
 
                 default :
-                    throw "unknown download client id" + clientId;
+                    throw 'unknown download client id' + clientId;
             }
         }
     });

@@ -28,7 +28,7 @@ define(
             initialize: function () {
                 this.collection = new AddSeriesCollection();
 
-                this.on("item:removed", function () {
+                this.on('item:removed', function () {
                     this.close();
                 }, this);
             },

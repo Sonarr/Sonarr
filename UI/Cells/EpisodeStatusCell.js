@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 define(['app','backgrid' ], function () {
     NzbDrone.Cells.EpisodeStatusCell = Backgrid.Cell.extend({
@@ -25,7 +25,7 @@ define(['app','backgrid' ], function () {
                     }
                 }
 
-                this.$el.html('<i class="{0}"/>'.format(icon));
+                this.$el.html('<i class='{0}'/>'.format(icon));
             }
 
             return this;

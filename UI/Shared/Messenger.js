@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(function () {
     return {
         show: function (options) {

@@ -19,7 +19,7 @@
             return new Date(obj.getTime());
         }
         if (_.isRegExp(obj)) {
-            return new RegExp(obj.source, obj.toString().replace(/.*\//, ""));
+            return new RegExp(obj.source, obj.toString().replace(/.*\//, ''));
         }
         isArr = _.isArray(obj || _.isArguments(obj));
         func = function(memo, value, key) {

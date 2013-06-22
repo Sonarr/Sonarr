@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app'], function () {
     NzbDrone.Series.SeasonModel = Backbone.Model.extend({
 
@@ -7,10 +7,10 @@ define(['app'], function () {
                 var seasonNumber = this.get('seasonNumber');
 
                 if (seasonNumber === 0) {
-                    return "Specials";
+                    return 'Specials';
                 }
 
-                return "Season " + seasonNumber;
+                return 'Season ' + seasonNumber;
             }
         },
 

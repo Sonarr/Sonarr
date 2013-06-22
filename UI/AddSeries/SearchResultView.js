@@ -12,7 +12,7 @@ define(
 
         return Marionette.ItemView.extend({
 
-            template: "AddSeries/SearchResultTemplate",
+            template: 'AddSeries/SearchResultTemplate',
 
             ui: {
                 qualityProfile: '.x-quality-profile',

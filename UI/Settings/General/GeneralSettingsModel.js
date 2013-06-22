@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'backbone', 'Mixins/AsChangeTrackingModel'], function (App, Backbone, AsChangeTrackingModel) {
     var model = Backbone.Model.extend({
 

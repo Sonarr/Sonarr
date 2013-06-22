@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(
     [
         'backbone',
@@ -7,7 +7,7 @@ define(
         return Backbone.Model.extend({
             mutators: {
                 freeSpaceString: function () {
-                    return this.get('freeSpace').bytes(2) + " Free";
+                    return this.get('freeSpace').bytes(2) + ' Free';
                 }
             },
 

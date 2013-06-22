@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app','backgrid'], function () {
     NzbDrone.Cells.IndexerCell = Backgrid.Cell.extend({
 

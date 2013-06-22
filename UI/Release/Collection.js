@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Release/Model', 'backbone.pageable'], function (app, SeriesModel, PagableCollection) {
     NzbDrone.Release.Collection = PagableCollection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/release',

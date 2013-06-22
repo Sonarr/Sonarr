@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app'], function () {
     NzbDrone.Release.Model = Backbone.Model.extend({
      /*   mutators: {

@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Series/EpisodeModel'], function () {
     NzbDrone.Calendar.Collection = Backbone.Collection.extend({
         url       : NzbDrone.Constants.ApiRoot + '/calendar',

@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Series/EpisodeModel'], function () {
     NzbDrone.Series.EpisodeCollection = Backbone.Collection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/episodes',
@@ -6,7 +6,7 @@ define(['app', 'Series/EpisodeModel'], function () {
 
         bySeason: function (season) {
             var filtered = this.filter(function (episode) {
-                return episode.get("seasonNumber") === season;
+                return episode.get('seasonNumber') === season;
             });
 
             return new NzbDrone.Series.EpisodeCollection(filtered);

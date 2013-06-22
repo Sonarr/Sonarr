@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(function () {
     //This module will automatically route all links through backbone router rather than
     //causing links to reload pages.

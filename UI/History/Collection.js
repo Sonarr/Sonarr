@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'History/Model', 'backbone.pageable'], function (App, HistoryModel, PageableCollection) {
     NzbDrone.History.Collection = PageableCollection.extend({
         url       : NzbDrone.Constants.ApiRoot + '/history',
@@ -6,7 +6,7 @@ define(['app', 'History/Model', 'backbone.pageable'], function (App, HistoryMode
 
         state: {
             pageSize: 15,
-            sortKey: "date",
+            sortKey: 'date',
             order: 1
         },
 
@@ -14,11 +14,11 @@ define(['app', 'History/Model', 'backbone.pageable'], function (App, HistoryMode
             totalPages: null,
             totalRecords: null,
             pageSize: 'pageSize',
-            sortKey: "sortKey",
-            order: "sortDir",
+            sortKey: 'sortKey',
+            order: 'sortDir',
             directions: {
-                "-1": "asc",
-                "1": "desc"
+                '-1': 'asc',
+                '1': 'desc'
             }
         },
 

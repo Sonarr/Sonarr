@@ -7,7 +7,7 @@ define(['marionette', 'Mixins/AsModelBoundview'], function (Marionette, AsModelB
         className: 'form-horizontal',
 
         ui: {
-            tooltip: '[class^="help-inline"] i'
+            tooltip: '[class^='help-inline'] i'
         }
 
     });

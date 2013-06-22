@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app', 'Config'], function () {
 
     NzbDrone.Shared.Toolbar.RadioButtonView = Backbone.Marionette.ItemView.extend({

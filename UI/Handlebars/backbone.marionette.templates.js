@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 
 define(['templates'], function (Templates) {
     return function () {

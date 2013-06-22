@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 define(['app','backgrid'], function () {
 
@@ -10,11 +10,11 @@ define(['app','backgrid'], function () {
 
         render: function () {
             this.$el.empty();
-            this.$el.append(this.column.get("label"));
+            this.$el.append(this.column.get('label'));
 
             if (this.column.get('sortable')) {
                 this.$el.addClass('clickable');
-                this.$el.append(" <i class='pull-right'></i>");
+                this.$el.append(' <i class='pull-right'></i>');
 
                 if (this.collection.state) {
                     var sortKey = this.collection.state.sortKey;
@@ -47,11 +47,11 @@ define(['app','backgrid'], function () {
         onClick: function (e) {
             e.preventDefault();
 
-            var columnName = this.column.get("name");
+            var columnName = this.column.get('name');
 
-            if (this.column.get("sortable")) {
-                if (this.direction() === "ascending") {
-                    this.sort(columnName, "descending", function (left, right) {
+            if (this.column.get('sortable')) {
+                if (this.direction() === 'ascending') {
+                    this.sort(columnName, 'descending', function (left, right) {
                         var leftVal = left.get(columnName);
                         var rightVal = right.get(columnName);
                         if (leftVal === rightVal) {
@@ -64,7 +64,7 @@ define(['app','backgrid'], function () {
                     });
                 }
                 else {
-                    this.sort(columnName, "ascending", function (left, right) {
+                    this.sort(columnName, 'ascending', function (left, right) {
                         var leftVal = left.get(columnName);
                         var rightVal = right.get(columnName);
                         if (leftVal === rightVal) {

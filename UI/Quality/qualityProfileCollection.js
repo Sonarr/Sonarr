@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Quality/QualityProfileModel'], function () {
 
     var qualityProfileCollection = Backbone.Collection.extend({

@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 define(
     [
         'marionette',
         'bootstrap'
     ], function (Marionette) {
         return Marionette.Region.extend({
-            el: "#modal-region",
+            el: '#modal-region',
 
             constructor: function () {
                 Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
-                this.on("show", this.showModal, this);
+                this.on('show', this.showModal, this);
             },
 
             getEl: function (selector) {
                 var $el = $(selector);
-                $el.on("hidden", this.close);
+                $el.on('hidden', this.close);
                 return $el;
             },
 

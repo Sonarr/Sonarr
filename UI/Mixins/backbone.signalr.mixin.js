@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define(['app', 'signalR'], function () {
 
     _.extend(Backbone.Collection.prototype, {BindSignalR: function (options) {

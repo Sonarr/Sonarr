@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 define(['app', 'Logs/Model', 'backbone.pageable'], function (app, SeriesModel, PagableCollection) {
     NzbDrone.Logs.Collection = PagableCollection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/log',
@@ -6,7 +6,7 @@ define(['app', 'Logs/Model', 'backbone.pageable'], function (app, SeriesModel, P
 
         state: {
             pageSize: 50,
-            sortKey : "time",
+            sortKey : 'time',
             order   : 1
         },
 
@@ -14,11 +14,11 @@ define(['app', 'Logs/Model', 'backbone.pageable'], function (app, SeriesModel, P
             totalPages  : null,
             totalRecords: null,
             pageSize    : 'pageSize',
-            sortKey     : "sortKey",
-            order       : "sortDir",
+            sortKey     : 'sortKey',
+            order       : 'sortDir',
             directions  : {
-                "-1": "asc",
-                "1" : "desc"
+                '-1': 'asc',
+                '1' : 'desc'
             }
         },
 

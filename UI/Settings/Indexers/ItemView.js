@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿'use strict';
 
 define(['marionette', 'Mixins/AsModelBoundView'], function (Marionette, AsModelBoundView) {
 
