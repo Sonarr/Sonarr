@@ -10,11 +10,20 @@ define(
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
-        'Cells/AirDateCell',
         'Shared/Grid/Pager',
         'Shared/LoadingView'
-    ], function (App, MissingRow) {
-        NzbDrone.Missing.MissingLayout = Backbone.Marionette.Layout.extend({
+    ], function (App,
+                 MissingRow,
+                 MissingCollection,
+                 AirDateCell,
+                 SeriesStatusCell,
+                 ToolbarLayout,
+                 SeriesTitleCell,
+                 EpisodeNumberCell,
+                 EpisodeTitleCell,
+                 Pager,
+                 LoadingView) {
+        return Backbone.Marionette.Layout.extend({
             template: 'Missing/MissingLayoutTemplate',
 
             regions: {
@@ -29,24 +38,24 @@ define(
                         name    : 'series',
                         label   : 'Series Title',
                         sortable: false,
-                        cell    : NzbDrone.Cells.SeriesTitleCell
+                        cell    : SeriesTitleCell
                     },
                     {
                         name    : 'this',
                         label   : 'Episode',
                         sortable: false,
-                        cell    : NzbDrone.Cells.EpisodeNumberCell
+                        cell    : EpisodeNumberCell
                     },
                     {
                         name    : 'this',
                         label   : 'Episode Title',
                         sortable: false,
-                        cell    : NzbDrone.Cells.EpisodeTitleCell
+                        cell    : EpisodeTitleCell
                     },
                     {
-                        name : 'airDate',
-                        label: 'Air Date',
-                        cell : NzbDrone.Cells.AirDateCell
+                        name    : 'airDate',
+                        label   : 'Air Date',
+                        cell    : AirDateCell
                     }
                 ],
 
@@ -67,9 +76,9 @@ define(
             onShow: function () {
                 var self = this;
 
-                this.missing.show(new NzbDrone.Shared.LoadingView());
+                this.missing.show(new LoadingView());
 
-                this.missingCollection = new NzbDrone.Missing.Collection();
+                this.missingCollection = new MissingCollection();
                 this.missingCollection.fetch().done(function () {
                         self._showTable();
                     });

@@ -1,6 +1,6 @@
 'use strict';
 define(['app','Cells/NzbDroneCell'], function () {
-    NzbDrone.Cells.RelativeDateCell = NzbDrone.Cells.NzbDroneCell.extend({
+    return NzbDrone.Cells.NzbDroneCell.extend({
 
         className : 'relative-date-cell',
 

@@ -14,8 +14,20 @@ define([
     'Shared/Grid/HeaderCell',
     'Shared/LoadingView'
 ],
-    function () {
-        NzbDrone.History.HistoryLayout = Backbone.Marionette.Layout.extend({
+    function (App,
+              HistoryCollection,
+              EventTypeCell,
+              RelativeDateCell,
+              TemplatedCell,
+              SeriesTitleCell,
+              EpisodeNumberCell,
+              EpisodeTitleCell,
+              QualityCell,
+              ToolbarLayout,
+              Pager,
+              HeaderCell,
+              LoadingView) {
+        return Backbone.Marionette.Layout.extend({
             template: 'History/HistoryLayoutTemplate',
 
             regions: {
@@ -28,34 +40,34 @@ define([
                 {
                     name: 'eventType',
                     label:'',
-                    cell : NzbDrone.History.EventTypeCell
+                    cell : EventTypeCell
                 },
                 {
                     name    : 'series',
                     label   : 'Series',
-                    cell    : NzbDrone.Cells.SeriesTitleCell
+                    cell    : SeriesTitleCell
                 },
                 {
                     name    : 'episode',
                     label   : 'Episode',
                     sortable: false,
-                    cell    : NzbDrone.Cells.EpisodeNumberCell
+                    cell    : EpisodeNumberCell
                 },
                 {
                     name    : 'episode',
                     label   : 'Episode Title',
                     sortable: false,
-                    cell    : NzbDrone.Cells.EpisodeTitleCell
+                    cell    : EpisodeTitleCell
                 },
                 {
-                    name : 'quality',
-                    label: 'Quality',
-                    cell    : NzbDrone.Cells.QualityCell
+                    name    : 'quality',
+                    label   : 'Quality',
+                    cell    : QualityCell
                 },
                 {
                     name : 'date',
                     label: 'Date',
-                    cell : NzbDrone.Cells.RelativeDateCell
+                    cell : RelativeDateCell
                 }
             ],
 
@@ -69,7 +81,7 @@ define([
                         className : 'table table-hover'
                     }));
 
-                this.pager.show(new NzbDrone.Shared.Grid.Pager({
+                this.pager.show(new Pager({
                     columns   : this.columns,
                     collection: this.historyCollection
                 }));
@@ -78,9 +90,9 @@ define([
             onShow: function () {
                 var self = this;
 
-                this.history.show(new NzbDrone.Shared.LoadingView());
+                this.history.show(new LoadingView());
 
-                this.historyCollection = new NzbDrone.History.Collection();
+                this.historyCollection = new HistoryCollection();
                 this.historyCollection.fetch()
                     .done(function () {
                         self._showTable();

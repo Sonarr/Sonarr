@@ -1,8 +1,12 @@
 'use strict';
-define(['app',  'Series/Details/SeasonLayout', 'Series/SeasonCollection', 'Series/EpisodeCollection'], function () {
+define(['app',
+        'Series/Details/SeasonLayout',
+        'Series/SeasonCollection',
+        'Series/EpisodeCollection'],
+    function (App, SeasonLayout, SeasonCollection, EpisodeCollection) {
     NzbDrone.Series.Details.SeasonCollectionView = Backbone.Marionette.CollectionView.extend({
 
-        itemView         : NzbDrone.Series.Details.SeasonLayout,
+        itemView         : SeasonLayout,
 
         initialize: function (options) {
 

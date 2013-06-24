@@ -5,8 +5,8 @@ define([
     'Cells/EpisodeTitleCell',
     'Cells/AirDateCell',
     'Cells/ToggleCell'],
-    function () {
-        NzbDrone.Series.Details.SeasonLayout = Backbone.Marionette.Layout.extend({
+    function (App, EpisodeStatusCell, EpisodeTitleCell, AirDateCell, ToggleCell) {
+        return Backbone.Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
             regions: {
@@ -18,7 +18,7 @@ define([
                 {
                     name      : 'ignored',
                     label     : '',
-                    cell      : NzbDrone.Cells.ToggleCell,
+                    cell      : ToggleCell,
                     trueClass : 'icon-bookmark-empty',
                     falseClass: 'icon-bookmark'
                 },
@@ -33,17 +33,17 @@ define([
                 {
                     name : 'this',
                     label: 'Title',
-                    cell : NzbDrone.Cells.EpisodeTitleCell
+                    cell : EpisodeTitleCell
                 },
                 {
                     name : 'airDate',
                     label: 'Air Date',
-                    cell : NzbDrone.Cells.AirDateCell
+                    cell : AirDateCell
                 } ,
                 {
                     name : 'status',
                     label: 'Status',
-                    cell : NzbDrone.Cells.EpisodeStatusCell
+                    cell : EpisodeStatusCell
                 }
             ],
 

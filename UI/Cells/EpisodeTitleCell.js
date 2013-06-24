@@ -1,7 +1,7 @@
 'use strict';
 
 define(['app', 'Cells/NzbDroneCell'], function () {
-    NzbDrone.Cells.EpisodeTitleCell = NzbDrone.Cells.NzbDroneCell.extend({
+    return NzbDrone.Cells.NzbDroneCell.extend({
 
         className: 'episode-title-cell',
 

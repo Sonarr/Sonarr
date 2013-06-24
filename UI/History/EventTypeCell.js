@@ -1,7 +1,7 @@
 'use strict';
 
 define(['app', 'Cells/NzbDroneCell' ], function () {
-    NzbDrone.History.EventTypeCell = NzbDrone.Cells.NzbDroneCell.extend({
+    return NzbDrone.Cells.NzbDroneCell.extend({
 
         className: 'history-event-type-cell',
 

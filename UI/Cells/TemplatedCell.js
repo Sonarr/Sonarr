@@ -1,9 +1,7 @@
 'use strict';
 
 define(['app','Cells/NzbDroneCell'], function () {
-    NzbDrone.Cells.TemplatedCell = NzbDrone.Cells.NzbDroneCell.extend({
-
-
+    return NzbDrone.Cells.NzbDroneCell.extend({
         render: function () {
 
             var templateName = this.column.get('template') || this.template;

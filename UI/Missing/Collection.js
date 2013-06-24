@@ -1,6 +1,6 @@
 ﻿'use strict';
 define(['app', 'Series/EpisodeModel', 'backbone.pageable'], function (app, EpisodeModel, PagableCollection) {
-    NzbDrone.Missing.Collection = PagableCollection.extend({
+    return PagableCollection.extend({
         url  : NzbDrone.Constants.ApiRoot + '/missing',
         model: NzbDrone.Series.EpisodeModel,
 

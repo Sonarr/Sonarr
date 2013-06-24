@@ -1,7 +1,7 @@
 'use strict';
 
-define(['app','backgrid' ], function () {
-    NzbDrone.Cells.EpisodeStatusCell = Backgrid.Cell.extend({
+define(['app','cells/nzbdronecell' ], function () {
+    return NzbDrone.Cells.NzbDroneCell.extend({
 
         className: 'episode-status-cell',
 

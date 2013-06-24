@@ -7,8 +7,8 @@ define([
     'Series/SeriesCollection',
     'Cells/AirDateCell',
     'Cells/SeriesTitleCell',
+    'Cells/SeriesStatusCell',
     'Cells/TemplatedCell',
-    'Series/Index/Table/SeriesStatusCell',
     'Shared/Toolbar/ToolbarLayout',
     'Config',
     'Shared/LoadingView'
@@ -21,8 +21,8 @@ define([
         SeriesCollection,
         AirDateCell,
         SeriesTitleCell,
-        TemplatedCell,
         SeriesStatusCell,
+        TemplatedCell,
         ToolbarLayout,
         Config,
         LoadingView)
@@ -39,7 +39,7 @@ define([
                 {
                     name : 'status',
                     label: '',
-                    cell : 'seriesStatus'
+                    cell : SeriesStatusCell
                 },
                 {
                     name : 'this',

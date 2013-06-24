@@ -1,6 +1,6 @@
 'use strict';
-define(['app','backgrid'], function () {
-    Backgrid.SeriesStatusCell = Backgrid.Cell.extend({
+define(['app','cells/nzbdronecell'], function () {
+    return NzbDrone.Cells.NzbDroneCell.extend({
         className: 'series-status-cell',
 
         render: function () {
@@ -22,6 +22,4 @@ define(['app','backgrid'], function () {
             return this;
         }
     });
-
-    return Backgrid.SeriesStatusCell;
 });

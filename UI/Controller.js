@@ -4,6 +4,8 @@ define(
         'app',
         'Settings/SettingsLayout',
         'AddSeries/AddSeriesLayout',
+        'Missing/MissingLayout',
+        'History/HistoryLayout',
         'Form/FormBuilder',
         'Series/Index/SeriesIndexLayout',
         'Calendar/CalendarLayout',
@@ -14,12 +16,10 @@ define(
         'Series/EpisodeCollection',
         'Logs/Layout',
         'Release/Layout',
-        'Missing/MissingLayout',
-        'History/HistoryLayout',
         'Shared/FormatHelpers',
         'Shared/TemplateHelpers',
         'Shared/Footer/View'
-    ], function (App, SettingsLayout, AddSeriesLayout) {
+    ], function (App, SettingsLayout, AddSeriesLayout, MissingLayout, HistoryLayout) {
         var controller = Backbone.Marionette.Controller.extend({
 
             series       : function () {
@@ -58,13 +58,13 @@ define(
             missing: function () {
                 this._setTitle('Missing');
 
-                App.mainRegion.show(new NzbDrone.Missing.MissingLayout());
+                App.mainRegion.show(new MissingLayout());
             },
 
             history: function () {
                 this._setTitle('History');
 
-                App.mainRegion.show(new NzbDrone.History.HistoryLayout());
+                App.mainRegion.show(new HistoryLayout());
             },
 
             rss: function () {

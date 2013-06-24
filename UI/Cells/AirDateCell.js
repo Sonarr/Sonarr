@@ -1,6 +1,6 @@
 'use strict';
-define(['app', 'Shared/FormatHelpers','backgrid'], function () {
-    NzbDrone.Cells.AirDateCell = Backgrid.Cell.extend({
+define(['app', 'Shared/FormatHelpers', 'Cells/NzbDroneCell'], function () {
+    return NzbDrone.Cells.NzbDroneCell.extend({
         className: 'air-date-cell',
 
         render: function () {
