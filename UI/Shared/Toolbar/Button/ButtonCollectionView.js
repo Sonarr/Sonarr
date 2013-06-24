@@ -1,8 +1,8 @@
 'use strict';
-define(['app', 'Shared/Toolbar/Button/ButtonView', 'Config'], function () {
-    NzbDrone.Shared.Toolbar.ButtonCollectionView = Backbone.Marionette.CollectionView.extend({
+define(['app', 'Shared/Toolbar/Button/ButtonView', 'Config'], function (App, ButtonView, Config) {
+    return Backbone.Marionette.CollectionView.extend({
         className: 'btn-group',
-        itemView : NzbDrone.Shared.Toolbar.ButtonView
+        itemView : ButtonView
     });
 });
 

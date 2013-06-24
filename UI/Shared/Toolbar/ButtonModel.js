@@ -7,7 +7,7 @@ define(['app'], function () {
         CallBack    : 'CallBack'
     };
 
-    NzbDrone.Shared.Toolbar.ButtonModel = Backbone.Model.extend({
+    return Backbone.Model.extend({
         defaults: {
             'target' : '/nzbdrone/route',
             'title'  : '',

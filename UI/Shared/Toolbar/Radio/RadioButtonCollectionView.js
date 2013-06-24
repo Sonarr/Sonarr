@@ -5,7 +5,7 @@ define(
         'Shared/Toolbar/Radio/RadioButtonView',
         'Config'
     ], function (App, RadioButtonView, Config) {
-        NzbDrone.Shared.Toolbar.RadioButtonCollectionView = Backbone.Marionette.CollectionView.extend({
+        return Backbone.Marionette.CollectionView.extend({
             className: 'btn-group',
             itemView : NzbDrone.Shared.Toolbar.RadioButtonView,
 

@@ -1,7 +1,11 @@
 'use strict';
-define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], function () {
+define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'],
+    function (App,
+              Config,
+              CommandController,
+              Messenger) {
 
-    NzbDrone.Shared.Toolbar.ButtonView = Backbone.Marionette.ItemView.extend({
+    return Backbone.Marionette.ItemView.extend({
         template : 'Shared/Toolbar/ButtonTemplate',
         className: 'btn',
 
@@ -12,7 +16,6 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
         ui: {
             icon: '.x-icon'
         },
-
 
         initialize: function () {
             this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
@@ -34,7 +37,6 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
             }
         },
 
-
         invokeCommand: function () {
             var command = this.model.get('command');
             if (command) {
@@ -43,10 +45,10 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
                 this.ui.icon.addClass('icon-spinner icon-spin');
 
                 var self = this;
-                var commandPromise = NzbDrone.Commands.Execute(command);
+                var commandPromise = CommandController.Execute(command);
                 commandPromise.done(function () {
                     if (self.model.get('successMessage')) {
-                        NzbDrone.Shared.Messenger.show({
+                        Messenger.show({
                             message: self.model.get('successMessage')
                         });
                     }
@@ -57,7 +59,7 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
                         return;
                     }
                     if (self.model.get('errorMessage')) {
-                        NzbDrone.Shared.Messenger.show({
+                        Messenger.show({
                             message: self.model.get('errorMessage'),
                             type   : 'error'
                         });
@@ -93,7 +95,6 @@ define(['app', 'Config', 'Commands/CommandController', 'Shared/Messenger'], func
                 callback.call(this.model.ownerContext);
             }
         }
-
     });
 });
 

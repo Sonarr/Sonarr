@@ -4,8 +4,14 @@ define(
         'app',
         'Shared/Toolbar/Radio/RadioButtonCollectionView',
         'Shared/Toolbar/Button/ButtonCollectionView',
-        'Shared/Toolbar/ButtonCollection'
-    ], function () {
+        'Shared/Toolbar/ButtonCollection',
+        'Shared/Toolbar/ButtonModel'
+    ],
+    function (App,
+              RadioButtonCollectionView,
+              ButtonCollectionView,
+              ButtonCollection,
+              ButtonModel) {
         NzbDrone.Shared.Toolbar.ToolbarLayout = Backbone.Marionette.Layout.extend({
             template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 
@@ -32,7 +38,6 @@ define(
 
             },
 
-
             onShow: function () {
                 if (this.left) {
                     _.each(this.left, this._showToolbarLeft, this);
@@ -53,7 +58,7 @@ define(
 
             _showToolbar: function (buttonGroup, index, position) {
 
-                var groupCollection = new NzbDrone.Shared.Toolbar.ButtonCollection();
+                var groupCollection = new ButtonCollection();
 
                 _.each(buttonGroup.items, function (button) {
 
@@ -61,7 +66,7 @@ define(
                         throw 'must provide key for all buttons when storSstate is enabled';
                     }
 
-                    var model = new NzbDrone.Shared.Toolbar.ButtonModel(button);
+                    var model = new ButtonModel(button);
                     model.set('menuKey', buttonGroup.menuKey);
                     model.ownerContext = this.toolbarContext;
                     groupCollection.add(model);
@@ -73,7 +78,7 @@ define(
                 switch (buttonGroup.type) {
                     case 'radio':
                     {
-                        buttonGroupView = new NzbDrone.Shared.Toolbar.RadioButtonCollectionView({
+                        buttonGroupView = new RadioButtonCollectionView({
                                 collection: groupCollection,
                                 menu      : buttonGroup
                             });
@@ -81,7 +86,7 @@ define(
                     }
                     default :
                     {
-                        buttonGroupView = new NzbDrone.Shared.Toolbar.ButtonCollectionView({
+                        buttonGroupView = new ButtonCollectionView({
                                 collection: groupCollection,
                                 menu      : buttonGroup
                             });
