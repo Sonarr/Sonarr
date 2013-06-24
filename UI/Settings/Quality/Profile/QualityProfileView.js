@@ -3,11 +3,11 @@
 define([
     'app',
     'marionette',
-    'Settings/Quality/Profile/EditQualityProfileView'
+    'Settings/Quality/Profile/EditQualityProfileView',
+    'Mixins/AsModelBoundView'
+], function (App, Marionette, EditProfileView, AsModelBoundView) {
 
-], function (App, Marionette, EditProfileView) {
-
-    return Marionette.ItemView.extend({
+    var view = Marionette.ItemView.extend({
         template: 'Settings/Quality/Profile/QualityProfileTemplate',
         tagName : 'tr',
 
@@ -30,4 +30,6 @@ define([
             NzbDrone.modalRegion.show(view);
         }
     });
+
+    return AsModelBoundView.call(view);
 });
