@@ -4,7 +4,7 @@ define(['app'], function () {
     NzbDrone.Commands.Execute = function (name, properties) {
         var data = { command: name };
 
-        if (!properties) {
+        if (properties) {
             $.extend(data, properties);
         }
 
