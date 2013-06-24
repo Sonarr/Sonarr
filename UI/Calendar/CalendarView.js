@@ -1,81 +1,87 @@
-﻿'use strict';
+﻿﻿'use strict';
 
-define(['app', 'Calendar/Collection','fullcalendar'], function () {
-    NzbDrone.Calendar.CalendarView = Backbone.Marionette.ItemView.extend({
-        initialize                   : function () {
-            this.collection = new NzbDrone.Calendar.Collection();
-        },
-        render: function () {
-            $(this.$el).empty().fullCalendar({
-                defaultView   : 'basicWeek',
-                allDayDefault : false,
-                ignoreTimezone: false,
-                weekMode      : 'variable',
-                timeFormat    : 'h(:mm)tt',
-                header        : {
-                    left  : 'prev,next today',
-                    center: 'title',
-                    right : 'month,basicWeek'
-                },
-                buttonText    : {
-                    prev: '<i class="icon-arrow-left"></i>',
-                    next: '<i class="icon-arrow-right"></i>'
-                },
-                events        : this.getEvents,
-                eventRender   : function (event, element) {
-                    $(element).addClass(event.statusLevel);
-                    $(element).children('.fc-event-inner').addClass(event.statusLevel);
+define(
+    [
+        'marionette',
+        'Calendar/Collection',
+        'fullcalendar'
+    ], function (Marionette, CalendarCollection) {
 
-                    element.popover({
-                        title    : '{seriesTitle} - {season}x{episode} - {episodeTitle}'.assign({
-                            seriesTitle : event.title,
-                            season      : event.seasonNumber,
-                            episode     : event.episodeNumber.pad(2),
-                            episodeTitle: event.episodeTitle
-                        }),
-                        content  : event.overview,
-                        placement: 'bottom',
-                        trigger  : 'manual'
-                    });
-                },
-                eventMouseover: function () {
-                    $(this).popover('show');
-                },
-                eventMouseout : function () {
-                    $(this).popover('hide');
-                }
-            });
+        var _instance;
 
-            NzbDrone.Calendar.CalendarView.Instance = this;
-        },
+        return Marionette.ItemView.extend({
+            initialize: function () {
+                this.collection = new CalendarCollection();
+            },
+            render    : function () {
+                $(this.$el).empty().fullCalendar({
+                    defaultView   : 'basicWeek',
+                    allDayDefault : false,
+                    ignoreTimezone: false,
+                    weekMode      : 'variable',
+                    timeFormat    : 'h(:mm)tt',
+                    header        : {
+                        left  : 'prev,next today',
+                        center: 'title',
+                        right : 'month,basicWeek'
+                    },
+                    buttonText    : {
+                        prev: '<i class="icon-arrow-left"></i>',
+                        next: '<i class="icon-arrow-right"></i>'
+                    },
+                    events        : this.getEvents,
+                    eventRender   : function (event, element) {
+                        $(element).addClass(event.statusLevel);
+                        $(element).children('.fc-event-inner').addClass(event.statusLevel);
 
-        onShow: function () {
-            this.$('.fc-button-today').click();
-        },
+                        element.popover({
+                            title    : '{seriesTitle} - {season}x{episode} - {episodeTitle}'.assign({
+                                seriesTitle : event.title,
+                                season      : event.seasonNumber,
+                                episode     : event.episodeNumber.pad(2),
+                                episodeTitle: event.episodeTitle
+                            }),
+                            content  : event.overview,
+                            placement: 'bottom',
+                            trigger  : 'manual'
+                        });
+                    },
+                    eventMouseover: function () {
+                        $(this).popover('show');
+                    },
+                    eventMouseout : function () {
+                        $(this).popover('hide');
+                    }
+                });
 
-        getEvents: function (start, end, callback) {
-            var bbView = NzbDrone.Calendar.CalendarView.Instance;
+                _instance = this;
+            },
 
-            var startDate = Date.create(start).format(Date.ISO8601_DATETIME);
-            var endDate = Date.create(end).format(Date.ISO8601_DATETIME);
+            onShow: function () {
+                this.$('.fc-button-today').click();
+            },
 
-            bbView.collection.fetch({
-                data   : { start: startDate, end: endDate },
-                success: function (calendarCollection) {
-                    _.each(calendarCollection.models, function (element) {
-                        var episodeTitle = element.get('title');
-                        var seriesTitle = element.get('series').get('title');
-                        var start = element.get('airDate');
+            getEvents: function (start, end, callback) {
+                var startDate = Date.create(start).format(Date.ISO8601_DATETIME);
+                var endDate = Date.create(end).format(Date.ISO8601_DATETIME);
 
-                        element.set('title', seriesTitle);
-                        element.set('episodeTitle', episodeTitle);
-                        element.set('start', start);
-                        element.set('allDay', false);
-                    });
+                _instance.collection.fetch({
+                    data   : { start: startDate, end: endDate },
+                    success: function (calendarCollection) {
+                        _.each(calendarCollection.models, function (element) {
+                            var episodeTitle = element.get('title');
+                            var seriesTitle = element.get('series').get('title');
+                            var start = element.get('airDate');
 
-                    callback(calendarCollection.toJSON());
-                }
-            });
-        }
+                            element.set('title', seriesTitle);
+                            element.set('episodeTitle', episodeTitle);
+                            element.set('start', start);
+                            element.set('allDay', false);
+                        });
+
+                        callback(calendarCollection.toJSON());
+                    }
+                });
+            }
+        });
     });
-});

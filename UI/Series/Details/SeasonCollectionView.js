@@ -1,28 +1,28 @@
 'use strict';
-define(['app',
-        'Series/Details/SeasonLayout',
-        'Series/SeasonCollection',
-        'Series/EpisodeCollection'],
-    function (App, SeasonLayout, SeasonCollection, EpisodeCollection) {
-    NzbDrone.Series.Details.SeasonCollectionView = Backbone.Marionette.CollectionView.extend({
+define(
+    [
+        'marionette',
+        'Series/Details/SeasonLayout'
+    ], function (Marionette, SeasonLayout) {
+        return Marionette.CollectionView.extend({
 
-        itemView         : SeasonLayout,
+            itemView: SeasonLayout,
 
-        initialize: function (options) {
+            initialize: function (options) {
 
-            if (!options.episodeCollection) {
-                throw 'episodeCollection is needed';
+                if (!options.episodeCollection) {
+                    throw 'episodeCollection is needed';
+                }
+
+                this.episodeCollection = options.episodeCollection;
+
+            },
+
+            itemViewOptions: function () {
+                return {
+                    episodeCollection: this.episodeCollection
+                };
             }
 
-            this.episodeCollection = options.episodeCollection;
-
-        },
-
-        itemViewOptions: function () {
-            return {
-                episodeCollection: this.episodeCollection
-            };
-        }
-
+        });
     });
-});

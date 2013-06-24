@@ -2,10 +2,9 @@
 
 define(
     [
-        'app',
         'handlebars',
         'Shared/FormatHelpers'
-    ], function (App, Handlebars) {
+    ], function (Handlebars, FormatHelpers) {
         Handlebars.registerHelper('partial', function (templateName) {
             //TODO: We should be able to pass in the context, either an object or a property
 
@@ -26,7 +25,7 @@ define(
         });
 
         Handlebars.registerHelper('fileSize', function (size) {
-            return new Handlebars.SafeString(NzbDrone.Shared.FormatHelpers.FileSizeHelper(size));
+            return new Handlebars.SafeString(FormatHelpers.FileSizeHelper(size));
         });
 
         Handlebars.registerHelper('date', function (date) {
@@ -36,7 +35,7 @@ define(
             }
 
             var shortDate = Date.create(date).short();
-            var formattedDate = NzbDrone.Shared.FormatHelpers.DateHelper(date);
+            var formattedDate = FormatHelpers.DateHelper(date);
             var result = '<span title="' + shortDate + '">' + formattedDate + '</span>';
 
             return new Handlebars.SafeString(result);

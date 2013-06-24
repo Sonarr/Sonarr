@@ -1,39 +1,42 @@
 'use strict';
 
-define(['app', 'Episode/Layout'], function () {
-    return Backgrid.Cell.extend({
+define(
+    [
+        'backgrid'
+    ], function (Backgrid) {
+        return Backgrid.Cell.extend({
 
-        className: 'toggle-cell clickable',
+            className: 'toggle-cell clickable',
 
-        events: {
-            'click': '_onClick'
-        },
-
-
-        _onClick: function () {
-            var name = this.column.get('name');
-            this.model.set(name, !this.model.get(name));
-            this.render();
-
-            this.model.save();
-        },
+            events: {
+                'click': '_onClick'
+            },
 
 
-        render: function () {
-            this.$el.empty();
+            _onClick: function () {
+                var name = this.column.get('name');
+                this.model.set(name, !this.model.get(name));
+                this.render();
+
+                this.model.save();
+            },
 
 
-            this.$el.html('<i />');
+            render: function () {
+                this.$el.empty();
 
-            var name = this.column.get('name');
 
-            if (this.model.get(name)) {
-                this.$('i').addClass(this.column.get('trueClass'));
+                this.$el.html('<i />');
+
+                var name = this.column.get('name');
+
+                if (this.model.get(name)) {
+                    this.$('i').addClass(this.column.get('trueClass'));
+                }
+                else {
+                    this.$('i').addClass(this.column.get('falseClass'));
+                }
+                return this;
             }
-            else {
-                this.$('i').addClass(this.column.get('falseClass'));
-            }
-            return this;
-        }
+        });
     });
-});

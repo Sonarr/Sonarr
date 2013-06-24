@@ -1,13 +1,17 @@
-﻿'use strict';
-define([
-    'app',
-    'Cells/EpisodeStatusCell',
-    'Cells/EpisodeTitleCell',
-    'Cells/AirDateCell',
-    'Cells/ToggleCell',
-    'Shared/Messenger'],
-    function (App, EpisodeStatusCell, EpisodeTitleCell, AirDateCell, ToggleCell, Messenger) {
-        return Backbone.Marionette.Layout.extend({
+﻿﻿
+'use strict';
+define(
+    [
+        'marionette',
+        'backgrid',
+        'Cells/ToggleCell',
+        'Cells/EpisodeTitleCell',
+        'Cells/AirDateCell',
+        'Cells/EpisodeStatusCell',
+        'Commands/CommandController',
+        'Shared/Messenger'
+    ], function ( Marionette, Backgrid, ToggleCell, EpisodeTitleCell, AirDateCell, EpisodeStatusCell, CommandController, Messenger) {
+        return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
             ui: {
@@ -22,39 +26,38 @@ define([
                 episodeGrid: '#x-episode-grid'
             },
 
-            columns: [
-
-                {
-                    name      : 'ignored',
-                    label     : '',
-                    cell      : ToggleCell,
-                    trueClass : 'icon-bookmark-empty',
-                    falseClass: 'icon-bookmark'
-                },
-                {
-                    name : 'episodeNumber',
-                    label: '#',
-                    cell : Backgrid.IntegerCell.extend({
-                        className: 'episode-number-cell'
-                    })
-                },
-
-                {
-                    name : 'this',
-                    label: 'Title',
-                    cell : EpisodeTitleCell
-                },
-                {
-                    name : 'airDate',
-                    label: 'Air Date',
-                    cell : AirDateCell
-                } ,
-                {
-                    name : 'status',
-                    label: 'Status',
-                    cell : EpisodeStatusCell
-                }
-            ],
+            columns:
+                [
+                    {
+                        name      : 'ignored',
+                        label     : '',
+                        cell      : ToggleCell,
+                        trueClass : 'icon-bookmark-empty',
+                        falseClass: 'icon-bookmark'
+                    },
+                    {
+                        name : 'episodeNumber',
+                        label: '#',
+                        cell : Backgrid.IntegerCell.extend({
+                            className: 'episode-number-cell'
+                        })
+                    },
+                    {
+                        name : 'this',
+                        label: 'Title',
+                        cell : EpisodeTitleCell
+                    },
+                    {
+                        name : 'airDate',
+                        label: 'Air Date',
+                        cell : AirDateCell
+                    } ,
+                    {
+                        name : 'status',
+                        label: 'Status',
+                        cell : EpisodeStatusCell
+                    }
+                ],
 
             initialize: function (options) {
 
@@ -66,12 +69,11 @@ define([
             },
 
             onShow: function () {
-                this.episodeGrid.show(new Backgrid.Grid(
-                    {
-                        columns   : this.columns,
-                        collection: this.episodeCollection,
-                        className : 'table table-hover season-grid'
-                    }));
+                this.episodeGrid.show(new Backgrid.Grid({
+                    columns   : this.columns,
+                    collection: this.episodeCollection,
+                    className : 'table table-hover season-grid'
+                }));
             },
 
             _seasonSearch: function () {
@@ -82,12 +84,12 @@ define([
                 this.ui.seasonSearch.addClass('icon-spinner icon-spin');
 
                 var properties = {
-                    seriesId: this.model.get('seriesId'),
+                    seriesId    : this.model.get('seriesId'),
                     seasonNumber: this.model.get('seasonNumber')
                 };
 
                 var self = this;
-                var commandPromise = App.Commands.Execute(command, properties);
+                var commandPromise = CommandController.Execute(command, properties);
 
                 commandPromise.fail(function (options) {
                     if (options.readyState === 0 || options.status === 0) {

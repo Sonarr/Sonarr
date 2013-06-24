@@ -1,9 +1,10 @@
-﻿'use strict';
-define(['app', 'Quality/QualitySizeModel'], function () {
-    NzbDrone.Quality.QualitySizeCollection = Backbone.Collection.extend({
-        model: NzbDrone.Quality.QualitySizeModel,
-        url  : NzbDrone.Constants.ApiRoot + '/qualitysize'
+﻿﻿'use strict';
+define(
+    [
+        'Quality/QualitySizeModel'
+    ], function (QualitySizeModel) {
+        return Backbone.Collection.extend({
+            model: QualitySizeModel,
+            url  : window.ApiRoot + '/qualitysize'
+        });
     });
-
-    return  NzbDrone.Quality.QualitySizeCollection;
-});

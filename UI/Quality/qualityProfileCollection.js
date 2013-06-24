@@ -1,14 +1,18 @@
-﻿'use strict';
-define(['app', 'Quality/QualityProfileModel'], function () {
+﻿﻿'use strict';
+define(
+    [
+        'backbone',
+        'Quality/QualityProfileModel'
+    ], function (Backbone, QualityProfileModel) {
 
-    var qualityProfileCollection = Backbone.Collection.extend({
-        model: NzbDrone.Quality.QualityProfileModel,
-        url  : NzbDrone.Constants.ApiRoot + '/qualityprofiles'
+        var QualityProfileCollection = Backbone.Collection.extend({
+            model: QualityProfileModel,
+            url  : window.ApiRoot + '/qualityprofiles'
+        });
+
+        var profiles = new QualityProfileCollection();
+
+        profiles.fetch();
+
+        return profiles;
     });
-
-    var profiles = new qualityProfileCollection();
-
-    profiles.fetch();
-
-    return profiles;
-});

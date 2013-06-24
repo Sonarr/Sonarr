@@ -1,6 +1,8 @@
+window.ApiRoot = '/api';
+
 var statusText = $.ajax({
     type : 'GET',
-    url  : '/api/system/status',
+    url  : window.ApiRoot + '/system/status',
     async: false
 }).responseText;
 

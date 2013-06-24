@@ -1,13 +1,17 @@
-﻿'use strict';
-define(['app', 'Series/EpisodeModel'], function () {
-    NzbDrone.Calendar.Collection = Backbone.Collection.extend({
-        url       : NzbDrone.Constants.ApiRoot + '/calendar',
-        model     : NzbDrone.Series.EpisodeModel,
+﻿﻿'use strict';
+define(
+    [
+        'backbone',
+        'Series/EpisodeModel'
+    ], function (Backbone, EpisodeModel) {
+        return  Backbone.Collection.extend({
+            url  : window.ApiRoot + '/calendar',
+            model: EpisodeModel,
 
-        comparator: function(model) {
-            var date = new Date(model.get('airDate'));
-            var time = date.getTime();
-            return time;
-        }
+            comparator: function (model) {
+                var date = new Date(model.get('airDate'));
+                var time = date.getTime();
+                return time;
+            }
+        });
     });
-});

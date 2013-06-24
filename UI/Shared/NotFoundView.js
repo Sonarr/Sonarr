@@ -1,8 +1,11 @@
-﻿'use strict';
-define(['app'], function () {
-    NzbDrone.Shared.NotFoundView = Backbone.Marionette.ItemView.extend({
-        template: 'Shared/notfoundtemplate'
+﻿﻿'use strict';
+define(
+    [
+        'marionette'
+    ], function (Marionette) {
+        return Marionette.ItemView.extend({
+            template: 'Shared/notfoundtemplate'
+        });
     });
-});
 
 

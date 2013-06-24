@@ -1,8 +1,11 @@
 'use strict';
-define(['app'], function () {
+define(
+    [
+        'marionette'
+    ], function (Marionette) {
 
-    NzbDrone.Episode.Summary.View = Backbone.Marionette.ItemView.extend({
-        template: 'Episode/Summary/ViewTemplate'
+        return Marionette.ItemView.extend({
+            template: 'Episode/Summary/ViewTemplate'
+        });
+
     });
-
-});

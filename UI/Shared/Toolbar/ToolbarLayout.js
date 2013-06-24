@@ -1,18 +1,13 @@
 'use strict';
 define(
     [
-        'app',
-        'Shared/Toolbar/Radio/RadioButtonCollectionView',
-        'Shared/Toolbar/Button/ButtonCollectionView',
+        'marionette',
         'Shared/Toolbar/ButtonCollection',
-        'Shared/Toolbar/ButtonModel'
-    ],
-    function (App,
-              RadioButtonCollectionView,
-              ButtonCollectionView,
-              ButtonCollection,
-              ButtonModel) {
-        NzbDrone.Shared.Toolbar.ToolbarLayout = Backbone.Marionette.Layout.extend({
+        'Shared/Toolbar/ButtonModel',
+        'Shared/Toolbar/Radio/RadioButtonCollectionView',
+        'Shared/Toolbar/Button/ButtonCollectionView'
+    ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView) {
+        return Marionette.Layout.extend({
             template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 
             regions: {
@@ -37,6 +32,7 @@ define(
                 this.toolbarContext = options.context;
 
             },
+
 
             onShow: function () {
                 if (this.left) {
@@ -79,17 +75,17 @@ define(
                     case 'radio':
                     {
                         buttonGroupView = new RadioButtonCollectionView({
-                                collection: groupCollection,
-                                menu      : buttonGroup
-                            });
+                            collection: groupCollection,
+                            menu      : buttonGroup
+                        });
                         break;
                     }
                     default :
                     {
                         buttonGroupView = new ButtonCollectionView({
-                                collection: groupCollection,
-                                menu      : buttonGroup
-                            });
+                            collection: groupCollection,
+                            menu      : buttonGroup
+                        });
                         break;
                     }
                 }
@@ -97,9 +93,6 @@ define(
                 this[position + '_' + (index + 1).toString()].show(buttonGroupView);
             }
         });
-
-        return  NzbDrone.Shared.Toolbar.ToolbarLayout;
-
     });
 
 

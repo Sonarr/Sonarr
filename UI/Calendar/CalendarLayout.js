@@ -1,12 +1,12 @@
 'use strict';
-define([
-    'app',
-    'Calendar/UpcomingCollectionView',
-    'Calendar/CalendarView',
-    'Shared/Toolbar/ToolbarLayout'
-],
-    function () {
-        NzbDrone.Calendar.CalendarLayout = Backbone.Marionette.Layout.extend({
+define(
+    [
+        'marionette',
+        'Calendar/UpcomingCollection',
+        'Calendar/UpcomingCollectionView',
+        'Calendar/CalendarView',
+    ], function (Marionette, UpcomingCollection, UpcomingCollectionView, CalendarView) {
+        return Marionette.Layout.extend({
             template: 'Calendar/CalendarLayoutTemplate',
 
             regions: {
@@ -15,7 +15,7 @@ define([
             },
 
             initialize: function () {
-                this.upcomingCollection = new NzbDrone.Calendar.UpcomingCollection();
+                this.upcomingCollection = new UpcomingCollection();
                 this.upcomingCollection.fetch();
             },
 
@@ -25,13 +25,13 @@ define([
             },
 
             _showUpcoming: function () {
-                this.upcoming.show(new NzbDrone.Calendar.UpcomingCollectionView({
+                this.upcoming.show(new UpcomingCollectionView({
                     collection: this.upcomingCollection
                 }));
             },
 
             _showCalendar: function () {
-                this.calendar.show(new NzbDrone.Calendar.CalendarView());
+                this.calendar.show(new CalendarView());
             }
         });
     });

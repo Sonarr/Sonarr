@@ -1,18 +1,20 @@
-﻿'use strict';
-define(['app', 'Series/SeriesModel'], function () {
-    NzbDrone.Series.SeriesCollection = Backbone.Collection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/series',
-        model: NzbDrone.Series.SeriesModel,
+﻿﻿'use strict';
+define(
+    [
+        'backbone',
+        'Series/SeriesModel'
+    ], function (Backbone, SeriesModel) {
+        return Backbone.Collection.extend({
+            url  : window.ApiRoot + '/series',
+            model: SeriesModel,
 
-        comparator: function(model) {
-            return model.get('title');
-        },
+            comparator: function (model) {
+                return model.get('title');
+            },
 
-        state: {
-            sortKey: 'title',
-            order: -1
-        }
+            state: {
+                sortKey: 'title',
+                order  : -1
+            }
+        });
     });
-
-    return NzbDrone.Series.SeriesCollection;
-});

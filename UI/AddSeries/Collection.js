@@ -1,12 +1,11 @@
-﻿'use strict';
+﻿﻿'use strict';
 define(
     [
-        'app',
         'backbone',
         'Series/SeriesModel'
-    ], function (App, Backbone, SeriesModel) {
+    ], function (Backbone, SeriesModel) {
         return Backbone.Collection.extend({
-            url  : Constants.ApiRoot + '/series/lookup',
+            url  : window.ApiRoot + '/series/lookup',
             model: SeriesModel,
 
             parse: function (response) {

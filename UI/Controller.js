@@ -1,40 +1,36 @@
-﻿'use strict';
+﻿﻿'use strict';
 define(
     [
         'app',
+        'marionette',
+        'History/HistoryLayout',
         'Settings/SettingsLayout',
         'AddSeries/AddSeriesLayout',
-        'Missing/MissingLayout',
-        'History/HistoryLayout',
-        'Form/FormBuilder',
         'Series/Index/SeriesIndexLayout',
-        'Calendar/CalendarLayout',
-        'Shared/NotificationView',
-        'Shared/NotFoundView',
-        'MainMenuView',
         'Series/Details/SeriesDetailsLayout',
-        'Series/EpisodeCollection',
+        'Missing/MissingLayout',
+        'Series/SeriesModel',
+        'Calendar/CalendarLayout',
         'Logs/Layout',
         'Release/Layout',
-        'Shared/FormatHelpers',
-        'Shared/TemplateHelpers',
-        'Shared/Footer/View'
-    ], function (App, SettingsLayout, AddSeriesLayout, MissingLayout, HistoryLayout) {
-        var controller = Backbone.Marionette.Controller.extend({
+        'Shared/NotFoundView'
+    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, MissingLayout, SeriesModel, CalendarLayout, NotFoundView,
+        LogsLayout, ReleaseLayout) {
+        return Marionette.Controller.extend({
 
             series       : function () {
                 this._setTitle('NzbDrone');
-                App.mainRegion.show(new NzbDrone.Series.Index.SeriesIndexLayout());
+                App.mainRegion.show(new SeriesIndexLayout());
             },
             seriesDetails: function (query) {
 
                 var self = this;
                 this._setTitle('Loading Series');
-                var series = new NzbDrone.Series.SeriesModel({ id: query });
+                var series = new SeriesModel({ id: query });
                 series.fetch({
                     success: function (seriesModel) {
                         self._setTitle(seriesModel.get('title'));
-                        App.mainRegion.show(new NzbDrone.Series.Details.SeriesDetailsLayout({ model: seriesModel }));
+                        App.mainRegion.show(new SeriesDetailsLayout({ model: seriesModel }));
                     }
                 });
             },
@@ -46,7 +42,7 @@ define(
 
             calendar: function () {
                 this._setTitle('Calendar');
-                App.mainRegion.show(new NzbDrone.Calendar.CalendarLayout());
+                App.mainRegion.show(new CalendarLayout());
             },
 
 
@@ -69,17 +65,17 @@ define(
 
             rss: function () {
                 this._setTitle('RSS');
-                App.mainRegion.show(new NzbDrone.Release.Layout());
+                App.mainRegion.show(new ReleaseLayout());
             },
 
             logs: function () {
                 this._setTitle('logs');
-                App.mainRegion.show(new NzbDrone.Logs.Layout());
+                App.mainRegion.show(new LogsLayout());
             },
 
             notFound: function () {
                 this._setTitle('Not Found');
-                App.mainRegion.show(new NzbDrone.Shared.NotFoundView(this));
+                App.mainRegion.show(new NotFoundView(this));
             },
 
 
@@ -112,8 +108,5 @@ define(
                 }
             }
         });
-
-        return new controller();
-
     });
 

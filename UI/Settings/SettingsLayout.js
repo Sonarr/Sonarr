@@ -1,21 +1,22 @@
-﻿'use strict';
-define([
-    'app',
-    'marionette',
-    'Settings/SettingsModel',
-    'Settings/General/GeneralSettingsModel',
-    'Settings/Naming/NamingView',
-    'Settings/Naming/NamingModel',
-    'Settings/Quality/QualityLayout',
-    'Settings/Indexers/CollectionView',
-    'Settings/Indexers/Collection',
-    'Settings/DownloadClient/DownloadClientView',
-    'Settings/Notifications/CollectionView',
-    'Settings/Notifications/Collection',
-    'Settings/General/GeneralView',
-    'Settings/Misc/MiscView'
-],
-    function (App, Marionette, SettingsModel, GeneralSettingsModel, NamingView, NamingModel, QualityLayout, IndexerCollectionView, IndexerCollection, DownloadClientView, NotificationCollectionView, NotificationCollection, GeneralView, MiscView) {
+﻿﻿'use strict';
+define(
+    [
+        'app',
+        'marionette',
+        'Settings/SettingsModel',
+        'Settings/General/GeneralSettingsModel',
+        'Settings/Naming/NamingModel',
+        'Settings/Naming/NamingView',
+        'Settings/Quality/QualityLayout',
+        'Settings/Indexers/CollectionView',
+        'Settings/Indexers/Collection',
+        'Settings/DownloadClient/DownloadClientView',
+        'Settings/Notifications/CollectionView',
+        'Settings/Notifications/Collection',
+        'Settings/General/GeneralView',
+        'Settings/Misc/MiscView'
+    ], function (App, Marionette, SettingsModel, GeneralSettingsModel,NamingModel, NamingView,  QualityLayout, IndexerCollectionView, IndexerCollection, DownloadClientView,
+        NotificationCollectionView, NotificationCollection, GeneralView, MiscView) {
         return Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
 
@@ -56,7 +57,7 @@ define([
                 }
 
                 this.ui.namingTab.tab('show');
-                App.Router.navigate('settings/naming');
+                this._navigate('settings/naming');
             },
 
             showQuality: function (e) {
@@ -65,7 +66,7 @@ define([
                 }
 
                 this.ui.qualityTab.tab('show');
-                App.Router.navigate('settings/quality');
+                this._navigate('settings/quality');
             },
 
             showIndexers: function (e) {
@@ -74,7 +75,7 @@ define([
                 }
 
                 this.ui.indexersTab.tab('show');
-                App.Router.navigate('settings/indexers');
+                this._navigate('settings/indexers');
             },
 
             showDownloadClient: function (e) {
@@ -83,7 +84,7 @@ define([
                 }
 
                 this.ui.downloadClientTab.tab('show');
-                App.Router.navigate('settings/downloadclient');
+                this._navigate('settings/downloadclient');
             },
 
             showNotifications: function (e) {
@@ -92,7 +93,7 @@ define([
                 }
 
                 this.ui.notificationsTab.tab('show');
-                App.Router.navigate('settings/notifications');
+                this._navigate('settings/notifications');
             },
 
             showGeneral: function (e) {
@@ -101,7 +102,7 @@ define([
                 }
 
                 this.ui.generalTab.tab('show');
-                App.Router.navigate('settings/general');
+                this._navigate('settings/general');
             },
 
             showMisc: function (e) {
@@ -110,7 +111,13 @@ define([
                 }
 
                 this.ui.miscTab.tab('show');
-                App.Router.navigate('settings/misc');
+                this._navigate('settings/misc');
+            },
+
+            _navigate:function(route){
+                require(['Router'], function(){
+                   App.Router.navigate(route);
+                });
             },
 
             initialize: function (options) {

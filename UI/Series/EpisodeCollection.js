@@ -1,18 +1,21 @@
-﻿'use strict';
-define(['app', 'Series/EpisodeModel'], function () {
-    NzbDrone.Series.EpisodeCollection = Backbone.Collection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/episodes',
-        model: NzbDrone.Series.EpisodeModel,
+﻿﻿'use strict';
+define(
+    [
+        'backbone',
+        'Series/EpisodeModel'
+    ], function (Backbone, EpisodeModel) {
+        return Backbone.Collection.extend({
+            url  : window.ApiRoot + '/episodes',
+            model: EpisodeModel,
 
-        bySeason: function (season) {
-            var filtered = this.filter(function (episode) {
-                return episode.get('seasonNumber') === season;
-            });
+            bySeason: function (season) {
+                var filtered = this.filter(function (episode) {
+                    return episode.get('seasonNumber') === season;
+                });
 
-            return new NzbDrone.Series.EpisodeCollection(filtered);
-        }
+                var EpisodeCollection = require('Series/EpisodeCollection');
+
+                return new EpisodeCollection(filtered);
+            }
+        });
     });
-
-
-    return   NzbDrone.Series.EpisodeCollection;
-});

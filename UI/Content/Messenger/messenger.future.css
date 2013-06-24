@@ -244,10 +244,6 @@ ul.messenger-theme-future {
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
   border-radius: 4px;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-  user-select: none;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5c5b5b), color-stop(100%, #353535));
   background-image: -webkit-linear-gradient(#5c5b5b, #353535);
   background-image: -moz-linear-gradient(#5c5b5b, #353535);

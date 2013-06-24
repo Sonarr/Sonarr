@@ -10,8 +10,6 @@ module.exports = function (grunt) {
             'UI/JsLibraries/backbone.modelbinder.js'         : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
             'UI/JsLibraries/backbone.mutators.js'            : 'http://raw.github.com/asciidisco/Backbone.Mutators/master/backbone.mutators.js',
             'UI/JsLibraries/backbone.shortcuts.js'           : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
-            'UI/JsLibraries/backbone.relational.js'          : 'http://raw.github.com/PaulUithol/Backbone-relational/0.8.5/backbone-relational.js',
-            'UI/JsLibraries/backbone.associations.js'        : 'http://raw.github.com/dhruvaray/backbone-associations/master/backbone-associations.js',
 
             'UI/JsLibraries/backbone.pageable.js'            : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
             'UI/JsLibraries/backbone.backgrid.js'            : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
@@ -28,6 +26,7 @@ module.exports = function (grunt) {
             'UI/JsLibraries/require.js'                      : 'http://raw.github.com/jrburke/requirejs/master/require.js',
             'UI/JsLibraries/sugar.js'                        : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
             'UI/JsLibraries/underscore.js'                   : 'http://underscorejs.org/underscore.js',
+            'UI/JsLibraries/lodash.underscore.js'            : 'http://raw.github.com/bestiejs/lodash/master/dist/lodash.underscore.js',
             'UI/JsLibraries/lunr.js'                         : 'http://raw.github.com/olivernn/lunr.js/master/lunr.js',
          
             'UI/JsLibraries/messenger.js'                    : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
@@ -36,6 +35,7 @@ module.exports = function (grunt) {
             
             'UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
         
+            /*          
             'UI/Content/FontAwesome/fontawesome.otf'         : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/FontAwesome.otf?raw=true',
             'UI/Content/FontAwesome/fontawesome-webfont.eot' : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.eot?raw=true',
             'UI/Content/FontAwesome/fontawesome-webfont.svg' : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.svg?raw=true',
@@ -51,6 +51,7 @@ module.exports = function (grunt) {
             'UI/Content/FontAwesome/mixins.less'             : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/mixins.less',
             'UI/Content/FontAwesome/path.less'               : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/path.less',
             'UI/Content/FontAwesome/variables.less'          : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/variables.less'
+            */
         },
 
         clean: {
@@ -125,6 +126,9 @@ module.exports = function (grunt) {
         },
 
         watch: {
+            options: {
+                nospawn: false,
+            },
             bootstrap  : {
                 files: ['UI/**/Bootstrap/**', 'UI/**/FontAwesome/**'],
                 tasks: ['less:bootstrap']

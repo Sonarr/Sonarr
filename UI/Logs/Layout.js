@@ -1,12 +1,12 @@
 'use strict';
 define([
-    'app',
-    'Logs/Collection',
-    'Shared/Toolbar/ToolbarLayout',
-    'Shared/Grid/Pager'
+    'marionette',
+    'backgrid',
+    'Shared/Grid/Pager',
+    'Logs/Collection'
 ],
-    function () {
-        NzbDrone.Logs.Layout = Backbone.Marionette.Layout.extend({
+    function (Marionette,Backgrid, GridPager, LogCollection) {
+        return Marionette.Layout.extend({
             template: 'Logs/LayoutTemplate',
 
             regions: {
@@ -51,20 +51,19 @@ define([
                         className : 'table table-hover'
                     }));
 
-                this.pager.show(new NzbDrone.Shared.Grid.Pager({
+                this.pager.show(new GridPager({
                     columns   : this.columns,
                     collection: this.collection
                 }));
             },
 
             initialize: function () {
-                this.collection = new NzbDrone.Logs.Collection();
+                this.collection = new LogCollection();
                 this.collection.fetch();
             },
 
             onShow: function () {
                 this.showTable();
-                //this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
             }
 
         })

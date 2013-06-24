@@ -1,13 +1,12 @@
-﻿'use strict';
-define([
-    'app',
-    'marionette',
-    'Quality/QualityProfileCollection',
-    'Settings/Quality/Profile/QualityProfileCollectionView',
-    'Quality/QualitySizeCollection',
-    'Settings/Quality/Size/QualitySizeCollectionView'
-],
-    function (App, Marionette, QualityProfileCollection, QualityProfileCollectionView, QualitySizeCollection, QualitySizeCollectionView) {
+﻿﻿'use strict';
+define(
+    [
+        'marionette',
+        'Quality/QualityProfileCollection',
+        'Settings/Quality/Profile/QualityProfileCollectionView',
+        'Quality/QualitySizeCollection',
+        'Settings/Quality/Size/QualitySizeCollectionView'
+    ], function (Marionette, QualityProfileCollection, QualityProfileCollectionView, QualitySizeCollection, QualitySizeCollectionView) {
         return Marionette.Layout.extend({
             template: 'Settings/Quality/QualityLayoutTemplate',
 

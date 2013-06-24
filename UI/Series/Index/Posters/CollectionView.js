@@ -1,12 +1,14 @@
-﻿'use strict';
+﻿﻿'use strict';
 
-define(['app', 'Series/Index/Posters/ItemView', 'Config'], function () {
+define(
+    [
+        'marionette',
+        'Series/Index/Posters/ItemView'
+    ], function (Marionette, PosterItemView) {
 
-    NzbDrone.Series.Index.Posters.CollectionView = Backbone.Marionette.CompositeView.extend({
-        itemView                : NzbDrone.Series.Index.Posters.ItemView,
-        itemViewContainer       : '#x-series-posters',
-        template                : 'Series/Index/Posters/CollectionTemplate'
+        return Marionette.CompositeView.extend({
+            itemView         : PosterItemView,
+            itemViewContainer: '#x-series-posters',
+            template         : 'Series/Index/Posters/CollectionTemplate'
+        });
     });
-
-    return  NzbDrone.Series.Index.Posters.CollectionView;
-});

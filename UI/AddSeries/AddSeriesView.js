@@ -1,13 +1,9 @@
-﻿'use strict';
+﻿﻿'use strict';
 define(
     [
         'marionette',
         'AddSeries/Collection',
         'AddSeries/SearchResultCollectionView',
-        'Shared/SpinnerView',
-        'app',
-        'AddSeries/RootFolders/Collection',
-        'AddSeries/SearchResultView',
         'Shared/SpinnerView'
     ], function (Marionette, AddSeriesCollection, SearchResultCollectionView, SpinnerView) {
         return Marionette.Layout.extend({

@@ -1,4 +1,4 @@
-﻿'use strict';
+﻿﻿'use strict';
 define(
     [
         'backbone',
@@ -6,12 +6,12 @@ define(
         'mixins/backbone.signalr.mixin'
     ], function (Backbone, RootFolderModel) {
 
-        var rootFolderCollection = Backbone.Collection.extend({
-            url  : NzbDrone.Constants.ApiRoot + '/rootfolder',
+        var RootFolderCollection = Backbone.Collection.extend({
+            url  : window.ApiRoot + '/rootfolder',
             model: RootFolderModel
         });
 
-        var collection = new rootFolderCollection().BindSignalR();
+        var collection = new RootFolderCollection().BindSignalR();
 
         return collection;
     });

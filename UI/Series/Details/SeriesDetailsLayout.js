@@ -1,6 +1,14 @@
 'use strict';
-define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView','backstrech'], function () {
-        NzbDrone.Series.Details.SeriesDetailsLayout = Backbone.Marionette.Layout.extend({
+define(
+    [
+        'marionette',
+        'Series/EpisodeCollection',
+        'Series/SeasonCollection',
+        'Series/Details/SeasonCollectionView',
+        'Shared/LoadingView',
+        'backstrech'
+    ], function (Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, LoadingView) {
+        return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
             template         : 'Series/Details/SeriesDetailsTemplate',
@@ -27,19 +35,17 @@ define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView','back
                     $('body').removeClass('backdrop');
                 }
 
-                this.seasons.show(new NzbDrone.Shared.LoadingView());
+                this.seasons.show(new LoadingView());
 
-                this.seasonCollection = new NzbDrone.Series.SeasonCollection();
-                this.episodeCollection = new NzbDrone.Series.EpisodeCollection();
+                this.seasonCollection = new SeasonCollection();
+                this.episodeCollection = new EpisodeCollection();
 
-                $.when(this.episodeCollection.fetch({data: { seriesId: this.model.id }}), this.seasonCollection.fetch({data: { seriesId: this.model.id }}))
-                    .done(function () {
-                        self.seasons.show(new NzbDrone.Series.Details.SeasonCollectionView({
-                            collection       : self.seasonCollection,
-                            episodeCollection: self.episodeCollection
-                        }));
-                    }
-                );
+                $.when(this.episodeCollection.fetch({data: { seriesId: this.model.id }}), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
+                    self.seasons.show(new SeasonCollectionView({
+                        collection       : self.seasonCollection,
+                        episodeCollection: self.episodeCollection
+                    }));
+                });
             },
 
             onClose: function () {
@@ -47,5 +53,4 @@ define(['app', 'Series/Details/SeasonCollectionView', 'Shared/LoadingView','back
                 $('body').removeClass('backdrop');
             }
         });
-    }
-);
+    });

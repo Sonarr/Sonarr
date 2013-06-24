@@ -1,45 +1,44 @@
-﻿'use strict';
+﻿﻿'use strict';
 
-define([
-    'app',
-    'Series/SeriesCollection',
-    'Series/Edit/EditSeriesView',
-    'Series/Delete/DeleteSeriesView'
+define(
+    [
+        'app',
+        'marionette',
+        'Series/Edit/EditSeriesView',
+        'Series/Delete/DeleteSeriesView'
 
-], function () {
+    ], function (App, Marionette, EditSeriesView, DeleteSeriesView) {
 
-    NzbDrone.Series.Index.Posters.ItemView = Backbone.Marionette.ItemView.extend({
-        tagName : 'li',
-        template: 'Series/Index/Posters/ItemTemplate',
-
-
-        ui: {
-            'progressbar': '.progress .bar',
-            'controls': '.series-controls'
-        },
-
-        events: {
-            'click .x-edit'  : 'editSeries',
-            'click .x-remove': 'removeSeries',
-            'mouseenter .x-series-poster': 'posterHoverAction',
-            'mouseleave .x-series-poster': 'posterHoverAction'
-        },
+        return Marionette.ItemView.extend({
+            tagName : 'li',
+            template: 'Series/Index/Posters/ItemTemplate',
 
 
-        editSeries: function () {
-            var view = new NzbDrone.Series.Edit.EditSeriesView({ model: this.model});
-            NzbDrone.modalRegion.show(view);
-        },
+            ui: {
+                'progressbar': '.progress .bar',
+                'controls'   : '.series-controls'
+            },
 
-        removeSeries: function () {
-            var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
-            NzbDrone.modalRegion.show(view);
-        },
+            events: {
+                'click .x-edit'              : 'editSeries',
+                'click .x-remove'            : 'removeSeries',
+                'mouseenter .x-series-poster': 'posterHoverAction',
+                'mouseleave .x-series-poster': 'posterHoverAction'
+            },
 
-        posterHoverAction: function () {
-            this.ui.controls.slideToggle();
-        }
+
+            editSeries: function () {
+                var view = new EditSeriesView({ model: this.model});
+                App.modalRegion.show(view);
+            },
+
+            removeSeries: function () {
+                var view = new DeleteSeriesView({ model: this.model });
+                App.modalRegion.show(view);
+            },
+
+            posterHoverAction: function () {
+                this.ui.controls.slideToggle();
+            }
+        });
     });
-
-    return NzbDrone.Series.Index.Posters.ItemView;
-});

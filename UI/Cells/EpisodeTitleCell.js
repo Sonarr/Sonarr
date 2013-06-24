@@ -1,22 +1,27 @@
 'use strict';
 
-define(['app', 'Cells/NzbDroneCell'], function () {
-    return NzbDrone.Cells.NzbDroneCell.extend({
+define(
+    [
+        'app',
+        'Cells/NzbDroneCell',
+        'Episode/Layout'
+    ], function (App, NzbDroneCell, EpisodeLayout) {
+        return NzbDroneCell.extend({
 
-        className: 'episode-title-cell',
+            className: 'episode-title-cell',
 
-        events: {
-            'click': 'showDetails'
-        },
+            events: {
+                'click': 'showDetails'
+            },
 
-        showDetails: function () {
-            var view = new NzbDrone.Episode.Layout({ model: this.cellValue });
-            NzbDrone.modalRegion.show(view);
-        },
+            showDetails: function () {
+                var view = new EpisodeLayout({ model: this.cellValue });
+                App.modalRegion.show(view);
+            },
 
-        render: function () {
-            this.$el.html(this.cellValue.get('title'));
-            return this;
-        }
+            render: function () {
+                this.$el.html(this.cellValue.get('title'));
+                return this;
+            }
+        });
     });
-});

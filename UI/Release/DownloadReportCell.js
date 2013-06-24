@@ -1,33 +1,32 @@
 'use strict';
 
-define(['app','backgrid'], function () {
-    NzbDrone.Release.DownloadReportCell = Backgrid.Cell.extend({
+define(
+    [
+        'backgrid'
+    ], function (Backgrid) {
+        return Backgrid.Cell.extend({
 
-        className: 'download-report-cell',
+            className: 'download-report-cell',
 
-        events: {
-            'click': '_onClick'
-        },
+            events: {
+                'click': '_onClick'
+            },
 
-        _onClick: function () {
+            _onClick: function () {
 
-            var self = this;
+                var self = this;
 
-            this.$el.html('<i class =\'icon-spinner icon-spin\' />');
-            this.model.save()
-                .always(function () {
-                    self.$el.html('<i class =\'icon-download-alt\' />');
-                });
-        },
+                this.$el.html('<i class =\'icon-spinner icon-spin\' />');
+                this.model.save().always(function () {
+                        self.$el.html('<i class =\'icon-download-alt\' />');
+                    });
+            },
 
-        render: function () {
+            render: function () {
 
-            this.$el.html('<i class =\'icon-download-alt\' />');
-            return this;
+                this.$el.html('<i class =\'icon-download-alt\' />');
+                return this;
 
-        }
+            }
+        });
     });
-
-
-    return NzbDrone.Release.DownloadReportCell;
-});

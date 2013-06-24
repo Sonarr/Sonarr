@@ -1,34 +1,37 @@
 'use strict';
 
-define(['app','cells/nzbdronecell' ], function () {
-    return NzbDrone.Cells.NzbDroneCell.extend({
+define(
+    [
+        'backgrid'
+    ], function (Backgrid) {
+        return  Backgrid.Cell.extend({
 
-        className: 'episode-status-cell',
+            className: 'episode-status-cell',
 
-        render: function () {
-            this.$el.empty();
+            render: function () {
+                this.$el.empty();
 
-            if (this.model) {
+                if (this.model) {
 
-                var icon;
+                    var icon;
 
-                if (this.model.get('episodeFile')) {
-                    icon = 'icon-ok';
+                    if (this.model.get('episodeFile')) {
+                        icon = 'icon-ok';
 
-                }
-                else {
-                    if (this.model.get('hasAired')) {
-                        icon = 'icon-warning-sign';
                     }
                     else {
-                        icon = 'icon-time';
+                        if (this.model.get('hasAired')) {
+                            icon = 'icon-warning-sign';
+                        }
+                        else {
+                            icon = 'icon-time';
+                        }
                     }
+
+                    this.$el.html('<i class="{0}"/>'.format(icon));
                 }
 
-                this.$el.html('<i class="{0}"/>'.format(icon));
+                return this;
             }
-
-            return this;
-        }
+        });
     });
-});

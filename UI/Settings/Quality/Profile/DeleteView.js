@@ -6,22 +6,15 @@ define(
     ], function (App, Marionette) {
 
         return  Marionette.ItemView.extend({
-            template: 'Series/Delete/DeleteSeriesTemplate',
+            template: 'Quality/Profile/DeleteTemplate',
 
             events: {
-                'click .x-confirm-delete': 'removeSeries'
+                'click .x-confirm-delete': '_removeProfile'
             },
 
-            ui: {
-                deleteFiles: '.x-delete-files'
-            },
-
-            removeSeries: function () {
-
-                var deleteFiles = this.ui.deleteFiles.prop('checked');
+            _removeProfile: function () {
 
                 this.model.destroy({
-                    data: { 'deleteFiles': deleteFiles },
                     wait: true
                 }).done(function () {
                         App.modalRegion.close();

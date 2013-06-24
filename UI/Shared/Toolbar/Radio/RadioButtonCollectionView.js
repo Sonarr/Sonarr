@@ -1,13 +1,13 @@
 'use strict';
 define(
     [
-        'app',
+        'marionette',
         'Shared/Toolbar/Radio/RadioButtonView',
         'Config'
-    ], function (App, RadioButtonView, Config) {
-        return Backbone.Marionette.CollectionView.extend({
+    ], function (Marionette, RadioButtonView, Config) {
+        return Marionette.CollectionView.extend({
             className: 'btn-group',
-            itemView : NzbDrone.Shared.Toolbar.RadioButtonView,
+            itemView : RadioButtonView,
 
             attributes: {
                 'data-toggle': 'buttons-radio'

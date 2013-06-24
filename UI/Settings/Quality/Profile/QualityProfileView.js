@@ -1,35 +1,40 @@
-﻿'use strict';
+﻿﻿
+'use strict';
 
-define([
-    'app',
-    'marionette',
-    'Settings/Quality/Profile/EditQualityProfileView',
-    'Mixins/AsModelBoundView'
-], function (App, Marionette, EditProfileView, AsModelBoundView) {
+define(
+    [
+        'app',
+        'marionette',
+        'Settings/Quality/Profile/EditQualityProfileView',
+        'Settings/Quality/Profile/DeleteView',
+        'Mixins/AsModelBoundView'
 
-    var view = Marionette.ItemView.extend({
-        template: 'Settings/Quality/Profile/QualityProfileTemplate',
-        tagName : 'tr',
+    ], function (App, Marionette, EditProfileView, DeleteProfileView, AsModelBoundView) {
 
-        ui: {
-            'progressbar': '.progress .bar'
-        },
+        var view = Marionette.ItemView.extend({
+            template: 'Settings/Quality/Profile/QualityProfileTemplate',
+            tagName : 'tr',
 
-        events: {
-            'click .x-edit'  : 'edit',
-            'click .x-remove': 'removeQuality'
-        },
+            ui: {
+                'progressbar': '.progress .bar'
+            },
 
-        edit: function () {
-            var view = new EditProfileView({ model: this.model});
-            App.modalRegion.show(view);
-        },
+            events: {
+                'click .x-edit'  : 'edit',
+                'click .x-remove': 'removeQuality'
+            },
 
-        removeQuality: function () {
-            var view = new NzbDrone.Series.Delete.DeleteSeriesView({ model: this.model });
-            NzbDrone.modalRegion.show(view);
-        }
+            edit: function () {
+                var view = new EditProfileView({ model: this.model});
+                App.modalRegion.show(view);
+            },
+
+            removeQuality: function () {
+                var view = new DeleteProfileView({ model: this.model });
+                App.modalRegion.show(view);
+            }
+        });
+
+
+        return AsModelBoundView.call(view);
     });
-
-    return AsModelBoundView.call(view);
-});

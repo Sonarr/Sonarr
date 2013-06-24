@@ -1,17 +1,16 @@
 'use strict';
-define(['app'], function () {
+define({
+        Execute: function (name, properties) {
+            var data = { command: name };
 
-    NzbDrone.Commands.Execute = function (name, properties) {
-        var data = { command: name };
+            if (properties) {
+                $.extend(data, properties);
+            }
 
-        if (properties) {
-            $.extend(data, properties);
+            return $.ajax({
+                type: 'POST',
+                url : window.ApiRoot + '/command',
+                data: JSON.stringify(data)
+            });
         }
-
-        return $.ajax({
-            type: 'POST',
-            url : NzbDrone.Constants.ApiRoot + '/command',
-            data: JSON.stringify(data)
-        });
-    };
-});
+    });

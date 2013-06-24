@@ -1,12 +1,11 @@
 'use strict';
 
-define([
-    'app',
-    'Calendar/UpcomingCollection'
-
-], function () {
-    NzbDrone.Calendar.UpcomingItemView = Backbone.Marionette.ItemView.extend({
-        template : 'Calendar/UpcomingItemTemplate',
-        tagName  : 'div'
+define(
+    [
+        'marionette'
+    ], function (Marionette) {
+        return Marionette.ItemView.extend({
+            template: 'Calendar/UpcomingItemTemplate',
+            tagName : 'div'
+        });
     });
-});

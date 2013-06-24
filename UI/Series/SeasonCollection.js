@@ -1,23 +1,24 @@
-﻿'use strict';
-define(['app', 'Series/SeasonModel', 'backbone.pageable'], function (App, SeasonModel, PageAbleCollection) {
-    NzbDrone.Series.SeasonCollection = PageAbleCollection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/season',
-        model: NzbDrone.Series.SeasonModel,
+﻿﻿'use strict';
+define(
+    [
+        'Series/SeasonModel',
+        'backbone.pageable'
+    ], function (SeasonModel, PageAbleCollection) {
+        return PageAbleCollection.extend({
+            url  : window.ApiRoot + '/season',
+            model: SeasonModel,
 
-        mode: 'client',
+            mode: 'client',
 
-        state: {
-            sortKey : 'seasonNumber',
-            order   : 1,
-            pageSize: 1000000
-        },
+            state: {
+                sortKey : 'seasonNumber',
+                order   : 1,
+                pageSize: 1000000
+            },
 
-        queryParams: {
-            sortKey: null,
-            order  : null
-        }
+            queryParams: {
+                sortKey: null,
+                order  : null
+            }
+        });
     });
-
-
-    return   NzbDrone.Series.SeasonCollection;
-});

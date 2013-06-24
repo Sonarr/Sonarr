@@ -1,4 +1,4 @@
-﻿'use strict';
+﻿﻿'use strict';
 require(
     [
         'app',
@@ -7,9 +7,9 @@ require(
         'jQuery/RouteBinder'
     ], function (App, Marionette, Controller, RouterBinder) {
 
-        NzbDrone.Router = Marionette.AppRouter.extend({
+        var Router = Marionette.AppRouter.extend({
 
-            controller: Controller,
+            controller: new Controller(),
             appRoutes : {
                 ''                           : 'series',
                 'series'                     : 'series',
@@ -28,17 +28,16 @@ require(
             }
         });
 
-        NzbDrone.addInitializer(function () {
+        App.addInitializer(function () {
 
-            NzbDrone.Router = new NzbDrone.Router();
+            App.Router = new Router();
             Backbone.history.start({ pushState: true });
 
-            RouterBinder.bind(NzbDrone.Router);
-            // NzbDrone.footerRegion.show(new FooterView());
+            RouterBinder.bind(App.Router);
         });
 
 
-        return NzbDrone.Router;
+        return App.Router;
 
     });
 

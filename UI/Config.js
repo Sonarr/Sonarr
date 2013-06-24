@@ -2,41 +2,38 @@
 define(
     [
         'app'
-    ], function () {
-
-        NzbDrone.Config = {
+    ], function (App) {
+        return {
             Events: {
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
             Keys  : {
                 DefaultQualityProfileId: 'DefaultQualityProfileId'
+            },
+
+            GetValue: function (key, defaultValue) {
+
+                var storeValue = localStorage.getItem(key);
+
+                if (!storeValue) {
+                    return defaultValue;
+                }
+
+                return storeValue.toString();
+            },
+
+            SetValue: function (key, value) {
+
+                console.log('Config: [{0}] => [{1}] '.format(key, value));
+
+                if (this.GetValue(key) === value.toString()) {
+                    return;
+                }
+
+                localStorage.setItem(key, value);
+                App.vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
+
             }
-        };
-
-        NzbDrone.Config.GetValue = function (key, defaultValue) {
-
-            var storeValue = localStorage.getItem(key);
-
-            if (!storeValue) {
-                return defaultValue;
-            }
-
-            return storeValue.toString();
-        };
-
-        NzbDrone.Config.SetValue = function (key, value) {
-
-            console.log('Config: [{0}] => [{1}] '.format(key, value));
-
-            if (NzbDrone.Config.GetValue(key) === value.toString()) {
-                return;
-            }
-
-            localStorage.setItem(key, value);
-            NzbDrone.vent.trigger(NzbDrone.Config.Events.ConfigUpdatedEvent, {key: key, value: value});
 
         };
-
-        return NzbDrone.Config;
-
     });

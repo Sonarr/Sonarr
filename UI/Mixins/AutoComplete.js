@@ -1,12 +1,12 @@
-﻿'use strict';
+﻿﻿'use strict';
 
-define(['app'], function () {
+define(function () {
 
     $.fn.autoComplete = function (resource) {
         $(this).typeahead({
             source   : function (filter, callback) {
                 $.ajax({
-                    url     : NzbDrone.Constants.ApiRoot + resource,
+                    url     : window.ApiRoot + resource,
                     dataType: 'json',
                     type    : 'GET',
                     data    : { query: filter },
@@ -16,7 +16,7 @@ define(['app'], function () {
                 });
             },
             minLength: 3,
-            items :20
+            items    : 20
         });
     };
 

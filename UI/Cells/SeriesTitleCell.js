@@ -1,9 +1,12 @@
 'use strict';
-define(['app', 'Cells/TemplatedCell'], function (App, TemplatedCell) {
-    return TemplatedCell.extend({
+define(
+    [
+        'Cells/TemplatedCell'
+    ], function (TemplatedCell) {
+        return TemplatedCell.extend({
 
-        className: 'series-title',
-        template : 'Cells/SeriesTitleTemplate'
+            className: 'series-title',
+            template : 'Cells/SeriesTitleTemplate'
 
+        });
     });
-});

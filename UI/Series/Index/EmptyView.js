@@ -1,10 +1,11 @@
-﻿'use strict';
+﻿﻿'use strict';
 
-define(['app'], function () {
+define(
+    [
+        'marionette'
+    ], function (Marionette) {
 
-    NzbDrone.Series.Index.EmptyView = Backbone.Marionette.CompositeView.extend({
-        template: 'Series/Index/EmptyTemplate'
+        return Marionette.CompositeView.extend({
+            template: 'Series/Index/EmptyTemplate'
+        });
     });
-
-    return   NzbDrone.Series.Index.EmptyView;
-});

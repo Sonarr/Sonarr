@@ -1,6 +1,6 @@
-﻿'use strict';
-define(['app'], function () {
-    NzbDrone.Release.Model = Backbone.Model.extend({
+﻿﻿'use strict';
+define(['backbone'], function (Backbone) {
+    return Backbone.Model.extend({
      /*   mutators: {
             seasonNumber: function () {
                 return this.get('episode').seasonNumber;

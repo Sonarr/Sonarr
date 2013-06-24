@@ -1,7 +1,10 @@
-﻿'use strict';
-define(['app', 'Settings/Indexers/Model'], function (App, IndexerModel) {
-    return Backbone.Collection.extend({
-        url  : App.Constants.ApiRoot + '/indexer',
-        model: IndexerModel
+﻿﻿'use strict';
+define(
+    [
+        'Settings/Indexers/Model'
+    ], function (IndexerModel) {
+        return Backbone.Collection.extend({
+            url  : window.ApiRoot + '/indexer',
+            model: IndexerModel
+        });
     });
-});

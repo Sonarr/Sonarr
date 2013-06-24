@@ -1,4 +1,4 @@
-﻿'use strict';
+﻿﻿'use strict';
 require.config({
 
     urlArgs: 'v=' + window.ServerStatus.version,
@@ -130,19 +130,29 @@ require.config({
             exports: 'Backgrid',
 
             init: function () {
-                Backgrid.Column.prototype.defaults = {
-                    name      : undefined,
-                    label     : undefined,
-                    sortable  : true,
-                    editable  : false,
-                    renderable: true,
-                    formatter : undefined,
-                    cell      : undefined,
-                    headerCell: 'nzbDrone'
-                };
+                require(
+                    [
+                        'Shared/Grid/HeaderCell'
+                    ], function () {
+
+                        Backgrid.Column.prototype.defaults = {
+                            name      : undefined,
+                            label     : undefined,
+                            sortable  : true,
+                            editable  : false,
+                            renderable: true,
+                            formatter : undefined,
+                            cell      : undefined,
+                            headerCell: 'NzbDrone'
+                        };
+
+                    });
             }
         },
         'backgrid.paginator': {
+
+            exports: 'Backgrid.Extension.Paginator',
+
             deps:
                 [
                     'backgrid'
@@ -165,76 +175,29 @@ define(
             ]);
 
 
-        window.NzbDrone = new Marionette.Application();
-        window.NzbDrone.Config = {};
-        window.NzbDrone.Form = {};
+        var app = new Marionette.Application();
 
-        window.NzbDrone.Series = {
-            Index  : {
-                Table  : {},
-                List   : {},
-                Posters: {}
-
-            },
-            Edit   : {},
-            Delete : {},
-            Details: {}
-        };
-
-        window.NzbDrone.Episode = {
-            Search  : {},
-            Summary : {},
-            Activity: {}
-        };
-
-        window.NzbDrone.Quality = {};
-
-        window.NzbDrone.Commands = {};
-
-        window.NzbDrone.Shared = {
-            Toolbar      : {},
-            Messenger    : {},
-            FormatHelpers: {},
-            Grid         : {}
-        };
-
-        window.NzbDrone.Cells = {};
-
-        window.NzbDrone.Calendar = {};
-
-        window.NzbDrone.Missing = {};
-        window.NzbDrone.History = {};
-        window.NzbDrone.Logs = {};
-        window.NzbDrone.Release = {};
-
-        window.NzbDrone.Events = {
+        app.Events = {
             SeriesAdded: 'seriesAdded'
         };
 
-        window.NzbDrone.Commands = {
+        app.Commands = {
             SaveSettings: 'saveSettings'
         };
 
-        window.NzbDrone.Constants = {
-            ApiRoot: '/api'
-        };
 
-        window.NzbDrone.addInitializer(function () {
+        app.addInitializer(function () {
             console.log('starting application');
         });
 
-        NzbDrone.addRegions({
+        app.addRegions({
             mainRegion        : '#main-region',
             notificationRegion: '#notification-region',
             modalRegion       : ModalRegion,
             footerRegion      : '#footer-region'
         });
 
-        window.NzbDrone.start();
-
-
-        //NzbDrone.footerRegion.show(new FooterView());
-
+        app.start();
 
         window.require(
             [
@@ -242,7 +205,7 @@ define(
                 'jQuery/TooltipBinder'
             ]);
 
-        return NzbDrone;
+        return app;
     });
 
 

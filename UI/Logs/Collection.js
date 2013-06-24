@@ -1,8 +1,8 @@
-﻿'use strict';
-define(['app', 'Logs/Model', 'backbone.pageable'], function (app, SeriesModel, PagableCollection) {
-    NzbDrone.Logs.Collection = PagableCollection.extend({
-        url  : NzbDrone.Constants.ApiRoot + '/log',
-        model: NzbDrone.Logs.Model,
+﻿﻿'use strict';
+define(['backbone.pageable', 'Logs/Model', ], function (PagableCollection, LogsModel) {
+    return PagableCollection.extend({
+        url  : window.ApiRoot + '/log',
+        model: LogsModel,
 
         state: {
             pageSize: 50,

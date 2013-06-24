@@ -1,29 +1,17 @@
 'use strict';
 define(
     [
-        'app',
-        'Missing/Row',
+        'marionette',
+        'backgrid',
         'Missing/Collection',
-        'Cells/AirDateCell',
-        'Series/Index/Table/SeriesStatusCell',
-        'Shared/Toolbar/ToolbarLayout',
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
+        'Cells/AirDateCell',
         'Shared/Grid/Pager',
         'Shared/LoadingView'
-    ], function (App,
-                 MissingRow,
-                 MissingCollection,
-                 AirDateCell,
-                 SeriesStatusCell,
-                 ToolbarLayout,
-                 SeriesTitleCell,
-                 EpisodeNumberCell,
-                 EpisodeTitleCell,
-                 Pager,
-                 LoadingView) {
-        return Backbone.Marionette.Layout.extend({
+    ], function (Marionette, Backgrid, MissingCollection, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, AirDateCell, GridPager, LoadingView) {
+        return Marionette.Layout.extend({
             template: 'Missing/MissingLayoutTemplate',
 
             regions: {
@@ -53,21 +41,20 @@ define(
                         cell    : EpisodeTitleCell
                     },
                     {
-                        name    : 'airDate',
-                        label   : 'Air Date',
-                        cell    : AirDateCell
+                        name : 'airDate',
+                        label: 'Air Date',
+                        cell : AirDateCell
                     }
                 ],
 
             _showTable: function () {
                 this.missing.show(new Backgrid.Grid({
-                        row       : MissingRow,
-                        columns   : this.columns,
-                        collection: this.missingCollection,
-                        className : 'table table-hover'
-                    }));
+                    columns   : this.columns,
+                    collection: this.missingCollection,
+                    className : 'table table-hover'
+                }));
 
-                this.pager.show(new NzbDrone.Shared.Grid.Pager({
+                this.pager.show(new GridPager({
                     columns   : this.columns,
                     collection: this.missingCollection
                 }));
@@ -80,8 +67,8 @@ define(
 
                 this.missingCollection = new MissingCollection();
                 this.missingCollection.fetch().done(function () {
-                        self._showTable();
-                    });
+                    self._showTable();
+                });
             }
         });
     });

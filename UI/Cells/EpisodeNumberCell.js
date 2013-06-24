@@ -1,49 +1,52 @@
 'use strict';
 
-define(['app', 'Cells/NzbDroneCell'], function () {
-    return NzbDrone.Cells.NzbDroneCell.extend({
+define(
+    [
+        'Cells/NzbDroneCell'
+    ], function (NzbDroneCell) {
+        return NzbDroneCell.extend({
 
-        className: 'episode-number-cell',
+            className: 'episode-number-cell',
 
-        render: function () {
+            render: function () {
 
-            this.$el.empty();
+                this.$el.empty();
 
-            var airDateField = this.column.get('airDate') || 'airDate';
-            var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
-            var episodeField = this.column.get('episodes') || 'episodeNumber';
+                var airDateField = this.column.get('airDate') || 'airDate';
+                var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
+                var episodeField = this.column.get('episodes') || 'episodeNumber';
 
-            if (this.cellValue) {
+                if (this.cellValue) {
 
-                var airDate = this.cellValue.get(airDateField);
-                var seasonNumber = this.cellValue.get(seasonField);
-                var episodes = this.cellValue.get(episodeField);
+                    var airDate = this.cellValue.get(airDateField);
+                    var seasonNumber = this.cellValue.get(seasonField);
+                    var episodes = this.cellValue.get(episodeField);
 
-                var result = 'Unknown';
+                    var result = 'Unknown';
 
-                if (episodes) {
+                    if (episodes) {
 
-                    var paddedEpisodes;
+                        var paddedEpisodes;
 
-                    if (episodes.constructor === Array) {
-                        paddedEpisodes = _.map(episodes,function (episodeNumber) {
-                            return episodeNumber.pad(2);
-                        }).join();
+                        if (episodes.constructor === Array) {
+                            paddedEpisodes = _.map(episodes,function (episodeNumber) {
+                                return episodeNumber.pad(2);
+                            }).join();
+                        }
+                        else {
+                            paddedEpisodes = episodes.pad(2);
+                        }
+
+                        result = 'S{0}-E{1}'.format(seasonNumber.pad(2), paddedEpisodes);
                     }
-                    else {
-                        paddedEpisodes = episodes.pad(2);
+                    else if (airDate) {
+                        result = new Date(airDate).toLocaleDateString();
                     }
 
-                    result = 'S{0}-E{1}'.format(seasonNumber.pad(2), paddedEpisodes);
+                    this.$el.html(result);
                 }
-                else if (airDate) {
-                    result = new Date(airDate).toLocaleDateString();
-                }
-
-                this.$el.html(result);
+                this.delegateEvents();
+                return this;
             }
-            this.delegateEvents();
-            return this;
-        }
+        });
     });
-});

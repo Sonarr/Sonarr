@@ -1,6 +1,6 @@
 'use strict';
 define(function () {
-    //This module will automatically route all links through backbone router rather than
+    //This module will automatically route all relative links through backbone router rather than
     //causing links to reload pages.
 
     var routeBinder = {
@@ -37,7 +37,7 @@ define(function () {
             }
 
             if (!href) {
-                throw 'couldnt find route target';
+                throw 'couldn\'t find route target';
             }
 
 

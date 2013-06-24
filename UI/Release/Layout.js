@@ -1,17 +1,17 @@
 'use strict';
-define([
-    'app',
-    'Release/Collection',
-    'Release/ApprovalStatusCell',
-    'Shared/SpinnerView',
-    'Shared/Toolbar/ToolbarLayout',
-    'Cells/EpisodeNumberCell',
-    'Cells/FileSizeCell',
-    'Cells/IndexerCell',
-    'Cells/QualityCell'
-],
-    function () {
-        NzbDrone.Release.Layout = Backbone.Marionette.Layout.extend({
+define(
+    [
+        'marionette',
+        'backgrid',
+        'Release/Collection',
+        'Cells/IndexerCell',
+        'Cells/EpisodeNumberCell',
+        'Cells/FileSizeCell',
+        'Cells/QualityCell',
+        'Release/ApprovalStatusCell',
+        'Shared/SpinnerView'
+    ], function (Marionette, Backgrid, ReleaseCollection, IndexerCell, EpisodeNumberCell, FileSizeCell, QualityCell, ApprovalStatusCell, SpinnerView) {
+        return Marionette.Layout.extend({
             template: 'Release/LayoutTemplate',
 
             regions: {
@@ -19,60 +19,60 @@ define([
                 toolbar: '#x-toolbar'
             },
 
-            columns: [
-                {
-                    name    : 'indexer',
-                    label   : 'Indexer',
-                    sortable: true,
-                    cell    : NzbDrone.Cells.IndexerCell
-                },
+            columns:
+                [
+                    {
+                        name    : 'indexer',
+                        label   : 'Indexer',
+                        sortable: true,
+                        cell    : IndexerCell
+                    },
 
-                {
-                    name    : 'title',
-                    label   : 'Title',
-                    sortable: true,
-                    cell    : Backgrid.StringCell
-                },
-                {
-                    name    : 'episodeNumbers',
-                    episodes: 'episodeNumbers',
-                    label   : 'season',
-                    cell    : NzbDrone.Cells.EpisodeNumberCell
-                },
-                {
-                    name    : 'size',
-                    label   : 'Size',
-                    sortable: true,
-                    cell    : NzbDrone.Cells.FileSizeCell
-                },
-                {
-                    name    : 'quality',
-                    label   : 'Quality',
-                    sortable: true,
-                    cell    : NzbDrone.Cells.QualityCell
-                },
+                    {
+                        name    : 'title',
+                        label   : 'Title',
+                        sortable: true,
+                        cell    : Backgrid.StringCell
+                    },
+                    {
+                        name    : 'episodeNumbers',
+                        episodes: 'episodeNumbers',
+                        label   : 'season',
+                        cell    : EpisodeNumberCell
+                    },
+                    {
+                        name    : 'size',
+                        label   : 'Size',
+                        sortable: true,
+                        cell    : FileSizeCell
+                    },
+                    {
+                        name    : 'quality',
+                        label   : 'Quality',
+                        sortable: true,
+                        cell    : QualityCell
+                    },
 
-                {
-                    name : 'rejections',
-                    label: 'decision',
-                    cell : NzbDrone.Release.ApprovalStatusCell
-                }
-            ],
+                    {
+                        name : 'rejections',
+                        label: 'decision',
+                        cell : ApprovalStatusCell
+                    }
+                ],
 
             showTable: function () {
                 if (!this.isClosed) {
-                    this.grid.show(new Backgrid.Grid(
-                        {
-                            row       : Backgrid.Row,
-                            columns   : this.columns,
-                            collection: this.collection,
-                            className : 'table table-hover'
-                        }));
+                    this.grid.show(new Backgrid.Grid({
+                        row       : Backgrid.Row,
+                        columns   : this.columns,
+                        collection: this.collection,
+                        className : 'table table-hover'
+                    }));
                 }
             },
 
             initialize: function () {
-                this.collection = new NzbDrone.Release.Collection();
+                this.collection = new ReleaseCollection();
                 this.fetchPromise = this.collection.fetch();
             },
 
@@ -80,12 +80,11 @@ define([
 
                 var self = this;
 
-                this.grid.show(new NzbDrone.Shared.SpinnerView());
+                this.grid.show(new SpinnerView());
 
                 this.fetchPromise.done(function () {
                     self.showTable();
                 });
-                //this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
             }
 
         });

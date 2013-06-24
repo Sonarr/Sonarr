@@ -1,26 +1,26 @@
-﻿'use strict';
+﻿﻿'use strict';
 
-define([
-    'app',
-    'marionette',
-    'Mixins/AsModelBoundView'
-], function (App, Marionette, AsModelBoundView) {
+define(
+    [
+        'marionette',
+        'Mixins/AsModelBoundView'
+    ], function (Marionette, AsModelBoundView) {
 
-    var view = Marionette.ItemView.extend({
-        template: 'Settings/Indexers/EditTemplate',
+        var view = Marionette.ItemView.extend({
+            template: 'Settings/Indexers/EditTemplate',
 
-        events: {
-            'click .x-save': 'save'
-        },
+            events: {
+                'click .x-save': 'save'
+            },
 
-        initialize: function (options) {
-            this.indexerCollection = options.indexerCollection;
-        },
+            initialize: function (options) {
+                this.indexerCollection = options.indexerCollection;
+            },
 
-        save: function () {
-            this.model.saveSettings();
-        }
+            save: function () {
+                this.model.saveSettings();
+            }
+        });
+
+        return AsModelBoundView.call(view);
     });
-
-    return AsModelBoundView.call(view);
-});

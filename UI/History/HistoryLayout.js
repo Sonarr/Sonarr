@@ -1,33 +1,19 @@
 'use strict';
-define([
-    'app',
-    'History/Collection',
-    'History/EventTypeCell',
-    'Cells/RelativeDateCell',
-    'Cells/TemplatedCell',
-    'Cells/SeriesTitleCell',
-    'Cells/EpisodeNumberCell',
-    'Cells/EpisodeTitleCell',
-    'Cells/QualityCell',
-    'Shared/Toolbar/ToolbarLayout',
-    'Shared/Grid/Pager',
-    'Shared/Grid/HeaderCell',
-    'Shared/LoadingView'
-],
-    function (App,
-              HistoryCollection,
-              EventTypeCell,
-              RelativeDateCell,
-              TemplatedCell,
-              SeriesTitleCell,
-              EpisodeNumberCell,
-              EpisodeTitleCell,
-              QualityCell,
-              ToolbarLayout,
-              Pager,
-              HeaderCell,
-              LoadingView) {
-        return Backbone.Marionette.Layout.extend({
+define(
+    [
+        'marionette',
+        'backgrid',
+        'History/Collection',
+        'History/EventTypeCell',
+        'Cells/SeriesTitleCell',
+        'Cells/EpisodeNumberCell',
+        'Cells/EpisodeTitleCell',
+        'Cells/QualityCell',
+        'Cells/RelativeDateCell',
+        'Shared/Grid/Pager',
+        'Shared/LoadingView'
+    ], function (Marionette, Backgrid, HistoryCollection, EventTypeCell, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, QualityCell, RelativeDateCell, GridPager, LoadingView) {
+        return Marionette.Layout.extend({
             template: 'History/HistoryLayoutTemplate',
 
             regions: {
@@ -36,54 +22,53 @@ define([
                 pager  : '#x-pager'
             },
 
-            columns: [
-                {
-                    name: 'eventType',
-                    label:'',
-                    cell : EventTypeCell
-                },
-                {
-                    name    : 'series',
-                    label   : 'Series',
-                    cell    : SeriesTitleCell
-                },
-                {
-                    name    : 'episode',
-                    label   : 'Episode',
-                    sortable: false,
-                    cell    : EpisodeNumberCell
-                },
-                {
-                    name    : 'episode',
-                    label   : 'Episode Title',
-                    sortable: false,
-                    cell    : EpisodeTitleCell
-                },
-                {
-                    name    : 'quality',
-                    label   : 'Quality',
-                    cell    : QualityCell
-                },
-                {
-                    name : 'date',
-                    label: 'Date',
-                    cell : RelativeDateCell
-                }
-            ],
-
-            _showTable: function () {
-
-                this.history.show(new Backgrid.Grid(
+            columns:
+                [
                     {
-                        row       : NzbDrone.History.Row,
-                        columns   : this.columns,
-                        collection: this.historyCollection,
-                        className : 'table table-hover'
-                    }));
+                        name : 'eventType',
+                        label: '',
+                        cell : EventTypeCell
+                    },
+                    {
+                        name : 'series',
+                        label: 'Series',
+                        cell : SeriesTitleCell
+                    },
+                    {
+                        name    : 'episode',
+                        label   : 'Episode',
+                        sortable: false,
+                        cell    : EpisodeNumberCell
+                    },
+                    {
+                        name    : 'episode',
+                        label   : 'Episode Title',
+                        sortable: false,
+                        cell    : EpisodeTitleCell
+                    },
+                    {
+                        name : 'quality',
+                        label: 'Quality',
+                        cell : QualityCell
+                    },
+                    {
+                        name : 'date',
+                        label: 'Date',
+                        cell : RelativeDateCell
+                    }
+                ],
 
-                this.pager.show(new Pager({
+            _showTable: function (collection) {
+
+                this.history.show(new Backgrid.Grid({
                     columns   : this.columns,
-                    collection: this.historyCollection
+                    collection: collection,
+                    className : 'table table-hover'
+                }));
+
+                this.pager.show(new GridPager({
+                    columns   : this.columns,
+                    collection: collection
                 }));
             },
 
@@ -92,16 +77,11 @@ define([
 
                 this.history.show(new LoadingView());
 
-                this.historyCollection = new HistoryCollection();
-                this.historyCollection.fetch()
-                    .done(function () {
-                        self._showTable();
-                    });
-
-                //this.toolbar.show(new NzbDrone.Shared.Toolbar.ToolbarLayout({right: [ viewButtons], context: this}));
+                var collection = new HistoryCollection();
+                collection.fetch().done(function () {
+                    self._showTable(collection);
+                });
             }
 
-        })
-        ;
-    })
-;
+        });
+    });

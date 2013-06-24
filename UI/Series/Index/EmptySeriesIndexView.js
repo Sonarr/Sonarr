@@ -1,8 +1,9 @@
-﻿'use strict';
-define(['app'], function () {
-    NzbDrone.Series.Index.EmptySeriesCollectionView = Backbone.Marionette.CompositeView.extend({
-        template: 'Series/Index/EmptySeriesIndexTemplate'
+﻿﻿'use strict';
+define(
+    [
+        'marionette'
+    ], function (Marionette) {
+        return Marionette.CompositeView.extend({
+            template: 'Series/Index/EmptySeriesIndexTemplate'
+        });
     });
-
-    return   NzbDrone.Series.Index.EmptySeriesCollectionView;
-});

@@ -1,13 +1,5 @@
-﻿'use strict';
+﻿﻿'use strict';
 (function () {
-
-    /*  var model = new NzbDrone.Shared.NotificationModel();
-     model.set('title','test notification');
-     model.set('message','test message');
-     model.set('level', 'error');
-     this.push(model);
-     */
-
 
     if (!window.console) {
         window.console = {};

@@ -1,5 +1,8 @@
-﻿'use strict';
-define(['app', 'backbone.deepmodel'], function (App, DeepModel) {
-    return DeepModel.DeepModel.extend({
+﻿﻿'use strict';
+define(
+    [
+        'backbone.deepmodel'
+    ], function (DeepModel) {
+        return DeepModel.DeepModel.extend({
+        });
     });
-});
