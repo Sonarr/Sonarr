@@ -94,13 +94,6 @@ namespace NzbDrone.Core.MediaFiles
 
         public void ProcessSubFolder(DirectoryInfo subfolderInfo)
         {
-            var lastFolderWrite = _diskProvider.GetLastFolderWrite(subfolderInfo.FullName);
-            if (lastFolderWrite.AddMinutes(2) > DateTime.UtcNow)
-            {
-                _logger.Trace("[{0}] is too fresh. skipping. Last write {1} UTC", subfolderInfo.FullName, lastFolderWrite);
-                return;
-            }
-
             var series = _parsingService.GetSeries(subfolderInfo.Name);
 
             if (series == null)
@@ -119,14 +112,6 @@ namespace NzbDrone.Core.MediaFiles
 
         private void ProcessVideoFile(string videoFile, Series series)
         {
-            var lastWrite = _diskProvider.GetLastFileWrite(videoFile);
-
-            if (lastWrite.AddMinutes(2) > DateTime.UtcNow)
-            {
-                _logger.Trace("[{0}] is too fresh. skipping. Last Write {1} UTC", videoFile, lastWrite);
-                return;
-            }
-
             if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
             {
                 _logger.Trace("[{0}] is currently locked by another process, skipping", videoFile);

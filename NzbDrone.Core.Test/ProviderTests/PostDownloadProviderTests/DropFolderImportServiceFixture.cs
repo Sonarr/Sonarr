@@ -64,16 +64,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void should_skip_if_folder_is_too_fresh()
-        {
-            WithRecentFolderWrite();
-
-            Subject.ProcessDownloadedEpisodesFolder();
-
-            VerifyNoImport();
-        }
-
-        [Test]
         public void should_search_for_series_using_folder_name()
         {
             WithOldWrite();
