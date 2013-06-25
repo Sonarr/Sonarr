@@ -6,7 +6,7 @@ define(
     ], function (App, Marionette) {
 
         return  Marionette.ItemView.extend({
-            template: 'Quality/Profile/DeleteTemplate',
+            template: 'Settings/Quality/Profile/DeleteTemplate',
 
             events: {
                 'click .x-confirm-delete': '_removeProfile'

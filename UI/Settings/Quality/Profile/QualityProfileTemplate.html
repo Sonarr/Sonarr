@@ -1,11 +1,11 @@
-﻿<td name="name"></td>
-<td>
-    {{#each allowed}}
-    {{name}} |
-    {{/each}}
-</td>
-<td name="cutoff.name"></td>
-<td>
-    <i class="icon-cog x-edit" title="Edit Series"/>
-    | Delete
-</td>
+﻿<div class="quality-profile-item">
+    <div>
+        <h2>{{name}}</h2>
+        <span class="btn-group pull-right">
+            <button class="btn btn-mini btn-danger x-delete">Delete</button>
+            <button class="btn btn-mini x-edit">Edit</button>
+        </span>
+    </div>
+
+    {{allowedLabeler}}
+</div>
