@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 (function () {
 
     if (!window.console) {
@@ -32,7 +32,8 @@
 
             window.Messenger().post(message);
 
-        } catch (error) {
+        }
+        catch (error) {
             console.log('An error occurred while reporting error. ' + error);
             console.log(msg);
             window.alert('Couldn\'t report JS error.  ' + msg);
@@ -62,7 +63,8 @@
         if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
             return false;
             //message.message = 'NzbDrone Server Not Reachable. make sure NzbDrone is running.';
-        } else {
+        }
+        else {
             message.message = '[{0}] {1} : {2}'.format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
         }
 

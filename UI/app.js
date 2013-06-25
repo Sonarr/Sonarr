@@ -28,12 +28,11 @@ require.config({
     shim: {
 
         $: {
-            exports: '$',
-            init   : function () {
-                window.Constants = {
-                    ApiRoot: '/api'
-                };
-            }
+            deps   :
+                [
+                    'Instrumentation/ErrorHandler'
+                ],
+            exports: '$'
         },
 
 
@@ -163,7 +162,6 @@ define(
         'marionette',
         'shared/modal/region',
         'Instrumentation/StringFormat',
-        'Instrumentation/ErrorHandler'
     ], function (Marionette, ModalRegion) {
 
         require(

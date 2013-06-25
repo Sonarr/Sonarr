@@ -2,11 +2,11 @@
 define(
     [
         'backbone',
-        'Quality/QualityProfileCollection',
+        'Quality/QualityProfileCollection'
     ], function (Backbone, QualityProfileCollection) {
         return Backbone.Model.extend({
 
-            urlRoot: Constants.ApiRoot + '/series',
+            urlRoot: ApiRoot + '/series',
 
             mutators: {
                 percentOfEpisodes: function () {
