@@ -109,13 +109,13 @@ require.config({
             }
         },
 
+        'jquery.knob': {
             deps:
                 [
                     '$'
                 ]
         },
 
-        'jquery.knob': {
         'backbone.pageable': {
             deps:
                 [
