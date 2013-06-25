@@ -5,19 +5,21 @@ define(
     ], function () {
         $(document).ready(function () {
 
+            var _window = $(window);
+            var _scrollButton = $('#scroll-up');
+
             $(window).scroll(function () {
-                if ($(this).scrollTop() > 100) {
-                    $('#scroll-up').fadeIn();
+                if (_window.scrollTop() > 100) {
+                    _scrollButton.fadeIn();
                 }
                 else {
-                    $('#scroll-up').fadeOut();
+                    _scrollButton.fadeOut();
                 }
             });
 
-            $('#scroll-up').click(function () {
+            _scrollButton.click(function () {
                 $("html, body").animate({ scrollTop: 0 }, 600);
                 return false;
             });
-
         });
     });
