@@ -4,45 +4,50 @@ define(
         'handlebars'
     ], function (Handlebars) {
 
-        var formBuilder = function (field) {
+        var _fieldBuilder = function (field) {
             if (!field.type) {
-                return Handlebars.helpers.partial.apply(field,
+                return _templateRenderer.apply(field,
                     [
                         'Form/TextboxTemplate'
                     ]);
             }
 
             if (field.type === 'password') {
-                return Handlebars.helpers.partial.apply(field,
+                return _templateRenderer.apply(field,
                     [
                         'Form/PasswordTemplate'
                     ]);
             }
 
             if (field.type === 'checkbox') {
-                return Handlebars.helpers.partial.apply(field,
+                return _templateRenderer.apply(field,
                     [
                         'Form/CheckboxTemplate'
                     ]);
             }
 
             if (field.type === 'select') {
-                return Handlebars.helpers.partial.apply(field,
+                return _templateRenderer.apply(field,
                     [
                         'Form/SelectTemplate'
                     ]);
             }
 
-            return Handlebars.helpers.partial.apply(field,
+            return _templateRenderer.apply(field,
                 [
                     'Form/TextboxTemplate'
                 ]);
         };
 
+        var _templateRenderer = function (templateName) {
+            var templateFunction = Marionette.TemplateCache.get(templateName);
+            return new Handlebars.SafeString(templateFunction(this));
+        };
+
         Handlebars.registerHelper('formBuilder', function () {
             var ret = '';
             _.each(this.fields, function (field) {
-                ret += this.FieldBuilder(field);
+                ret += _fieldBuilder(field);
             });
 
             return new Handlebars.SafeString(ret);
