@@ -18,7 +18,7 @@ require.config({
         'fullcalendar'        : 'JsLibraries/fullcalendar',
         'backstrech'          : 'JsLibraries/jquery.backstretch',
         '$'                   : 'JsLibraries/jquery',
-        'underscore'          : 'JsLibraries/underscore',
+        'underscore'          : 'JsLibraries/lodash.underscore',
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
         'libs'                : 'JsLibraries/'
