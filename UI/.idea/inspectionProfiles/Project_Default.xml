@@ -4,7 +4,7 @@
     <option name="myLocal" value="false" />
     <inspection_tool class="AssignmentResultUsedJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AssignmentToForLoopParameterJS" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AssignmentToFunctionParameterJS" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AssignmentToFunctionParameterJS" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="BadExpressionStatementJS" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="BreakStatementJS" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
     <inspection_tool class="BreakStatementWithLabelJS" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -67,7 +67,6 @@
       <option name="m_limit" value="3" />
     </inspection_tool>
     <inspection_tool class="JSDuplicatedDeclaration" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JSLastCommaInArrayLiteral" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JSPotentiallyInvalidUsageOfThis" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
     <inspection_tool class="JSUndeclaredVariable" enabled="true" level="ERROR" enabled_by_default="true" />

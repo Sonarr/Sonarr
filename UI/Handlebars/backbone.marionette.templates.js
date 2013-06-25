@@ -1,8 +1,11 @@
-﻿﻿'use strict';
-
+﻿'use strict';
 define(
     [
-        'templates'
+        'templates',
+        'Handlebars/Helpers/DateTime',
+        'Handlebars/Helpers/Html',
+        'Handlebars/Helpers/Numbers',
+        'Handlebars/Debug'
     ], function (Templates) {
         return function () {
             this.get = function (templateId) {

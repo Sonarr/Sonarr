@@ -4,7 +4,7 @@ define(
     [
         'sugar'
     ], {
-        FileSizeHelper: function (sourceSize) {
+        Bytes: function (sourceSize) {
             var size = Number(sourceSize);
             return size.bytes(1);
         },

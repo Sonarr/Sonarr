@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 require.config({
 
     urlArgs: 'v=' + window.ServerStatus.version,
@@ -36,6 +36,14 @@ require.config({
             }
         },
 
+
+        signalR: {
+            deps:
+                [
+                    '$'
+                ]
+        },
+
         bootstrap: {
             deps:
                 [
@@ -57,7 +65,7 @@ require.config({
                 ]
         },
 
-        'underscore': {
+        underscore: {
             deps   :
                 [
                     '$'
@@ -90,29 +98,18 @@ require.config({
             deps:
                 [
                     'backbone',
-                    'handlebars',
                     'Handlebars/backbone.marionette.templates',
-                    'mixins/AsNamedView',
-
-                    'Handlebars/Helpers/DateTime'
+                    'mixins/AsNamedView'
                 ],
 
             exports: 'Marionette',
-            init   : function (Backbone, Handlebars, TemplateMixin, AsNamedView, DateTimeHelpers) {
+            init   : function (Backbone, TemplateMixin, AsNamedView) {
                 TemplateMixin.call(Marionette.TemplateCache);
                 AsNamedView.call(Marionette.ItemView.prototype);
-                DateTimeHelpers.register(Handlebars);
 
             }
         },
 
-
-        signalR: {
-            deps:
-                [
-                    '$'
-                ]
-        },
 
         'backbone.pageable': {
             deps:
