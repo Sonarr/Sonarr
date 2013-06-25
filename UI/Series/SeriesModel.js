@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'backbone',
@@ -52,24 +52,13 @@ define(
                 isContinuing     : function () {
                     return this.get('status') === 'continuing';
                 },
-                shortDate        : function () {
-                    var date = this.get('nextAiring');
-
-                    if (!date) {
-                        return '';
-                    }
-
-                    return Date.create(date).short();
-                },
                 route            : function () {
                     return '/series/details/' + this.get('titleSlug');
                     //return '/series/details/' + this.get('id');
                 },
 
                 qualityProfile: function () {
-
                     var profile = QualityProfileCollection.get(this.get('qualityProfileId'));
-
                     if (profile) {
                         return profile.toJSON();
                     }
