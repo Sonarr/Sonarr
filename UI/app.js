@@ -32,9 +32,16 @@ require.config({
                 [
                     'Instrumentation/ErrorHandler'
                 ],
-            exports: '$'
-        },
+            exports: '$',
 
+            init: function () {
+                require(
+                    [
+                        'jQuery/ToTheTop'
+                    ]);
+            }
+
+        },
 
         signalR: {
             deps:

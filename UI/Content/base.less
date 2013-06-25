@@ -1,103 +1,122 @@
 ﻿@import "bootstrap/variables";
 @import "bootstrap/mixins";
 @import "bootstrap/type";
+@import "../shared/styles/clickable";
 
 .progress {
-  width: 125px;
-  position: relative;
-  margin-bottom: 2px;
+  width         : 125px;
+  position      : relative;
+  margin-bottom : 2px;
   .progressbar-back-text {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    font-size: 12px;
-    text-align: center;
+    position   : absolute;
+    width      : 100%;
+    height     : 100%;
+    font-size  : 12px;
+    text-align : center;
   }
+
   .progressbar-front-text {
-    display: block;
-    width: 125px;
-    font-size: 12px;
-    text-align: center;
+    display    : block;
+    width      : 125px;
+    font-size  : 12px;
+    text-align : center;
   }
   .bar {
-    position: absolute;
-    overflow: hidden;
+    position : absolute;
+    overflow : hidden;
   }
 }
 
 .backdrop .page {
-  background-color: transparent;
-  box-shadow: none;
+  background-color : transparent;
+  box-shadow       : none;
 }
 
 html {
-  overflow: -moz-scrollbars-vertical;
-  overflow-y: scroll;
+  overflow   : -moz-scrollbars-vertical;
+  overflow-y : scroll;
 }
 
 .input-append {
   .add-on {
-    margin-left: 0;
+    margin-left : 0;
   }
 }
 
 .line &>[class^="icon-"], .line &>[class*=" icon-"] {
-  margin-top: 1em;
-  height: 1em;
-  line-height: 1em;
+  margin-top  : 1em;
+  height      : 1em;
+  line-height : 1em;
 }
 
 #localSeriesLookup {
-  width: 220px;
-  border: 0px;
-  background: rgb(75, 75, 75);
-  color: rgb(169, 169, 169);
-  padding: 4px;
-  font-size: 13px;
+  width      : 220px;
+  border     : 0px;
+  background : rgb(75, 75, 75);
+  color      : rgb(169, 169, 169);
+  padding    : 4px;
+  font-size  : 13px;
 }
 
 #notification-region {
   pre {
-    font-size: 12px;
+    font-size : 12px;
   }
   .alert {
-    margin: 10px;
+    margin : 10px;
   }
   i {
-    padding-right: 10px;
+    padding-right : 10px;
   }
 }
 
 .nz-loading {
   .text-center;
-  font-size: 40px;
-  font-weight: 300;
-  padding: 30px;
+  font-size   : 40px;
+  font-weight : 300;
+  padding     : 30px;
 }
 
 .nz-spinner {
   .text-center;
-  font-size: 56px;
-  padding: 30px;
+  font-size : 56px;
+  padding   : 30px;
 }
 
 .page-toolbar {
-  margin-top: 10px;
-  margin-bottom: 30px;
+  margin-top    : 10px;
+  margin-bottom : 30px;
 }
 
 .page-container {
-  min-height: 600px;
+  min-height : 600px;
 }
 
 button::-moz-focus-inner, a::-moz-focus-inner {
-  border: 0;
+  border : 0;
 }
 
 a:focus {
-  outline: none;
+  outline : none;
 }
 
 .label, .badge {
-  cursor: default;
+  cursor : default;
+}
+
+#scroll-up {
+  &:hover {
+    text-decoration : none;
+    opacity   : 0.4;
+  }
+
+  .clickable;
+  opacity   : 0.2;
+  position  : fixed;
+  bottom    : 50px;
+  right     : 50px;
+  display   : none;
+  font-size : 56px;
+  color     : white;
+
 }
