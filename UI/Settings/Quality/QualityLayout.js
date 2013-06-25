@@ -1,4 +1,5 @@
-﻿﻿'use strict';
+﻿"use strict";
+
 define(
     [
         'marionette',
@@ -11,7 +12,6 @@ define(
             template: 'Settings/Quality/QualityLayoutTemplate',
 
             regions: {
-                qualityStandard: '#quality-standard',
                 qualityProfile : '#quality-profile',
                 qualitySize    : '#quality-size'
             },

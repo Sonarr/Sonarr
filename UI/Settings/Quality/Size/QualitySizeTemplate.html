@@ -1,5 +1,8 @@
-﻿<b>{{name}}</b>
-<div class="quality-slider-container">
-    <input type="text" class="span4 slider"/>
+﻿<div class="quality-size-item">
+    <h2 class="center-block">{{name}}</h2>
+    <div class="size">
+        <input type="text" name="maxSize" class="knob x-knob" />
+    </div>
+    <div class="size-value">30 minute limit: <span name="thirtyMinuteSize" class="thirty-minute-size"></span>MB</div>
+    <div class="size-value">60 minute limit: <span name="sixtyMinuteSize" class="sixty-minute-size"></span>MB</div>
 </div>
-30 minute size: <span name="thirtyMinuteSize" class="thirty-minute-size"></span>MB | 60 minute size: <span name="sixtyMinuteSize" class="sixty-minute-size"></span>MB

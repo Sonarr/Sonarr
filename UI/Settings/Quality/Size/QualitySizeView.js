@@ -1,19 +1,19 @@
 ﻿'use strict';
 
-define(['marionette', 'bootstrap.slider'], function (Marionette) {
+define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Marionette, AsModelBoundView) {
 
-    return Marionette.ItemView.extend({
+    var view = Marionette.ItemView.extend({
         template : 'Settings/Quality/Size/QualitySizeTemplate',
-        className: 'quality-size-item',
+        tagName  : 'li',
 
         ui: {
-            slider          : '.slider',
+            knob            : '.x-knob',
             thirtyMinuteSize: '.thirty-minute-size',
             sixtyMinuteSize : '.sixty-minute-size'
         },
 
         events: {
-            'slide .slider': 'slide'
+            'change .x-knob': '_changeMaxSize'
         },
 
         initialize: function (options) {
@@ -21,23 +21,25 @@ define(['marionette', 'bootstrap.slider'], function (Marionette) {
         },
 
         onRender: function () {
-            var self = this;
-            this.ui.slider.slider({
-                min    : 0,
-                max    : 200,
-                step   : 1,
-                value  : self.model.get('maxSize'),
-                tooltip: 'hide'
+            this.ui.knob.knob({
+                min         : 0,
+                max         : 200,
+                step        : 10,
+                cursor      : 25,
+                width       : 100,
+                stopper     : true
             });
         },
 
-        slide: function (e) {
-            var newSize = e.value;
+        _changeMaxSize: function (e, value) {
+            this.model.set({
+                maxSize: value
+            });
 
-            this.model.set({ maxSize: newSize, thirtyMinuteSize: newSize * 30, sixtyMinuteSize: newSize * 60 });
-
-            this.ui.thirtyMinuteSize.html(newSize * 30);
-            this.ui.sixtyMinuteSize.html(newSize * 60);
+            this.ui.thirtyMinuteSize.html(value * 30);
+            this.ui.sixtyMinuteSize.html(value * 60);
         }
     });
+
+    return AsModelBoundView.call(view);
 });

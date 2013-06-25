@@ -16,14 +16,14 @@ namespace NzbDrone.Api.Qualities
         }
     }
 
-    public class QualityProfilesModule : NzbDroneRestModule<QualityProfileResource>
+    public class QualityProfileModule : NzbDroneRestModule<QualityProfileResource>
     {
-        private readonly QualityProfileService _qualityProvider;
+        private readonly QualityProfileService _qualityProfileService;
 
-        public QualityProfilesModule(QualityProfileService qualityProvider)
-            : base("/qualityProfiles")
+        public QualityProfileModule(QualityProfileService qualityProfileService)
+            : base("/qualityprofiles")
         {
-            _qualityProvider = qualityProvider;
+            _qualityProfileService = qualityProfileService;
 
             GetResourceAll = GetAll;
 
@@ -39,30 +39,30 @@ namespace NzbDrone.Api.Qualities
         private QualityProfileResource Create(QualityProfileResource resource)
         {
             var model = resource.InjectTo<QualityProfile>();
-            model = _qualityProvider.Add(model);
+            model = _qualityProfileService.Add(model);
             return GetById(model.Id);
         }
 
         private void DeleteProfile(int id)
         {
-            _qualityProvider.Delete(id);
+            _qualityProfileService.Delete(id);
         }
 
         private QualityProfileResource Update(QualityProfileResource resource)
         {
             var model = resource.InjectTo<QualityProfile>();
-            _qualityProvider.Update(model);
+            _qualityProfileService.Update(model);
             return GetById(resource.Id);
         }
 
         private QualityProfileResource GetById(int id)
         {
-            return QualityToResource(_qualityProvider.Get(id));
+            return QualityToResource(_qualityProfileService.Get(id));
         }
 
         private List<QualityProfileResource> GetAll()
         {
-            var allProfiles = _qualityProvider.All();
+            var allProfiles = _qualityProfileService.All();
 
 
             var profiles = allProfiles.Select(QualityToResource).ToList();

@@ -24,8 +24,12 @@ define(
                 'click .x-delete': '_deleteProfile'
             },
 
+            initialize: function () {
+                this.listenTo(this.model, 'sync', this.render);
+            },
+
             _editProfile: function () {
-                var view = new EditProfileView({ model: this.model});
+                var view = new EditProfileView({ model: this.model, profileCollection: this.model.collection });
                 App.modalRegion.show(view);
             },
 

@@ -1,6 +1,10 @@
 ﻿<div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Edit: Quality Profile</h3>
+    {{#if id}}
+        <h3>Edit</h3>
+    {{else}}
+        <h3>Add</h3>
+    {{/if}}
 </div>
 <div class="modal-body">
     <div class="form-horizontal">
@@ -16,9 +20,9 @@
         <div class="control-group">
             <label class="control-label">Cutoff</label>
             <div class="controls">
-                <select class="x-cutoff" name="cutoff">
+                <select class="x-cutoff" name="cutoff.id">
                     {{#each allowed}}
-                    <option value="{{id}}">{{name}}</option>
+                        <option value="{{id}}">{{name}}</option>
                     {{/each}}
                 </select>
                 <span class="help-inline">
@@ -47,7 +51,9 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger pull-left x-remove">delete</button>
+    {{#if id}}
+        <button class="btn btn-danger pull-left x-remove">delete</button>
+    {{/if}}
     <button class="btn" data-dismiss="modal">cancel</button>
     <button class="btn btn-primary x-save">save</button>
 </div>

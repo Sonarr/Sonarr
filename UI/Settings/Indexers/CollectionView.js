@@ -14,7 +14,6 @@ define(['app',
                 'click .x-add': 'openSchemaModal'
             },
 
-
             openSchemaModal: function () {
                 var self = this;
                 //TODO: Is there a better way to deal with changing URLs?

@@ -21,7 +21,7 @@ module.exports = function (grunt) {
             'UI/JsLibraries/jquery.js'                       : 'http://code.jquery.com/jquery.js',
             'UI/JsLibraries/jquery.backstretch.js'           : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
             'UI/JsLibraries/jquery.signalR.js'               : 'https://raw.github.com/SignalR/SignalR/master/samples/Microsoft.AspNet.SignalR.Hosting.AspNet.Samples/Scripts/jquery.signalR.js',
-
+            'UI/JsLibraries/jquery.knob'                     : 'https://raw.github.com/aterrien/jQuery-Knob/master/js/jquery.knob.js',
 
             'UI/JsLibraries/require.js'                      : 'http://raw.github.com/jrburke/requirejs/master/require.js',
             'UI/JsLibraries/sugar.js'                        : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',

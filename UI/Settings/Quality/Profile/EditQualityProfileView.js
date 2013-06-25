@@ -4,10 +4,18 @@ define(['app', 'marionette', 'Mixins/AsModelBoundView'], function (App, Marionet
     var view = Marionette.ItemView.extend({
         template: 'Settings/Quality/Profile/EditQualityProfileTemplate',
 
+        ui: {
+            cutoff: '.x-cutoff'
+        },
+
         events: {
-            'click .x-save'             : 'saveQualityProfile',
+            'click .x-save'             : '_saveQualityProfile',
             'dblclick .x-available-list': '_moveQuality',
             'dblclick .x-allowed-list'  : '_moveQuality'
+        },
+
+        initialize: function (options) {
+            this.profileCollection = options.profileCollection;
         },
 
         _moveQuality: function (event) {
@@ -39,19 +47,25 @@ define(['app', 'marionette', 'Mixins/AsModelBoundView'], function (App, Marionet
                 throw 'couldnt find quality id ' + qualityId;
             }
 
-
             this.model.set('available', availableCollection.toJSON());
             this.model.set('allowed', allowedCollection.toJSON());
 
             this.render();
         },
 
-        saveQualityProfile: function () {
-            //Todo: Make sure model is updated with Allowed, Cutoff, Name
+        _saveQualityProfile: function () {
+            var self = this;
+            var cutoff = _.findWhere(this.model.get('allowed'), { id: parseInt(this.ui.cutoff.val())});
+            this.model.set('cutoff', cutoff);
 
-            this.model.save();
-            this.trigger('saved');
-            App.modalRegion.closeModal();
+            var promise = this.model.save();
+
+            if (promise) {
+                promise.done(function () {
+                    self.profileCollection.add(self.model, { merge: true });
+                    App.modalRegion.closeModal();
+                });
+            }
         }
     });
 

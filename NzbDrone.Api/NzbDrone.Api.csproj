@@ -131,6 +131,7 @@
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="PagingResource.cs" />
+    <Compile Include="Qualities\QualityProfileSchemaModule.cs" />
     <Compile Include="REST\BadRequestException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />
     <Compile Include="REST\RestModule.cs" />
@@ -152,7 +153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NzbDroneApiModule.cs" />
     <Compile Include="Qualities\QualityProfileResource.cs" />
-    <Compile Include="Qualities\QualityProfilesModule.cs" />
+    <Compile Include="Qualities\QualityProfileModule.cs" />
     <Compile Include="Qualities\QualitySizeResource.cs" />
     <Compile Include="Qualities\QualitySizeModule.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />

@@ -3,7 +3,7 @@
 define(['marionette', 'Settings/Quality/Size/QualitySizeView'], function (Marionette, QualitySizeView) {
     return Marionette.CompositeView.extend({
         itemView         : QualitySizeView,
-        itemViewContainer: '#quality-sizes-container',
+        itemViewContainer: '.quality-sizes',
         template         : 'Settings/Quality/Size/QualitySizeCollectionTemplate'
     });
 });

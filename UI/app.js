@@ -8,7 +8,6 @@ require.config({
         'sugar'               : 'JsLibraries/sugar',
         'handlebars'          : 'JsLibraries/handlebars.runtime',
         'bootstrap'           : 'JsLibraries/bootstrap',
-        'bootstrap.slider'    : 'JsLibraries/bootstrap.slider',
         'backbone.mutators'   : 'JsLibraries/backbone.mutators',
         'backbone.deepmodel'  : 'JsLibraries/backbone.deep.model',
         'backbone.pageable'   : 'JsLibraries/backbone.pageable',
@@ -21,6 +20,7 @@ require.config({
         'underscore'          : 'JsLibraries/lodash.underscore',
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
+        'jquery.knob'         : 'JsLibraries/jquery.knob',
         'libs'                : 'JsLibraries/'
 
     },
@@ -51,13 +51,6 @@ require.config({
         },
 
         bootstrap: {
-            deps:
-                [
-                    '$'
-                ]
-        },
-
-        'bootstrap.slider': {
             deps:
                 [
                     '$'
@@ -116,7 +109,13 @@ require.config({
             }
         },
 
+            deps:
+                [
+                    '$'
+                ]
+        },
 
+        'jquery.knob': {
         'backbone.pageable': {
             deps:
                 [

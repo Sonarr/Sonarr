@@ -1,4 +1,5 @@
-﻿'use strict';
+﻿"use strict";
+
 define(
     [
         'backbone'
