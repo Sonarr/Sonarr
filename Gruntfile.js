@@ -120,7 +120,7 @@ module.exports = function (grunt) {
             },
             bootstrap  : {
                 files: ['UI/**/Bootstrap/**', 'UI/**/FontAwesome/**'],
-                tasks: ['less:bootstrap']
+                tasks: ['less:bootstrap','less:general']
             },
             generalLess: {
                 files: ['UI/**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
