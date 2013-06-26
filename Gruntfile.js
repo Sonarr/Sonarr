@@ -33,25 +33,7 @@ module.exports = function (grunt) {
             'UI/Content/Messenger/messenger.css'             : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
             'UI/Content/Messenger/messenger.future.css'      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css',
             
-            'UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',
-        
-            /*          
-            'UI/Content/FontAwesome/fontawesome.otf'         : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/FontAwesome.otf?raw=true',
-            'UI/Content/FontAwesome/fontawesome-webfont.eot' : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.eot?raw=true',
-            'UI/Content/FontAwesome/fontawesome-webfont.svg' : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.svg?raw=true',
-            'UI/Content/FontAwesome/fontawesome-webfont.ttf' : 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.ttf?raw=true',
-            'UI/Content/FontAwesome/fontawesome-webfont.woff': 'http://github.com/FortAwesome/Font-Awesome/blob/master/build/assets/font-awesome/font/fontawesome-webfont.woff?raw=true',
-            
-            'UI/Content/FontAwesome/bootstrap.less'          : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/bootstrap.less',
-            'UI/Content/FontAwesome/core.less'               : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/core.less',
-            'UI/Content/FontAwesome/extras.less'             : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/extras.less',
-            'UI/Content/FontAwesome/font-awesome-ie7.less'   : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/font-awesome-ie7.less',
-            'UI/Content/FontAwesome/font-awesome.less'       : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/font-awesome.less',
-            'UI/Content/FontAwesome/icons.less'              : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/icons.less',
-            'UI/Content/FontAwesome/mixins.less'             : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/mixins.less',
-            'UI/Content/FontAwesome/path.less'               : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/path.less',
-            'UI/Content/FontAwesome/variables.less'          : 'http://raw.github.com/FortAwesome/Font-Awesome/master/build/assets/font-awesome/less/variables.less'
-            */
+            'UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css'          
         },
 
         clean: {
@@ -67,7 +49,14 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src   : ['UI/**/*.less', '!**/Bootstrap/**','!**/FontAwesome/**'],
+                        src   : [
+                                    'UI/Content/base.less',
+                                    'UI/Series/Series.less',
+                                    'UI/AddSeries/addSeries.less',
+                                    'UI/Calendar/calendar.less',
+                                    'UI/Cells/cells.less',
+                                    'UI/Settings/settings.less',
+                                ],
                         dest  : '_output/',
                         ext   : '.css'
                     }

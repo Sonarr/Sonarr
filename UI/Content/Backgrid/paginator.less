@@ -1,0 +1,48 @@
+.backgrid-paginator {
+  text-align            : center;
+  -webkit-box-sizing    : border-box;
+  -moz-box-sizing       : border-box;
+  box-sizing            : border-box;
+  border-top            : none;
+  -webkit-border-radius : 0 0 4px 4px;
+  -moz-border-radius    : 0 0 4px 4px;
+  border-radius         : 0 0 4px 4px;
+
+
+
+
+  ul {
+    display  : inline-block;
+    *display : inline;
+    margin   : 5px 0;
+    *zoom    : 1;
+
+    li {
+      display : inline;
+
+      i, span {
+        float           : left;
+        width           : 30px;
+        height          : 30px;
+        padding         : 0;
+        line-height     : 30px;
+        text-decoration : none;
+      }
+    }
+
+    .active {
+      i, span {
+        background-color : #f5f5f5;
+        color            : #999999;
+        cursor           : default;
+      }
+    }
+
+    .disabled {
+      i, span {
+        color  : #999999;
+        cursor : default;
+      }
+    }
+  }
+}

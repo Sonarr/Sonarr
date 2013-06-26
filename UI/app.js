@@ -193,7 +193,6 @@ define(
 
         app.addRegions({
             mainRegion        : '#main-region',
-            notificationRegion: '#notification-region',
             modalRegion       : ModalRegion,
             footerRegion      : '#footer-region'
         });

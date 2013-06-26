@@ -1,6 +1,12 @@
 ﻿@import "bootstrap/variables";
 @import "bootstrap/mixins";
 @import "bootstrap/type";
+@import "Overrides/overrides";
+@import "font";
+@import "form";
+@import "theme";
+@import "menu";
+@import "backgrid/backgrid";
 @import "../shared/styles/clickable";
 
 .progress {
@@ -32,16 +38,6 @@
   box-shadow       : none;
 }
 
-html {
-  overflow   : -moz-scrollbars-vertical;
-  overflow-y : scroll;
-}
-
-.input-append {
-  .add-on {
-    margin-left : 0;
-  }
-}
 
 .line &>[class^="icon-"], .line &>[class*=" icon-"] {
   margin-top  : 1em;
@@ -56,18 +52,6 @@ html {
   color      : rgb(169, 169, 169);
   padding    : 4px;
   font-size  : 13px;
-}
-
-#notification-region {
-  pre {
-    font-size : 12px;
-  }
-  .alert {
-    margin : 10px;
-  }
-  i {
-    padding-right : 10px;
-  }
 }
 
 .nz-loading {
@@ -92,25 +76,14 @@ html {
   min-height : 600px;
 }
 
-button::-moz-focus-inner, a::-moz-focus-inner {
-  border : 0;
-}
-
-a:focus {
-  outline : none;
-}
-
-.label, .badge {
-  cursor : default;
-}
-
 #scroll-up {
+  .clickable;
+
   &:hover {
     text-decoration : none;
-    opacity   : 0.4;
+    opacity         : 0.4;
   }
 
-  .clickable;
   opacity   : 0.2;
   position  : fixed;
   bottom    : 50px;
@@ -118,5 +91,4 @@ a:focus {
   display   : none;
   font-size : 56px;
   color     : white;
-
 }
