@@ -8,6 +8,7 @@
 @import "menu";
 @import "backgrid/backgrid";
 @import "../shared/styles/clickable";
+@import "/content/prefixer";
 
 .progress {
   width         : 125px;
@@ -37,7 +38,6 @@
   background-color : transparent;
   box-shadow       : none;
 }
-
 
 .line &>[class^="icon-"], .line &>[class*=" icon-"] {
   margin-top  : 1em;
@@ -81,10 +81,10 @@
 
   &:hover {
     text-decoration : none;
-    opacity         : 0.4;
+    .opacity         (0.4);
   }
 
-  opacity   : 0.2;
+  .opacity   (0.2);
   position  : fixed;
   bottom    : 50px;
   right     : 50px;

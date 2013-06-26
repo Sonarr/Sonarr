@@ -33,7 +33,8 @@ module.exports = function (grunt) {
             'UI/Content/Messenger/messenger.css'             : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
             'UI/Content/Messenger/messenger.future.css'      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css',
             
-            'UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css'          
+            'UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',          
+            'UI/Content/prefixer.less'                       : 'http://raw.github.com/JoelSutherland/LESS-Prefixer/master/prefixer.less'          
         },
 
         clean: {
@@ -41,6 +42,14 @@ module.exports = function (grunt) {
         },
 
         less  : {
+
+            options:{
+                dumpLineNumbers : 'false',
+                compress        : false,
+                yuicompress     : false,
+                ieCompat        : false
+            },
+
             bootstrap: {
                 src : "UI/Content/bootstrap/bootstrap.less",
                 dest: "_output/UI/Content/bootstrap.css"

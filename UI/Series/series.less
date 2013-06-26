@@ -1,155 +1,152 @@
 @import "../Shared/Styles/card.less";
 @import "../Shared/Styles/clickable.less";
+@import "/content/prefixer";
 
 .series-item {
-  padding-bottom: 30px;
+  padding-bottom : 30px;
 
   :hover {
-    text-decoration: none;
+    text-decoration : none;
   }
 
   h2 {
-    margin-top: 0px;
+    margin-top : 0px;
   }
 
   a {
-    color: #000000;
+    color : #000000;
   }
 }
 
 .series-page-header {
-  background: #000000;
-  color: #ffffff;
-  opacity: 0.9;
-  padding: 30px 30px;
-  margin: 50px 10px;
-  opacity: 0.9;
+  background : #000000;
+  color      : #ffffff;
+  .opacity(0.9);
+  padding    : 30px 30px;
+  margin     : 50px 10px;
 }
 
 .series-season {
   .card;
-  margin: 80px 10px;
-  padding: 20px 40px;
-  opacity: 0.9;
-
+  margin  : 80px 10px;
+  padding : 20px 40px;
+  .opacity(0.9);
 }
 
 .series-posters {
-  list-style-type: none;
+  list-style-type : none;
 
   li {
-    display: inline-block;
-    vertical-align: top;
+    display        : inline-block;
+    vertical-align : top;
   }
 
   .series-posters-item {
 
     .card;
     .clickable;
-    margin-bottom: 20px;
-    height: 295px;
+    margin-bottom : 20px;
+    height        : 295px;
 
     .center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
+      display      : block;
+      margin-left  : auto;
+      margin-right : auto;
+      text-align   : center;
     }
 
     .progress {
-      left: 22px;
-      margin-top: 5px;
+      left       : 22px;
+      margin-top : 5px;
     }
 
     .title {
-      position: absolute;
-      left: -10000px;
-      top: auto;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
+      position : absolute;
+      left     : -10000px;
+      top      : auto;
+      width    : 1px;
+      height   : 1px;
+      overflow : hidden;
     }
 
     .labels {
-      display: inline-block;
-      opacity: 0.75;
-      width: 170px;
+      display : inline-block;
+      .opacity(0.75);
+      width   : 170px;
 
       :hover {
-        cursor: default;
+        cursor : default;
       }
 
       .label {
-        margin-top: 3px;
-        display: block;
+        margin-top : 3px;
+        display    : block;
       }
 
       .tooltip {
-        opacity: 1;
+        .opacity(1);
       }
     }
   }
 
   .series-poster-container {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
+    position : relative;
+    overflow : hidden;
+    display  : inline-block;
 
     .ended-banner {
-      color: #eeeeee;
-      background-color: #b94a48;
-      -moz-box-shadow: 2px 2px 20px #888888;
-      -moz-transform: rotate(45deg);
-      -moz-transform-origin: 50% 50%;
-      -webkit-transform: rotate(45deg);
-      -webkit-transform-origin: 50% 50%;
-      position: absolute;
-      width: 300px;
-      top: 175px;
-      left: -122px;
-      text-align: center;
-      opacity: 0.9;
+      color                    : #eeeeee;
+      background-color         : #b94a48;
+      .box-shadow(2px 2px 20px #888888);
+      -moz-transform-origin    : 50% 50%;
+      -webkit-transform-origin : 50% 50%;
+      position                 : absolute;
+      width                    : 300px;
+      top                      : 175px;
+      left                     : -122px;
+      text-align               : center;
+      .opacity(0.9);
+
+      .transform(rotate(45deg));
     }
 
     .series-controls {
-      position: absolute;;
-      top: 0px;
-      overflow: hidden;
-      background-color: #eeeeee;
-      width: 100%;
-      text-align: right;
-      padding-right: 20px;
-      opacity: 0.8;
-      display: none;
+      position         : absolute;;
+      top              : 0px;
+      overflow         : hidden;
+      background-color : #eeeeee;
+      width            : 100%;
+      text-align       : right;
+      padding-right    : 20px;
+      .opacity(0.8);
+      display          : none;
     }
 
     .series-poster {
-      width: 168px;
+      width : 168px;
     }
   }
 
 }
 
 .series-detail-overview {
-  margin-bottom: 50px;
+  margin-bottom : 50px;
 }
-
-@import "../shared/Styles/clickable.less";
 
 .series-season {
   .episode-number-cell {
-    width: 22px;
+    width : 22px;
   }
   .episode-air-date-cell {
-    width: 150px;
+    width : 150px;
   }
 
   .episode-status-cell {
-    width: 100px;
+    width : 100px;
   }
 
   .episode-title-cell {
-    cursor: pointer;
+    cursor : pointer;
   }
 }
 
@@ -157,23 +154,23 @@
 
   .episode-overview {
 
-    font-style: italic;
+    font-style : italic;
   }
 
   .episode-file-info {
 
-    margin-top: 30px;
-    font-size: 12px;
+    margin-top : 30px;
+    font-size  : 12px;
   }
 }
 
 .season-grid {
   .toggle-cell {
-    width: 10px;
+    width : 10px;
   }
 }
 
 .season-search {
   .clickable;
-  font-size: 24px;
+  font-size : 24px;
 }
