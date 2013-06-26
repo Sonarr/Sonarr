@@ -6,7 +6,8 @@ define([
     'Settings/Notifications/Model',
     'Settings/Notifications/DeleteView',
     'Shared/Messenger',
-    'Mixins/AsModelBoundView'
+    'Mixins/AsModelBoundView',
+    'Form/FormBuilder'
 
 ], function (App, Marionette, NotificationModel, DeleteView, Messenger, AsModelBoundView) {
 
@@ -29,10 +30,14 @@ define([
         },
 
         _saveNotification: function () {
+            var self = this;
             var promise = this.model.saveSettings();
 
             if (promise) {
-                promise.done(this._saveSuccess);
+                promise.done(function () {
+                    self.notificationCollection.add(self.model, { merge: true });
+                    App.modalRegion.closeModal();
+                });
             }
         },
 

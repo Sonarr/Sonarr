@@ -7,7 +7,7 @@ define([
 
     return Marionette.CompositeView.extend({
         itemView         : AddItemView,
-        itemViewContainer: '.notifications .items',
+        itemViewContainer: '.add-notifications .items',
         template         : 'Settings/Notifications/AddTemplate',
 
         itemViewOptions: function () {

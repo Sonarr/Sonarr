@@ -10,19 +10,23 @@ define([
 
     return Marionette.ItemView.extend({
         template: 'Settings/Notifications/ItemTemplate',
-        tagName : 'tr',
+        tagName : 'li',
 
         events: {
-            'click .x-edit'  : 'edit',
-            'click .x-delete': 'deleteNotification'
+            'click .x-edit'  : '_editNotification',
+            'click .x-delete': '_deleteNotification'
         },
 
-        edit: function () {
+        initialize: function () {
+            this.listenTo(this.model, 'sync', this.render);
+        },
+
+        _editNotification: function () {
             var view = new EditView({ model: this.model, notificationCollection: this.model.collection});
             App.modalRegion.show(view);
         },
 
-        deleteNotification: function () {
+        _deleteNotification: function () {
             var view = new DeleteView({ model: this.model});
             App.modalRegion.show(view);
         }

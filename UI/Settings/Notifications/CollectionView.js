@@ -8,14 +8,14 @@ define([
 ], function (App, Marionette, NotificationCollection, NotificationItemView, AddSelectionNotificationView) {
     return Marionette.CompositeView.extend({
         itemView         : NotificationItemView,
-        itemViewContainer: 'tbody',
+        itemViewContainer: '.notifications',
         template         : 'Settings/Notifications/CollectionTemplate',
 
         events: {
-            'click .x-add': 'openSchemaModal'
+            'click .x-add': '_openSchemaModal'
         },
 
-        openSchemaModal: function () {
+        _openSchemaModal: function () {
             var schemaCollection = new NotificationCollection();
             schemaCollection.url = '/api/notification/schema';
             schemaCollection.fetch();

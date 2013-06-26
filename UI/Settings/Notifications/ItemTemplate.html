@@ -1,9 +1,23 @@
-﻿<td name="name"></td>
-<td name="implementationName"></td>
-<td name="onGrab"></td>
-<td name="onDownload"></td>
-<td name="cutoff.name"></td>
-<td>
-    <i class="icon-cog x-edit" title="Edit"/>
-    <i class="icon-remove x-delete" title="Delete"/>
-</td>
+﻿<div class="notification-item">
+    <div>
+        <h3>{{name}}</h3>
+        <span class="btn-group pull-right">
+            <button class="btn btn-mini x-edit"><i class="icon-nd-edit"/></button>
+            <button class="btn btn-mini x-delete"><i class="icon-nd-delete"/></button>
+        </span>
+    </div>
+
+    <div>
+        {{#if onGrab}}
+            <span class="label label-success">On Grab</span>
+        {{else}}
+            <span class="label">On Grab</span>
+        {{/if}}
+
+        {{#if onDownload}}
+            <span class="label label-success">On Download</span>
+        {{else}}
+            <span class="label">On Download</span>
+        {{/if}}
+    </div>
+</div>
