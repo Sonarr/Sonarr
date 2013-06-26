@@ -20,7 +20,7 @@
   var internalToString = object.prototype.toString;
 
   // Internal hasOwnProperty
-  var hasOwnProperty = object.hasOwnProperty;
+  var internalHasOwnProperty = object.prototype.hasOwnProperty;
 
   // The global context
   var globalContext = typeof global !== 'undefined' ? global : this;
@@ -103,7 +103,7 @@
     initializeClass(klass);
     iterateOverObject(methods, function(name, method) {
       var original = extendee[name];
-      var existed  = hasOwnProperty.call(extendee, name);
+      var existed  = hasOwnProperty(extendee, name);
       if(typeof override === 'function') {
         method = wrapNative(extendee[name], method, override);
       }
@@ -191,9 +191,13 @@
 
   // Object helpers
 
+  function hasOwnProperty(obj, prop) {
+    return !!obj && internalHasOwnProperty.call(obj, prop);
+  }
+
   function isObjectPrimitive(obj) {
     // Check for null
-    return obj && typeof obj === 'object';
+    return !!obj && typeof obj === 'object';
   }
 
   function isPlainObject(obj, klass) {
@@ -202,8 +206,8 @@
       // Not own constructor property must be Object
       // This code was borrowed from jQuery.isPlainObject
       if (obj.constructor &&
-            !hasOwnProperty.call(obj, 'constructor') &&
-            !hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf')) {
+            !hasOwnProperty(obj, 'constructor') &&
+            !hasOwnProperty(obj.constructor.prototype, 'isPrototypeOf')) {
         return false;
       }
     } catch (e) {
@@ -219,7 +223,7 @@
   function iterateOverObject(obj, fn) {
     var key;
     for(key in obj) {
-      if(!hasOwnProperty.call(obj, key)) continue;
+      if(!hasOwnProperty(obj, key)) continue;
       if(fn.call(obj, key, obj[key], obj) === false) break;
     }
   }
@@ -1064,6 +1068,10 @@
     return result;
   }
 
+  function isArrayLike(obj) {
+    return hasOwnProperty(obj, 'length') && !isArray(obj) && !isString(obj) && !isPlainObject(obj);
+  }
+
   function flatArguments(args) {
     var result = [];
     multiArgs(args, function(arg) {
@@ -1242,15 +1250,10 @@
      *
      ***/
     'create': function() {
-      var result = [], tmp;
+      var result = [];
       multiArgs(arguments, function(a) {
-        if(isObjectPrimitive(a)) {
-          try {
-            tmp = array.prototype.slice.call(a, 0);
-            if(tmp.length > 0) {
-              a = tmp;
-            }
-          } catch(e) {};
+        if(isArrayLike(a)) {
+          a = array.prototype.slice.call(a, 0);
         }
         result = result.concat(a);
       });
@@ -3954,6 +3957,36 @@
     },
 
      /***
+     * @method beginningOfISOWeek()
+     * @returns Date
+     * @short Set the date to the beginning of week as defined by this ISO-8601 standard.
+     * @extra Note that this standard places Monday at the start of the week.
+     */
+    'beginningOfISOWeek': function() {
+      var day = this.getDay();
+      if(day === 0) {
+        day = -6;
+      } else if(day !== 1) {
+        day = 1;
+      }
+      this.setWeekday(day);
+      return this.reset();
+    },
+
+     /***
+     * @method endOfISOWeek()
+     * @returns Date
+     * @short Set the date to the end of week as defined by this ISO-8601 standard.
+     * @extra Note that this standard places Sunday at the end of the week.
+     */
+    'endOfISOWeek': function() {
+      if(this.getDay() !== 0) {
+        this.setWeekday(7);
+      }
+      return this.endOfDay()
+    },
+
+     /***
      * @method getUTCOffset([iso])
      * @returns String
      * @short Returns a string representation of the offset from UTC time. If [iso] is true the offset will be in ISO8601 format.
@@ -5551,7 +5584,7 @@
       allKeys.forEach(function(k) {
         paramIsArray = !k || k.match(/^\d+$/);
         if(!key && isArray(obj)) key = obj.length;
-        if(!hasOwnProperty.call(obj, key)) {
+        if(!hasOwnProperty(obj, key)) {
           obj[key] = paramIsArray ? [] : {};
         }
         obj = obj[key];
@@ -5598,7 +5631,7 @@
     if(isRegExp(match)) {
       return match.test(key);
     } else if(isObjectPrimitive(match)) {
-      return hasOwnProperty.call(match, key);
+      return hasOwnProperty(match, key);
     } else {
       return key === string(match);
     }
@@ -5788,7 +5821,7 @@
       // their properties not being enumerable in < IE8.
       if(target && typeof source != 'string') {
         for(key in source) {
-          if(!hasOwnProperty.call(source, key) || !target) continue;
+          if(!hasOwnProperty(source, key) || !target) continue;
           val = source[key];
           // Conflict!
           if(isDefined(target[key])) {
@@ -5953,7 +5986,7 @@
      *
      ***/
     'has': function (obj, key) {
-      return hasOwnProperty.call(obj, key);
+      return hasOwnProperty(obj, key);
     },
 
     /***
@@ -6976,7 +7009,7 @@
         }
       });
       return this.replace(/\{([^{]+?)\}/g, function(m, key) {
-        return hasOwnProperty.call(assign, key) ? assign[key] : m;
+        return hasOwnProperty(assign, key) ? assign[key] : m;
       });
     }
 
@@ -7345,7 +7378,7 @@
       var str = runReplacements(this, humans), acronym;
       str = str.replace(/_id$/g, '');
       str = str.replace(/(_)?([a-z\d]*)/gi, function(match, _, word){
-        acronym = hasOwnProperty.call(acronyms, word) ? acronyms[word] : null;
+        acronym = hasOwnProperty(acronyms, word) ? acronyms[word] : null;
         return (_ ? ' ' : '') + (acronym || word.toLowerCase());
       });
       return capitalize(str);
