@@ -1,5 +1,12 @@
 ﻿<div class="indexer-settings-item">
-    <h2>{{name}}</h2>
+    <div>
+        <h3>{{name}}</h3>
+        {{#if isNewznab}}
+            <span class="btn-group pull-right">
+                <button class="btn btn-mini x-delete"><i class="icon-nd-delete"/></button>
+            </span>
+        {{/if}}
+    </div>
 
     <div class="control-group">
         <label class="control-label">Enable</label>
