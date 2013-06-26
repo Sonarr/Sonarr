@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 require(
     [
         'app',
@@ -11,20 +11,19 @@ require(
 
             controller: new Controller(),
             appRoutes : {
-                ''                           : 'series',
-                'series'                     : 'series',
-                'series/index'               : 'series',
-                'series/add'                 : 'addSeries',
-                'series/add/:action(/:query)': 'addSeries',
-                'series/details/:query'      : 'seriesDetails',
-                'calendar'                   : 'calendar',
-                'settings'                   : 'settings',
-                'settings/:action(/:query)'  : 'settings',
-                'missing'                    : 'missing',
-                'history'                    : 'history',
-                'logs'                       : 'logs',
-                'rss'                        : 'rss',
-                ':whatever'                  : 'notFound'
+                ''                          : 'series',
+                'series'                    : 'series',
+                'addseries'                 : 'addSeries',
+                'addseries/:action(/:query)': 'addSeries',
+                'series/:query'             : 'seriesDetails',
+                'calendar'                  : 'calendar',
+                'settings'                  : 'settings',
+                'settings/:action(/:query)' : 'settings',
+                'missing'                   : 'missing',
+                'history'                   : 'history',
+                'logs'                      : 'logs',
+                'rss'                       : 'rss',
+                ':whatever'                 : 'notFound'
             }
         });
 
@@ -35,7 +34,6 @@ require(
 
             RouterBinder.bind(App.Router);
         });
-
 
         return App.Router;
 

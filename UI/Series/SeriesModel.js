@@ -53,7 +53,7 @@ define(
                     return this.get('status') === 'continuing';
                 },
                 route            : function () {
-                    return '/series/details/' + this.get('titleSlug');
+                    return '/series/' + this.get('titleSlug');
                     //return '/series/details/' + this.get('id');
                 },
 

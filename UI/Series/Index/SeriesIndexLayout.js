@@ -80,7 +80,7 @@ define(
                         {
                             title: 'Add Series',
                             icon : 'icon-plus',
-                            route: 'series/add'
+                            route: 'addseries'
                         },
                         {
                             title         : 'RSS Sync',
