@@ -1,9 +1,10 @@
 'use strict';
 define(
     [
+        '$',
         'marionette',
         'bootstrap'
-    ], function (Marionette) {
+    ], function ($, Marionette) {
         return Marionette.Region.extend({
             el: '#modal-region',
 
@@ -30,14 +31,9 @@ define(
                     'backdrop': 'static'});
             },
 
-
-            onClose: function(){
-                this.closeModal();
-            },
-
-
             closeModal: function () {
-                this.$el.modal('hide');
+                $(this.el).modal('hide');
+                this.reset();
             }
 
         });

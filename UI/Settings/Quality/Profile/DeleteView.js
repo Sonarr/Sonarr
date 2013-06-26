@@ -17,7 +17,7 @@ define(
                 this.model.destroy({
                     wait: true
                 }).done(function () {
-                        App.modalRegion.close();
+                        App.modalRegion.closeModal();
                     });
             }
         });

@@ -24,7 +24,7 @@ define(
                     data: { 'deleteFiles': deleteFiles },
                     wait: true
                 }).done(function () {
-                        App.modalRegion.close();
+                        App.modalRegion.closeModal();
                     });
             }
         });
