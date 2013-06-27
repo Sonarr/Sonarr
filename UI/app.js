@@ -7,6 +7,7 @@ require.config({
         'backbone'            : 'JsLibraries/backbone',
         'sugar'               : 'JsLibraries/sugar',
         'handlebars'          : 'JsLibraries/handlebars.runtime',
+        'handlebars.helpers'  : 'JsLibraries/handlebars.helpers',
         'bootstrap'           : 'JsLibraries/bootstrap',
         'backbone.mutators'   : 'JsLibraries/backbone.mutators',
         'backbone.deepmodel'  : 'JsLibraries/backbone.deep.model',
@@ -158,6 +159,13 @@ require.config({
             deps:
                 [
                     'backgrid'
+                ]
+        },
+
+        'handlebars.helpers': {
+            deps:
+                [
+                    'handlebars'
                 ]
         }
     }

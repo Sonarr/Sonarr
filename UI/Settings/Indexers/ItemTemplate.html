@@ -1,11 +1,11 @@
 ﻿<div class="indexer-settings-item">
     <div>
         <h3>{{name}}</h3>
-        {{#if isNewznab}}
+        {{#if_eq implementation compare="Newznab"}}
             <span class="btn-group pull-right">
                 <button class="btn btn-mini x-delete"><i class="icon-nd-delete"/></button>
             </span>
-        {{/if}}
+        {{/if_eq}}
     </div>
 
     <div class="control-group">

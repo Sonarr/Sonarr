@@ -2,6 +2,7 @@
 define(
     [
         'templates',
+        'handlebars.helpers',
         'Handlebars/Helpers/DateTime',
         'Handlebars/Helpers/Html',
         'Handlebars/Helpers/Numbers',

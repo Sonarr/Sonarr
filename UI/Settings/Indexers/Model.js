@@ -6,6 +6,5 @@ define([
         successMessage: 'Indexer Saved',
         errorMessage  : 'Couldn\'t save indexer'
 
-
     });
 });
