@@ -1,5 +1,5 @@
 /*
-  backbone-pageable 1.3.1
+  backbone-pageable 1.3.0
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -574,17 +574,6 @@
     /**
        Change the page size of this collection.
 
-       Under most if not all circumstances, you should call this method to
-       change the page size of a pageable collection because it will keep the
-       pagination state sane. By default, the method will recalculate the
-       current page number to one that will retain the current page's models
-       when increasing the page size. When decreasing the page size, this method
-       will retain the last models to the current page that will fit into the
-       smaller page size.
-
-       If `options.first` is true, changing the page size will also reset the
-       current page back to the first page instead of trying to be smart.
-
        For server mode operations, changing the page size will trigger a #fetch
        and subsequently a `reset` event.
 
@@ -597,8 +586,6 @@
 
        @param {number} pageSize The new page size to set to #state.
        @param {Object} [options] {@link #fetch} options.
-       @param {boolean} [options.first=false] Reset the current page number to
-       the first page if `true`.
        @param {boolean} [options.fetch] If `true`, force a fetch in client mode.
 
        @throws {TypeError} If `pageSize` is not a finite integer.
@@ -611,24 +598,14 @@
     setPageSize: function (pageSize, options) {
       pageSize = finiteInt(pageSize, "pageSize");
 
-      options = options || {first: false};
+      options = options || {};
 
-      var state = this.state;
-      var totalPages = ceil(state.totalRecords / pageSize);
-      var currentPage = max(state.firstPage,
-                            floor(totalPages *
-                                  (state.firstPage ?
-                                   state.currentPage :
-                                   state.currentPage + 1) /
-                                  state.totalPages));
-
-      state = this.state = this._checkState(_extend({}, state, {
+      this.state = this._checkState(_extend({}, this.state, {
         pageSize: pageSize,
-        currentPage: options.first ? state.firstPage : currentPage,
-        totalPages: totalPages
+        totalPages: ceil(this.state.totalRecords / pageSize)
       }));
 
-      return this.getPage(state.currentPage, _omit(options, ["first"]));
+      return this.getPage(this.state.currentPage, options);
     },
 
     /**
@@ -1015,14 +992,13 @@
        encouraged to override #parseState and #parseRecords instead.
 
        @param {Object} resp The deserialized response data from the server.
-       @param {Object} the options for the ajax request
 
        @return {Array.<Object>} An array of model objects
     */
-    parse: function (resp, options) {
-      var newState = this.parseState(resp, _clone(this.queryParams), _clone(this.state), options);
+    parse: function (resp) {
+      var newState = this.parseState(resp, _clone(this.queryParams), _clone(this.state));
       if (newState) this.state = this._checkState(_extend({}, this.state, newState));
-      return this.parseRecords(resp, options);
+      return this.parseRecords(resp);
     },
 
     /**
@@ -1040,14 +1016,8 @@
        `totalRecords` value is enough to trigger a full pagination state
        recalculation.
 
-           parseState: function (resp, queryParams, state, options) {
+           parseState: function (resp, queryParams, state) {
              return {totalRecords: resp.total_entries};
-           }
-
-       If you want to use header fields use:
-
-           parseState: function (resp, queryParams, state, options) {
-               return {totalRecords: options.xhr.getResponseHeader("X-total")};
            }
 
        This method __MUST__ return a new state object instead of directly
@@ -1057,12 +1027,10 @@
        @param {Object} resp The deserialized response data from the server.
        @param {Object} queryParams A copy of #queryParams.
        @param {Object} state A copy of #state.
-       @param {Object} [options] The options passed through from
-       `parse`. (backbone >= 0.9.10 only)
 
        @return {Object} A new (partial) state object.
      */
-    parseState: function (resp, queryParams, state, options) {
+    parseState: function (resp, queryParams, state) {
       if (resp && resp.length === 2 && _isObject(resp[0]) && _isArray(resp[1])) {
 
         var newState = _clone(state);
@@ -1091,12 +1059,10 @@
        response is returned directly.
 
        @param {Object} resp The deserialized response data from the server.
-       @param {Object} [options] The options passed through from the
-       `parse`. (backbone >= 0.9.10 only)
 
        @return {Array.<Object>} An array of model objects
      */
-    parseRecords: function (resp, options) {
+    parseRecords: function (resp) {
       if (resp && resp.length === 2 && _isObject(resp[0]) && _isArray(resp[1])) {
         return resp[1];
       }
@@ -1172,7 +1138,7 @@
         kvp = extraKvps[i];
         v = kvp[1];
         v = _isFunction(v) ? v.call(thisCopy) : v;
-        if (v != null) data[kvp[0]] = v;
+        data[kvp[0]] = v;
       }
 
       var fullCol = this.fullCollection, links = this.links;
@@ -1246,11 +1212,11 @@
 
        @param {string} [sortKey=this.state.sortKey] See `state.sortKey`.
        @param {number} [order=this.state.order] See `state.order`.
-       @param {(function(Backbone.Model, string): Object) | string} [sortValue] See #setSorting.
 
        See [Backbone.Collection.comparator](http://backbonejs.org/#Collection-comparator).
     */
-    _makeComparator: function (sortKey, order, sortValue) {
+    _makeComparator: function (sortKey, order) {
+
       var state = this.state;
 
       sortKey = sortKey || state.sortKey;
@@ -1258,12 +1224,8 @@
 
       if (!sortKey || !order) return;
 
-      if (!sortValue) sortValue = function (model, attr) {
-        return model.get(attr);
-      };
-
       return function (left, right) {
-        var l = sortValue(left, sortKey), r = sortValue(right, sortKey), t;
+        var l = left.get(sortKey), r = right.get(sortKey), t;
         if (order === 1) t = l, l = r, r = t;
         if (l === r) return 0;
         else if (l < r) return -1;
@@ -1282,11 +1244,6 @@
        `sortKey` to `null` removes the comparator from both the current page and
        the full collection.
 
-       If a `sortValue` function is given, it will be passed the `(model,
-       sortKey)` arguments and is used to extract a value from the model during
-       comparison sorts. If `sortValue` is not given, `model.get(sortKey)` is
-       used for sorting.
-
        @chainable
 
        @param {string} sortKey See `state.sortKey`.
@@ -1295,7 +1252,6 @@
        @param {"server"|"client"} [options.side] By default, `"client"` if
        `mode` is `"client"`, `"server"` otherwise.
        @param {boolean} [options.full=true]
-       @param {(function(Backbone.Model, string): Object) | string} [options.sortValue]
     */
     setSorting: function (sortKey, order, options) {
 
@@ -1314,7 +1270,7 @@
       options = _extend({side: mode == "client" ? mode : "server", full: true},
                         options);
 
-      var comparator = this._makeComparator(sortKey, order, options.sortValue);
+      var comparator = this._makeComparator(sortKey, order);
 
       var full = options.full, side = options.side;
 

@@ -41,6 +41,12 @@ if (!String.prototype.trim || ws.trim()) {
   };
 }
 
+function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+
+//  return String.fromCharCode(s.charCodeAt(0) - 32) + s.slice(1);
+}
+
 function lpad(str, length, padstr) {
   var paddingLen = length - (str + '').length;
   paddingLen =  paddingLen < 0 ? 0 : paddingLen;
@@ -68,9 +74,7 @@ var Backgrid = root.Backgrid = {
 
   resolveNameToClass: function (name, suffix) {
     if (_.isString(name)) {
-      var key = _.map(name.split('-'), function (e) {
-        return e.slice(0, 1).toUpperCase() + e.slice(1);
-      }).join('') + suffix;
+      var key = _.map(name.split('-'), function (e) { return capitalize(e); }).join('') + suffix;
       var klass = Backgrid[key] || Backgrid.Extension[key];
       if (_.isUndefined(klass)) {
         throw new ReferenceError("Class '" + key + "' not found");
@@ -79,17 +83,7 @@ var Backgrid = root.Backgrid = {
     }
 
     return name;
-  },
-
-  callByNeed: function () {
-    var value = arguments[0];
-    if (!_.isFunction(value)) return value;
-
-    var context = arguments[1];
-    var args = [].slice.call(arguments, 2);
-    return value.apply(context, !!(args + '') ? args : void 0);
   }
-
 };
 _.extend(Backgrid, Backbone.Events);
 
@@ -107,7 +101,7 @@ _.extend(Backgrid, Backbone.Events);
 var Command = Backgrid.Command = function (evt) {
   _.extend(this, {
     altKey: !!evt.altKey,
-    "char": evt["char"],
+    char: evt.char,
     charCode: evt.charCode,
     ctrlKey: !!evt.ctrlKey,
     key: evt.key,
@@ -745,33 +739,12 @@ var Cell = Backgrid.Cell = Backbone.View.extend({
     if (!(this.column instanceof Column)) {
       this.column = new Column(this.column);
     }
-
-    var column = this.column, model = this.model, $el = this.$el;
-
-    this.formatter = Backgrid.resolveNameToClass(column.get("formatter") ||
-                                                 this.formatter, "Formatter");
-
+    this.formatter = Backgrid.resolveNameToClass(this.column.get("formatter") || this.formatter, "Formatter");
     this.editor = Backgrid.resolveNameToClass(this.editor, "CellEditor");
-
-    this.listenTo(model, "change:" + column.get("name"), function () {
-      if (!$el.hasClass("editor")) this.render();
+    this.listenTo(this.model, "change:" + this.column.get("name"), function () {
+      if (!this.$el.hasClass("editor")) this.render();
     });
-
-    this.listenTo(model, "backgrid:error", this.renderError);
-
-    this.listenTo(column, "change:editable change:sortable change:renderable",
-                  function (column) {
-                    var changed = column.changedAttributes();
-                    for (var key in changed) {
-                      if (changed.hasOwnProperty(key)) {
-                        $el.toggleClass(key, changed[key]);
-                      }
-                    }
-                  });
-
-    if (column.get("editable")) $el.addClass("editable");
-    if (column.get("sortable")) $el.addClass("sortable");
-    if (column.get("renderable")) $el.addClass("renderable");
+    this.listenTo(this.model, "backgrid:error", this.renderError);
   },
 
   /**
@@ -808,8 +781,7 @@ var Cell = Backgrid.Cell = Backbone.View.extend({
     var model = this.model;
     var column = this.column;
 
-    var editable = Backgrid.callByNeed(column.get("editable"), column, model);
-    if (editable) {
+    if (column.get("editable")) {
 
       this.currentEditor = new this.editor({
         column: this.column,
@@ -858,7 +830,7 @@ var Cell = Backgrid.Cell = Backbone.View.extend({
   */
   remove: function () {
     if (this.currentEditor) {
-      this.currentEditor.remove.apply(this.currentEditor, arguments);
+      this.currentEditor.remove.apply(this, arguments);
       delete this.currentEditor;
     }
     return Backbone.View.prototype.remove.apply(this, arguments);
@@ -1513,7 +1485,6 @@ var Column = Backgrid.Column = Backbone.Model.extend({
     editable: true,
     renderable: true,
     formatter: undefined,
-    sortValue: undefined,
     cell: undefined,
     headerCell: undefined
   },
@@ -1522,36 +1493,22 @@ var Column = Backgrid.Column = Backbone.Model.extend({
      Initializes this Column instance.
 
      @param {Object} attrs Column attributes.
-
      @param {string} attrs.name The name of the model attribute.
-
      @param {string|Backgrid.Cell} attrs.cell The cell type.
      If this is a string, the capitalized form will be used to look up a
      cell class in Backbone, i.e.: string => StringCell. If a Cell subclass
      is supplied, it is initialized with a hash of parameters. If a Cell
      instance is supplied, it is used directly.
-
      @param {string|Backgrid.HeaderCell} [attrs.headerCell] The header cell type.
-
      @param {string} [attrs.label] The label to show in the header.
-
-     @param {boolean|string} [attrs.sortable=true]
-
-     @param {boolean|string} [attrs.editable=true]
-
-     @param {boolean|string} [attrs.renderable=true]
-
-     @param {Backgrid.CellFormatter | Object | string} [attrs.formatter] The
+     @param {boolean} [attrs.sortable=true]
+     @param {boolean} [attrs.editable=true]
+     @param {boolean} [attrs.renderable=true]
+     @param {Backgrid.CellFormatter|Object|string} [attrs.formatter] The
      formatter to use to convert between raw model values and user input.
 
-     @param {(function(Backbone.Model, string): Object) | string} [sortValue] The
-     function to use to extract a value from the model for comparison during
-     sorting. If this value is a string, a method with the same name will be
-     looked up from the column instance.
-
      @throws {TypeError} If attrs.cell or attrs.options are not supplied.
-
-     @throws {ReferenceError} If formatter is a string but a formatter class of
+     @throws {ReferenceError} If attrs.cell is a string but a cell class of
      said name cannot be found in the Backgrid module.
 
      See:
@@ -1567,32 +1524,8 @@ var Column = Backgrid.Column = Backbone.Model.extend({
     }
 
     var headerCell = Backgrid.resolveNameToClass(this.get("headerCell"), "HeaderCell");
-
     var cell = Backgrid.resolveNameToClass(this.get("cell"), "Cell");
-
-    var sortValue = this.get("sortValue");
-    if (sortValue == null) sortValue = function (model, colName) {
-      return model.get(colName);
-    };
-    else if (_.isString(sortValue)) sortValue = this[sortValue];
-
-    var sortable = this.get("sortable");
-    if (_.isString(sortable)) sortable = this[sortable];
-
-    var editable = this.get("editable");
-    if (_.isString(editable)) editable = this[editable];
-
-    var renderable = this.get("renderable");
-    if (_.isString(renderable)) renderable = this[renderable];
-
-    this.set({
-      cell: cell,
-      headerCell: headerCell,
-      sortable: sortable,
-      editable: editable,
-      renderable: renderable,
-      sortValue: sortValue
-    }, { silent: true });
+    this.set({ cell: cell, headerCell: headerCell }, { silent: true });
   }
 
 });
@@ -1656,10 +1589,21 @@ var Row = Backgrid.Row = Backbone.View.extend({
       cells.push(this.makeCell(columns.at(i), options));
     }
 
+    this.listenTo(columns, "change:renderable", function (column, renderable) {
+      for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        if (cell.column.get("name") == column.get("name")) {
+          if (renderable) cell.$el.show(); else cell.$el.hide();
+        }
+      }
+    });
+
     this.listenTo(columns, "add", function (column, columns) {
       var i = columns.indexOf(column);
       var cell = this.makeCell(column, options);
       cells.splice(i, 0, cell);
+
+      if (!cell.column.get("renderable")) cell.$el.hide();
 
       var $el = this.$el;
       if (i === 0) {
@@ -1704,8 +1648,11 @@ var Row = Backgrid.Row = Backbone.View.extend({
     this.$el.empty();
 
     var fragment = document.createDocumentFragment();
+
     for (var i = 0; i < this.cells.length; i++) {
-      fragment.appendChild(this.cells[i].render().el);
+      var cell = this.cells[i];
+      fragment.appendChild(cell.render().el);
+      if (!cell.column.get("renderable")) cell.$el.hide();
     }
 
     this.el.appendChild(fragment);
@@ -1821,24 +1768,7 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
     if (!(this.column instanceof Column)) {
       this.column = new Column(this.column);
     }
-
     this.listenTo(this.collection, "backgrid:sort", this._resetCellDirection);
-
-    var column = this.column, $el = this.$el;
-
-    this.listenTo(column, "change:editable change:sortable change:renderable",
-                  function (column) {
-                    var changed = column.changedAttributes();
-                    for (var key in changed) {
-                      if (changed.hasOwnProperty(key)) {
-                        $el.toggleClass(key, changed[key]);
-                      }
-                    }
-                  });
-
-    if (column.get("editable")) $el.addClass("editable");
-    if (column.get("sortable")) $el.addClass("sortable");
-    if (column.get("renderable")) $el.addClass("renderable");
   },
 
   /**
@@ -1865,9 +1795,9 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
 
      @private
    */
-  _resetCellDirection: function (columnToSort, direction, comparator, collection) {
+  _resetCellDirection: function (sortByColName, direction, comparator, collection) {
     if (collection == this.collection) {
-      if (columnToSort !== this.column) this.direction(null);
+      if (sortByColName !== this.column.get("name")) this.direction(null);
       else this.direction(direction);
     }
   },
@@ -1880,12 +1810,34 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
   onClick: function (e) {
     e.preventDefault();
 
-    var column = this.column;
-    var sortable = Backgrid.callByNeed(column.get("sortable"), column, this.model);
-    if (sortable) {
-      if (this.direction() === "ascending") this.sort(column, "descending");
-      else if (this.direction() === "descending") this.sort(column, null);
-      else this.sort(column, "ascending");
+    var columnName = this.column.get("name");
+
+    if (this.column.get("sortable")) {
+      if (this.direction() === "ascending") {
+        this.sort(columnName, "descending", function (left, right) {
+          var leftVal = left.get(columnName);
+          var rightVal = right.get(columnName);
+          if (leftVal === rightVal) {
+            return 0;
+          }
+          else if (leftVal > rightVal) { return -1; }
+          return 1;
+        });
+      }
+      else if (this.direction() === "descending") {
+        this.sort(columnName, null);
+      }
+      else {
+        this.sort(columnName, "ascending", function (left, right) {
+          var leftVal = left.get(columnName);
+          var rightVal = right.get(columnName);
+          if (leftVal === rightVal) {
+            return 0;
+          }
+          else if (leftVal < rightVal) { return -1; }
+          return 1;
+        });
+      }
     }
   },
 
@@ -1902,37 +1854,31 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
      and the current page will then be returned.
 
      Triggers a Backbone `backgrid:sort` event from the collection when done
-     with the column, direction, comparator and a reference to the collection.
+     with the column name, direction, comparator and a reference to the
+     collection.
 
-     @param {Backgrid.Column} column
+     @param {string} columnName
      @param {null|"ascending"|"descending"} direction
+     @param {function(*, *): number} [comparator]
 
      See [Backbone.Collection#comparator](http://backbonejs.org/#Collection-comparator)
   */
-  sort: function (column, direction) {
+  sort: function (columnName, direction, comparator) {
+
+    comparator = comparator || this._cidComparator;
 
     var collection = this.collection;
 
-    var order;
-    if (direction === "ascending") order = -1;
-    else if (direction === "descending") order = 1;
-    else order = null;
+    if (Backbone.PageableCollection && collection instanceof Backbone.PageableCollection) {
+      var order;
+      if (direction === "ascending") order = -1;
+      else if (direction === "descending") order = 1;
+      else order = null;
 
-    var comparator = this.makeComparator(column.get("name"), order,
-                                         order ?
-                                         column.get("sortValue") :
-                                         function (model) {
-                                           return model.cid;
-                                         });
-
-    if (Backbone.PageableCollection &&
-        collection instanceof Backbone.PageableCollection) {
-
-      collection.setSorting(order && column.get("name"), order,
-                            {sortValue: column.get("sortValue")});
+      collection.setSorting(order ? columnName : null, order);
 
       if (collection.mode == "client") {
-        if (collection.fullCollection.comparator == null) {
+        if (!collection.fullCollection.comparator) {
           collection.fullCollection.comparator = comparator;
         }
         collection.fullCollection.sort();
@@ -1944,24 +1890,26 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
       collection.sort();
     }
 
-    this.collection.trigger("backgrid:sort", column, direction, comparator,
-                            this.collection);
+    this.collection.trigger("backgrid:sort", columnName, direction, comparator, this.collection);
   },
 
-  makeComparator: function (attr, order, func) {
+  /**
+     Default comparator for Backbone.Collections. Sorts cids in ascending
+     order. The cids of the models are assumed to be in insertion order.
 
-    return function (left, right) {
-      // extract the values from the models
-      var l = func(left, attr), r = func(right, attr), t;
+     @private
+     @param {*} left
+     @param {*} right
+  */
+  _cidComparator: function (left, right) {
+    var lcid = left.cid, rcid = right.cid;
+    if (!_.isUndefined(lcid) && !_.isUndefined(rcid)) {
+      lcid = lcid.slice(1) * 1, rcid = rcid.slice(1) * 1;
+      if (lcid < rcid) return -1;
+      else if (lcid > rcid) return 1;
+    }
 
-      // if descending order, swap left and right
-      if (order === 1) t = l, l = r, r = t;
-
-      // compare as usual
-      if (l === r) return 0;
-      else if (l < r) return -1;
-      return 1;
-    };
+    return 0;
   },
 
   /**
@@ -1969,9 +1917,7 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
    */
   render: function () {
     this.$el.empty();
-    var $label = $("<a>").text(this.column.get("label"));
-    var sortable = Backgrid.callByNeed(this.column.get("sortable"), this.column, this.model);
-    if (sortable) $label.append("<b class='sort-caret'></b>");
+    var $label = $("<a>").text(this.column.get("label")).append("<b class='sort-caret'></b>");
     this.$el.append($label);
     this.delegateEvents();
     return this;
@@ -2315,9 +2261,6 @@ var Body = Backgrid.Body = Backbone.View.extend({
   moveToNextCell: function (model, column, command) {
     var i = this.collection.indexOf(model);
     var j = this.columns.indexOf(column);
-    var cell, renderable, editable;
-
-    this.rows[i].cells[j].exitEditMode();
 
     if (command.moveUp() || command.moveDown() || command.moveLeft() ||
         command.moveRight() || command.save()) {
@@ -2326,12 +2269,7 @@ var Body = Backgrid.Body = Backbone.View.extend({
 
       if (command.moveUp() || command.moveDown()) {
         var row = this.rows[i + (command.moveUp() ? -1 : 1)];
-        if (row) {
-          cell = row.cells[j];
-          if (Backgrid.callByNeed(cell.column.get("editable"), cell.column, model)) {
-            cell.enterEditMode();
-          }
-        }
+        if (row) row.cells[j].enterEditMode();
       }
       else if (command.moveLeft() || command.moveRight()) {
         var right = command.moveRight();
@@ -2340,16 +2278,16 @@ var Body = Backgrid.Body = Backbone.View.extend({
              right ? offset++ : offset--) {
           var m = ~~(offset / l);
           var n = offset - m * l;
-          cell = this.rows[m].cells[n];
-          renderable = Backgrid.callByNeed(cell.column.get("renderable"), cell.column, cell.model);
-          editable = Backgrid.callByNeed(cell.column.get("editable"), cell.column, model);
-          if (renderable && editable) {
+          var cell = this.rows[m].cells[n];
+          if (cell.column.get("renderable") && cell.column.get("editable")) {
             cell.enterEditMode();
             break;
           }
         }
       }
     }
+
+    this.rows[i].cells[j].exitEditMode();
   }
 });
 /*
