@@ -19,6 +19,7 @@ namespace NzbDrone.Api.Indexers
             GetResourceAll = GetAll;
             CreateResource = CreateIndexer;
             UpdateResource = UpdateIndexer;
+            DeleteResource = DeleteIndexer;
         }
 
         private List<IndexerResource> GetAll()
@@ -79,6 +80,11 @@ namespace NzbDrone.Api.Indexers
             indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
 
             return indexer;
+        }
+
+        private void DeleteIndexer(int id)
+        {
+            _indexerService.Delete(id);
         }
     }
 }

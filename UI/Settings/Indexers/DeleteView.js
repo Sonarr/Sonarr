@@ -4,10 +4,10 @@ define(['app', 'marionette'], function (App, Marionette) {
         template: 'Settings/Notifications/DeleteTemplate',
 
         events: {
-            'click .x-confirm-delete': '_removeNotification'
+            'click .x-confirm-delete': '_removeIndexer'
         },
 
-        _removeNotification: function () {
+        _removeIndexer: function () {
             this.model.destroy({
                 wait   : true,
                 success: function () {

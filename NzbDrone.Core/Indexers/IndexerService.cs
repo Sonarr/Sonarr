@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Indexers
         List<Indexer> Schema();
         Indexer Create(Indexer indexer);
         Indexer Update(Indexer indexer);
+        void Delete(int id);
     }
 
     public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
@@ -81,7 +82,6 @@ namespace NzbDrone.Core.Indexers
             return indexers;
         }
 
-
         public Indexer Create(Indexer indexer)
         {
             var definition = new IndexerDefinition
@@ -106,6 +106,11 @@ namespace NzbDrone.Core.Indexers
             _indexerRepository.Update(definition);
 
             return indexer;
+        }
+
+        public void Delete(int id)
+        {
+            _indexerRepository.Delete(id);
         }
 
         private Indexer ToIndexer(IndexerDefinition definition)
