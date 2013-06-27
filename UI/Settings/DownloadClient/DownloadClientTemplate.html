@@ -11,18 +11,16 @@
                 <option value="pneumatic">Pneumatic</option>
                 <option value="nzbget">NZBGet</option>
             </select>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="What method do you download NZBs with?"/>
-            </span>
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">Downloaded Episodes Folder</label>
+        <label class="control-label">Drone Factory</label>
 
         <div class="controls">
-            <input type="text" placeholder="C:\Unsorted TV" name="downloadedEpisodesFolder" class="x-path"/>
+            <input type="text" name="downloadedEpisodesFolder" class="x-path"/>
             <span class="help-inline">
-                <i class="icon-question-sign" title="The folder where your download client downloads TV shows to."/>
+                <i class="icon-question-sign" title="The folder where your download client downloads TV shows to (aka TV Download Dir)"/>
+                <i class="icon-exclamation-sign danger" title="Do not use the folder that contains some or all of your sorted and named TV shows - doing so could cause data loss"></i>
             </span>
         </div>
     </div>
@@ -31,7 +29,7 @@
 <fieldset class="x-sab-config">
     <legend>SABnzbd</legend>
 
-    <div class="control-group">
+    {{!<div class="control-group">
         <label class="control-label">Auto-Configure</label>
 
         <div class="controls">
@@ -41,16 +39,13 @@
                         title="(Windows only) If access to SABnzbd doesn't require a username & password and it is on the same system as NzbDrone, you can auto-configure it"/>
             </span>
         </div>
-    </div>
+    </div>}}
 
     <div class="control-group">
         <label class="control-label">Host</label>
 
         <div class="controls">
             <input type="text" name="sabHost"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Hostname or IP Address running SABnzbd"/>
-            </span>
         </div>
     </div>
 
@@ -59,9 +54,6 @@
 
         <div class="controls">
             <input type="text" name="sabPort"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Port for the SABnzbd Web Interface"/>
-            </span>
         </div>
     </div>
 
@@ -70,9 +62,6 @@
 
         <div class="controls">
             <input type="text" name="sabApiKey"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="API Key for SABnzbd<br/>Found in Config -> General"></i>
-            </span>
         </div>
     </div>
 
@@ -81,9 +70,6 @@
 
         <div class="controls">
             <input type="text" name="sabUsername"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Username for the SABnzbd web interface"/>
-            </span>
         </div>
     </div>
 
@@ -92,9 +78,6 @@
 
         <div class="controls">
             <input type="password" name="sabPassword"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Password for the SABnzbd web interface"/>
-            </span>
         </div>
     </div>
 
@@ -103,9 +86,6 @@
 
         <div class="controls">
             <input type="text" name="sabTvCategory" placeholder="This is not the dropdownlist you're looking for"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Category to use when sending NZBs to SABnzbd"/>
-            </span>
         </div>
     </div>
 
@@ -150,9 +130,6 @@
 
         <div class="controls">
             <input type="button" value="Test" class="btn btn-inverse"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Test SABnzbd settings"/>
-            </span>
         </div>
     </div>
 </fieldset>
@@ -192,9 +169,6 @@
 
         <div class="controls">
             <input type="text" name="nzbgetHost"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Hostname or IP Address running NZBGet"/>
-            </span>
         </div>
     </div>
 
@@ -203,9 +177,6 @@
 
         <div class="controls">
             <input type="text" name="nzbgetPort"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Port for the NZBGet Web Interface"/>
-            </span>
         </div>
     </div>
 
@@ -214,9 +185,6 @@
 
         <div class="controls">
             <input type="text" name="nzbgetApiKey"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="API Key for NZBGet<br/>Found in Config -> General"></i>
-            </span>
         </div>
     </div>
 
@@ -225,9 +193,6 @@
 
         <div class="controls">
             <input type="text" name="nzbgetUsername"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Username for the NZBGet web interface"/>
-            </span>
         </div>
     </div>
 
@@ -236,9 +201,6 @@
 
         <div class="controls">
             <input type="password" name="nzbgetPassword"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Password for the NZBGet web interface"/>
-            </span>
         </div>
     </div>
 
@@ -247,9 +209,6 @@
 
         <div class="controls">
             <input type="text" name="nzbgetTvCategory"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Category to use when sending NZBs to NZBGet"/>
-            </span>
         </div>
     </div>
 
@@ -294,9 +253,6 @@
 
         <div class="controls">
             <input type="button" value="Test" class="btn btn-inverse"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="Test NZBGet settings"/>
-            </span>
         </div>
     </div>
 </fieldset>
