@@ -160,13 +160,6 @@ require.config({
                 [
                     'backgrid'
                 ]
-        },
-
-        'handlebars.helpers': {
-            deps:
-                [
-                    'handlebars'
-                ]
         }
     }
 });
