@@ -1,4 +1,5 @@
 @import "../prefixer";
+@import "../../Shared/Styles/clickable.less";
 
 .backgrid-paginator {
   text-align            : center;
@@ -23,6 +24,10 @@
         padding         : 0;
         line-height     : 30px;
         text-decoration : none;
+      }
+
+      .pager-btn {
+        .clickable;
       }
     }
     .active {
