@@ -12,16 +12,15 @@ define(
         'Series/Index/Table/SeriesStatusCell',
         'Series/Index/Table/Row',
         'Shared/Toolbar/ToolbarLayout',
-        'Config',
         'Shared/LoadingView'
     ], function (Marionette, PosterCollectionView, ListCollectionView, EmptyView, SeriesCollection, AirDateCell, SeriesTitleCell, TemplatedCell, SeriesStatusCell, SeriesIndexRow,
-        ToolbarLayout, Config, LoadingView) {
+        ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
             regions: {
-                series : '#x-series',
-                toolbar: '#x-toolbar'
+                seriesRegion: '#x-series',
+                toolbar     : '#x-toolbar'
             },
 
             columns:
@@ -100,60 +99,71 @@ define(
             },
 
             _showTable: function () {
-                var view = new Backgrid.Grid({
+                this.currentView = new Backgrid.Grid({
                     row       : SeriesIndexRow,
+                    collection: SeriesCollection,
                     columns   : this.columns,
-                    collection: this.seriesCollection,
                     className : 'table table-hover'
                 });
 
-                this._fetchCollection(view);
+                this._renderView();
+                this._fetchCollection();
             },
 
             _showList: function () {
-                var view = new ListCollectionView();
-                this._fetchCollection(view);
+                this.currentView = new ListCollectionView();
+                this._fetchCollection();
             },
 
             _showPosters: function () {
-                var view = new PosterCollectionView();
-                this._fetchCollection(view);
+                this.currentView = new PosterCollectionView();
+                this._fetchCollection();
             },
 
-            _showEmpty: function () {
-                this.series.show(new EmptyView());
-            },
-
-            _fetchCollection: function (view) {
-                var self = this;
-
-                if (this.seriesCollection.models.length === 0) {
-                    this.series.show(new LoadingView());
-
-                    this.seriesCollection.fetch().done(function () {
-                        if (self.seriesCollection.models.length === 0) {
-                            self._showEmpty();
-                        }
-                        else {
-                            view.collection = self.seriesCollection;
-                            self.series.show(view);
-                        }
-                    });
-                }
-
-                else {
-                    view.collection = this.seriesCollection;
-                    this.series.show(view);
-                }
-            },
 
             initialize: function () {
-                this.seriesCollection = new SeriesCollection();
+                this.seriesCollection = SeriesCollection;
+
+                this.listenTo(SeriesCollection, 'sync', this._renderView);
+                this.listenTo(SeriesCollection, 'remove', this._renderView);
             },
 
-            onShow: function () {
 
-                //TODO: Move this outside of the function - 'this' is not available for the call back though (use string like events?)
+            _renderView: function () {
+
+                if (SeriesCollection.length === 0) {
+                    this.seriesRegion.show(new EmptyView());
+                    this.toolbar.close();
+                }
+                else if (this.currentView && !this.currentView.isClosed) {
+                    this.currentView.collection = SeriesCollection;
+                    this.seriesRegion.show(this.currentView);
+
+                    this._showToolbar();
+                }
+            },
+
+
+            onShow: function () {
+                this._fetchCollection();
+                this._showToolbar();
+            },
+
+
+            _fetchCollection: function () {
+                if (SeriesCollection.length === 0) {
+                    this.seriesRegion.show(new LoadingView());
+                }
+
+                SeriesCollection.fetch();
+            },
+
+            _showToolbar: function () {
+
+                if (this.toolbar.currentView) {
+                    return;
+                }
+
                 var viewButtons = {
                     type         : 'radio',
                     storeState   : true,

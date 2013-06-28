@@ -49,8 +49,8 @@ define(
                 this.searchCollection = new AddSeriesCollection();
 
                 this.searchCollection.fetch({
-                    data   : { term: this.ui.searchText.val() },
-                    success: function () {
+                    data: { term: this.ui.searchText.val() }
+                }).done(function () {
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                         deferred.resolve();
                         self.collection.add(self.searchCollection.shift());
@@ -59,12 +59,10 @@ define(
                             self._showAll();
                         }
 
-                    },
-                    fail   : function () {
+                    }).fail(function () {
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                         deferred.reject();
-                    }
-                });
+                    });
 
                 return deferred.promise();
             },

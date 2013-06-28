@@ -73,9 +73,11 @@ define(
 
                 var self = this;
 
-                this.model.save(undefined, {
-                    url    : SeriesCollection.prototype.url,
-                    success: function () {
+                SeriesCollection.add(this.model);
+
+
+                this.model.save()
+                    .done(function () {
                         self.close();
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                         Messenger.show({
@@ -83,12 +85,10 @@ define(
                         });
 
                         App.vent.trigger(App.Events.SeriesAdded, { series: self.model });
-                        self.model.collection.remove(self.model);
-                    },
-                    fail   : function () {
+                    })
+                    .fail(function () {
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-                    }
-                });
+                    });
             },
 
             serializeData: function () {

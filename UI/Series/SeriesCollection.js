@@ -1,10 +1,10 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'backbone',
         'Series/SeriesModel'
     ], function (Backbone, SeriesModel) {
-        return Backbone.Collection.extend({
+        var collection = Backbone.Collection.extend({
             url  : window.ApiRoot + '/series',
             model: SeriesModel,
 
@@ -17,4 +17,6 @@ define(
                 order  : -1
             }
         });
+
+        return new collection();
     });
