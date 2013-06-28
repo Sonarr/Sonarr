@@ -65,6 +65,10 @@ define(
                 }
 
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
+
+                _.each(this.episodeCollection.models, function (episode) {
+                    episode.set({ hideSeriesLink: true });
+                });
             },
 
             onShow: function () {

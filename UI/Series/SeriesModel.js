@@ -54,7 +54,6 @@ define(
                 },
                 route            : function () {
                     return '/series/' + this.get('titleSlug');
-                    //return '/series/details/' + this.get('id');
                 },
 
                 qualityProfile: function () {

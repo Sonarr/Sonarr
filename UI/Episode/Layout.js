@@ -26,19 +26,19 @@ define(
 
             events: {
 
-                'click .x-episode-summary' : 'showSummary',
-                'click .x-episode-activity': 'showActivity',
-                'click .x-episode-search'  : 'showSearch'
+                'click .x-episode-summary' : '_showSummary',
+                'click .x-episode-activity': '_showActivity',
+                'click .x-episode-search'  : '_showSearch'
             },
 
 
             onShow: function () {
-                this.showSummary();
+                this._showSummary();
                 this._releaseSearchActivated = false;
             },
 
 
-            showSummary: function (e) {
+            _showSummary: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -48,7 +48,7 @@ define(
 
             },
 
-            showActivity: function (e) {
+            _showActivity: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -56,7 +56,7 @@ define(
                 this.ui.activity.tab('show');
             },
 
-            showSearch: function (e) {
+            _showSearch: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
