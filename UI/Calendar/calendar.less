@@ -1,3 +1,8 @@
+@import "../content/Bootstrap/mixins";
+@import "../content/Bootstrap/variables";
+@import "../content/Bootstrap/buttons";
+@import "../Shared/Styles/clickable";
+
 .calendar {
   th, td {
     border-color : #eeeeee;
@@ -13,6 +18,10 @@
     border           : 1px solid #007ccd;
     border-radius    : 4px;
     text-align       : center;
+  }
+
+  .fc-event {
+    .clickable;
   }
 
   .info {
@@ -85,6 +94,7 @@
 
   p {
     color : #999999;
+    margin: 0px;
   }
 
   .danger {
@@ -117,5 +127,11 @@
 
   .success {
     border-color : #4cb158;
+  }
+
+  .episode-title {
+    .btn-link;
+    color: @linkColor;
+    margin-top: 1px;
   }
 }

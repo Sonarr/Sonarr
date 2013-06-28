@@ -2,10 +2,12 @@
 
 define(
     [
+        'app',
         'marionette',
         'Calendar/Collection',
+        'Episode/Layout',
         'fullcalendar'
-    ], function (Marionette, CalendarCollection) {
+    ], function (App, Marionette, CalendarCollection, EpisodeLayout) {
 
         var _instance;
 
@@ -33,24 +35,10 @@ define(
                     eventRender   : function (event, element) {
                         $(element).addClass(event.statusLevel);
                         $(element).children('.fc-event-inner').addClass(event.statusLevel);
-
-                        element.popover({
-                            title    : '{seriesTitle} - {season}x{episode} - {episodeTitle}'.assign({
-                                seriesTitle : event.title,
-                                season      : event.seasonNumber,
-                                episode     : event.episodeNumber.pad(2),
-                                episodeTitle: event.episodeTitle
-                            }),
-                            content  : event.overview,
-                            placement: 'bottom',
-                            trigger  : 'manual'
-                        });
                     },
-                    eventMouseover: function () {
-                        $(this).popover('show');
-                    },
-                    eventMouseout : function () {
-                        $(this).popover('hide');
+                    eventClick : function (event) {
+                        var view = new EpisodeLayout({ model: event.model });
+                        App.modalRegion.show(view);
                     }
                 });
 
@@ -73,10 +61,14 @@ define(
                             var seriesTitle = element.get('series').get('title');
                             var start = element.get('airDate');
 
-                            element.set('title', seriesTitle);
-                            element.set('episodeTitle', episodeTitle);
-                            element.set('start', start);
-                            element.set('allDay', false);
+                            element.set({
+                                'title': seriesTitle,
+                                episodeTitle: episodeTitle,
+                                start: start,
+                                allDay: false
+                            });
+
+                            element.set('model', element);
                         });
 
                         callback(calendarCollection.toJSON());
