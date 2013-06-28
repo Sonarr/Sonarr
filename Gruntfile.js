@@ -61,6 +61,7 @@ module.exports = function (grunt) {
                         expand: true,
                         src   : [
                                     'UI/Content/base.less',
+                                    'UI/Content/Overrides.less',
                                     'UI/Series/Series.less',
                                     'UI/AddSeries/addSeries.less',
                                     'UI/Calendar/calendar.less',
