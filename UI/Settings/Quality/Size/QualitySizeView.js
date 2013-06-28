@@ -24,7 +24,7 @@ define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Mario
             this.ui.knob.knob({
                 min          : 0,
                 max          : 200,
-                step         : 10,
+                step         : 5,
                 cursor       : 25,
                 width        : 150,
                 stopper      : true,
@@ -32,11 +32,19 @@ define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Mario
             });
         },
 
-        _changeMaxSize: function (e) {
-            var value = this.model.get('maxSize');
+        _changeMaxSize: function () {
+            var maxSize = this.model.get('maxSize');
+            var bytes = maxSize * 1024 * 1024;
+            var thirty = (bytes * 30).bytes(1);
+            var sixty = (bytes * 60).bytes(1);
 
-            this.ui.thirtyMinuteSize.html(value * 30);
-            this.ui.sixtyMinuteSize.html(value * 60);
+            if (parseInt(maxSize) === 0) {
+                thirty = 'No Limit';
+                sixty = 'No Limit';
+            }
+
+            this.ui.thirtyMinuteSize.html(thirty);
+            this.ui.sixtyMinuteSize.html(sixty);
         }
     });
 
