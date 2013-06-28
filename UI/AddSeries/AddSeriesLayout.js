@@ -11,7 +11,7 @@ define(
     ], function (App, Marionette, RootFolderLayout, ExistingSeriesCollectionView, AddSeriesView, qualityProfileCollection, rootFolderCollection) {
 
         return Marionette.Layout.extend({
-            template: 'AddSeries/addSeriesLayoutTemplate',
+            template: 'AddSeries/AddSeriesLayoutTemplate',
 
             regions: {
                 workspace: '#add-series-workspace'

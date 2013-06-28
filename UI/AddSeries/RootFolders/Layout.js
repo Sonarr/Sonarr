@@ -21,7 +21,7 @@ define(
             },
 
             events: {
-                'click .x-add': 'addFolder'
+                'click .x-add': '_addFolder'
             },
 
             initialize: function () {
@@ -29,7 +29,6 @@ define(
                 this.rootfolderListView = new RootFolderCollectionView({ collection: RootFolderCollection });
                 this.rootfolderListView.on('itemview:folderSelected', this._onFolderSelected, this);
             },
-
 
             onRender: function () {
 
@@ -41,7 +40,7 @@ define(
                 this.trigger('folderSelected', options);
             },
 
-            addFolder: function () {
+            _addFolder: function () {
                 var newDir = new RootFolderModel({
                     Path: this.ui.pathInput.val()
                 });
