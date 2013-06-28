@@ -475,6 +475,7 @@
                             ) return;
 
                             s.val(v);
+                            s.$.trigger('change', v);
                         }
                 , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
 

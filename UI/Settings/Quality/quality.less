@@ -32,17 +32,18 @@
 .quality-size-item {
 
   .card;
+  text-align: center;
 
   width: 200px;
-  height: 200px;
+  height: 220px;
   padding: 10px 15px;
 
   h3 {
     margin-top: 0px;
-    text-align: center;
   }
 
   .size {
+    position: relative;
     height: 100px;
     margin: 10px;
     text-align: center;
@@ -52,8 +53,14 @@
     box-shadow: none;
   }
 
-  .size-value {
-    text-align: center;
+  .size-value-wrapper {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+
+    div {
+      margin-top: 2px;
+    }
   }
 }
 

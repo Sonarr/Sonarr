@@ -8,33 +8,33 @@ define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Mario
 
         ui: {
             knob            : '.x-knob',
-            thirtyMinuteSize: '.thirty-minute-size',
-            sixtyMinuteSize : '.sixty-minute-size'
+            thirtyMinuteSize: '.x-size-thirty',
+            sixtyMinuteSize : '.x-size-sixty'
         },
 
         events: {
-            'change .x-knob': '_changeMaxSize'
+//            'change .x-knob': '_changeMaxSize'
         },
 
         initialize: function (options) {
             this.qualityProfileCollection = options.qualityProfiles;
+            this.model.on('change:maxSize', this._changeMaxSize, this)
         },
 
         onRender: function () {
             this.ui.knob.knob({
-                min         : 0,
-                max         : 200,
-                step        : 10,
-                cursor      : 25,
-                width       : 100,
-                stopper     : true
+                min          : 0,
+                max          : 200,
+                step         : 10,
+                cursor       : 25,
+                width        : 150,
+                stopper      : true,
+                displayInput : false
             });
         },
 
-        _changeMaxSize: function (e, value) {
-            this.model.set({
-                maxSize: value
-            });
+        _changeMaxSize: function (e) {
+            var value = this.model.get('maxSize');
 
             this.ui.thirtyMinuteSize.html(value * 30);
             this.ui.sixtyMinuteSize.html(value * 60);

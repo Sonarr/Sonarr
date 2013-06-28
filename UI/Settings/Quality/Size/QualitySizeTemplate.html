@@ -1,8 +1,20 @@
 ﻿<div class="quality-size-item">
     <h2 class="center-block">{{name}}</h2>
     <div class="size">
+        <div class="size-value-wrapper">
+            <div>
+                <span class="label label-large label-warning x-size-thirty"
+                      name="thirtyMinuteSize"
+                      title="Maximum size for a 30 minute episode in Megabytes">
+                </span>
+            </div>
+            <div>
+                <span class="label label-large label-info x-size-sixty"
+                      name="sixtyMinuteSize"
+                      title="Maximum size for a 60 minute episode in Megabytes">
+                </span>
+            </div>
+        </div>
         <input type="text" name="maxSize" class="knob x-knob" />
     </div>
-    <div class="size-value">30 minute limit: <span name="thirtyMinuteSize" class="thirty-minute-size"></span>MB</div>
-    <div class="size-value">60 minute limit: <span name="sixtyMinuteSize" class="sixty-minute-size"></span>MB</div>
 </div>
