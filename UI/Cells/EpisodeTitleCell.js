@@ -20,7 +20,13 @@ define(
             },
 
             render: function () {
-                this.$el.html(this.cellValue.get('title'));
+                var title = this.cellValue.get('title');
+
+                if (!title || title === '') {
+                    title = 'TBA';
+                }
+
+                this.$el.html(title);
                 return this;
             }
         });
