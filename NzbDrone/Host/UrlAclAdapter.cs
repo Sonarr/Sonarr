@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Host
@@ -15,20 +16,18 @@ namespace NzbDrone.Host
     {
         private readonly IProcessProvider _processProvider;
         private readonly IConfigFileProvider _configFileProvider;
-        private readonly IEnvironmentProvider _environmentProvider;
         private readonly Logger _logger;
 
-        public UrlAclAdapter(IProcessProvider processProvider, IConfigFileProvider configFileProvider, IEnvironmentProvider environmentProvider, Logger logger)
+        public UrlAclAdapter(IProcessProvider processProvider, IConfigFileProvider configFileProvider, Logger logger)
         {
             _processProvider = processProvider;
             _configFileProvider = configFileProvider;
-            _environmentProvider = environmentProvider;
             _logger = logger;
         }
 
         public void RefreshRegistration()
         {
-            if (_environmentProvider.GetOsVersion().Major < 6)
+            if (OsInfo.Version.Major < 6)
                 return;
 
             RegisterUrl(_configFileProvider.Port);

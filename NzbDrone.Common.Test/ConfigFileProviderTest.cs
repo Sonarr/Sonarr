@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Test.Common;
@@ -17,7 +18,7 @@ namespace NzbDrone.Common.Test
             WithTempAsAppPath();
 
             //Reset config file
-            var configFile = Mocker.Resolve<IEnvironmentProvider>().GetConfigPath();
+            var configFile = Mocker.Resolve<IAppDirectoryInfo>().GetConfigPath();
 
             if (File.Exists(configFile))
                 File.Delete(configFile);

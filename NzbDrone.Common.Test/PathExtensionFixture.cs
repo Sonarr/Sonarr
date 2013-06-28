@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 
@@ -11,9 +12,9 @@ namespace NzbDrone.Common.Test
     public class PathExtensionFixture : TestBase
     {
 
-        private EnvironmentProvider GetEnvironmentProvider()
+        private IAppDirectoryInfo GetIAppDirectoryInfo()
         {
-            var fakeEnvironment = new Mock<EnvironmentProvider>();
+            var fakeEnvironment = new Mock<IAppDirectoryInfo>();
 
             fakeEnvironment.SetupGet(c => c.WorkingDirectory).Returns(@"C:\NzbDrone\");
 
@@ -73,44 +74,44 @@ namespace NzbDrone.Common.Test
         [Test]
         public void AppDataDirectory_path_test()
         {
-            GetEnvironmentProvider().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\");
+            GetIAppDirectoryInfo().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\");
         }
 
 
         [Test]
         public void Config_path_test()
         {
-            GetEnvironmentProvider().GetConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\Config.xml");
+            GetIAppDirectoryInfo().GetConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\Config.xml");
         }
 
         [Test]
         public void Sanbox()
         {
-            GetEnvironmentProvider().GetUpdateSandboxFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\");
+            GetIAppDirectoryInfo().GetUpdateSandboxFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\");
         }
 
         [Test]
         public void GetUpdatePackageFolder()
         {
-            GetEnvironmentProvider().GetUpdatePackageFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\");
+            GetIAppDirectoryInfo().GetUpdatePackageFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\");
         }
 
         [Test]
         public void GetUpdateClientFolder()
         {
-            GetEnvironmentProvider().GetUpdateClientFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\NzbDrone.Update\");
+            GetIAppDirectoryInfo().GetUpdateClientFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\NzbDrone.Update\");
         }
 
         [Test]
         public void GetUpdateClientExePath()
         {
-            GetEnvironmentProvider().GetUpdateClientExePath().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone.Update.exe");
+            GetIAppDirectoryInfo().GetUpdateClientExePath().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone.Update.exe");
         }
 
         [Test]
         public void GetUpdateLogFolder()
         {
-            GetEnvironmentProvider().GetUpdateLogFolder().Should().BeEquivalentTo(@"C:\NzbDrone\UpdateLogs\");
+            GetIAppDirectoryInfo().GetUpdateLogFolder().Should().BeEquivalentTo(@"C:\NzbDrone\UpdateLogs\");
         }
     }
 }

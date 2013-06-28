@@ -6,36 +6,20 @@ using System.Text;
 using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Common.Contract;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common
 {
 
     public class RestProvider
     {
-
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
-        private readonly IEnvironmentProvider _environmentProvider;
-
-
-        public RestProvider(IEnvironmentProvider environmentProvider)
-        {
-            _environmentProvider = environmentProvider;
-        }
-
-        public RestProvider()
-        {
-
-        }
-
         private const int TIMEOUT = 15000;
         private const string METHOD = "POST";
 
         public virtual void PostData(string url, ReportBase reportBase)
         {
-            reportBase.UGuid = EnvironmentProvider.UGuid;
-            reportBase.Version = _environmentProvider.Version.ToString();
-            reportBase.IsProduction = EnvironmentProvider.IsProduction;
+            reportBase.Version = BuildInfo.Version.ToString();
+            reportBase.IsProduction = RuntimeInfo.IsProduction;
 
             PostData(url, reportBase as object);
         }

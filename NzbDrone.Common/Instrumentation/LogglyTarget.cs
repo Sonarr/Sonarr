@@ -3,6 +3,7 @@ using NLog;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Serializer;
 using Logger = Loggly.Logger;
 
@@ -10,7 +11,7 @@ namespace NzbDrone.Common.Instrumentation
 {
     public class LogglyTarget : TargetWithLayout
     {
-        private readonly IEnvironmentProvider _environmentProvider;
+        private readonly IAppDirectoryInfo _appDirectoryInfo;
         private Logger _logger;
 
         public void Register(LogLevel minLevel)
@@ -25,16 +26,16 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.ReconfigExistingLoggers();
         }
 
-        public LogglyTarget(IEnvironmentProvider environmentProvider)
+        public LogglyTarget(IAppDirectoryInfo appDirectoryInfo)
         {
-            _environmentProvider = environmentProvider;
+            _appDirectoryInfo = appDirectoryInfo;
         }
 
         protected override void InitializeTarget()
         {
             string apiKey = string.Empty;
 
-            if (EnvironmentProvider.IsProduction)
+            if (RuntimeInfo.IsProduction)
             {
                 apiKey = "4c4ecb69-d1b9-4e2a-b54b-b0c4cc143a95";
             }
@@ -67,7 +68,7 @@ namespace NzbDrone.Common.Instrumentation
             dictionary.Add("method", Layout.Render(logEvent));
             dictionary.Add("level", logEvent.Level.Name);
             dictionary.Add("message", logEvent.GetFormattedMessage());
-            dictionary.Add("ver", _environmentProvider.Version.ToString());
+            dictionary.Add("ver", BuildInfo.Version.ToString());
 
             _logger.Log(dictionary.ToJson());
         }

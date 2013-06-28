@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class EnvironmentProviderTest : TestBase<EnvironmentProvider>
+    public class IAppDirectoryInfoTest : TestBase<AppDirectoryInfo>
     {
 
         [Test]
@@ -30,15 +30,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void IsProduction_should_return_false_when_run_within_nunit()
         {
-            EnvironmentProvider.IsProduction.Should().BeFalse();
+            RuntimeInfo.IsProduction.Should().BeFalse();
         }
-
-        [TestCase("0.0.0.0")]
-        [TestCase("1.0.0.0")]
-        public void Application_version_should_not_be_default(string version)
-        {
-            Subject.Version.Should().NotBe(new Version(version));
-        }
-
     }
 }

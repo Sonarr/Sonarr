@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Moq;
 using NLog;
 using NLog.Config;
@@ -12,6 +11,7 @@ using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Jobs;
@@ -61,19 +61,19 @@ namespace NzbDrone.Integration.Test
             Logger.Info("Registering Database...");
 
             //TODO: move this to factory
-            var environmentProvider = new EnvironmentProvider();
-            var appDataPath = environmentProvider.GetAppDataPath();
+            var IAppDirectoryInfo = new AppDirectoryInfo();
+            var appDataPath = IAppDirectoryInfo.GetAppDataPath();
 
             if (!Directory.Exists(appDataPath))
             {
                 Directory.CreateDirectory(appDataPath);
             }
 
-            var dbPath = Path.Combine(environmentProvider.WorkingDirectory, DateTime.Now.Ticks + ".db");
+            var dbPath = Path.Combine(IAppDirectoryInfo.WorkingDirectory, DateTime.Now.Ticks + ".db");
 
 
-            Logger.Info("Working Folder: {0}", environmentProvider.WorkingDirectory);
-            Logger.Info("Data Folder: {0}", environmentProvider.GetAppDataPath());
+            Logger.Info("Working Folder: {0}", IAppDirectoryInfo.WorkingDirectory);
+            Logger.Info("Data Folder: {0}", IAppDirectoryInfo.GetAppDataPath());
             Logger.Info("DB Na: {0}", dbPath);
 
 
@@ -95,27 +95,31 @@ namespace NzbDrone.Integration.Test
             _bootstrapper = new NancyBootstrapper(Container.TinyContainer);
 
 
-            var _hostConfig = new Mock<IConfigFileProvider>();
-            _hostConfig.SetupGet(c => c.Port).Returns(1313);
+            var hostConfig = new Mock<IConfigFileProvider>();
+            hostConfig.SetupGet(c => c.Port).Returns(1313);
 
-            _hostController = new OwinHostController(_hostConfig.Object, new[] { new NancyMiddleWare(_bootstrapper) }, Logger);
+            _hostController = new OwinHostController(hostConfig.Object, new[] { new NancyMiddleWare(_bootstrapper) }, Logger);
 
 
+            InitRestClients();
+
+            _hostController.StartServer();
+        }
+
+        private void InitRestClients()
+        {
             RestClient = new RestClient(_hostController.AppUrl + "/api/");
             Series = new SeriesClient(RestClient);
             Releases = new ReleaseClient(RestClient);
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
             Commands = new ClientBase<CommandResource>(RestClient);
             Indexers = new IndexerClient(RestClient);
-
-            _hostController.StartServer();
         }
 
         [TearDown]
         public void SmokeTestTearDown()
         {
             _hostController.StopServer();
-
             _bootstrapper.Shutdown();
         }
     }

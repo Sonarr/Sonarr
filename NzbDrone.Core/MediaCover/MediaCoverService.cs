@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.MediaCover
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IEnvironmentProvider environmentProvider,
+        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IAppDirectoryInfo appDirectoryInfo,
             ICoverExistsSpecification coverExistsSpecification, Logger logger)
         {
             _httpProvider = httpProvider;
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.MediaCover
             _coverExistsSpecification = coverExistsSpecification;
             _logger = logger;
 
-            _coverRootFolder = environmentProvider.GetMediaCoverPath();
+            _coverRootFolder = appDirectoryInfo.GetMediaCoverPath();
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)

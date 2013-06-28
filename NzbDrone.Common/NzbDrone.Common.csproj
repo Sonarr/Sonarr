@@ -103,6 +103,9 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="EnvironmentInfo\BuildInfo.cs" />
+    <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
+    <Compile Include="EnvironmentInfo\OsInfo.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Messaging\LimitedConcurrencyLevelTaskScheduler.cs" />
@@ -146,7 +149,7 @@
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="IDiskProvider.cs" />
-    <Compile Include="IEnvironmentProvider.cs" />
+    <Compile Include="EnvironmentInfo\AppDirectoryInfo.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="IProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

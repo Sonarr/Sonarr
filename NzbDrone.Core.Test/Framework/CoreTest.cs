@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected void UseRealHttp()
         {
-            Mocker.SetConstant<IHttpProvider>(new HttpProvider(new EnvironmentProvider()));
+            Mocker.SetConstant<IHttpProvider>(new HttpProvider());
         }
     }
 

@@ -2,6 +2,7 @@
 using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Host;
 using NzbDrone.Owin;
@@ -17,7 +18,7 @@ namespace NzbDrone
     public class NzbDroneServiceFactory : ServiceBase, INzbDroneServiceFactory
     {
         private readonly IConfigFileProvider _configFileProvider;
-        private readonly IEnvironmentProvider _environmentProvider;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly IHostController _hostController;
         private readonly IProcessProvider _processProvider;
         private readonly PriorityMonitor _priorityMonitor;
@@ -25,14 +26,13 @@ namespace NzbDrone
         private readonly IUrlAclAdapter _urlAclAdapter;
         private readonly Logger _logger;
 
-        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController,
-                          IEnvironmentProvider environmentProvider,
+        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController, IRuntimeInfo runtimeInfo,
                            IProcessProvider processProvider, PriorityMonitor priorityMonitor,
                            IFirewallAdapter firewallAdapter, IUrlAclAdapter urlAclAdapter, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
-            _environmentProvider = environmentProvider;
+            _runtimeInfo = runtimeInfo;
             _processProvider = processProvider;
             _priorityMonitor = priorityMonitor;
             _firewallAdapter = firewallAdapter;
@@ -47,7 +47,7 @@ namespace NzbDrone
 
         public void Start()
         {
-            if (_environmentProvider.IsAdmin)
+            if (_runtimeInfo.IsAdmin)
             {
                 _urlAclAdapter.RefreshRegistration();
                 _firewallAdapter.MakeAccessible();
@@ -55,7 +55,7 @@ namespace NzbDrone
             }
             _hostController.StartServer();
 
-            if (_environmentProvider.IsUserInteractive && _configFileProvider.LaunchBrowser)
+            if (_runtimeInfo.IsUserInteractive && _configFileProvider.LaunchBrowser)
             {
                 try
                 {

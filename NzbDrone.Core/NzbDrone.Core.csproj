@@ -525,9 +525,10 @@
     <Compile Include="Tv\SeriesStatusType.cs" />
     <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
+    <Compile Include="Update\InstallUpdateService.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
-    <Compile Include="Update\UpdateService.cs" />
+    <Compile Include="Update\UpdateCheckService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

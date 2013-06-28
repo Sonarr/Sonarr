@@ -2,12 +2,13 @@ using System;
 using System.IO;
 using System.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend
 {
     public class StaticResourceMapper : IMapHttpRequestsToDisk
     {
-        private readonly IEnvironmentProvider _environmentProvider;
+        private readonly IAppDirectoryInfo _appDirectoryInfo;
         private static readonly string[] Extensions = new[] { 
                                                               ".css",
                                                               ".js",
@@ -24,9 +25,9 @@ namespace NzbDrone.Api.Frontend
                                                               ".eot"
                                                             };
 
-        public StaticResourceMapper(IEnvironmentProvider environmentProvider)
+        public StaticResourceMapper(IAppDirectoryInfo appDirectoryInfo)
         {
-            _environmentProvider = environmentProvider;
+            _appDirectoryInfo = appDirectoryInfo;
         }
 
         public string Map(string resourceUrl)
@@ -35,7 +36,7 @@ namespace NzbDrone.Api.Frontend
             path = path.Trim(Path.DirectorySeparatorChar).ToLower();
 
 
-            return Path.Combine(_environmentProvider.StartUpPath, "ui", path);
+            return Path.Combine(_appDirectoryInfo.StartUpPath, "ui", path);
         }
 
         public bool CanHandle(string resourceUrl)

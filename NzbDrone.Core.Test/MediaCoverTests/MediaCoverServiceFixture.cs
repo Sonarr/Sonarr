@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         [SetUp]
         public void Setup()
         {
-            //Mocker.SetConstant(new HttpProvider(new EnvironmentProvider()));
+            //Mocker.SetConstant(new HttpProvider(new IAppDirectoryInfo()));
             //Mocker.SetConstant(new DiskProvider());
-            Mocker.SetConstant<IEnvironmentProvider>(new EnvironmentProvider());
+            Mocker.SetConstant(new AppDirectoryInfo());
         }
 
         [Test]

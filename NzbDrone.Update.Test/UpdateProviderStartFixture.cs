@@ -19,16 +19,16 @@ namespace NzbDrone.Update.Test
         private const string BACKUP_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone_backup\";
         private const string TARGET_FOLDER = @"C:\NzbDrone\";
 
-        Mock<IEnvironmentProvider> _environmentProvider;
+        Mock<IIAppDirectoryInfo> _IAppDirectoryInfo;
 
 
         [SetUp]
         public void Setup()
         {
 
-            _environmentProvider = Mocker.GetMock<IEnvironmentProvider>();
+            _IAppDirectoryInfo = Mocker.GetMock<IIAppDirectoryInfo>();
 
-            _environmentProvider.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+            _IAppDirectoryInfo.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
             Mocker.GetMock<IDiskProvider>()
                .Setup(c => c.FolderExists(UPDATE_FOLDER))

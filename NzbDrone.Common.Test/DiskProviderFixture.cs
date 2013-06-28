@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
@@ -165,7 +166,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var appPath = new EnvironmentProvider().WorkingDirectory;
+            var appPath = new AppDirectoryInfo().WorkingDirectory;
 
             TestLogger.Info("Path is: {0}", appPath);
 

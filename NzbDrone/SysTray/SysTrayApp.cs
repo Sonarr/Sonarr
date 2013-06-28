@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Owin;
 
 namespace NzbDrone.SysTray
@@ -16,16 +17,14 @@ namespace NzbDrone.SysTray
     {
         private readonly IProcessProvider _processProvider;
         private readonly IHostController _hostController;
-        private readonly IEnvironmentProvider _environmentProvider;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
-        public SystemTrayApp(IProcessProvider processProvider, IHostController hostController, IEnvironmentProvider environmentProvider)
+        public SystemTrayApp(IProcessProvider processProvider, IHostController hostController)
         {
             _processProvider = processProvider;
             _hostController = hostController;
-            _environmentProvider = environmentProvider;
         }
 
 
@@ -35,7 +34,7 @@ namespace NzbDrone.SysTray
             _trayMenu.MenuItems.Add("-");
             _trayMenu.MenuItems.Add("Exit", OnExit);
 
-            _trayIcon.Text = String.Format("NzbDrone - {0}", _environmentProvider.Version);
+            _trayIcon.Text = String.Format("NzbDrone - {0}", BuildInfo.Version);
             _trayIcon.Icon = new Icon(Assembly.GetEntryAssembly().GetManifestResourceStream("NzbDrone.NzbDrone.ico"));
 
             _trayIcon.ContextMenu = _trayMenu;

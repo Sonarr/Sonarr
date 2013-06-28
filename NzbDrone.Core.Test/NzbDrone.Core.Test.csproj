@@ -216,7 +216,6 @@
     <Compile Include="Qualities\QualityProfileFixture.cs" />
     <Compile Include="TvTests\SeriesServiceFixture.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
-    <Compile Include="UpdateTests\GetUpdateLogFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>

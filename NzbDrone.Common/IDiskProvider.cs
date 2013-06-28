@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common
 {
@@ -285,7 +286,7 @@ namespace NzbDrone.Common
 
             if (driveInfo == null)
             {
-                if (EnvironmentProvider.IsLinux)
+                if (OsInfo.IsLinux)
                 {
                     return 0;
                 }

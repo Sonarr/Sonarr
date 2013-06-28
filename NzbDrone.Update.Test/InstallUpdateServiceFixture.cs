@@ -3,6 +3,7 @@ using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using NzbDrone.Update.UpdateEngine;
 
@@ -14,7 +15,7 @@ namespace NzbDrone.Update.Test
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IEnvironmentProvider>()
+            Mocker.GetMock<IAppDirectoryInfo>()
                 .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
         }
 

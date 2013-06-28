@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
@@ -15,26 +16,26 @@ using NzbDrone.Test.Common.Categories;
 namespace NzbDrone.Core.Test.UpdateTests
 {
     [TestFixture]
-    public class UpdateServiceFixture : CoreTest<UpdateService>
+    public class UpdateServiceFixture : CoreTest<InstallUpdateService>
     {
         private string _sandboxFolder;
 
         private readonly UpdatePackage _updatePackage = new UpdatePackage
         {
-            FileName = "NzbDrone.kay.one.0.6.0.2031.zip",
-            Url = "http://update.nzbdrone.com/_test/NzbDrone.zip",
-            Version = new Version("0.6.0.2031")
+            FileName = "NzbDrone.vnext.0.8.1.226.zip",
+            Url = "http://update.nzbdrone.com/vnext/NzbDrone.vnext.0.8.1.226.zip",
+            Version = new Version("0.8.1.226")
         };
 
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IEnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
-            Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns(_updatePackage);
+            Mocker.GetMock<IAppDirectoryInfo>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns(_updatePackage);
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
 
-            _sandboxFolder = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateSandboxFolder();
+            _sandboxFolder = Mocker.GetMock<IAppDirectoryInfo>().Object.GetUpdateSandboxFolder();
         }
 
 
@@ -86,7 +87,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void Should_copy_update_client_to_root_of_sandbox()
         {
-            var updateClientFolder = Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateClientFolder();
+            var updateClientFolder = Mocker.GetMock<IAppDirectoryInfo>().Object.GetUpdateClientFolder();
 
             Subject.Execute(new ApplicationUpdateCommand());
 
@@ -109,7 +110,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void when_no_updates_are_available_should_return_without_error_or_warnings()
         {
-            Mocker.GetMock<IUpdatePackageProvider>().Setup(c => c.GetLatestUpdate()).Returns<UpdatePackage>(null);
+            Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns<UpdatePackage>(null);
 
             Subject.Execute(new ApplicationUpdateCommand());
 
@@ -123,7 +124,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             UseRealHttp();
 
-            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<IEnvironmentProvider>().Object.GetUpdateSandboxFolder());
+            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<IAppDirectoryInfo>().Object.GetUpdateSandboxFolder());
 
             updateSubFolder.Exists.Should().BeFalse();
 

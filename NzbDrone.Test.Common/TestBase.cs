@@ -6,8 +6,8 @@ using NLog;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
@@ -74,6 +74,8 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
+            WithTempAsAppPath();
+
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
 
             Mocker.SetConstant<ICacheManger>(new CacheManger());
@@ -110,7 +112,7 @@ namespace NzbDrone.Test.Common
             {
                 var testName = TestContext.CurrentContext.Test.Name.ToLower();
 
-                if (EnvironmentProvider.IsLinux && testName.Contains("windows"))
+                if (IAppDirectoryInfo.IsLinux && testName.Contains("windows"))
                 {
                     throw new IgnoreException("windows specific test");
                 }
@@ -123,7 +125,7 @@ namespace NzbDrone.Test.Common
 
         protected void WindowsOnly()
         {
-            if (EnvironmentProvider.IsLinux)
+            if (OsInfo.IsLinux)
             {
                 throw new IgnoreException("windows specific test");
             }
@@ -132,7 +134,7 @@ namespace NzbDrone.Test.Common
 
         protected void LinuxOnly()
         {
-            if (!EnvironmentProvider.IsLinux)
+            if (!OsInfo.IsLinux)
             {
                 throw new IgnoreException("linux specific test");
             }
@@ -140,7 +142,7 @@ namespace NzbDrone.Test.Common
 
         protected void WithTempAsAppPath()
         {
-            Mocker.GetMock<IEnvironmentProvider>()
+            Mocker.GetMock<IAppDirectoryInfo>()
                 .SetupGet(c => c.WorkingDirectory)
                 .Returns(VirtualPath);
         }

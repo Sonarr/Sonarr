@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat.Resources;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.EnsureThat
 {
@@ -105,7 +106,7 @@ namespace NzbDrone.Common.EnsureThat
             if (string.IsNullOrWhiteSpace(param.Value))
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
 
-            if (EnvironmentProvider.IsLinux)
+            if (OsInfo.IsLinux)
             {
                 if (!param.Value.StartsWith(Path.DirectorySeparatorChar.ToString()))
                 {

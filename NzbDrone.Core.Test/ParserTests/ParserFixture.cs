@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
-            result.SeriesTitle.Should().Be(Parser.Parser.CleanSeriesTitle(title));
+            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
         }
 
         [TestCase(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
-            result.SeriesTitle.Should().Be(Parser.Parser.CleanSeriesTitle(title));
+            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
         }
 
 
@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
-            result.SeriesTitle.Should().Be(Parser.Parser.CleanSeriesTitle(title));
+            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.AirDate.Should().Be(airDate);
             result.EpisodeNumbers.Should().BeNull();
         }
@@ -233,7 +233,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
-            result.SeriesTitle.Should().Be(Parser.Parser.CleanSeriesTitle(title));
+            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.EpisodeNumbers.Length.Should().Be(0);
             result.FullSeason.Should().BeTrue();
         }
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Parenthood.2010", "parenthood2010")]
         public void series_name_normalize(string parsedSeriesName, string seriesName)
         {
-            var result = Parser.Parser.CleanSeriesTitle(parsedSeriesName);
+            var result = parsedSeriesName.CleanSeriesTitle();
             result.Should().Be(seriesName);
         }
 
@@ -257,7 +257,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("24", "24")]
         public void Normalize_Title(string dirty, string clean)
         {
-            var result = Parser.Parser.CleanSeriesTitle(dirty);
+            var result = dirty.CleanSeriesTitle();
             result.Should().Be(clean);
         }
 
@@ -285,7 +285,7 @@ namespace NzbDrone.Core.Test.ParserTests
             foreach (var s in dirtyFormat)
             {
                 var dirty = String.Format(s, word);
-                Parser.Parser.CleanSeriesTitle(dirty).Should().Be("wordword");
+                dirty.CleanSeriesTitle().Should().Be("wordword");
             }
 
         }
@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Test.ParserTests
             foreach (var s in dirtyFormat)
             {
                 var dirty = String.Format(s, word);
-                Parser.Parser.CleanSeriesTitle(dirty).Should().Be(("word" + word.ToLower() + "word"));
+                dirty.CleanSeriesTitle().Should().Be(("word" + word.ToLower() + "word"));
             }
 
         }
@@ -328,7 +328,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.Parser.ParseSeriesName(postTitle);
-            result.Should().Be(Parser.Parser.CleanSeriesTitle(title));
+            result.Should().Be(title.CleanSeriesTitle());
         }
 
         [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", Language.English)]
@@ -373,7 +373,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = Parser.Parser.ParseTitle(postTitle);
 
-            result.SeriesTitle.Should().Be(Parser.Parser.CleanSeriesTitle(seriesName));
+            result.SeriesTitle.Should().Be(seriesName.CleanSeriesTitle());
             result.SeasonNumber.Should().Be(seasonNumber);
             result.FullSeason.Should().BeTrue();
         }

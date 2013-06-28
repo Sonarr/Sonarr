@@ -3,6 +3,7 @@ using System.Text;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -14,7 +15,7 @@ namespace NzbDrone.Common.Instrumentation
 
         public ApplicationLogLayoutRenderer()
         {
-            _appData = Path.Combine(new EnvironmentProvider().GetLogFolder(), "nzbdrone.txt");
+            _appData = Path.Combine(new AppDirectoryInfo().GetLogFolder(), "nzbdrone.txt");
 
         }
 

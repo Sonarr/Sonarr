@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Core.Configuration
@@ -24,16 +25,16 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigFileProvider : IConfigFileProvider
     {
-        private readonly IEnvironmentProvider _environmentProvider;
+        private readonly IAppDirectoryInfo _appDirectoryInfo;
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(IEnvironmentProvider environmentProvider, ICacheManger cacheManger)
+        public ConfigFileProvider(IAppDirectoryInfo appDirectoryInfo, ICacheManger cacheManger)
         {
-            _environmentProvider = environmentProvider;
+            _appDirectoryInfo = appDirectoryInfo;
             _cache = cacheManger.GetCache<string>(this.GetType());
-            _configFile = _environmentProvider.GetConfigPath();
+            _configFile = _appDirectoryInfo.GetConfigPath();
         }
 
         public Dictionary<string, object> GetConfigDictionary()

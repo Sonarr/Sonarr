@@ -1,30 +1,28 @@
 ﻿using System;
 using System.Linq;
 using Ionic.Zip;
-using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Core.Providers
 {
     public class BackupProvider
     {
-        private readonly IEnvironmentProvider _environmentProvider;
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-      
-        public BackupProvider(IEnvironmentProvider environmentProvider)
+        private readonly IAppDirectoryInfo _appDirectoryInfo;
+
+        public BackupProvider(IAppDirectoryInfo appDirectoryInfo)
         {
-            _environmentProvider = environmentProvider;
+            _appDirectoryInfo = appDirectoryInfo;
         }
 
         public BackupProvider()
         {
-            
         }
 
         public virtual string CreateBackupZip()
         {
-            var configFile = _environmentProvider.GetConfigPath();
-            var zipFile = _environmentProvider.GetConfigBackupFile();
+            var configFile = _appDirectoryInfo.GetConfigPath();
+            var zipFile = _appDirectoryInfo.GetConfigBackupFile();
 
             using (var zip = new ZipFile())
             {

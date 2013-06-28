@@ -4,6 +4,7 @@ using System.Text;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -15,7 +16,7 @@ namespace NzbDrone.Common.Instrumentation
 
         public UpdateLogLayoutRenderer()
         {
-            _appData = Path.Combine(new EnvironmentProvider().GetUpdateLogFolder(), DateTime.Now.ToString("yy.MM.d-HH.mm") + ".txt");
+            _appData = Path.Combine(new AppDirectoryInfo().GetUpdateLogFolder(), DateTime.Now.ToString("yy.MM.d-HH.mm") + ".txt");
 
         }
 

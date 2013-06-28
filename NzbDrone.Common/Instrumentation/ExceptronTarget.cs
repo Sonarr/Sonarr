@@ -7,6 +7,7 @@ using NLog.Common;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -43,12 +44,12 @@ namespace NzbDrone.Common.Instrumentation
                     IncludeMachineName = true,
                 };
 
-            if (EnvironmentProvider.IsProduction)
+            if (RuntimeInfo.IsProduction)
             {
                 config.ApiKey = "cc4728a35aa9414f9a0baa8eed56bc67";
             }
 
-            ExceptronClient = new ExceptronClient(config, new EnvironmentProvider().Version);
+            ExceptronClient = new ExceptronClient(config, BuildInfo.Version);
         }
 
 

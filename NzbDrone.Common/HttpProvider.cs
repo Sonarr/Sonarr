@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common
 {
@@ -25,14 +26,12 @@ namespace NzbDrone.Common
 
         public const string ContentLenghtHeader = "Content-Length";
 
-        private readonly IEnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly string _userAgent;
 
-        public HttpProvider(IEnvironmentProvider environmentProvider)
+        public HttpProvider()
         {
-            _environmentProvider = environmentProvider;
-            _userAgent = String.Format("NzbDrone {0}", _environmentProvider.Version);
+            _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
         }
 
         public string DownloadString(string address)

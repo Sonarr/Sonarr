@@ -5,6 +5,7 @@ using NzbDrone.Api;
 using NzbDrone.Api.SignalR;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
@@ -41,19 +42,19 @@ namespace NzbDrone
             Logger.Info("Registering Database...");
 
             //TODO: move this to factory
-            var environmentProvider = new EnvironmentProvider();
-            var appDataPath = environmentProvider.GetAppDataPath();
+            var IAppDirectoryInfo = new AppDirectoryInfo();
+            var appDataPath = IAppDirectoryInfo.GetAppDataPath();
 
             if (!Directory.Exists(appDataPath))
             {
                 Directory.CreateDirectory(appDataPath);
             }
 
-            Container.Register(c => c.Resolve<IDbFactory>().Create(environmentProvider.GetNzbDroneDatabase()));
+            Container.Register(c => c.Resolve<IDbFactory>().Create(IAppDirectoryInfo.GetNzbDroneDatabase()));
 
             Container.Register<ILogRepository>(c =>
                 {
-                    var db = c.Resolve<IDbFactory>().Create(environmentProvider.GetLogDatabase(), MigrationType.Log);
+                    var db = c.Resolve<IDbFactory>().Create(IAppDirectoryInfo.GetLogDatabase(), MigrationType.Log);
                     return new LogRepository(db, c.Resolve<IMessageAggregator>());
                 });
         }

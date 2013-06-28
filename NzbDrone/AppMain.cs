@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone
@@ -18,7 +19,7 @@ namespace NzbDrone
             {
                 GlobalExceptionHandlers.Register();
 
-                new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Warn);
+                new LogglyTarget(new AppDirectoryInfo()).Register(LogLevel.Warn);
 
 
                 logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);

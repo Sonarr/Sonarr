@@ -3,6 +3,7 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Update.UpdateEngine;
 
@@ -29,10 +30,10 @@ namespace NzbDrone.Update
                 Console.WriteLine("Starting NzbDrone Update Client");
                 GlobalExceptionHandlers.Register();
 
-                new LogglyTarget(new EnvironmentProvider()).Register(LogLevel.Debug);
+                new LogglyTarget(new AppDirectoryInfo()).Register(LogLevel.Debug);
                 _container = UpdateContainerBuilder.Build();
 
-                logger.Info("Updating NzbDrone to version {0}", _container.Resolve<IEnvironmentProvider>().Version);
+                logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
                 _container.Resolve<Program>().Start(args);
             }
             catch (Exception e)

@@ -8,17 +8,17 @@ namespace NzbDrone.Api.Update
 {
     public class UpdateModule : NzbDroneRestModule<UpdateResource>
     {
-        private readonly IUpdateService _updateService;
+        private readonly ICheckUpdateService _checkUpdateService;
 
-        public UpdateModule(IUpdateService updateService)
+        public UpdateModule(ICheckUpdateService checkUpdateService)
         {
-            _updateService = updateService;
+            _checkUpdateService = checkUpdateService;
             GetResourceAll = GetAvailableUpdate;
         }
 
         private List<UpdateResource> GetAvailableUpdate()
         {
-            var update = _updateService.AvailableUpdate();
+            var update = _checkUpdateService.AvailableUpdate();
             var response = new List<UpdateResource>();
 
             if (update != null)

@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.SysTray;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
@@ -14,17 +15,17 @@ namespace NzbDrone
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly IServiceProvider _serviceProvider;
         private readonly IConsoleService _consoleService;
-        private readonly IEnvironmentProvider _environmentProvider;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly ISystemTrayApp _systemTrayProvider;
         private readonly Logger _logger;
 
         public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider,
-                        IConsoleService consoleService, IEnvironmentProvider environmentProvider, ISystemTrayApp systemTrayProvider, Logger logger)
+                        IConsoleService consoleService, IRuntimeInfo runtimeInfo, ISystemTrayApp systemTrayProvider, Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
-            _environmentProvider = environmentProvider;
+            _runtimeInfo = runtimeInfo;
             _systemTrayProvider = systemTrayProvider;
             _logger = logger;
         }
@@ -36,7 +37,7 @@ namespace NzbDrone
 
         public void Route(ApplicationModes applicationModes)
         {
-            if (!_environmentProvider.IsUserInteractive)
+            if (!_runtimeInfo.IsUserInteractive)
             {
                 applicationModes = ApplicationModes.Service;
             }
