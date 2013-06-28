@@ -11,9 +11,6 @@ namespace NzbDrone.Core.Test.Qualities
 
     public class QualitySizeRepositoryFixture : DbTest<QualitySizeRepository, QualitySize>
     {
-
-
-
         [SetUp]
         public void Setup()
         {

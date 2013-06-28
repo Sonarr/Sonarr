@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
@@ -39,8 +40,10 @@ namespace NzbDrone.App.Test
         public void should_resolve_command_executor_by_name()
         {
             var genericExecutor = typeof(IExecute<>).MakeGenericType(typeof(RssSyncCommand));
+            var container = MainAppContainerBuilder.BuildContainer();
+            DbFactory.RegisterDatabase(container);
 
-            var executor = MainAppContainerBuilder.BuildContainer().Resolve(genericExecutor);
+            var executor = container.Resolve(genericExecutor);
 
             executor.Should().NotBeNull();
             executor.Should().BeAssignableTo<IExecute<RssSyncCommand>>();
