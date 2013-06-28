@@ -136,22 +136,38 @@ namespace NzbDrone.Core.Indexers
 
         private IIndexer GetInstance(IndexerDefinition indexerDefinition)
         {
-            var type = _indexers.Single(c => c.GetType().Name.Equals(indexerDefinition.Implementation, StringComparison.InvariantCultureIgnoreCase)).GetType();
-
+            var type = GetImplementation(indexerDefinition);
             var instance = (IIndexer)Activator.CreateInstance(type);
-
             instance.InstanceDefinition = indexerDefinition;
             return instance;
+        }
+
+        private Type GetImplementation(IndexerDefinition indexerDefinition)
+        {
+            return _indexers.Select(c => c.GetType()).SingleOrDefault(c => c.Name.Equals(indexerDefinition.Implementation, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             _logger.Debug("Initializing indexers. Count {0}", _indexers.Count);
 
+            RemoveMissingImplementations();
+
             if (!All().Any())
             {
                 var definitions = _indexers.SelectMany(indexer => indexer.DefaultDefinitions);
                 _indexerRepository.InsertMany(definitions.ToList());
+            }
+        }
+
+        private void RemoveMissingImplementations()
+        {
+            var storedIndexers = _indexerRepository.All();
+
+            foreach (var indexerDefinition in storedIndexers.Where(i => GetImplementation(i) == null))
+            {
+                _logger.Debug("Removing Indexer {0} ", indexerDefinition.Name);
+                _indexerRepository.Delete(indexerDefinition);
             }
         }
     }

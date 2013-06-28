@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.NzbClub;
-using NzbDrone.Core.Indexers.NzbsRUs;
 using NzbDrone.Core.Indexers.Omgwtfnzbs;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Lifecycle;
@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Test.IndexerTests
             _indexers = new List<IIndexer>();
 
             _indexers.Add(new Newznab());
-            _indexers.Add(new Nzbsrus());
             _indexers.Add(new NzbClub());
             _indexers.Add(new Omgwtfnzbs());
             _indexers.Add(new Wombles());
@@ -67,5 +66,23 @@ namespace NzbDrone.Core.Test.IndexerTests
             indexers.Select(c => c.Instance).Should().OnlyHaveUniqueItems();
         }
 
+
+        [Test]
+        public void should_remove_missing_indexers_on_startup()
+        {
+            var repo = Mocker.Resolve<IndexerRepository>();
+
+            Mocker.SetConstant<IIndexerRepository>(repo);
+
+
+            var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
+
+            repo.Insert(existingIndexers);
+
+
+            Subject.Handle(new ApplicationStartedEvent());
+
+            AllStoredModels.Should().NotContain(c => c.Id == existingIndexers.Id);
+        }
     }
 }

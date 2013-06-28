@@ -298,14 +298,11 @@
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
     <Compile Include="Indexers\NzbClub\NzbClub.cs" />
     <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
-    <Compile Include="Indexers\NzbsRUs\NzbsRUs.cs" />
-    <Compile Include="Indexers\NzbsRUs\NzbsrusParser.cs" />
     <Compile Include="Indexers\Nzbx\Nzbx.cs" />
     <Compile Include="Indexers\Nzbx\NzbxParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
     <Compile Include="Indexers\IIndexerSetting.cs" />
-    <Compile Include="Indexers\NzbsRUs\NzbsrusSettings.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
     <Compile Include="Indexers\Wombles\WomblesParser.cs" />
