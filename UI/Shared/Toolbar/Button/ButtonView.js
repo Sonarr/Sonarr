@@ -30,6 +30,10 @@ define(
                     this.$el.addClass('active');
                     this.invokeCallback();
                 }
+
+                if(!this.model.get('title')){
+                    this.$el.addClass('btn-icon-only');
+                }
             },
 
             onClick: function () {
