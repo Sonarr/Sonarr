@@ -23,6 +23,13 @@ namespace NzbDrone.Core.Test.Framework
         {
             Mocker.SetConstant<IHttpProvider>(new HttpProvider());
         }
+
+        protected void UseRealDisk()
+        {
+            Mocker.SetConstant<IDiskProvider>(new DiskProvider());
+            WithTempAsAppPath();
+        }
+
     }
 
     public abstract class CoreTest<TSubject> : CoreTest where TSubject : class

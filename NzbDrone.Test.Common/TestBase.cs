@@ -74,7 +74,6 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
-            WithTempAsAppPath();
 
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
 
@@ -87,7 +86,6 @@ namespace NzbDrone.Test.Common
             TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
 
             MockedRestProvider = new Mock<RestProvider>();
-
 
             Directory.CreateDirectory(TempFolder);
         }
