@@ -11,7 +11,7 @@ define(
             tagName : 'tr',
 
             events: {
-                'click .x-remove': 'removeFolder',
+                'click .x-delete': 'removeFolder',
                 'click .x-folder': 'folderSelected'
             },
 

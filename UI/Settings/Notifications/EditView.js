@@ -15,9 +15,11 @@ define([
         template: 'Settings/Notifications/EditTemplate',
 
         events: {
-            'click .x-save'  : '_saveNotification',
-            'click .x-remove': '_deleteNotification',
-            'click .x-test'  : '_test'
+            'click .x-save'          : '_saveNotification',
+            'click .x-save-and-add'  : '_saveAndAddNotification',
+            'click .x-delete'        : '_deleteNotification',
+            'click .x-back'          : '_back',
+            'click .x-test'          : '_test'
         },
 
         ui: {
@@ -41,14 +43,26 @@ define([
             }
         },
 
+        _saveAndAddNotification: function () {
+            var self = this;
+            var promise = this.model.saveSettings();
+
+            if (promise) {
+                promise.done(function () {
+                    self.notificationCollection.add(self.model, { merge: true });
+
+                    require('Settings/Notifications/SchemaModal').open(self.notificationCollection);
+                });
+            }
+        },
+
         _deleteNotification: function () {
             var view = new DeleteView({ model: this.model });
             App.modalRegion.show(view);
         },
 
-        _saveSuccess: function () {
-            this.notificationCollection.add(this.model, { merge: true });
-            App.modalRegion.closeModal();
+        _back: function () {
+            require('Settings/Notifications/SchemaModal').open(this.notificationCollection);
         },
 
         _test: function () {

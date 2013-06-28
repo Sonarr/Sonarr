@@ -8,10 +8,10 @@ namespace NzbDrone.Core.Notifications.Prowl
 {
     public class ProwlSettings : INotifcationSettings
     {
-        [FieldDefinition(0, Label = "API Key", HelpText = "API Key for Prowl")]
+        [FieldDefinition(0, Label = "API Key")]
         public String ApiKey { get; set; }
 
-        [FieldDefinition(1, Label = "Priority", HelpText = "Priority to send messages at", Type = FieldType.Select, SelectOptions= typeof(ProwlPriority) )]
+        [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions= typeof(ProwlPriority) )]
         public Int32 Priority { get; set; }
 
         public bool IsValid

@@ -40,5 +40,16 @@
         <button class="btn btn-danger pull-left x-remove">delete</button>
     {{/if}}
     <button class="btn" data-dismiss="modal">cancel</button>
-    <button class="btn btn-primary x-save">save</button>
+
+    <div class="btn-group">
+        <button class="btn btn-primary x-save">save</button>
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li class="save-and-add x-save-and-add">
+                save and add
+            </li>
+        </ul>
+    </div>
 </div>

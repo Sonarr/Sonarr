@@ -23,24 +23,27 @@
 }
 
 .notifications {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+
   li {
     display: inline-block;
     vertical-align: top;
   }
 }
-
 .notification-item {
 
   .card;
 
-  width: 250px;
-  height: 80px;
-  padding: 10px 15px;
+  width: 290px;
+  height: 90px;
+  padding: 20px 20px;
 
   h3 {
     margin-top: 0px;
     display: inline-block;
-    width: 200px;
+    width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -48,5 +51,9 @@
 
   .btn-group {
     margin-top: 8px;
+  }
+
+  .settings {
+    margin-top: 5px;
   }
 }

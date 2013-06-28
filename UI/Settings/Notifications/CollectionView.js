@@ -2,10 +2,9 @@
 define([
     'app',
     'marionette',
-    'Settings/Notifications/Collection',
     'Settings/Notifications/ItemView',
-    'Settings/Notifications/AddView'
-], function (App, Marionette, NotificationCollection, NotificationItemView, AddSelectionNotificationView) {
+    'Settings/Notifications/SchemaModal'
+], function (App, Marionette, NotificationItemView, SchemaModal) {
     return Marionette.CompositeView.extend({
         itemView         : NotificationItemView,
         itemViewContainer: '.notifications',
@@ -16,13 +15,7 @@ define([
         },
 
         _openSchemaModal: function () {
-            var schemaCollection = new NotificationCollection();
-            schemaCollection.url = '/api/notification/schema';
-            schemaCollection.fetch();
-            schemaCollection.url = '/api/notification';
-
-            var view = new AddSelectionNotificationView({ collection: schemaCollection, notificationCollection: this.collection});
-            App.modalRegion.show(view);
+            SchemaModal.open(this.collection);
         }
     });
 });

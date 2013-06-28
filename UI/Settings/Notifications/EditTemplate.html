@@ -61,10 +61,23 @@
 </div>
 <div class="modal-footer">
     {{#if id}}
-        <button class="btn btn-danger pull-left x-remove">delete</button>
+        <button class="btn btn-danger pull-left x-delete">delete</button>
+    {{else}}
+        <button class="btn pull-left x-back">back</button>
     {{/if}}
-    <button class="btn x-test">test <i class="x-test-icon"/></button>
 
+    <button class="btn x-test">test <i class="x-test-icon"/></button>
     <button class="btn" data-dismiss="modal">cancel</button>
-    <button class="btn btn-primary x-save">save</button>
+
+    <div class="btn-group">
+        <button class="btn btn-primary x-save">save</button>
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li class="save-and-add x-save-and-add">
+                save and add
+            </li>
+        </ul>
+    </div>
 </div>
