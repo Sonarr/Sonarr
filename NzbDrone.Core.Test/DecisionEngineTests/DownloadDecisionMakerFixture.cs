@@ -13,7 +13,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class AllowedDownloadSpecificationFixture : CoreTest<DownloadDecisionMaker>
+    public class DownloadDecisionMakerFixture : CoreTest<DownloadDecisionMaker>
     {
         private List<ReportInfo> _reports;
         private RemoteEpisode _remoteEpisode;
@@ -142,9 +142,25 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             results.Should().BeEmpty();
         }
 
+        [Test] public void should_not_attempt_to_map_episode_series_title_is_blank()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            _reports[0].Title = "1937 - Snow White and the Seven Dwarves";
+
+            var results = Subject.GetRssDecision(_reports).ToList();
+
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>()), Times.Never());
+
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+
+            results.Should().BeEmpty();
+        }
+
 
         [Test]
-        public void should_not_attempt_to_make_decision_if_series_is_unknow()
+        public void should_not_attempt_to_make_decision_if_series_is_unknown()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
 

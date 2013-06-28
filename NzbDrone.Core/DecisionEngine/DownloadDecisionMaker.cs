@@ -49,7 +49,7 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
 
-                    if (parsedEpisodeInfo != null)
+                    if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
                         remoteEpisode.Report = report;

@@ -203,7 +203,7 @@
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="OrganizerTests\GetNewFilenameFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\AllowedDownloadSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
     <Compile Include="TvTests\QualityModelFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
