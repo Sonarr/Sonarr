@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         }
 
         [Test]
+        [Explicit]
         public void nzbclub_rss()
         {
             var indexer = new NzbClub();
