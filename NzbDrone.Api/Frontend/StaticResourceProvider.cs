@@ -5,6 +5,7 @@ using NLog;
 using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common;
+using NzbDrone.Api.Extensions;
 
 namespace NzbDrone.Api.Frontend
 {
@@ -43,7 +44,10 @@ namespace NzbDrone.Api.Frontend
 
                 if (_diskProvider.FileExists(filePath))
                 {
-                    return new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
+                    var response = new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
+                    response.Headers.EnableCache();
+
+                    return response;
                 }
 
                 _logger.Warn("File {0} not found", filePath);

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend
