@@ -13,26 +13,23 @@ namespace NzbDrone.Common.EnvironmentInfo
 
     public class AppDirectoryInfo : IAppDirectoryInfo
     {
-        public string WorkingDirectory
-        {
-            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create), "NzbDrone"); }
-        }
 
-        public string StartUpPath
+        public AppDirectoryInfo()
         {
-            get
+            WorkingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create), "NzbDrone");
+            StartUpPath = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            SystemTemp = Path.GetTempPath();
+
+            if (!Directory.Exists(WorkingDirectory))
             {
-                var path = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
-                return path;
+                Directory.CreateDirectory(WorkingDirectory);
             }
         }
 
-        public String SystemTemp
-        {
-            get
-            {
-                return Path.GetTempPath();
-            }
-        }
+        public string WorkingDirectory { get; private set; }
+
+        public string StartUpPath { get; private set; }
+
+        public String SystemTemp { get; private set; }
     }
 }

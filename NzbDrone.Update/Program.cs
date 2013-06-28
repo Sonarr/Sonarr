@@ -30,7 +30,7 @@ namespace NzbDrone.Update
                 Console.WriteLine("Starting NzbDrone Update Client");
                 GlobalExceptionHandlers.Register();
 
-                new LogglyTarget(new AppDirectoryInfo()).Register(LogLevel.Debug);
+                new LogglyTarget().Register(LogLevel.Debug);
                 _container = UpdateContainerBuilder.Build();
 
                 logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);

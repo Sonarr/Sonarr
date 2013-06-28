@@ -2,15 +2,15 @@
 using System.Diagnostics;
 using System.Reflection;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone
 {
     public static class AppMain
     {
-        private static readonly Logger logger = LogManager.GetLogger("AppMain");
+        private static readonly Logger Logger = LogManager.GetLogger("AppMain");
 
 
         public static void Main(string[] args)
@@ -19,10 +19,10 @@ namespace NzbDrone
             {
                 GlobalExceptionHandlers.Register();
 
-                new LogglyTarget(new AppDirectoryInfo()).Register(LogLevel.Warn);
+                new LogglyTarget().Register(LogLevel.Warn);
 
 
-                logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+                Logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
 
 
                 //Check if full version .NET is installed.
@@ -32,7 +32,7 @@ namespace NzbDrone
                 }
                 catch (Exception)
                 {
-                    logger.Error("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to the download page.");
+                    Logger.Error("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to the download page.");
                     Console.Read();
 
                     try
@@ -41,7 +41,7 @@ namespace NzbDrone
                     }
                     catch (Exception e)
                     {
-                        logger.Warn("Oops. can't start default browser. Please visit http://www.microsoft.com/download/en/details.aspx?id=17851 to download .NET Framework 4.");
+                        Logger.Warn("Oops. can't start default browser. Please visit http://www.microsoft.com/download/en/details.aspx?id=17851 to download .NET Framework 4.");
                         Console.ReadLine();
                     }
 
@@ -50,20 +50,12 @@ namespace NzbDrone
 
                 var container = MainAppContainerBuilder.BuildContainer();
 
-                /*try
-                {
-                    container.Resolve<IUpdateService>().Execute(new ApplicationUpdateCommand());
-                }
-                catch (Exception e)
-                {
-                    logger.ErrorException("Application update failed.", e);
-                }
-*/
+                DbFactory.RegisterDatabase(container);
                 container.Resolve<Router>().Route(args);
             }
             catch (Exception e)
             {
-                logger.FatalException("Epic Fail " + e.Message, e);
+                Logger.FatalException("Epic Fail " + e.Message, e);
             }
         }
 

@@ -289,7 +289,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             result.Should().NotBeNull();
             result.SeriesId.Should().Be(_fakeSeries.Id);
             result.Size.Should().Be(_fileSize);
-            result.DateAdded.Should().HaveDay(DateTime.Now.Day);
+            result.DateAdded.Should().HaveDay(DateTime.UtcNow.Day);
 
             Mocker.GetMock<IMediaFileService>().Verify(c => c.Add(result), Times.Once());
         }

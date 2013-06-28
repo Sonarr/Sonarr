@@ -105,21 +105,10 @@ namespace NzbDrone.Test.Common
             catch (Exception)
             {
             }
-
-/*            if (TestContext.CurrentContext.Result.State == TestState.Failure || TestContext.CurrentContext.Result.State == TestState.Error)
-            {
-                var testName = TestContext.CurrentContext.Test.Name.ToLower();
-
-                if (IAppDirectoryInfo.IsLinux && testName.Contains("windows"))
-                {
-                    throw new IgnoreException("windows specific test");
-                }
-                else if (testName.Contains("linux"))
-                {
-                    throw new IgnoreException("linux specific test");
-                }
-            }*/
         }
+
+
+        protected IAppDirectoryInfo TestDirectoryInfo { get; private set; }
 
         protected void WindowsOnly()
         {
@@ -143,6 +132,8 @@ namespace NzbDrone.Test.Common
             Mocker.GetMock<IAppDirectoryInfo>()
                 .SetupGet(c => c.WorkingDirectory)
                 .Returns(VirtualPath);
+
+            TestDirectoryInfo = Mocker.GetMock<IAppDirectoryInfo>().Object;
         }
 
         protected string GetTestFilePath(string fileName)

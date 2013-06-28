@@ -17,9 +17,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         [SetUp]
         public void Setup()
         {
-            //Mocker.SetConstant(new HttpProvider(new IAppDirectoryInfo()));
-            //Mocker.SetConstant(new DiskProvider());
-            Mocker.SetConstant(new AppDirectoryInfo());
+            Mocker.SetConstant<IAppDirectoryInfo>(new AppDirectoryInfo());
         }
 
         [Test]

@@ -11,7 +11,6 @@ namespace NzbDrone.Common.Instrumentation
 {
     public class LogglyTarget : TargetWithLayout
     {
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
         private Logger _logger;
 
         public void Register(LogLevel minLevel)
@@ -24,11 +23,6 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.LoggingRules.Add(rule);
             LogManager.ConfigurationReloaded += (sender, args) => Register(minLevel);
             LogManager.ReconfigExistingLoggers();
-        }
-
-        public LogglyTarget(IAppDirectoryInfo appDirectoryInfo)
-        {
-            _appDirectoryInfo = appDirectoryInfo;
         }
 
         protected override void InitializeTarget()

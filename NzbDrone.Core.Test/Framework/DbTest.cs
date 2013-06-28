@@ -5,6 +5,7 @@ using System.Linq;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -63,9 +64,6 @@ namespace NzbDrone.Core.Test.Framework
 
     public abstract class DbTest : CoreTest
     {
-
-        private string _dbName;
-
         private ITestDatabase _db;
         private IDatabase _database;
 
@@ -90,15 +88,15 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
-        private void WithObjectDb(bool memory = true)
+        private void WithTestDb()
         {
+            WithTempAsAppPath();
 
-            _dbName = DateTime.Now.Ticks.ToString() + ".db";
 
             MapRepository.Instance.EnableTraceLogging = true;
 
-            var factory = new DbFactory(new MigrationController(new MigrationLogger(TestLogger)));
-            _database = factory.Create(_dbName, MigrationType);
+            var factory = new DbFactory(new MigrationController(new MigrationLogger(TestLogger)), Mocker.GetMock<IAppDirectoryInfo>().Object);
+            _database = factory.Create(MigrationType);
             _db = new TestTestDatabase(_database);
             Mocker.SetConstant(_database);
         }
@@ -106,27 +104,29 @@ namespace NzbDrone.Core.Test.Framework
         [SetUp]
         public void SetupReadDb()
         {
-            WithObjectDb();
+            WithTestDb();
         }
 
         [TearDown]
         public void TearDown()
         {
-            var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db");
-
-            foreach (var file in files)
+            if (TestDirectoryInfo != null)
             {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (Exception)
-                {
+                var files = Directory.GetFiles(TestDirectoryInfo.WorkingDirectory);
 
+                foreach (var file in files)
+                {
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
             }
         }
-
     }
 
 

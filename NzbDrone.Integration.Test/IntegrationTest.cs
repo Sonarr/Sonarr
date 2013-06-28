@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Moq;
 using NLog;
 using NLog.Config;
@@ -9,7 +7,6 @@ using NUnit.Framework;
 using NzbDrone.Api;
 using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
-using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
@@ -56,36 +53,14 @@ namespace NzbDrone.Integration.Test
             LogManager.ReconfigExistingLoggers();
         }
 
-        private void InitDatabase()
-        {
-            Logger.Info("Registering Database...");
-
-            //TODO: move this to factory
-            var IAppDirectoryInfo = new AppDirectoryInfo();
-            var appDataPath = IAppDirectoryInfo.GetAppDataPath();
-
-            if (!Directory.Exists(appDataPath))
-            {
-                Directory.CreateDirectory(appDataPath);
-            }
-
-            var dbPath = Path.Combine(IAppDirectoryInfo.WorkingDirectory, DateTime.Now.Ticks + ".db");
-
-
-            Logger.Info("Working Folder: {0}", IAppDirectoryInfo.WorkingDirectory);
-            Logger.Info("Data Folder: {0}", IAppDirectoryInfo.GetAppDataPath());
-            Logger.Info("DB Na: {0}", dbPath);
-
-
-            Container.Register(c => c.Resolve<IDbFactory>().Create(dbPath));
-        }
 
         [SetUp]
         public void SmokeTestSetup()
         {
             Container = MainAppContainerBuilder.BuildContainer();
+            Container.Register(typeof(IAppDirectoryInfo), new IntegrationTestDirectoryInfo());
 
-            InitDatabase();
+            DbFactory.RegisterDatabase(Container);
 
             var taskManagerMock = new Mock<ITaskManager>();
             taskManagerMock.Setup(c => c.GetPending()).Returns(new List<ScheduledTask>());
