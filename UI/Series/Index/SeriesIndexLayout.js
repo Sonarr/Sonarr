@@ -135,7 +135,7 @@ define(
                     this.seriesRegion.show(new EmptyView());
                     this.toolbar.close();
                 }
-                else if (this.currentView && !this.currentView.isClosed) {
+                else {
                     this.currentView.collection = SeriesCollection;
                     this.seriesRegion.show(this.currentView);
 
@@ -145,9 +145,9 @@ define(
 
 
             onShow: function () {
+                this._showToolbar();
                 this._renderView();
                 this._fetchCollection();
-                this._showToolbar();
             },
 
 
