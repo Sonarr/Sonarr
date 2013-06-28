@@ -145,6 +145,7 @@ define(
 
 
             onShow: function () {
+                this._renderView();
                 this._fetchCollection();
                 this._showToolbar();
             },
