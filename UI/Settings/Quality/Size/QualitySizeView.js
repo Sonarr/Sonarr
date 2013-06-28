@@ -13,12 +13,11 @@ define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Mario
         },
 
         events: {
-//            'change .x-knob': '_changeMaxSize'
+            'change .x-knob': '_changeMaxSize'
         },
 
         initialize: function (options) {
             this.qualityProfileCollection = options.qualityProfiles;
-            this.model.on('change:maxSize', this._changeMaxSize, this)
         },
 
         onRender: function () {
