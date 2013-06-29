@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 
 define(
     [
@@ -6,7 +6,6 @@ define(
     ], function (Marionette) {
         return Marionette.ItemView.extend({
             template : 'Shared/SpinnerTemplate',
-            className: 'nz-spinner row'
         });
     });
 
