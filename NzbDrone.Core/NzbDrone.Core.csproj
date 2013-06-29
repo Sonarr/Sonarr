@@ -250,6 +250,8 @@
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\SabQueueItem.cs" />
+    <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
+    <Compile Include="IndexerSearch\EpisodeSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />

@@ -15,12 +15,13 @@ define(
                 }
 
                 this.episodeCollection = options.episodeCollection;
-
+                this.series = options.series;
             },
 
             itemViewOptions: function () {
                 return {
-                    episodeCollection: this.episodeCollection
+                    episodeCollection: this.episodeCollection,
+                    series           : this.series
                 };
             }
 

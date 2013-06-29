@@ -43,7 +43,8 @@ define(
                 $.when(this.episodeCollection.fetch({data: { seriesId: this.model.id }}), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
                     self.seasons.show(new SeasonCollectionView({
                         collection       : self.seasonCollection,
-                        episodeCollection: self.episodeCollection
+                        episodeCollection: self.episodeCollection,
+                        series           : self.model
                     }));
                 });
             },

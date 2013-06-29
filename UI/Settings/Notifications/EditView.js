@@ -6,10 +6,11 @@ define([
     'Settings/Notifications/Model',
     'Settings/Notifications/DeleteView',
     'Shared/Messenger',
+    'Commands/CommandController',
     'Mixins/AsModelBoundView',
     'Form/FormBuilder'
 
-], function (App, Marionette, NotificationModel, DeleteView, Messenger, AsModelBoundView) {
+], function (App, Marionette, NotificationModel, DeleteView, Messenger, CommandController, AsModelBoundView) {
 
     var model = Marionette.ItemView.extend({
         template: 'Settings/Notifications/EditTemplate',
@@ -79,7 +80,7 @@ define([
                 });
 
                 var self = this;
-                var commandPromise = App.Commands.Execute(testCommand, properties);
+                var commandPromise = CommandController.Execute(testCommand, properties);
                 commandPromise.done(function () {
                     Messenger.show({
                         message: 'Notification settings tested successfully'

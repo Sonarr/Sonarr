@@ -1,69 +1,71 @@
 'use strict';
 define(
     [
+        'app',
         'marionette',
-        'backgrid',
-        'Cells/FileSizeCell',
-        'Cells/QualityCell',
-        'Release/ApprovalStatusCell',
-        'Release/DownloadReportCell'
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell) {
+        'Episode/Search/ManualLayout',
+        'Release/Collection',
+        'Shared/SpinnerView',
+        'Shared/Messenger',
+        'Commands/CommandController'
+    ], function (App, Marionette, ManualSearchLayout, ReleaseCollection, SpinnerView, Messenger, CommandController) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/LayoutTemplate',
 
             regions: {
-                grid: '#episode-release-grid'
+                main: '#episode-search-region'
             },
 
-            columns:
-                [
-                    {
-                        name    : 'age',
-                        label   : 'Age',
-                        sortable: true,
-                        cell    : Backgrid.IntegerCell
-                    },
-                    {
-                        name    : 'title',
-                        label   : 'Title',
-                        sortable: true,
-                        cell    : Backgrid.StringCell
-                    },
-                    {
-                        name    : 'size',
-                        label   : 'Size',
-                        sortable: true,
-                        cell    : FileSizeCell
-                    },
-                    {
-                        name    : 'quality',
-                        label   : 'Quality',
-                        sortable: true,
-                        cell    : QualityCell
-                    },
-
-                    {
-                        name : 'rejections',
-                        label: 'decision',
-                        cell : ApprovalStatusCell
-                    },
-                    {
-                        name : 'download',
-                        label: '',
-                        cell : DownloadReportCell
-                    }
-                ],
+            events: {
+                'click .x-search-auto': '_searchAuto',
+                'click .x-search-manual': '_searchManual'
+            },
 
             onShow: function () {
-                if (!this.isClosed) {
-                    this.grid.show(new Backgrid.Grid({
-                        row       : Backgrid.Row,
-                        columns   : this.columns,
-                        collection: this.collection,
-                        className : 'table table-hover'
-                    }));
+                this._releaseSearchActivated = false;
+            },
+
+            _searchAuto: function (e) {
+                if (e) {
+                    e.preventDefault();
                 }
+
+                CommandController.Execute('episodeSearch', { episodeId: this.model.get('id') });
+
+                var seriesTitle = this.model.get('series').get('title');
+                var season = this.model.get('seasonNumber');
+                var episode = this.model.get('episodeNumber');
+                var message = seriesTitle + ' - S' + season.pad(2) + 'E' + episode.pad(2);
+
+                Messenger.show({
+                    message: 'Search started for: ' + message
+                });
+
+                App.modalRegion.closeModal();
+            },
+
+            _searchManual: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                if (this._releaseSearchActivated) {
+                    return;
+                }
+
+                var self = this;
+
+                this.main.show(new SpinnerView());
+
+                var releases = new ReleaseCollection();
+                var promise = releases.fetchEpisodeReleases(this.model.id);
+
+                promise.done(function () {
+                    if (!self.isClosed) {
+                        self.main.show(new ManualSearchLayout({collection: releases}));
+                    }
+                });
             }
         });
 

@@ -3,14 +3,11 @@ define(
     [
         'marionette',
         'Episode/Summary/View',
-        'Episode/Search/Layout',
-        'Release/Collection',
-        'Shared/SpinnerView'
-    ], function (Marionette, SummaryView, SearchLayout, ReleaseCollection, SpinnerView) {
+        'Episode/Search/Layout'
+    ], function (Marionette, SummaryView, SearchLayout) {
 
         return Marionette.Layout.extend({
             template: 'Episode/LayoutTemplate',
-
 
             regions: {
                 summary : '#episode-summary',
@@ -30,7 +27,6 @@ define(
                 'click .x-episode-activity': '_showActivity',
                 'click .x-episode-search'  : '_showSearch'
             },
-
 
             onShow: function () {
                 this._showSummary();
@@ -61,23 +57,8 @@ define(
                     e.preventDefault();
                 }
 
-                if (this._releaseSearchActivated) {
-                    return;
-                }
-
-                var self = this;
-
                 this.ui.search.tab('show');
-                this.search.show(new SpinnerView());
-
-                var releases = new ReleaseCollection();
-                var promise = releases.fetchEpisodeReleases(this.model.id);
-
-                promise.done(function () {
-                    if (!self.isClosed) {
-                        self.search.show(new SearchLayout({collection: releases}));
-                    }
-                });
+                this.search.show(new SearchLayout({ model: this.model }));
             }
 
         });

@@ -89,8 +89,7 @@ define(
 
             defaults: {
                 seasonNumber: 0,
-                status      : 0,
-                title       : 'TBA'
+                status      : 0
             }
         });
     });
