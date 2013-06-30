@@ -7,8 +7,9 @@ define(
         'AddSeries/Existing/CollectionView',
         'AddSeries/AddSeriesView',
         'Quality/QualityProfileCollection',
-        'AddSeries/RootFolders/Collection'
-    ], function (App, Marionette, RootFolderLayout, ExistingSeriesCollectionView, AddSeriesView, qualityProfileCollection, rootFolderCollection) {
+        'AddSeries/RootFolders/Collection',
+        'Series/SeriesCollection',
+    ], function (App, Marionette, RootFolderLayout, ExistingSeriesCollectionView, AddSeriesView, qualityProfileCollection, rootFolderCollection, SeriesCollection) {
 
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesLayoutTemplate',
@@ -21,7 +22,14 @@ define(
                 'click .x-import': '_importSeries'
             },
 
+            attributes: {
+                id: 'add-series-screen'
+            },
+
             initialize: function () {
+
+                SeriesCollection.fetch();
+
                 this.rootFolderLayout = new RootFolderLayout();
                 this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
 

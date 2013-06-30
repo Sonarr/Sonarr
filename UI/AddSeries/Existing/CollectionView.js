@@ -12,10 +12,6 @@ define(
 
             initialize: function () {
                 this.collection = new UnmappedFolderCollection();
-                this.refreshItems();
-            },
-
-            refreshItems: function () {
                 this.collection.importItems(this.model);
             },
 
@@ -28,12 +24,12 @@ define(
                 var model = this.collection.at(index);
 
                 if (model) {
-                    var that = this;
+                    var self = this;
                     var currentIndex = index;
                     var folderName = model.get('folder').name;
                     this.addItemView(model, this.getItemView(), index);
                     $.when(this.children.findByModel(model).search({term: folderName})).then(function () {
-                        that._showAndSearch(currentIndex + 1);
+                        self._showAndSearch(currentIndex + 1);
                     });
                 }
             },

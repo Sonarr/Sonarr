@@ -1,13 +1,18 @@
 ﻿'use strict';
 define(
     [
+        'app',
         'marionette',
         'AddSeries/Collection',
         'AddSeries/SearchResultCollectionView',
         'Shared/SpinnerView'
-    ], function (Marionette, AddSeriesCollection, SearchResultCollectionView, SpinnerView) {
+    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, SpinnerView) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesTemplate',
+
+            regions: {
+                searchResult: '#search-result'
+            },
 
             ui: {
                 seriesSearch: '.x-series-search',
@@ -15,17 +20,42 @@ define(
                 loadMore    : '.x-load-more'
             },
 
-            regions: {
-                searchResult: '#search-result'
+            events: {
+                'click .x-load-more': '_onLoadMore'
             },
 
+            _onLoadMore: function () {
+                this.ui.loadMore.hide();
+                this.ui.searchBar.show();
+                this.resultCollectionView.showAll();
+            },
+
+
             initialize: function (options) {
-                this.collection = new AddSeriesCollection();
+                this.collection = new AddSeriesCollection({unmappedFolderModel: this.model});
                 this.isExisting = options.isExisting;
+
+                if (this.isExisting) {
+                    this.className = 'existing-series';
+                    this.listenTo(App.vent, App.Events.SeriesAdded, this._onSeriesAdded);
+                }
+                else {
+                    this.className = 'new-series';
+                }
+            },
+
+
+            _onSeriesAdded: function (options) {
+                if (options.series.get('path') === this.model.get('folder').path) {
+                    this.close();
+                }
             },
 
             onRender: function () {
                 var self = this;
+
+
+                this.$el.addClass(this.className);
 
                 this.ui.seriesSearch.data('timeout', null).keyup(function () {
                     window.clearTimeout(self.$el.data('timeout'));
@@ -40,8 +70,8 @@ define(
                     this.ui.searchBar.hide();
                 }
 
-                this.resultView = new SearchResultCollectionView({
-                    fullResult: this.collection,
+                this.resultCollectionView = new SearchResultCollectionView({
+                    collection: this.collection,
                     isExisting: this.isExisting
                 });
             },
@@ -50,7 +80,7 @@ define(
 
                 var self = this;
 
-                this.abortExistingRequest();
+                this.abortExistingSearch();
 
                 this.collection.reset();
 
@@ -59,22 +89,24 @@ define(
                 }
                 else {
                     this.searchResult.show(new SpinnerView());
-                    this.currentSearchRequest = this.collection.fetch({
+                    this.currentSearchPromise = this.collection.fetch({
                         data: { term: options.term }
                     }).done(function () {
-                            self.searchResult.show(self.resultView);
-
-                            if (!self.showingAll && self.isExisting) {
-                                self.ui.loadMore.show();
+                            if (!self.isClosed) {
+                                self.searchResult.show(self.resultCollectionView);
+                                if (!self.showingAll && self.isExisting) {
+                                    self.ui.loadMore.show();
+                                }
                             }
                         });
                 }
+                return this.currentSearchPromise;
             },
 
-            abortExistingRequest: function () {
-                if (this.currentSearchRequest && this.currentSearchRequest.readyState > 0 && this.currentSearchRequest.readyState < 4) {
+            abortExistingSearch: function () {
+                if (this.currentSearchPromise && this.currentSearchPromise.readyState > 0 && this.currentSearchPromise.readyState < 4) {
                     console.log('aborting previous pending search request.');
-                    this.currentSearchRequest.abort();
+                    this.currentSearchPromise.abort();
                 }
             }
         });

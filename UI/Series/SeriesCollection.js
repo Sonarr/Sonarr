@@ -4,7 +4,7 @@ define(
         'backbone',
         'Series/SeriesModel'
     ], function (Backbone, SeriesModel) {
-        var collection = Backbone.Collection.extend({
+        var Collection = Backbone.Collection.extend({
             url  : window.ApiRoot + '/series',
             model: SeriesModel,
 
@@ -18,5 +18,8 @@ define(
             }
         });
 
-        return new collection();
+        var collection = new Collection();
+        collection.fetch();
+
+        return collection;
     });

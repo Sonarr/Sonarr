@@ -2,7 +2,8 @@
     <div class="row">
         <div class="span2">
             <a href="{{traktUrl}}" target="_blank">
-                <img class="add-series-poster" src="{{remotePoster}}" {{defaultImg}}>
+                <img class="new-series-poster" src="{{remotePoster}}"
+                {{defaultImg}} >
             </a>
         </div>
         <div class="span9">
@@ -14,16 +15,23 @@
                 {{overview}}
             </div>
             <div class="row">
-                <div class="btn btn-success x-add pull-right new-series-add">
+                {{#if existing}}
+                <div class="btn pull-right add-series disabled">
+                    Already Exists
+                </div>
+                {{else}}
+                <div class="btn btn-success x-add pull-right add-series">
                     Add
                     <icon class="icon-plus"></icon>
                 </div>
-                {{#unless isExisting}}
+                {{#unless path}}
                 {{> RootFolderSelectionPartial rootFolders}}
                 {{/unless}}
                 <div class='pull-right'>
                     {{> QualityProfileSelectionPartial qualityProfiles}}
                 </div>
+                {{/if}}
+
             </div>
         </div>
     </div>

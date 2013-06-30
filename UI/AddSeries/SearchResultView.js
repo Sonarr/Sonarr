@@ -22,7 +22,7 @@ define(
             },
 
             events: {
-                'click .x-add'             : 'addSeries',
+                'click .x-add'             : '_addSeries',
                 'change .x-quality-profile': '_qualityProfileChanged'
             },
 
@@ -32,10 +32,8 @@ define(
                     throw 'model is required';
                 }
 
-                this.model.set('isExisting', this.options.isExisting);
-                this.model.set('path', this.options.folder);
-
-                App.vent.on(Config.Events.ConfigUpdatedEvent, this._onConfigUpdated, this);
+                this.listenTo(App.vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
+                this.listenTo(this.model, 'change', this.render);
             },
 
 
@@ -51,7 +49,6 @@ define(
             },
 
             onRender: function () {
-                this.listenTo(this.model, 'change', this.render);
 
                 var defaultQuality = Config.GetValue(Config.Keys.DefaultQualityProfileId);
 
@@ -59,7 +56,6 @@ define(
                     this.ui.qualityProfile.val(defaultQuality);
                 }
             },
-
 
             addSeries: function () {
                 var icon = this.ui.addButton.find('icon');
@@ -76,25 +72,34 @@ define(
                 SeriesCollection.add(this.model);
 
 
-                this.model.save()
-                    .done(function () {
-                        self.close();
-                        icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-                        Messenger.show({
-                            message: 'Added: ' + self.model.get('title')
-                        });
+                this.model.save().done(function () {
+                    self.close();
+                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+                    Messenger.show({
+                        message: 'Added: ' + self.model.get('title')
+                    });
 
-                        App.vent.trigger(App.Events.SeriesAdded, { series: self.model });
-                    })
-                    .fail(function () {
+                    App.vent.trigger(App.Events.SeriesAdded, { series: self.model });
+                }).fail(function () {
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     });
+
             },
 
             serializeData: function () {
                 var data = this.model.toJSON();
-                data.rootFolders = RootFolders.toJSON();
+
+                var existingSeries = SeriesCollection.where({tvdbId: this.model.get('tvdbId')});
+
+                if (existingSeries.length > 0) {
+                    data.existing = existingSeries[0].toJSON();
+                }
+
                 data.qualityProfiles = QualityProfiles.toJSON();
+
+                if (!data.isExisting) {
+                    data.rootFolders = RootFolders.toJSON();
+                }
 
                 return data;
             }
