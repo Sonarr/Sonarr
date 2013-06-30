@@ -5,10 +5,12 @@ using NUnit.Framework;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.MetadataSourceTests
 {
     [TestFixture]
+    [IntegrationTest]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
         [TestCase("The Simpsons", "The Simpsons")]
