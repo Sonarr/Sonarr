@@ -10,123 +10,121 @@
   width    : 256px;
   margin   : 50px auto;
   display  : block;
-}
 
-.followingBalls {
-  background-color : @colorDark;
-  position         : absolute;
-  top              : 0;
-  left             : 0;
-  width            : 20px;
-  height           : 20px;
-  .border-radius(10px);
-  .animation-name(bounce_followingBallsG);
-  .animation-duration(1.9s);
-  .animation-iteration-count(infinite);
-  .animation-direction(linear);
-}
-
-#followingBallsG_1 {
-  .animation-delay(0s);
-}
-
-#followingBallsG_2 {
-  .animation-delay(0.19s);
-}
-
-#followingBallsG_3 {
-  .animation-delay(0.38s);
-}
-
-#followingBallsG_4 {
-  .animation-delay(0.57s);
-}
-
-@-moz-keyframes bounce_followingBallsG {
-  0% {
-    left             : 0px;
+  .ball {
     background-color : @colorDark;
+    position         : absolute;
+    top              : 0;
+    left             : 0;
+    width            : 20px;
+    height           : 20px;
+    .border-radius(10px);
+    .animation-name(bounce);
+    .animation-duration(1.9s);
+    .animation-iteration-count(infinite);
+    .animation-direction(linear);
   }
 
-  50% {
-    left             : 236px;
-    background-color : @colorLight;
+  #ball-1 {
+    .animation-delay(0s);
   }
 
-  100% {
-    left             : 0px;
-    background-color : @colorDark;
+  #ball-2 {
+    .animation-delay(0.19s);
   }
 
-}
-
-@-webkit-keyframes bounce_followingBallsG {
-  0% {
-    left             : 0px;
-    background-color : @colorDark;
+  #ball-3 {
+    .animation-delay(0.38s);
   }
 
-  50% {
-    left             : 236px;
-    background-color : @colorLight;
+  #ball-4 {
+    .animation-delay(0.57s);
   }
 
-  100% {
-    left             : 0px;
-    background-color : @colorDark;
+  @keyframes bounce {
+    0% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
+
+    50% {
+      left             : 236px;
+      background-color : @colorLight;
+    }
+
+    100% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
   }
 
-}
+  @-moz-keyframes bounce {
+    0% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
 
-@-ms-keyframes bounce_followingBallsG {
-  0% {
-    left             : 0px;
-    background-color : @colorDark;
+    50% {
+      left             : 236px;
+      background-color : @colorLight;
+    }
+
+    100% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
+
   }
 
-  50% {
-    left             : 236px;
-    background-color : @colorLight;
+  @-webkit-keyframes bounce {
+    0% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
+
+    50% {
+      left             : 236px;
+      background-color : @colorLight;
+    }
+
+    100% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
+
   }
 
-  100% {
-    left             : 0px;
-    background-color : @colorDark;
+  @-ms-keyframes bounce {
+    0% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
+
+    50% {
+      left             : 236px;
+      background-color : @colorLight;
+    }
+
+    100% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
   }
 
-}
+  @-o-keyframes bounce {
+    0% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
 
-@-o-keyframes bounce_followingBallsG {
-  0% {
-    left             : 0px;
-    background-color : @colorDark;
-  }
+    50% {
+      left             : 236px;
+      background-color : @colorLight;
+    }
 
-  50% {
-    left             : 236px;
-    background-color : @colorLight;
-  }
-
-  100% {
-    left             : 0px;
-    background-color : @colorDark;
-  }
-
-}
-
-@keyframes bounce_followingBallsG {
-  0% {
-    left             : 0px;
-    background-color : @colorDark;
-  }
-
-  50% {
-    left             : 236px;
-    background-color : @colorLight;
-  }
-
-  100% {
-    left             : 0px;
-    background-color : @colorDark;
+    100% {
+      left             : 0px;
+      background-color : @colorDark;
+    }
   }
 }
