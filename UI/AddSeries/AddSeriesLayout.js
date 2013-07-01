@@ -19,7 +19,8 @@ define(
             },
 
             events: {
-                'click .x-import': '_importSeries'
+                'click .x-import': '_importSeries',
+                'click .x-add-new': '_addSeries'
             },
 
             attributes: {
@@ -48,6 +49,10 @@ define(
 
             _importSeries: function () {
                 App.modalRegion.show(this.rootFolderLayout);
+            },
+
+            _addSeries: function () {
+                this.workspace.show(new AddSeriesView());
             }
         });
     });

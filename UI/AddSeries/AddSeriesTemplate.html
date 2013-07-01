@@ -1,10 +1,10 @@
-﻿<div class="row unmapped-folder-path">
-    <div class="span11">
-        {{#if folder.path}}
-        {{folder.path}}
-        {{/if}}
+﻿{{#if folder.path}}
+    <div class="row well unmapped-folder-path">
+        <div class="span11">
+            {{folder.path}}
+        </div>
     </div>
-</div>
+{{/if}}
 <div class="row x-search-bar">
     <div class="input-prepend nz-input-large add-series-search span11">
         <i class="add-on icon-search"/>
@@ -14,7 +14,7 @@
 <div class="row">
     <div id="search-result" class="result-list span12"/>
 </div>
-<div class="text-center new-series-loadmore x-load-more" style="display: none;">
+<div class="btn btn-block text-center new-series-loadmore x-load-more" style="display: none;">
     <i class="icon-angle-down"/>
     more
-</div>{{debug}}
+</div>
