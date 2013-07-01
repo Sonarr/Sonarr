@@ -6,6 +6,7 @@ using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend
 {
@@ -20,7 +21,9 @@ namespace NzbDrone.Api.Frontend
         private readonly IEnumerable<IMapHttpRequestsToDisk> _requestMappers;
         private readonly Logger _logger;
 
-        public StaticResourceProvider(IDiskProvider diskProvider, IEnumerable<IMapHttpRequestsToDisk> requestMappers, Logger logger)
+        public StaticResourceProvider(IDiskProvider diskProvider,
+                                      IEnumerable<IMapHttpRequestsToDisk> requestMappers,
+                                      Logger logger)
         {
             _diskProvider = diskProvider;
             _requestMappers = requestMappers;
@@ -45,7 +48,11 @@ namespace NzbDrone.Api.Frontend
                 if (_diskProvider.FileExists(filePath))
                 {
                     var response = new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
-                    response.Headers.EnableCache();
+
+                    if (RuntimeInfo.IsProduction)
+                    {
+                        response.Headers.EnableCache();
+                    }
 
                     return response;
                 }
