@@ -21,7 +21,14 @@
 
             var a = document.createElement('a');
             a.href = url;
-            var messageText = a.pathname.split('/').pop() + ' : ' + line + '</br>' + msg;
+            var filename = a.pathname.split('/').pop();
+
+            //Suppress Firefox debug errors when console window is closed
+            if (filename.toLowerCase() === 'markupview.jsm') {
+                return false;
+            }
+
+            var messageText = filename + ' : ' + line + '</br>' + msg;
 
             var message = {
                 message        : messageText,
