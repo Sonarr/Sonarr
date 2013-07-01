@@ -6,8 +6,6 @@ define(['app',
     var model = DeepModel.DeepModel.extend({
 
         initialize: function () {
-
-           // App.vent.on(App.Commands.SaveSettings, this.saveSettings, this);
             this.listenTo(App.vent, App.Commands.SaveSettings, this.saveSettings);
         },
 

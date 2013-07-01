@@ -10,6 +10,7 @@ require.config({
         'handlebars.helpers'  : 'JsLibraries/handlebars.helpers',
         'bootstrap'           : 'JsLibraries/bootstrap',
         'backbone.mutators'   : 'JsLibraries/backbone.mutators',
+        'backbone.mutators.deep.model': 'JsLibraries/backbone.mutators.deep.model',
         'backbone.deepmodel'  : 'JsLibraries/backbone.deep.model',
         'backbone.pageable'   : 'JsLibraries/backbone.pageable',
         'backbone.modelbinder': 'JsLibraries/backbone.modelbinder',
@@ -173,7 +174,8 @@ define(
 
         require(
             [
-                'libs/backbone.mutators'
+                'libs/backbone.mutators',
+                'libs/backbone.mutators.deep.model'
             ]);
 
 
