@@ -37,7 +37,7 @@ namespace NzbDrone.Api.Calendar
             var resources = ToListResource(() => _episodeService.EpisodesBetweenDates(start, end))
                 .LoadSubtype(e => e.SeriesId, _seriesRepository);
 
-            return resources.ToList();
+            return resources.OrderBy(e => e.AirDate).ToList();
         }
     }
 }

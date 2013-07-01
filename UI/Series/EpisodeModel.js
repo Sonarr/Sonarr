@@ -14,7 +14,7 @@ define(
                     return Date.create(this.get('airDate')).format('{dd}');
                 },
                 month              : function () {
-                    return Date.create(this.get('airDate')).format('{MON}');
+                    return Date.create(this.get('airDate')).format('{Mon}');
                 },
                 startTime          : function () {
                     var start = Date.create(this.get('airDate'));
