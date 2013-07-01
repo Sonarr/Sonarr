@@ -54,6 +54,11 @@ namespace NzbDrone.Api.Frontend
                         response.Headers.EnableCache();
                     }
 
+                    else
+                    {
+                        response.Headers.DisableCache();
+                    }
+
                     return response;
                 }
 
