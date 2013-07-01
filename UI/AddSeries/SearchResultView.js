@@ -57,7 +57,7 @@ define(
                 }
             },
 
-            addSeries: function () {
+            _addSeries: function () {
                 var icon = this.ui.addButton.find('icon');
                 icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
 
