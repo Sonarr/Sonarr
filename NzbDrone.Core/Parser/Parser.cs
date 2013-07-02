@@ -184,7 +184,14 @@ namespace NzbDrone.Core.Parser
                     {
                         var first = Convert.ToInt32(episodeCaptures.First().Value);
                         var last = Convert.ToInt32(episodeCaptures.Last().Value);
-                        result.EpisodeNumbers = Enumerable.Range(first, last - first + 1).ToArray();
+
+                        if (first > last)
+                        {
+                            return null;
+                        }
+
+                        var count = last - first + 1;
+                        result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
                     }
                     else
                     {

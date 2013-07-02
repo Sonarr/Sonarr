@@ -124,17 +124,10 @@ namespace NzbDrone.Core.Test.ParserTests
             ExceptionVerification.IgnoreWarns();
         }
 
-        [Test]
-        [Ignore]
-        public void unparsable_title_should_report_title()
+        [TestCase("[DmonHiro] The Severing Crime Edge - Cut 02 - Portrait Of Heresy [BD, 720p] [BE36E9E0]")]
+        public void unparsable_title_should_log_warn_and_return_null(string title)
         {
-            const string TITLE = "SOMETHING 12345";
-
-            Parser.Parser.ParseTitle(TITLE).Should().BeNull();
-
-            MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(r => r.Title == TITLE)), Times.Once());
-
-            ExceptionVerification.IgnoreWarns();
+            Parser.Parser.ParseTitle(title).Should().BeNull();
         }
 
         //[Timeout(1000)]
