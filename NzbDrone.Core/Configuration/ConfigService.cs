@@ -167,15 +167,15 @@ namespace NzbDrone.Core.Configuration
 
         public DownloadClientType DownloadClient
         {
-            get { return GetValueEnum("DownloadClientType", DownloadClientType.Sabnzbd); }
+            get { return GetValueEnum("DownloadClient", DownloadClientType.Sabnzbd); }
 
             set { SetValue("DownloadClient", value); }
         }
 
         public string BlackholeFolder
         {
-            get { return GetValue("BlackholeDirectory", String.Empty); }
-            set { SetValue("BlackholeDirectory", value); }
+            get { return GetValue("BlackholeFolder", String.Empty); }
+            set { SetValue("BlackholeFolder", value); }
         }
 
         public string ServiceRootUrl
@@ -192,8 +192,8 @@ namespace NzbDrone.Core.Configuration
 
         public string PneumaticFolder
         {
-            get { return GetValue("PneumaticDirectory", String.Empty); }
-            set { SetValue("PneumaticDirectory", value); }
+            get { return GetValue("PneumaticFolder", String.Empty); }
+            set { SetValue("PneumaticFolder", value); }
         }
 
         public string RecycleBin
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Configuration
 
         public int RssSyncInterval
         {
-            get { return GetValueInt("RssSyncInterval", 25); }
+            get { return GetValueInt("RssSyncInterval", 15); }
             set { SetValue("RssSyncInterval", value); }
         }
 

@@ -10,13 +10,27 @@ define(
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/CollectionView',
         'Settings/Indexers/Collection',
-        'Settings/DownloadClient/DownloadClientView',
+        'Settings/DownloadClient/Layout',
         'Settings/Notifications/CollectionView',
         'Settings/Notifications/Collection',
         'Settings/General/GeneralView',
-        'Settings/Misc/MiscView'
-    ], function (App, Marionette, SettingsModel, GeneralSettingsModel,NamingModel, NamingView,  QualityLayout, IndexerCollectionView, IndexerCollection, DownloadClientView,
-        NotificationCollectionView, NotificationCollection, GeneralView, MiscView) {
+        'Settings/Misc/MiscView',
+        'Shared/LoadingView'
+    ], function (App,
+                 Marionette,
+                 SettingsModel,
+                 GeneralSettingsModel,
+                 NamingModel,
+                 NamingView,
+                 QualityLayout,
+                 IndexerCollectionView,
+                 IndexerCollection,
+                 DownloadClientLayout,
+                 NotificationCollectionView,
+                 NotificationCollection,
+                 GeneralView,
+                 MiscView,
+                 LoadingView) {
         return Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
 
@@ -27,7 +41,8 @@ define(
                 downloadClient: '#download-client',
                 notifications : '#notifications',
                 general       : '#general',
-                misc          : '#misc'
+                misc          : '#misc',
+                loading       : '#loading-region'
             },
 
             ui: {
@@ -121,34 +136,36 @@ define(
             },
 
             initialize: function (options) {
-                this.settings = new SettingsModel();
-                this.settings.fetch();
-
-                this.generalSettings = new GeneralSettingsModel();
-                this.generalSettings.fetch();
-
-                this.namingSettings = new NamingModel();
-                this.namingSettings.fetch();
-
-                this.indexerSettings = new IndexerCollection();
-                this.indexerSettings.fetch();
-
-                this.notificationSettings = new NotificationCollection();
-                this.notificationSettings.fetch();
-
                 if (options.action) {
                     this.action = options.action.toLowerCase();
                 }
             },
 
             onRender: function () {
-                this.naming.show(new NamingView());
-                this.quality.show(new QualityLayout({settings: this.settings}));
-                this.indexers.show(new IndexerCollectionView({collection: this.indexerSettings}));
-                this.downloadClient.show(new DownloadClientView({model: this.settings}));
-                this.notifications.show(new NotificationCollectionView({collection: this.notificationSettings}));
-                this.general.show(new GeneralView({model: this.generalSettings}));
-                this.misc.show(new MiscView({model: this.settings}));
+                this.loading.show(new LoadingView());
+                var self = this;
+
+                this.settings = new SettingsModel();
+                this.generalSettings = new GeneralSettingsModel();
+                this.namingSettings = new NamingModel();
+                this.indexerSettings = new IndexerCollection();
+                this.notificationSettings = new NotificationCollection();
+
+                $.when(this.settings.fetch(),
+                       this.generalSettings.fetch(),
+                       this.namingSettings.fetch(),
+                       this.indexerSettings.fetch(),
+                       this.notificationSettings.fetch()
+                      ).done(function () {
+                    self.loading.$el.hide();
+                    self.naming.show(new NamingView());
+                    self.quality.show(new QualityLayout({settings: self.settings}));
+                    self.indexers.show(new IndexerCollectionView({collection: self.indexerSettings}));
+                    self.downloadClient.show(new DownloadClientLayout({model: self.settings}));
+                    self.notifications.show(new NotificationCollectionView({collection: self.notificationSettings}));
+                    self.general.show(new GeneralView({model: self.generalSettings}));
+                    self.misc.show(new MiscView({model: self.settings}));
+                });
             },
 
             onShow: function () {

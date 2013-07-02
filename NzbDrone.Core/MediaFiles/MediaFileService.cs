@@ -78,6 +78,7 @@ namespace NzbDrone.Core.MediaFiles
             string path = series.Path;
             if (series.SeasonFolder)
             {
+                //TODO: Allow series name
                 var seasonFolder = _configService.SortingSeasonFolderFormat
                                                  .Replace("%0s", seasonNumber.ToString("00"))
                                                  .Replace("%s", seasonNumber.ToString());
