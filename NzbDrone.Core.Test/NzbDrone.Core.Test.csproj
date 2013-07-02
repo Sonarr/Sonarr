@@ -124,6 +124,7 @@
     <Compile Include="Datastore\PagingSpecExtenstionsTests\ToSortDirectionFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtenstionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
+    <Compile Include="DecisionEngineTests\NotRestrictedNzbSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
@@ -167,7 +168,6 @@
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="ParserTests\QualityParserFixture.cs" />
     <Compile Include="Configuration\ConfigCachingFixture.cs" />
-    <Compile Include="DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CustomStartDateSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\CleanupFixture.cs" />

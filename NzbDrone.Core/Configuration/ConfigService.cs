@@ -277,12 +277,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("NzbRestrictions", value); }
         }
 
-        public string AllowedReleaseGroups
-        {
-            get { return GetValue("AllowedReleaseGroups", String.Empty); }
-            set { SetValue("AllowedReleaseGroups", value); }
-        }
-
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

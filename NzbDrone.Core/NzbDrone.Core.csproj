@@ -227,12 +227,12 @@
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
     <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\NotRestrictedNzbSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\IDecisionEngineSearchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
     <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
-    <Compile Include="DecisionEngine\Specifications\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CustomStartDateSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
