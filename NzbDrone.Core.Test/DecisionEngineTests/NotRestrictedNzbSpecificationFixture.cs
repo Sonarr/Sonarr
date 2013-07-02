@@ -32,7 +32,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         [TestCase("KYR")]
         [TestCase("EDITED")]
+        [TestCase("edited")]
         [TestCase("2HD\nKYR")]
+        [TestCase("2HD\nkyr")]
         public void should_be_false_when_nzb_contains_a_restricted_term(string restrictions)
         {
             Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbRestrictions).Returns(restrictions);
