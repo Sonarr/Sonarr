@@ -1,23 +1,39 @@
 @import "../content/Bootstrap/mixins";
 @import "../content/Bootstrap/variables";
 @import "../content/Bootstrap/buttons";
+@import "../shared/styles/clickable";
 
 .episode-title-cell {
   .btn-link;
 }
 
 .air-date-cell {
-  width: 100px;
+  width : 100px;
 }
 
 .relative-date-cell {
-  width: 150px;
+  width : 150px;
 }
 
-.quality-cell{
-  width: 130px;
+.quality-cell {
+  width : 130px;
 }
 
-.history-event-type-cell{
+.history-event-type-cell {
   width : 10px;
+}
+
+.download-report-cell {
+  .clickable();
+}
+
+.approval-status-cell {
+  widows : 10px;
+  .popover {
+    max-width : 400px;
+  }
+
+  i {
+    color : @red;
+  }
 }

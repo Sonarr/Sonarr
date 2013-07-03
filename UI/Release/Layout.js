@@ -8,7 +8,7 @@ define(
         'Cells/EpisodeNumberCell',
         'Cells/FileSizeCell',
         'Cells/QualityCell',
-        'Release/ApprovalStatusCell',
+        'Cells/ApprovalStatusCell',
         'Shared/SpinnerView'
     ], function (Marionette, Backgrid, ReleaseCollection, IndexerCell, EpisodeNumberCell, FileSizeCell, QualityCell, ApprovalStatusCell, SpinnerView) {
         return Marionette.Layout.extend({
@@ -55,7 +55,7 @@ define(
 
                     {
                         name : 'rejections',
-                        label: 'decision',
+                        label: '',
                         cell : ApprovalStatusCell
                     }
                 ],

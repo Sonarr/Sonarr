@@ -5,7 +5,7 @@ define(
         'backgrid',
         'Cells/FileSizeCell',
         'Cells/QualityCell',
-        'Release/ApprovalStatusCell',
+        'Cells/ApprovalStatusCell',
         'Release/DownloadReportCell'
 
     ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell) {
@@ -46,7 +46,7 @@ define(
 
                     {
                         name : 'rejections',
-                        label: 'decision',
+                        label: '',
                         cell : ApprovalStatusCell
                     },
                     {

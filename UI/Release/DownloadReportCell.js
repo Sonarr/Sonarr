@@ -18,13 +18,13 @@ define(
 
                 this.$el.html('<i class =\'icon-spinner icon-spin\' />');
                 this.model.save().always(function () {
-                        self.$el.html('<i class =\'icon-download-alt\' />');
-                    });
+                    self.$el.html('<i class =\'icon-download-alt\' title=\'Add to download queue\' />');
+                });
             },
 
             render: function () {
 
-                this.$el.html('<i class =\'icon-download-alt\' />');
+                this.$el.html('<i class =\'icon-download-alt\' title=\'Add to download queue\' />');
                 return this;
 
             }
