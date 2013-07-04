@@ -3,12 +3,13 @@ define(
     [
         'app',
         'marionette',
+        'Episode/Search/ButtonsView',
         'Episode/Search/ManualLayout',
         'Release/Collection',
         'Shared/SpinnerView',
         'Shared/Messenger',
         'Commands/CommandController'
-    ], function (App, Marionette, ManualSearchLayout, ReleaseCollection, SpinnerView, Messenger, CommandController) {
+    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SpinnerView, Messenger, CommandController) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/LayoutTemplate',
@@ -18,12 +19,17 @@ define(
             },
 
             events: {
-                'click .x-search-auto': '_searchAuto',
-                'click .x-search-manual': '_searchManual'
+                'click .x-search-auto'  : '_searchAuto',
+                'click .x-search-manual': '_searchManual',
+                'click .x-search-back'  : '_showButtons'
+            },
+
+            initialize: function () {
+                this.mainView = new ButtonsView();
             },
 
             onShow: function () {
-                this._releaseSearchActivated = false;
+                this._showMainView();
             },
 
             _searchAuto: function (e) {
@@ -50,22 +56,29 @@ define(
                     e.preventDefault();
                 }
 
-                if (this._releaseSearchActivated) {
-                    return;
-                }
-
                 var self = this;
 
-                this.main.show(new SpinnerView());
+                this.mainView = new SpinnerView();
+                this._showMainView();
 
                 var releases = new ReleaseCollection();
                 var promise = releases.fetchEpisodeReleases(this.model.id);
 
                 promise.done(function () {
                     if (!self.isClosed) {
-                        self.main.show(new ManualSearchLayout({collection: releases}));
+                        self.mainView = new ManualSearchLayout({collection: releases});
+                        self._showMainView();
                     }
                 });
+            },
+
+            _showMainView: function () {
+                this.main.show(this.mainView);
+            },
+
+            _showButtons: function () {
+                this.mainView = new ButtonsView();
+                this._showMainView();
             }
         });
 

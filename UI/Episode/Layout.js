@@ -30,7 +30,7 @@ define(
 
             onShow: function () {
                 this._showSummary();
-                this._releaseSearchActivated = false;
+                this.searchLayout = new SearchLayout({ model: this.model });
             },
 
 
@@ -58,7 +58,7 @@ define(
                 }
 
                 this.ui.search.tab('show');
-                this.search.show(new SearchLayout({ model: this.model }));
+                this.search.show(this.searchLayout);
             }
 
         });
