@@ -2,8 +2,9 @@
 define(
     [
         'backbone',
-        'Quality/QualityProfileCollection'
-    ], function (Backbone, QualityProfileCollection) {
+        'Quality/QualityProfileCollection',
+        'underscore'
+    ], function (Backbone, QualityProfileCollection,_) {
         return Backbone.Model.extend({
 
             urlRoot: ApiRoot + '/series',

@@ -13,8 +13,7 @@ define(
 
             ui: {
                 progressbar    : '.progress .bar',
-                qualityProfile : '.x-quality-profile',
-                backlogSettings: '.x-backlog-setting'
+                qualityProfile : '.x-quality-profile'
             },
 
             events: {
@@ -29,12 +28,11 @@ define(
 
 
             saveSeries: function () {
-                //Todo: Get qualityProfile + backlog setting from UI
+                //Todo: Get qualityProfile
                 var qualityProfile = this.ui.qualityProfile.val();
                 var qualityProfileText = this.ui.qualityProfile.children('option:selected').text();
-                var backlogSetting = this.ui.backlogSettings.val();
 
-                this.model.set({ qualityProfileId: qualityProfile, backlogSetting: backlogSetting, qualityProfileName: qualityProfileText });
+                this.model.set({ qualityProfileId: qualityProfile, qualityProfileName: qualityProfileText });
 
                 this.model.save();
                 this.trigger('saved');
