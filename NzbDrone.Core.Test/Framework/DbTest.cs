@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.Framework
 
             var factory = new DbFactory(new MigrationController(new MigrationLogger(TestLogger)), Mocker.GetMock<IAppDirectoryInfo>().Object);
             _database = factory.Create(MigrationType);
-            _db = new TestTestDatabase(_database);
+            _db = new TestDatabase(_database);
             Mocker.SetConstant(_database);
         }
 
@@ -140,12 +140,12 @@ namespace NzbDrone.Core.Test.Framework
         void Delete<T>(T childModel) where T : ModelBase, new();
     }
 
-    public class TestTestDatabase : ITestDatabase
+    public class TestDatabase : ITestDatabase
     {
         private readonly IDatabase _dbConnection;
         private IMessageAggregator _messageAggregator;
 
-        public TestTestDatabase(IDatabase dbConnection)
+        public TestDatabase(IDatabase dbConnection)
         {
             _messageAggregator = new Mock<IMessageAggregator>().Object;
             _dbConnection = dbConnection;

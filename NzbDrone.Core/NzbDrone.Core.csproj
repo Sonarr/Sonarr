@@ -212,6 +212,7 @@
     <Compile Include="Datastore\Migration\005_added_eventtype_to_history.cs" />
     <Compile Include="Datastore\Migration\006_add_index_to_log_time.cs" />
     <Compile Include="Datastore\Migration\007_add_renameEpisodes_to_naming.cs" />
+    <Compile Include="Datastore\Migration\007_remove_backlog.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Datastore\Migration\001_initialSetup.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
     <Compile Include="Datastore\MigrationType.cs" />
+    <Compile Include="Datastore\Migration\Framework\SqliteAlter.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
