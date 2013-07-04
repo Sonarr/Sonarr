@@ -4,9 +4,7 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients
@@ -34,7 +32,7 @@ namespace NzbDrone.Core.Download.Clients
             throw new NotImplementedException();
         }
 
-        public bool DownloadNzb(string url, string title, bool recentlyAired)
+        public bool DownloadNzb(string url, string title)
         {
             try
             {

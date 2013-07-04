@@ -36,7 +36,6 @@ namespace NzbDrone.Api.Series
         //Editing Only
         public Boolean SeasonFolder { get; set; }
         public Boolean Monitored { get; set; }
-        public BacklogSettingType BacklogSetting { get; set; }
         public DateTime? CustomStartDate { get; set; }
 
         public Boolean UseSceneNumbering { get; set; }

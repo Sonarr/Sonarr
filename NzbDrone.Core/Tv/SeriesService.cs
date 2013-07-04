@@ -80,7 +80,6 @@ namespace NzbDrone.Core.Tv
             newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
 
             newSeries.SeasonFolder = _configService.UseSeasonFolder;
-            newSeries.BacklogSetting = BacklogSettingType.Inherit;
 
             _seriesRepository.Insert(newSeries);
             _messageAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
@@ -99,7 +98,6 @@ namespace NzbDrone.Core.Tv
                 series.QualityProfileId = edited.QualityProfileId;
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;
-                series.BacklogSetting = edited.BacklogSetting;
                 //series.Path = edited.Path;
                 series.CustomStartDate = edited.CustomStartDate;
 

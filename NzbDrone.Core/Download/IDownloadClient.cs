@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadClient
     {
-        bool DownloadNzb(string url, string title, bool recentlyAired);
+        bool DownloadNzb(string url, string title);
         IEnumerable<QueueItem> GetQueue();
     }
 

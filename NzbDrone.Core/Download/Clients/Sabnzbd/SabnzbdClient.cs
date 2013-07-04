@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public IRestRequest AddToQueueRequest(RemoteEpisode remoteEpisode)
         {
             string cat = _configService.SabTvCategory;
-            int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabBacklogTvPriority;
+            int priority =  (int)_configService.SabRecentTvPriority;
 
             string name = remoteEpisode.Report.NzbUrl.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(remoteEpisode.Report.Title);
@@ -64,12 +64,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
+        public virtual bool DownloadNzb(string url, string title)
         {
             try
             {
                 string cat = _configService.SabTvCategory;
-                int priority = recentlyAired ? (int)_configService.SabRecentTvPriority : (int)_configService.SabBacklogTvPriority;
+                int priority =(int)_configService.SabRecentTvPriority ;
 
                 string name = url.Replace("&", "%26");
                 string nzbName = HttpUtility.UrlEncode(title);

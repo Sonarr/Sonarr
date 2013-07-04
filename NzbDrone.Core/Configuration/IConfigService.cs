@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Configuration
         String SabUsername { get; set; }
         String SabPassword { get; set; }
         String SabTvCategory { get; set; }
-        SabPriorityType SabBacklogTvPriority { get; set; }
         SabPriorityType SabRecentTvPriority { get; set; }
         String DownloadedEpisodesFolder { get; set; }
         bool UseSeasonFolder { get; set; }
@@ -40,7 +39,6 @@ namespace NzbDrone.Core.Configuration
         Int32 NzbgetPort { get; set; }
         String NzbgetTvCategory { get; set; }
         Int32 NzbgetPriority { get; set; }
-        PriorityType NzbgetBacklogTvPriority { get; set; }
         PriorityType NzbgetRecentTvPriority { get; set; }
         string NzbRestrictions { get; set; }
         string GetValue(string key, object defaultValue, bool persist = false);

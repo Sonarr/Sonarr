@@ -350,7 +350,6 @@
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
-    <Compile Include="Model\BacklogSettingType.cs" />
     <Compile Include="Model\MediaInfoModel.cs" />
     <Compile Include="Download\Clients\Nzbget\EnqueueResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />

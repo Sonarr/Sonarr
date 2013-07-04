@@ -102,13 +102,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SabTvCategory", value); }
         }
 
-        public SabPriorityType SabBacklogTvPriority
-        {
-            get { return GetValueEnum("SabBacklogTvPriority", SabPriorityType.Default); }
-
-            set { SetValue("SabBacklogTvPriority", value); }
-        }
-
         public SabPriorityType SabRecentTvPriority
         {
             get { return GetValueEnum("SabRecentTvPriority", SabPriorityType.Default); }
@@ -140,12 +133,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }
             set { SetValue("UpdateUrl", value); }
-        }
-
-        public bool EnableBacklogSearching
-        {
-            get { return GetValueBoolean("EnableBacklogSearching"); }
-            set { SetValue("EnableBacklogSearching", value); }
         }
 
         public bool AutoIgnorePreviouslyDownloadedEpisodes
@@ -255,13 +242,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("NzbgetPriority", 0); }
 
             set { SetValue("NzbgetPriority", value); }
-        }
-
-        public PriorityType NzbgetBacklogTvPriority
-        {
-            get { return GetValueEnum("NzbgetBacklogTvPriority", PriorityType.Normal); }
-
-            set { SetValue("NzbgetBacklogTvPriority", value); }
         }
 
         public PriorityType NzbgetRecentTvPriority

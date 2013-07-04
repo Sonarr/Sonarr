@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
             fakeConfig.SetupGet(c => c.NzbgetUsername).Returns("nzbget");
             fakeConfig.SetupGet(c => c.NzbgetPassword).Returns("pass");
             fakeConfig.SetupGet(c => c.NzbgetTvCategory).Returns("TV");
-            fakeConfig.SetupGet(c => c.NzbgetBacklogTvPriority).Returns(PriorityType.Normal);
             fakeConfig.SetupGet(c => c.NzbgetRecentTvPriority).Returns(PriorityType.High);
         }
 
@@ -44,7 +43,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
                     .Returns("{\"version\": \"1.1\",\"result\": true}");
 
             Mocker.Resolve<NzbgetClient>()
-                  .DownloadNzb(url, title, false)
+                  .DownloadNzb(url, title)
                   .Should()
                   .BeTrue();
         }
@@ -54,7 +53,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithFailResponse();
 
-            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetClient>().DownloadNzb("http://www.nzbdrone.com", "30 Rock - S01E01 - Pilot [HDTV-720p]", false));
+            Assert.Throws<ApplicationException>(() => Mocker.Resolve<NzbgetClient>().DownloadNzb("http://www.nzbdrone.com", "30 Rock - S01E01 - Pilot [HDTV-720p]"));
         }
     }
 }

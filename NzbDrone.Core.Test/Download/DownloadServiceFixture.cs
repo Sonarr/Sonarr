@@ -37,14 +37,14 @@ namespace NzbDrone.Core.Test.Download
         private void WithSuccessfulAdd()
         {
             Mocker.GetMock<IDownloadClient>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<bool>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
                 .Returns(true);
         }
 
         private void WithFailedAdd()
         {
             Mocker.GetMock<IDownloadClient>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<bool>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
                 .Returns(false);
         }
 
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.DownloadReport(_parseResult);
 
             Mocker.GetMock<IDownloadClient>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Once());
+                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()), Times.Once());
         }
 
         [Test]

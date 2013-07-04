@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients
@@ -31,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients
             _diskProvider = diskProvider;
         }
 
-        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
+        public virtual bool DownloadNzb(string url, string title)
         {
             try
             {

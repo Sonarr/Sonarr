@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.RootFolders;
 
 
 namespace NzbDrone.Core.Tv
@@ -31,7 +29,6 @@ namespace NzbDrone.Core.Tv
         public int Runtime { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }
-        public BacklogSettingType BacklogSetting { get; set; }
         public string Network { get; set; }
         public DateTime? CustomStartDate { get; set; }
         public bool UseSceneNumbering { get; set; }

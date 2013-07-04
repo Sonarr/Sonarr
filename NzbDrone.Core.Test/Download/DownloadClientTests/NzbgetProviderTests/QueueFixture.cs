@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
             fakeConfig.SetupGet(c => c.NzbgetUsername).Returns("nzbget");
             fakeConfig.SetupGet(c => c.NzbgetPassword).Returns("pass");
             fakeConfig.SetupGet(c => c.NzbgetTvCategory).Returns("TV");
-            fakeConfig.SetupGet(c => c.NzbgetBacklogTvPriority).Returns(PriorityType.Normal);
             fakeConfig.SetupGet(c => c.NzbgetRecentTvPriority).Returns(PriorityType.High);
         }
 

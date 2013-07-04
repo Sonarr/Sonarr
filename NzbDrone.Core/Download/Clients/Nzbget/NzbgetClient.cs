@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
+        public virtual bool DownloadNzb(string url, string title)
         {
             try
             {
                 string cat = _configService.NzbgetTvCategory;
-                int priority = recentlyAired ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetBacklogTvPriority;
+                int priority = (int)_configService.NzbgetRecentTvPriority;
 
                 var command = new JsonRequest
                 {
