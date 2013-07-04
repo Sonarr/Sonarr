@@ -10,6 +10,11 @@ namespace NzbDrone.Core.Indexers.NzbClub
             get { return "NzbClub"; }
         }
 
+        public override bool EnableByDefault
+        {
+            get { return false; }
+        }
+
         public override IParseFeed Parser
         {
             get

@@ -5,6 +5,11 @@ namespace NzbDrone.Core.Indexers.Wombles
 {
     public class Wombles : IndexerBase
     {
+        public override string Name
+        {
+            get { return "WomblesIndex"; }
+        }
+
         public override IParseFeed Parser
         {
             get
@@ -16,11 +21,6 @@ namespace NzbDrone.Core.Indexers.Wombles
         public override IEnumerable<string> RecentFeed
         {
             get { yield return "http://nzb.isasecret.com/rss/?sec=TV&fr=false"; }
-        }
-
-        public override string Name
-        {
-            get { return "WomblesIndex"; }
         }
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)

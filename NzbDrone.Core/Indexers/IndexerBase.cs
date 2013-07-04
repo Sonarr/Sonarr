@@ -7,6 +7,8 @@ namespace NzbDrone.Core.Indexers
     {
         public abstract string Name { get; }
 
+        public virtual bool EnableByDefault { get { return true; } }
+
         public IndexerDefinition InstanceDefinition { get; set; }
 
         public virtual IEnumerable<IndexerDefinition> DefaultDefinitions

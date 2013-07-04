@@ -7,6 +7,11 @@ namespace NzbDrone.Core.Indexers
     {
         public TSetting Settings { get; set; }
 
+        public override bool EnableByDefault
+        {
+            get { return false; }
+        }
+
         public TSetting ImportSettingsFromJson(string json)
         {
             Settings = Json.Deserialize<TSetting>(json) ?? new TSetting();
