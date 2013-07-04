@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Qualities
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityProfileRepository>()
-                .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Exactly(2));
+                .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Exactly(4));
         }
 
         [Test]

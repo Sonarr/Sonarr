@@ -58,17 +58,62 @@ namespace NzbDrone.Core.Qualities
 
             _logger.Info("Setting up default quality profiles");
 
-            var sd = new QualityProfile { Name = "SD", Allowed = new List<Quality> { Quality.SDTV, Quality.DVD }, Cutoff = Quality.SDTV };
+            var sd = new QualityProfile
+            { 
+                Name = "SD", 
+                Allowed = new List<Quality>
+                              {
+                                  Quality.SDTV,
+                                  Quality.WEBDL480p,
+                                  Quality.DVD
+                              }, 
+                Cutoff = Quality.SDTV
+            };
 
-            var hd = new QualityProfile
+            var hd720p = new QualityProfile
             {
-                Name = "HD",
-                Allowed = new List<Quality> { Quality.HDTV720p, Quality.WEBDL720p, Quality.Bluray720p },
+                Name = "HD 720p",
+                Allowed = new List<Quality>
+                              {
+                                  Quality.HDTV720p,
+                                  Quality.WEBDL720p,
+                                  Quality.Bluray720p
+                              },
+                Cutoff = Quality.HDTV720p
+            };
+
+
+            var hd1080p = new QualityProfile
+            {
+                Name = "HD 1080p",
+                Allowed = new List<Quality>
+                              {
+                                  Quality.HDTV1080p,
+                                  Quality.WEBDL1080p,
+                                  Quality.Bluray1080p
+                              },
+                Cutoff = Quality.HDTV1080p
+            };
+
+            var hdAll = new QualityProfile
+            {
+                Name = "HD - All",
+                Allowed = new List<Quality>
+                              {
+                                  Quality.HDTV720p,
+                                  Quality.WEBDL720p,
+                                  Quality.Bluray720p,
+                                  Quality.HDTV1080p,
+                                  Quality.WEBDL1080p,
+                                  Quality.Bluray1080p
+                              },
                 Cutoff = Quality.HDTV720p
             };
 
             Add(sd);
-            Add(hd);
+            Add(hd720p);
+            Add(hd1080p);
+            Add(hdAll);
         }
     }
 }
