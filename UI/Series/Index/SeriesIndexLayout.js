@@ -173,23 +173,24 @@ define(
                     items        :
                         [
                             {
+                                key     : 'posterView',
+                                title   : '',
+                                icon    : 'icon-th-large',
+                                callback: this._showPosters
+                            },
+                            {
+                                key     : 'listView',
+                                title   : '',
+                                icon    : 'icon-th-list',
+                                callback: this._showList
+                            },
+                            {
                                 key     : 'tableView',
                                 title   : '',
                                 icon    : 'icon-table',
                                 callback: this._showTable
                             },
-                            {
-                                key     : 'listView',
-                                title   : '',
-                                icon    : 'icon-list',
-                                callback: this._showList
-                            },
-                            {
-                                key     : 'posterView',
-                                title   : '',
-                                icon    : 'icon-picture',
-                                callback: this._showPosters
-                            }
+
                         ]
                 };
 
