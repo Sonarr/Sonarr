@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Tv
 
         public override string ToString()
         {
-            return string.Format("[{0}][{1}]", Id, Title.NullSafe());
+            return string.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
         }
     }
 }

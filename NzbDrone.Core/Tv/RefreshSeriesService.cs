@@ -172,8 +172,8 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
-            _episodeService.InsertMany(newList);
             _episodeService.UpdateMany(updateList);
+            _episodeService.InsertMany(newList);
 
             if (newList.Any())
             {
