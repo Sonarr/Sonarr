@@ -72,25 +72,5 @@ namespace NzbDrone.Core.MediaFiles
             var files = GetFilesBySeries(message.Series.Id);
             _mediaFileRepository.DeleteMany(files);
         }
-
-        public FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extension)
-        {
-            string path = series.Path;
-            if (series.SeasonFolder)
-            {
-                var seasonFolder = _configService.SortingSeasonFolderFormat
-                                                 .Replace("%sn", series.Title)
-                                                 .Replace("%s.n", series.Title.Replace(' ', '.'))
-                                                 .Replace("%s_n", series.Title.Replace(' ', '_'))
-                                                 .Replace("%0s", seasonNumber.ToString("00"))
-                                                 .Replace("%s", seasonNumber.ToString());
-
-                path = Path.Combine(path, seasonFolder);
-            }
-
-            path = Path.Combine(path, fileName + extension);
-
-            return new FileInfo(path);
-        }
     }
 }

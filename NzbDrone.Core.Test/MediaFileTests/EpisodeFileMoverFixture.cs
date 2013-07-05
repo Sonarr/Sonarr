@@ -55,9 +55,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
                 .Returns(fi);
 
-
             var result = Subject.MoveEpisodeFile(file, false);
-
 
             result.Should().BeNull();
         }

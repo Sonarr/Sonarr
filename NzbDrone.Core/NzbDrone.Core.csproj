@@ -211,6 +211,7 @@
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
     <Compile Include="Datastore\Migration\005_added_eventtype_to_history.cs" />
     <Compile Include="Datastore\Migration\006_add_index_to_log_time.cs" />
+    <Compile Include="Datastore\Migration\007_add_renameEpisodes_to_naming.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />

@@ -23,7 +23,6 @@ namespace NzbDrone.Api.Config
 
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
             SharedValidator.RuleFor(c => c.NumberStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.SeasonFolderFormat).NotEmpty();
             SharedValidator.RuleFor(c => c.Separator).Matches(@"\s|\s\-\s|\.");
         }
 
@@ -42,10 +41,9 @@ namespace NzbDrone.Api.Config
     {
         public Boolean IncludeEpisodeTitle { get; set; }
         public Boolean ReplaceSpaces { get; set; }
-        public Boolean UseSceneName { get; set; }
+        public Boolean RenameEpisodes { get; set; }
         public Int32 MultiEpisodeStyle { get; set; }
         public Int32 NumberStyle { get; set; }
-        public String SeasonFolderFormat { get; set; }
         public String Separator { get; set; }
         public Boolean IncludeQuality { get; set; }
         public Boolean IncludeSeriesTitle { get; set; }

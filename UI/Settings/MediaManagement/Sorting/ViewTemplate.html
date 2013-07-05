@@ -1,0 +1,32 @@
+﻿<fieldset>
+    <legend>Sorting</legend>
+
+    <!--TODO: Remove this and move it to Add Series-->
+    <div class="control-group">
+        <label class="control-label">Use Season Folder</label>
+
+        <div class="controls">
+            <label class="checkbox toggle well">
+                <input type="checkbox" name="useSeasonFolder"/>
+
+                <p>
+                    <span>Yes</span>
+                    <span>No</span>
+                </p>
+
+                <div class="btn btn-primary slide-button"/>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Season Folder Format</label>
+
+        <div class="controls">
+            <input type="text" placeholder="Season %s" name="seasonFolderFormat"/>
+        <span class="help-inline">
+            <i class="icon-question-sign" title="How should season folders be named? (Use %0s to pad to two digits, %sn for Series Name)"/>
+        </span>
+        </div>
+    </div>
+</fieldset>

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Organizer
             {
                 return new NamingConfig
                     {
-                        UseSceneName = false,
+                        RenameEpisodes = true,
                         Separator = " - ",
                         NumberStyle = 0,
                         IncludeSeriesTitle = true,
@@ -18,12 +18,12 @@ namespace NzbDrone.Core.Organizer
                         IncludeEpisodeTitle = true,
                         IncludeQuality = true,
                         ReplaceSpaces = false,
-                        SeasonFolderFormat = "Season %s"
+                        SeasonFolderFormat = "DO_NOT_USE"
                     };
             }
         }
 
-        public bool UseSceneName { get; set; }
+        public bool RenameEpisodes { get; set; }
 
         public string Separator { get; set; }
 
@@ -39,6 +39,8 @@ namespace NzbDrone.Core.Organizer
 
         public bool ReplaceSpaces { get; set; }
 
+        //Todo: remove - not used
         public string SeasonFolderFormat { get; set; }
+        public bool UseSceneName { get; set; }
     }
 }

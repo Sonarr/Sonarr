@@ -5,7 +5,7 @@ define(
     ], function (ModelBase) {
         return  ModelBase.extend({
             url           : window.ApiRoot + '/config/naming',
-            successMessage: 'Naming settings saved',
+            successMessage: 'MediaManagement settings saved',
             errorMessage  : 'Couldn\'t save naming settings'
         });
 

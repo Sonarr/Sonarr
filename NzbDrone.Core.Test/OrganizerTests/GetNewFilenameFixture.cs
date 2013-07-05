@@ -534,7 +534,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             namingConfig.Separator = "."; ;
             namingConfig.NumberStyle = 0;
             namingConfig.ReplaceSpaces = false;
-            namingConfig.UseSceneName = true;
+            namingConfig.RenameEpisodes = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -563,7 +563,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             namingConfig.Separator = ".";
             namingConfig.NumberStyle = 0;
             namingConfig.ReplaceSpaces = false;
-            namingConfig.UseSceneName = true;
+            namingConfig.RenameEpisodes = false;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")

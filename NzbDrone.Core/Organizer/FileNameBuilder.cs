@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
@@ -50,25 +51,24 @@ namespace NzbDrone.Core.Organizer
         }
     }
 
-
     public class FileNameBuilder : IBuildFileNames
     {
+        private readonly IConfigService _configService;
         private readonly INamingConfigService _namingConfigService;
         private readonly Logger _logger;
 
-        public FileNameBuilder(INamingConfigService namingConfigService, Logger logger)
+        public FileNameBuilder(INamingConfigService namingConfigService, IConfigService configService, Logger logger)
         {
             _namingConfigService = namingConfigService;
+            _configService = configService;
             _logger = logger;
         }
-
-
 
         public string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile)
         {
             var nameSpec = _namingConfigService.GetConfig();
 
-            if (nameSpec.UseSceneName)
+            if (!nameSpec.RenameEpisodes)
             {
                 if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
                 {
@@ -162,13 +162,13 @@ namespace NzbDrone.Core.Organizer
 
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
-
-            var nameSpec = _namingConfigService.GetConfig();
-
             string path = series.Path;
             if (series.SeasonFolder)
             {
-                var seasonFolder = nameSpec.SeasonFolderFormat
+                var seasonFolder = _configService.SeasonFolderFormat
+                                                 .Replace("%sn", series.Title)
+                                                 .Replace("%s.n", series.Title.Replace(' ', '.'))
+                                                 .Replace("%s_n", series.Title.Replace(' ', '_'))
                                                  .Replace("%0s", seasonNumber.ToString("00"))
                                                  .Replace("%s", seasonNumber.ToString());
 
@@ -177,7 +177,6 @@ namespace NzbDrone.Core.Organizer
 
             return Path.Combine(path, fileName + extension);
         }
-
 
         public static string CleanFilename(string name)
         {
@@ -190,7 +189,6 @@ namespace NzbDrone.Core.Organizer
 
             return result.Trim();
         }
-
 
         private static readonly List<EpisodeSortingType> NumberStyles = new List<EpisodeSortingType>
                                                                             {

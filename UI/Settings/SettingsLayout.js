@@ -5,8 +5,8 @@ define(
         'marionette',
         'Settings/SettingsModel',
         'Settings/General/GeneralSettingsModel',
-        'Settings/Naming/NamingModel',
-        'Settings/Naming/NamingView',
+        'Settings/MediaManagement/Naming/Model',
+        'Settings/MediaManagement/Layout',
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/CollectionView',
         'Settings/Indexers/Collection',
@@ -21,7 +21,7 @@ define(
                  SettingsModel,
                  GeneralSettingsModel,
                  NamingModel,
-                 NamingView,
+                 MediaManagementLayout,
                  QualityLayout,
                  IndexerCollectionView,
                  IndexerCollection,
@@ -35,47 +35,47 @@ define(
             template: 'Settings/SettingsLayoutTemplate',
 
             regions: {
-                naming        : '#naming',
-                quality       : '#quality',
-                indexers      : '#indexers',
-                downloadClient: '#download-client',
-                notifications : '#notifications',
-                general       : '#general',
-                misc          : '#misc',
-                loading       : '#loading-region'
+                mediaManagement : '#media-management',
+                quality         : '#quality',
+                indexers        : '#indexers',
+                downloadClient  : '#download-client',
+                notifications   : '#notifications',
+                general         : '#general',
+                misc            : '#misc',
+                loading         : '#loading-region'
             },
 
             ui: {
-                namingTab        : '.x-naming-tab',
-                qualityTab       : '.x-quality-tab',
-                indexersTab      : '.x-indexers-tab',
-                downloadClientTab: '.x-download-client-tab',
-                notificationsTab : '.x-notifications-tab',
-                generalTab       : '.x-general-tab',
-                miscTab          : '.x-misc-tab'
+                mediaManagementTab : '.x-media-management-tab',
+                qualityTab         : '.x-quality-tab',
+                indexersTab        : '.x-indexers-tab',
+                downloadClientTab  : '.x-download-client-tab',
+                notificationsTab   : '.x-notifications-tab',
+                generalTab         : '.x-general-tab',
+                miscTab            : '.x-misc-tab'
             },
 
             events: {
-                'click .x-naming-tab'         : 'showNaming',
-                'click .x-quality-tab'        : 'showQuality',
-                'click .x-indexers-tab'       : 'showIndexers',
-                'click .x-download-client-tab': 'showDownloadClient',
-                'click .x-notifications-tab'  : 'showNotifications',
-                'click .x-general-tab'        : 'showGeneral',
-                'click .x-misc-tab'           : 'showMisc',
-                'click .x-save-settings'      : 'save'
+                'click .x-media-management-tab' : '_showMediaManagement',
+                'click .x-quality-tab'          : '_showQuality',
+                'click .x-indexers-tab'         : '_showIndexers',
+                'click .x-download-client-tab'  : '_showDownloadClient',
+                'click .x-notifications-tab'    : '_showNotifications',
+                'click .x-general-tab'          : '_showGeneral',
+                'click .x-misc-tab'             : '_showMisc',
+                'click .x-save-settings'        : '_save'
             },
 
-            showNaming: function (e) {
+            _showMediaManagement: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
 
-                this.ui.namingTab.tab('show');
-                this._navigate('settings/naming');
+                this.ui.mediaManagementTab.tab('show');
+                this._navigate('settings/mediamanagement');
             },
 
-            showQuality: function (e) {
+            _showQuality: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -84,7 +84,7 @@ define(
                 this._navigate('settings/quality');
             },
 
-            showIndexers: function (e) {
+            _showIndexers: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -93,7 +93,7 @@ define(
                 this._navigate('settings/indexers');
             },
 
-            showDownloadClient: function (e) {
+            _showDownloadClient: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -102,7 +102,7 @@ define(
                 this._navigate('settings/downloadclient');
             },
 
-            showNotifications: function (e) {
+            _showNotifications: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -111,7 +111,7 @@ define(
                 this._navigate('settings/notifications');
             },
 
-            showGeneral: function (e) {
+            _showGeneral: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -120,7 +120,7 @@ define(
                 this._navigate('settings/general');
             },
 
-            showMisc: function (e) {
+            _showMisc: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
@@ -158,7 +158,7 @@ define(
                        this.notificationSettings.fetch()
                       ).done(function () {
                     self.loading.$el.hide();
-                    self.naming.show(new NamingView());
+                    self.mediaManagement.show(new MediaManagementLayout({ settings: self.settings, namingSettings: self.namingSettings }));
                     self.quality.show(new QualityLayout({settings: self.settings}));
                     self.indexers.show(new IndexerCollectionView({collection: self.indexerSettings}));
                     self.downloadClient.show(new DownloadClientLayout({model: self.settings}));
@@ -171,29 +171,29 @@ define(
             onShow: function () {
                 switch (this.action) {
                     case 'quality':
-                        this.showQuality();
+                        this._showQuality();
                         break;
                     case 'indexers':
-                        this.showIndexers();
+                        this._showIndexers();
                         break;
                     case 'downloadclient':
-                        this.showDownloadClient();
+                        this._showDownloadClient();
                         break;
                     case 'notifications':
-                        this.showNotifications();
+                        this._showNotifications();
                         break;
                     case 'general':
-                        this.showGeneral();
+                        this._showGeneral();
                         break;
                     case 'misc':
-                        this.showMisc();
+                        this._showMisc();
                         break;
                     default:
-                        this.showNaming();
+                        this._showMediaManagement();
                 }
             },
 
-            save: function () {
+            _save: function () {
                 App.vent.trigger(App.Commands.SaveSettings);
             }
         });

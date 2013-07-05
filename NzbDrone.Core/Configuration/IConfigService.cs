@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Configuration
         SabPriorityType SabRecentTvPriority { get; set; }
         String DownloadedEpisodesFolder { get; set; }
         bool UseSeasonFolder { get; set; }
-        string SortingSeasonFolderFormat { get; set; }
+        string SeasonFolderFormat { get; set; }
         bool EnableBacklogSearching { get; set; }
         bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
         int Retention { get; set; }
