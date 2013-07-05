@@ -4,8 +4,6 @@ using System.Net;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
@@ -106,14 +104,14 @@ namespace NzbDrone.Core.Indexers
                 }
                 catch (WebException webException)
                 {
-                    if (webException.Message.Contains("503"))
+                    if (webException.Message.Contains("503") || webException.Message.Contains("timed out"))
                     {
                         _logger.Warn("{0} server is currently unavailable.{1} {2}", indexer.Name, url, webException.Message);
                     }
                     else
                     {
                         webException.Data.Add("FeedUrl", url);
-                        _logger.ErrorException("An error occurred while processing feed. " + url, webException);
+                        _logger.WarnException("An error occurred while processing feed. " + url, webException);
                     }
                 }
                 catch (Exception feedEx)

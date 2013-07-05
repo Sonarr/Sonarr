@@ -10,11 +10,6 @@ namespace NzbDrone.Common
             return string.Format(format, formattingArgs);
         }
 
-        public static string Inject(this string format, params string[] formattingArgs)
-        {
-            return string.Format(format, formattingArgs.Cast<object>());
-        }
-
         private static readonly Regex InvalidCharRegex = new Regex(@"[^a-z0-9\s-]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-z0-9\s-\.]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled | RegexOptions.IgnoreCase);

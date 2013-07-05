@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -58,6 +59,10 @@ namespace NzbDrone.Core.MediaCover
 
                 _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series.Title, cover.Url);
                 _httpProvider.DownloadFile(cover.Url, fileName);
+            }
+            catch (WebException e)
+            {
+                _logger.WarnException("Couldn't download media cover for " + series.TvdbId, e);
             }
             catch (Exception e)
             {
