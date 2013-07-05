@@ -2,7 +2,6 @@ param (
     [switch]$runTests = $false
  )
 
-
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
 $testSearchPattern = '*.Test\bin\x86\Release'
@@ -12,6 +11,8 @@ Function Build()
 {
     $clean = $msbuild + " nzbdrone.sln /t:Clean /m"
     $build = $msbuild + " nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
+    
+
 
     if(Test-Path $outputFolder)
     {
@@ -19,7 +20,11 @@ Function Build()
     }
        
     Invoke-Expression $clean
+    CheckExitCode
+
     Invoke-Expression $build
+    CheckExitCode
+
     CleanFolder $outputFolder
 }
 
@@ -42,7 +47,7 @@ Function CleanFolder($path)
 
 Function PackageTests()
 {
-    Write-Host Packagin Tests
+    Write-Host Packaging Tests
 
       if(Test-Path $testPackageFolder)
     {
@@ -60,7 +65,6 @@ Function PackageTests()
 
 }
 
-
 Function Nunit()
 {
     $testFiles
@@ -71,15 +75,27 @@ Function Nunit()
     }
 
      $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
-     Invoke-Expression  $nunitExe 
+     Invoke-Expression  $nunitExe
+     CheckExitCode
 }
 
 Function RunGrunt()
 {
    $gruntPath = [environment]::getfolderpath("applicationdata") + '\npm\node_modules\grunt-cli\bin\grunt'
    Invoke-Expression  'npm install'
+   CheckExitCode
     
    Invoke-Expression  ('node ' + $gruntPath + ' package')
+   CheckExitCode
+}
+
+Function CheckExitCode()
+{
+        if ($lastexitcode -ne 0)
+        {
+            Write-Host $errorMessage
+            exit 1
+        }
 }
 
 Build
