@@ -3,6 +3,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Tv;
 
 
 namespace NzbDrone.Core.Qualities
@@ -19,11 +20,13 @@ namespace NzbDrone.Core.Qualities
     public class QualityProfileService : IQualityProfileService, IHandle<ApplicationStartedEvent>
     {
         private readonly IQualityProfileRepository _qualityProfileRepository;
+        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public QualityProfileService(IQualityProfileRepository qualityProfileRepository, Logger logger)
+        public QualityProfileService(IQualityProfileRepository qualityProfileRepository, ISeriesService seriesService, Logger logger)
         {
             _qualityProfileRepository = qualityProfileRepository;
+            _seriesService = seriesService;
             _logger = logger;
         }
 
@@ -39,6 +42,11 @@ namespace NzbDrone.Core.Qualities
 
         public void Delete(int id)
         {
+            if (_seriesService.GetAllSeries().Any(c => c.QualityProfileId == id))
+            {
+                throw new QualityProfileInUseException(id);
+            }
+
             _qualityProfileRepository.Delete(id);
         }
 
@@ -59,14 +67,14 @@ namespace NzbDrone.Core.Qualities
             _logger.Info("Setting up default quality profiles");
 
             var sd = new QualityProfile
-            { 
-                Name = "SD", 
+            {
+                Name = "SD",
                 Allowed = new List<Quality>
                               {
                                   Quality.SDTV,
                                   Quality.WEBDL480p,
                                   Quality.DVD
-                              }, 
+                              },
                 Cutoff = Quality.SDTV
             };
 

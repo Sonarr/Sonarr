@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.IO;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaFiles

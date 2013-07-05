@@ -376,6 +376,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Providers\UpdateXemMappings.cs" />
+    <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />

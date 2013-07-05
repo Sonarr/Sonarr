@@ -30,16 +30,13 @@ require.config({
     shim: {
 
         $: {
-            deps   :
-                [
-                    'Instrumentation/ErrorHandler'
-                ],
             exports: '$',
 
             init: function () {
                 require(
                     [
-                        'jQuery/ToTheTop'
+                        'jQuery/ToTheTop',
+                        'Instrumentation/ErrorHandler'
                     ]);
             }
 
