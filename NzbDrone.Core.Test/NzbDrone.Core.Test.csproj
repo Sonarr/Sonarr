@@ -125,7 +125,7 @@
     <Compile Include="Datastore\PagingSpecExtenstionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperFixture.cs" />
-    <Compile Include="DecisionEngineTests\NotRestrictedNzbSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />

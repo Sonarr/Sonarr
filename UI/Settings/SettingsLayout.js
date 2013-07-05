@@ -8,7 +8,7 @@ define(
         'Settings/MediaManagement/Naming/Model',
         'Settings/MediaManagement/Layout',
         'Settings/Quality/QualityLayout',
-        'Settings/Indexers/CollectionView',
+        'Settings/Indexers/Layout',
         'Settings/Indexers/Collection',
         'Settings/DownloadClient/Layout',
         'Settings/Notifications/CollectionView',
@@ -23,7 +23,7 @@ define(
                  NamingModel,
                  MediaManagementLayout,
                  QualityLayout,
-                 IndexerCollectionView,
+                 IndexerLayout,
                  IndexerCollection,
                  DownloadClientLayout,
                  NotificationCollectionView,
@@ -157,14 +157,14 @@ define(
                        this.indexerSettings.fetch(),
                        this.notificationSettings.fetch()
                       ).done(function () {
-                    self.loading.$el.hide();
-                    self.mediaManagement.show(new MediaManagementLayout({ settings: self.settings, namingSettings: self.namingSettings }));
-                    self.quality.show(new QualityLayout({settings: self.settings}));
-                    self.indexers.show(new IndexerCollectionView({collection: self.indexerSettings}));
-                    self.downloadClient.show(new DownloadClientLayout({model: self.settings}));
-                    self.notifications.show(new NotificationCollectionView({collection: self.notificationSettings}));
-                    self.general.show(new GeneralView({model: self.generalSettings}));
-                    self.misc.show(new MiscView({model: self.settings}));
+                        self.loading.$el.hide();
+                        self.mediaManagement.show(new MediaManagementLayout({ settings: self.settings, namingSettings: self.namingSettings }));
+                        self.quality.show(new QualityLayout({settings: self.settings}));
+                        self.indexers.show(new IndexerLayout({ settings: self.settings, indexersCollection: self.indexerSettings }));
+                        self.downloadClient.show(new DownloadClientLayout({model: self.settings}));
+                        self.notifications.show(new NotificationCollectionView({collection: self.notificationSettings}));
+                        self.general.show(new GeneralView({model: self.generalSettings}));
+                        self.misc.show(new MiscView({model: self.settings}));
                 });
             },
 

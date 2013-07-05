@@ -21,7 +21,7 @@ define(
                 this.namingSettings = options.namingSettings;
             },
 
-            onRender: function () {
+            onShow: function () {
                 this.episodeNaming.show(new NamingView({ model: this.namingSettings }));
                 this.sorting.show(new SortingView({ model: this.settings }));
                 this.fileManagement.show(new FileManagementView({ model: this.settings }));

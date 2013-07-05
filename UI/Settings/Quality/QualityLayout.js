@@ -23,7 +23,7 @@ define(
                 this.qualitySizeCollection.fetch();
             },
 
-            onRender: function () {
+            onShow: function () {
                 this.qualityProfile.show(new QualityProfileCollectionView({collection: QualityProfileCollection}));
                 this.qualitySize.show(new QualitySizeCollectionView({collection: this.qualitySizeCollection}));
             }

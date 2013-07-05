@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Organizer
             _repository = repository;
         }
 
-
         public NamingConfig GetConfig()
         {
             var config = _repository.SingleOrDefault();

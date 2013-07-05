@@ -251,10 +251,10 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("NzbgetRecentTvPriority", value); }
         }
 
-        public string NzbRestrictions
+        public string ReleaseRestrictions
         {
-            get { return GetValue("NzbRestrictions", String.Empty); }
-            set { SetValue("NzbRestrictions", value); }
+            get { return GetValue("ReleaseRestrictions", String.Empty); }
+            set { SetValue("ReleaseRestrictions", value); }
         }
 
         private string GetValue(string key)

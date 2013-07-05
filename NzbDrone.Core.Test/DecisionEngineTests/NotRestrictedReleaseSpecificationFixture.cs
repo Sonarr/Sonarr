@@ -8,7 +8,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class NotRestrictedNzbSpecificationFixture : CoreTest<NotRestrictedNzbSpecification>
+    public class NotRestrictedReleaseSpecificationFixture : CoreTest<NotRestrictedReleaseSpecification>
     {
         private RemoteEpisode _parseResult;
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase("2HD\nkyr")]
         public void should_be_false_when_nzb_contains_a_restricted_term(string restrictions)
         {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbRestrictions).Returns(restrictions);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.ReleaseRestrictions).Returns(restrictions);
             Subject.IsSatisfiedBy(_parseResult).Should().BeFalse();
         }
 
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase("Hello\nWorld")]
         public void should_be_true_when_nzb_does_not_contain_a_restricted_term(string restrictions)
         {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.NzbRestrictions).Returns(restrictions);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.ReleaseRestrictions).Returns(restrictions);
             Subject.IsSatisfiedBy(_parseResult).Should().BeTrue();
         }
     }

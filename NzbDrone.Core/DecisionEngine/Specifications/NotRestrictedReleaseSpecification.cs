@@ -8,12 +8,12 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class NotRestrictedNzbSpecification : IDecisionEngineSpecification
+    public class NotRestrictedReleaseSpecification : IDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public NotRestrictedNzbSpecification(IConfigService configService, Logger logger)
+        public NotRestrictedReleaseSpecification(IConfigService configService, Logger logger)
         {
             _configService = configService;
             _logger = logger;
@@ -29,9 +29,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject)
         {
-            _logger.Trace("Checking if Nzb contains any restrictions: {0}", subject);
+            _logger.Trace("Checking if release contains any restricted terms: {0}", subject);
 
-            var restrictionsString = _configService.NzbRestrictions;
+            var restrictionsString = _configService.ReleaseRestrictions;
 
             if (String.IsNullOrWhiteSpace(restrictionsString))
             {
