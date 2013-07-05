@@ -17,8 +17,7 @@ namespace NzbDrone.Core.Organizer
                         MultiEpisodeStyle = 0,
                         IncludeEpisodeTitle = true,
                         IncludeQuality = true,
-                        ReplaceSpaces = false,
-                        SeasonFolderFormat = "DO_NOT_USE"
+                        ReplaceSpaces = false
                     };
             }
         }
@@ -38,7 +37,5 @@ namespace NzbDrone.Core.Organizer
         public int MultiEpisodeStyle { get; set; }
 
         public bool ReplaceSpaces { get; set; }
-
-        public string SeasonFolderFormat { get; set; }
     }
 }
