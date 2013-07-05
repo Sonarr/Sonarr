@@ -14,12 +14,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     public class MigrationController : IMigrationController
     {
         private readonly IAnnouncer _announcer;
+        private readonly ISQLiteAlter _sqLiteAlter;
 
         private static readonly HashSet<string> MigrationCache = new HashSet<string>();
 
-        public MigrationController(IAnnouncer announcer)
+        public MigrationController(IAnnouncer announcer, ISQLiteAlter sqLiteAlter)
         {
             _announcer = announcer;
+            _sqLiteAlter = sqLiteAlter;
         }
 
         public void MigrateToLatest(string connectionString, MigrationType migrationType)
@@ -35,7 +37,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 var migrationContext = new RunnerContext(_announcer)
                     {
                         Namespace = "NzbDrone.Core.Datastore.Migration",
-                        ApplicationContext = migrationType
+                        ApplicationContext = new MigrationContext
+                            {
+                                MigrationType = migrationType,
+                                SQLiteAlter = _sqLiteAlter
+                            }
                     };
 
                 var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };

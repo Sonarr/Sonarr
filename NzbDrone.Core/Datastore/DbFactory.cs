@@ -3,10 +3,8 @@ using System.Data.SQLite;
 using Marr.Data;
 using Marr.Data.Reflection;
 using NzbDrone.Common.Composition;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
 
 
@@ -17,10 +15,11 @@ namespace NzbDrone.Core.Datastore
         IDatabase Create(MigrationType migrationType = MigrationType.Main);
     }
 
+
     public class DbFactory : IDbFactory
     {
         private readonly IMigrationController _migrationController;
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IConnectionStringFactory _connectionStringFactory;
 
         static DbFactory()
         {
@@ -39,26 +38,27 @@ namespace NzbDrone.Core.Datastore
             });
         }
 
-        public DbFactory(IMigrationController migrationController, IAppDirectoryInfo appDirectoryInfo)
+        public DbFactory(IMigrationController migrationController, IConnectionStringFactory connectionStringFactory)
         {
             _migrationController = migrationController;
-            _appDirectoryInfo = appDirectoryInfo;
+            _connectionStringFactory = connectionStringFactory;
         }
 
         public IDatabase Create(MigrationType migrationType = MigrationType.Main)
         {
-            string dbPath;
+            string connectionString;
+
 
             switch (migrationType)
             {
                 case MigrationType.Main:
                     {
-                        dbPath = _appDirectoryInfo.GetNzbDroneDatabase();
+                        connectionString = _connectionStringFactory.MainDbConnectionString;
                         break;
                     }
                 case MigrationType.Log:
                     {
-                        dbPath = _appDirectoryInfo.GetLogDatabase();
+                        connectionString = _connectionStringFactory.LogDbConnectionString;
                         break;
                     }
                 default:
@@ -68,7 +68,6 @@ namespace NzbDrone.Core.Datastore
             }
 
 
-            var connectionString = GetConnectionString(dbPath);
 
             _migrationController.MigrateToLatest(connectionString, migrationType);
 
@@ -81,18 +80,6 @@ namespace NzbDrone.Core.Datastore
 
                     return dataMapper;
                 });
-        }
-
-        private string GetConnectionString(string dbPath)
-        {
-            var connectionBuilder = new SQLiteConnectionStringBuilder();
-
-            connectionBuilder.DataSource = dbPath;
-            connectionBuilder.CacheSize = (int)-10.Megabytes();
-            connectionBuilder.DateTimeKind = DateTimeKind.Utc;
-            connectionBuilder.JournalMode = SQLiteJournalModeEnum.Wal;
-
-            return connectionBuilder.ConnectionString;
         }
     }
 }

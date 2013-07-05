@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FluentMigrator.Runner;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
@@ -93,10 +94,16 @@ namespace NzbDrone.Core.Test.Framework
             WithTempAsAppPath();
 
 
+            Mocker.SetConstant<IAnnouncer>(Mocker.Resolve<MigrationLogger>());
+            Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
+            Mocker.SetConstant<ISQLiteMigrationHelper>(Mocker.Resolve<SQLiteMigrationHelper>());
+            Mocker.SetConstant<ISQLiteAlter>(Mocker.Resolve<SQLiteAlter>());
+            Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());
+
             MapRepository.Instance.EnableTraceLogging = true;
 
-            var factory = new DbFactory(new MigrationController(new MigrationLogger(TestLogger)), Mocker.GetMock<IAppDirectoryInfo>().Object);
-            _database = factory.Create(MigrationType);
+            var factory = Mocker.Resolve<DbFactory>();
+            var _database = factory.Create(MigrationType);
             _db = new TestDatabase(_database);
             Mocker.SetConstant(_database);
         }

@@ -14,7 +14,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public override void Up()
         {
-            switch ((MigrationType)ApplicationContext)
+            var context = (MigrationContext)ApplicationContext;
+
+            SQLiteAlter = context.SQLiteAlter;
+
+            switch (context.MigrationType)
             {
                 case MigrationType.Main:
                     MainDbUpgrade();
@@ -29,6 +33,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             }
         }
 
+        public ISQLiteAlter SQLiteAlter { get; private set; }
 
         public override void Down()
         {

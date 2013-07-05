@@ -1,69 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using FluentMigrator.Builders.Execute;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-    public class SQLiteAlter
+    public interface ISQLiteAlter
     {
-        private readonly SQLiteConnection _connection;
-
-        private static readonly Regex SchemaRegex = new Regex(@"[\""\[](?<name>\w+)[\""\]]\s(?<schema>[\w-\s]+)",
-            RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
-
-        public SQLiteAlter(string connectionString)
-        {
-            _connection = new SQLiteConnection(connectionString);
-            _connection.Open();
-        }
-
-        private string GetOriginalSql(string tableName)
-        {
-            var command =
-                new SQLiteCommand(string.Format("SELECT sql FROM sqlite_master WHERE type='table' AND name ='{0}'",
-                                                tableName));
-
-            command.Connection = _connection;
-            return (string)command.ExecuteScalar();
-        }
-
-        public Dictionary<String, SQLiteColumn> GetColumns(string tableName)
-        {
-            var originalSql = GetOriginalSql(tableName);
-
-            var matches = SchemaRegex.Matches(originalSql);
-
-            return matches.Cast<Match>().ToDictionary(
-                               match => match.Groups["name"].Value.Trim(),
-                               match => new SQLiteColumn
-                                   {
-                                       Name = match.Groups["name"].Value.Trim(),
-                                       Schema = match.Groups["schema"].Value.Trim()
-                                   });
-        }
-
-        public void CreateTable(string tableName, Dictionary<string, SQLiteColumn>.ValueCollection values)
-        {
-            var columns = String.Join(",", values.Select(c => c.ToString()));
-
-            var command = new SQLiteCommand(string.Format("CREATE TABLE [{0}] ({1})", tableName, columns));
-            command.Connection = _connection;
-
-            command.ExecuteNonQuery();
-        }
+        void DropColumns(string tableName, IEnumerable<string> columns);
     }
 
-    public class SQLiteColumn
+    public class SQLiteAlter : ISQLiteAlter
     {
-        public string Name { get; set; }
-        public string Schema { get; set; }
+        private readonly ISQLiteMigrationHelper _sqLiteMigrationHelper;
 
-        public override string ToString()
+        public SQLiteAlter(ISQLiteMigrationHelper sqLiteMigrationHelper)
         {
-            return string.Format("[{0}] {1}", Name, Schema);
+            _sqLiteMigrationHelper = sqLiteMigrationHelper;
+        }
+
+        public void DropColumns(string tableName, IEnumerable<string> columns)
+        {
+            using (var transaction = _sqLiteMigrationHelper.BeginTransaction())
+            {
+                var originalColumns = _sqLiteMigrationHelper.GetColumns(tableName);
+
+                var newColumns = originalColumns.Where(c => !columns.Contains(c.Key)).Select(c => c.Value).ToList();
+
+                var tempTableName = tableName + "_temp";
+
+                _sqLiteMigrationHelper.CreateTable(tempTableName, newColumns);
+
+                _sqLiteMigrationHelper.CopyData(tableName, tempTableName, newColumns);
+
+                _sqLiteMigrationHelper.DropTable(tableName);
+
+                _sqLiteMigrationHelper.RenameTable(tempTableName, tableName);
+
+                transaction.Commit();
+            }
         }
     }
 }
