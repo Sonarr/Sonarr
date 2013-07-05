@@ -26,13 +26,6 @@ namespace NzbDrone.Common.Test
             Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c => c.Kill());
         }
 
-        [TestCase(0)]
-        [TestCase(123332324)]
-        public void Kill_should_not_fail_on_invalid_process_is(int processId)
-        {
-            Subject.Kill(processId);
-            ExceptionVerification.ExpectedWarns(1);
-        }
 
         [Test]
         public void GetById_should_return_null_if_process_doesnt_exist()
@@ -50,14 +43,6 @@ namespace NzbDrone.Common.Test
             Subject.GetProcessById(processId).Should().BeNull();
 
             ExceptionVerification.ExpectedWarns(1);
-        }
-
-        [Test]
-        public void Should_be_able_to_kill_procces()
-        {
-            var dummyProcess = StartDummyProcess();
-            Subject.Kill(dummyProcess.Id);
-            dummyProcess.HasExited.Should().BeTrue();
         }
 
         [Test]
