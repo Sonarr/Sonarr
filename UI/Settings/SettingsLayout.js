@@ -14,7 +14,6 @@ define(
         'Settings/Notifications/CollectionView',
         'Settings/Notifications/Collection',
         'Settings/General/GeneralView',
-        'Settings/Misc/MiscView',
         'Shared/LoadingView'
     ], function (App,
                  Marionette,
@@ -29,7 +28,6 @@ define(
                  NotificationCollectionView,
                  NotificationCollection,
                  GeneralView,
-                 MiscView,
                  LoadingView) {
         return Marionette.Layout.extend({
             template: 'Settings/SettingsLayoutTemplate',
@@ -41,7 +39,6 @@ define(
                 downloadClient  : '#download-client',
                 notifications   : '#notifications',
                 general         : '#general',
-                misc            : '#misc',
                 loading         : '#loading-region'
             },
 
@@ -52,7 +49,6 @@ define(
                 downloadClientTab  : '.x-download-client-tab',
                 notificationsTab   : '.x-notifications-tab',
                 generalTab         : '.x-general-tab',
-                miscTab            : '.x-misc-tab'
             },
 
             events: {
@@ -62,7 +58,6 @@ define(
                 'click .x-download-client-tab'  : '_showDownloadClient',
                 'click .x-notifications-tab'    : '_showNotifications',
                 'click .x-general-tab'          : '_showGeneral',
-                'click .x-misc-tab'             : '_showMisc',
                 'click .x-save-settings'        : '_save'
             },
 
@@ -120,15 +115,6 @@ define(
                 this._navigate('settings/general');
             },
 
-            _showMisc: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-
-                this.ui.miscTab.tab('show');
-                this._navigate('settings/misc');
-            },
-
             _navigate:function(route){
                 require(['Router'], function(){
                    App.Router.navigate(route);
@@ -164,7 +150,6 @@ define(
                         self.downloadClient.show(new DownloadClientLayout({model: self.settings}));
                         self.notifications.show(new NotificationCollectionView({collection: self.notificationSettings}));
                         self.general.show(new GeneralView({model: self.generalSettings}));
-                        self.misc.show(new MiscView({model: self.settings}));
                 });
             },
 
@@ -184,9 +169,6 @@ define(
                         break;
                     case 'general':
                         this._showGeneral();
-                        break;
-                    case 'misc':
-                        this._showMisc();
                         break;
                     default:
                         this._showMediaManagement();
