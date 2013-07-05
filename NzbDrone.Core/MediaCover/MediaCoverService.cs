@@ -57,16 +57,16 @@ namespace NzbDrone.Core.MediaCover
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
 
-                _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series.Title, cover.Url);
+                _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.Url);
                 _httpProvider.DownloadFile(cover.Url, fileName);
             }
             catch (WebException e)
             {
-                _logger.WarnException("Couldn't download media cover for " + series.TvdbId, e);
+                _logger.WarnException("Couldn't download media cover for " + series, e);
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't download media cover for " + series.TvdbId, e);
+                _logger.ErrorException("Couldn't download media cover for " + series, e);
             }
         }
 

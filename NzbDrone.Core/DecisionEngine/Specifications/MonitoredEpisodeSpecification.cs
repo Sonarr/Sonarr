@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             if (!subject.Series.Monitored)
             {
-                _logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.Series.Title);
+                _logger.Debug("{0} is present in the DB but not tracked. skipping.", subject.Series);
                 return false;
             }
 

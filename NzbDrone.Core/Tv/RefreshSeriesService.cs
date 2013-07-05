@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Tv
                     }
                     catch (Exception e)
                     {
-                        _logger.ErrorException("Couldn't refresh info for {0}".Inject(series.Title), e);
+                        _logger.ErrorException("Couldn't refresh info for {0}".Inject(series), e);
                     }
                 }
             }
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Tv
 
         private void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
-            _logger.Info("Starting series info refresh for: {0}", series.Title.WithDefault(series.Id));
+            _logger.Info("Starting series info refresh for: {0}", series);
             var successCount = 0;
             var failCount = 0;
 
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Tv
                 }
                 catch (Exception e)
                 {
-                    _logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}", series.Title), e);
+                    _logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}", series), e);
                     failCount++;
                 }
             }
@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Tv
             }
             else
             {
-                _logger.Info("Finished episode refresh for series: {0}.", series.Title);
+                _logger.Info("Finished episode refresh for series: {0}.", series);
             }
 
             //DeleteEpisodesNotAvailableAnymore(series, remoteEpisodes);

@@ -7,7 +7,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Providers
 {
-    public class XemProvider :IExecute<UpdateXemMappings>
+    public class XemProvider : IExecute<UpdateXemMappings>
     {
         private readonly IEpisodeService _episodeService;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(IEpisodeService episodeService,XemCommunicationProvider xemCommunicationProvider,ISeriesRepository seriesRepository)
+        public XemProvider(IEpisodeService episodeService, XemCommunicationProvider xemCommunicationProvider, ISeriesRepository seriesRepository)
         {
             _episodeService = episodeService;
             _xemCommunicationProvider = xemCommunicationProvider;
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers
                 var series = _seriesRepository.All();
                 var wantedSeries = series.Where(s => ids.Contains(s.Id)).ToList();
 
-                foreach(var ser in wantedSeries)
+                foreach (var ser in wantedSeries)
                 {
                     PerformUpdate(ser);
                 }
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Providers
                 _logger.Trace("Completed scene numbering update");
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.WarnException("Error updating Scene Mappings", ex);
                 throw;
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void PerformUpdate(Series series)
         {
-            _logger.Trace("Updating scene numbering mapping for: {0}", series.Title);
+            _logger.Trace("Updating scene numbering mapping for: {0}", series);
             try
             {
                 var episodesToUpdate = new List<Episode>();
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Providers
 
                 if (mappings == null)
                 {
-                    _logger.Trace("Mappings for: {0} are null, skipping", series.Title);
+                    _logger.Trace("Mappings for: {0} are null, skipping", series);
                     return;
                 }
 
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Providers
 
                 foreach (var mapping in mappings)
                 {
-                    _logger.Trace("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series.Title, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+                    _logger.Trace("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
 
                     var episode = episodes.SingleOrDefault(e => e.SeasonNumber == mapping.Tvdb.Season && e.EpisodeNumber == mapping.Tvdb.Episode);
 
@@ -101,10 +101,10 @@ namespace NzbDrone.Core.Providers
                     episodesToUpdate.Add(episode);
                 }
 
-                _logger.Trace("Committing scene numbering mappings to database for: {0}", series.Title);
+                _logger.Trace("Committing scene numbering mappings to database for: {0}", series);
                 _episodeService.UpdateEpisodes(episodesToUpdate);
 
-                _logger.Trace("Setting UseSceneMapping for {0}", series.Title);
+                _logger.Trace("Setting UseSceneMapping for {0}", series);
                 series.UseSceneNumbering = true;
                 _seriesRepository.Update(series);
             }

@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 if (seriesPath != null)
                 {
-                    _logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, seriesPath, settings.Address);
+                    _logger.Trace("Updating series {0} (Path: {1}) on XBMC host: {2}", series, seriesPath, settings.Address);
 
                     var parameters = new JObject(new JObject(new JProperty("directory", seriesPath)));
                     postJson = BuildJsonRequest("VideoLibrary.Scan", parameters);
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 else
                 {
-                    _logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title,
+                    _logger.Trace("Series {0} doesn't exist on XBMC host: {1}, Updating Entire Library", series,
                                  settings.Address);
 
                     postJson = BuildJsonRequest("VideoLibrary.Scan");

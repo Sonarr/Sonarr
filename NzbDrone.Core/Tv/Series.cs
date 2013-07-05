@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Common;
 
 
 namespace NzbDrone.Core.Tv
@@ -39,5 +40,10 @@ namespace NzbDrone.Core.Tv
 
         public DateTime? FirstAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("[{0}][{1}]", Id, Title.NullSafe());
+        }
     }
 }

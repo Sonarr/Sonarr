@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Tv
                 _diskProvider.CreateFolder(newSeries.Path);
             }
 
-            _logger.Info("Adding Series [{0}] Path: [{1}]", newSeries.Title, newSeries.Path);
+            _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
 
             newSeries.Monitored = true;
             newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);

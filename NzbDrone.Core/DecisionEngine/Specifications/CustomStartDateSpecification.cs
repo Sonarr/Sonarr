@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             if (!subject.Series.CustomStartDate.HasValue)
             {
-                _logger.Debug("{0} does not restrict downloads before date.", subject.Series.Title);
+                _logger.Debug("{0} does not restrict downloads before date.", subject.Series);
                 return true;
             }
 

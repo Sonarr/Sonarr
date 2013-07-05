@@ -154,7 +154,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("Diskscan failed for " + series.Title, e);
+                    Logger.ErrorException("Disk scan failed for " + series, e);
                 }
             }
         }
