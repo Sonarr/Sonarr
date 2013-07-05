@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
@@ -33,6 +34,7 @@ namespace NzbDrone.Common
         void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
         bool IsFileLocked(FileInfo file);
         string GetPathRoot(string path);
+        void SetPermissions(string filename, string account, FileSystemRights Rights, AccessControlType ControlType);
     }
 
     public class DiskProvider : IDiskProvider
@@ -82,7 +84,6 @@ namespace NzbDrone.Common
 
             return new FileInfo(path).LastWriteTimeUtc;
         }
-
 
         public virtual void EnsureFolder(string path)
         {
@@ -365,6 +366,20 @@ namespace NzbDrone.Common
             Ensure.That(() => path).IsValidPath();
 
             return Path.GetPathRoot(path);
+        }
+
+        public void SetPermissions(string filename, string account, FileSystemRights rights, AccessControlType controlType)
+        {
+            var directoryInfo = new DirectoryInfo(filename);
+            var directorySecurity = directoryInfo.GetAccessControl();
+
+            var accessRule = new FileSystemAccessRule(account, rights,
+                                                      InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                                                      PropagationFlags.None, controlType);
+
+
+            directorySecurity.AddAccessRule(accessRule);
+            directoryInfo.SetAccessControl(directorySecurity);
         }
     }
 }

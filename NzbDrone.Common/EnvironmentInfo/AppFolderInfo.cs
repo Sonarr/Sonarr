@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Security.AccessControl;
+using NLog;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -24,12 +26,13 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             if (!_diskProvider.FolderExists(AppDataFolder))
             {
-                MigrateFromAppDate();
+                MigrateFromAppData();
             }
+
+            SetPermissions();
         }
 
-
-        private void MigrateFromAppDate()
+        private void MigrateFromAppData()
         {
             var oldAppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
 
@@ -40,6 +43,18 @@ namespace NzbDrone.Common.EnvironmentInfo
             else
             {
                 _diskProvider.CreateFolder(AppDataFolder);
+            }
+        }
+
+        private void SetPermissions()
+        {
+            try
+            {
+                _diskProvider.SetPermissions(AppDataFolder, "Everyone", FileSystemRights.FullControl, AccessControlType.Allow);
+            }
+            catch (Exception ex)
+            {
+                //Todo: Add logging
             }
         }
 
