@@ -39,8 +39,6 @@ namespace NzbDrone.Core.Organizer
 
         public bool ReplaceSpaces { get; set; }
 
-        //Todo: remove - not used
         public string SeasonFolderFormat { get; set; }
-        public bool UseSceneName { get; set; }
     }
 }
