@@ -15,8 +15,8 @@ namespace NzbDrone.Update.Test
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IAppDirectoryInfo>()
-                .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
+            Mocker.GetMock<IAppFolderInfo>()
+                .Setup(c => c.TempFolder).Returns(@"C:\Temp\");
         }
 
         [TestCase(null)]

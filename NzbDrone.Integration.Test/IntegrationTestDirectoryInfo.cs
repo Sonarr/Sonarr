@@ -4,23 +4,23 @@ using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Integration.Test
 {
-    public class IntegrationTestDirectoryInfo : IAppDirectoryInfo
+    public class IntegrationTestFolderInfo : IAppFolderInfo
     {
-        public IntegrationTestDirectoryInfo()
+        public IntegrationTestFolderInfo()
         {
-            SystemTemp = Path.GetTempPath();
-            WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "integ_test", DateTime.Now.Ticks.ToString());
+            TempFolder = Path.GetTempPath();
+            AppDataFolder = Path.Combine(Directory.GetCurrentDirectory(), "integ_test", DateTime.Now.Ticks.ToString());
 
-            if (!Directory.Exists(WorkingDirectory))
+            if (!Directory.Exists(AppDataFolder))
             {
-                Directory.CreateDirectory(WorkingDirectory);
+                Directory.CreateDirectory(AppDataFolder);
             }
 
-            StartUpPath = Directory.GetCurrentDirectory();
+            StartUpFolder = Directory.GetCurrentDirectory();
         }
 
-        public string WorkingDirectory { get; private set; }
-        public string SystemTemp { get; private set; }
-        public string StartUpPath { get; private set; }
+        public string AppDataFolder { get; private set; }
+        public string TempFolder { get; private set; }
+        public string StartUpFolder { get; private set; }
     }
 }

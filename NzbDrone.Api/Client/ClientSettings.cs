@@ -14,21 +14,21 @@ namespace NzbDrone.Api.Client
 {
     public class ClientSettings : IHandle<ApplicationStartedEvent>
     {
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
 
         private static readonly Regex VersionRegex = new Regex(@"(?<=Version:\s')(.*)(?=')", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex BuildDateRegex = new Regex(@"(?<=BuildDate:\s)('.*')", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public ClientSettings(IAppDirectoryInfo appDirectoryInfo)
+        public ClientSettings(IAppFolderInfo appFolderInfo)
         {
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             //TODO: Update the APIKey (when we have it)
 
-            var appFile = Path.Combine(_appDirectoryInfo.StartUpPath, "UI", "app.js");
+            var appFile = Path.Combine(_appFolderInfo.StartUpFolder, "UI", "app.js");
             var contents = File.ReadAllText(appFile);
             var version = BuildInfo.Version;
             var date = BuildInfo.BuildDateTime;

@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Test
         {
             WithTempAsAppPath();
 
-            var configFile = Mocker.Resolve<IAppDirectoryInfo>().GetConfigPath();
+            var configFile = Mocker.Resolve<IAppFolderInfo>().GetConfigPath();
 
             if (File.Exists(configFile))
                 File.Delete(configFile);

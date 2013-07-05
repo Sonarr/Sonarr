@@ -8,11 +8,11 @@ namespace NzbDrone.Core.Providers
 {
     public class BackupProvider
     {
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
 
-        public BackupProvider(IAppDirectoryInfo appDirectoryInfo)
+        public BackupProvider(IAppFolderInfo appFolderInfo)
         {
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
         }
 
         public BackupProvider()
@@ -21,8 +21,8 @@ namespace NzbDrone.Core.Providers
 
         public virtual string CreateBackupZip()
         {
-            var configFile = _appDirectoryInfo.GetConfigPath();
-            var zipFile = _appDirectoryInfo.GetConfigBackupFile();
+            var configFile = _appFolderInfo.GetConfigPath();
+            var zipFile = _appFolderInfo.GetConfigBackupFile();
 
             using (var zip = new ZipFile())
             {

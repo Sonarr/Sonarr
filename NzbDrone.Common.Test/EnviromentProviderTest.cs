@@ -7,22 +7,22 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class IAppDirectoryInfoTest : TestBase<AppDirectoryInfo>
+    public class IAppDirectoryInfoTest : TestBase<AppFolderInfo>
     {
 
         [Test]
         public void StartupPath_should_not_be_empty()
         {
-            Subject.StartUpPath.Should().NotBeBlank();
-            Path.IsPathRooted(Subject.StartUpPath).Should().BeTrue("Path is not rooted");
+            Subject.StartUpFolder.Should().NotBeBlank();
+            Path.IsPathRooted(Subject.StartUpFolder).Should().BeTrue("Path is not rooted");
 
         }
 
         [Test]
         public void ApplicationPath_should_not_be_empty()
         {
-            Subject.WorkingDirectory.Should().NotBeBlank();
-            Path.IsPathRooted(Subject.WorkingDirectory).Should().BeTrue("Path is not rooted");
+            Subject.AppDataFolder.Should().NotBeBlank();
+            Path.IsPathRooted(Subject.AppDataFolder).Should().BeTrue("Path is not rooted");
         }
 
 

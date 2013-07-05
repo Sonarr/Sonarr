@@ -26,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles
         {
         }
 
-        public virtual void DeleteDirectory(string path)
+        public virtual void DeleteFolder(string path)
         {
             logger.Trace("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
@@ -43,10 +43,10 @@ namespace NzbDrone.Core.MediaFiles
                 var destination = Path.Combine(recyclingBin, new DirectoryInfo(path).Name);
 
                 logger.Trace("Moving '{0}' to '{1}'", path, destination);
-                _diskProvider.MoveDirectory(path, destination);
+                _diskProvider.MoveFolder(path, destination);
 
                 logger.Trace("Setting last accessed: {0}", path);
-                _diskProvider.DirectorySetLastWriteTimeUtc(destination, DateTime.UtcNow);
+                _diskProvider.FolderSetLastWriteTimeUtc(destination, DateTime.UtcNow);
                 foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
                 {
                     _diskProvider.FileSetLastWriteTimeUtc(file, DateTime.UtcNow);
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (message.DeleteFiles)
             {
-                DeleteDirectory(message.Series.Path);
+                DeleteFolder(message.Series.Path);
             }
         }
 

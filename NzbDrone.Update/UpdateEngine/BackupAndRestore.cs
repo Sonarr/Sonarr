@@ -13,27 +13,27 @@ namespace NzbDrone.Update.UpdateEngine
     public class BackupAndRestore : IBackupAndRestore
     {
         private readonly IDiskProvider _diskProvider;
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly Logger _logger;
 
-        public BackupAndRestore(IDiskProvider diskProvider, IAppDirectoryInfo appDirectoryInfo, Logger logger)
+        public BackupAndRestore(IDiskProvider diskProvider, IAppFolderInfo appFolderInfo, Logger logger)
         {
             _diskProvider = diskProvider;
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
             _logger = logger;
         }
 
         public void BackUp(string source)
         {
             _logger.Info("Creating backup of existing installation");
-            _diskProvider.CopyDirectory(source, _appDirectoryInfo.GetUpdateBackUpFolder());
+            _diskProvider.CopyFolder(source, _appFolderInfo.GetUpdateBackUpFolder());
         }
 
         public void Restore(string target)
         {
             //TODO:this should ignore single file failures.
             _logger.Info("Attempting to rollback upgrade");
-            _diskProvider.CopyDirectory(_appDirectoryInfo.GetUpdateBackUpFolder(), target);
+            _diskProvider.CopyFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
         }
     }
 }

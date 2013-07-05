@@ -149,7 +149,7 @@
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="IDiskProvider.cs" />
-    <Compile Include="EnvironmentInfo\AppDirectoryInfo.cs" />
+    <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="IProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

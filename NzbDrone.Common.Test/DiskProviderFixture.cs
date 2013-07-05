@@ -55,7 +55,7 @@ namespace NzbDrone.Common.Test
         public void moveFile_should_overwrite_existing_file()
         {
 
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
 
             var targetPath = Path.Combine(_binFolderCopy.FullName, "file.move");
 
@@ -69,7 +69,7 @@ namespace NzbDrone.Common.Test
         public void moveFile_should_not_move_overwrite_itself()
         {
 
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
 
             var targetPath = _binFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName;
 
@@ -84,7 +84,7 @@ namespace NzbDrone.Common.Test
         {
 
 
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
 
 
             VerifyCopy();
@@ -97,13 +97,13 @@ namespace NzbDrone.Common.Test
 
 
 
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
 
             //Delete Random File
             _binFolderCopy.Refresh();
             _binFolderCopy.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
 
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
 
 
             VerifyCopy();
@@ -114,12 +114,12 @@ namespace NzbDrone.Common.Test
         {
 
 
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderCopy.FullName);
-            Subject.CopyDirectory(_binFolder.FullName, _binFolderMove.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(_binFolder.FullName, _binFolderMove.FullName);
             VerifyCopy();
 
 
-            Subject.MoveDirectory(_binFolderCopy.FullName, _binFolderMove.FullName);
+            Subject.MoveFolder(_binFolderCopy.FullName, _binFolderMove.FullName);
 
 
             VerifyMove();
@@ -166,11 +166,11 @@ namespace NzbDrone.Common.Test
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var appPath = new AppDirectoryInfo().WorkingDirectory;
+            var appPath = new AppFolderInfo(Subject).AppDataFolder;
 
             TestLogger.Info("Path is: {0}", appPath);
 
-            Subject.WriteAllText(Path.Combine(appPath,"newfile.txt"), "");
+            Subject.WriteAllText(Path.Combine(appPath, "newfile.txt"), "");
 
             Subject.GetLastFolderWrite(appPath).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-10));
             Subject.GetLastFolderWrite(appPath).Should().BeBefore(DateTime.UtcNow);
@@ -182,18 +182,6 @@ namespace NzbDrone.Common.Test
         {
             Console.WriteLine(Subject.GetLastFolderWrite(@"C:\DRIVERS"));
             Console.WriteLine(new DirectoryInfo(@"C:\DRIVERS").LastWriteTimeUtc);
-        }
-
-        [Test]
-        public void IsChildOfPath_should_return_true_when_it_is_a_child()
-        {
-            Subject.IsChildOfPath(@"C:\Test\TV", @"C:\Test").Should().BeTrue();
-        }
-
-        [Test]
-        public void IsChildOfPath_should_return_false_when_it_is_not_a_child()
-        {
-            Subject.IsChildOfPath(@"C:\NOT_Test\TV", @"C:\Test").Should().BeFalse();
         }
 
         private void VerifyCopy()

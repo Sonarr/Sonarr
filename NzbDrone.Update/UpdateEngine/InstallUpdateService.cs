@@ -16,18 +16,18 @@ namespace NzbDrone.Update.UpdateEngine
         private readonly IDiskProvider _diskProvider;
         private readonly IDetectApplicationType _detectApplicationType;
         private readonly ITerminateNzbDrone _terminateNzbDrone;
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IBackupAndRestore _backupAndRestore;
         private readonly IStartNzbDrone _startNzbDrone;
         private readonly Logger _logger;
 
         public InstallUpdateService(IDiskProvider diskProvider, IDetectApplicationType detectApplicationType, ITerminateNzbDrone terminateNzbDrone,
-            IAppDirectoryInfo appDirectoryInfo, IBackupAndRestore backupAndRestore, IStartNzbDrone startNzbDrone, Logger logger)
+            IAppFolderInfo appFolderInfo, IBackupAndRestore backupAndRestore, IStartNzbDrone startNzbDrone, Logger logger)
         {
             _diskProvider = diskProvider;
             _detectApplicationType = detectApplicationType;
             _terminateNzbDrone = terminateNzbDrone;
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
             _backupAndRestore = backupAndRestore;
             _startNzbDrone = startNzbDrone;
             _logger = logger;
@@ -44,8 +44,8 @@ namespace NzbDrone.Update.UpdateEngine
                 throw new DirectoryNotFoundException("Target folder doesn't exist " + targetFolder);
 
             _logger.Info("Verifying Update Folder");
-            if (!_diskProvider.FolderExists(_appDirectoryInfo.GetUpdatePackageFolder()))
-                throw new DirectoryNotFoundException("Update folder doesn't exist " + _appDirectoryInfo.GetUpdatePackageFolder());
+            if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdatePackageFolder()))
+                throw new DirectoryNotFoundException("Update folder doesn't exist " + _appFolderInfo.GetUpdatePackageFolder());
         }
 
         public void Start(string installationFolder)
@@ -64,7 +64,7 @@ namespace NzbDrone.Update.UpdateEngine
 
                 try
                 {
-                    _diskProvider.CopyDirectory(_appDirectoryInfo.GetUpdatePackageFolder(), installationFolder);
+                    _diskProvider.CopyFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
                 }
                 catch (Exception e)
                 {

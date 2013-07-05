@@ -16,11 +16,11 @@ namespace NzbDrone.Api.Frontend
 
         private readonly string _indexPath;
 
-        public IndexModule(IDiskProvider diskProvider, ICacheManger cacheManger, IAppDirectoryInfo appDirectory)
+        public IndexModule(IDiskProvider diskProvider, ICacheManger cacheManger, IAppFolderInfo appFolder)
         {
             _diskProvider = diskProvider;
 
-            _indexPath = Path.Combine(appDirectory.StartUpPath, "UI", "index.html");
+            _indexPath = Path.Combine(appFolder.StartUpFolder, "UI", "index.html");
 
             _indexCache = cacheManger.GetCache<string>(typeof(IndexModule));
             //Serve anything that doesn't have an extension

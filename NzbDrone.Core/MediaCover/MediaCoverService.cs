@@ -22,7 +22,7 @@ namespace NzbDrone.Core.MediaCover
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IAppDirectoryInfo appDirectoryInfo,
+        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IAppFolderInfo appFolderInfo,
             ICoverExistsSpecification coverExistsSpecification, Logger logger)
         {
             _httpProvider = httpProvider;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.MediaCover
             _coverExistsSpecification = coverExistsSpecification;
             _logger = logger;
 
-            _coverRootFolder = appDirectoryInfo.GetMediaCoverPath();
+            _coverRootFolder = appFolderInfo.GetMediaCoverPath();
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)

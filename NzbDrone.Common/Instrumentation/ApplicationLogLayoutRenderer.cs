@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Instrumentation
 
         public ApplicationLogLayoutRenderer()
         {
-            _appData = Path.Combine(new AppDirectoryInfo().GetLogFolder(), "nzbdrone.txt");
+            _appData = Path.Combine(new AppFolderInfo(new DiskProvider()).GetLogFolder(), "nzbdrone.txt");
 
         }
 

@@ -13,10 +13,10 @@ namespace NzbDrone.Core.Datastore
 
     public class ConnectionStringFactory : IConnectionStringFactory
     {
-        public ConnectionStringFactory(IAppDirectoryInfo appDirectoryInfo)
+        public ConnectionStringFactory(IAppFolderInfo appFolderInfo)
         {
-            MainDbConnectionString = GetConnectionString(appDirectoryInfo.GetNzbDroneDatabase());
-            LogDbConnectionString = GetConnectionString(appDirectoryInfo.GetLogDatabase());
+            MainDbConnectionString = GetConnectionString(appFolderInfo.GetNzbDroneDatabase());
+            LogDbConnectionString = GetConnectionString(appFolderInfo.GetLogDatabase());
         }
 
         public string MainDbConnectionString { get; private set; }

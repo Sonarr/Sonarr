@@ -6,11 +6,11 @@ namespace NzbDrone.Api.Frontend
 {
     public class MediaCoverMapper : IMapHttpRequestsToDisk
     {
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
 
-        public MediaCoverMapper(IAppDirectoryInfo appDirectoryInfo)
+        public MediaCoverMapper(IAppFolderInfo appFolderInfo)
         {
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
         }
 
         public string Map(string resourceUrl)
@@ -18,7 +18,7 @@ namespace NzbDrone.Api.Frontend
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = path.Trim(Path.DirectorySeparatorChar).ToLower();
 
-            return Path.Combine(_appDirectoryInfo.GetAppDataPath(), path);
+            return Path.Combine(_appFolderInfo.GetAppDataPath(), path);
         }
 
         public bool CanHandle(string resourceUrl)

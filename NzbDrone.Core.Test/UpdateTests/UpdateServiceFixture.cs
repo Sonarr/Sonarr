@@ -30,12 +30,12 @@ namespace NzbDrone.Core.Test.UpdateTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IAppDirectoryInfo>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.TempFolder).Returns(TempFolder);
             Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns(_updatePackage);
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
 
-            _sandboxFolder = Mocker.GetMock<IAppDirectoryInfo>().Object.GetUpdateSandboxFolder();
+            _sandboxFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder();
         }
 
 
@@ -87,13 +87,13 @@ namespace NzbDrone.Core.Test.UpdateTests
         [Test]
         public void Should_copy_update_client_to_root_of_sandbox()
         {
-            var updateClientFolder = Mocker.GetMock<IAppDirectoryInfo>().Object.GetUpdateClientFolder();
+            var updateClientFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateClientFolder();
 
             Subject.Execute(new ApplicationUpdateCommand());
 
 
 
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.MoveDirectory(updateClientFolder, _sandboxFolder));
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.MoveFolder(updateClientFolder, _sandboxFolder));
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             UseRealHttp();
 
-            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<IAppDirectoryInfo>().Object.GetUpdateSandboxFolder());
+            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder());
 
             updateSubFolder.Exists.Should().BeFalse();
 

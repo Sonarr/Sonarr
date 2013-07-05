@@ -108,7 +108,7 @@ namespace NzbDrone.Test.Common
         }
 
 
-        protected IAppDirectoryInfo TestDirectoryInfo { get; private set; }
+        protected IAppFolderInfo TestFolderInfo { get; private set; }
 
         protected void WindowsOnly()
         {
@@ -129,11 +129,11 @@ namespace NzbDrone.Test.Common
 
         protected void WithTempAsAppPath()
         {
-            Mocker.GetMock<IAppDirectoryInfo>()
-                .SetupGet(c => c.WorkingDirectory)
+            Mocker.GetMock<IAppFolderInfo>()
+                .SetupGet(c => c.AppDataFolder)
                 .Returns(VirtualPath);
 
-            TestDirectoryInfo = Mocker.GetMock<IAppDirectoryInfo>().Object;
+            TestFolderInfo = Mocker.GetMock<IAppFolderInfo>().Object;
         }
 
         protected string GetTestFilePath(string fileName)

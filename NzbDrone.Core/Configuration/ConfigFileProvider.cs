@@ -25,16 +25,16 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigFileProvider : IConfigFileProvider
     {
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(IAppDirectoryInfo appDirectoryInfo, ICacheManger cacheManger)
+        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger)
         {
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
             _cache = cacheManger.GetCache<string>(this.GetType());
-            _configFile = _appDirectoryInfo.GetConfigPath();
+            _configFile = _appFolderInfo.GetConfigPath();
         }
 
         public Dictionary<string, object> GetConfigDictionary()

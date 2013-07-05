@@ -58,7 +58,7 @@ namespace NzbDrone.Integration.Test
         public void SmokeTestSetup()
         {
             Container = MainAppContainerBuilder.BuildContainer();
-            Container.Register(typeof(IAppDirectoryInfo), new IntegrationTestDirectoryInfo());
+            Container.Register(typeof(IAppFolderInfo), new IntegrationTestFolderInfo());
 
             DbFactory.RegisterDatabase(Container);
 

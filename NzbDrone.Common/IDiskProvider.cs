@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -18,25 +17,21 @@ namespace NzbDrone.Common
         bool FileExists(string path);
         string[] GetDirectories(string path);
         string[] GetFiles(string path, SearchOption searchOption);
-        long GetDirectorySize(string path);
+        long GetFolderSize(string path);
         long GetFileSize(string path);
         String CreateFolder(string path);
-        void CopyDirectory(string source, string target);
-        void MoveDirectory(string source, string destination);
+        void CopyFolder(string source, string target);
+        void MoveFolder(string source, string destination);
         void DeleteFile(string path);
         void MoveFile(string source, string destination);
         void DeleteFolder(string path, bool recursive);
-        DateTime DirectoryDateCreated(string path);
-        IEnumerable<FileInfo> GetFileInfos(string path, string pattern, SearchOption searchOption);
         void InheritFolderPermissions(string filename);
         long GetAvilableSpace(string path);
         string ReadAllText(string filePath);
         void WriteAllText(string filename, string contents);
         void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
-        void DirectorySetLastWriteTimeUtc(string path, DateTime dateTime);
-        bool IsFolderLocked(string path);
+        void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
         bool IsFileLocked(FileInfo file);
-        bool IsChildOfPath(string child, string parent);
         string GetPathRoot(string path);
     }
 
@@ -125,7 +120,7 @@ namespace NzbDrone.Common
             return Directory.GetFiles(path, "*.*", searchOption);
         }
 
-        public virtual long GetDirectorySize(string path)
+        public virtual long GetFolderSize(string path)
         {
             Ensure.That(() => path).IsValidPath();
 
@@ -150,22 +145,22 @@ namespace NzbDrone.Common
             return Directory.CreateDirectory(path).FullName;
         }
 
-        public virtual void CopyDirectory(string source, string target)
+        public virtual void CopyFolder(string source, string target)
         {
             Ensure.That(() => source).IsValidPath();
             Ensure.That(() => target).IsValidPath();
 
-            TransferDirectory(source, target, TransferAction.Copy);
+            TransferFolder(source, target, TransferAction.Copy);
         }
 
-        public virtual void MoveDirectory(string source, string destination)
+        public virtual void MoveFolder(string source, string destination)
         {
             Ensure.That(() => source).IsValidPath();
             Ensure.That(() => destination).IsValidPath();
 
             try
             {
-                TransferDirectory(source, destination, TransferAction.Move);
+                TransferFolder(source, destination, TransferAction.Move);
                 Directory.Delete(source, true);
             }
             catch (Exception e)
@@ -176,7 +171,7 @@ namespace NzbDrone.Common
             }
         }
 
-        private void TransferDirectory(string source, string target, TransferAction transferAction)
+        private void TransferFolder(string source, string target, TransferAction transferAction)
         {
             Ensure.That(() => source).IsValidPath();
             Ensure.That(() => target).IsValidPath();
@@ -193,7 +188,7 @@ namespace NzbDrone.Common
 
             foreach (var subDir in sourceFolder.GetDirectories())
             {
-                TransferDirectory(subDir.FullName, Path.Combine(target, subDir.Name), transferAction);
+                TransferFolder(subDir.FullName, Path.Combine(target, subDir.Name), transferAction);
             }
 
             foreach (var sourceFile in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
@@ -249,20 +244,6 @@ namespace NzbDrone.Common
             Ensure.That(() => path).IsValidPath();
 
             Directory.Delete(path, recursive);
-        }
-
-        public virtual DateTime DirectoryDateCreated(string path)
-        {
-            Ensure.That(() => path).IsValidPath();
-
-            return Directory.GetCreationTime(path);
-        }
-
-        public virtual IEnumerable<FileInfo> GetFileInfos(string path, string pattern, SearchOption searchOption)
-        {
-            Ensure.That(() => path).IsValidPath();
-
-            return new DirectoryInfo(path).EnumerateFiles(pattern, searchOption);
         }
 
         public virtual void InheritFolderPermissions(string filename)
@@ -350,26 +331,11 @@ namespace NzbDrone.Common
             File.SetLastWriteTimeUtc(path, dateTime);
         }
 
-        public virtual void DirectorySetLastWriteTimeUtc(string path, DateTime dateTime)
+        public virtual void FolderSetLastWriteTimeUtc(string path, DateTime dateTime)
         {
             Ensure.That(() => path).IsValidPath();
 
             Directory.SetLastWriteTimeUtc(path, dateTime);
-        }
-
-        public virtual bool IsFolderLocked(string path)
-        {
-            Ensure.That(() => path).IsValidPath();
-
-            var files = GetFileInfos(path, "*.*", SearchOption.AllDirectories);
-
-            foreach (var fileInfo in files)
-            {
-                if (IsFileLocked(fileInfo))
-                    return true;
-            }
-
-            return false;
         }
 
         public virtual bool IsFileLocked(FileInfo file)
@@ -391,17 +357,6 @@ namespace NzbDrone.Common
             }
 
             //file is not locked
-            return false;
-        }
-
-        public virtual bool IsChildOfPath(string child, string parent)
-        {
-            Ensure.That(() => child).IsValidPath();
-            Ensure.That(() => parent).IsValidPath();
-
-            if (Path.GetFullPath(child).StartsWith(Path.GetFullPath(parent)))
-                return true;
-
             return false;
         }
 

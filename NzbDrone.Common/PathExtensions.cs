@@ -38,12 +38,12 @@ namespace NzbDrone.Common
             return text.IndexOfAny(Path.GetInvalidPathChars()) >= 0;
         }
 
-        private static string GetProperDirectoryCapitalization(DirectoryInfo dirInfo)
+        private static string GetProperCapitalization(DirectoryInfo dirInfo)
         {
             var parentDirInfo = dirInfo.Parent;
             if (null == parentDirInfo)
                 return dirInfo.Name;
-            return Path.Combine(GetProperDirectoryCapitalization(parentDirInfo),
+            return Path.Combine(GetProperCapitalization(parentDirInfo),
                                 parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
         }
 
@@ -51,74 +51,74 @@ namespace NzbDrone.Common
         {
             var fileInfo = new FileInfo(filename);
             DirectoryInfo dirInfo = fileInfo.Directory;
-            return Path.Combine(GetProperDirectoryCapitalization(dirInfo),
+            return Path.Combine(GetProperCapitalization(dirInfo),
                                 dirInfo.GetFiles(fileInfo.Name)[0].Name);
         }
 
 
-        public static string GetAppDataPath(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)
         {
-            return IAppDirectoryInfo.WorkingDirectory;
+            return appFolderInfo.AppDataFolder;
         }
 
-        public static string GetLogFolder(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetLogFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), "logs");
+            return Path.Combine(GetAppDataPath(appFolderInfo), "logs");
         }
 
-        public static string GetConfigPath(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetConfigPath(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), APP_CONFIG_FILE);
+            return Path.Combine(GetAppDataPath(appFolderInfo), APP_CONFIG_FILE);
         }
 
-        public static string GetMediaCoverPath(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetMediaCoverPath(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), "MediaCover");
+            return Path.Combine(GetAppDataPath(appFolderInfo), "MediaCover");
         }
 
-        public static string GetUpdateLogFolder(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetUpdateLogFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), UPDATE_LOG_FOLDER_NAME);
+            return Path.Combine(GetAppDataPath(appFolderInfo), UPDATE_LOG_FOLDER_NAME);
         }
 
-        public static string GetUpdateSandboxFolder(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetUpdateSandboxFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(IAppDirectoryInfo.SystemTemp, UPDATE_SANDBOX_FOLDER_NAME);
+            return Path.Combine(appFolderInfo.TempFolder, UPDATE_SANDBOX_FOLDER_NAME);
         }
 
-        public static string GetUpdateBackUpFolder(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetUpdateBackUpFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetUpdateSandboxFolder(IAppDirectoryInfo), UPDATE_BACKUP_FOLDER_NAME);
+            return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_BACKUP_FOLDER_NAME);
         }
 
-        public static string GetUpdatePackageFolder(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetUpdatePackageFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetUpdateSandboxFolder(IAppDirectoryInfo), UPDATE_PACKAGE_FOLDER_NAME);
+            return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_PACKAGE_FOLDER_NAME);
         }
 
-        public static string GetUpdateClientFolder(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetUpdateClientFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetUpdatePackageFolder(IAppDirectoryInfo), UPDATE_CLIENT_FOLDER_NAME);
+            return Path.Combine(GetUpdatePackageFolder(appFolderInfo), UPDATE_CLIENT_FOLDER_NAME);
         }
 
-        public static string GetUpdateClientExePath(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetUpdateClientExePath(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetUpdateSandboxFolder(IAppDirectoryInfo), UPDATE_CLIENT_EXE);
+            return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_CLIENT_EXE);
         }
 
-        public static string GetConfigBackupFile(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetConfigBackupFile(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), BACKUP_ZIP_FILE);
+            return Path.Combine(GetAppDataPath(appFolderInfo), BACKUP_ZIP_FILE);
         }
 
-        public static string GetNzbDroneDatabase(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetNzbDroneDatabase(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), NZBDRONE_DB);
+            return Path.Combine(GetAppDataPath(appFolderInfo), NZBDRONE_DB);
         }
 
-        public static string GetLogDatabase(this IAppDirectoryInfo IAppDirectoryInfo)
+        public static string GetLogDatabase(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(IAppDirectoryInfo), NZBDRONE_LOG_DB);
+            return Path.Combine(GetAppDataPath(appFolderInfo), NZBDRONE_LOG_DB);
         }
     }
 }

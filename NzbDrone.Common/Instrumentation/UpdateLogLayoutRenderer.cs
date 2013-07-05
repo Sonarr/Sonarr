@@ -16,7 +16,7 @@ namespace NzbDrone.Common.Instrumentation
 
         public UpdateLogLayoutRenderer()
         {
-            _appData = Path.Combine(new AppDirectoryInfo().GetUpdateLogFolder(), DateTime.Now.ToString("yy.MM.d-HH.mm") + ".txt");
+            _appData = Path.Combine(new AppFolderInfo(new DiskProvider()).GetUpdateLogFolder(), DateTime.Now.ToString("yy.MM.d-HH.mm") + ".txt");
 
         }
 

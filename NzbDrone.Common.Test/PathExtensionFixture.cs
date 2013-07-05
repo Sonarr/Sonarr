@@ -12,13 +12,13 @@ namespace NzbDrone.Common.Test
     public class PathExtensionFixture : TestBase
     {
 
-        private IAppDirectoryInfo GetIAppDirectoryInfo()
+        private IAppFolderInfo GetIAppDirectoryInfo()
         {
-            var fakeEnvironment = new Mock<IAppDirectoryInfo>();
+            var fakeEnvironment = new Mock<IAppFolderInfo>();
 
-            fakeEnvironment.SetupGet(c => c.WorkingDirectory).Returns(@"C:\NzbDrone\");
+            fakeEnvironment.SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone\");
 
-            fakeEnvironment.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+            fakeEnvironment.SetupGet(c => c.TempFolder).Returns(@"C:\Temp\");
 
             return fakeEnvironment.Object;
         }

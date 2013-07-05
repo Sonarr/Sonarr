@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Update
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
 
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
@@ -20,12 +20,12 @@ namespace NzbDrone.Core.Update
         private readonly IProcessProvider _processProvider;
 
 
-        public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppDirectoryInfo appDirectoryInfo,
+        public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppFolderInfo appFolderInfo,
                                     IDiskProvider diskProvider, IHttpProvider httpProvider,
                                     ArchiveProvider archiveProvider, IProcessProvider processProvider, Logger logger)
         {
             _checkUpdateService = checkUpdateService;
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
             _archiveProvider = archiveProvider;
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Update
 
         private void InstallUpdate(UpdatePackage updatePackage)
         {
-            var updateSandboxFolder = _appDirectoryInfo.GetUpdateSandboxFolder();
+            var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
             var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
 
@@ -64,14 +64,14 @@ namespace NzbDrone.Core.Update
             _logger.Info("Update package extracted successfully");
 
             _logger.Info("Preparing client");
-            _diskProvider.MoveDirectory(_appDirectoryInfo.GetUpdateClientFolder(),
+            _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
                                         updateSandboxFolder);
 
 
             _logger.Info("Starting update client");
             var startInfo = new ProcessStartInfo
                 {
-                    FileName = _appDirectoryInfo.GetUpdateClientExePath(),
+                    FileName = _appFolderInfo.GetUpdateClientExePath(),
                     Arguments = _processProvider.GetCurrentProcess().Id.ToString()
                 };
 

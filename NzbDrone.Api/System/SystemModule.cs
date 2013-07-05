@@ -8,14 +8,14 @@ namespace NzbDrone.Api.System
 {
     public class SystemModule : NzbDroneApiModule
     {
-        private readonly IAppDirectoryInfo _appDirectoryInfo;
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IRouteCacheProvider _routeCacheProvider;
 
-        public SystemModule(IAppDirectoryInfo appDirectoryInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider)
+        public SystemModule(IAppFolderInfo appFolderInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider)
             : base("system")
         {
-            _appDirectoryInfo = appDirectoryInfo;
+            _appFolderInfo = appFolderInfo;
             _runtimeInfo = runtimeInfo;
             _routeCacheProvider = routeCacheProvider;
             Get["/status"] = x => GetStatus();
@@ -32,8 +32,8 @@ namespace NzbDrone.Api.System
                     IsProduction = RuntimeInfo.IsProduction,
                     IsAdmin = _runtimeInfo.IsAdmin,
                     IsUserInteractive = _runtimeInfo.IsUserInteractive,
-                    StartupPath = _appDirectoryInfo.StartUpPath,
-                    AppData = _appDirectoryInfo.GetAppDataPath(),
+                    StartupPath = _appFolderInfo.StartUpFolder,
+                    AppData = _appFolderInfo.GetAppDataPath(),
                     OsVersion = OsInfo.Version.ToString(),
                     IsMono = OsInfo.IsMono,
                     IsLinux = OsInfo.IsLinux,
