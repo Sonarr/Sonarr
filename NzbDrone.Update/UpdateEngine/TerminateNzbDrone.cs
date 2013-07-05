@@ -33,12 +33,13 @@ namespace NzbDrone.Update.UpdateEngine
             {
                 try
                 {
+                    _logger.Info("NzbDrone Service is installed and running");
                     _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
 
                 }
-                catch (InvalidOperationException e)
+                catch (Exception e)
                 {
-                    _logger.WarnException("couldn't stop service", e);
+                    _logger.ErrorException("couldn't stop service", e);
                 }
             }
 

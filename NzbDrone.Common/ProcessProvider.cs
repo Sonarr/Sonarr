@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NLog;
@@ -12,10 +11,9 @@ namespace NzbDrone.Common
         ProcessInfo GetCurrentProcess();
         ProcessInfo GetProcessById(int id);
         IEnumerable<ProcessInfo> GetProcessByName(string name);
-        void Start(string path);
+        Process Start(string path);
         Process Start(ProcessStartInfo startInfo);
         void WaitForExit(Process process);
-        void Kill(int processId);
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
     }
@@ -27,12 +25,12 @@ namespace NzbDrone.Common
         public const string NzbDroneProcessName = "NzbDrone";
         public const string NzbDroneConsoleProcessName = "NzbDrone.Console";
 
-        public  ProcessInfo GetCurrentProcess()
+        public ProcessInfo GetCurrentProcess()
         {
             return ConvertToProcessInfo(Process.GetCurrentProcess());
         }
 
-        public  ProcessInfo GetProcessById(int id)
+        public ProcessInfo GetProcessById(int id)
         {
             Logger.Trace("Finding process with Id:{0}", id);
 
@@ -50,17 +48,17 @@ namespace NzbDrone.Common
             return processInfo;
         }
 
-        public  IEnumerable<ProcessInfo> GetProcessByName(string name)
+        public IEnumerable<ProcessInfo> GetProcessByName(string name)
         {
             return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
         }
 
-        public  void Start(string path)
+        public Process Start(string path)
         {
-            Process.Start(path);
+            return Start(new ProcessStartInfo(path));
         }
 
-        public  Process Start(ProcessStartInfo startInfo)
+        public Process Start(ProcessStartInfo startInfo)
         {
             Logger.Info("Starting process. [{0}]", startInfo.FileName);
 
@@ -69,38 +67,19 @@ namespace NzbDrone.Common
                                   StartInfo = startInfo
                               };
             process.Start();
+
             return process;
         }
 
-        public  void WaitForExit(Process process)
+        public void WaitForExit(Process process)
         {
             Logger.Trace("Waiting for process {0} to exit.", process.ProcessName);
             process.WaitForExit();
         }
 
-        public  void Kill(int processId)
-        {
-            if (processId == 0 || Process.GetProcesses().All(p => p.Id != processId))
-            {
-                Logger.Warn("Cannot find process with id: {0}", processId);
-                return;
-            }
 
-            var process = Process.GetProcessById(processId);
 
-            if (process.HasExited)
-            {
-                return;
-            }
-
-            Logger.Info("[{0}]: Killing process", process.Id);
-            process.Kill();
-            Logger.Info("[{0}]: Waiting for exit", process.Id);
-            process.WaitForExit();
-            Logger.Info("[{0}]: Process terminated successfully", process.Id);
-        }
-
-        public  void SetPriority(int processId, ProcessPriorityClass priority)
+        public void SetPriority(int processId, ProcessPriorityClass priority)
         {
             var process = Process.GetProcessById(processId);
 
@@ -125,7 +104,7 @@ namespace NzbDrone.Common
                        };
         }
 
-        public  void KillAll(string processName)
+        public void KillAll(string processName)
         {
             var processToKill = GetProcessByName(processName);
 
@@ -133,6 +112,28 @@ namespace NzbDrone.Common
             {
                 Kill(processInfo.Id);
             }
+        }
+
+        private void Kill(int processId)
+        {
+            if (processId == 0 || Process.GetProcesses().All(p => p.Id != processId))
+            {
+                Logger.Warn("Cannot find process with id: {0}", processId);
+                return;
+            }
+
+            var process = Process.GetProcessById(processId);
+
+            if (process.HasExited)
+            {
+                return;
+            }
+
+            Logger.Info("[{0}]: Killing process", process.Id);
+            process.Kill();
+            Logger.Info("[{0}]: Waiting for exit", process.Id);
+            process.WaitForExit();
+            Logger.Info("[{0}]: Process terminated successfully", process.Id);
         }
     }
 }

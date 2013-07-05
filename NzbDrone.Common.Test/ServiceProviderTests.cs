@@ -1,4 +1,5 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.ServiceProcess;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -16,22 +17,27 @@ namespace NzbDrone.Common.Test
         public void Setup()
         {
             WindowsOnly();
-
-
-            if (Subject.ServiceExist(TEMP_SERVICE_NAME))
-            {
-                Subject.UnInstall(TEMP_SERVICE_NAME);
-            }
+            CleanupService();
         }
 
         [TearDown]
         public void TearDown()
         {
             WindowsOnly();
+            CleanupService();
+        }
 
+
+        private void CleanupService()
+        {
             if (Subject.ServiceExist(TEMP_SERVICE_NAME))
             {
                 Subject.UnInstall(TEMP_SERVICE_NAME);
+            }
+
+            if (Subject.IsServiceRunning(ALWAYS_INSTALLED_SERVICE))
+            {
+                Subject.Stop(ALWAYS_INSTALLED_SERVICE);
             }
         }
 
@@ -84,6 +90,19 @@ namespace NzbDrone.Common.Test
 
             Subject.GetService(ALWAYS_INSTALLED_SERVICE).Status
                 .Should().Be(ServiceControllerStatus.Stopped);
+        }
+
+        [Test]
+        public void should_throw_if_starting_a_running_serivce()
+        {
+            Subject.GetService(ALWAYS_INSTALLED_SERVICE).Status
+               .Should().NotBe(ServiceControllerStatus.Running);
+
+            Subject.Start(ALWAYS_INSTALLED_SERVICE);
+            Assert.Throws<InvalidOperationException>(() => Subject.Start(ALWAYS_INSTALLED_SERVICE));
+
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

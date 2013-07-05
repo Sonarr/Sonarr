@@ -148,14 +148,14 @@
     <Compile Include="Contract\ParseErrorReport.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="PathExtensions.cs" />
-    <Compile Include="IDiskProvider.cs" />
+    <Compile Include="DiskProvider.cs" />
     <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
-    <Compile Include="IProcessProvider.cs" />
+    <Compile Include="ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="RestProvider.cs" />
-    <Compile Include="IServiceProvider.cs" />
+    <Compile Include="ServiceProvider.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TryParseExtension.cs" />
   </ItemGroup>
