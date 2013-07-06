@@ -8,6 +8,7 @@ define(
         'Settings/DownloadClient/PneumaticView',
         'Settings/DownloadClient/NzbgetView',
         'Mixins/AsModelBoundView',
+        'Mixins/AutoComplete',
         'bootstrap'
     ], function (Marionette, SabView, BlackholeView, PneumaticView, NzbgetView, AsModelBoundView) {
 
@@ -19,7 +20,8 @@ define(
             },
 
             ui: {
-                downloadClientSelect: '.x-download-client'
+                downloadClientSelect: '.x-download-client',
+                downloadedEpisodesFolder: '.x-path'
             },
 
             events: {
@@ -31,6 +33,8 @@ define(
                 this.blackholeView = new BlackholeView({ model: this.model});
                 this.pneumaticView = new PneumaticView({ model: this.model});
                 this.nzbgetView = new NzbgetView({ model: this.model});
+
+                this.ui.downloadedEpisodesFolder.autoComplete('/directories');
 
                 var client = this.model.get('downloadClient');
                 this.refreshUIVisibility(client);
