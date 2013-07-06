@@ -114,6 +114,10 @@ module.exports = function (grunt) {
                 src : 'UI/**/*.jpg',
                 dest: '_output/'
             },
+            icon : {
+                src : 'UI/**/*.ico',
+                dest: '_output/'
+            },
             fontAwesome  : {
                 src : 'UI/**/FontAwesome/*.*',
                 dest: '_output/'
@@ -159,6 +163,10 @@ module.exports = function (grunt) {
             copyJpg : {
                 files: '<%= copy.jpg.src %>',
                 tasks: ['copy:jpg']
+            },
+            copyJpg : {
+                files: '<%= copy.icon.src %>',
+                tasks: ['copy:icon']
             },
             copyFontAwesome  : {
                 files: '<%= copy.fontAwesome.src %>',

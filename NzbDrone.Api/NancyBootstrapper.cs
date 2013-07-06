@@ -74,6 +74,14 @@ namespace NzbDrone.Api
             Conventions.StaticContentsConventions.Add(processors.ProcessStaticResourceRequest);
         }
 
+        protected override byte[] FavIcon
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public void Shutdown()
         {
             ApplicationContainer.Resolve<IMessageAggregator>().PublishEvent(new ApplicationShutdownRequested());

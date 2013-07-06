@@ -56,8 +56,7 @@
     <IntermediateOutputPath>C:\Users\Mark\AppData\Local\Temp\vs1A55.tmp\x86\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>..\NzbDrone\NzbDrone.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>NzbDrone.Console.AppMain</StartupObject>
