@@ -21,15 +21,6 @@ namespace NzbDrone.Api
         }
 
         /// <summary>
-        /// Get the moduleKey generator
-        /// </summary>
-        /// <returns>IModuleKeyGenerator instance</returns>
-        protected override sealed IModuleKeyGenerator GetModuleKeyGenerator()
-        {
-            return this.ApplicationContainer.Resolve<IModuleKeyGenerator>();
-        }
-
-        /// <summary>
         /// Create a default, unconfigured, container
         /// </summary>
         /// <returns>Container instance</returns>
@@ -88,8 +79,8 @@ namespace NzbDrone.Api
                 container.Register(
                     typeof(INancyModule),
                     moduleRegistrationType.ModuleType,
-                    moduleRegistrationType.ModuleKey).
-                          AsSingleton();
+                    moduleRegistrationType.ModuleType.FullName).
+                    AsSingleton();
             }
         }
 
@@ -156,14 +147,14 @@ namespace NzbDrone.Api
         }
 
         /// <summary>
-        /// Retreive a specific module instance from the container by its key
+        /// Retreive a specific module instance from the container
         /// </summary>
         /// <param name="container">Container to use</param>
-        /// <param name="moduleKey">Module key of the module</param>
+        /// <param name="moduleType">Type of the module</param>
         /// <returns>NancyModule instance</returns>
-        protected override sealed INancyModule GetModuleByKey(TinyIoCContainer container, string moduleKey)
+        protected override sealed INancyModule GetModule(TinyIoCContainer container, Type moduleType)
         {
-            return container.Resolve<INancyModule>(moduleKey);
+            return (INancyModule)container.Resolve(moduleType);
         }
 
         /// <summary>

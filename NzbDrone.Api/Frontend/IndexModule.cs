@@ -24,7 +24,8 @@ namespace NzbDrone.Api.Frontend
 
             _indexCache = cacheManger.GetCache<string>(typeof(IndexModule));
             //Serve anything that doesn't have an extension
-            Get[@"/(.*)"] = x => Index();
+            Get[@"^(?:.*)$"] = x => Index();
+            Get[@"/"] = x => Index();
         }
 
         private object Index()
