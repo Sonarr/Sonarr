@@ -274,6 +274,13 @@
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
     <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
     <Compile Include="MediaFiles\Commands\DiskScanCommand.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\IImportDecisionEngineSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportApprovedEpisodes.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotAlreadyImportedSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using FizzWare.NBuilder;
 using Moq;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
@@ -26,7 +28,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             _fakeEpisodeFile = Builder<EpisodeFile>.CreateNew().Build();
 
-
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(_videoFiles);
 
@@ -35,24 +36,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder)
                   .Returns("c:\\drop\\");
-        }
-
-        private void WithOldWrite()
-        {
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetLastFolderWrite(It.IsAny<String>()))
-                .Returns(DateTime.Now.AddDays(-5));
-        }
-
-        private void WithRecentFolderWrite()
-        {
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetLastFolderWrite(It.IsAny<String>()))
-                .Returns(DateTime.UtcNow);
-
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetLastFileWrite(It.IsAny<String>()))
-                .Returns(DateTime.UtcNow);
         }
 
         [Test]
@@ -66,65 +49,14 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void should_search_for_series_using_folder_name()
         {
-            WithOldWrite();
-
             Subject.ProcessDownloadedEpisodesFolder();
 
             Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
-
         }
 
         [Test]
-        public void all_imported_files_should_be_moved()
+        public void should_skip_if_file_is_in_use_by_another_process()
         {
-            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
-                  .Returns(_fakeEpisodeFile);
-
-            Subject.ProcessDownloadedEpisodesFolder();
-
-            Mocker.GetMock<IMoveEpisodeFiles>().Verify(c => c.MoveEpisodeFile(_fakeEpisodeFile, true), Times.Once());
-        }
-
-        [Test]
-        public void should_trigger_import_event_on_import()
-        {
-            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
-                  .Returns(_fakeEpisodeFile);
-
-            Subject.ProcessDownloadedEpisodesFolder();
-
-            VerifyEventPublished<EpisodeImportedEvent>();
-
-        }
-
-        [Test]
-        public void should_not_attempt_move_if_nothing_is_imported()
-        {
-            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
-                 .Returns<EpisodeFile>(null);
-
-            Subject.ProcessDownloadedEpisodesFolder();
-
-            Mocker.GetMock<IMoveEpisodeFiles>().Verify(c => c.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<bool>()), Times.Never());
-        }
-
-
-        [Test]
-        public void should_not_publish_import_event_if_nothing_is_imported()
-        {
-            Mocker.GetMock<IDiskScanService>().Setup(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()))
-                 .Returns<EpisodeFile>(null);
-
-            Subject.ProcessDownloadedEpisodesFolder();
-
-
-            VerifyEventNotPublished<EpisodeImportedEvent>();
-        }
-
-        [Test]
-        public void should_skip_if_folder_is_in_use_by_another_process()
-        {
-
             Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<FileInfo>()))
                   .Returns(true);
 
@@ -134,13 +66,13 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
         private void VerifyNoImport()
         {
-            Mocker.GetMock<IDiskScanService>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()),
+            Mocker.GetMock<IImportApprovedEpisodes>().Verify(c => c.Import(It.IsAny<List<ImportDecision>>(), true),
                 Times.Never());
         }
 
         private void VerifyImport()
         {
-            Mocker.GetMock<IDiskScanService>().Verify(c => c.ImportFile(It.IsAny<Series>(), It.IsAny<string>()),
+            Mocker.GetMock<IImportApprovedEpisodes>().Verify(c => c.Import(It.IsAny<List<ImportDecision>>(), true),
                 Times.Once());
         }
     }

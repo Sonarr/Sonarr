@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Parser
             _logger = logger;
         }
 
-
         public LocalEpisode GetEpisodes(string fileName, Series series)
         {
             var parsedEpisodeInfo = Parser.ParseTitle(fileName);
@@ -45,8 +44,10 @@ namespace NzbDrone.Core.Parser
 
             return new LocalEpisode
                 {
+                    Series = series,
                     Quality = parsedEpisodeInfo.Quality,
                     Episodes = episodes,
+                    Path = fileName
                 };
         }
 

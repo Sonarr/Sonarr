@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
@@ -15,7 +16,6 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IDiskScanService
     {
-        EpisodeFile ImportFile(Series series, string filePath);
         string[] GetVideoFiles(string path, bool allDirectories = true);
     }
 
@@ -25,19 +25,20 @@ namespace NzbDrone.Core.MediaFiles
         private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesService _seriesService;
-        private readonly IMediaFileService _mediaFileService;
-        private readonly IVideoFileInfoReader _videoFileInfoReader;
-        private readonly IParsingService _parsingService;
+        private readonly IMakeImportDecision _importDecisionMaker;
+        private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IMessageAggregator _messageAggregator;
 
-        public DiskScanService(IDiskProvider diskProvider, ISeriesService seriesService, IMediaFileService mediaFileService, IVideoFileInfoReader videoFileInfoReader,
-            IParsingService parsingService, IMessageAggregator messageAggregator)
+        public DiskScanService(IDiskProvider diskProvider,
+                                ISeriesService seriesService,
+                                IMakeImportDecision importDecisionMaker, 
+                                IImportApprovedEpisodes importApprovedEpisodes,
+                                IMessageAggregator messageAggregator)
         {
             _diskProvider = diskProvider;
             _seriesService = seriesService;
-            _mediaFileService = mediaFileService;
-            _videoFileInfoReader = videoFileInfoReader;
-            _parsingService = parsingService;
+            _importDecisionMaker = importDecisionMaker;
+            _importApprovedEpisodes = importApprovedEpisodes;
             _messageAggregator = messageAggregator;
         }
 
@@ -53,71 +54,8 @@ namespace NzbDrone.Core.MediaFiles
 
             var mediaFileList = GetVideoFiles(series.Path);
 
-            foreach (var filePath in mediaFileList)
-            {
-                try
-                {
-                    ImportFile(series, filePath);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("Couldn't import file " + filePath, e);
-                }
-            }
-
-            //Todo: Find the "best" episode file for all found episodes and import that one
-            //Todo: Move the episode linking to here, instead of import (or rename import)
-        }
-
-        public EpisodeFile ImportFile(Series series, string filePath)
-        {
-            Logger.Trace("Importing file to database [{0}]", filePath);
-
-            if (_mediaFileService.Exists(filePath))
-            {
-                Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
-                return null;
-            }
-
-            var parsedEpisode = _parsingService.GetEpisodes(filePath, series);
-
-            if (parsedEpisode == null || !parsedEpisode.Episodes.Any())
-            {
-                return null;
-            }
-
-            var size = _diskProvider.GetFileSize(filePath);
-
-            if (series.SeriesType == SeriesTypes.Daily || parsedEpisode.SeasonNumber > 0)
-            {
-                var runTime = _videoFileInfoReader.GetRunTime(filePath);
-                if (size < Constants.IgnoreFileSize && runTime.TotalMinutes < 3)
-                {
-                    Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
-                    return null;
-                }
-            }
-
-            if (parsedEpisode.Episodes.Any(e => e.EpisodeFileId != 0 && e.EpisodeFile.Value.Quality > parsedEpisode.Quality))
-            {
-                Logger.Trace("This file isn't an upgrade for all episodes. Skipping {0}", filePath);
-                return null;
-            }
-
-            var episodeFile = new EpisodeFile();
-            episodeFile.DateAdded = DateTime.UtcNow;
-            episodeFile.SeriesId = series.Id;
-            episodeFile.Path = filePath.CleanPath();
-            episodeFile.Size = size;
-            episodeFile.Quality = parsedEpisode.Quality;
-            episodeFile.SeasonNumber = parsedEpisode.SeasonNumber;
-            episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.CleanPath());
-            episodeFile.Episodes = parsedEpisode.Episodes;
-
-            //Todo: We shouldn't actually import the file until we confirm its the only one we want.
-            //Todo: Separate episodeFile creation from importing (pass file to import to import)
-            _mediaFileService.Add(episodeFile);
-            return episodeFile;
+            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
+            _importApprovedEpisodes.Import(decisions);
         }
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)

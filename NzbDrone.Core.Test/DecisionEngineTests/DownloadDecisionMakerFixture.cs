@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
         [Test]
-        public void should_return_unknown_series_rejection_if_series_is_unknow()
+        public void should_return_unknown_series_rejection_if_series_is_unknown()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
 

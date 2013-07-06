@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
                 .Returns(fi);
 
-            var result = Subject.MoveEpisodeFile(file, false);
+            var result = Subject.MoveEpisodeFile(file);
 
             result.Should().BeNull();
         }
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                   .Setup(s => s.FileExists(currentFilename))
                   .Returns(true);
 
-            var result = Subject.MoveEpisodeFile(file, true);
+            var result = Subject.MoveEpisodeFile(file);
 
 
         }
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".mkv"))
                 .Returns(fi);
 
-            var result = Subject.MoveEpisodeFile(file, true);
+            var result = Subject.MoveEpisodeFile(file);
 
             result.Should().BeNull();
             ExceptionVerification.ExpectedErrors(1);

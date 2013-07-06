@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -19,7 +20,8 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IMoveEpisodeFiles _episodeFileMover;
         private readonly IParsingService _parsingService;
         private readonly IConfigService _configService;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IMakeImportDecision _importDecisionMaker;
+        private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -28,7 +30,8 @@ namespace NzbDrone.Core.MediaFiles
             IMoveEpisodeFiles episodeFileMover,
             IParsingService parsingService,
             IConfigService configService,
-            IMessageAggregator messageAggregator,
+            IMakeImportDecision importDecisionMaker,
+            IImportApprovedEpisodes importApprovedEpisodes,
             Logger logger)
         {
             _diskProvider = diskProvider;
@@ -37,7 +40,8 @@ namespace NzbDrone.Core.MediaFiles
             _episodeFileMover = episodeFileMover;
             _parsingService = parsingService;
             _configService = configService;
-            _messageAggregator = messageAggregator;
+            _importDecisionMaker = importDecisionMaker;
+            _importApprovedEpisodes = importApprovedEpisodes;
             _logger = logger;
         }
 
@@ -92,7 +96,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        public void ProcessSubFolder(DirectoryInfo subfolderInfo)
+        private void ProcessSubFolder(DirectoryInfo subfolderInfo)
         {
             var series = _parsingService.GetSeries(subfolderInfo.Name);
 
@@ -102,12 +106,9 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            var files = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
+            var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
 
-            foreach (var file in files)
-            {
-                ProcessVideoFile(file, series);
-            }
+            ProcessFiles(videoFiles, series);
         }
 
         private void ProcessVideoFile(string videoFile, Series series)
@@ -118,13 +119,13 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            var episodeFile = _diskScanService.ImportFile(series, videoFile);
+            ProcessFiles(new [] { videoFile }, series);
+        }
 
-            if (episodeFile != null)
-            {
-                _episodeFileMover.MoveEpisodeFile(episodeFile, true);
-                _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
-            }
+        private void ProcessFiles(IEnumerable<string> videoFiles, Series series)
+        {
+            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series);
+            _importApprovedEpisodes.Import(decisions, true);
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)
