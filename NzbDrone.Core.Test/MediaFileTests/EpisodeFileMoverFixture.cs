@@ -40,20 +40,24 @@ namespace NzbDrone.Core.Test.MediaFileTests
                     .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(e => e.Get(fakeSeries.Id))
-                .Returns(fakeSeries);
+                  .Setup(e => e.Get(fakeSeries.Id))
+                  .Returns(fakeSeries);
 
             Mocker.GetMock<IEpisodeService>()
-                .Setup(e => e.GetEpisodesByFileId(file.Id))
-                .Returns(fakeEpisode);
+                  .Setup(e => e.GetEpisodesByFileId(file.Id))
+                  .Returns(fakeEpisode);
 
             Mocker.GetMock<IBuildFileNames>()
-                .Setup(e => e.BuildFilename(fakeEpisode, fakeSeries, It.IsAny<EpisodeFile>()))
-                .Returns(filename);
+                  .Setup(e => e.BuildFilename(fakeEpisode, fakeSeries, It.IsAny<EpisodeFile>()))
+                  .Returns(filename);
 
             Mocker.GetMock<IBuildFileNames>()
-                .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
-                .Returns(fi);
+                  .Setup(e => e.BuildFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
+                  .Returns(fi);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FileExists(fi))
+                  .Returns(true);
 
             var result = Subject.MoveEpisodeFile(file);
 
