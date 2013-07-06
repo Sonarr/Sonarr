@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Owin.Hosting;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Owin.MiddleWare;
 using Owin;
@@ -26,19 +25,22 @@ namespace NzbDrone.Owin
 
         public void StartServer()
         {
-            var options = new StartOptions
+            var url = "http://*:" + _configFileProvider.Port;
+
+            var options = new StartOptions(url)
                 {
-                    Url = "http://*:" + _configFileProvider.Port,
-                    App = GetType().AssemblyQualifiedName
+                    ServerFactory = "Microsoft.Owin.Host.HttpListener"
                 };
 
-            _logger.Info("starting server on {0}", options.Url);
+            _logger.Info("starting server on {0}", url);
 
-            _host = WebApplication.Start(options, BuildApp);
+            _host = WebApp.Start(options, BuildApp);
         }
 
         private void BuildApp(IAppBuilder appBuilder)
         {
+            appBuilder.Properties["host.AppName"] = "NzbDrone";
+
             foreach (var middleWare in _owinMiddleWares.OrderBy(c => c.Order))
             {
                 _logger.Debug("Attaching {0} to host", middleWare.GetType().Name);
