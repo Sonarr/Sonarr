@@ -59,7 +59,8 @@ namespace NzbDrone.Api.Frontend
                         response.Headers.DisableCache();
                     }
 
-                    return response.CompressResponse(context.Request);
+                    //return response.CompressResponse(context.Request);
+                    return response;
                 }
 
                 _logger.Warn("File {0} not found", filePath);

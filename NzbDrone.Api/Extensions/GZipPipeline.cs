@@ -14,7 +14,9 @@ namespace NzbDrone.Api.Extensions
 
         public static Response CompressResponse(this Response response, Request request)
         {
-            if (!response.ContentType.Contains("image") && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip")))
+            if (!response.ContentType.Contains("image")
+                && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip"))
+                && (!response.Headers.ContainsKey("Content-Encoding") || response.Headers["Content-Encoding"] != "gzip"))
             {
                 var data = new MemoryStream();
                 response.Contents.Invoke(data);
