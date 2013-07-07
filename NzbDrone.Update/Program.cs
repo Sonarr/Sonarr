@@ -5,6 +5,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Security;
 using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update
@@ -28,6 +29,9 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
+                
+                IgnoreCertErrorPolicy.Register();
+
                 GlobalExceptionHandlers.Register();
 
                 new LogglyTarget().Register(LogLevel.Debug);

@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Security;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone
@@ -18,6 +18,7 @@ namespace NzbDrone
             try
             {
                 GlobalExceptionHandlers.Register();
+                IgnoreCertErrorPolicy.Register();
 
                 new LogglyTarget().Register(LogLevel.Warn);
 
