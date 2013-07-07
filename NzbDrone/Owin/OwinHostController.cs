@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Owin.Hosting;
 using NLog;
+using NzbDrone.Common.Security;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Owin.MiddleWare;
 using Owin;
@@ -25,6 +26,8 @@ namespace NzbDrone.Owin
 
         public void StartServer()
         {
+            IgnoreCertErrorPolicy.Register();
+
             var url = "http://*:" + _configFileProvider.Port;
 
             var options = new StartOptions(url)
