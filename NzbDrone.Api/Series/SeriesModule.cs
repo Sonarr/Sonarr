@@ -48,7 +48,12 @@ namespace NzbDrone.Api.Series
                 return new NotFoundResponse();
             }
 
-            return series.AsResponse();
+
+            var resource = ToResource(()=>_seriesService.FindBySlug(slug));
+
+            MapCoversToLocal(resource);
+
+            return resource.AsResponse();
         }
 
         private List<SeriesResource> AllSeries()

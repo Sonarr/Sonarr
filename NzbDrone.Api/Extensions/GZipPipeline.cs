@@ -9,14 +9,19 @@ namespace NzbDrone.Api.Extensions
     {
         public static void Handle(NancyContext context)
         {
-            if (!context.Response.ContentType.Contains("image") && context.Request.Headers.AcceptEncoding.Any(x => x.Contains("gzip")))
+            context.Response.CompressResponse(context.Request);
+        }
+
+        public static Response CompressResponse(this Response response, Request request)
+        {
+            if (!response.ContentType.Contains("image") && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip")))
             {
                 var data = new MemoryStream();
-                context.Response.Contents.Invoke(data);
+                response.Contents.Invoke(data);
                 data.Position = 0;
                 if (data.Length < 1024)
                 {
-                    context.Response.Contents = stream =>
+                    response.Contents = stream =>
                     {
                         data.CopyTo(stream);
                         stream.Flush();
@@ -24,8 +29,8 @@ namespace NzbDrone.Api.Extensions
                 }
                 else
                 {
-                    context.Response.Headers["Content-Encoding"] = "gzip";
-                    context.Response.Contents = s =>
+                    response.Headers["Content-Encoding"] = "gzip";
+                    response.Contents = s =>
                     {
                         var gzip = new GZipStream(s, CompressionMode.Compress, true);
                         data.CopyTo(gzip);
@@ -33,6 +38,8 @@ namespace NzbDrone.Api.Extensions
                     };
                 }
             }
+
+            return response;
         }
     }
 }
