@@ -61,9 +61,7 @@ namespace NzbDrone.Core.MediaFiles
             var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
             episodeFile = MoveFile(episodeFile, destinationFilename);
 
-            //TODO: This just re-parses the source path (which is how we got localEpisode to begin with)
-            var parsedEpisodeInfo = Parser.Parser.ParsePath(localEpisode.Path);
-            _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(parsedEpisodeInfo, localEpisode.Series));
+            _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode.ParsedEpisodeInfo, localEpisode.Series));
 
             return episodeFile;
         }

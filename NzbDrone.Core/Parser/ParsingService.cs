@@ -47,7 +47,8 @@ namespace NzbDrone.Core.Parser
                     Series = series,
                     Quality = parsedEpisodeInfo.Quality,
                     Episodes = episodes,
-                    Path = fileName
+                    Path = fileName,
+                    ParsedEpisodeInfo =  parsedEpisodeInfo
                 };
         }
 
