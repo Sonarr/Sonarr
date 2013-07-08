@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Net;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -8,6 +10,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
@@ -36,6 +39,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
             _remoteEpisode.Report = new ReportInfo();
             _remoteEpisode.Report.Title = TITLE;
             _remoteEpisode.Report.NzbUrl = URL;
+
+            _remoteEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                                                      .All()
+                                                      .With(e => e.AirDate = DateTime.Today)
+                                                      .Build()
+                                                      .ToList();
         }
 
         private void WithFailResponse()
