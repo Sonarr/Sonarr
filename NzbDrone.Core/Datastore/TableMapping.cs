@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<Episode>().RegisterModel("Episodes")
                   .Ignore(e => e.SeriesTitle)
+                  .Ignore(e => e.HasFile)
                   .Relationship()
                   .HasOne(episode => episode.EpisodeFile, episode => episode.EpisodeFileId);
 

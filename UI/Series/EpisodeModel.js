@@ -29,7 +29,7 @@ define(
 
                     if (this.has('series')) {
                         var start = Date.create(this.get('airDate'));
-                        var runtime = this.get('series').runtime;
+                        var runtime = this.get('series').get('runtime');
 
                         return start.addMinutes(runtime);
                     }
@@ -37,20 +37,23 @@ define(
                     return undefined;
                 },
                 statusLevel        : function () {
-                    var episodeFileId = this.get('episodeFileId');
+                    var hasFile = this.get('hasFile');
                     var currentTime = Date.create();
                     var start = Date.create(this.get('airDate'));
                     var end = Date.create(this.get('end'));
+
+                    console.log(this.get('end'));
+
 
                     if (currentTime.isBetween(start, end)) {
                         return 'warning';
                     }
 
-                    if (start.isBefore(currentTime) && episodeFileId === 0) {
+                    if (start.isBefore(currentTime) && !hasFile) {
                         return 'danger';
                     }
 
-                    if (status === 'Ready') {
+                    if (hasFile) {
                         return 'success';
                     }
 
