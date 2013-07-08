@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
@@ -14,21 +15,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
     [TestFixture]
     public class BlackholeProviderFixture : CoreTest<BlackholeProvider>
     {
-        private const string nzbUrl = "http://www.nzbs.com/url";
-        private const string title = "some_nzb_title";
-        private const string blackHoleFolder = @"d:\nzb\blackhole\";
-        private const string nzbPath = @"d:\nzb\blackhole\some_nzb_title.nzb";
+        private const string _nzbUrl = "http://www.nzbs.com/url";
+        private const string _title = "some_nzb_title";
+        private const string _blackHoleFolder = @"d:\nzb\blackhole\";
+        private const string _nzbPath = @"d:\nzb\blackhole\some_nzb_title.nzb";
+        private RemoteEpisode _remoteEpisode;
 
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.BlackholeFolder).Returns(blackHoleFolder);
-        }
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.BlackholeFolder).Returns(_blackHoleFolder);
 
+            _remoteEpisode = new RemoteEpisode();
+            _remoteEpisode.Report = new ReportInfo();
+            _remoteEpisode.Report.Title = _title;
+            _remoteEpisode.Report.NzbUrl = _nzbUrl;
+        }
 
         private void WithExistingFile()
         {
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(nzbPath)).Returns(true);
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(_nzbPath)).Returns(true);
         }
 
         private void WithFailedDownload()
@@ -39,9 +45,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void DownloadNzb_should_download_file_if_it_doesnt_exist()
         {
-            Subject.DownloadNzb(nzbUrl, title).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(nzbUrl, nzbPath), Times.Once());
+            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
         }
 
         [Test]
@@ -49,7 +55,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithExistingFile();
 
-            Subject.DownloadNzb(nzbUrl, title).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
@@ -59,7 +65,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithFailedDownload();
 
-            Subject.DownloadNzb(nzbUrl, title).Should().BeFalse();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeFalse();
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -68,9 +74,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         public void should_replace_illegal_characters_in_title()
         {
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
-            var expectedFilename = Path.Combine(blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
+            var expectedFilename = Path.Combine(_blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
+            _remoteEpisode.Report.Title = illegalTitle;
 
-            Subject.DownloadNzb(nzbUrl, illegalTitle).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }

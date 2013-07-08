@@ -25,12 +25,15 @@ namespace NzbDrone.Core.Download.Clients
             _diskProvider = diskProvider;
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(RemoteEpisode remoteEpisode)
         {
+            var url = remoteEpisode.Report.NzbUrl;
+            var title = remoteEpisode.Report.Title;
+
             try
             {
                 //Todo: Allow full season releases
-                if (Parser.Parser.ParseTitle(title).FullSeason)
+                if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
                 {
                     logger.Info("Skipping Full Season Release: {0}", title);
                     return false;

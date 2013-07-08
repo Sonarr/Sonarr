@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
     {
         private const string URL = "http://www.nzbclub.com/nzb_download.aspx?mid=1950232";
         private const string TITLE = "My Series Name - 5x2-5x3 - My title [Bluray720p] [Proper]";
+        private RemoteEpisode _remoteEpisode;
 
         [SetUp]
         public void Setup()
@@ -29,6 +31,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
             fakeConfig.SetupGet(c => c.SabUsername).Returns("admin");
             fakeConfig.SetupGet(c => c.SabPassword).Returns("pass");
             fakeConfig.SetupGet(c => c.SabTvCategory).Returns("tv");
+
+            _remoteEpisode = new RemoteEpisode();
+            _remoteEpisode.Report = new ReportInfo();
+            _remoteEpisode.Report.Title = TITLE;
+            _remoteEpisode.Report.NzbUrl = URL;
         }
 
         private void WithFailResponse()
@@ -45,14 +52,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Returns("{ \"status\": true }");
 
 
-            Subject.DownloadNzb(URL, TITLE).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
         }
 
         [Test]
         public void add_by_url_should_detect_and_handle_sab_errors()
         {
             WithFailResponse();
-            Assert.Throws<ApplicationException>(() => Subject.DownloadNzb(URL, TITLE).Should().BeFalse());
+            Assert.Throws<ApplicationException>(() => Subject.DownloadNzb(_remoteEpisode).Should().BeFalse());
         }
 
         [Test]
@@ -186,7 +193,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
             Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.DownloadString(It.IsAny<String>())).Throws(new WebException());
 
-            Subject.DownloadNzb(URL, TITLE).Should().BeFalse();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeFalse();
             ExceptionVerification.ExpectedErrors(1);
         }
 
@@ -203,11 +210,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                     .Returns("{ \"status\": true }");
 
 
-            Subject.DownloadNzb(URL, TITLE).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>()
                     .Verify(v => v.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"), Times.Once());
         }
-
     }
 }

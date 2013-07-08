@@ -32,8 +32,11 @@ namespace NzbDrone.Core.Download.Clients
             throw new NotImplementedException();
         }
 
-        public bool DownloadNzb(string url, string title)
+        public bool DownloadNzb(RemoteEpisode remoteEpisode)
         {
+            var url = remoteEpisode.Report.NzbUrl;
+            var title = remoteEpisode.Report.Title;
+
             try
             {
                 title = FileNameBuilder.CleanFilename(title);

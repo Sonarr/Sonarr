@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -21,12 +22,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(RemoteEpisode remoteEpisode)
         {
+            var url = remoteEpisode.Report.NzbUrl;
+            var title = remoteEpisode.Report.Title;
+
             try
             {
                 string cat = _configService.NzbgetTvCategory;
-                int priority = (int)_configService.NzbgetRecentTvPriority;
+                int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetOlderTvPriority;
 
                 var command = new JsonRequest
                 {

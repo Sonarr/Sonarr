@@ -37,7 +37,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return new RestRequest(request);
         }
 
-
         private string GetSabRequest(string action)
         {
             return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
@@ -49,7 +48,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                                  _configService.SabPassword);
         }
     }
-
 
     public class SabnzbdClient : IDownloadClient
     {
@@ -64,12 +62,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(RemoteEpisode remoteEpisode)
         {
+            var url = remoteEpisode.Report.NzbUrl;
+            var title = remoteEpisode.Report.Title;
+
             try
             {
                 string cat = _configService.SabTvCategory;
-                int priority =(int)_configService.SabRecentTvPriority ;
+                int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
 
                 string name = url.Replace("&", "%26");
                 string nzbName = HttpUtility.UrlEncode(title);

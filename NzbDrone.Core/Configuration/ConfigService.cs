@@ -109,6 +109,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SabRecentTvPriority", value); }
         }
 
+        public SabPriorityType SabOlderTvPriority
+        {
+            get { return GetValueEnum("SabOlderTvPriority", SabPriorityType.Default); }
+
+            set { SetValue("SabOlderTvPriority", value); }
+        }
+
         public String DownloadedEpisodesFolder
         {
             get { return GetValue("DownloadedEpisodesFolder"); }
@@ -249,6 +256,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueEnum("NzbgetRecentTvPriority", PriorityType.Normal); }
 
             set { SetValue("NzbgetRecentTvPriority", value); }
+        }
+
+        public PriorityType NzbgetOlderTvPriority
+        {
+            get { return GetValueEnum("NzbgetOlderTvPriority", PriorityType.Normal); }
+
+            set { SetValue("NzbgetOlderTvPriority", value); }
         }
 
         public string ReleaseRestrictions

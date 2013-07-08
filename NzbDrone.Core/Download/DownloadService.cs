@@ -27,10 +27,9 @@ namespace NzbDrone.Core.Download
         public bool DownloadReport(RemoteEpisode remoteEpisode)
         {
             var downloadTitle = remoteEpisode.Report.Title;
-
             var provider = _downloadClientProvider.GetDownloadClient();
 
-            bool success = provider.DownloadNzb(remoteEpisode.Report.NzbUrl, downloadTitle);
+            bool success = provider.DownloadNzb(remoteEpisode);
 
             if (success)
             {
@@ -40,7 +39,5 @@ namespace NzbDrone.Core.Download
 
             return success;
         }
-
-
     }
 }

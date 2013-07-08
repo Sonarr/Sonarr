@@ -6,32 +6,42 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {
     [TestFixture]
-    public class PneumaticProviderFixture : CoreTest
+    public class PneumaticProviderFixture : CoreTest<PneumaticClient>
     {
-        private const string nzbUrl = "http://www.nzbs.com/url";
-        private const string title = "30.Rock.S01E05.hdtv.xvid-LoL";
-        private const string pneumaticFolder = @"d:\nzb\pneumatic\";
-        private const string sabDrop = @"d:\unsorted tv\";
-        private string nzbPath;
+        private const string _nzbUrl = "http://www.nzbs.com/url";
+        private const string _title = "30.Rock.S01E05.hdtv.xvid-LoL";
+        private const string _pneumaticFolder = @"d:\nzb\pneumatic\";
+        private const string _sabDrop = @"d:\unsorted tv\";
+        private string _nzbPath;
+        private RemoteEpisode _remoteEpisode;
 
         [SetUp]
         public void Setup()
         {
-            nzbPath = pneumaticFolder + title + ".nzb";
+            _nzbPath = _pneumaticFolder + _title + ".nzb";
 
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.PneumaticFolder).Returns(pneumaticFolder);
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder).Returns(sabDrop);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.PneumaticFolder).Returns(_pneumaticFolder);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder).Returns(_sabDrop);
+
+            _remoteEpisode = new RemoteEpisode();
+            _remoteEpisode.Report = new ReportInfo();
+            _remoteEpisode.Report.Title = _title;
+            _remoteEpisode.Report.NzbUrl = _nzbUrl;
+
+            _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
+            _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
         }
 
         private void WithExistingFile()
         {
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(nzbPath)).Returns(true);
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(_nzbPath)).Returns(true);
         }
 
         private void WithFailedDownload()
@@ -42,9 +52,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void should_download_file_if_it_doesnt_exist()
         {
-            Mocker.Resolve<PneumaticClient>().DownloadNzb(nzbUrl, title).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(nzbUrl, nzbPath),Times.Once());
+            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath),Times.Once());
         }
 
         [Test]
@@ -52,7 +62,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithExistingFile();
 
-            Mocker.Resolve<PneumaticClient>().DownloadNzb(nzbUrl, title).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
@@ -62,7 +72,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithFailedDownload();
 
-            Mocker.Resolve<PneumaticClient>().DownloadNzb(nzbUrl, title).Should().BeFalse();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeFalse();
             
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -70,16 +80,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void should_skip_if_full_season_download()
         {
-            Mocker.Resolve<PneumaticClient>().DownloadNzb(nzbUrl, "30 Rock - Season 1").Should().BeFalse();
+            _remoteEpisode.Report.Title = "30 Rock - Season 1";
+            _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
+
+            Mocker.Resolve<PneumaticClient>().DownloadNzb(_remoteEpisode).Should().BeFalse();
         }
 
         [Test]
         public void should_replace_illegal_characters_in_title()
         {
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
-            var expectedFilename = Path.Combine(pneumaticFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
+            var expectedFilename = Path.Combine(_pneumaticFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
+            _remoteEpisode.Report.Title = illegalTitle;
 
-            Mocker.Resolve<PneumaticClient>().DownloadNzb(nzbUrl, illegalTitle).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }

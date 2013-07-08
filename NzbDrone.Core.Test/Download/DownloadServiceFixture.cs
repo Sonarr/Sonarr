@@ -37,14 +37,14 @@ namespace NzbDrone.Core.Test.Download
         private void WithSuccessfulAdd()
         {
             Mocker.GetMock<IDownloadClient>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()))
                 .Returns(true);
         }
 
         private void WithFailedAdd()
         {
             Mocker.GetMock<IDownloadClient>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()))
                 .Returns(false);
         }
 
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.DownloadReport(_parseResult);
 
             Mocker.GetMock<IDownloadClient>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()), Times.Once());
+                .Verify(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()), Times.Once());
         }
 
         [Test]
@@ -77,8 +77,5 @@ namespace NzbDrone.Core.Test.Download
             Subject.DownloadReport(_parseResult);
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
         }
-
-
-
     }
 }

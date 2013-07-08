@@ -47,6 +47,7 @@
             <input type="text" name="nzbgetTvCategory"/>
         </div>
     </div>
+
     <div class="control-group">
         <label class="control-label">Download Priority</label>
 
@@ -60,7 +61,25 @@
                 <option value="force">Force</option>
             </select>
             <span class="help-inline">
-                <i class="icon-form-info" title="Priority to use when sending episodes that aired within the last 7 days to NZBGet"/>
+                <i class="icon-form-info" title="Priority to use when sending episodes that aired within the last 14 days to NZBGet"/>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Older Download Priority</label>
+
+        <div class="controls">
+            <select name="nzbgetOlderTvPriority">
+                <option value="default">Default</option>
+                <option value="pasued">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="force">Force</option>
+            </select>
+            <span class="help-inline">
+                <i class="icon-form-info" title="Priority to use when sending episodes that aired prior to 14 days to NZBGet"/>
             </span>
         </div>
     </div>
