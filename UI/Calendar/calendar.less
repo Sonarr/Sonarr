@@ -19,44 +19,10 @@
     .clickable;
   }
 
-  .primary {
-    border-color     : #007ccd;
-    background-color : #007ccd;
-  }
-
-  .info {
-    border-color     : #14b8d4;
-    background-color : #14b8d4;
-  }
-
-  .inverse {
-    border-color     : #333333;
-    background-color : #333333;
-  }
-
-  .warning {
-    border-color     : #ffa93c;
-    background-color : #ffa93c;
-  }
-
-  .danger {
-    border-color     : #ea494a;
-    background-color : #ea494a;
-  }
-
   th {
     background-color : #eeeeee;
   }
 
-  .purple {
-    border-color     : #7932ea;
-    background-color : #7932ea;
-  }
-
-  .success {
-    border-color     : #4cb158;
-    background-color : #4cb158;
-  }
   h2 {
     font-size : 17.5px;
   }
@@ -101,37 +67,104 @@
     }
   }
 
+  .primary {
+    border-color     : @btnPrimaryBackground;
+  }
+
+  .info {
+    border-color     : @btnInfoBackground;
+  }
+
+  .inverse {
+    border-color     : @btnInverseBackground;
+  }
+
+  .warning {
+    border-color     : @btnWarningBackground;
+  }
+
+  .danger {
+    border-color     : @btnDangerBackground;
+  }
+
+  .success {
+    border-color     : @btnSuccessBackground;;
+  }
+
+  .purple {
+    border-color     : #7932ea;
+  }
+
   .episode-title {
     .btn-link;
     color: @linkColor;
     margin-top: 1px;
   }
+}
 
+.legend {
+  margin: 5px;
+
+  ul {
+    margin: 0;
+    margin-bottom: 5px;
+    padding: 0;
+    float: left;
+    list-style: none;
+
+    li {
+      font-size: 80%;
+      list-style: none;
+      margin-left: 0;
+      line-height: 18px;
+      margin-bottom: 2px;
+
+      span {
+        display: block;
+        float: left;
+        height: 16px;
+        width: 30px;
+        margin-right: 5px;
+        margin-left: 0;
+        border: none;
+      }
+    }
+  }
+}
+
+.calendar, .legend {
   .primary {
-    border-color : #007ccd;
+    border-color     : @btnPrimaryBackground;
+    background-color : @btnPrimaryBackground;
   }
 
   .info {
-    border-color : #14b8d4;
+    border-color     : @btnInfoBackground;
+    background-color : @btnInfoBackground;
   }
 
   .inverse {
-    border-color : #333333;
+    border-color     : @btnInverseBackground;
+    background-color : @btnInverseBackground;
   }
 
   .warning {
-    border-color : #ffa93c;
+    border-color     : @btnWarningBackground;
+    background-color : @btnWarningBackground;
   }
 
   .danger {
-    border-color : #ea494a;
-  }
-
-  .purple {
-    border-color : #7932ea;
+    border-color     : @btnDangerBackground;
+    background-color : @btnDangerBackground;
   }
 
   .success {
-    border-color : #4cb158;
+    border-color     : @btnSuccessBackground;
+    background-color : @btnSuccessBackground;
+  }
+
+  .purple {
+    border-color     : #7932ea;
+    background-color : #7932ea;
   }
 }
