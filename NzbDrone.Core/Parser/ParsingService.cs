@@ -95,7 +95,6 @@ namespace NzbDrone.Core.Parser
             {
                 if (series.SeriesType == SeriesTypes.Standard)
                 {
-                    //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
                     _logger.Warn("Found daily-style episode for non-daily series: {0}.", series);
                     return new List<Episode>();
                 }

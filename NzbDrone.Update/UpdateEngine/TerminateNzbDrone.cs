@@ -43,7 +43,6 @@ namespace NzbDrone.Update.UpdateEngine
                 }
             }
 
-            //TODO:Should be able to restart service if anything beyond this point fails
             _logger.Info("Killing all running processes");
 
             if (_processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProcessName).Any())

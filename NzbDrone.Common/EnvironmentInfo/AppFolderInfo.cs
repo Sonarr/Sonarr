@@ -16,10 +16,12 @@ namespace NzbDrone.Common.EnvironmentInfo
     public class AppFolderInfo : IAppFolderInfo
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly Logger _logger;
 
         public AppFolderInfo(IDiskProvider diskProvider)
         {
             _diskProvider = diskProvider;
+            _logger = LogManager.GetCurrentClassLogger();
             AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
             StartUpFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             TempFolder = Path.GetTempPath();
@@ -54,7 +56,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             }
             catch (Exception ex)
             {
-                //Todo: Add logging
+                _logger.WarnException("Coudn't set app folder permission", ex);
             }
         }
 

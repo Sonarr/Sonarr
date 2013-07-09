@@ -40,9 +40,6 @@ namespace NzbDrone.Core.Datastore
         private readonly IDatabase _database;
         private readonly IMessageAggregator _messageAggregator;
 
-        //TODO: add assertion to make sure model properly mapped 
-
-
         private IDataMapper DataMapper
         {
             get { return _database.DataMapper; }

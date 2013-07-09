@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Series
