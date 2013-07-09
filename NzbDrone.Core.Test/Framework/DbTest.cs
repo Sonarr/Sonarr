@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.Framework
         [TearDown]
         public void TearDown()
         {
-            if (TestFolderInfo != null)
+            if (TestFolderInfo != null && Directory.Exists(TestFolderInfo.AppDataFolder))
             {
                 var files = Directory.GetFiles(TestFolderInfo.AppDataFolder);
 

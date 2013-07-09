@@ -3,7 +3,6 @@ using FluentAssertions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.NzbClub;
-using NzbDrone.Core.Indexers.Nzbx;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -32,18 +31,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
             ValidateResult(result);
         }
-
-        [Test]
-        public void nzbx_rss()
-        {
-            var indexer = new Nzbx();
-
-            var result = Subject.FetchRss(indexer);
-
-            ValidateResult(result);
-        }
-
-
 
         [Test]
         public void wombles_rss()

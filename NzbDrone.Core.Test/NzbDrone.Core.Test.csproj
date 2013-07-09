@@ -142,7 +142,6 @@
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
-    <Compile Include="IndexerTests\ParserTests\NzbxParserFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
@@ -279,12 +278,6 @@
     <None Include="..\NzbDrone.Test.Common\App.config">
       <Link>App.config</Link>
     </None>
-    <None Include="Files\Indexers\Nzbx\nzbx_search.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\Indexers\Nzbx\nzbx_recent.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="Files\RSS\omgwtfnzbs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -342,12 +335,6 @@
     <Content Include="Files\Xem\Mappings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Files\RSS\SizeParsing\nzbx_recent.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Files\RSS\SizeParsing\nzbx_search.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Files\SceneMappings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -357,6 +344,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Files\Indexers\" />
     <Folder Include="ProviderTests\UpdateProviderTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

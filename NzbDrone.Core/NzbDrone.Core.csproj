@@ -316,8 +316,6 @@
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
     <Compile Include="Indexers\NzbClub\NzbClub.cs" />
     <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
-    <Compile Include="Indexers\Nzbx\Nzbx.cs" />
-    <Compile Include="Indexers\Nzbx\NzbxParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
     <Compile Include="Indexers\IIndexerSetting.cs" />
@@ -374,7 +372,6 @@
     <Compile Include="Download\Clients\Nzbget\NzbGetQueueItem.cs" />
     <Compile Include="Download\Clients\Nzbget\PriorityType.cs" />
     <Compile Include="Download\Clients\Nzbget\VersionModel.cs" />
-    <Compile Include="Indexers\Nzbx\NzbxRecentItem.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Parser\Language.cs" />
