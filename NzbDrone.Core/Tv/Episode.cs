@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Tv
         public DateTime? AirDate { get; set; }
 
         public string Overview { get; set; }
-        public Boolean Ignored { get; set; }
+        public Boolean Monitored { get; set; }
         public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }

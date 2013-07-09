@@ -142,10 +142,10 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("UpdateUrl", value); }
         }
 
-        public bool AutoIgnorePreviouslyDownloadedEpisodes
+        public bool AutoUnmonitorPreviouslyDownloadedEpisodes
         {
-            get { return GetValueBoolean("AutoIgnorePreviouslyDownloadedEpisodes"); }
-            set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
+            get { return GetValueBoolean("AutoUnmonitorPreviouslyDownloadedEpisodes"); }
+            set { SetValue("AutoUnmonitorPreviouslyDownloadedEpisodes", value); }
         }
 
         public int Retention

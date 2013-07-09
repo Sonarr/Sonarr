@@ -13,26 +13,25 @@ namespace NzbDrone.Core.Test.TvTests
 {
     public class SeasonProviderTest : DbTest<SeasonRepository, Season>
     {
-
         [TestCase(true)]
         [TestCase(false)]
-        public void IsIgnored_should_return_ignored_status_of_season(bool ignoreFlag)
+        public void Ismonitored_should_return_monitored_status_of_season(bool monitored)
         {
             var fakeSeason = Builder<Season>.CreateNew()
-                                            .With(s => s.Ignored = ignoreFlag)
+                                            .With(s => s.Monitored = monitored)
                                             .BuildNew<Season>();
 
             Db.Insert(fakeSeason);
 
-            var result = Subject.IsIgnored(fakeSeason.SeriesId, fakeSeason.SeasonNumber);
+            var result = Subject.IsMonitored(fakeSeason.SeriesId, fakeSeason.SeasonNumber);
 
-            result.Should().Be(ignoreFlag);
+            result.Should().Be(monitored);
         }
 
         [Test]
-        public void IsIgnored_should_return_false_if_not_in_db()
+        public void Monitored_should_return_true_if_not_in_db()
         {
-            Subject.IsIgnored(10, 0).Should().BeFalse();
+            Subject.IsMonitored(10, 0).Should().BeTrue();
         }
 
         [Test]

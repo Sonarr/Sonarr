@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Tv
     {
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
-        public Boolean Ignored { get; set; }
+        public Boolean Monitored { get; set; }
 
         public List<Episode> Episodes { get; set; }
     }

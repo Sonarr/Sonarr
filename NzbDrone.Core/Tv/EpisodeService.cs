@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> EpisodesWithFiles();
         void UpdateEpisode(Episode episode);
         List<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber);
-        void SetEpisodeIgnore(int episodeId, bool isIgnored);
+        void SetEpisodeMonitored(int episodeId, bool monitored);
         bool IsFirstOrLastEpisodeOfSeason(int episodeId);
         void UpdateEpisodes(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
@@ -123,12 +123,12 @@ namespace NzbDrone.Core.Tv
             return GetEpisodesBySeason(seriesId, seasonNumber).Select(c => c.Id).ToList();
         }
 
-        public void SetEpisodeIgnore(int episodeId, bool isIgnored)
+        public void SetEpisodeMonitored(int episodeId, bool monitored)
         {
             var episode = _episodeRepository.Get(episodeId);
-            _episodeRepository.SetIgnoreFlat(episode, isIgnored);
+            _episodeRepository.SetMonitoredFlat(episode, monitored);
 
-            logger.Info("Ignore flag for Episode:{0} was set to {1}", episodeId, isIgnored);
+            logger.Info("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
         }
 
         public bool IsFirstOrLastEpisodeOfSeason(int episodeId)
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Tv
             {
                 _logger.Trace("Detaching episode {0} from file.", episode.Id);
                 episode.EpisodeFileId = 0;
-                episode.Ignored = _configService.AutoIgnorePreviouslyDownloadedEpisodes;
+                episode.Monitored = _configService.AutoUnmonitorPreviouslyDownloadedEpisodes;
                 UpdateEpisode(episode);
             }
         }
@@ -192,7 +192,5 @@ namespace NzbDrone.Core.Tv
                 _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.Path, episode);
             }
         }
-
-
     }
 }

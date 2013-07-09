@@ -116,12 +116,12 @@ namespace NzbDrone.Core.Tv
                         //If it is Episode Zero Ignore it (specials, sneak peeks.)
                         if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
                         {
-                            episodeToUpdate.Ignored = true;
+                            episodeToUpdate.Monitored = false;
                         }
                         else
                         {
                             var season = seasons.FirstOrDefault(c => c.SeasonNumber == episode.SeasonNumber);
-                            episodeToUpdate.Ignored = season != null && season.Ignored;
+                            episodeToUpdate.Monitored = season != null && season.Monitored;
                         }
                     }
                     else

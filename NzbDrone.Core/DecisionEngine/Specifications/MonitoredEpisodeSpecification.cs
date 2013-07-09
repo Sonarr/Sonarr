@@ -17,7 +17,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             get
             {
-                return "Series is not monitored or Episode is ignored";
+                return "Series or Episode is not monitored";
             }
         }
 
@@ -30,12 +30,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
 
             //return monitored if any of the episodes are monitored
-            if (subject.Episodes.Any(episode => !episode.Ignored))
+            if (subject.Episodes.Any(episode => episode.Monitored))
             {
                 return true;
             }
 
-            _logger.Debug("All episodes are ignored. skipping.");
+            _logger.Debug("No episodes are monitored. skipping.");
             return false;
         }
     }

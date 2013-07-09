@@ -16,7 +16,7 @@ namespace NzbDrone.Api.Episodes
         public EpisodeFile EpisodeFile { get; set; }
 
         public Boolean HasFile { get; set; }
-        public Boolean Ignored { get; set; }
+        public Boolean Monitored { get; set; }
         public Int32 SceneEpisodeNumber { get; set; }
         public Int32 SceneSeasonNumber { get; set; }
         public Int32 TvDbEpisodeId { get; set; }

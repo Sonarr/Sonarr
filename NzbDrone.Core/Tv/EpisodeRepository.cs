@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Tv
         Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> EpisodesWithFiles();
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
-        void SetIgnoreFlat(Episode episode, bool ignoreFlag);
+        void SetMonitoredFlat(Episode episode, bool monitored);
         void SetFileId(int episodeId, int fileId);
     }
 
@@ -119,10 +119,10 @@ namespace NzbDrone.Core.Tv
                         .AndWhere(e => e.AirDate <= endDate).ToList();
         }
 
-        public void SetIgnoreFlat(Episode episode, bool ignoreFlag)
+        public void SetMonitoredFlat(Episode episode, bool monitored)
         {
-            episode.Ignored = ignoreFlag;
-            SetFields(episode, p => p.Ignored);
+            episode.Monitored = monitored;
+            SetFields(episode, p => p.Monitored);
         }
 
         public void SetFileId(int episodeId, int fileId)

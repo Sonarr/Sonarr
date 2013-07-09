@@ -30,8 +30,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .With(c => c.Monitored = true)
                 .Build();
 
-            _firstEpisode = new Episode { Ignored = false };
-            _secondEpisode = new Episode { Ignored = false };
+            _firstEpisode = new Episode { Monitored = true };
+            _secondEpisode = new Episode { Monitored = true };
 
 
             var singleEpisodeList = new List<Episode> { _firstEpisode };
@@ -48,20 +48,16 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Series = _fakeSeries,
                 Episodes = singleEpisodeList
             };
-
-
-
-
         }
 
-        private void WithFirstEpisodeIgnored()
+        private void WithFirstEpisodeUnmonitored()
         {
-            _firstEpisode.Ignored = true;
+            _firstEpisode.Monitored = false;
         }
 
-        private void WithSecondEpisodeIgnored()
+        private void WithSecondEpisodeUnmonitored()
         {
-            _secondEpisode.Ignored = true;
+            _secondEpisode.Monitored = false;
         }
 
         [Test]
@@ -81,34 +77,34 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
         [Test]
-        public void only_episode_ignored_should_return_false()
+        public void only_episode_not_monitored_should_return_false()
         {
-            WithFirstEpisodeIgnored();
+            WithFirstEpisodeUnmonitored();
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle).Should().BeFalse();
         }
 
 
         [Test]
-        public void both_episodes_ignored_should_return_false()
+        public void both_episodes_not_monitored_should_return_false()
         {
-            WithFirstEpisodeIgnored();
-            WithSecondEpisodeIgnored();
+            WithFirstEpisodeUnmonitored();
+            WithSecondEpisodeUnmonitored();
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
         }
 
 
         [Test]
-        public void only_first_episode_ignored_should_return_monitored()
+        public void only_first_episode_not_monitored_should_return_monitored()
         {
-            WithFirstEpisodeIgnored();
+            WithFirstEpisodeUnmonitored();
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
         }
 
 
         [Test]
-        public void only_second_episode_ignored_should_return_monitored()
+        public void only_second_episode_not_monitored_should_return_monitored()
         {
-            WithSecondEpisodeIgnored();
+            WithSecondEpisodeUnmonitored();
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
         }
 

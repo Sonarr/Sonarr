@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Configuration
         String DownloadedEpisodesFolder { get; set; }
         bool UseSeasonFolder { get; set; }
         string SeasonFolderFormat { get; set; }
-        bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
+        bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
         int Retention { get; set; }
         Guid UGuid { get; }
         DownloadClientType DownloadClient { get; set; }

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Tv
     {
         IList<int> GetSeasonNumbers(int seriesId);
         Season Get(int seriesId, int seasonNumber);
-        bool IsIgnored(int seriesId, int seasonNumber);
+        bool IsMonitored(int seriesId, int seasonNumber);
         List<Season> GetSeasonBySeries(int seriesId);
     }
 
@@ -32,13 +32,13 @@ namespace NzbDrone.Core.Tv
             return Query.Single(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
         }
 
-        public bool IsIgnored(int seriesId, int seasonNumber)
+        public bool IsMonitored(int seriesId, int seasonNumber)
         {
             var season = Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
 
-            if (season == null) return false;
+            if (season == null) return true;
 
-            return season.Ignored;
+            return season.Monitored;
         }
 
         public List<Season> GetSeasonBySeries(int seriesId)

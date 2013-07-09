@@ -214,6 +214,8 @@
     <Compile Include="Datastore\Migration\007_add_renameEpisodes_to_naming.cs" />
     <Compile Include="Datastore\Migration\008_remove_backlog.cs" />
     <Compile Include="Datastore\Migration\009_fix_renameEpisodes.cs" />
+    <Compile Include="Datastore\Migration\010_add_monitored.cs" />
+    <Compile Include="Datastore\Migration\011_remove_ignored.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
