@@ -1,29 +1,37 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Seasons
 {
-    public class SeasonModule : NzbDroneApiModule
+    public class SeasonModule : NzbDroneRestModule<SeasonResource>
     {
         private readonly ISeasonService _seasonService;
 
         public SeasonModule(ISeasonService seasonService)
-            : base("/Season")
+            : base("/season")
         {
             _seasonService = seasonService;
 
-            Get["/"] = x => GetSeasons();
+            GetResourceAll = GetSeasons;
+            UpdateResource = SetMonitored;
         }
 
-        private Response GetSeasons()
+        private List<SeasonResource> GetSeasons()
         {
             var seriesId = Request.Query.SeriesId;
 
-            return JsonExtensions.AsResponse(_seasonService.GetSeasonsBySeries(seriesId));
+            return ToListResource<Season>(() => _seasonService.GetSeasonsBySeries(seriesId));
+        }
+
+        private SeasonResource SetMonitored(SeasonResource seasonResource)
+        {
+            _seasonService.SetMonitored(seasonResource.SeriesId, seasonResource.SeasonNumber, seasonResource.Monitored);
+
+            return seasonResource;
         }
     }
-
-
 }

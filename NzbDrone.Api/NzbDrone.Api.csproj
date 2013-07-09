@@ -140,6 +140,7 @@
     <Compile Include="RootFolders\RootFolderResource.cs" />
     <Compile Include="RootFolders\RootFolderConnection.cs" />
     <Compile Include="Seasons\SeasonModule.cs" />
+    <Compile Include="Seasons\SeasonResource.cs" />
     <Compile Include="Series\SeriesConnection.cs" />
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />

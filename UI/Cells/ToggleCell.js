@@ -21,11 +21,8 @@ define(
                 this.model.save();
             },
 
-
             render: function () {
                 this.$el.empty();
-
-
                 this.$el.html('<i />');
 
                 var name = this.column.get('name');
@@ -36,6 +33,13 @@ define(
                 else {
                     this.$('i').addClass(this.column.get('falseClass'));
                 }
+
+                var tooltip = this.column.get('tooltip');
+
+                if (tooltip) {
+                    this.$('i').attr('title', tooltip);
+                }
+
                 return this;
             }
         });

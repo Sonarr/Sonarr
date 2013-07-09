@@ -28,11 +28,12 @@ define(
             columns:
                 [
                     {
-                        name      : 'ignored',
+                        name      : 'monitored',
                         label     : '',
                         cell      : ToggleCell,
-                        trueClass : 'icon-bookmark-empty',
-                        falseClass: 'icon-bookmark'
+                        trueClass : 'icon-bookmark',
+                        falseClass: 'icon-bookmark-empty',
+                        tooltip   : 'Toggle monitored status'
                     },
                     {
                         name : 'episodeNumber',

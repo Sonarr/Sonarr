@@ -19,6 +19,7 @@ namespace NzbDrone.Api.Episodes
             _mediaFileRepository = mediaFileRepository;
 
             GetResourceAll = GetEpisodes;
+            UpdateResource = SetMonitored;
         }
 
         private List<EpisodeResource> GetEpisodes()
@@ -34,6 +35,13 @@ namespace NzbDrone.Api.Episodes
                 .LoadSubtype(e => e.EpisodeFileId, _mediaFileRepository);
 
             return resource.ToList();
+        }
+
+        private EpisodeResource SetMonitored(EpisodeResource episodeResource)
+        {
+            _episodeService.SetEpisodeMonitored(episodeResource.Id, episodeResource.Monitored);
+
+            return episodeResource;
         }
     }
 }
