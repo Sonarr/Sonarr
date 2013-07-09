@@ -16,7 +16,7 @@ License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 using System;
 using System.Reflection;
 
-namespace Marr.Data
+namespace Marr.Data.Reflection
 {
     public class ReflectionHelper
     {
