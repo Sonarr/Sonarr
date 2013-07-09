@@ -68,8 +68,15 @@ namespace NzbDrone.Api.REST
                 Get[ID_ROUTE] = options =>
                     {
                         ValidateId(options.Id);
-                        var resource = GetResourceById((int)options.Id);
-                        return resource.AsResponse();
+                        try
+                        {
+                            var resource = GetResourceById((int)options.Id);
+                            return resource.AsResponse();
+                        }
+                        catch (ModelNotFoundException)
+                        {
+                            return new NotFoundResponse();
+                        }
                     };
             }
         }

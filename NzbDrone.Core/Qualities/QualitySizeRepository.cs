@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Qualities
             }
             catch (InvalidOperationException e)
             {
-                throw new InvalidOperationException("Sequence contains no element with qualityId = " + qualityId.ToString());
+                throw new ModelNotFoundException(typeof(QualitySize), qualityId);
             }
         }
     }

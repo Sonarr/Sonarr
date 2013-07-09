@@ -228,6 +228,7 @@
     <Compile Include="Datastore\Migration\Framework\SQLiteMigrationHelper.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
+    <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
     <Compile Include="Datastore\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\RelationshipExtensions.cs" />

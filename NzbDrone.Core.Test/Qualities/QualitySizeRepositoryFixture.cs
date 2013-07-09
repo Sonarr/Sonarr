@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Test.Qualities
         public void should_throw_with_id_if_not_exist()
         {
             var id = 123;
-            Assert.Throws<InvalidOperationException>(()=> Subject.GetByQualityId(id)).Message.Contains(id.ToString());
+            Assert.Throws<ModelNotFoundException>(()=> Subject.GetByQualityId(id)).Message.Contains(id.ToString());
         }
 
     }

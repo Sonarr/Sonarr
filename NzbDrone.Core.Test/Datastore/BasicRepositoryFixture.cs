@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void getting_model_with_invalid_id_should_throw()
         {
-            Assert.Throws<InvalidOperationException>(() => Subject.Get(12));
+            Assert.Throws<ModelNotFoundException>(() => Subject.Get(12));
         }
 
 

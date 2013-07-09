@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
 using System.Linq;
 
@@ -60,10 +58,8 @@ namespace NzbDrone.Integration.Test
         }
 
         [Test]
-        [Ignore]
         public void invalid_id_should_return_404()
         {
-            //TODO: fix
             Series.Get(99, HttpStatusCode.NotFound);
         }
     }

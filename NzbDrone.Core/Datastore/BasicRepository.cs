@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.QGen;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Common;
@@ -73,7 +74,14 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            return DataMapper.Query<TModel>().Single(c => c.Id == id);
+            var model = DataMapper.Query<TModel>().SingleOrDefault(c => c.Id == id);
+
+            if (model == null)
+            {
+                throw new ModelNotFoundException(typeof(TModel), id);
+            }
+
+            return model;
         }
 
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
