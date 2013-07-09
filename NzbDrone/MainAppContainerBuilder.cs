@@ -1,11 +1,9 @@
-﻿using NLog;
-using Nancy.Bootstrapper;
+﻿using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Api.SignalR;
 using NzbDrone.Common.Composition;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
 
@@ -13,15 +11,12 @@ namespace NzbDrone
 {
     public class MainAppContainerBuilder : ContainerBuilderBase
     {
-        private static readonly Logger Logger = LogManager.GetLogger("ContainerBuilderBase");
-
-        public static IContainer BuildContainer()
+        public static IContainer BuildContainer(string[] args)
         {
-            return new MainAppContainerBuilder().Container;
+            return new MainAppContainerBuilder(args).Container;
         }
 
-
-        private MainAppContainerBuilder()
+        private MainAppContainerBuilder(string[] args)
             : base("NzbDrone", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
             AutoRegisterImplementations<NzbDronePersistentConnection>();
@@ -30,9 +25,8 @@ namespace NzbDrone
             Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>));
 
             Container.Register<INancyBootstrapper, NancyBootstrapper>();
-        
+
+            Container.Register(new StartupArguments(args));
         }
-
-
     }
 }

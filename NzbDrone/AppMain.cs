@@ -49,10 +49,10 @@ namespace NzbDrone
                     return;
                 }
 
-                var container = MainAppContainerBuilder.BuildContainer();
+                var container = MainAppContainerBuilder.BuildContainer(args);
 
                 DbFactory.RegisterDatabase(container);
-                container.Resolve<Router>().Route(args);
+                container.Resolve<Router>().Route();
             }
             catch (Exception e)
             {

@@ -13,9 +13,8 @@ namespace NzbDrone.Common.Test
         [SetUp]
         public void setup()
         {
-            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer());
+            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new string[0]));
         }
-
 
         [Test]
         public void event_handlers_should_be_unique()

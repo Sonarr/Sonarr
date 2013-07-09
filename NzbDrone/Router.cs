@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.SysTray;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
@@ -14,25 +13,28 @@ namespace NzbDrone
     {
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly IServiceProvider _serviceProvider;
+        private readonly StartupArguments _startupArguments;
         private readonly IConsoleService _consoleService;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly ISystemTrayApp _systemTrayProvider;
         private readonly Logger _logger;
 
-        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider,
+        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider, StartupArguments startupArguments,
                         IConsoleService consoleService, IRuntimeInfo runtimeInfo, ISystemTrayApp systemTrayProvider, Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
+            _startupArguments = startupArguments;
             _consoleService = consoleService;
             _runtimeInfo = runtimeInfo;
             _systemTrayProvider = systemTrayProvider;
             _logger = logger;
         }
 
-        public void Route(IEnumerable<string> args)
+        public void Route()
         {
-            Route(GetApplicationMode(args));
+            var appMode = GetApplicationMode();
+            Route(appMode);
         }
 
         public void Route(ApplicationModes applicationModes)
@@ -87,7 +89,7 @@ namespace NzbDrone
                         _logger.Trace("Uninstall Service selected");
                         if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
-                            _consoleService.PrintServiceDoestExist();
+                            _consoleService.PrintServiceDoesNotExist();
                         }
                         else
                         {
@@ -104,20 +106,24 @@ namespace NzbDrone
             }
         }
 
-        public static ApplicationModes GetApplicationMode(IEnumerable<string> args)
+        private ApplicationModes GetApplicationMode()
         {
-            if (args == null) return ApplicationModes.Console;
+            if (_startupArguments.Flags.Contains(StartupArguments.HELP))
+            {
+                return ApplicationModes.Help;
+            }
 
-            var cleanArgs = args.Where(c => c != null && !String.IsNullOrWhiteSpace(c)).ToList();
-            if (cleanArgs.Count == 0) return ApplicationModes.Console;
-            if (cleanArgs.Count != 1) return ApplicationModes.Help;
+            if (_startupArguments.Flags.Contains(StartupArguments.INSTALL_SERVICE))
+            {
+                return ApplicationModes.InstallService;
+            }
 
-            var arg = cleanArgs.First().Trim('/', '\\', '-').ToLower();
+            if (_startupArguments.Flags.Contains(StartupArguments.UNINSTALL_SERVICE))
+            {
+                return ApplicationModes.UninstallService;
+            }
 
-            if (arg == "i") return ApplicationModes.InstallService;
-            if (arg == "u") return ApplicationModes.UninstallService;
-
-            return ApplicationModes.Help;
+            return ApplicationModes.Console;
         }
     }
 }

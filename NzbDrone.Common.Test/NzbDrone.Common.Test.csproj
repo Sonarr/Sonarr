@@ -82,6 +82,7 @@
     <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
+    <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="EnvironmentTests\EnviromentProviderTest.cs" />
     <Compile Include="EventingTests\MessageAggregatorCommandTests.cs" />
     <Compile Include="EventingTests\MessageAggregatorEventTests.cs" />
@@ -124,7 +125,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EnviromentTests\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -81,6 +81,8 @@ namespace NzbDrone.Test.Common
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
 
+            Mocker.SetConstant(new StartupArguments(new string[0]));
+
             LogManager.ReconfigExistingLoggers();
 
             TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);

@@ -1,5 +1,4 @@
 ﻿using System.ServiceProcess;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -11,37 +10,6 @@ namespace NzbDrone.App.Test
     [TestFixture]
     public class RouterTest : TestBase<Router>
     {
-
-        [TestCase(null, ApplicationModes.Console)]
-        [TestCase("", ApplicationModes.Console)]
-        [TestCase("1", ApplicationModes.Help)]
-        [TestCase("ii", ApplicationModes.Help)]
-        [TestCase("uu", ApplicationModes.Help)]
-        [TestCase("i", ApplicationModes.InstallService)]
-        [TestCase("I", ApplicationModes.InstallService)]
-        [TestCase("/I", ApplicationModes.InstallService)]
-        [TestCase("/i", ApplicationModes.InstallService)]
-        [TestCase("-I", ApplicationModes.InstallService)]
-        [TestCase("-i", ApplicationModes.InstallService)]
-        [TestCase("u", ApplicationModes.UninstallService)]
-        [TestCase("U", ApplicationModes.UninstallService)]
-        [TestCase("/U", ApplicationModes.UninstallService)]
-        [TestCase("/u", ApplicationModes.UninstallService)]
-        [TestCase("-U", ApplicationModes.UninstallService)]
-        [TestCase("-u", ApplicationModes.UninstallService)]
-        public void GetApplicationMode_single_arg(string arg, ApplicationModes modes)
-        {
-            Router.GetApplicationMode(new[] { arg }).Should().Be(modes);
-        }
-
-        [TestCase("", "", ApplicationModes.Console)]
-        [TestCase("", null, ApplicationModes.Console)]
-        [TestCase("i", "n", ApplicationModes.Help)]
-        public void GetApplicationMode_two_args(string a, string b, ApplicationModes modes)
-        {
-            Router.GetApplicationMode(new[] { a, b }).Should().Be(modes);
-        }
-
         [Test]
         public void Route_should_call_install_service_when_application_mode_is_install()
         {
@@ -123,7 +91,7 @@ namespace NzbDrone.App.Test
             var serviceMock = Mocker.GetMock<IServiceProvider>();
             Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
-            consoleMock.Setup(c => c.PrintServiceDoestExist());
+            consoleMock.Setup(c => c.PrintServiceDoesNotExist());
             serviceMock.Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)).Returns(false);
 
             Subject.Route(ApplicationModes.UninstallService);

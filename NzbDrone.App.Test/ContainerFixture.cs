@@ -16,22 +16,25 @@ namespace NzbDrone.App.Test
     [TestFixture]
     public class ContainerFixture : TestBase
     {
+
+        string[] args = new[]{"first","second"};
+
         [Test]
         public void should_be_able_to_resolve_indexers()
         {
-            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
+            MainAppContainerBuilder.BuildContainer(args).Resolve<IEnumerable<IIndexer>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void should_be_able_to_resolve_downlodclients()
         {
-            MainAppContainerBuilder.BuildContainer().Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
+            MainAppContainerBuilder.BuildContainer(args).Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
         }
 
         [Test]
         public void container_should_inject_itself()
         {
-            var factory = MainAppContainerBuilder.BuildContainer().Resolve<IServiceFactory>();
+            var factory = MainAppContainerBuilder.BuildContainer(args).Resolve<IServiceFactory>();
 
             factory.Build<IIndexerService>().Should().NotBeNull();
         }
@@ -40,7 +43,7 @@ namespace NzbDrone.App.Test
         public void should_resolve_command_executor_by_name()
         {
             var genericExecutor = typeof(IExecute<>).MakeGenericType(typeof(RssSyncCommand));
-            var container = MainAppContainerBuilder.BuildContainer();
+            var container = MainAppContainerBuilder.BuildContainer(args);
             DbFactory.RegisterDatabase(container);
 
             var executor = container.Resolve(genericExecutor);
@@ -53,7 +56,7 @@ namespace NzbDrone.App.Test
         [Ignore("need to fix this at some point")]
         public void should_return_same_instance_of_singletons()
         {
-            var container = MainAppContainerBuilder.BuildContainer();
+            var container = MainAppContainerBuilder.BuildContainer(args);
 
             var first = container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
             var second = container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();

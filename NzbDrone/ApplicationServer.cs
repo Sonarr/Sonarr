@@ -22,12 +22,13 @@ namespace NzbDrone
         private readonly IHostController _hostController;
         private readonly IProcessProvider _processProvider;
         private readonly PriorityMonitor _priorityMonitor;
+        private readonly StartupArguments _startupArguments;
         private readonly IFirewallAdapter _firewallAdapter;
         private readonly IUrlAclAdapter _urlAclAdapter;
         private readonly Logger _logger;
 
         public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController, IRuntimeInfo runtimeInfo,
-                           IProcessProvider processProvider, PriorityMonitor priorityMonitor,
+                           IProcessProvider processProvider, PriorityMonitor priorityMonitor, StartupArguments startupArguments,
                            IFirewallAdapter firewallAdapter, IUrlAclAdapter urlAclAdapter, Logger logger)
         {
             _configFileProvider = configFileProvider;
@@ -35,6 +36,7 @@ namespace NzbDrone
             _runtimeInfo = runtimeInfo;
             _processProvider = processProvider;
             _priorityMonitor = priorityMonitor;
+            _startupArguments = startupArguments;
             _firewallAdapter = firewallAdapter;
             _urlAclAdapter = urlAclAdapter;
             _logger = logger;
@@ -55,7 +57,9 @@ namespace NzbDrone
             }
             _hostController.StartServer();
 
-            if (_runtimeInfo.IsUserInteractive && _configFileProvider.LaunchBrowser)
+            if (!_startupArguments.Flags.Contains(StartupArguments.NO_BROWSER) &&
+                _runtimeInfo.IsUserInteractive &&
+                _configFileProvider.LaunchBrowser)
             {
                 try
                 {

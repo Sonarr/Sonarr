@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using NzbDrone.Update.UpdateEngine;
 
@@ -26,13 +28,16 @@ namespace NzbDrone.Update.Test
         [Test]
         public void should_start_console_if_app_type_was_serivce_but_start_failed_because_of_permissions()
         {
-            string targetFolder = "c:\\NzbDrone\\";
+            const string targetFolder = "c:\\NzbDrone\\";
 
             Mocker.GetMock<Common.IServiceProvider>().Setup(c => c.Start(ServiceProvider.NZBDRONE_SERVICE_NAME)).Throws(new InvalidOperationException());
 
             Subject.Start(AppType.Service, targetFolder);
 
-            Mocker.GetMock<IProcessProvider>().Verify(c => c.Start("c:\\NzbDrone\\NzbDrone.Console.exe"), Times.Once());
+            Mocker.GetMock<IProcessProvider>().Verify(c => c.Start(It.Is<ProcessStartInfo>(s =>
+                s.FileName == "c:\\NzbDrone\\NzbDrone.Console.exe" &&
+                s.Arguments == StartupArguments.NO_BROWSER
+                )), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }

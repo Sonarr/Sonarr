@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone.Update.UpdateEngine
@@ -58,14 +60,20 @@ namespace NzbDrone.Update.UpdateEngine
 
         private void StartWinform(string installationFolder)
         {
-            _logger.Info("Starting NzbDrone without Console");
-            _processProvider.Start(Path.Combine(installationFolder, "NzbDrone.exe"));
+            Start(installationFolder, "NzbDrone.exe");
         }
 
         private void StartConsole(string installationFolder)
         {
-            _logger.Info("Starting NzbDrone with Console");
-            _processProvider.Start(Path.Combine(installationFolder, "NzbDrone.Console.exe"));
+            Start(installationFolder, "NzbDrone.Console.exe");
+        }
+
+        private void Start(string installationFolder, string fileName)
+        {
+            _logger.Info("Starting {0}", fileName);
+            var path = Path.Combine(installationFolder, fileName);
+
+            _processProvider.Start(new ProcessStartInfo(path, StartupArguments.NO_BROWSER));
         }
     }
 }
