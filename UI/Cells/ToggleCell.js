@@ -14,11 +14,18 @@ define(
 
 
             _onClick: function () {
+                var self = this;
+
                 var name = this.column.get('name');
                 this.model.set(name, !this.model.get(name));
-                this.render();
 
-                this.model.save();
+                this.$('i').addClass('icon-spinner icon-spin');
+
+                var promise = this.model.save();
+
+                promise.always(function (){
+                    self.render();
+                });
             },
 
             render: function () {
