@@ -7,3 +7,5 @@ var statusText = $.ajax({
 }).responseText;
 
 window.ServerStatus = JSON.parse(statusText);
+
+$('#footer-region .version').html(window.ServerStatus.version);
