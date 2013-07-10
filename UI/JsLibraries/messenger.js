@@ -1,4 +1,4 @@
-/*! messenger 1.3.5 */
+/*! messenger 1.3.6 */
 /*
  * This file begins the output concatenated into messenger.js
  *
@@ -351,16 +351,43 @@ window.Messenger.Events = (function() {
         method = _.bind(method, this);
         eventName += ".delegateEvents" + this.cid;
         if (selector === '') {
-          _results.push(this.$el.on(eventName, method));
+          _results.push(this.jqon(eventName, method));
         } else {
-          _results.push(this.$el.on(eventName, selector, method));
+          _results.push(this.jqon(eventName, selector, method));
         }
       }
       return _results;
     };
 
+    BaseView.prototype.jqon = function(eventName, selector, method) {
+      var _ref2;
+      if (this.$el.on != null) {
+        return (_ref2 = this.$el).on.apply(_ref2, arguments);
+      } else {
+        if (!(method != null)) {
+          method = selector;
+          selector = void 0;
+        }
+        if (selector != null) {
+          return this.$el.delegate(selector, eventName, method);
+        } else {
+          return this.$el.bind(eventName, method);
+        }
+      }
+    };
+
+    BaseView.prototype.jqoff = function(eventName) {
+      var _ref2;
+      if (this.$el.off != null) {
+        return (_ref2 = this.$el).off.apply(_ref2, arguments);
+      } else {
+        this.$el.undelegate();
+        return this.$el.unbind(eventName);
+      }
+    };
+
     BaseView.prototype.undelegateEvents = function() {
-      return this.$el.off(".delegateEvents" + this.cid);
+      return this.jqoff(".delegateEvents" + this.cid);
     };
 
     BaseView.prototype.remove = function() {

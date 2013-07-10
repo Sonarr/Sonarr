@@ -3,8 +3,8 @@
  * Lo-Dash 1.3.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash underscore exports="amd,commonjs,global,node" -o ./dist/lodash.underscore.js`
  * Copyright 2012-2013 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.4.4 <http://underscorejs.org/>
- * Copyright 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
+ * Based on Underscore.js 1.5.1 <http://underscorejs.org/>
+ * Copyright 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  * Available under MIT license <http://lodash.com/license>
  */
 ;(function(window) {
@@ -24,17 +24,11 @@
   /** Used to prefix keys to avoid issues with `__proto__` and properties on `Object.prototype` */
   var keyPrefix = +new Date + '';
 
-  /** Used to match HTML entities */
-  var reEscapedHtml = /&(?:amp|lt|gt|quot|#39);/g;
-
   /** Used to match "interpolate" template delimiters */
   var reInterpolate = /<%=([\s\S]+?)%>/g;
 
   /** Used to ensure capturing order of template delimiters */
   var reNoMatch = /($^)/;
-
-  /** Used to match HTML characters */
-  var reUnescapedHtml = /[&<>"']/g;
 
   /** Used to match unescaped characters in compiled string literals */
   var reUnescapedString = /['\n\r\t\u2028\u2029\\]/g;
@@ -501,12 +495,12 @@
    * // => false
    */
   function isArguments(value) {
-    return toString.call(value) == argsClass;
+    return (value && typeof value == 'object') ? toString.call(value) == argsClass : false;
   }
   // fallback for browsers that can't detect `arguments` objects by [[Class]]
   if (!isArguments(arguments)) {
     isArguments = function(value) {
-      return value ? hasOwnProperty.call(value, 'callee') : false;
+      return (value && typeof value == 'object') ? hasOwnProperty.call(value, 'callee') : false;
     };
   }
 
@@ -527,7 +521,7 @@
    * // => true
    */
   var isArray = nativeIsArray || function(value) {
-    return value ? (typeof value == 'object' && toString.call(value) == arrayClass) : false;
+    return (value && typeof value == 'object') ? toString.call(value) == arrayClass : false;
   };
 
   /**
@@ -584,11 +578,16 @@
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#39;'
+    "'": '&#x27;',
+    '/': '&#x2F;'
   };
 
   /** Used to convert HTML entities to characters */
   var htmlUnescapes = invert(htmlEscapes);
+
+  /** Used to match HTML entities and HTML characters */
+  var reEscapedHtml = RegExp('(' + keys(htmlUnescapes).join('|') + ')', 'g'),
+      reUnescapedHtml = RegExp('[' + keys(htmlEscapes).join('') + ']', 'g');
 
   /*--------------------------------------------------------------------------*/
 
@@ -713,7 +712,7 @@
       var iterable = arguments[argsIndex];
       if (iterable) {
         for (var key in iterable) {
-          if (object[key] == null) {
+          if (typeof object[key] == 'undefined') {
             object[key] = iterable[key];
           }
         }
@@ -1254,7 +1253,7 @@
    * // => true
    */
   function isRegExp(value) {
-    return !!(value && objectTypes[typeof value]) && toString.call(value) == regexpClass;
+    return (value && objectTypes[typeof value]) ? toString.call(value) == regexpClass : false;
   }
 
   /**
@@ -2624,7 +2623,7 @@
 
     while (++index < length) {
       var value = array[index];
-      if (isArray(value)) {
+      if (value && typeof value == 'object' && (isArray(value) || isArguments(value))) {
         push.apply(result, isShallow ? value : flatten(value));
       } else {
         result.push(value);
@@ -3097,10 +3096,10 @@
    * // => [1, 2, 3, 101, 10]
    */
   function union(array) {
-    if (!isArray(array)) {
-      arguments[0] = array ? nativeSlice.call(array) : arrayRef;
+    if (!array) {
+      arguments[0] = arrayRef;
     }
-    return uniq(concat.apply(arrayRef, arguments));
+    return uniq(flatten(arguments, true));
   }
 
   /**
@@ -3180,31 +3179,6 @@
   }
 
   /**
-   * The inverse of `_.zip`, this method splits groups of elements into arrays
-   * composed of elements from each group at their corresponding indexes.
-   *
-   * @static
-   * @memberOf _
-   * @category Arrays
-   * @param {Array} array The array to process.
-   * @returns {Array} Returns a new array of the composed arrays.
-   * @example
-   *
-   * _.unzip([['moe', 30, true], ['larry', 40, false]]);
-   * // => [['moe', 'larry'], [30, 40], [true, false]];
-   */
-  function unzip(array) {
-    var index = -1,
-        length = array ? max(pluck(array, 'length')) : 0,
-        result = Array(length < 0 ? 0 : length);
-
-    while (++index < length) {
-      result[index] = pluck(array, index);
-    }
-    return result;
-  }
-
-  /**
    * Creates an array with all occurrences of the passed values removed using
    * strict equality for comparisons, i.e. `===`.
    *
@@ -3224,13 +3198,13 @@
   }
 
   /**
-   * Groups the elements of each array at their corresponding indexes. Useful for
-   * separate data sources that are coordinated through matching array indexes.
-   * For a matrix of nested arrays, `_.zip.apply(...)` can transpose the matrix
-   * in a similar fashion.
+   * Creates an array of grouped elements, the first of which contains the first
+   * elements of the given arrays, the second of which contains the second
+   * elements of the given arrays, and so on.
    *
    * @static
    * @memberOf _
+   * @alias unzip
    * @category Arrays
    * @param {Array} [array1, array2, ...] Arrays to process.
    * @returns {Array} Returns a new array of grouped elements.
@@ -3239,9 +3213,9 @@
    * _.zip(['moe', 'larry'], [30, 40], [true, false]);
    * // => [['moe', 30, true], ['larry', 40, false]]
    */
-  function zip(array) {
+  function zip() {
     var index = -1,
-        length = array ? max(pluck(arguments, 'length')) : 0,
+        length = max(pluck(arguments, 'length')),
         result = Array(length < 0 ? 0 : length);
 
     while (++index < length) {
@@ -3287,17 +3261,14 @@
   /*--------------------------------------------------------------------------*/
 
   /**
-   * If `n` is greater than `0`, a function is created that is restricted to
-   * executing `func`, with the `this` binding and arguments of the created
-   * function, only after it is called `n` times. If `n` is less than `1`,
-   * `func` is executed immediately, without a `this` binding or additional
-   * arguments, and its result is returned.
+   * Creates a function this is restricted to executing `func`, with the `this`
+   * binding and arguments of the created function, only after it is called `n` times.
    *
    * @static
    * @memberOf _
    * @category Functions
    * @param {Number} n The number of times the function must be called before
-   * it is executed.
+   *  `func` is executed.
    * @param {Function} func The function to restrict.
    * @returns {Function} Returns the new restricted function.
    * @example
@@ -3309,9 +3280,6 @@
    * // `renderNotes` is run once, after all notes have saved
    */
   function after(n, func) {
-    if (n < 1) {
-      return func();
-    }
     return function() {
       if (--n < 1) {
         return func.apply(this, arguments);
@@ -3547,28 +3515,83 @@
    *   'maxWait': 1000
    * }, false);
    */
-  function debounce(func, wait, immediate) {
+  function debounce(func, wait, options) {
     var args,
         result,
         thisArg,
-        timeoutId = null;
+        callCount = 0,
+        lastCalled = 0,
+        maxWait = false,
+        maxTimeoutId = null,
+        timeoutId = null,
+        trailing = true;
+
+    function clear() {
+      clearTimeout(maxTimeoutId);
+      clearTimeout(timeoutId);
+      callCount = 0;
+      maxTimeoutId = timeoutId = null;
+    }
 
     function delayed() {
-      timeoutId = null;
-      if (!immediate) {
+      var isCalled = trailing && (!leading || callCount > 1);
+      clear();
+      if (isCalled) {
+        if (maxWait !== false) {
+          lastCalled = new Date;
+        }
         result = func.apply(thisArg, args);
       }
     }
+
+    function maxDelayed() {
+      clear();
+      if (trailing || (maxWait !== wait)) {
+        lastCalled = new Date;
+        result = func.apply(thisArg, args);
+      }
+    }
+
+    wait = nativeMax(0, wait || 0);
+    if (options === true) {
+      var leading = true;
+      trailing = false;
+    } else if (isObject(options)) {
+      leading = options.leading;
+      maxWait = 'maxWait' in options && nativeMax(wait, options.maxWait || 0);
+      trailing = 'trailing' in options ? options.trailing : trailing;
+    }
     return function() {
-      var isImmediate = immediate && !timeoutId;
       args = arguments;
       thisArg = this;
+      callCount++;
 
+      // avoid issues with Titanium and `undefined` timeout ids
+      // https://github.com/appcelerator/titanium_mobile/blob/3_1_0_GA/android/titanium/src/java/ti/modules/titanium/TitaniumModule.java#L185-L192
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(delayed, wait);
 
-      if (isImmediate) {
-        result = func.apply(thisArg, args);
+      if (maxWait === false) {
+        if (leading && callCount < 2) {
+          result = func.apply(thisArg, args);
+        }
+      } else {
+        var now = new Date;
+        if (!maxTimeoutId && !leading) {
+          lastCalled = now;
+        }
+        var remaining = maxWait - (now - lastCalled);
+        if (remaining <= 0) {
+          clearTimeout(maxTimeoutId);
+          maxTimeoutId = null;
+          lastCalled = now;
+          result = func.apply(thisArg, args);
+        }
+        else if (!maxTimeoutId) {
+          maxTimeoutId = setTimeout(maxDelayed, remaining);
+        }
+      }
+      if (wait !== maxWait) {
+        timeoutId = setTimeout(delayed, wait);
       }
       return result;
     };
@@ -3733,36 +3756,22 @@
    *   'trailing': false
    * }));
    */
-  function throttle(func, wait) {
-    var args,
-        result,
-        thisArg,
-        lastCalled = 0,
-        timeoutId = null;
+  function throttle(func, wait, options) {
+    var leading = true,
+        trailing = true;
 
-    function trailingCall() {
-      lastCalled = new Date;
-      timeoutId = null;
-      result = func.apply(thisArg, args);
+    if (options === false) {
+      leading = false;
+    } else if (isObject(options)) {
+      leading = 'leading' in options ? options.leading : leading;
+      trailing = 'trailing' in options ? options.trailing : trailing;
     }
-    return function() {
-      var now = new Date,
-          remaining = wait - (now - lastCalled);
+    options = {};
+    options.leading = leading;
+    options.maxWait = wait;
+    options.trailing = trailing;
 
-      args = arguments;
-      thisArg = this;
-
-      if (remaining <= 0) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
-        lastCalled = now;
-        result = func.apply(thisArg, args);
-      }
-      else if (!timeoutId) {
-        timeoutId = setTimeout(trailingCall, remaining);
-      }
-      return result;
-    };
+    return debounce(func, wait, options);
   }
 
   /**
@@ -3952,7 +3961,7 @@
    * // => 'nonsense'
    */
   function result(object, property) {
-    var value = object ? object[property] : null;
+    var value = object ? object[property] : undefined;
     return isFunction(value) ? object[property]() : value;
   }
 
@@ -4332,6 +4341,7 @@
   lodash.select = filter;
   lodash.tail = rest;
   lodash.unique = uniq;
+  lodash.unzip = zip;
 
   // add Underscore compat
   lodash.chain = chain;
