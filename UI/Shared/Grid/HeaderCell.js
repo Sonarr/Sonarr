@@ -15,7 +15,7 @@ define(
                 this.$el.append(this.column.get('label'));
 
                 if (this.column.get('sortable')) {
-                    this.$el.addClass('clickable');
+                    this.$el.addClass('sortable');
                     this.$el.append(' <i class="pull-right"></i>');
 
                     if (this.collection.state) {

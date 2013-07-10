@@ -62,7 +62,6 @@
   padding     : 30px;
 }
 
-
 .page-toolbar {
   margin-top    : 10px;
   margin-bottom : 30px;
@@ -92,4 +91,14 @@
 .label-large {
   padding   : 4px 6px;
   font-size : 16px;
+}
+
+th {
+  &.sortable {
+    &:hover {
+      background: @tableBackgroundHover;
+    }
+    .clickable();
+
+  }
 }

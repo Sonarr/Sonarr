@@ -6,7 +6,7 @@ define(
     ], function (Backgrid) {
         return Backgrid.Cell.extend({
 
-            className: 'toggle-cell clickable',
+            className: 'toggle-cell',
 
             events: {
                 'click': '_onClick'
