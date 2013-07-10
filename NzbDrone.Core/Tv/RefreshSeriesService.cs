@@ -121,7 +121,8 @@ namespace NzbDrone.Core.Tv
                         else
                         {
                             var season = seasons.FirstOrDefault(c => c.SeasonNumber == episode.SeasonNumber);
-                            episodeToUpdate.Monitored = season != null && season.Monitored;
+
+                            episodeToUpdate.Monitored = season != null ? season.Monitored : true;
                         }
                     }
                     else
