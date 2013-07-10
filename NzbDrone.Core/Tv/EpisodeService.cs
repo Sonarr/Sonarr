@@ -111,8 +111,6 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.EpisodesWithFiles();
         }
 
-
-
         public void UpdateEpisode(Episode episode)
         {
             _episodeRepository.Update(episode);
@@ -129,6 +127,11 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
             logger.Info("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+        }
+
+        public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
+        {
+            _episodeRepository.SetMonitoredBySeason(seriesId, seasonNumber, monitored);
         }
 
         public bool IsFirstOrLastEpisodeOfSeason(int episodeId)

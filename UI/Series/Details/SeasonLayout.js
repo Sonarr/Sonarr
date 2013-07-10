@@ -14,11 +14,13 @@ define(
             template: 'Series/Details/SeasonLayoutTemplate',
 
             ui: {
-                seasonSearch: '.x-season-search'
+                seasonSearch   : '.x-season-search',
+                seasonMonitored: '.x-season-monitored'
             },
 
             events: {
-                'click .x-season-search': '_seasonSearch'
+                'click .x-season-search'   : '_seasonSearch',
+                'click .x-season-monitored': '_seasonMonitored'
             },
 
             regions: {
@@ -72,12 +74,14 @@ define(
                 });
             },
 
-            onShow: function () {
+            onRender: function () {
                 this.episodeGrid.show(new Backgrid.Grid({
                     columns   : this.columns,
                     collection: this.episodeCollection,
                     className : 'table table-hover season-grid'
                 }));
+
+                this._setSeasonMonitoredState();
             },
 
             _seasonSearch: function () {
@@ -112,6 +116,39 @@ define(
                         self.idle = true;
                     }
                 });
+            },
+
+            _seasonMonitored: function () {
+                var self = this;
+                var name = 'monitored';
+                this.model.set(name, !this.model.get(name));
+
+                this.ui.seasonMonitored.addClass('icon-spinner icon-spin');
+
+                var promise = this.model.save();
+
+                promise.always(function (){
+                    _.each(self.episodeCollection.models, function (episode) {
+                        episode.set({ monitored: !episode.get('monitored') });
+                    });
+
+                    self.render();
+                });
+            },
+
+            _setSeasonMonitoredState: function () {
+                var monitored = this.model.get('monitored');
+
+                this.ui.seasonMonitored.removeClass('icon-spinner icon-spin');
+
+                if (this.model.get('monitored')) {
+                    this.ui.seasonMonitored.addClass('icon-bookmark');
+                    this.ui.seasonMonitored.removeClass('icon-bookmark-empty');
+                }
+                else {
+                    this.ui.seasonMonitored.addClass('icon-bookmark-empty');
+                    this.ui.seasonMonitored.removeClass('icon-bookmark');
+                }
             }
         });
     });
