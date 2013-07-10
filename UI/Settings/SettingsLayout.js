@@ -48,7 +48,7 @@ define(
                 indexersTab        : '.x-indexers-tab',
                 downloadClientTab  : '.x-download-client-tab',
                 notificationsTab   : '.x-notifications-tab',
-                generalTab         : '.x-general-tab',
+                generalTab         : '.x-general-tab'
             },
 
             events: {
