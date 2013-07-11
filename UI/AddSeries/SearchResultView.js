@@ -36,6 +36,32 @@ define(
                 this.listenTo(this.model, 'change', this.render);
             },
 
+            onRender: function () {
+
+                var defaultQuality = Config.GetValue(Config.Keys.DefaultQualityProfileId);
+
+                if (QualityProfiles.get(defaultQuality)) {
+                    this.ui.qualityProfile.val(defaultQuality);
+                }
+            },
+
+            serializeData: function () {
+                var data = this.model.toJSON();
+
+                var existingSeries = SeriesCollection.where({tvdbId: this.model.get('tvdbId')});
+
+                if (existingSeries.length > 0) {
+                    data.existing = existingSeries[0].toJSON();
+                }
+
+                data.qualityProfiles = QualityProfiles.toJSON();
+
+                if (!data.isExisting) {
+                    data.rootFolders = RootFolders.toJSON();
+                }
+
+                return data;
+            },
 
             _onConfigUpdated: function (options) {
 
@@ -46,15 +72,6 @@ define(
 
             _qualityProfileChanged: function () {
                 Config.SetValue(Config.Keys.DefaultQualityProfileId, this.ui.qualityProfile.val());
-            },
-
-            onRender: function () {
-
-                var defaultQuality = Config.GetValue(Config.Keys.DefaultQualityProfileId);
-
-                if (QualityProfiles.get(defaultQuality)) {
-                    this.ui.qualityProfile.val(defaultQuality);
-                }
             },
 
             _addSeries: function () {
@@ -83,26 +100,6 @@ define(
                 }).fail(function () {
                         icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                     });
-
-            },
-
-            serializeData: function () {
-                var data = this.model.toJSON();
-
-                var existingSeries = SeriesCollection.where({tvdbId: this.model.get('tvdbId')});
-
-                if (existingSeries.length > 0) {
-                    data.existing = existingSeries[0].toJSON();
-                }
-
-                data.qualityProfiles = QualityProfiles.toJSON();
-
-                if (!data.isExisting) {
-                    data.rootFolders = RootFolders.toJSON();
-                }
-
-                return data;
             }
         });
-
     });

@@ -44,7 +44,6 @@ define(
                 }
             },
 
-
             _onSeriesAdded: function (options) {
                 if (options.series.get('path') === this.model.get('folder').path) {
                     this.close();
@@ -53,7 +52,6 @@ define(
 
             onRender: function () {
                 var self = this;
-
 
                 this.$el.addClass(this.className);
 

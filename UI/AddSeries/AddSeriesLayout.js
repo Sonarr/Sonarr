@@ -8,8 +8,15 @@ define(
         'AddSeries/AddSeriesView',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
-        'Series/SeriesCollection',
-    ], function (App, Marionette, RootFolderLayout, ExistingSeriesCollectionView, AddSeriesView, qualityProfileCollection, rootFolderCollection, SeriesCollection) {
+        'Series/SeriesCollection'
+    ], function (App,
+                 Marionette,
+                 RootFolderLayout,
+                 ExistingSeriesCollectionView,
+                 AddSeriesView,
+                 QualityProfileCollection,
+                 RootFolderCollection,
+                 SeriesCollection) {
 
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesLayoutTemplate',
@@ -30,12 +37,11 @@ define(
             initialize: function () {
 
                 SeriesCollection.fetch();
+                QualityProfileCollection.fetch();
+                RootFolderCollection.fetch();
 
                 this.rootFolderLayout = new RootFolderLayout();
                 this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
-
-                qualityProfileCollection.fetch();
-                rootFolderCollection.fetch();
             },
 
             onShow: function () {

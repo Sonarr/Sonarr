@@ -16,20 +16,20 @@
             </div>
             <div class="row">
                 {{#if existing}}
-                <div class="btn pull-right add-series disabled">
-                    Already Exists
-                </div>
+                    <div class="btn pull-right add-series disabled">
+                        Already Exists
+                    </div>
                 {{else}}
-                <div class="btn btn-success x-add pull-right add-series">
-                    Add
-                    <icon class="icon-plus"></icon>
-                </div>
-                {{#unless path}}
-                {{> RootFolderSelectionPartial rootFolders}}
-                {{/unless}}
-                <div class='pull-right'>
-                    {{> QualityProfileSelectionPartial qualityProfiles}}
-                </div>
+                    <div class="btn btn-success x-add pull-right add-series">
+                        Add
+                        <icon class="icon-plus"></icon>
+                    </div>
+                    {{#unless path}}
+                        {{> RootFolderSelectionPartial rootFolders}}
+                    {{/unless}}
+                    <div class='pull-right'>
+                        {{> QualityProfileSelectionPartial qualityProfiles}}
+                    </div>
                 {{/if}}
 
             </div>
