@@ -19,6 +19,7 @@ define(
             parse: function (model) {
                 model.series = new SeriesModel(model.series);
                 model.episode = new EpisodeModel(model.episode);
+                model.episode.set('series', model.series);
                 return model;
             }
         });
