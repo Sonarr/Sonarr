@@ -42,9 +42,6 @@ define(
                     var start = Date.create(this.get('airDate'));
                     var end = Date.create(this.get('end'));
 
-                    console.log(this.get('end'));
-
-
                     if (currentTime.isBetween(start, end)) {
                         return 'warning';
                     }

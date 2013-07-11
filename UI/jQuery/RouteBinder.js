@@ -24,7 +24,6 @@ define(function () {
                 return;
             }
 
-            console.log('click');
             event.preventDefault();
 
             var href = event.target.getAttribute('href');
