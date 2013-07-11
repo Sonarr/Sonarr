@@ -1,23 +1,13 @@
 ﻿﻿'use strict';
 define(
     [
-        'backbone',
-        'Mixins/AsChangeTrackingModel'
-    ], function (Backbone, AsChangeTrackingModel) {
-        var model = Backbone.Model.extend({
+        'Settings/SettingsModelBase'
+    ], function (SettingsModelBase) {
+        return SettingsModelBase.extend({
 
-            url: window.ApiRoot + '/settings/host',
+            url           : window.ApiRoot + '/settings/host',
+            successMessage: 'General settings saved',
+            errorMessage  : 'Failed to save general settings'
 
-            initialize: function () {
-                this.on('change', function () {
-                    this.isSaved = false;
-                }, this);
-
-                this.on('sync', function () {
-                    this.isSaved = true;
-                }, this);
-            }
         });
-
-        return AsChangeTrackingModel.call(model);
     });
