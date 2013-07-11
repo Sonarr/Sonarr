@@ -17,6 +17,8 @@ define(function () {
                 else {
                     xhr.url = xhr.url + '&' + $.param(xhr.data);
                 }
+
+                delete xhr.data;
             }
 
             return original.apply(this, arguments);
