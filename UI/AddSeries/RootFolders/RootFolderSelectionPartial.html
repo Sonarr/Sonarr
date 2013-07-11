@@ -1,6 +1,10 @@
 ﻿<select class="span6 x-root-folder">
+    {{#if this}}
     {{#each this}}
-        <option value="{{id}}">{{path}}</option>
+    <option value="{{id}}">{{path}}</option>
     {{/each}}
+    {{else}}
+    <option value="">Select Path</option>
+    {{/if}}
     <option value="addNew">Add a different path</option>
 </select>

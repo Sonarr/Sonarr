@@ -1,13 +1,16 @@
 ﻿<div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <i class="icon-hdd"/>
+    <h3>Select Folder</h3>
 </div>
 <div class="modal-body root-folders-modal">
     <div class="input-prepend input-append x-path">
         <span class="add-on">&nbsp;<i class="icon-folder-open"></i></span>
-        <input class="span5" type="text" placeholder="Path of the folder to add ...">
-        <button class="btn btn-success x-add"><i class="icon-plus"/></button>
+        <input class="span9" type="text" placeholder="Start Typing Folder Path...">
+        <button class="btn btn-success x-add"><i class="icon-ok"/></button>
     </div>
+    {{#if items}}
+    <h4>Recent Folders</h4>
+    {{/if}}
     <div id="current-dirs"/>
 </div>
 <div class="modal-footer">

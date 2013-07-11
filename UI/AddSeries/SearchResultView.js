@@ -5,10 +5,11 @@ define(
         'marionette',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
+        'AddSeries/RootFolders/Layout',
         'Series/SeriesCollection',
         'Config',
         'Shared/Messenger'
-    ], function (App, Marionette, QualityProfiles, RootFolders, SeriesCollection, Config, Messenger) {
+    ], function (App, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger) {
 
         return Marionette.ItemView.extend({
 
@@ -23,7 +24,8 @@ define(
 
             events: {
                 'click .x-add'             : '_addSeries',
-                'change .x-quality-profile': '_qualityProfileChanged'
+                'change .x-quality-profile': '_qualityProfileChanged',
+                'change .x-root-folder'    : '_rootFolderChanged'
             },
 
             initialize: function () {
@@ -34,14 +36,23 @@ define(
 
                 this.listenTo(App.vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
                 this.listenTo(this.model, 'change', this.render);
+                this.listenTo(RootFolders, 'change', this.render);
+
+                this.rootFolderLayout = new RootFolderLayout();
+                this.listenTo(this.rootFolderLayout, 'folderSelected', this._setRootFolder);
             },
 
             onRender: function () {
 
                 var defaultQuality = Config.GetValue(Config.Keys.DefaultQualityProfileId);
+                var defaultRoot = Config.GetValue(Config.Keys.DefaultRootFolderId);
 
                 if (QualityProfiles.get(defaultQuality)) {
                     this.ui.qualityProfile.val(defaultQuality);
+                }
+
+                if (RootFolders.get(defaultRoot)) {
+                    this.ui.rootFolder.val(defaultRoot);
                 }
             },
 
@@ -64,14 +75,31 @@ define(
             },
 
             _onConfigUpdated: function (options) {
-
                 if (options.key === Config.Keys.DefaultQualityProfileId) {
-                    this.$('.x-quality-profile').val(options.value);
+                    this.ui.qualityProfile.val(options.value);
+                }
+                else if (options.key === Config.Keys.DefaultRootFolderId) {
+                    this.ui.rootFolder.val(options.value);
                 }
             },
 
             _qualityProfileChanged: function () {
                 Config.SetValue(Config.Keys.DefaultQualityProfileId, this.ui.qualityProfile.val());
+            },
+
+            _rootFolderChanged: function () {
+                var rootFolderValue = this.ui.rootFolder.val();
+                if (rootFolderValue === 'addNew') {
+                    App.modalRegion.show(this.rootFolderLayout);
+                }
+                else {
+                    Config.SetValue(Config.Keys.DefaultRootFolderId, rootFolderValue);
+                }
+            },
+
+            _setRootFolder: function (options) {
+                App.modalRegion.closeModal();
+                this.ui.rootFolder.val(options.model.id);
             },
 
             _addSeries: function () {

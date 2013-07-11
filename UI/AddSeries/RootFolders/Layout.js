@@ -27,7 +27,8 @@ define(
             initialize: function () {
                 this.collection = RootFolderCollection;
                 this.rootfolderListView = new RootFolderCollectionView({ collection: RootFolderCollection });
-                this.rootfolderListView.on('itemview:folderSelected', this._onFolderSelected, this);
+
+                this.listenTo(this.rootfolderListView, 'itemview:folderSelected', this._onFolderSelected);
             },
 
             onRender: function () {
@@ -41,14 +42,17 @@ define(
             },
 
             _addFolder: function () {
+
+                var self = this;
+
                 var newDir = new RootFolderModel({
                     Path: this.ui.pathInput.val()
                 });
 
-                RootFolderCollection.create(newDir, {
-                    wait: true, success: function () {
-                        RootFolderCollection.fetch();
-                    }
+                RootFolderCollection.add(newDir);
+
+                newDir.save().done(function () {
+                    self.trigger('folderSelected', {model: newDir});
                 });
             }
         });

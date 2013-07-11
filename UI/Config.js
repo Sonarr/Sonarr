@@ -8,7 +8,8 @@ define(
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
             Keys  : {
-                DefaultQualityProfileId: 'DefaultQualityProfileId'
+                DefaultQualityProfileId: 'DefaultQualityProfileId',
+                DefaultRootFolderId: 'DefaultRootFolderId'
             },
 
             GetValue: function (key, defaultValue) {
