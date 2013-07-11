@@ -7,7 +7,7 @@ define(
 
         return Marionette.ItemView.extend({
 
-            template: 'AddSeries/RootFolders/RootFolderItemTemplate',
+            template: 'AddSeries/RootFolders/ItemViewTemplate',
             tagName : 'tr',
 
             events: {
