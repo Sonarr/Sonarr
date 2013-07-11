@@ -27,7 +27,6 @@ module.exports = function (grunt) {
             'UI/JsLibraries/require.js'                      : 'http://raw.github.com/jrburke/requirejs/master/require.js',
             'UI/JsLibraries/sugar.js'                        : 'http://raw.github.com/andrewplummer/Sugar/master/release/sugar-full.development.js',
             'UI/JsLibraries/lodash.underscore.js'            : 'http://raw.github.com/bestiejs/lodash/master/dist/lodash.underscore.js',
-            'UI/JsLibraries/lunr.js'                         : 'http://raw.github.com/olivernn/lunr.js/master/lunr.js',
          
             'UI/JsLibraries/messenger.js'                    : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
             'UI/Content/Messenger/messenger.css'             : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
