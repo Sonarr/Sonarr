@@ -132,8 +132,8 @@ namespace NzbDrone.Core.Configuration
 
         public string SeasonFolderFormat
         {
-            get { return GetValue("Sorting_SeasonFolderFormat", "Season %s"); }
-            set { SetValue("Sorting_SeasonFolderFormat", value); }
+            get { return GetValue("SeasonFolderFormat", "Season %s"); }
+            set { SetValue("SeasonFolderFormat", value); }
         }
 
         public string UpdateUrl
@@ -350,8 +350,6 @@ namespace NzbDrone.Core.Configuration
         {
             SetValue(key, value.ToString().ToLower());
         }
-
-
 
         private void EnsureCache()
         {
