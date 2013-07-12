@@ -41,8 +41,6 @@ namespace NzbDrone.Integration.Test
 
         static IntegrationTest()
         {
-            LogManager.Configuration.Reload();
-
             LogManager.Configuration = new LoggingConfiguration();
             var consoleTarget = new ConsoleTarget { Layout = "${time} - ${logger} - ${message} ${exception}" };
             LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
