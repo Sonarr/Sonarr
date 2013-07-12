@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Nancy;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Validation;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Series
 {
@@ -30,7 +32,7 @@ namespace NzbDrone.Api.Series
             UpdateResource = UpdateSeries;
             DeleteResource = DeleteSeries;
 
-            Get["/{slug}"] = o => GetSeries((string)o.slug.ToString());
+            Get["/{slug}"] = o => GetSeriesBySlug((string)o.slug.ToString());
 
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
             SharedValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
@@ -39,7 +41,23 @@ namespace NzbDrone.Api.Series
             PostValidator.RuleFor(s => s.Title).NotEmpty();
         }
 
-        private Response GetSeries(string slug)
+        private SeriesResource GetSeries(int id)
+        {
+            Core.Tv.Series series = null;
+
+            try
+            {
+                series = _seriesService.GetSeries(id);
+            }
+            catch (ModelNotFoundException)
+            {
+                series = _seriesService.FindBySlug(id.ToString());
+            }
+
+            return GetSeriesResource(series);
+        }
+
+        private Response GetSeriesBySlug(string slug)
         {
             var series = _seriesService.FindBySlug(slug);
 
@@ -48,12 +66,16 @@ namespace NzbDrone.Api.Series
                 return new NotFoundResponse();
             }
 
+            return GetSeriesResource(series).AsResponse();
+        }
 
-            var resource = ToResource(()=>_seriesService.FindBySlug(slug));
+        private SeriesResource GetSeriesResource(Core.Tv.Series series)
+        {
+            if (series == null) return null;
 
+            var resource = series.InjectTo<SeriesResource>();
             MapCoversToLocal(resource);
-
-            return resource.AsResponse();
+            return resource;
         }
 
         private List<SeriesResource> AllSeries()
@@ -77,14 +99,7 @@ namespace NzbDrone.Api.Series
             return seriesResources;
         }
 
-        private SeriesResource GetSeries(int id)
-        {
-            var resource = ToResource(_seriesService.GetSeries, id);
 
-            MapCoversToLocal(resource);
-
-            return resource;
-        }
 
         private SeriesResource AddSeries(SeriesResource seriesResource)
         {

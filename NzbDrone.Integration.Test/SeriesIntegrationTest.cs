@@ -51,6 +51,23 @@ namespace NzbDrone.Integration.Test
             Series.All().Should().BeEmpty();
         }
 
+
+        [Test]
+        public void should_be_able_to_add_and_get_number_only_series_title()
+        {
+            var series = Series.Lookup("90210").First(c=>c.TitleSlug == "90210");
+
+            series.QualityProfileId = 1;
+            series.Path = @"C:\Test\90210";
+
+            series = Series.Post(series);
+
+            Series.All().Should().HaveCount(1);
+
+            Series.Get(series.Id).Should().NotBeNull();
+            Series.Get(series.TitleSlug).Should().NotBeNull();
+        }
+
         [Test]
         public void wrong_slug_should_return_404()
         {

@@ -41,14 +41,12 @@ namespace NzbDrone.Integration.Test
 
         static IntegrationTest()
         {
-            if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
-            {
-                LogManager.Configuration = new LoggingConfiguration();
-                var consoleTarget = new ConsoleTarget { Layout = "${time} - ${logger} - ${message} ${exception}" };
-                LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
-            }
+            LogManager.Configuration.Reload();
 
+            LogManager.Configuration = new LoggingConfiguration();
+            var consoleTarget = new ConsoleTarget { Layout = "${time} - ${logger} - ${message} ${exception}" };
+            LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
 
             LogManager.ReconfigExistingLoggers();
         }

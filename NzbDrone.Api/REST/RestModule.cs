@@ -71,6 +71,12 @@ namespace NzbDrone.Api.REST
                         try
                         {
                             var resource = GetResourceById((int)options.Id);
+
+                            if (resource == null)
+                            {
+                                return new NotFoundResponse();
+                            }
+
                             return resource.AsResponse();
                         }
                         catch (ModelNotFoundException)
