@@ -48,7 +48,7 @@ namespace NzbDrone.Core.MediaFiles
             
             if (!_diskProvider.FolderExists(series.Path))
             {
-                Logger.Trace("Series folder doesn't exist: {0}", series.Path);
+                Logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 return;
             }
 

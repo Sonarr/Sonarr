@@ -18,14 +18,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
     {
         private readonly IMoveEpisodeFiles _episodeFileMover;
-        private readonly MediaFileService _mediaFileService;
-        private readonly DiskProvider _diskProvider;
+        private readonly IMediaFileService _mediaFileService;
+        private readonly IDiskProvider _diskProvider;
         private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
 
         public ImportApprovedEpisodes(IMoveEpisodeFiles episodeFileMover,
-                                      MediaFileService mediaFileService,
-                                      DiskProvider diskProvider,
+                                      IMediaFileService mediaFileService,
+                                      IDiskProvider diskProvider,
                                       IMessageAggregator messageAggregator,
                                       Logger logger)
         {
@@ -38,12 +38,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload = false)
         {
-            var qualifiedReports = GetQualifiedReports(decisions);
+            var qualifiedImports = GetQualifiedImports(decisions);
             var imported = new List<ImportDecision>();
 
-            foreach (var report in qualifiedReports)
+            foreach (var importDecision in qualifiedImports)
             {
-                var localEpisode = report.LocalEpisode;
+                var localEpisode = importDecision.LocalEpisode;
 
                 try
                 {
@@ -73,6 +73,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     }
                     
                     _mediaFileService.Add(episodeFile);
+                    imported.Add(importDecision);
                 }
                 catch (Exception e)
                 {
@@ -83,7 +84,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             return imported;
         }
 
-        private List<ImportDecision> GetQualifiedReports(List<ImportDecision> decisions)
+        private List<ImportDecision> GetQualifiedImports(List<ImportDecision> decisions)
         {
             return decisions.Where(c => c.Approved)
                             .OrderByDescending(c => c.LocalEpisode.Quality)

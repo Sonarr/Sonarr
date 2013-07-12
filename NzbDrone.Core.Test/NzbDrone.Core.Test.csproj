@@ -147,6 +147,7 @@
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
+    <Compile Include="MediaFileTests\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\NotSampleSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\ImportDecisionMakerFixture.cs" />
@@ -193,7 +194,7 @@
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTests\DropFolderImportServiceFixture.cs" />
+    <Compile Include="MediaFileTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />

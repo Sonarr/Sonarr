@@ -13,7 +13,7 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
+namespace NzbDrone.Core.Test.MediaFileTests
 {
     [TestFixture]
     public class DropFolderImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
