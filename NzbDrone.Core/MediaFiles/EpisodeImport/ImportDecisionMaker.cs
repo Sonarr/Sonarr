@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
@@ -42,7 +43,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 try
                 {
-                    var parsedEpisode = _parsingService.GetEpisodes(file, series);
+                    var fileWithoutExtension = Path.GetFileNameWithoutExtension(file);
+                    var parsedEpisode = _parsingService.GetEpisodes(Path.GetFileNameWithoutExtension(file), series);
 
                     if (parsedEpisode != null)
                     {

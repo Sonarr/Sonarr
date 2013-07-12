@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>())).Returns(false);
             _fail3.Setup(c => c.RejectionReason).Returns("_fail3");
 
-            _videoFiles = new List<String> { "The.Office.S03E115.DVDRip.XviD-OSiTV" };
+            _videoFiles = new List<String> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
             _series = new Series();
             _localEpisode = new LocalEpisode { Series = _series, Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
 
@@ -87,7 +88,6 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             _pass2.Verify(c => c.IsSatisfiedBy(_localEpisode), Times.Once());
             _pass3.Verify(c => c.IsSatisfiedBy(_localEpisode), Times.Once());
         }
-
 
         [Test]
         public void should_return_rejected_if_single_specs_fail()
@@ -149,6 +149,18 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                   .Verify(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>()), Times.Exactly(_videoFiles.Count));
 
             ExceptionVerification.ExpectedErrors(3);
+        }
+
+        [Test]
+        public void should_use_filename_without_extension_when_getting_episodes_from_ParsingService()
+        {
+            var expectedFilename = Path.GetFileNameWithoutExtension(_videoFiles.First());
+
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            Subject.GetImportDecisions(_videoFiles, _series);
+
+            Mocker.GetMock<IParsingService>().Verify(v => v.GetEpisodes(expectedFilename, _series), Times.Once());
         }
     }
 
