@@ -37,16 +37,18 @@ namespace NzbDrone.Core.Tv
         private readonly IConfigService _configService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly ISceneMappingService _sceneMappingService;
-        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public SeriesService(ISeriesRepository seriesRepository, IConfigService configServiceService, IMessageAggregator messageAggregator, ISceneMappingService sceneMappingService, IDiskProvider diskProvider, Logger logger)
+        public SeriesService(ISeriesRepository seriesRepository,
+                             IConfigService configServiceService,
+                             IMessageAggregator messageAggregator,
+                             ISceneMappingService sceneMappingService,
+                             Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _messageAggregator = messageAggregator;
             _sceneMappingService = sceneMappingService;
-            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -54,8 +56,6 @@ namespace NzbDrone.Core.Tv
         {
             return _seriesRepository.Get(id).Monitored;
         }
-
-
 
         public Series GetSeries(int seriesId)
         {
@@ -70,8 +70,6 @@ namespace NzbDrone.Core.Tv
             {
                 var folderName = FileNameBuilder.CleanFilename(newSeries.Title);
                 newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
-
-                _diskProvider.CreateFolder(newSeries.Path);
             }
 
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);

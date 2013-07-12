@@ -44,13 +44,13 @@ namespace NzbDrone.Core.MediaFiles
 
         private void Scan(Series series)
         {
+            _messageAggregator.PublishCommand(new CleanMediaFileDb(series.Id));
+            
             if (!_diskProvider.FolderExists(series.Path))
             {
-                Logger.Warn("Series folder doesn't exist: {0}", series.Path);
+                Logger.Trace("Series folder doesn't exist: {0}", series.Path);
                 return;
             }
-
-            _messageAggregator.PublishCommand(new CleanMediaFileDb(series.Id));
 
             var mediaFileList = GetVideoFiles(series.Path);
 

@@ -90,9 +90,7 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-
             var seriesEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
-
             var seasons = _seasonRepository.GetSeasonBySeries(series.Id);
 
             var updateList = new List<Episode>();
@@ -203,6 +201,7 @@ namespace NzbDrone.Core.Tv
         /*        private void DeleteEpisodesNotAvailableAnymore(Series series, IEnumerable<Episode> onlineEpisodes)
                 {
                     //Todo: This will not work as currently implemented - what are we trying to do here?
+         *          //We were trying to remove episodes that were once on tvdb but were removed, for whatever reason, instead of polluting our DB with them.
                     return;
                     _logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
                     foreach (var episode in onlineEpisodes)
