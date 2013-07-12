@@ -88,11 +88,6 @@ namespace NzbDrone.Api.Series
 
         private SeriesResource AddSeries(SeriesResource seriesResource)
         {
-            //Todo: Alert the user if this series already exists
-            //Todo: We need to create the folder if the user is adding a new series
-            //(we can just create the folder and it won't blow up if it already exists)
-            //We also need to remove any special characters from the filename before attempting to create it           
-
             return ToResource<Core.Tv.Series>(_seriesService.AddSeries, seriesResource);
         }
 

@@ -1,7 +1,14 @@
 ﻿<div class="row series-page-header">
     <div class="span11">
         <div class="row">
-            <h1>{{title}}</h1>
+            <h1>
+                {{title}}
+                <span class="series-actions pull-right">
+                    <i class="icon-refresh x-refresh" title="Update Series"/>
+                    <i class="icon-bookmark x-monitored" title="Toggle monitored state for entire series"/>
+                    <i class="icon-nd-edit x-edit" title="Edit series"/>
+                </span>
+            </h1>
         </div>
         <div class="row  series-detail-overview">
             {{overview}}
