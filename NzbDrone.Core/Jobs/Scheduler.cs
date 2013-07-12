@@ -6,6 +6,7 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 using Timer = System.Timers.Timer;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -30,7 +31,9 @@ namespace NzbDrone.Core.Jobs
         {
             _cancellationTokenSource = new CancellationTokenSource();
             Timer.Interval = 1000 * 30;
-            Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token);
+            Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token)
+                .LogExceptions();
+            
             Timer.Start();
         }
 

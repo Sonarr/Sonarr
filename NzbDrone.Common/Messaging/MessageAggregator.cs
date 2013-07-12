@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Common.Messaging
 {
@@ -53,7 +54,8 @@ namespace NzbDrone.Common.Messaging
                     _logger.Debug("{0} ~> {1}", eventName, handlerLocal.GetType().Name);
                     handlerLocal.HandleAsync(@event);
                     _logger.Debug("{0} <~ {1}", eventName, handlerLocal.GetType().Name);
-                }, TaskCreationOptions.PreferFairness);
+                }, TaskCreationOptions.PreferFairness)
+                .LogExceptions();
             }
         }
 

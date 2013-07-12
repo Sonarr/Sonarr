@@ -9,6 +9,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.IndexerSearch
 {
@@ -158,7 +159,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         _logger.ErrorException("Error while searching for " + criteriaBase, e);
                     }
-                }));
+                }).LogExceptions());
             }
 
             Task.WaitAll(taskList.ToArray());

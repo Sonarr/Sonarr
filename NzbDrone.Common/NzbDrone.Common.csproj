@@ -110,7 +110,7 @@
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
-    <Compile Include="Messaging\LimitedConcurrencyLevelTaskScheduler.cs" />
+    <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
@@ -160,6 +160,7 @@
     <Compile Include="RestProvider.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="TinyIoC.cs" />
+    <Compile Include="TPL\TaskExtensions.cs" />
     <Compile Include="TryParseExtension.cs" />
   </ItemGroup>
   <ItemGroup>

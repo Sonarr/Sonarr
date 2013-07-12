@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Indexers
                          {
                              result.AddRange(indexerFeed);
                          }
-                     });
+                     }).LogExceptions();
 
                 taskList.Add(task);
             }
