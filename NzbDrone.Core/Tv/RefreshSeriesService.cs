@@ -111,8 +111,8 @@ namespace NzbDrone.Core.Tv
                         episodeToUpdate = new Episode();
                         newList.Add(episodeToUpdate);
 
-                        //If it is Episode Zero Ignore it (specials, sneak peeks.)
-                        if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
+                        //If it is Episode Zero or Season zero ignore it
+                        if ((episode.EpisodeNumber == 0 && episode.SeasonNumber != 1) || episode.SeasonNumber == 0)
                         {
                             episodeToUpdate.Monitored = false;
                         }
