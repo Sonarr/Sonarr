@@ -69,11 +69,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     if (newDownload)
                     {
                         episodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+                        _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
                     }
                     
                     _mediaFileService.Add(episodeFile);
-                    _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
-
                 }
                 catch (Exception e)
                 {
