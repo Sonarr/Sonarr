@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Tv
                 series.QualityProfileId = edited.QualityProfileId;
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;
-                //series.Path = edited.Path;
+                series.Path = edited.Path;
                 series.CustomStartDate = edited.CustomStartDate;
 
                 _seriesRepository.Update(series);
@@ -108,7 +108,6 @@ namespace NzbDrone.Core.Tv
         {
             return _seriesRepository.FindByTvdbId(tvdbId);
         }
-
 
         public Series FindBySlug(string slug)
         {
