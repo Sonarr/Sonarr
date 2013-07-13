@@ -7,8 +7,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -19,7 +17,9 @@ namespace NzbDrone.Core.MediaFiles
         string[] GetVideoFiles(string path, bool allDirectories = true);
     }
 
-    public class DiskScanService : IDiskScanService, IExecute<DiskScanCommand>, IHandle<EpisodeInfoAddedEvent>
+    public class DiskScanService :
+        IDiskScanService,
+        IHandle<SeriesUpdatedEvent>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public DiskScanService(IDiskProvider diskProvider,
                                 ISeriesService seriesService,
-                                IMakeImportDecision importDecisionMaker, 
+                                IMakeImportDecision importDecisionMaker,
                                 IImportApprovedEpisodes importApprovedEpisodes,
                                 IMessageAggregator messageAggregator)
         {
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles
         private void Scan(Series series)
         {
             _messageAggregator.PublishCommand(new CleanMediaFileDb(series.Id));
-            
+
             if (!_diskProvider.FolderExists(series.Path))
             {
                 Logger.Debug("Series folder doesn't exist: {0}", series.Path);
@@ -71,33 +71,7 @@ namespace NzbDrone.Core.MediaFiles
             return mediaFileList.ToArray();
         }
 
-        public void Execute(DiskScanCommand message)
-        {
-            var seriesToScan = new List<Series>();
-
-            if (message.SeriesId.HasValue)
-            {
-                seriesToScan.Add(_seriesService.GetSeries(message.SeriesId.Value));
-            }
-            else
-            {
-                seriesToScan.AddRange(_seriesService.GetAllSeries());
-            }
-
-            foreach (var series in seriesToScan)
-            {
-                try
-                {
-                    Scan(series);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("Disk scan failed for " + series, e);
-                }
-            }
-        }
-
-        public void Handle(EpisodeInfoAddedEvent message)
+        public void Handle(SeriesUpdatedEvent message)
         {
             Scan(message.Series);
         }
