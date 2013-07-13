@@ -21,7 +21,13 @@ define(
             },
 
             removeFolder: function () {
-                this.model.destroy({ wait: true });
+
+                var self = this;
+
+                this.model.destroy()
+                    .success(function(){
+                        self.close();
+                    });
             },
 
             folderSelected: function () {
