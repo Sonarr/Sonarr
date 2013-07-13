@@ -43,8 +43,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 try
                 {
-                    var fileWithoutExtension = Path.GetFileNameWithoutExtension(file);
-                    var parsedEpisode = _parsingService.GetEpisodes(Path.GetFileNameWithoutExtension(file), series);
+                    var parsedEpisode = _parsingService.GetEpisodes(file, series);
 
                     if (parsedEpisode != null)
                     {

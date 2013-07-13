@@ -17,5 +17,10 @@ namespace NzbDrone.Core.Parser.Model
         public QualityModel Quality { get; set; }
 
         public int SeasonNumber { get { return Episodes.Select(c => c.SeasonNumber).Distinct().Single(); } }
+
+        public override string ToString()
+        {
+            return Path;
+        }
     }
 }

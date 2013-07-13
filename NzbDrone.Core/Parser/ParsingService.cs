@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Parser.Model;
@@ -8,7 +9,7 @@ namespace NzbDrone.Core.Parser
 {
     public interface IParsingService
     {
-        LocalEpisode GetEpisodes(string fileName, Series series);
+        LocalEpisode GetEpisodes(string filename, Series series);
         Series GetSeries(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo);
     }
@@ -26,9 +27,9 @@ namespace NzbDrone.Core.Parser
             _logger = logger;
         }
 
-        public LocalEpisode GetEpisodes(string fileName, Series series)
+        public LocalEpisode GetEpisodes(string filename, Series series)
         {
-            var parsedEpisodeInfo = Parser.ParseTitle(fileName);
+            var parsedEpisodeInfo = Parser.ParsePath(filename);
 
             if (parsedEpisodeInfo == null)
             {
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Parser
                     Series = series,
                     Quality = parsedEpisodeInfo.Quality,
                     Episodes = episodes,
-                    Path = fileName,
+                    Path = filename,
                     ParsedEpisodeInfo =  parsedEpisodeInfo
                 };
         }

@@ -77,7 +77,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 }
                 catch (Exception e)
                 {
-                    _logger.WarnException("Couldn't add report to download queue. " + localEpisode, e);
+                    _logger.WarnException("Couldn't import episode " + localEpisode, e);
                 }
             }
 

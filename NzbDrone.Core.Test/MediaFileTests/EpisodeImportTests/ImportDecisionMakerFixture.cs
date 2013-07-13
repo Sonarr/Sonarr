@@ -150,18 +150,5 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 
             ExceptionVerification.ExpectedErrors(3);
         }
-
-        [Test]
-        public void should_use_filename_without_extension_when_getting_episodes_from_ParsingService()
-        {
-            var expectedFilename = Path.GetFileNameWithoutExtension(_videoFiles.First());
-
-            GivenSpecifications(_pass1, _pass2, _pass3);
-
-            Subject.GetImportDecisions(_videoFiles, _series);
-
-            Mocker.GetMock<IParsingService>().Verify(v => v.GetEpisodes(expectedFilename, _series), Times.Once());
-        }
     }
-
 }
