@@ -2,7 +2,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>Edit: {{title}}</h3>
 </div>
-<div class="modal-body">
+<div class="modal-body edit-series-modal">
     <div class="form-horizontal">
 
         <div class="control-group">
@@ -52,7 +52,7 @@
 
                 <select class="x-quality-profile" id="inputQualityProfile" name="qualityProfileId">
                     {{#each qualityProfiles.models}}
-                        <option value="{{id}}">{{attributes.name}}</option>
+                    <option value="{{id}}">{{attributes.name}}</option>
                     {{/each}}
                 </select>
                 <span class="help-inline">
@@ -65,7 +65,7 @@
             <label class="control-label" for="inputPath">Path</label>
 
             <div class="controls">
-                <input type="text" id="inputPath" placeholder="Path" name="path">
+                <input type="text" id="inputPath" class="x-path" placeholder="Path" name="path">
                 <span class="help-inline">
                     <i class="icon-question-sign" title="Where should NzbDrone store episodes for this series?"/>
                 </span>
