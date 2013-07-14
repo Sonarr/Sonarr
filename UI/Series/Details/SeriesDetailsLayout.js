@@ -89,7 +89,7 @@ define(
             _setMonitoredState: function () {
                 var monitored = this.model.get('monitored');
 
-                this.ui.monitored.removeClass('icon-spinner icon-spin');
+                this.ui.monitored.removeClass('icon-spin');
 
                 if (this.model.get('monitored')) {
                     this.ui.monitored.addClass('icon-bookmark');
@@ -109,11 +109,11 @@ define(
             _refreshSeries: function () {
                 var self = this;
 
-                this.ui.refresh.addClass('icon-spinner icon-spin');
+                this.ui.refresh.addClass('icon-spin');
                 var promise = CommandController.Execute('refreshseries', { seriesId: this.model.get('id') });
 
                 promise.always(function () {
-                    self.ui.refresh.removeClass('icon-spinner icon-spin');
+                    self.ui.refresh.removeClass('icon-spin');
                 });
             }
         });
