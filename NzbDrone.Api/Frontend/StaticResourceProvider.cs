@@ -19,14 +19,17 @@ namespace NzbDrone.Api.Frontend
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IEnumerable<IMapHttpRequestsToDisk> _requestMappers;
+        private readonly IAddCacheHeaders _addCacheHeaders;
         private readonly Logger _logger;
 
         public StaticResourceProvider(IDiskProvider diskProvider,
                                       IEnumerable<IMapHttpRequestsToDisk> requestMappers,
+                                      IAddCacheHeaders addCacheHeaders,
                                       Logger logger)
         {
             _diskProvider = diskProvider;
             _requestMappers = requestMappers;
+            _addCacheHeaders = addCacheHeaders;
             _logger = logger;
         }
 
@@ -48,18 +51,8 @@ namespace NzbDrone.Api.Frontend
                 if (_diskProvider.FileExists(filePath))
                 {
                     var response = new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
+                    _addCacheHeaders.ToResponse(context.Request, response);
 
-                    if (RuntimeInfo.IsProduction)
-                    {
-                        response.Headers.EnableCache();
-                    }
-
-                    else
-                    {
-                        response.Headers.DisableCache();
-                    }
-
-                    //return response.CompressResponse(context.Request);
                     return response;
                 }
 
