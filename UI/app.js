@@ -6,6 +6,7 @@ require.config({
     paths: {
         'backbone'            : 'JsLibraries/backbone',
         'sugar'               : 'JsLibraries/sugar',
+        'moment'              : 'JsLibraries/moment',
         'handlebars'          : 'JsLibraries/handlebars.runtime',
         'handlebars.helpers'  : 'JsLibraries/handlebars.helpers',
         'bootstrap'           : 'JsLibraries/bootstrap',

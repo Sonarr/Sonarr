@@ -1,0 +1,50 @@
+﻿@import "../Content/icons";
+
+#logs-screen {
+
+  .log-time-cell{
+    width: 80px;
+  }
+
+  .log-level-cell{
+    width: 12px;
+    font-size: 14px;
+  }
+
+  td{
+    font-size: 13px;
+  }
+
+
+  .icon-info:before {
+    .icon(@info-sign);
+    color : dodgerblue;
+  }
+
+  .icon-debug:before {
+    .icon(@info-sign);
+    color : gray;
+  }
+
+  .icon-trace:before {
+    .icon(@info-sign);
+    color : lightgrey;
+  }
+
+  .icon-warn:before {
+    .icon(@exclamation-sign);
+    color : orange;
+  }
+
+  .icon-error:before {
+    .icon(@bug);
+    color : red;
+  }
+
+  .icon-fatal:before {
+    .icon(@remove-sign);
+    color : purple;
+  }
+
+}
+
