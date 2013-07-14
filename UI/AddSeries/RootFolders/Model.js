@@ -1,8 +1,7 @@
 'use strict';
 define(
     [
-        'backbone',
-        'sugar'
+        'backbone'
     ], function (Backbone) {
         return Backbone.Model.extend({
             defaults: {

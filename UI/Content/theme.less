@@ -1,4 +1,6 @@
-﻿body {
+﻿@import "../shared/styles/card";
+
+body {
   background-color : #1c1c1c;
   background-image : url('../content/images/pattern.png');
   margin-bottom    : 100px;
@@ -66,14 +68,12 @@ body h1, body h2, body h3, body h4, body h5, body h6 {
 }
 
 .page {
+  .card(#AAAAAA);
   width            : 1210px;
   min-width        : 1210px;
   margin           : auto;
-  background-color : #ffffff;
-  border-radius    : 6px;
   margin-top       : -70px;
   padding          : 20px 0px;
-  box-shadow       : 0 0 6px rgba(0, 0, 0, 0.1);
   .header {
     padding-bottom : 10px;
     margin-bottom  : 20px;
