@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'marionette',
@@ -9,32 +9,28 @@ define(
             template: 'Settings/MediaManagement/Naming/ViewTemplate',
 
             ui: {
-                namingOptions        : '.x-naming-options',
-                renameEpisodesCheckbox : '.x-rename-episodes'
+                namingOptions         : '.x-naming-options',
+                renameEpisodesCheckbox: '.x-rename-episodes'
             },
 
             events: {
-                'change .x-rename-episodes': '_toggleNamingOptions'
+                'change .x-rename-episodes': '_setNamingOptionsVisibility'
             },
 
-            onShow: function () {
-                var renameEpisodes = this.model.get('renameEpisodes');
-                this._setNamingOptionsVisibility(renameEpisodes);
+            onRender: function(){
+                if(!this.model.get('renameEpisodes')){
+                    this.ui.namingOptions.hide();
+                }
             },
 
-            _toggleNamingOptions: function() {
+            _setNamingOptionsVisibility: function () {
                 var checked = this.ui.renameEpisodesCheckbox.prop('checked');
-                this._setNamingOptionsVisibility(checked);
-            },
-
-            _setNamingOptionsVisibility: function (showNamingOptions) {
-
-                if (showNamingOptions) {
-                    this.ui.namingOptions.show();
+                if (checked) {
+                    this.ui.namingOptions.slideDown();
                 }
 
                 else {
-                    this.ui.namingOptions.hide();
+                    this.ui.namingOptions.slideUp();
                 }
             }
         });

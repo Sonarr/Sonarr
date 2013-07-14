@@ -1,7 +1,6 @@
 ﻿using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Bootstrapper;
-using NzbDrone.Common.Model;
 
 namespace NzbDrone.Api.Authentication
 {
@@ -28,7 +27,7 @@ namespace NzbDrone.Api.Authentication
         private Response RequiresAuthentication(NancyContext context)
         {
             Response response = null;
-            if (context.CurrentUser == null && _authenticationService.AuthenticationType != AuthenticationType.Anonymous)
+            if (context.CurrentUser == null && _authenticationService.Enabled)
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }

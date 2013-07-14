@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Model;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -16,11 +14,11 @@ namespace NzbDrone.Core.Configuration
         Dictionary<string, object> GetConfigDictionary();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
-        int Port { get; set; }
-        bool LaunchBrowser { get; set; }
-        AuthenticationType AuthenticationType { get; set; }
-        string BasicAuthUsername { get; set; }
-        string BasicAuthPassword { get; set; }
+        int Port { get; }
+        bool LaunchBrowser { get; }
+        bool AuthenticationEnabled { get; }
+        string Username { get; }
+        string Password { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -80,31 +78,26 @@ namespace NzbDrone.Core.Configuration
         public int Port
         {
             get { return GetValueInt("Port", 8989); }
-            set { SetValue("Port", value); }
         }
 
         public bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser", true); }
-            set { SetValue("LaunchBrowser", value); }
         }
 
-        public AuthenticationType AuthenticationType
+        public bool AuthenticationEnabled
         {
-            get { return GetValueEnum("AuthenticationType", AuthenticationType.Anonymous); }
-            set { SetValue("AuthenticationType", value); }
+            get { return GetValueBoolean("AuthenticationEnabled", false); }
         }
 
-        public string BasicAuthUsername
+        public string Username
         {
-            get { return GetValue("BasicAuthUsername", ""); }
-            set { SetValue("BasicAuthUsername", value); }
+            get { return GetValue("Username", ""); }
         }
 
-        public string BasicAuthPassword
+        public string Password
         {
-            get { return GetValue("BasicAuthPassword", ""); }
-            set { SetValue("BasicAuthPassword", value); }
+            get { return GetValue("Password", ""); }
         }
 
         public int GetValueInt(string key, int defaultValue)

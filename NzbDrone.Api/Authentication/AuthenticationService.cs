@@ -1,14 +1,12 @@
 ﻿using Nancy.Authentication.Basic;
 using Nancy.Security;
-using NzbDrone.Common;
-using NzbDrone.Common.Model;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication
 {
     public interface IAuthenticationService : IUserValidator
     {
-        AuthenticationType AuthenticationType { get; }
+        bool Enabled { get; }
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -22,25 +20,29 @@ namespace NzbDrone.Api.Authentication
             _configFileProvider = configFileProvider;
         }
 
-        public AuthenticationType AuthenticationType
-        {
-            get { return _configFileProvider.AuthenticationType; }
-        }
 
         public IUserIdentity Validate(string username, string password)
         {
-            if (AuthenticationType == AuthenticationType.Anonymous)
+            if (!Enabled)
             {
                 return AnonymousUser;
             }
 
-            if (_configFileProvider.BasicAuthUsername.Equals(username) &&
-                _configFileProvider.BasicAuthPassword.Equals(password))
+            if (_configFileProvider.Username.Equals(username) &&
+                _configFileProvider.Password.Equals(password))
             {
                 return new NzbDroneUser { UserName = username };
             }
 
             return null;
+        }
+
+        public bool Enabled
+        {
+            get
+            {
+                return _configFileProvider.AuthenticationEnabled;
+            }
         }
     }
 }

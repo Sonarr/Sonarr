@@ -6,7 +6,7 @@
             <label class="control-label">Port Number</label>
 
             <div class="controls">
-                <input type="text" placeholder="8989" name="port"/>
+                <input type="number" placeholder="8989" name="port"/>
                     <span>
                 <i class="icon-form-danger" title="Requires restart to take effect"/>
             </span>
@@ -38,33 +38,36 @@
 
     <fieldset>
         <legend>Security</legend>
-
-
         <div class="control-group">
             <label class="control-label">Authentication</label>
-
             <div class="controls">
-                <select class="inputClass" name="authenticationType">
-                    <option value="anonymous">Anonymous</option>
-                    <option value="basic">Basic</option>
-                </select>
+                <label class="checkbox toggle well">
+                    <input type="checkbox" class='x-auth' name="authenticationEnabled"/>
+                    <p>
+                        <span>On</span>
+                        <span>Off</span>
+                    </p>
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Require Username and Password to access Nzbdrone"/>
+            </span>
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label">Username</label>
-
-            <div class="controls">
-                <input type="text" placeholder="Username" name="basicAuthUsername"/>
+        <div class='x-auth-options'>
+            <div class="control-group">
+                <label class="control-label">Username</label>
+                <div class="controls">
+                    <input type="text" placeholder="Username" name="username"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Password</label>
+                <div class="controls">
+                    <input type="password" name="password"/>
+                </div>
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label">Password</label>
-
-            <div class="controls">
-                <input type="password" name="basicAuthPassword"/>
-            </div>
-        </div>
-
-
     </fieldset>
 </div>

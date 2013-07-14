@@ -149,7 +149,6 @@
     <Compile Include="ConsoleService.cs" />
     <Compile Include="Contract\ReportBase.cs" />
     <Compile Include="Contract\ParseErrorReport.cs" />
-    <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
