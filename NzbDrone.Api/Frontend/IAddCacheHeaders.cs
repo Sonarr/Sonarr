@@ -1,3 +1,4 @@
+using System;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
@@ -19,7 +20,7 @@ namespace NzbDrone.Api.Frontend
                 return;
             }
 
-            if (request.Url.Path.ToLower() == "app.js")
+            if (request.Url.Path.EndsWith("app.js", StringComparison.CurrentCultureIgnoreCase))
             {
                 response.Headers.DisableCache();
                 return;
