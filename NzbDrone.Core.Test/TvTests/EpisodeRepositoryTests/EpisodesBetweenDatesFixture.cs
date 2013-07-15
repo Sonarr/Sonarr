@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var series = Builder<Series>.CreateNew()
                                         .With(s => s.Id = 0)
                                         .With(s => s.Runtime = 30)
+                                        .With(s => s.Monitored = true)
                                         .Build();
 
             series.Id = Db.Insert(series).Id;
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var episode = Builder<Episode>.CreateNew()
                                           .With(e => e.Id = 0)
                                           .With(e => e.SeriesId = series.Id)
+                                          .With(e => e.Monitored = true)
                                           .Build();
 
             Db.Insert(episode);
