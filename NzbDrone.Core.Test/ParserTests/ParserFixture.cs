@@ -149,6 +149,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Breakout Kings - 2x09-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
         [TestCase("Hell on Wheels S02E09 E10 HDTV x264 EVOLVE", "Hell on Wheels", 2, new[] { 9, 10 })]
         [TestCase("Hell.on.Wheels.S02E09-E10.720p.HDTV.x264-EVOLVE", "Hell on Wheels", 2, new[] { 9, 10 })]
+        [TestCase("Grey's Anatomy - 8x01_02 - Free Falling", "Grey's Anatomy", 8, new [] { 1,2 })]
+        [TestCase("8x01_02 - Free Falling", "", 8, new[] { 1, 2 })]
         public void TitleParse_multi(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
