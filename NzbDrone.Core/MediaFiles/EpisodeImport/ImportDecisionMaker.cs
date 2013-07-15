@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -21,12 +22,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     {
         private readonly IEnumerable<IRejectWithReason> _specifications;
         private readonly IParsingService _parsingService;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public ImportDecisionMaker(IEnumerable<IRejectWithReason> specifications, IParsingService parsingService, Logger logger)
+        public ImportDecisionMaker(IEnumerable<IRejectWithReason> specifications,
+                                   IParsingService parsingService,
+                                   IDiskProvider diskProvider,
+                                   Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
+            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -44,9 +50,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 try
                 {
                     var parsedEpisode = _parsingService.GetEpisodes(file, series);
-
+                    
                     if (parsedEpisode != null)
                     {
+                        parsedEpisode.Size = _diskProvider.GetFileSize(file);
                         decision = GetDecision(parsedEpisode);
                     }
 

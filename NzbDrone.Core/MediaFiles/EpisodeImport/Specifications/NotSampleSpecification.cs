@@ -39,10 +39,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
-            var size = _diskProvider.GetFileSize(localEpisode.Path);
             var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
 
-            if (size < Constants.IgnoreFileSize && runTime.TotalMinutes < 3)
+            if (localEpisode.Size < Constants.IgnoreFileSize && runTime.TotalMinutes < 3)
             {
                 _logger.Trace("[{0}] appears to be a sample.", localEpisode.Path);
                 return false;
