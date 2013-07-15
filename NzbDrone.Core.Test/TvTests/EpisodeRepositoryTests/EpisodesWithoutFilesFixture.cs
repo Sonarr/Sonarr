@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = series.Id)
                                            .With(e => e.EpisodeFileId = 0)
+                                           .With(e => e.Monitored = true)
                                            .TheLast(1)
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
