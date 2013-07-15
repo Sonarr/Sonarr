@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Tv
         public String SeriesTitle { get; private set; }
 
         public LazyLoaded<EpisodeFile> EpisodeFile { get; set; }
+        
+        public Series Series { get; set; }
 
         public Boolean HasFile
         {

@@ -84,9 +84,12 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            var pagingQuery = Query.Where(e => e.EpisodeFileId == 0)
+            var pagingQuery = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                                   .Where(e => e.EpisodeFileId == 0)
                                    .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
                                    .AndWhere(e => e.AirDate <= currentTime)
+                                   .AndWhere(e => e.Monitored)
+                                   .AndWhere(e => e.Series.Monitored)
                                    .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
                                    .Skip(pagingSpec.PagingOffset())
                                    .Take(pagingSpec.PageSize);
