@@ -31,12 +31,12 @@ namespace NzbDrone.Core.Tv
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
     {
-        private readonly IDataMapper _dataMapper;
+        private readonly IDatabase _database;
 
         public EpisodeRepository(IDatabase database, IMessageAggregator messageAggregator)
             : base(database, messageAggregator)
         {
-            _dataMapper = database.DataMapper;
+            _database = database;
         }
 
         public Episode Get(int seriesId, int season, int episodeNumber)
@@ -135,16 +135,18 @@ namespace NzbDrone.Core.Tv
 
         public void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
-            _dataMapper.AddParameter("seriesId", seriesId);
-            _dataMapper.AddParameter("seasonNumber", seasonNumber);
-            _dataMapper.AddParameter("monitored", monitored);
+            var mapper = _database.GetDataMapper();
 
-            var sql = "UPDATE Episodes " +
-                      "SET Monitored = @monitored " +
-                      "WHERE SeriesId = @seriesId " +
-                      "AND SeasonNumber = @seasonNumber";
+            mapper.AddParameter("seriesId", seriesId);
+            mapper.AddParameter("seasonNumber", seasonNumber);
+            mapper.AddParameter("monitored", monitored);
 
-            _dataMapper.ExecuteNonQuery(sql);
+            const string sql = "UPDATE Episodes " +
+                               "SET Monitored = @monitored " +
+                               "WHERE SeriesId = @seriesId " +
+                               "AND SeasonNumber = @seasonNumber";
+
+            mapper.ExecuteNonQuery(sql);
         }
 
         public void SetFileId(int episodeId, int fileId)

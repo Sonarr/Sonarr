@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Marr.Data;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.SeriesStats
@@ -12,18 +11,20 @@ namespace NzbDrone.Core.SeriesStats
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
     {
-        private readonly IDataMapper _dataMapper;
+        private readonly IDatabase _database;
 
         public SeriesStatisticsRepository(IDatabase database)
         {
-            _dataMapper = database.DataMapper;
+            _database = database;
         }
 
         public List<SeriesStatistics> SeriesStatistics()
         {
-            _dataMapper.AddParameter("currentDate", DateTime.UtcNow);
+            var mapper = _database.GetDataMapper();
 
-            var queryText = @"SELECT
+            mapper.AddParameter("currentDate", DateTime.UtcNow);
+
+            const string queryText = @"SELECT
                               SeriesId,
                               SUM(CASE WHEN Monitored = 1 AND Airdate <= @currentDate THEN 1 ELSE 0 END) AS EpisodeCount,
                               SUM(CASE WHEN Monitored = 1 AND Episodes.EpisodeFileId > 0 AND AirDate <= @currentDate THEN 1 ELSE 0 END) as EpisodeFileCount,
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.SeriesStats
                               FROM Episodes
                               GROUP BY SeriesId";
 
-            return _dataMapper.Query<SeriesStatistics>(queryText);
+            return mapper.Query<SeriesStatistics>(queryText);
         }
     }
 }

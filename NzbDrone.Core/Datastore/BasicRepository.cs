@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Datastore
 
         private IDataMapper DataMapper
         {
-            get { return _database.DataMapper; }
+            get { return _database.GetDataMapper(); }
         }
 
         public BasicRepository(IDatabase database, IMessageAggregator messageAggregator)

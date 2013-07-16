@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IDatabase
     {
-        IDataMapper DataMapper { get; }
+        IDataMapper GetDataMapper();
     }
 
     public class Database : IDatabase
@@ -17,12 +17,9 @@ namespace NzbDrone.Core.Datastore
             _dataMapperFactory = dataMapperFactory;
         }
 
-        public IDataMapper DataMapper
+        public IDataMapper GetDataMapper()
         {
-            get
-            {
-                return _dataMapperFactory();
-            }
+            return _dataMapperFactory();
         }
     }
 }
