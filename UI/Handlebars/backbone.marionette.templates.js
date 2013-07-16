@@ -6,7 +6,9 @@ define(
         'Handlebars/Helpers/DateTime',
         'Handlebars/Helpers/Html',
         'Handlebars/Helpers/Numbers',
-        'Handlebars/Helpers/EpisodeNumber',
+        'Handlebars/Helpers/Episode',
+        'Handlebars/Helpers/Series',
+        'Handlebars/Helpers/Quality',
         'Handlebars/Debug'
     ], function (Templates) {
         return function () {

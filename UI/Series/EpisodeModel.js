@@ -55,9 +55,6 @@ define(
                     }
 
                     return 'primary';
-                },
-                hasAired           : function () {
-                    return Date.create(this.get('airDate')).isBefore(Date.create());
                 }
             },
 

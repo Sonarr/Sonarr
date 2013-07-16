@@ -7,9 +7,9 @@
                         <i class="icon-cog x-edit" title="Edit Series"/>
                         <i class="icon-remove x-remove" title="Delete Series"/>
                     </div>
-                    {{#unless isContinuing}}
+                    {{#unless_eq status compare="continuing"}}
                         <div class="ended-banner">Ended</div>
-                    {{/unless}}
+                    {{/unless_eq}}
                     <a href="{{route}}">
                         <img class="series-poster" src="{{poster}}" {{defaultImg}}>
                     </a>

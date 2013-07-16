@@ -44,8 +44,10 @@ define(
             onShow: function () {
                 var self = this;
 
-                if (this.model.has('fanArt')) {
-                    $.backstretch(this.model.get('fanArt'));
+                var fanArt = this._getFanArt();
+
+                if (fanArt) {
+                    $.backstretch(fanArt);
                 }
                 else {
                     $('body').removeClass('backdrop');
@@ -67,6 +69,16 @@ define(
                 this._setMonitoredState();
             },
 
+            _getFanArt: function () {
+                var fanArt = _.where(this.model.get('images'), {coverType: 'fanart'});
+
+                if(fanArt && fanArt[0]){
+                    return fanArt[0].url;
+                }
+
+                return undefined;
+            },
+
             onClose: function () {
                 $('.backstretch').remove();
                 $('body').removeClass('backdrop');
@@ -81,7 +93,7 @@ define(
 
                 var promise = this.model.save();
 
-                promise.always(function (){
+                promise.always(function () {
                     self._setMonitoredState();
                 });
             },

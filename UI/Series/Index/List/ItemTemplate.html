@@ -29,7 +29,7 @@
             <div class="row">&nbsp;</div>
             <div class="row">
                 <div class="span8">
-                    {{#if isContinuing}}
+                    {{#if_eq status compare="continuing"}}
                         {{#if nextAiring}}
                             <span class="label">{{ShortDate nextAiring}}</span>
                         {{/if}}
@@ -37,9 +37,9 @@
                     {{else}}
                         <span class="label label-important">Ended</span>
                         <span class="label label-info">{{seasonCount}} Seasons</span>
-                    {{/if}}
+                    {{/if_eq}}
 
-                    {{> QualityProfilePartial qualityProfile}}
+                    {{qualityProfile qualityProfileId}}
                 </div>
                 <div class="span2">
                     <div class="progress">

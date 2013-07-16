@@ -16,7 +16,9 @@ define(
                     var icon;
                     var tooltip;
 
-                    if (this.model.get('episodeFile')) {
+                    var hasAired = Date.create(this.model.get('airDate')).isBefore(Date.create());
+
+                    if (hasAired) {
                         icon = 'icon-ok';
                         tooltip = 'Episode downloaded';
                     }

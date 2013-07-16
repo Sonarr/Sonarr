@@ -29,17 +29,15 @@ define(
 
 
             saveSeries: function () {
-                //Todo: Get qualityProfile
-                var qualityProfile = this.ui.qualityProfile.val();
-                var qualityProfileText = this.ui.qualityProfile.children('option:selected').text();
 
-                this.model.set({ qualityProfileId: qualityProfile, qualityProfileName: qualityProfileText });
+                var qualityProfileId = this.ui.qualityProfile.val();
+                this.model.set({ qualityProfileId: qualityProfileId});
 
                 this.model.save();
                 this.trigger('saved');
                 App.modalRegion.closeModal();
-            },
 
+            },
 
             onRender: function () {
                 this.ui.path.autoComplete('/directories');
