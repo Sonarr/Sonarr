@@ -18,7 +18,6 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
         private readonly ISeriesService _seriesService;
-        private readonly IMoveEpisodeFiles _episodeFileMover;
         private readonly IParsingService _parsingService;
         private readonly IConfigService _configService;
         private readonly IMakeImportDecision _importDecisionMaker;
@@ -28,7 +27,6 @@ namespace NzbDrone.Core.MediaFiles
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
             IDiskScanService diskScanService,
             ISeriesService seriesService,
-            IMoveEpisodeFiles episodeFileMover,
             IParsingService parsingService,
             IConfigService configService,
             IMakeImportDecision importDecisionMaker,
@@ -38,7 +36,6 @@ namespace NzbDrone.Core.MediaFiles
             _diskProvider = diskProvider;
             _diskScanService = diskScanService;
             _seriesService = seriesService;
-            _episodeFileMover = episodeFileMover;
             _parsingService = parsingService;
             _configService = configService;
             _importDecisionMaker = importDecisionMaker;
@@ -46,7 +43,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public void ProcessDownloadedEpisodesFolder()
+        private void ProcessDownloadedEpisodesFolder()
         {
             //TODO: We should also process the download client's category folder
             var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
@@ -57,24 +54,30 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            foreach (var subfolder in _diskProvider.GetDirectories(downloadedEpisodesFolder))
+            if (!_diskProvider.FolderExists(downloadedEpisodesFolder))
+            {
+                _logger.Warn("Downloaded Episodes Folder [{0}] doesn't exist.", downloadedEpisodesFolder);
+                return;
+            }
+
+            foreach (var subFolder in _diskProvider.GetDirectories(downloadedEpisodesFolder))
             {
                 try
                 {
-                    if (!_seriesService.SeriesPathExists(subfolder))
+                    if (!_seriesService.SeriesPathExists(subFolder))
                     {
-                        ProcessSubFolder(new DirectoryInfo(subfolder));
+                        ProcessSubFolder(new DirectoryInfo(subFolder));
 
                         //Todo: We should make sure the file(s) are actually imported
-                        if (_diskProvider.GetFolderSize(subfolder) < NotSampleSpecification.SampleSizeLimit)
+                        if (_diskProvider.GetFolderSize(subFolder) < NotSampleSpecification.SampleSizeLimit)
                         {
-                            _diskProvider.DeleteFolder(subfolder, true);
+                            _diskProvider.DeleteFolder(subFolder, true);
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("An error has occurred while importing folder: " + subfolder, e);
+                    _logger.ErrorException("An error has occurred while importing folder: " + subFolder, e);
                 }
             }
 
@@ -121,7 +124,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            ProcessFiles(new [] { videoFile }, series);
+            ProcessFiles(new[] { videoFile }, series);
         }
 
         private void ProcessFiles(IEnumerable<string> videoFiles, Series series)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using FizzWare.NBuilder;
@@ -7,11 +6,11 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests
 {
@@ -34,14 +33,20 @@ namespace NzbDrone.Core.Test.MediaFileTests
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetDirectories(It.IsAny<string>()))
                   .Returns(_subFolders);
 
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
+
             Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder)
                   .Returns("c:\\drop\\");
+
+
         }
 
         [Test]
         public void should_import_file()
         {
-            Subject.ProcessDownloadedEpisodesFolder();
+            Subject.Execute(new DownloadedEpisodesScanCommand());
 
             VerifyImport();
         }
@@ -49,9 +54,23 @@ namespace NzbDrone.Core.Test.MediaFileTests
         [Test]
         public void should_search_for_series_using_folder_name()
         {
-            Subject.ProcessDownloadedEpisodesFolder();
+            Subject.Execute(new DownloadedEpisodesScanCommand());
+
 
             Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
+        }
+
+        [Test]
+        public void should_skip_import_if_dropfolder_doesnt_exist()
+        {
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>())).Returns(false);
+            
+            Subject.Execute(new DownloadedEpisodesScanCommand());
+
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.GetDirectories(It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.GetFiles(It.IsAny<string>(), It.IsAny<SearchOption>()), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -60,7 +79,8 @@ namespace NzbDrone.Core.Test.MediaFileTests
             Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<FileInfo>()))
                   .Returns(true);
 
-            Subject.ProcessDownloadedEpisodesFolder();
+            Subject.Execute(new DownloadedEpisodesScanCommand());
+
             VerifyNoImport();
         }
 
