@@ -94,8 +94,8 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             Subject.Import(new List<ImportDecision> {_approvedDecisions.First()}, true);
 
-            Mocker.GetMock<IMoveEpisodeFiles>()
-                  .Verify(v => v.MoveEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode),
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                  .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode),
                           Times.Once());
         }
 
@@ -113,8 +113,8 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() });
 
-            Mocker.GetMock<IMoveEpisodeFiles>()
-                  .Verify(v => v.MoveEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode),
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                  .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode),
                           Times.Never());
         }
 

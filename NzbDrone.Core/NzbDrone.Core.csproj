@@ -287,6 +287,7 @@
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\SeriesRenamedEvent.cs" />
+    <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
     <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />

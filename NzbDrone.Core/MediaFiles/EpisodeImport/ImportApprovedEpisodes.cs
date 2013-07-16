@@ -17,19 +17,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
     {
-        private readonly IMoveEpisodeFiles _episodeFileMover;
+        private readonly IUpgradeMediaFiles _episodeFileUpgrader;
         private readonly IMediaFileService _mediaFileService;
         private readonly IDiskProvider _diskProvider;
         private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
 
-        public ImportApprovedEpisodes(IMoveEpisodeFiles episodeFileMover,
+        public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
                                       IMediaFileService mediaFileService,
                                       IDiskProvider diskProvider,
                                       IMessageAggregator messageAggregator,
                                       Logger logger)
         {
-            _episodeFileMover = episodeFileMover;
+            _episodeFileUpgrader = episodeFileUpgrader;
             _mediaFileService = mediaFileService;
             _diskProvider = diskProvider;
             _messageAggregator = messageAggregator;
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        episodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+                        episodeFile = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
                         _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
                     }
                     

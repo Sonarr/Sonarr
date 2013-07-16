@@ -9,7 +9,15 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaFiles
 {
-    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IExecute<CleanUpRecycleBinCommand>
+    public interface IRecycleBinProvider
+    {
+        void DeleteFolder(string path);
+        void DeleteFile(string path);
+        void Empty();
+        void Cleanup();
+    }
+
+    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IExecute<CleanUpRecycleBinCommand>, IRecycleBinProvider
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
@@ -22,11 +30,7 @@ namespace NzbDrone.Core.MediaFiles
             _configService = configService;
         }
 
-        public RecycleBinProvider()
-        {
-        }
-
-        public virtual void DeleteFolder(string path)
+        public void DeleteFolder(string path)
         {
             logger.Trace("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
@@ -56,7 +60,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        public virtual void DeleteFile(string path)
+        public void DeleteFile(string path)
         {
             logger.Trace("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
@@ -79,7 +83,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        public virtual void Empty()
+        public void Empty()
         {
             if (String.IsNullOrWhiteSpace(_configService.RecycleBin))
             {
@@ -102,7 +106,7 @@ namespace NzbDrone.Core.MediaFiles
             logger.Trace("Recycling Bin has been emptied.");
         }
 
-        public virtual void Cleanup()
+        public void Cleanup()
         {
             if (String.IsNullOrWhiteSpace(_configService.RecycleBin))
             {
