@@ -7,6 +7,7 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -64,7 +65,8 @@ namespace NzbDrone.Core.MediaFiles
                     {
                         ProcessSubFolder(new DirectoryInfo(subfolder));
 
-                        if (_diskProvider.GetFolderSize(subfolder) < 50.Megabytes())
+                        //Todo: We should make sure the file(s) are actually imported
+                        if (_diskProvider.GetFolderSize(subfolder) < NotSampleSpecification.SampleSizeLimit)
                         {
                             _diskProvider.DeleteFolder(subfolder, true);
                         }

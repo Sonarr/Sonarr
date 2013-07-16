@@ -12,15 +12,22 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
     public class NotSampleSpecification : IImportDecisionEngineSpecification
     {
-        private readonly IDiskProvider _diskProvider;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly Logger _logger;
 
-        public NotSampleSpecification(IDiskProvider diskProvider, IVideoFileInfoReader videoFileInfoReader, Logger logger)
+        public NotSampleSpecification(IVideoFileInfoReader videoFileInfoReader,
+                                      Logger logger)
         {
-            _diskProvider = diskProvider;
             _videoFileInfoReader = videoFileInfoReader;
             _logger = logger;
+        }
+
+        public static long SampleSizeLimit
+        {
+            get
+            {
+                return 70.Megabytes();
+            }
         }
 
         public string RejectionReason { get { return "Sample"; } }
@@ -41,7 +48,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
 
-            if (localEpisode.Size < Constants.IgnoreFileSize && runTime.TotalMinutes < 3)
+            if (localEpisode.Size < SampleSizeLimit && runTime.TotalMinutes < 3)
             {
                 _logger.Trace("[{0}] appears to be a sample.", localEpisode.Path);
                 return false;

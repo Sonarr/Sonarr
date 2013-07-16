@@ -184,7 +184,6 @@
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
