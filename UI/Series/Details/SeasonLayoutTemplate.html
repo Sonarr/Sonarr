@@ -1,9 +1,13 @@
 ﻿<div class="series-season">
     <h2>
-        <i class="x-season-monitored clickable" title="Toggle season monitored status" />
-        {{seasonTitle}}
+        <i class="x-season-monitored clickable" title="Toggle season monitored status"/>
+        {{#if seasonNumber}}
+        Season {{seasonNumber}}
+        {{else}}
+        Specials
+        {{/if}}
         <span class="season-actions pull-right">
-            <i class="icon-search x-season-search" title="Search for all episodes in season {{seasonNumber}}" />
+            <i class="icon-search x-season-search" title="Search for all episodes in season {{seasonNumber}}"/>
         </span>
     </h2>
     <div id="x-episode-grid"/>
