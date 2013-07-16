@@ -18,12 +18,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Reflection;
 using System.Collections;
-using System.Linq;
 using Marr.Data.Mapping;
-using Marr.Data.Converters;
 using Marr.Data.Parameters;
 using Marr.Data.QGen;
 using System.Linq.Expressions;
@@ -39,8 +36,6 @@ namespace Marr.Data
 
         #region - Contructor, Members -
 
-        private DbProviderFactory _dbProviderFactory;
-        private string _connectionString;
         private DbCommand _command;
 
         /// <summary>
@@ -55,43 +50,32 @@ namespace Marr.Data
         /// <summary>
         /// A database provider agnostic initialization.
         /// </summary>
-        /// <param name="connection">The database connection string.</param>
+        /// <param name="connectionString">The database connection string.</param>
         public DataMapper(DbProviderFactory dbProviderFactory, string connectionString)
         {
+            SqlMode = SqlModes.StoredProcedure;
             if (dbProviderFactory == null)
-                throw new ArgumentNullException("dbProviderFactory instance cannot be null.");
+                throw new ArgumentNullException("dbProviderFactory");
 
             if (string.IsNullOrEmpty(connectionString))
-                throw new ArgumentNullException("connectionString cannot be null or empty.");
+                throw new ArgumentNullException("connectionString");
 
-            _dbProviderFactory = dbProviderFactory;
+            ProviderFactory = dbProviderFactory;
 
-            _connectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
-        public string ConnectionString
-        {
-            get
-            {
-                return _connectionString;
-            }
-        }
+        public string ConnectionString { get; private set; }
 
-        public DbProviderFactory ProviderFactory
-        {
-            get
-            {
-                return _dbProviderFactory;
-            }
-        }
-        
+        public DbProviderFactory ProviderFactory { get; private set; }
+
         /// <summary>
         /// Creates a new command utilizing the connection string.
         /// </summary>
         private DbCommand CreateNewCommand()
         {
-            DbConnection conn = _dbProviderFactory.CreateConnection();
-            conn.ConnectionString = _connectionString;
+            DbConnection conn = ProviderFactory.CreateConnection();
+            conn.ConnectionString = ConnectionString;
             DbCommand cmd = conn.CreateCommand();
             SetSqlMode(cmd);
             return cmd;
@@ -155,23 +139,12 @@ namespace Marr.Data
 
         #region - SP / SQL Mode -
 
-        private SqlModes _sqlMode = SqlModes.StoredProcedure; // Defaults to SP.
         /// <summary>
         /// Gets or sets a value that determines whether the DataMapper will 
         /// use a stored procedure or a sql text command to access 
         /// the database.  The default is stored procedure.
         /// </summary>
-        public SqlModes SqlMode
-        {
-            get
-            {
-                return _sqlMode;
-            }
-            set
-            {
-                _sqlMode = value;
-            }
-        }
+        public SqlModes SqlMode { get; set; }
 
         /// <summary>
         /// Sets the DbCommand objects CommandType to the current SqlMode.
@@ -257,7 +230,7 @@ namespace Marr.Data
             {
                 OpenConnection();
 
-                List<TResult> list = new List<TResult>();
+                var list = new List<TResult>();
                 DbDataReader reader = null;
                 try
                 {
@@ -290,8 +263,8 @@ namespace Marr.Data
         {
             if (string.IsNullOrEmpty(sql))
                 throw new ArgumentNullException("sql", "A SQL query or stored procedure name is required");
-            else
-                Command.CommandText = sql;
+
+            Command.CommandText = sql;
 
             try
             {
@@ -334,7 +307,7 @@ namespace Marr.Data
 
             try
             {
-                using (DbDataAdapter adapter = _dbProviderFactory.CreateDataAdapter())
+                using (DbDataAdapter adapter = ProviderFactory.CreateDataAdapter())
                 {
                     Command.CommandText = sql;
                     adapter.SelectCommand = Command;
@@ -370,7 +343,7 @@ namespace Marr.Data
 
             try
             {
-                using (DbDataAdapter adapter = _dbProviderFactory.CreateDataAdapter())
+                using (DbDataAdapter adapter = ProviderFactory.CreateDataAdapter())
                 {
                     Command.CommandText = sql;
                     adapter.SelectCommand = Command;
@@ -404,7 +377,7 @@ namespace Marr.Data
 
             try
             {
-                adapter = _dbProviderFactory.CreateDataAdapter();
+                adapter = ProviderFactory.CreateDataAdapter();
 
                 adapter.UpdateCommand = Command;
                 adapter.UpdateCommand.CommandText = sql;
@@ -437,7 +410,7 @@ namespace Marr.Data
 
             try
             {
-                adapter = _dbProviderFactory.CreateDataAdapter();
+                adapter = ProviderFactory.CreateDataAdapter();
 
                 adapter.InsertCommand = Command;
                 adapter.InsertCommand.CommandText = sql;
@@ -467,7 +440,7 @@ namespace Marr.Data
 
             try
             {
-                adapter = _dbProviderFactory.CreateDataAdapter();
+                adapter = ProviderFactory.CreateDataAdapter();
 
                 adapter.DeleteCommand = Command;
                 adapter.DeleteCommand.CommandText = sql;
@@ -620,7 +593,7 @@ namespace Marr.Data
         #endregion
 
         #region - Query to Graph -
-        
+
         public List<T> QueryToGraph<T>(string sql)
         {
             return (List<T>)QueryToGraph<T>(sql, new List<T>());
@@ -696,7 +669,7 @@ namespace Marr.Data
 
         public UpdateQueryBuilder<T> Update<T>()
         {
-            return new UpdateQueryBuilder<T>(this);            
+            return new UpdateQueryBuilder<T>(this);
         }
 
         public int Update<T>(T entity, Expression<Func<T, bool>> filter)
@@ -844,7 +817,7 @@ namespace Marr.Data
         }
 
         #endregion
-        
+
         #region - Events -
 
         public event EventHandler OpeningConnection;
@@ -894,7 +867,7 @@ namespace Marr.Data
         {
             if (MapRepository.Instance.EnableTraceLogging)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.AppendLine();
                 sb.AppendLine("==== Begin Query Trace ====");
                 sb.AppendLine();
@@ -920,11 +893,8 @@ namespace Marr.Data
 
         private void UnbindEvents()
         {
-            if (OpeningConnection != null)
-                OpeningConnection = null;
-
-            if (ClosingConnection != null)
-                ClosingConnection = null;
+            OpeningConnection = null;
+            ClosingConnection = null;
         }
 
         public void BeginTransaction()

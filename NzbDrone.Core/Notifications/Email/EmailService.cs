@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Notifications.Email
             var settings = new EmailSettings();
             settings.InjectFrom(message);
 
-            var body = "Success! You have properly configured your email notification settings";
+            const string body = "Success! You have properly configured your email notification settings";
 
             SendEmail(settings, "NzbDrone - Test Notification", body);
         }
