@@ -1,8 +1,8 @@
-*NZBDrone vNext is currently under development to be faster, smarter and work on all major platforms (Windows, Linux, OSX).
-There ARE severe bugs in it and at any given time it may not work at all.*
+*NzbDrone vNext is currently under development to be faster, smarter and work on all major platforms (Windows, Linux, OSX).
+NzbDrone vNext is currently in alpha being tested and vetted by our release testers.*
 
 
-# NZBDrone #
+# NzbDrone #
 
 
 NZBDrone is a PVR for newsgroup users written in .NET 4.0. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
