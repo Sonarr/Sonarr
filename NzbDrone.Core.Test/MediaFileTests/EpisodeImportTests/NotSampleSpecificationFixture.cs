@@ -55,9 +55,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 
         private void WithFileSize(long size)
         {
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetFileSize(It.IsAny<String>()))
-                  .Returns(size);
+            _localEpisode.Size = size;
         }
 
         private void WithLength(int minutes)
