@@ -20,14 +20,14 @@
 
             <div class="center">
                 <div class="labels">
-                    {{#if isContinuing}}
+                    {{#if_eq status compare="continuing"}}
                         {{#if nextAiring}}
-                            <span class="label label-inverse">{{ShortDate nextAiring}}</span>
+                            <span class="label label-inverse">{{NextAiring nextAiring}}</span>
                         {{/if}}
                         <span class="label label-info">Season {{seasonCount}}</span>
                     {{else}}
                         <span class="label label-info">{{seasonCount}} Seasons</span>
-                    {{/if}}
+                    {{/if_eq}}
                 </div>
             </div>
         </div>

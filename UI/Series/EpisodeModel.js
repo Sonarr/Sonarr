@@ -2,16 +2,17 @@
 define(
     [
         'backbone',
+        'moment',
         'Series/SeriesModel'
-    ], function (Backbone, SeriesModel) {
+    ], function (Backbone, Moment, SeriesModel) {
         return Backbone.Model.extend({
 
             initialize: function () {
                 if (this.has('series')) {
-                    var start = Date.create(this.get('airDate'));
+                    var start = Moment(this.get('airDate'));
                     var runtime = this.get('series').get('runtime');
 
-                    this.set('end', start.addMinutes(runtime));
+                    this.set('end', start.add('minutes', runtime));
                 }
             },
 

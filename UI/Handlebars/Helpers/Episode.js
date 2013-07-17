@@ -2,8 +2,9 @@
 define(
     [
         'handlebars',
-        'Shared/FormatHelpers'
-    ], function (Handlebars, FormatHelpers) {
+        'Shared/FormatHelpers',
+        'moment'
+    ], function (Handlebars, FormatHelpers, Moment) {
         Handlebars.registerHelper('EpisodeNumber', function () {
 
             if (this.series.seriesType === 'daily') {
@@ -19,11 +20,11 @@ define(
         Handlebars.registerHelper('StatusLevel', function () {
 
             var hasFile = this.hasFile;
-            var currentTime = Date.create();
-            var start = Date.create(this.airDate);
-            var end = Date.create(this.end);
+            var currentTime = Moment();
+            var start = Moment(this.airDate);
+            var end = Moment(this.end);
 
-            if (currentTime.isBetween(start, end)) {
+            if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
                 return 'warning';
             }
 

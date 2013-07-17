@@ -9,6 +9,7 @@ define(
         });
 
         Handlebars.registerHelper('Pad2', function (input) {
-            return input.pad(2);
+            return FormatHelpers.pad(input, 2);
         });
+
     });

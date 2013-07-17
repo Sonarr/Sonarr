@@ -1,8 +1,10 @@
 'use strict';
 define(
     [
-        'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
+        'Cells/NzbDroneCell',
+        'moment',
+        'Shared/FormatHelpers'
+    ], function (NzbDroneCell, Moment, FormatHelpers) {
         return NzbDroneCell.extend({
 
             className: 'relative-date-cell',
@@ -10,7 +12,11 @@ define(
             render: function () {
 
                 var date = this.model.get(this.column.get('name'));
-                this.$el.html(Date.create(date).relative());
+
+                if (date) {
+                    this.$el.html(FormatHelpers.DateHelper(date));
+                    this.$el.attr('title', Moment(date).format('LLLL'));
+                }
 
                 return this;
             }

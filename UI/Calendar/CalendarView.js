@@ -4,10 +4,11 @@ define(
     [
         'app',
         'marionette',
+        'moment',
         'Calendar/Collection',
         'Episode/Layout',
         'fullcalendar'
-    ], function (App, Marionette, CalendarCollection, EpisodeLayout) {
+    ], function (App, Marionette, Moment, CalendarCollection, EpisodeLayout) {
 
         var _instance;
 
@@ -50,8 +51,8 @@ define(
             },
 
             getEvents: function (start, end, callback) {
-                var startDate = Date.create(start).format(Date.ISO8601_DATETIME);
-                var endDate = Date.create(end).format(Date.ISO8601_DATETIME);
+                var startDate = Moment(start).toISOString();
+                var endDate = Moment(end).toISOString();
 
                 _instance.collection.fetch({
                     data   : { start: startDate, end: endDate },
@@ -80,11 +81,11 @@ define(
 
             getStatusLevel: function (element) {
                 var hasFile = element.get('hasFile');
-                var currentTime = Date.create();
-                var start = Date.create(element.get('airDate'));
-                var end = Date.create(element.get('end'));
+                var currentTime = Moment();
+                var start = Moment(element.get('airDate'));
+                var end = Moment(element.get('end'));
 
-                if (currentTime.isBetween(start, end)) {
+                if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
                     return 'warning';
                 }
 

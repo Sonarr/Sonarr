@@ -2,8 +2,9 @@
 
 define(
     [
-        'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
+        'Cells/NzbDroneCell',
+        'Shared/FormatHelpers'
+    ], function (NzbDroneCell, FormatHelpers) {
         return NzbDroneCell.extend({
 
             className: 'episode-number-cell',
@@ -30,14 +31,14 @@ define(
 
                         if (episodes.constructor === Array) {
                             paddedEpisodes = _.map(episodes,function (episodeNumber) {
-                                return episodeNumber.pad(2);
+                                return FormatHelpers.pad(episodeNumber, 2);
                             }).join();
                         }
                         else {
-                            paddedEpisodes = episodes.pad(2);
+                            paddedEpisodes = FormatHelpers.pad(episodes, 2);
                         }
 
-                        result = 'S{0}-E{1}'.format(seasonNumber.pad(2), paddedEpisodes);
+                        result = '{0}x{1}'.format(seasonNumber, paddedEpisodes);
                     }
                     else if (airDate) {
                         result = new Date(airDate).toLocaleDateString();

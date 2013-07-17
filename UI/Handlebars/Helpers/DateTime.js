@@ -2,15 +2,27 @@
 define(
     [
         'handlebars',
-        'sugar'
-    ], function (Handlebars) {
+        'moment',
+        'Shared/FormatHelpers'
+    ], function (Handlebars, Moment, FormatHelpers) {
         Handlebars.registerHelper('ShortDate', function (input) {
             if (!input) {
                 return '';
             }
 
-            var date = Date.create(input);
-            var result = '<span title="' + date.full() + '">' + date.short() + '</span>';
+            var date = Moment(input);
+            var result = '<span title="' + date.format('LLLL') + '">' + date.format('LL') + '</span>';
+
+            return new Handlebars.SafeString(result);
+        });
+
+        Handlebars.registerHelper('NextAiring', function (input) {
+            if (!input) {
+                return '';
+            }
+
+            var date = Moment(input);
+            var result = '<span title="' + date.format('LLLL') + '">' + FormatHelpers.DateHelper(input) + '</span>';
 
             return new Handlebars.SafeString(result);
         });
@@ -20,7 +32,7 @@ define(
                 return '';
             }
 
-            return Date.create(input).format('{dd}');
+            return Moment(input).format('DD');
         });
 
         Handlebars.registerHelper('Month', function (input) {
@@ -28,7 +40,7 @@ define(
                 return '';
             }
 
-            return Date.create(input).format('{Mon}');
+            return Moment(input).format('MMM');
         });
 
         Handlebars.registerHelper('StartTime', function (input) {
@@ -36,11 +48,11 @@ define(
                 return '';
             }
 
-            var date = Date.create(input);
-            if (date.format('{mm}') === '00') {
-                return date.format('{h}{tt}');
+            var date = Moment(input);
+            if (date.format('mm') === '00') {
+                return date.format('ha');
             }
 
-            return date.format('{h}.{mm}{tt}');
+            return date.format('h.mma');
         });
     });

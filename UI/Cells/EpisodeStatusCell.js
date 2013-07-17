@@ -2,8 +2,9 @@
 
 define(
     [
-        'backgrid'
-    ], function (Backgrid) {
+        'backgrid',
+        'moment'
+    ], function (Backgrid, Moment) {
         return  Backgrid.Cell.extend({
 
             className: 'episode-status-cell',
@@ -16,7 +17,7 @@ define(
                     var icon;
                     var tooltip;
 
-                    var hasAired = Date.create(this.model.get('airDate')).isBefore(Date.create());
+                    var hasAired = Moment(this.model.get('airDate')).isBefore(Moment());
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {

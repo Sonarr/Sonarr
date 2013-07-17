@@ -2,37 +2,37 @@
 
 define(
     [
-        'sugar'
-    ], {
-        Bytes: function (sourceSize) {
-            var size = Number(sourceSize);
-            return size.bytes(1);
-        },
+        'moment',
+        'filesize'
+    ], function (Moment, Filesize) {
 
-        DateHelper: function (sourceDate) {
-            if (!sourceDate) {
-                return '';
-            }
+        return {
 
-            var date = Date.create(sourceDate);
+            Bytes: function (sourceSize) {
+                var size = Number(sourceSize);
+                return Filesize(size, 1, false);
+            },
 
-            if (date.isYesterday()) {
-                return 'Yesterday';
-            }
-            if (date.isToday()) {
-                return 'Today';
-            }
-            if (date.isTomorrow()) {
-                return 'Tomorrow';
-            }
-            if (date.isAfter(Date.create('tomorrow')) && date.isBefore(Date.create().addDays(7))) {
-                return date.format('{Weekday}');
-            }
+            DateHelper: function (sourceDate) {
+                if (!sourceDate) {
+                    return '';
+                }
 
-            if (date.isAfter(Date.create().addDays(6))) {
-                return date.relative().replace(' from now', '');
-            }
+                var date = Moment(sourceDate);
 
-            return date.format('{MM}/{dd}/{yyyy}');
+                if (date.isAfter(Moment().add('days', 6))) {
+                    return date.fromNow(true);
+                }
+
+                //TODO: It would be nice to not have to hack this...
+                var calendarDate = date.calendar();
+                return calendarDate.substring(0, calendarDate.indexOf(' at '));
+            },
+
+            pad: function(n, width, z) {
+                z = z || '0';
+                n = n + '';
+                return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+            }
         }
     });

@@ -60,7 +60,8 @@ define(
                         label   : 'Episodes',
                         sortable: false,
                         template: 'Series/EpisodeProgressTemplate',
-                        cell    : TemplatedCell
+                        cell    : TemplatedCell,
+                        className: 'episode-progress-cell'
                     },
                     {
                         name    : 'this',
@@ -189,8 +190,7 @@ define(
                                 title   : '',
                                 icon    : 'icon-table',
                                 callback: this._showTable
-                            },
-
+                            }
                         ]
                 };
 
