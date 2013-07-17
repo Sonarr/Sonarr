@@ -182,7 +182,12 @@ namespace NzbDrone.Core.Tv
             {
                 _logger.Trace("Detaching episode {0} from file.", episode.Id);
                 episode.EpisodeFileId = 0;
-                episode.Monitored = _configService.AutoUnmonitorPreviouslyDownloadedEpisodes;
+
+                if (_configService.AutoUnmonitorPreviouslyDownloadedEpisodes)
+                {
+                    episode.Monitored = false;
+                }
+
                 UpdateEpisode(episode);
             }
         }
