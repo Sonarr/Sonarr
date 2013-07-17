@@ -8,7 +8,6 @@ module.exports = function (grunt) {
             'UI/JsLibraries/backbone.js'                     : 'http://documentcloud.github.io/backbone/backbone.js',
             'UI/JsLibraries/backbone.marionette.js'          : 'http://marionettejs.com/downloads/backbone.marionette.js',
             'UI/JsLibraries/backbone.modelbinder.js'         : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
-            'UI/JsLibraries/backbone.mutators.js'            : 'http://raw.github.com/asciidisco/Backbone.Mutators/master/backbone.mutators.js',
             'UI/JsLibraries/backbone.shortcuts.js'           : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
 
             'UI/JsLibraries/backbone.pageable.js'            : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
