@@ -75,6 +75,8 @@ namespace NzbDrone.Api.Series
 
             var resource = series.InjectTo<SeriesResource>();
             MapCoversToLocal(resource);
+            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics());
+
             return resource;
         }
 
@@ -83,23 +85,15 @@ namespace NzbDrone.Api.Series
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
             var seriesResources = ToListResource(_seriesService.GetAllSeries);
 
-            foreach (var s in seriesResources)
+            foreach (var resource in seriesResources)
             {
-                var stats = seriesStats.SingleOrDefault(ss => ss.SeriesId == s.Id);
-                if (stats == null) continue;
-
-                s.EpisodeCount = stats.EpisodeCount;
-                s.EpisodeFileCount = stats.EpisodeFileCount;
-                s.SeasonCount = stats.SeasonCount;
-                s.NextAiring = stats.NextAiring;
+                LinkSeriesStatistics(resource, seriesStats);
             }
 
             MapCoversToLocal(seriesResources.ToArray());
 
             return seriesResources;
         }
-
-
 
         private SeriesResource AddSeries(SeriesResource seriesResource)
         {
@@ -108,7 +102,11 @@ namespace NzbDrone.Api.Series
 
         private SeriesResource UpdateSeries(SeriesResource seriesResource)
         {
-            return ToResource<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
+            var resource = ToResource<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
+            MapCoversToLocal(resource);
+            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics());
+
+            return resource;
         }
 
         private void DeleteSeries(int id)
@@ -124,6 +122,16 @@ namespace NzbDrone.Api.Series
                 _coverMapper.ConvertToLocalUrls(seriesResource.Id, seriesResource.Images);
             }
         }
-    }
 
+        private void LinkSeriesStatistics(SeriesResource resource, List<SeriesStatistics> seriesStatistics)
+        {
+            var stats = seriesStatistics.SingleOrDefault(ss => ss.SeriesId == resource.Id);
+                if (stats == null) return;
+
+            resource.EpisodeCount = stats.EpisodeCount;
+            resource.EpisodeFileCount = stats.EpisodeFileCount;
+            resource.SeasonCount = stats.SeasonCount;
+            resource.NextAiring = stats.NextAiring;
+        }
+    }
 }
