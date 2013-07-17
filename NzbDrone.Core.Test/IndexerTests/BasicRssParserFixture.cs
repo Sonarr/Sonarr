@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [TestCase("7,162.1MB", 7510006170)]
         [TestCase("162.1MB", 169974170)]
         [TestCase("398.62 MB", 417983365)]
+        [TestCase("845 MB", 1073741824)]
         public void parse_size(string sizeString, long expectedSize)
         {
             var result = BasicRssParser.GetReportSize(sizeString);
