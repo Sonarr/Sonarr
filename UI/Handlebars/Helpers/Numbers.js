@@ -12,4 +12,8 @@ define(
             return FormatHelpers.pad(input, 2);
         });
 
+        Handlebars.registerHelper('Number', function (input) {
+            return FormatHelpers.Number(input);
+        });
+
     });

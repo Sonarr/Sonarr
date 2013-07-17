@@ -7,12 +7,20 @@
   border-top            : none;
   .box-sizing(border-box);
   .border-radius(0 0 4px 4px);
+  position: relative;
+
+  .total-records {
+    display    : inline-block;
+    height     : 30px;
+    padding    : 0;
+    line-height: 30px;
+    font-size  : 13px;
+    position   : absolute;
+    right      : 0;
+  }
 
   ul {
     display  : inline-block;
-    *display : inline;
-    margin   : 5px 0;
-    *zoom    : 1;
 
     li {
       display : inline;
@@ -31,10 +39,12 @@
       }
     }
     .active {
-      i, span {
+      span {
         background-color : #f5f5f5;
         color            : #999999;
         cursor           : default;
+        width            : inherit;
+        padding          : 0px 2px;
       }
     }
 

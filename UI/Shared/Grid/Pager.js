@@ -30,6 +30,8 @@ define(
                     return;
                 }
 
+                target.closest('li i').addClass('icon-spinner icon-spin');
+
                 var label = target.attr('data-action');
                 var ffLabels = this.fastForwardHandleLabels;
 
@@ -81,10 +83,11 @@ define(
                 if (collection.mode !== 'infinite') {
                     for (var i = windowStart; i < windowEnd; i++) {
                         handles.push({
-                            label     : i + 1,
-                            title     : 'No. ' + (i + 1),
-                            className : currentPage === i ? 'active' :undefined,
-                            pageNumber: i + 1
+                            label       : i + 1,
+                            title       : 'No. ' + (i + 1),
+                            className   : currentPage === i ? 'active' :undefined,
+                            pageNumber  : i + 1,
+                            lastPage    : lastPage + 1
                         });
                     }
                 }
@@ -134,7 +137,8 @@ define(
                 var templateFunction = Marionette.TemplateCache.get(this.template);
 
                 this.$el.html(templateFunction({
-                    handles: this.makeHandles()
+                    handles: this.makeHandles(),
+                    state: this.collection.state
                 }));
 
                 this.delegateEvents();

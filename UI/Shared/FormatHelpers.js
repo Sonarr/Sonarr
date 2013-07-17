@@ -33,6 +33,14 @@ define(
                 z = z || '0';
                 n = n + '';
                 return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+            },
+
+            Number: function (input) {
+                if (!input) {
+                    return '';
+                }
+
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         }
     });
