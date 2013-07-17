@@ -125,8 +125,7 @@ namespace NzbDrone.Api.Series
 
         private void LinkSeriesStatistics(SeriesResource resource, List<SeriesStatistics> seriesStatistics)
         {
-            var stats = seriesStatistics.SingleOrDefault(ss => ss.SeriesId == resource.Id);
-                if (stats == null) return;
+            var stats = seriesStatistics.Single(ss => ss.SeriesId == resource.Id);
 
             resource.EpisodeCount = stats.EpisodeCount;
             resource.EpisodeFileCount = stats.EpisodeFileCount;
