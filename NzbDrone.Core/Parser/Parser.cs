@@ -450,6 +450,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("portuguese"))
                 return Language.Portuguese;
 
+            if (lowerTitle.Contains("nlsub"))
+                return Language.Norwegian;
+
             var match = LanguageRegex.Match(title);
 
             if (match.Groups["italian"].Captures.Cast<Capture>().Any())
