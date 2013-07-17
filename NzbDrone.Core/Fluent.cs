@@ -26,12 +26,12 @@ namespace NzbDrone.Core
 
         public static Int64 Megabytes(this int megabytes)
         {
-            return megabytes * 1048576L;
+            return Convert.ToInt64(megabytes * 1024L *1024L);
         }
 
         public static Int64 Gigabytes(this int gigabytes)
         {
-            return gigabytes * 1073741824L;
+            return Convert.ToInt64(gigabytes * 1024L * 1024L * 1024L);
         }
 
         public static string ToBestDateString(this DateTime dateTime)
