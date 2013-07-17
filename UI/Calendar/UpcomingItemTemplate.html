@@ -3,9 +3,11 @@
         <h1>{{Day airDate}}</h1>
         <h4>{{Month airDate}}</h4>
     </div>
-    <a href="{{series.route}}">
-        <h4>{{series.title}}</h4>
+    {{#with series}}
+    <a href="{{route}}">
+        <h4>{{title}}</h4>
     </a>
+    {{/with}}
     <p>{{StartTime airDate}} {{ShortDate airDate}}<span class="pull-right">{{seasonNumber}}x{{Pad2 episodeNumber}}</span><br>{{episodeTitle}}</p>
     <p class="episode-title x-episode-title">{{title}}</p>
 </div>

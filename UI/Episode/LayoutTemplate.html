@@ -22,7 +22,9 @@
     </div>
     <div class="modal-footer">
         {{#unless hideSeriesLink}}
-            <a href="{{series.route}}" class="btn pull-left" data-dismiss="modal">open series</a>
+            {{#with series}}
+                <a href="{{route}}" class="btn pull-left" data-dismiss="modal">open series</a>
+            {{/with}}
         {{/unless}}
 
         <button class="btn" data-dismiss="modal">close</button>
