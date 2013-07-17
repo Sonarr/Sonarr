@@ -60,12 +60,14 @@ define(
                             var episodeTitle = element.get('title');
                             var seriesTitle = element.get('series').get('title');
                             var start = element.get('airDate');
+                            var statusLevel = _instance.getStatusLevel(element);
 
                             element.set({
-                                'title': seriesTitle,
+                                title       : seriesTitle,
                                 episodeTitle: episodeTitle,
-                                start: start,
-                                allDay: false
+                                start       : start,
+                                allDay      : false,
+                                statusLevel : statusLevel
                             });
 
                             element.set('model', element);
@@ -74,6 +76,27 @@ define(
                         callback(calendarCollection.toJSON());
                     }
                 });
+            },
+
+            getStatusLevel: function (element) {
+                var hasFile = element.get('hasFile');
+                var currentTime = Date.create();
+                var start = Date.create(element.get('airDate'));
+                var end = Date.create(element.get('end'));
+
+                if (currentTime.isBetween(start, end)) {
+                    return 'warning';
+                }
+
+                if (start.isBefore(currentTime) && !hasFile) {
+                    return 'danger';
+                }
+
+                if (hasFile) {
+                    return 'success';
+                }
+
+                return 'primary';
             }
         });
     });
