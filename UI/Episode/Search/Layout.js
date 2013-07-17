@@ -8,8 +8,9 @@ define(
         'Release/Collection',
         'Shared/SpinnerView',
         'Shared/Messenger',
-        'Commands/CommandController'
-    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SpinnerView, Messenger, CommandController) {
+        'Commands/CommandController',
+        'Shared/FormatHelpers'
+    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SpinnerView, Messenger, CommandController, FormatHelpers) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/LayoutTemplate',
@@ -42,7 +43,7 @@ define(
                 var seriesTitle = this.model.get('series').get('title');
                 var season = this.model.get('seasonNumber');
                 var episode = this.model.get('episodeNumber');
-                var message = seriesTitle + ' - S' + season.pad(2) + 'E' + episode.pad(2);
+                var message = seriesTitle + ' - ' + season + 'x' + FormatHelpers.pad(episode, 2);
 
                 Messenger.show({
                     message: 'Search started for: ' + message

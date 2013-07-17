@@ -12,7 +12,7 @@ define(
             }
 
             else {
-                return '{0}x{1}'.format(this.seasonNumber, this.episodeNumber.pad(2));
+                return '{0}x{1}'.format(this.seasonNumber, FormatHelpers.pad(this.episodeNumber, 2));
             }
 
         });

@@ -16,15 +16,21 @@ define(
 
                 var self = this;
 
-                this.$el.html('<i class =\'icon-spinner icon-spin\' />');
-                this.model.save().always(function () {
-                    self.$el.html('<i class =\'icon-download-alt\' title=\'Add to download queue\' />');
+                this.$el.html('<i class="icon-spinner icon-spin" />');
+                var promise = this.model.save();
+
+                promise.done(function () {
+                    self.$el.html('<i class="icon-ok" title="Added to downloaded queue" />');
+                });
+
+                promise.fail(function () {
+                    self.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
                 });
             },
 
             render: function () {
 
-                this.$el.html('<i class =\'icon-download-alt\' title=\'Add to download queue\' />');
+                this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
                 return this;
 
             }
