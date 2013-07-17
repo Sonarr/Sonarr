@@ -17,13 +17,14 @@ define(
                     var tooltip;
 
                     var hasAired = Date.create(this.model.get('airDate')).isBefore(Date.create());
+                    var hasFile = this.model.get('hasFile');
 
-                    if (hasAired) {
+                    if (hasFile) {
                         icon = 'icon-ok';
                         tooltip = 'Episode downloaded';
                     }
                     else {
-                        if (this.model.get('hasAired')) {
+                        if (hasAired) {
                             icon = 'icon-warning-sign';
                             tooltip = 'Episode missing from disk';
                         }
