@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Indexers
             return header;
         }
 
-        private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2})\W?(?<unit>GB|MB|GiB|MiB)",
+        private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 
@@ -148,11 +148,17 @@ namespace NzbDrone.Core.Indexers
 
                 var unit = match[0].Groups["unit"].Value;
 
-                if (unit.Equals("MB", StringComparison.InvariantCultureIgnoreCase) || unit.Equals("MiB", StringComparison.InvariantCultureIgnoreCase))
-                    return Convert.ToInt64(value * 1048576L);
+                if (unit.Equals("MB", StringComparison.InvariantCultureIgnoreCase) ||
+                    unit.Equals("MiB", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return Convert.ToInt32(value).Megabytes();
+                }
 
-                if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) || unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
-                    return Convert.ToInt64(value * 1073741824L);
+            if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) ||
+                    unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return Convert.ToInt32(value).Gigabytes();
+                }
             }
             return 0;
         }
