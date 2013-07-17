@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Jobs
                 {
                     new ScheduledTask{ Interval = 15, TypeName = typeof(RssSyncCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappings).FullName},
-                    new ScheduledTask{ Interval = 6*60, TypeName = typeof(RefreshSeriesCommand).FullName},
+                    new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 5, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName}
