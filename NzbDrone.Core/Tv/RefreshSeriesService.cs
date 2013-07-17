@@ -100,12 +100,9 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId);
+                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId) ??
+                                          seriesEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
-                    if (episodeToUpdate == null)
-                    {
-                        episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
-                    }
                     if (episodeToUpdate == null)
                     {
                         episodeToUpdate = new Episode();
@@ -119,8 +116,7 @@ namespace NzbDrone.Core.Tv
                         else
                         {
                             var season = seasons.FirstOrDefault(c => c.SeasonNumber == episode.SeasonNumber);
-
-                            episodeToUpdate.Monitored = season != null ? season.Monitored : true;
+                            episodeToUpdate.Monitored = season == null || season.Monitored;
                         }
                     }
                     else
@@ -148,7 +144,7 @@ namespace NzbDrone.Core.Tv
                 }
                 catch (Exception e)
                 {
-                    _logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}", series), e);
+                    _logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}. {1}", series, episode), e);
                     failCount++;
                 }
             }

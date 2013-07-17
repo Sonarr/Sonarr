@@ -2,6 +2,7 @@
 using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Common;
 
 
 namespace NzbDrone.Core.Tv
@@ -25,12 +26,17 @@ namespace NzbDrone.Core.Tv
         public String SeriesTitle { get; private set; }
 
         public LazyLoaded<EpisodeFile> EpisodeFile { get; set; }
-        
+
         public Series Series { get; set; }
 
         public Boolean HasFile
         {
             get { return EpisodeFileId > 0; }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[0]{1}", TvDbEpisodeId, Title.NullSafe());
         }
     }
 }

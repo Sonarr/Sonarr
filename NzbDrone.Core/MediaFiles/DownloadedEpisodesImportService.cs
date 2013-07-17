@@ -89,7 +89,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     if (series == null)
                     {
-                        _logger.Trace("Unknown Series for file: {0}", videoFile);
+                        _logger.Debug("Unknown Series for file: {0}", videoFile);
                     }
 
                     ProcessVideoFile(videoFile, series);
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (series == null)
             {
-                _logger.Trace("Unknown Series {0}", subfolderInfo.Name);
+                _logger.Debug("Unknown Series {0}", subfolderInfo.Name);
                 return;
             }
 
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
             {
-                _logger.Trace("[{0}] is currently locked by another process, skipping", videoFile);
+                _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
                 return;
             }
 

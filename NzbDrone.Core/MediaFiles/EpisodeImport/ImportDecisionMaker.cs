@@ -67,7 +67,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("Couldn't process report.", e);
+                    _logger.ErrorException("Couldn't import file." + file, e);
                 }
 
                 if (decision != null)
