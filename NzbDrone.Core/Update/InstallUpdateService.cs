@@ -16,19 +16,19 @@ namespace NzbDrone.Core.Update
 
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
-        private readonly ArchiveProvider _archiveProvider;
+        private readonly IArchiveService _archiveService;
         private readonly IProcessProvider _processProvider;
 
 
         public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppFolderInfo appFolderInfo,
                                     IDiskProvider diskProvider, IHttpProvider httpProvider,
-                                    ArchiveProvider archiveProvider, IProcessProvider processProvider, Logger logger)
+                                    IArchiveService archiveService, IProcessProvider processProvider, Logger logger)
         {
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
-            _archiveProvider = archiveProvider;
+            _archiveService = archiveService;
             _processProvider = processProvider;
             _logger = logger;
         }
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Update
             _logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
             _logger.Info("Extracting Update package");
-            _archiveProvider.ExtractArchive(packageDestination, updateSandboxFolder);
+            _archiveService.Extract(packageDestination, updateSandboxFolder);
             _logger.Info("Update package extracted successfully");
 
             _logger.Info("Preparing client");

@@ -1,19 +1,19 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Test.Framework;
 using System.IO;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
     [TestFixture]
-    public class ExtractArchiveFixture : CoreTest
+    public class ArchiveProviderFixture : TestBase<ArchiveService>
     {
         [Test]
         public void Should_extract_to_correct_folder()
         {
             var destination = Path.Combine(TempFolder, "destination");
-            Mocker.Resolve<ArchiveProvider>().ExtractArchive(GetTestFilePath("TestArchive.zip"), destination);
+            Subject.Extract(GetTestFilePath("TestArchive.zip"), destination);
 
             var destinationFolder = new DirectoryInfo(destination);
 

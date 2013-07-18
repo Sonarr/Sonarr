@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
@@ -45,13 +44,8 @@ namespace NzbDrone.Update.UpdateEngine
 
             _logger.Info("Killing all running processes");
 
-            if (_processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProcessName).Any())
-            {
-                _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
-            }
-
+            _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
             _processProvider.KillAll(ProcessProvider.NzbDroneProcessName);
-
         }
     }
 }

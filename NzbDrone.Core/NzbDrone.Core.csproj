@@ -136,9 +136,6 @@
     <Reference Include="Growl.CoreLibrary">
       <HintPath>..\packages\Growl.0.6\lib\Growl.CoreLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="MediaInfoDotNet">
       <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
     </Reference>
@@ -431,9 +428,6 @@
     <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Qualities\Quality.cs" />
     <Compile Include="Tv\Season.cs" />
-    <Compile Include="Providers\BackupProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Configuration\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>

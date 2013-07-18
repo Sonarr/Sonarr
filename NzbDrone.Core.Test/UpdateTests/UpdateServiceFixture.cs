@@ -22,9 +22,9 @@ namespace NzbDrone.Core.Test.UpdateTests
 
         private readonly UpdatePackage _updatePackage = new UpdatePackage
         {
-            FileName = "NzbDrone.vnext.0.8.1.226.zip",
-            Url = "http://update.nzbdrone.com/vnext/NzbDrone.vnext.0.8.1.226.zip",
-            Version = new Version("0.8.1.226")
+            FileName = "NzbDrone.vnext.0.8.1.385.zip",
+            Url = "http://update.nzbdrone.com/vnext/NzbDrone.vnext.0.8.1.385.zip",
+            Version = new Version("0.8.1.385")
         };
 
         [SetUp]
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
 
-            Mocker.GetMock<ArchiveProvider>().Verify(c => c.ExtractArchive(updateArchive, _sandboxFolder));
+            Mocker.GetMock<IArchiveService>().Verify(c => c.Extract(updateArchive, _sandboxFolder));
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             updateSubFolder.Exists.Should().BeFalse();
 
             Mocker.Resolve<DiskProvider>();
-            Mocker.Resolve<ArchiveProvider>();
+            Mocker.SetConstant<IArchiveService>(Mocker.Resolve<ArchiveService>());
 
             Subject.Execute(new ApplicationUpdateCommand());
 
