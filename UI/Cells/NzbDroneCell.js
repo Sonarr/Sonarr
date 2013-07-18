@@ -23,6 +23,14 @@ define(
 
             _getValue: function () {
 
+                var cellValue = this.column.get('cellValue');
+
+                if (cellValue) {
+                    if (cellValue === 'this') {
+                        return this.model;
+                    }
+                }
+
                 var name = this.column.get('name');
 
                 if (name === 'this') {

@@ -43,9 +43,10 @@ define(
                         cell : SeriesStatusCell
                     },
                     {
-                        name : 'this',
-                        label: 'Title',
-                        cell : SeriesTitleCell
+                        name     : 'title',
+                        label    : 'Title',
+                        cell     : SeriesTitleCell,
+                        cellValue: 'this'
                     },
                     {
                         name : 'seasonCount',
