@@ -39,6 +39,8 @@ define(
                 this.model.on('sync', function () {
                     this._setMonitoredState()
                 }, this);
+
+                this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
             },
 
             onShow: function () {
@@ -127,6 +129,13 @@ define(
                 promise.always(function () {
                     self.ui.refresh.removeClass('icon-spin');
                 });
+            },
+
+            _onSeriesDeleted: function (event) {
+
+                if (this.model.get('id') === event.series.get('id')) {
+                    App.Router.navigate('/', { trigger: true });
+                }
             }
         });
     });

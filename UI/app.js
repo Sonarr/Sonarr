@@ -171,7 +171,8 @@ define(
         var app = new Marionette.Application();
 
         app.Events = {
-            SeriesAdded: 'seriesAdded'
+            SeriesAdded: 'series:added',
+            SeriesDeleted: 'series:deleted'
         };
 
         app.Commands = {

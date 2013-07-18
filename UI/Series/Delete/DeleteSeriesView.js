@@ -17,13 +17,14 @@ define(
             },
 
             removeSeries: function () {
-
+                var self = this;
                 var deleteFiles = this.ui.deleteFiles.prop('checked');
 
                 this.model.destroy({
                     data: { 'deleteFiles': deleteFiles },
                     wait: true
                 }).done(function () {
+                        App.vent.trigger(App.Events.SeriesDeleted, { series: self.model });
                         App.modalRegion.closeModal();
                     });
             }
