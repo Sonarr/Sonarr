@@ -75,7 +75,7 @@ namespace NzbDrone.Api.Series
 
             var resource = series.InjectTo<SeriesResource>();
             MapCoversToLocal(resource);
-            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics());
+            FetchAndLinkSeriesStatistics(resource);
 
             return resource;
         }
@@ -85,12 +85,8 @@ namespace NzbDrone.Api.Series
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
             var seriesResources = ToListResource(_seriesService.GetAllSeries);
 
-            foreach (var resource in seriesResources)
-            {
-                LinkSeriesStatistics(resource, seriesStats);
-            }
-
             MapCoversToLocal(seriesResources.ToArray());
+            LinkSeriesStatistics(seriesResources, seriesStats);
 
             return seriesResources;
         }
@@ -104,7 +100,7 @@ namespace NzbDrone.Api.Series
         {
             var resource = ToResource<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
             MapCoversToLocal(resource);
-            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics());
+            FetchAndLinkSeriesStatistics(resource);
 
             return resource;
         }
@@ -123,14 +119,28 @@ namespace NzbDrone.Api.Series
             }
         }
 
-        private void LinkSeriesStatistics(SeriesResource resource, List<SeriesStatistics> seriesStatistics)
+        private void FetchAndLinkSeriesStatistics(SeriesResource resource)
         {
-            var stats = seriesStatistics.Single(ss => ss.SeriesId == resource.Id);
+            LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics(resource.Id));
+        }
 
-            resource.EpisodeCount = stats.EpisodeCount;
-            resource.EpisodeFileCount = stats.EpisodeFileCount;
-            resource.SeasonCount = stats.SeasonCount;
-            resource.NextAiring = stats.NextAiring;
+        private void LinkSeriesStatistics(List<SeriesResource> resources, List<SeriesStatistics> seriesStatistics)
+        {
+            foreach (var series in resources)
+            {
+                var stats = seriesStatistics.SingleOrDefault(ss => ss.SeriesId == series.Id);
+                if (stats == null) continue;
+
+                LinkSeriesStatistics(series, stats);
+            }
+        }
+
+        private void LinkSeriesStatistics(SeriesResource resource, SeriesStatistics seriesStatistics)
+        {
+            resource.EpisodeCount = seriesStatistics.EpisodeCount;
+            resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
+            resource.SeasonCount = seriesStatistics.SeasonCount;
+            resource.NextAiring = seriesStatistics.NextAiring;
         }
     }
 }
