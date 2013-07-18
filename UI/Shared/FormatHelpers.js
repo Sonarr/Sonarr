@@ -24,8 +24,12 @@ define(
                     return date.fromNow(true);
                 }
 
-                //TODO: It would be nice to not have to hack this...
+                if (date.isBefore(Moment().add('days', -6))) {
+                    return date.fromNow();
+                }
+
                 var calendarDate = date.calendar();
+                //TODO: It would be nice to not have to hack this...
                 return calendarDate.substring(0, calendarDate.indexOf(' at '));
             },
 

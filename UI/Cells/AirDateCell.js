@@ -14,10 +14,9 @@ define(
                 var date = this.model.get(this.column.get('name'));
 
                 if (date) {
-                    this.$el.html(FormatHelpers.DateHelper(date));
+                    this.$el.html('<div>' + FormatHelpers.DateHelper(date) + '</div>');
 
-                    //TODO: Figure out why this makes the series grid freak out
-                    //this.$el.attr('title', Moment(date).format('LLLL'));
+                    this.$el.children('div').attr('title', Moment(date).format('LLLL'));
                 }
 
                 return this;
