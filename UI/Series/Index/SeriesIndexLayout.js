@@ -9,12 +9,24 @@ define(
         'Cells/AirDateCell',
         'Cells/SeriesTitleCell',
         'Cells/TemplatedCell',
+        'Cells/QualityProfileCell',
         'Series/Index/Table/SeriesStatusCell',
         'Series/Index/Table/Row',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
-    ], function (Marionette, PosterCollectionView, ListCollectionView, EmptyView, SeriesCollection, AirDateCell, SeriesTitleCell, TemplatedCell, SeriesStatusCell, SeriesIndexRow,
-        ToolbarLayout, LoadingView) {
+    ], function (Marionette,
+                 PosterCollectionView,
+                 ListCollectionView,
+                 EmptyView,
+                 SeriesCollection,
+                 AirDateCell,
+                 SeriesTitleCell,
+                 TemplatedCell,
+                 QualityProfileCell,
+                 SeriesStatusCell,
+                 SeriesIndexRow,
+                 ToolbarLayout,
+                 LoadingView) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -41,9 +53,9 @@ define(
                         cell : 'integer'
                     },
                     {
-                        name : 'quality',
+                        name : 'qualityProfileId',
                         label: 'Quality',
-                        cell : 'integer'
+                        cell : QualityProfileCell
                     },
                     {
                         name : 'network',
