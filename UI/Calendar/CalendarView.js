@@ -85,19 +85,27 @@ define(
                 var start = Moment(element.get('airDate'));
                 var end = Moment(element.get('end'));
 
+                var statusLevel = 'primary';
+
                 if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
-                    return 'warning';
+                    statusLevel = 'warning';
                 }
 
-                if (start.isBefore(currentTime) && !hasFile) {
-                    return 'danger';
+                else if (start.isBefore(currentTime) && !hasFile) {
+                    statusLevel = 'danger';
                 }
 
-                if (hasFile) {
-                    return 'success';
+                else if (hasFile) {
+                    statusLevel = 'success';
                 }
 
-                return 'primary';
+                var test = currentTime.startOf('day').format('LLLL');
+
+                if (end.isBefore(currentTime.startOf('day'))) {
+                    statusLevel += ' past'
+                }
+
+                return statusLevel;
             }
         });
     });

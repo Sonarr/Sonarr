@@ -39,7 +39,7 @@ define(
                             tooltip = 'Episode has not aired';
                         }
                     }
-                    
+
                     this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, tooltip));
                 }
 
