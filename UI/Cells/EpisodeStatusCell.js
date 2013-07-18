@@ -25,7 +25,12 @@ define(
                         tooltip = 'Episode downloaded';
                     }
                     else {
-                        if (hasAired) {
+                        if (!this.model.get('airDate')) {
+                            icon = 'icon-question-sign';
+                            tooltip = 'TBA';
+                        }
+
+                        else if (hasAired) {
                             icon = 'icon-warning-sign';
                             tooltip = 'Episode missing from disk';
                         }
@@ -34,7 +39,7 @@ define(
                             tooltip = 'Episode has not aired';
                         }
                     }
-
+                    
                     this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, tooltip));
                 }
 
