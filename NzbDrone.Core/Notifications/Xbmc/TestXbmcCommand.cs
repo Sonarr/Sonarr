@@ -8,5 +8,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public int Port { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public int DisplayTime { get; set; }
     }
 }

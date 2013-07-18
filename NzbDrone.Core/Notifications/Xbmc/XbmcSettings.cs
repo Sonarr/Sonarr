@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
@@ -9,6 +10,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
 {
     public class XbmcSettings : INotifcationSettings
     {
+        public XbmcSettings()
+        {
+            DisplayTime = 5;
+        }
+
         [FieldDefinition(0, Label = "Host")]
         public String Host { get; set; }
 
@@ -21,16 +27,20 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
         public String Password { get; set; }
 
-        [FieldDefinition(4, Label = "GUI Notification", HelpText = "Show GUI notifications?", Type = FieldType.Checkbox)]
+        [DefaultValue(5)]
+        [FieldDefinition(4, Label = "Display Time", HelpText = "How long the notification will be displayed for (In seconds)")]
+        public Int32 DisplayTime { get; set; }
+
+        [FieldDefinition(5, Label = "GUI Notification", HelpText = "Show GUI notifications?", Type = FieldType.Checkbox)]
         public Boolean Notify { get; set; }
 
-        [FieldDefinition(5, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
+        [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
         public Boolean UpdateLibrary { get; set; }
 
-        [FieldDefinition(6, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Checkbox)]
+        [FieldDefinition(7, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Checkbox)]
         public Boolean CleanLibrary { get; set; }
 
-        [FieldDefinition(7, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Checkbox)]
+        [FieldDefinition(8, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Checkbox)]
         public Boolean AlwaysUpdate { get; set; }
 
         [JsonIgnore]

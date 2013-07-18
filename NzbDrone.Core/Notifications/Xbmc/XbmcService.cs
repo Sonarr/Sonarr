@@ -105,7 +105,8 @@ namespace NzbDrone.Core.Notifications.Xbmc
                                    Host = message.Host,
                                    Port = message.Port,
                                    Username = message.Username,
-                                   Password = message.Password
+                                   Password = message.Password,
+                                   DisplayTime = message.DisplayTime
                                };
              
             Logger.Trace("Determining version of XBMC Host: {0}", settings.Address);
