@@ -107,7 +107,14 @@ namespace NzbDrone.Api.Series
 
         private void DeleteSeries(int id)
         {
-            var deleteFiles = Convert.ToBoolean(Request.Headers["deleteFiles"].FirstOrDefault());
+            var deleteFiles = false;
+            var deleteFilesQuery = Request.Query.deleteFiles;
+            
+            if (deleteFilesQuery.HasValue)
+            {
+                deleteFiles = Convert.ToBoolean(deleteFilesQuery.Value);
+            }
+
             _seriesService.DeleteSeries(id, deleteFiles);
         }
 
