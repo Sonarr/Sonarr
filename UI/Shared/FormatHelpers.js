@@ -20,17 +20,20 @@ define(
 
                 var date = Moment(sourceDate);
 
-                if (date.isAfter(Moment().add('days', 6))) {
+                var calendarDate = date.calendar();
+
+                //TODO: It would be nice to not have to hack this...
+                var strippedCalendarDate = calendarDate.substring(0, calendarDate.indexOf(' at '));
+
+                if (strippedCalendarDate){
+                    return strippedCalendarDate;
+                }
+
+                if (date.isAfter(Moment())) {
                     return date.fromNow(true);
                 }
 
-                if (date.isBefore(Moment().add('days', -6))) {
-                    return date.fromNow();
-                }
-
-                var calendarDate = date.calendar();
-                //TODO: It would be nice to not have to hack this...
-                return calendarDate.substring(0, calendarDate.indexOf(' at '));
+                return date.fromNow();
             },
 
             pad: function(n, width, z) {
