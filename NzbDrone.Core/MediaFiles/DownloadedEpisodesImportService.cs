@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
@@ -64,11 +65,15 @@ namespace NzbDrone.Core.MediaFiles
             {
                 try
                 {
-                    if (!_seriesService.SeriesPathExists(subFolder))
+                    if (_seriesService.SeriesPathExists(subFolder))
                     {
-                        ProcessSubFolder(new DirectoryInfo(subFolder));
+                        continue;
+                    }
 
-                        //Todo: We should make sure the file(s) are actually imported
+                    var importedFiles = ProcessSubFolder(new DirectoryInfo(subFolder));
+
+                    if (importedFiles.Any())
+                    {
                         if (_diskProvider.GetFolderSize(subFolder) < NotSampleSpecification.SampleSizeLimit)
                         {
                             _diskProvider.DeleteFolder(subFolder, true);
@@ -85,14 +90,7 @@ namespace NzbDrone.Core.MediaFiles
             {
                 try
                 {
-                    var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(videoFile));
-
-                    if (series == null)
-                    {
-                        _logger.Debug("Unknown Series for file: {0}", videoFile);
-                    }
-
-                    ProcessVideoFile(videoFile, series);
+                    ProcessVideoFile(videoFile);
                 }
                 catch (Exception ex)
                 {
@@ -101,23 +99,31 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        private void ProcessSubFolder(DirectoryInfo subfolderInfo)
+        private List<ImportDecision> ProcessSubFolder(DirectoryInfo subfolderInfo)
         {
             var series = _parsingService.GetSeries(subfolderInfo.Name);
 
             if (series == null)
             {
                 _logger.Debug("Unknown Series {0}", subfolderInfo.Name);
-                return;
+                return new List<ImportDecision>();
             }
 
             var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
 
-            ProcessFiles(videoFiles, series);
+            return ProcessFiles(videoFiles, series);
         }
 
-        private void ProcessVideoFile(string videoFile, Series series)
+        private void ProcessVideoFile(string videoFile)
         {
+            var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(videoFile));
+
+            if (series == null)
+            {
+                _logger.Debug("Unknown Series for file: {0}", videoFile);
+                return;
+            }
+
             if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
             {
                 _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
@@ -127,10 +133,10 @@ namespace NzbDrone.Core.MediaFiles
             ProcessFiles(new[] { videoFile }, series);
         }
 
-        private void ProcessFiles(IEnumerable<string> videoFiles, Series series)
+        private List<ImportDecision> ProcessFiles(IEnumerable<string> videoFiles, Series series)
         {
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series);
-            _importApprovedEpisodes.Import(decisions, true);
+            return _importApprovedEpisodes.Import(decisions, true);
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)
