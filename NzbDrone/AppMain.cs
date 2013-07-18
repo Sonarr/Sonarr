@@ -20,11 +20,7 @@ namespace NzbDrone
                 GlobalExceptionHandlers.Register();
                 IgnoreCertErrorPolicy.Register();
 
-                new LogglyTarget().Register(LogLevel.Warn);
-
-
                 Logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
-
 
                 //Check if full version .NET is installed.
                 try

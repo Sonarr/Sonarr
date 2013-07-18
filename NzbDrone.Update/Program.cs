@@ -34,7 +34,7 @@ namespace NzbDrone.Update
 
                 GlobalExceptionHandlers.Register();
 
-                new LogglyTarget().Register(LogLevel.Debug);
+                new LogglyTarget().Register(LogLevel.Trace);
                 _container = UpdateContainerBuilder.Build();
 
                 logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);

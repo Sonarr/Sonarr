@@ -196,6 +196,8 @@ namespace NzbDrone.Common
             {
                 var destFile = Path.Combine(target, sourceFile.Name);
 
+                Logger.Trace("{0} {1} -> {2}", transferAction, sourceFile, destFile);
+
                 switch (transferAction)
                 {
                     case TransferAction.Copy:
