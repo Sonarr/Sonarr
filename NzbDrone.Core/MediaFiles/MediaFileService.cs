@@ -67,6 +67,11 @@ namespace NzbDrone.Core.MediaFiles
             return _mediaFileRepository.GetFilesBySeries(seriesId);
         }
 
+        public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
+        {
+            return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
+        }
+
         public List<string> FilterExistingFiles(List<string> files, int seriesId)
         {
             var seriesFiles = GetFilesBySeries(seriesId);
