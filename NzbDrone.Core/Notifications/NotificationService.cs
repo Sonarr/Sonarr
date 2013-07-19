@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Notifications
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnDownload(message.Series.Title, message.Series)
+                                        .AfterRename(message.Series)
                         );
         }
     }
