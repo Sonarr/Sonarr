@@ -13,7 +13,8 @@ define(
         'Calendar/CalendarLayout',
         'Logs/Layout',
         'Release/Layout',
-        'Shared/NotFoundView'
+        'Shared/NotFoundView',
+        'Shared/Modal/Region'
     ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, MissingLayout, SeriesModel, CalendarLayout,
         LogsLayout, ReleaseLayout, NotFoundView) {
         return Marionette.Controller.extend({

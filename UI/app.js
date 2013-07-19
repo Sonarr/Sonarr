@@ -164,9 +164,8 @@ require.config({
 define(
     [
         'marionette',
-        'shared/modal/region',
-        'Instrumentation/StringFormat',
-    ], function (Marionette, ModalRegion) {
+        'Instrumentation/StringFormat'
+    ], function (Marionette) {
 
         var app = new Marionette.Application();
 
@@ -179,14 +178,12 @@ define(
             SaveSettings: 'saveSettings'
         };
 
-
         app.addInitializer(function () {
             console.log('starting application');
         });
 
         app.addRegions({
             mainRegion        : '#main-region',
-            modalRegion       : ModalRegion,
             footerRegion      : '#footer-region'
         });
 
@@ -200,9 +197,3 @@ define(
 
         return app;
     });
-
-
-
-
-
-

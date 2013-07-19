@@ -1,11 +1,12 @@
 'use strict';
 define(
     [
+        'app',
         '$',
         'marionette',
         'bootstrap'
-    ], function ($, Marionette) {
-        return Marionette.Region.extend({
+    ], function (app, $, Marionette) {
+        var region = Marionette.Region.extend({
             el: '#modal-region',
 
             constructor: function () {
@@ -37,4 +38,12 @@ define(
             }
 
         });
+
+        app.addInitializer(function () {
+            app.addRegions({
+                modalRegion       : region
+            });
+        });
+
+        return region;
     });
