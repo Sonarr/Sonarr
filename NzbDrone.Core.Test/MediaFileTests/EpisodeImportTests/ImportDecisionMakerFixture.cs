@@ -148,6 +148,11 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                     "The.Office.S03E115.DVDRip.XviD-OSiTV"
                 };
 
+
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<int>()))
+                .Returns(_videoFiles);
+
             Subject.GetImportDecisions(_videoFiles, new Series());
 
             Mocker.GetMock<IParsingService>()
