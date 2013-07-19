@@ -10,12 +10,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
-    public interface IRenameEpisodeFiles
-    {
-        
-    }
-
-    public class RenameEpisodeFileService : IRenameEpisodeFiles, IExecute<RenameSeasonCommand>, IExecute<RenameSeriesCommand>
+    public class RenameEpisodeFileService : IExecute<RenameSeasonCommand>, IExecute<RenameSeriesCommand>
     {
         private readonly ISeriesService _seriesService;
         private readonly IMediaFileService _mediaFileService;
