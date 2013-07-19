@@ -11,6 +11,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
     public interface IDailySeriesDataProxy
     {
         IEnumerable<int> GetDailySeriesIds();
+        bool IsDailySeries(int tvdbid);
     }
 
     public class DailySeriesDataProxy : IDailySeriesDataProxy
@@ -42,6 +43,20 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
                 return new List<int>();
             }
 
+        }
+
+        public bool IsDailySeries(int tvdbid)
+        {
+            try
+            {
+                var result = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/DailySeries/Check?seriesId=" + tvdbid);
+                return Convert.ToBoolean(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Failed to check Daily Series status for: " + tvdbid, ex);
+                return false;
+            }
         }
     }
 }

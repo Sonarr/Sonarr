@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
@@ -17,16 +18,18 @@ namespace NzbDrone.Core.Tv
         private readonly IEpisodeService _episodeService;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IMessageAggregator _messageAggregator;
+        private readonly IDailySeriesService _dailySeriesService;
         private readonly Logger _logger;
 
         public RefreshSeriesService(IProvideSeriesInfo seriesInfo, ISeriesService seriesService, IEpisodeService episodeService,
-            ISeasonRepository seasonRepository, IMessageAggregator messageAggregator, Logger logger)
+            ISeasonRepository seasonRepository, IMessageAggregator messageAggregator, IDailySeriesService dailySeriesService, Logger logger)
         {
             _seriesInfo = seriesInfo;
             _seriesService = seriesService;
             _episodeService = episodeService;
             _seasonRepository = seasonRepository;
             _messageAggregator = messageAggregator;
+            _dailySeriesService = dailySeriesService;
             _logger = logger;
         }
 
@@ -77,6 +80,12 @@ namespace NzbDrone.Core.Tv
             series.Images = seriesInfo.Images;
             series.Network = seriesInfo.Network;
             series.FirstAired = seriesInfo.FirstAired;
+
+            if (_dailySeriesService.IsDailySeries(series.TvdbId))
+            {
+                series.SeriesType = SeriesTypes.Daily;
+            }
+
             _seriesService.UpdateSeries(series);
 
             RefreshEpisodeInfo(series, tuple.Item2);
