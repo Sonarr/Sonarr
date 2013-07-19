@@ -1,4 +1,3 @@
-using System.Data;
 using System.Linq;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace ServiceUninstall
+﻿namespace ServiceUninstall
 {
     public static class Program
     {

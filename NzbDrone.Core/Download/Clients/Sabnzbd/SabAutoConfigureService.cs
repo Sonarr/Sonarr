@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {

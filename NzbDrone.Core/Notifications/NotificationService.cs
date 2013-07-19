@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Newtonsoft.Json;
-using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;

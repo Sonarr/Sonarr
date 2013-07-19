@@ -2,7 +2,6 @@
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Download
 {

@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using NLog;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Tv;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Api.ClientSchema
+﻿namespace NzbDrone.Api.ClientSchema
 {
 
 }

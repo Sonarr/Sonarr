@@ -1,8 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Nancy;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Seasons

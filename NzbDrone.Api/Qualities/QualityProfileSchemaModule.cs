@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NzbDrone.Core.Datastore;
+﻿using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Mapping;
 using System.Linq;

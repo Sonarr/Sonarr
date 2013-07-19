@@ -1,6 +1,4 @@
-﻿using NLog;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Tv;
+﻿using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Plex
 {

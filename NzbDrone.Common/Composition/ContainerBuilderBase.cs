@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Common.Reflection;
 using TinyIoC;
 
 

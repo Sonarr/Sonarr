@@ -15,9 +15,6 @@ License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.Data.Common;
 using Marr.Data.Converters;
 using Marr.Data.Parameters;
 using Marr.Data.Mapping;

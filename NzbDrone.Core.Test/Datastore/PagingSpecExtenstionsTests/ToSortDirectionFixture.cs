@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;

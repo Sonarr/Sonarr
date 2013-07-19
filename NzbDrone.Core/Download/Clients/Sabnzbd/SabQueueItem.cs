@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
 using NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters;
-using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {

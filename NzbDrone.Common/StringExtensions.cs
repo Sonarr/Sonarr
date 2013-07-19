@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace NzbDrone.Common
 {

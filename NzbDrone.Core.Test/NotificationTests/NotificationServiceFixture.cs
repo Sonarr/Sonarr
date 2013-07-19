@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Composition;
-using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Notifications.Email;
 using NzbDrone.Core.Notifications.Growl;
 using NzbDrone.Core.Notifications.Plex;
 using NzbDrone.Core.Notifications.Prowl;
-using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.NotificationTests

@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Common.Test
 {

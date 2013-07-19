@@ -5,8 +5,6 @@ using NLog;
 using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend
 {

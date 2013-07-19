@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NzbDrone.Test.Common.AutoMoq;
+﻿using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
 {

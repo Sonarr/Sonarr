@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Model
 {
     public class MisnamedEpisodeModel
     {

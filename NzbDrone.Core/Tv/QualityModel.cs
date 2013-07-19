@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 

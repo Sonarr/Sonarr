@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using NLog;
 using Newtonsoft.Json;
 using NzbDrone.Common.Contract;
 using NzbDrone.Common.EnvironmentInfo;

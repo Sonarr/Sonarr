@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;

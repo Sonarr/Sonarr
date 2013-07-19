@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NLog;
-using NzbDrone.Common;
+﻿using NLog;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;

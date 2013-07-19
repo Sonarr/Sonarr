@@ -1,5 +1,4 @@
-﻿using NLog;
-using NzbDrone.Api.SignalR;
+﻿using NzbDrone.Api.SignalR;
 
 namespace NzbDrone.Api.Series
 {

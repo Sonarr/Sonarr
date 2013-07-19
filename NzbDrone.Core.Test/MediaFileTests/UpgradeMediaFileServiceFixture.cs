@@ -1,18 +1,12 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using FizzWare.NBuilder;
-using FluentAssertions;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests
 {

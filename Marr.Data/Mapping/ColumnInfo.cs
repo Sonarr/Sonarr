@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Marr.Data.Mapping
+﻿namespace Marr.Data.Mapping
 {
     public class ColumnInfo : IColumnInfo
     {

@@ -1,6 +1,4 @@
-﻿using System;
-using NLog;
-using NzbDrone.Common.Serializer;
+﻿using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications

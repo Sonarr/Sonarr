@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Common;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
 

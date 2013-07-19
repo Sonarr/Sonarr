@@ -1,5 +1,4 @@
-﻿using System;
-using Nancy;
+﻿using Nancy;
 using NzbDrone.Api.ErrorManagement;
 
 namespace NzbDrone.Api.REST

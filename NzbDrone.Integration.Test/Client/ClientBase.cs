@@ -3,7 +3,6 @@ using System.Net;
 using FluentAssertions;
 using NLog;
 using NzbDrone.Api.REST;
-using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 using RestSharp;
 

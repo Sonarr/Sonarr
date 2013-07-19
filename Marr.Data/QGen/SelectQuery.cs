@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Marr.Data;
+﻿using System.Text;
 using Marr.Data.Mapping;
-using System.Data.Common;
 using Marr.Data.QGen.Dialects;
 
 namespace Marr.Data.QGen

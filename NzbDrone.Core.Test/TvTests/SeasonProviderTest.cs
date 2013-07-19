@@ -1,13 +1,9 @@
-﻿
-
-using System;
-using System.Linq;
+﻿using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests
 {

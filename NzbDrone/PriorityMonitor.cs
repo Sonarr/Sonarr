@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 using NLog;

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Nancy;
+﻿using Nancy;
 using Nancy.ErrorHandling;
 using NzbDrone.Api.Extensions;
 

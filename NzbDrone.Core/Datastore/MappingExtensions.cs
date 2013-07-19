@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Reflection;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Datastore
 {

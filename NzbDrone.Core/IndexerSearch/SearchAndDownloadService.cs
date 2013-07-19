@@ -1,6 +1,4 @@
 ﻿using System;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.IndexerSearch
 {

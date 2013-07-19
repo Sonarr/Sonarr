@@ -1,5 +1,4 @@
 ﻿using System;
-using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {

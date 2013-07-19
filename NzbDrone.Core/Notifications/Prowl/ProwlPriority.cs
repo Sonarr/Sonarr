@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NzbDrone.Core.Notifications.Prowl
+﻿namespace NzbDrone.Core.Notifications.Prowl
 {
     public enum ProwlPriority
     {

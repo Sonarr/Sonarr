@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace NzbDrone.Api.ErrorManagement
+﻿namespace NzbDrone.Api.ErrorManagement
 {
     public class ErrorModel
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NzbDrone.Core.Model.Xbmc
+﻿namespace NzbDrone.Core.Model.Xbmc
 {
     public class TvShow
     {

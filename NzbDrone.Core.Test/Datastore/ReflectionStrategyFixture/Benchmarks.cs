@@ -1,7 +1,4 @@
-﻿using Marr.Data.Reflection;
-using NUnit.Framework;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Tv;
+﻿using NUnit.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.ReflectionStrategyFixture
 {

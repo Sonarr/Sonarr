@@ -1,5 +1,4 @@
-﻿using NzbDrone.Common;
-using NzbDrone.Common.Composition;
+﻿using NzbDrone.Common.Composition;
 
 namespace NzbDrone.Update
 {

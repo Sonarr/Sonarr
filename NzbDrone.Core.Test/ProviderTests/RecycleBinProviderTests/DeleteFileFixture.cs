@@ -1,22 +1,12 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using FizzWare.NBuilder;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {

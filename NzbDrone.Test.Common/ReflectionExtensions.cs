@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NzbDrone.Test.Common
+﻿namespace NzbDrone.Test.Common
 {
     public static class ReflectionExtensions
     {

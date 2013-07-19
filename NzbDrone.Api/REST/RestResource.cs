@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using FluentValidation;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace NzbDrone.Api.REST
 {

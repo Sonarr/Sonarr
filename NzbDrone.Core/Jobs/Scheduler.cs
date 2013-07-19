@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 using Timer = System.Timers.Timer;

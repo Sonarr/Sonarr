@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 

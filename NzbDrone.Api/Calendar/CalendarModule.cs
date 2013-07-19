@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Mapping;
-using NzbDrone.Common;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Calendar

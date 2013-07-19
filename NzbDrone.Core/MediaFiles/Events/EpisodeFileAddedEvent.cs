@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Common.Messaging;
 
 namespace NzbDrone.Core.MediaFiles.Events
 {

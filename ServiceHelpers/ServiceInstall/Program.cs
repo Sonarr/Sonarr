@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System;
-
-namespace ServiceInstall
+﻿namespace ServiceInstall
 {
     public static class Program
     {
