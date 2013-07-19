@@ -72,6 +72,10 @@ define(
                 _.each(this.episodeCollection.models, function (episode) {
                     episode.set({ hideSeriesLink: true, series: options.series });
                 });
+
+                this.episodeCollection.on('sync', function () {
+                    this.render();
+                }, this);
             },
 
             onRender: function () {
@@ -137,8 +141,6 @@ define(
             },
 
             _setSeasonMonitoredState: function () {
-                var monitored = this.model.get('monitored');
-
                 this.ui.seasonMonitored.removeClass('icon-spinner icon-spin');
 
                 if (this.model.get('monitored')) {

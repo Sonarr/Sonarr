@@ -2,11 +2,16 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-        {{#if episodeTitle}}
-            <h3>{{episodeTitle}} - {{EpisodeNumber}}</h3>
-        {{else}}
-            <h3>{{title}} - {{EpisodeNumber}}</h3>
-        {{/if}}
+        <h3>
+            <i class="icon-bookmark x-episode-monitored" title="Toggle monitored status" />
+            {{#if episodeTitle}}
+                {{episodeTitle}}
+            {{else}}
+                {{title}}
+            {{/if}}
+            -  {{EpisodeNumber}}
+        </h3>
+
     </div>
     <div class="modal-body">
         <ul class="nav nav-tabs" id="myTab">
