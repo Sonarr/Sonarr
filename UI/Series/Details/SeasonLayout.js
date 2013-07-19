@@ -135,7 +135,7 @@ define(
 
                 promise.always(function (){
                     _.each(self.episodeCollection.models, function (episode) {
-                        episode.set({ monitored: !episode.get('monitored') });
+                        episode.set({ monitored: self.model.get('monitored') });
                     });
 
                     self.render();
