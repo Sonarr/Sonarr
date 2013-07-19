@@ -21,8 +21,17 @@ define(
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {
-                        icon = 'icon-ok';
-                        tooltip = 'Episode downloaded';
+                        var quality = this.model.get('episodeFile').quality;
+
+                        if (quality.proper) {
+                            this.$el.html('<span class="badge badge-info" title="Episode downloaded [PROPER]">{0}</span>'.format(quality.quality.name));
+                        }
+
+                        else {
+                            this.$el.html('<span class="badge badge-inverse" title="Episode downloaded">{0}</span>'.format(quality.quality.name));
+                        }
+
+                        return this;
                     }
                     else {
                         if (!this.model.get('airDate')) {
