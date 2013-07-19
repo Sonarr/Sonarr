@@ -24,13 +24,15 @@ define(
                 header   : '.x-header',
                 monitored: '.x-monitored',
                 edit     : '.x-edit',
-                refresh  : '.x-refresh'
+                refresh  : '.x-refresh',
+                rename   : '.x-rename'
             },
 
             events: {
                 'click .x-monitored': '_toggleMonitored',
                 'click .x-edit'     : '_editSeries',
-                'click .x-refresh'  : '_refreshSeries'
+                'click .x-refresh'  : '_refreshSeries',
+                'click .x-rename'   : '_renameSeries'
             },
 
             initialize: function () {
@@ -136,6 +138,39 @@ define(
                 if (this.model.get('id') === event.series.get('id')) {
                     App.Router.navigate('/', { trigger: true });
                 }
+            },
+
+            _renameSeries: function () {
+                var command = 'renameSeries';
+
+                this.idle = false;
+
+                this.ui.rename.toggleClass('icon-nd-rename icon-nd-spinner');
+
+                var properties = {
+                    seriesId    : this.model.get('id')
+                };
+
+                var self = this;
+                var commandPromise = CommandController.Execute(command, properties);
+
+                commandPromise.fail(function (options) {
+                    if (options.readyState === 0 || options.status === 0) {
+                        return;
+                    }
+
+                    Messenger.show({
+                        message: 'Season rename failed',
+                        type   : 'error'
+                    });
+                });
+
+                commandPromise.always(function () {
+                    if (!self.isClosed) {
+                        self.ui.rename.toggleClass('icon-nd-rename icon-nd-spinner');
+                        self.idle = true;
+                    }
+                });
             }
         });
     });

@@ -1,7 +1,7 @@
 ﻿using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Download
+namespace NzbDrone.Core.MediaFiles.Events
 {
     public class SeriesRenamedEvent : IEvent
     {

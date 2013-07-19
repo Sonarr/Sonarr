@@ -17,21 +17,19 @@ namespace NzbDrone.Core.MediaFiles
         bool Exists(string path);
         EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
-
+        List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
         List<string> FilterExistingFiles(List<string> files, int seriesId);
     }
 
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
     {
-        private readonly IConfigService _configService;
         private readonly IMessageAggregator _messageAggregator;
-        private readonly Logger _logger;
         private readonly IMediaFileRepository _mediaFileRepository;
+        private readonly Logger _logger;
 
-        public MediaFileService(IMediaFileRepository mediaFileRepository, IConfigService configService, IMessageAggregator messageAggregator, Logger logger)
+        public MediaFileService(IMediaFileRepository mediaFileRepository, IMessageAggregator messageAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
-            _configService = configService;
             _messageAggregator = messageAggregator;
             _logger = logger;
         }

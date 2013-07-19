@@ -14,6 +14,7 @@ namespace NzbDrone.Core.MediaFiles
     public interface IMoveEpisodeFiles
     {
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile);
+        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
@@ -59,6 +60,15 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileService.Update(episodeFile);
 
             return episodeFile;
+        }
+
+        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series)
+        {
+            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
+            var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
+            var destinationFilename = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+
+            return MoveFile(episodeFile, destinationFilename);
         }
 
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)

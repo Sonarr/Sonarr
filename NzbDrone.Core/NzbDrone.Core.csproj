@@ -270,6 +270,8 @@
     <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
     <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
+    <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
+    <Compile Include="MediaFiles\Commands\RenameSeasonCommand.cs" />
     <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
     <Compile Include="MediaFiles\EpisodeImport\IImportDecisionEngineSpecification.cs" />
@@ -281,7 +283,8 @@
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
-    <Compile Include="Download\SeriesRenamedEvent.cs" />
+    <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
+    <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
     <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />

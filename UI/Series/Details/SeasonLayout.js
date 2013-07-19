@@ -15,12 +15,14 @@ define(
 
             ui: {
                 seasonSearch   : '.x-season-search',
-                seasonMonitored: '.x-season-monitored'
+                seasonMonitored: '.x-season-monitored',
+                seasonRename   : '.x-season-rename'
             },
 
             events: {
                 'click .x-season-search'   : '_seasonSearch',
-                'click .x-season-monitored': '_seasonMonitored'
+                'click .x-season-monitored': '_seasonMonitored',
+                'click .x-season-rename'   : '_seasonRename'
             },
 
             regions: {
@@ -151,6 +153,40 @@ define(
                     this.ui.seasonMonitored.addClass('icon-bookmark-empty');
                     this.ui.seasonMonitored.removeClass('icon-bookmark');
                 }
+            },
+
+            _seasonRename: function () {
+                var command = 'renameSeason';
+
+                this.idle = false;
+
+                this.ui.seasonRename.toggleClass('icon-nd-rename icon-nd-spinner');
+
+                var properties = {
+                    seriesId    : this.model.get('seriesId'),
+                    seasonNumber: this.model.get('seasonNumber')
+                };
+
+                var self = this;
+                var commandPromise = CommandController.Execute(command, properties);
+
+                commandPromise.fail(function (options) {
+                    if (options.readyState === 0 || options.status === 0) {
+                        return;
+                    }
+
+                    Messenger.show({
+                        message: 'Season rename failed',
+                        type   : 'error'
+                    });
+                });
+
+                commandPromise.always(function () {
+                    if (!self.isClosed) {
+                        self.ui.seasonRename.toggleClass('icon-nd-rename icon-nd-spinner');
+                        self.idle = true;
+                    }
+                });
             }
         });
     });
