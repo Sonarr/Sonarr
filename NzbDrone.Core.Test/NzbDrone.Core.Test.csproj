@@ -153,7 +153,6 @@
     <Compile Include="MediaFileTests\EpisodeImportTests\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\NotSampleSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\ImportDecisionMakerFixture.cs" />
-    <Compile Include="MediaFileTests\EpisodeImportTests\NotAlreadyImportedSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />

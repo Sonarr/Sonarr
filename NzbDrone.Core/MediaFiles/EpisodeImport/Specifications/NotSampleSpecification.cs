@@ -41,11 +41,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
+            if (localEpisode.Size > SampleSizeLimit)
+            {
+                return true;
+            }
+
             var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
 
-            if (localEpisode.Size < SampleSizeLimit && runTime.TotalMinutes < 3)
+            if (runTime.TotalMinutes < 3)
             {
-                _logger.Trace("[{0}] appears to be a sample.", localEpisode.Path);
+                _logger.Trace("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
                 return false;
             }
 

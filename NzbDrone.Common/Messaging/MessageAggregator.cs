@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
@@ -83,9 +84,12 @@ namespace NzbDrone.Common.Messaging
 
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
 
+            var sw = Stopwatch.StartNew();
+
             try
             {
                 handler.Execute(command);
+                sw.Stop();
                 PublishEvent(new CommandCompletedEvent(command));
             }
             catch (Exception e)
@@ -98,7 +102,7 @@ namespace NzbDrone.Common.Messaging
                 PublishEvent(new CommandExecutedEvent(command));
             }
 
-            _logger.Debug("{0} <- {1}", command.GetType().Name, handler.GetType().Name);
+            _logger.Debug("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, sw.Elapsed.ToString(""));
         }
 
         public void PublishCommand(string commandTypeName)

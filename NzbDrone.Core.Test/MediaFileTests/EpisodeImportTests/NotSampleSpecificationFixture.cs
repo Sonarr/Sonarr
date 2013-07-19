@@ -112,5 +112,18 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
         }
+
+        [Test]
+        public void should_not_check_lenght_if_file_is_large_enough()
+        {
+            WithFileSize(100.Megabytes());
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+
+
+            Mocker.GetMock<IVideoFileInfoReader>().Verify(c => c.GetRunTime(It.IsAny<string>()), Times.Never());
+        }
+
+
     }
 }
