@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -65,6 +66,11 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 
             Mocker.GetMock<IParsingService>().Setup(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>()))
                   .Returns(_localEpisode);
+
+
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<int>()))
+                .Returns(_videoFiles);
 
         }
 
