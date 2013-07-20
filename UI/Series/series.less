@@ -2,8 +2,23 @@
 @import "../Shared/Styles/clickable.less";
 @import "../Content/prefixer";
 
-.edit-series-modal {
+.edit-series-modal, .delete-series-modal {
   overflow : visible;
+
+  .series-poster {
+    .card;
+    width : 168px;
+  }
+
+  .form-horizontal {
+    margin-top: 10px;
+  }
+}
+
+.delete-series-modal {
+  .path {
+    margin-left: 30px;
+  }
 }
 
 .series-item {
@@ -196,3 +211,4 @@
     .clickable;
   }
 }
+

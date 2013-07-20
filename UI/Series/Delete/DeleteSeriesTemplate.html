@@ -2,15 +2,38 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>Delete: {{title}}</h3>
 </div>
-<div class="modal-body">
-    <p>Are you sure you want to delete '{{title}}'?</p>
-    <p>{{path}}</p>
+<div class="modal-body delete-series-modal">
 
-    <div class="series-delete-files">
-        <label class="checkbox">
-            <input class="x-delete-files" type="checkbox" value="true">
-            Delete all files from disk?
-        </label>
+    <div class="row">
+        <div class="span2">
+            <img class="series-poster" src="{{poster}}" {{defaultImg}}>
+        </div>
+        <div class="span7">
+            <div class="form-horizontal">
+                <h3 class="path">{{path}}</h3>
+
+                <div class="control-group">
+                    <label class="control-label">Delete all files</label>
+
+                    <div class="controls">
+                        <label class="checkbox toggle well">
+                            <input type="checkbox" class="x-delete-files"/>
+                            <p>
+                                <span>Yes</span>
+                                <span>No</span>
+                            </p>
+
+                            <div class="btn btn-primary slide-button"/>
+                        </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-question-sign" title="Do you want to delete all files from disk?"/>
+                    <i class="icon-form-danger" title="This option is irreversible, use with extreme caution"/>
+                </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer">

@@ -3,82 +3,90 @@
     <h3>Edit: {{title}}</h3>
 </div>
 <div class="modal-body edit-series-modal">
-    <div class="form-horizontal">
+    <div class="row">
+        <div class="span2">
+            <img class="series-poster" src="{{poster}}" {{defaultImg}}>
+        </div>
+        <div class="span7">
+            <div class="form-horizontal">
 
-        <div class="control-group">
-            <label class="control-label">Monitored</label>
+                <div class="control-group">
+                    <label class="control-label">Monitored</label>
 
-            <div class="controls">
-                <label class="checkbox toggle well">
-                    <input type="checkbox" name="monitored"/>
-                    <p>
-                        <span>Yes</span>
-                        <span>No</span>
-                    </p>
+                    <div class="controls">
+                        <label class="checkbox toggle well">
+                            <input type="checkbox" name="monitored"/>
+                            <p>
+                                <span>Yes</span>
+                                <span>No</span>
+                            </p>
 
-                    <div class="btn btn-primary slide-button"/>
-                </label>
+                            <div class="btn btn-primary slide-button"/>
+                        </label>
 
                 <span class="help-inline-checkbox">
                     <i class="icon-question-sign" title="Should NzbDrone download episodes for this series?"/>
                 </span>
-            </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="control-group">
-            <label class="control-label">Use Season Folder</label>
+                <div class="control-group">
+                    <label class="control-label">Use Season Folder</label>
 
-            <div class="controls">
-                <label class="checkbox toggle well">
-                    <input type="checkbox" name="seasonFolder"/>
-                    <p>
-                        <span>Yes</span>
-                        <span>No</span>
-                    </p>
+                    <div class="controls">
+                        <label class="checkbox toggle well">
+                            <input type="checkbox" name="seasonFolder"/>
+                            <p>
+                                <span>Yes</span>
+                                <span>No</span>
+                            </p>
 
-                    <div class="btn btn-primary slide-button"/>
-                </label>
+                            <div class="btn btn-primary slide-button"/>
+                        </label>
 
                 <span class="help-inline-checkbox">
                     <i class="icon-question-sign" title="Should downloaded episodes be stored in season folders?"/>
                 </span>
-            </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="control-group">
-            <label class="control-label" for="inputQualityProfile">Quality Profile</label>
+                <div class="control-group">
+                    <label class="control-label" for="inputQualityProfile">Quality Profile</label>
 
-            <div class="controls">
+                    <div class="controls">
 
-                <select class="x-quality-profile" id="inputQualityProfile" name="qualityProfileId">
-                    {{#each qualityProfiles.models}}
-                    <option value="{{id}}">{{attributes.name}}</option>
-                    {{/each}}
-                </select>
+                        <select class="x-quality-profile" id="inputQualityProfile" name="qualityProfileId">
+                            {{#each qualityProfiles.models}}
+                            <option value="{{id}}">{{attributes.name}}</option>
+                            {{/each}}
+                        </select>
                 <span class="help-inline">
                     <i class="icon-question-sign" title="Which Quality Profile should NzbDrone use to download episodes?"/>
                 </span>
-            </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="control-group">
-            <label class="control-label" for="inputPath">Path</label>
+                <div class="control-group">
+                    <label class="control-label" for="inputPath">Path</label>
 
-            <div class="controls">
-                <input type="text" id="inputPath" class="x-path" placeholder="Path" name="path">
+                    <div class="controls">
+                        <input type="text" id="inputPath" class="x-path" placeholder="Path" name="path">
                 <span class="help-inline">
                     <i class="icon-question-sign" title="Where should NzbDrone store episodes for this series?"/>
                 </span>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="inputCustomStartDate">Custom Start Date</label>
+                    </div>
+                </div>
 
-            <div class="controls">
-                <input type="date" id="inputCustomStartDate" name="customStartDate">
+                <div class="control-group">
+                    <label class="control-label" for="inputCustomStartDate">Custom Start Date</label>
+
+                    <div class="controls">
+                        <input type="date" id="inputCustomStartDate" name="customStartDate">
                 <span class="help-inline">
                     <i class="icon-question-sign" title="Should NzbDrone only download episodes after your preferred start date?"/>
                 </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
