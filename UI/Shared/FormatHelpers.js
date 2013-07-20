@@ -33,6 +33,10 @@ define(
                     return date.fromNow(true);
                 }
 
+                if (date.isBefore(Moment().add('years', -1))) {
+                    return date.format('ll');
+                }
+
                 return date.fromNow();
             },
 
