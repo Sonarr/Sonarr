@@ -32,6 +32,11 @@ define(
                 }
 
                 return 0;
+            },
+
+            state: {
+                sortKey: 'episodeNumber',
+                order  : -1
             }
         });
     });

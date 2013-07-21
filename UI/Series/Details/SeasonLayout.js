@@ -37,7 +37,8 @@ define(
                         cell      : ToggleCell,
                         trueClass : 'icon-bookmark',
                         falseClass: 'icon-bookmark-empty',
-                        tooltip   : 'Toggle monitored status'
+                        tooltip   : 'Toggle monitored status',
+                        sortable  : false
                     },
                     {
                         name : 'episodeNumber',
@@ -47,9 +48,10 @@ define(
                         })
                     },
                     {
-                        name : 'this',
-                        label: 'Title',
-                        cell : EpisodeTitleCell
+                        name    : 'this',
+                        label   : 'Title',
+                        cell    : EpisodeTitleCell,
+                        sortable: false
                     },
                     {
                         name : 'airDate',
@@ -57,9 +59,10 @@ define(
                         cell : AirDateCell
                     } ,
                     {
-                        name : 'status',
-                        label: 'Status',
-                        cell : EpisodeStatusCell
+                        name    : 'status',
+                        label   : 'Status',
+                        cell    : EpisodeStatusCell,
+                        sortable: false
                     }
                 ],
 
