@@ -8,9 +8,9 @@ define(
         'Series/Details/SeasonCollectionView',
         'Series/Edit/EditSeriesView',
         'Shared/LoadingView',
-        'Commands/CommandController',
+        'Shared/Actioneer',
         'backstrech'
-    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, EditSeriesView, LoadingView, CommandController) {
+    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, EditSeriesView, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -89,16 +89,13 @@ define(
             },
 
             _toggleMonitored: function () {
-                var self = this;
                 var name = 'monitored';
                 this.model.set(name, !this.model.get(name), { silent: true });
 
-                this.ui.monitored.addClass('icon-spinner icon-spin');
-
-                var promise = this.model.save();
-
-                promise.always(function () {
-                    self._setMonitoredState();
+                Actioneer.SaveModel({
+                    context       : this,
+                    element       : this.ui.monitored,
+                    alwaysCallback: this._setMonitoredState()
                 });
             },
 
@@ -123,13 +120,13 @@ define(
             },
 
             _refreshSeries: function () {
-                var self = this;
-
-                this.ui.refresh.addClass('icon-spin');
-                var promise = CommandController.Execute('refreshseries', { seriesId: this.model.get('id') });
-
-                promise.always(function () {
-                    self.ui.refresh.removeClass('icon-spin');
+                Actioneer.ExecuteCommand({
+                    command    : 'refreshSeries',
+                    properties : {
+                        seriesId    : this.model.get('id')
+                    },
+                    element    : this.ui.refresh,
+                    leaveIcon  : true
                 });
             },
 
@@ -141,35 +138,13 @@ define(
             },
 
             _renameSeries: function () {
-                var command = 'renameSeries';
-
-                this.idle = false;
-
-                this.ui.rename.toggleClass('icon-nd-rename icon-nd-spinner');
-
-                var properties = {
-                    seriesId    : this.model.get('id')
-                };
-
-                var self = this;
-                var commandPromise = CommandController.Execute(command, properties);
-
-                commandPromise.fail(function (options) {
-                    if (options.readyState === 0 || options.status === 0) {
-                        return;
-                    }
-
-                    Messenger.show({
-                        message: 'Season rename failed',
-                        type   : 'error'
-                    });
-                });
-
-                commandPromise.always(function () {
-                    if (!self.isClosed) {
-                        self.ui.rename.toggleClass('icon-nd-rename icon-nd-spinner');
-                        self.idle = true;
-                    }
+                Actioneer.ExecuteCommand({
+                    command    : 'renameSeries',
+                    properties : {
+                        seriesId    : this.model.get('id')
+                    },
+                    element    : this.ui.rename,
+                    failMessage: 'Series search failed'
                 });
             }
         });

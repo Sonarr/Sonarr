@@ -8,8 +8,8 @@ define(
         'Cells/AirDateCell',
         'Cells/EpisodeStatusCell',
         'Commands/CommandController',
-        'Shared/Messenger'
-    ], function ( Marionette, Backgrid, ToggleCell, EpisodeTitleCell, AirDateCell, EpisodeStatusCell, CommandController, Messenger) {
+        'Shared/Actioneer'
+    ], function ( Marionette, Backgrid, ToggleCell, EpisodeTitleCell, AirDateCell, EpisodeStatusCell, CommandController, Actioneer) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -94,55 +94,36 @@ define(
             },
 
             _seasonSearch: function () {
-                var command = 'seasonSearch';
-
-                this.idle = false;
-
-                this.ui.seasonSearch.addClass('icon-spinner icon-spin');
-
-                var properties = {
-                    seriesId    : this.model.get('seriesId'),
-                    seasonNumber: this.model.get('seasonNumber')
-                };
-
-                var self = this;
-                var commandPromise = CommandController.Execute(command, properties);
-
-                commandPromise.fail(function (options) {
-                    if (options.readyState === 0 || options.status === 0) {
-                        return;
-                    }
-
-                    Messenger.show({
-                        message: 'Season search failed',
-                        type   : 'error'
-                    });
-                });
-
-                commandPromise.always(function () {
-                    if (!self.isClosed) {
-                        self.ui.seasonSearch.removeClass('icon-spinner icon-spin');
-                        self.idle = true;
-                    }
+                Actioneer.ExecuteCommand({
+                    command    : 'seasonSearch',
+                    properties : {
+                        seriesId    : this.model.get('seriesId'),
+                        seasonNumber: this.model.get('seasonNumber')
+                    },
+                    element    : this.ui.seasonSearch,
+                    failMessage: 'Season search failed'
                 });
             },
 
             _seasonMonitored: function () {
-                var self = this;
                 var name = 'monitored';
                 this.model.set(name, !this.model.get(name));
 
-                this.ui.seasonMonitored.addClass('icon-spinner icon-spin');
-
-                var promise = this.model.save();
-
-                promise.always(function (){
-                    _.each(self.episodeCollection.models, function (episode) {
-                        episode.set({ monitored: self.model.get('monitored') });
-                    });
-
-                    self.render();
+                Actioneer.SaveModel({
+                    context       : this,
+                    element       : this.ui.seasonMonitored,
+                    alwaysCallback: this._afterSeasonMonitored
                 });
+            },
+
+            _afterSeasonMonitored: function () {
+                var self = this;
+
+                _.each(this.episodeCollection.models, function (episode) {
+                    episode.set({ monitored: self.model.get('monitored') });
+                });
+
+                this.render();
             },
 
             _setSeasonMonitoredState: function () {
@@ -159,36 +140,14 @@ define(
             },
 
             _seasonRename: function () {
-                var command = 'renameSeason';
-
-                this.idle = false;
-
-                this.ui.seasonRename.toggleClass('icon-nd-rename icon-nd-spinner');
-
-                var properties = {
-                    seriesId    : this.model.get('seriesId'),
-                    seasonNumber: this.model.get('seasonNumber')
-                };
-
-                var self = this;
-                var commandPromise = CommandController.Execute(command, properties);
-
-                commandPromise.fail(function (options) {
-                    if (options.readyState === 0 || options.status === 0) {
-                        return;
-                    }
-
-                    Messenger.show({
-                        message: 'Season rename failed',
-                        type   : 'error'
-                    });
-                });
-
-                commandPromise.always(function () {
-                    if (!self.isClosed) {
-                        self.ui.seasonRename.toggleClass('icon-nd-rename icon-nd-spinner');
-                        self.idle = true;
-                    }
+                Actioneer.ExecuteCommand({
+                    command    : 'renameSeason',
+                    properties : {
+                        seriesId    : this.model.get('seriesId'),
+                        seasonNumber: this.model.get('seasonNumber')
+                    },
+                    element    : this.ui.seasonRename,
+                    failMessage: 'Season rename failed'
                 });
             }
         });
