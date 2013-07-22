@@ -2,6 +2,7 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Marr.Data;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
@@ -108,6 +109,29 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                                                      .ToList();
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+        }
+
+        [Test]
+        [Explicit]
+        public void should_return_false_if_exact_path_exists_in_db()
+        {
+            Mocker.GetMock<IMediaFileService>()
+                  .Setup(s => s.Exists(It.IsAny<string>()))
+                  .Returns(true);
+
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                                                     .All()
+                                                     .With(e => e.EpisodeFileId = 1)
+                                                     .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
+                                                                                new EpisodeFile
+                                                                                {
+                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.pilot.avi",
+                                                                                    Size = 100
+                                                                                }))
+                                                     .Build()
+                                                     .ToList();
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
         }
     }
 }

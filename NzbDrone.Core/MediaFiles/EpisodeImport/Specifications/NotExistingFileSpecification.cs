@@ -7,10 +7,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
     public class NotExistingFileSpecification : IImportDecisionEngineSpecification
     {
+        private readonly IMediaFileService _mediaFileService;
         private readonly Logger _logger;
 
-        public NotExistingFileSpecification(Logger logger)
+        public NotExistingFileSpecification(IMediaFileService mediaFileService, Logger logger)
         {
+            _mediaFileService = mediaFileService;
             _logger = logger;
         }
 
@@ -18,16 +20,25 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
-            var episodeFiles = localEpisode.Episodes.Where(e => e.EpisodeFileId > 0).Select(e => e.EpisodeFile.Value);
+//            if (_mediaFileService.Exists(localEpisode.Path))
+//            {
+//                _logger.Trace("File is a match for an existing episode file: {0}", localEpisode.Path);
+//                return false;
+//            }
 
-            foreach (var episodeFile in episodeFiles)
+            var existingFiles = localEpisode.Episodes.Where(e => e.EpisodeFileId > 0).Select(e => e.EpisodeFile.Value);
+
+            foreach (var existingFile in existingFiles)
             {
-                if (Path.GetFileName(episodeFile.Path) == Path.GetFileName(localEpisode.Path) &&
-                    episodeFile.Size == localEpisode.Size)
+                if (Path.GetFileName(existingFile.Path) == Path.GetFileName(localEpisode.Path) &&
+                    existingFile.Size == localEpisode.Size)
                 {
                     _logger.Trace("File is a match for an existing episode file: {0}", localEpisode.Path);
                     return false;
                 }
+
+                _logger.Trace("Existing filename: {0} size: {1}", Path.GetFileName(existingFile.Path), existingFile.Size);
+                _logger.Trace("New filename: {0} size: {1}", Path.GetFileName(localEpisode.Path), localEpisode.Size);
             }
 
             return true;
