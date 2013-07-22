@@ -5,6 +5,7 @@ define(['Commands/CommandController', 'Shared/Messenger'],
             ExecuteCommand: function (options) {
                 options.iconClass = this._getIconClass(options.element);
 
+                this._showStartMessage(options);
                 this._setSpinnerOnElement(options);
 
                 var promise = CommandController.Execute(options.command, options.properties);
@@ -14,9 +15,10 @@ define(['Commands/CommandController', 'Shared/Messenger'],
             SaveModel: function (options) {
                 options.iconClass = this._getIconClass(options.element);
 
+                this._showStartMessage(options);
                 this._setSpinnerOnElement(options);
-                var promise = options.context.model.save();
 
+                var promise = options.context.model.save();
                 this._handlePromise(promise, options);
             },
 
@@ -79,6 +81,14 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                 else {
                     options.element.removeClass(options.iconClass);
                     options.element.addClass('icon-nd-spinner');
+                }
+            },
+
+            _showStartMessage: function (options) {
+                if (options.startMessage) {
+                    Messenger.show({
+                        message: options.startMessage
+                    });
                 }
             }
         }

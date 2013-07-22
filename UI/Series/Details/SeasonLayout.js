@@ -95,13 +95,14 @@ define(
 
             _seasonSearch: function () {
                 Actioneer.ExecuteCommand({
-                    command    : 'seasonSearch',
-                    properties : {
+                    command     : 'seasonSearch',
+                    properties  : {
                         seriesId    : this.model.get('seriesId'),
                         seasonNumber: this.model.get('seasonNumber')
                     },
-                    element    : this.ui.seasonSearch,
-                    failMessage: 'Season search failed'
+                    element     : this.ui.seasonSearch,
+                    failMessage : 'Search for season {0} failed'.format(this.model.get('seasonNumber')),
+                    startMessage: 'Search for season {0} started'.format(this.model.get('seasonNumber'))
                 });
             },
 

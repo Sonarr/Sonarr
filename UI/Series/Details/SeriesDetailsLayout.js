@@ -25,14 +25,16 @@ define(
                 monitored: '.x-monitored',
                 edit     : '.x-edit',
                 refresh  : '.x-refresh',
-                rename   : '.x-rename'
+                rename   : '.x-rename',
+                search   : '.x-search'
             },
 
             events: {
                 'click .x-monitored': '_toggleMonitored',
                 'click .x-edit'     : '_editSeries',
                 'click .x-refresh'  : '_refreshSeries',
-                'click .x-rename'   : '_renameSeries'
+                'click .x-rename'   : '_renameSeries',
+                'click .x-search'   : '_seriesSearch'
             },
 
             initialize: function () {
@@ -145,6 +147,18 @@ define(
                     },
                     element    : this.ui.rename,
                     failMessage: 'Series search failed'
+                });
+            },
+
+            _seriesSearch: function () {
+                Actioneer.ExecuteCommand({
+                    command     : 'seriesSearch',
+                    properties  : {
+                        seriesId    : this.model.get('id')
+                    },
+                    element     : this.ui.search,
+                    failMessage : 'Series search failed',
+                    startMessage: 'Search for {0} started'.format(this.model.get('title'))
                 });
             }
         });
