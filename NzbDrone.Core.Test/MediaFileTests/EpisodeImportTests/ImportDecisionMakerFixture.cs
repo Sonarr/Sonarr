@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             Subject.GetImportDecisions(_videoFiles, new Series(), false);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>()), Times.Exactly(_videoFiles.Count));
+                  .Verify(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
 
             ExceptionVerification.ExpectedErrors(3);
         }
