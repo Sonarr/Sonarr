@@ -14,27 +14,47 @@ namespace NzbDrone.Core.Test.MediaFileTests
 {
     public class MediaFileTableCleanupServiceFixture : CoreTest<MediaFileTableCleanupService>
     {
-
-        private void GiveEpisodeFiles(IEnumerable<EpisodeFile> episodeFiles)
-        {
-            Mocker.GetMock<IMediaFileService>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(episodeFiles.ToList());
-        }
-
-
         private const string DeletedPath = "ANY FILE WITH THIS PATH IS CONSIDERED DELETED!";
 
         [SetUp]
         public void SetUp()
         {
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.GetSeries(It.IsAny<Int32>()))
+                  .Returns(Builder<Series>.CreateNew().Build());
+
             Mocker.GetMock<IDiskProvider>()
-             .Setup(e => e.FileExists(It.Is<String>(c => c != DeletedPath)))
-             .Returns(true);
+                  .Setup(e => e.FileExists(It.Is<String>(c => c != DeletedPath)))
+                  .Returns(true);
 
             Mocker.GetMock<IEpisodeService>()
-            .Setup(c => c.GetEpisodesByFileId(It.IsAny<int>()))
-            .Returns(new List<Episode> { new Episode() });
+                  .Setup(c => c.GetEpisodesByFileId(It.IsAny<int>()))
+                  .Returns(new List<Episode> {new Episode()});
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.IsParent(It.IsAny<String>(), It.IsAny<String>()))
+                  .Returns(true);
+        }
+
+        private void GivenEpisodeFiles(IEnumerable<EpisodeFile> episodeFiles)
+        {
+            Mocker.GetMock<IMediaFileService>()
+                  .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
+                  .Returns(episodeFiles.ToList());
+        }
+
+        private void GivenFilesAreNotAttachedToEpisode()
+        {
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(c => c.GetEpisodesByFileId(It.IsAny<int>()))
+                  .Returns(new List<Episode>());
+        }
+
+        private void GivenFileIsNotInSeriesFolder()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.IsParent(It.IsAny<String>(), It.IsAny<String>()))
+                  .Returns(false);
         }
 
         [Test]
@@ -43,7 +63,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .Build();
 
-            GiveEpisodeFiles(episodeFiles);
+            GivenEpisodeFiles(episodeFiles);
 
             Subject.Execute(new CleanMediaFileDb(0));
 
@@ -58,12 +78,11 @@ namespace NzbDrone.Core.Test.MediaFileTests
                 .With(c => c.Path = DeletedPath)
                 .Build();
 
-            GiveEpisodeFiles(episodeFiles);
+            GivenEpisodeFiles(episodeFiles);
 
             Subject.Execute(new CleanMediaFileDb(0));
 
-            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.Path == DeletedPath)), Times.Exactly(2));
-
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.Path == DeletedPath), false), Times.Exactly(2));
         }
 
         [Test]
@@ -74,19 +93,28 @@ namespace NzbDrone.Core.Test.MediaFileTests
                                 .With(c => c.Path = "ExistingPath")
                                 .Build();
 
-            GiveEpisodeFiles(episodeFiles);
+            GivenEpisodeFiles(episodeFiles);
             GivenFilesAreNotAttachedToEpisode();
 
             Subject.Execute(new CleanMediaFileDb(0));
 
-            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>()), Times.Exactly(10));
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>(), false), Times.Exactly(10));
         }
 
-        private void GivenFilesAreNotAttachedToEpisode()
+        [Test]
+        public void should_delete_files_that_do_not_belong_to_the_series_path()
         {
-            Mocker.GetMock<IEpisodeService>()
-                  .Setup(c => c.GetEpisodesByFileId(It.IsAny<int>()))
-                  .Returns(new List<Episode>());
+            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
+                                .Random(10)
+                                .With(c => c.Path = "ExistingPath")
+                                .Build();
+
+            GivenEpisodeFiles(episodeFiles);
+            GivenFileIsNotInSeriesFolder();
+
+            Subject.Execute(new CleanMediaFileDb(0));
+
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>(), false), Times.Exactly(10));
         }
     }
 }

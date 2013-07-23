@@ -40,7 +40,7 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.Trace("Removing existing episode file: {0}", file);
 
                 _recycleBinProvider.DeleteFile(file.Path);
-                _mediaFileService.Delete(file);
+                _mediaFileService.Delete(file, true);
             }
 
             _logger.Trace("Moving episode file: {0}", episodeFile);

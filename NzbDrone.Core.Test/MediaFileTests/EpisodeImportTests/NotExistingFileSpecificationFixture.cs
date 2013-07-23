@@ -112,7 +112,6 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         }
 
         [Test]
-        [Explicit]
         public void should_return_false_if_exact_path_exists_in_db()
         {
             Mocker.GetMock<IMediaFileService>()

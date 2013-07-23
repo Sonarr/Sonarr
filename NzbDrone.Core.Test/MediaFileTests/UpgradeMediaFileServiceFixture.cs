@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
 
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>()), Times.Once());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), true), Times.Once());
         }
     }
 }

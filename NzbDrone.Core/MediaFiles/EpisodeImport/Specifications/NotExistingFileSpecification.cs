@@ -20,11 +20,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
-//            if (_mediaFileService.Exists(localEpisode.Path))
-//            {
-//                _logger.Trace("File is a match for an existing episode file: {0}", localEpisode.Path);
-//                return false;
-//            }
+            if (_mediaFileService.Exists(localEpisode.Path))
+            {
+                _logger.Trace("File is a match for an existing episode file: {0}", localEpisode.Path);
+                return false;
+            }
 
             var existingFiles = localEpisode.Episodes.Where(e => e.EpisodeFileId > 0).Select(e => e.EpisodeFile.Value);
 
@@ -36,9 +36,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     _logger.Trace("File is a match for an existing episode file: {0}", localEpisode.Path);
                     return false;
                 }
-
-                _logger.Trace("Existing filename: {0} size: {1}", Path.GetFileName(existingFile.Path), existingFile.Size);
-                _logger.Trace("New filename: {0} size: {1}", Path.GetFileName(localEpisode.Path), localEpisode.Size);
             }
 
             return true;

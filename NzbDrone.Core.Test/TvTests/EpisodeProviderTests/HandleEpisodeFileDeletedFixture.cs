@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             GivenSingleEpisodeFile();
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Once());
@@ -69,14 +69,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             GivenMultiEpisodeFile();
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Exactly(2));
         }
 
         [Test]
-        public void should_set_monitored_to_false_if_autoUnmonitor_is_true()
+        public void should_set_monitored_to_false_if_autoUnmonitor_is_true_and_is_not_for_an_upgrade()
         {
             GivenSingleEpisodeFile();
 
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == false)), Times.Once());
@@ -99,7 +99,22 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(false);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
+
+            Mocker.GetMock<IEpisodeRepository>()
+                .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == true)), Times.Once());
+        }
+
+        [Test]
+        public void should_leave_monitored_to_true_if_autoUnmonitor_is_true_and_is_for_an_upgrade()
+        {
+            GivenSingleEpisodeFile();
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
+                  .Returns(true);
+
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, true));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == true)), Times.Once());

@@ -35,6 +35,7 @@ namespace NzbDrone.Common
         bool IsFileLocked(FileInfo file);
         string GetPathRoot(string path);
         void SetPermissions(string filename, string account, FileSystemRights Rights, AccessControlType ControlType);
+        bool IsParent(string parentfolder, string subfolder);
     }
 
     public class DiskProvider : IDiskProvider
@@ -382,6 +383,27 @@ namespace NzbDrone.Common
 
             directorySecurity.AddAccessRule(accessRule);
             directoryInfo.SetAccessControl(directorySecurity);
+        }
+
+        public bool IsParent(string parent, string subfolder)
+        {
+            parent = parent.TrimEnd(Path.DirectorySeparatorChar);
+            subfolder = subfolder.TrimEnd(Path.DirectorySeparatorChar);
+
+            var diParent = new DirectoryInfo(parent);
+            var diSubfolder = new DirectoryInfo(subfolder);
+
+            while (diSubfolder.Parent != null)
+            {
+                if (diSubfolder.Parent.FullName == diParent.FullName)
+                {
+                    return true;
+                }
+                
+                diSubfolder = diSubfolder.Parent;
+            }
+
+            return false;
         }
     }
 }
