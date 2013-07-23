@@ -4,32 +4,41 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Providers
 {
-    public class XemProvider : IExecute<UpdateXemMappings>
+    public interface IXemProvider
+    {
+        void UpdateMappings();
+        void UpdateMappings(int seriesId);
+        void PerformUpdate(Series series);
+    }
+
+    public class XemProvider : IXemProvider, IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent> 
     {
         private readonly IEpisodeService _episodeService;
         private readonly XemCommunicationProvider _xemCommunicationProvider;
-        private readonly ISeriesRepository _seriesRepository;
+        private readonly ISeriesService _seriesService;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(IEpisodeService episodeService, XemCommunicationProvider xemCommunicationProvider, ISeriesRepository seriesRepository)
+        public XemProvider(IEpisodeService episodeService, XemCommunicationProvider xemCommunicationProvider, ISeriesService seriesService)
         {
+            if (seriesService == null) throw new ArgumentNullException("seriesService");
             _episodeService = episodeService;
             _xemCommunicationProvider = xemCommunicationProvider;
-            _seriesRepository = seriesRepository;
+            _seriesService = seriesService;
         }
 
-        public virtual void UpdateMappings()
+        public void UpdateMappings()
         {
             _logger.Trace("Starting scene numbering update");
             try
             {
                 var ids = _xemCommunicationProvider.GetXemSeriesIds();
-                var series = _seriesRepository.All();
-                var wantedSeries = series.Where(s => ids.Contains(s.Id)).ToList();
+                var series = _seriesService.GetAllSeries();
+                var wantedSeries = series.Where(s => ids.Contains(s.TvdbId)).ToList();
 
                 foreach (var ser in wantedSeries)
                 {
@@ -46,17 +55,9 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual void UpdateMappings(int seriesId)
+        public void UpdateMappings(int seriesId)
         {
-            var xemIds = _xemCommunicationProvider.GetXemSeriesIds();
-
-            if (!xemIds.Contains(seriesId))
-            {
-                _logger.Trace("Xem doesn't have a mapping for this series: {0}", seriesId);
-                return;
-            }
-
-            var series = _seriesRepository.Get(seriesId);
+            var series = _seriesService.GetSeries(seriesId);
 
             if (series == null)
             {
@@ -64,16 +65,24 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
+            var xemIds = _xemCommunicationProvider.GetXemSeriesIds();
+
+            if (!xemIds.Contains(series.TvdbId))
+            {
+                _logger.Trace("Xem doesn't have a mapping for this series: {0}", series.TvdbId);
+                return;
+            }
+
             PerformUpdate(series);
         }
 
-        public virtual void PerformUpdate(Series series)
+        public void PerformUpdate(Series series)
         {
             _logger.Trace("Updating scene numbering mapping for: {0}", series);
             try
             {
                 var episodesToUpdate = new List<Episode>();
-                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.Id);
+                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.TvdbId);
 
                 if (mappings == null)
                 {
@@ -106,7 +115,7 @@ namespace NzbDrone.Core.Providers
 
                 _logger.Trace("Setting UseSceneMapping for {0}", series);
                 series.UseSceneNumbering = true;
-                _seriesRepository.Update(series);
+                _seriesService.UpdateSeries(series);
             }
 
             catch (Exception ex)
@@ -115,9 +124,21 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void Execute(UpdateXemMappings message)
+        public void Execute(UpdateXemMappingsCommand message)
         {
-            UpdateMappings();
+            if (message.SeriesId.HasValue)
+            {
+                UpdateMappings(message.SeriesId.Value);
+            }
+            else
+            {
+                UpdateMappings();
+            }
+        }
+
+        public void Handle(SeriesUpdatedEvent message)
+        {
+            PerformUpdate(message.Series);
         }
     }
 }

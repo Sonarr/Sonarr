@@ -382,7 +382,7 @@
     <Compile Include="Parser\Model\ReportInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
-    <Compile Include="Providers\UpdateXemMappings.cs" />
+    <Compile Include="Providers\UpdateXemMappingsCommand.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />

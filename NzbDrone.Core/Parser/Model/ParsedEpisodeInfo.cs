@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Parser.Model
         public Language Language { get; set; }
         
         public bool FullSeason { get; set; }
-        public bool SceneSource { get; set; }
 
         public override string ToString()
         {

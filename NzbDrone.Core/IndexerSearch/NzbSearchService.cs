@@ -56,23 +56,31 @@ namespace NzbDrone.Core.IndexerSearch
                 return SearchDaily(episode.SeriesId, episode.AirDate.Value.Date);
             }
 
-            return SearchSingle(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+            return SearchSingle(series, episode);
         }
 
-        private List<DownloadDecision> SearchSingle(int seriesId, int seasonNumber, int episodeNumber)
+        private List<DownloadDecision> SearchSingle(Series series, Episode episode)
         {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(seriesId, seasonNumber);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series.Id, episode.SeasonNumber);
 
-            if (_seriesService.GetSeries(seriesId).UseSceneNumbering)
+            if (series.UseSceneNumbering)
             {
-                var episode = _episodeService.GetEpisode(seriesId, seasonNumber, episodeNumber);
-                searchSpec.EpisodeNumber = episode.SceneEpisodeNumber;
-                searchSpec.SeasonNumber = episode.SceneSeasonNumber;
+                if (episode.SceneSeasonNumber > 0 && episode.SceneEpisodeNumber > 0)
+                {
+                    searchSpec.EpisodeNumber = episode.SceneEpisodeNumber;
+                    searchSpec.SeasonNumber = episode.SceneSeasonNumber;
+                }
+
+                else
+                {
+                    searchSpec.EpisodeNumber = episode.EpisodeNumber;
+                    searchSpec.SeasonNumber = episode.SeasonNumber;
+                }
             }
             else
             {
-                searchSpec.EpisodeNumber = episodeNumber;
-                searchSpec.SeasonNumber = seasonNumber;
+                searchSpec.EpisodeNumber = episode.EpisodeNumber;
+                searchSpec.SeasonNumber = episode.SeasonNumber;
             }
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);

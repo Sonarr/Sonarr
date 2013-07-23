@@ -52,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var mediaFileList = GetVideoFiles(series.Path);
 
-            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
+            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
             _importApprovedEpisodes.Import(decisions);
         }
 

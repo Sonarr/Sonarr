@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Jobs
             var defaultTasks = new[]
                 {
                     new ScheduledTask{ Interval = 15, TypeName = typeof(RssSyncCommand).FullName},
-                    new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappings).FullName},
+                    new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappingsCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 5, TypeName = typeof(ApplicationUpdateCommand).FullName},
