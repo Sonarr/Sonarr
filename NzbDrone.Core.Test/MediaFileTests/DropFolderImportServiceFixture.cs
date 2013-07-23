@@ -141,6 +141,26 @@ namespace NzbDrone.Core.Test.MediaFileTests
                   .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Once());
         }
 
+        [TestCase("_UNPACK_")]
+        [TestCase("_FAILED_")]
+        public void should_remove_unpack_from_folder_name(string prefix)
+        {
+            var folderName = "30.rock.s01e01.pilot.hdtv-lol";
+            var folders = new[] { String.Format(@"C:\Test\Unsorted\{0}{1}", prefix, folderName) };
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.GetDirectories(It.IsAny<string>()))
+                  .Returns(folders);
+
+            Subject.Execute(new DownloadedEpisodesScanCommand());
+
+            Mocker.GetMock<IParsingService>()
+                .Verify(v => v.GetSeries(folderName), Times.Once());
+
+            Mocker.GetMock<IParsingService>()
+                .Verify(v => v.GetSeries(It.Is<String>(s => s.StartsWith(prefix))), Times.Never());
+        }
+
         private void VerifyNoImport()
         {
             Mocker.GetMock<IImportApprovedEpisodes>().Verify(c => c.Import(It.IsAny<List<ImportDecision>>(), true),

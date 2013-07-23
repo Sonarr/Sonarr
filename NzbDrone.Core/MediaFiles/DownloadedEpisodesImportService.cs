@@ -101,11 +101,12 @@ namespace NzbDrone.Core.MediaFiles
 
         private List<ImportDecision> ProcessSubFolder(DirectoryInfo subfolderInfo)
         {
-            var series = _parsingService.GetSeries(subfolderInfo.Name);
+            var cleanedUpName = GetCleanedUpFolderName(subfolderInfo.Name);
+            var series = _parsingService.GetSeries(cleanedUpName);
 
             if (series == null)
             {
-                _logger.Debug("Unknown Series {0}", subfolderInfo.Name);
+                _logger.Debug("Unknown Series {0}", cleanedUpName);
                 return new List<ImportDecision>();
             }
 
@@ -137,6 +138,14 @@ namespace NzbDrone.Core.MediaFiles
         {
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series, true);
             return _importApprovedEpisodes.Import(decisions, true);
+        }
+
+        private string GetCleanedUpFolderName(string folder)
+        {
+            folder = folder.Replace("_UNPACK_", "")
+                           .Replace("_FAILED_", "");
+
+            return folder;
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)
