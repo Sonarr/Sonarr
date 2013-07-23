@@ -66,14 +66,14 @@ namespace NzbDrone.Core.MediaFiles
                         continue;
                     }
 
-                    var localEpsiode = _parsingService.GetEpisodes(episodeFile.Path, series);
-
-                    if (localEpsiode == null || episodes.Count != localEpsiode.Episodes.Count)
-                    {
-                        _logger.Trace("File [{0}] parsed episodes has changed, removing from db", episodeFile.Path);
-                        _mediaFileService.Delete(episodeFile);
-                        continue;
-                    }
+//                    var localEpsiode = _parsingService.GetEpisodes(episodeFile.Path, series);
+//
+//                    if (localEpsiode == null || episodes.Count != localEpsiode.Episodes.Count)
+//                    {
+//                        _logger.Trace("File [{0}] parsed episodes has changed, removing from db", episodeFile.Path);
+//                        _mediaFileService.Delete(episodeFile);
+//                        continue;
+//                    }
                 }
                 catch (Exception ex)
                 {
