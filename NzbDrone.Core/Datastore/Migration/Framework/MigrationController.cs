@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             lock (MigrationCache)
             {
-                _announcer.Heading("Migrating " + connectionString);
-
                 if (MigrationCache.Contains(connectionString.ToLower())) return;
+
+                _announcer.Heading("Migrating " + connectionString);
 
                 var assembly = Assembly.GetExecutingAssembly();
 

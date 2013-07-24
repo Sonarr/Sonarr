@@ -8,7 +8,6 @@ namespace NzbDrone.Common.Cache
     {
         ICached<T> GetCache<T>(Type host, string name);
         ICached<T> GetCache<T>(Type host);
-        //ICollection<ICached<T>> Caches<T> { get;}
         void Clear();
         ICollection<ICached> Caches { get; }
     }

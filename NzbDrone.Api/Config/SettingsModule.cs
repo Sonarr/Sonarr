@@ -2,54 +2,10 @@
 using System.Collections.Generic;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Organizer;
-using FluentValidation;
 
 namespace NzbDrone.Api.Config
 {
-    public class NamingModule : NzbDroneRestModule<NamingConfigResource>
-    {
-        private readonly INamingConfigService _namingConfigService;
-
-        public NamingModule(INamingConfigService namingConfigService)
-            : base("config/naming")
-        {
-            _namingConfigService = namingConfigService;
-            GetResourceSingle = GetNamingConfig;
-
-            UpdateResource = UpdateNamingConfig;
-
-            SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.NumberStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.Separator).Matches(@"\s|\s\-\s|\.");
-        }
-
-        private NamingConfigResource UpdateNamingConfig(NamingConfigResource resource)
-        {
-            return ToResource<NamingConfig>(_namingConfigService.Save, resource);
-        }
-
-        private NamingConfigResource GetNamingConfig()
-        {
-            return ToResource(_namingConfigService.GetConfig);
-        }
-    }
-
-    public class NamingConfigResource : RestResource
-    {
-        public Boolean IncludeEpisodeTitle { get; set; }
-        public Boolean ReplaceSpaces { get; set; }
-        public Boolean RenameEpisodes { get; set; }
-        public Int32 MultiEpisodeStyle { get; set; }
-        public Int32 NumberStyle { get; set; }
-        public String Separator { get; set; }
-        public Boolean IncludeQuality { get; set; }
-        public Boolean IncludeSeriesTitle { get; set; }
-    }
-
-
     public class SettingsModule : NzbDroneApiModule
     {
         private readonly IConfigService _configService;
@@ -65,6 +21,19 @@ namespace NzbDrone.Api.Config
 
             Get["/host"] = x => GetHostSettings();          
             Post["/host"] = x => SaveHostSettings();
+
+            Get["/log"] = x => GetLogSettings();
+            Post["/log"] = x => SaveLogSettings();
+        }
+
+        private Response SaveLogSettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        private Response GetLogSettings()
+        {
+            throw new NotImplementedException();
         }
 
         private Response SaveHostSettings()

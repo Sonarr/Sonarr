@@ -7,7 +7,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.CacheTests
 {
     [TestFixture]
-    public class CachedManagerFixture:TestBase<ICacheManger>
+    public class CachedManagerFixture : TestBase<ICacheManger>
     {
         [Test]
         public void should_return_proper_type_of_cache()
@@ -17,7 +17,6 @@ namespace NzbDrone.Common.Test.CacheTests
             result.Should().BeOfType<Cached<DateTime>>();
         }
 
-
         [Test]
         public void multiple_calls_should_get_the_same_cache()
         {
@@ -26,9 +25,5 @@ namespace NzbDrone.Common.Test.CacheTests
 
             result1.Should().BeSameAs(result2);
         }
-
-
-
-
     }
 }

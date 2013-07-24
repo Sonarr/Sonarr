@@ -5,19 +5,15 @@ namespace NzbDrone.Common.Cache
 {
     public interface ICached
     {
-        bool ContainsKey(string key);
         void Clear();
-        void Remove(string key);
     }
 
     public interface ICached<T> : ICached
     {
-        void Set(string key, T value);
-        T Get(string key, Func<T> function);
-        T Get(string key);
+        void Set(string key, T value, TimeSpan? lifetime = null);
+        T Get(string key, Func<T> function, TimeSpan? lifeTime = null);
         T Find(string key);
 
         ICollection<T> Values { get; }
-        ICollection<string> Keys { get; }
     }
 }

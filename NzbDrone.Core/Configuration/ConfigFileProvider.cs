@@ -118,25 +118,25 @@ namespace NzbDrone.Core.Configuration
         public string GetValue(string key, object defaultValue)
         {
             return _cache.Get(key, () =>
-                  {
-                      EnsureDefaultConfigFile();
+                {
+                    EnsureDefaultConfigFile();
 
-                      var xDoc = XDocument.Load(_configFile);
-                      var config = xDoc.Descendants("Config").Single();
+                    var xDoc = XDocument.Load(_configFile);
+                    var config = xDoc.Descendants("Config").Single();
 
-                      var parentContainer = config;
+                    var parentContainer = config;
 
-                      var valueHolder = parentContainer.Descendants(key).ToList();
+                    var valueHolder = parentContainer.Descendants(key).ToList();
 
-                      if (valueHolder.Count() == 1)
-                          return valueHolder.First().Value;
+                    if (valueHolder.Count() == 1)
+                        return valueHolder.First().Value;
 
-                      //Save the value
-                      SetValue(key, defaultValue);
+                    //Save the value
+                    SetValue(key, defaultValue);
 
-                      //return the default value
-                      return defaultValue.ToString();
-                  });
+                    //return the default value
+                    return defaultValue.ToString();
+                });
         }
 
         public void SetValue(string key, object value)
