@@ -23,6 +23,14 @@ define(
             return 'http://imdb.com/title/' + this.imdbId;
         });
 
+        Handlebars.registerHelper('tvdbUrl', function () {
+            return 'http://www.thetvdb.com/?tab=series&id=' + this.tvdbId;
+        });
+
+        Handlebars.registerHelper('tvRageUrl', function () {
+            return 'http://www.tvrage.com/shows/id-' + this.tvRageId;
+        });
+
         Handlebars.registerHelper('route', function () {
             return '/series/' + this.titleSlug;
         });
