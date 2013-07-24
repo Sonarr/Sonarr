@@ -6,7 +6,7 @@ define(
         return TemplatedCell.extend({
 
             className: 'quality-cell',
-            template : 'Cells/QualityTemplate'
+            template : 'Cells/QualityCellTemplate'
 
         });
     });
