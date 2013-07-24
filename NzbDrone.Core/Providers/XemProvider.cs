@@ -120,7 +120,8 @@ namespace NzbDrone.Core.Providers
 
             catch (Exception ex)
             {
-                _logger.WarnException("Error updating scene numbering mappings for: " + series, ex);
+                //TODO: We should increase this back to warn when caching is in place
+                _logger.TraceException("Error updating scene numbering mappings for: " + series, ex);
             }
         }
 
