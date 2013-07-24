@@ -3,11 +3,8 @@
 define(
     [
         'app',
-        'marionette',
-        'Series/Edit/EditSeriesView',
-        'Series/Delete/DeleteSeriesView'
-
-    ], function (App, Marionette, EditSeriesView, DeleteSeriesView) {
+        'marionette'
+    ], function (App, Marionette) {
 
         return Marionette.ItemView.extend({
             tagName : 'li',
@@ -28,13 +25,11 @@ define(
 
 
             editSeries: function () {
-                var view = new EditSeriesView({ model: this.model});
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.EditSeriesCommand, {series:this.model});
             },
 
             removeSeries: function () {
-                var view = new DeleteSeriesView({ model: this.model });
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series:this.model});
             },
 
             posterHoverAction: function () {

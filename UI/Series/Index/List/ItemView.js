@@ -4,10 +4,7 @@ define(
     [
         'app',
         'marionette',
-        'Series/Edit/EditSeriesView',
-        'Series/Delete/DeleteSeriesView'
-
-    ], function (App, Marionette, EditSeriesView, DeleteSeriesView) {
+    ], function (App, Marionette) {
         return Marionette.ItemView.extend({
             template: 'Series/Index/List/ItemTemplate',
 
@@ -21,13 +18,11 @@ define(
             },
 
             editSeries: function () {
-                var view = new EditSeriesView({ model: this.model});
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.EditSeriesCommand, {series: this.model});
             },
 
             removeSeries: function () {
-                var view = new DeleteSeriesView({ model: this.model });
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series: this.model});
             }
         });
     });

@@ -7,7 +7,7 @@ define(
         'moment',
         'Calendar/Collection',
         'fullcalendar'
-    ], function (App, Marionette, Moment, CalendarCollection, EpisodeLayout) {
+    ], function (App, Marionette, Moment, CalendarCollection) {
 
         var _instance;
 
@@ -37,8 +37,7 @@ define(
                         $(element).children('.fc-event-inner').addClass(event.statusLevel);
                     },
                     eventClick    : function (event) {
-                        var view = new EpisodeLayout({ model: event.model });
-                        App.modalRegion.show(view);
+                        App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: event.model});
                     }
                 });
 
