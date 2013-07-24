@@ -3,11 +3,10 @@ define(
     [
         'app',
         'marionette',
-        'Series/Delete/DeleteSeriesView',
         'Quality/QualityProfileCollection',
         'Mixins/AsModelBoundView',
         'Mixins/AutoComplete'
-    ], function (App, Marionette, DeleteSeriesView, QualityProfiles, AsModelBoundView) {
+    ], function (App, Marionette, QualityProfiles, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Series/Edit/EditSeriesTemplate',
@@ -45,8 +44,7 @@ define(
             },
 
             _removeSeries: function () {
-                var view = new DeleteSeriesView({ model: this.model });
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series:this.model});
             }
         });
 

@@ -3,9 +3,8 @@
 define(
     [
         'app',
-        'Cells/NzbDroneCell',
-        'Episode/Layout'
-    ], function (App, NzbDroneCell, EpisodeLayout) {
+        'Cells/NzbDroneCell'
+    ], function (App, NzbDroneCell) {
         return NzbDroneCell.extend({
 
             className: 'episode-title-cell',
@@ -15,8 +14,7 @@ define(
             },
 
             showDetails: function () {
-                var view = new EpisodeLayout({ model: this.cellValue });
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.cellValue});
             },
 
             render: function () {

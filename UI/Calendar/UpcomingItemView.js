@@ -3,20 +3,18 @@
 define(
     [
         'app',
-        'marionette',
-        'Episode/Layout'
-    ], function (App, Marionette, EpisodeLayout) {
+        'marionette'
+    ], function (App, Marionette) {
         return Marionette.ItemView.extend({
             template: 'Calendar/UpcomingItemTemplate',
             tagName : 'div',
 
-            events  : {
-                'click .x-episode-title' : '_showEpisodeDetails'
+            events: {
+                'click .x-episode-title': '_showEpisodeDetails'
             },
 
-            _showEpisodeDetails : function() {
-                var view = new EpisodeLayout({ model: this.model });
-                App.modalRegion.show(view);
+            _showEpisodeDetails: function () {
+                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.model});
             }
         });
     });

@@ -19,21 +19,21 @@ define(
             },
 
             _closeModal: function () {
-                App.vent.trigger(App.Commands.CloseModalCommand);
+                App.modalRegion.closeModal();
             },
 
             _editSeries: function (options) {
-                var view = new EditSeriesView({ model: options.model });
+                var view = new EditSeriesView({ model: options.series });
                 App.modalRegion.show(view);
             },
 
             _deleteSeries: function (options) {
-                var view = new DeleteSeriesView({ model: options.model });
+                var view = new DeleteSeriesView({ model: options.series });
                 App.modalRegion.show(view);
             },
 
             _showEpisode: function (options) {
-                var view = new EpisodeLayout({ model: options.model });
+                var view = new EpisodeLayout({ model: options.episode });
                 App.modalRegion.show(view);
             }
         });

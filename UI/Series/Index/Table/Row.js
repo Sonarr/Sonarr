@@ -2,10 +2,8 @@
 define(
     [
         'app',
-        'backgrid',
-        'Series/Edit/EditSeriesView',
-        'Series/Delete/DeleteSeriesView'
-    ], function (App, Backgrid, EditSeriesView, DeleteSeriesView) {
+        'backgrid'
+    ], function (App, Backgrid) {
         return Backgrid.Row.extend({
             events: {
                 'click .x-edit'  : 'editSeries',
@@ -13,14 +11,12 @@ define(
             },
 
             editSeries: function () {
-                var view = new EditSeriesView({ model: this.model});
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.EditSeriesCommand, {series:this.model});
             },
 
             removeSeries: function () {
-                var view = new DeleteSeriesView({ model: this.model });
-                App.modalRegion.show(view);
-            }
+                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series:this.model});
+            },
         });
     });
 
