@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Tv
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
         public DateTime? AirDate { get; set; }
+        public DateTime? AirDateUtc { get; set; }
 
         public string Overview { get; set; }
         public Boolean Monitored { get; set; }

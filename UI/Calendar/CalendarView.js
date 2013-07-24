@@ -58,7 +58,7 @@ define(
                         _.each(calendarCollection.models, function (element) {
                             var episodeTitle = element.get('title');
                             var seriesTitle = element.get('series').get('title');
-                            var start = element.get('airDate');
+                            var start = element.get('airDateUtc');
                             var statusLevel = _instance.getStatusLevel(element);
 
                             element.set({
@@ -80,7 +80,7 @@ define(
             getStatusLevel: function (element) {
                 var hasFile = element.get('hasFile');
                 var currentTime = Moment();
-                var start = Moment(element.get('airDate'));
+                var start = Moment(element.get('airDateUtc'));
                 var end = Moment(element.get('end'));
 
                 var statusLevel = 'primary';

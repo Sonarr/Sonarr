@@ -1,13 +1,13 @@
 ﻿<div class="event">
     <div class="date {{StatusLevel}}">
-        <h1>{{Day airDate}}</h1>
-        <h4>{{Month airDate}}</h4>
+        <h1>{{Day airDateUtc}}</h1>
+        <h4>{{Month airDateUtc}}</h4>
     </div>
     {{#with series}}
     <a href="{{route}}">
         <h4>{{title}}</h4>
     </a>
     {{/with}}
-    <p>{{StartTime airDate}} {{ShortDate airDate}}<span class="pull-right">{{seasonNumber}}x{{Pad2 episodeNumber}}</span><br>{{episodeTitle}}</p>
+    <p>{{StartTime airDateUtc}} {{ShortDate airDateUtc}}<span class="pull-right">{{seasonNumber}}x{{Pad2 episodeNumber}}</span><br>{{episodeTitle}}</p>
     <p class="episode-title x-episode-title">{{title}}</p>
 </div>

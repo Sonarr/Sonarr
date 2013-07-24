@@ -13,7 +13,7 @@ define(
 
                 this.$el.empty();
 
-                var airDateField = this.column.get('airDate') || 'airDate';
+                var airDateField = this.column.get('airDateUtc') || 'airDateUtc';
                 var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
                 var episodeField = this.column.get('episodes') || 'episodeNumber';
 

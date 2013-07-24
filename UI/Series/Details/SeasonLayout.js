@@ -54,7 +54,7 @@ define(
                         sortable: false
                     },
                     {
-                        name : 'airDate',
+                        name : 'airDateUtc',
                         label: 'Air Date',
                         cell : AirDateCell
                     } ,

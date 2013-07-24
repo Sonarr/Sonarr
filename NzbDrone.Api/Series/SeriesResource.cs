@@ -22,7 +22,6 @@ namespace NzbDrone.Api.Series
         public DateTime? NextAiring { get; set; }
         public String Network { get; set; }
         public String AirTime { get; set; }
-        public Int32 UtcOffset { get; set; }
         public List<Core.MediaCover.MediaCover> Images { get; set; }
 
         public String RemotePoster { get; set; }

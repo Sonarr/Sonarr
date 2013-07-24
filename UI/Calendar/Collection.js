@@ -9,7 +9,7 @@ define(
             model: EpisodeModel,
 
             comparator: function (model) {
-                var date = new Date(model.get('airDate'));
+                var date = new Date(model.get('airDateUtc'));
                 var time = date.getTime();
                 return time;
             }

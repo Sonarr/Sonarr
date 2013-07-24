@@ -9,7 +9,7 @@ define(
 
             initialize: function () {
                 if (this.has('series')) {
-                    var start = Moment(this.get('airDate'));
+                    var start = Moment(this.get('airDateUtc'));
                     var runtime = this.get('series').get('runtime');
 
                     this.set('end', start.add('minutes', runtime));

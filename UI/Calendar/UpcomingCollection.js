@@ -10,11 +10,11 @@ define(
             model: EpisodeModel,
 
             comparator: function (model1, model2) {
-                var airDate1 = model1.get('airDate');
+                var airDate1 = model1.get('airDateUtc');
                 var date1 = Moment(airDate1);
                 var time1 = date1.unix();
 
-                var airDate2 = model2.get('airDate');
+                var airDate2 = model2.get('airDateUtc');
                 var date2 = Moment(airDate2);
                 var time2 = date2.unix();
 

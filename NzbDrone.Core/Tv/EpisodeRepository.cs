@@ -106,8 +106,8 @@ namespace NzbDrone.Core.Tv
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
         {
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                        .Where<Episode>(e => e.AirDate >= startDate)
-                        .AndWhere(e => e.AirDate <= endDate)
+                        .Where<Episode>(e => e.AirDateUtc >= startDate)
+                        .AndWhere(e => e.AirDateUtc <= endDate)
                         .AndWhere(e => e.Monitored)
                         .AndWhere(e => e.Series.Monitored)
                         .ToList();
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Tv
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
                         .Where(e => e.EpisodeFileId == 0)
                         .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                        .AndWhere(e => e.AirDate <= currentTime)
+                        .AndWhere(e => e.AirDateUtc <= currentTime)
                         .AndWhere(e => e.Monitored)
                         .AndWhere(e => e.Series.Monitored)
                         .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())

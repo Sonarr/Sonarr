@@ -12,6 +12,7 @@ namespace NzbDrone.Api.Episodes
         public Int32 EpisodeNumber { get; set; }
         public String Title { get; set; }
         public DateTime? AirDate { get; set; }
+        public DateTime? AirDateUtc { get; set; }
         public String Overview { get; set; }
         public EpisodeFile EpisodeFile { get; set; }
 

@@ -10,7 +10,7 @@ define(
 
             state: {
                 pageSize: 15,
-                sortKey : 'airDate',
+                sortKey : 'airDateUtc',
                 order   : 1
             },
 
