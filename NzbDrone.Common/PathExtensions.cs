@@ -10,6 +10,7 @@ namespace NzbDrone.Common
         private const string NZBDRONE_DB = "nzbdrone.db";
         private const string NZBDRONE_LOG_DB = "logs.db";
         private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
+        private const string NLOG_CONFIG_FILE = "nlog.config";
 
         private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone" + Path.DirectorySeparatorChar;
@@ -69,7 +70,6 @@ namespace NzbDrone.Common
             DirectoryInfo dirInfo = fileInfo.Directory;
             return Path.Combine(GetProperCapitalization(dirInfo), dirInfo.GetFiles(fileInfo.Name)[0].Name);
         }
-
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)
         {
@@ -134,6 +134,11 @@ namespace NzbDrone.Common
         public static string GetLogDatabase(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(GetAppDataPath(appFolderInfo), NZBDRONE_LOG_DB);
+        }
+
+        public static string GetNlogConfigPath(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(appFolderInfo.StartUpFolder, NLOG_CONFIG_FILE);
         }
     }
 }

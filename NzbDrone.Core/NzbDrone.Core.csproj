@@ -180,6 +180,7 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
+    <Compile Include="Configuration\Events\ConfigFileSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
+    <Compile Include="Instrumentation\SetLoggingLevel.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
     <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />

@@ -6,6 +6,8 @@ using System.Xml.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Configuration.Events;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -19,19 +21,22 @@ namespace NzbDrone.Core.Configuration
         bool AuthenticationEnabled { get; }
         string Username { get; }
         string Password { get; }
+        string LogLevel { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
     {
         private readonly IAppFolderInfo _appFolderInfo;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger)
+        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IMessageAggregator messageAggregator)
         {
             _appFolderInfo = appFolderInfo;
             _cache = cacheManger.GetCache<string>(GetType());
+            _messageAggregator = messageAggregator;
             _configFile = _appFolderInfo.GetConfigPath();
         }
 
@@ -72,7 +77,7 @@ namespace NzbDrone.Core.Configuration
                 }
             }
 
-
+            _messageAggregator.PublishEvent(new ConfigFileSavedEvent());
         }
 
         public int Port
@@ -98,6 +103,11 @@ namespace NzbDrone.Core.Configuration
         public string Password
         {
             get { return GetValue("Password", ""); }
+        }
+
+        public string LogLevel
+        {
+            get { return GetValue("LogLevel", "Info"); }
         }
 
         public int GetValueInt(string key, int defaultValue)

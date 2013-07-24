@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
+using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Core.Configuration
 {
