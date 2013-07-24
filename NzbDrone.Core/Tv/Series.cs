@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Tv
         public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public string Network { get; set; }
-        public DateTime? CustomStartDate { get; set; }
         public bool UseSceneNumbering { get; set; }
         public string TitleSlug { get; set; }
         public string Path { get; set; }

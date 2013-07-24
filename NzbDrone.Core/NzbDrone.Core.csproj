@@ -212,6 +212,7 @@
     <Compile Include="Datastore\Migration\009_fix_renameEpisodes.cs" />
     <Compile Include="Datastore\Migration\010_add_monitored.cs" />
     <Compile Include="Datastore\Migration\011_remove_ignored.cs" />
+    <Compile Include="Datastore\Migration\012_remove_custom_start_date.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -239,7 +240,6 @@
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
     <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\CustomStartDateSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\MonitoredEpisodeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />

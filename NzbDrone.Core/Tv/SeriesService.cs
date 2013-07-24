@@ -95,7 +95,6 @@ namespace NzbDrone.Core.Tv
                 series.Monitored = edited.Monitored;
                 series.SeasonFolder = edited.SeasonFolder;
                 series.Path = edited.Path;
-                series.CustomStartDate = edited.CustomStartDate;
 
                 _seriesRepository.Update(series);
             }
