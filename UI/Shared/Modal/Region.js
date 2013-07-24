@@ -39,11 +39,17 @@ define(
 
         });
 
-        app.addInitializer(function () {
-            app.addRegions({
-                modalRegion       : region
+        require(
+            [
+                'Shared/Modal/Controller'
+            ], function () {
+
+                app.addInitializer(function () {
+                    app.addRegions({
+                        modalRegion: region
+                    });
+                });
             });
-        });
 
         return region;
     });

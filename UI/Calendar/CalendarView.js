@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 
 define(
     [
@@ -6,7 +6,6 @@ define(
         'marionette',
         'moment',
         'Calendar/Collection',
-        'Episode/Layout',
         'fullcalendar'
     ], function (App, Marionette, Moment, CalendarCollection, EpisodeLayout) {
 
@@ -37,7 +36,7 @@ define(
                         $(element).addClass(event.statusLevel);
                         $(element).children('.fc-event-inner').addClass(event.statusLevel);
                     },
-                    eventClick : function (event) {
+                    eventClick    : function (event) {
                         var view = new EpisodeLayout({ model: event.model });
                         App.modalRegion.show(view);
                     }

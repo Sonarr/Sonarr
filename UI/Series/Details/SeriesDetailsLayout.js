@@ -6,11 +6,10 @@ define(
         'Series/EpisodeCollection',
         'Series/SeasonCollection',
         'Series/Details/SeasonCollectionView',
-        'Series/Edit/EditSeriesView',
         'Shared/LoadingView',
         'Shared/Actioneer',
         'backstrech'
-    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, EditSeriesView, LoadingView, Actioneer) {
+    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -78,7 +77,7 @@ define(
             _getFanArt: function () {
                 var fanArt = _.where(this.model.get('images'), {coverType: 'fanart'});
 
-                if(fanArt && fanArt[0]){
+                if (fanArt && fanArt[0]) {
                     return fanArt[0].url;
                 }
 
@@ -117,18 +116,17 @@ define(
             },
 
             _editSeries: function () {
-                var view = new EditSeriesView({ model: this.model });
-                App.modalRegion.show(view);
+                App.vent.trigger(App.Commands.EditSeriesCommand, {model: this.model});
             },
 
             _refreshSeries: function () {
                 Actioneer.ExecuteCommand({
-                    command    : 'refreshSeries',
-                    properties : {
-                        seriesId    : this.model.get('id')
+                    command   : 'refreshSeries',
+                    properties: {
+                        seriesId: this.model.get('id')
                     },
-                    element    : this.ui.refresh,
-                    leaveIcon  : true
+                    element   : this.ui.refresh,
+                    leaveIcon : true
                 });
             },
 
@@ -143,7 +141,7 @@ define(
                 Actioneer.ExecuteCommand({
                     command    : 'renameSeries',
                     properties : {
-                        seriesId    : this.model.get('id')
+                        seriesId: this.model.get('id')
                     },
                     element    : this.ui.rename,
                     failMessage: 'Series search failed'
@@ -154,7 +152,7 @@ define(
                 Actioneer.ExecuteCommand({
                     command     : 'seriesSearch',
                     properties  : {
-                        seriesId    : this.model.get('id')
+                        seriesId: this.model.get('id')
                     },
                     element     : this.ui.search,
                     failMessage : 'Series search failed',

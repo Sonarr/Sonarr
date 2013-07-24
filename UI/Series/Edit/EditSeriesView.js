@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(
     [
-        'App',
+        'app',
         'marionette',
         'Series/Delete/DeleteSeriesView',
         'Quality/QualityProfileCollection',
@@ -18,8 +18,8 @@ define(
             },
 
             events: {
-                'click .x-save'  : 'saveSeries',
-                'click .x-remove': 'removeSeries'
+                'click .x-save'  : '_saveSeries',
+                'click .x-remove': '_removeSeries'
             },
 
 
@@ -28,22 +28,23 @@ define(
             },
 
 
-            saveSeries: function () {
+            _saveSeries: function () {
 
+                var self = this;
                 var qualityProfileId = this.ui.qualityProfile.val();
                 this.model.set({ qualityProfileId: qualityProfileId});
 
-                this.model.save();
-                this.trigger('saved');
-                App.modalRegion.closeModal();
-
+                this.model.save().done(function () {
+                    self.trigger('saved');
+                    App.vent.trigger(App.Commands.CloseModalCommand);
+                });
             },
 
             onRender: function () {
                 this.ui.path.autoComplete('/directories');
             },
 
-            removeSeries: function () {
+            _removeSeries: function () {
                 var view = new DeleteSeriesView({ model: this.model });
                 App.modalRegion.show(view);
             }

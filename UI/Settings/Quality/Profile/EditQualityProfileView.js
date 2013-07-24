@@ -63,7 +63,7 @@ define(['app', 'marionette', 'Mixins/AsModelBoundView'], function (App, Marionet
             if (promise) {
                 promise.done(function () {
                     self.profileCollection.add(self.model, { merge: true });
-                    App.modalRegion.closeModal();
+                    App.vent.trigger(App.Commands.CloseModalCommand);
                 });
             }
         }

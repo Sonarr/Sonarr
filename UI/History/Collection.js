@@ -1,9 +1,9 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'History/Model',
         'backbone.pageable'
-    ], function ( HistoryModel, PageableCollection) {
+    ], function (HistoryModel, PageableCollection) {
         return PageableCollection.extend({
             url  : window.ApiRoot + '/history',
             model: HistoryModel,

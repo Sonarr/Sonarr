@@ -39,7 +39,7 @@ define([
             if (promise) {
                 promise.done(function () {
                     self.notificationCollection.add(self.model, { merge: true });
-                    App.modalRegion.closeModal();
+                    App.vent.trigger(App.Commands.CloseModalCommand);
                 });
             }
         },

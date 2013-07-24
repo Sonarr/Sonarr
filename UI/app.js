@@ -170,12 +170,16 @@ define(
         var app = new Marionette.Application();
 
         app.Events = {
-            SeriesAdded: 'series:added',
+            SeriesAdded  : 'series:added',
             SeriesDeleted: 'series:deleted'
         };
 
         app.Commands = {
-            SaveSettings: 'saveSettings'
+            EditSeriesCommand  : 'EditSeriesCommand',
+            DeleteSeriesCommand: 'DeleteSeriesCommand',
+            CloseModalCommand  : 'CloseModalCommand',
+            ShowEpisodeDetails : 'ShowEpisodeDetails',
+            SaveSettings       : 'saveSettings'
         };
 
         app.addInitializer(function () {
@@ -183,8 +187,8 @@ define(
         });
 
         app.addRegions({
-            mainRegion        : '#main-region',
-            footerRegion      : '#footer-region'
+            mainRegion  : '#main-region',
+            footerRegion: '#footer-region'
         });
 
         app.start();

@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 
 define(
     [
@@ -11,7 +11,7 @@ define(
             template: 'Settings/Indexers/EditTemplate',
 
             events: {
-                'click .x-save': '_save',
+                'click .x-save'        : '_save',
                 'click .x-save-and-add': '_saveAndAdd'
             },
 
@@ -26,7 +26,7 @@ define(
                 if (promise) {
                     promise.done(function () {
                         self.indexerCollection.add(self.model, { merge: true });
-                        App.modalRegion.closeModal();
+                        App.vent.trigger(App.Commands.CloseModalCommand);
                     });
                 }
             },
@@ -40,13 +40,13 @@ define(
                         self.indexerCollection.add(self.model, { merge: true });
 
                         self.model.set({
-                            id: undefined,
-                            name: '',
+                            id    : undefined,
+                            name  : '',
                             enable: false
                         });
 
                         _.each(self.model.get('fields'), function (value, key, list) {
-                            self.model.set('fields.' + key +'.value', '');
+                            self.model.set('fields.' + key + '.value', '');
                         });
                     });
                 }
