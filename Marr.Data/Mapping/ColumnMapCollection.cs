@@ -30,12 +30,12 @@ namespace Marr.Data.Mapping
 
         public ColumnMap GetByColumnName(string columnName)
         {
-            return this.Find(m => m.ColumnInfo.Name == columnName);
+            return Find(m => m.ColumnInfo.Name == columnName);
         }
 
         public ColumnMap GetByFieldName(string fieldName)
         {
-            return this.Find(m => m.FieldName == fieldName);
+            return Find(m => m.FieldName == fieldName);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Marr.Data.Mapping
         /// <returns>A list of mapped columns that are present in the sql statement as parameters.</returns>
         public ColumnMapCollection OrderParameters(DbCommand command)
         {
-            if (command.CommandType == CommandType.Text && this.Count > 0)
+            if (command.CommandType == CommandType.Text && Count > 0)
             {
                 string commandTypeString = command.GetType().ToString();
                 if (commandTypeString.Contains("Oracle") || commandTypeString.Contains("OleDb"))
@@ -120,7 +120,7 @@ namespace Marr.Data.Mapping
                     Regex regex = new Regex(regexString);
                     foreach (Match m in regex.Matches(command.CommandText))
                     {
-                        ColumnMap matchingColumn = this.Find(c => string.Concat(paramPrefix, c.ColumnInfo.Name.ToLower()) == m.Value.ToLower());
+                        ColumnMap matchingColumn = Find(c => string.Concat(paramPrefix, c.ColumnInfo.Name.ToLower()) == m.Value.ToLower());
                         if (matchingColumn != null)
                             columns.Add(matchingColumn);
                     }
@@ -148,7 +148,7 @@ namespace Marr.Data.Mapping
         /// <returns></returns>
         public ColumnMapCollection PrefixAltNames(string prefix)
         {
-            this.ForEach(c => c.ColumnInfo.AltName = c.ColumnInfo.Name.Insert(0, prefix));
+            ForEach(c => c.ColumnInfo.AltName = c.ColumnInfo.Name.Insert(0, prefix));
             return this;
         }
 
@@ -163,7 +163,7 @@ namespace Marr.Data.Mapping
         /// <returns></returns>
         public ColumnMapCollection SuffixAltNames(string suffix)
         {
-            this.ForEach(c => c.ColumnInfo.AltName = c.ColumnInfo.Name + suffix);
+            ForEach(c => c.ColumnInfo.AltName = c.ColumnInfo.Name + suffix);
             return this;
         }
 

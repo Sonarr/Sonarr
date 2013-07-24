@@ -1,4 +1,6 @@
-﻿namespace Marr.Data.QGen
+﻿using Marr.Data.QGen.Dialects;
+
+namespace Marr.Data.QGen
 {
     /// <summary>
     /// This class creates a SQL delete query.
@@ -7,9 +9,9 @@
     {
         protected Table TargetTable { get; set; }
         protected string WhereClause { get; set; }
-        protected Dialects.Dialect Dialect { get; set; }
+        protected Dialect Dialect { get; set; }
 
-        public DeleteQuery(Dialects.Dialect dialect, Table targetTable, string whereClause)
+        public DeleteQuery(Dialect dialect, Table targetTable, string whereClause)
         {
             Dialect = dialect;
             TargetTable = targetTable;

@@ -78,7 +78,7 @@ namespace Marr.Data.QGen
 
         protected override Expression VisitMethodCall(MethodCallExpression expression)
         {
-            string method = (expression as System.Linq.Expressions.MethodCallExpression).Method.Name;
+            string method = (expression as MethodCallExpression).Method.Name;
             switch (method)
             {
                 case "Contains":
@@ -270,7 +270,7 @@ namespace Marr.Data.QGen
         internal void Append(WhereBuilder<T> where, WhereAppendType appendType)
         {
             _constantWhereClause = string.Format("{0} {1} {2}",
-                this.ToString(),
+                ToString(),
                 appendType.ToString(),
                 where.ToString().Replace("WHERE ", string.Empty));
         }

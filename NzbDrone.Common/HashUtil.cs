@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -53,7 +54,7 @@ namespace NzbDrone.Common
             var byteSize = (length / 4) * 3;
 
             var linkBytes = new byte[byteSize];
-            var rngCrypto = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            var rngCrypto = new RNGCryptoServiceProvider();
             rngCrypto.GetBytes(linkBytes);
             var base64String = Convert.ToBase64String(linkBytes);
 

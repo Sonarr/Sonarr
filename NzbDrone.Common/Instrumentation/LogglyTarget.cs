@@ -42,7 +42,7 @@ namespace NzbDrone.Common.Instrumentation
         }
 
 
-        protected override void Write(NLog.LogEventInfo logEvent)
+        protected override void Write(LogEventInfo logEvent)
         {
             var dictionary = new Dictionary<string, object>();
 

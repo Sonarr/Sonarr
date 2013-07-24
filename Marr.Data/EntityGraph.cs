@@ -84,7 +84,7 @@ namespace Marr.Data
             }
 
             // Create a new EntityGraph for each child relationship that is not lazy loaded
-            foreach (Relationship childRelationship in this.Relationships)
+            foreach (Relationship childRelationship in Relationships)
             {
                 if (!childRelationship.IsLazyLoaded)
                 {
@@ -169,7 +169,7 @@ namespace Marr.Data
             _entity = entityInstance;
 
             // Add newly created entityInstance to list (Many) or set it to field (One)
-            if (this.IsRoot)
+            if (IsRoot)
             {
                 RootList.Add(entityInstance);
             }
@@ -213,7 +213,7 @@ namespace Marr.Data
             bool isNewGroup = false;
 
             // Get primary keys from parent entity and any one-to-one child entites
-            GroupingKeyCollection groupingKeyColumns = this.GroupingKeyColumns;
+            GroupingKeyCollection groupingKeyColumns = GroupingKeyColumns;
 
             // Concatenate column values
             KeyGroupInfo keyGroupInfo = groupingKeyColumns.CreateGroupingKey(reader);
@@ -265,7 +265,7 @@ namespace Marr.Data
 
         private object FindParentReference()
         {
-            var parent = this.Parent.Parent;
+            var parent = Parent.Parent;
             while (parent != null)
             {
                 if (parent._entityType == _relationship.MemberType)
@@ -333,7 +333,7 @@ namespace Marr.Data
             // * Only 1-1 entities with no children are allowed to have 0 PKs specified.
             if ((groupingKeyColumns.PrimaryKeys.Count == 0 && _children.Count > 0) ||
                 (groupingKeyColumns.PrimaryKeys.Count == 0 && !IsRoot && _relationship.RelationshipInfo.RelationType == RelationshipTypes.Many))
-                throw new MissingPrimaryKeyException(string.Format("There are no primary key mappings defined for the following entity: '{0}'.", this.EntityType.Name));
+                throw new MissingPrimaryKeyException(string.Format("There are no primary key mappings defined for the following entity: '{0}'.", EntityType.Name));
 
             // Add parent's keys
             if (IsChild)
@@ -378,7 +378,7 @@ namespace Marr.Data
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         #endregion

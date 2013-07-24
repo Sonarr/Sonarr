@@ -27,7 +27,7 @@ namespace Marr.Data.Mapping.Strategies
 
         
 
-        protected override void CreateColumnMap(Type entityType, System.Reflection.MemberInfo member, ColumnAttribute columnAtt, ColumnMapCollection columnMaps)
+        protected override void CreateColumnMap(Type entityType, MemberInfo member, ColumnAttribute columnAtt, ColumnMapCollection columnMaps)
         {
             if (ColumnPredicate(member))
             {
@@ -36,7 +36,7 @@ namespace Marr.Data.Mapping.Strategies
             }
         }
 
-        protected override void CreateRelationship(Type entityType, System.Reflection.MemberInfo member, RelationshipAttribute relationshipAtt, RelationshipCollection relationships)
+        protected override void CreateRelationship(Type entityType, MemberInfo member, RelationshipAttribute relationshipAtt, RelationshipCollection relationships)
         {
             if (RelationshipPredicate(member))
             {

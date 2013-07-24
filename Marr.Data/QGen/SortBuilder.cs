@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq.Expressions;
@@ -243,7 +244,7 @@ namespace Marr.Data.QGen
 
         public virtual IEnumerator<T> GetEnumerator()
         {
-            var list = this.ToList();
+            var list = ToList();
             return list.GetEnumerator();
         }
 
@@ -251,7 +252,7 @@ namespace Marr.Data.QGen
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

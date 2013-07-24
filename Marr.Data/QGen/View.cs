@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.Mapping;
 
@@ -11,7 +12,7 @@ namespace Marr.Data.QGen
     {
         private string _viewName;
         private Table[] _tables;
-        private Mapping.ColumnMapCollection _columns;
+        private ColumnMapCollection _columns;
 
         public View(string viewName, Table[] tables)
             : base(tables[0].EntityType, JoinType.None)
@@ -58,7 +59,7 @@ namespace Marr.Data.QGen
         /// <summary>
         /// Gets all the columns from all the tables included in the view.
         /// </summary>
-        public override Mapping.ColumnMapCollection Columns
+        public override ColumnMapCollection Columns
         {
             get
             {
@@ -81,9 +82,9 @@ namespace Marr.Data.QGen
             }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

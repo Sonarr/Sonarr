@@ -14,6 +14,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
+using System.Data;
 using System.Data.OleDb;
 
 namespace Marr.Data.Parameters
@@ -59,7 +60,7 @@ namespace Marr.Data.Parameters
                 return OleDbType.Variant;
         }
 
-        public void SetDbType(System.Data.IDbDataParameter param, Enum dbType)
+        public void SetDbType(IDbDataParameter param, Enum dbType)
         {
             var oleDbParam = (OleDbParameter)param;
             oleDbParam.OleDbType = (OleDbType)dbType;

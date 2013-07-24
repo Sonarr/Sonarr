@@ -62,7 +62,7 @@ namespace Marr.Data.Parameters
                 return DbType.Object;
         }
 
-        public void SetDbType(System.Data.IDbDataParameter param, Enum dbType)
+        public void SetDbType(IDbDataParameter param, Enum dbType)
         {
             param.DbType = (DbType)dbType;
         }

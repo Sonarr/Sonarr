@@ -35,7 +35,7 @@ namespace Marr.Data.QGen
                 case ExpressionType.Not:
                 case ExpressionType.Quote:
                 case ExpressionType.TypeAs:
-                    return this.VisitUnary((UnaryExpression)expression);
+                    return VisitUnary((UnaryExpression)expression);
                 case ExpressionType.Add:
                 case ExpressionType.AddChecked:
                 case ExpressionType.And:
@@ -60,15 +60,15 @@ namespace Marr.Data.QGen
                 case ExpressionType.RightShift:
                 case ExpressionType.Subtract:
                 case ExpressionType.SubtractChecked:
-                    return this.VisitBinary((BinaryExpression)expression);
+                    return VisitBinary((BinaryExpression)expression);
                 case ExpressionType.Call:
-                    return this.VisitMethodCall((MethodCallExpression)expression);
+                    return VisitMethodCall((MethodCallExpression)expression);
                 case ExpressionType.Constant:
-                    return this.VisitConstant((ConstantExpression)expression);
+                    return VisitConstant((ConstantExpression)expression);
                 case ExpressionType.MemberAccess:
-                    return this.VisitMemberAccess((MemberExpression)expression);
+                    return VisitMemberAccess((MemberExpression)expression);
                 case ExpressionType.Parameter:
-                    return this.VisitParameter((ParameterExpression)expression);
+                    return VisitParameter((ParameterExpression)expression);
 
             }
             throw new ArgumentOutOfRangeException("expression", expression.NodeType.ToString());
@@ -111,8 +111,8 @@ namespace Marr.Data.QGen
         /// <returns></returns>
         protected virtual Expression VisitBinary(BinaryExpression expression)
         {
-            this.Visit(expression.Left);
-            this.Visit(expression.Right);
+            Visit(expression.Left);
+            Visit(expression.Right);
             return expression;
         }
 
@@ -123,7 +123,7 @@ namespace Marr.Data.QGen
         /// <returns></returns>
         protected virtual Expression VisitUnary(UnaryExpression expression)
         {
-            this.Visit(expression.Operand);
+            Visit(expression.Operand);
             return expression;
         }
 
@@ -134,7 +134,7 @@ namespace Marr.Data.QGen
         /// <returns></returns>
         protected virtual Expression VisitLamda(LambdaExpression lambdaExpression)
         {
-            this.Visit(lambdaExpression.Body);
+            Visit(lambdaExpression.Body);
             return lambdaExpression;
         }
 

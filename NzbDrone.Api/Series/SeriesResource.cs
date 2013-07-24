@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Series
@@ -22,7 +23,7 @@ namespace NzbDrone.Api.Series
         public DateTime? NextAiring { get; set; }
         public String Network { get; set; }
         public String AirTime { get; set; }
-        public List<Core.MediaCover.MediaCover> Images { get; set; }
+        public List<MediaCover> Images { get; set; }
 
         public String RemotePoster { get; set; }
 

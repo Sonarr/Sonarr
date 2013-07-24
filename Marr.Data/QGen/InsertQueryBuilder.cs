@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Marr.Data.Mapping;
 using System.Linq.Expressions;
+using Marr.Data.QGen.Dialects;
 
 namespace Marr.Data.QGen
 {
@@ -15,7 +16,7 @@ namespace Marr.Data.QGen
         private SqlModes _previousSqlMode;
         private bool _generateQuery = true;
         private bool _getIdentityValue;
-        private Dialects.Dialect _dialect;
+        private Dialect _dialect;
         private ColumnMapCollection _columnsToInsert;
 
         public InsertQueryBuilder()

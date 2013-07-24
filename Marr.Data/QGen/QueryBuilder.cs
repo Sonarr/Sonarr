@@ -6,6 +6,7 @@ using System.Reflection;
 using Marr.Data.Mapping;
 using System.Data.Common;
 using System.Collections;
+using Marr.Data.QGen.Dialects;
 
 namespace Marr.Data.QGen
 {
@@ -19,7 +20,7 @@ namespace Marr.Data.QGen
         #region - Private Members -
 
         private DataMapper _db;
-        private Dialects.Dialect _dialect;
+        private Dialect _dialect;
         private TableCollection _tables;
         private WhereBuilder<T> _whereBuilder;
         private SortBuilder<T> _sortBuilder;
@@ -71,7 +72,7 @@ namespace Marr.Data.QGen
             // Used only for unit testing with mock frameworks
         }
 
-        public QueryBuilder(DataMapper db, Dialects.Dialect dialect)
+        public QueryBuilder(DataMapper db, Dialect dialect)
         {
             _db = db;
             _dialect = dialect;
@@ -499,7 +500,7 @@ namespace Marr.Data.QGen
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        protected override System.Linq.Expressions.Expression Visit(System.Linq.Expressions.Expression expression)
+        protected override Expression Visit(Expression expression)
         {
             return base.Visit(expression);
         }
@@ -509,9 +510,9 @@ namespace Marr.Data.QGen
         /// </summary>
         /// <param name="lambdaExpression"></param>
         /// <returns></returns>
-        protected override System.Linq.Expressions.Expression VisitLamda(System.Linq.Expressions.LambdaExpression lambdaExpression)
+        protected override Expression VisitLamda(LambdaExpression lambdaExpression)
         {
-            _sortBuilder = this.Where(lambdaExpression as Expression<Func<T, bool>>);
+            _sortBuilder = Where(lambdaExpression as Expression<Func<T, bool>>);
             return base.VisitLamda(lambdaExpression);
         }
 
@@ -520,16 +521,16 @@ namespace Marr.Data.QGen
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        protected override System.Linq.Expressions.Expression VisitMethodCall(MethodCallExpression expression)
+        protected override Expression VisitMethodCall(MethodCallExpression expression)
         {
             if (expression.Method.Name == "OrderBy" || expression.Method.Name == "ThenBy")
             {
-                var memberExp = ((expression.Arguments[1] as UnaryExpression).Operand as System.Linq.Expressions.LambdaExpression).Body as System.Linq.Expressions.MemberExpression;
+                var memberExp = ((expression.Arguments[1] as UnaryExpression).Operand as LambdaExpression).Body as MemberExpression;
                 _sortBuilder.Order(memberExp.Expression.Type, memberExp.Member.Name);
             }
             if (expression.Method.Name == "OrderByDescending" || expression.Method.Name == "ThenByDescending")
             {
-                var memberExp = ((expression.Arguments[1] as UnaryExpression).Operand as System.Linq.Expressions.LambdaExpression).Body as System.Linq.Expressions.MemberExpression;
+                var memberExp = ((expression.Arguments[1] as UnaryExpression).Operand as LambdaExpression).Body as MemberExpression;
                 _sortBuilder.OrderByDescending(memberExp.Expression.Type, memberExp.Member.Name);
             }
 
@@ -540,14 +541,14 @@ namespace Marr.Data.QGen
         {
             _isJoin = true;
             MemberInfo rightMember = (rightEntity.Body as MemberExpression).Member;
-            return this.Join(joinType, rightMember, filterExpression);
+            return Join(joinType, rightMember, filterExpression);
         }
 
         public virtual QueryBuilder<T> Join<TLeft, TRight>(JoinType joinType, Expression<Func<TLeft, TRight>> rightEntity, Expression<Func<TLeft, TRight, bool>> filterExpression)
         {
             _isJoin = true;
             MemberInfo rightMember = (rightEntity.Body as MemberExpression).Member;
-            return this.Join(joinType, rightMember, filterExpression);
+            return Join(joinType, rightMember, filterExpression);
         }
 
         public virtual QueryBuilder<T> Join<TLeft, TRight>(JoinType joinType, MemberInfo rightMember, Expression<Func<TLeft, TRight, bool>> filterExpression)
@@ -598,7 +599,7 @@ namespace Marr.Data.QGen
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            var list = this.ToList();
+            var list = ToList();
             return list.GetEnumerator();
         }
 
@@ -608,7 +609,7 @@ namespace Marr.Data.QGen
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            var list = this.ToList();
+            var list = ToList();
             return list.GetEnumerator();
         }
 

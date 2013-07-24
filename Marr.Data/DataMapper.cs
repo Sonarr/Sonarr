@@ -131,7 +131,7 @@ namespace Marr.Data
             if (parameter.Value == null)
                 parameter.Value = DBNull.Value;
 
-            this.Parameters.Add(parameter);
+            Parameters.Add(parameter);
             return parameter;
         }
 
@@ -395,7 +395,7 @@ namespace Marr.Data
 
         public int InsertDataTable(DataTable table, string insertSP)
         {
-            return this.InsertDataTable(table, insertSP, UpdateRowSource.None);
+            return InsertDataTable(table, insertSP, UpdateRowSource.None);
         }
 
         public int InsertDataTable(DataTable dt, string sql, UpdateRowSource updateRowSource)
@@ -462,7 +462,7 @@ namespace Marr.Data
 
         public T Find<T>(string sql)
         {
-            return this.Find<T>(sql, default(T));
+            return Find<T>(sql, default(T));
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace Marr.Data
         /// <returns>Returns a QueryBuilder of T.</returns>
         public QueryBuilder<T> Query<T>()
         {
-            var dialect = QGen.QueryFactory.CreateDialect(this);
+            var dialect = QueryFactory.CreateDialect(this);
             return new QueryBuilder<T>(this, dialect);
         }
 
@@ -783,7 +783,7 @@ namespace Marr.Data
         public int Delete<T>(string tableName, Expression<Func<T, bool>> filter)
         {
             // Remember sql mode
-            var previousSqlMode = this.SqlMode;
+            var previousSqlMode = SqlMode;
             SqlMode = SqlModes.Text;
 
             var mappingHelper = new MappingHelper(this);
@@ -791,7 +791,7 @@ namespace Marr.Data
             {
                 tableName = MapRepository.Instance.GetTableName(typeof(T));
             }
-            var dialect = QGen.QueryFactory.CreateDialect(this);
+            var dialect = QueryFactory.CreateDialect(this);
             TableCollection tables = new TableCollection();
             tables.Add(new Table(typeof(T)));
             var where = new WhereBuilder<T>(Command, dialect, filter, tables, false, false);

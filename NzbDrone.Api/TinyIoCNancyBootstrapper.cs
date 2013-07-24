@@ -17,7 +17,7 @@ namespace NzbDrone.Api
         /// <returns>INancyEngine implementation</returns>
         protected override sealed INancyEngine GetEngineInternal()
         {
-            return this.ApplicationContainer.Resolve<INancyEngine>();
+            return ApplicationContainer.Resolve<INancyEngine>();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace NzbDrone.Api
         /// <returns>IModuleKeyGenerator instance</returns>
         protected override sealed IModuleKeyGenerator GetModuleKeyGenerator()
         {
-            return this.ApplicationContainer.Resolve<IModuleKeyGenerator>();
+            return ApplicationContainer.Resolve<IModuleKeyGenerator>();
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace NzbDrone.Api
         /// <returns>Request container instance</returns>
         protected override sealed TinyIoCContainer CreateRequestContainer()
         {
-            return this.ApplicationContainer.GetChildContainer();
+            return ApplicationContainer.GetChildContainer();
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace NzbDrone.Api
         /// <returns>IDagnostics implementation</returns>
         protected override IDiagnostics GetDiagnostics()
         {
-            return this.ApplicationContainer.Resolve<IDiagnostics>();
+            return ApplicationContainer.Resolve<IDiagnostics>();
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace NzbDrone.Api
         /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IApplicationStartup"/> instances. </returns>
         protected override IEnumerable<IApplicationStartup> GetApplicationStartupTasks()
         {
-            return this.ApplicationContainer.ResolveAll<IApplicationStartup>(false);
+            return ApplicationContainer.ResolveAll<IApplicationStartup>(false);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace NzbDrone.Api
         /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IApplicationRegistrations"/> instances.</returns>
         protected override IEnumerable<IApplicationRegistrations> GetApplicationRegistrationTasks()
         {
-            return this.ApplicationContainer.ResolveAll<IApplicationRegistrations>(false);
+            return ApplicationContainer.ResolveAll<IApplicationRegistrations>(false);
         }
 
         /// <summary>

@@ -53,10 +53,10 @@ namespace Marr.Data
             ReflectionStrategy = new SimpleReflectionStrategy();
 
             // Register a default type converter for Enums
-            TypeConverters.Add(typeof(Enum), new Converters.EnumStringConverter());
+            TypeConverters.Add(typeof(Enum), new EnumStringConverter());
 
             // Register a default IDbTypeBuilder
-            _dbTypeBuilder = new Parameters.DbTypeBuilder();
+            _dbTypeBuilder = new DbTypeBuilder();
 
             _columnMapStrategies = new Dictionary<Type, IMapStrategy>();
             RegisterDefaultMapStrategy(new AttributeMapStrategy());

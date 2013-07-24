@@ -14,6 +14,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
+using System.Collections;
 using System.Reflection;
 
 namespace Marr.Data.Mapping.Strategies
@@ -70,7 +71,7 @@ namespace Marr.Data.Mapping.Strategies
                 if (member.MemberType == MemberTypes.Property)
                 {
                     PropertyInfo propertyInfo = member as PropertyInfo;
-                    if (typeof(System.Collections.ICollection).IsAssignableFrom(propertyInfo.PropertyType))
+                    if (typeof(ICollection).IsAssignableFrom(propertyInfo.PropertyType))
                     {
                         Relationship relationship = new Relationship(member);
                         relationships.Add(relationship);

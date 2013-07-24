@@ -55,9 +55,9 @@ namespace Marr.Data.Mapping
         public class MappingsFluentColumns<TEntity>
         {
             private bool _publicOnly;
-            private FluentMappings.MappingsFluentEntity<TEntity> _fluentEntity;
+            private MappingsFluentEntity<TEntity> _fluentEntity;
 
-            public MappingsFluentColumns(FluentMappings.MappingsFluentEntity<TEntity> fluentEntity, bool publicOnly)
+            public MappingsFluentColumns(MappingsFluentEntity<TEntity> fluentEntity, bool publicOnly)
             {
                 _fluentEntity = fluentEntity;
                 _publicOnly = publicOnly;
@@ -122,9 +122,9 @@ namespace Marr.Data.Mapping
 
         public class MappingsFluentTables<TEntity>
         {
-            private FluentMappings.MappingsFluentEntity<TEntity> _fluentEntity;
+            private MappingsFluentEntity<TEntity> _fluentEntity;
 
-            public MappingsFluentTables(FluentMappings.MappingsFluentEntity<TEntity> fluentEntity)
+            public MappingsFluentTables(MappingsFluentEntity<TEntity> fluentEntity)
             {
                 _fluentEntity = fluentEntity;
             }
@@ -152,10 +152,10 @@ namespace Marr.Data.Mapping
 
         public class MappingsFluentRelationships<TEntity>
         {
-            private FluentMappings.MappingsFluentEntity<TEntity> _fluentEntity;
+            private MappingsFluentEntity<TEntity> _fluentEntity;
             private bool _publicOnly;
 
-            public MappingsFluentRelationships(FluentMappings.MappingsFluentEntity<TEntity> fluentEntity, bool publicOnly)
+            public MappingsFluentRelationships(MappingsFluentEntity<TEntity> fluentEntity, bool publicOnly)
             {
                 _fluentEntity = fluentEntity;
                 _publicOnly = publicOnly;

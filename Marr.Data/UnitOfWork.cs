@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Marr.Data
 {
@@ -118,8 +119,8 @@ namespace Marr.Data
         public NestedSharedContextRollBackException(string message) : base(message) { }
         public NestedSharedContextRollBackException(string message, Exception inner) : base(message, inner) { }
         protected NestedSharedContextRollBackException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
+          SerializationInfo info,
+          StreamingContext context)
             : base(info, context) { }
     }
 }

@@ -74,18 +74,18 @@ namespace NzbDrone.Core.Indexers
 
         public void CheckForError()
         {
-            if (this.MoveToContent() == XmlNodeType.Element)
+            if (MoveToContent() == XmlNodeType.Element)
             {
-               if (this.Name != "error")
+               if (Name != "error")
                     return;
 
                 var message = "Error: ";
 
-                if (this.HasAttributes)
+                if (HasAttributes)
                 {
-                    while (this.MoveToNextAttribute())
+                    while (MoveToNextAttribute())
                     {
-                        message += String.Format(" [{0}:{1}]", this.Name, this.Value);
+                        message += String.Format(" [{0}:{1}]", Name, Value);
                     }
                 }
 

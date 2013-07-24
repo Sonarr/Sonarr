@@ -1,4 +1,5 @@
 ﻿using System;
+using Marr.Data.Mapping;
 using Marr.Data.QGen.Dialects;
 
 namespace Marr.Data.QGen
@@ -16,19 +17,19 @@ namespace Marr.Data.QGen
         private const string DB_FireBirdClient = "FirebirdSql.Data.FirebirdClient.FirebirdClientFactory";
         private const string DB_SQLiteClient = "System.Data.SQLite.SQLiteFactory";
         
-        public static IQuery CreateUpdateQuery(Mapping.ColumnMapCollection columns, IDataMapper dataMapper, string target, string whereClause)
+        public static IQuery CreateUpdateQuery(ColumnMapCollection columns, IDataMapper dataMapper, string target, string whereClause)
         {
             Dialect dialect = CreateDialect(dataMapper);
             return new UpdateQuery(dialect, columns, dataMapper.Command, target, whereClause);
         }
 
-        public static IQuery CreateInsertQuery(Mapping.ColumnMapCollection columns, IDataMapper dataMapper, string target)
+        public static IQuery CreateInsertQuery(ColumnMapCollection columns, IDataMapper dataMapper, string target)
         {
             Dialect dialect = CreateDialect(dataMapper);
             return new InsertQuery(dialect, columns, dataMapper.Command, target);
         }
 
-        public static IQuery CreateDeleteQuery(Dialects.Dialect dialect, Table targetTable, string whereClause)
+        public static IQuery CreateDeleteQuery(Dialect dialect, Table targetTable, string whereClause)
         {
             return new DeleteQuery(dialect, targetTable, whereClause);
         }
@@ -81,7 +82,7 @@ namespace Marr.Data.QGen
             }
         }
 
-        public static Dialects.Dialect CreateDialect(IDataMapper dataMapper)
+        public static Dialect CreateDialect(IDataMapper dataMapper)
         {
             string providerString = dataMapper.ProviderFactory.ToString();
             switch (providerString)

@@ -28,7 +28,7 @@ namespace Marr.Data.Mapping
         {
             get
             {
-                return this.Find(m => m.Member.Name == fieldName);
+                return Find(m => m.Member.Name == fieldName);
             }
         }
     }

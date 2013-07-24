@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Configuration
         public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger)
         {
             _appFolderInfo = appFolderInfo;
-            _cache = cacheManger.GetCache<string>(this.GetType());
+            _cache = cacheManger.GetCache<string>(GetType());
             _configFile = _appFolderInfo.GetConfigPath();
         }
 

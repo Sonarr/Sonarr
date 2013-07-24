@@ -14,6 +14,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library. If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
+using System.Collections;
 using System.Reflection;
 using Marr.Data.Reflection;
 
@@ -35,7 +36,7 @@ namespace Marr.Data.Mapping
             // Try to determine the RelationshipType
             if (relationshipInfo.RelationType == RelationshipTypes.AutoDetect)
             {
-                if (typeof(System.Collections.ICollection).IsAssignableFrom(MemberType))
+                if (typeof(ICollection).IsAssignableFrom(MemberType))
                 {
                     relationshipInfo.RelationType = RelationshipTypes.Many;
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Marr.Data.Mapping;
 using System.Linq.Expressions;
+using Marr.Data.QGen.Dialects;
 
 namespace Marr.Data.QGen
 {
@@ -16,7 +17,7 @@ namespace Marr.Data.QGen
         private bool _generateQuery = true;
         private TableCollection _tables;
         private Expression<Func<T, bool>> _filterExpression;
-        private Dialects.Dialect _dialect;
+        private Dialect _dialect;
         private ColumnMapCollection _columnsToUpdate;
 
         public UpdateQueryBuilder()

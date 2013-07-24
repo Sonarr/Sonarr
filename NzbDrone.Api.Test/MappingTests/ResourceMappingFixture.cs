@@ -21,6 +21,7 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Update;
 using NzbDrone.Test.Common;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace NzbDrone.Api.Test.MappingTests
     public class ResourceMappingFixture : TestBase
     {
         [TestCase(typeof(Core.Tv.Series), typeof(SeriesResource))]
-        [TestCase(typeof(Core.Tv.Episode), typeof(EpisodeResource))]
+        [TestCase(typeof(Episode), typeof(EpisodeResource))]
         [TestCase(typeof(RootFolder), typeof(RootFolderResource))]
         [TestCase(typeof(NamingConfig), typeof(NamingConfigResource))]
         [TestCase(typeof(Indexer), typeof(IndexerResource))]
