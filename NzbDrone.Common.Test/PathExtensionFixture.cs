@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -69,13 +71,46 @@ namespace NzbDrone.Common.Test
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [Test]
+        public void get_actual_casing_for_none_existing_file_should_throw()
+        {
+            WindowsOnly();
+            Assert.Throws<DirectoryNotFoundException>(() => "C:\\InValidFolder\\invalidfile.exe".GetActualCasing());
+        }
+
+        [Test]
+        public void get_actual_casing_should_return_actual_casing_for_local_file()
+        {
+            var path = Process.GetCurrentProcess().MainModule.FileName;
+            path.ToUpper().GetActualCasing().Should().Be(path);
+            path.ToLower().GetActualCasing().Should().Be(path);
+        }
+
+        [Test]
+        public void get_actual_casing_should_return_actual_casing_for_local_dir()
+        {
+            var path = Directory.GetCurrentDirectory();
+            path.ToUpper().GetActualCasing().Should().Be(path);
+            path.ToLower().GetActualCasing().Should().Be(path);
+        }
+
+
+        [Test]
+        [Explicit]
+        public void get_actual_casing_should_return_original_casing_for_shares()
+        {
+            var path = @"\\server\Pool\Apps";
+            path.GetActualCasing().Should().Be(path);
+        }
+
+
+
 
         [Test]
         public void AppDataDirectory_path_test()
         {
             GetIAppDirectoryInfo().GetAppDataPath().Should().BeEquivalentTo(@"C:\NzbDrone\");
         }
-
 
         [Test]
         public void Config_path_test()

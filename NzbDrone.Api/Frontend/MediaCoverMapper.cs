@@ -16,14 +16,14 @@ namespace NzbDrone.Api.Frontend
         public string Map(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
-            path = path.Trim(Path.DirectorySeparatorChar).ToLower();
+            path = path.Trim(Path.DirectorySeparatorChar);
 
             return Path.Combine(_appFolderInfo.GetAppDataPath(), path);
         }
 
         public bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/mediacover");
+            return resourceUrl.StartsWith("/MediaCover");
         }
     }
 }

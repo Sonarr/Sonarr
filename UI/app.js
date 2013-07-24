@@ -73,7 +73,7 @@ require.config({
         backbone: {
             deps   :
                 [
-                    'mixins/backbone.ajax',
+                    'Mixins/backbone.ajax',
                     'underscore',
                     '$'
                 ],
@@ -87,7 +87,7 @@ require.config({
         'backbone.deepmodel': {
             deps:
                 [
-                    'mixins/underscore.mixin.deepExtend'
+                    'Mixins/underscore.mixin.deepExtend'
                 ]
         },
 
@@ -96,7 +96,7 @@ require.config({
                 [
                     'backbone',
                     'Handlebars/backbone.marionette.templates',
-                    'mixins/AsNamedView'
+                    'Mixins/AsNamedView'
                 ],
 
             exports: 'Marionette',

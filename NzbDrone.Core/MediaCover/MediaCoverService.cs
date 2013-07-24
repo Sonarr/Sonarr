@@ -95,7 +95,7 @@ namespace NzbDrone.Core.MediaCover
             {
                 var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
 
-                mediaCover.Url = @"/mediacover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
+                mediaCover.Url = @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
 
                 if (_diskProvider.FileExists(filePath))
                 {

@@ -78,12 +78,12 @@ namespace NzbDrone.Common.Test.CacheTests
                     {
                         hitCount++;
                         return null;
-                    }, TimeSpan.FromMilliseconds(200));
+                    }, TimeSpan.FromMilliseconds(300));
 
                 Thread.Sleep(10);
             }
 
-            hitCount.Should().BeInRange(4, 6);
+            hitCount.Should().BeInRange(3, 6);
         }
     }
 

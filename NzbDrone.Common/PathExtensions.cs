@@ -41,18 +41,33 @@ namespace NzbDrone.Common
         private static string GetProperCapitalization(DirectoryInfo dirInfo)
         {
             var parentDirInfo = dirInfo.Parent;
-            if (null == parentDirInfo)
-                return dirInfo.Name;
-            return Path.Combine(GetProperCapitalization(parentDirInfo),
-                                parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
+            if (parentDirInfo == null)
+            {
+                //Drive letter
+                return dirInfo.Name.ToUpper();
+            }
+            return Path.Combine(GetProperCapitalization(parentDirInfo), parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
         }
 
-        public static string GetActualCasing(this string filename)
+        public static string GetActualCasing(this string path)
         {
-            var fileInfo = new FileInfo(filename);
+            var attributes = File.GetAttributes(path);
+
+            if (OsInfo.IsLinux || path.StartsWith("\\"))
+            {
+                return path;
+            }
+
+            if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                return GetProperCapitalization(new DirectoryInfo(path));
+            }
+
+            var fileInfo = new FileInfo(path);
+
+
             DirectoryInfo dirInfo = fileInfo.Directory;
-            return Path.Combine(GetProperCapitalization(dirInfo),
-                                dirInfo.GetFiles(fileInfo.Name)[0].Name);
+            return Path.Combine(GetProperCapitalization(dirInfo), dirInfo.GetFiles(fileInfo.Name)[0].Name);
         }
 
 

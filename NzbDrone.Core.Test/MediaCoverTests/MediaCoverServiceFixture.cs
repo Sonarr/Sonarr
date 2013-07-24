@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
             Subject.ConvertToLocalUrls(12, covers);
 
 
-            covers.Single().Url.Should().Be("/mediacover/12/banner.jpg?lastWrite=1234");
+            covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg?lastWrite=1234");
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
             Subject.ConvertToLocalUrls(12, covers);
 
 
-            covers.Single().Url.Should().Be("/mediacover/12/banner.jpg");
+            covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
         }
 
     }

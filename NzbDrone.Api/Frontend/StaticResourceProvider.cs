@@ -5,6 +5,7 @@ using NLog;
 using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend
 {
@@ -20,6 +21,8 @@ namespace NzbDrone.Api.Frontend
         private readonly IAddCacheHeaders _addCacheHeaders;
         private readonly Logger _logger;
 
+        private readonly bool _caseSensitive;
+
         public StaticResourceProvider(IDiskProvider diskProvider,
                                       IEnumerable<IMapHttpRequestsToDisk> requestMappers,
                                       IAddCacheHeaders addCacheHeaders,
@@ -29,11 +32,16 @@ namespace NzbDrone.Api.Frontend
             _requestMappers = requestMappers;
             _addCacheHeaders = addCacheHeaders;
             _logger = logger;
+
+            if (!RuntimeInfo.IsProduction)
+            {
+                _caseSensitive = true;
+            }
         }
 
         public Response ProcessStaticResourceRequest(NancyContext context, string workingFolder)
         {
-            var path = context.Request.Url.Path.ToLower();
+            var path = context.Request.Url.Path;
 
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -46,7 +54,7 @@ namespace NzbDrone.Api.Frontend
             {
                 var filePath = mapper.Map(path);
 
-                if (_diskProvider.FileExists(filePath))
+                if (_diskProvider.FileExists(filePath, _caseSensitive))
                 {
                     var response = new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
                     _addCacheHeaders.ToResponse(context.Request, response);

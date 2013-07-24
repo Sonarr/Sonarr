@@ -14,8 +14,10 @@ namespace NzbDrone.Common
         DateTime GetLastFolderWrite(string path);
         DateTime GetLastFileWrite(string path);
         void EnsureFolder(string path);
+        bool FolderExists(string path, bool caseSensitive);
         bool FolderExists(string path);
         bool FileExists(string path);
+        bool FileExists(string path, bool caseSensitive);
         string[] GetDirectories(string path);
         string[] GetFiles(string path, SearchOption searchOption);
         long GetFolderSize(string path);
@@ -97,15 +99,34 @@ namespace NzbDrone.Common
         public virtual bool FolderExists(string path)
         {
             Ensure.That(() => path).IsValidPath();
-
             return Directory.Exists(path);
         }
+        
+        public virtual bool FolderExists(string path, bool caseSensitive)
+        {
+            if (caseSensitive)
+            {
+                return FolderExists(path) && path == path.GetActualCasing();
+            }
+
+            return FolderExists(path);
+        }
+
 
         public virtual bool FileExists(string path)
         {
             Ensure.That(() => path).IsValidPath();
-
             return File.Exists(path);
+        }
+
+        public virtual bool FileExists(string path, bool caseSensitive)
+        {
+            if (caseSensitive)
+            {
+                return FileExists(path) && path == path.GetActualCasing();
+            }
+
+            return FileExists(path);
         }
 
         public virtual string[] GetDirectories(string path)
