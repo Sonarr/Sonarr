@@ -49,7 +49,8 @@ define(
             },
 
             _folderSelected: function (options) {
-                App.modalRegion.closeModal();
+                App.vent.trigger(App.Commands.CloseModalCommand);
+
                 this.workspace.show(new ExistingSeriesCollectionView({model: options.model}));
             },
 

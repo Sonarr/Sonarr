@@ -98,7 +98,7 @@ define(
             },
 
             _setRootFolder: function (options) {
-                App.modalRegion.closeModal();
+                App.vent.trigger(App.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
             },
 

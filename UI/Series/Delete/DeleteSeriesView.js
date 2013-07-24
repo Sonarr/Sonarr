@@ -25,7 +25,7 @@ define(
                     wait: true
                 }).done(function () {
                         App.vent.trigger(App.Events.SeriesDeleted, { series: self.model });
-                        App.modalRegion.closeModal();
+                        App.vent.trigger(App.Commands.CloseModalCommand);
                     });
             }
         });

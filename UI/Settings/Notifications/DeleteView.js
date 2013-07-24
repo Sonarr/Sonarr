@@ -11,7 +11,7 @@ define(['app', 'marionette'], function (App, Marionette) {
             this.model.destroy({
                 wait   : true,
                 success: function () {
-                    App.modalRegion.closeModal();
+                    App.vent.trigger(App.Commands.CloseModalCommand);
                 }
             });
         }

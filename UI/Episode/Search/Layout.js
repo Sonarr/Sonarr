@@ -49,7 +49,7 @@ define(
                     message: 'Search started for: ' + message
                 });
 
-                App.modalRegion.closeModal();
+                App.vent.trigger(App.Commands.CloseModalCommand);
             },
 
             _searchManual: function (e) {
