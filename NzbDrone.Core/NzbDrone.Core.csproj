@@ -356,6 +356,12 @@
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
     <Compile Include="Notifications\Email\EmailSettings.cs" />
     <Compile Include="Notifications\Prowl\TestProwlCommand.cs" />
+    <Compile Include="Notifications\Pushover\InvalidResponseException.cs" />
+    <Compile Include="Notifications\Pushover\Pushover.cs" />
+    <Compile Include="Notifications\Pushover\PushoverPriority.cs" />
+    <Compile Include="Notifications\Pushover\PushoverService.cs" />
+    <Compile Include="Notifications\Pushover\PushoverSettings.cs" />
+    <Compile Include="Notifications\Pushover\TestPushoverCommand.cs" />
     <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\IApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\InvalidXbmcVersionException.cs" />
