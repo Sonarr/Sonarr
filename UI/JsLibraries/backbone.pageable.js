@@ -1,5 +1,5 @@
 /*
-  backbone-pageable 1.3.1
+  backbone-pageable 1.3.2
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -19,7 +19,7 @@
   // Browser
   else if (typeof _ !== "undefined" && typeof Backbone !== "undefined") {
     var oldPageableCollection = Backbone.PageableCollection;
-    var PageableCollection = Backbone.PageableCollection = factory(_, Backbone);
+    var PageableCollection = factory(_, Backbone);
 
     /**
        __BROWSER ONLY__
@@ -102,7 +102,7 @@
      @class Backbone.PageableCollection
      @extends Backbone.Collection
   */
-  var PageableCollection = Backbone.Collection.extend({
+  var PageableCollection = Backbone.PageableCollection = Backbone.Collection.extend({
 
     /**
        The container object to store all pagination states.
@@ -615,12 +615,14 @@
 
       var state = this.state;
       var totalPages = ceil(state.totalRecords / pageSize);
-      var currentPage = max(state.firstPage,
-                            floor(totalPages *
-                                  (state.firstPage ?
-                                   state.currentPage :
-                                   state.currentPage + 1) /
-                                  state.totalPages));
+      var currentPage = totalPages ?
+        max(state.firstPage,
+            floor(totalPages *
+                  (state.firstPage ?
+                   state.currentPage :
+                   state.currentPage + 1) /
+                  state.totalPages)) :
+        state.firstPage;
 
       state = this.state = this._checkState(_extend({}, state, {
         pageSize: pageSize,
@@ -803,8 +805,8 @@
        can be forced in client mode before resetting the current page. Under
        infinite mode, if the index is less than the current page, a reset is
        done as in client mode. If the index is greater than the current page
-       number, a fetch is made with the results **appended** to
-       #fullCollection. The current page will then be reset after fetching.
+       number, a fetch is made with the results **appended** to #fullCollection.
+       The current page will then be reset after fetching.
 
        @param {number|string} index The page index to go to, or the page name to
        look up from #links in infinite mode.
@@ -926,9 +928,9 @@
        is assumed to be the `first` URL. If `prev` or `next` is missing, it is
        assumed to be `null`. An empty object hash must be returned if there are
        no links found. If either the response or the header contains information
-       pertaining to the total number of records on the server,
-       #state.totalRecords must be set to that number. The default
-       implementation uses the `last` link from the header to calculate it.
+       pertaining to the total number of records on the server, #state.totalRecords
+       must be set to that number. The default implementation uses the `last`
+       link from the header to calculate it.
 
        @param {*} resp The deserialized response body.
        @param {Object} [options]
@@ -1175,11 +1177,8 @@
         if (v != null) data[kvp[0]] = v;
       }
 
-      var fullCol = this.fullCollection, links = this.links;
-
       if (mode != "server") {
-
-        var self = this;
+        var self = this, fullCol = this.fullCollection;
         var success = options.success;
         options.success = function (col, resp, opts) {
 
@@ -1189,28 +1188,7 @@
           else opts.silent = options.silent;
 
           var models = col.models;
-          var currentPage = state.currentPage;
-
           if (mode == "client") fullCol.reset(models, opts);
-          else if (links[currentPage]) { // refetching a page
-            var pageSize = state.pageSize;
-            var pageStart = (state.firstPage === 0 ?
-                             currentPage :
-                             currentPage - 1) * pageSize;
-            var fullModels = fullCol.models;
-            var head = fullModels.slice(0, pageStart);
-            var tail = fullModels.slice(pageStart + pageSize);
-            fullModels = head.concat(models).concat(tail);
-            var updateFunc = fullCol.set || fullCol.update;
-            // Must silent update and trigger reset later because the event
-            // sychronization handler is temporarily taken out during either add
-            // or remove, which Collection#set does, so the pageable collection
-            // will be out of sync if not silenced because adding will trigger
-            // the sychonization event handler
-            updateFunc.call(fullCol, fullModels, _extend({silent: true}, opts));
-            fullCol.trigger("reset", fullCol, opts);
-          }
-          // fetching new page
           else fullCol.add(models, _extend({at: fullCol.length}, opts));
 
           if (success) success(col, resp, opts);
