@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Marionette, AsModelBoundView) {
+define(['marionette', 'Mixins/AsModelBoundView', 'filesize', 'jquery.knob' ], function (Marionette, AsModelBoundView, Filesize) {
 
     var view = Marionette.ItemView.extend({
         template : 'Settings/Quality/Size/QualitySizeTemplate',
@@ -18,6 +18,7 @@ define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Mario
 
         initialize: function (options) {
             this.qualityProfileCollection = options.qualityProfiles;
+            this.filesize = Filesize;
         },
 
         onRender: function () {
@@ -30,13 +31,15 @@ define(['marionette', 'Mixins/AsModelBoundView', 'jquery.knob'], function (Mario
                 stopper      : true,
                 displayInput : false
             });
+
+            this._changeMaxSize();
         },
 
         _changeMaxSize: function () {
             var maxSize = this.model.get('maxSize');
             var bytes = maxSize * 1024 * 1024;
-            var thirty = (bytes * 30).bytes(1);
-            var sixty = (bytes * 60).bytes(1);
+            var thirty = Filesize(bytes * 30, 1, false);
+            var sixty = Filesize(bytes * 60, 1, false);
 
             if (parseInt(maxSize) === 0) {
                 thirty = 'No Limit';
