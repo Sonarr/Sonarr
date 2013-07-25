@@ -31,13 +31,42 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Reconfigure()
         {
-            var logLevel = _configFileProvider.LogLevel;
+            var minimumLogLevel = LogLevel.FromString(_configFileProvider.LogLevel);
 
             var rules = LogManager.Configuration.LoggingRules;
             var rollingFileLogger = rules.Single(s => s.Targets.Any(t => t.Name == "rollingFileLogger"));
             rollingFileLogger.EnableLoggingForLevel(LogLevel.Trace);
 
-            var test = 1;
+            SetMinimumLogLevel(rollingFileLogger, minimumLogLevel);
+        }
+
+        private void SetMinimumLogLevel(LoggingRule rule, LogLevel minimumLogLevel)
+        {
+            foreach (var logLevel in GetLogLevels())
+            {
+                if (logLevel < minimumLogLevel)
+                {
+                    rule.DisableLoggingForLevel(logLevel);
+                }
+
+                else
+                {
+                    rule.EnableLoggingForLevel(logLevel);
+                }
+            }
+        }
+
+        private List<LogLevel> GetLogLevels()
+        {
+            return new List<LogLevel>
+                       {
+                           LogLevel.Trace,
+                           LogLevel.Debug,
+                           LogLevel.Info,
+                           LogLevel.Warn,
+                           LogLevel.Error,
+                           LogLevel.Fatal
+                       };
         }
 
         public void HandleAsync(ConfigFileSavedEvent message)
