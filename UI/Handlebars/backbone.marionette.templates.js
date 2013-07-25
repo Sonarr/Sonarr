@@ -9,7 +9,7 @@ define(
         'Handlebars/Helpers/Episode',
         'Handlebars/Helpers/Series',
         'Handlebars/Helpers/Quality',
-        'Handlebars/Debug'
+        'Handlebars/Handlebars.Debug'
     ], function (Templates) {
         return function () {
             this.get = function (templateId) {
