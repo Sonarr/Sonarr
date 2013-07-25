@@ -41,7 +41,7 @@ define(
                         cell    : EpisodeTitleCell
                     },
                     {
-                        name : 'airDate',
+                        name : 'airDateUtc',
                         label: 'Air Date',
                         cell : AirDateCell
                     }
