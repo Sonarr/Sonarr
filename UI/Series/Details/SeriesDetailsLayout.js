@@ -116,7 +116,7 @@ define(
             },
 
             _editSeries: function () {
-                App.vent.trigger(App.Commands.EditSeriesCommand, {model: this.model});
+                App.vent.trigger(App.Commands.EditSeriesCommand, {series: this.model});
             },
 
             _refreshSeries: function () {
