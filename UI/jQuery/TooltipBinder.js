@@ -11,6 +11,15 @@ define(
                 element.attr('data-placement', 'right');
             }
 
+            var container = element.parents('.modal-body');
+            if (container.length === 0) {
+                container = 'body';
+            }
+
+            element.tooltip({
+                container: container
+            });
+
             element.tooltip('show');
         });
     });
