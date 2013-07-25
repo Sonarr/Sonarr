@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Api.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;
+using System.Linq;
 
 namespace NzbDrone.Integration.Test.Client
 {
@@ -99,11 +100,21 @@ namespace NzbDrone.Integration.Test.Client
                 throw response.ErrorException;
             }
 
+            AssertDisableCache(response.Headers);
+
             response.ErrorMessage.Should().BeBlank();
 
             response.StatusCode.Should().Be(statusCode);
 
             return Json.Deserialize<T>(response.Content);
+        }
+
+
+        private static void AssertDisableCache(IList<Parameter> headers)
+        {
+            headers.Single(c => c.Name == "Cache-Control").Value.Should().Be("no-cache, no-store, must-revalidate");
+            headers.Single(c => c.Name == "Pragma").Value.Should().Be("no-cache");
+            headers.Single(c => c.Name == "Expires").Value.Should().Be("0");
         }
 
     }

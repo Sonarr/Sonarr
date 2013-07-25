@@ -106,6 +106,7 @@
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
+    <Compile Include="Extensions\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\GZipPipeline.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Frontend\IAddCacheHeaders.cs" />

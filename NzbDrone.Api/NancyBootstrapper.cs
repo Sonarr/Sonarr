@@ -33,6 +33,7 @@ namespace NzbDrone.Api
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
             pipelines.AfterRequest.AddItemToStartOfPipeline(GzipCompressionPipeline.Handle);
+            pipelines.AfterRequest.AddItemToEndOfPipeline(CacheHeaderPipeline.Handle);
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }
