@@ -25,9 +25,10 @@ define(
             columns:
                 [
                     {
-                        name : 'eventType',
-                        label: '',
-                        cell : EventTypeCell
+                        name     : 'eventType',
+                        label    : '',
+                        cell     : EventTypeCell,
+                        cellValue: 'this'
                     },
                     {
                         name : 'series',

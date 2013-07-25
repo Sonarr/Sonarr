@@ -28,6 +28,10 @@ define(
                 if(!this.model.get('title')){
                     this.$el.addClass('btn-icon-only');
                 }
+
+                if (this.model.get('tooltip')) {
+                    this.$el.attr('title', this.model.get('tooltip'))
+                }
             },
 
             onClick: function () {

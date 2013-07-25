@@ -189,18 +189,21 @@ define(
                             {
                                 key     : 'posterView',
                                 title   : '',
+                                tooltip : 'Posters',
                                 icon    : 'icon-th-large',
                                 callback: this._showPosters
                             },
                             {
                                 key     : 'listView',
                                 title   : '',
+                                tooltip : 'Overview List',
                                 icon    : 'icon-th-list',
                                 callback: this._showList
                             },
                             {
                                 key     : 'tableView',
                                 title   : '',
+                                tooltip : 'Table',
                                 icon    : 'icon-table',
                                 callback: this._showTable
                             }

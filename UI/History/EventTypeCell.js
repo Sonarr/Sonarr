@@ -16,10 +16,10 @@ define(
                     var icon;
                     var toolTip;
 
-                    switch (this.cellValue) {
+                    switch (this.cellValue.get('eventType')) {
                         case 'grabbed':
                             icon = 'icon-cloud-download';
-                            toolTip = 'Episode grabbed from indexer and sent to download client';
+                            toolTip = 'Episode grabbed from {0} and sent to download client'.format(this.cellValue.get('data').indexer);
                             break;
                         case 'seriesFolderImported':
                             icon = 'icon-hdd';
