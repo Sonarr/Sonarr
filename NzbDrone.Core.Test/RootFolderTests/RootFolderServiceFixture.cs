@@ -10,11 +10,12 @@ using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.RootFolderTests
 {
     [TestFixture]
-    
+
     public class RootFolderServiceFixture : CoreTest<RootFolderService>
     {
         [SetUp]
@@ -40,8 +41,8 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [TestCase("//server//folder")]
         public void should_be_able_to_add_root_dir(string path)
         {
-            var root = new RootFolder { Path = path };
-            
+            var root = new RootFolder { Path = path.AsOsAgnostic() };
+
             Subject.Add(root);
 
             Mocker.GetMock<IBasicRepository<RootFolder>>().Verify(c => c.Insert(root), Times.Once());
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         {
             WithNoneExistingFolder();
 
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.Add(new RootFolder { Path = "C:\\TEST" }));
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.Add(new RootFolder { Path = "C:\\TEST".AsOsAgnostic() }));
         }
 
         [Test]

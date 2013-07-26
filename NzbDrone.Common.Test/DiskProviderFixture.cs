@@ -42,13 +42,15 @@ namespace NzbDrone.Common.Test
         [Test]
         public void directory_exist_should_be_able_to_find_existing_unc_share()
         {
+            WindowsOnly();
+
             Subject.FolderExists(@"\\localhost\c$").Should().BeTrue();
         }
 
         [Test]
         public void directory_exist_should_not_be_able_to_find_none_existing_folder()
         {
-            Subject.FolderExists(@"C:\ThisBetterNotExist\").Should().BeFalse();
+            Subject.FolderExists(@"C:\ThisBetterNotExist\".AsOsAgnostic()).Should().BeFalse();
         }
 
         [Test]
@@ -140,20 +142,14 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\smallcheese\DRIVE_G\TV-C\Simspsons", @"\\smallcheese\DRIVE_G\TV-C\Simspsons")]
         public void paths_should_be_equal(string first, string second)
         {
-            if (first.StartsWith("\\"))
-            {
-                //verify the linux equivalent.
-                DiskProvider.PathEquals(first, second).Should().BeTrue();
-            }
-
-            DiskProvider.PathEquals(first, second).Should().BeTrue();
+            DiskProvider.PathEquals(first.AsOsAgnostic(), second.AsOsAgnostic()).Should().BeTrue();
         }
 
-        [TestCase(@"D:\Test", @"C:\Test\")]
-        [TestCase(@"D:\Test\Test", @"C:\TestTest\")]
+        [TestCase(@"C:\Test", @"C:\Test2\")]
+        [TestCase(@"C:\Test\Test", @"C:\TestTest\")]
         public void paths_should_not_be_equal(string first, string second)
         {
-            DiskProvider.PathEquals(first, second).Should().BeFalse();
+            DiskProvider.PathEquals(first.AsOsAgnostic(), second.AsOsAgnostic()).Should().BeFalse();
         }
 
         [Test]
@@ -180,8 +176,8 @@ namespace NzbDrone.Common.Test
         [Explicit]
         public void check_last_write()
         {
-            Console.WriteLine(Subject.GetLastFolderWrite(@"C:\DRIVERS"));
-            Console.WriteLine(new DirectoryInfo(@"C:\DRIVERS").LastWriteTimeUtc);
+            Console.WriteLine(Subject.GetLastFolderWrite(_binFolder.FullName));
+            Console.WriteLine(_binFolder.LastWriteTimeUtc);
         }
 
         private void VerifyCopy()

@@ -17,13 +17,17 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
     {
         private const string _nzbUrl = "http://www.nzbs.com/url";
         private const string _title = "some_nzb_title";
-        private const string _blackHoleFolder = @"d:\nzb\blackhole\";
-        private const string _nzbPath = @"d:\nzb\blackhole\some_nzb_title.nzb";
+        private string _blackHoleFolder;
+        private string _nzbPath;
         private RemoteEpisode _remoteEpisode;
 
         [SetUp]
         public void Setup()
         {
+            _blackHoleFolder = @"c:\nzb\blackhole\".AsOsAgnostic();
+            _nzbPath = @"c:\nzb\blackhole\some_nzb_title.nzb".AsOsAgnostic();
+
+
             Mocker.GetMock<IConfigService>().SetupGet(c => c.BlackholeFolder).Returns(_blackHoleFolder);
 
             _remoteEpisode = new RemoteEpisode();
