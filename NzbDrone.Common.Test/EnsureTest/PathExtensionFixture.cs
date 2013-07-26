@@ -16,7 +16,7 @@ namespace NzbDrone.Common.Test.EnsureTest
         }
 
 
-        [TestCase(@"var/user/file with, comma.mkv")]
+        [TestCase(@"/var/user/file with, comma.mkv")]
         public void EnsureLinuxPath(string path)
         {
             LinuxOnly();

@@ -8,16 +8,17 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 {
     [TestFixture]
-    
+
     public class DeleteDirectoryFixture : CoreTest
     {
         private void WithRecycleBin()
         {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(@"C:\Test\Recycle Bin");
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(@"C:\Test\Recycle Bin".AsOsAgnostic());
         }
 
         private void WithoutRecycleBin()
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         {
             WithoutRecycleBin();
 
-            var path = @"C:\Test\TV\30 Rock";
+            var path = @"C:\Test\TV\30 Rock".AsOsAgnostic();
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
@@ -42,11 +43,11 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         {
             WithRecycleBin();
 
-            var path = @"C:\Test\TV\30 Rock";
+            var path = @"C:\Test\TV\30 Rock".AsOsAgnostic();
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
-            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFolder(path, @"C:\Test\Recycle Bin\30 Rock"), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFolder(path, @"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic()), Times.Once());
         }
 
         [Test]
@@ -54,21 +55,21 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         {
             WithRecycleBin();
 
-            var path = @"C:\Test\TV\30 Rock";
+            var path = @"C:\Test\TV\30 Rock".AsOsAgnostic();
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
-            Mocker.GetMock<IDiskProvider>().Verify(v => v.FolderSetLastWriteTimeUtc(@"C:\Test\Recycle Bin\30 Rock", It.IsAny<DateTime>()), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.FolderSetLastWriteTimeUtc(@"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), It.IsAny<DateTime>()), Times.Once());
         }
 
         [Test]
         public void should_call_fileSetLastWriteTime_for_each_file()
         {
             WithRecycleBin();
-            var path = @"C:\Test\TV\30 Rock";
+            var path = @"C:\Test\TV\30 Rock".AsOsAgnostic();
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock", SearchOption.AllDirectories))
-                                            .Returns(new[]{ "File1", "File2", "File3" });
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), SearchOption.AllDirectories))
+                                            .Returns(new[] { "File1", "File2", "File3" });
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 

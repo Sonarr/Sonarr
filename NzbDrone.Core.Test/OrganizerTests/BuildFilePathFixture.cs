@@ -5,6 +5,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.OrganizerTests
 {
@@ -12,19 +13,11 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
     public class BuildFilePathFixture : CoreTest<FileNameBuilder>
     {
-        private Series _series;
-
         private NamingConfig namingConfig;
 
         [SetUp]
         public void Setup()
         {
-            _series = Builder<Series>
-                    .CreateNew()
-                    .With(s => s.Title = "South Park")
-                    .Build();
-
-
             namingConfig = new NamingConfig();
 
 
@@ -42,13 +35,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "30 Rock")
-                .With(s => s.Path = @"C:\Test\30 Rock")
+                .With(s => s.Path = @"C:\Test\30 Rock".AsOsAgnostic())
                 .With(s => s.SeasonFolder = useSeasonFolder)
                 .Build();
 
             Mocker.GetMock<IConfigService>().Setup(e => e.SeasonFolderFormat).Returns(seasonFolderFormat);
 
-            Subject.BuildFilePath(fakeSeries, 1, filename, ".mkv").Should().Be(expectedPath);
+            Subject.BuildFilePath(fakeSeries, 1, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
     }
 }

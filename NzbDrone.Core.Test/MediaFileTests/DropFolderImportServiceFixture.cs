@@ -20,16 +20,12 @@ namespace NzbDrone.Core.Test.MediaFileTests
     [TestFixture]
     public class DropFolderImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
     {
-        private EpisodeFile _fakeEpisodeFile;
-
-        private string[] _subFolders = new[] { "c:\\root\\foldername" };
-        private string[] _videoFiles = new[] { "c:\\root\\foldername\\video.ext" };
+        private string[] _subFolders = new[] { "c:\\root\\foldername".AsOsAgnostic() };
+        private string[] _videoFiles = new[] { "c:\\root\\foldername\\video.ext".AsOsAgnostic() };
 
         [SetUp]
         public void Setup()
         {
-            _fakeEpisodeFile = Builder<EpisodeFile>.CreateNew().Build();
-
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(_videoFiles);
 
@@ -40,7 +36,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                   .Returns(true);
 
             Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder)
-                  .Returns("c:\\drop\\");
+                  .Returns("c:\\drop\\".AsOsAgnostic());
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true))
@@ -146,7 +142,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         public void should_remove_unpack_from_folder_name(string prefix)
         {
             var folderName = "30.rock.s01e01.pilot.hdtv-lol";
-            var folders = new[] { String.Format(@"C:\Test\Unsorted\{0}{1}", prefix, folderName) };
+            var folders = new[] { String.Format(@"C:\Test\Unsorted\{0}{1}", prefix, folderName).AsOsAgnostic() };
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(c => c.GetDirectories(It.IsAny<string>()))

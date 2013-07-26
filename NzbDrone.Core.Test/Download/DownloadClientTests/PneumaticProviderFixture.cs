@@ -17,15 +17,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
     {
         private const string _nzbUrl = "http://www.nzbs.com/url";
         private const string _title = "30.Rock.S01E05.hdtv.xvid-LoL";
-        private const string _pneumaticFolder = @"d:\nzb\pneumatic\";
-        private const string _sabDrop = @"d:\unsorted tv\";
+        private string _pneumaticFolder;
+        private string _sabDrop;
         private string _nzbPath;
         private RemoteEpisode _remoteEpisode;
 
         [SetUp]
         public void Setup()
         {
-            _nzbPath = _pneumaticFolder + _title + ".nzb";
+            _pneumaticFolder = @"d:\nzb\pneumatic\".AsOsAgnostic();
+
+            _nzbPath = Path.Combine(_pneumaticFolder, _title + ".nzb").AsOsAgnostic();
+            _sabDrop = @"d:\unsorted tv\".AsOsAgnostic();
 
             Mocker.GetMock<IConfigService>().SetupGet(c => c.PneumaticFolder).Returns(_pneumaticFolder);
             Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder).Returns(_sabDrop);
@@ -54,7 +57,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath),Times.Once());
+            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
         }
 
         [Test]
@@ -73,7 +76,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             WithFailedDownload();
 
             Subject.DownloadNzb(_remoteEpisode).Should().BeFalse();
-            
+
             ExceptionVerification.ExpectedWarns(1);
         }
 
