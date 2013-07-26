@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                     .Build().ToList();
 
             const string filename = @"30 Rock - S01E01 - TBD";
-            var fi = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".avi");
+            var fi = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".avi").AsOsAgnostic();
 
             var file = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.SeriesId = fakeSeries.Id)
@@ -80,8 +80,8 @@ namespace NzbDrone.Core.Test.MediaFileTests
                     .Build().ToList();
 
             const string filename = @"30 Rock - S01E01 - TBD";
-            var fi = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".mkv");
-            var currentFilename = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", "30.Rock.S01E01.Test.WED-DL.mkv");
+            var fi = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".mkv").AsOsAgnostic();
+            var currentFilename = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", "30.Rock.S01E01.Test.WED-DL.mkv").AsOsAgnostic();
             const string message = "30 Rock - 1x01 - [WEBDL]";
 
             var file = Builder<EpisodeFile>.CreateNew()
@@ -131,8 +131,8 @@ namespace NzbDrone.Core.Test.MediaFileTests
                     .Build().ToList();
 
             const string filename = @"30 Rock - S01E01 - TBD";
-            var fi = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".mkv");
-            var currentFilename = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", "30.Rock.S01E01.Test.WED-DL.mkv");
+            var fi = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".mkv").AsOsAgnostic();
+            var currentFilename = Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", "30.Rock.S01E01.Test.WED-DL.mkv").AsOsAgnostic();
             const string message = "30 Rock - 1x01 - [WEBDL]";
 
             var file = Builder<EpisodeFile>.CreateNew()

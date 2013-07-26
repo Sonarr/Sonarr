@@ -9,6 +9,7 @@ using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 {
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         {
             _localEpisode = new LocalEpisode
             {
-                Path = @"C:\Test\30 Rock\30.rock.s01e01.avi",
+                Path = @"C:\Test\30 Rock\30.rock.s01e01.avi".AsOsAgnostic(),
                 Size = 100
             };
         }
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Path = @"C:\Test\30 Rock\30.rock.s01e01.avi",
+                                                                                    Path = @"C:\Test\30 Rock\30.rock.s01e01.avi".AsOsAgnostic(),
                                                                                     Size = 100
                                                                                 }))
                                                      .Build()
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.avi",
+                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.avi".AsOsAgnostic(),
                                                                                     Size = 100
                                                                                 }))
                                                      .Build()
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.avi",
+                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.avi".AsOsAgnostic(),
                                                                                     Size = 50
                                                                                 }))
                                                      .Build()
@@ -102,7 +103,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.pilot.avi",
+                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.pilot.avi".AsOsAgnostic(),
                                                                                     Size = 100
                                                                                 }))
                                                      .Build()
@@ -124,7 +125,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.pilot.avi",
+                                                                                    Path = @"C:\Test\30 Rock\Season 01\30.rock.s01e01.pilot.avi".AsOsAgnostic(),
                                                                                     Size = 100
                                                                                 }))
                                                      .Build()

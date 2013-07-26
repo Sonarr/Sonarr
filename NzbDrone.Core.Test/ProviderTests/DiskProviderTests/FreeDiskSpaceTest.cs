@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void should_throw_if_drive_doesnt_exist()
         {
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST"));
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
         }
     }
 }

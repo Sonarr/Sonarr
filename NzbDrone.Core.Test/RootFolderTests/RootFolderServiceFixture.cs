@@ -97,9 +97,9 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void adding_duplicated_root_folder_should_throw()
         {
-            Mocker.GetMock<IBasicRepository<RootFolder>>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV" } });
+            Mocker.GetMock<IBasicRepository<RootFolder>>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV".AsOsAgnostic() } });
 
-            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV" }));
+            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
         }
     }
 }
