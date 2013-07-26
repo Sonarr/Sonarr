@@ -136,6 +136,13 @@ namespace NzbDrone.Core.Notifications
 
         private string GetMessage(ParsedEpisodeInfo parsedEpisodeInfo, Series series)
         {
+            if (series.SeriesType == SeriesTypes.Daily)
+            {
+                return String.Format("{0} - {1}",
+                                 series.Title,
+                                 parsedEpisodeInfo.AirDate.Value.ToString(Episode.AIR_DATE_FORMAT));
+            }
+            
             return String.Format("{0} - {1}{2}",
                                  series.Title,
                                  parsedEpisodeInfo.SeasonNumber,
@@ -144,21 +151,25 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(EpisodeGrabbedEvent message)
         {
+            var messageBody = GetMessage(message.Episode.ParsedEpisodeInfo, message.Episode.Series);
+
             All().Where(n => n.OnGrab)
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnGrab(GetMessage(message.Episode.ParsedEpisodeInfo, message.Episode.Series))
+                                        .OnGrab(messageBody)
                         );
         }
 
         public void Handle(EpisodeDownloadedEvent message)
         {
+            var messageBody = GetMessage(message.ParsedEpisodeInfo, message.Series);
+
             All().Where(n => n.OnDownload)
                 .ToList()
                 .ForEach(notification =>
                             notification.Instance
-                                        .OnDownload(GetMessage(message.ParsedEpisodeInfo, message.Series), message.Series)
+                                        .OnDownload(messageBody, message.Series)
                         );
         }
 
