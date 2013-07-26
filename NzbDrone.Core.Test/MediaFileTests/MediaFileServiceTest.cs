@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests
 {
@@ -26,9 +27,9 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             var files = new List<string>()
             {
-                "c:\\file1.avi",
-                "c:\\file2.avi",
-                "c:\\file3.avi",
+                "c:\\file1.avi".AsOsAgnostic(),
+                "c:\\file2.avi".AsOsAgnostic(),
+                "c:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -45,9 +46,9 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             var files = new List<string>()
             {
-                "c:\\file1.avi",
-                "c:\\file2.avi",
-                "c:\\file3.avi",
+                "c:\\file1.avi".AsOsAgnostic(),
+                "c:\\file2.avi".AsOsAgnostic(),
+                "c:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -63,21 +64,21 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             var files = new List<string>()
             {
-                "c:\\file1.avi",
-                "c:\\file2.avi",
-                "c:\\file3.avi",
+                "c:\\file1.avi".AsOsAgnostic(),
+                "c:\\file2.avi".AsOsAgnostic(),
+                "c:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{Path = "c:\\file2.avi"}
+                    new EpisodeFile{Path = "c:\\file2.avi".AsOsAgnostic()}
                 });
 
 
             Subject.FilterExistingFiles(files, 10).Should().HaveCount(2);
-            Subject.FilterExistingFiles(files, 10).Should().NotContain("c:\\file2.avi");
+            Subject.FilterExistingFiles(files, 10).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
         }
     }
 }

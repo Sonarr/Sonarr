@@ -81,6 +81,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void get_actual_casing_should_return_actual_casing_for_local_file_in_windows()
         {
+            WindowsOnly();
             var path = Process.GetCurrentProcess().MainModule.FileName;
             path.ToUpper().GetActualCasing().Should().Be(path);
             path.ToLower().GetActualCasing().Should().Be(path);
@@ -89,6 +90,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void get_actual_casing_should_return_origibal_value_in_linux()
         {
+            LinuxOnly();
             var path = Process.GetCurrentProcess().MainModule.FileName;
             path.GetActualCasing().Should().Be(path);
             path.GetActualCasing().Should().Be(path);
@@ -107,7 +109,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void get_actual_casing_should_return_original_value_in_linux()
         {
-            WindowsOnly();
+            LinuxOnly();
             var path = Directory.GetCurrentDirectory();
             path.GetActualCasing().Should().Be(path);
             path.GetActualCasing().Should().Be(path);
