@@ -49,7 +49,7 @@ module.exports = function (grunt) {
             },
 
             bootstrap: {
-                src : "UI/Content/bootstrap/bootstrap.less",
+                src : "UI/Content/Bootstrap/bootstrap.less",
                 dest: "_output/UI/Content/bootstrap.css"
             },
             general  : {
