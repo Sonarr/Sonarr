@@ -13,7 +13,16 @@ define(['app',
         template         : 'Settings/Quality/Profile/QualityProfileCollectionTemplate',
 
         events: {
-            'click .x-add': '_addProfile'
+            'click .x-add-card': '_addProfile'
+        },
+
+        onAfterItemAdded: function () {
+            this.$itemViewContainer.find('.x-add-card').remove();
+
+            this.templateFunction = Marionette.TemplateCache.get('Settings/Quality/Profile/AddCardTemplate');
+            var html = this.templateFunction();
+
+            this.$itemViewContainer.append(html);
         },
 
         _addProfile: function () {
