@@ -14,8 +14,8 @@ define(['app',
                 'click .x-add-card': '_openSchemaModal'
             },
 
-            onAfterItemAdded: function () {
-                this.$itemViewContainer.find('.x-add-card').parent('li').remove();
+            onRender: function () {
+                this.listenTo(this.collection, 'add', this.render);
 
                 this.templateFunction = Marionette.TemplateCache.get('Settings/Indexers/AddCardTemplate');
                 var html = this.templateFunction();
