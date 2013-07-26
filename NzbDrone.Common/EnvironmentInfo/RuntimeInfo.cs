@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Principal;
 using NLog;
 
@@ -26,6 +27,11 @@ namespace NzbDrone.Common.EnvironmentInfo
             get { return Environment.UserInteractive; }
         }
 
+        static RuntimeInfo()
+        {
+            IsProduction = InternalIsProduction();
+        }
+
         public bool IsAdmin
         {
             get
@@ -45,21 +51,22 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
-        public static bool IsProduction
+        public static bool IsProduction { get; private set; }
+
+        private static bool InternalIsProduction()
         {
-            get
-            {
-                if (BuildInfo.IsDebug || Debugger.IsAttached) return false;
-                if (BuildInfo.Version.Revision > 10000) return false; //Official builds will never have such a high revision
+            if (BuildInfo.IsDebug || Debugger.IsAttached) return false;
+            if (BuildInfo.Version.Revision > 10000) return false; //Official builds will never have such a high revision
 
-                var lowerProcessName = ProcessName.ToLower();
-                if (lowerProcessName.Contains("vshost")) return false;
-                if (lowerProcessName.Contains("nunit")) return false;
-                if (lowerProcessName.Contains("jetbrain")) return false;
-                if (lowerProcessName.Contains("resharper")) return false;
+            var lowerProcessName = ProcessName.ToLower();
+            if (lowerProcessName.Contains("vshost")) return false;
+            if (lowerProcessName.Contains("nunit")) return false;
+            if (lowerProcessName.Contains("jetbrain")) return false;
+            if (lowerProcessName.Contains("resharper")) return false;
 
-                return true;
-            }
+            if (Directory.GetCurrentDirectory().ToLower().Contains("teamcity")) return false;
+
+            return true;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace NzbDrone.Common
 
             var info = new FileInfo(path);
 
-            if (info.FullName.StartsWith(@"\\")) //UNC
+            if (!OsInfo.IsLinux && info.FullName.StartsWith(@"\\")) //UNC
             {
                 return info.FullName.TrimEnd('/', '\\', ' ');
             }
