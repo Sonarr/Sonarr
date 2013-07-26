@@ -11,7 +11,8 @@ namespace NzbDrone.Test.Common
             {
                 if (path.Length > 2 && path[1] == ':')
                 {
-                    path = path.Replace(':', Path.DirectorySeparatorChar);
+                    path = path.Replace(":", "");
+                    path = Path.DirectorySeparatorChar + path;
                 }
                 path = path.Replace("\\", Path.DirectorySeparatorChar.ToString());
             }

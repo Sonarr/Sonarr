@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
@@ -30,7 +31,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void IsProduction_should_return_false_when_run_within_nunit()
         {
-            RuntimeInfo.IsProduction.Should().BeFalse();
+            RuntimeInfo.IsProduction.Should().BeFalse("Process name is " + Process.GetCurrentProcess().ProcessName);
         }
     }
 }

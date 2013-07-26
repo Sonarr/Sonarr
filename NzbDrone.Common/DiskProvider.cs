@@ -101,7 +101,7 @@ namespace NzbDrone.Common
             Ensure.That(() => path).IsValidPath();
             return Directory.Exists(path);
         }
-        
+
         public virtual bool FolderExists(string path, bool caseSensitive)
         {
             if (caseSensitive)
@@ -394,16 +394,28 @@ namespace NzbDrone.Common
 
         public void SetPermissions(string filename, string account, FileSystemRights rights, AccessControlType controlType)
         {
-            var directoryInfo = new DirectoryInfo(filename);
-            var directorySecurity = directoryInfo.GetAccessControl();
 
-            var accessRule = new FileSystemAccessRule(account, rights,
-                                                      InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                                                      PropagationFlags.None, controlType);
+            try
+            {
 
 
-            directorySecurity.AddAccessRule(accessRule);
-            directoryInfo.SetAccessControl(directorySecurity);
+                var directoryInfo = new DirectoryInfo(filename);
+                var directorySecurity = directoryInfo.GetAccessControl();
+
+                var accessRule = new FileSystemAccessRule(account, rights,
+                                                          InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+                                                          PropagationFlags.None, controlType);
+
+
+                directorySecurity.AddAccessRule(accessRule);
+                directoryInfo.SetAccessControl(directorySecurity);
+            }
+            catch (Exception e)
+            {
+                Logger.WarnException(string.Format("Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, account, rights, controlType), e);
+                throw;
+            }
+
         }
 
         public bool IsParent(string parent, string subfolder)
@@ -420,7 +432,7 @@ namespace NzbDrone.Common
                 {
                     return true;
                 }
-                
+
                 diSubfolder = diSubfolder.Parent;
             }
 
