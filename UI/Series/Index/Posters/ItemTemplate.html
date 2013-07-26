@@ -24,10 +24,9 @@
                         {{#if nextAiring}}
                             <span class="label label-inverse">{{NextAiring nextAiring}}</span>
                         {{/if}}
-                        <span class="label label-info">Season {{seasonCount}}</span>
-                    {{else}}
-                        <span class="label label-info">{{seasonCount}} Seasons</span>
                     {{/if_eq}}
+                    {{seasonCountHelper}}
+                    {{> EpisodeProgressPartial }}
                 </div>
             </div>
         </div>

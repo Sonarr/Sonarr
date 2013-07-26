@@ -35,7 +35,6 @@ define(
             return '/series/' + this.titleSlug;
         });
 
-
         Handlebars.registerHelper('percentOfEpisodes', function () {
             var episodeCount = this.episodeCount;
             var episodeFileCount = this.episodeFileCount;
@@ -49,4 +48,18 @@ define(
             return percent;
         });
 
+        Handlebars.registerHelper('seasonCountHelper', function () {
+            var seasonCount = this.seasonCount;
+            var continuing = this.status === 'continuing';
+
+            if (continuing) {
+                return new Handlebars.SafeString('<span class="label label-info">Season {0}</span>'.format(seasonCount));
+            }
+
+            if (seasonCount === 1) {
+                return new Handlebars.SafeString('<span class="label label-info">{0} Season</span>'.format(seasonCount))
+            }
+
+            return new Handlebars.SafeString('<span class="label label-info">{0} Seasons</span>'.format(seasonCount))
+        });
     });

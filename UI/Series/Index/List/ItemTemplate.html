@@ -33,20 +33,16 @@
                         {{#if nextAiring}}
                             <span class="label">{{NextAiring nextAiring}}</span>
                         {{/if}}
-                        <span class="label label-info">Season {{seasonCount}}</span>
                     {{else}}
                         <span class="label label-important">Ended</span>
-                        <span class="label label-info">{{seasonCount}} Seasons</span>
                     {{/if_eq}}
+
+                    {{seasonCountHelper}}
 
                     {{qualityProfile qualityProfileId}}
                 </div>
                 <div class="span2">
-                    <div class="progress">
-                        <span class="progressbar-back-text">{{episodeFileCount}} / {{episodeCount}}</span>
-
-                        <div class="bar" style="width:{{percentOfEpisodes}}%"><span class="progressbar-front-text">{{episodeFileCount}} / {{episodeCount}}</span></div>
-                    </div>
+                    {{> EpisodeProgressPartial }}
                 </div>
             </div>
         </div>
