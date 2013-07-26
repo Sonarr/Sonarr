@@ -17,35 +17,24 @@ namespace NzbDrone.Common.EnvironmentInfo
     {
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
+        private readonly Environment.SpecialFolder _dataSpecialFolder = Environment.SpecialFolder.CommonApplicationData;
+
 
         public AppFolderInfo(IDiskProvider diskProvider)
         {
             _diskProvider = diskProvider;
             _logger = LogManager.GetCurrentClassLogger();
-            AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
+
+            if (OsInfo.IsLinux)
+            {
+                _dataSpecialFolder = Environment.SpecialFolder.ApplicationData;
+            }
+
+            AppDataFolder = Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
             StartUpFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             TempFolder = Path.GetTempPath();
 
-            if (!_diskProvider.FolderExists(AppDataFolder))
-            {
-                MigrateFromAppData();
-            }
-
             SetPermissions();
-        }
-
-        private void MigrateFromAppData()
-        {
-            var oldAppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
-
-            if (_diskProvider.FolderExists(oldAppDataFolder))
-            {
-                _diskProvider.MoveFolder(oldAppDataFolder, AppDataFolder);
-            }
-            else
-            {
-                _diskProvider.CreateFolder(AppDataFolder);
-            }
         }
 
         private void SetPermissions()
