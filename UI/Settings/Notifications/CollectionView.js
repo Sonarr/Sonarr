@@ -3,9 +3,8 @@ define([
     'app',
     'marionette',
     'Settings/Notifications/ItemView',
-    'Settings/Notifications/SchemaModal',
-    'Settings/Notifications/AddCardView'
-], function (App, Marionette, NotificationItemView, SchemaModal, AddCardView) {
+    'Settings/Notifications/SchemaModal'
+], function (App, Marionette, NotificationItemView, SchemaModal) {
     return Marionette.CompositeView.extend({
         itemView         : NotificationItemView,
         itemViewContainer: '.notifications',
