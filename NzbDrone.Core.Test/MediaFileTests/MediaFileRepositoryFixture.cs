@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.Id = 0)
-                    .With(f => f.Path = path.CleanPath())
+                    .With(f => f.Path = path.CleanFilePath())
                     .Build();
 
             Subject.Insert(episodeFile);
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             //Resolve
             file.Should().NotBeNull();
-            file.Path.Should().Be(path.CleanPath());
+            file.Path.Should().Be(path.CleanFilePath());
         }
     }
 }

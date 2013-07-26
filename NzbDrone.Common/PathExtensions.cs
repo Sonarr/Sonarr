@@ -19,7 +19,7 @@ namespace NzbDrone.Common
         private static readonly string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_LOG_FOLDER_NAME = "UpdateLogs" + Path.DirectorySeparatorChar;
 
-        public static string CleanPath(this string path)
+        public static string CleanFilePath(this string path)
         {
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
 

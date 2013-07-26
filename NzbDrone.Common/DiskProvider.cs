@@ -346,7 +346,7 @@ namespace NzbDrone.Common
             Ensure.That(() => firstPath).IsValidPath();
             Ensure.That(() => secondPath).IsValidPath();
 
-            return String.Equals(firstPath.CleanPath(), secondPath.CleanPath(), StringComparison.InvariantCultureIgnoreCase);
+            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
         }
 
         public virtual void FileSetLastWriteTimeUtc(string path, DateTime dateTime)

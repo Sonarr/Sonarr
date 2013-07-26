@@ -17,9 +17,9 @@ namespace NzbDrone.Common.Test
         {
             var fakeEnvironment = new Mock<IAppFolderInfo>();
 
-            fakeEnvironment.SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone\");
+            fakeEnvironment.SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone\".AsOsAgnostic());
 
-            fakeEnvironment.SetupGet(c => c.TempFolder).Returns(@"C:\Temp\");
+            fakeEnvironment.SetupGet(c => c.TempFolder).Returns(@"C:\Temp\".AsOsAgnostic());
 
             return fakeEnvironment.Object;
         }
@@ -33,11 +33,11 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\Testserver\Test\file.ext", @"\\Testserver\Test\file.ext")]
         [TestCase(@"\\Testserver\Test\file.ext\\", @"\\Testserver\Test\file.ext")]
         [TestCase(@"\\Testserver\Test\file.ext   \\", @"\\Testserver\Test\file.ext")]
-        public void Normalize_Path_Windows(string dirty, string clean)
+        public void Clean_Path_Windows(string dirty, string clean)
         {
             WindowsOnly();
 
-            var result = dirty.CleanPath();
+            var result = dirty.CleanFilePath();
             result.Should().Be(clean);
         }
 
@@ -48,18 +48,18 @@ namespace NzbDrone.Common.Test
         [TestCase(@"//test//other// ", @"/test/other")]
         [TestCase(@"//test//other//file.ext ", @"/test/other/file.ext")]
         [TestCase(@"//CAPITAL//lower// ", @"/CAPITAL/lower")]
-        public void Normalize_Path_Linux(string dirty, string clean)
+        public void Clean_Path_Linux(string dirty, string clean)
         {
             LinuxOnly();
 
-            var result = dirty.CleanPath();
+            var result = dirty.CleanFilePath();
             result.Should().Be(clean);
         }
 
         [Test]
         public void normalize_path_exception_empty()
         {
-            Assert.Throws<ArgumentException>(() => "".CleanPath());
+            Assert.Throws<ArgumentException>(() => "".CleanFilePath());
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Common.Test
         public void normalize_path_exception_null()
         {
             string nullPath = null;
-            Assert.Throws<ArgumentException>(() => nullPath.CleanPath());
+            Assert.Throws<ArgumentException>(() => nullPath.CleanFilePath());
             ExceptionVerification.ExpectedWarns(1);
         }
 
