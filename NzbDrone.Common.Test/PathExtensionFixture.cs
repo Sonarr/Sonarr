@@ -79,7 +79,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void get_actual_casing_should_return_actual_casing_for_local_file()
+        public void get_actual_casing_should_return_actual_casing_for_local_file_in_windows()
         {
             var path = Process.GetCurrentProcess().MainModule.FileName;
             path.ToUpper().GetActualCasing().Should().Be(path);
@@ -87,13 +87,31 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void get_actual_casing_should_return_actual_casing_for_local_dir()
+        public void get_actual_casing_should_return_origibal_value_in_linux()
         {
+            var path = Process.GetCurrentProcess().MainModule.FileName;
+            path.GetActualCasing().Should().Be(path);
+            path.GetActualCasing().Should().Be(path);
+        }
+
+        [Test]
+        public void get_actual_casing_should_return_actual_casing_for_local_dir_in_windows()
+        {
+            WindowsOnly();
             var path = Directory.GetCurrentDirectory();
             path.ToUpper().GetActualCasing().Should().Be(path);
             path.ToLower().GetActualCasing().Should().Be(path);
         }
 
+
+        [Test]
+        public void get_actual_casing_should_return_original_value_in_linux()
+        {
+            WindowsOnly();
+            var path = Directory.GetCurrentDirectory();
+            path.GetActualCasing().Should().Be(path);
+            path.GetActualCasing().Should().Be(path);
+        }
 
         [Test]
         [Explicit]
@@ -102,9 +120,6 @@ namespace NzbDrone.Common.Test
             var path = @"\\server\Pool\Apps";
             path.GetActualCasing().Should().Be(path);
         }
-
-
-
 
         [Test]
         public void AppDataDirectory_path_test()

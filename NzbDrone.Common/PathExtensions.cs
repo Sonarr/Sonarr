@@ -22,8 +22,9 @@ namespace NzbDrone.Common
         public static string CleanFilePath(this string path)
         {
             Ensure.That(() => path).IsNotNullOrWhiteSpace();
+            Ensure.That(() => path).IsValidPath();
 
-            var info = new FileInfo(path);
+            var info = new FileInfo(path.Trim());
 
             if (!OsInfo.IsLinux && info.FullName.StartsWith(@"\\")) //UNC
             {
