@@ -12,6 +12,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests
 {
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
                                                {
                                                    Series = series,
                                                    Episodes = new List<Episode> {episode},
-                                                   Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilit.avi",
+                                                   Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilit.avi".AsOsAgnostic(),
                                                    Quality = new QualityModel(Quality.Bluray720p)
 
                                                }));
