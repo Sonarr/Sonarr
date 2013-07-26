@@ -5,11 +5,11 @@ define(
         'backgrid',
         'Cells/ToggleCell',
         'Cells/EpisodeTitleCell',
-        'Cells/AirDateCell',
+        'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
         'Commands/CommandController',
         'Shared/Actioneer'
-    ], function ( Marionette, Backgrid, ToggleCell, EpisodeTitleCell, AirDateCell, EpisodeStatusCell, CommandController, Actioneer) {
+    ], function ( Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, CommandController, Actioneer) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -56,7 +56,7 @@ define(
                     {
                         name : 'airDateUtc',
                         label: 'Air Date',
-                        cell : AirDateCell
+                        cell : RelativeDateCell
                     } ,
                     {
                         name    : 'status',

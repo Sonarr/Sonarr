@@ -6,7 +6,7 @@ define(
         'Series/Index/List/CollectionView',
         'Series/Index/EmptyView',
         'Series/SeriesCollection',
-        'Cells/AirDateCell',
+        'Cells/RelativeDateCell',
         'Cells/SeriesTitleCell',
         'Cells/TemplatedCell',
         'Cells/QualityProfileCell',
@@ -19,7 +19,7 @@ define(
                  ListCollectionView,
                  EmptyView,
                  SeriesCollection,
-                 AirDateCell,
+                 RelativeDateCell,
                  SeriesTitleCell,
                  TemplatedCell,
                  QualityProfileCell,
@@ -66,7 +66,7 @@ define(
                     {
                         name : 'nextAiring',
                         label: 'Next Airing',
-                        cell : AirDateCell
+                        cell : RelativeDateCell
                     },
                     {
                         name    : 'this',

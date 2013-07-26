@@ -7,10 +7,10 @@ define(
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
-        'Cells/AirDateCell',
+        'Cells/RelativeDateCell',
         'Shared/Grid/Pager',
         'Shared/LoadingView'
-    ], function (Marionette, Backgrid, MissingCollection, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, AirDateCell, GridPager, LoadingView) {
+    ], function (Marionette, Backgrid, MissingCollection, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, RelativeDateCell, GridPager, LoadingView) {
         return Marionette.Layout.extend({
             template: 'Missing/MissingLayoutTemplate',
 
@@ -43,7 +43,7 @@ define(
                     {
                         name : 'airDateUtc',
                         label: 'Air Date',
-                        cell : AirDateCell
+                        cell : RelativeDateCell
                     }
                 ],
 
