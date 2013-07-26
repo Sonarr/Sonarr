@@ -17,7 +17,7 @@ namespace NzbDrone.Common.EnvironmentInfo
     {
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
-        private readonly Environment.SpecialFolder _dataSpecialFolder = Environment.SpecialFolder.CommonApplicationData;
+        private const Environment.SpecialFolder DATA_SPECIAL_FOLDER = Environment.SpecialFolder.CommonApplicationData;
 
 
         public AppFolderInfo(IDiskProvider diskProvider)
@@ -25,16 +25,14 @@ namespace NzbDrone.Common.EnvironmentInfo
             _diskProvider = diskProvider;
             _logger = LogManager.GetCurrentClassLogger();
 
-            if (OsInfo.IsLinux)
-            {
-                _dataSpecialFolder = Environment.SpecialFolder.ApplicationData;
-            }
-
-            AppDataFolder = Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
+            AppDataFolder = Path.Combine(Environment.GetFolderPath(DATA_SPECIAL_FOLDER, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
             StartUpFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             TempFolder = Path.GetTempPath();
 
-            SetPermissions();
+            if (!OsInfo.IsLinux)
+            {
+                SetPermissions();
+            }
         }
 
         private void SetPermissions()
