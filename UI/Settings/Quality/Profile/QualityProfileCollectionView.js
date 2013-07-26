@@ -17,7 +17,7 @@ define(['app',
         },
 
         onAfterItemAdded: function () {
-            this.$itemViewContainer.find('.x-add-card').remove();
+            this.$itemViewContainer.find('.x-add-card').parent('li').remove();
 
             this.templateFunction = Marionette.TemplateCache.get('Settings/Quality/Profile/AddCardTemplate');
             var html = this.templateFunction();

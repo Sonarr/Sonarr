@@ -11,10 +11,19 @@ define(['app',
             template         : 'Settings/Indexers/CollectionTemplate',
 
             events: {
-                'click .x-add': 'openSchemaModal'
+                'click .x-add-card': '_openSchemaModal'
             },
 
-            openSchemaModal: function () {
+            onAfterItemAdded: function () {
+                this.$itemViewContainer.find('.x-add-card').parent('li').remove();
+
+                this.templateFunction = Marionette.TemplateCache.get('Settings/Indexers/AddCardTemplate');
+                var html = this.templateFunction();
+
+                this.$itemViewContainer.append(html);
+            },
+
+            _openSchemaModal: function () {
                 var self = this;
                 //TODO: Is there a better way to deal with changing URLs?
                 var schemaCollection = new IndexerCollection();
