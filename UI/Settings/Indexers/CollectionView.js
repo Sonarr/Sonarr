@@ -10,18 +10,18 @@ define(['app',
             itemViewContainer: '#x-indexers',
             template         : 'Settings/Indexers/CollectionTemplate',
 
+            ui: {
+                'addCard': '.x-add-card'
+            },
+
             events: {
                 'click .x-add-card': '_openSchemaModal'
             },
 
-            onRender: function () {
-                this.listenTo(this.collection, 'add', this.render);
-
-                this.templateFunction = Marionette.TemplateCache.get('Settings/Indexers/AddCardTemplate');
-                var html = this.templateFunction();
-
-                this.$itemViewContainer.append(html);
+            appendHtml: function(collectionView, itemView, index){
+                collectionView.ui.addCard.parent('li').before(itemView.el);
             },
+
 
             _openSchemaModal: function () {
                 var self = this;

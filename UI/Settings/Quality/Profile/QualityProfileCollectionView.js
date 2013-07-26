@@ -12,18 +12,18 @@ define(['app',
         itemViewContainer: '.quality-profiles',
         template         : 'Settings/Quality/Profile/QualityProfileCollectionTemplate',
 
+        ui: {
+            'addCard': '.x-add-card'
+        },
+
         events: {
             'click .x-add-card': '_addProfile'
         },
 
-        onRender: function () {
-            this.listenTo(this.collection, 'add', this.render);
-
-            this.templateFunction = Marionette.TemplateCache.get('Settings/Quality/Profile/AddCardTemplate');
-            var html = this.templateFunction();
-
-            this.$itemViewContainer.append(html);
+        appendHtml: function(collectionView, itemView, index){
+            collectionView.ui.addCard.parent('li').before(itemView.el);
         },
+
 
         _addProfile: function () {
             var self = this;
