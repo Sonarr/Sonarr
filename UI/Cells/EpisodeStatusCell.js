@@ -17,7 +17,7 @@ define(
                     var icon;
                     var tooltip;
 
-                    var hasAired = Moment(this.model.get('airDate')).isBefore(Moment());
+                    var hasAired = Moment(this.model.get('airDateUtc')).isBefore(Moment());
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {
@@ -34,7 +34,7 @@ define(
                         return this;
                     }
                     else {
-                        if (!this.model.get('airDate')) {
+                        if (!this.model.get('airDateUtc')) {
                             icon = 'icon-question-sign';
                             tooltip = 'TBA';
                         }
