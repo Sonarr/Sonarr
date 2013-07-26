@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 
             _remoteEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
                                                       .All()
-                                                      .With(e => e.AirDate = DateTime.Today)
+                                                      .With(e => e.AirDate = DateTime.Today.ToString(Episode.AIR_DATE_FORMAT))
                                                       .Build()
                                                       .ToList();
         }

@@ -163,14 +163,14 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(newList);
             allEpisodes.AddRange(updateList);
 
-            var groups = allEpisodes.Where(c=>c.AirDate.HasValue).GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
+            var groups = allEpisodes.Where(c=>c.AirDateUtc.HasValue).GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
 
             foreach (var group in groups)
             {
                 int episodeCount = 0;
                 foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
                 {
-                    episode.AirDate = episode.AirDate.Value.AddMinutes(series.Runtime * episodeCount);
+                    episode.AirDateUtc = episode.AirDateUtc.Value.AddMinutes(series.Runtime * episodeCount);
                     episodeCount++;
                 }
             }

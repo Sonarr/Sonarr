@@ -700,7 +700,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             var episodes = Builder<Episode>
                     .CreateListOfSize(1)
                     .All()
-                    .With(e => e.AirDate = new DateTime(2012, 12, 13))
+                    .With(e => e.AirDate = "2012-12-13")
                     .With(e => e.Title = "Kristen Stewart")
                     .Build();
 
@@ -729,7 +729,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             var episodes = Builder<Episode>
                     .CreateListOfSize(1)
                     .All()
-                    .With(e => e.AirDate = new DateTime(2012, 12, 13))
+                    .With(e => e.AirDate = "2012-12-13")
                     .With(e => e.Title = "Kristen Stewart")
                     .Build();
 

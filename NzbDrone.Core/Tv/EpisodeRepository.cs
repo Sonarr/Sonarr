@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Tv
 
         public Episode Get(int seriesId, DateTime date)
         {
-            return Query.Single(s => s.SeriesId == seriesId && s.AirDate.HasValue && s.AirDate.Value.Date == date.Date);
+            return Query.Single(s => s.SeriesId == seriesId && s.AirDate == date.ToString(Episode.AIR_DATE_FORMAT));
         }
 
         public Episode Find(int seriesId, DateTime date)
         {
-            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.AirDate.HasValue && s.AirDate.Value.Date == date.Date);
+            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.AirDate == date.ToString(Episode.AIR_DATE_FORMAT));
         }
 
         public List<Episode> GetEpisodes(int seriesId)

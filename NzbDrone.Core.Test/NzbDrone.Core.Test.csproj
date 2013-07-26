@@ -157,7 +157,7 @@
     <Compile Include="MediaFileTests\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />
-    <Compile Include="MetadataSourceTests\TracktProxyFixture.cs" />
+    <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />

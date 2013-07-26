@@ -128,8 +128,8 @@ namespace NzbDrone.Core.Organizer
 
             else
             {
-                if (episodes.First().AirDate.HasValue)
-                    result += episodes.First().AirDate.Value.ToString("yyyy-MM-dd");
+                if (!String.IsNullOrEmpty(episodes.First().AirDate))
+                    result += episodes.First().AirDate;
 
                 else
                     result += "Unknown";

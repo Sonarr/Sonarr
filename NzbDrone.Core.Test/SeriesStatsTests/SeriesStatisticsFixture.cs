@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             _episode = Builder<Episode>.CreateNew()
                                           .With(e => e.Id = 0)
                                           .With(e => e.SeriesId = series.Id)
-                                          .With(e => e.AirDate = DateTime.Today.AddDays(5))
+                                          .With(e => e.AirDateUtc = DateTime.Today.AddDays(5))
                                           .Build();
 
             Db.Insert(_episode);
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             var stats = Subject.SeriesStatistics();
 
             stats.Should().HaveCount(1);
-            stats.First().NextAiring.Should().Be(_episode.AirDate);
+            stats.First().NextAiring.Should().Be(_episode.AirDateUtc);
         }
     }
 }

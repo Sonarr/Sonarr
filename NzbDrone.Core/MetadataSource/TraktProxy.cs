@@ -69,7 +69,7 @@ namespace NzbDrone.Core.MetadataSource
             episode.EpisodeNumber = traktEpisode.number;
             episode.TvDbEpisodeId = traktEpisode.tvdb_id;
             episode.Title = traktEpisode.title;
-            episode.AirDate = FromEpoch(traktEpisode.first_aired);
+            episode.AirDate = FromIsoToString(traktEpisode.first_aired_iso);
             episode.AirDateUtc = FromIso(traktEpisode.first_aired_iso);
 
             return episode;
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.MetadataSource
         {
             if (ticks == 0) return null;
 
-            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(ticks);
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(ticks);
         }
 
         private static DateTime? FromIso(string iso)
@@ -106,6 +106,16 @@ namespace NzbDrone.Core.MetadataSource
                 return null;
 
             return result.ToUniversalTime();
+        }
+
+        private static string FromIsoToString(string iso)
+        {
+            DateTime result;
+
+            if (!DateTime.TryParse(iso, out result))
+                return null;
+
+            return result.ToString(Episode.AIR_DATE_FORMAT);
         }
     }
 }

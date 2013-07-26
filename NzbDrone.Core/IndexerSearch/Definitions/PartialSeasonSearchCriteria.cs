@@ -13,7 +13,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            return string.Format("[{0} : S{1:00}E{1:0}*]", SceneTitle, SeasonNumber, Prefix);
+            return string.Format("[{0} : S{1:00}E{2:0}*]", SceneTitle, SeasonNumber, Prefix);
         }
     }
 }

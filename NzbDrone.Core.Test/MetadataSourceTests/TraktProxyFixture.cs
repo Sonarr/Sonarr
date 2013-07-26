@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -27,7 +28,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             result[0].Title.Should().Be(expected);
         }
 
-
         [Test]
         public void no_search_result()
         {
@@ -35,39 +35,15 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             result.Should().BeEmpty();
         }
 
-        [Test]
-        public void should_be_able_to_get_series_detail()
+        [TestCase(75978)]
+        [TestCase(79349)]
+        public void should_be_able_to_get_series_detail(int tvdbId)
         {
-            var details = Subject.GetSeriesInfo(75978);
-
+            var details = Subject.GetSeriesInfo(tvdbId);
 
             ValidateSeries(details.Item1);
-
-            var episodes = details.Item2;
-
-            episodes.Should().NotBeEmpty();
-
-            episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
-                .Max(e => e.Count()).Should().Be(1);
-
-            episodes.Select(c => c.TvDbEpisodeId).Should().OnlyHaveUniqueItems();
-
-            episodes.Should().Contain(c => c.SeasonNumber > 0);
-            episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
-
-            foreach (var episode in episodes)
-            {
-                episode.AirDate.Should().HaveValue();
-                episode.AirDate.Value.Kind.Should().Be(DateTimeKind.Utc);
-                episode.EpisodeNumber.Should().NotBe(0);
-                episode.Title.Should().NotBeBlank();
-                episode.TvDbEpisodeId.Should().NotBe(0);
-            }
-
+            ValidateEpisodes(details.Item2);
         }
-
-
-
 
         private void ValidateSeries(Series series)
         {
@@ -84,6 +60,39 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             series.TitleSlug.Should().NotBeBlank();
             series.TvRageId.Should().BeGreaterThan(0);
             series.TvdbId.Should().BeGreaterThan(0);
+        }
+
+        private void ValidateEpisodes(List<Episode> episodes)
+        {
+            episodes.Should().NotBeEmpty();
+
+            episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+                .Max(e => e.Count()).Should().Be(1);
+
+            episodes.Select(c => c.TvDbEpisodeId).Should().OnlyHaveUniqueItems();
+
+            episodes.Should().Contain(c => c.SeasonNumber > 0);
+            episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
+
+            foreach (var episode in episodes)
+            {
+                ValidateEpisode(episode);
+            }
+        }
+
+        private void ValidateEpisode(Episode episode)
+        {
+            episode.Should().NotBeNull();
+            episode.Title.Should().NotBeBlank();
+            episode.EpisodeNumber.Should().NotBe(0);
+            episode.TvDbEpisodeId.Should().BeGreaterThan(0);
+
+            episode.Should().NotBeNull();
+
+            if (episode.AirDateUtc.HasValue)
+            {
+                episode.AirDateUtc.Value.Kind.Should().Be(DateTimeKind.Utc);
+            }
         }
     }
 }

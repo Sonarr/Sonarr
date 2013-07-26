@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (series.SeriesType == SeriesTypes.Daily)
             {
-                return SearchDaily(episode.SeriesId, episode.AirDate.Value.Date);
+                return SearchDaily(episode.SeriesId, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
             }
 
             return SearchSingle(series, episode);
