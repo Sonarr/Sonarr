@@ -33,17 +33,14 @@ namespace Marr.Data.Converters
             {
                 return true;
             }
-            else if (val == "N")
+            if (val == "N")
             {
                 return false;
             }
-            else
-            {
-                throw new ConversionException(
-                    string.Format(
+            throw new ConversionException(
+                string.Format(
                     "The BooleanYNConverter could not convert the value '{0}' to a boolean.",
                     dbValue));
-            }
         }
 
         public object ToDB(object clrValue)
@@ -54,14 +51,11 @@ namespace Marr.Data.Converters
             {
                 return "Y";
             }
-            else if (val == false)
+            if (val == false)
             {
                 return "N";
             }
-            else
-            {
-                return DBNull.Value;
-            }
+            return DBNull.Value;
         }
 
         public Type DbType

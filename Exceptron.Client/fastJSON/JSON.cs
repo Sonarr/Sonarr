@@ -93,12 +93,9 @@ namespace Exceptron.Client.fastJSON
             string val = "";
             if (_tyname.TryGetValue(t, out val))
                 return val;
-            else
-            {
-                string s = t.AssemblyQualifiedName;
-                _tyname.Add(t, s);
-                return s;
-            }
+            string s = t.AssemblyQualifiedName;
+            _tyname.Add(t, s);
+            return s;
         }
 
         readonly SafeDictionary<string, Type> _typecache = new SafeDictionary<string, Type>();
@@ -107,12 +104,9 @@ namespace Exceptron.Client.fastJSON
             Type val = null;
             if (_typecache.TryGetValue(typename, out val))
                 return val;
-            else
-            {
-                Type t = Type.GetType(typename);
-                _typecache.Add(typename, t);
-                return t;
-            }
+            Type t = Type.GetType(typename);
+            _typecache.Add(typename, t);
+            return t;
         }
 
         readonly SafeDictionary<Type, CreateObject> _constrcache = new SafeDictionary<Type, CreateObject>();
@@ -126,17 +120,14 @@ namespace Exceptron.Client.fastJSON
                 {
                     return c();
                 }
-                else
-                {
-                    DynamicMethod dynMethod = new DynamicMethod("_", objtype, null, true);
-                    ILGenerator ilGen = dynMethod.GetILGenerator();
+                DynamicMethod dynMethod = new DynamicMethod("_", objtype, null, true);
+                ILGenerator ilGen = dynMethod.GetILGenerator();
 
-                    ilGen.Emit(OpCodes.Newobj, objtype.GetConstructor(Type.EmptyTypes));
-                    ilGen.Emit(OpCodes.Ret);
-                    c = (CreateObject)dynMethod.CreateDelegate(typeof(CreateObject));
-                    _constrcache.Add(objtype, c);
-                    return c();
-                }
+                ilGen.Emit(OpCodes.Newobj, objtype.GetConstructor(Type.EmptyTypes));
+                ilGen.Emit(OpCodes.Ret);
+                c = (CreateObject)dynMethod.CreateDelegate(typeof(CreateObject));
+                _constrcache.Add(objtype, c);
+                return c();
             }
             catch (Exception exc)
             {
@@ -188,22 +179,19 @@ namespace Exceptron.Client.fastJSON
             {
                 return sd;
             }
-            else
+            sd = new SafeDictionary<string, myPropInfo>();
+            var pr = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            foreach (var p in pr)
             {
-                sd = new SafeDictionary<string, myPropInfo>();
-                var pr = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                foreach (var p in pr)
-                {
-                    myPropInfo d = CreateMyProp(p.PropertyType, p.Name);
-                    d.CanWrite = p.CanWrite;
-                    d.setter = CreateSetMethod(p);
-                    d.getter = CreateGetMethod(p);
-                    sd.Add(p.Name, d);
-                }
-
-                _propertycache.Add(typename, sd);
-                return sd;
+                myPropInfo d = CreateMyProp(p.PropertyType, p.Name);
+                d.CanWrite = p.CanWrite;
+                d.setter = CreateSetMethod(p);
+                d.getter = CreateGetMethod(p);
+                sd.Add(p.Name, d);
             }
+
+            _propertycache.Add(typename, sd);
+            return sd;
         }
 
         private myPropInfo CreateMyProp(Type t, string name)
@@ -342,16 +330,16 @@ namespace Exceptron.Client.fastJSON
             if (conversionType == typeof(int))
                 return (int)CreateLong((string)value);
 
-            else if (conversionType == typeof(long))
+            if (conversionType == typeof(long))
                 return CreateLong((string)value);
 
-            else if (conversionType == typeof(string))
+            if (conversionType == typeof(string))
                 return value;
 
-            else if (conversionType == typeof(Guid))
+            if (conversionType == typeof(Guid))
                 return CreateGuid((string)value);
 
-            else if (conversionType.IsEnum)
+            if (conversionType.IsEnum)
                 return CreateEnum(conversionType, (string)value);
 
             return Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
@@ -550,8 +538,7 @@ namespace Exceptron.Client.fastJSON
         {
             if (s.Length > 30)
                 return new Guid(s);
-            else
-                return new Guid(Convert.FromBase64String(s));
+            return new Guid(Convert.FromBase64String(s));
         }
 
         private DateTime CreateDateTime(string value)
@@ -571,8 +558,7 @@ namespace Exceptron.Client.fastJSON
 
             if (UseUTCDateTime == false && utc == false)
                 return new DateTime(year, month, day, hour, min, sec);
-            else
-                return new DateTime(year, month, day, hour, min, sec, DateTimeKind.Utc).ToLocalTime();
+            return new DateTime(year, month, day, hour, min, sec, DateTimeKind.Utc).ToLocalTime();
         }
 
 #if SILVERLIGHT

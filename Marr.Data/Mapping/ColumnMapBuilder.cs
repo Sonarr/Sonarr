@@ -216,10 +216,7 @@ namespace Marr.Data.Mapping
                     fieldName,
                     typeof(TEntity).Name));
             }
-            else
-            {
-                MappedColumns.Add(columnMap);
-            }
+            MappedColumns.Add(columnMap);
         }
 
         /// <summary>

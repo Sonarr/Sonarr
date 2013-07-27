@@ -26,41 +26,40 @@ namespace Marr.Data.Parameters
             if (type == typeof(String))
                 return SqlDbType.VarChar;
 
-            else if (type == typeof(Int32))
+            if (type == typeof(Int32))
                 return SqlDbType.Int;
 
-            else if (type == typeof(Decimal))
+            if (type == typeof(Decimal))
                 return SqlDbType.Decimal;
 
-            else if (type == typeof(DateTime))
+            if (type == typeof(DateTime))
                 return SqlDbType.DateTime;
 
-            else if (type == typeof(Boolean))
+            if (type == typeof(Boolean))
                 return SqlDbType.Bit;
 
-            else if (type == typeof(Int16))
+            if (type == typeof(Int16))
                 return SqlDbType.SmallInt;
 
-            else if (type == typeof(Int64))
+            if (type == typeof(Int64))
                 return SqlDbType.BigInt;
 
-            else if (type == typeof(Double))
+            if (type == typeof(Double))
                 return SqlDbType.Float;
 
-            else if (type == typeof(Char))
+            if (type == typeof(Char))
                 return SqlDbType.Char;
 
-            else if (type == typeof(Byte))
+            if (type == typeof(Byte))
                 return SqlDbType.Binary;
 
-            else if (type == typeof(Byte[]))
+            if (type == typeof(Byte[]))
                 return SqlDbType.VarBinary;
 
-            else if (type == typeof(Guid))
+            if (type == typeof(Guid))
                 return SqlDbType.UniqueIdentifier;
 
-            else
-                return SqlDbType.Variant;
+            return SqlDbType.Variant;
         }
 
         public void SetDbType(IDbDataParameter param, Enum dbType)

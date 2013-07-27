@@ -153,10 +153,7 @@ namespace Marr.Data.Mapping
                     fieldName,
                     typeof(TEntity).Name));
             }
-            else
-            {
-                Relationships.Add(relationship);
-            }
+            Relationships.Add(relationship);
         }
 
         /// <summary>

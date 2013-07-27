@@ -95,10 +95,7 @@ namespace Marr.Data.QGen
             {
                 return columnInfo.AltName;
             }
-            else
-            {
-                return columnInfo.Name;
-            }
+            return columnInfo.Name;
         }
 
         public void BuildFromClause(StringBuilder sql)

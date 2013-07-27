@@ -118,12 +118,9 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 return null;
             }
 
-            else
-            {
-                var matchingSeries = allSeries.FirstOrDefault(s => s.ImdbNumber == series.TvdbId || s.Label == series.Title);
+            var matchingSeries = allSeries.FirstOrDefault(s => s.ImdbNumber == series.TvdbId || s.Label == series.Title);
 
-                if (matchingSeries != null) return matchingSeries.File;
-            }
+            if (matchingSeries != null) return matchingSeries.File;
 
             return null;
         }

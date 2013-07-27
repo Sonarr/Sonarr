@@ -67,10 +67,7 @@ namespace Marr.Data.Mapping.Strategies
             {
                 return (atts[0] as TableAttribute).Name;
             }
-            else
-            {
-                return entityType.Name;
-            }
+            return entityType.Name;
         }
 
         /// <summary>

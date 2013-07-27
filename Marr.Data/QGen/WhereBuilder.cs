@@ -281,10 +281,7 @@ namespace Marr.Data.QGen
             {
                 return _sb.ToString();
             }
-            else
-            {
-                return _constantWhereClause;
-            }
+            return _constantWhereClause;
         }
     } 
 

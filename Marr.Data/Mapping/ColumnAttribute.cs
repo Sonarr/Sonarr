@@ -109,10 +109,7 @@ namespace Marr.Data.Mapping
             {
                 return AltName;
             }
-            else
-            {
-                return Name;
-            }
+            return Name;
         }
     }
 }

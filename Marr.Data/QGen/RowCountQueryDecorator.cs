@@ -18,10 +18,7 @@ namespace Marr.Data.QGen
             {
                 return ComplexRowCount();
             }
-            else
-            {
-                return SimpleRowCount();
-            }
+            return SimpleRowCount();
         }
 
         /// <summary>

@@ -32,10 +32,7 @@ namespace Marr.Data.QGen
             {
                 return ComplexPaging();
             }
-            else
-            {
-                return SimplePaging();
-            }
+            return SimplePaging();
         }
 
         /// <summary>

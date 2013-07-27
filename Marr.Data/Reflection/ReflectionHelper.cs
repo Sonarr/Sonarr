@@ -32,14 +32,11 @@ namespace Marr.Data.Reflection
             {
                 return null;
             }
-            else if (fieldType.IsValueType)
+            if (fieldType.IsValueType)
             {
                 return Activator.CreateInstance(fieldType);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>

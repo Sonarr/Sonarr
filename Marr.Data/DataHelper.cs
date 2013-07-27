@@ -65,10 +65,7 @@ namespace Marr.Data
             {
                 return col.TryGetAltName();
             }
-            else
-            {
-                return col.Name;
-            }
+            return col.Name;
         }
 
         /// <summary>

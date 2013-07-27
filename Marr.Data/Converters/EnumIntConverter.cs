@@ -24,16 +24,14 @@ namespace Marr.Data.Converters
         {
             if (dbValue == null || dbValue == DBNull.Value)
                 return null;
-            else
-                return Enum.ToObject(map.FieldType, (int)dbValue);
+            return Enum.ToObject(map.FieldType, (int)dbValue);
         }
 
         public object ToDB(object clrValue)
         {
             if (clrValue == null)
                 return DBNull.Value;
-            else
-                return (int)clrValue;
+            return (int)clrValue;
         }
 
         public Type DbType

@@ -11,11 +11,11 @@ namespace NzbDrone.Common
         private const string NZBDRONE_LOG_DB = "logs.db";
         private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
         private const string NLOG_CONFIG_FILE = "nlog.config";
+        private const string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
 
         private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup" + Path.DirectorySeparatorChar;
-        private static readonly string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
         private static readonly string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_LOG_FOLDER_NAME = "UpdateLogs" + Path.DirectorySeparatorChar;
 

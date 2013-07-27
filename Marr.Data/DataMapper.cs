@@ -174,8 +174,7 @@ namespace Marr.Data
         {
             if (string.IsNullOrEmpty(sql))
                 throw new ArgumentNullException("sql", "A SQL query or stored procedure name is required");
-            else
-                Command.CommandText = sql;
+            Command.CommandText = sql;
 
             try
             {
@@ -197,8 +196,7 @@ namespace Marr.Data
         {
             if (string.IsNullOrEmpty(sql))
                 throw new ArgumentNullException("sql", "A SQL query or stored procedure name is required");
-            else
-                Command.CommandText = sql;
+            Command.CommandText = sql;
 
             try
             {
@@ -223,8 +221,7 @@ namespace Marr.Data
         {
             if (string.IsNullOrEmpty(sql))
                 throw new ArgumentNullException("sql", "A SQL query or stored procedure name is required");
-            else
-                Command.CommandText = sql;
+            Command.CommandText = sql;
 
             try
             {
