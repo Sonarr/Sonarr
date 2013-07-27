@@ -147,6 +147,7 @@
     <Compile Include="Extensions\ReqResExtensions.cs" />
     <Compile Include="Config\SettingsModule.cs" />
     <Compile Include="SignalR\BasicResourceConnection.cs" />
+    <Compile Include="SignalR\NoOpPerformanceCounterManager.cs" />
     <Compile Include="SignalR\Serializer.cs" />
     <Compile Include="SignalR\SignalrDependencyResolver.cs" />
     <Compile Include="SignalR\NzbDronePersistentConnection.cs" />
