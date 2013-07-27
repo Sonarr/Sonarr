@@ -9,6 +9,7 @@ namespace NzbDrone.Api.Notifications
     {
         public String Name { get; set; }
         public String ImplementationName { get; set; }
+        public String Link { get; set; }
         public Boolean OnGrab { get; set; }
         public Boolean OnDownload { get; set; }
         public List<Field> Fields { get; set; }

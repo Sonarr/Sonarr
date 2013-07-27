@@ -7,6 +7,7 @@ namespace NzbDrone.Core.Notifications
     {
         public abstract string Name { get; }
         public abstract string ImplementationName { get; }
+        public abstract string Link { get; }
 
         public NotificationDefinition InstanceDefinition { get; set; }
 

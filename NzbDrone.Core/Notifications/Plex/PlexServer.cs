@@ -21,6 +21,11 @@ namespace NzbDrone.Core.Notifications.Plex
             get { return "Plex Server"; }
         }
 
+        public override string Link
+        {
+            get { return "http://www.plexapp.com/"; }
+        }
+
         public override void OnGrab(string message)
         {
         }

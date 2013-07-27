@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Notifications.Pushover
 {
     public class PushoverSettings : INotifcationSettings
     {
-        [FieldDefinition(0, Label = "User Key")]
+        [FieldDefinition(0, Label = "User Key", HelpLink = "https://pushover.net/")]
         public String UserKey { get; set; }
 
         [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(PushoverPriority) )]

@@ -18,7 +18,11 @@ define([
             this.notificationCollection = options.notificationCollection;
         },
 
-        addNotification: function () {
+        addNotification: function (e) {
+            if ($(e.target).hasClass('icon-info-sign')) {
+                return;
+            }
+
             this.model.set('id', undefined);
             var editView = new EditView({ model: this.model, notificationCollection: this.notificationCollection });
             App.modalRegion.show(editView);

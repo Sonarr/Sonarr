@@ -23,6 +23,11 @@ namespace NzbDrone.Core.Notifications.Pushover
             get { return "Pushover"; }
         }
 
+        public override string Link
+        {
+            get { return "https://pushover.net/"; }
+        }
+
         public override void OnGrab(string message)
         {
             const string title = "Episode Grabbed";

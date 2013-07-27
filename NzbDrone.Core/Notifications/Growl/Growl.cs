@@ -21,6 +21,11 @@ namespace NzbDrone.Core.Notifications.Growl
             get { return "Growl"; }
         }
 
+        public override string Link
+        {
+            get { return "http://growl.info/"; }
+        }
+
         public override void OnGrab(string message)
         {
             const string title = "Episode Grabbed";

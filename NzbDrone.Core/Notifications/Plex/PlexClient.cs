@@ -21,6 +21,11 @@ namespace NzbDrone.Core.Notifications.Plex
             get { return "Plex Client"; }
         }
 
+        public override string Link
+        {
+            get { return "http://www.plexapp.com/"; }
+        }
+
         public override void OnGrab(string message)
         {
             const string header = "NzbDrone [TV] - Grabbed";

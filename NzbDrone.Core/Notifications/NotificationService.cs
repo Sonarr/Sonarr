@@ -68,6 +68,7 @@ namespace NzbDrone.Core.Notifications
                 newNotification.Instance = (INotification)_container.Resolve(type);
                 newNotification.Id = i;
                 newNotification.ImplementationName = notification.ImplementationName;
+                newNotification.Link = notification.Link;
 
                 var instanceType = newNotification.Instance.GetType();
                 var baseGenArgs = instanceType.BaseType.GetGenericArguments();

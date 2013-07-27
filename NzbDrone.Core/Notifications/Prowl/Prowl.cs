@@ -22,6 +22,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             get { return "Prowl"; }
         }
 
+        public override string Link
+        {
+            get { return "http://www.prowlapp.com/"; }
+        }
+
         public override void OnGrab(string message)
         {
             const string title = "Episode Grabbed";

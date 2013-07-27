@@ -1,4 +1,6 @@
-﻿﻿.control-group {
+﻿@import "../Shared/Styles/clickable.less";
+
+﻿.control-group {
   .controls {
     i {
       font-size : 16px;
@@ -30,4 +32,12 @@
 
 textarea.release-restrictions {
   width : 260px;
+}
+
+.help-link {
+  text-decoration: none !important;
+
+  i {
+    .clickable;
+  }
 }

@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 {
     public class ProwlSettings : INotifcationSettings
     {
-        [FieldDefinition(0, Label = "API Key")]
+        [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.prowlapp.com/api_settings.php")]
         public String ApiKey { get; set; }
 
         [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions= typeof(ProwlPriority) )]

@@ -22,6 +22,11 @@ namespace NzbDrone.Core.Notifications.Email
             get { return "Email"; }
         }
 
+        public override string Link
+        {
+            get { return null; }
+        }
+
         public override void OnGrab(string message)
         {
             const string subject = "NzbDrone [TV] - Grabbed";

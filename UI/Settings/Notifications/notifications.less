@@ -1,4 +1,5 @@
 @import "../../Shared/Styles/card.less";
+@import "../../Shared/Styles/clickable.less";
 
 .add-notification-item {
   .card;
@@ -6,6 +7,19 @@
   font-size: 24px;
   font-weight: lighter;
   text-align: center;
+
+  a {
+    font-size: 16px;
+    color: #595959;
+
+    i {
+      .clickable;
+    }
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
 }
 
 .add-notifications {
