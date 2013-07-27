@@ -12,6 +12,7 @@ define(
         'Cells/QualityProfileCell',
         'Series/Index/Table/SeriesStatusCell',
         'Series/Index/Table/Row',
+        'Series/Index/LegendView',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
     ], function (Marionette,
@@ -25,6 +26,7 @@ define(
                  QualityProfileCell,
                  SeriesStatusCell,
                  SeriesIndexRow,
+                 LegendView,
                  ToolbarLayout,
                  LoadingView) {
         return Marionette.Layout.extend({
@@ -32,7 +34,8 @@ define(
 
             regions: {
                 seriesRegion: '#x-series',
-                toolbar     : '#x-toolbar'
+                toolbar     : '#x-toolbar',
+                legend : '#x-legend'
             },
 
             columns:
@@ -152,6 +155,7 @@ define(
                 else {
                     this.currentView.collection = SeriesCollection;
                     this.seriesRegion.show(this.currentView);
+                    this.legend.show(new LegendView());
 
                     this._showToolbar();
                 }
