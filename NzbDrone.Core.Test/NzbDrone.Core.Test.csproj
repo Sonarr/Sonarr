@@ -164,6 +164,7 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesRepositoryReadFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithoutFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesBetweenDatesFixture.cs" />

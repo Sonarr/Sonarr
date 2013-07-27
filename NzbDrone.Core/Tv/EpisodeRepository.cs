@@ -90,12 +90,12 @@ namespace NzbDrone.Core.Tv
 
         public Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return Query.Single(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
+            return Query.Single(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
         }
 
         public Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
+            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
         }
 
         public List<Episode> EpisodesWithFiles()
