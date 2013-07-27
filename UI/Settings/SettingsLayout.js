@@ -103,7 +103,7 @@ define(
                 }
 
                 this.ui.notificationsTab.tab('show');
-                this._navigate('settings/notifications');
+                this._navigate('settings/connect');
             },
 
             _showGeneral: function (e) {
@@ -163,6 +163,9 @@ define(
                         break;
                     case 'downloadclient':
                         this._showDownloadClient();
+                        break;
+                    case 'connect':
+                        this._showNotifications();
                         break;
                     case 'notifications':
                         this._showNotifications();
