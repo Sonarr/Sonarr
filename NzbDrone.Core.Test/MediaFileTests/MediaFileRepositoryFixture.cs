@@ -6,6 +6,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests
 {
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         [Test]
         public void GetFileByPath_should_return_EpisodeFile_if_file_exists_in_database()
         {
-            var path = @"C:\Test\EpisodeFile.avi";
+            var path = @"C:\Test\EpisodeFile.avi".AsOsAgnostic();
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                     .With(f => f.Id = 0)

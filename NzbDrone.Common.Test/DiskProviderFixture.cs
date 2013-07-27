@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
@@ -162,14 +161,14 @@ namespace NzbDrone.Common.Test
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var appPath = new AppFolderInfo(Subject).AppDataFolder;
+            var testFile = Path.Combine(SandboxFolder, "newfile.txt");
 
-            TestLogger.Info("Path is: {0}", appPath);
+            TestLogger.Info("Path is: {0}", testFile);
 
-            Subject.WriteAllText(Path.Combine(appPath, "newfile.txt"), "");
+            Subject.WriteAllText(testFile, "");
 
-            Subject.GetLastFolderWrite(appPath).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-10));
-            Subject.GetLastFolderWrite(appPath).Should().BeBefore(DateTime.UtcNow);
+            Subject.GetLastFolderWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
+            Subject.GetLastFolderWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow);
         }
 
         [Test]

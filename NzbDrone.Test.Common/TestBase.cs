@@ -140,9 +140,19 @@ namespace NzbDrone.Test.Common
 
         protected string GetTestFilePath(string fileName)
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "Files", fileName);
+            return Path.Combine(SandboxFolder, fileName);
         }
 
+        protected string SandboxFolder
+        {
+            get
+            {
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+                Directory.CreateDirectory(folder);
+                return folder;
+            }
+
+        }
         protected void VerifyEventPublished<TEvent>() where TEvent : class, IEvent
         {
             VerifyEventPublished<TEvent>(Times.Once());
