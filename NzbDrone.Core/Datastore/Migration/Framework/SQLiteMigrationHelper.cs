@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -24,10 +25,19 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         private static readonly Regex SchemaRegex = new Regex(@"['\""\[](?<name>\w+)['\""\]]\s(?<schema>[\w-\s]+)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-        public SQLiteMigrationHelper(IConnectionStringFactory connectionStringFactory)
+        public SQLiteMigrationHelper(IConnectionStringFactory connectionStringFactory,Logger logger)
         {
-            _connection = new SQLiteConnection(connectionStringFactory.MainDbConnectionString);
-            _connection.Open();
+            try
+            {
+                _connection = new SQLiteConnection(connectionStringFactory.MainDbConnectionString);
+                _connection.Open();
+            }
+            catch (Exception e)
+            {
+                logger.ErrorException("Couldn't open databse " + connectionStringFactory.MainDbConnectionString, e);
+                throw;
+            }
+
         }
 
         private string GetOriginalSql(string tableName)
