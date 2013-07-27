@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -50,6 +51,14 @@ namespace NzbDrone.Common
 
         public IEnumerable<ProcessInfo> GetProcessByName(string name)
         {
+            if (OsInfo.IsMono)
+            {
+                var mono = Process.GetProcessesByName("mono");
+
+                return mono.Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name + ".exe"))
+                                     .Select(ConvertToProcessInfo);
+            }
+
             return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
         }
 
@@ -91,6 +100,17 @@ namespace NzbDrone.Common
             process.PriorityClass = priority;
         }
 
+        public void KillAll(string processName)
+        {
+            var processToKill = GetProcessByName(processName);
+
+            foreach (var processInfo in processToKill)
+            {
+                Kill(processInfo.Id);
+            }
+        }
+
+
         private static ProcessInfo ConvertToProcessInfo(Process process)
         {
             if (process == null || process.Id <= 0 || process.HasExited) return null;
@@ -104,15 +124,7 @@ namespace NzbDrone.Common
                        };
         }
 
-        public void KillAll(string processName)
-        {
-            var processToKill = GetProcessByName(processName);
 
-            foreach (var processInfo in processToKill)
-            {
-                Kill(processInfo.Id);
-            }
-        }
 
         private void Kill(int processId)
         {
