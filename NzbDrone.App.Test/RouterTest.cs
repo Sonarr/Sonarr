@@ -10,6 +10,13 @@ namespace NzbDrone.App.Test
     [TestFixture]
     public class RouterTest : TestBase<Router>
     {
+        [SetUp]
+        public void Setup()
+        {
+            WindowsOnly();
+        }
+
+
         [Test]
         public void Route_should_call_install_service_when_application_mode_is_install()
         {

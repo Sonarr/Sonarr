@@ -110,12 +110,12 @@ namespace NzbDrone
                 return ApplicationModes.Help;
             }
 
-            if (_startupArguments.Flags.Contains(StartupArguments.INSTALL_SERVICE))
+            if (!OsInfo.IsLinux && _startupArguments.Flags.Contains(StartupArguments.INSTALL_SERVICE))
             {
                 return ApplicationModes.InstallService;
             }
 
-            if (_startupArguments.Flags.Contains(StartupArguments.UNINSTALL_SERVICE))
+            if (!OsInfo.IsLinux && _startupArguments.Flags.Contains(StartupArguments.UNINSTALL_SERVICE))
             {
                 return ApplicationModes.UninstallService;
             }
