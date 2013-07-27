@@ -322,3 +322,15 @@ i[class*="icon-"]:not(.gridAction):hover {
         display: inline-block;
     }
 }
+
+#upgrade-now {
+    background-color: #FCF8E3;
+    text-align: center;
+    padding: 5px;
+    
+}
+
+#upgrade-now h3 {
+    color: #c09853;
+    font-weight: bold;
+}

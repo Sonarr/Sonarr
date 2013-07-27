@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex parseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
-        public const string DEFAULT_UPDATE_URL = @"http://update.nzbdrone.com/_release/";
+        public const string DEFAULT_UPDATE_URL = @"http://update.nzbdrone.com/v1/";
 
 
         public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
