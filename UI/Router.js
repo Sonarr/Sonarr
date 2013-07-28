@@ -22,6 +22,7 @@ require(
                 'missing'                   : 'missing',
                 'history'                   : 'history',
                 'logs'                      : 'logs',
+                'logs/:action'              : 'logs',
                 'rss'                       : 'rss',
                 'system'                    : 'system',
                 ':whatever'                 : 'notFound'

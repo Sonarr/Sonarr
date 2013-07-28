@@ -1,5 +1,4 @@
 ﻿using NzbDrone.Core.Datastore;
-using NzbDrone.Core.History;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Api.Mapping;
 
@@ -8,7 +7,6 @@ namespace NzbDrone.Api.Logs
     public class LogModule : NzbDroneRestModule<LogResource>
     {
         private readonly ILogService _logService;
-        private readonly IHistoryService _historyService;
 
         public LogModule(ILogService logService)
         {

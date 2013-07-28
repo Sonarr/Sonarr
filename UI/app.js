@@ -179,7 +179,8 @@ define(
             DeleteSeriesCommand: 'DeleteSeriesCommand',
             CloseModalCommand  : 'CloseModalCommand',
             ShowEpisodeDetails : 'ShowEpisodeDetails',
-            SaveSettings       : 'saveSettings'
+            SaveSettings       : 'saveSettings',
+            ShowLogFile        : 'showLogFile'
         };
 
         app.addInitializer(function () {

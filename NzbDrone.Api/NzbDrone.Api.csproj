@@ -92,6 +92,7 @@
     <Compile Include="Extensions\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\GZipPipeline.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
+    <Compile Include="Frontend\LogFileMapper.cs" />
     <Compile Include="Frontend\IAddCacheHeaders.cs" />
     <Compile Include="Frontend\MediaCoverMapper.cs" />
     <Compile Include="Frontend\IMapHttpRequestsToDisk.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="Indexers\ReleaseModule.cs" />
     <Compile Include="Extensions\LazyExtensions.cs" />
     <Compile Include="Indexers\ReleaseResource.cs" />
+    <Compile Include="Logs\LogFileResource.cs" />
+    <Compile Include="Logs\LogFileModule.cs" />
     <Compile Include="Logs\LogModule.cs" />
     <Compile Include="Logs\LogResource.cs" />
     <Compile Include="Mapping\CloneInjection.cs" />

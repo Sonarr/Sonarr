@@ -10,11 +10,7 @@ define(
             className: 'episode-title-cell',
 
             events: {
-                'click': 'showDetails'
-            },
-
-            showDetails: function () {
-                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.cellValue});
+                'click': '_showDetails'
             },
 
             render: function () {
@@ -26,6 +22,10 @@ define(
 
                 this.$el.html(title);
                 return this;
+            },
+
+            _showDetails: function () {
+                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.cellValue});
             }
         });
     });

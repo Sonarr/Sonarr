@@ -6,8 +6,9 @@ define(
         'Logs/LogTimeCell',
         'Logs/LogLevelCell',
         'Shared/Grid/Pager',
-        'Logs/Collection'
-    ], function (Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection) {
+        'Logs/Collection',
+        'Shared/Toolbar/ToolbarLayout'
+    ], function (Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'Logs/LayoutTemplate',
 
@@ -52,7 +53,30 @@ define(
                     }
                 ],
 
-            showTable: function () {
+            leftSideButtons: {
+                type      : 'default',
+                storeState: false,
+                items     :
+                    [
+                        {
+                            title: 'Files',
+                            icon : 'icon-file',
+                            route: 'logs/files'
+                        }
+                    ]
+            },
+
+            initialize: function () {
+                this.collection = new LogCollection();
+                this.collection.fetch();
+            },
+
+            onShow: function () {
+                this._showToolbar();
+                this._showTable();
+            },
+
+            _showTable: function () {
 
                 this.grid.show(new Backgrid.Grid({
                     row       : Backgrid.Row,
@@ -67,14 +91,14 @@ define(
                 }));
             },
 
-            initialize: function () {
-                this.collection = new LogCollection();
-                this.collection.fetch();
-            },
-
-            onShow: function () {
-                this.showTable();
+            _showToolbar: function () {
+                this.toolbar.show(new ToolbarLayout({
+                    left   :
+                        [
+                            this.leftSideButtons
+                        ],
+                    context: this
+                }));
             }
-
         });
     });

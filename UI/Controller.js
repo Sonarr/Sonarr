@@ -12,12 +12,13 @@ define(
         'Series/SeriesModel',
         'Calendar/CalendarLayout',
         'Logs/Layout',
+        'Logs/Files/Layout',
         'Release/Layout',
         'System/Layout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
     ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, MissingLayout, SeriesModel, CalendarLayout,
-        LogsLayout, ReleaseLayout, SystemLayout, NotFoundView) {
+        LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, NotFoundView) {
         return Marionette.Controller.extend({
 
             series       : function () {
@@ -71,9 +72,16 @@ define(
                 App.mainRegion.show(new ReleaseLayout());
             },
 
-            logs: function () {
-                this._setTitle('logs');
-                App.mainRegion.show(new LogsLayout());
+            logs: function (action) {
+                if (action) {
+                    this._setTitle('log files');
+                    App.mainRegion.show(new LogFileLayout());
+                }
+
+                else {
+                    this._setTitle('logs');
+                    App.mainRegion.show(new LogsLayout());
+                }
             },
 
             system: function () {
