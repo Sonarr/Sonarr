@@ -23,6 +23,7 @@ require(
                 'history'                   : 'history',
                 'logs'                      : 'logs',
                 'rss'                       : 'rss',
+                'system'                    : 'system',
                 ':whatever'                 : 'notFound'
             }
         });

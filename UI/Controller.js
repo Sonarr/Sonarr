@@ -13,16 +13,18 @@ define(
         'Calendar/CalendarLayout',
         'Logs/Layout',
         'Release/Layout',
+        'System/Layout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
     ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, MissingLayout, SeriesModel, CalendarLayout,
-        LogsLayout, ReleaseLayout, NotFoundView) {
+        LogsLayout, ReleaseLayout, SystemLayout, NotFoundView) {
         return Marionette.Controller.extend({
 
             series       : function () {
                 this._setTitle('NzbDrone');
                 App.mainRegion.show(new SeriesIndexLayout());
             },
+
             seriesDetails: function (query) {
 
                 var self = this;
@@ -74,11 +76,15 @@ define(
                 App.mainRegion.show(new LogsLayout());
             },
 
+            system: function () {
+                this._setTitle('system');
+                App.mainRegion.show(new SystemLayout());
+            },
+
             notFound: function () {
                 this._setTitle('Not Found');
                 App.mainRegion.show(new NotFoundView(this));
             },
-
 
             _setTitle: function (title) {
                 //$('#title-region').html(title);

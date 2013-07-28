@@ -1,12 +1,11 @@
 'use strict';
 define(
     [
-        'backbone',
-        'constants'
+        'backbone'
     ], function (Backbone) {
 
         var model = Backbone.Model.extend({
-            url: Constants.ApiRoot + '/system/status'
+            url: window.ApiRoot + '/system/status'
         });
 
 
