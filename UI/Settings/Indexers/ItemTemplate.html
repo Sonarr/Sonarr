@@ -25,4 +25,10 @@
     </div>
 
     {{formBuilder}}
+
+    {{#if_eq name compare="WomblesIndex"}}
+        <div class="alert">
+            <strong>Warning!</strong> Does not support searching
+        </div>
+    {{/if_eq}}
 </div>
