@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
@@ -110,12 +111,13 @@ namespace NzbDrone.Core.MetadataSource
 
         private static string FromIsoToString(string iso)
         {
-            DateTime result;
+            if (String.IsNullOrWhiteSpace(iso)) return null;
 
-            if (!DateTime.TryParse(iso, out result))
-                return null;
+            var match = Regex.Match(iso, @"^\d{4}\W\d{2}\W\d{2}");
 
-            return result.ToString(Episode.AIR_DATE_FORMAT);
+            if (!match.Success) return null;
+
+            return match.Captures[0].Value;
         }
     }
 }
