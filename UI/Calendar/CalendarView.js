@@ -25,7 +25,7 @@ define(
                     header        : {
                         left  : 'prev,next today',
                         center: 'title',
-                        right : 'month,basicWeek'
+                        right : 'month,basicWeek,basicDay'
                     },
                     buttonText    : {
                         prev: '<i class="icon-arrow-left"></i>',
