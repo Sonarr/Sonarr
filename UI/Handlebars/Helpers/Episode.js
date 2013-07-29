@@ -8,7 +8,7 @@ define(
         Handlebars.registerHelper('EpisodeNumber', function () {
 
             if (this.series.seriesType === 'daily') {
-                return Moment(this.airDateUtc).format('L');
+                return Moment(this.airDate).format('L');
             }
 
             else {
