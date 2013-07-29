@@ -230,18 +230,38 @@ define(
 
             _showFooter: function () {
                 var footerModel = new FooterModel();
-                var episodeCount = _.reduce(SeriesCollection.models, function (memo, model) {
-                    return memo + model.get('episodeCount');
-                }, 0);
+                var series = SeriesCollection.models.length;
+                var episodes = 0;
+                var episodeFiles = 0;
+                var ended = 0;
+                var continuing = 0;
+                var monitored = 0;
 
-                var episodeFileCount = _.reduce(SeriesCollection.models, function (memo, model) {
-                    return memo + model.get('episodeFileCount');
-                }, 0);
+                _.each(SeriesCollection.models, function (model){
+                    episodes += model.get('episodeCount');
+                    episodeFiles += model.get('episodeFileCount');
+
+                    if (model.get('status').toLowerCase() === 'ended') {
+                        ended++;
+                    }
+
+                    else {
+                        continuing++;
+                    }
+
+                    if (model.get('monitored')) {
+                        monitored++;
+                    }
+                });
 
                 footerModel.set({
-                    count: SeriesCollection.models.length,
-                    episodeCount: episodeCount,
-                    episodeFileCount: episodeFileCount
+                    series: series,
+                    ended: ended,
+                    continuing: continuing,
+                    monitored: monitored,
+                    unmonitored: series - monitored,
+                    episodes: episodes,
+                    episodeFiles: episodeFiles
                 });
 
                 this.footer.show(new FooterView({ model: footerModel }));
