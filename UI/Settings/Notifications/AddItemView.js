@@ -23,7 +23,11 @@ define([
                 return;
             }
 
-            this.model.set('id', undefined);
+            this.model.set({
+                id: undefined,
+                name: this.model.get('implementationName')
+            });
+
             var editView = new EditView({ model: this.model, notificationCollection: this.notificationCollection });
             App.modalRegion.show(editView);
         }
