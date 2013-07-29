@@ -85,16 +85,16 @@ define(
 
                 var statusLevel = 'primary';
 
-                if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
+                if (hasFile) {
+                    statusLevel = 'success';
+                }
+
+                else if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
                     statusLevel = 'warning';
                 }
 
                 else if (start.isBefore(currentTime) && !hasFile) {
                     statusLevel = 'danger';
-                }
-
-                else if (hasFile) {
-                    statusLevel = 'success';
                 }
 
                 var test = currentTime.startOf('day').format('LLLL');

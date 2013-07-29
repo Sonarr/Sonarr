@@ -24,16 +24,16 @@ define(
             var start = Moment(this.airDateUtc);
             var end = Moment(this.end);
 
+            if (hasFile) {
+                return 'success';
+            }
+
             if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
                 return 'warning';
             }
 
             if (start.isBefore(currentTime) && !hasFile) {
                 return 'danger';
-            }
-
-            if (hasFile) {
-                return 'success';
             }
 
             return 'primary';
