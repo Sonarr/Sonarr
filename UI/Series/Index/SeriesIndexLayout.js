@@ -12,7 +12,8 @@ define(
         'Cells/QualityProfileCell',
         'Series/Index/Table/SeriesStatusCell',
         'Series/Index/Table/Row',
-        'Series/Index/LegendView',
+        'Series/Index/FooterView',
+        'Series/Index/FooterModel',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
     ], function (Marionette,
@@ -26,7 +27,8 @@ define(
                  QualityProfileCell,
                  SeriesStatusCell,
                  SeriesIndexRow,
-                 LegendView,
+                 FooterView,
+                 FooterModel,
                  ToolbarLayout,
                  LoadingView) {
         return Marionette.Layout.extend({
@@ -35,7 +37,7 @@ define(
             regions: {
                 seriesRegion: '#x-series',
                 toolbar     : '#x-toolbar',
-                legend : '#x-legend'
+                footer : '#x-series-footer'
             },
 
             columns:
@@ -155,9 +157,9 @@ define(
                 else {
                     this.currentView.collection = SeriesCollection;
                     this.seriesRegion.show(this.currentView);
-                    this.legend.show(new LegendView());
 
                     this._showToolbar();
+                    this._showFooter();
                 }
             },
 
@@ -167,7 +169,6 @@ define(
                 this._renderView();
                 this._fetchCollection();
             },
-
 
             _fetchCollection: function () {
                 if (SeriesCollection.length === 0) {
@@ -225,6 +226,25 @@ define(
                         ],
                     context: this
                 }));
+            },
+
+            _showFooter: function () {
+                var footerModel = new FooterModel();
+                var episodeCount = _.reduce(SeriesCollection.models, function (memo, model) {
+                    return memo + model.get('episodeCount');
+                }, 0);
+
+                var episodeFileCount = _.reduce(SeriesCollection.models, function (memo, model) {
+                    return memo + model.get('episodeFileCount');
+                }, 0);
+
+                footerModel.set({
+                    count: SeriesCollection.models.length,
+                    episodeCount: episodeCount,
+                    episodeFileCount: episodeFileCount
+                });
+
+                this.footer.show(new FooterView({ model: footerModel }));
             }
         });
     });
