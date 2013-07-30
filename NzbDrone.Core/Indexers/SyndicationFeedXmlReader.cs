@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Indexers
             return dateVal;
         }
 
-        public void CheckForError()
+        private void CheckForError()
         {
             if (MoveToContent() == XmlNodeType.Element)
             {

@@ -54,6 +54,11 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (series.SeriesType == SeriesTypes.Daily)
             {
+                if (string.IsNullOrWhiteSpace(episode.AirDate))
+                {
+                    throw new InvalidOperationException("Daily episode is missing AirDate. Try to refresh series info.");
+                }
+
                 return SearchDaily(episode.SeriesId, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
             }
 
