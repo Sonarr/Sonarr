@@ -38,6 +38,7 @@ namespace NzbDrone.Common
         string GetPathRoot(string path);
         void SetPermissions(string filename, string account, FileSystemRights Rights, AccessControlType ControlType);
         bool IsParent(string parentfolder, string subfolder);
+        FileAttributes GetFileAttributes(string path);
     }
 
     public class DiskProvider : IDiskProvider
@@ -111,7 +112,6 @@ namespace NzbDrone.Common
 
             return FolderExists(path);
         }
-
 
         public virtual bool FileExists(string path)
         {
@@ -437,6 +437,11 @@ namespace NzbDrone.Common
             }
 
             return false;
+        }
+
+        public FileAttributes GetFileAttributes(string path)
+        {
+            return File.GetAttributes(path);
         }
     }
 }

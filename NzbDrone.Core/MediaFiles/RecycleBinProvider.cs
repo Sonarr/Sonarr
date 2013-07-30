@@ -2,6 +2,7 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
@@ -68,6 +69,12 @@ namespace NzbDrone.Core.MediaFiles
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
                 logger.Info("Recycling Bin has not been configured, deleting permanently.");
+
+                if (!OsInfo.IsLinux)
+                {
+                    logger.Trace(_diskProvider.GetFileAttributes(path));
+                }
+
                 _diskProvider.DeleteFile(path);
                 logger.Trace("File has been permanently deleted: {0}", path);
             }
