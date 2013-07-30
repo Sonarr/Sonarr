@@ -3,11 +3,13 @@ using NLog.Config;
 using NLog;
 using NLog.Layouts;
 using NLog.Targets;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Instrumentation
 {
 
-    public class DatabaseTarget : TargetWithLayout
+    public class DatabaseTarget : TargetWithLayout, IHandle<ApplicationShutdownRequested>
     {
         private readonly ILogRepository _repository;
 
@@ -24,10 +26,23 @@ namespace NzbDrone.Core.Instrumentation
 
             LogManager.Configuration.AddTarget("DbLogger", this);
             LogManager.Configuration.LoggingRules.Add(Rule);
-            LogManager.ConfigurationReloaded += (sender, args) => Register();
+            LogManager.ConfigurationReloaded += OnLogManagerOnConfigurationReloaded;
             LogManager.ReconfigExistingLoggers();
         }
 
+        public void UnRegister()
+        {
+            LogManager.ConfigurationReloaded -= OnLogManagerOnConfigurationReloaded;
+            LogManager.Configuration.RemoveTarget("DbLogger");
+            LogManager.Configuration.LoggingRules.Remove(Rule);
+            LogManager.ReconfigExistingLoggers();
+            Dispose();
+        }
+
+        private void OnLogManagerOnConfigurationReloaded(object sender, LoggingConfigurationReloadedEventArgs args)
+        {
+            Register();
+        }
 
         public LoggingRule Rule { get; set; }
 
@@ -65,6 +80,14 @@ namespace NzbDrone.Core.Instrumentation
             log.Level = logEvent.Level.Name;
 
             _repository.Insert(log);
+        }
+
+        public void Handle(ApplicationShutdownRequested message)
+        {
+            if (LogManager.Configuration.LoggingRules.Contains(Rule))
+            {
+                UnRegister();
+            }
         }
     }
 }

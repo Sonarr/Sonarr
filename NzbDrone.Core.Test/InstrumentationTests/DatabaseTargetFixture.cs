@@ -109,6 +109,13 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             epFile.Path.Should().BeNull();
         }
 
+
+        [TearDown]
+        public void Teardown()
+        {
+            Mocker.Resolve<DatabaseTarget>().UnRegister();
+        }
+
         private void VerifyLog(Log logItem, LogLevel level)
         {
             logItem.Time.Should().BeWithin(TimeSpan.FromSeconds(2));
