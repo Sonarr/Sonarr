@@ -3,7 +3,6 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Tags("")]
     [Migration(8)]
     public class remove_backlog : NzbDroneMigrationBase
     {

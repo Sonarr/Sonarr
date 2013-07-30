@@ -3,7 +3,6 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Tags("")]
     [Migration(14)]
     public class drop_air_date : NzbDroneMigrationBase
     {

@@ -3,7 +3,6 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Tags("")]
     [Migration(10)]
     public class add_monitored : NzbDroneMigrationBase
     {

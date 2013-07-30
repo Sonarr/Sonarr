@@ -3,7 +3,6 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Tags("")]
     [Migration(6)]
     public class add_index_to_log_time : NzbDroneMigrationBase
     {

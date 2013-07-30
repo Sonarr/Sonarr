@@ -3,7 +3,6 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Tags("")]
     [Migration(7)]
     public class add_renameEpisodes_to_naming : NzbDroneMigrationBase
     {
