@@ -51,12 +51,12 @@ namespace NzbDrone.Common.Test
             var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
 
 
-            Subject.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
-                .BeEmpty("Dummy process is already running");
+            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
+                   .BeFalse("Dummy process is already running");
             Subject.Start(startInfo).Should().NotBeNull();
 
-            Subject.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
-                .HaveCount(1, "excepted one dummy process to be already running");
+            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
+                   .BeTrue("excepted one dummy process to be already running");
         }
 
         [Test]
@@ -83,6 +83,5 @@ namespace NzbDrone.Common.Test
             Console.WriteLine(new ProcessInfo().ToString());
             ExceptionVerification.MarkInconclusive(typeof(Win32Exception));
         }
-
     }
 }

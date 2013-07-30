@@ -1,4 +1,3 @@
-using System.Linq;
 using NzbDrone.Common;
 
 namespace NzbDrone.Update.UpdateEngine
@@ -27,7 +26,7 @@ namespace NzbDrone.Update.UpdateEngine
                 return AppType.Service;
             }
 
-            if (_processProvider.GetProcessByName(ProcessProvider.NzbDroneConsoleProcessName).Any())
+            if (_processProvider.Exists(ProcessProvider.NzbDroneConsoleProcessName))
             {
                 return AppType.Console;
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -13,10 +12,10 @@ namespace NzbDrone.App.Test
     public class MonitoringProviderTest : TestBase<PriorityMonitor>
     {
         [Test]
-        public void Ensure_priority_doesnt_fail_on_invalid_iis_proccess_id()
+        public void Ensure_priority_doesnt_fail_on_invalid_process_id()
         {
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess())
-                .Returns(Builder<ProcessInfo>.CreateNew().With(c => c.Priority == ProcessPriorityClass.Normal).Build());
+                .Returns(Builder<ProcessInfo>.CreateNew().Build());
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetProcessById(It.IsAny<int>())).Returns((ProcessInfo)null);
 

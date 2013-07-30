@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -11,12 +10,13 @@ namespace NzbDrone.Common
     {
         ProcessInfo GetCurrentProcess();
         ProcessInfo GetProcessById(int id);
-        IEnumerable<ProcessInfo> GetProcessByName(string name);
         Process Start(string path);
         Process Start(ProcessStartInfo startInfo);
         void WaitForExit(Process process);
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
+        bool Exists(string processName);
+        ProcessPriorityClass GetCurrentProcessPriority();
     }
 
     public class ProcessProvider : IProcessProvider
@@ -29,6 +29,16 @@ namespace NzbDrone.Common
         public ProcessInfo GetCurrentProcess()
         {
             return ConvertToProcessInfo(Process.GetCurrentProcess());
+        }
+
+        public bool Exists(string processName)
+        {
+            return Process.GetProcessesByName(processName).Any();
+        }
+
+        public ProcessPriorityClass GetCurrentProcessPriority()
+        {
+            return Process.GetCurrentProcess().PriorityClass;
         }
 
         public ProcessInfo GetProcessById(int id)
@@ -49,18 +59,18 @@ namespace NzbDrone.Common
             return processInfo;
         }
 
-        public IEnumerable<ProcessInfo> GetProcessByName(string name)
-        {
-            if (OsInfo.IsMono)
-            {
-                var mono = Process.GetProcessesByName("mono");
+        /*        public IEnumerable<ProcessInfo> GetProcessByName(string name)
+                {
+                    if (OsInfo.IsMono)
+                    {
+                        var mono = Process.GetProcessesByName("mono");
 
-                return mono.Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name + ".exe"))
-                                     .Select(ConvertToProcessInfo);
-            }
+                        return mono.Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name + ".exe"))
+                                             .Select(ConvertToProcessInfo);
+                    }
 
-            return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
-        }
+                    return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
+                }*/
 
         public Process Start(string path)
         {
@@ -102,7 +112,7 @@ namespace NzbDrone.Common
 
         public void KillAll(string processName)
         {
-            var processToKill = GetProcessByName(processName);
+            var processToKill = Process.GetProcessesByName(processName);
 
             foreach (var processInfo in processToKill)
             {
@@ -113,15 +123,27 @@ namespace NzbDrone.Common
 
         private static ProcessInfo ConvertToProcessInfo(Process process)
         {
-            if (process == null || process.Id <= 0 || process.HasExited) return null;
+            if (process == null) return null;
 
-            return new ProcessInfo
-                       {
-                           Id = process.Id,
-                           Priority = process.PriorityClass,
-                           StartPath = process.MainModule.FileName,
-                           Name = process.ProcessName
-                       };
+            process.Refresh();
+
+            try
+            {
+                if (process.Id <= 0 || process.HasExited) return null;
+
+                return new ProcessInfo
+                {
+                    Id = process.Id,
+                    StartPath = process.MainModule.FileName,
+                    Name = process.ProcessName
+                };
+            }
+            catch (Win32Exception)
+            {
+                Logger.Warn("Coudn't get process info for " + process.ProcessName);
+            }
+
+            return null;
         }
 
 
