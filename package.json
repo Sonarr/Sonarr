@@ -22,6 +22,6 @@
     "grunt-contrib-copy": "*",
     "grunt-curl": "*",
     "grunt-notify": "*",
-    "grunt-clean": "*"
+    "grunt-contrib-clean": "*"
   }
 }

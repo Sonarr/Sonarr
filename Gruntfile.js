@@ -1,7 +1,13 @@
 module.exports = function (grunt) {
+    'use strict';  
 
-    // Project configuration.
+    var outputRoot = '_output/';
+    var outputDir =  outputRoot +'UI/';
+    var srcContent = 'UI/Content/';
+    var destContent = outputDir + 'Content/';
+
     grunt.initConfig({
+
         pkg: grunt.file.readJSON('package.json'),
 
         curl: {
@@ -36,7 +42,8 @@ module.exports = function (grunt) {
         },
 
         clean: {
-            folder: "_output/UI/"
+            output:  outputDir,
+            scripts: [ outputDir + '/**.js','!_output/UI/**/templates.js']
         },
 
         less  : {
@@ -49,8 +56,8 @@ module.exports = function (grunt) {
             },
 
             bootstrap: {
-                src : "UI/Content/Bootstrap/bootstrap.less",
-                dest: "_output/UI/Content/bootstrap.css"
+                src : srcContent + 'Bootstrap/bootstrap.less',
+                dest: destContent + 'bootstrap.css'
             },
             general  : {
                 files: [
@@ -66,7 +73,7 @@ module.exports = function (grunt) {
                                     'UI/Logs/logs.less',
                                     'UI/Settings/settings.less',
                                 ],
-                        dest  : '_output/',
+                        dest  : outputRoot,
                         ext   : '.css'
                     }
                 ]
@@ -75,7 +82,7 @@ module.exports = function (grunt) {
 
         handlebars: {
             options: {
-                namespace   : "T",
+                namespace   : 'T',
                 partialRegex: /Partial.html/,
                 wrapped     : true,
                 amd         : true,
@@ -87,43 +94,43 @@ module.exports = function (grunt) {
                 }
             },
             files  : {
-                src : ['UI/**/*emplate.html','UI/**/*Partial.html'],
-                dest: '_output/UI/templates.js'
+                src : ['UI/**/*Template.html','UI/**/*Partial.html'],
+                dest: outputDir + 'templates.js'
             }
         },
 
         copy: {
             index  : {
                 src : 'UI/*ndex.html',
-                dest: '_output/'
+                dest: outputRoot
             },
             scripts: {
                 src : 'UI/**/*.js',
-                dest: '_output/'
+                dest: outputRoot
             },
             styles : {
                 src : 'UI/**/*.css',
-                dest: '_output/'
+                dest: outputRoot
             },
             images : {
                 src : 'UI/**/*.png',
-                dest: '_output/'
+                dest: outputRoot
             },
             jpg : {
                 src : 'UI/**/*.jpg',
-                dest: '_output/'
+                dest: outputRoot
             },
             icon : {
                 src : 'UI/**/*.ico',
-                dest: '_output/'
+                dest: outputRoot
             },
             fontAwesome  : {
                 src : 'UI/**/FontAwesome/*.*',
-                dest: '_output/'
+                dest: outputRoot
             },
             fonts  : {
                 src : 'UI/**/fonts/*.*',
-                dest: '_output/'
+                dest: outputRoot
             }
         },
 
@@ -132,11 +139,11 @@ module.exports = function (grunt) {
                 nospawn: false,
             },
             bootstrap  : {
-                files: ['UI/**/Bootstrap/**', 'UI/**/FontAwesome/**'],
+                files: [ srcContent + 'Bootstrap/**', srcContent +'FontAwesome/**'],
                 tasks: ['less:bootstrap','less:general']
             },
             generalLess: {
-                files: ['UI/**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
+                files: '<%= less.general.files[0].src %>',
                 tasks: ['less:general']
             },
             handlebars : {
@@ -163,7 +170,7 @@ module.exports = function (grunt) {
                 files: '<%= copy.jpg.src %>',
                 tasks: ['copy:jpg']
             },
-            copyJpg : {
+            copyIcon : {
                 files: '<%= copy.icon.src %>',
                 tasks: ['copy:icon']
             },
@@ -182,11 +189,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-curl');
-    grunt.loadNpmTasks('grunt-clean');
-    // Default task(s).
-    grunt.registerTask('package', ['clean', 'copy', 'less', 'handlebars']);
+
+    grunt.registerTask('package', ['clean:output', 'copy', 'less', 'handlebars']);
     grunt.registerTask('default', ['package', 'watch']); 
     grunt.registerTask('update', ['curl']);
 
