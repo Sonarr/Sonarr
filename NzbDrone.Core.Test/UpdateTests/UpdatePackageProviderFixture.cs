@@ -10,11 +10,11 @@ namespace NzbDrone.Core.Test.UpdateTests
     public class UpdatePackageProviderFixture : CoreTest<UpdatePackageProvider>
     {
         [Test]
-        public void should_get_list_of_avilable_updates()
+        public void should_get_list_of_available_updates()
         {
             UseRealHttp();
 
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/_release/");
+            Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/_release/");
 
             var updates = Subject.GetAvailablePackages().ToList();
 

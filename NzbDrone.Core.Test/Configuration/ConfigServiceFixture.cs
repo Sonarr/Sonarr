@@ -105,24 +105,6 @@ namespace NzbDrone.Core.Test.Configuration
             Subject.GetValue(key, value2).Should().Be(value2);
         }
 
-
-
-        [Test]
-        public void uguid_should_only_be_set_once()
-        {
-            var guid1 = Subject.UGuid;
-            var guid2 = Subject.UGuid;
-
-            guid1.Should().Be(guid2);
-        }
-
-        [Test]
-        public void uguid_should_return_valid_result_on_first_call()
-        {
-            var guid = Subject.UGuid;
-            guid.Should().NotBeEmpty();
-        }
-
         [Test]
         public void updating_a_vakye_should_update_its_value()
         {

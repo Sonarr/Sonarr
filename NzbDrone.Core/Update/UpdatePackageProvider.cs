@@ -16,13 +16,13 @@ namespace NzbDrone.Core.Update
 
     public class UpdatePackageProvider : IUpdatePackageProvider
     {
-        private readonly IConfigService _configService;
+        private readonly IConfigFileProvider _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly Logger _logger;
 
         private static readonly Regex ParseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
 
-        public UpdatePackageProvider(IConfigService configService, IHttpProvider httpProvider, Logger logger)
+        public UpdatePackageProvider(IConfigFileProvider configService, IHttpProvider httpProvider, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;

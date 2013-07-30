@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -137,11 +136,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SeasonFolderFormat", value); }
         }
 
-        public string UpdateUrl
-        {
-            get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }
-            set { SetValue("UpdateUrl", value); }
-        }
 
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
         {
@@ -153,11 +147,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValueInt("Retention", 0); }
             set { SetValue("Retention", value); }
-        }
-
-        public Guid UGuid
-        {
-            get { return Guid.Parse(GetValue("UGuid", Guid.NewGuid().ToString(), persist: true)); }
         }
 
         public DownloadClientType DownloadClient
@@ -178,13 +167,6 @@ namespace NzbDrone.Core.Configuration
             get { return "http://services.nzbdrone.com"; }
         }
 
-        public Boolean MetadataUseBanners
-        {
-            get { return GetValueBoolean("MetadataUseBanners"); }
-
-            set { SetValue("MetadataUseBanners", value); }
-        }
-
         public string PneumaticFolder
         {
             get { return GetValue("PneumaticFolder", String.Empty); }
@@ -195,19 +177,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("RecycleBin", String.Empty); }
             set { SetValue("RecycleBin", value); }
-        }
-
-        public int RssSyncInterval
-        {
-            get { return GetValueInt("RssSyncInterval", 15); }
-            set { SetValue("RssSyncInterval", value); }
-        }
-
-        public Boolean IgnoreArticlesWhenSortingSeries
-        {
-            get { return GetValueBoolean("IgnoreArticlesWhenSortingSeries", true); }
-
-            set { SetValue("IgnoreArticlesWhenSortingSeries", value); }
         }
 
         public String NzbgetUsername
@@ -243,13 +212,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("NzbgetTvCategory", "nzbget"); }
 
             set { SetValue("NzbgetTvCategory", value); }
-        }
-
-        public Int32 NzbgetPriority
-        {
-            get { return GetValueInt("NzbgetPriority", 0); }
-
-            set { SetValue("NzbgetPriority", value); }
         }
 
         public PriorityType NzbgetRecentTvPriority

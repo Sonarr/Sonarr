@@ -2,8 +2,10 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
@@ -32,6 +34,7 @@ namespace NzbDrone.Core.Update
             _processProvider = processProvider;
             _logger = logger;
         }
+
 
         public void Execute(ApplicationUpdateCommand message)
         {
