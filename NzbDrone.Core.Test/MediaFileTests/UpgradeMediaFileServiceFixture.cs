@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -23,6 +24,11 @@ namespace NzbDrone.Core.Test.MediaFileTests
             _episodeFile = Builder<EpisodeFile>
                 .CreateNew()
                 .Build();
+
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.FileExists(It.IsAny<string>()))
+                .Returns(true);
         }
 
         private void GivenSingleEpisodeWithSingleEpisodeFile()
@@ -114,6 +120,35 @@ namespace NzbDrone.Core.Test.MediaFileTests
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), true), Times.Once());
+        }
+
+
+        [Test]
+        public void should_delete_existing_file_fromdb_if_file_doesnt_exist()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.FileExists(It.IsAny<string>()))
+                .Returns(false);
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_try_to_recyclebin_existing_file_fromdb_if_file_doesnt_exist()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.FileExists(It.IsAny<string>()))
+                .Returns(false);
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+
+            Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
         }
     }
 }

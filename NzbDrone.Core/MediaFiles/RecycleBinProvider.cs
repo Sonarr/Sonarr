@@ -33,14 +33,14 @@ namespace NzbDrone.Core.MediaFiles
 
         public void DeleteFolder(string path)
         {
-            logger.Trace("Attempting to send '{0}' to recycling bin", path);
+            logger.Info("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
                 logger.Info("Recycling Bin has not been configured, deleting permanently.");
                 _diskProvider.DeleteFolder(path, true);
-                logger.Trace("Folder has been permanently deleted: {0}", path);
+                logger.Debug("Folder has been permanently deleted: {0}", path);
             }
 
             else
@@ -57,13 +57,13 @@ namespace NzbDrone.Core.MediaFiles
                     _diskProvider.FileSetLastWriteTimeUtc(file, DateTime.UtcNow);
                 }
 
-                logger.Trace("Folder has been moved to the recycling bin: {0}", destination);
+                logger.Debug("Folder has been moved to the recycling bin: {0}", destination);
             }
         }
 
         public void DeleteFile(string path)
         {
-            logger.Trace("Attempting to send '{0}' to recycling bin", path);
+            logger.Debug("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
