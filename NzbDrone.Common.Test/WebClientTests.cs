@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -19,14 +21,13 @@ namespace NzbDrone.Common.Test
 
         [TestCase("")]
         [TestCase("http://")]
-        [TestCase(null)]
-        [ExpectedException]
         public void DownloadString_should_throw_on_error(string url)
         {
-            var jquery = Subject.DownloadString(url);
+            Assert.Throws<ArgumentException>(() => Subject.DownloadString(url));
+            ExceptionVerification.ExpectedWarns(1);
         }
-    
-    
+
+
         [Test]
         public void should_get_headers()
         {
