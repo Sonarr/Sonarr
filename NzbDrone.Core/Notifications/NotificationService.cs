@@ -154,34 +154,52 @@ namespace NzbDrone.Core.Notifications
         {
             var messageBody = GetMessage(message.Episode.ParsedEpisodeInfo, message.Episode.Series);
 
-            All().Where(n => n.OnGrab)
-                .ToList()
-                .ForEach(notification =>
-                            notification.Instance
-                                        .OnGrab(messageBody)
-                        );
+            foreach (var notification in All().Where(n => n.OnGrab))
+            {
+                try
+                {
+                    notification.Instance.OnGrab(messageBody);
+                }
+
+                catch (Exception ex)
+                {
+                    _logger.WarnException("Unable to send OnGrab notification to: " + notification.Name, ex);
+                }
+            }
         }
 
         public void Handle(EpisodeDownloadedEvent message)
         {
             var messageBody = GetMessage(message.ParsedEpisodeInfo, message.Series);
 
-            All().Where(n => n.OnDownload)
-                .ToList()
-                .ForEach(notification =>
-                            notification.Instance
-                                        .OnDownload(messageBody, message.Series)
-                        );
+            foreach (var notification in All().Where(n => n.OnDownload))
+            {
+                try
+                {
+                    notification.Instance.OnDownload(messageBody, message.Series);
+                }
+
+                catch (Exception ex)
+                {
+                    _logger.WarnException("Unable to send OnDownload notification to: " + notification.Name, ex);
+                }
+            }
         }
 
         public void Handle(SeriesRenamedEvent message)
         {
-            All().Where(n => n.OnDownload)
-                .ToList()
-                .ForEach(notification =>
-                            notification.Instance
-                                        .AfterRename(message.Series)
-                        );
+            foreach (var notification in All().Where(n => n.OnDownload))
+            {
+                try
+                {
+                    notification.Instance.AfterRename(message.Series);
+                }
+
+                catch (Exception ex)
+                {
+                    _logger.WarnException("Unable to send AfterRename notification to: " + notification.Name, ex);
+                }
+            }
         }
     }
 }

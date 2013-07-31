@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Composition;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Notifications.Email;
 using NzbDrone.Core.Notifications.Growl;
 using NzbDrone.Core.Notifications.Plex;
 using NzbDrone.Core.Notifications.Prowl;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.NotificationTests
 {
@@ -71,6 +77,47 @@ namespace NzbDrone.Core.Test.NotificationTests
             notifications.Select(c => c.ImplementationName).Should().OnlyHaveUniqueItems();
             notifications.Select(c => c.Instance).Should().OnlyHaveUniqueItems();
             notifications.Select(c => c.Id).Should().OnlyHaveUniqueItems();
+        }
+
+        [Test]
+        [Explicit]
+        public void should_try_other_notifiers_when_one_fails()
+        {
+            var notifications = Builder<NotificationDefinition>.CreateListOfSize(2)
+                .All()
+                .With(n => n.OnGrab = true)
+                .With(n => n.OnDownload = true)
+                .TheFirst(1)
+                .With(n => n.Implementation = "Xbmc")
+                .TheLast(1)
+                .With(n => n.Implementation = "Email")
+                .Build()
+                .ToList();
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesType = SeriesTypes.Standard)
+                .Build();
+
+            var parsedEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew()
+                .With(p => p.EpisodeNumbers = new int[] {1})
+                .Build();
+
+            Mocker.GetMock<INotificationRepository>()
+                .Setup(s => s.All())
+                .Returns(notifications);
+
+            //Todo: How can we test this, right now without an empty constructor it won't work
+            Mocker.GetMock<Notifications.Xbmc.Xbmc>()
+                .Setup(s => s.OnDownload(It.IsAny<string>(), series))
+                .Throws(new SocketException());
+
+            Subject.Handle(new EpisodeDownloadedEvent(parsedEpisodeInfo, series));
+
+            Mocker.GetMock<Notifications.Xbmc.Xbmc>()
+                .Verify(v => v.OnDownload(It.IsAny<string>(), series), Times.Once());
+
+            Mocker.GetMock<Email>()
+                .Verify(v => v.OnDownload(It.IsAny<string>(), series), Times.Once());
         }
     }
 }
