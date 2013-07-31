@@ -46,6 +46,7 @@ define(
 
                 if (tooltip) {
                     this.$el.attr('title', tooltip);
+                    this.$el.attr('data-container', 'body');
                 }
 
                 return this;
