@@ -115,8 +115,6 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
-                        Logger.Trace("Matching Regex: '{0}'", regex.ToString());
-
                         var result = ParseMatchCollection(match);
                         if (result != null)
                         {

@@ -11,9 +11,9 @@ namespace NzbDrone.Common
 {
     public interface IHttpProvider
     {
-        string DownloadString(string address);
-        string DownloadString(string address, string username, string password);
-        string DownloadString(string address, ICredentials identity);
+        string DownloadString(string url);
+        string DownloadString(string url, string username, string password);
+        string DownloadString(string url, ICredentials identity);
         Dictionary<string, string> GetHeader(string url);
 
         Stream DownloadStream(string url, NetworkCredential credential = null);
@@ -34,27 +34,32 @@ namespace NzbDrone.Common
             _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
         }
 
-        public string DownloadString(string address)
+        public string DownloadString(string url)
         {
-            return DownloadString(address, null);
+            return DownloadString(url, null);
         }
 
-        public string DownloadString(string address, string username, string password)
+        public string DownloadString(string url, string username, string password)
         {
-            return DownloadString(address, new NetworkCredential(username, password));
+            return DownloadString(url, new NetworkCredential(username, password));
         }
 
-        public string DownloadString(string address, ICredentials identity)
+        public string DownloadString(string url, ICredentials identity)
         {
             try
             {
                 var client = new WebClient { Credentials = identity };
                 client.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
-                return client.DownloadString(address);
+                return client.DownloadString(url);
             }
-            catch (Exception ex)
+            catch (WebException e)
             {
-                logger.Trace(ex.Message, ex.ToString());
+                logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
+                throw;
+            }
+            catch (Exception e)
+            {
+                logger.WarnException("Failed to get response from: " + url, e);
                 throw;
             }
         }
@@ -106,10 +111,14 @@ namespace NzbDrone.Common
                 stopWatch.Stop();
                 logger.Trace("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }
-            catch (Exception ex)
+            catch (WebException e)
             {
-                logger.Warn("Failed to get response from: {0}", url);
-                logger.TraceException(ex.Message, ex);
+                logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
+                throw;
+            }
+            catch (Exception e)
+            {
+                logger.WarnException("Failed to get response from: " + url, e);
                 throw;
             }
         }
