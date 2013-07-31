@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Enable = false,
                     Name = "Nzbs.org",
                     Implementation = GetType().Name,
-                    Settings = GetSettings("http://nzbs.org")
+                    Settings = GetSettings("http://nzbs.org", new List<Int32>{ 5000 })
                 });
 
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Enable = false,
                     Name = "Nzb.su",
                     Implementation = GetType().Name,
-                    Settings = GetSettings("https://nzb.su")
+                    Settings = GetSettings("https://nzb.su", new List<Int32>())
                 });
 
                 list.Add(new IndexerDefinition
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Enable = false,
                     Name = "Dognzb.cr",
                     Implementation = GetType().Name,
-                    Settings = GetSettings("https://dognzb.cr")
+                    Settings = GetSettings("https://dognzb.cr", new List<Int32>())
                 });
 
                 return list;
@@ -51,16 +51,29 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        private string GetSettings(string url)
+        private string GetSettings(string url, List<int> categories)
         {
-            return new NewznabSettings { Url = url }.ToJson();
+            var settings = new NewznabSettings { Url = url };
+
+            if (categories.Any())
+            {
+                settings.Categories = categories;
+            }
+
+            return settings.ToJson();
         }
 
         public override IEnumerable<string> RecentFeed
         {
             get
             {
-                var url = String.Format("{0}/api?t=tvsearch&cat=5000", Settings.Url);
+                //Todo: We should be able to update settings on start
+                if (Name.Equals("nzbs.org"))
+                {
+                    Settings.Categories = new List<int>{ 5000 };
+                }
+
+                var url = String.Format("{0}/api?t=tvsearch&cat={1}", Settings.Url, String.Join(",", Settings.Categories));
 
                 if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
                 {
