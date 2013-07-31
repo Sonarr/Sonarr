@@ -57,6 +57,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return false;
         }
 
+        public bool IsConfigured
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_configService.NzbgetHost) && _configService.NzbgetPort != 0;
+            }
+        }
+
         public virtual IEnumerable<QueueItem> GetQueue()
         {
             var command = new JsonRequest

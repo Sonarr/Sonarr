@@ -6,6 +6,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download
 {
@@ -28,9 +29,12 @@ namespace NzbDrone.Core.Test.Download
 
             _parseResult = Builder<RemoteEpisode>.CreateNew()
                    .With(c => c.Series = Builder<Series>.CreateNew().Build())
-                   .With(c=>c.Report = Builder<ReportInfo>.CreateNew().Build())
+                   .With(c => c.Report = Builder<ReportInfo>.CreateNew().Build())
                    .With(c => c.Episodes = episodes)
                    .Build();
+
+
+            Mocker.GetMock<IDownloadClient>().Setup(c => c.IsConfigured).Returns(true);
         }
 
         private void WithSuccessfulAdd()
@@ -75,6 +79,21 @@ namespace NzbDrone.Core.Test.Download
 
             Subject.DownloadReport(_parseResult);
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
+        }
+
+
+        [Test]
+        public void should_not_attempt_download_if_client_isnt_configure()
+        {
+            Mocker.GetMock<IDownloadClient>().Setup(c => c.IsConfigured).Returns(false);
+
+
+            Subject.DownloadReport(_parseResult);
+
+            Mocker.GetMock<IDownloadClient>().Verify(c => c.DownloadNzb(It.IsAny<RemoteEpisode>()),Times.Never());
+            VerifyEventNotPublished<EpisodeGrabbedEvent>();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

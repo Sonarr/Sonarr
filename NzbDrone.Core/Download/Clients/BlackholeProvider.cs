@@ -63,6 +63,14 @@ namespace NzbDrone.Core.Download.Clients
             }
         }
 
+        public bool IsConfigured
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_configService.BlackholeFolder);
+            }
+        }
+
         public IEnumerable<QueueItem> GetQueue()
         {
             return new QueueItem[0];

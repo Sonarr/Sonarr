@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -10,10 +11,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class NotInQueueSpecification : IDecisionEngineSpecification
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly Logger _logger;
 
-        public NotInQueueSpecification(IProvideDownloadClient downloadClientProvider)
+        public NotInQueueSpecification(IProvideDownloadClient downloadClientProvider, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
+            _logger = logger;
         }
 
         public string RejectionReason
@@ -27,6 +30,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public bool IsSatisfiedBy(RemoteEpisode subject)
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
+
+            if (!downloadClient.IsConfigured)
+            {
+                _logger.Warn("Download client {0} isn't configured yet.", downloadClient.GetType().Name);
+                return true;
+            }
 
             var queue = downloadClient.GetQueue().Select(queueItem => Parser.Parser.ParseTitle(queueItem.Title)).Where(episodeInfo => episodeInfo != null);
 
