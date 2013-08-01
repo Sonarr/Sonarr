@@ -135,24 +135,35 @@ namespace NzbDrone.Core.Notifications
             return instance;
         }
 
-        private string GetMessage(ParsedEpisodeInfo parsedEpisodeInfo, Series series)
+        private string GetMessage(Series series, List<Episode> episodes, QualityModel quality)
         {
             if (series.SeriesType == SeriesTypes.Daily)
             {
-                return String.Format("{0} - {1}",
-                                 series.Title,
-                                 parsedEpisodeInfo.AirDate.Value.ToString(Episode.AIR_DATE_FORMAT));
+                var episode = episodes.First();
+
+                return String.Format("{0} - {1} - {2} [{3}]",
+                                         series.Title,
+                                         episode.AirDate,
+                                         episode.Title,
+                                         quality);
             }
-            
-            return String.Format("{0} - {1}{2}",
-                                 series.Title,
-                                 parsedEpisodeInfo.SeasonNumber,
-                                 String.Concat(parsedEpisodeInfo.EpisodeNumbers.Select(i => String.Format("x{0:00}", i))));
+
+            var episodeNumbers = String.Concat(episodes.Select(e => e.EpisodeNumber)
+                                                       .Select(i => String.Format("x{0:00}", i)));
+
+            var episodeTitles = String.Join(" + ", episodes.Select(e => e.Title));
+
+            return String.Format("{0} - {1}{2} - {3} {4}",
+                                    series.Title,
+                                    episodes.First().SeasonNumber,
+                                    episodeNumbers,
+                                    episodeTitles,
+                                    quality);
         }
 
         public void Handle(EpisodeGrabbedEvent message)
         {
-            var messageBody = GetMessage(message.Episode.ParsedEpisodeInfo, message.Episode.Series);
+            var messageBody = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
 
             foreach (var notification in All().Where(n => n.OnGrab))
             {
@@ -170,13 +181,13 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(EpisodeDownloadedEvent message)
         {
-            var messageBody = GetMessage(message.ParsedEpisodeInfo, message.Series);
+            var messageBody = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
 
             foreach (var notification in All().Where(n => n.OnDownload))
             {
                 try
                 {
-                    notification.Instance.OnDownload(messageBody, message.Series);
+                    notification.Instance.OnDownload(messageBody, message.Episode.Series);
                 }
 
                 catch (Exception ex)

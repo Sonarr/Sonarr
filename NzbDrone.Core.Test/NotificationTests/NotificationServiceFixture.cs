@@ -102,6 +102,13 @@ namespace NzbDrone.Core.Test.NotificationTests
                 .With(p => p.EpisodeNumbers = new int[] {1})
                 .Build();
 
+            var localEpisode = Builder<LocalEpisode>.CreateNew()
+                .With(e => e.Series = series)
+                .With(e => e.ParsedEpisodeInfo = parsedEpisodeInfo)
+                .With(e => e.Episodes = Builder<Episode>.CreateListOfSize(1)
+                    .Build().ToList())
+                .Build();
+
             Mocker.GetMock<INotificationRepository>()
                 .Setup(s => s.All())
                 .Returns(notifications);
@@ -111,7 +118,7 @@ namespace NzbDrone.Core.Test.NotificationTests
                 .Setup(s => s.OnDownload(It.IsAny<string>(), series))
                 .Throws(new SocketException());
 
-            Subject.Handle(new EpisodeDownloadedEvent(parsedEpisodeInfo, series));
+            Subject.Handle(new EpisodeDownloadedEvent(localEpisode));
 
             Mocker.GetMock<Notifications.Xbmc.Xbmc>()
                 .Verify(v => v.OnDownload(It.IsAny<string>(), series), Times.Once());

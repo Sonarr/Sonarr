@@ -77,7 +77,7 @@ namespace NzbDrone.Core.MediaFiles
             var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
             episodeFile = MoveFile(episodeFile, destinationFilename);
 
-            _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode.ParsedEpisodeInfo, localEpisode.Series));
+            _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
 
             return episodeFile;
         }

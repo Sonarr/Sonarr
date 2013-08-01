@@ -6,13 +6,11 @@ namespace NzbDrone.Core.MediaFiles.Events
 {
     public class EpisodeDownloadedEvent : IEvent
     {
-        public ParsedEpisodeInfo ParsedEpisodeInfo { get; private set; }
-        public Series Series { get; set; }
+        public LocalEpisode Episode { get; private set; }
 
-        public EpisodeDownloadedEvent(ParsedEpisodeInfo parsedEpisodeInfo, Series series)
+        public EpisodeDownloadedEvent(LocalEpisode episode)
         {
-            ParsedEpisodeInfo = parsedEpisodeInfo;
-            Series = series;
+            Episode = episode;
         }
     }
 }
