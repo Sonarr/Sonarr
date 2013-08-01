@@ -10,6 +10,7 @@ define(
         'Cells/SeriesTitleCell',
         'Cells/TemplatedCell',
         'Cells/QualityProfileCell',
+        'Shared/Grid/DateHeaderCell',
         'Series/Index/Table/SeriesStatusCell',
         'Series/Index/Table/Row',
         'Series/Index/FooterView',
@@ -25,6 +26,7 @@ define(
                  SeriesTitleCell,
                  TemplatedCell,
                  QualityProfileCell,
+                 DateHeaderCell,
                  SeriesStatusCell,
                  SeriesIndexRow,
                  FooterView,
@@ -69,9 +71,10 @@ define(
                         cell : 'string'
                     },
                     {
-                        name : 'nextAiring',
-                        label: 'Next Airing',
-                        cell : RelativeDateCell
+                        name      : 'nextAiring',
+                        label     : 'Next Airing',
+                        cell      : RelativeDateCell,
+                        headerCell: DateHeaderCell
                     },
                     {
                         name    : 'this',
