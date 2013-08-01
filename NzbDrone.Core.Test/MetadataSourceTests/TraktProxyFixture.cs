@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         {
             series.Should().NotBeNull();
             series.Title.Should().NotBeBlank();
+            series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
             series.Overview.Should().NotBeBlank();
             series.AirTime.Should().NotBeBlank();
             series.FirstAired.Should().HaveValue();

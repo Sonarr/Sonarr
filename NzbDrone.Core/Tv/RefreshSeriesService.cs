@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
@@ -15,19 +14,16 @@ namespace NzbDrone.Core.Tv
     {
         private readonly IProvideSeriesInfo _seriesInfo;
         private readonly ISeriesService _seriesService;
-        private readonly IEpisodeService _episodeService;
-        private readonly ISeasonRepository _seasonRepository;
+        private readonly IRefreshEpisodeService _refreshEpisodeService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly IDailySeriesService _dailySeriesService;
         private readonly Logger _logger;
 
-        public RefreshSeriesService(IProvideSeriesInfo seriesInfo, ISeriesService seriesService, IEpisodeService episodeService,
-            ISeasonRepository seasonRepository, IMessageAggregator messageAggregator, IDailySeriesService dailySeriesService, Logger logger)
+        public RefreshSeriesService(IProvideSeriesInfo seriesInfo, ISeriesService seriesService, IRefreshEpisodeService refreshEpisodeService, IMessageAggregator messageAggregator, IDailySeriesService dailySeriesService, Logger logger)
         {
             _seriesInfo = seriesInfo;
             _seriesService = seriesService;
-            _episodeService = episodeService;
-            _seasonRepository = seasonRepository;
+            _refreshEpisodeService = refreshEpisodeService;
             _messageAggregator = messageAggregator;
             _dailySeriesService = dailySeriesService;
             _logger = logger;
@@ -74,7 +70,7 @@ namespace NzbDrone.Core.Tv
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;
-            series.CleanTitle = Parser.Parser.CleanSeriesTitle(seriesInfo.Title);
+            series.CleanTitle = seriesInfo.CleanTitle;
             series.LastInfoSync = DateTime.UtcNow;
             series.Runtime = seriesInfo.Runtime;
             series.Images = seriesInfo.Images;
@@ -88,132 +84,11 @@ namespace NzbDrone.Core.Tv
 
             _seriesService.UpdateSeries(series);
 
-            RefreshEpisodeInfo(series, tuple.Item2);
+            _refreshEpisodeService.RefreshEpisodeInfo(series, tuple.Item2);
 
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
         }
 
-        private void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
-        {
-            _logger.Info("Starting series info refresh for: {0}", series);
-            var successCount = 0;
-            var failCount = 0;
 
-            var seriesEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
-            var seasons = _seasonRepository.GetSeasonBySeries(series.Id);
-
-            var updateList = new List<Episode>();
-            var newList = new List<Episode>();
-
-            foreach (var episode in remoteEpisodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
-            {
-                try
-                {
-                    var episodeToUpdate = seriesEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId) ??
-                                          seriesEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
-
-                    if (episodeToUpdate == null)
-                    {
-                        episodeToUpdate = new Episode();
-                        newList.Add(episodeToUpdate);
-
-                        //If it is Episode Zero or Season zero ignore it
-                        if ((episode.EpisodeNumber == 0 && episode.SeasonNumber != 1) || episode.SeasonNumber == 0)
-                        {
-                            episodeToUpdate.Monitored = false;
-                        }
-                        else
-                        {
-                            var season = seasons.FirstOrDefault(c => c.SeasonNumber == episode.SeasonNumber);
-                            episodeToUpdate.Monitored = season == null || season.Monitored;
-                        }
-                    }
-                    else
-                    {
-                        updateList.Add(episodeToUpdate);
-                    }
-
-                    if ((episodeToUpdate.EpisodeNumber != episode.EpisodeNumber ||
-                         episodeToUpdate.SeasonNumber != episode.SeasonNumber) &&
-                        episodeToUpdate.EpisodeFileId > 0)
-                    {
-                        _logger.Debug("Un-linking episode file because the episode number has changed");
-                        episodeToUpdate.EpisodeFileId = 0;
-                    }
-
-                    episodeToUpdate.SeriesId = series.Id;
-                    episodeToUpdate.TvDbEpisodeId = episode.TvDbEpisodeId;
-                    episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
-                    episodeToUpdate.SeasonNumber = episode.SeasonNumber;
-                    episodeToUpdate.Title = episode.Title;
-                    episodeToUpdate.Overview = episode.Overview;
-                    episodeToUpdate.AirDate = episode.AirDate;
-                    episodeToUpdate.AirDateUtc = episode.AirDateUtc;
-
-                    successCount++;
-                }
-                catch (Exception e)
-                {
-                    _logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}. {1}", series, episode), e);
-                    failCount++;
-                }
-            }
-
-            var allEpisodes = new List<Episode>();
-            allEpisodes.AddRange(newList);
-            allEpisodes.AddRange(updateList);
-
-            var groups = allEpisodes.Where(c=>c.AirDateUtc.HasValue).GroupBy(e => new { e.SeriesId, e.AirDate }).Where(g => g.Count() > 1).ToList();
-
-            foreach (var group in groups)
-            {
-                int episodeCount = 0;
-                foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
-                {
-                    episode.AirDateUtc = episode.AirDateUtc.Value.AddMinutes(series.Runtime * episodeCount);
-                    episodeCount++;
-                }
-            }
-
-            _episodeService.UpdateMany(updateList);
-            _episodeService.InsertMany(newList);
-
-            if (newList.Any())
-            {
-                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
-            }
-
-            if (updateList.Any())
-            {
-                _messageAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
-            }
-
-            if (failCount != 0)
-            {
-                _logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
-                            series.Title, successCount, failCount);
-            }
-            else
-            {
-                _logger.Info("Finished episode refresh for series: {0}.", series);
-            }
-
-            //DeleteEpisodesNotAvailableAnymore(series, remoteEpisodes);
-        }
-
-
-        /*        private void DeleteEpisodesNotAvailableAnymore(Series series, IEnumerable<Episode> onlineEpisodes)
-                {
-                    //Todo: This will not work as currently implemented - what are we trying to do here?
-                    //Todo: We were trying to remove episodes that were once on tvdb but were removed, for whatever reason, instead of polluting our DB with them.
-                    return;
-                    _logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.Id));
-                    foreach (var episode in onlineEpisodes)
-                    {
-                        _episodeRepository.Delete(episode.Id);
-                    }
-
-                    _logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.Id);
-                }*/
     }
 }

@@ -47,6 +47,7 @@ namespace NzbDrone.Core.MetadataSource
             series.TvRageId = show.tvrage_id;
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
+            series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
             series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
             series.Runtime = show.runtime;

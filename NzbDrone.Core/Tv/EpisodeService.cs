@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
         void InsertMany(List<Episode> episodes);
         void UpdateMany(List<Episode> episodes);
+        void DeleteMany(List<Episode> episodes);
     }
 
     public class EpisodeService : IEpisodeService,
@@ -168,6 +169,11 @@ namespace NzbDrone.Core.Tv
         public void UpdateMany(List<Episode> episodes)
         {
             _episodeRepository.UpdateMany(episodes);
+        }
+
+        public void DeleteMany(List<Episode> episodes)
+        {
+            _episodeRepository.DeleteMany(episodes);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
