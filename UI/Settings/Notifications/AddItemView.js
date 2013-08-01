@@ -25,7 +25,9 @@ define([
 
             this.model.set({
                 id: undefined,
-                name: this.model.get('implementationName')
+                name: this.model.get('implementationName'),
+                onGrab: true,
+                onDownload: true
             });
 
             var editView = new EditView({ model: this.model, notificationCollection: this.notificationCollection });

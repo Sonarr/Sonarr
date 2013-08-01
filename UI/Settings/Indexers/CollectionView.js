@@ -22,7 +22,6 @@ define(['app',
                 collectionView.ui.addCard.parent('li').before(itemView.el);
             },
 
-
             _openSchemaModal: function () {
                 var self = this;
                 //TODO: Is there a better way to deal with changing URLs?
@@ -32,8 +31,12 @@ define(['app',
                     success: function (collection) {
                         collection.url = '/api/indexer';
                         var model = _.first(collection.models);
-                        model.set('id', undefined);
-                        model.set('name', '');
+
+                        model.set({
+                            id: undefined,
+                            name: '',
+                            enable: true
+                        });
 
                         var view = new IndexerEditView({ model: model, indexerCollection: self.collection});
                         App.modalRegion.show(view);
