@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Indexers
                 yield return new IndexerDefinition
                 {
                     Name = Name,
-                    Enable = true,
+                    Enable = EnableByDefault,
                     Implementation = GetType().Name,
                     Settings = String.Empty
                 };

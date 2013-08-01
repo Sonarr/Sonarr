@@ -32,6 +32,12 @@ define(
                         cell    : Backgrid.StringCell
                     },
                     {
+                        name    : 'indexer',
+                        label   : 'Indexer',
+                        sortable: true,
+                        cell    : Backgrid.StringCell
+                    },
+                    {
                         name    : 'size',
                         label   : 'Size',
                         sortable: true,
