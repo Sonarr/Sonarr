@@ -6,17 +6,19 @@ define(
         'Series/EpisodeCollection',
         'Series/SeasonCollection',
         'Series/Details/SeasonCollectionView',
+        'Series/Details/SeasonMenu/CollectionView',
         'Shared/LoadingView',
         'Shared/Actioneer',
         'backstrech'
-    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, LoadingView, Actioneer) {
+    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
             template         : 'Series/Details/SeriesDetailsTemplate',
 
             regions: {
-                seasons: '#seasons'
+                seasonMenu: '#season-menu',
+                seasons   : '#seasons'
             },
 
             ui: {
@@ -68,6 +70,11 @@ define(
                         collection       : self.seasonCollection,
                         episodeCollection: self.episodeCollection,
                         series           : self.model
+                    }));
+
+                    self.seasonMenu.show(new SeasonMenuCollectionView({
+                        collection: self.seasonCollection,
+                        episodeCollection: self.episodeCollection
                     }));
                 });
 

@@ -78,6 +78,10 @@ define(
                     episode.set({ hideSeriesLink: true, series: options.series });
                 });
 
+                this.model.on('sync', function () {
+                    this._afterSeasonMonitored();
+                }, this);
+
                 this.episodeCollection.on('sync', function () {
                     this.render();
                 }, this);
