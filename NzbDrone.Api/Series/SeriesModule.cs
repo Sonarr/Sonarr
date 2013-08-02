@@ -32,8 +32,6 @@ namespace NzbDrone.Api.Series
             UpdateResource = UpdateSeries;
             DeleteResource = DeleteSeries;
 
-            Get["/{slug}"] = o => GetSeriesBySlug((string)o.slug.ToString());
-
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
             SharedValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
             SharedValidator.RuleFor(s => s.RootFolderPath).NotEmpty().When(s => String.IsNullOrEmpty(s.Path));
@@ -43,17 +41,7 @@ namespace NzbDrone.Api.Series
 
         private SeriesResource GetSeries(int id)
         {
-            Core.Tv.Series series = null;
-
-            try
-            {
-                series = _seriesService.GetSeries(id);
-            }
-            catch (ModelNotFoundException)
-            {
-                series = _seriesService.FindBySlug(id.ToString());
-            }
-
+            var series = _seriesService.GetSeries(id);
             return GetSeriesResource(series);
         }
 
@@ -109,7 +97,7 @@ namespace NzbDrone.Api.Series
         {
             var deleteFiles = false;
             var deleteFilesQuery = Request.Query.deleteFiles;
-            
+
             if (deleteFilesQuery.HasValue)
             {
                 deleteFiles = Convert.ToBoolean(deleteFilesQuery.Value);

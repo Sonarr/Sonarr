@@ -8,6 +8,7 @@ define(
         'AddSeries/AddSeriesLayout',
         'Series/Index/SeriesIndexLayout',
         'Series/Details/SeriesDetailsLayout',
+        'Series/SeriesCollection',
         'Missing/MissingLayout',
         'Series/SeriesModel',
         'Calendar/CalendarLayout',
@@ -17,7 +18,7 @@ define(
         'System/Layout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
-    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, MissingLayout, SeriesModel, CalendarLayout,
+    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout,SeriesCollection, MissingLayout, SeriesModel, CalendarLayout,
         LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, NotFoundView) {
         return Marionette.Controller.extend({
 
@@ -28,15 +29,13 @@ define(
 
             seriesDetails: function (query) {
 
-                var self = this;
-                this._setTitle('Loading Series');
-                var series = new SeriesModel({ id: query });
-                series.fetch({
-                    success: function (seriesModel) {
-                        self._setTitle(seriesModel.get('title'));
-                        App.mainRegion.show(new SeriesDetailsLayout({ model: seriesModel }));
-                    }
-                });
+                var series = SeriesCollection.where({titleSlug : query});
+
+                if(series.length != 0){
+                    var targetSeries = series[0];
+                    this._setTitle(targetSeries.get('title'));
+                    App.mainRegion.show(new SeriesDetailsLayout({ model: targetSeries }));
+                }
             },
 
             addSeries: function (action) {

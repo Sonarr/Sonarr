@@ -44,7 +44,6 @@ namespace NzbDrone.Integration.Test
             Series.All().Should().HaveCount(1);
 
             Series.Get(series.Id).Should().NotBeNull();
-            Series.Get(series.TitleSlug).Should().NotBeNull();
 
             Series.Delete(series.Id);
 
@@ -53,9 +52,9 @@ namespace NzbDrone.Integration.Test
 
 
         [Test]
-        public void should_be_able_to_add_and_get_number_only_series_title()
+        public void should_be_able_to_find_series_by_id()
         {
-            var series = Series.Lookup("90210").First(c=>c.TitleSlug == "90210");
+            var series = Series.Lookup("90210").First();
 
             series.QualityProfileId = 1;
             series.Path = @"C:\Test\90210";
@@ -65,14 +64,8 @@ namespace NzbDrone.Integration.Test
             Series.All().Should().HaveCount(1);
 
             Series.Get(series.Id).Should().NotBeNull();
-            Series.Get(series.TitleSlug).Should().NotBeNull();
         }
 
-        [Test]
-        public void wrong_slug_should_return_404()
-        {
-            Series.Get("non-existing-slug", HttpStatusCode.NotFound);
-        }
 
         [Test]
         public void invalid_id_should_return_404()
