@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Net;
 using FluentValidation;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Common.Exceptions;
+using HttpStatusCode = Nancy.HttpStatusCode;
 
 namespace NzbDrone.Api.ErrorManagement
 {
@@ -31,13 +34,10 @@ namespace NzbDrone.Api.ErrorManagement
             {
                 _logger.Warn("Invalid request {0}", validationException.Message);
 
-
                 return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
-
             }
 
             _logger.FatalException("Request Failed", exception);
-
 
             return new ErrorModel()
                 {

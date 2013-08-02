@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Tv
         bool SeriesPathExists(string folder);
         List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
         Series FindBySlug(string slug);
+        List<String> GetSeriesPaths();
     }
 
     public class SeriesService : ISeriesService
@@ -110,6 +111,11 @@ namespace NzbDrone.Core.Tv
         {
             var series = _seriesRepository.FindBySlug(slug);
             return series;
+        }
+
+        public List<string> GetSeriesPaths()
+        {
+            return _seriesRepository.GetSeriesPaths();
         }
 
         public Series FindByTitle(string title)

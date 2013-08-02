@@ -8,6 +8,11 @@ using NzbDrone.Core.Download.Clients.Sabnzbd;
 
 namespace NzbDrone.Core.Configuration
 {
+    public enum ConfigKey
+    {
+        DownloadedEpisodesFolder
+    }
+
     public class ConfigService : IConfigService
     {
         private readonly IConfigRepository _repository;
@@ -118,9 +123,9 @@ namespace NzbDrone.Core.Configuration
 
         public String DownloadedEpisodesFolder
         {
-            get { return GetValue("DownloadedEpisodesFolder"); }
+            get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
 
-            set { SetValue("DownloadedEpisodesFolder", value); }
+            set { SetValue(ConfigKey.DownloadedEpisodesFolder.ToString(), value); }
         }
 
         public bool UseSeasonFolder
@@ -135,7 +140,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("SeasonFolderFormat", "Season %s"); }
             set { SetValue("SeasonFolderFormat", value); }
         }
-
 
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
         {

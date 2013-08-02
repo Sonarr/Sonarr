@@ -10,11 +10,11 @@ namespace NzbDrone.Core.Tv
     {
         bool SeriesPathExists(string path);
         List<Series> Search(string title);
-
         Series FindByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         Series FindBySlug(string slug);
+        List<String> GetSeriesPaths();
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -52,6 +52,11 @@ namespace NzbDrone.Core.Tv
         public Series FindBySlug(string slug)
         {
             return Query.SingleOrDefault(c => c.TitleSlug == slug.ToLower());
+        }
+
+        public List<string> GetSeriesPaths()
+        {
+            return Query.Select(s => s.Path).ToList();
         }
     }
 }

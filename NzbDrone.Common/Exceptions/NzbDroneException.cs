@@ -12,12 +12,10 @@ namespace NzbDrone.Common.Exceptions
 
         }
 
-
         protected NzbDroneException(string message)
             : base(message)
         {
 
         }
     }
-
 }

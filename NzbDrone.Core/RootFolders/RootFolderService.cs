@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 
@@ -26,12 +27,17 @@ namespace NzbDrone.Core.RootFolders
         private readonly IBasicRepository<RootFolder> _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
+        private readonly IConfigService _configService;
 
-        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository, IDiskProvider diskProvider,ISeriesRepository seriesRepository)
+        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository,
+                                 IDiskProvider diskProvider,
+                                 ISeriesRepository seriesRepository,
+                                 IConfigService configService)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
+            _configService = configService;
         }
 
         public virtual List<RootFolder> All()
@@ -66,7 +72,10 @@ namespace NzbDrone.Core.RootFolders
                 throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
 
             if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
-                throw new InvalidOperationException("Root directory already exist.");
+                throw new InvalidOperationException("Recent directory already exist.");
+
+            if (DiskProvider.PathEquals(_configService.DownloadedEpisodesFolder, rootFolder.Path))
+                throw new InvalidOperationException("Drone Factory folder cannot be used.");
 
             _rootFolderRepository.Insert(rootFolder);
 
