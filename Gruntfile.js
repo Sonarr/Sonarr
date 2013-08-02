@@ -60,23 +60,19 @@ module.exports = function (grunt) {
                 dest: destContent + 'bootstrap.css'
             },
             general  : {
-                files: [
-                    {
-                        expand: true,
-                        src   : [
-                                    'UI/Content/base.less',
-                                    'UI/Content/overrides.less',
-                                    'UI/Series/series.less',
-                                    'UI/AddSeries/addSeries.less',
-                                    'UI/Calendar/calendar.less',
-                                    'UI/Cells/cells.less',
-                                    'UI/Logs/logs.less',
-                                    'UI/Settings/settings.less',
-                                ],
-                        dest  : outputRoot,
-                        ext   : '.css'
-                    }
-                ]
+                expand :true,
+                src   : [
+                            'UI/Content/base.less',
+                            'UI/Content/overrides.less',
+                            'UI/Series/series.less',
+                            'UI/AddSeries/addSeries.less',
+                            'UI/Calendar/calendar.less',
+                            'UI/Cells/cells.less',
+                            'UI/Logs/logs.less',
+                            'UI/Settings/settings.less',
+                        ],
+                dest  : outputRoot,
+                ext: '.css'
             }
         },
 
@@ -143,7 +139,7 @@ module.exports = function (grunt) {
                 tasks: ['less:bootstrap','less:general']
             },
             generalLess: {
-                files: '<%= less.general.files[0].src %>',
+                files: ['UI/**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
                 tasks: ['less:general']
             },
             handlebars : {
