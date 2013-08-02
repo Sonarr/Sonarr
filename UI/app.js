@@ -188,6 +188,7 @@ define(
         });
 
         app.addRegions({
+            navbarRegion: '#nav-region',
             mainRegion  : '#main-region',
             footerRegion: '#footer-region'
         });

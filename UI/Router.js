@@ -5,8 +5,9 @@ require(
         'marionette',
         'Controller',
         'Series/SeriesCollection',
+        'Navbar/NavbarView',
         'jQuery/RouteBinder'
-    ], function (App, Marionette, Controller, SeriesCollection, RouterBinder) {
+    ], function (App, Marionette, Controller, SeriesCollection,NavbarView, RouterBinder) {
 
         var Router = Marionette.AppRouter.extend({
 
@@ -39,6 +40,7 @@ require(
                 .done(function(){
                     Backbone.history.start({ pushState: true });
                     RouterBinder.bind(App.Router);
+                    App.navbarRegion.show(new NavbarView());
                 })
         });
 
