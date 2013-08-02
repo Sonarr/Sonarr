@@ -19,7 +19,5 @@ define(
         });
 
         var collection = new Collection();
-        collection.fetch();
-
         return collection;
     });

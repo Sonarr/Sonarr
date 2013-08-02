@@ -18,24 +18,31 @@ define(
         'System/Layout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
-    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout,SeriesCollection, MissingLayout, SeriesModel, CalendarLayout,
+    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, SeriesModel, CalendarLayout,
         LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, NotFoundView) {
         return Marionette.Controller.extend({
 
-            series       : function () {
+            series: function () {
                 this._setTitle('NzbDrone');
                 App.mainRegion.show(new SeriesIndexLayout());
             },
 
             seriesDetails: function (query) {
+                var series = SeriesCollection.where({titleSlug: query});
 
-                var series = SeriesCollection.where({titleSlug : query});
-
-                if(series.length != 0){
+                if (series.length != 0) {
                     var targetSeries = series[0];
                     this._setTitle(targetSeries.get('title'));
                     App.mainRegion.show(new SeriesDetailsLayout({ model: targetSeries }));
                 }
+                else {
+                    this.notFound();
+                }
+            },
+
+
+            _showSeriesDetail: function(seriesModel){
+
             },
 
             addSeries: function (action) {

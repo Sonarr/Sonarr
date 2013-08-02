@@ -174,10 +174,6 @@ define(
             },
 
             _fetchCollection: function () {
-                if (SeriesCollection.length === 0) {
-                    this.seriesRegion.show(new LoadingView());
-                }
-
                 SeriesCollection.fetch();
             },
 

@@ -45,18 +45,6 @@ namespace NzbDrone.Api.Series
             return GetSeriesResource(series);
         }
 
-        private Response GetSeriesBySlug(string slug)
-        {
-            var series = _seriesService.FindBySlug(slug);
-
-            if (series == null)
-            {
-                return new NotFoundResponse();
-            }
-
-            return GetSeriesResource(series).AsResponse();
-        }
-
         private SeriesResource GetSeriesResource(Core.Tv.Series series)
         {
             if (series == null) return null;

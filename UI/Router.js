@@ -4,8 +4,9 @@ require(
         'app',
         'marionette',
         'Controller',
+        'Series/SeriesCollection',
         'jQuery/RouteBinder'
-    ], function (App, Marionette, Controller, RouterBinder) {
+    ], function (App, Marionette, Controller, SeriesCollection, RouterBinder) {
 
         var Router = Marionette.AppRouter.extend({
 
@@ -32,9 +33,12 @@ require(
         App.addInitializer(function () {
 
             App.Router = new Router();
-            Backbone.history.start({ pushState: true });
 
-            RouterBinder.bind(App.Router);
+            SeriesCollection.fetch()
+                .done(function(){
+                    Backbone.history.start({ pushState: true });
+                    RouterBinder.bind(App.Router);
+                })
         });
 
         return App.Router;
