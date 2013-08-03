@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var episode in episodes)
             {
-                if (episode.EpisodeFileId > 0 && seriesFile.SingleOrDefault(f => f.Id == episode.EpisodeFileId) == null)
+                if (episode.EpisodeFileId > 0 && !seriesFile.Any(f => f.Id == episode.EpisodeFileId))
                 {
                     episode.EpisodeFileId = 0;
                     _episodeService.UpdateEpisode(episode);
