@@ -68,12 +68,12 @@ namespace NzbDrone.Core.Indexers.Newznab
             get
             {
                 //Todo: We should be able to update settings on start
-                if (Name.Equals("nzbs.org"))
+                if (Name.Equals("nzbs.org", StringComparison.InvariantCultureIgnoreCase))
                 {
                     Settings.Categories = new List<int>{ 5000 };
                 }
 
-                var url = String.Format("{0}/api?t=tvsearch&cat={1}", Settings.Url, String.Join(",", Settings.Categories));
+                var url = String.Format("{0}/api?t=tvsearch&cat={1}", Settings.Url.TrimEnd('/'), String.Join(",", Settings.Categories));
 
                 if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
                 {
