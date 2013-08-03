@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -48,42 +49,48 @@ namespace NzbDrone.Core.Update
 
         private void InstallUpdate(UpdatePackage updatePackage)
         {
-            var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
-
-            var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
-
-            if (_diskProvider.FolderExists(updateSandboxFolder))
+            try
             {
-                _logger.Info("Deleting old update files");
-                _diskProvider.DeleteFolder(updateSandboxFolder, true);
-            }
+                var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
-            _logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
-            _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
-            _logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
+                var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
 
-            _logger.Info("Extracting Update package");
-            _archiveService.Extract(packageDestination, updateSandboxFolder);
-            _logger.Info("Update package extracted successfully");
+                if (_diskProvider.FolderExists(updateSandboxFolder))
+                {
+                    _logger.Info("Deleting old update files");
+                    _diskProvider.DeleteFolder(updateSandboxFolder, true);
+                }
 
-            _logger.Info("Preparing client");
-            _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
-                                        updateSandboxFolder);
+                _logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
+                _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
+                _logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
+
+                _logger.Info("Extracting Update package");
+                _archiveService.Extract(packageDestination, updateSandboxFolder);
+                _logger.Info("Update package extracted successfully");
+
+                _logger.Info("Preparing client");
+                _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
+                                            updateSandboxFolder);
 
 
-            _logger.Info("Starting update client");
-            var startInfo = new ProcessStartInfo
+                _logger.Info("Starting update client");
+                var startInfo = new ProcessStartInfo
                 {
                     FileName = _appFolderInfo.GetUpdateClientExePath(),
                     Arguments = _processProvider.GetCurrentProcess().Id.ToString()
                 };
 
-            var process = _processProvider.Start(startInfo);
+                var process = _processProvider.Start(startInfo);
 
-            _processProvider.WaitForExit(process);
+                _processProvider.WaitForExit(process);
 
-            _logger.Error("Update process failed");
+                _logger.Error("Update process failed");
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Update process failed", ex);
+            }
         }
-
     }
 }
