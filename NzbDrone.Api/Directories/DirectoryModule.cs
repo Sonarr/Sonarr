@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common;
@@ -8,12 +10,12 @@ namespace NzbDrone.Api.Directories
 {
     public class DirectoryModule : NzbDroneApiModule
     {
-        private readonly IDiskProvider _diskProvider;
+        private readonly IDirectoryLookupService _directoryLookupService;
 
-        public DirectoryModule(IDiskProvider diskProvider)
+        public DirectoryModule(IDirectoryLookupService directoryLookupService)
             : base("/directories")
         {
-            _diskProvider = diskProvider;
+            _directoryLookupService = directoryLookupService;
             Get["/"] = x => GetDirectories();
         }
 
@@ -24,30 +26,7 @@ namespace NzbDrone.Api.Directories
 
             string query = Request.Query.query.Value;
 
-            IEnumerable<String> dirs = null;
-            try
-            {
-                //Windows (Including UNC)
-                var windowsSep = query.LastIndexOf('\\');
-
-                if (windowsSep > -1)
-                {
-                    dirs = _diskProvider.GetDirectories(query.Substring(0, windowsSep + 1));
-                }
-
-                //Unix
-                var index = query.LastIndexOf('/');
-
-                if (index > -1)
-                {
-                    dirs = _diskProvider.GetDirectories(query.Substring(0, index + 1));
-                }
-            }
-            catch (Exception)
-            {
-                //Swallow the exceptions so proper JSON is returned to the client (Empty results)
-                return new List<string>().AsResponse();
-            }
+            var dirs = _directoryLookupService.LookupSubDirectories(query);
 
             if (dirs == null)
                 throw new Exception("A valid path was not provided");

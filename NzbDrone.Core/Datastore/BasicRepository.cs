@@ -85,13 +85,13 @@ namespace NzbDrone.Core.Datastore
 
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
         {
-            var query = String.Format("Id IN ({0})", String.Join(",", ids));
-
+            var idList = ids.ToList();
+            var query = String.Format("Id IN ({0})", String.Join(",", idList));
             var result = Query.Where(query).ToList();
 
-            if (result.Count != ids.Count())
+            if (result.Count != idList.Count())
             {
-                throw new ApplicationException("Expected query to return {0} rows but returned {1}".Inject(ids.Count(), result.Count));
+                throw new ApplicationException("Expected query to return {0} rows but returned {1}".Inject(idList.Count(), result.Count));
             }
 
             return result;

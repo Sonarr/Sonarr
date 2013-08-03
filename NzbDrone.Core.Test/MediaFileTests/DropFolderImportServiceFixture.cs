@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             Subject.Execute(new DownloadedEpisodesScanCommand());
 
-            Mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.GetFolderSize(It.IsAny<String>()), Times.Never());
         }
 
