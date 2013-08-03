@@ -65,6 +65,8 @@ namespace NzbDrone.Core.RootFolders
 
         public virtual RootFolder Add(RootFolder rootFolder)
         {
+            var all = All();
+
             if (String.IsNullOrWhiteSpace(rootFolder.Path) || !Path.IsPathRooted(rootFolder.Path))
                 throw new ArgumentException("Invalid path");
 
@@ -74,7 +76,8 @@ namespace NzbDrone.Core.RootFolders
             if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
                 throw new InvalidOperationException("Recent directory already exist.");
 
-            if (DiskProvider.PathEquals(_configService.DownloadedEpisodesFolder, rootFolder.Path))
+            if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder) &&
+                DiskProvider.PathEquals(_configService.DownloadedEpisodesFolder, rootFolder.Path))
                 throw new InvalidOperationException("Drone Factory folder cannot be used.");
 
             _rootFolderRepository.Insert(rootFolder);
