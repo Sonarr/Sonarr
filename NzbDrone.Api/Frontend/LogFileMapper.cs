@@ -23,7 +23,7 @@ namespace NzbDrone.Api.Frontend
 
         public bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/log");
+            return resourceUrl.StartsWith("/log") && resourceUrl.EndsWith(".txt");
         }
     }
 }
