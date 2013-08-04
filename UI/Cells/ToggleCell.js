@@ -12,7 +12,6 @@ define(
                 'click': '_onClick'
             },
 
-
             _onClick: function () {
 
                 var self = this;
@@ -45,8 +44,7 @@ define(
                 var tooltip = this.column.get('tooltip');
 
                 if (tooltip) {
-                    this.$el.attr('title', tooltip);
-                    this.$el.attr('data-container', 'body');
+                    this.$('i').attr('title', tooltip);
                 }
 
                 return this;
