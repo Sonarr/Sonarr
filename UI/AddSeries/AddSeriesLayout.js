@@ -39,9 +39,6 @@ define(
                 SeriesCollection.fetch();
                 QualityProfileCollection.fetch();
                 RootFolderCollection.fetch();
-
-                this.rootFolderLayout = new RootFolderLayout();
-                this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
             },
 
             onShow: function () {
@@ -55,6 +52,8 @@ define(
             },
 
             _importSeries: function () {
+                this.rootFolderLayout = new RootFolderLayout();
+                this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
                 App.modalRegion.show(this.rootFolderLayout);
             },
 
