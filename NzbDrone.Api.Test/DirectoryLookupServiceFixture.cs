@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Api.Directories;
+using NzbDrone.Common;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Common.Test
+namespace NzbDrone.Api.Test
 {
     [TestFixture]
     public class DirectoryLookupServiceFixture :TestBase<DirectoryLookupService>
@@ -50,20 +50,6 @@ namespace NzbDrone.Common.Test
             });
         }
             
-        [Test]
-        public void should_get_all_folder_for_none_root_path()
-        {
-            const string root = @"C:\Test\";
-            SetupFolders(root);
-
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectories(It.IsAny<String>()))
-                .Returns(_folders.ToArray());
-
-            Subject.LookupSubDirectories(root).Should()
-                   .HaveCount(_folders.Count);
-        }
-
         [Test]
         public void should_not_contain_recycling_bin_for_root_of_drive()
         {

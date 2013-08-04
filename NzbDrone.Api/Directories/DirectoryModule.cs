@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
@@ -26,10 +24,9 @@ namespace NzbDrone.Api.Directories
 
             string query = Request.Query.query.Value;
 
-            var dirs = _directoryLookupService.LookupSubDirectories(query);
-
-            if (dirs == null)
-                throw new Exception("A valid path was not provided");
+            var dirs = _directoryLookupService.LookupSubDirectories(query)
+                .Select(p => p.GetActualCasing())
+                .ToList();
 
             return dirs.AsResponse();
         }
