@@ -28,7 +28,6 @@ namespace NzbDrone.Core.Tv
             _logger = logger;
         }
 
-
         public void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
             _logger.Info("Starting series info refresh for: {0}", series);
@@ -45,19 +44,12 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = existinEpisodes.SingleOrDefault(e => e.TvDbEpisodeId == episode.TvDbEpisodeId) ??
-                                          existinEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    var episodeToUpdate = existinEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
                     if (episodeToUpdate != null)
                     {
                         existinEpisodes.Remove(episodeToUpdate);
                         updateList.Add(episodeToUpdate);
-
-                        if ((episodeToUpdate.EpisodeNumber != episode.EpisodeNumber || episodeToUpdate.SeasonNumber != episode.SeasonNumber) && episodeToUpdate.EpisodeFileId != 0)
-                        {
-                            _logger.Debug("Un-linking episode file because the episode number has changed");
-                            episodeToUpdate.EpisodeFileId = 0;
-                        }
                     }
                     else
                     {
