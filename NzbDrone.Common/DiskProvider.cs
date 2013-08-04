@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -11,6 +12,7 @@ namespace NzbDrone.Common
 {
     public interface IDiskProvider
     {
+        HashSet<string> SpecialFolders { get; }
         DateTime GetLastFolderWrite(string path);
         DateTime GetLastFileWrite(string path);
         void EnsureFolder(string path);
@@ -36,14 +38,14 @@ namespace NzbDrone.Common
         void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
         bool IsFileLocked(FileInfo file);
         string GetPathRoot(string path);
-        void SetPermissions(string filename, string account, FileSystemRights Rights, AccessControlType ControlType);
+        void SetPermissions(string filename, string account, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentfolder, string subfolder);
-        FileAttributes GetFileAttributes(string path);
+        FileAttributes GetFileAttributes(string path);  
     }
 
     public class DiskProvider : IDiskProvider
     {
-        enum TransferAction
+       enum TransferAction
         {
             Copy,
             Move
@@ -57,6 +59,14 @@ namespace NzbDrone.Common
         out ulong lpTotalNumberOfFreeBytes);
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public HashSet<string> SpecialFolders
+        {
+            get
+            {
+                return new HashSet<string> { "$recycle.bin", "system volume information", "recycler" };
+            }
+        }
 
         public DateTime GetLastFolderWrite(string path)
         {

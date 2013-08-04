@@ -35,8 +35,8 @@ namespace NzbDrone.Common
 
                     if (Path.GetPathRoot(path).Equals(path, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var setToRemove = new HashSet<string> { "$Recycle.Bin", "System Volume Information" };
-                        dirsList.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x).Name));
+                        var setToRemove = _diskProvider.SpecialFolders;
+                        dirsList.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.ToLowerInvariant()).Name));
                     }
 
                     dirs = dirsList;

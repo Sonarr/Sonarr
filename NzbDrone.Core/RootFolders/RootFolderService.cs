@@ -99,7 +99,7 @@ namespace NzbDrone.Core.RootFolders
                 throw new ArgumentException("Invalid path provided", "path");
 
             var results = new List<UnmappedFolder>();
-            var series = _seriesRepository.All();
+            var series = _seriesRepository.All().ToList();
 
             if (!_diskProvider.FolderExists(path))
             {
@@ -114,6 +114,12 @@ namespace NzbDrone.Core.RootFolders
                     var di = new DirectoryInfo(seriesFolder.Normalize());
                     results.Add(new UnmappedFolder{ Name = di.Name, Path = di.FullName });
                 }
+            }
+
+            if (Path.GetPathRoot(path).Equals(path, StringComparison.InvariantCultureIgnoreCase))
+            {
+                var setToRemove = _diskProvider.SpecialFolders;
+                results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
             }
 
             Logger.Debug("{0} unmapped folders detected.", results.Count);
