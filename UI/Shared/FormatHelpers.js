@@ -8,12 +8,12 @@ define(
 
         return {
 
-            Bytes: function (sourceSize) {
+            bytes: function (sourceSize) {
                 var size = Number(sourceSize);
                 return Filesize(size, 1, false);
             },
 
-            DateHelper: function (sourceDate) {
+            dateHelper: function (sourceDate) {
                 if (!sourceDate) {
                     return '';
                 }
@@ -46,7 +46,7 @@ define(
                 return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
             },
 
-            Number: function (input) {
+            number: function (input) {
                 if (!input) {
                     return '';
                 }

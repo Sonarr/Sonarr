@@ -22,7 +22,7 @@ define(
             },
 
             setActive: function () {
-                var storedKey = Config.GetValue(this.menu.menuKey, this.menu.defaultAction);
+                var storedKey = Config.getValue(this.menu.menuKey, this.menu.defaultAction);
 
                 this.collection.each(function (model) {
                     if (model.get('key').toLocaleLowerCase() === storedKey.toLowerCase()) {

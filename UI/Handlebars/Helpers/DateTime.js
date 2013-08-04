@@ -22,7 +22,7 @@ define(
             }
 
             var date = Moment(input);
-            var result = '<span title="' + date.format('LLLL') + '">' + FormatHelpers.DateHelper(input) + '</span>';
+            var result = '<span title="' + date.format('LLLL') + '">' + FormatHelpers.dateHelper(input) + '</span>';
 
             return new Handlebars.SafeString(result);
         });

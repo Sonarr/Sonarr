@@ -5,7 +5,7 @@ define(
         'Shared/FormatHelpers'
     ], function (Handlebars, FormatHelpers) {
         Handlebars.registerHelper('Bytes', function (size) {
-            return new Handlebars.SafeString(FormatHelpers.Bytes(size));
+            return new Handlebars.SafeString(FormatHelpers.bytes(size));
         });
 
         Handlebars.registerHelper('Pad2', function (input) {
@@ -13,7 +13,7 @@ define(
         });
 
         Handlebars.registerHelper('Number', function (input) {
-            return FormatHelpers.Number(input);
+            return FormatHelpers.number(input);
         });
 
     });

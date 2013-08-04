@@ -12,7 +12,7 @@ define(
                 DefaultRootFolderId: 'DefaultRootFolderId'
             },
 
-            GetValue: function (key, defaultValue) {
+            getValue: function (key, defaultValue) {
 
                 var storeValue = localStorage.getItem(key);
 
@@ -23,11 +23,11 @@ define(
                 return storeValue.toString();
             },
 
-            SetValue: function (key, value) {
+            setValue: function (key, value) {
 
                 console.log('Config: [{0}] => [{1}] '.format(key, value));
 
-                if (this.GetValue(key) === value.toString()) {
+                if (this.getValue(key) === value.toString()) {
                     return;
                 }
 
