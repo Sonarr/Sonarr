@@ -30,7 +30,7 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                         });
                     }
 
-                    if (options.succesCallback) {
+                    if (options.successCallback) {
                         options.successCallback.call(options.context);
                     }
                 });

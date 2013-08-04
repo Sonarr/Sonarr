@@ -49,8 +49,6 @@ define(
             },
 
             onShow: function () {
-                var self = this;
-
                 var fanArt = this._getFanArt();
 
                 if (fanArt) {
@@ -60,24 +58,7 @@ define(
                     $('body').removeClass('backdrop');
                 }
 
-                this.seasons.show(new LoadingView());
-
-                this.seasonCollection = new SeasonCollection();
-                this.episodeCollection = new EpisodeCollection();
-
-                $.when(this.episodeCollection.fetch({data: { seriesId: this.model.id }}), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
-                    self.seasons.show(new SeasonCollectionView({
-                        collection       : self.seasonCollection,
-                        episodeCollection: self.episodeCollection,
-                        series           : self.model
-                    }));
-
-                    self.seasonMenu.show(new SeasonMenuCollectionView({
-                        collection: self.seasonCollection,
-                        episodeCollection: self.episodeCollection
-                    }));
-                });
-
+                this._showSeasons();
                 this._setMonitoredState();
             },
 
@@ -133,7 +114,9 @@ define(
                         seriesId: this.model.get('id')
                     },
                     element   : this.ui.refresh,
-                    leaveIcon : true
+                    leaveIcon : true,
+                    context: this,
+                    successCallback: this._showSeasons
                 });
             },
 
@@ -164,6 +147,28 @@ define(
                     element     : this.ui.search,
                     failMessage : 'Series search failed',
                     startMessage: 'Search for {0} started'.format(this.model.get('title'))
+                });
+            },
+
+            _showSeasons: function () {
+                var self = this;
+
+                this.seasons.show(new LoadingView());
+
+                this.seasonCollection = new SeasonCollection();
+                this.episodeCollection = new EpisodeCollection();
+
+                $.when(this.episodeCollection.fetch({data: { seriesId: this.model.id }}), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
+                    self.seasons.show(new SeasonCollectionView({
+                        collection       : self.seasonCollection,
+                        episodeCollection: self.episodeCollection,
+                        series           : self.model
+                    }));
+
+                    self.seasonMenu.show(new SeasonMenuCollectionView({
+                        collection: self.seasonCollection,
+                        episodeCollection: self.episodeCollection
+                    }));
                 });
             }
         });
