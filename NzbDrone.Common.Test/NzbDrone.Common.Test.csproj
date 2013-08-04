@@ -62,7 +62,6 @@
     <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
-    <Compile Include="DirectoryLookupServiceFixture.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="EnvironmentTests\EnviromentProviderTest.cs" />

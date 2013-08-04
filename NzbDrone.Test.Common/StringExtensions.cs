@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Newtonsoft.Json.Serialization;
 using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Test.Common
