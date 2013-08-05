@@ -54,14 +54,14 @@ Function CleanFolder($path)
 
 Function AddJsonNet()
 {
-    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.*  -Destination $outputFolder -Verbose
+    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.*  -Destination $outputFolder
 }
 
 Function PackageTests()
 {
     Write-Host Packaging Tests
 
-      if(Test-Path $testPackageFolder)
+    if(Test-Path $testPackageFolder)
     {
         Remove-Item -Recurse -Force $testPackageFolder -ErrorAction Continue
     }
@@ -71,10 +71,13 @@ Function PackageTests()
         Copy-Item -Recurse ($_.FullName + "\*")  $testPackageFolder -ErrorAction Ignore
     }
 
+
     CleanFolder $testPackageFolder
 
-    get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
+    Copy-Item $outputFolder\*.dll  -Destination $testPackageFolder -Force
+    Copy-Item $outputFolder\*.pdb  -Destination $testPackageFolder -Force
 
+    get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 }
 
 Function Nunit()
@@ -83,12 +86,11 @@ Function Nunit()
 
     get-childitem $testPackageFolder -File -Filter *test.dll | foreach ($_) {
        $testFiles = $testFiles + $_.FullName + " "
-       
     }
 
-     $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
-     Invoke-Expression  $nunitExe
-     CheckExitCode
+    $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
+    Invoke-Expression  $nunitExe
+    CheckExitCode
 }
 
 Function RunGrunt()
@@ -111,7 +113,7 @@ Function CheckExitCode()
 }
 
 Build
-RunGrunt
+#RunGrunt
 PackageTests
 
 if($runTests)
