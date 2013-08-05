@@ -36,6 +36,10 @@ namespace NzbDrone.Common.Test
                 "Users",
                 "Windows"
             };
+
+            Mocker.GetMock<IDiskProvider>()
+                .SetupGet(s => s.SpecialFolders)
+                .Returns(new HashSet<string> { "$recycle.bin", "system volume information", "recycler" });
         }
 
         private void SetupFolders(string root)
@@ -96,7 +100,11 @@ namespace NzbDrone.Common.Test
                 .Setup(s => s.GetDirectories(It.IsAny<String>()))
                 .Returns(_folders.ToArray());
 
-            Subject.LookupSubDirectories(root).Should().HaveCount(_folders.Count - 2);
+            var result = Subject.LookupSubDirectories(root);
+
+            result.Should().HaveCount(_folders.Count - 2);
+            result.Should().NotContain(RECYCLING_BIN);
+            result.Should().NotContain(SYSTEM_VOLUME_INFORMATION);
         }
     }
 }
