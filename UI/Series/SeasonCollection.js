@@ -1,24 +1,25 @@
 ﻿﻿'use strict';
 define(
     [
-        'Series/SeasonModel',
-        'backbone.pageable'
-    ], function (SeasonModel, PageAbleCollection) {
-        return PageAbleCollection.extend({
+        'backbone',
+        'Series/SeasonModel'
+    ], function (Backbone, SeasonModel) {
+        return Backbone.Collection.extend({
             url  : window.ApiRoot + '/season',
             model: SeasonModel,
 
-            mode: 'client',
-
-            state: {
-                sortKey : 'seasonNumber',
-                order   : 1,
-                pageSize: 1000000
+            comparator: function (season) {
+                return -season.get('seasonNumber');
             },
 
-            queryParams: {
-                sortKey: null,
-                order  : null
+            bySeries: function (series) {
+                var filtered = this.filter(function (season) {
+                    return season.get('seriesId') === series;
+                });
+
+                var SeasonCollection = require('Series/SeasonCollection');
+
+                return new SeasonCollection(filtered);
             }
         });
     });

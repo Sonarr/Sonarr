@@ -16,10 +16,11 @@ define(
         'Logs/Files/Layout',
         'Release/Layout',
         'System/Layout',
+        'SeasonPass/Layout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
     ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, SeriesModel, CalendarLayout,
-        LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, NotFoundView) {
+        LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, SeasonPassLayout, NotFoundView) {
         return Marionette.Controller.extend({
 
             series: function () {
@@ -40,11 +41,6 @@ define(
                 }
             },
 
-
-            _showSeriesDetail: function(seriesModel){
-
-            },
-
             addSeries: function (action) {
                 this._setTitle('Add Series');
                 App.mainRegion.show(new AddSeriesLayout({action: action}));
@@ -54,7 +50,6 @@ define(
                 this._setTitle('Calendar');
                 App.mainRegion.show(new CalendarLayout());
             },
-
 
             settings: function (action) {
                 this._setTitle('Settings');
@@ -93,6 +88,11 @@ define(
             system: function () {
                 this._setTitle('system');
                 App.mainRegion.show(new SystemLayout());
+            },
+
+            seasonPass: function () {
+                this._setTitle('Season Pass');
+                App.mainRegion.show(new SeasonPassLayout());
             },
 
             notFound: function () {

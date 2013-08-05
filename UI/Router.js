@@ -26,6 +26,7 @@ require(
                 'logs/:action'              : 'logs',
                 'rss'                       : 'rss',
                 'system'                    : 'system',
+                'seasonpass'                : 'seasonPass',
                 ':whatever'                 : 'notFound'
             }
         });

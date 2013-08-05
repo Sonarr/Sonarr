@@ -14,13 +14,20 @@ namespace NzbDrone.Api.Seasons
 
             GetResourceAll = GetSeasons;
             UpdateResource = SetMonitored;
+
+            Post["/pass"] = x => SetSeasonPass();
         }
 
         private List<SeasonResource> GetSeasons()
         {
             var seriesId = Request.Query.SeriesId;
 
-            return ToListResource<Season>(() => _seasonService.GetSeasonsBySeries(seriesId));
+            if (seriesId.HasValue)
+            {
+                return ToListResource<Season>(() => _seasonService.GetSeasonsBySeries(seriesId));
+            }
+
+            return ToListResource<Season>(() => _seasonService.GetAllSeasons());
         }
 
         private SeasonResource SetMonitored(SeasonResource seasonResource)
@@ -28,6 +35,14 @@ namespace NzbDrone.Api.Seasons
             _seasonService.SetMonitored(seasonResource.SeriesId, seasonResource.SeasonNumber, seasonResource.Monitored);
 
             return seasonResource;
+        }
+
+        private List<SeasonResource> SetSeasonPass()
+        {
+            var seriesId = Request.Form.SeriesId;
+            var seasonNumber = Request.Form.SeasonNumber;
+
+            return ToListResource<Season>(() => _seasonService.SetSeasonPass(seriesId, seasonNumber));
         }
     }
 }

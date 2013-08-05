@@ -1,0 +1,32 @@
+﻿<div class="seasonpass-series">
+    <div class="row">
+        <div class="span11">
+            <i class="icon-chevron-right x-expander expander pull-left"/>
+
+            <span class="title span5">
+                <a href="{{route}}">
+                    {{title}}
+                </a>
+            </span>
+            <select class="x-season-select season-select">
+                <option value="-1">Select season...</option>
+                {{#each seasons.models}}
+                    {{#if_eq attributes.seasonNumber compare="0"}}
+                        <option value="{{attributes.seasonumber}}">Specials</option>
+                    {{else}}
+                        <option value="{{attributes.seasonNumber}}">Season {{attributes.seasonNumber}}</option>
+                    {{/if_eq}}
+                {{/each}}
+            </select>
+            <span class="help-inline">
+                <i class="icon-question-sign" title="Selecting a season will unmonitor all previous seasons"/>
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span11">
+            <div class="x-season-grid season-grid"></div>
+        </div>
+    </div>
+</div>

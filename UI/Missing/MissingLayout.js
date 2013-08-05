@@ -9,8 +9,9 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
         'Shared/Grid/Pager',
+        'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
-    ], function (Marionette, Backgrid, MissingCollection, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, RelativeDateCell, GridPager, LoadingView) {
+    ], function (Marionette, Backgrid, MissingCollection, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, RelativeDateCell, GridPager, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
             template: 'Missing/MissingLayoutTemplate',
 
@@ -47,6 +48,19 @@ define(
                     }
                 ],
 
+            leftSideButtons: {
+                type      : 'default',
+                storeState: false,
+                items     :
+                    [
+                        {
+                            title  : 'Season Pass',
+                            icon   : 'icon-bookmark',
+                            route  : 'seasonpass'
+                        }
+                    ]
+            },
+
             _showTable: function () {
                 this.missing.show(new Backgrid.Grid({
                     columns   : this.columns,
@@ -69,6 +83,18 @@ define(
                 this.missingCollection.fetch().done(function () {
                     self._showTable();
                 });
+
+                this._showToolbar();
+            },
+
+            _showToolbar: function () {
+                this.toolbar.show(new ToolbarLayout({
+                    left   :
+                        [
+                            this.leftSideButtons
+                        ],
+                    context: this
+                }));
             }
         });
     });
