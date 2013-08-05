@@ -53,9 +53,7 @@ namespace NzbDrone.Core.Notifications.Email
             try
             {
                 var smtp = new SmtpClient(server, port);
-
                 smtp.EnableSsl = ssl;
-
                 smtp.Credentials = credentials;
 
                 smtp.Send(email);
