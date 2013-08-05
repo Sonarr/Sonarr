@@ -26,6 +26,8 @@ Function Build()
     CheckExitCode
 
     CleanFolder $outputFolder
+
+    AddJsonNet
 }
 
 Function CleanFolder($path)
@@ -34,6 +36,8 @@ Function CleanFolder($path)
     get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {remove-item $_.fullname}
 
     get-childitem $path -File -Filter *.transform -Recurse  | foreach ($_) {remove-item $_.fullname}
+
+    get-childitem $path -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
 
     Write-Host Removing FluentValidation.Resources  files
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
@@ -45,6 +49,12 @@ Function CleanFolder($path)
     {
         Get-ChildItem $path -Directory -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Remove-Item
     }
+}
+
+
+Function AddJsonNet()
+{
+    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.*  -Destination $outputFolder -Verbose
 }
 
 Function PackageTests()
