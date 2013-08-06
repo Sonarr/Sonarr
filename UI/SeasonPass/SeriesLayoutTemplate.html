@@ -8,18 +8,28 @@
                     {{title}}
                 </a>
             </span>
-            <select class="x-season-select season-select">
-                <option value="-1">Select season...</option>
-                {{#each seasons.models}}
+
+            <span class="span3">
+                <select class="x-season-select season-select">
+                    <option value="-1">Select season...</option>
+                    {{#each seasons.models}}
                     {{#if_eq attributes.seasonNumber compare="0"}}
-                        <option value="{{attributes.seasonumber}}">Specials</option>
+                    <option value="{{attributes.seasonNumber}}">Specials</option>
                     {{else}}
-                        <option value="{{attributes.seasonNumber}}">Season {{attributes.seasonNumber}}</option>
+                    <option value="{{attributes.seasonNumber}}">Season {{attributes.seasonNumber}}</option>
                     {{/if_eq}}
-                {{/each}}
-            </select>
+                    {{/each}}
+                </select>
+
+                <span class="help-inline">
+                    <i class="icon-question-sign" title="Selecting a season will unmonitor all previous seasons"/>
+                </span>
+            </span>
+
+            <button class="btn x-latest">Latest</button>
+
             <span class="help-inline">
-                <i class="icon-question-sign" title="Selecting a season will unmonitor all previous seasons"/>
+                <i class="icon-question-sign" title="Will quickly select the latest season as first monitored"/>
             </span>
         </div>
     </div>

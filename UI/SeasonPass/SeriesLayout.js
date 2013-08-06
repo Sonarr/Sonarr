@@ -18,7 +18,8 @@ define(
 
             events: {
                 'change .x-season-select': '_seasonSelected',
-                'click .x-expander'        : '_expand'
+                'click .x-expander'      : '_expand',
+                'click .x-latest'        : '_latest'
             },
 
             regions: {
@@ -66,26 +67,13 @@ define(
             },
 
             _seasonSelected: function () {
-                var self = this;
                 var seasonNumber = parseInt(this.ui.seasonSelect.val());
 
-                if (seasonNumber == -1) {
+                if (seasonNumber == -1 || isNaN(seasonNumber)) {
                     return;
                 }
 
-                var promise = $.ajax({
-                    url: this.seasonCollection.url + '/pass',
-                    type: 'POST',
-                    data: {
-                        seriesId: this.model.get('id'),
-                        seasonNumber: seasonNumber
-                    }
-                });
-
-                promise.done(function (data) {
-                    self.seasonCollection = new SeasonCollection(data);
-                    self.render();
-                });
+                this._setMonitored(seasonNumber)
             },
 
             _expand: function () {
@@ -112,6 +100,34 @@ define(
                     this.ui.expander.removeClass('icon-chevron-down');
                     this.ui.expander.addClass('icon-chevron-right');
                 }
+            },
+
+            _latest: function () {
+                var season = _.max(this.seasonCollection.models, function (model) {
+                    return model.get('seasonNumber');
+                });
+
+                //var seasonNumber = season.get('seasonNumber');
+
+                this._setMonitored(season.get('seasonNumber'))
+            },
+
+            _setMonitored: function (seasonNumber) {
+                var self = this;
+
+                var promise = $.ajax({
+                    url: this.seasonCollection.url + '/pass',
+                    type: 'POST',
+                    data: {
+                        seriesId: this.model.get('id'),
+                        seasonNumber: seasonNumber
+                    }
+                });
+
+                promise.done(function (data) {
+                    self.seasonCollection = new SeasonCollection(data);
+                    self.render();
+                });
             }
         });
     });
