@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -30,6 +32,9 @@ namespace NzbDrone.SysTray
 
         public void Start()
         {
+            Application.ThreadException += new ThreadExceptionEventHandler(OnThreadException);
+            Application.ApplicationExit += new EventHandler(OnApplicationExit);
+
             _trayMenu.MenuItems.Add("Launch Browser", LaunchBrowser);
             _trayMenu.MenuItems.Add("-");
             _trayMenu.MenuItems.Add("Exit", OnExit);
@@ -42,6 +47,11 @@ namespace NzbDrone.SysTray
 
 
             Application.Run(this);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            DisposeTrayIcon();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -76,6 +86,24 @@ namespace NzbDrone.SysTray
         private void LaunchBrowser(object sender, EventArgs e)
         {
             _processProvider.Start(_hostController.AppUrl);
+        }
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            DisposeTrayIcon();
+        }
+
+        private void OnThreadException(object sender, EventArgs e)
+        {
+            DisposeTrayIcon();
+        }
+
+        private void DisposeTrayIcon()
+        {
+            _trayIcon.Visible = false;
+            _trayIcon.Icon = null;
+            _trayIcon.Visible = false;
+            _trayIcon.Dispose();
         }
     }
 }
