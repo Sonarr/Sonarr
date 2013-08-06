@@ -81,7 +81,6 @@
     <Compile Include="ClientSchema\Field.cs" />
     <Compile Include="ClientSchema\SchemaBuilder.cs" />
     <Compile Include="ClientSchema\SelectOption.cs" />
-    <Compile Include="Client\ClientSettings.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
