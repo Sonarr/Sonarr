@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             }
         }
 
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int rageTvId, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<string>();
 
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return searchUrls;
         }
 
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int rageTvId, DateTime date)
         {
             var searchUrls = new List<String>();
 
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return searchUrls;
         }
 
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int rageTvId, int seasonNumber)
         {
             var searchUrls = new List<String>();
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return searchUrls;
         }
 
-        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int rageTvId, int seasonNumber, int episodeWildcard)
         {
             var searchUrls = new List<String>();
 

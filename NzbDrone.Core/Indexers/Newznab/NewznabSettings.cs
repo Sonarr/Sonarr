@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         public NewznabSettings()
         {
             Categories = new [] { 5030, 5040 };
+            UseRageTvId = true;
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -19,6 +20,8 @@ namespace NzbDrone.Core.Indexers.Newznab
         public String ApiKey { get; set; }
 
         public IEnumerable<Int32> Categories { get; set; }
+
+        public bool UseRageTvId { get; set; }
 
         public bool IsValid
         {

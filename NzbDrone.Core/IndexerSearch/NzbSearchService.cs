@@ -59,7 +59,7 @@ namespace NzbDrone.Core.IndexerSearch
                     throw new InvalidOperationException("Daily episode is missing AirDate. Try to refresh series info.");
                 }
 
-                return SearchDaily(episode.SeriesId, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
+                return SearchDaily(episode.SeriesId, episode.Series.TvRageId, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
             }
 
             return SearchSingle(series, episode);
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> SearchSingle(Series series, Episode episode)
         {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(series.Id, episode.SeasonNumber);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series.Id, series.TvRageId, episode.SeasonNumber);
 
             if (series.UseSceneNumbering)
             {
@@ -92,9 +92,9 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchDaily(int seriesId, DateTime airDate)
+        private List<DownloadDecision> SearchDaily(int seriesId, int rageTvId, DateTime airDate)
         {
-            var searchSpec = Get<DailyEpisodeSearchCriteria>(seriesId);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(seriesId, rageTvId);
             searchSpec.Airtime = airDate;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
@@ -128,13 +128,14 @@ namespace NzbDrone.Core.IndexerSearch
             return result;
         }
 
-        private TSpec Get<TSpec>(int seriesId, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(int seriesId, int rageTvId, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
             var series = _seriesService.GetSeries(seriesId);
 
             spec.SeriesId = seriesId;
+            spec.SeriesRageTvId = rageTvId;
             spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId, seasonNumber);
 
             if (string.IsNullOrWhiteSpace(spec.SceneTitle))
