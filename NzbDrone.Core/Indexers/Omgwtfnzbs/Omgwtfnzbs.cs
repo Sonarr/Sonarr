@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             get { return "omgwtfnzbs"; }
         }
 
+        public override IParseFeed Parser
+        {
+            get
+            {
+                return new OmgwtfnzbsParser();
+            }
+        }
+
         public override IEnumerable<string> RecentFeed
         {
             get

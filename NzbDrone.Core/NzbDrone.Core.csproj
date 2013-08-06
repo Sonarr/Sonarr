@@ -207,6 +207,7 @@
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
+    <Compile Include="Indexers\XElementExtensions.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\SetLoggingLevel.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
@@ -433,9 +434,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\IndexerFetchService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Indexers\SyndicationFeedXmlReader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MediaFiles\MediaFileService.cs">

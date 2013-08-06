@@ -1,21 +1,16 @@
-﻿using System.ServiceModel.Syndication;
+﻿using System.Xml.Linq;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
     public class WomblesParser : BasicRssParser
     {
-        protected override string GetNzbUrl(SyndicationItem item)
-        {
-            return item.Links[0].Uri.ToString();
-        }
-
-        protected override string GetNzbInfoUrl(SyndicationItem item)
+        protected override string GetNzbInfoUrl(XElement item)
         {
             return null;
         }
 
-        protected override ReportInfo PostProcessor(SyndicationItem item, ReportInfo currentResult)
+        protected override ReportInfo PostProcessor(XElement item, ReportInfo currentResult)
         {
             if (currentResult != null)
             {
