@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Indexers
                 {
                     if (webException.Message.Contains("503") || webException.Message.Contains("timed out"))
                     {
-                        _logger.Warn("{0} server is currently unavailable.{1} {2}", indexer.Name, url, webException.Message);
+                        _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer.Name, url, webException.Message);
                     }
                     else
                     {

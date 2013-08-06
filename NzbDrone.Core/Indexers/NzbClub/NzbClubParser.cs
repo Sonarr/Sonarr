@@ -1,6 +1,6 @@
 using System;
-using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using NLog;
 using NzbDrone.Core.Parser.Model;
 
@@ -18,11 +18,11 @@ namespace NzbDrone.Core.Indexers.NzbClub
         }
 
 
-        protected override ReportInfo PostProcessor(SyndicationItem item, ReportInfo currentResult)
+        protected override ReportInfo PostProcessor(XElement item, ReportInfo currentResult)
         {
             if (currentResult != null)
             {
-                var match = SizeRegex.Match(item.Summary.Text);
+                var match = SizeRegex.Match(item.Description());
 
                 if (match.Success && match.Groups["size"].Success)
                 {
@@ -30,26 +30,33 @@ namespace NzbDrone.Core.Indexers.NzbClub
                 }
                 else
                 {
-                   logger.Warn("Couldn't parse size from {0}", item.Summary.Text);
+                   logger.Warn("Couldn't parse size from {0}", item.Description());
                 }
             }
 
             return currentResult;
         }
 
-        protected override string GetTitle(SyndicationItem syndicationItem)
+        protected override string GetTitle(XElement item)
         {
-            var title = ParseHeader(syndicationItem.Title.Text);
+            var title = ParseHeader(item.Title());
 
             if (String.IsNullOrWhiteSpace(title))
-                return syndicationItem.Title.Text;
+                return item.Title();
 
             return title;
         }
 
-        protected override string GetNzbInfoUrl(SyndicationItem item)
+        protected override string GetNzbInfoUrl(XElement item)
         {
-            return item.Links[1].Uri.ToString();
+            return item.Links()[0];
+        }
+
+        protected override string GetNzbUrl(XElement item)
+        {
+            var enclosure = item.Element("enclosure");
+
+            return enclosure.Attribute("url").Value;
         }
     }
 }
