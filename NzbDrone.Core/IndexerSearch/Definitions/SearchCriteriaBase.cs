@@ -10,7 +10,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         private static readonly Regex BeginningThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public int SeriesId { get; set; }
-        public int SeriesRageTvId { get; set; }
+        public int SeriesTvRageId { get; set; }
         public string SceneTitle { get; set; }
 
         public string QueryTitle

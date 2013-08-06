@@ -135,7 +135,7 @@ namespace NzbDrone.Core.IndexerSearch
             var series = _seriesService.GetSeries(seriesId);
 
             spec.SeriesId = seriesId;
-            spec.SeriesRageTvId = rageTvId;
+            spec.SeriesTvRageId = rageTvId;
             spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId, seasonNumber);
 
             if (string.IsNullOrWhiteSpace(spec.SceneTitle))
