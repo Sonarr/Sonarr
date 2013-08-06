@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Indexers
 
         IParseFeed Parser { get; }
 
-        IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int rageTvId, int seasonNumber, int episodeNumber);
-        IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int rageTvId, DateTime date);
-        IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int rageTvId, int seasonNumber);
-        IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int rageTvId, int seasonNumber, int episodeWildcard);
+        IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
+        IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
+        IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber);
+        IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard);
     }
 }

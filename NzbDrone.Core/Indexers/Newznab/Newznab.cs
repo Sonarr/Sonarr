@@ -84,52 +84,24 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int rageTvId, int seasonNumber, int episodeNumber)
+        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
-            if (Settings.UseRageTvId)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&ep={3}", url, rageTvId, seasonNumber, episodeNumber));
-            }
-            else
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&ep={3}", url, tvRageId, seasonNumber, episodeNumber));
         }
 
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int rageTvId, DateTime date)
+        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
         {
-            if (Settings.UseRageTvId)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM/dd}", url, rageTvId, date)).ToList();
-            }
-            else
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM/dd}", url, NewsnabifyTitle(seriesTitle), date)).ToList();
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM/dd}", url, tvRageId, date)).ToList();
         }
 
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int rageTvId, int seasonNumber)
+        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber)
         {
-            if (Settings.UseRageTvId)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}", url, rageTvId, seasonNumber));
-            }
-            else
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}", url, NewsnabifyTitle(seriesTitle), seasonNumber));
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}", url, tvRageId, seasonNumber));
         }
 
-        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int rageTvId, int seasonNumber, int episodeWildcard)
+        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard)
         {
-            if (Settings.UseRageTvId)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&q=E{3}", url, rageTvId, seasonNumber, episodeWildcard));
-            }
-            else
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+S{2:00}E{3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeWildcard));
-            }
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&q=E{3}", url, tvRageId, seasonNumber, episodeWildcard));
         }
 
         public override string Name
