@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
@@ -16,12 +18,14 @@ namespace NzbDrone.Core.Configuration
     public class ConfigService : IConfigService
     {
         private readonly IConfigRepository _repository;
+        private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
         private static Dictionary<string, string> _cache;
 
-        public ConfigService(IConfigRepository repository, Logger logger)
+        public ConfigService(IConfigRepository repository, IMessageAggregator messageAggregator, Logger logger)
         {
             _repository = repository;
+            _messageAggregator = messageAggregator;
             _logger = logger;
             _cache = new Dictionary<string, string>();
         }
@@ -63,6 +67,8 @@ namespace NzbDrone.Core.Configuration
                 if (!equal)
                     SetValue(configValue.Key, configValue.Value.ToString());
             }
+
+            _messageAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
         public String SabHost
@@ -236,6 +242,13 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("ReleaseRestrictions", String.Empty); }
             set { SetValue("ReleaseRestrictions", value); }
+        }
+
+        public Int32 RssSyncInterval
+        {
+            get { return GetValueInt("RssSyncInterval", 15); }
+
+            set { SetValue("RssSyncInterval", value); }
         }
 
         private string GetValue(string key)

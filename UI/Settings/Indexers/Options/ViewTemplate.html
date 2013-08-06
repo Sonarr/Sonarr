@@ -9,22 +9,28 @@
         </div>
     </div>
 
-    <!--<div class="control-group">-->
-        <!--<label class="control-label">RSS Sync Interval</label>-->
+    <div class="control-group">
+        <label class="control-label">RSS Sync Interval</label>
 
-        <!--<div class="controls">-->
-            <!--<input type="number" min="15" max="120" name="rssSyncInterval"/>-->
-        <!--</div>-->
-    <!--</div>-->
+        <div class="controls">
+            <input type="number" min="10" max="120" name="rssSyncInterval"/>
+
+            <span class="help-inline">
+                <i class="icon-form-warning" title="This will apply to all indexers, please follow the rules set forth by them"/>
+            </span>
+        </div>
+    </div>
 
     <div class="control-group">
         <label class="control-label">Release Restrictions</label>
 
         <div class="controls">
             <textarea rows="3" name="releaseRestrictions" class="release-restrictions"></textarea>
+
             <span class="help-inline">
                 <i class="icon-question-sign" title="Blacklist NZBs based on these words (case-insensitive)"/>
             </span>
+
             <span class="text-area-help">Newline-delimited set of rules</span>
         </div>
     </div>
