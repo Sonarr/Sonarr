@@ -1,4 +1,99 @@
-﻿@import "../Shared/Styles/card";
+﻿@import "Bootstrap/variables";
+@import "Bootstrap/mixins";
+@import "Bootstrap/type";
+@import "font";
+@import "form";
+@import "menu";
+@import "Backgrid/backgrid";
+@import "prefixer";
+@import "icons";
+@import "spinner";
+@import "legend";
+@import "../Shared/Styles/clickable";
+@import "../Shared/Styles/card";
+
+.progress {
+  width         : 125px;
+  position      : relative;
+  margin-bottom : 2px;
+
+  .progressbar-back-text, .progressbar-front-text {
+    font-size   : 11.844px;
+    font-weight : bold;
+    text-align  : center;
+  }
+
+  .progressbar-back-text {
+    position : absolute;
+    width    : 100%;
+    height   : 100%;
+  }
+
+  .progressbar-front-text {
+    display : block;
+    width   : 125px;
+  }
+  .bar {
+    position : absolute;
+    overflow : hidden;
+  }
+}
+
+.backdrop #page {
+  background-color : transparent;
+  box-shadow       : none;
+}
+
+.page-toolbar {
+  margin-top    : 10px;
+  margin-bottom : 30px;
+}
+
+#scroll-up {
+  .clickable;
+
+  &:hover {
+    text-decoration : none;
+    .opacity         (0.4);
+  }
+
+  .opacity   (0.2);
+  position  : fixed;
+  bottom    : 50px;
+  right     : 50px;
+  display   : none;
+  font-size : 56px;
+  color     : white;
+}
+
+.label-large {
+  padding   : 4px 6px;
+  font-size : 16px;
+}
+
+th {
+  &.sortable {
+    &:hover {
+      background : @tableBackgroundHover;
+    }
+    .clickable();
+
+  }
+}
+
+
+
+a, .btn {
+  i {
+    cursor : pointer;
+  }
+}
+
+.label-white {
+  color            : black;
+  background-color : white;
+}
+
 
 body {
   background-color : #1c1c1c;
@@ -7,27 +102,6 @@ body {
   p {
     font-size : 0.9em;
   }
-}
-
-
-.calendar {
-  background-position : -160px -128px;
-}
-
-.panel .primary, .panel .primary h6 {
-  background-color : #007ccd;
-}
-
-.panel .info, .panel .info h6 {
-  background-color : #14b8d4;
-}
-
-.message-sidebar a.message-preview p, .message-sidebar a.message-preview h5 {
-  color : #999999;
-}
-
-ul.stat-list li label, ul.stat-list li h4, ul.stat-list li small, ul.stat-list li p {
-  display : inline-block;
 }
 
 footer {
@@ -47,30 +121,23 @@ footer {
   p {
     margin-bottom : 0px;
   }
+
+  #footer-region {
+    .text-center();
+    position : relative;
+    width    : 256px;
+    margin   : 50px auto 0px auto;
+    display  : block;
+  }
 }
 
-.popover-title {
-  text-transform : none;
-}
-
-.message-sidebar a.active p, .message-sidebar a.active h5 {
-  color : rgba(255, 255, 255, 0.8);
-}
-
-
-
-body h1, body h2, body h3, body h4, body h5, body h6 {
-  text-transform : capitalize;
-  font-weight    : 300;
-}
-
-.page {
-  .card(#AAAAAA);
-  width            : 1210px;
-  min-width        : 1210px;
-  margin           : auto;
-  margin-top       : -70px;
-  padding          : 20px 0px;
+.started #page {
+  .card(#aaaaaa);
+  width      : 1210px;
+  min-width  : 1210px;
+  margin     : auto;
+  margin-top : -70px;
+  padding    : 20px 0px;
   .header {
     padding-bottom : 10px;
     margin-bottom  : 20px;
