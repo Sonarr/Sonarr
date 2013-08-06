@@ -11,7 +11,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Api.Test
 {
     [TestFixture]
-    public class DirectoryLookupServiceFixture :TestBase<DirectoryLookupService>
+    public class DirectoryLookupServiceFixture : TestBase<DirectoryLookupService>
     {
         private const string RECYCLING_BIN = "$Recycle.Bin";
         private const string SYSTEM_VOLUME_INFORMATION = "System Volume Information";
@@ -49,11 +49,11 @@ namespace NzbDrone.Api.Test
                 e = Path.Combine(root, e);
             });
         }
-            
+
         [Test]
         public void should_not_contain_recycling_bin_for_root_of_drive()
         {
-            const string root = @"C:\";
+            string root = @"C:\".AsOsAgnostic();
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
@@ -64,9 +64,9 @@ namespace NzbDrone.Api.Test
         }
 
         [Test]
-        public void should_not_contain_system_volume_information_for_root_of_drive()
+        public void should_not_contain_system_volume_information()
         {
-            const string root = @"C:\";
+            string root = @"C:\".AsOsAgnostic();
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
@@ -79,7 +79,7 @@ namespace NzbDrone.Api.Test
         [Test]
         public void should_not_contain_recycling_bin_or_system_volume_information_for_root_of_drive()
         {
-            const string root = @"C:\";
+            string root = @"C:\";
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
