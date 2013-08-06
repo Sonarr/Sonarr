@@ -23,22 +23,22 @@ namespace NzbDrone.Core.Indexers.Wombles
             get { yield return "http://nzb.isasecret.com/rss/?sec=TV&fr=false"; }
         }
 
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
             return new List<string>();
         }
 
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber)
         {
             return new List<string>();
         }
 
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
         {
             return new List<string>();
         }
 
-        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard)
         {
             return new List<string>();
         }
