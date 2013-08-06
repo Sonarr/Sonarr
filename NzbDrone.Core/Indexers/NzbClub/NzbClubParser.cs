@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using NLog;
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
 
         protected override string GetNzbInfoUrl(XElement item)
         {
-            return item.Links()[0];
+            return item.Links().First();
         }
 
         protected override string GetNzbUrl(XElement item)
