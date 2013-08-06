@@ -8,14 +8,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabParser : BasicRssParser
     {
-        private static XNamespace NEWZNAB = "http://www.newznab.com/DTD/2010/feeds/attributes/";
-        
-        private readonly Newznab _newznabIndexer;
-
-        public NewznabParser(Newznab newznabIndexer)
-        {
-            _newznabIndexer = newznabIndexer;
-        }
+        private static readonly XNamespace NewznabNamespace = "http://www.newznab.com/DTD/2010/feeds/attributes/";
 
         protected override string GetNzbInfoUrl(XElement item)
         {
@@ -26,7 +19,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             if (currentResult != null)
             {
-                var attributes = item.Elements(NEWZNAB + "attr");
+                var attributes = item.Elements(NewznabNamespace + "attr");
                 var sizeElement = attributes.Single(e => e.Attribute("name").Value == "size");
 
                 currentResult.Size = Convert.ToInt64(sizeElement.Attribute("value").Value);

@@ -94,16 +94,13 @@ namespace NzbDrone.Core.Indexers
         {
             var result = new List<ReportInfo>();
 
-			var body = "......";
-
             foreach (var url in urls)
             {
                 try
                 {
-                  _logger.Trace("Downloading Feed " + url);
-				  body = _httpProvider.DownloadString(url);
-                  var stream = _httpProvider.DownloadStream(url);
-                  result.AddRange(indexer.Parser.Process(stream));
+                    _logger.Trace("Downloading Feed " + url);
+                    var stream = _httpProvider.DownloadStream(url);
+                    result.AddRange(indexer.Parser.Process(stream));
                 }
                 catch (WebException webException)
                 {
@@ -114,13 +111,13 @@ namespace NzbDrone.Core.Indexers
                     else
                     {
                         webException.Data.Add("FeedUrl", url);
-                        _logger.WarnException("An error occurred while processing feed. " + url + " " + body, webException);
+                        _logger.WarnException("An error occurred while processing feed. " + url, webException);
                     }
                 }
                 catch (Exception feedEx)
                 {
                     feedEx.Data.Add("FeedUrl", url);
-                    _logger.ErrorException("An error occurred while processing feed. " + url + " " + body, feedEx);
+                    _logger.ErrorException("An error occurred while processing feed. " + url, feedEx);
                 }
             }
 

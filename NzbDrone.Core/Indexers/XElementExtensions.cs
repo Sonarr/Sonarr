@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace NzbDrone.Core.Indexers
@@ -11,38 +9,32 @@ namespace NzbDrone.Core.Indexers
     {
         public static string Title(this XElement item)
         {
-            return TryGetValue(item, "title", "Unknown");
+            return item.TryGetValue("title", "Unknown");
         }
 
         public static DateTime PublishDate(this XElement item)
         {
-            return DateTime.Parse(TryGetValue(item, "pubDate"));
+            return DateTime.Parse(item.TryGetValue("pubDate"));
         }
 
         public static List<String> Links(this XElement item)
         {
-            var result = new List<String>();
             var elements = item.Elements("link");
 
-            foreach (var link in elements)
-            {
-                result.Add(link.Value);
-            }
-
-            return result;
+            return elements.Select(link => link.Value).ToList();
         }
 
         public static string Description(this XElement item)
         {
-            return TryGetValue(item, "description");
+            return item.TryGetValue("description");
         }
 
         public static string Comments(this XElement item)
         {
-            return TryGetValue(item, "comments");
+            return item.TryGetValue("comments");
         }
 
-        private static string TryGetValue(XElement item, string elementName, string defaultValue = "")
+        private static string TryGetValue(this XElement item, string elementName, string defaultValue = "")
         {
             var element = item.Element(elementName);
 

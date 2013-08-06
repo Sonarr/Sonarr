@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             get
             {
-                return new NewznabParser(this);
+                return new NewznabParser();
             }
         }
 
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Enable = false,
                     Name = "Nzbs.org",
                     Implementation = GetType().Name,
-                    Settings = GetSettings("http://nzbs.org", new List<Int32>{ 5000 })
+                    Settings = GetSettings("http://nzbs.org", new List<Int32> { 5000 })
                 });
 
 
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 //Todo: We should be able to update settings on start
                 if (Name.Equals("nzbs.org", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Settings.Categories = new List<int>{ 5000 };
+                    Settings.Categories = new List<int> { 5000 };
                 }
 
                 var url = String.Format("{0}/api?t=tvsearch&cat={1}", Settings.Url.TrimEnd('/'), String.Join(",", Settings.Categories));
