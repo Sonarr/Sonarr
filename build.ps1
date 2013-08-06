@@ -113,7 +113,7 @@ Function CheckExitCode()
 }
 
 Build
-#RunGrunt
+RunGrunt
 PackageTests
 
 if($runTests)
