@@ -86,22 +86,42 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&ep={3}", url, tvRageId, seasonNumber, episodeNumber));
+            if (tvRageId > 0)
+            {
+                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&ep={3}", url, tvRageId, seasonNumber, episodeNumber));
+            }
+
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
         }
 
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
         {
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM/dd}", url, tvRageId, date)).ToList();
+            if (tvRageId > 0)
+            {
+                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM/dd}", url, tvRageId, date)).ToList();
+            }
+
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM/dd}", url, NewsnabifyTitle(seriesTitle), date)).ToList();
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber)
         {
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}", url, tvRageId, seasonNumber));
+            if (tvRageId > 0)
+            {
+                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}", url, tvRageId, seasonNumber));
+            }
+
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}", url, NewsnabifyTitle(seriesTitle), seasonNumber));
         }
 
         public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard)
         {
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&q=E{3}", url, tvRageId, seasonNumber, episodeWildcard));
+            if (tvRageId > 0)
+            {
+                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&q=E{3}", url, tvRageId, seasonNumber, episodeWildcard));
+            }
+
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+S{2:00}E{3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeWildcard));
         }
 
         public override string Name
