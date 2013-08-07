@@ -1,4 +1,5 @@
 using NLog;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
         {
             _logger.Trace("Checking if report meets language requirements. {0}", subject.ParsedEpisodeInfo.Language);
             if (subject.ParsedEpisodeInfo.Language != Language.English)

@@ -37,23 +37,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2 = new Mock<IDecisionEngineSpecification>();
             _fail3 = new Mock<IDecisionEngineSpecification>();
 
-            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(true);
+            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(true);
             _pass1.Setup(c => c.RejectionReason).Returns("_pass1");
 
-            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(true);
+            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(true);
             _pass2.Setup(c => c.RejectionReason).Returns("_pass2");
 
-            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(true);
+            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(true);
             _pass3.Setup(c => c.RejectionReason).Returns("_pass3");
 
 
-            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
+            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(false);
             _fail1.Setup(c => c.RejectionReason).Returns("_fail1");
 
-            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
+            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(false);
             _fail2.Setup(c => c.RejectionReason).Returns("_fail2");
 
-            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>())).Returns(false);
+            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(false);
             _fail3.Setup(c => c.RejectionReason).Returns("_fail3");
 
             _reports = new List<ReportInfo> { new ReportInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
@@ -61,7 +61,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>()))
                   .Returns(_remoteEpisode);
-
         }
 
         private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
@@ -76,14 +75,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.GetRssDecision(_reports).ToList();
 
-            _fail1.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
-            _fail2.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
-            _fail3.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
-            _pass1.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
-            _pass2.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
-            _pass3.Verify(c => c.IsSatisfiedBy(_remoteEpisode), Times.Once());
+            _fail1.Verify(c => c.IsSatisfiedBy(_remoteEpisode, null), Times.Once());
+            _fail2.Verify(c => c.IsSatisfiedBy(_remoteEpisode, null), Times.Once());
+            _fail3.Verify(c => c.IsSatisfiedBy(_remoteEpisode, null), Times.Once());
+            _pass1.Verify(c => c.IsSatisfiedBy(_remoteEpisode, null), Times.Once());
+            _pass2.Verify(c => c.IsSatisfiedBy(_remoteEpisode, null), Times.Once());
+            _pass3.Verify(c => c.IsSatisfiedBy(_remoteEpisode, null), Times.Once());
         }
-
 
         [Test]
         public void should_return_rejected_if_single_specs_fail()
@@ -124,7 +122,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             result.Single().Rejections.Should().HaveCount(3);
         }
 
-
         [Test]
         public void should_not_attempt_to_map_episode_if_not_parsable()
         {
@@ -135,9 +132,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>()), Times.Never());
 
-            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
 
             results.Should().BeEmpty();
         }
@@ -151,13 +148,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>()), Times.Never());
 
-            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
 
             results.Should().BeEmpty();
         }
-
 
         [Test]
         public void should_not_attempt_to_make_decision_if_series_is_unknown()
@@ -168,12 +164,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.GetRssDecision(_reports);
 
-            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>()), Times.Never());
-
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
         }
-
 
         [Test]
         public void broken_report_shouldnt_blowup_the_process()
@@ -197,7 +191,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             ExceptionVerification.ExpectedErrors(3);
         }
 
-
         [Test]
         public void should_return_unknown_series_rejection_if_series_is_unknown()
         {
@@ -208,8 +201,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var result = Subject.GetRssDecision(_reports);
 
             result.Should().HaveCount(1);
-
         }
     }
-
 }

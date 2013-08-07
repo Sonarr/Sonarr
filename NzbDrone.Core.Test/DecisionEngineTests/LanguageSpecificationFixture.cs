@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithEnglishRelease();
 
-            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(parseResult).Should().BeTrue();
+            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithGermanRelease();
 
-            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(parseResult).Should().BeFalse();
+            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(parseResult, null).Should().BeFalse();
         }
     }
 }

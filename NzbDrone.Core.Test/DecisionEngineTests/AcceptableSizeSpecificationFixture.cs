@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeFalse();
@@ -115,8 +115,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_single_episode_not_first_or_last_60_minute()
         {
-
-
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Report.Size = 1.Gigabytes();
 
@@ -126,9 +124,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
                 .Returns(false);
 
-
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
-
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
             result.Should().BeFalse();
         }
@@ -136,8 +132,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_30_minute()
         {
-
-
             parseResultMulti.Series = series30minutes;
             parseResultMulti.Report.Size = 184572800;
 
@@ -148,7 +142,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultMulti);
+            bool result = Subject.IsSatisfiedBy(parseResultMulti, null);
 
 
             result.Should().BeTrue();
@@ -157,8 +151,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_60_minute()
         {
-
-
             parseResultMulti.Series = series60minutes;
             parseResultMulti.Report.Size = 368572800;
 
@@ -169,7 +161,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultMulti);
+            bool result = Subject.IsSatisfiedBy(parseResultMulti, null);
 
 
             result.Should().BeTrue();
@@ -178,8 +170,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_30_minute()
         {
-
-
             parseResultMulti.Series = series30minutes;
             parseResultMulti.Report.Size = 1.Gigabytes();
 
@@ -190,7 +180,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultMulti);
+            bool result = Subject.IsSatisfiedBy(parseResultMulti, null);
 
 
             result.Should().BeFalse();
@@ -199,8 +189,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_60_minute()
         {
-
-
             parseResultMulti.Series = series60minutes;
             parseResultMulti.Report.Size = 10.Gigabytes();
 
@@ -211,7 +199,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(false);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultMulti);
+            bool result = Subject.IsSatisfiedBy(parseResultMulti, null);
 
 
             result.Should().BeFalse();
@@ -220,8 +208,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_single_episode_first_30_minute()
         {
-
-
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Report.Size = 184572800;
 
@@ -232,7 +218,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -241,8 +227,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_true_single_episode_first_60_minute()
         {
-
-
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Report.Size = 368572800;
 
@@ -253,7 +237,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -262,8 +246,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void IsAcceptableSize_false_single_episode_first_30_minute()
         {
-
-
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Report.Size = 1.Gigabytes();
 
@@ -274,7 +256,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeFalse();
@@ -295,7 +277,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeFalse();
@@ -317,7 +299,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -339,7 +321,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -363,7 +345,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Returns(true);
 
 
-            bool result = Subject.IsSatisfiedBy(parseResultSingle);
+            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
 
 
             result.Should().BeTrue();
@@ -377,7 +359,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.RAWHD, false) },
                 };
 
-            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
 
@@ -389,7 +371,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.Unknown, false) },
             };
 
-            Subject.IsSatisfiedBy(parseResult).Should().BeFalse();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeFalse();
 
 
             Mocker.GetMock<IQualitySizeService>().Verify(c=>c.Get(It.IsAny<int>()),Times.Never());

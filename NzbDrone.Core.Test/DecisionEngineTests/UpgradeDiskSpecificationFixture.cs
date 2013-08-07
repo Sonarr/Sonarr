@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_if_episode_has_no_existing_file()
         {
             parseResultSingle.Episodes.ForEach(c => c.EpisodeFileId = 0);
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
@@ -78,14 +78,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             parseResultSingle.Episodes = new List<Episode>();
 
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
         public void should_be_upgradable_if_only_episode_is_upgradable()
         {
             WithFirstFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
@@ -93,27 +93,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithFirstFileUpgradable();
             WithSecondFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeTrue();
         }
 
         [Test]
         public void should_be_not_upgradable_if_both_episodes_are_not_upgradable()
         {
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_first_episodes_is_upgradable()
         {
             WithFirstFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_second_episodes_is_upgradable()
         {
             WithSecondFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
@@ -121,28 +121,28 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
             parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_when_episodeFile_was_added_more_than_7_days_ago()
         {
             firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_when_first_episodeFile_was_added_more_than_7_days_ago()
         {
             firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_when_second_episodeFile_was_added_more_than_7_days_ago()
         {
             secondFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
         }
     }
 }

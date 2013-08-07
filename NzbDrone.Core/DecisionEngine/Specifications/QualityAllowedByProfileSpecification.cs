@@ -1,4 +1,5 @@
 using NLog;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -20,7 +21,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
         {
             _logger.Trace("Checking if report meets quality requirements. {0}", subject.ParsedEpisodeInfo.Quality);
             if (!subject.Series.QualityProfile.Value.Allowed.Contains(subject.ParsedEpisodeInfo.Quality.Quality))

@@ -1,5 +1,6 @@
 using System.Linq;
 using NLog;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             get { return "File size too big or small"; }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
         {
 
             _logger.Trace("Beginning size check for: {0}", subject);
