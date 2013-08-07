@@ -41,7 +41,7 @@ define(
             initialize: function () {
                 $('body').addClass('backdrop');
 
-                this.model.on('sync', function () {
+                this.listenTo(this.model, 'sync', function () {
                     this._setMonitoredState()
                 }, this);
 
