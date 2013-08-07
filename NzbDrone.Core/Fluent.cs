@@ -21,12 +21,18 @@ namespace NzbDrone.Core
 
         public static Int64 Megabytes(this int megabytes)
         {
-            return Convert.ToInt64(megabytes * 1024L *1024L);
+            return Convert.ToInt64(megabytes * 1024L * 1024L);
         }
 
         public static Int64 Gigabytes(this int gigabytes)
         {
             return Convert.ToInt64(gigabytes * 1024L * 1024L * 1024L);
+        }
+
+
+        public static Int64 Round(this long number, long level)
+        {
+            return Convert.ToInt64(Math.Floor((decimal)number / level) * level);
         }
 
         public static string ToBestDateString(this DateTime dateTime)

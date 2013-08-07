@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {
@@ -54,11 +55,12 @@ namespace NzbDrone.Core.Download
             return downloadedReports;
         }
 
-        public List<DownloadDecision> GetQualifiedReports(List<DownloadDecision> decisions)
+        public List<DownloadDecision> GetQualifiedReports(IEnumerable<DownloadDecision> decisions)
         {
-            return decisions.Where(c => c.Approved)
+            return decisions.Where(c => c.Approved && c.RemoteEpisode.Episodes.Any())
                             .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality)
                             .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
+                            .ThenBy(c => c.RemoteEpisode.Report.Size.Round(200.Megabytes()) / c.RemoteEpisode.Episodes.Count)
                             .ThenBy(c => c.RemoteEpisode.Report.Age)
                             .ToList();
         }

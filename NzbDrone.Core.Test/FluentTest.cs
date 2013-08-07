@@ -271,5 +271,16 @@ namespace NzbDrone.Core.Test
             //Resolve
             result.Should().Be(0);
         }
+
+
+        [TestCase(100,100,100)]
+        [TestCase(110,100,100)]
+        [TestCase(199,100,100)]
+        [TestCase(1000,100,1000)]
+        [TestCase(0,100,0)]
+        public void round_to_level(long number, int level, int result)
+        {
+            number.Round(level).Should().Be(result);
+        }
     }
 }
