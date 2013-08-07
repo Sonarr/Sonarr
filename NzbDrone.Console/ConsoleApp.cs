@@ -2,17 +2,15 @@
 
 namespace NzbDrone.Console
 {
-    public static class AppMain
+    public static class ConsoleApp
     {
         public static void Main(string[] args)
         {
             try
             {
-
-                NzbDrone.AppMain.Main(args);
-
+                Host.Bootstrap.Start(args);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 System.Console.WriteLine(e.ToString());
             }

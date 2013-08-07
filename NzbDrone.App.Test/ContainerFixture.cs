@@ -7,6 +7,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Host;
 using NzbDrone.Test.Common;
 using FluentAssertions;
 using System.Linq;

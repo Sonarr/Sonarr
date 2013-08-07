@@ -2,18 +2,19 @@
 using System.Diagnostics;
 using System.Reflection;
 using NLog;
+using NzbDrone.Common.Composition;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Datastore;
 
-namespace NzbDrone
+namespace NzbDrone.Host
 {
-    public static class AppMain
+    public static class Bootstrap
     {
         private static readonly Logger Logger = LogManager.GetLogger("AppMain");
 
 
-        public static void Main(string[] args)
+        public static IContainer Start(string[] args)
         {
             try
             {
@@ -42,19 +43,21 @@ namespace NzbDrone
                         Console.ReadLine();
                     }
 
-                    return;
+                    return null;
                 }
 
                 var container = MainAppContainerBuilder.BuildContainer(args);
 
                 DbFactory.RegisterDatabase(container);
                 container.Resolve<Router>().Route();
+
+                return container;
             }
             catch (Exception e)
             {
                 Logger.FatalException("Epic Fail " + e.Message, e);
+                throw;
             }
         }
-
     }
 }

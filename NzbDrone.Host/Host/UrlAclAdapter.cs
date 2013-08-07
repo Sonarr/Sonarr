@@ -1,11 +1,10 @@
 using System;
-using System.Diagnostics;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Host
+namespace NzbDrone.Host.Host
 {
     public interface IUrlAclAdapter
     {
@@ -40,28 +39,19 @@ namespace NzbDrone.Host
             RunNetsh(arguments);
         }
 
-        private string RunNetsh(string arguments)
+        private void RunNetsh(string arguments)
         {
             try
             {
-                var startInfo = new ProcessStartInfo()
-                    {
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        FileName = "netsh.exe",
-                        Arguments = arguments
-                    };
 
-                var process = _processProvider.Start(startInfo);
+
+                var process = _processProvider.ShellExecute("netsh.exe", arguments);
                 process.WaitForExit(5000);
-                return process.StandardOutput.ReadToEnd();
             }
             catch (Exception ex)
             {
                 _logger.WarnException("Error executing netsh with arguments: " + arguments, ex);
             }
-
-            return null;
         }
     }
 }

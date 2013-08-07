@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
+using NzbDrone.Host;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test

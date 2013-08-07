@@ -1,9 +1,9 @@
 using System;
-using NLog;
 using NetFwTypeLib;
+using NLog;
 using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Host
+namespace NzbDrone.Host.Host
 {
     public interface IFirewallAdapter
     {

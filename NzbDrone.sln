@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Core", "NzbDrone.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Core.Test", "NzbDrone.Core.Test\NzbDrone.Core.Test.csproj", "{193ADD3B-792B-4173-8E4C-5A3F8F0237F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.App.Test", "NzbDrone.App.Test\NzbDrone.App.Test.csproj", "{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Host.Test", "NzbDrone.App.Test\NzbDrone.Host.Test.csproj", "{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Test.Dummy", "NzbDrone.Test.Dummy\NzbDrone.Test.Dummy.csproj", "{FAFB5948-A222-4CF6-AD14-026BE7564802}"
 EndProject
@@ -51,6 +51,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Integration.Test", "NzbDrone.Integration.Test\NzbDrone.Integration.Test.csproj", "{8CEFECD0-A6C2-498F-98B1-3FBE5820F9AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exceptron.Client", "Exceptron.Client\Exceptron.Client.csproj", "{B1784698-592E-4132-BDFA-9817409E3A96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Host", "NzbDrone.Host\NzbDrone.Host.csproj", "{95C11A9E-56ED-456A-8447-2C89C1139266}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{486ADF86-DD89-4E19-B805-9D94F19800D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +138,10 @@ Global
 		{B1784698-592E-4132-BDFA-9817409E3A96}.Debug|x86.Build.0 = Debug|x86
 		{B1784698-592E-4132-BDFA-9817409E3A96}.Release|x86.ActiveCfg = Release|x86
 		{B1784698-592E-4132-BDFA-9817409E3A96}.Release|x86.Build.0 = Release|x86
+		{95C11A9E-56ED-456A-8447-2C89C1139266}.Debug|x86.ActiveCfg = Debug|x86
+		{95C11A9E-56ED-456A-8447-2C89C1139266}.Debug|x86.Build.0 = Debug|x86
+		{95C11A9E-56ED-456A-8447-2C89C1139266}.Release|x86.ActiveCfg = Release|x86
+		{95C11A9E-56ED-456A-8447-2C89C1139266}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,6 +159,9 @@ Global
 		{CADDFCE0-7509-4430-8364-2074E1EEFCA2} = {47697CDB-27B6-4B05-B4F8-0CBE6F6EDF97}
 		{6BCE712F-846D-4846-9D1B-A66B858DA755} = {F9E67978-5CD6-4A5F-827B-4249711C0B02}
 		{700D0B95-95CD-43F3-B6C9-FAA0FC1358D4} = {F9E67978-5CD6-4A5F-827B-4249711C0B02}
+		{D12F7F2F-8A3C-415F-88FA-6DD061A84869} = {486ADF86-DD89-4E19-B805-9D94F19800D9}
+		{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976} = {486ADF86-DD89-4E19-B805-9D94F19800D9}
+		{95C11A9E-56ED-456A-8447-2C89C1139266} = {486ADF86-DD89-4E19-B805-9D94F19800D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;packages\Unity.2.1.505.2\lib\NET35

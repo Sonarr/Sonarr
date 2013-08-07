@@ -72,13 +72,8 @@ namespace NzbDrone.Core.Update
                                             updateSandboxFolder);
 
                 _logger.Info("Starting update client");
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = _appFolderInfo.GetUpdateClientExePath(),
-                    Arguments = _processProvider.GetCurrentProcess().Id.ToString()
-                };
 
-                var process = _processProvider.Start(startInfo);
+                var process = _processProvider.ShellExecute(_appFolderInfo.GetUpdateClientExePath(), _processProvider.GetCurrentProcess().Id.ToString());
 
                 _processProvider.WaitForExit(process);
 

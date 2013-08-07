@@ -4,10 +4,10 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Host;
-using NzbDrone.Owin;
+using NzbDrone.Host.Host;
+using NzbDrone.Host.Owin;
 
-namespace NzbDrone
+namespace NzbDrone.Host
 {
     public interface INzbDroneServiceFactory
     {
@@ -49,11 +49,10 @@ namespace NzbDrone
 
         public void Start()
         {
-            if (_runtimeInfo.IsAdmin)
+            if (OsInfo.IsWindows && _runtimeInfo.IsAdmin)
             {
                 _urlAclAdapter.RefreshRegistration();
                 _firewallAdapter.MakeAccessible();
-
             }
             _hostController.StartServer();
 

@@ -1,8 +1,8 @@
-﻿namespace NzbDrone
+﻿namespace NzbDrone.Host
 {
     public enum ApplicationModes
     {
-        Console,
+        Interactive,
         Help,
         InstallService,
         UninstallService,
