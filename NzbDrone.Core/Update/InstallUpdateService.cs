@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -71,7 +70,7 @@ namespace NzbDrone.Core.Update
                 _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
                                             updateSandboxFolder);
 
-                _logger.Info("Starting update client");
+                _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
 
                 var process = _processProvider.ShellExecute(_appFolderInfo.GetUpdateClientExePath(), _processProvider.GetCurrentProcess().Id.ToString());
 
