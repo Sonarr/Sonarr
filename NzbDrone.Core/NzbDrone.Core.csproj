@@ -230,6 +230,7 @@
     <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
+    <Compile Include="MetadataSource\Trakt\TraktCommunicationException.cs" />
     <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />
