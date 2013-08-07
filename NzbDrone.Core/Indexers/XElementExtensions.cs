@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using NLog;
 
 namespace NzbDrone.Core.Indexers
 {
     public static class XElementExtensions
     {
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static string Title(this XElement item)
         {
             return item.TryGetValue("title", "Unknown");
@@ -14,7 +18,17 @@ namespace NzbDrone.Core.Indexers
 
         public static DateTime PublishDate(this XElement item)
         {
-            return DateTime.Parse(item.TryGetValue("pubDate"));
+            string dateString = item.TryGetValue("pubDate");
+
+            try
+            {
+                return DateTime.Parse(dateString);
+            }
+            catch (FormatException e)
+            {
+                Logger.TraceException("Unable to parse " + dateString, e);
+                throw;
+            }
         }
 
         public static List<String> Links(this XElement item)
