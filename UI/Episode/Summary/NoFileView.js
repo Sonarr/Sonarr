@@ -5,7 +5,7 @@ define(
     ], function (Marionette) {
 
         return Marionette.ItemView.extend({
-            template: 'Episode/Summary/ViewTemplate'
+            template: 'Episode/Summary/NoFileViewTemplate'
         });
 
     });
