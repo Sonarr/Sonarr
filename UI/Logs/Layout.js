@@ -98,7 +98,7 @@ define(
                             successMessage : 'Logs have been cleared',
                             errorMessage   : 'Failed to clear logs',
                             ownerContext   : this,
-                            successCallback: this._refreshLogs
+                            onSuccess: this._refreshLogs
                         },
 
                         {

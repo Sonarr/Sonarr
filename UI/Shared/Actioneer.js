@@ -30,8 +30,8 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                         });
                     }
 
-                    if (options.successCallback) {
-                        options.successCallback.call(options.context);
+                    if (options.onSuccess) {
+                        options.onSuccess.call(options.context);
                     }
                 });
 
@@ -47,8 +47,8 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                         });
                     }
 
-                    if (options.failCallback) {
-                        options.failCallback.call(options.context);
+                    if (options.onError) {
+                        options.onError.call(options.context);
                     }
                 });
 
@@ -63,8 +63,8 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                         options.element.removeClass('icon-nd-spinner');
                     }
 
-                    if (options.alwaysCallback) {
-                        options.alwaysCallback.call(options.context);
+                    if (options.always) {
+                        options.always.call(options.context);
                     }
                 });
             },

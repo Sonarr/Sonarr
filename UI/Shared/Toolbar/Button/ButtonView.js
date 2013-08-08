@@ -62,12 +62,12 @@ define(
                             });
                         }
 
-                        if (self.model.get('successCallback')) {
+                        if (self.model.get('onSuccess')) {
                             if (!self.model.ownerContext) {
                                 throw 'ownerContext must be set.';
                             }
 
-                            self.model.get('successCallback').call(self.model.ownerContext);
+                            self.model.get('onSuccess').call(self.model.ownerContext);
                         }
                     });
 
@@ -83,12 +83,12 @@ define(
                             });
                         }
 
-                        if (self.model.get('failCallback')) {
+                        if (self.model.get('onError')) {
                             if (!self.model.ownerContext) {
                                 throw 'ownerContext must be set.';
                             }
 
-                            self.model.get('failCallback').call(self.model.ownerContext);
+                            self.model.get('onError').call(self.model.ownerContext);
                         }
                     });
 
@@ -100,12 +100,12 @@ define(
                         }
                     });
 
-                    if (self.model.get('alwaysCallback')) {
+                    if (self.model.get('always')) {
                         if (!self.model.ownerContext) {
                             throw 'ownerContext must be set.';
                         }
 
-                        self.model.get('alwaysCallback').call(self.model.ownerContext);
+                        self.model.get('always').call(self.model.ownerContext);
                     }
                 }
             },

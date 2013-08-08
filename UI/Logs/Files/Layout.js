@@ -78,7 +78,7 @@ define(
                                 successMessage : 'Log files have been deleted',
                                 errorMessage   : 'Failed to delete log files',
                                 ownerContext   : this,
-                                successCallback: this._refreshLogs
+                                onSuccess: this._refreshLogs
                             }
                         ]
                 };

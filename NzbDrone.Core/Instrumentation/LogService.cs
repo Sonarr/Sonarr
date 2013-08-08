@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Execute(ClearLogCommand message)
         {
-            _logRepository.DeleteAll();
+            _logRepository.Purge();
         }
     }
 }
