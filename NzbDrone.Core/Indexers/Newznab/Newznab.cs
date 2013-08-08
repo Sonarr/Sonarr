@@ -114,16 +114,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}", url, NewsnabifyTitle(seriesTitle), seasonNumber));
         }
 
-        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard)
-        {
-            if (tvRageId > 0)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&q=E{3}", url, tvRageId, seasonNumber, episodeWildcard));
-            }
-
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+S{2:00}E{3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeWildcard));
-        }
-
         public override string Name
         {
             get
