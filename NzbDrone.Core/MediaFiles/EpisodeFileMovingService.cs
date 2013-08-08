@@ -13,53 +13,30 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IMoveEpisodeFiles
     {
-        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        EpisodeFile PreMoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class MoveEpisodeFiles : IMoveEpisodeFiles
     {
-        private readonly ISeriesRepository _seriesRepository;
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
-        private readonly IMediaFileService _mediaFileService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public MoveEpisodeFiles(ISeriesRepository seriesRepository,
-                                IEpisodeService episodeService,
+        public MoveEpisodeFiles(IEpisodeService episodeService,
                                 IBuildFileNames buildFileNames,
-                                IMediaFileService mediaFileService,
                                 IMessageAggregator messageAggregator,
                                 IDiskProvider diskProvider,
                                 Logger logger)
         {
-            _seriesRepository = seriesRepository;
             _episodeService = episodeService;
             _buildFileNames = buildFileNames;
-            _mediaFileService = mediaFileService;
             _messageAggregator = messageAggregator;
             _diskProvider = diskProvider;
             _logger = logger;
-        }
-
-        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile)
-        {
-            if (episodeFile == null)
-                throw new ArgumentNullException("episodeFile");
-
-            var series = _seriesRepository.Get(episodeFile.SeriesId);
-            var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
-            var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
-            var destinationFilename = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-
-            episodeFile = MoveFile(episodeFile, destinationFilename);
-            
-            _mediaFileService.Update(episodeFile);
-
-            return episodeFile;
         }
 
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series)
@@ -78,6 +55,15 @@ namespace NzbDrone.Core.MediaFiles
             episodeFile = MoveFile(episodeFile, destinationFilename);
 
             _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
+
+            return episodeFile;
+        }
+
+        public EpisodeFile PreMoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        {
+            var newFileName = Path.GetFileNameWithoutExtension(episodeFile.Path);
+            var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            episodeFile = MoveFile(episodeFile, destinationFilename);
 
             return episodeFile;
         }
