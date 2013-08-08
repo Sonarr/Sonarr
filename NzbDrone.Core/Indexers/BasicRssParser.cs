@@ -112,13 +112,13 @@ namespace NzbDrone.Core.Indexers
         private static readonly Regex[] HeaderRegex = new[]
                                                           {
                                                                 new Regex(@"(?:\[.+\]\-\[.+\]\-\[.+\]\-\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                        RegexOptions.IgnoreCase),
                                                                 
                                                                 new Regex(@"(?:\[.+\]\W+\[.+\]\W+\[.+\]\W+\"")(?<nzbTitle>.+)(?:\"".+)",
-                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                        RegexOptions.IgnoreCase),
                                                                     
                                                                 new Regex(@"(?:\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                        RegexOptions.IgnoreCase),
                                                           };
 
         public static string ParseHeader(string header)

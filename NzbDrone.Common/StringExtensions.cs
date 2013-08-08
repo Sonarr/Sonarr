@@ -10,9 +10,9 @@ namespace NzbDrone.Common
             return string.Format(format, formattingArgs);
         }
 
-        private static readonly Regex InvalidCharRegex = new Regex(@"[^a-z0-9\s-]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-z0-9\s-\.]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex InvalidCharRegex = new Regex(@"[^a-zA-Z0-9\s-]", RegexOptions.Compiled);
+        private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-zA-Z0-9\s-\.]", RegexOptions.Compiled);
+        private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled);
 
         public static string ToSlug(this string phrase)
         {

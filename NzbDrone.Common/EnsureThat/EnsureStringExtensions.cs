@@ -95,8 +95,8 @@ namespace NzbDrone.Common.EnsureThat
             return param;
         }
 
-        private static readonly Regex windowsInvalidPathRegex = new Regex(@"[/*<>""|]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex windowsPathRegex = new Regex(@"^[a-z]:\\", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex windowsInvalidPathRegex = new Regex(@"[/*<>""|]", RegexOptions.Compiled);
+        private static readonly Regex windowsPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
 
         [DebuggerStepThrough]
         public static Param<string> IsValidPath(this Param<string> param)
