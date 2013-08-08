@@ -64,6 +64,16 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         }
 
         [Test]
+        public void should_reject_when_there_isnt_enough_space_for_file_plus_100mb_padding()
+        {
+            GivenFileSize(100.Megabytes());
+            GivenFreeSpace(150.Megabytes());
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
         public void should_accept_when_there_is_enough_disk_space()
         {
             GivenFileSize(100.Megabytes());

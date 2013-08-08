@@ -29,7 +29,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             
             var freeSpace = _diskProvider.GetAvilableSpace(destinationFilename);
 
-            if (freeSpace < localEpisode.Size)
+            if (freeSpace < localEpisode.Size + 100.Megabytes())
             {
                 _logger.Warn("Not enough free space to import: {0}", localEpisode);
                 return false;
