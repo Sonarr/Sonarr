@@ -24,6 +24,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
+            //TODO: fix issues with this, seems to be completely broken...
+            return true;
+
             var newFileName = Path.GetFileNameWithoutExtension(localEpisode.Path);
             var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(localEpisode.Path));
             

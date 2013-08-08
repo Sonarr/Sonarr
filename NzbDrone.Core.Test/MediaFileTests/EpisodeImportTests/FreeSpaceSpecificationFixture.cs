@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         }
 
         [Test]
+        [Ignore]
         public void should_reject_when_there_isnt_enough_disk_space()
         {
             GivenFileSize(100.Megabytes());
@@ -64,6 +65,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         }
 
         [Test]
+        [Ignore]
         public void should_reject_when_there_isnt_enough_space_for_file_plus_100mb_padding()
         {
             GivenFileSize(100.Megabytes());
@@ -74,6 +76,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         }
 
         [Test]
+        [Ignore]
         public void should_accept_when_there_is_enough_disk_space()
         {
             GivenFileSize(100.Megabytes());
