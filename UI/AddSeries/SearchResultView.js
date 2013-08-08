@@ -3,12 +3,14 @@ define(
     [
         'app',
         'marionette',
+
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
         'AddSeries/RootFolders/Layout',
         'Series/SeriesCollection',
         'Config',
-        'Shared/Messenger'
+        'Shared/Messenger',
+        'jquery.dotdotdot'
     ], function (App, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger) {
 
         return Marionette.ItemView.extend({
@@ -54,6 +56,12 @@ define(
                 if (RootFolders.get(defaultRoot)) {
                     this.ui.rootFolder.val(defaultRoot);
                 }
+
+                //TODO: make this work via onRender, FM?
+                //works with onShow, but stops working after the first render
+                this.ui.overview.dotdotdot({
+                    height: 120
+                });
             },
 
             serializeData: function () {

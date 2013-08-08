@@ -22,6 +22,7 @@ require.config({
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
+        'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
         'libs'                : 'JsLibraries/'
 
     },
@@ -108,6 +109,13 @@ require.config({
         },
 
         'jquery.knob': {
+            deps:
+                [
+                    '$'
+                ]
+        },
+
+        'jquery.dotdotdot': {
             deps:
                 [
                     '$'
