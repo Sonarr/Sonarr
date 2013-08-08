@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var age = subject.Report.Age;
 

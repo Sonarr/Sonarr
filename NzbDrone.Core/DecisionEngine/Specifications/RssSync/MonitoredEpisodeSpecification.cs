@@ -22,9 +22,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            if (searchCriteriaBase != null)
+            if (searchCriteria != null)
             {
                 _logger.Trace("Skipping monitored check during search");
                 return true;

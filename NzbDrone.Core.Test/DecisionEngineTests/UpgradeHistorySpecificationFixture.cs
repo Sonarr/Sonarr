@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.History;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -121,6 +122,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_upgradableQuality);
 
             _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_it_is_a_search()
+        {
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
         }
     }
 }

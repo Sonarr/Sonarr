@@ -22,14 +22,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             }
         }
 
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase)
+        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
-            if (searchCriteriaBase == null)
+            if (searchCriteria == null)
             {
                 return true;
             }
 
-            var singleEpisodeSpec = searchCriteriaBase as SingleEpisodeSearchCriteria;
+            var singleEpisodeSpec = searchCriteria as SingleEpisodeSearchCriteria;
             if (singleEpisodeSpec == null) return true;
 
             if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)

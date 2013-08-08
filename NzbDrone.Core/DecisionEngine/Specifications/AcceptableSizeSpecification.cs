@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             get { return "File size too big or small"; }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
 
             _logger.Trace("Beginning size check for: {0}", subject);

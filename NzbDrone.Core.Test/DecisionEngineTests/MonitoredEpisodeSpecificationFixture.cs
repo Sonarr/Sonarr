@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
@@ -101,6 +102,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithSecondEpisodeUnmonitored();
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_it_is_a_search()
+        {
+            _fakeSeries.Monitored = false;
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
         }
     }
 }

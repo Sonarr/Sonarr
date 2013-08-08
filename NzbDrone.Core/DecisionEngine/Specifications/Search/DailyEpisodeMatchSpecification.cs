@@ -23,14 +23,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return "Episode doesn't match";
             }
         }
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase)
+        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
-            if (searchCriteriaBase == null)
+            if (searchCriteria == null)
             {
                 return true;
             }
 
-            var dailySearchSpec = searchCriteriaBase as DailyEpisodeSearchCriteria;
+            var dailySearchSpec = searchCriteria as DailyEpisodeSearchCriteria;
 
             if (dailySearchSpec == null) return true;
 

@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteriaBase)
+        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
