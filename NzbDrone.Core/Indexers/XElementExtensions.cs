@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using NLog;
 
@@ -10,6 +12,8 @@ namespace NzbDrone.Core.Indexers
     {
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private static readonly Regex RemoveTimeZoneRegex = new Regex(@"\s[A-Z]{2,4}$", RegexOptions.Compiled);
 
         public static string Title(this XElement item)
         {
@@ -22,7 +26,13 @@ namespace NzbDrone.Core.Indexers
 
             try
             {
-                return DateTime.Parse(dateString);
+                DateTime result;
+                if (!DateTime.TryParse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal, out result))
+                {
+                    dateString = RemoveTimeZoneRegex.Replace(dateString, "");
+                    result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
+                }
+                return result.ToUniversalTime();
             }
             catch (FormatException e)
             {
