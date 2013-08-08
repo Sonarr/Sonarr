@@ -9,12 +9,14 @@ define(
         'Logs/Files/Collection',
         'Logs/Files/Row',
         'Logs/Files/ContentsView',
-        'Logs/Files/ContentsModel'
-    ], function (App, Marionette, Backgrid, FilenameCell, RelativeDateCell, LogFileCollection, LogFileRow, ContentsView, ContentsModel) {
+        'Logs/Files/ContentsModel',
+        'Shared/Toolbar/ToolbarLayout'
+    ], function (App, Marionette, Backgrid, FilenameCell, RelativeDateCell, LogFileCollection, LogFileRow, ContentsView, ContentsModel, ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'Logs/Files/LayoutTemplate',
 
             regions: {
+                toolbar  : '#x-toolbar',
                 grid     : '#x-grid',
                 contents : '#x-contents'
             },
@@ -35,22 +37,62 @@ define(
 
             initialize: function () {
                 this.collection = new LogFileCollection();
-                this.collectionPromise = this.collection.fetch();
+
 
                 App.vent.on(App.Commands.ShowLogFile, this._showLogFile, this);
             },
 
             onShow: function () {
-                var self = this;
+                this._fetchAndShow();
+                this._showToolbar();
                 this._showTable();
+            },
 
-                this.collectionPromise.done(function (){
-                    self._showLogFile({ model: _.first(self.collection.models) });
+            _fetchAndShow: function () {
+                var self = this;
+
+                var promise = this.collection.fetch();
+                promise.done(function () {
+                    self._showLogFile({ model: self.collection.first() });
                 });
             },
 
-            _showTable: function () {
+            _showToolbar: function () {
 
+                var leftSideButtons = {
+                    type      : 'default',
+                    storeState: false,
+                    items     :
+                        [
+                            {
+                                title         : 'Refresh',
+                                icon          : 'icon-refresh',
+                                ownerContext  : this,
+                                callback      : this._refreshLogs
+                            },
+
+                            {
+                                title          : 'Delete Log Files',
+                                icon           : 'icon-trash',
+                                command        : 'deleteLogFiles',
+                                successMessage : 'Log files have been deleted',
+                                errorMessage   : 'Failed to delete log files',
+                                ownerContext   : this,
+                                successCallback: this._refreshLogs
+                            }
+                        ]
+                };
+
+                this.toolbar.show(new ToolbarLayout({
+                    left   :
+                        [
+                            leftSideButtons
+                        ],
+                    context: this
+                }));
+            },
+
+            _showTable: function () {
                 this.grid.show(new Backgrid.Grid({
                     row       : LogFileRow,
                     columns   : this.columns,
@@ -60,6 +102,13 @@ define(
             },
 
             _showLogFile: function (options) {
+
+                this.contents.close();
+
+                if (!options.model) {
+                    return;
+                }
+
                 var self = this;
                 var filename = options.model.get('filename');
 
@@ -74,6 +123,10 @@ define(
                         self.contents.show(new ContentsView({ model: model }));
                     }
                 });
+            },
+
+            _refreshLogs: function () {
+                this._fetchAndShow();
             }
         });
     });

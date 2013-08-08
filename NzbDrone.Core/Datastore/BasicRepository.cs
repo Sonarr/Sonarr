@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Datastore
         void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
         TModel Single();
         PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec);
+        void DeleteAll();
     }
 
 
@@ -217,6 +218,10 @@ namespace NzbDrone.Core.Datastore
             return pagingSpec;
         }
 
+        public void DeleteAll()
+        {
+            DataMapper.Delete<TModel>(c => c.Id > 0);
+        }
 
         private void PublishModelEvent(TModel model, RepositoryAction action)
         {

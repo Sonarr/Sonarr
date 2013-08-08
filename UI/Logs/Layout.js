@@ -53,19 +53,6 @@ define(
                     }
                 ],
 
-            leftSideButtons: {
-                type      : 'default',
-                storeState: false,
-                items     :
-                    [
-                        {
-                            title: 'Files',
-                            icon : 'icon-file',
-                            route: 'logs/files'
-                        }
-                    ]
-            },
-
             initialize: function () {
                 this.collection = new LogCollection();
                 this.collection.fetch();
@@ -92,13 +79,48 @@ define(
             },
 
             _showToolbar: function () {
+                var leftSideButtons = {
+                    type      : 'default',
+                        storeState: false,
+                        items     :
+                    [
+                        {
+                            title         : 'Refresh',
+                            icon          : 'icon-refresh',
+                            ownerContext  : this,
+                            callback      : this._refreshLogs
+                        },
+
+                        {
+                            title          : 'Clear Logs',
+                            icon           : 'icon-trash',
+                            command        : 'clearLog',
+                            successMessage : 'Logs have been cleared',
+                            errorMessage   : 'Failed to clear logs',
+                            ownerContext   : this,
+                            successCallback: this._refreshLogs
+                        },
+
+                        {
+                            title: 'Files',
+                            icon : 'icon-file',
+                            route: 'logs/files'
+                        }
+                    ]
+                };
+
                 this.toolbar.show(new ToolbarLayout({
                     left   :
                         [
-                            this.leftSideButtons
+                            leftSideButtons
                         ],
                     context: this
                 }));
+            },
+
+            _refreshLogs: function () {
+                this.collection.fetch({ reset: true });
+                this._showTable();
             }
         });
     });

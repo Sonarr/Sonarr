@@ -64,13 +64,13 @@
     <Compile Include="ConfigFileProviderTest.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
-    <Compile Include="EnvironmentTests\EnviromentProviderTest.cs" />
+    <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
     <Compile Include="EventingTests\MessageAggregatorCommandTests.cs" />
     <Compile Include="EventingTests\MessageAggregatorEventTests.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="PathExtensionFixture.cs" />
     <Compile Include="DiskProviderFixture.cs" />
-    <Compile Include="EnviromentProviderTest.cs" />
+    <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
     <Compile Include="ReflectionTests\ReflectionExtensionFixture.cs" />
     <Compile Include="ServiceFactoryFixture.cs" />

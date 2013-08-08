@@ -207,7 +207,10 @@
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
+    <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
+    <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
+    <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
     <Compile Include="Instrumentation\SetLoggingLevel.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
