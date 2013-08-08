@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Indexers
             }
             catch (FormatException e)
             {
-                Logger.TraceException("Unable to parse " + dateString, e);
+                Logger.WarnException("Unable to parse " + dateString, e);
                 throw;
             }
         }
