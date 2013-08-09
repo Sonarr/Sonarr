@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System;
+using System.IO;
+using NLog;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;
@@ -41,12 +43,24 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
+            if (Path.GetExtension(localEpisode.Path).Equals(".flv", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _logger.Trace("Skipping smaple check for .flv file");
+                return true;
+            }
+
             if (localEpisode.Size > SampleSizeLimit)
             {
                 return true;
             }
 
             var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
+
+            if (runTime.TotalMinutes.Equals(0))
+            {
+                _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", localEpisode);
+                return false;
+            }
 
             if (runTime.TotalMinutes < 3)
             {
