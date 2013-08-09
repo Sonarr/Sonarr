@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void should_throw_if_drive_doesnt_exist()
         {
+            WindowsOnly();
+
             Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
         }
 
