@@ -5,6 +5,11 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexServerSettings : INotifcationSettings
     {
+        public PlexServerSettings()
+        {
+            Port = 32400;
+        }
+
         [FieldDefinition(0, Label = "Host")]
         public String Host { get; set; }
 

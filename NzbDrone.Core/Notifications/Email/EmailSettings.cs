@@ -5,6 +5,11 @@ namespace NzbDrone.Core.Notifications.Email
 {
     public class EmailSettings : INotifcationSettings
     {
+        public EmailSettings()
+        {
+            Port = 25;
+        }
+
         [FieldDefinition(0, Label = "Server", HelpText = "Hostname or IP of Email server")]
         public String Server { get; set; }
 
