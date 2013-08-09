@@ -31,5 +31,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         {
             Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
         }
+
+        [Test]
+        public void should_be_able_to_get_space_on_folder_that_doesnt_exist()
+        {
+            var result = Subject.GetAvilableSpace(@"C:\I_DO_NOT_EXIST".AsOsAgnostic());
+            result.Should().BeGreaterThan(0);
+        }
     }
 }

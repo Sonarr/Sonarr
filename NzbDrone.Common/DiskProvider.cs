@@ -294,13 +294,14 @@ namespace NzbDrone.Common
         {
             Ensure.That(() => path).IsValidPath();
 
-            if (!FolderExists(path))
-                throw new DirectoryNotFoundException(path);
+            var root = GetPathRoot(path);
 
+            if (!FolderExists(root))
+                throw new DirectoryNotFoundException(root);
 
             if (OsInfo.IsLinux)
             {
-                var driveInfo = DriveInfo.GetDrives().SingleOrDefault(c => c.IsReady && c.Name.Equals(Path.GetPathRoot(path), StringComparison.CurrentCultureIgnoreCase));
+                var driveInfo = DriveInfo.GetDrives().SingleOrDefault(c => c.IsReady && c.Name.Equals(root, StringComparison.CurrentCultureIgnoreCase));
 
                 if (driveInfo == null)
                 {
@@ -310,7 +311,7 @@ namespace NzbDrone.Common
                 return driveInfo.AvailableFreeSpace;
             }
 
-            return DriveFreeSpaceEx(path);
+            return DriveFreeSpaceEx(root);
         }
 
         private static long DriveFreeSpaceEx(string folderName)

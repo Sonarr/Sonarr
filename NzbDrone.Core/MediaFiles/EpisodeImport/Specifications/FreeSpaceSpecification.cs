@@ -9,13 +9,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
     public class FreeSpaceSpecification : IImportDecisionEngineSpecification
     {
-        private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public FreeSpaceSpecification(IBuildFileNames buildFileNames, IDiskProvider diskProvider,  Logger logger)
+        public FreeSpaceSpecification(IDiskProvider diskProvider,  Logger logger)
         {
-            _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
             _logger = logger;
         }
@@ -23,14 +21,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         public string RejectionReason { get { return "Not enough free space"; } }
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
-        {
-            //TODO: fix issues with this, seems to be completely broken...
-            return true;
-
-            var newFileName = Path.GetFileNameWithoutExtension(localEpisode.Path);
-            var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(localEpisode.Path));
-            
-            var freeSpace = _diskProvider.GetAvilableSpace(destinationFilename);
+        {           
+            var freeSpace = _diskProvider.GetAvilableSpace(localEpisode.Series.Path);
 
             if (freeSpace < localEpisode.Size + 100.Megabytes())
             {
