@@ -11,8 +11,8 @@ define(
             itemView: SearchResultView,
 
             initialize: function (options) {
-
                 this.isExisting = options.isExisting;
+                this.showing = 1;
             },
 
             showAll: function () {
@@ -20,11 +20,17 @@ define(
                 this.render();
             },
 
+            showMore: function () {
+                this.showing += 5;
+                this.render();
+
+                return this.showing >= this.collection.length;
+            },
+
             appendHtml: function (collectionView, itemView, index) {
-                if (!this.isExisting || this.showingAll || index === 0) {
+                if (!this.isExisting || index < this.showing || index === 0) {
                     collectionView.$el.append(itemView.el);
                 }
             }
-
         });
     });
