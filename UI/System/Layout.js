@@ -35,8 +35,8 @@ define(
                             route: 'logs'
                         },
                         {
-                            title: 'Check for Update',
-                            icon: 'icon-download-alt',
+                            title  : 'Check for Update',
+                            icon   : 'icon-nd-update',
                             command: 'applicationUpdate'
                         },
 //                        {
