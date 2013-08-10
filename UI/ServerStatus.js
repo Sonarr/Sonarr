@@ -12,7 +12,7 @@ var footerText = window.ServerStatus.version;
 
 $(document).ready(function () {
     if (window.ServerStatus.branch != 'master') {
-        footerText = '</br>' + window.ServerStatus.branch;
+        footerText += '</br>' + window.ServerStatus.branch;
     }
     $('#footer-region .version').html(footerText);
 });
