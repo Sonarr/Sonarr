@@ -4,7 +4,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Host.Host;
+using NzbDrone.Host.AccessControl;
 using NzbDrone.Host.Owin;
 
 namespace NzbDrone.Host

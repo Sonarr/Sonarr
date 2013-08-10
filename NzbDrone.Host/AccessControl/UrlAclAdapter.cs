@@ -4,7 +4,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Host.Host
+namespace NzbDrone.Host.AccessControl
 {
     public interface IUrlAclAdapter
     {
@@ -43,8 +43,6 @@ namespace NzbDrone.Host.Host
         {
             try
             {
-
-
                 var process = _processProvider.ShellExecute("netsh.exe", arguments);
                 process.WaitForExit(5000);
             }

@@ -107,8 +107,8 @@
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Host\FirewallAdapter.cs" />
-    <Compile Include="Host\UrlAclAdapter.cs" />
+    <Compile Include="AccessControl\FirewallAdapter.cs" />
+    <Compile Include="AccessControl\UrlAclAdapter.cs" />
     <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationModes.cs" />
     <Compile Include="Bootstrap.cs" />
