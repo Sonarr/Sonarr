@@ -23,7 +23,22 @@ define(
                     episodeCollection: this.episodeCollection,
                     series           : this.series
                 };
-            }
+            },
 
+            onEpisodeGrabbed: function (message) {
+                if (message.episode.series.id != this.episodeCollection.seriesId) {
+                    return;
+                }
+
+                var self = this;
+
+                _.each(message.episode.episodes, function (episode){
+                    var ep = self.episodeCollection.find({ id: episode.id });
+                    ep.set('downloading', true);
+                    console.debug(episode.title);
+                });
+
+                this.render();
+            }
         });
     });

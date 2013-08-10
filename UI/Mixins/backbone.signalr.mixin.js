@@ -6,11 +6,13 @@ define(
 
         _.extend(Backbone.Collection.prototype, {BindSignalR: function (options) {
 
-            if (!options || !options.url) {
+            if (!options) {
+                options = {};
+            }
+
+            if (!options.url) {
                 console.assert(this.url, 'url must be provided or collection must have url');
-                options = {
-                    url: this.url.replace('api', 'signalr')
-                };
+                options['url'] = this.url.replace('api', 'signalr');
             }
 
             var self = this;
@@ -31,16 +33,24 @@ define(
 
             };
 
-
             var connection = $.connection(options.url);
 
             connection.stateChanged(function (change) {
                 console.debug('{0} [{1}]'.format(options.url, _getStatus(change.newState)));
             });
 
-            connection.received(function (model) {
-                console.debug(model);
-                self.fetch();
+            connection.received(function (message) {
+                console.debug(message);
+
+                if (options.onReceived) {
+                    var context = options.context || self;
+
+                    options.onReceived.call(context, message);
+                }
+
+                else {
+                    self.fetch();
+                }
             });
 
             connection.start({ transport:

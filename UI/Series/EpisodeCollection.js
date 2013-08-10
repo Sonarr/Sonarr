@@ -8,6 +8,17 @@ define(
             url  : window.ApiRoot + '/episodes',
             model: EpisodeModel,
 
+            state: {
+                sortKey: 'episodeNumber',
+                order  : -1
+            },
+
+            originalFetch: Backbone.Collection.prototype.fetch,
+
+            initialize: function (options) {
+                this.seriesId = options.seriesId;
+            },
+
             bySeason: function (season) {
                 var filtered = this.filter(function (episode) {
                     return episode.get('seasonNumber') === season;
@@ -34,9 +45,18 @@ define(
                 return 0;
             },
 
-            state: {
-                sortKey: 'episodeNumber',
-                order  : -1
+            fetch: function (options) {
+                if (!this.seriesId) {
+                    throw 'seriesId is required';
+                }
+
+                if (!options) {
+                    options = {};
+                }
+
+                options['data'] = { seriesId: this.seriesId };
+
+                return this.originalFetch.call(this, options);
             }
         });
     });

@@ -9,7 +9,8 @@ define(
         'Series/Details/SeasonMenu/CollectionView',
         'Shared/LoadingView',
         'Shared/Actioneer',
-        'backstrech'
+        'backstrech',
+        'Mixins/backbone.signalr.mixin'
     ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
@@ -156,14 +157,21 @@ define(
                 this.seasons.show(new LoadingView());
 
                 this.seasonCollection = new SeasonCollection();
-                this.episodeCollection = new EpisodeCollection();
+                this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id });
 
-                $.when(this.episodeCollection.fetch({data: { seriesId: this.model.id }}), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
-                    self.seasons.show(new SeasonCollectionView({
+                $.when(this.episodeCollection.fetch(), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
+                    var seasonCollectionView = new SeasonCollectionView({
                         collection       : self.seasonCollection,
                         episodeCollection: self.episodeCollection,
                         series           : self.model
-                    }));
+                    });
+
+                    self.episodeCollection.BindSignalR({
+                        onReceived: seasonCollectionView.onEpisodeGrabbed,
+                        context   : seasonCollectionView
+                    });
+
+                    self.seasons.show(seasonCollectionView);
 
                     self.seasonMenu.show(new SeasonMenuCollectionView({
                         collection: self.seasonCollection,

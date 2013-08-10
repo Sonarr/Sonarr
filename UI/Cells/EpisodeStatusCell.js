@@ -40,7 +40,12 @@ define(
                         return this;
                     }
                     else {
-                        if (!this.model.get('airDateUtc')) {
+                        if (this.model.get('downloading')) {
+                            icon = 'icon-download-alt';
+                            tooltip = 'Episode is downloading';
+                        }
+
+                        else if (!this.model.get('airDateUtc')) {
                             icon = 'icon-question-sign';
                             tooltip = 'TBA';
                         }
