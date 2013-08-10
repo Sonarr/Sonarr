@@ -48,6 +48,13 @@ namespace NzbDrone.Api.Frontend
                 return null;
             }
 
+            if (context.Request.Headers.IfModifiedSince.HasValue)
+            {
+                var response = new Response { ContentType = MimeTypes.GetMimeType(path), StatusCode = HttpStatusCode.NotModified };
+                _addCacheHeaders.ToResponse(context.Request, response);
+                return response;
+            }
+
             var mapper = _requestMappers.SingleOrDefault(m => m.CanHandle(path));
 
             if (mapper != null)
