@@ -41,21 +41,21 @@ define(
                     }
                     else {
                         if (this.model.get('downloading')) {
-                            icon = 'icon-download-alt';
+                            icon = 'icon-nd-downloading';
                             tooltip = 'Episode is downloading';
                         }
 
                         else if (!this.model.get('airDateUtc')) {
-                            icon = 'icon-question-sign';
+                            icon = 'icon-nd-tba';
                             tooltip = 'TBA';
                         }
 
                         else if (hasAired) {
-                            icon = 'icon-warning-sign';
+                            icon = 'icon-nd-missing';
                             tooltip = 'Episode missing from disk';
                         }
                         else {
-                            icon = 'icon-time';
+                            icon = 'icon-nd-not-aired';
                             tooltip = 'Episode has not aired';
                         }
                     }
