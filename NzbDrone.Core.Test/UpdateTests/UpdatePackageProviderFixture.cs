@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             updates.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.FileName));
             updates.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Url));
             updates.Should().OnlyContain(c => c.Version != null);
-            updates.Should().OnlyContain(c => c.Version.Minor != 0);
+            updates.Should().OnlyContain(c => c.Version.Major == 2);
         }
     }
 }
