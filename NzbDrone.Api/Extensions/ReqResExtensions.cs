@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using Nancy;
 using Nancy.Responses;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Api.Extensions
 {
-    public static class JsonExtensions
+    public static class ReqResExtensions
     {
         private static readonly NancyJsonSerializer NancySerializer = new NancyJsonSerializer();
+
+
+        public static readonly string LastModified = BuildInfo.BuildDateTime.ToString("r");
 
         public static T FromJson<T>(this Stream body) where T : class, new()
         {
@@ -51,7 +55,7 @@ namespace NzbDrone.Api.Extensions
         {
             headers["Cache-Control"] = "max-age=31536000 , public";
             headers["Expires"] = "Sat, 29 Jun 2020 00:00:00 GMT";
-            headers["Last-Modified"] = "Sat, 29 Jun 2000 00:00:00 GMT";
+            headers["Last-Modified"] = LastModified;
             headers["Age"] = "193266";
 
             return headers;
