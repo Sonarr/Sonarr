@@ -1,0 +1,12 @@
+@import "Bootstrap/variables";
+@import "Bootstrap/mixins";
+
+.toggle {
+  .slide-button {
+    .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+  }
+
+  input:first-of-type:checked ~ .slide-button {
+    .buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
+  }
+}
