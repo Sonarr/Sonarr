@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             UseRealHttp();
 
-            Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/_release/");
+            Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.Branch).Returns("master");
 
             var updates = Subject.GetAvailablePackages().ToList();
 

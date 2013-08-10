@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Update
@@ -20,7 +21,8 @@ namespace NzbDrone.Core.Update
         private readonly IHttpProvider _httpProvider;
         private readonly Logger _logger;
 
-        private static readonly Regex ParseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
+        private static readonly Regex ParseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>(?<=\.)\d+\.\d+\.\d+\.\d+).+?)(?:\<\/a\>)",
+                                                             RegexOptions.IgnoreCase);
 
         public UpdatePackageProvider(IConfigFileProvider configService, IHttpProvider httpProvider, Logger logger)
         {
@@ -32,7 +34,10 @@ namespace NzbDrone.Core.Update
         public IEnumerable<UpdatePackage> GetAvailablePackages()
         {
             var updateList = new List<UpdatePackage>();
-            var updateUrl = _configService.UpdateUrl;
+
+            var branch = _configService.Branch;
+            var version = BuildInfo.Version;
+            var updateUrl = String.Format("http://update.nzbdrone.com/v{0}/{1}/", version.Major, branch);
 
             _logger.Debug("Getting a list of updates from {0}", updateUrl);
 

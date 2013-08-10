@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Configuration
         string Username { get; }
         string Password { get; }
         string LogLevel { get; }
-        string UpdateUrl { get; }
+        string Branch { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -96,9 +96,9 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("AuthenticationEnabled", false); }
         }
 
-        public string UpdateUrl
+        public string Branch
         {
-            get { return GetValue("UpdateUrl", "http://update.nzbdrone.com/vnext/"); }
+            get { return GetValue("Branch", "master"); }
         }
 
         public string Username

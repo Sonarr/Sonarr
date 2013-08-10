@@ -71,7 +71,6 @@ namespace NzbDrone.Core.Update
                 _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
                                             updateSandboxFolder);
 
-
                 _logger.Info("Starting update client");
                 var startInfo = new ProcessStartInfo
                 {
