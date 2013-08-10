@@ -8,4 +8,12 @@ var statusText = $.ajax({
 
 window.ServerStatus = JSON.parse(statusText);
 
-$('#footer-region .version').html(window.ServerStatus.version);
+var footerText = window.ServerStatus.version;
+
+$(document).ready(function () {
+    if (window.ServerStatus.branch != 'master') {
+        footerText = '</br>' + window.ServerStatus.branch;
+    }
+    $('#footer-region .version').html(footerText);
+});
+

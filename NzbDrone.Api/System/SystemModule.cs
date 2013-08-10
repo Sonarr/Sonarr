@@ -3,6 +3,7 @@ using Nancy.Routing;
 using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.System
 {
@@ -11,13 +12,15 @@ namespace NzbDrone.Api.System
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IRouteCacheProvider _routeCacheProvider;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public SystemModule(IAppFolderInfo appFolderInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider)
+        public SystemModule(IAppFolderInfo appFolderInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider, IConfigFileProvider configFileProvider)
             : base("system")
         {
             _appFolderInfo = appFolderInfo;
             _runtimeInfo = runtimeInfo;
             _routeCacheProvider = routeCacheProvider;
+            _configFileProvider = configFileProvider;
             Get["/status"] = x => GetStatus();
             Get["/routes"] = x => GetRoutes();
         }
@@ -37,6 +40,8 @@ namespace NzbDrone.Api.System
                     OsVersion = OsInfo.Version.ToString(),
                     IsMono = OsInfo.IsMono,
                     IsLinux = OsInfo.IsLinux,
+                    Branch = _configFileProvider.Branch,
+                    Authentication = _configFileProvider.AuthenticationEnabled
                 }.AsResponse();
 
         }
