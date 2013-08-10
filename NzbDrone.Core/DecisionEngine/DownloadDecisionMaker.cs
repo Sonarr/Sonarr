@@ -36,7 +36,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase)
         {
-            return GetDecisions(reports).ToList();
+            return GetDecisions(reports, searchCriteriaBase).ToList();
         }
 
         private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteria = null)
@@ -94,17 +94,8 @@ namespace NzbDrone.Core.DecisionEngine
                     throw new InvalidOperationException("[Need Rejection Text]");
                 }
 
-                var searchSpecification = spec as IDecisionEngineSearchSpecification;
-                if (searchSpecification != null && searchCriteriaBase != null)
-                {
-                    if (!searchSpecification.IsSatisfiedBy(remoteEpisode, searchCriteriaBase))
-                    {
-                        return spec.RejectionReason;
-                    }
-                }
-
                 var generalSpecification = spec as IDecisionEngineSpecification;
-                if (generalSpecification != null && !generalSpecification.IsSatisfiedBy(remoteEpisode))
+                if (generalSpecification != null && !generalSpecification.IsSatisfiedBy(remoteEpisode, searchCriteriaBase))
                 {
                     return spec.RejectionReason;
                 }

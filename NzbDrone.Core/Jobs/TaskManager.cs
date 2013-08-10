@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
@@ -18,17 +20,18 @@ namespace NzbDrone.Core.Jobs
         IList<ScheduledTask> GetPending();
     }
 
-    public class TaskManager : IHandle<ApplicationStartedEvent>, IHandleAsync<CommandExecutedEvent>, ITaskManager
+    public class TaskManager : ITaskManager, IHandle<ApplicationStartedEvent>, IHandleAsync<CommandExecutedEvent>, IHandleAsync<ConfigSavedEvent>
     {
         private readonly IScheduledTaskRepository _scheduledTaskRepository;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public TaskManager(IScheduledTaskRepository scheduledTaskRepository, Logger logger)
+        public TaskManager(IScheduledTaskRepository scheduledTaskRepository, IConfigService configService, Logger logger)
         {
             _scheduledTaskRepository = scheduledTaskRepository;
+            _configService = configService;
             _logger = logger;
         }
-
 
         public IList<ScheduledTask> GetPending()
         {
@@ -39,7 +42,7 @@ namespace NzbDrone.Core.Jobs
         {
             var defaultTasks = new[]
                 {
-                    new ScheduledTask{ Interval = 15, TypeName = typeof(RssSyncCommand).FullName},
+                    new ScheduledTask{ Interval = _configService.RssSyncInterval, TypeName = typeof(RssSyncCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(UpdateXemMappingsCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
@@ -79,6 +82,13 @@ namespace NzbDrone.Core.Jobs
             {
                 _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, DateTime.UtcNow);
             }
+        }
+
+        public void HandleAsync(ConfigSavedEvent message)
+        {
+            var rss = _scheduledTaskRepository.GetDefinition(typeof (RssSyncCommand));
+            rss.Interval = _configService.RssSyncInterval;
+            _scheduledTaskRepository.Update(rss);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace NzbDrone.Core.IndexerSearch
                     throw new InvalidOperationException("Daily episode is missing AirDate. Try to refresh series info.");
                 }
 
-                return SearchDaily(episode.SeriesId, episode.Series.TvRageId, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
+                return SearchDaily(series, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
             }
 
             return SearchSingle(series, episode);
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> SearchSingle(Series series, Episode episode)
         {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(series.Id, series.TvRageId, episode.SeasonNumber);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, episode.SeasonNumber);
 
             if (series.UseSceneNumbering)
             {
@@ -92,9 +92,9 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchDaily(int seriesId, int rageTvId, DateTime airDate)
+        private List<DownloadDecision> SearchDaily(Series series, DateTime airDate)
         {
-            var searchSpec = Get<DailyEpisodeSearchCriteria>(seriesId, rageTvId);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(series);
             searchSpec.Airtime = airDate;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
@@ -102,40 +102,20 @@ namespace NzbDrone.Core.IndexerSearch
 
         public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
-            var searchSpec = Get<SeasonSearchCriteria>(seriesId, seasonNumber);
+            var series = _seriesService.GetSeries(seriesId);
+
+            var searchSpec = Get<SeasonSearchCriteria>(series, seasonNumber);
             searchSpec.SeasonNumber = seasonNumber;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> PartialSeasonSearch(SeasonSearchCriteria search)
-        {
-            var episodesNumbers = _episodeService.GetEpisodesBySeason(search.SeriesId, search.SeasonNumber).Select(c => c.EpisodeNumber);
-            var prefixes = episodesNumbers
-                .Select(i => i / 10)
-                .Distinct()
-                .Select(prefix => new PartialSeasonSearchCriteria(search, prefix));
-
-            var result = new List<DownloadDecision>();
-
-            foreach (var partialSeasonSearchSpec in prefixes)
-            {
-                var spec = partialSeasonSearchSpec;
-                result.AddRange(Dispatch(indexer => _feedFetcher.Fetch(indexer, spec), partialSeasonSearchSpec));
-            }
-
-
-            return result;
-        }
-
-        private TSpec Get<TSpec>(int seriesId, int rageTvId, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(Series series, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
-            var series = _seriesService.GetSeries(seriesId);
-
-            spec.SeriesId = seriesId;
-            spec.SeriesTvRageId = rageTvId;
+            spec.SeriesId = series.Id;
+            spec.SeriesTvRageId = series.TvRageId;
             spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId, seasonNumber);
 
             if (string.IsNullOrWhiteSpace(spec.SceneTitle))

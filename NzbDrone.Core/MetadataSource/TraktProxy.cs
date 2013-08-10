@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
@@ -20,6 +21,8 @@ namespace NzbDrone.Core.MetadataSource
             var restRequest = new RestRequest(title.ToSearchTerm());
             var response = client.Execute<List<Show>>(restRequest);
 
+            CheckForError(response);
+
             return response.Data.Select(MapSeries).ToList();
         }
 
@@ -28,6 +31,8 @@ namespace NzbDrone.Core.MetadataSource
             var client = BuildClient("show", "summary");
             var restRequest = new RestRequest(tvDbSeriesId.ToString() + "/extended");
             var response = client.Execute<Show>(restRequest);
+
+            CheckForError(response);
 
             var episodes = response.Data.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
             var series = MapSeries(response.Data);
@@ -119,6 +124,14 @@ namespace NzbDrone.Core.MetadataSource
             if (!match.Success) return null;
 
             return match.Captures[0].Value;
+        }
+
+        private void CheckForError(IRestResponse response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new TraktCommunicationException(response.ErrorMessage, response.ErrorException);
+            }
         }
     }
 }

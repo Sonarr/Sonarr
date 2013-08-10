@@ -1,43 +1,31 @@
 ﻿using System;
-using System.ServiceModel.Syndication;
+using System.Drawing;
+using System.Linq;
+using System.Xml.Linq;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabParser : BasicRssParser
     {
-        private readonly Newznab _newznabIndexer;
+        private static readonly XNamespace NewznabNamespace = "http://www.newznab.com/DTD/2010/feeds/attributes/";
 
-        public NewznabParser(Newznab newznabIndexer)
+        protected override string GetNzbInfoUrl(XElement item)
         {
-            _newznabIndexer = newznabIndexer;
+            return item.Comments().Replace("#comments", "");
         }
 
-        protected override string GetNzbInfoUrl(SyndicationItem item)
-        {
-            return item.Id;
-        }
-
-        protected override ReportInfo PostProcessor(SyndicationItem item, ReportInfo currentResult)
+        protected override ReportInfo PostProcessor(XElement item, ReportInfo currentResult)
         {
             if (currentResult != null)
             {
-                if (item.Links.Count > 1)
-                {
-                    currentResult.Size = item.Links[1].Length;
-                }
+                var attributes = item.Elements(NewznabNamespace + "attr");
+                var sizeElement = attributes.Single(e => e.Attribute("name").Value == "size");
 
-                currentResult.Indexer = GetName(item);
+                currentResult.Size = Convert.ToInt64(sizeElement.Attribute("value").Value);
             }
 
             return currentResult;
-        }
-
-
-        private string GetName(SyndicationItem item)
-        {
-            var hostname = item.Links[0].Uri.DnsSafeHost.ToLower();
-            return String.Format("{0}_{1}", _newznabIndexer.Name, hostname);
         }
     }
 }

@@ -5,8 +5,10 @@ require(
         'marionette',
         'Controller',
         'Series/SeriesCollection',
-        'jQuery/RouteBinder'
-    ], function (App, Marionette, Controller, SeriesCollection, RouterBinder) {
+        'Navbar/NavbarView',
+        'jQuery/RouteBinder',
+        'jquery'
+    ], function (App, Marionette, Controller, SeriesCollection, NavbarView, RouterBinder, $) {
 
         var Router = Marionette.AppRouter.extend({
 
@@ -35,10 +37,11 @@ require(
 
             App.Router = new Router();
 
-            SeriesCollection.fetch()
-                .done(function(){
+            SeriesCollection.fetch().done(function () {
                     Backbone.history.start({ pushState: true });
                     RouterBinder.bind(App.Router);
+                    App.navbarRegion.show(new NavbarView());
+                    $('body').addClass('started');
                 })
         });
 

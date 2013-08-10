@@ -41,7 +41,7 @@ define(
             initialize: function () {
                 $('body').addClass('backdrop');
 
-                this.model.on('sync', function () {
+                this.listenTo(this.model, 'sync', function () {
                     this._setMonitoredState()
                 }, this);
 
@@ -82,9 +82,9 @@ define(
                 this.model.set(name, !this.model.get(name), { silent: true });
 
                 Actioneer.SaveModel({
-                    context       : this,
-                    element       : this.ui.monitored,
-                    alwaysCallback: this._setMonitoredState()
+                    context: this,
+                    element: this.ui.monitored,
+                    always : this._setMonitoredState()
                 });
             },
 
@@ -116,7 +116,7 @@ define(
                     element   : this.ui.refresh,
                     leaveIcon : true,
                     context: this,
-                    successCallback: this._showSeasons
+                    onSuccess: this._showSeasons
                 });
             },
 

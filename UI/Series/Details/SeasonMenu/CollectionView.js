@@ -19,11 +19,11 @@ define(
 
             itemViewOptions: function () {
                 return {
-                    episodeCollection: this.episodeCollection,
+                    episodeCollection: this.episodeCollection
                 };
             },
 
-            appendHtml: function(collectionView, itemView, index){
+            appendHtml: function(collectionView, itemView){
                 var childrenContainer = $(collectionView.childrenContainer || collectionView.el);
                 childrenContainer.prepend(itemView.el);
             }

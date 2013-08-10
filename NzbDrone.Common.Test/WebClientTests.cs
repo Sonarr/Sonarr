@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;

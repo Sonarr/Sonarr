@@ -11,7 +11,7 @@ define(
 
             render: function () {
                 var size = this.model.get(this.column.get('name'));
-                this.$el.html(FormatHelpers.Bytes(size));
+                this.$el.html(FormatHelpers.bytes(size));
                 this.delegateEvents();
                 return this;
             }

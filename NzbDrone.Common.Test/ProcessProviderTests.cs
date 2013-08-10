@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -48,7 +49,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Should_be_able_to_start_process()
         {
-            var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
+            var startInfo = new ProcessStartInfo(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
 
 
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()

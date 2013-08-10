@@ -5,6 +5,11 @@ namespace NzbDrone.Core.Notifications.Growl
 {
     public class GrowlSettings : INotifcationSettings
     {
+        public GrowlSettings()
+        {
+            Port = 23053;
+        }
+
         [FieldDefinition(0, Label = "Host")]
         public String Host { get; set; }
 

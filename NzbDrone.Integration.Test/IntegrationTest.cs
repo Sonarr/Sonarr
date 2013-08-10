@@ -39,7 +39,7 @@ namespace NzbDrone.Integration.Test
         protected ReleaseClient Releases;
         protected IndexerClient Indexers;
 
-        static IntegrationTest()
+        private static void ResetLogger()
         {
             LogManager.Configuration = new LoggingConfiguration();
             var consoleTarget = new ConsoleTarget { Layout = "${time} - ${logger} - ${message} ${exception}" };
@@ -53,6 +53,8 @@ namespace NzbDrone.Integration.Test
         [SetUp]
         public void SmokeTestSetup()
         {
+            ResetLogger();
+
             Container = MainAppContainerBuilder.BuildContainer(new string[0]);
             Container.Register(typeof(IAppFolderInfo), new IntegrationTestFolderInfo());
 

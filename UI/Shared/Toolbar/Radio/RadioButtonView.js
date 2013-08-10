@@ -37,7 +37,7 @@ define(
 
             onClick: function () {
 
-                Config.SetValue(this.model.get('menuKey'), this.model.get('key'));
+                Config.setValue(this.model.get('menuKey'), this.model.get('key'));
                 this.invokeCallback();
             },
 

@@ -115,9 +115,9 @@ define(
                 this.model.set(name, !this.model.get(name));
 
                 Actioneer.SaveModel({
-                    context       : this,
-                    element       : this.ui.seasonMonitored,
-                    alwaysCallback: this._afterSeasonMonitored
+                    context: this,
+                    element: this.ui.seasonMonitored,
+                    always : this._afterSeasonMonitored
                 });
             },
 

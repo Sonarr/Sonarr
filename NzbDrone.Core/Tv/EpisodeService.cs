@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Tv
         void InsertMany(List<Episode> episodes);
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
+        void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
     }
 
     public class EpisodeService : IEpisodeService,

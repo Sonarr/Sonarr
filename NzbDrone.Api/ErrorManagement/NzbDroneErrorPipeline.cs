@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Net;
 using FluentValidation;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common.Exceptions;
 using HttpStatusCode = Nancy.HttpStatusCode;
 
 namespace NzbDrone.Api.ErrorManagement

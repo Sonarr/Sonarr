@@ -70,17 +70,5 @@ namespace NzbDrone.Core.Indexers.NzbClub
 
             return searchUrls;
         }
-
-        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard)
-        {
-            var searchUrls = new List<String>();
-
-            foreach (var url in RecentFeed)
-            {
-                searchUrls.Add(String.Format("{0}+{1}+S{2:00}E{3}", url, seriesTitle, seasonNumber, episodeWildcard));
-            }
-
-            return searchUrls;
-        }
     }
 }

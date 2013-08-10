@@ -1,5 +1,6 @@
 using NLog;
 using NzbDrone.Core.History;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -25,8 +26,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject)
+        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            if (searchCriteria != null)
+            {
+                _logger.Trace("Skipping history check during search");
+                return true;
+            }
+
             foreach (var episode in subject.Episodes)
             {
                 var bestQualityInHistory = _historyService.GetBestQualityInHistory(episode.Id);

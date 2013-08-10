@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public bool IsSatisfiedBy(RemoteEpisode subject)
+        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 

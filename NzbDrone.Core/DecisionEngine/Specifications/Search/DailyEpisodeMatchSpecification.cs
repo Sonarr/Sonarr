@@ -5,7 +5,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 {
-    public class DailyEpisodeMatchSpecification : IDecisionEngineSearchSpecification
+    public class DailyEpisodeMatchSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
         private readonly IEpisodeService _episodeService;
@@ -23,9 +23,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return "Episode doesn't match";
             }
         }
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase)
+        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
-            var dailySearchSpec = searchCriteriaBase as DailyEpisodeSearchCriteria;
+            if (searchCriteria == null)
+            {
+                return true;
+            }
+
+            var dailySearchSpec = searchCriteria as DailyEpisodeSearchCriteria;
 
             if (dailySearchSpec == null) return true;
 

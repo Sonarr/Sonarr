@@ -9,6 +9,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 {
@@ -120,10 +121,27 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
 
-
             Mocker.GetMock<IVideoFileInfoReader>().Verify(c => c.GetRunTime(It.IsAny<string>()), Times.Never());
         }
 
+        [Test]
+        public void should_log_error_if_run_time_is_0_and_under_sample_size()
+        {
+            WithFileSize(40.Megabytes());
+            WithLength(0);
 
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_skip_check_for_flv_file()
+        {
+            _localEpisode.Path = @"C:\Test\some.show.s01e01.flv";
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+
+            Mocker.GetMock<IVideoFileInfoReader>().Verify(c => c.GetRunTime(It.IsAny<string>()), Times.Never());
+        }
     }
 }

@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.History;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -80,7 +81,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_upgradable_if_only_episode_is_upgradable()
         {
             WithFirstReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultSingle).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
@@ -88,27 +89,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithFirstReportUpgradable();
             WithSecondReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
         }
 
         [Test]
         public void should_not_be_upgradable_if_both_episodes_are_not_upgradable()
         {
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_first_episodes_is_upgradable()
         {
             WithFirstReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_second_episodes_is_upgradable()
         {
             WithSecondReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
@@ -120,7 +121,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_upgradableQuality);
 
-            _upgradeHistory.IsSatisfiedBy(_parseResultSingle).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_it_is_a_search()
+        {
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
         }
     }
 }

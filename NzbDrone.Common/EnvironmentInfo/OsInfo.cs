@@ -5,31 +5,27 @@ namespace NzbDrone.Common.EnvironmentInfo
     public static class OsInfo
     {
 
-        public static Version Version
+        static OsInfo()
         {
-            get
-            {
-                OperatingSystem os = Environment.OSVersion;
-                Version version = os.Version;
+            Version = Environment.OSVersion.Version;
+            IsMono = Type.GetType("Mono.Runtime") != null;
 
-                return version;
-            }
+            int platform = (int)Environment.OSVersion.Platform;
+            IsLinux = (platform == 4) || (platform == 6) || (platform == 128);
+            
         }
 
-        public static bool IsMono
-        {
-            get
-            {
-                return Type.GetType("Mono.Runtime") != null;
-            }
-        }
+        public static Version Version { get; private set; }
 
-        public static bool IsLinux
+        public static bool IsMono { get; private set; }
+
+        public static bool IsLinux { get; private set; }
+
+        public static bool IsWindows
         {
             get
             {
-                int p = (int)Environment.OSVersion.Platform;
-                return (p == 4) || (p == 6) || (p == 128);
+                return !IsLinux;
             }
         }
     }

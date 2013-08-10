@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
-using Nancy;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Validation;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Series

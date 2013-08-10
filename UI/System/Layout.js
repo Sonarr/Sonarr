@@ -34,6 +34,11 @@ define(
                             icon : 'icon-book',
                             route: 'logs'
                         },
+                        {
+                            title  : 'Check for Update',
+                            icon   : 'icon-nd-update',
+                            command: 'applicationUpdate'
+                        },
 //                        {
 //                            title         : 'Restart',
 //                            icon          : 'icon-repeat',

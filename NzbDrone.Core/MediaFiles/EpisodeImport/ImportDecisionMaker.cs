@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;

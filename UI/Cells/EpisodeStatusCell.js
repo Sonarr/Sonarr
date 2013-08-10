@@ -3,8 +3,9 @@
 define(
     [
         'backgrid',
-        'moment'
-    ], function (Backgrid, Moment) {
+        'moment',
+        'Shared/FormatHelpers'
+    ], function (Backgrid, Moment, FormatHelpers) {
         return  Backgrid.Cell.extend({
 
             className: 'episode-status-cell',
@@ -21,14 +22,19 @@ define(
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {
-                        var quality = this.model.get('episodeFile').quality;
+                        var episodeFile = this.model.get('episodeFile');
+                        var quality = episodeFile.quality;
+                        var size = FormatHelpers.bytes(episodeFile.size);
+                        var title = 'Episode downloaded';
 
                         if (quality.proper) {
-                            this.$el.html('<span class="badge badge-info" title="Episode downloaded [PROPER]">{0}</span>'.format(quality.quality.name));
+                            title += ' [PROPER] - {0}'.format(size);
+                            this.$el.html('<span class="badge badge-info" title="{0}">{1}</span>'.format(title, quality.quality.name));
                         }
 
                         else {
-                            this.$el.html('<span class="badge badge-inverse" title="Episode downloaded">{0}</span>'.format(quality.quality.name));
+                            title += ' - {0}'.format(size);
+                            this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
                         }
 
                         return this;

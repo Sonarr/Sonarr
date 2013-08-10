@@ -26,6 +26,8 @@ Function Build()
     CheckExitCode
 
     CleanFolder $outputFolder
+
+    AddJsonNet
 }
 
 Function CleanFolder($path)
@@ -34,6 +36,8 @@ Function CleanFolder($path)
     get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {remove-item $_.fullname}
 
     get-childitem $path -File -Filter *.transform -Recurse  | foreach ($_) {remove-item $_.fullname}
+
+    get-childitem $path -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
 
     Write-Host Removing FluentValidation.Resources  files
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
@@ -47,11 +51,17 @@ Function CleanFolder($path)
     }
 }
 
+
+Function AddJsonNet()
+{
+    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.*  -Destination $outputFolder
+}
+
 Function PackageTests()
 {
     Write-Host Packaging Tests
 
-      if(Test-Path $testPackageFolder)
+    if(Test-Path $testPackageFolder)
     {
         Remove-Item -Recurse -Force $testPackageFolder -ErrorAction Continue
     }
@@ -61,10 +71,13 @@ Function PackageTests()
         Copy-Item -Recurse ($_.FullName + "\*")  $testPackageFolder -ErrorAction Ignore
     }
 
+
     CleanFolder $testPackageFolder
 
-    get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
+    Copy-Item $outputFolder\*.dll  -Destination $testPackageFolder -Force
+    Copy-Item $outputFolder\*.pdb  -Destination $testPackageFolder -Force
 
+    get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 }
 
 Function Nunit()
@@ -73,12 +86,11 @@ Function Nunit()
 
     get-childitem $testPackageFolder -File -Filter *test.dll | foreach ($_) {
        $testFiles = $testFiles + $_.FullName + " "
-       
     }
 
-     $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
-     Invoke-Expression  $nunitExe
-     CheckExitCode
+    $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
+    Invoke-Expression  $nunitExe
+    CheckExitCode
 }
 
 Function RunGrunt()

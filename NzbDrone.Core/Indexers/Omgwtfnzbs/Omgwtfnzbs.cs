@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             get { return "omgwtfnzbs"; }
         }
 
+        public override IParseFeed Parser
+        {
+            get
+            {
+                return new OmgwtfnzbsParser();
+            }
+        }
+
         public override IEnumerable<string> RecentFeed
         {
             get
@@ -51,18 +59,6 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             foreach (var url in RecentFeed)
             {
                 searchUrls.Add(String.Format("{0}&search={1}+S{2:00}", url, seriesTitle, seasonNumber));
-            }
-
-            return searchUrls;
-        }
-
-        public override IEnumerable<string> GetPartialSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeWildcard)
-        {
-            var searchUrls = new List<String>();
-
-            foreach (var url in RecentFeed)
-            {
-                searchUrls.Add(String.Format("{0}&search={1}+S{2:00}E{3}", url, seriesTitle, seasonNumber, episodeWildcard));
             }
 
             return searchUrls;

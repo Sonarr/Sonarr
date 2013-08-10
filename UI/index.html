@@ -8,7 +8,7 @@
     <link href="/Content/Messenger/messenger.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/Messenger/messenger.future.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/fullcalendar.css" rel='stylesheet' type='text/css'>
-    <link href="/Content/base.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/theme.css" rel='stylesheet' type='text/css'/>
     <link href="/Cells/cells.css" rel='stylesheet' type='text/css'>
     <link href="/Series/series.css" rel='stylesheet' type='text/css'/>
     <link href="/Logs/logs.css" rel='stylesheet' type='text/css'/>
@@ -17,81 +17,29 @@
     <link href="/Calendar/calendar.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/overrides.css" rel='stylesheet' type='text/css'/>
 
-    <link rel="apple-touch-icon" href="/Content/Images/touch/57.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/Content/Images/touch/72.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/Content/Images/touch/114.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/Content/Images/touch/144.png" />
+    <link rel="apple-touch-icon" href="/Content/Images/touch/57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/Images/touch/72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/Images/touch/114.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="/Content/Images/touch/144.png"/>
 </head>
 <body>
-<div id="in-sub-nav">
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                <div class="pull-left logo">
-                    <a href="/"><img src="/Content/Images/logo.png" alt="NzbDrone"></a>
-                </div>
-                <ul id="main-menu-region">
-                    <li>
-                        <a href="/">
-                            <i class="icon-play"></i>
-                            <br>
-                            Series
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/calendar">
-                            <i class="icon-calendar"></i>
-                            <br>
-                            Calendar
-                        </a>
-                    </li>
-                    <li>
-                        <a href="history">
-                            <i class="icon-time"></i>
-                            <br>
-                            History
-                        </a>
-                    </li>
-                    <li>
-                        <a href="missing">
-                            <i class="icon-warning-sign"></i>
-                            <br>
-                            Missing
-                        </a>
-                    </li>
-                    <li>
-                        <a href="settings">
-                            <i class="icon-cogs"></i>
-                            <br>
-                            Settings
-                        </a>
-                    </li>
-                    <li>
-                        <a href="system">
-                            <i class="icon-laptop"></i>
-                            <br>
-                            System
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRTE52U3XJDSQ" target="_blank">
-                            <i class="icon-heart"></i>
-                            <br>
-                            Donate
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="page">
+<div id="nav-region"></div>
+<div id="page">
     <div class="page-container">
         <div class="container">
             <div class="row">
                 <div class="span12" id="notification-region"/>
             </div>
-            <div class="span12" id="main-region"></div>
+            <div class="span12" id="main-region">
+                <div class="row">
+                    <div id="followingBalls">
+                        <div id="ball-1" class="ball"></div>
+                        <div id="ball-2" class="ball"></div>
+                        <div id="ball-3" class="ball"></div>
+                        <div id="ball-4" class="ball"></div>
+                    </div>
+                </div>
+            </div>
             <div id="modal-region"></div>
         </div>
     </div>

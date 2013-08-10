@@ -2,7 +2,8 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
@@ -63,50 +64,51 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void setup_should_return_monitored_episode_should_return_true()
         {
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle).Should().BeTrue();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
         }
-
 
         [Test]
         public void not_monitored_series_should_be_skipped()
         {
             _fakeSeries.Monitored = false;
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
-
 
         [Test]
         public void only_episode_not_monitored_should_return_false()
         {
             WithFirstEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle).Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
         }
-
 
         [Test]
         public void both_episodes_not_monitored_should_return_false()
         {
             WithFirstEpisodeUnmonitored();
             WithSecondEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeFalse();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
-
 
         [Test]
         public void only_first_episode_not_monitored_should_return_monitored()
         {
             WithFirstEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
         }
-
 
         [Test]
         public void only_second_episode_not_monitored_should_return_monitored()
         {
             WithSecondEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti).Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
         }
 
+        [Test]
+        public void should_return_true_if_it_is_a_search()
+        {
+            _fakeSeries.Monitored = false;
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
+        }
     }
 }

@@ -25,11 +25,13 @@ define(
             },
 
             _onLoadMore: function () {
-                this.ui.loadMore.hide();
-                this.ui.searchBar.show();
-                this.resultCollectionView.showAll();
-            },
+                var showingAll = this.resultCollectionView.showMore();
 
+                if (showingAll) {
+                    this.ui.loadMore.hide();
+                    this.ui.searchBar.show();
+                }
+            },
 
             initialize: function (options) {
                 this.collection = new AddSeriesCollection({unmappedFolderModel: this.model});

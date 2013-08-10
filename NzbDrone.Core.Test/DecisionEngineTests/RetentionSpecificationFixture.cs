@@ -50,35 +50,35 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void unlimited_retention_should_return_true()
         {
             WithUnlimitedRetention();
-            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
         public void longer_retention_should_return_true()
         {
             WithLongRetention();
-            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
         public void equal_retention_should_return_true()
         {
             WithEqualRetention();
-            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
         public void shorter_retention_should_return_false()
         {
             WithShortRetention();
-            Subject.IsSatisfiedBy(parseResult).Should().BeFalse();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeFalse();
         }
 
         [Test]
         public void zeroDay_report_should_return_true()
         {
             WithUnlimitedRetention();
-            Subject.IsSatisfiedBy(parseResult).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FizzWare.NBuilder;
 using Marr.Data;
 using Moq;
@@ -122,7 +123,6 @@ namespace NzbDrone.Core.Test.MediaFileTests
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), true), Times.Once());
         }
 
-
         [Test]
         public void should_delete_existing_file_fromdb_if_file_doesnt_exist()
         {
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         }
 
         [Test]
-        public void should_not_try_to_recyclebin_existing_file_fromdb_if_file_doesnt_exist()
+        public void should_not_try_to_recyclebin_existing_file_if_file_doesnt_exist()
         {
             GivenSingleEpisodeWithSingleEpisodeFile();
 
@@ -149,6 +149,31 @@ namespace NzbDrone.Core.Test.MediaFileTests
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void should_not_delete_file_if_pre_move_fails()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            Mocker.GetMock<IMoveEpisodeFiles>()
+                .Setup(s => s.PreMoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()))
+                .Throws<InvalidOperationException>();
+
+            Assert.Throws<InvalidOperationException>(() => Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode));
+
+            Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void should_move_after_premove()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+
+            Mocker.GetMock<IMoveEpisodeFiles>().Verify(v => v.PreMoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()), Times.Once());
+            Mocker.GetMock<IMoveEpisodeFiles>().Verify(v => v.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()), Times.Once());
         }
     }
 }

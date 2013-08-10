@@ -22,6 +22,7 @@ require.config({
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
+        'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
         'libs'                : 'JsLibraries/'
 
     },
@@ -114,6 +115,13 @@ require.config({
                 ]
         },
 
+        'jquery.dotdotdot': {
+            deps:
+                [
+                    '$'
+                ]
+        },
+
         'backbone.pageable': {
             deps:
                 [
@@ -188,6 +196,7 @@ define(
         });
 
         app.addRegions({
+            navbarRegion: '#nav-region',
             mainRegion  : '#main-region',
             footerRegion: '#footer-region'
         });

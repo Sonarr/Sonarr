@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.3\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,11 +81,11 @@
     <Compile Include="ClientSchema\Field.cs" />
     <Compile Include="ClientSchema\SchemaBuilder.cs" />
     <Compile Include="ClientSchema\SelectOption.cs" />
-    <Compile Include="Client\ClientSettings.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
     <Compile Include="Config\NamingModule.cs" />
+    <Compile Include="Directories\DirectoryLookupService.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />

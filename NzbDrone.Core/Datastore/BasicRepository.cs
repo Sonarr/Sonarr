@@ -217,6 +217,10 @@ namespace NzbDrone.Core.Datastore
             return pagingSpec;
         }
 
+        public void DeleteAll()
+        {
+            DataMapper.Delete<TModel>(c => c.Id > 0);
+        }
 
         private void PublishModelEvent(TModel model, RepositoryAction action)
         {

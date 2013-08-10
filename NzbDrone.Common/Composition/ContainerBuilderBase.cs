@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using NzbDrone.Common.Messaging;
@@ -61,13 +60,10 @@ namespace NzbDrone.Common.Composition
             if (implementations.Count == 1)
             {
                 var impl = implementations.Single();
-
-                Trace.WriteLine(string.Format("Registering {0} -> {1}", contractType.FullName, impl.Name));
                 Container.RegisterSingleton(contractType, impl);
             }
             else
             {
-                Trace.WriteLine(string.Format("Registering {0} -> {1}", contractType.FullName, implementations.Count));
                 Container.RegisterAllAsSingleton(contractType, implementations);
             }
         }

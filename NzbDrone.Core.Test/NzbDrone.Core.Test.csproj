@@ -76,7 +76,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.3\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -92,7 +92,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -124,11 +123,13 @@
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
+    <Compile Include="IndexerTests\XElementExtensionsFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
+    <Compile Include="MediaFileTests\EpisodeImportTests\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\RenameEpisodeFileServiceFixture.cs" />
     <Compile Include="MediaFileTests\UpgradeMediaFileServiceFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\NotExistingFileSpecificationFixture.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="MediaFileTests\EpisodeImportTests\ImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFileTests\MediaFileRepositoryFixture.cs" />
-    <Compile Include="MediaFileTests\EpisodeFileMoverFixture.cs" />
     <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
@@ -177,11 +177,13 @@
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradableSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
+    <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
     <Compile Include="MediaFileTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
+    <Compile Include="TvTests\SeasonServiceTests\SetSeasonPassFixture.cs" />
+    <Compile Include="TvTests\SeasonServiceTests\SetMonitoredFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />

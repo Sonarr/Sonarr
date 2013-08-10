@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
             remoteEpisode.Series.QualityProfile.Value.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
-            Subject.IsSatisfiedBy(remoteEpisode).Should().BeTrue();
+            Subject.IsSatisfiedBy(remoteEpisode, null).Should().BeTrue();
         }
 
         [Test, TestCaseSource("DeniedTestCases")]
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
             remoteEpisode.Series.QualityProfile.Value.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
 
-            Subject.IsSatisfiedBy(remoteEpisode).Should().BeFalse();
+            Subject.IsSatisfiedBy(remoteEpisode, null).Should().BeFalse();
         }
     }
 }

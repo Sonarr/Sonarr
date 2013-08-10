@@ -1,6 +1,4 @@
-﻿using NzbDrone.Core.Notifications.Prowl;
-using NzbDrone.Core.Tv;
-using Prowlin;
+﻿using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {

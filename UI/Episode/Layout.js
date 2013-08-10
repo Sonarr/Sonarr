@@ -2,9 +2,9 @@
 define(
     [
         'marionette',
-        'Episode/Summary/View',
+        'Episode/Summary/Layout',
         'Episode/Search/Layout'
-    ], function (Marionette, SummaryView, SearchLayout) {
+    ], function (Marionette, SummaryLayout, SearchLayout) {
 
         return Marionette.Layout.extend({
             template: 'Episode/LayoutTemplate',
@@ -43,8 +43,7 @@ define(
                 }
 
                 this.ui.summary.tab('show');
-                this.summary.show(new SummaryView({model: this.model}));
-
+                this.summary.show(new SummaryLayout({model: this.model}));
             },
 
             _showActivity: function (e) {
@@ -92,7 +91,5 @@ define(
                     this.ui.monitored.removeClass('icon-bookmark');
                 }
             }
-
         });
-
     });

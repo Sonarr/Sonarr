@@ -7,7 +7,6 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using Omu.ValueInjecter;
 

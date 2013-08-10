@@ -1,5 +1,6 @@
 @import "FontAwesome/font-awesome";
 @import "Bootstrap/variables";
+@import "variables";
 
 /* Icon rotations and mirroring */
 .icon-rotate-90() {
@@ -67,16 +68,25 @@
   .icon(@plus);
 }
 
-.icon-form-info:before {
+.icon-nd-form-info:before {
   .icon(@question-sign);
 }
 
-.icon-form-warning:before {
+.icon-nd-form-warning:before {
   .icon(@warning-sign);
-  color : #f89406;
+  color: #f89406;
 }
 
-.icon-form-danger:before {
+.icon-nd-form-danger:before {
   .icon(@exclamation-sign);
-  color : #b94a48;
+  color: #b94a48;
+}
+
+.icon-nd-donate:before {
+  .icon(@heart);
+  color: @nzbdroneRed;
+}
+
+.icon-nd-update:before {
+  .icon(@download-alt);
 }

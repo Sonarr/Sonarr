@@ -44,8 +44,9 @@ define(
                 }
             },
 
-
             invokeCommand: function () {
+                //TODO: Use Actioneer to handle icon swapping
+
                 var command = this.model.get('command');
                 if (command) {
                     this.idle = false;
@@ -60,17 +61,34 @@ define(
                                 message: self.model.get('successMessage')
                             });
                         }
+
+                        if (self.model.get('onSuccess')) {
+                            if (!self.model.ownerContext) {
+                                throw 'ownerContext must be set.';
+                            }
+
+                            self.model.get('onSuccess').call(self.model.ownerContext);
+                        }
                     });
 
                     commandPromise.fail(function (options) {
                         if (options.readyState === 0 || options.status === 0) {
                             return;
                         }
+
                         if (self.model.get('errorMessage')) {
                             Messenger.show({
                                 message: self.model.get('errorMessage'),
                                 type   : 'error'
                             });
+                        }
+
+                        if (self.model.get('onError')) {
+                            if (!self.model.ownerContext) {
+                                throw 'ownerContext must be set.';
+                            }
+
+                            self.model.get('onError').call(self.model.ownerContext);
                         }
                     });
 
@@ -81,6 +99,14 @@ define(
                             self.idle = true;
                         }
                     });
+
+                    if (self.model.get('always')) {
+                        if (!self.model.ownerContext) {
+                            throw 'ownerContext must be set.';
+                        }
+
+                        self.model.get('always').call(self.model.ownerContext);
+                    }
                 }
             },
 
@@ -102,7 +128,6 @@ define(
                 if (!this.model.ownerContext) {
                     throw 'ownerContext must be set.';
                 }
-
 
                 var callback = this.model.get('callback');
                 if (callback) {
