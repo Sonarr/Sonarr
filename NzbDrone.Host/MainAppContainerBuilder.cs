@@ -7,7 +7,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
 
-namespace NzbDrone
+namespace NzbDrone.Host
 {
     public class MainAppContainerBuilder : ContainerBuilderBase
     {
@@ -17,7 +17,7 @@ namespace NzbDrone
         }
 
         private MainAppContainerBuilder(string[] args)
-            : base("NzbDrone", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
+            : base("NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 

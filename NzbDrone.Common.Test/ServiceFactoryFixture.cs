@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Host;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test

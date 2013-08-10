@@ -79,13 +79,13 @@
       <Project>{ff5ee3b6-913b-47ce-9ceb-11c51b4e1205}</Project>
       <Name>NzbDrone.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Host\NzbDrone.Host.csproj">
+      <Project>{95C11A9E-56ED-456A-8447-2C89C1139266}</Project>
+      <Name>NzbDrone.Host</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone\NzbDrone.csproj">
-      <Project>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</Project>
-      <Name>NzbDrone</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

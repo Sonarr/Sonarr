@@ -5,7 +5,7 @@ using Nancy.Bootstrapper;
 using Nancy.Owin;
 using Owin;
 
-namespace NzbDrone.Owin.MiddleWare
+namespace NzbDrone.Host.Owin.MiddleWare
 {
     public class NancyMiddleWare : IOwinMiddleWare
     {

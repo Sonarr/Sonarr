@@ -1,12 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Reflection;
-using System.Threading;
 using System.Windows.Forms;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Owin;
+using NzbDrone.Host.Owin;
 
 namespace NzbDrone.SysTray
 {
@@ -32,15 +29,15 @@ namespace NzbDrone.SysTray
 
         public void Start()
         {
-            Application.ThreadException += new ThreadExceptionEventHandler(OnThreadException);
-            Application.ApplicationExit += new EventHandler(OnApplicationExit);
+            Application.ThreadException += OnThreadException;
+            Application.ApplicationExit += OnApplicationExit;
 
             _trayMenu.MenuItems.Add("Launch Browser", LaunchBrowser);
             _trayMenu.MenuItems.Add("-");
             _trayMenu.MenuItems.Add("Exit", OnExit);
 
             _trayIcon.Text = String.Format("NzbDrone - {0}", BuildInfo.Version);
-            _trayIcon.Icon = new Icon(Assembly.GetEntryAssembly().GetManifestResourceStream("NzbDrone.NzbDrone.ico"));
+            _trayIcon.Icon = Properties.Resources.NzbDroneIcon;
 
             _trayIcon.ContextMenu = _trayMenu;
             _trayIcon.Visible = true;
@@ -85,7 +82,14 @@ namespace NzbDrone.SysTray
 
         private void LaunchBrowser(object sender, EventArgs e)
         {
-            _processProvider.Start(_hostController.AppUrl);
+            try
+            {
+                _processProvider.Start(_hostController.AppUrl);
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void OnApplicationExit(object sender, EventArgs e)
@@ -100,10 +104,17 @@ namespace NzbDrone.SysTray
 
         private void DisposeTrayIcon()
         {
-            _trayIcon.Visible = false;
-            _trayIcon.Icon = null;
-            _trayIcon.Visible = false;
-            _trayIcon.Dispose();
+            try
+            {
+                _trayIcon.Visible = false;
+                _trayIcon.Icon = null;
+                _trayIcon.Visible = false;
+                _trayIcon.Dispose();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 }
