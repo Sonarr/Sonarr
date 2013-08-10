@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Model;
@@ -17,6 +20,7 @@ namespace NzbDrone.Common
         void KillAll(string processName);
         bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
+        Process ShellExecute(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
     }
 
     public class ProcessProvider : IProcessProvider
@@ -75,6 +79,54 @@ namespace NzbDrone.Common
         public Process Start(string path)
         {
             return Start(new ProcessStartInfo(path));
+        }
+
+        public Process ShellExecute(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
+        {
+            var logger = LogManager.GetLogger(new FileInfo(path).Name);
+
+            var startInfo = new ProcessStartInfo(path, args)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+            };
+
+
+            logger.Info("Starting {0} {1}", path, args);
+
+            var process = Process.Start(startInfo);
+
+            process.OutputDataReceived += (sender, eventArgs) =>
+            {
+                if (string.IsNullOrWhiteSpace(eventArgs.Data)) return;
+
+                logger.Debug(eventArgs.Data);
+
+                if (onOutputDataReceived != null)
+                {
+                    onOutputDataReceived(eventArgs.Data);
+                }
+            };
+
+            process.ErrorDataReceived += (sender, eventArgs) =>
+            {
+                if (string.IsNullOrWhiteSpace(eventArgs.Data)) return;
+
+                logger.Error(eventArgs.Data);
+
+                if (onErrorDataReceived != null)
+                {
+                    onErrorDataReceived(eventArgs.Data);
+                }
+            };
+
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+            process.Start();
+
+            return process;
         }
 
         public Process Start(ProcessStartInfo startInfo)

@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Owin
+﻿namespace NzbDrone.Host.Owin
 {
     public interface IHostController
     {

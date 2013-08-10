@@ -4,7 +4,7 @@ using System.Threading;
 using NLog;
 using NzbDrone.Common;
 
-namespace NzbDrone
+namespace NzbDrone.Host
 {
     public class PriorityMonitor
     {

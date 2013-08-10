@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Owin.Hosting;
 using NLog;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Owin.MiddleWare;
+using NzbDrone.Host.Owin.MiddleWare;
 using Owin;
-using System.Linq;
 
-namespace NzbDrone.Owin
+namespace NzbDrone.Host.Owin
 {
     public class OwinHostController : IHostController
     {

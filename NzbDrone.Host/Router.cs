@@ -1,10 +1,8 @@
 ﻿using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.SysTray;
-using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
-namespace NzbDrone
+namespace NzbDrone.Host
 {
     public class Router
     {
@@ -13,18 +11,16 @@ namespace NzbDrone
         private readonly StartupArguments _startupArguments;
         private readonly IConsoleService _consoleService;
         private readonly IRuntimeInfo _runtimeInfo;
-        private readonly ISystemTrayApp _systemTrayProvider;
         private readonly Logger _logger;
 
         public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider, StartupArguments startupArguments,
-                        IConsoleService consoleService, IRuntimeInfo runtimeInfo, ISystemTrayApp systemTrayProvider, Logger logger)
+                        IConsoleService consoleService, IRuntimeInfo runtimeInfo, Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
             _startupArguments = startupArguments;
             _consoleService = consoleService;
             _runtimeInfo = runtimeInfo;
-            _systemTrayProvider = systemTrayProvider;
             _logger = logger;
         }
 
@@ -52,17 +48,13 @@ namespace NzbDrone
                         break;
                     }
 
-                case ApplicationModes.Console:
+                case ApplicationModes.Interactive:
                     {
                         _logger.Trace("Console selected");
                         _nzbDroneServiceFactory.Start();
                         if (_consoleService.IsConsoleApplication)
                         {
                             _consoleService.WaitForClose();
-                        }
-                        else
-                        {
-                            _systemTrayProvider.Start();
                         }
 
                         break;
@@ -120,7 +112,7 @@ namespace NzbDrone
                 return ApplicationModes.UninstallService;
             }
 
-            return ApplicationModes.Console;
+            return ApplicationModes.Interactive;
         }
     }
 }

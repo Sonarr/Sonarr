@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Host;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test
@@ -51,13 +52,13 @@ namespace NzbDrone.App.Test
             Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.IsUserInteractive).Returns(true);
             Mocker.GetMock<IConsoleService>().SetupGet(c => c.IsConsoleApplication).Returns(true);
 
-            Subject.Route(ApplicationModes.Console);
+            Subject.Route(ApplicationModes.Interactive);
 
             Mocker.GetMock<IConsoleService>().Verify(c => c.WaitForClose(), Times.Once());
             Mocker.GetMock<INzbDroneServiceFactory>().Verify(c => c.Start(), Times.Once());
         }
 
-        [TestCase(ApplicationModes.Console)]
+        [TestCase(ApplicationModes.Interactive)]
         [TestCase(ApplicationModes.InstallService)]
         [TestCase(ApplicationModes.UninstallService)]
         [TestCase(ApplicationModes.Help)]

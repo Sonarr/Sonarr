@@ -1,14 +1,13 @@
 using System;
-using NLog;
 using NetFwTypeLib;
+using NLog;
 using NzbDrone.Core.Configuration;
 
-namespace NzbDrone.Host
+namespace NzbDrone.Host.AccessControl
 {
     public interface IFirewallAdapter
     {
         void MakeAccessible();
-        bool IsNzbDronePortOpen();
     }
 
     public class FirewallAdapter : IFirewallAdapter
@@ -24,8 +23,6 @@ namespace NzbDrone.Host
 
         public void MakeAccessible()
         {
-            int port = 0;
-
             if (IsFirewallEnabled())
             {
                 if (IsNzbDronePortOpen())
@@ -42,7 +39,7 @@ namespace NzbDrone.Host
         }
 
 
-        public bool IsNzbDronePortOpen()
+        private bool IsNzbDronePortOpen()
         {
             try
             {
@@ -75,7 +72,7 @@ namespace NzbDrone.Host
             try
             {
                 var type = Type.GetTypeFromProgID("HNetCfg.FWOpenPort", false);
-                var port = Activator.CreateInstance(type) as INetFwOpenPort;
+                var port = (INetFwOpenPort)Activator.CreateInstance(type);
 
                 port.Port = portNumber;
                 port.Name = "NzbDrone";
@@ -94,7 +91,7 @@ namespace NzbDrone.Host
             }
         }
 
-        private int CloseFirewallPort()
+        private void CloseFirewallPort()
         {
             try
             {
@@ -116,14 +113,12 @@ namespace NzbDrone.Host
                 if (portNumber != _configFileProvider.Port)
                 {
                     ports.Remove(portNumber, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
-                    return portNumber;
                 }
             }
             catch (Exception ex)
             {
                 _logger.WarnException("Failed to close port in firewall for NzbDrone", ex);
             }
-            return 0;
         }
 
         private bool IsFirewallEnabled()

@@ -103,10 +103,8 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             Subject.Execute(new ApplicationUpdateCommand());
 
-            Mocker.GetMock<IProcessProvider>().Verify(
-               c => c.Start(It.Is<ProcessStartInfo>(p =>
-                       !string.IsNullOrWhiteSpace(p.FileName) &&
-                       p.Arguments == "12")));
+            Mocker.GetMock<IProcessProvider>()
+                .Verify(c => c.ShellExecute(It.IsAny<string>(), "12", null, null), Times.Once());
         }
 
         [Test]

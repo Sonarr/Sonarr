@@ -12,9 +12,10 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Host;
+using NzbDrone.Host.Owin;
+using NzbDrone.Host.Owin.MiddleWare;
 using NzbDrone.Integration.Test.Client;
-using NzbDrone.Owin;
-using NzbDrone.Owin.MiddleWare;
 using NzbDrone.Test.Common.Categories;
 using RestSharp;
 
