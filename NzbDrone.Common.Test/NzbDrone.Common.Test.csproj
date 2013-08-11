@@ -62,6 +62,7 @@
     <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="DiskProviderTests\IsParentFixture.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="EventingTests\MessageAggregatorEventTests.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="PathExtensionFixture.cs" />
-    <Compile Include="DiskProviderFixture.cs" />
+    <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
     <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
     <Compile Include="ReflectionTests\ReflectionExtensionFixture.cs" />

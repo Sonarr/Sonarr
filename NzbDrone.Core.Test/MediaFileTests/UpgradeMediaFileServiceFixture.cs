@@ -150,30 +150,5 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
         }
-
-        [Test]
-        public void should_not_delete_file_if_pre_move_fails()
-        {
-            GivenSingleEpisodeWithSingleEpisodeFile();
-
-            Mocker.GetMock<IMoveEpisodeFiles>()
-                .Setup(s => s.PreMoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()))
-                .Throws<InvalidOperationException>();
-
-            Assert.Throws<InvalidOperationException>(() => Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode));
-
-            Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public void should_move_after_premove()
-        {
-            GivenSingleEpisodeWithSingleEpisodeFile();
-
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
-
-            Mocker.GetMock<IMoveEpisodeFiles>().Verify(v => v.PreMoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()), Times.Once());
-            Mocker.GetMock<IMoveEpisodeFiles>().Verify(v => v.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()), Times.Once());
-        }
     }
 }

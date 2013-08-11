@@ -38,8 +38,6 @@ namespace NzbDrone.Core.MediaFiles
                                             .Select(e => e.EpisodeFile.Value)
                                             .GroupBy(e => e.Id);
 
-            episodeFile = _episodeFileMover.PreMoveEpisodeFile(episodeFile, localEpisode);
-
             foreach (var existingFile in existingFiles)
             {
                 var file = existingFile.First();

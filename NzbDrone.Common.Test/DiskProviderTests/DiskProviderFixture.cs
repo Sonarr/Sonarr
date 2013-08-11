@@ -5,7 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Common.Test
+namespace NzbDrone.Common.Test.DiskProviderTests
 {
     [TestFixture]
     public class DiskProviderFixture : TestBase<DiskProvider>

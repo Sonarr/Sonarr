@@ -15,7 +15,6 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
-        EpisodeFile PreMoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class MoveEpisodeFiles : IMoveEpisodeFiles
@@ -55,15 +54,6 @@ namespace NzbDrone.Core.MediaFiles
             episodeFile = MoveFile(episodeFile, destinationFilename);
 
             _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
-
-            return episodeFile;
-        }
-
-        public EpisodeFile PreMoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
-        {
-            var newFileName = Path.GetFileNameWithoutExtension(episodeFile.Path);
-            var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-            episodeFile = MoveFile(episodeFile, destinationFilename);
 
             return episodeFile;
         }
