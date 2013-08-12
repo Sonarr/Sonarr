@@ -21,8 +21,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         public string RejectionReason { get { return "Not enough free space"; } }
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
-        {           
-            var freeSpace = _diskProvider.GetAvilableSpace(localEpisode.Series.Path);
+        {
+            var path = Directory.GetParent(localEpisode.Series.Path);
+            var freeSpace = _diskProvider.GetAvilableSpace(path.FullName);
 
             if (freeSpace < localEpisode.Size + 100.Megabytes())
             {

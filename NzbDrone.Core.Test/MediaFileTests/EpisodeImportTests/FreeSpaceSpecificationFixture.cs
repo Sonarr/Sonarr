@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -19,12 +20,14 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
     {
         private Series _series;
         private LocalEpisode _localEpisode;
+        private const String ROOT_FOLDER = @"C:\Test\TV";
 
         [SetUp]
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)
+                                     .With(s => s.Path = Path.Combine(ROOT_FOLDER, "30 Rock"))
                                      .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(1)
@@ -80,6 +83,18 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             GivenFreeSpace(1.Gigabytes());
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_use_series_paths_parent_for_free_space_check()
+        {
+            GivenFileSize(100.Megabytes());
+            GivenFreeSpace(1.Gigabytes());
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetAvilableSpace(ROOT_FOLDER), Times.Once());
         }
     }
 }
