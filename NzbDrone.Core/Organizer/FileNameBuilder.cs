@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Organizer
     public interface IBuildFileNames
     {
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile);
+        string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig);
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
     }
 
@@ -67,6 +68,11 @@ namespace NzbDrone.Core.Organizer
         {
             var nameSpec = _namingConfigService.GetConfig();
 
+            return BuildFilename(episodes, series, episodeFile, nameSpec);
+        }
+
+        public string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec)
+        {
             if (!nameSpec.RenameEpisodes)
             {
                 if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
