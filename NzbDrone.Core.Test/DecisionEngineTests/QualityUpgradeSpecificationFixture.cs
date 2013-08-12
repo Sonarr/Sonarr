@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
@@ -24,11 +25,30 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.WEBDL1080p, false, Quality.WEBDL1080p, false, Quality.WEBDL1080p, false }
         };
 
+        private void GivenAutoDownloadPropers(bool autoDownloadPropers)
+        {
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.AutoDownloadPropers)
+                  .Returns(autoDownloadPropers);
+        }
+
         [Test, TestCaseSource("IsUpgradeTestCases")]
         public void IsUpgradeTest(Quality current, bool currentProper, Quality newQuality, bool newProper, Quality cutoff, bool expected)
         {
+            GivenAutoDownloadPropers(true);
+
             Subject.IsUpgradable(new QualityProfile() { Cutoff = cutoff }, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
                     .Should().Be(expected);
+        }
+
+        [Test]
+        public void should_return_false_if_proper_and_autoDownloadPropers_is_false()
+        {
+            GivenAutoDownloadPropers(false);
+
+            Subject.IsUpgradable(new QualityProfile { Cutoff = Quality.Bluray1080p },
+                                 new QualityModel(Quality.DVD, true),
+                                 new QualityModel(Quality.DVD, false)).Should().BeFalse();
         }
     }
 }

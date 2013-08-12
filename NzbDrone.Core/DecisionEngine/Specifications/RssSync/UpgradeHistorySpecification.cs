@@ -3,7 +3,7 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
-namespace NzbDrone.Core.DecisionEngine.Specifications
+namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
     public class UpgradeHistorySpecification : IDecisionEngineSpecification
     {

@@ -251,6 +251,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RssSyncInterval", value); }
         }
 
+        public Boolean AutoDownloadPropers
+        {
+            get { return GetValueBoolean("AutoDownloadPropers", true); }
+
+            set { SetValue("AutoDownloadPropers", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

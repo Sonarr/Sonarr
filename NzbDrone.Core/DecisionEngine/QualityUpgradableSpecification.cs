@@ -1,4 +1,5 @@
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -11,10 +12,12 @@ namespace NzbDrone.Core.DecisionEngine
 
     public class QualityUpgradableSpecification : IQualityUpgradableSpecification
     {
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public QualityUpgradableSpecification(Logger logger)
+        public QualityUpgradableSpecification(IConfigService configService, Logger logger)
         {
+            _configService = configService;
             _logger = logger;
         }
 
@@ -28,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine
                     return false;
                 }
 
-                if (currentQuality.Quality == newQuality.Quality && newQuality.Proper)
+                if (currentQuality.Quality == newQuality.Quality && newQuality.Proper && _configService.AutoDownloadPropers)
                 {
                     _logger.Trace("Upgrading existing item to proper.");
                     return true;

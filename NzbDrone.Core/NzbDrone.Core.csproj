@@ -186,7 +186,7 @@
     <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\UpgradeHistorySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\UpgradeHistorySpecification.cs" />
     <Compile Include="Download\Clients\Sabnzbd\ConnectionInfoModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />

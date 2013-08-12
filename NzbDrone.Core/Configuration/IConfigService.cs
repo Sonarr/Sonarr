@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Configuration
         PriorityType NzbgetOlderTvPriority { get; set; }
         string ReleaseRestrictions { get; set; }
         Int32 RssSyncInterval { get; set; }
+        Boolean AutoDownloadPropers { get; set; }
         void SaveValues(Dictionary<string, object> configValues);
     }
 }
