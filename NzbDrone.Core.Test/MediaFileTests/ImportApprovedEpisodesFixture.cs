@@ -51,6 +51,10 @@ namespace NzbDrone.Core.Test.MediaFileTests
 
                                                }));
             }
+
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                  .Setup(s => s.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()))
+                  .Returns(new EpisodeFile());
         }
             
         [Test]
