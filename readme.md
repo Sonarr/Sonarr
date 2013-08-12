@@ -1,6 +1,3 @@
-*NzbDrone vNext is currently under development to be faster, smarter and work on all major platforms (Windows, Linux, OSX).*
-
-
 # NzbDrone #
 
 
@@ -8,6 +5,7 @@ NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new
 
 ## Major Features Include: ##
 
+* Support for major platforms: Windows, Linux, OSX
 * Automatically detects new episodes
 * can scan your existing library and then download any old seasons that are missing
 * can watch for better versions and upgrade your existing episodes. *eg. from DVD to Blu-Ray*
