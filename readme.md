@@ -1,11 +1,10 @@
-*NzbDrone vNext is currently under development to be faster, smarter and work on all major platforms (Windows, Linux, OSX).
-NzbDrone vNext is currently in alpha being tested and vetted by our release testers.*
+*NzbDrone vNext is currently under development to be faster, smarter and work on all major platforms (Windows, Linux, OSX).*
 
 
 # NzbDrone #
 
 
-NZBDrone is a PVR for newsgroup users written in .NET 4.0. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
+NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
 
 ## Major Features Include: ##
 
@@ -16,6 +15,7 @@ NZBDrone is a PVR for newsgroup users written in .NET 4.0. It can monitor multip
 * full integration with SABNzbd
 * full integration with XBMC (notification, library update, metadata)
 * full support for specials and multi-episode releases
+* beautiful UI
 
 
 ## Configuring Development Enviroment: ##
