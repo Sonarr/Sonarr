@@ -20,14 +20,16 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
     {
         private Series _series;
         private LocalEpisode _localEpisode;
-        private const String ROOT_FOLDER = @"C:\Test\TV";
+        private String _rootFolder;
 
         [SetUp]
         public void Setup()
         {
+             _rootFolder = @"C:\Test\TV".AsOsAgnostic();
+
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)
-                                     .With(s => s.Path = Path.Combine(ROOT_FOLDER, "30 Rock"))
+                                     .With(s => s.Path = Path.Combine(_rootFolder, "30 Rock"))
                                      .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(1)
@@ -94,7 +96,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
 
             Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.GetAvilableSpace(ROOT_FOLDER), Times.Once());
+                .Verify(v => v.GetAvilableSpace(_rootFolder), Times.Once());
         }
     }
 }
