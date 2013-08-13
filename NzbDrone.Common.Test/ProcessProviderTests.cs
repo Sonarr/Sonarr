@@ -18,7 +18,13 @@ namespace NzbDrone.Common.Test
         [SetUp]
         public void Setup()
         {
-            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c => c.Kill());
+            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c =>
+                {
+                    c.Kill();
+                    c.WaitForExit();
+                });
+
+            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).Should().BeEmpty();
         }
 
         [TearDown]
@@ -51,13 +57,32 @@ namespace NzbDrone.Common.Test
         {
             var startInfo = new ProcessStartInfo(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
 
-
-            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
-                   .BeFalse("Dummy process is already running");
-            Subject.Start(startInfo).Should().NotBeNull();
+            var process = Subject.Start(startInfo);
 
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
                    .BeTrue("excepted one dummy process to be already running");
+
+            process.Kill();
+            process.WaitForExit();
+
+            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should().BeFalse();
+        }
+
+
+
+        [Test]
+        public void Should_be_able_to_execute_process()
+        {
+            var process = Subject.ShellExecute(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
+
+
+            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
+                   .BeTrue("excepted one dummy process to be already running");
+
+            process.Kill();
+            process.WaitForExit();
+
+            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should().BeFalse();
         }
 
         [Test]

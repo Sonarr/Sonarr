@@ -124,7 +124,6 @@ namespace NzbDrone.Common
 
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
-            process.Start();
 
             return process;
         }
