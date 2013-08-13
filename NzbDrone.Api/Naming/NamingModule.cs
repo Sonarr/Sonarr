@@ -50,7 +50,7 @@ namespace NzbDrone.Api.Naming
             var episodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.S01E01.hdtv.avi"
+                Path = @"C:\Test\Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv"
             };
 
             resource.SingleEpisodeExample = _buildFileNames.BuildFilename(new List<Episode> { episode1 },
@@ -58,7 +58,7 @@ namespace NzbDrone.Api.Naming
                                                                           episodeFile,
                                                                           nameSpec);
 
-            episodeFile.Path = @"C:\Test\Series.Title.S01E01-E02.hdtv.avi";
+            episodeFile.Path = @"C:\Test\Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv";
 
             resource.MultiEpisodeExample = _buildFileNames.BuildFilename(new List<Episode> { episode1, episode2 },
                                                                          series,
