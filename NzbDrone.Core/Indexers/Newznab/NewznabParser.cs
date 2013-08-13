@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
+using NLog;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Newznab
@@ -20,7 +21,13 @@ namespace NzbDrone.Core.Indexers.Newznab
             if (currentResult != null)
             {
                 var attributes = item.Elements(NewznabNamespace + "attr");
-                var sizeElement = attributes.Single(e => e.Attribute("name").Value == "size");
+                var sizeElement = attributes.SingleOrDefault(e => e.Attribute("name").Value == "size");
+
+                if (sizeElement == null)
+                {
+                    var message = String.Format("Unable to parse size from: {0} [{1}]", currentResult.Title, currentResult.Indexer);
+                    throw new SizeParsingException(message);
+                }
 
                 currentResult.Size = Convert.ToInt64(sizeElement.Attribute("value").Value);
             }
