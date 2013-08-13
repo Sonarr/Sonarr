@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
@@ -35,18 +36,26 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var file in episodeFiles)
             {
-                var episodeFile = file;
-
-                _logger.Trace("Renaming episode file: {0}", episodeFile);
-                episodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, series);
-
-                if (episodeFile != null)
+                try
                 {
+                    var episodeFile = file;
+
+                    _logger.Trace("Renaming episode file: {0}", episodeFile);
+                    episodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, series);
+
                     _mediaFileService.Update(episodeFile);
                     renamed.Add(episodeFile);
-                }
 
-                _logger.Trace("Renamed episode file: {0}", episodeFile);
+                    _logger.Trace("Renamed episode file: {0}", episodeFile);
+                }
+                catch (SameFilenameException ex)
+                {
+                    _logger.Trace("File not renamed, source and destination are the same: {0}", ex.Filename);
+                }
+                catch (Exception ex)
+                {
+                    _logger.ErrorException("Failed to rename file: " + file.Path, ex);
+                }
             }
 
             if (renamed.Any())

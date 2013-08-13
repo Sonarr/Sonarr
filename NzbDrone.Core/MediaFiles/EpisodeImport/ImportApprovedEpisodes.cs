@@ -68,13 +68,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     if (newDownload)
                     {
                         episodeFile = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
-
-                        if (episodeFile == null)
-                        {
-                            _logger.Error("Failed to move [{0}], aborting processing", localEpisode);
-                            continue;
-                        }
-
                         _messageAggregator.PublishEvent(new EpisodeImportedEvent(episodeFile));
                     }
                     
