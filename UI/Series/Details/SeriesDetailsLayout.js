@@ -7,11 +7,12 @@ define(
         'Series/SeasonCollection',
         'Series/Details/SeasonCollectionView',
         'Series/Details/SeasonMenu/CollectionView',
+        'Series/Details/InfoView',
         'Shared/LoadingView',
         'Shared/Actioneer',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, LoadingView, Actioneer) {
+    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, InfoView, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -19,7 +20,8 @@ define(
 
             regions: {
                 seasonMenu: '#season-menu',
-                seasons   : '#seasons'
+                seasons   : '#seasons',
+                info      : '#info'
             },
 
             ui: {
@@ -43,7 +45,8 @@ define(
                 $('body').addClass('backdrop');
 
                 this.listenTo(this.model, 'sync', function () {
-                    this._setMonitoredState()
+                    this._setMonitoredState();
+                    this._showInfo();
                 }, this);
 
                 this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
@@ -61,6 +64,7 @@ define(
 
                 this._showSeasons();
                 this._setMonitoredState();
+                this._showInfo();
             },
 
             _getFanArt: function () {
@@ -178,6 +182,10 @@ define(
                         episodeCollection: self.episodeCollection
                     }));
                 });
+            },
+
+            _showInfo: function () {
+                this.info.show(new InfoView({ model: this.model }));
             }
         });
     });
