@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
@@ -38,7 +39,7 @@ namespace NzbDrone.Common
         void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
         bool IsFileLocked(FileInfo file);
         string GetPathRoot(string path);
-        void SetPermissions(string filename, string account, FileSystemRights rights, AccessControlType controlType);
+        void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentPath, string childPath);
         FileAttributes GetFileAttributes(string path);  
     }
@@ -243,7 +244,6 @@ namespace NzbDrone.Common
                             break;
                         }
                 }
-
             }
         }
 
@@ -403,17 +403,16 @@ namespace NzbDrone.Common
             return Path.GetPathRoot(path);
         }
 
-        public void SetPermissions(string filename, string account, FileSystemRights rights, AccessControlType controlType)
+        public void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType)
         {
-
             try
             {
-
+                var sid = new SecurityIdentifier(accountSid, null);
 
                 var directoryInfo = new DirectoryInfo(filename);
                 var directorySecurity = directoryInfo.GetAccessControl();
 
-                var accessRule = new FileSystemAccessRule(account, rights,
+                var accessRule = new FileSystemAccessRule(sid, rights,
                                                           InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                                                           PropagationFlags.None, controlType);
 
@@ -423,7 +422,7 @@ namespace NzbDrone.Common
             }
             catch (Exception e)
             {
-                Logger.WarnException(string.Format("Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, account, rights, controlType), e);
+                Logger.WarnException(string.Format("Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType), e);
                 throw;
             }
 

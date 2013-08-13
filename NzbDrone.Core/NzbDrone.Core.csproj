@@ -234,6 +234,7 @@
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
+    <Compile Include="MediaFiles\SameFilenameException.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
     <Compile Include="MetadataSource\Trakt\TraktCommunicationException.cs" />
     <Compile Include="Notifications\Email\TestEmailCommand.cs" />

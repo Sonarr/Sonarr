@@ -35,7 +35,7 @@ namespace NzbDrone.Host.AccessControl
 
         private void RegisterUrl(int portNumber)
         {
-            var arguments = String.Format("http add urlacl http://*:{0}/ user=EVERYONE", portNumber);
+            var arguments = String.Format("http add urlacl http://*:{0}/ sddl=D:(A;;GX;;;S-1-1-0)", portNumber);
             RunNetsh(arguments);
         }
 

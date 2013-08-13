@@ -62,15 +62,12 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (!_diskProvider.FileExists(episodeFile.Path))
             {
-                _logger.Error("Episode file path does not exist, {0}", episodeFile.Path);
-                return null;
+                throw new FileNotFoundException("Episode file path does not exist", episodeFile.Path);
             }
 
-            //Only rename if existing and new filenames don't match
             if (DiskProvider.PathEquals(episodeFile.Path, destinationFilename))
             {
-                _logger.Debug("Skipping file rename, source and destination are the same: {0}", episodeFile.Path);
-                return null;
+                throw new SameFilenameException("File not moved, source and destination are the same", episodeFile.Path);
             }
 
             _diskProvider.CreateFolder(new FileInfo(destinationFilename).DirectoryName);

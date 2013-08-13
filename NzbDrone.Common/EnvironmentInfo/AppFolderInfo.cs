@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using NLog;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -47,7 +48,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         {
             try
             {
-                _diskProvider.SetPermissions(AppDataFolder, "Everyone", FileSystemRights.FullControl, AccessControlType.Allow);
+                _diskProvider.SetPermissions(AppDataFolder, WellKnownSidType.WorldSid, FileSystemRights.FullControl, AccessControlType.Allow);
             }
             catch (Exception ex)
             {

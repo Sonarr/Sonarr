@@ -80,6 +80,10 @@ namespace NzbDrone.Core.Test.MediaFileTests
         {
             GivenEpisodeFiles();
 
+            Mocker.GetMock<IMoveEpisodeFiles>()
+                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<Series>()))
+                  .Throws(new SameFilenameException("Same file name", "Filename"));
+
             Subject.Execute(new RenameSeriesCommand(_series.Id));
 
             Mocker.GetMock<IMessageAggregator>()
