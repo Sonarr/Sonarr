@@ -205,6 +205,7 @@
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
+    <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
     <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
