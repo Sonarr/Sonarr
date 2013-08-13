@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
@@ -17,8 +18,7 @@ namespace NzbDrone.App.Test
     [TestFixture]
     public class ContainerFixture : TestBase
     {
-
-        string[] args = new[]{"first","second"};
+        StartupArguments args = new StartupArguments("first", "second");
 
         [Test]
         public void should_be_able_to_resolve_indexers()

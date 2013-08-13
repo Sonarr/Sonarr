@@ -96,7 +96,10 @@ namespace NzbDrone.Common
 
             logger.Info("Starting {0} {1}", path, args);
 
-            var process = Process.Start(startInfo);
+            var process = new Process
+                {
+                    StartInfo = startInfo
+                };
 
             process.OutputDataReceived += (sender, eventArgs) =>
             {

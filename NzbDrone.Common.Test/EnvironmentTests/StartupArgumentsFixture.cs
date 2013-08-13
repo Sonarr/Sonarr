@@ -26,5 +26,17 @@ namespace NzbDrone.Common.Test.EnvironmentTests
             args.Flags.Contains("t").Should().BeTrue();
         }
 
+
+        [TestCase("/key=value")]
+        [TestCase("/KEY=value")]
+        [TestCase(" /key=\"value\"")]
+        public void should_parse_args_with_alues(string arg)
+        {
+            var args = new StartupArguments(new[] { arg });
+            args.Args.Should().HaveCount(1);
+            args.Args["key"].Should().Be("value");
+        }
+
+
     }
 }

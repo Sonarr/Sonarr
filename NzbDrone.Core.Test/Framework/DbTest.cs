@@ -65,8 +65,6 @@ namespace NzbDrone.Core.Test.Framework
     public abstract class DbTest : CoreTest
     {
         private ITestDatabase _db;
-        private IDatabase _database;
-
 
         protected virtual MigrationType MigrationType
         {

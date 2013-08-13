@@ -11,22 +11,22 @@ namespace NzbDrone.Host
 {
     public class MainAppContainerBuilder : ContainerBuilderBase
     {
-        public static IContainer BuildContainer(string[] args)
+        public static IContainer BuildContainer(StartupArguments args)
         {
             return new MainAppContainerBuilder(args).Container;
         }
 
-        private MainAppContainerBuilder(string[] args)
+        private MainAppContainerBuilder(StartupArguments args)
             : base("NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
+            Container.Register<IStartupArguments>(args);
+
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>));
             Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>));
 
             Container.Register<INancyBootstrapper, NancyBootstrapper>();
-
-            Container.Register(new StartupArguments(args));
         }
     }
 }

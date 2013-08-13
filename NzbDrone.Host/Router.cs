@@ -8,12 +8,12 @@ namespace NzbDrone.Host
     {
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly IServiceProvider _serviceProvider;
-        private readonly StartupArguments _startupArguments;
+        private readonly IStartupArguments _startupArguments;
         private readonly IConsoleService _consoleService;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider, StartupArguments startupArguments,
+        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider, IStartupArguments startupArguments,
                         IConsoleService consoleService, IRuntimeInfo runtimeInfo, Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;

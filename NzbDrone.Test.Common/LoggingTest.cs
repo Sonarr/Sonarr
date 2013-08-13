@@ -2,15 +2,20 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Test.Common
 {
     public abstract class LoggingTest
     {
-        protected Logger TestLogger = LogManager.GetLogger("TestLogger");
+        protected static Logger TestLogger;
 
         protected static void InitLogging()
         {
+            new StartupArguments();
+
+            TestLogger = LogManager.GetLogger("TestLogger");
+
             if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
             {
                 LogManager.Configuration = new LoggingConfiguration();

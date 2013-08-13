@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Host;
@@ -14,7 +15,7 @@ namespace NzbDrone.Common.Test
         [SetUp]
         public void setup()
         {
-            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new string[0]));
+            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new StartupArguments()));
         }
 
         [Test]

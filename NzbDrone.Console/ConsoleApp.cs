@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Console
 {
@@ -8,7 +9,7 @@ namespace NzbDrone.Console
         {
             try
             {
-                Host.Bootstrap.Start(args);
+                Host.Bootstrap.Start(new StartupArguments(args));
             }
             catch (Exception e)
             {

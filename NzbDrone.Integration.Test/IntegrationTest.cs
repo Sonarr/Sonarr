@@ -1,20 +1,12 @@
-﻿using System.Collections.Generic;
-using Moq;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
 using NUnit.Framework;
-using NzbDrone.Api;
 using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
-using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs;
-using NzbDrone.Host;
-using NzbDrone.Host.Owin;
-using NzbDrone.Host.Owin.MiddleWare;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.Test.Common.Categories;
 using RestSharp;
@@ -25,14 +17,7 @@ namespace NzbDrone.Integration.Test
     [IntegrationTest]
     public abstract class IntegrationTest
     {
-        private NancyBootstrapper _bootstrapper;
-        private IHostController _hostController;
         protected RestClient RestClient { get; private set; }
-
-        private static readonly Logger Logger = LogManager.GetLogger("TEST");
-
-        protected IContainer Container { get; private set; }
-
 
         protected SeriesClient Series;
         protected ClientBase<RootFolderResource> RootFolders;
@@ -40,49 +25,102 @@ namespace NzbDrone.Integration.Test
         protected ReleaseClient Releases;
         protected IndexerClient Indexers;
 
-        private static void ResetLogger()
-        {
-            LogManager.Configuration = new LoggingConfiguration();
-            var consoleTarget = new ConsoleTarget { Layout = "${time} - ${logger} - ${message} ${exception}" };
-            LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
-
-            LogManager.ReconfigExistingLoggers();
-        }
-
-
         [SetUp]
         public void SmokeTestSetup()
         {
-            ResetLogger();
+            new StartupArguments();
 
-            Container = MainAppContainerBuilder.BuildContainer(new string[0]);
-            Container.Register(typeof(IAppFolderInfo), new IntegrationTestFolderInfo());
-
-            DbFactory.RegisterDatabase(Container);
-
-            var taskManagerMock = new Mock<ITaskManager>();
-            taskManagerMock.Setup(c => c.GetPending()).Returns(new List<ScheduledTask>());
-
-            Container.TinyContainer.Register(taskManagerMock.Object);
-
-            _bootstrapper = new NancyBootstrapper(Container.TinyContainer);
-
-
-            var hostConfig = new Mock<IConfigFileProvider>();
-            hostConfig.SetupGet(c => c.Port).Returns(1313);
-
-            _hostController = new OwinHostController(hostConfig.Object, new[] { new NancyMiddleWare(_bootstrapper) }, Logger);
-
+            KillNzbDrone();
 
             InitRestClients();
 
-            _hostController.StartServer();
+            PackageStart();
+        }
+
+        private static void KillNzbDrone()
+        {
+            foreach (var p in Process.GetProcessesByName("NzbDrone.Console"))
+            {
+                try
+                {
+                    p.Kill();
+                }
+                catch (Win32Exception)
+                {
+                }
+            }
+        }
+
+        private string AppDate;
+
+        private void PackageStart()
+        {
+            AppDate = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
+
+            Start("..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+
+            while (RestClient.Get(new RestRequest("system/status")).ResponseStatus != ResponseStatus.Completed)
+            {
+                Thread.Sleep(1000);
+            }
+        }
+
+        private Process Start(string path)
+        {
+
+            var args = "-nobrowser -data=\"" + AppDate + "\"";
+
+            var startInfo = new ProcessStartInfo(path, args)
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+            };
+
+            Console.WriteLine("Starting {0} {1}", path, args);
+
+            var process = new Process
+            {
+                StartInfo = startInfo
+            };
+
+            process.OutputDataReceived += (sender, eventArgs) =>
+            {
+                if (string.IsNullOrWhiteSpace(eventArgs.Data)) return;
+
+                if (eventArgs.Data.Contains("Press enter to exit"))
+                {
+                    Assert.Fail("Process waiting for input");
+                }
+
+                Console.WriteLine(eventArgs.Data);
+            };
+
+            process.ErrorDataReceived += (sender, eventArgs) =>
+            {
+                if (string.IsNullOrWhiteSpace(eventArgs.Data)) return;
+
+                if (eventArgs.Data.Contains("Press enter to exit"))
+                {
+                    Assert.Fail("Process waiting for input");
+                }
+
+                Console.WriteLine(eventArgs.Data);
+            };
+
+
+            process.Start();
+
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+
+            return process;
         }
 
         private void InitRestClients()
         {
-            RestClient = new RestClient(_hostController.AppUrl + "/api/");
+            RestClient = new RestClient("http://localhost:8989/api");
             Series = new SeriesClient(RestClient);
             Releases = new ReleaseClient(RestClient);
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
@@ -93,8 +131,7 @@ namespace NzbDrone.Integration.Test
         [TearDown]
         public void SmokeTestTearDown()
         {
-            _hostController.StopServer();
-            _bootstrapper.Shutdown();
+            KillNzbDrone();
         }
     }
 

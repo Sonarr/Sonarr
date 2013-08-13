@@ -19,12 +19,22 @@ namespace NzbDrone.Integration.Test.Client
             return Get<List<SeriesResource>>(request);
         }
 
-
         public SeriesResource Get(string slug, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             var request = BuildRequest(slug);
             return Get<SeriesResource>(request, statusCode);
         }
+
+    }
+
+
+    public class SystemInfoClient : ClientBase<SeriesResource>
+    {
+        public SystemInfoClient(IRestClient restClient)
+            : base(restClient)
+        {
+        }
+
 
     }
 }

@@ -26,12 +26,19 @@ namespace NzbDrone.Common.Test
             Path.IsPathRooted(Subject.AppDataFolder).Should().BeTrue("Path is not rooted");
         }
 
-
-
         [Test]
         public void IsProduction_should_return_false_when_run_within_nunit()
         {
             RuntimeInfo.IsProduction.Should().BeFalse("Process name is " + Process.GetCurrentProcess().ProcessName);
+        }
+
+        [Test]
+        public void should_use_path_from_arg_if_provided()
+        {
+            var args = new StartupArguments("-data=\"c:\\users\\test\\\"");
+
+            Mocker.SetConstant<IStartupArguments>(args);
+            Subject.AppDataFolder.Should().Be("c:\\users\\test\\");
         }
     }
 }
