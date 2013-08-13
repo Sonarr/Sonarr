@@ -57,10 +57,18 @@ namespace NzbDrone.Integration.Test
         {
             AppDate = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
 
-            Start("..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+            if (BuildInfo.IsDebug)
+            {
+                Start("..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+            }
+            else
+            {
+                Start("bin\\NzbDrone.Console.exe");
+            }
 
             while (RestClient.Get(new RestRequest("system/status")).ResponseStatus != ResponseStatus.Completed)
             {
+
                 Thread.Sleep(1000);
             }
         }
