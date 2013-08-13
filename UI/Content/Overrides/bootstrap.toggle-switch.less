@@ -4,9 +4,17 @@
 .toggle {
   .slide-button {
     .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+
+    &.btn-danger {
+      .buttonBackground(@btnInverseBackground, @btnInverseBackgroundHighlight);
+    }
   }
 
   input:first-of-type:checked ~ .slide-button {
     .buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
+
+    &.btn-danger {
+      .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+    }
   }
 }
