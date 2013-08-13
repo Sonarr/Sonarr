@@ -541,7 +541,6 @@
     <Content Include="MediaInfo.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="NzbDrone.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Download\Clients\Sabnzbd\Api\" />
