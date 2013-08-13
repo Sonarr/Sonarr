@@ -472,9 +472,6 @@
     <Compile Include="Notifications\Xbmc\XbmcService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Xbmc\ResourceManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Notifications\NotificationDefinition.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
