@@ -84,6 +84,7 @@ namespace NzbDrone.Integration.Test
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
+                RedirectStandardInput = true
             };
 
             Console.WriteLine("Starting {0} {1}", path, args);
