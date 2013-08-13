@@ -99,7 +99,7 @@ namespace NzbDrone.Integration.Test
 
                 if (eventArgs.Data.Contains("Press enter to exit"))
                 {
-                    Assert.Fail("Process waiting for input");
+                    process.StandardInput.WriteLine(" ");
                 }
 
                 Console.WriteLine(eventArgs.Data);
@@ -111,7 +111,7 @@ namespace NzbDrone.Integration.Test
 
                 if (eventArgs.Data.Contains("Press enter to exit"))
                 {
-                    Assert.Fail("Process waiting for input");
+                    process.StandardInput.WriteLine(" ");
                 }
 
                 Console.WriteLine(eventArgs.Data);
@@ -122,6 +122,8 @@ namespace NzbDrone.Integration.Test
 
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
+
+            process.Exited += (sender, eventArgs) => Assert.Fail("Process exited");
 
             return process;
         }
