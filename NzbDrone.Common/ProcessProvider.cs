@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -30,6 +31,14 @@ namespace NzbDrone.Common
         public const string NzbDroneProcessName = "NzbDrone";
         public const string NzbDroneConsoleProcessName = "NzbDrone.Console";
 
+        private static List<Process> GetProcessesByName(string name)
+        {
+            var monoProcesses = Process.GetProcessesByName("mono")
+                                       .Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name + ".exe"));
+            return Process.GetProcessesByName(name)
+                .Union(monoProcesses).ToList();
+        }
+
         public ProcessInfo GetCurrentProcess()
         {
             return ConvertToProcessInfo(Process.GetCurrentProcess());
@@ -37,7 +46,7 @@ namespace NzbDrone.Common
 
         public bool Exists(string processName)
         {
-            return Process.GetProcessesByName(processName).Any();
+            return GetProcessesByName(processName).Any();
         }
 
         public ProcessPriorityClass GetCurrentProcessPriority()
@@ -63,18 +72,6 @@ namespace NzbDrone.Common
             return processInfo;
         }
 
-        /*        public IEnumerable<ProcessInfo> GetProcessByName(string name)
-                {
-                    if (OsInfo.IsMono)
-                    {
-                        var mono = Process.GetProcessesByName("mono");
-
-                        return mono.Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name + ".exe"))
-                                             .Select(ConvertToProcessInfo);
-                    }
-
-                    return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
-                }*/
 
         public Process Start(string path)
         {
@@ -177,7 +174,7 @@ namespace NzbDrone.Common
 
         public void KillAll(string processName)
         {
-            var processToKill = Process.GetProcessesByName(processName);
+            var processToKill = GetProcessesByName(processName);
 
             foreach (var processInfo in processToKill)
             {

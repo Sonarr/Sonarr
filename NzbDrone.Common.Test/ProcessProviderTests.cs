@@ -68,8 +68,6 @@ namespace NzbDrone.Common.Test
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should().BeFalse();
         }
 
-
-
         [Test]
         public void Should_be_able_to_execute_process()
         {
