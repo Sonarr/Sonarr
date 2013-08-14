@@ -18,6 +18,7 @@ namespace NzbDrone.Common
         ServiceController GetService(string serviceName);
         void Stop(string serviceName);
         void Start(string serviceName);
+        ServiceControllerStatus GetStatus(string serviceName);
     }
 
     public class ServiceProvider : IServiceProvider
@@ -136,7 +137,13 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual void Start(string serviceName)
+
+        public ServiceControllerStatus GetStatus(string serviceName)
+        {
+          return  GetService(serviceName).Status;
+        }
+
+        public void Start(string serviceName)
         {
             Logger.Info("Starting {0} Service...", serviceName);
             var service = GetService(serviceName);

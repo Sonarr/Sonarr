@@ -93,6 +93,14 @@ namespace NzbDrone.Host
 
         private ApplicationModes GetApplicationMode()
         {
+            if (!_runtimeInfo.IsUserInteractive &&
+               OsInfo.IsWindows &&
+               _serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
+               _serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending)
+            {
+                return ApplicationModes.Service;
+            }
+
             if (_startupArguments.Flags.Contains(StartupArguments.HELP))
             {
                 return ApplicationModes.Help;
@@ -106,14 +114,6 @@ namespace NzbDrone.Host
             if (!OsInfo.IsLinux && _startupArguments.Flags.Contains(StartupArguments.UNINSTALL_SERVICE))
             {
                 return ApplicationModes.UninstallService;
-            }
-
-            if (!_runtimeInfo.IsUserInteractive &&
-                OsInfo.IsWindows &&
-                _serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
-                _serviceProvider.GetService(ServiceProvider.NZBDRONE_SERVICE_NAME).Status == ServiceControllerStatus.StartPending)
-            {
-                return ApplicationModes.Service;
             }
 
             return ApplicationModes.Interactive;

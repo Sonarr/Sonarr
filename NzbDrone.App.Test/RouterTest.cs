@@ -58,11 +58,8 @@ namespace NzbDrone.App.Test
             Mocker.GetMock<INzbDroneServiceFactory>().Verify(c => c.Start(), Times.Once());
         }
 
-        [TestCase(ApplicationModes.Interactive)]
-        [TestCase(ApplicationModes.InstallService)]
-        [TestCase(ApplicationModes.UninstallService)]
-        [TestCase(ApplicationModes.Help)]
-        public void Route_should_call_service_start_when_run_in_service_mode(ApplicationModes applicationModes)
+        [Test]
+        public void Route_should_call_service_start_when_run_in_service_mode()
         {
             var envMock = Mocker.GetMock<IRuntimeInfo>();
             var serviceProvider = Mocker.GetMock<IServiceProvider>();
@@ -71,8 +68,9 @@ namespace NzbDrone.App.Test
 
             serviceProvider.Setup(c => c.Run(It.IsAny<ServiceBase>()));
             serviceProvider.Setup(c => c.ServiceExist(It.IsAny<string>())).Returns(true);
+            serviceProvider.Setup(c => c.GetStatus(It.IsAny<string>())).Returns(ServiceControllerStatus.StartPending);
 
-            Subject.Route(applicationModes);
+            Subject.Route();
 
             serviceProvider.Verify(c => c.Run(It.IsAny<ServiceBase>()), Times.Once());
         }
@@ -90,7 +88,6 @@ namespace NzbDrone.App.Test
 
             Subject.Route(ApplicationModes.InstallService);
 
-            Mocker.VerifyAllMocks();
         }
 
         [Test]
@@ -105,7 +102,6 @@ namespace NzbDrone.App.Test
 
             Subject.Route(ApplicationModes.UninstallService);
 
-            Mocker.VerifyAllMocks();
         }
     }
 }
