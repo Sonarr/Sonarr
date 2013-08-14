@@ -33,7 +33,7 @@ namespace NzbDrone.Integration.Test
             }
             else
             {
-                Start("bin\\NzbDrone.Console.exe");
+                Start(Path.Combine("bin","NzbDrone.Console.exe"));
             }
 
             while (true)
