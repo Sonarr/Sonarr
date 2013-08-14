@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
+﻿using NLog;
+using NLog.Config;
+using NLog.Targets;
 using NUnit.Framework;
 using NzbDrone.Api.Commands;
 using NzbDrone.Api.RootFolders;
@@ -27,10 +25,20 @@ namespace NzbDrone.Integration.Test
 
         private NzbDroneRunner _runner;
 
+
+        public IntegrationTest()
+        {
+            new StartupArguments();
+
+            LogManager.Configuration = new LoggingConfiguration();
+            var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
+            LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
+        }
+
         [SetUp]
         public void SmokeTestSetup()
         {
-            new StartupArguments();
 
             _runner = new NzbDroneRunner();
             _runner.KillAll();

@@ -34,7 +34,7 @@ namespace NzbDrone.Common
         private static List<Process> GetProcessesByName(string name)
         {
             var monoProcesses = Process.GetProcessesByName("mono")
-                                       .Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name + ".exe"));
+                                       .Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name.ToLower() + ".exe"));
             return Process.GetProcessesByName(name)
                 .Union(monoProcesses).ToList();
         }
