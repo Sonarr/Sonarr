@@ -38,7 +38,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return false;
             }
 
-            if (!remoteEpisode.Episodes.Select(c => c.EpisodeNumber).Contains(singleEpisodeSpec.EpisodeNumber))
+            if (!remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers.Contains(singleEpisodeSpec.EpisodeNumber))
             {
                 _logger.Trace("Episode number does not match searched episode number, skipping.");
                 return false;
