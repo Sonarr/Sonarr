@@ -43,7 +43,7 @@ namespace NzbDrone.Host.AccessControl
         {
             try
             {
-                var process = _processProvider.ShellExecute("netsh.exe", arguments);
+                var process = _processProvider.Start("netsh.exe", arguments);
                 process.WaitForExit(5000);
             }
             catch (Exception ex)

@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Update
 
                 _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
 
-                var process = _processProvider.ShellExecute(_appFolderInfo.GetUpdateClientExePath(), _processProvider.GetCurrentProcess().Id.ToString());
+                var process = _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), _processProvider.GetCurrentProcess().Id.ToString());
 
                 _processProvider.WaitForExit(process);
 

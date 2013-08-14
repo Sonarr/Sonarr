@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -33,10 +32,7 @@ namespace NzbDrone.Update.Test
 
             Subject.Start(AppType.Service, targetFolder);
 
-            Mocker.GetMock<IProcessProvider>().Verify(c => c.Start(It.Is<ProcessStartInfo>(s =>
-                s.FileName == "c:\\NzbDrone\\NzbDrone.Console.exe" &&
-                s.Arguments == StartupArguments.NO_BROWSER
-                )), Times.Once());
+            Mocker.GetMock<IProcessProvider>().Verify(c => c.Start("c:\\NzbDrone\\NzbDrone.Console.exe", StartupArguments.NO_BROWSER, null, null), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }

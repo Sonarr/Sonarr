@@ -55,9 +55,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Should_be_able_to_start_process()
         {
-            var startInfo = new ProcessStartInfo(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
-
-            var process = Subject.Start(startInfo);
+            var process = Subject.Start(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
 
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
                    .BeTrue("excepted one dummy process to be already running");
@@ -71,7 +69,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Should_be_able_to_execute_process()
         {
-            var process = Subject.ShellExecute(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
+            var process = Subject.Start(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
 
 
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
@@ -95,10 +93,9 @@ namespace NzbDrone.Common.Test
             dummy2.HasExited.Should().BeTrue();
         }
 
-        public Process StartDummyProcess()
+        private Process StartDummyProcess()
         {
-            var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
-            return Subject.Start(startInfo);
+            return Subject.Start(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
         }
 
         [Test]

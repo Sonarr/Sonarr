@@ -44,8 +44,8 @@ namespace NzbDrone.Update.UpdateEngine
 
             _logger.Info("Killing all running processes");
 
-            _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
-            _processProvider.KillAll(ProcessProvider.NzbDroneProcessName);
+            _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+            _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
         }
     }
 }

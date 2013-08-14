@@ -14,22 +14,21 @@ namespace NzbDrone.Common
     {
         ProcessInfo GetCurrentProcess();
         ProcessInfo GetProcessById(int id);
-        Process Start(string path);
-        Process Start(ProcessStartInfo startInfo);
+        void OpenDefaultBrowser(string url);
         void WaitForExit(Process process);
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
         bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
-        Process ShellExecute(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
+        Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
     }
 
     public class ProcessProvider : IProcessProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public const string NzbDroneProcessName = "NzbDrone";
-        public const string NzbDroneConsoleProcessName = "NzbDrone.Console";
+        public const string NZB_DRONE_PROCESS_NAME = "NzbDrone";
+        public const string NZB_DRONE_CONSOLE_PROCESS_NAME = "NzbDrone.Console";
 
         private static List<Process> GetProcessesByName(string name)
         {
@@ -73,12 +72,22 @@ namespace NzbDrone.Common
         }
 
 
-        public Process Start(string path)
+        public void OpenDefaultBrowser(string url)
         {
-            return Start(new ProcessStartInfo(path));
+            Logger.Info("Opening URL [{0}]", url);
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo(url)
+                    {
+                        UseShellExecute = true
+                    }
+            };
+
+            process.Start();
         }
 
-        public Process ShellExecute(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
+        public Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
         {
 
             if (OsInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
@@ -135,19 +144,6 @@ namespace NzbDrone.Common
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
 
-
-            return process;
-        }
-
-        public Process Start(ProcessStartInfo startInfo)
-        {
-            Logger.Info("Starting process. [{0}]", startInfo.FileName);
-
-            var process = new Process
-                              {
-                                  StartInfo = startInfo
-                              };
-            process.Start();
 
             return process;
         }

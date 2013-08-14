@@ -63,7 +63,7 @@ namespace NzbDrone.Host
                 try
                 {
                     _logger.Info("Starting default browser. {0}", _hostController.AppUrl);
-                    _processProvider.Start(_hostController.AppUrl);
+                    _processProvider.OpenDefaultBrowser(_hostController.AppUrl);
                 }
                 catch (Exception e)
                 {

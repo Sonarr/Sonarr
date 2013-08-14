@@ -84,7 +84,7 @@ namespace NzbDrone.SysTray
         {
             try
             {
-                _processProvider.Start(_hostController.AppUrl);
+                _processProvider.OpenDefaultBrowser(_hostController.AppUrl);
             }
             catch (Exception)
             {

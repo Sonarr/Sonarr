@@ -56,14 +56,14 @@ namespace NzbDrone.Integration.Test
 
         public void KillAll()
         {
-            _processProvider.KillAll(ProcessProvider.NzbDroneConsoleProcessName);
-            _processProvider.KillAll(ProcessProvider.NzbDroneProcessName);
+            _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+            _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
         }
 
         private void Start(string outputNzbdroneConsoleExe)
         {
             var args = "-nobrowser -data=\"" + AppDate + "\"";
-            _nzbDroneProcess = _processProvider.ShellExecute(outputNzbdroneConsoleExe, args, OnOutputDataReceived, OnOutputDataReceived);
+            _nzbDroneProcess = _processProvider.Start(outputNzbdroneConsoleExe, args, OnOutputDataReceived, OnOutputDataReceived);
 
         }
 

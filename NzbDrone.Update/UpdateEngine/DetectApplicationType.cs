@@ -26,7 +26,7 @@ namespace NzbDrone.Update.UpdateEngine
                 return AppType.Service;
             }
 
-            if (_processProvider.Exists(ProcessProvider.NzbDroneConsoleProcessName))
+            if (_processProvider.Exists(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME))
             {
                 return AppType.Console;
             }

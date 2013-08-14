@@ -73,7 +73,7 @@ namespace NzbDrone.Update.UpdateEngine
             _logger.Info("Starting {0}", fileName);
             var path = Path.Combine(installationFolder, fileName);
 
-            _processProvider.Start(new ProcessStartInfo(path, StartupArguments.NO_BROWSER));
+            _processProvider.Start(path, StartupArguments.NO_BROWSER);
         }
     }
 }
