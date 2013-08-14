@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
+using System.ServiceProcess;
 using NLog;
 
 namespace NzbDrone.Common.EnvironmentInfo

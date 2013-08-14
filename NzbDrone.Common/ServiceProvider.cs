@@ -15,6 +15,7 @@ namespace NzbDrone.Common
         void Install(string serviceName);
         void UnInstall(string serviceName);
         void Run(ServiceBase service);
+        ServiceController GetService(string serviceName);
         void Stop(string serviceName);
         void Start(string serviceName);
     }
@@ -25,7 +26,7 @@ namespace NzbDrone.Common
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public bool ServiceExist(string name)
+        public virtual bool ServiceExist(string name)
         {
             Logger.Debug("Checking if service {0} exists.", name);
             return
@@ -33,7 +34,7 @@ namespace NzbDrone.Common
                     s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public bool IsServiceRunning(string name)
+        public virtual bool IsServiceRunning(string name)
         {
             Logger.Debug("Checking if '{0}' service is running", name);
 
@@ -47,7 +48,7 @@ namespace NzbDrone.Common
                 service.Status == ServiceControllerStatus.PausePending);
         }
 
-        public void Install(string serviceName)
+        public virtual void Install(string serviceName)
         {
             Logger.Info("Installing service '{0}'", serviceName);
 
@@ -76,7 +77,7 @@ namespace NzbDrone.Common
             Logger.Info("Service Has installed successfully.");
         }
 
-        public void UnInstall(string serviceName)
+        public virtual void UnInstall(string serviceName)
         {
             Logger.Info("Uninstalling {0} service", serviceName);
 
@@ -92,17 +93,17 @@ namespace NzbDrone.Common
             Logger.Info("{0} successfully uninstalled", serviceName);
         }
 
-        public void Run(ServiceBase service)
+        public virtual void Run(ServiceBase service)
         {
             ServiceBase.Run(service);
         }
 
-        public ServiceController GetService(string serviceName)
+        public virtual ServiceController GetService(string serviceName)
         {
             return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public void Stop(string serviceName)
+        public virtual void Stop(string serviceName)
         {
             Logger.Info("Stopping {0} Service...", serviceName);
             var service = GetService(serviceName);
@@ -135,7 +136,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public void Start(string serviceName)
+        public virtual void Start(string serviceName)
         {
             Logger.Info("Starting {0} Service...", serviceName);
             var service = GetService(serviceName);

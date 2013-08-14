@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System.ServiceProcess;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -32,11 +33,6 @@ namespace NzbDrone.Host
 
         public void Route(ApplicationModes applicationModes)
         {
-            if (!_runtimeInfo.IsUserInteractive && !OsInfo.IsLinux &&_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
-            {
-                applicationModes = ApplicationModes.Service;
-            }
-
             _logger.Info("Application mode: {0}", applicationModes);
 
             switch (applicationModes)
@@ -110,6 +106,14 @@ namespace NzbDrone.Host
             if (!OsInfo.IsLinux && _startupArguments.Flags.Contains(StartupArguments.UNINSTALL_SERVICE))
             {
                 return ApplicationModes.UninstallService;
+            }
+
+            if (!_runtimeInfo.IsUserInteractive &&
+                OsInfo.IsWindows &&
+                _serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
+                _serviceProvider.GetService(ServiceProvider.NZBDRONE_SERVICE_NAME).Status == ServiceControllerStatus.StartPending)
+            {
+                return ApplicationModes.Service;
             }
 
             return ApplicationModes.Interactive;
