@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -82,6 +83,13 @@ namespace NzbDrone.Common
 
         public Process ShellExecute(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
         {
+
+            if (OsInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+            {
+                args = path + " " + args;
+                path = "mono";
+            }
+
             var logger = LogManager.GetLogger(new FileInfo(path).Name);
 
             var startInfo = new ProcessStartInfo(path, args)
