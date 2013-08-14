@@ -32,7 +32,7 @@ namespace NzbDrone.Host
 
         public void Route(ApplicationModes applicationModes)
         {
-            if (!_runtimeInfo.IsUserInteractive && !OsInfo.IsLinux)
+            if (!_runtimeInfo.IsUserInteractive && !OsInfo.IsLinux &&_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
                 applicationModes = ApplicationModes.Service;
             }

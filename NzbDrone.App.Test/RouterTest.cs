@@ -62,7 +62,7 @@ namespace NzbDrone.App.Test
         [TestCase(ApplicationModes.InstallService)]
         [TestCase(ApplicationModes.UninstallService)]
         [TestCase(ApplicationModes.Help)]
-        public void Route_should_call_service_start_when_run_in_service_more(ApplicationModes applicationModes)
+        public void Route_should_call_service_start_when_run_in_service_mode(ApplicationModes applicationModes)
         {
             var envMock = Mocker.GetMock<IRuntimeInfo>();
             var serviceProvider = Mocker.GetMock<IServiceProvider>();
@@ -70,6 +70,7 @@ namespace NzbDrone.App.Test
             envMock.SetupGet(c => c.IsUserInteractive).Returns(false);
 
             serviceProvider.Setup(c => c.Run(It.IsAny<ServiceBase>()));
+            serviceProvider.Setup(c => c.ServiceExist(It.IsAny<string>())).Returns(true);
 
             Subject.Route(applicationModes);
 
