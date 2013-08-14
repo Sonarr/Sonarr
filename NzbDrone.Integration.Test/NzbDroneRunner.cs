@@ -38,7 +38,6 @@ namespace NzbDrone.Integration.Test
 
             while (true)
             {
-
                 _nzbDroneProcess.Refresh();
 
                 if (_nzbDroneProcess.HasExited)
@@ -70,6 +69,8 @@ namespace NzbDrone.Integration.Test
 
         private void OnOutputDataReceived(string data)
         {
+            Console.WriteLine(data);
+
             if (data.Contains("Press enter to exit"))
             {
                 _nzbDroneProcess.StandardInput.WriteLine(" ");
