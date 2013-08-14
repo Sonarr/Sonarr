@@ -25,8 +25,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
                 if (sizeElement == null)
                 {
-                    var message = String.Format("Unable to parse size from: {0} [{1}]", currentResult.Title, currentResult.Indexer);
-                    throw new SizeParsingException(message);
+                    throw new SizeParsingException("Unable to parse size from: {0} [{1}]", currentResult.Title, currentResult.Indexer);
                 }
 
                 currentResult.Size = Convert.ToInt64(sizeElement.Attribute("value").Value);

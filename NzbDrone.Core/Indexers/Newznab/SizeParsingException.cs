@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class SizeParsingException : Exception
+    public class SizeParsingException : NzbDroneException
     {
-        public SizeParsingException(string message) : base(message)
+        public SizeParsingException(string message, params object[] args) : base(message, args)
         {
         }
     }

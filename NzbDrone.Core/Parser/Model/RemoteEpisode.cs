@@ -19,5 +19,10 @@ namespace NzbDrone.Core.Parser.Model
         {
             return Episodes.Any(e => e.AirDateUtc >= DateTime.Today.AddDays(-14));
         }
+
+        public override string ToString()
+        {
+            return Report.Title;
+        }
     }
 }

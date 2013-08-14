@@ -18,7 +18,7 @@ define(
 
                     switch (this.cellValue.get('eventType')) {
                         case 'grabbed':
-                            icon = 'icon-cloud-download';
+                            icon = 'icon-nd-downloading';
                             toolTip = 'Episode grabbed from {0} and sent to download client'.format(this.cellValue.get('data').indexer);
                             break;
                         case 'seriesFolderImported':
@@ -26,7 +26,7 @@ define(
                             toolTip = 'Existing episode file added to library';
                             break;
                         case 'downloadFolderImported':
-                            icon = 'icon-download-alt';
+                            icon = 'icon-nd-imported';
                             toolTip = 'Episode downloaded successfully and picked up from download client';
                             break;
                         default :

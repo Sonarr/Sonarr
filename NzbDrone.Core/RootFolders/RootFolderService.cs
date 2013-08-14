@@ -73,8 +73,8 @@ namespace NzbDrone.Core.RootFolders
             if (!_diskProvider.FolderExists(rootFolder.Path))
                 throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
 
-            if (All().Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
-                throw new InvalidOperationException("Recent directory already exist.");
+            if (all.Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
+                throw new InvalidOperationException("Recent directory already exists.");
 
             if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder) &&
                 DiskProvider.PathEquals(_configService.DownloadedEpisodesFolder, rootFolder.Path))
