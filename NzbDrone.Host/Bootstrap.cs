@@ -48,9 +48,6 @@ namespace NzbDrone.Host
 
                 var container = MainAppContainerBuilder.BuildContainer(args);
 
-                throw new IndexOutOfRangeException();
-
-
                 DbFactory.RegisterDatabase(container);
                 container.Resolve<Router>().Route();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -91,6 +90,7 @@ namespace NzbDrone.Common
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
+                RedirectStandardInput = true
             };
 
 
@@ -125,8 +125,11 @@ namespace NzbDrone.Common
                 }
             };
 
+            process.Start();
+
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
+
 
             return process;
         }
@@ -204,13 +207,15 @@ namespace NzbDrone.Common
 
         private void Kill(int processId)
         {
-            if (processId == 0 || Process.GetProcesses().All(p => p.Id != processId))
+            var process = Process.GetProcesses().FirstOrDefault(p => p.Id == processId);
+
+            if (process == null)
             {
                 Logger.Warn("Cannot find process with id: {0}", processId);
                 return;
             }
 
-            var process = Process.GetProcessById(processId);
+            process.Refresh();
 
             if (process.HasExited)
             {

@@ -25,109 +25,21 @@ namespace NzbDrone.Integration.Test
         protected ReleaseClient Releases;
         protected IndexerClient Indexers;
 
+        private NzbDroneRunner _runner;
+
         [SetUp]
         public void SmokeTestSetup()
         {
             new StartupArguments();
 
-            KillNzbDrone();
+            _runner = new NzbDroneRunner();
+            _runner.KillAll();
 
             InitRestClients();
 
-            PackageStart();
+            _runner.Start();
         }
 
-        private static void KillNzbDrone()
-        {
-            foreach (var p in Process.GetProcessesByName("NzbDrone.Console"))
-            {
-                try
-                {
-                    p.Kill();
-                }
-                catch (Win32Exception)
-                {
-                }
-            }
-        }
-
-        private string AppDate;
-
-        private void PackageStart()
-        {
-            AppDate = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
-
-            if (BuildInfo.IsDebug)
-            {
-                Start("..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
-            }
-            else
-            {
-                Start("bin\\NzbDrone.Console.exe");
-            }
-
-            while (RestClient.Get(new RestRequest("system/status")).ResponseStatus != ResponseStatus.Completed)
-            {
-
-                Thread.Sleep(1000);
-            }
-        }
-
-        private Process Start(string path)
-        {
-
-            var args = "-nobrowser -data=\"" + AppDate + "\"";
-
-            var startInfo = new ProcessStartInfo(path, args)
-            {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                RedirectStandardInput = true
-            };
-
-            Console.WriteLine("Starting {0} {1}", path, args);
-
-            var process = new Process
-            {
-                StartInfo = startInfo
-            };
-
-            process.OutputDataReceived += (sender, eventArgs) =>
-            {
-                if (string.IsNullOrWhiteSpace(eventArgs.Data)) return;
-
-                if (eventArgs.Data.Contains("Press enter to exit"))
-                {
-                    process.StandardInput.WriteLine(" ");
-                }
-
-                Console.WriteLine(eventArgs.Data);
-            };
-
-            process.ErrorDataReceived += (sender, eventArgs) =>
-            {
-                if (string.IsNullOrWhiteSpace(eventArgs.Data)) return;
-
-                if (eventArgs.Data.Contains("Press enter to exit"))
-                {
-                    process.StandardInput.WriteLine(" ");
-                }
-
-                Console.WriteLine(eventArgs.Data);
-            };
-
-
-            process.Start();
-
-            process.BeginErrorReadLine();
-            process.BeginOutputReadLine();
-
-            process.Exited += (sender, eventArgs) => Assert.Fail("Process exited");
-
-            return process;
-        }
 
         private void InitRestClients()
         {
@@ -142,7 +54,7 @@ namespace NzbDrone.Integration.Test
         [TearDown]
         public void SmokeTestTearDown()
         {
-            KillNzbDrone();
+            _runner.KillAll();
         }
     }
 
