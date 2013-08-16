@@ -1,0 +1,14 @@
+Package: nzbdrone
+Standards-Version: 2.0.0.226
+Architecture: all
+Maintainer: Keivan Beigi <kay.one@gmail.com>
+Depends: mono-runtime (>= 2.10.1)
+Section: web
+Priority: optional
+
+Homepage: http://www.nzbdrone.com
+Vcs-Git: git@github.com:NzbDrone/NzbDrone.git
+Vcs-Browser: https://github.com/NzbDrone/NzbDrone
+
+Description: NZBDrone is a PVR for newsgroup users. 
+It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
