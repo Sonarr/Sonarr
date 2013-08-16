@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using TinyIoC;
 
@@ -14,8 +15,10 @@ namespace NzbDrone.Common.Composition
 
         public IContainer Container { get; private set; }
 
-        protected ContainerBuilderBase(params string[] assemblies)
+        protected ContainerBuilderBase(IStartupArguments args, params string[] assemblies)
         {
+
+
             _loadedTypes = new List<Type>();
 
             foreach (var assembly in assemblies)
@@ -25,6 +28,7 @@ namespace NzbDrone.Common.Composition
 
             Container = new Container(new TinyIoCContainer(), _loadedTypes);
             AutoRegisterInterfaces();
+            Container.Register(args);
         }
 
         private void AutoRegisterInterfaces()

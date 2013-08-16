@@ -17,9 +17,8 @@ namespace NzbDrone.Host
         }
 
         private MainAppContainerBuilder(StartupArguments args)
-            : base("NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
+            : base(args, "NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
         {
-            Container.Register<IStartupArguments>(args);
 
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 

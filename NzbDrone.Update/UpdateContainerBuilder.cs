@@ -1,18 +1,19 @@
 ﻿using NzbDrone.Common.Composition;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Update
 {
     public class UpdateContainerBuilder : ContainerBuilderBase
     {
-        private UpdateContainerBuilder()
-            : base("NzbDrone.Update", "NzbDrone.Common")
+        private UpdateContainerBuilder(IStartupArguments startupArguments)
+            : base(startupArguments, "NzbDrone.Update", "NzbDrone.Common")
         {
 
         }
 
-        public static IContainer Build()
+        public static IContainer Build(IStartupArguments startupArguments)
         {
-            return new UpdateContainerBuilder().Container;
+            return new UpdateContainerBuilder(startupArguments).Container;
         }
     }
 }

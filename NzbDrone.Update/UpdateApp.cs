@@ -29,13 +29,13 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
-                
+
                 IgnoreCertErrorPolicy.Register();
 
                 GlobalExceptionHandlers.Register();
 
                 new LogglyTarget().Register(LogLevel.Trace);
-                _container = UpdateContainerBuilder.Build();
+                _container = UpdateContainerBuilder.Build(new StartupArguments(args));
 
                 logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
