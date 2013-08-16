@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Indexers
                 {
                     _logger.Trace("Downloading Feed " + url);
                     var stream = _httpProvider.DownloadStream(url);
-                    result.AddRange(indexer.Parser.Process(stream));
+                    result.AddRange(indexer.Parser.Process(stream, url));
                 }
                 catch (WebException webException)
                 {

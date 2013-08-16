@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IParseFeed
     {
-        IEnumerable<ReportInfo> Process(Stream source);
+        IEnumerable<ReportInfo> Process(Stream source, string url);
     }
 
     public class BasicRssParser : IParseFeed
@@ -24,10 +24,10 @@ namespace NzbDrone.Core.Indexers
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public IEnumerable<ReportInfo> Process(Stream source)
+        public IEnumerable<ReportInfo> Process(Stream source, string url)
         {
-            var xdoc = XDocument.Load(source);
-            var items = xdoc.Descendants("item");
+            var document = XDocument.Load(source);
+            var items = document.Descendants("item");
 
             var result = new List<ReportInfo>();
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Indexers
                 catch (Exception itemEx)
                 {
                     itemEx.Data.Add("Item", item.Title());
-                    _logger.ErrorException("An error occurred while processing feed item", itemEx);
+                    _logger.ErrorException("An error occurred while processing feed item from " + url, itemEx);
                 }
             }
 
@@ -155,8 +155,8 @@ namespace NzbDrone.Core.Indexers
                     return ConvertToBytes(Convert.ToDouble(value), 2);
                 }
 
-            if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) ||
-                    unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
+                if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) ||
+                        unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
                 {
                     return ConvertToBytes(Convert.ToDouble(value), 3);
                 }
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Indexers
         private static long ConvertToBytes(double value, int power)
         {
             var multiplier = Math.Pow(1024, power);
-            var result = value*multiplier;
+            var result = value * multiplier;
 
             return Convert.ToInt64(result);
         }
