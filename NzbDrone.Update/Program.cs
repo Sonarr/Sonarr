@@ -10,7 +10,7 @@ using NzbDrone.Update.UpdateEngine;
 
 namespace NzbDrone.Update
 {
-    public class Program
+    public class UpdateApp
     {
         private readonly IInstallUpdateService _installUpdateService;
         private readonly IProcessProvider _processProvider;
@@ -18,7 +18,7 @@ namespace NzbDrone.Update
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public Program(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
+        public UpdateApp(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
             _installUpdateService = installUpdateService;
             _processProvider = processProvider;
@@ -38,7 +38,7 @@ namespace NzbDrone.Update
                 _container = UpdateContainerBuilder.Build();
 
                 logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
-                _container.Resolve<Program>().Start(args);
+                _container.Resolve<UpdateApp>().Start(args);
             }
             catch (Exception e)
             {

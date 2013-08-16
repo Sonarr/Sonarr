@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Host;
 using NzbDrone.SysTray;
 
 namespace NzbDrone
@@ -11,9 +12,12 @@ namespace NzbDrone
         {
             try
             {
-                var container = Host.Bootstrap.Start(new StartupArguments(args));
+                var container = Bootstrap.Start(new StartupArguments(args), new MessageBoxUserAlert());
                 container.Register<ISystemTrayApp, SystemTrayApp>();
                 container.Resolve<ISystemTrayApp>().Start();
+            }
+            catch (TerminateApplicationException)
+            {
             }
             catch (Exception e)
             {

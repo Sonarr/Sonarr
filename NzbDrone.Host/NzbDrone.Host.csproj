@@ -121,6 +121,8 @@
     </Compile>
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
+    <Compile Include="IUserAlert.cs" />
+    <Compile Include="PlatformValidation.cs" />
     <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationModes.cs" />
     <Compile Include="Bootstrap.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PriorityMonitor.cs" />
     <Compile Include="Router.cs" />
+    <Compile Include="TerminateApplicationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

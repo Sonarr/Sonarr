@@ -52,7 +52,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppType.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="UpdateApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateContainerBuilder.cs" />
     <Compile Include="UpdateEngine\BackupAndRestore.cs" />

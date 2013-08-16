@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Host;
 
 namespace NzbDrone.Console
 {
@@ -9,13 +10,15 @@ namespace NzbDrone.Console
         {
             try
             {
-                Host.Bootstrap.Start(new StartupArguments(args));
+                Bootstrap.Start(new StartupArguments(args), new ConsoleAlerts());
+            }
+            catch (TerminateApplicationException)            
+            {
             }
             catch (Exception e)
             {
                 System.Console.WriteLine(e.ToString());
             }
-
             System.Console.WriteLine("Press enter to exit...");
             System.Console.ReadLine();
         }

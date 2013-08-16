@@ -9,7 +9,7 @@ using NzbDrone.Update.UpdateEngine;
 namespace NzbDrone.Update.Test
 {
     [TestFixture]
-    public class ProgramFixture : TestBase<Program>
+    public class ProgramFixture : TestBase<UpdateApp>
     {
 
 
