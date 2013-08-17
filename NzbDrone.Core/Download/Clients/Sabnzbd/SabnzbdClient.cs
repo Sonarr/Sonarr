@@ -62,39 +62,28 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public virtual bool DownloadNzb(RemoteEpisode remoteEpisode)
+        public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Report.NzbUrl;
             var title = remoteEpisode.Report.Title;
 
-            try
-            {
-                string cat = _configService.SabTvCategory;
-                int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
+            string cat = _configService.SabTvCategory;
+            int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
 
-                string name = url.Replace("&", "%26");
-                string nzbName = HttpUtility.UrlEncode(title);
+            string name = url.Replace("&", "%26");
+            string nzbName = HttpUtility.UrlEncode(title);
 
-                string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
-                    name, priority, cat, nzbName);
+            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
+                name, priority, cat, nzbName);
 
-                string request = GetSabRequest(action);
-                _logger.Info("Adding report [{0}] to the queue.", title);
+            string request = GetSabRequest(action);
+            _logger.Info("Adding report [{0}] to the queue.", title);
 
-                var response = _httpProvider.DownloadString(request);
+            var response = _httpProvider.DownloadString(request);
 
-                _logger.Debug("Queue Response: [{0}]", response);
+            _logger.Debug("Queue Response: [{0}]", response);
 
-                CheckForError(response);
-                return true;
-            }
-
-            catch (WebException ex)
-            {
-                _logger.Error("Error communicating with SAB: " + ex.Message);
-            }
-
-            return false;
+            CheckForError(response);
         }
 
         public bool IsConfigured

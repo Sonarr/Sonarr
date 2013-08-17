@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -40,15 +41,14 @@ namespace NzbDrone.Core.Test.Download
         private void WithSuccessfulAdd()
         {
             Mocker.GetMock<IDownloadClient>()
-                .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()))
-                .Returns(true);
+                  .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()));
         }
 
         private void WithFailedAdd()
         {
             Mocker.GetMock<IDownloadClient>()
                 .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()))
-                .Returns(false);
+                .Throws(new WebException());
         }
 
         [Test]
@@ -77,7 +77,8 @@ namespace NzbDrone.Core.Test.Download
         {
             WithFailedAdd();
 
-            Subject.DownloadReport(_parseResult);
+            Assert.Throws<WebException>(() => Subject.DownloadReport(_parseResult));
+
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
         }
 
@@ -90,7 +91,7 @@ namespace NzbDrone.Core.Test.Download
 
             Subject.DownloadReport(_parseResult);
 
-            Mocker.GetMock<IDownloadClient>().Verify(c => c.DownloadNzb(It.IsAny<RemoteEpisode>()),Times.Never());
+            Mocker.GetMock<IDownloadClient>().Verify(c => c.DownloadNzb(It.IsAny<RemoteEpisode>()), Times.Never());
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
 
             ExceptionVerification.ExpectedWarns(1);

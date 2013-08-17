@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadClient
     {
-        bool DownloadNzb(RemoteEpisode remoteEpisode);
+        void DownloadNzb(RemoteEpisode remoteEpisode);
         bool IsConfigured { get; }
         IEnumerable<QueueItem> GetQueue();
     }

@@ -32,35 +32,20 @@ namespace NzbDrone.Core.Download.Clients
             throw new NotImplementedException();
         }
 
-        public bool DownloadNzb(RemoteEpisode remoteEpisode)
+        public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Report.NzbUrl;
             var title = remoteEpisode.Report.Title;
 
-            try
-            {
-                title = FileNameBuilder.CleanFilename(title);
+            title = FileNameBuilder.CleanFilename(title);
 
-                var filename = Path.Combine(_configService.BlackholeFolder, title + ".nzb");
+            var filename = Path.Combine(_configService.BlackholeFolder, title + ".nzb");
 
-                if (_diskProvider.FileExists(filename))
-                {
-                    //Return true so a lesser quality is not returned.
-                    _logger.Info("NZB already exists on disk: {0}", filename);
-                    return true;
-                }
 
-                _logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
-                _httpProvider.DownloadFile(url, filename);
+            _logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
+            _httpProvider.DownloadFile(url, filename);
 
-                _logger.Trace("NZB Download succeeded, saved to: {0}", filename);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.WarnException("Failed to download NZB: " + url, ex);
-                return false;
-            }
+            _logger.Trace("NZB Download succeeded, saved to: {0}", filename);
         }
 
         public bool IsConfigured

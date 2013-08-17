@@ -1,6 +1,5 @@
 using System.IO;
 using System.Net;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -49,29 +48,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void DownloadNzb_should_download_file_if_it_doesnt_exist()
         {
-            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode);
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
-        }
-
-        [Test]
-        public void DownloadNzb_not_download_file_if_it_doesn_exist()
-        {
-            WithExistingFile();
-
-            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
-
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public void should_return_false_on_failed_download()
-        {
-            WithFailedDownload();
-
-            Subject.DownloadNzb(_remoteEpisode).Should().BeFalse();
-
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -81,7 +60,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             var expectedFilename = Path.Combine(_blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
             _remoteEpisode.Report.Title = illegalTitle;
 
-            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode);
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }

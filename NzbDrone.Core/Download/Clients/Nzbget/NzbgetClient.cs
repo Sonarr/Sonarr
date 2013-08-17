@@ -22,39 +22,28 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public virtual bool DownloadNzb(RemoteEpisode remoteEpisode)
+        public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Report.NzbUrl;
             var title = remoteEpisode.Report.Title;
 
-            try
+            string cat = _configService.NzbgetTvCategory;
+            int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetOlderTvPriority;
+
+            var command = new JsonRequest
             {
-                string cat = _configService.NzbgetTvCategory;
-                int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetOlderTvPriority;
+                Method = "appendurl",
+                Params = new object[] { title, cat, priority, false, url }
+            };
 
-                var command = new JsonRequest
-                {
-                    Method = "appendurl",
-                    Params = new object[] { title, cat, priority, false, url }
-                };
+            _logger.Info("Adding report [{0}] to the queue.", title);
+            var response = PostCommand(JsonConvert.SerializeObject(command));
 
-                _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = PostCommand(JsonConvert.SerializeObject(command));
+            CheckForError(response);
 
-                CheckForError(response);
+            var success = JsonConvert.DeserializeObject<EnqueueResponse>(response).Result;
+            _logger.Debug("Queue Response: [{0}]", success);
 
-                var success = JsonConvert.DeserializeObject<EnqueueResponse>(response).Result;
-                _logger.Debug("Queue Response: [{0}]", success);
-
-                return true;
-            }
-
-            catch (WebException ex)
-            {
-                _logger.Error("Error communicating with Nzbget: " + ex.Message);
-            }
-
-            return false;
         }
 
         public bool IsConfigured

@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        bool DownloadReport(RemoteEpisode remoteEpisode);
+        void DownloadReport(RemoteEpisode remoteEpisode);
     }
 
     public class DownloadService : IDownloadService
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public bool DownloadReport(RemoteEpisode remoteEpisode)
+        public void DownloadReport(RemoteEpisode remoteEpisode)
         {
             var downloadTitle = remoteEpisode.Report.Title;
             var downloadClient = _downloadClientProvider.GetDownloadClient();
@@ -32,18 +32,13 @@ namespace NzbDrone.Core.Download
             if (!downloadClient.IsConfigured)
             {
                 _logger.Warn("Download client {0} isn't configured yet.", downloadClient.GetType().Name);
-                return false;
+                return;
             }
 
-            bool success = downloadClient.DownloadNzb(remoteEpisode);
+            downloadClient.DownloadNzb(remoteEpisode);
 
-            if (success)
-            {
-                _logger.Info("Report sent to download client. {0}", downloadTitle);
-                _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
-            }
-
-            return success;
+            _logger.Info("Report sent to download client. {0}", downloadTitle);
+            _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
         }
     }
 }

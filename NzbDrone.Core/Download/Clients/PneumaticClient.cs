@@ -25,47 +25,30 @@ namespace NzbDrone.Core.Download.Clients
             _diskProvider = diskProvider;
         }
 
-        public virtual bool DownloadNzb(RemoteEpisode remoteEpisode)
+        public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Report.NzbUrl;
             var title = remoteEpisode.Report.Title;
 
-            try
+            if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
             {
-                //Todo: Allow full season releases
-                if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
-                {
-                    logger.Info("Skipping Full Season Release: {0}", title);
-                    return false;
-                }
-
-                title = FileNameBuilder.CleanFilename(title);
-
-                //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
-                var filename = Path.Combine(_configService.PneumaticFolder, title + ".nzb");
-
-                if (_diskProvider.FileExists(filename))
-                {
-                    //Return true so a lesser quality is not returned.
-                    logger.Info("NZB already exists on disk: {0}", filename);
-                    return true;
-                }
-
-                logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
-                _httpProvider.DownloadFile(url, filename);
-
-                logger.Trace("NZB Download succeeded, saved to: {0}", filename);
-
-                var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
-                _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
-
-                return true;
+                throw new NotImplementedException("Full season Pneumatic releases are not supported.");
             }
-            catch (Exception ex)
-            {
-                logger.WarnException("Failed to download NZB: " + url, ex);
-                return false;
-            }
+
+            title = FileNameBuilder.CleanFilename(title);
+
+            //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
+            var filename = Path.Combine(_configService.PneumaticFolder, title + ".nzb");
+
+ 
+
+            logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
+            _httpProvider.DownloadFile(url, filename);
+
+            logger.Trace("NZB Download succeeded, saved to: {0}", filename);
+
+            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
+            _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
         }
 
         public bool IsConfigured

@@ -1,6 +1,6 @@
+using System;
 using System.IO;
 using System.Net;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -55,38 +55,27 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void should_download_file_if_it_doesnt_exist()
         {
-            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode);
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
         }
 
-        [Test]
-        public void should_not_download_file_if_it_doesn_exist()
-        {
-            WithExistingFile();
-
-            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
-
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-        }
 
         [Test]
-        public void should_return_false_on_failed_download()
+        public void should_throw_on_failed_download()
         {
             WithFailedDownload();
 
-            Subject.DownloadNzb(_remoteEpisode).Should().BeFalse();
-
-            ExceptionVerification.ExpectedWarns(1);
+            Assert.Throws<WebException>(() => Subject.DownloadNzb(_remoteEpisode));
         }
 
         [Test]
-        public void should_skip_if_full_season_download()
+        public void should_throw_if_full_season_download()
         {
             _remoteEpisode.Report.Title = "30 Rock - Season 1";
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
 
-            Mocker.Resolve<PneumaticClient>().DownloadNzb(_remoteEpisode).Should().BeFalse();
+            Assert.Throws<NotImplementedException>(() => Subject.DownloadNzb(_remoteEpisode));
         }
 
         [Test]
@@ -96,7 +85,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             var expectedFilename = Path.Combine(_pneumaticFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
             _remoteEpisode.Report.Title = illegalTitle;
 
-            Subject.DownloadNzb(_remoteEpisode).Should().BeTrue();
+            Subject.DownloadNzb(_remoteEpisode);
 
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }
