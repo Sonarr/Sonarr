@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -20,21 +21,18 @@ namespace NzbDrone.Core.MediaFiles
         IHandle<SeriesUpdatedEvent>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtensions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm" };
+        private static readonly HashSet<string> MediaExtensions = new HashSet<string> { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm", ".iso", "m2ts" };
         private readonly IDiskProvider _diskProvider;
-        private readonly ISeriesService _seriesService;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IMessageAggregator _messageAggregator;
 
         public DiskScanService(IDiskProvider diskProvider,
-                                ISeriesService seriesService,
                                 IMakeImportDecision importDecisionMaker,
                                 IImportApprovedEpisodes importApprovedEpisodes,
                                 IMessageAggregator messageAggregator)
         {
             _diskProvider = diskProvider;
-            _seriesService = seriesService;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
             _messageAggregator = messageAggregator;
