@@ -1,6 +1,6 @@
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
-
+$testPackageFolder = '.\_tests\'
 
 Function Build()
 {
@@ -56,10 +56,7 @@ Function PackageTests()
 {
     Write-Host Packaging Tests
 
-    $testPackageFolder = '.\_tests\'
-
-    .\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder 
-
+  
     if(Test-Path $testPackageFolder)
     {
         Remove-Item -Recurse -Force $testPackageFolder -ErrorAction Continue
@@ -70,6 +67,7 @@ Function PackageTests()
         Copy-Item -Recurse ($_.FullName + "\*")  $testPackageFolder -ErrorAction Ignore
     }
 
+    .\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder 
 
     CleanFolder $testPackageFolder
 
