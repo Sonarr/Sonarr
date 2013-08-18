@@ -10,14 +10,13 @@ define(
         'Cells/SeriesTitleCell',
         'Cells/TemplatedCell',
         'Cells/QualityProfileCell',
+        'Cells/EpisodeProgressCell',
         'Shared/Grid/DateHeaderCell',
         'Series/Index/Table/SeriesStatusCell',
-        'Series/Index/Table/SeriesStatusHeaderCell',
         'Series/Index/Table/Row',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
-        'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView'
+        'Shared/Toolbar/ToolbarLayout'
     ], function (Marionette,
                  PosterCollectionView,
                  ListCollectionView,
@@ -27,14 +26,13 @@ define(
                  SeriesTitleCell,
                  TemplatedCell,
                  QualityProfileCell,
+                 EpisodeProgressCell,
                  DateHeaderCell,
                  SeriesStatusCell,
-                 SeriesStatusHeaderCell,
                  SeriesIndexRow,
                  FooterView,
                  FooterModel,
-                 ToolbarLayout,
-                 LoadingView) {
+                 ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -79,11 +77,9 @@ define(
                         headerCell: DateHeaderCell
                     },
                     {
-                        name    : 'this',
-                        label   : 'Episodes',
-                        sortable: false,
-                        template: 'Series/EpisodeProgressTemplate',
-                        cell    : TemplatedCell,
+                        name     : 'percentOfEpisodes',
+                        label    : 'Episodes',
+                        cell     : EpisodeProgressCell,
                         className: 'episode-progress-cell'
                     },
                     {
