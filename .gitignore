@@ -112,3 +112,4 @@ _output/
 _rawPackage/
 _dotTrace*
 _tests/
+*.Result.xml
