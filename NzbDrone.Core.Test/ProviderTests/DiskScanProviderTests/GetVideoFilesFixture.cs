@@ -21,9 +21,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                         {
                             @"C:\Test\30 Rock1.mkv",
                             @"C:\Test\30 Rock2.avi",
-                            @"C:\Test\30 Rock3.mp4",
-                            @"C:\Test\30 Rock4.wmv",
-                            @"C:\Test\movie.exe"
+                            @"C:\Test\30 Rock3.MP4",
+                            @"C:\Test\30 Rock4.wMv",
+                            @"C:\Test\movie.exe",
+                            @"C:\Test\movie"
                         };
 
             Mocker.GetMock<IDiskProvider>()

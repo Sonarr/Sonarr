@@ -20,22 +20,31 @@ namespace NzbDrone.Core.MediaFiles
         IDiskScanService,
         IHandle<SeriesUpdatedEvent>
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly HashSet<string> MediaExtensions = new HashSet<string> { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm", ".m4v", ".strm", ".iso", "m2ts" };
+        private readonly HashSet<string> _mediaExtensions;
+
+        private const string EXTENSIONS =
+            ".m4v .3gp .nsv .ts .ty .strm .rm .rmvb .m3u .ifo .mov .qt .divx .xvid .bivx .vob .nrg .img" +
+            ".iso .pva .wmv .asf .asx .ogm .m2v .avi .bin .dat .dvr-ms .mpg .mpeg .mp4 .mkv .avc .vp3 " +
+            ".svq3 .nuv .viv .dv .fli .flv .wpl";
+
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IMessageAggregator _messageAggregator;
+        private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
                                 IMakeImportDecision importDecisionMaker,
                                 IImportApprovedEpisodes importApprovedEpisodes,
-                                IMessageAggregator messageAggregator)
+                                IMessageAggregator messageAggregator, Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
             _messageAggregator = messageAggregator;
+            _logger = logger;
+
+            _mediaExtensions = new HashSet<string>(EXTENSIONS.Split(' '));
         }
 
         private void Scan(Series series)
@@ -44,7 +53,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (!_diskProvider.FolderExists(series.Path))
             {
-                Logger.Debug("Series folder doesn't exist: {0}", series.Path);
+                _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 return;
             }
 
@@ -56,14 +65,14 @@ namespace NzbDrone.Core.MediaFiles
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)
         {
-            Logger.Debug("Scanning '{0}' for video files", path);
+            _logger.Debug("Scanning '{0}' for video files", path);
 
             var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
 
-            var mediaFileList = filesOnDisk.Where(c => MediaExtensions.Contains(Path.GetExtension(c).ToLower())).ToList();
+            var mediaFileList = filesOnDisk.Where(c => _mediaExtensions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
-            Logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
+            _logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();
         }
 
