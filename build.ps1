@@ -1,11 +1,6 @@
-param (
-    [switch]$runTests = $false
- )
-
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
-$testSearchPattern = '*.Test\bin\x86\Release'
-$testPackageFolder = '.\_tests\'
+
 
 Function Build()
 {
@@ -61,6 +56,10 @@ Function PackageTests()
 {
     Write-Host Packaging Tests
 
+    $testPackageFolder = '.\_tests\'
+
+    .\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder 
+
     if(Test-Path $testPackageFolder)
     {
         Remove-Item -Recurse -Force $testPackageFolder -ErrorAction Continue
@@ -80,18 +79,6 @@ Function PackageTests()
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 }
 
-Function Nunit()
-{
-    $testFiles
-
-    get-childitem $testPackageFolder -File -Filter *test.dll | foreach ($_) {
-       $testFiles = $testFiles + $_.FullName + " "
-    }
-
-    $nunitExe =  '.\Libraries\nunit\nunit-console-x86.exe ' + $testFiles + ' /process:multiple /noxml'
-    Invoke-Expression  $nunitExe
-    CheckExitCode
-}
 
 Function RunGrunt()
 {
@@ -115,8 +102,3 @@ Function CheckExitCode()
 Build
 RunGrunt
 PackageTests
-
-if($runTests)
-{
-    Nunit
-}
