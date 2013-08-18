@@ -71,7 +71,6 @@ namespace NzbDrone.Common
             return processInfo;
         }
 
-
         public void OpenDefaultBrowser(string url)
         {
             Logger.Info("Opening URL [{0}]", url);
@@ -154,8 +153,6 @@ namespace NzbDrone.Common
             process.WaitForExit();
         }
 
-
-
         public void SetPriority(int processId, ProcessPriorityClass priority)
         {
             var process = Process.GetProcessById(processId);
@@ -177,7 +174,6 @@ namespace NzbDrone.Common
                 Kill(processInfo.Id);
             }
         }
-
 
         private static ProcessInfo ConvertToProcessInfo(Process process)
         {
@@ -203,8 +199,6 @@ namespace NzbDrone.Common
 
             return null;
         }
-
-
 
         private void Kill(int processId)
         {
