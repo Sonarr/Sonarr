@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
@@ -19,10 +18,23 @@ namespace NzbDrone.Core.MetadataSource
         public List<Series> SearchForNewSeries(string title)
         {
             var client = BuildClient("search", "shows");
-            var restRequest = new RestRequest(title.ToSearchTerm());
+            var restRequest = new RestRequest(GetSearchTerm(title));
             var response = client.ExecuteAndValidate<List<Show>>(restRequest);
 
             return response.Select(MapSeries).ToList();
+        }
+
+
+        private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-zA-Z0-9\s-\.]", RegexOptions.Compiled);
+
+        private static string GetSearchTerm(string phrase)
+        {
+            phrase = phrase.RemoveAccent().ToLower();
+            phrase = phrase.Replace("&", "and");
+            phrase = InvalidSearchCharRegex.Replace(phrase, string.Empty);
+            phrase = phrase.CleanSpaces().Replace(" ", "+");
+
+            return phrase;
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId)

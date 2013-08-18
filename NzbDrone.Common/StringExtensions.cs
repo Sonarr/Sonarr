@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -5,42 +8,49 @@ namespace NzbDrone.Common
 {
     public static class StringExtensions
     {
+        public static string NullSafe(this string target)
+        {
+            return ((object)target).NullSafe().ToString();
+        }
+
+        public static object NullSafe(this object target)
+        {
+            if (target != null) return target;
+            return "[NULL]";
+        }
+
+        public static string FirstCharToUpper(this string input)
+        {
+            return input.First().ToString().ToUpper() + String.Join("", input.Skip(1));
+        }
+
         public static string Inject(this string format, params object[] formattingArgs)
         {
             return string.Format(format, formattingArgs);
         }
 
-        private static readonly Regex InvalidCharRegex = new Regex(@"[^a-zA-Z0-9\s-]", RegexOptions.Compiled);
-        private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-zA-Z0-9\s-\.]", RegexOptions.Compiled);
         private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled);
 
-        public static string ToSlug(this string phrase)
+        public static string RemoveAccent(this string text)
         {
-            phrase = phrase.RemoveAccent().ToLower();
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
 
-            phrase = InvalidCharRegex.Replace(phrase, string.Empty);
-            phrase = CollapseSpace.Replace(phrase, " ").Trim();
-            phrase = phrase.Replace(" ", "-");
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
 
-            return phrase;
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
-        public static string ToSearchTerm(this string phrase)
+        public static string CleanSpaces(this string text)
         {
-            phrase = phrase.RemoveAccent().ToLower();
-
-            phrase = phrase.Replace("&", "and");
-            phrase = InvalidSearchCharRegex.Replace(phrase, string.Empty);
-            phrase = CollapseSpace.Replace(phrase, " ").Trim();
-            phrase = phrase.Replace(" ", "+");
-            
-            return phrase;
-        }
-
-        public static string RemoveAccent(this string txt)
-        {
-            var bytes = Encoding.GetEncoding("Cyrillic").GetBytes(txt);
-            return Encoding.ASCII.GetString(bytes);
+            return CollapseSpace.Replace(text, " ").Trim();
         }
     }
 }

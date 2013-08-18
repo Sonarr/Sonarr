@@ -125,7 +125,6 @@
     <Compile Include="Messaging\TestCommandExecutor.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="ServiceFactory.cs" />
-    <Compile Include="StringExtension.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="Contract\ReportBase.cs" />
