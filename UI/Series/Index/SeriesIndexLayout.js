@@ -47,10 +47,9 @@ define(
             columns:
                 [
                     {
-                        name      : 'status',
+                        name      : 'statusWeight',
                         label     : '',
-                        cell      : SeriesStatusCell,
-                        headerCell: SeriesStatusHeaderCell
+                        cell      : SeriesStatusCell
                     },
                     {
                         name     : 'title',
