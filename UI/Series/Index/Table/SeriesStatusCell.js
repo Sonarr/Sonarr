@@ -11,15 +11,19 @@ define(
                 var monitored = this.model.get('monitored');
                 var status = this.model.get('status');
 
-                if (!monitored) {
-                    this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
+                if (status === 'ended') {
+                    this.$el.html('<i class="icon-stop grid-icon" title="Ended"></i>');
+                    this.model.set('statusWeight', 3);
                 }
-                else if (status === 'continuing') {
-                    this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
+
+                else if (!monitored) {
+                    this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
+                    this.model.set('statusWeight', 2);
                 }
 
                 else {
-                    this.$el.html('<i class="icon-stop grid-icon" title="Ended"></i>');
+                    this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
+                    this.model.set('statusWeight', 1);
                 }
 
                 return this;

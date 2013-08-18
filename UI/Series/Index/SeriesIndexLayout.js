@@ -12,6 +12,7 @@ define(
         'Cells/QualityProfileCell',
         'Shared/Grid/DateHeaderCell',
         'Series/Index/Table/SeriesStatusCell',
+        'Series/Index/Table/SeriesStatusHeaderCell',
         'Series/Index/Table/Row',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
@@ -28,6 +29,7 @@ define(
                  QualityProfileCell,
                  DateHeaderCell,
                  SeriesStatusCell,
+                 SeriesStatusHeaderCell,
                  SeriesIndexRow,
                  FooterView,
                  FooterModel,
@@ -45,9 +47,10 @@ define(
             columns:
                 [
                     {
-                        name : 'status',
-                        label: '',
-                        cell : SeriesStatusCell
+                        name      : 'status',
+                        label     : '',
+                        cell      : SeriesStatusCell,
+                        headerCell: SeriesStatusHeaderCell
                     },
                     {
                         name     : 'title',
