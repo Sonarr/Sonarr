@@ -48,7 +48,7 @@ namespace NzbDrone.Test.Common
 
             //can't use because of a bug in mono with 2.6.2,
             //https://bugs.launchpad.net/nunitv2/+bug/1076932
-            //if (TestContext.CurrentContext.Result.State == TestState.Success)
+            if (OsInfo.IsWindows && TestContext.CurrentContext.Result.State == TestState.Success)
             {
                 ExceptionVerification.AssertNoUnexcpectedLogs();
             }

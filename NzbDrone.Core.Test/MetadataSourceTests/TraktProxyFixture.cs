@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MetadataSource;
+using NzbDrone.Core.Rest;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common.Categories;
@@ -43,6 +44,13 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
 
             ValidateSeries(details.Item1);
             ValidateEpisodes(details.Item2);
+        }
+
+
+        [Test]
+        public void getting_details_of_invalid_series()
+        {
+            Assert.Throws<RestException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
         }
 
         private void ValidateSeries(Series series)

@@ -1,26 +1,18 @@
-﻿using System.Net;
-using NLog;
-using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Common.Messaging;
 using RestSharp;
+using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
-    public interface IPushoverService
+    public interface IPushoverProxy
     {
         void SendNotification(string title, string message, string userKey, PushoverPriority priority);
     }
 
-    public class PushoverService : IPushoverService, IExecute<TestPushoverCommand>
+    public class PushoverProxy : IPushoverProxy, IExecute<TestPushoverCommand>
     {
-        private readonly Logger _logger;
-
         private const string TOKEN = "yz9b4U215iR4vrKFRfjNXP24NMNPKJ";
         private const string URL = "https://api.pushover.net/1/messages.json";
-
-        public PushoverService(Logger logger)
-        {
-            _logger = logger;
-        }
 
         public void SendNotification(string title, string message, string userKey, PushoverPriority priority)
         {
@@ -32,12 +24,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             request.AddParameter("message", message);
             request.AddParameter("priority", (int)priority);
 
-            var response = client.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new InvalidResponseException(response.Content);
-            }
+            client.ExecuteAndValidate(request);
         }
 
         public void Execute(TestPushoverCommand message)

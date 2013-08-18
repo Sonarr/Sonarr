@@ -342,6 +342,8 @@
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
+    <Compile Include="Rest\RestSharpExtensions.cs" />
+    <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
@@ -541,6 +543,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Download\Clients\Sabnzbd\Api\" />
+    <Folder Include="Download\Clients\uTorrent\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

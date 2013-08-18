@@ -4,11 +4,11 @@ namespace NzbDrone.Core.Notifications.Pushover
 {
     public class Pushover : NotificationBase<PushoverSettings>
     {
-        private readonly IPushoverService _pushoverService;
+        private readonly IPushoverProxy _pushoverProxy;
 
-        public Pushover(IPushoverService pushoverService)
+        public Pushover(IPushoverProxy pushoverProxy)
         {
-            _pushoverService = pushoverService;
+            _pushoverProxy = pushoverProxy;
         }
 
         public override string Name
@@ -30,14 +30,14 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
             const string title = "Episode Grabbed";
 
-            _pushoverService.SendNotification(title, message, Settings.UserKey, (PushoverPriority)Settings.Priority);
+            _pushoverProxy.SendNotification(title, message, Settings.UserKey, (PushoverPriority)Settings.Priority);
         }
 
         public override void OnDownload(string message, Series series)
         {
             const string title = "Episode Downloaded";
 
-            _pushoverService.SendNotification(title, message, Settings.UserKey, (PushoverPriority)Settings.Priority);
+            _pushoverProxy.SendNotification(title, message, Settings.UserKey, (PushoverPriority)Settings.Priority);
         }
 
         public override void AfterRename(Series series)

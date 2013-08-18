@@ -10,6 +10,7 @@ using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Tv;
 using RestSharp;
 using Episode = NzbDrone.Core.Tv.Episode;
+using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.MetadataSource
 {
@@ -19,23 +20,20 @@ namespace NzbDrone.Core.MetadataSource
         {
             var client = BuildClient("search", "shows");
             var restRequest = new RestRequest(title.ToSearchTerm());
-            var response = client.Execute<List<Show>>(restRequest);
+            var response = client.ExecuteAndValidate<List<Show>>(restRequest);
 
-            CheckForError(response);
-
-            return response.Data.Select(MapSeries).ToList();
+            return response.Select(MapSeries).ToList();
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId)
         {
             var client = BuildClient("show", "summary");
             var restRequest = new RestRequest(tvDbSeriesId.ToString() + "/extended");
-            var response = client.Execute<Show>(restRequest);
+            var response = client.ExecuteAndValidate<Show>(restRequest);
 
-            CheckForError(response);
 
-            var episodes = response.Data.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
-            var series = MapSeries(response.Data);
+            var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
+            var series = MapSeries(response);
 
             return new Tuple<Series, List<Episode>>(series, episodes);
         }
@@ -126,12 +124,6 @@ namespace NzbDrone.Core.MetadataSource
             return match.Captures[0].Value;
         }
 
-        private void CheckForError(IRestResponse response)
-        {
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new TraktCommunicationException(response.ErrorMessage, response.ErrorException);
-            }
-        }
+
     }
 }
