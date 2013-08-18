@@ -74,6 +74,8 @@ Function PackageTests()
     Copy-Item $outputFolder\*.dll  -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb  -Destination $testPackageFolder -Force
 
+    Copy-Item .\*.sh               -Destination $testPackageFolder -Force
+
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 }
 
