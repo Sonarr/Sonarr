@@ -24,6 +24,7 @@ namespace NzbDrone.Api.Indexers
         public String SeriesTitle { get; set; }
         public int[] EpisodeNumbers { get; set; }
         public Boolean Approved { get; set; }
+        public Int32 TvRageId { get; set; }
         public List<string> Rejections { get; set; }
     }
 }
