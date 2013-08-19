@@ -1,6 +1,7 @@
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
 $testPackageFolder = '.\_tests\'
+$testSearchPattern = '*.Test\bin\x86\Release'
 
 Function Build()
 {
@@ -55,7 +56,6 @@ Function AddJsonNet()
 Function PackageTests()
 {
     Write-Host Packaging Tests
-
   
     if(Test-Path $testPackageFolder)
     {
@@ -69,7 +69,7 @@ Function PackageTests()
 
     .\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder 
 
-    CleanFolder $testPackageFolder
+   
 
     Copy-Item $outputFolder\*.dll  -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb  -Destination $testPackageFolder -Force
@@ -77,6 +77,8 @@ Function PackageTests()
     Copy-Item .\*.sh               -Destination $testPackageFolder -Force
 
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
+
+    CleanFolder $testPackageFolder
 }
 
 
