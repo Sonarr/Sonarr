@@ -34,7 +34,7 @@ define(
                    allFilesDownloaded: allDownloaded
                 });
 
-                this.model.on('sync', function () {
+                this.listenTo(this.model, 'sync', function () {
                     this.render();
                 }, this);
             },
