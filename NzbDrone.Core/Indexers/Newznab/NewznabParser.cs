@@ -20,8 +20,9 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             if (currentResult != null)
             {
-                var attributes = item.Elements(NewznabNamespace + "attr");
-                var sizeElement = attributes.SingleOrDefault(e => e.Attribute("name").Value == "size");
+                var attributes = item.Elements(NewznabNamespace + "attr").ToList();
+                var sizeElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("size", StringComparison.CurrentCultureIgnoreCase));
+                var rageIdElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("rageid", StringComparison.CurrentCultureIgnoreCase));
 
                 if (sizeElement == null)
                 {
@@ -29,6 +30,11 @@ namespace NzbDrone.Core.Indexers.Newznab
                 }
 
                 currentResult.Size = Convert.ToInt64(sizeElement.Attribute("value").Value);
+
+                if (rageIdElement != null)
+                {
+                    currentResult.TvRageId = Convert.ToInt32(rageIdElement.Attribute("value").Value);
+                }
             }
 
             return currentResult;

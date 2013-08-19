@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Tv
         List<Series> Search(string title);
         Series FindByTitle(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
+        Series FindByTvRageId(int tvRageId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         Series FindBySlug(string slug);
         List<String> GetSeriesPaths();
@@ -42,6 +43,11 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvdbId(int tvdbId)
         {
             return Query.SingleOrDefault(s => s.TvdbId.Equals(tvdbId));
+        }
+
+        public Series FindByTvRageId(int tvRageId)
+        {
+            return Query.SingleOrDefault(s => s.TvRageId.Equals(tvRageId));
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesType)

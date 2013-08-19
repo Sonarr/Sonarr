@@ -51,7 +51,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {
-                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
+                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvRageId);
                         remoteEpisode.Report = report;
 
                         if (remoteEpisode.Series != null)

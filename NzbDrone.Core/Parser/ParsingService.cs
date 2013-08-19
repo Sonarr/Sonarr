@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Parser
         LocalEpisode GetEpisodes(string filename, Series series);
         LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
-        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo);
+        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId);
     }
 
     public class ParsingService : IParsingService
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Parser
             return _seriesService.FindByTitle(searchTitle);
         }
 
-        public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo)
+        public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
         {
             var remoteEpisode = new RemoteEpisode
                 {
@@ -80,6 +80,12 @@ namespace NzbDrone.Core.Parser
                 };
 
             var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+
+            if (series == null && tvRageId > 0)
+            {
+                series = _seriesService.FindByTvRageId(tvRageId);
+                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
+            }
 
             if (series == null)
             {

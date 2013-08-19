@@ -11,5 +11,6 @@ namespace NzbDrone.Core.Parser.Model
         public String Indexer { get; set; }
         public int Age { get; set; }
         public string ReleaseGroup { get; set; }
+        public int TvRageId { get; set; }
     }
 }

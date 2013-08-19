@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
         Series AddSeries(Series newSeries);
         void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
+        Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
@@ -105,6 +106,11 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvdbId(int tvdbId)
         {
             return _seriesRepository.FindByTvdbId(tvdbId);
+        }
+
+        public Series FindByTvRageId(int tvRageId)
+        {
+            return _seriesRepository.FindByTvRageId(tvRageId);
         }
 
         public Series FindBySlug(string slug)
