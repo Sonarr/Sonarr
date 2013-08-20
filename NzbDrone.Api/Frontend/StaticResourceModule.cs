@@ -30,7 +30,7 @@ namespace NzbDrone.Api.Frontend
             _indexCache = cacheManger.GetCache<string>(typeof(StaticResourceModule));
 
             Get["/{resource*}"] = x => Index();
-            Get["/*"] = x => Index();
+            Get["/"] = x => Index();
 
             if (!RuntimeInfo.IsProduction)
             {
