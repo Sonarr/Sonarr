@@ -116,7 +116,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             spec.SeriesId = series.Id;
             spec.SeriesTvRageId = series.TvRageId;
-            spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId, seasonNumber);
+            spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId);
 
             if (string.IsNullOrWhiteSpace(spec.SceneTitle))
             {

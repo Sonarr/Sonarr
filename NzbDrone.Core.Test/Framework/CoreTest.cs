@@ -7,8 +7,6 @@ namespace NzbDrone.Core.Test.Framework
 {
     public abstract class CoreTest : TestBase
     {
-
-
         protected FileStream OpenRead(params string[] path)
         {
             return File.OpenRead(Path.Combine(path));
@@ -21,7 +19,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected void UseRealHttp()
         {
-            Mocker.SetConstant<IHttpProvider>(new HttpProvider());
+            Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));
         }
 
         protected void UseRealDisk()

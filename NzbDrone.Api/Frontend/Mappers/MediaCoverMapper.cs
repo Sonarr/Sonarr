@@ -1,19 +1,21 @@
 using System.IO;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend.Mappers
 {
-    public class MediaCoverMapper : IMapHttpRequestsToDisk
+    public class MediaCoverMapper : StaticResourceMapperBase
     {
         private readonly IAppFolderInfo _appFolderInfo;
 
-        public MediaCoverMapper(IAppFolderInfo appFolderInfo)
+        public MediaCoverMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+            : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;
         }
 
-        public string Map(string resourceUrl)
+        protected override string Map(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = path.Trim(Path.DirectorySeparatorChar);
@@ -21,7 +23,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             return Path.Combine(_appFolderInfo.GetAppDataPath(), path);
         }
 
-        public bool CanHandle(string resourceUrl)
+        public override bool CanHandle(string resourceUrl)
         {
             return resourceUrl.StartsWith("/MediaCover");
         }

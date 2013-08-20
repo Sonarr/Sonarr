@@ -1,5 +1,4 @@
-﻿using NLog;
-using NzbDrone.Core.Tv;
+﻿using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
@@ -7,7 +6,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
     {
         private readonly IXbmcService _xbmcProvider;
 
-        public Xbmc(IXbmcService xbmcProvider, Logger logger)
+        public Xbmc(IXbmcService xbmcProvider)
         {
             _xbmcProvider = xbmcProvider;
         }

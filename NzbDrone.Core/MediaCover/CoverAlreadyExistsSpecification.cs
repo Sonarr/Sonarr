@@ -33,7 +33,7 @@ namespace NzbDrone.Core.MediaCover
 
             string sizeString;
 
-            if (headers.TryGetValue(HttpProvider.ContentLenghtHeader, out sizeString))
+            if (headers.TryGetValue(HttpProvider.CONTENT_LENGHT_HEADER, out sizeString))
             {
                 int size;
                 int.TryParse(sizeString, out size);

@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.NotificationTests
         {
             _notifications = new List<INotification>();
 
-            _notifications.Add(new Notifications.Xbmc.Xbmc(null, null));
+            _notifications.Add(new Notifications.Xbmc.Xbmc(null));
             _notifications.Add(new PlexClient(null));
             _notifications.Add(new PlexServer(null));
             _notifications.Add(new Email(null));
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             Mocker.SetConstant<INotificationRepository>(Mocker.Resolve<NotificationRepository>());
 
             Mocker.GetMock<IContainer>().Setup(s => s.Resolve(typeof(Notifications.Xbmc.Xbmc)))
-                  .Returns(new Notifications.Xbmc.Xbmc(null, null));
+                  .Returns(new Notifications.Xbmc.Xbmc(null));
 
             Mocker.GetMock<IContainer>().Setup(s => s.Resolve(typeof(PlexClient)))
                   .Returns(new PlexClient(null));

@@ -76,7 +76,9 @@ namespace NzbDrone.Common.Test.EventingTests
 
     public class CommandA : ICommand
     {
+// ReSharper disable UnusedParameter.Local
         public CommandA(int id = 0)
+// ReSharper restore UnusedParameter.Local
         {
 
         }

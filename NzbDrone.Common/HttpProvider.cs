@@ -22,14 +22,15 @@ namespace NzbDrone.Common
 
     public class HttpProvider : IHttpProvider
     {
+        private readonly Logger _logger;
 
-        public const string ContentLenghtHeader = "Content-Length";
+        public const string CONTENT_LENGHT_HEADER = "Content-Length";
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly string _userAgent;
 
-        public HttpProvider()
+        public HttpProvider(Logger logger)
         {
+            _logger = logger;
             _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
         }
 
@@ -53,12 +54,12 @@ namespace NzbDrone.Common
             }
             catch (WebException e)
             {
-                logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
+                _logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
                 throw;
             }
             catch (Exception e)
             {
-                logger.WarnException("Failed to get response from: " + url, e);
+                _logger.WarnException("Failed to get response from: " + url, e);
                 throw;
             }
         }
@@ -101,23 +102,23 @@ namespace NzbDrone.Common
                     fileInfo.Directory.Create();
                 }
 
-                logger.Trace("Downloading [{0}] to [{1}]", url, fileName);
+                _logger.Trace("Downloading [{0}] to [{1}]", url, fileName);
 
                 var stopWatch = Stopwatch.StartNew();
                 var webClient = new WebClient();
                 webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
                 webClient.DownloadFile(url, fileName);
                 stopWatch.Stop();
-                logger.Trace("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
+                _logger.Trace("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }
             catch (WebException e)
             {
-                logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
+                _logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
                 throw;
             }
             catch (Exception e)
             {
-                logger.WarnException("Failed to get response from: " + url, e);
+                _logger.WarnException("Failed to get response from: " + url, e);
                 throw;
             }
         }
@@ -126,7 +127,7 @@ namespace NzbDrone.Common
         {
             address = String.Format("http://{0}/jsonrpc", address);
 
-            logger.Trace("Posting command: {0}, to {1}", command, address);
+            _logger.Trace("Posting command: {0}, to {1}", command, address);
 
             byte[] byteArray = Encoding.ASCII.GetBytes(command);
 

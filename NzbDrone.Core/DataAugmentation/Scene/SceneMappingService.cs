@@ -10,7 +10,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        string GetSceneName(int tvdbId, int seasonNumber = -1);
+        string GetSceneName(int tvdbId);
         Nullable<int> GetTvDbId(string cleanName);
     }
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _logger = logger;
         }
 
-        public string GetSceneName(int tvdbId, int seasonNumber = -1)
+        public string GetSceneName(int tvdbId)
         {
             var mapping = _getSceneNameCache.Find(tvdbId.ToString());
 
