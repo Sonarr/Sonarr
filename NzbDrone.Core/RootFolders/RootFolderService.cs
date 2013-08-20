@@ -73,11 +73,11 @@ namespace NzbDrone.Core.RootFolders
             if (!_diskProvider.FolderExists(rootFolder.Path))
                 throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
 
-            if (all.Exists(r => DiskProvider.PathEquals(r.Path, rootFolder.Path)))
+            if (all.Exists(r => r.Path.PathEquals(rootFolder.Path)))
                 throw new InvalidOperationException("Recent directory already exists.");
 
             if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder) &&
-                DiskProvider.PathEquals(_configService.DownloadedEpisodesFolder, rootFolder.Path))
+                _configService.DownloadedEpisodesFolder.PathEquals(rootFolder.Path))
                 throw new InvalidOperationException("Drone Factory folder cannot be used.");
 
             _rootFolderRepository.Insert(rootFolder);
@@ -109,10 +109,10 @@ namespace NzbDrone.Core.RootFolders
 
             foreach (string seriesFolder in _diskProvider.GetDirectories(path))
             {
-                if (!series.Any(s => s.Path == seriesFolder))
+                if (!series.Any(s => s.Path.PathEquals(seriesFolder)))
                 {
                     var di = new DirectoryInfo(seriesFolder.Normalize());
-                    results.Add(new UnmappedFolder{ Name = di.Name, Path = di.FullName });
+                    results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
                 }
             }
 

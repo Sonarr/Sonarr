@@ -56,6 +56,30 @@ namespace NzbDrone.Common.Test
             result.Should().Be(clean);
         }
 
+        [TestCase(@"C:\", @"C:\")]
+        [TestCase(@"C:\\", @"C:\")]
+        [TestCase(@"c:\", @"C:\")]
+        [TestCase(@"c:\Test", @"C:\Test\\")]
+        [TestCase(@"c:\\\\\Test", @"C:\Test\\")]
+        [TestCase(@"c:\Test\\\\", @"C:\Test\\")]
+        [TestCase(@"c:\Test", @"C:\Test\\")]
+        [TestCase(@"\\Server\pool", @"\\Server\pool")]
+        [TestCase(@"\\Server\pool\", @"\\Server\pool")]
+        [TestCase(@"\\Server\pool", @"\\Server\pool\")]
+        [TestCase(@"\\Server\pool\", @"\\Server\pool\")]
+        [TestCase(@"\\smallcheese\DRIVE_G\TV-C\Simspsons", @"\\smallcheese\DRIVE_G\TV-C\Simspsons")]
+        public void paths_should_be_equal(string first, string second)
+        {
+            first.AsOsAgnostic().PathEquals(second.AsOsAgnostic()).Should().BeTrue();
+        }
+
+        [TestCase(@"C:\Test", @"C:\Test2\")]
+        [TestCase(@"C:\Test\Test", @"C:\TestTest\")]
+        public void paths_should_not_be_equal(string first, string second)
+        {
+            first.AsOsAgnostic().PathEquals(second.AsOsAgnostic()).Should().BeFalse();
+        }
+
         [Test]
         public void normalize_path_exception_empty()
         {

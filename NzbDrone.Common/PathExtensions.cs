@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -34,6 +35,14 @@ namespace NzbDrone.Common
             return info.FullName.TrimEnd('/').Trim('\\', ' ');
         }
 
+
+        public static bool PathEquals(this string firstPath, string secondPath)
+        {
+            Ensure.That(() => firstPath).IsValidPath();
+            Ensure.That(() => secondPath).IsValidPath();
+
+            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
+        }
 
         public static bool ContainsInvalidPathChars(this string text)
         {

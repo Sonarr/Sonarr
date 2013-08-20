@@ -65,7 +65,7 @@ namespace NzbDrone.Core.MediaFiles
                 throw new FileNotFoundException("Episode file path does not exist", episodeFile.Path);
             }
 
-            if (DiskProvider.PathEquals(episodeFile.Path, destinationFilename))
+            if (episodeFile.Path.PathEquals(destinationFilename))
             {
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFile.Path);
             }

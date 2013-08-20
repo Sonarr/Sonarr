@@ -41,12 +41,12 @@ namespace NzbDrone.Common
         string GetPathRoot(string path);
         void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentPath, string childPath);
-        FileAttributes GetFileAttributes(string path);  
+        FileAttributes GetFileAttributes(string path);
     }
 
     public class DiskProvider : IDiskProvider
     {
-       enum TransferAction
+        enum TransferAction
         {
             Copy,
             Move
@@ -260,7 +260,7 @@ namespace NzbDrone.Common
             Ensure.That(() => source).IsValidPath();
             Ensure.That(() => destination).IsValidPath();
 
-            if (PathEquals(source, destination))
+            if (source.PathEquals(destination))
             {
                 Logger.Warn("Source and destination can't be the same {0}", source);
                 return;
@@ -303,7 +303,7 @@ namespace NzbDrone.Common
                     throw new DirectoryNotFoundException(path);
                 }
 
-             return driveInfo.AvailableFreeSpace;
+                return driveInfo.AvailableFreeSpace;
             }
 
             var root = GetPathRoot(path);
@@ -312,7 +312,7 @@ namespace NzbDrone.Common
                 throw new DirectoryNotFoundException(root);
 
             return DriveFreeSpaceEx(root);
-           }
+        }
 
         private static long DriveFreeSpaceEx(string folderName)
         {
@@ -352,13 +352,6 @@ namespace NzbDrone.Common
             File.WriteAllText(filename, contents);
         }
 
-        public static bool PathEquals(string firstPath, string secondPath)
-        {
-            Ensure.That(() => firstPath).IsValidPath();
-            Ensure.That(() => secondPath).IsValidPath();
-
-            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
-        }
 
         public void FileSetLastWriteTimeUtc(string path, DateTime dateTime)
         {
