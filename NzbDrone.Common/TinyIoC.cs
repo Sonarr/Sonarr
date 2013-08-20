@@ -22,7 +22,6 @@
 // depending on platform features. If the platform has an appropriate
 // #DEFINE then these should be set automatically below.
 
-
 #define EXPRESSIONS                         // Platform supports System.Linq.Expressions
 #define COMPILED_EXPRESSIONS                // Platform supports compiling expressions
 #define APPDOMAIN_GETASSEMBLIES             // Platform supports getting all assemblies from the AppDomain object
@@ -71,12 +70,13 @@ namespace TinyIoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
-    using NLog;
 
 #if EXPRESSIONS
     using System.Linq.Expressions;
+    using NLog;
     using System.Threading;
 
 #endif
@@ -279,7 +279,7 @@ namespace TinyIoC
             GC.SuppressFinalize(this);
         }
 
-    #endregion
+        #endregion
     }
 #endif
     #endregion
@@ -708,6 +708,13 @@ namespace TinyIoC
         Fail
     }
 
+    public enum DuplicateImplementationActions
+    {
+        RegisterSingle,
+        RegisterMultiple,
+        Fail
+    }
+
     /// <summary>
     /// Resolution settings
     /// </summary>
@@ -1025,7 +1032,7 @@ namespace TinyIoC
         public void AutoRegister()
         {
 #if APPDOMAIN_GETASSEMBLIES
-            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), true, null);
+            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), DuplicateImplementationActions.RegisterSingle, null);
 #else
             AutoRegisterInternal(new Assembly[] {this.GetType().Assembly()}, true, null);
 #endif
@@ -1042,7 +1049,7 @@ namespace TinyIoC
         public void AutoRegister(Func<Type, bool> registrationPredicate)
         {
 #if APPDOMAIN_GETASSEMBLIES
-            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), true, registrationPredicate);
+            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), DuplicateImplementationActions.RegisterSingle, registrationPredicate);
 #else
             AutoRegisterInternal(new Assembly[] { this.GetType().Assembly()}, true, registrationPredicate);
 #endif
@@ -1051,12 +1058,12 @@ namespace TinyIoC
         /// <summary>
         /// Attempt to automatically register all non-generic classes and interfaces in the current app domain.
         /// </summary>
-        /// <param name="ignoreDuplicateImplementations">Whether to ignore duplicate implementations of an interface/base class. False=throw an exception</param>
+        /// <param name="duplicateAction">What action to take when encountering duplicate implementations of an interface/base class.</param>
         /// <exception cref="TinyIoCAutoRegistrationException"/>
-        public void AutoRegister(bool ignoreDuplicateImplementations)
+        public void AutoRegister(DuplicateImplementationActions duplicateAction)
         {
 #if APPDOMAIN_GETASSEMBLIES
-            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), ignoreDuplicateImplementations, null);
+            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), duplicateAction, null);
 #else
             AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, ignoreDuplicateImplementations, null);
 #endif
@@ -1066,13 +1073,13 @@ namespace TinyIoC
         /// Attempt to automatically register all non-generic classes and interfaces in the current app domain.
         /// Types will only be registered if they pass the supplied registration predicate.
         /// </summary>
-        /// <param name="ignoreDuplicateImplementations">Whether to ignore duplicate implementations of an interface/base class. False=throw an exception</param>
+        /// <param name="duplicateAction">What action to take when encountering duplicate implementations of an interface/base class.</param>
         /// <param name="registrationPredicate">Predicate to determine if a particular type should be registered</param>
         /// <exception cref="TinyIoCAutoRegistrationException"/>
-        public void AutoRegister(bool ignoreDuplicateImplementations, Func<Type, bool> registrationPredicate)
+        public void AutoRegister(DuplicateImplementationActions duplicateAction, Func<Type, bool> registrationPredicate)
         {
 #if APPDOMAIN_GETASSEMBLIES
-            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), ignoreDuplicateImplementations, registrationPredicate);
+            AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), duplicateAction, registrationPredicate);
 #else
             AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, ignoreDuplicateImplementations, registrationPredicate);
 #endif
@@ -1087,7 +1094,7 @@ namespace TinyIoC
         /// <param name="assemblies">Assemblies to process</param>
         public void AutoRegister(IEnumerable<Assembly> assemblies)
         {
-            AutoRegisterInternal(assemblies, true, null);
+            AutoRegisterInternal(assemblies, DuplicateImplementationActions.RegisterSingle, null);
         }
 
         /// <summary>
@@ -1101,18 +1108,18 @@ namespace TinyIoC
         /// <param name="registrationPredicate">Predicate to determine if a particular type should be registered</param>
         public void AutoRegister(IEnumerable<Assembly> assemblies, Func<Type, bool> registrationPredicate)
         {
-            AutoRegisterInternal(assemblies, true, registrationPredicate);
+            AutoRegisterInternal(assemblies, DuplicateImplementationActions.RegisterSingle, registrationPredicate);
         }
 
         /// <summary>
         /// Attempt to automatically register all non-generic classes and interfaces in the specified assemblies
         /// </summary>
         /// <param name="assemblies">Assemblies to process</param>
-        /// <param name="ignoreDuplicateImplementations">Whether to ignore duplicate implementations of an interface/base class. False=throw an exception</param>
+        /// <param name="duplicateAction">What action to take when encountering duplicate implementations of an interface/base class.</param>
         /// <exception cref="TinyIoCAutoRegistrationException"/>
-        public void AutoRegister(IEnumerable<Assembly> assemblies, bool ignoreDuplicateImplementations)
+        public void AutoRegister(IEnumerable<Assembly> assemblies, DuplicateImplementationActions duplicateAction)
         {
-            AutoRegisterInternal(assemblies, ignoreDuplicateImplementations, null);
+            AutoRegisterInternal(assemblies, duplicateAction, null);
         }
 
         /// <summary>
@@ -1120,12 +1127,12 @@ namespace TinyIoC
         /// Types will only be registered if they pass the supplied registration predicate.
         /// </summary>
         /// <param name="assemblies">Assemblies to process</param>
-        /// <param name="ignoreDuplicateImplementations">Whether to ignore duplicate implementations of an interface/base class. False=throw an exception</param>
+        /// <param name="duplicateAction">What action to take when encountering duplicate implementations of an interface/base class.</param>
         /// <param name="registrationPredicate">Predicate to determine if a particular type should be registered</param>
         /// <exception cref="TinyIoCAutoRegistrationException"/>
-        public void AutoRegister(IEnumerable<Assembly> assemblies, bool ignoreDuplicateImplementations, Func<Type, bool> registrationPredicate)
+        public void AutoRegister(IEnumerable<Assembly> assemblies, DuplicateImplementationActions duplicateAction, Func<Type, bool> registrationPredicate)
         {
-            AutoRegisterInternal(assemblies, ignoreDuplicateImplementations, registrationPredicate);
+            AutoRegisterInternal(assemblies, duplicateAction, registrationPredicate);
         }
 
         /// <summary>
@@ -3050,7 +3057,7 @@ namespace TinyIoC
 
         #region Internal Methods
         private readonly object _AutoRegisterLock = new object();
-        private void AutoRegisterInternal(IEnumerable<Assembly> assemblies, bool ignoreDuplicateImplementations, Func<Type, bool> registrationPredicate)
+        private void AutoRegisterInternal(IEnumerable<Assembly> assemblies, DuplicateImplementationActions duplicateAction, Func<Type, bool> registrationPredicate)
         {
             lock (_AutoRegisterLock)
             {
@@ -3083,8 +3090,16 @@ namespace TinyIoC
                                           where localType.IsAssignableFrom(implementationType)
                                           select implementationType;
 
-                    if (!ignoreDuplicateImplementations && implementations.Count() > 1)
-                        throw new TinyIoCAutoRegistrationException(type, implementations);
+                    if (implementations.Count() > 1)
+                    {
+                        if (duplicateAction == DuplicateImplementationActions.Fail)
+                            throw new TinyIoCAutoRegistrationException(type, implementations);
+
+                        if (duplicateAction == DuplicateImplementationActions.RegisterMultiple)
+                        {
+                            RegisterMultiple(type, implementations);
+                        }
+                    }
 
                     var firstImplementation = implementations.FirstOrDefault();
                     if (firstImplementation != null)
@@ -3815,6 +3830,7 @@ namespace TinyIoC
 
         #endregion
     }
+
 }
 
 // reverse shim for WinRT SR changes...

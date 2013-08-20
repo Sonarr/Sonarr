@@ -44,18 +44,6 @@ namespace NzbDrone.Api
             return _tinyIoCContainer;
         }
 
-        protected override NancyInternalConfiguration InternalConfiguration
-        {
-            get
-            {
-                var internalConfig = NancyInternalConfiguration.Default;
-
-                internalConfig.StatusCodeHandlers.Add(typeof(ErrorHandler));
-                internalConfig.Serializers.Add(typeof(NancyJsonSerializer));
-
-                return internalConfig;
-            }
-        }
 
         protected override DiagnosticsConfiguration DiagnosticsConfiguration
         {
@@ -75,11 +63,6 @@ namespace NzbDrone.Api
             {
                 return null;
             }
-        }
-
-        public void Shutdown()
-        {
-            ApplicationContainer.Resolve<IMessageAggregator>().PublishEvent(new ApplicationShutdownRequested());
         }
     }
 }

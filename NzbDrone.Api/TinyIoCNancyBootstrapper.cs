@@ -9,25 +9,50 @@ using TinyIoC;
 
 namespace NzbDrone.Api
 {
-    public abstract class TinyIoCNancyBootstrapper : NancyBootstrapperWithRequestContainerBase<TinyIoCContainer>
+    public class TinyIoCNancyBootstrapper : NancyBootstrapperWithRequestContainerBase<TinyIoCContainer>
     {
+        // <summary>
+        /// Default assemblies that are ignored for autoregister
+        /// </summary>
+        private static readonly IEnumerable<Func<Assembly, bool>> DefaultAutoRegisterIgnoredAssemblies = new Func<Assembly, bool>[]
+            {
+                asm => !asm.FullName.StartsWith("Nancy.", StringComparison.InvariantCulture),
+            };
+
+        /// <summary>
+        /// Gets the assemblies to ignore when autoregistering the application container
+        /// Return true from the delegate to ignore that particular assembly, returning true
+        /// does not mean the assembly *will* be included, a false from another delegate will
+        /// take precedence.
+        /// </summary>
+        protected virtual IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies
+        {
+            get { return DefaultAutoRegisterIgnoredAssemblies; }
+        }
+
+        /// <summary>
+        /// Configures the container using AutoRegister followed by registration
+        /// of default INancyModuleCatalog and IRouteResolver.
+        /// </summary>
+        /// <param name="container">Container instance</param>
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+        {
+            AutoRegister(container, this.AutoRegisterIgnoredAssemblies);
+        }
+
         /// <summary>
         /// Resolve INancyEngine
         /// </summary>
         /// <returns>INancyEngine implementation</returns>
         protected override sealed INancyEngine GetEngineInternal()
         {
-            return ApplicationContainer.Resolve<INancyEngine>();
+            return this.ApplicationContainer.Resolve<INancyEngine>();
         }
 
-        /// <summary>
-        /// Get the moduleKey generator
-        /// </summary>
-        /// <returns>IModuleKeyGenerator instance</returns>
-        protected override sealed IModuleKeyGenerator GetModuleKeyGenerator()
-        {
-            return ApplicationContainer.Resolve<IModuleKeyGenerator>();
-        }
+        /*        protected override IModuleKeyGenerator GetModuleKeyGenerator()
+                {
+                    return ApplicationContainer.Resolve<IModuleKeyGenerator>();
+                }*/
 
         /// <summary>
         /// Create a default, unconfigured, container
@@ -72,7 +97,7 @@ namespace NzbDrone.Api
         {
             foreach (var collectionTypeRegistration in collectionTypeRegistrationsn)
             {
-                container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes.Distinct());
+                container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes);
             }
         }
 
@@ -88,8 +113,8 @@ namespace NzbDrone.Api
                 container.Register(
                     typeof(INancyModule),
                     moduleRegistrationType.ModuleType,
-                    moduleRegistrationType.ModuleKey).
-                          AsSingleton();
+                    moduleRegistrationType.ModuleType.FullName).
+                    AsSingleton();
             }
         }
 
@@ -114,16 +139,16 @@ namespace NzbDrone.Api
         /// <returns>Request container instance</returns>
         protected override sealed TinyIoCContainer CreateRequestContainer()
         {
-            return ApplicationContainer.GetChildContainer();
+            return this.ApplicationContainer.GetChildContainer();
         }
 
         /// <summary>
-        /// Gets the diagnostics for intialisation
+        /// Gets the diagnostics for initialisation
         /// </summary>
-        /// <returns>IDagnostics implementation</returns>
+        /// <returns>IDiagnostics implementation</returns>
         protected override IDiagnostics GetDiagnostics()
         {
-            return ApplicationContainer.Resolve<IDiagnostics>();
+            return this.ApplicationContainer.Resolve<IDiagnostics>();
         }
 
         /// <summary>
@@ -132,7 +157,7 @@ namespace NzbDrone.Api
         /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IApplicationStartup"/> instances. </returns>
         protected override IEnumerable<IApplicationStartup> GetApplicationStartupTasks()
         {
-            return ApplicationContainer.ResolveAll<IApplicationStartup>(false);
+            return this.ApplicationContainer.ResolveAll<IApplicationStartup>(false);
         }
 
         /// <summary>
@@ -141,7 +166,7 @@ namespace NzbDrone.Api
         /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IApplicationRegistrations"/> instances.</returns>
         protected override IEnumerable<IApplicationRegistrations> GetApplicationRegistrationTasks()
         {
-            return ApplicationContainer.ResolveAll<IApplicationRegistrations>(false);
+            return this.ApplicationContainer.ResolveAll<IApplicationRegistrations>(false);
         }
 
         /// <summary>
@@ -156,14 +181,16 @@ namespace NzbDrone.Api
         }
 
         /// <summary>
-        /// Retreive a specific module instance from the container by its key
+        /// Retreive a specific module instance from the container
         /// </summary>
         /// <param name="container">Container to use</param>
-        /// <param name="moduleKey">Module key of the module</param>
+        /// <param name="moduleType">Type of the module</param>
         /// <returns>NancyModule instance</returns>
-        protected override sealed INancyModule GetModuleByKey(TinyIoCContainer container, string moduleKey)
+        protected override sealed INancyModule GetModule(TinyIoCContainer container, Type moduleType)
         {
-            return container.Resolve<INancyModule>(moduleKey);
+            container.Register(typeof(INancyModule), moduleType);
+
+            return container.Resolve<INancyModule>();
         }
 
         /// <summary>
@@ -176,7 +203,7 @@ namespace NzbDrone.Api
 
             var whitelist = new Type[] { };
 
-            container.AutoRegister(AppDomain.CurrentDomain.GetAssemblies().Where(a => !ignoredAssemblies.Any(ia => ia(a))), t => t.Assembly != assembly || whitelist.Any(wt => wt == t));
+            container.AutoRegister(AppDomain.CurrentDomain.GetAssemblies().Where(a => !ignoredAssemblies.Any(ia => ia(a))), DuplicateImplementationActions.RegisterMultiple, t => t.Assembly != assembly || whitelist.Any(wt => wt == t));
         }
     }
 }
