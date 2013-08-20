@@ -5,11 +5,10 @@
         <h3>
             <i class="icon-bookmark x-episode-monitored" title="Toggle monitored status" />
             {{#if episodeTitle}}
-                {{episodeTitle}}
+                {{title}} - {{EpisodeNumber}} - {{episodeTitle}}
             {{else}}
-                {{title}}
+                {{series.title}} - {{EpisodeNumber}} - {{title}}
             {{/if}}
-            -  {{EpisodeNumber}}
         </h3>
 
     </div>
