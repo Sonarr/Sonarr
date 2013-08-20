@@ -133,7 +133,6 @@
     <Compile Include="MediaFileTests\EpisodeImportTests\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\RenameEpisodeFileServiceFixture.cs" />
     <Compile Include="MediaFileTests\UpgradeMediaFileServiceFixture.cs" />
-    <Compile Include="MediaFileTests\EpisodeImportTests\NotExistingFileSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\NotSampleSpecificationFixture.cs" />

@@ -50,11 +50,9 @@ namespace NzbDrone.App.Test
         public void Route_should_call_console_service_when_application_mode_is_console()
         {
             Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.IsUserInteractive).Returns(true);
-            Mocker.GetMock<IConsoleService>().SetupGet(c => c.IsConsoleApplication).Returns(true);
 
             Subject.Route(ApplicationModes.Interactive);
 
-            Mocker.GetMock<IConsoleService>().Verify(c => c.WaitForClose(), Times.Once());
             Mocker.GetMock<INzbDroneServiceFactory>().Verify(c => c.Start(), Times.Once());
         }
 

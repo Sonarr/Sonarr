@@ -7,8 +7,6 @@ namespace NzbDrone.Common
 {
     public interface IConsoleService
     {
-        bool IsConsoleApplication { get; }
-        void WaitForClose();
         void PrintHelp();
         void PrintServiceAlreadyExist();
         void PrintServiceDoesNotExist();
@@ -16,17 +14,9 @@ namespace NzbDrone.Common
 
     public class ConsoleService : IConsoleService
     {
-        public bool IsConsoleApplication
+        public static bool IsConsoleAvailable
         {
             get { return Console.In != StreamReader.Null; }
-        }
-
-        public void WaitForClose()
-        {
-            while (true)
-            {
-                Console.ReadLine();
-            }
         }
 
         public void PrintHelp()
@@ -34,8 +24,8 @@ namespace NzbDrone.Common
             Console.WriteLine();
             Console.WriteLine("     Usage: {0} <command> ", Process.GetCurrentProcess().MainModule.ModuleName);
             Console.WriteLine("     Commands:");
-            Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).",StartupArguments.INSTALL_SERVICE,  ServiceProvider.NZBDRONE_SERVICE_NAME);
-            Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).",StartupArguments.UNINSTALL_SERVICE,  ServiceProvider.NZBDRONE_SERVICE_NAME);
+            Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupArguments.INSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
+            Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupArguments.UNINSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
             Console.WriteLine("                 /{0} Don't open NzbDrone in a browser", StartupArguments.NO_BROWSER);
             Console.WriteLine("                 <No Arguments>  Run application in console mode.");
         }

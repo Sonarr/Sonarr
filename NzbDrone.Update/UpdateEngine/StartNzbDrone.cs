@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -73,7 +72,7 @@ namespace NzbDrone.Update.UpdateEngine
             _logger.Info("Starting {0}", fileName);
             var path = Path.Combine(installationFolder, fileName);
 
-            _processProvider.Start(path, StartupArguments.NO_BROWSER);
+            _processProvider.SpawnNewProcess(path, StartupArguments.NO_BROWSER);
         }
     }
 }

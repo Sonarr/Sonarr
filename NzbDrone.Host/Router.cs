@@ -48,11 +48,6 @@ namespace NzbDrone.Host
                     {
                         _logger.Trace("Console selected");
                         _nzbDroneServiceFactory.Start();
-                        if (_consoleService.IsConsoleApplication)
-                        {
-                            _consoleService.WaitForClose();
-                        }
-
                         break;
                     }
                 case ApplicationModes.InstallService:

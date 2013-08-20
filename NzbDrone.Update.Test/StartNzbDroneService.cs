@@ -15,16 +15,15 @@ namespace NzbDrone.Update.Test
         [Test]
         public void should_start_service_if_app_type_was_serivce()
         {
-            string targetFolder = "c:\\NzbDrone\\";
+            const string targetFolder = "c:\\NzbDrone\\";
 
             Subject.Start(AppType.Service, targetFolder);
 
             Mocker.GetMock<IServiceProvider>().Verify(c => c.Start(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
         }
 
-
         [Test]
-        public void should_start_console_if_app_type_was_serivce_but_start_failed_because_of_permissions()
+        public void should_start_console_if_app_type_was_service_but_start_failed_because_of_permissions()
         {
             const string targetFolder = "c:\\NzbDrone\\";
 
@@ -32,7 +31,7 @@ namespace NzbDrone.Update.Test
 
             Subject.Start(AppType.Service, targetFolder);
 
-            Mocker.GetMock<IProcessProvider>().Verify(c => c.Start("c:\\NzbDrone\\NzbDrone.Console.exe", StartupArguments.NO_BROWSER, null, null), Times.Once());
+            Mocker.GetMock<IProcessProvider>().Verify(c => c.SpawnNewProcess("c:\\NzbDrone\\NzbDrone.Console.exe", StartupArguments.NO_BROWSER), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }

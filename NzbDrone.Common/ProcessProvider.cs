@@ -21,6 +21,7 @@ namespace NzbDrone.Common
         bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
+        Process SpawnNewProcess(string path, string args = null);
     }
 
     public class ProcessProvider : IProcessProvider
@@ -86,6 +87,8 @@ namespace NzbDrone.Common
             process.Start();
         }
 
+
+
         public Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
         {
 
@@ -143,6 +146,27 @@ namespace NzbDrone.Common
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
 
+
+            return process;
+        }
+
+        public Process SpawnNewProcess(string path, string args = null)
+        {
+            if (OsInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+            {
+                args = path + " " + args;
+                path = "mono";
+            }
+
+            Logger.Info("Starting {0} {1}", path, args);
+
+            var startInfo = new ProcessStartInfo(path, args);
+            var process = new Process
+            {
+                StartInfo = startInfo
+            };
+
+            process.Start();
 
             return process;
         }
