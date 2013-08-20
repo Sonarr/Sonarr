@@ -1,5 +1,5 @@
 ﻿using System;
-using NzbDrone.Common;
+using System.Threading;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Host;
 
@@ -19,12 +19,12 @@ namespace NzbDrone.Console
             catch (Exception e)
             {
                 System.Console.WriteLine(e.ToString());
+                System.Console.ReadLine();
             }
 
-            if (ConsoleService.IsConsoleAvailable)
+            while (true)
             {
-                System.Console.WriteLine("Press enter to exit...");
-                System.Console.ReadLine();
+                Thread.Sleep(10 * 60);
             }
         }
     }
