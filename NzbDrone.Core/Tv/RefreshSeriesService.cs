@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
@@ -81,6 +82,17 @@ namespace NzbDrone.Core.Tv
             {
                 series.SeriesType = SeriesTypes.Daily;
             }
+
+            try
+            {
+                series.Path = new DirectoryInfo(series.Path).FullName;
+                series.Path = series.Path.GetActualCasing();
+            }
+            catch (Exception e)
+            {
+                _logger.WarnException("Couldn't update series path for " + series.Path, e);
+            }
+
 
             _seriesService.UpdateSeries(series);
 
