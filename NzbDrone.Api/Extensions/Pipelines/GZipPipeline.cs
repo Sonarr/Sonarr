@@ -2,17 +2,18 @@
 using System.IO.Compression;
 using System.Linq;
 using Nancy;
+using Nancy.Bootstrapper;
 
-namespace NzbDrone.Api.Extensions
+namespace NzbDrone.Api.Extensions.Pipelines
 {
-    public static class GzipCompressionPipeline
+    public class GzipCompressionPipeline : IRegisterNancyPipeline
     {
-        public static void Handle(NancyContext context)
+        public void Register(IPipelines pipelines)
         {
-            context.Response.CompressResponse(context.Request);
+            pipelines.AfterRequest.AddItemToEndOfPipeline(c => CompressResponse(c.Request, c.Response));
         }
 
-        public static Response CompressResponse(this Response response, Request request)
+        private Response CompressResponse(Request request, Response response)
         {
             if (!response.ContentType.Contains("image")
                 && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip"))

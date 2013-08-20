@@ -61,8 +61,6 @@ namespace NzbDrone.Api.Frontend
                 if (_diskProvider.FileExists(filePath, _caseSensitive))
                 {
                     var response = new StreamResponse(() => File.OpenRead(filePath), MimeTypes.GetMimeType(filePath));
-                    //_addCacheHeaders.ToResponse(context.Request, response);
-
                     return response;
                 }
 

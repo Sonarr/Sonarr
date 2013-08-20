@@ -1,9 +1,11 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
@@ -26,14 +28,26 @@ namespace NzbDrone.Api
         {
             _logger.Info("Starting NzbDrone API");
 
+
+            RegisterPipelines(pipelines);
+
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
             container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
 
-            pipelines.AfterRequest.AddItemToStartOfPipeline(GzipCompressionPipeline.Handle);
-            pipelines.AfterRequest.AddItemToEndOfPipeline(CacheHeaderPipeline.Handle);
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
+        }
+
+        private void RegisterPipelines(IPipelines pipelines)
+        {
+            var pipelineRegistrars = _tinyIoCContainer.ResolveAll<IRegisterNancyPipeline>();
+
+            foreach (var registerNancyPipeline in pipelineRegistrars)
+            {
+                registerNancyPipeline.Register(pipelines);
+            }
+
         }
 
 
@@ -41,7 +55,6 @@ namespace NzbDrone.Api
         {
             return _tinyIoCContainer;
         }
-
 
         protected override DiagnosticsConfiguration DiagnosticsConfiguration
         {

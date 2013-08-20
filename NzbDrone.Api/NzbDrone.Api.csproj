@@ -91,8 +91,10 @@
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Episodes\EpisodeConnection.cs" />
-    <Compile Include="Extensions\CacheHeaderPipeline.cs" />
-    <Compile Include="Extensions\GZipPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\IRegisterNancyPipeline.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Frontend\IAddCacheHeaders.cs" />
     <Compile Include="Frontend\IsCacheableSpecification.cs" />

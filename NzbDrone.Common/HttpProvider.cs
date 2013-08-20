@@ -13,7 +13,6 @@ namespace NzbDrone.Common
     {
         string DownloadString(string url);
         string DownloadString(string url, string username, string password);
-        string DownloadString(string url, ICredentials identity);
         Dictionary<string, string> GetHeader(string url);
 
         Stream DownloadStream(string url, NetworkCredential credential = null);
@@ -44,7 +43,7 @@ namespace NzbDrone.Common
             return DownloadString(url, new NetworkCredential(username, password));
         }
 
-        public string DownloadString(string url, ICredentials identity)
+        private string DownloadString(string url, ICredentials identity)
         {
             try
             {
