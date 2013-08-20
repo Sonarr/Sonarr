@@ -80,5 +80,30 @@ namespace NzbDrone.Core.Test.MediaFileTests
             Subject.FilterExistingFiles(files, 10).Should().HaveCount(2);
             Subject.FilterExistingFiles(files, 10).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
         }
+
+
+
+
+        [Test]
+        public void filter_should_return_none_existing_files_ignoring_case()
+        {
+            var files = new List<string>()
+            {
+                "c:\\file1.avi".AsOsAgnostic(),
+                "c:\\FILE2.avi".AsOsAgnostic(),
+                "c:\\file3.avi".AsOsAgnostic()
+            };
+
+            Mocker.GetMock<IMediaFileRepository>()
+                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
+                .Returns(new List<EpisodeFile>
+                {
+                    new EpisodeFile{Path = "c:\\file2.avi".AsOsAgnostic()}
+                });
+
+
+            Subject.FilterExistingFiles(files, 10).Should().HaveCount(2);
+            Subject.FilterExistingFiles(files, 10).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
+        }
     }
 }

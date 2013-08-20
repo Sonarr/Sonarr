@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -73,11 +74,11 @@ namespace NzbDrone.Core.MediaFiles
 
         public List<string> FilterExistingFiles(List<string> files, int seriesId)
         {
-            var seriesFiles = GetFilesBySeries(seriesId);
+            var seriesFiles = GetFilesBySeries(seriesId).Select(f => f.Path.CleanFilePath().ToLower()).ToList();
 
             if (!seriesFiles.Any()) return files;
 
-            return files.Select(f => f.Normalize()).Except(seriesFiles.Select(c => c.Path)).ToList();
+            return files.Select(f => f.CleanFilePath().ToLower()).Except(seriesFiles).ToList();
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
