@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using Nancy;
 using Nancy.Responses;
+using NzbDrone.Api.Frontend.Mappers;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 

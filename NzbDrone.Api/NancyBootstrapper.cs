@@ -1,11 +1,9 @@
 ﻿using NLog;
 using Nancy.Bootstrapper;
-using Nancy.Conventions;
 using Nancy.Diagnostics;
 using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Frontend;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
@@ -48,13 +46,6 @@ namespace NzbDrone.Api
         protected override DiagnosticsConfiguration DiagnosticsConfiguration
         {
             get { return new DiagnosticsConfiguration { Password = @"password" }; }
-        }
-
-        protected override void ConfigureConventions(NancyConventions nancyConventions)
-        {
-            base.ConfigureConventions(nancyConventions);
-            var processors = ApplicationContainer.Resolve<IProcessStaticResource>();
-            Conventions.StaticContentsConventions.Add(processors.ProcessStaticResourceRequest);
         }
 
         protected override byte[] FavIcon

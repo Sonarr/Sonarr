@@ -2,7 +2,7 @@ using System.IO;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 
-namespace NzbDrone.Api.Frontend
+namespace NzbDrone.Api.Frontend.Mappers
 {
     public class MediaCoverMapper : IMapHttpRequestsToDisk
     {

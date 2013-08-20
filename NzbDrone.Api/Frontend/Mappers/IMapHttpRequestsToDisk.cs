@@ -1,5 +1,5 @@
 ﻿
-namespace NzbDrone.Api.Frontend
+namespace NzbDrone.Api.Frontend.Mappers
 {
     public interface IMapHttpRequestsToDisk
     {
