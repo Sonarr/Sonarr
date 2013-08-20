@@ -66,20 +66,6 @@ namespace NzbDrone.Common.Test
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should().BeFalse();
         }
 
-        [Test]
-        public void Should_be_able_to_execute_process()
-        {
-            var process = Subject.Start(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
-
-
-            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
-                   .BeTrue("excepted one dummy process to be already running");
-
-            process.Kill();
-            process.WaitForExit();
-
-            Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should().BeFalse();
-        }
 
         [Test]
         public void kill_all_should_kill_all_process_with_name()
