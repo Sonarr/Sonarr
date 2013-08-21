@@ -39,6 +39,14 @@ define(
                     }
                 ],
 
+            templateHelpers: {},
+
+            initialize: function (options) {
+                if (!this.model.series) {
+                    this.templateHelpers.series = options.series.toJSON();
+                }
+            },
+
             onShow: function () {
                 if (this.model.get('episodeFile')) {
                     this.activity.show(new Backgrid.Grid({

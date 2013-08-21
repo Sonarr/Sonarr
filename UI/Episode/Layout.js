@@ -36,9 +36,8 @@ define(
             initialize: function (options) {
                 this.templateHelpers.hideSeriesLink = options.hideSeriesLink;
 
-                var series = SeriesCollection.find({ id: this.model.get('seriesId') });
-                this.templateHelpers.series = series.toJSON();
-                var test = 1;
+                this.series = SeriesCollection.find({ id: this.model.get('seriesId') });
+                this.templateHelpers.series = this.series.toJSON();
             },
 
             onShow: function () {
@@ -53,7 +52,7 @@ define(
                 }
 
                 this.ui.summary.tab('show');
-                this.summary.show(new SummaryLayout({model: this.model}));
+                this.summary.show(new SummaryLayout({model: this.model, series: this.series}));
             },
 
             _showActivity: function (e) {
