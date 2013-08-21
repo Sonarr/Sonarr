@@ -3,8 +3,9 @@ define(
     [
         'backbone',
         'moment',
-        'Series/SeriesModel'
-    ], function (Backbone, Moment, SeriesModel) {
+        'Series/SeriesModel',
+        'Series/EpisodeFileModel'
+    ], function (Backbone, Moment, SeriesModel, EpisodeFileModel) {
         return Backbone.Model.extend({
 
             initialize: function () {
@@ -18,6 +19,10 @@ define(
 
             parse: function (model) {
                 model.series = new SeriesModel(model.series);
+
+                if (model.episodeFile) {
+                    model.episodeFile = new EpisodeFileModel(model.episodeFile);
+                }
 
                 return model;
             },

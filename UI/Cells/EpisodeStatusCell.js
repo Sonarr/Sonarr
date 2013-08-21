@@ -23,8 +23,8 @@ define(
 
                     if (hasFile) {
                         var episodeFile = this.model.get('episodeFile');
-                        var quality = episodeFile.quality;
-                        var size = FormatHelpers.bytes(episodeFile.size);
+                        var quality = episodeFile.get('quality');
+                        var size = FormatHelpers.bytes(episodeFile.get('size'));
                         var title = 'Episode downloaded';
 
                         if (quality.proper) {

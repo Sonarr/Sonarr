@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.MediaFiles
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
         List<string> FilterExistingFiles(List<string> files, int seriesId);
+        EpisodeFile Get(int id);
     }
 
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
@@ -79,6 +81,11 @@ namespace NzbDrone.Core.MediaFiles
             if (!seriesFiles.Any()) return files;
 
             return files.Select(f => f.CleanFilePath().ToLower()).Except(seriesFiles).ToList();
+        }
+
+        public EpisodeFile Get(int id)
+        {
+            return _mediaFileRepository.Get(id);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

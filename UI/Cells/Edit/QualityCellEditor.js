@@ -51,6 +51,7 @@ define(
                 };
 
                 model.set(column.get("name"), newQuality);
+                model.save();
                 model.trigger("backgrid:edited", model, column, new Backgrid.Command(e));
             },
 

@@ -36,7 +36,6 @@ define(
                 this._setMonitoredState();
             },
 
-
             _showSummary: function (e) {
                 if (e) {
                     e.preventDefault();
