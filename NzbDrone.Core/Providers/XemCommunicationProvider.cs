@@ -9,7 +9,14 @@ using NzbDrone.Core.Model.Xem;
 
 namespace NzbDrone.Core.Providers
 {
-    public class XemCommunicationProvider
+    public interface IXemCommunicationProvider
+    {
+        List<Int32> GetXemSeriesIds(string origin = "tvdb");
+        List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id);
+        void CheckForFailureResult(string response);
+    }
+
+    public class XemCommunicationProvider : IXemCommunicationProvider
     {
         private readonly IHttpProvider _httpProvider;
 
@@ -22,11 +29,7 @@ namespace NzbDrone.Core.Providers
             _httpProvider = httpProvider;
         }
 
-        public XemCommunicationProvider()
-        {
-        }
-
-        public virtual List<Int32> GetXemSeriesIds(string origin = "tvdb")
+        public List<Int32> GetXemSeriesIds(string origin = "tvdb")
         {
             _logger.Trace("Fetching Series IDs from: {0}", origin);
 
@@ -40,7 +43,7 @@ namespace NzbDrone.Core.Providers
             return result.Data.ToList();
         }
 
-        public virtual List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id)
+        public List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id)
         {
             _logger.Trace("Fetching Mappings for: {0}", id);
             var url = String.Format("{0}all?id={1}&origin=tvdb", XEM_BASE_URL, id);
@@ -53,7 +56,7 @@ namespace NzbDrone.Core.Providers
             return result;
         }
 
-        public virtual void CheckForFailureResult(string response)
+        public void CheckForFailureResult(string response)
         {
             var result = JsonConvert.DeserializeObject<XemResult<dynamic>>(response);
 

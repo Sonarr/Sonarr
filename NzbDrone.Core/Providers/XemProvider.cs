@@ -18,12 +18,12 @@ namespace NzbDrone.Core.Providers
     public class XemProvider : IXemProvider, IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent> 
     {
         private readonly IEpisodeService _episodeService;
-        private readonly XemCommunicationProvider _xemCommunicationProvider;
+        private readonly IXemCommunicationProvider _xemCommunicationProvider;
         private readonly ISeriesService _seriesService;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(IEpisodeService episodeService, XemCommunicationProvider xemCommunicationProvider, ISeriesService seriesService)
+        public XemProvider(IEpisodeService episodeService, IXemCommunicationProvider xemCommunicationProvider, ISeriesService seriesService)
         {
             if (seriesService == null) throw new ArgumentNullException("seriesService");
             _episodeService = episodeService;
