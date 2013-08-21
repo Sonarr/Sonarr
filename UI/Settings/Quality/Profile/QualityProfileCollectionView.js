@@ -4,8 +4,8 @@ define(['app',
         'marionette',
         'Settings/Quality/Profile/QualityProfileView',
         'Settings/Quality/Profile/EditQualityProfileView',
-        'Settings/Quality/Profile/QualityProfileSchemaCollection'],
-    function (App, Marionette, QualityProfileView, EditProfileView, ProfileCollection) {
+        'Settings/Quality/Profile/QualityProfileSchemaCollection'
+], function (App, Marionette, QualityProfileView, EditProfileView, ProfileCollection) {
 
     return Marionette.CompositeView.extend({
         itemView         : QualityProfileView,
@@ -23,7 +23,6 @@ define(['app',
         appendHtml: function(collectionView, itemView, index){
             collectionView.ui.addCard.parent('li').before(itemView.el);
         },
-
 
         _addProfile: function () {
             var self = this;

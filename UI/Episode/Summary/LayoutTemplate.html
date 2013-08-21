@@ -1,4 +1,14 @@
-﻿<div class="episode-overview">
+﻿<div class="episode-info">
+    {{#with series}}
+        {{qualityProfile qualityProfileId}}
+        <span class="label label-info">{{network}}</span>
+    {{/with}}
+    <span class="label label-info">{{StartTime airDateUtc}}</span>
+    <span class="label label-info">{{NextAiring airDateUtc}}</span>
+</div>
+
+<div class="episode-overview">
     {{overview}}
 </div>
+
 <div class="episode-file-info"></div>

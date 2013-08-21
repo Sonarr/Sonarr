@@ -1,12 +1,17 @@
 'use strict';
 define(
     [
-        'Cells/TemplatedCell'
-    ], function (TemplatedCell) {
+        'Cells/TemplatedCell',
+        'Cells/Edit/QualityCellEditor'
+    ], function (TemplatedCell, QualityCellEditor) {
         return TemplatedCell.extend({
 
             className: 'quality-cell',
-            template : 'Cells/QualityCellTemplate'
+            template : 'Cells/QualityCellTemplate',
+            editor   : QualityCellEditor,
 
+            _startEditing: function (model, column, cell, editor) {
+                editor._setOptions({ cell: cell });
+            }
         });
     });

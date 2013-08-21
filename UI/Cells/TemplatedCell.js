@@ -7,7 +7,6 @@ define(
     ], function (Marionette, NzbDroneCell) {
         return NzbDroneCell.extend({
 
-
             render: function () {
 
                 var templateName = this.column.get('template') || this.template;
@@ -17,6 +16,7 @@ define(
                 var html = this.templateFunction(data);
                 this.$el.html(html);
 
+                this.delegateEvents();
                 return this;
             }
         });

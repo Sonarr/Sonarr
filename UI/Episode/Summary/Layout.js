@@ -34,7 +34,8 @@ define(
                         name    : 'quality',
                         label   : 'Quality',
                         cell    : QualityCell,
-                        sortable: false
+                        sortable: false,
+                        editable: true
                     }
                 ],
 
