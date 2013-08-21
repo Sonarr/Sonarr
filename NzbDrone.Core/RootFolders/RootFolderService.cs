@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,14 +41,14 @@ namespace NzbDrone.Core.RootFolders
             _configService = configService;
         }
 
-        public virtual List<RootFolder> All()
+        public List<RootFolder> All()
         {
             var rootFolders = _rootFolderRepository.All().ToList();
 
             return rootFolders;
         }
 
-        public virtual List<RootFolder> AllWithUnmappedFolders()
+        public List<RootFolder> AllWithUnmappedFolders()
         {
             var rootFolders = _rootFolderRepository.All().ToList();
 
@@ -63,7 +64,7 @@ namespace NzbDrone.Core.RootFolders
             return rootFolders;
         }
 
-        public virtual RootFolder Add(RootFolder rootFolder)
+        public RootFolder Add(RootFolder rootFolder)
         {
             var all = All();
 
@@ -87,12 +88,12 @@ namespace NzbDrone.Core.RootFolders
             return rootFolder;
         }
 
-        public virtual void Remove(int id)
+        public void Remove(int id)
         {
             _rootFolderRepository.Delete(id);
         }
 
-        public virtual List<UnmappedFolder> GetUnmappedFolders(string path)
+        public List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(path))
@@ -107,13 +108,13 @@ namespace NzbDrone.Core.RootFolders
                 return results;
             }
 
-            foreach (string seriesFolder in _diskProvider.GetDirectories(path))
+            var seriesFolders = _diskProvider.GetDirectories(path).ToList();
+            var unmappedFolders = seriesFolders.Except(series.Select(s => s.Path), new PathEqualityComparer()).ToList();
+
+            foreach (string unmappedFolder in unmappedFolders)
             {
-                if (!series.Any(s => s.Path.PathEquals(seriesFolder)))
-                {
-                    var di = new DirectoryInfo(seriesFolder.Normalize());
-                    results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
-                }
+                var di = new DirectoryInfo(unmappedFolder.Normalize());
+                results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
             }
 
             if (Path.GetPathRoot(path).Equals(path, StringComparison.InvariantCultureIgnoreCase))
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.RootFolders
             return results;
         }
 
-        public virtual Dictionary<string, long> FreeSpaceOnDrives()
+        public Dictionary<string, long> FreeSpaceOnDrives()
         {
             var freeSpace = new Dictionary<string, long>();
 

@@ -91,6 +91,7 @@
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
+    <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
     <Compile Include="StringExtensions.cs" />

@@ -5,9 +5,9 @@ namespace NzbDrone.Api.RootFolders
 {
     public class RootFolderModule : NzbDroneRestModule<RootFolderResource>
     {
-        private readonly RootFolderService _rootFolderService;
+        private readonly IRootFolderService _rootFolderService;
 
-        public RootFolderModule(RootFolderService rootFolderService)
+        public RootFolderModule(IRootFolderService rootFolderService)
         {
             _rootFolderService = rootFolderService;
 
