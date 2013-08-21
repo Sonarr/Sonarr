@@ -32,8 +32,12 @@ define(
             },
 
             onRender: function () {
+                var self = this;
 
-                this.currentDirs.show(this.rootfolderListView);
+                RootFolderCollection.promise.done(function () {
+                    self.currentDirs.show(self.rootfolderListView);
+                });
+
                 this.ui.pathInput.autoComplete('/directories');
             },
 

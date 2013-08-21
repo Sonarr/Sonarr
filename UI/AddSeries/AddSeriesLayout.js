@@ -38,7 +38,7 @@ define(
 
                 SeriesCollection.fetch();
                 QualityProfileCollection.fetch();
-                RootFolderCollection.fetch();
+                RootFolderCollection.promise = RootFolderCollection.fetch();
             },
 
             onShow: function () {
