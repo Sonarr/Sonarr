@@ -13,6 +13,11 @@ namespace NzbDrone.Api.Frontend
     {
         public bool IsCacheable(NancyContext context)
         {
+            if (BuildInfo.IsDebug)
+            {
+                return false;
+            }
+
             if (context.Request.Query.v == BuildInfo.Version) return true;
 
             if (context.Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase)) return false;
