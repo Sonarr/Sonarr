@@ -56,7 +56,7 @@ define(
                 var fanArt = this._getFanArt();
 
                 if (fanArt) {
-                    $.backstretch(fanArt);
+                    this._backstrech = $.backstretch(fanArt);
                 }
                 else {
                     $('body').removeClass('backdrop');
@@ -78,7 +78,12 @@ define(
             },
 
             onClose: function () {
-                $('.backstretch').remove();
+
+                if (this._backstrech) {
+                    this._backstrech.destroy();
+                    delete this._backstrech;
+                }
+
                 $('body').removeClass('backdrop');
             },
 
@@ -120,8 +125,8 @@ define(
                     },
                     element   : this.ui.refresh,
                     leaveIcon : true,
-                    context: this,
-                    onSuccess: this._showSeasons
+                    context   : this,
+                    onSuccess : this._showSeasons
                 });
             },
 
@@ -170,15 +175,15 @@ define(
                         series           : self.model
                     });
 
-                    self.episodeCollection.BindSignalR({
+ /*                   self.episodeCollection.bindSignalR({
                         onReceived: seasonCollectionView.onEpisodeGrabbed,
                         context   : seasonCollectionView
-                    });
+                    });*/
 
                     self.seasons.show(seasonCollectionView);
 
                     self.seasonMenu.show(new SeasonMenuCollectionView({
-                        collection: self.seasonCollection,
+                        collection       : self.seasonCollection,
                         episodeCollection: self.episodeCollection
                     }));
                 });
