@@ -12,6 +12,7 @@ require.config({
         'bootstrap'           : 'JsLibraries/bootstrap',
         'backbone.deepmodel'  : 'JsLibraries/backbone.deep.model',
         'backbone.pageable'   : 'JsLibraries/backbone.pageable',
+        'backbone.validation' : 'JsLibraries/backbone.validation',
         'backbone.modelbinder': 'JsLibraries/backbone.modelbinder',
         'backgrid'            : 'JsLibraries/backbone.backgrid',
         'backgrid.paginator'  : 'JsLibraries/backbone.backgrid.paginator',
@@ -90,6 +91,14 @@ require.config({
                 [
                     'Mixins/underscore.mixin.deepExtend'
                 ]
+        },
+
+        'backbone.validation': {
+            deps   :
+                [
+                    'backbone'
+                ],
+            exports: 'Backbone.Validation'
         },
 
         marionette: {

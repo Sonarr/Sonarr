@@ -6,6 +6,7 @@ using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
+using FluentValidation;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -20,6 +21,12 @@ namespace NzbDrone.Api.Indexers
             CreateResource = CreateIndexer;
             UpdateResource = UpdateIndexer;
             DeleteResource = DeleteIndexer;
+
+
+            SharedValidator.RuleFor(c => c.Name).NotEmpty();
+            SharedValidator.RuleFor(c => c.Implementation).NotEmpty();
+
+            PostValidator.RuleFor(c => c.Fields).NotEmpty();
         }
 
         private List<IndexerResource> GetAll()

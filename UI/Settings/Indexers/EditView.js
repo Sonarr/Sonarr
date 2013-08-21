@@ -4,8 +4,9 @@ define(
     [
         'app',
         'marionette',
-        'Mixins/AsModelBoundView'
-    ], function (App, Marionette, AsModelBoundView) {
+        'Mixins/AsModelBoundView',
+        'Mixins/AsValidatedView'
+    ], function (App, Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Indexers/EditTemplate',
@@ -53,5 +54,8 @@ define(
             }
         });
 
-        return AsModelBoundView.call(view);
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+
+        return view;
     });
