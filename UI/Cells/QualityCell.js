@@ -8,10 +8,6 @@ define(
 
             className: 'quality-cell',
             template : 'Cells/QualityCellTemplate',
-            editor   : QualityCellEditor,
-
-            _startEditing: function (model, column, cell, editor) {
-                editor._setOptions({ cell: cell });
-            }
+            editor   : QualityCellEditor
         });
     });

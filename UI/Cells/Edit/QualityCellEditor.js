@@ -26,7 +26,7 @@ define(
                     var templateName = self.template;
                     self.schema = qualityProfileSchemaCollection.first();
 
-                    var selected = _.find(self.schema.get('available'), { 'id': self.cell.cellValue.get('quality').id });
+                    var selected = _.find(self.schema.get('available'), { 'id': self.model.get(self.column.get("name")).quality.id });
                     selected.selected = true;
 
                     self.templateFunction = Marionette.TemplateCache.get(templateName);
@@ -61,10 +61,6 @@ define(
                 var command = new Backgrid.Command(e);
 
                 model.trigger("backgrid:edited", model, column, command);
-            },
-
-            _setOptions: function (options) {
-                this.cell = options.cell
             }
         });
     });

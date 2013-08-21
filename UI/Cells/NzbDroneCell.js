@@ -8,18 +8,19 @@ define(
 
             _originalInit: Backgrid.Cell.prototype.initialize,
 
-
             initialize: function () {
                 this._originalInit.apply(this, arguments);
                 this.cellValue = this._getValue();
 
                 this.listenTo(this.model, 'change', this._refresh);
 
-                this.listenTo(this.model, "backgrid:edit", function (model, column, cell, editor) {
-                    if (column.get("name") == this.column.get("name")) {
-                        this._startEditing(model, column, cell, editor);
-                    }
-                });
+                if (this._onEdit) {
+                    this.listenTo(this.model, "backgrid:edit", function (model, column, cell, editor) {
+                        if (column.get("name") == this.column.get("name")) {
+                            this._onEdit(model, column, cell, editor);
+                        }
+                    });
+                }
             },
 
             _refresh: function () {
