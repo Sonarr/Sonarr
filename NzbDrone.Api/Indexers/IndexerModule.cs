@@ -28,7 +28,7 @@ namespace NzbDrone.Api.Indexers
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Implementation).NotEmpty();
 
-            SharedValidator.RuleForField<string>(c => c.Fields, "Url").NotEmpty();
+            SharedValidator.RuleForField<string>(c=>c.Fields,"Url").NotEmpty();
 
             PostValidator.RuleFor(c => c.Fields).NotEmpty();
         }
