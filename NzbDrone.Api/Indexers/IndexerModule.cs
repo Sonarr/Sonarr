@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Internal;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
+using NzbDrone.Api.Validation;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
 using FluentValidation;
@@ -25,6 +27,8 @@ namespace NzbDrone.Api.Indexers
 
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Implementation).NotEmpty();
+
+            SharedValidator.RuleForField<string>(c => c.Fields, "Url").NotEmpty();
 
             PostValidator.RuleFor(c => c.Fields).NotEmpty();
         }
