@@ -50,6 +50,7 @@ define(
                     {
                         name    : 'this',
                         label   : 'Title',
+                        hideSeriesLink : true,
                         cell    : EpisodeTitleCell,
                         sortable: false
                     },
@@ -73,10 +74,6 @@ define(
                 }
 
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
-
-                _.each(this.episodeCollection.models, function (episode) {
-                    episode.set({ hideSeriesLink: true, series: options.series });
-                });
 
                 this.listenTo(this.model, 'sync', function () {
                     this._afterSeasonMonitored();

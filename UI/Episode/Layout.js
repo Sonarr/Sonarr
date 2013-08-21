@@ -3,8 +3,9 @@ define(
     [
         'marionette',
         'Episode/Summary/Layout',
-        'Episode/Search/Layout'
-    ], function (Marionette, SummaryLayout, SearchLayout) {
+        'Episode/Search/Layout',
+        'Series/SeriesCollection'
+    ], function (Marionette, SummaryLayout, SearchLayout, SeriesCollection) {
 
         return Marionette.Layout.extend({
             template: 'Episode/LayoutTemplate',
@@ -28,6 +29,16 @@ define(
                 'click .x-episode-activity' : '_showActivity',
                 'click .x-episode-search'   : '_showSearch',
                 'click .x-episode-monitored': '_toggleMonitored'
+            },
+
+            templateHelpers: {},
+
+            initialize: function (options) {
+                this.templateHelpers.hideSeriesLink = options.hideSeriesLink;
+
+                var series = SeriesCollection.find({ id: this.model.get('seriesId') });
+                this.templateHelpers.series = series.toJSON();
+                var test = 1;
             },
 
             onShow: function () {

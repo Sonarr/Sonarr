@@ -57,14 +57,17 @@ define(
                     success: function (calendarCollection) {
                         _.each(calendarCollection.models, function (element) {
                             var episodeTitle = element.get('title');
-                            var seriesTitle = element.get('series').get('title');
+                            var seriesTitle = element.get('series').title;
                             var start = element.get('airDateUtc');
                             var statusLevel = _instance.getStatusLevel(element);
+                            var runtime = element.get('series').runtime;
+                            var end = Moment(start).add('minutes', runtime);
 
                             element.set({
                                 title       : seriesTitle,
                                 episodeTitle: episodeTitle,
                                 start       : start,
+                                end         : end,
                                 allDay      : false,
                                 statusLevel : statusLevel
                             });

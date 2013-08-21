@@ -33,7 +33,7 @@ define(
             },
 
             _showEpisode: function (options) {
-                var view = new EpisodeLayout({ model: options.episode });
+                var view = new EpisodeLayout({ model: options.episode, hideSeriesLink: options.hideSeriesLink });
                 App.modalRegion.show(view);
             }
         });

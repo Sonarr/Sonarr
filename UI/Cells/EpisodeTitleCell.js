@@ -25,7 +25,9 @@ define(
             },
 
             _showDetails: function () {
-                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.cellValue});
+                var hideSeriesLink = this.column.get('hideSeriesLink');
+
+                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.cellValue, hideSeriesLink: hideSeriesLink });
             }
         });
     });

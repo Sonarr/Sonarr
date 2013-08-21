@@ -2,11 +2,11 @@
 
 define(
     [
-        'backgrid',
+        'Cells/NzbDroneCell',
         'moment',
         'Shared/FormatHelpers'
-    ], function (Backgrid, Moment, FormatHelpers) {
-        return  Backgrid.Cell.extend({
+    ], function (NzbDroneCell, Moment, FormatHelpers) {
+        return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
 
