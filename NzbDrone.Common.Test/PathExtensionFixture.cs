@@ -58,11 +58,10 @@ namespace NzbDrone.Common.Test
 
         [TestCase(@"C:\", @"C:\")]
         [TestCase(@"C:\\", @"C:\")]
-        [TestCase(@"c:\", @"C:\")]
-        [TestCase(@"c:\Test", @"C:\Test\\")]
-        [TestCase(@"c:\\\\\Test", @"C:\Test\\")]
-        [TestCase(@"c:\Test\\\\", @"C:\Test\\")]
-        [TestCase(@"c:\Test", @"C:\Test\\")]
+        [TestCase(@"C:\Test", @"C:\Test\\")]
+        [TestCase(@"C:\\\\\Test", @"C:\Test\\")]
+        [TestCase(@"C:\Test\\\\", @"C:\Test\\")]
+        [TestCase(@"C:\Test", @"C:\Test\\")]
         [TestCase(@"\\Server\pool", @"\\Server\pool")]
         [TestCase(@"\\Server\pool\", @"\\Server\pool")]
         [TestCase(@"\\Server\pool", @"\\Server\pool\")]
@@ -71,6 +70,13 @@ namespace NzbDrone.Common.Test
         public void paths_should_be_equal(string first, string second)
         {
             first.AsOsAgnostic().PathEquals(second.AsOsAgnostic()).Should().BeTrue();
+        }
+
+        [TestCase(@"c:\", @"C:\")]
+        public void should_be_equal_windows_only(string first, string second)
+        {
+            WindowsOnly();
+            first.PathEquals(second.AsOsAgnostic()).Should().BeTrue();
         }
 
         [TestCase(@"C:\Test", @"C:\Test2\")]
