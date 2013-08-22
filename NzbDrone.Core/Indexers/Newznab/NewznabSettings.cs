@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using FluentValidation;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
@@ -8,7 +11,8 @@ namespace NzbDrone.Core.Indexers.Newznab
     {
         public NewznabSettings()
         {
-            Categories = new [] { 5030, 5040 };
+            Categories = new[] { 5030, 5040 };
+            //RuleFor(c => c.Url).ValidRootUrl();
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -25,6 +29,12 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 return !string.IsNullOrWhiteSpace(Url);
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            return new ValidationResult();
+            //return Validate(this);
         }
     }
 }

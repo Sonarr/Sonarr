@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentValidation.Internal;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
-using NzbDrone.Api.Validation;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
 using FluentValidation;
@@ -27,8 +25,6 @@ namespace NzbDrone.Api.Indexers
 
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Implementation).NotEmpty();
-
-            SharedValidator.RuleForField<string>(c=>c.Fields,"Url").NotEmpty();
 
             PostValidator.RuleFor(c => c.Fields).NotEmpty();
         }
@@ -67,12 +63,26 @@ namespace NzbDrone.Api.Indexers
             var indexer = _indexerService.Get(indexerResource.Id);
             indexer.InjectFrom(indexerResource);
             indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
+
+            ValidateSetting(indexer.Settings);
+
             indexer = _indexerService.Update(indexer);
 
             var response = indexer.InjectTo<IndexerResource>();
             response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
 
             return response;
+        }
+
+
+        private static void ValidateSetting(IIndexerSetting setting)
+        {
+            var validationResult = setting.Validate();
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
         }
 
         private Indexer GetIndexer(IndexerResource indexerResource)
@@ -89,6 +99,8 @@ namespace NzbDrone.Api.Indexers
 
             indexer.InjectFrom(indexerResource);
             indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
+
+            ValidateSetting(indexer.Settings);
 
             return indexer;
         }

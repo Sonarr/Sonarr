@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Indexers
 
         public List<IIndexer> GetAvailableIndexers()
         {
-            return All().Where(c => c.Enable && c.Settings.IsValid).Select(c => c.Instance).ToList();
+            return All().Where(c => c.Enable && c.Settings.Validate().IsValid).Select(c => c.Instance).ToList();
         }
 
         public Indexer Get(int id)

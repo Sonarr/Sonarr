@@ -1,26 +1,20 @@
-﻿namespace NzbDrone.Core.Indexers
+﻿using FluentValidation.Results;
+
+namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerSetting
     {
-        bool IsValid { get; }
+        ValidationResult Validate();
     }
 
 
     public class NullSetting : IIndexerSetting
     {
-        public static NullSetting Instance = new NullSetting();
+        public static readonly NullSetting Instance = new NullSetting();
 
-        private NullSetting()
+        public ValidationResult Validate()
         {
-
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
+            return new ValidationResult();
         }
     }
 }
