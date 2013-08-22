@@ -10,13 +10,11 @@ namespace NzbDrone.Api.Episodes
     public class EpisodeModule : NzbDroneRestModule<EpisodeResource>
     {
         private readonly IEpisodeService _episodeService;
-        private readonly MediaFileRepository _mediaFileRepository;
 
-        public EpisodeModule(IEpisodeService episodeService, MediaFileRepository mediaFileRepository)
+        public EpisodeModule(IEpisodeService episodeService)
             : base("/episodes")
         {
             _episodeService = episodeService;
-            _mediaFileRepository = mediaFileRepository;
 
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;
@@ -31,10 +29,7 @@ namespace NzbDrone.Api.Episodes
                 throw new BadRequestException("seriesId is missing");
             }
 
-            var resource = ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value))
-                .LoadSubtype(e => e.EpisodeFileId, _mediaFileRepository);
-
-            return resource.ToList();
+            return ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value));
         }
 
         private EpisodeResource SetMonitored(EpisodeResource episodeResource)

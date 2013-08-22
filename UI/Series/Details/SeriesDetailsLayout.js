@@ -4,6 +4,7 @@ define(
         'app',
         'marionette',
         'Series/EpisodeCollection',
+        'Series/EpisodeFileCollection',
         'Series/SeasonCollection',
         'Series/Details/SeasonCollectionView',
         'Series/Details/SeasonMenu/CollectionView',
@@ -12,7 +13,7 @@ define(
         'Shared/Actioneer',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (App, Marionette, EpisodeCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, InfoView, LoadingView, Actioneer) {
+    ], function (App, Marionette, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, InfoView, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -85,6 +86,7 @@ define(
                 }
 
                 $('body').removeClass('backdrop');
+                App.reqres.removeHandler(App.Reqres.GetEpisodeFileById);
             },
 
             _toggleMonitored: function () {
@@ -167,12 +169,17 @@ define(
 
                 this.seasonCollection = new SeasonCollection();
                 this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id });
+                this.episodeFileCollection = new EpisodeFileCollection({ seriesId: this.model.id });
 
-                $.when(this.episodeCollection.fetch(), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
+                $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch(), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
                     var seasonCollectionView = new SeasonCollectionView({
                         collection       : self.seasonCollection,
                         episodeCollection: self.episodeCollection,
                         series           : self.model
+                    });
+
+                    App.reqres.setHandler(App.Reqres.GetEpisodeFileById, function(episodeFileId){
+                        return self.episodeFileCollection.get(episodeFileId);
                     });
 
  /*                   self.episodeCollection.bindSignalR({

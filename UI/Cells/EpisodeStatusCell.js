@@ -2,10 +2,11 @@
 
 define(
     [
+        'app',
         'Cells/NzbDroneCell',
         'moment',
         'Shared/FormatHelpers'
-    ], function (NzbDroneCell, Moment, FormatHelpers) {
+    ], function (App, NzbDroneCell, Moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -22,7 +23,10 @@ define(
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {
-                        var episodeFile = this.model.get('episodeFile');
+                        var episodeFile = App.request(App.Reqres.GetEpisodeFileById, this.model.get('episodeFileId'));
+
+                        this.listenTo(episodeFile, 'change', this._refresh);
+
                         var quality = episodeFile.get('quality');
                         var size = FormatHelpers.bytes(episodeFile.get('size'));
                         var title = 'Episode downloaded';

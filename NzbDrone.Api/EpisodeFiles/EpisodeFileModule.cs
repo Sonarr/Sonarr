@@ -16,8 +16,20 @@ namespace NzbDrone.Api.EpisodeFiles
             : base("/episodefile")
         {
             _mediaFileService = mediaFileService;
-
+            GetResourceAll = GetEpisodeFiles;
             UpdateResource = SetQuality;
+        }
+
+        private List<EpisodeFileResource> GetEpisodeFiles()
+        {
+            var seriesId = (int?)Request.Query.SeriesId;
+
+            if (seriesId == null)
+            {
+                throw new BadRequestException("seriesId is missing");
+            }
+
+            return ToListResource(() => _mediaFileService.GetFilesBySeries(seriesId.Value));
         }
 
         private EpisodeFileResource SetQuality(EpisodeFileResource episodeFileResource)

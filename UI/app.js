@@ -200,6 +200,10 @@ define(
             ShowLogFile        : 'showLogFile'
         };
 
+        app.Reqres = {
+            GetEpisodeFileById: 'GetEpisodeFileById'
+        };
+
         app.addInitializer(function () {
             console.log('starting application');
         });

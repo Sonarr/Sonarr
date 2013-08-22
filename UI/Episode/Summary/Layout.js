@@ -1,12 +1,14 @@
 'use strict';
 define(
     [
+        'app',
         'marionette',
         'backgrid',
+        'Series/EpisodeFileCollection',
         'Cells/FileSizeCell',
         'Cells/QualityCell',
         'Episode/Summary/NoFileView'
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, NoFileView) {
+    ], function (App, Marionette, Backgrid, EpisodeFileCollection, FileSizeCell, QualityCell, NoFileView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Summary/LayoutTemplate',
@@ -48,9 +50,11 @@ define(
             },
 
             onShow: function () {
-                if (this.model.get('episodeFile')) {
+                if (this.model.get('hasFile')) {
+                    var episodeFile = App.request(App.Reqres.GetEpisodeFileById, this.model.get('episodeFileId'));
+
                     this.activity.show(new Backgrid.Grid({
-                        collection: new Backbone.Collection(this.model.get('episodeFile')),
+                        collection: new EpisodeFileCollection(episodeFile, { seriesId: this.model.get('seriesId') }),
                         columns   : this.columns,
                         className : 'table table-bordered'
                     }));
