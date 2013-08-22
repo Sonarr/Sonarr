@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
             return searchUrls;
         }
 
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber)
+        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
         {
             var searchUrls = new List<string>();
 

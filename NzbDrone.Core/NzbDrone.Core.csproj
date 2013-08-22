@@ -249,7 +249,6 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="History\HistoryRepository.cs" />
     <Compile Include="IndexerSearch\Definitions\DailyEpisodeSearchCriteria.cs" />
-    <Compile Include="IndexerSearch\Definitions\PartialSeasonSearchCriteria.cs" />
     <Compile Include="IndexerSearch\Definitions\SearchCriteriaBase.cs" />
     <Compile Include="IndexerSearch\Definitions\SeasonSearchCriteria.cs" />
     <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />

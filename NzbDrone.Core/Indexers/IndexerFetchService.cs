@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using System.Linq;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -14,7 +15,6 @@ namespace NzbDrone.Core.Indexers
 
         IList<ReportInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
         IList<ReportInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
-        IList<ReportInfo> Fetch(IIndexer indexer, PartialSeasonSearchCriteria searchCriteria);
         IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
     }
 
@@ -46,11 +46,29 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeriesTvRageId, searchCriteria.SeasonNumber);
+            var result = Fetch(indexer, searchCriteria, 0).DistinctBy(c => c.NzbUrl).ToList();
+
+            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+
+            return result;
+        }
+
+
+        private IList<ReportInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria, int offset)
+        {
+            _logger.Debug("Searching for {0} offset: {1}", searchCriteria, offset);
+
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeriesTvRageId, searchCriteria.SeasonNumber, offset);
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("{0} offset {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+
+            if (result.Count > 90)
+            {
+                result.AddRange(Fetch(indexer, searchCriteria, offset + 90));
+            }
+
             return result;
         }
 
@@ -67,17 +85,6 @@ namespace NzbDrone.Core.Indexers
 
         }
 
-        public IList<ReportInfo> Fetch(IIndexer indexer, PartialSeasonSearchCriteria searchCriteria)
-        {
-            _logger.Debug("Searching for {0}", searchCriteria);
-
-            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeriesTvRageId, searchCriteria.SeasonNumber);
-            var result = Fetch(indexer, searchUrls);
-
-
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
-            return result;
-        }
 
         public IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria)
         {

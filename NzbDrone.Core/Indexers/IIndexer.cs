@@ -19,6 +19,6 @@ namespace NzbDrone.Core.Indexers
 
         IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
-        IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber);
+        IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
     }
 }

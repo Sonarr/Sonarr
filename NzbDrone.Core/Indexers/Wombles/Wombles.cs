@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers.Wombles
             return new List<string>();
         }
 
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber)
+        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
         {
             return new List<string>();
         }

@@ -89,6 +89,7 @@
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
+    <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="PathEqualityComparer.cs" />

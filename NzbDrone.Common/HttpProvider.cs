@@ -24,7 +24,7 @@ namespace NzbDrone.Common
     {
         private readonly Logger _logger;
 
-        public const string CONTENT_LENGHT_HEADER = "Content-Length";
+        public const string CONTENT_LENGTH_HEADER = "Content-Length";
 
         private readonly string _userAgent;
 
