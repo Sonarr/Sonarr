@@ -55,23 +55,23 @@ define(
                 _instance.collection.fetch({
                     data   : { start: startDate, end: endDate },
                     success: function (calendarCollection) {
-                        _.each(calendarCollection.models, function (element) {
+                        calendarCollection.each(function (element) {
                             var episodeTitle = element.get('title');
                             var seriesTitle = element.get('series').title;
                             var start = element.get('airDateUtc');
-                            var statusLevel = _instance.getStatusLevel(element);
                             var runtime = element.get('series').runtime;
-                            var end = Moment(start).add('minutes', runtime);
+                            var end = Moment(start).add('minutes', runtime).toISOString();
+
 
                             element.set({
                                 title       : seriesTitle,
                                 episodeTitle: episodeTitle,
                                 start       : start,
                                 end         : end,
-                                allDay      : false,
-                                statusLevel : statusLevel
+                                allDay      : false
                             });
 
+                            element.set('statusLevel', _instance.getStatusLevel(element));
                             element.set('model', element);
                         });
 
@@ -93,6 +93,10 @@ define(
                 }
 
                 else if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
+                    var s = start.toISOString();
+                    var e = end.toISOString();
+                    var c = currentTime.toISOString();
+
                     statusLevel = 'warning';
                 }
 

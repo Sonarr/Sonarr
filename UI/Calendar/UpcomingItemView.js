@@ -20,7 +20,7 @@ define(
                 var end = Moment(start).add('minutes', runtime);
 
                 this.model.set({
-                    end: end
+                    end: end.toISOString()
                 })
             },
 
