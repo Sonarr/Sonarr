@@ -2,8 +2,9 @@
 define(
     [
         'backgrid',
-        'Settings/Quality/Profile/QualityProfileSchemaCollection'
-    ], function (Backgrid, QualityProfileSchemaCollection) {
+        'Settings/Quality/Profile/QualityProfileSchemaCollection',
+        'Series/EpisodeFileModel'
+    ], function (Backgrid, QualityProfileSchemaCollection, EpisodeFileModel) {
         return Backgrid.CellEditor.extend({
 
             className: 'quality-cell-editor',

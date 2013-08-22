@@ -2,7 +2,7 @@
 define(
     [
         'marionette',
-        'Episode/Summary/Layout',
+        'Episode/Summary/EpisodeSummaryLayout',
         'Episode/Search/Layout',
         'Series/SeriesCollection'
     ], function (Marionette, SummaryLayout, SearchLayout, SeriesCollection) {

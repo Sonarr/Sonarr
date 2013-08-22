@@ -33,7 +33,7 @@ define(
                 var self = this;
 
                 _.each(message.episode.episodes, function (episode){
-                    var ep = self.episodeCollection.find({ id: episode.id });
+                    var ep = self.episodeCollection.get(episode.id);
                     ep.set('downloading', true);
                     console.debug(episode.title);
                 });

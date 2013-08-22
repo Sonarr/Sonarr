@@ -1,21 +1,9 @@
 'use strict';
 define(
     [
-        'backbone',
-        'moment',
-        'Series/SeriesModel',
-        'Series/EpisodeFileModel'
-    ], function (Backbone, Moment, SeriesModel, EpisodeFileModel) {
+        'backbone'
+    ], function (Backbone) {
         return Backbone.Model.extend({
-
-            parse: function (model) {
-
-                if (model.episodeFile) {
-                    model.episodeFile = new EpisodeFileModel(model.episodeFile);
-                }
-
-                return model;
-            },
 
             defaults: {
                 seasonNumber: 0,
