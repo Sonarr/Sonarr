@@ -38,8 +38,9 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="1">
+          <list size="2">
             <item index="0" class="java.lang.String" itemvalue="name" />
+            <item index="1" class="java.lang.String" itemvalue="validation-name" />
           </list>
         </value>
       </option>

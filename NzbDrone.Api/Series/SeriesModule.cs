@@ -30,9 +30,11 @@ namespace NzbDrone.Api.Series
             DeleteResource = DeleteSeries;
 
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
-            SharedValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
-            SharedValidator.RuleFor(s => s.RootFolderPath).NotEmpty().When(s => String.IsNullOrEmpty(s.Path));
 
+            PutValidator.RuleFor(s => s.Path).NotEmpty();
+
+            PostValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
+            PostValidator.RuleFor(s => s.RootFolderPath).NotEmpty().When(s => String.IsNullOrEmpty(s.Path));
             PostValidator.RuleFor(s => s.Title).NotEmpty();
         }
 

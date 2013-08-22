@@ -5,8 +5,9 @@ define(
         'marionette',
         'Quality/QualityProfileCollection',
         'Mixins/AsModelBoundView',
+        'Mixins/AsValidatedView',
         'Mixins/AutoComplete'
-    ], function (App, Marionette, QualityProfiles, AsModelBoundView) {
+    ], function (App, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Series/Edit/EditSeriesTemplate',
@@ -49,5 +50,6 @@ define(
         });
 
 
-        return AsModelBoundView.apply(view);
+        AsModelBoundView.apply(view);
+        return AsValidatedView.apply(view);
     });

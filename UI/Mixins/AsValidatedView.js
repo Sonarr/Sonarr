@@ -2,7 +2,7 @@ define(
     [
         'backbone.validation',
         'underscore',
-        'jQuery/Validation'
+        'jQuery/jquery.validation'
     ], function (Validation, _) {
         'use strict';
 
@@ -27,7 +27,10 @@ define(
                     var boundHandler = errorHandler.bind(this);
 
                     this.model.sync = function () {
-                        self.$el.removeBootstrapError();
+                        self.$el.removeAllErrors();
+
+                        arguments[2].isValidatedCall = true;
+
                         return self.originalSync.apply(this, arguments).fail(boundHandler);
                     };
                 }
@@ -71,9 +74,13 @@ define(
                     var validationErrors = JSON.parse(response.responseText);
 
                     _.each(validationErrors, function (error) {
-                        view.$el.addBootstrapError(error);
+                        view.$el.processServerError(error);
                     });
                 }
             };
+
+
+
+            return this;
         };
     });

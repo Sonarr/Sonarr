@@ -14,7 +14,7 @@ namespace NzbDrone.Api.REST
         public IRuleBuilderInitial<TResource, TProperty> RuleForField<TProperty>(Expression<Func<TResource, IEnumerable<Field>>> fieldListAccessor, string fieldName)
         {
             var rule = new PropertyRule(fieldListAccessor.GetMember(), c => GetValue(c, fieldListAccessor.Compile(), fieldName), null, () => CascadeMode.Continue, typeof(TProperty), typeof(TResource));
-            rule.PropertyName += "." + fieldName;
+            rule.PropertyName = fieldName;
             rule.DisplayName = new StaticStringSource(fieldName);
 
             AddRule(rule);
@@ -34,7 +34,4 @@ namespace NzbDrone.Api.REST
             return resource.Value;
         }
     }
-
-
-
 }

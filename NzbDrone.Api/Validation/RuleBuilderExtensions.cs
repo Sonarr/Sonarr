@@ -15,5 +15,4 @@ namespace NzbDrone.Api.Validation
             return ruleBuilder.SetValidator(new EqualValidator(0));
         }
     }
-
 }
