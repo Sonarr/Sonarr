@@ -13,7 +13,16 @@ define(
         'Shared/Actioneer',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (App, Marionette, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, SeasonMenuCollectionView, InfoView, LoadingView, Actioneer) {
+    ], function (App,
+                 Marionette,
+                 EpisodeCollection,
+                 EpisodeFileCollection,
+                 SeasonCollection,
+                 SeasonCollectionView,
+                 SeasonMenuCollectionView,
+                 InfoView,
+                 LoadingView,
+                 Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -146,6 +155,8 @@ define(
                         seriesId: this.model.get('id')
                     },
                     element    : this.ui.rename,
+                    context   : this,
+                    onSuccess : this._showSeasons,
                     failMessage: 'Series search failed'
                 });
             },
