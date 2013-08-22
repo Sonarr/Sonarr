@@ -6,8 +6,9 @@ define(
         'AddSeries/RootFolders/CollectionView',
         'AddSeries/RootFolders/Collection',
         'AddSeries/RootFolders/Model',
+        'Shared/LoadingView',
         'Mixins/AutoComplete'
-    ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel) {
+    ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'AddSeries/RootFolders/LayoutTemplate',
@@ -33,6 +34,7 @@ define(
 
             onRender: function () {
                 var self = this;
+                this.currentDirs.show(new LoadingView());
 
                 RootFolderCollection.promise.done(function () {
                     self.currentDirs.show(self.rootfolderListView);

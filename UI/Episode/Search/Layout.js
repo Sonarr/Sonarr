@@ -6,11 +6,11 @@ define(
         'Episode/Search/ButtonsView',
         'Episode/Search/ManualLayout',
         'Release/Collection',
-        'Shared/SpinnerView',
+        'Shared/LoadingView',
         'Shared/Messenger',
         'Commands/CommandController',
         'Shared/FormatHelpers'
-    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SpinnerView, Messenger, CommandController, FormatHelpers) {
+    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, LoadingView, Messenger, CommandController, FormatHelpers) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/LayoutTemplate',
@@ -59,7 +59,7 @@ define(
 
                 var self = this;
 
-                this.mainView = new SpinnerView();
+                this.mainView = new LoadingView();
                 this._showMainView();
 
                 var releases = new ReleaseCollection();

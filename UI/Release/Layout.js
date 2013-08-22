@@ -9,8 +9,8 @@ define(
         'Cells/FileSizeCell',
         'Cells/QualityCell',
         'Cells/ApprovalStatusCell',
-        'Shared/SpinnerView'
-    ], function (Marionette, Backgrid, ReleaseCollection, IndexerCell, EpisodeNumberCell, FileSizeCell, QualityCell, ApprovalStatusCell, SpinnerView) {
+        'Shared/LoadingView'
+    ], function (Marionette, Backgrid, ReleaseCollection, IndexerCell, EpisodeNumberCell, FileSizeCell, QualityCell, ApprovalStatusCell, LoadingView) {
         return Marionette.Layout.extend({
             template: 'Release/LayoutTemplate',
 
@@ -80,7 +80,7 @@ define(
 
                 var self = this;
 
-                this.grid.show(new SpinnerView());
+                this.grid.show(new LoadingView());
 
                 this.fetchPromise.done(function () {
                     self.showTable();

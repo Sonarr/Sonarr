@@ -8,8 +8,9 @@ define(
         'Series/EpisodeFileCollection',
         'Cells/FileSizeCell',
         'Cells/QualityCell',
-        'Episode/Summary/NoFileView'
-    ], function (App, Marionette, Backgrid, EpisodeFileModel, EpisodeFileCollection, FileSizeCell, QualityCell, NoFileView) {
+        'Episode/Summary/NoFileView',
+        'Shared/LoadingView'
+    ], function (App, Marionette, Backgrid, EpisodeFileModel, EpisodeFileCollection, FileSizeCell, QualityCell, NoFileView, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Summary/EpisodeSummaryLayoutTemplate',
@@ -61,6 +62,8 @@ define(
                     }
 
                     else {
+                        this.activity.show(new LoadingView());
+
                         var self = this;
                         var newEpisodeFile = new EpisodeFileModel({ id: episodeFileId });
                         var newEpisodeFileCollection = new EpisodeFileCollection(newEpisodeFile, { seriesId: this.model.get('seriesId') });
