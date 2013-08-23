@@ -258,6 +258,12 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoDownloadPropers", value); }
         }
 
+        public string DownloadClientWorkingFolders
+        {
+            get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }
+            set { SetValue("DownloadClientWorkingFolders", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

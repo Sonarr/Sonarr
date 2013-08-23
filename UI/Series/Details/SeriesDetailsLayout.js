@@ -156,7 +156,7 @@ define(
                     },
                     element    : this.ui.rename,
                     context   : this,
-                    onSuccess : this._showSeasons,
+                    onSuccess : this._refetchEpisodeFiles,
                     failMessage: 'Series search failed'
                 });
             },
@@ -209,6 +209,10 @@ define(
 
             _showInfo: function () {
                 this.info.show(new InfoView({ model: this.model }));
+            },
+
+            _refetchEpisodeFiles: function () {
+                this.episodeFileCollection.fetch();
             }
         });
     });

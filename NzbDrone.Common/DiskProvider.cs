@@ -93,7 +93,6 @@ namespace NzbDrone.Common
         {
             Ensure.That(() => path).IsValidPath();
 
-
             if (!FileExists(path))
                 throw new FileNotFoundException("File doesn't exist: " + path);
 

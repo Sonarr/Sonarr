@@ -6,11 +6,12 @@ define(
         'Episode/Search/ButtonsView',
         'Episode/Search/ManualLayout',
         'Release/Collection',
+        'Series/SeriesCollection',
         'Shared/LoadingView',
         'Shared/Messenger',
         'Commands/CommandController',
         'Shared/FormatHelpers'
-    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, LoadingView, Messenger, CommandController, FormatHelpers) {
+    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SeriesCollection, LoadingView, Messenger, CommandController, FormatHelpers) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/LayoutTemplate',
@@ -40,7 +41,8 @@ define(
 
                 CommandController.Execute('episodeSearch', { episodeId: this.model.get('id') });
 
-                var seriesTitle = this.model.get('series').get('title');
+                var series = SeriesCollection.get(this.model.get('seriesId'));
+                var seriesTitle = series.get('title');
                 var season = this.model.get('seasonNumber');
                 var episode = this.model.get('episodeNumber');
                 var message = seriesTitle + ' - ' + season + 'x' + FormatHelpers.pad(episode, 2);

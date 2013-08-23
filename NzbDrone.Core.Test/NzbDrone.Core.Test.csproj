@@ -132,6 +132,7 @@
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
+    <Compile Include="MediaFileTests\EpisodeImportTests\NotUnpackingSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\NotInUseSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\EpisodeImportTests\FreeSpaceSpecificationFixture.cs" />
     <Compile Include="MediaFileTests\RenameEpisodeFileServiceFixture.cs" />
