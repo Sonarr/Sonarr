@@ -5,8 +5,8 @@ define(
         'marionette',
         'AddSeries/Collection',
         'AddSeries/SearchResultCollectionView',
-        'Shared/SpinnerView'
-    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, SpinnerView) {
+        'Shared/LoadingView'
+    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, LoadingView) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesTemplate',
 
@@ -88,7 +88,7 @@ define(
                     this.searchResult.close();
                 }
                 else {
-                    this.searchResult.show(new SpinnerView());
+                    this.searchResult.show(new LoadingView());
                     this.currentSearchPromise = this.collection.fetch({
                         data: { term: options.term }
                     }).done(function () {

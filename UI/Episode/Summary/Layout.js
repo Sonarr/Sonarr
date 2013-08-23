@@ -55,7 +55,7 @@ define(
                     this.activity.show(new Backgrid.Grid({
                         collection: new Backbone.Collection(episodeFile),
                         columns   : this.columns,
-                        className : 'table table-bordered'
+                        className : 'table table-bordered'spinn
                     }));
                 }
 
