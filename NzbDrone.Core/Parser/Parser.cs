@@ -249,8 +249,6 @@ namespace NzbDrone.Core.Parser
             var result = new QualityModel { Quality = Quality.Unknown };
             result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
-            //if (Regex.Match(normalizedName))
-
             if ((normalizedName.Contains("dvd") && !normalizedName.Contains("avcdvd")) || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
             {
                 result.Quality = Quality.DVD;
