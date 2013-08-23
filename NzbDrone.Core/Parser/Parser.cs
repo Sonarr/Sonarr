@@ -249,7 +249,9 @@ namespace NzbDrone.Core.Parser
             var result = new QualityModel { Quality = Quality.Unknown };
             result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
-            if (normalizedName.Contains("dvd") || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
+            //if (Regex.Match(normalizedName))
+
+            if ((normalizedName.Contains("dvd") && !normalizedName.Contains("avcdvd")) || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
             {
                 result.Quality = Quality.DVD;
                 return result;
@@ -325,8 +327,8 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.HDTV720p;
                 return result;
             }
-            //Based on extension
 
+            //Based on extension
             if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
             {
                 try
