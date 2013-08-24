@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage GetLatestUpdate()
         {
-            var url = String.Format("{0}/v1/update/{1}?{2}", Services.RootUrl, _configFileProvider.Branch, BuildInfo.Version);
+            var url = String.Format("{0}/v1/update/{1}?version={2}", Services.RootUrl, _configFileProvider.Branch, BuildInfo.Version);
             var update = JsonConvert.DeserializeObject<UpdatePackageAvailable>(_httpProvider.DownloadString(url));
 
             if (!update.Available) return null;
