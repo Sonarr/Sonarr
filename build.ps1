@@ -137,7 +137,7 @@ Function CheckExitCode()
 }
 
 Build
-PackageMono
 RunGrunt
+PackageMono
 PackageTests
 
