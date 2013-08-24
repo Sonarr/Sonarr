@@ -1,5 +1,6 @@
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
+$outputFolderMono = '.\_output_mono'
 $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
 
@@ -33,11 +34,17 @@ Function CleanFolder($path)
 
     get-childitem $path -File -Filter *.transform -Recurse  | foreach ($_) {remove-item $_.fullname}
 
+    
+    get-childitem $path -File -Filter *.dll.config -Recurse  | foreach ($_) {remove-item $_.fullname}
 
     Write-Host Removing FluentValidation.Resources  files
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
 
     get-childitem $path -File -Filter app.config -Recurse  | foreach ($_) {remove-item $_.fullname}
+ 
+ 
+    Write-Host Removing NuGet
+    Remove-Item -Recurse -Force "$path\NuGet"
   
     Write-Host Removing Empty folders
     while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) 
@@ -46,11 +53,39 @@ Function CleanFolder($path)
     }
 }
 
+Function PackageMono()
+{
+    if(Test-Path $outputFolderMono)
+    {
+        Remove-Item -Recurse -Force $outputFolderMono -ErrorAction Continue
+    }
+
+    Copy-Item $outputFolder $outputFolderMono -recurse
+
+    Write-Host Removing Update Client 
+    Remove-Item -Recurse -Force "$outputFolderMono\NzbDrone.Update"
+
+    Write-Host Removing PDBs
+    get-childitem $outputFolderMono -File -Filter *.pdb -Recurse | foreach ($_) {remove-item $_.fullname}
+
+    Write-Host Removing Service helpers
+    get-childitem $outputFolderMono -File -Filter ServiceUninstall.* -Recurse  | foreach ($_) {remove-item $_.fullname}
+    get-childitem $outputFolderMono -File -Filter ServiceInstall.* -Recurse  | foreach ($_) {remove-item $_.fullname}
+    
+    Write-Host Removing native windows binaries Sqlite, MedianInfo
+    get-childitem $outputFolderMono -File -Filter sqlite3.* -Recurse  | foreach ($_) {remove-item $_.fullname}
+    get-childitem $outputFolderMono -File -Filter MediaInfo.* -Recurse  | foreach ($_) {remove-item $_.fullname}
+
+    Write-Host Renaming NzbDrone.Console.exe to NzbDrone.exe
+    get-childitem $outputFolderMono -File -Filter NzbDrone.exe -Recurse  | foreach ($_) {remove-item $_.fullname}
+    Rename-Item "$outputFolderMono\NzbDrone.Console.exe" "NzbDrone.exe"
+}
+
 
 Function AddJsonNet()
 {
     get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
-    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.*  -Destination $outputFolder
+    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder
 }
 
 Function PackageTests()
@@ -102,5 +137,7 @@ Function CheckExitCode()
 }
 
 Build
+PackageMono
 RunGrunt
 PackageTests
+

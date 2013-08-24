@@ -108,7 +108,7 @@ UpdateLogs/
 .idea/*
 *log.txt
 node_modules/
-_output/
+_output*
 _rawPackage/
 _dotTrace*
 _tests/
