@@ -128,6 +128,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_when_episodeFile_was_added_more_than_7_days_ago()
         {
+            _firstFile.Quality.Quality = Quality.DVD;
+
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
             _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
         }
@@ -135,6 +137,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_when_first_episodeFile_was_added_more_than_7_days_ago()
         {
+            _firstFile.Quality.Quality = Quality.DVD;
+            _secondFile.Quality.Quality = Quality.DVD;
+
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
             _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
@@ -142,6 +147,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_when_second_episodeFile_was_added_more_than_7_days_ago()
         {
+            _firstFile.Quality.Quality = Quality.DVD;
+            _secondFile.Quality.Quality = Quality.DVD;
+
             _secondFile.DateAdded = DateTime.Today.AddDays(-30);
             _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
@@ -149,7 +157,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_when_episodeFile_was_added_more_than_7_days_ago_but_proper_is_for_better_quality()
         {
-            _firstFile.Quality.Quality = Quality.SDTV;
+            WithFirstFileUpgradable();
+
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
             _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
         }
@@ -157,6 +166,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_when_episodeFile_was_added_more_than_7_days_ago_but_is_for_search()
         {
+            WithFirstFileUpgradable();
+
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
             _upgradeDisk.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Should().BeTrue();
         }
