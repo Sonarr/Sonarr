@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -20,10 +21,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     {
         private UpgradeDiskSpecification _upgradeDisk;
 
-        private RemoteEpisode parseResultMulti;
-        private RemoteEpisode parseResultSingle;
-        private EpisodeFile firstFile;
-        private EpisodeFile secondFile;
+        private RemoteEpisode _parseResultMulti;
+        private RemoteEpisode _parseResultSingle;
+        private EpisodeFile _firstFile;
+        private EpisodeFile _secondFile;
 
         [SetUp]
         public void Setup()
@@ -31,24 +32,24 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<QualityUpgradableSpecification>();
             _upgradeDisk = Mocker.Resolve<UpgradeDiskSpecification>();
 
-            firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
-            secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
+            _firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
+            _secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, true), DateAdded = DateTime.Now };
 
-            var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
-            var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
+            var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
+            var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = _secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
 
             var fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
                          .Build();
 
-            parseResultMulti = new RemoteEpisode
+            _parseResultMulti = new RemoteEpisode
             {
                 Series = fakeSeries,
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
                 Episodes = doubleEpisodeList
             };
 
-            parseResultSingle = new RemoteEpisode
+            _parseResultSingle = new RemoteEpisode
             {
                 Series = fakeSeries,
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
@@ -58,34 +59,34 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithFirstFileUpgradable()
         {
-            firstFile.Quality = new QualityModel(Quality.SDTV);
+            _firstFile.Quality = new QualityModel(Quality.SDTV);
         }
 
         private void WithSecondFileUpgradable()
         {
-            secondFile.Quality = new QualityModel(Quality.SDTV);
+            _secondFile.Quality = new QualityModel(Quality.SDTV);
         }
 
         [Test]
         public void should_return_true_if_episode_has_no_existing_file()
         {
-            parseResultSingle.Episodes.ForEach(c => c.EpisodeFileId = 0);
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
+            _parseResultSingle.Episodes.ForEach(c => c.EpisodeFileId = 0);
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_single_episode_doesnt_exist_on_disk()
         {
-            parseResultSingle.Episodes = new List<Episode>();
+            _parseResultSingle.Episodes = new List<Episode>();
 
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
         public void should_be_upgradable_if_only_episode_is_upgradable()
         {
             WithFirstFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
@@ -93,56 +94,71 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithFirstFileUpgradable();
             WithSecondFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeTrue();
+            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
         }
 
         [Test]
         public void should_be_not_upgradable_if_both_episodes_are_not_upgradable()
         {
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_first_episodes_is_upgradable()
         {
             WithFirstFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_second_episodes_is_upgradable()
         {
             WithSecondFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
+            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_not_be_upgradable_if_qualities_are_the_same()
         {
-            firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
-            parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeFalse();
+            _firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
+            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_when_episodeFile_was_added_more_than_7_days_ago()
         {
-            firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(parseResultSingle, null).Should().BeFalse();
+            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_when_first_episodeFile_was_added_more_than_7_days_ago()
         {
-            firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
+            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_when_second_episodeFile_was_added_more_than_7_days_ago()
         {
-            secondFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(parseResultMulti, null).Should().BeFalse();
+            _secondFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_when_episodeFile_was_added_more_than_7_days_ago_but_proper_is_for_better_quality()
+        {
+            _firstFile.Quality.Quality = Quality.SDTV;
+            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_episodeFile_was_added_more_than_7_days_ago_but_is_for_search()
+        {
+            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
+            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Should().BeTrue();
         }
     }
 }

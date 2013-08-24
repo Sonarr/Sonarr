@@ -36,7 +36,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     return false;
                 }
 
-                if (subject.ParsedEpisodeInfo.Quality.Proper && file.DateAdded < DateTime.Today.AddDays(-7))
+                if (searchCriteria == null &&
+                    subject.ParsedEpisodeInfo.Quality.Quality == file.Quality.Quality &&
+                    subject.ParsedEpisodeInfo.Quality.Proper &&
+                    file.DateAdded < DateTime.Today.AddDays(-7))
                 {
                     _logger.Trace("Proper for old file, skipping: {0}", subject);
                     return false;
