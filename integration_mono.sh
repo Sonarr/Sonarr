@@ -1,4 +1,4 @@
-EXCLUDE="-exclude:Windows,IntegrationTest"
+EXCLUDE="-exclude:Windows -include:IntegrationTest"
 TESTDIR="."
 NUNIT="$TESTDIR/NUnit.Runners.2.6.1/tools/nunit-console-x86.exe"
 
