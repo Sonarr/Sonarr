@@ -33,7 +33,12 @@ namespace NzbDrone.Core.Indexers.Newznab
 
                 if (rageIdElement != null)
                 {
-                    currentResult.TvRageId = Convert.ToInt32(rageIdElement.Attribute("value").Value);
+                    int tvRageId;
+
+                    if (Int32.TryParse(rageIdElement.Attribute("value").Value, out tvRageId))
+                    {
+                        currentResult.TvRageId = tvRageId;
+                    }
                 }
             }
 

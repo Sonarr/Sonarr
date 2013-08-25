@@ -93,14 +93,10 @@ namespace NzbDrone.Core.Tv
                 _logger.WarnException("Couldn't update series path for " + series.Path, e);
             }
 
-
             _seriesService.UpdateSeries(series);
-
             _refreshEpisodeService.RefreshEpisodeInfo(series, tuple.Item2);
 
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
         }
-
-
     }
 }
