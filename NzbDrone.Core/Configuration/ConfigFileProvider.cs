@@ -8,10 +8,11 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.Configuration
 {
-    public interface IConfigFileProvider
+    public interface IConfigFileProvider : IHandleAsync<ApplicationStartedEvent>
     {
         Dictionary<string, object> GetConfigDictionary();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
@@ -27,6 +28,8 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigFileProvider : IConfigFileProvider
     {
+        private const string CONFIG_ELEMENT_NAME = "Config";
+
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IMessageAggregator _messageAggregator;
         private readonly ICached<string> _cache;
@@ -138,7 +141,7 @@ namespace NzbDrone.Core.Configuration
                     EnsureDefaultConfigFile();
 
                     var xDoc = XDocument.Load(_configFile);
-                    var config = xDoc.Descendants("Config").Single();
+                    var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
                     var parentContainer = config;
 
@@ -160,7 +163,7 @@ namespace NzbDrone.Core.Configuration
             EnsureDefaultConfigFile();
 
             var xDoc = XDocument.Load(_configFile);
-            var config = xDoc.Descendants("Config").Single();
+            var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
             var parentContainer = config;
 
@@ -191,9 +194,37 @@ namespace NzbDrone.Core.Configuration
             if (!File.Exists(_configFile))
             {
                 var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
-                xDoc.Add(new XElement("Config"));
+                xDoc.Add(new XElement(CONFIG_ELEMENT_NAME));
                 xDoc.Save(_configFile);
             }
+        }
+
+        private void DeleteOldValues()
+        {
+            EnsureDefaultConfigFile();
+
+            var xDoc = XDocument.Load(_configFile);
+            var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
+
+            var type = GetType();
+            var properties = type.GetProperties();
+
+            foreach (var configValue in config.Descendants().ToList())
+            {
+                var name = configValue.Name.LocalName;
+
+                if (!properties.Any(p => p.Name == name))
+                {
+                    config.Descendants(name).Remove();
+                }
+            }
+
+            xDoc.Save(_configFile);
+        }
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            DeleteOldValues();
         }
     }
 }
