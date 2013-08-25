@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
     public class DownloadNzbFixture : CoreTest
     {
         private const string _url = "http://www.nzbdrone.com";
-        private const string _title = "30 Rock - S01E01 - Pilot [HDTV-720p]";
+        private const string _title = "30.Rock.S01E01.Pilot.720p.hdtv";
         private RemoteEpisode _remoteEpisode;
 
         [SetUp]
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             Mocker.GetMock<IHttpProvider>()
                     .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass",
-                        It.Is<String>(c => c.Equals("{\"method\":\"appendurl\",\"params\":[\"30 Rock - S01E01 - Pilot [HDTV-720p]\",\"TV\",50,false,\"http://www.nzbdrone.com\"]}"))))
+                        It.Is<String>(c => c.Equals("{\"method\":\"appendurl\",\"params\":[\"30.Rock.S01E01.Pilot.720p.hdtv.nzb\",\"TV\",50,false,\"http://www.nzbdrone.com\"]}"))))
                     .Returns("{\"version\": \"1.1\",\"result\": true}");
 
             Mocker.Resolve<NzbgetClient>().DownloadNzb(_remoteEpisode);

@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Report.NzbUrl;
-            var title = remoteEpisode.Report.Title;
+            var title = remoteEpisode.Report.Title + ".nzb";
 
             string cat = _configService.NzbgetTvCategory;
             int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetOlderTvPriority;
