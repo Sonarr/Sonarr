@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
@@ -89,8 +90,11 @@ namespace NzbDrone.Core.History
                         Quality = message.EpisodeFile.Quality,
                         SourceTitle = message.EpisodeFile.Path,
                         SeriesId = message.EpisodeFile.SeriesId,
-                        EpisodeId = episode.Id,
+                        EpisodeId = episode.Id
                     };
+
+                history.Data.Add("Path", message.EpisodeFile.Path);
+                history.Data.Add("Filename", Path.GetFileNameWithoutExtension(message.EpisodeFile.Path));
 
                 _historyRepository.Insert(history);
             }

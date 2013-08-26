@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.MediaFiles.Events
 {
-    public class EpisodeImportedEvent:IEvent
+    public class EpisodeImportedEvent : IEvent
     {
         public EpisodeFile EpisodeFile { get; private set; }
 

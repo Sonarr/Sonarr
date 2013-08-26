@@ -5,9 +5,9 @@ define(
         'marionette',
         'Series/Edit/EditSeriesView',
         'Series/Delete/DeleteSeriesView',
-        'Episode/Layout'
-
-    ], function (App, Marionette, EditSeriesView, DeleteSeriesView, EpisodeLayout) {
+        'Episode/Layout',
+        'History/Details/HistoryDetailsView'
+    ], function (App, Marionette, EditSeriesView, DeleteSeriesView, EpisodeLayout, HistoryDetailsView) {
 
         var router = Marionette.AppRouter.extend({
 
@@ -16,6 +16,7 @@ define(
                 App.vent.on(App.Commands.EditSeriesCommand, this._editSeries, this);
                 App.vent.on(App.Commands.DeleteSeriesCommand, this._deleteSeries, this);
                 App.vent.on(App.Commands.ShowEpisodeDetails, this._showEpisode, this);
+                App.vent.on(App.Commands.ShowHistoryDetails, this._showHistory, this);
             },
 
             _closeModal: function () {
@@ -34,6 +35,11 @@ define(
 
             _showEpisode: function (options) {
                 var view = new EpisodeLayout({ model: options.episode, hideSeriesLink: options.hideSeriesLink });
+                App.modalRegion.show(view);
+            },
+
+            _showHistory: function (options) {
+                var view = new HistoryDetailsView({ model: options.history });
                 App.modalRegion.show(view);
             }
         });

@@ -1,0 +1,58 @@
+﻿<div class="history-detail-modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        <h3>
+            Details
+        </h3>
+
+    </div>
+    <div class="modal-body">
+        {{#if_eq eventType compare="grabbed"}}
+            <dl class="dl-horizontal">
+
+                <dt>Name</dt>
+                <dd>{{sourceTitle}}</dd>
+
+                {{#with data}}
+                    {{#if indexer}}
+                        <dt>Indexer</dt>
+                        <dd>{{indexer}}</dd>
+                    {{/if}}
+
+                    {{#if releaseGroup}}
+                        <dt>Release Group</dt>
+                        <dd>{{releaseGroup}}</dd>
+                    {{/if}}
+
+                    {{#if nzbInfoUrl}}
+                        <dt>Info</dt>
+                        <dd><a href="{{nzbInfoUrl}}">{{nzbInfoUrl}}o</a></dd>
+                    {{/if}}
+                {{/with}}
+            </dl>
+        {{else}}
+            {{#if data}}
+                {{#with data}}
+                    <dl class="dl-horizontal">
+                        {{#if filename}}
+                            <dt>Filename</dt>
+                            <dd>{{filename}}</dd>
+                        {{/if}}
+
+                        {{#if path}}
+                            <dt>Path</dt>
+                            <dd>{{path}}</dd>
+                        {{/if}}
+                    </dl>
+                {{/with}}
+            {{else}}
+                No details available
+            {{/if}}
+        {{/if_eq}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">close</button>
+    </div>
+</div>
+

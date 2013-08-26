@@ -196,6 +196,7 @@ define(
             DeleteSeriesCommand: 'DeleteSeriesCommand',
             CloseModalCommand  : 'CloseModalCommand',
             ShowEpisodeDetails : 'ShowEpisodeDetails',
+            ShowHistoryDetails : 'ShowHistryDetails',
             SaveSettings       : 'saveSettings',
             ShowLogFile        : 'showLogFile'
         };

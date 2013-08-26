@@ -10,9 +10,21 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/QualityCell',
         'Cells/RelativeDateCell',
+        'History/HistoryDetailsCell',
         'Shared/Grid/Pager',
         'Shared/LoadingView'
-    ], function (Marionette, Backgrid, HistoryCollection, EventTypeCell, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, QualityCell, RelativeDateCell, GridPager, LoadingView) {
+    ], function (Marionette,
+                 Backgrid,
+                 HistoryCollection,
+                 EventTypeCell,
+                 SeriesTitleCell,
+                 EpisodeNumberCell,
+                 EpisodeTitleCell,
+                 QualityCell,
+                 RelativeDateCell,
+                 HistoryDetailsCell,
+                 GridPager,
+                 LoadingView) {
         return Marionette.Layout.extend({
             template: 'History/HistoryLayoutTemplate',
 
@@ -56,6 +68,12 @@ define(
                         name : 'date',
                         label: 'Date',
                         cell : RelativeDateCell
+                    },
+                    {
+                        name    : 'this',
+                        label   : '',
+                        cell    : HistoryDetailsCell,
+                        sortable: false
                     }
                 ],
 
