@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [FieldDefinition(4, Label = "Display Time", HelpText = "How long the notification will be displayed for (In seconds)")]
         public Int32 DisplayTime { get; set; }
 
-        [FieldDefinition(5, Label = "GUI Notification", HelpText = "Show GUI notifications?", Type = FieldType.Checkbox)]
+        [FieldDefinition(5, Label = "GUI Notification", Type = FieldType.Checkbox)]
         public Boolean Notify { get; set; }
 
         [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
