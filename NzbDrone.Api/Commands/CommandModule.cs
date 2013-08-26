@@ -31,7 +31,7 @@ namespace NzbDrone.Api.Commands
             dynamic command = Request.Body.FromJson(commandType);
             _messageAggregator.PublishCommand(command);
 
-            return resource.AsResponse();
+            return resource.AsResponse(HttpStatusCode.Created);
         }
     }
 }

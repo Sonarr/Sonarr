@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.RootFolders;
+using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.RootFolders
 {
@@ -12,8 +14,14 @@ namespace NzbDrone.Api.RootFolders
             _rootFolderService = rootFolderService;
 
             GetResourceAll = GetRootFolders;
+            GetResourceById = GetRootFolder;
             CreateResource = CreateRootFolder;
             DeleteResource = DeleteFolder;
+        }
+
+        private RootFolderResource GetRootFolder(int id)
+        {
+            return _rootFolderService.Get(id).InjectTo<RootFolderResource>();
         }
 
         private int CreateRootFolder(RootFolderResource rootFolderResource)
