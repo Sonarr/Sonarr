@@ -18,9 +18,15 @@ namespace NzbDrone.Api.Notifications
             _notificationService = notificationService;
 
             GetResourceAll = GetAll;
+            GetResourceById = GetNotification;
             CreateResource = Create;
             UpdateResource = Update;
             DeleteResource = DeleteNotification;
+        }
+
+        private NotificationResource GetNotification(int id)
+        {
+            return _notificationService.Get(id).InjectTo<NotificationResource>();
         }
 
         private List<NotificationResource> GetAll()
@@ -44,13 +50,13 @@ namespace NzbDrone.Api.Notifications
 
         private int Create(NotificationResource notificationResource)
         {
-            var notification = GetNotification(notificationResource);
+            var notification = ConvertToNotification(notificationResource);
             return _notificationService.Create(notification).Id;
         }
 
         private void Update(NotificationResource notificationResource)
         {
-            var notification = GetNotification(notificationResource);
+            var notification = ConvertToNotification(notificationResource);
             notification.Id = notificationResource.Id;
             _notificationService.Update(notification);
         }
@@ -60,7 +66,7 @@ namespace NzbDrone.Api.Notifications
             _notificationService.Delete(id);
         }
 
-        private Notification GetNotification(NotificationResource notificationResource)
+        private Notification ConvertToNotification(NotificationResource notificationResource)
         {
             var notification = _notificationService.Schema()
                                .SingleOrDefault(i =>

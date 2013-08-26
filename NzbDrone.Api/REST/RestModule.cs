@@ -137,6 +137,7 @@ namespace NzbDrone.Api.REST
             private get { return _createResource; }
             set
             {
+                EnsureGetByIdRoute();
                 _createResource = value;
                 Post[ROOT_ROUTE] = options =>
                 {
@@ -144,6 +145,15 @@ namespace NzbDrone.Api.REST
                     return GetResourceById(id).AsResponse(HttpStatusCode.Created);
                 };
 
+            }
+        }
+
+        private void EnsureGetByIdRoute()
+        {
+            if (GetResourceById == null)
+            {
+                throw new InvalidOperationException(
+                    "GetResourceById route must be defined before defining Create/Update routes.");
             }
         }
 
