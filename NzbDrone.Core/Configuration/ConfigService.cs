@@ -172,11 +172,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("BlackholeFolder", value); }
         }
 
-        public string ServiceRootUrl
-        {
-            get { return "http://services.nzbdrone.com"; }
-        }
-
         public string PneumaticFolder
         {
             get { return GetValue("PneumaticFolder", String.Empty); }

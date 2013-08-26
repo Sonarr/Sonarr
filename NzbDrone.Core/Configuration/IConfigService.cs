@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Configuration
         int Retention { get; set; }
         DownloadClientType DownloadClient { get; set; }
         string BlackholeFolder { get; set; }
-        string ServiceRootUrl { get; }
         string PneumaticFolder { get; set; }
         string RecycleBin { get; set; }
         String NzbgetUsername { get; set; }

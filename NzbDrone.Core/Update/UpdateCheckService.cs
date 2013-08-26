@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Update
         {
             var latestAvailable = _updatePackageProvider.GetLatestUpdate();
 
-            if (latestAvailable == null || latestAvailable.Version <= BuildInfo.Version)
+            if (latestAvailable == null)
             {
                 _logger.Debug("No update available.");
                 return null;

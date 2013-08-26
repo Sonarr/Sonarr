@@ -17,13 +17,11 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
     public class DailySeriesDataProxy : IDailySeriesDataProxy
     {
         private readonly IHttpProvider _httpProvider;
-        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public DailySeriesDataProxy(IHttpProvider httpProvider, IConfigService configService, Logger logger)
+        public DailySeriesDataProxy(IHttpProvider httpProvider, Logger logger)
         {
             _httpProvider = httpProvider;
-            _configService = configService;
             _logger = logger;
         }
 
@@ -31,7 +29,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
         {
             try
             {
-                var dailySeriesIds = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/DailySeries/AllIds");
+                var dailySeriesIds = _httpProvider.DownloadString(Services.RootUrl + "/DailySeries/AllIds");
 
                 var seriesIds = Json.Deserialize<List<int>>(dailySeriesIds);
 
@@ -49,7 +47,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
         {
             try
             {
-                var result = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/DailySeries/Check?seriesId=" + tvdbid);
+                var result = _httpProvider.DownloadString(Services.RootUrl + "/DailySeries/Check?seriesId=" + tvdbid);
                 return Convert.ToBoolean(result);
             }
             catch (Exception ex)
