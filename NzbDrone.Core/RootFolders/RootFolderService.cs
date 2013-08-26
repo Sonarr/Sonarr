@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -155,7 +154,10 @@ namespace NzbDrone.Core.RootFolders
 
         public RootFolder Get(int id)
         {
-            return _rootFolderRepository.Get(id);
+            var rootFolder = _rootFolderRepository.Get(id);
+            rootFolder.FreeSpace = _diskProvider.GetAvilableSpace(rootFolder.Path);
+            rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
+            return rootFolder;
         }
     }
 }
