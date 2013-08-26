@@ -20,9 +20,9 @@
         <div class="control-group">
             <label class="control-label">Cutoff</label>
             <div class="controls">
-                <select class="x-cutoff" name="cutoff.id">
+                <select class="x-cutoff" name="cutoff.id" validation-name="cutoff">
                     {{#each allowed}}
-                        <option value="{{id}}">{{name}}</option>
+                    <option value="{{id}}">{{name}}</option>
                     {{/each}}
                 </select>
                 <span class="help-inline">
@@ -41,12 +41,16 @@
             </select>
         </div>
         <div class="span3">
-            <h3>Allowed</h3>
-            <select multiple="multiple" class="x-allowed-list">
-                {{#each allowed}}
-                <option value="{{id}}">{{name}}</option>
-                {{/each}}
-            </select>
+            <div class="control-group">
+                <div class="controls">
+                    <h3>Allowed</h3>
+                    <select multiple="multiple" class="x-allowed-list" validation-name="allowed">
+                        {{#each allowed}}
+                        <option value="{{id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 </div>

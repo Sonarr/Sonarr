@@ -1,20 +1,11 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Mapping;
 using System.Linq;
+using FluentValidation;
 
 namespace NzbDrone.Api.Qualities
 {
-
-    public static class LazyLoadedExtensions
-    {
-        public static IEnumerable<int> GetForeignKeys(this IEnumerable<ModelBase> models)
-        {
-            return models.Select(c => c.Id).Distinct();
-        }
-    }
-
     public class QualityProfileModule : NzbDroneRestModule<QualityProfileResource>
     {
         private readonly QualityProfileService _qualityProfileService;
@@ -23,6 +14,10 @@ namespace NzbDrone.Api.Qualities
             : base("/qualityprofiles")
         {
             _qualityProfileService = qualityProfileService;
+
+            SharedValidator.RuleFor(c => c.Name).NotEmpty();
+            SharedValidator.RuleFor(c => c.Cutoff).NotNull();
+            SharedValidator.RuleFor(c => c.Allowed).NotEmpty();
 
             GetResourceAll = GetAll;
 
