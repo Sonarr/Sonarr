@@ -16,9 +16,9 @@ namespace NzbDrone.Api.RootFolders
             DeleteResource = DeleteFolder;
         }
 
-        private RootFolderResource CreateRootFolder(RootFolderResource rootFolderResource)
+        private int CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            return ToResource<RootFolder>(_rootFolderService.Add, rootFolderResource);
+            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
         }
 
         private List<RootFolderResource> GetRootFolders()

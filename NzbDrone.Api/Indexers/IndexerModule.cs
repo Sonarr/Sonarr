@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.ClientSchema;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
@@ -47,18 +46,14 @@ namespace NzbDrone.Api.Indexers
             return result;
         }
 
-        private IndexerResource CreateIndexer(IndexerResource indexerResource)
+        private int CreateIndexer(IndexerResource indexerResource)
         {
             var indexer = GetIndexer(indexerResource);
             indexer = _indexerService.Create(indexer);
-
-            var response = indexer.InjectTo<IndexerResource>();
-            response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
-
-            return response;
+            return indexer.Id;
         }
 
-        private IndexerResource UpdateIndexer(IndexerResource indexerResource)
+        private void UpdateIndexer(IndexerResource indexerResource)
         {
             var indexer = _indexerService.Get(indexerResource.Id);
             indexer.InjectFrom(indexerResource);
@@ -66,12 +61,7 @@ namespace NzbDrone.Api.Indexers
 
             ValidateIndexer(indexer);
 
-            indexer = _indexerService.Update(indexer);
-
-            var response = indexer.InjectTo<IndexerResource>();
-            response.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
-
-            return response;
+            _indexerService.Update(indexer);
         }
 
 

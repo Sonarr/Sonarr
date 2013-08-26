@@ -31,7 +31,7 @@ namespace NzbDrone.Api.Frontend
                 path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase) ||
                 path.StartsWith("/signalr", StringComparison.CurrentCultureIgnoreCase))
             {
-                return null;
+                return new NotFoundResponse();
             }
 
             var mapper = _requestMappers.SingleOrDefault(m => m.CanHandle(path));
@@ -44,7 +44,7 @@ namespace NzbDrone.Api.Frontend
 
             _logger.Warn("Couldn't find handler for {0}", path);
 
-            return null;
+            return new NotFoundResponse();
         }
     }
 }

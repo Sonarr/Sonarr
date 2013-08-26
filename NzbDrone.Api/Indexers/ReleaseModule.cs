@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Nancy;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
@@ -8,6 +9,8 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using Omu.ValueInjecter;
 using System.Linq;
+using Nancy.ModelBinding;
+using NzbDrone.Api.Extensions;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -31,17 +34,17 @@ namespace NzbDrone.Api.Indexers
             _downloadService = downloadService;
             _parsingService = parsingService;
             GetResourceAll = GetReleases;
-            CreateResource = DownloadRelease;
+            Post["/"] = x=> DownloadRelease(this.Bind<ReleaseResource>());
         }
 
-        private ReleaseResource DownloadRelease(ReleaseResource release)
+        private Response DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), 0);
             remoteEpisode.Report = release.InjectTo<ReportInfo>();
 
             _downloadService.DownloadReport(remoteEpisode);
 
-            return release;
+            return release.AsResponse();
         }
 
         private List<ReleaseResource> GetReleases()

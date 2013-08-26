@@ -42,29 +42,17 @@ namespace NzbDrone.Api.Notifications
             return result;
         }
 
-        private NotificationResource Create(NotificationResource notificationResource)
+        private int Create(NotificationResource notificationResource)
         {
             var notification = GetNotification(notificationResource);
-
-            notification = _notificationService.Create(notification);
-            notificationResource.Id = notification.Id;
-
-            var response = notification.InjectTo<NotificationResource>();
-            response.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
-
-            return response;
+            return _notificationService.Create(notification).Id;
         }
 
-        private NotificationResource Update(NotificationResource notificationResource)
+        private void Update(NotificationResource notificationResource)
         {
             var notification = GetNotification(notificationResource);
             notification.Id = notificationResource.Id;
-            notification = _notificationService.Update(notification);
-
-            var response = notification.InjectTo<NotificationResource>();
-            response.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
-
-            return response;
+            _notificationService.Update(notification);
         }
 
         private void DeleteNotification(int id)

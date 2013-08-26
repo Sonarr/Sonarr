@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
@@ -16,10 +17,11 @@ namespace NzbDrone.Api.Commands
             _messageAggregator = messageAggregator;
             _container = container;
 
-            CreateResource = RunCommand;
+            Post["/"] = x => RunCommand(ReadResourceFromRequest());
+
         }
 
-        private CommandResource RunCommand(CommandResource resource)
+        private Response RunCommand(CommandResource resource)
         {
             var commandType =
                 _container.GetImplementations(typeof(ICommand))
@@ -29,7 +31,7 @@ namespace NzbDrone.Api.Commands
             dynamic command = Request.Body.FromJson(commandType);
             _messageAggregator.PublishCommand(command);
 
-            return resource;
+            return resource.AsResponse();
         }
     }
 }

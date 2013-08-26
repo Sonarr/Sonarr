@@ -19,13 +19,13 @@ define(
                 'change .x-rename-episodes': '_setNamingOptionsVisibility'
             },
 
-            onRender: function(){
-                if(!this.model.get('renameEpisodes')){
+            onRender: function () {
+                if (!this.model.get('renameEpisodes')) {
                     this.ui.namingOptions.hide();
                 }
 
-                this.listenTo(this.model, 'change', this._buildExamples);
-                this._buildExamples();
+                this.listenTo(this.model, 'change', this._updateExamples);
+                this._updateExamples();
             },
 
             _setNamingOptionsVisibility: function () {
@@ -39,16 +39,14 @@ define(
                 }
             },
 
-            _buildExamples: function () {
+            _updateExamples: function () {
+
                 var self = this;
 
-                var data = this.model.toJSON();
-                data.id = 0;
-
                 var promise = $.ajax({
-                    type: 'POST',
-                    url : window.ApiRoot + '/naming',
-                    data: JSON.stringify(data)
+                    type: 'GET',
+                    url : window.ApiRoot + '/config/naming/samples',
+                    data: this.model.toJSON()
                 });
 
                 promise.done(function (result) {

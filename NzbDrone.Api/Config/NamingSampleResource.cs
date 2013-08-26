@@ -1,8 +1,6 @@
-﻿using NzbDrone.Api.Config;
-
-namespace NzbDrone.Api.Naming
+﻿namespace NzbDrone.Api.Config
 {
-    public class NamingResource : NamingConfigResource
+    public class NamingSampleResource
     {
         public string SingleEpisodeExample { get; set; }
         public string MultiEpisodeExample { get; set; }

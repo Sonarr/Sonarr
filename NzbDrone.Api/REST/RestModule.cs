@@ -19,8 +19,8 @@ namespace NzbDrone.Api.REST
         private Func<List<TResource>> _getResourceAll;
         private Func<PagingResource<TResource>, PagingResource<TResource>> _getResourcePaged;
         private Func<TResource> _getResourceSingle;
-        private Func<TResource, TResource> _createResource;
-        private Func<TResource, TResource> _updateResource;
+        private Func<TResource, int> _createResource;
+        private Action<TResource> _updateResource;
 
         protected ResourceValidator<TResource> PostValidator { get; private set; }
         protected ResourceValidator<TResource> PutValidator { get; private set; }
@@ -132,7 +132,7 @@ namespace NzbDrone.Api.REST
             }
         }
 
-        protected Func<TResource, TResource> CreateResource
+        protected Func<TResource, int> CreateResource
         {
             private get { return _createResource; }
             set
@@ -140,36 +140,37 @@ namespace NzbDrone.Api.REST
                 _createResource = value;
                 Post[ROOT_ROUTE] = options =>
                 {
-                    var resource = CreateResource(ReadFromRequest());
-                    return resource.AsResponse(HttpStatusCode.Created);
+                    var id = CreateResource(ReadResourceFromRequest());
+                    return GetResourceById(id).AsResponse(HttpStatusCode.Created);
                 };
 
             }
         }
 
-        protected Func<TResource, TResource> UpdateResource
+        protected Action<TResource> UpdateResource
         {
             private get { return _updateResource; }
             set
             {
                 _updateResource = value;
                 Put[ROOT_ROUTE] = options =>
-                {
-                    var resource = UpdateResource(ReadFromRequest());
-                    return resource.AsResponse(HttpStatusCode.Accepted);
-                };
+                    {
+                        var resource = ReadResourceFromRequest();
+                        UpdateResource(resource);
+                        return GetResourceById(resource.Id).AsResponse(HttpStatusCode.Accepted);
+                    };
 
                 Put[ID_ROUTE] = options =>
                     {
-                        var model = ReadFromRequest();
-                        model.Id = options.Id;
-                        var resource = UpdateResource(model);
-                        return resource.AsResponse(HttpStatusCode.Accepted);
+                        var resource = ReadResourceFromRequest();
+                        resource.Id = options.Id;
+                        UpdateResource(resource);
+                        return GetResourceById(resource.Id).AsResponse(HttpStatusCode.Accepted);
                     };
             }
         }
 
-        private TResource ReadFromRequest()
+        protected TResource ReadResourceFromRequest()
         {
             //TODO: handle when request is null
             var resource = Request.Body.FromJson<TResource>();

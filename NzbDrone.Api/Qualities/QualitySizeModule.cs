@@ -19,16 +19,15 @@ namespace NzbDrone.Api.Qualities
             UpdateResource = Update;
         }
 
-        private QualitySizeResource Update(QualitySizeResource resource)
+        private void Update(QualitySizeResource resource)
         {
             var model = resource.InjectTo<QualitySize>();
             _qualityTypeProvider.Update(model);
-            return GetById(resource.Id);
         }
 
         private QualitySizeResource GetById(int id)
         {
-            return ToResource(() => _qualityTypeProvider.Get(id));
+            return _qualityTypeProvider.Get(id).InjectTo<QualitySizeResource>();
         }
 
         private List<QualitySizeResource> GetAll()

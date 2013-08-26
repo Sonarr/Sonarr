@@ -30,11 +30,11 @@ namespace NzbDrone.Api.Qualities
             DeleteResource = DeleteProfile;
         }
 
-        private QualityProfileResource Create(QualityProfileResource resource)
+        private int Create(QualityProfileResource resource)
         {
             var model = resource.InjectTo<QualityProfile>();
             model = _qualityProfileService.Add(model);
-            return GetById(model.Id);
+            return model.Id;
         }
 
         private void DeleteProfile(int id)
@@ -42,11 +42,10 @@ namespace NzbDrone.Api.Qualities
             _qualityProfileService.Delete(id);
         }
 
-        private QualityProfileResource Update(QualityProfileResource resource)
+        private void Update(QualityProfileResource resource)
         {
             var model = resource.InjectTo<QualityProfile>();
             _qualityProfileService.Update(model);
-            return GetById(resource.Id);
         }
 
         private QualityProfileResource GetById(int id)

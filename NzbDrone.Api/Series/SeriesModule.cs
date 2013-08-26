@@ -66,18 +66,14 @@ namespace NzbDrone.Api.Series
             return seriesResources;
         }
 
-        private SeriesResource AddSeries(SeriesResource seriesResource)
+        private int AddSeries(SeriesResource seriesResource)
         {
-            return ToResource<Core.Tv.Series>(_seriesService.AddSeries, seriesResource);
+            return GetNewId<Core.Tv.Series>(_seriesService.AddSeries, seriesResource);
         }
 
-        private SeriesResource UpdateSeries(SeriesResource seriesResource)
+        private void UpdateSeries(SeriesResource seriesResource)
         {
-            var resource = ToResource<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
-            MapCoversToLocal(resource);
-            FetchAndLinkSeriesStatistics(resource);
-
-            return resource;
+            GetNewId<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
         }
 
         private void DeleteSeries(int id)

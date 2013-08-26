@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.REST;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
-using NzbDrone.Api.Extensions;
-using System.Linq;
 
 namespace NzbDrone.Api.Episodes
 {
@@ -32,11 +29,9 @@ namespace NzbDrone.Api.Episodes
             return ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value));
         }
 
-        private EpisodeResource SetMonitored(EpisodeResource episodeResource)
+        private void SetMonitored(EpisodeResource episodeResource)
         {
             _episodeService.SetEpisodeMonitored(episodeResource.Id, episodeResource.Monitored);
-
-            return episodeResource;
         }
     }
 }

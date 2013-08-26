@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Tv;
-using NzbDrone.Api.Extensions;
-using System.Linq;
-using Omu.ValueInjecter;
+using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -23,7 +20,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
         private EpisodeFileResource GetEpisodeFile(int id)
         {
-            return ToResource(() => _mediaFileService.Get(id));
+            return _mediaFileService.Get(id).InjectTo<EpisodeFileResource>();
         }
 
         private List<EpisodeFileResource> GetEpisodeFiles()
@@ -38,15 +35,11 @@ namespace NzbDrone.Api.EpisodeFiles
             return ToListResource(() => _mediaFileService.GetFilesBySeries(seriesId.Value));
         }
 
-        private EpisodeFileResource SetQuality(EpisodeFileResource episodeFileResource)
+        private void SetQuality(EpisodeFileResource episodeFileResource)
         {
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
-
             _mediaFileService.Update(episodeFile);
-            episodeFileResource.InjectFrom(episodeFile);
-
-            return episodeFileResource;
         }
     }
 }
