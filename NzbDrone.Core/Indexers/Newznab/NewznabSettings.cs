@@ -7,12 +7,22 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
+    public class NewznabSettingsValidator : AbstractValidator<NewznabSettings>
+    {
+        public NewznabSettingsValidator()
+        {
+            RuleFor(c => c.Url).ValidRootUrl();
+        }
+    }
+
+
     public class NewznabSettings : IIndexerSetting
     {
+        private static readonly NewznabSettingsValidator Validator = new NewznabSettingsValidator();
+
         public NewznabSettings()
         {
             Categories = new[] { 5030, 5040 };
-            //RuleFor(c => c.Url).ValidRootUrl();
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -23,18 +33,9 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public IEnumerable<Int32> Categories { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Url);
-            }
-        }
-
         public ValidationResult Validate()
         {
-            return new ValidationResult();
-            //return Validate(this);
+            return Validator.Validate(this);
         }
     }
 }

@@ -6,15 +6,4 @@ namespace NzbDrone.Core.Indexers
     {
         ValidationResult Validate();
     }
-
-
-    public class NullSetting : IIndexerSetting
-    {
-        public static readonly NullSetting Instance = new NullSetting();
-
-        public ValidationResult Validate()
-        {
-            return new ValidationResult();
-        }
-    }
 }

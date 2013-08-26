@@ -64,7 +64,7 @@ namespace NzbDrone.Api.Indexers
             indexer.InjectFrom(indexerResource);
             indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
 
-            ValidateSetting(indexer.Settings);
+            ValidateIndexer(indexer);
 
             indexer = _indexerService.Update(indexer);
 
@@ -75,13 +75,16 @@ namespace NzbDrone.Api.Indexers
         }
 
 
-        private static void ValidateSetting(IIndexerSetting setting)
+        private static void ValidateIndexer(Indexer indexer)
         {
-            var validationResult = setting.Validate();
-
-            if (!validationResult.IsValid)
+            if (indexer.Enable)
             {
-                throw new ValidationException(validationResult.Errors);
+                var validationResult = indexer.Settings.Validate();
+
+                if (!validationResult.IsValid)
+                {
+                    throw new ValidationException(validationResult.Errors);
+                }
             }
         }
 
@@ -100,7 +103,7 @@ namespace NzbDrone.Api.Indexers
             indexer.InjectFrom(indexerResource);
             indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
 
-            ValidateSetting(indexer.Settings);
+            ValidateIndexer(indexer);
 
             return indexer;
         }

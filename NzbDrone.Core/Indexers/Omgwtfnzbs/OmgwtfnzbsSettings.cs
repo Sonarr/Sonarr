@@ -1,18 +1,22 @@
 ﻿using System;
 using FluentValidation;
 using FluentValidation.Results;
-using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
+    public class OmgwtfnzbsSettingsValidator : AbstractValidator<OmgwtfnzbsSettings>
+    {
+        public OmgwtfnzbsSettingsValidator()
+        {
+            RuleFor(c => c.Username).NotEmpty();
+            RuleFor(c => c.ApiKey).NotEmpty();
+        }
+    }
+
     public class OmgwtfnzbsSettings : IIndexerSetting
     {
-//        public OmgwtfnzbsSettings()
-//        {
-//            RuleFor(c => c.Username).NotEmpty();
-//            RuleFor(c => c.ApiKey).NotEmpty();
-//        }
+        private static readonly OmgwtfnzbsSettingsValidator Validator = new OmgwtfnzbsSettingsValidator();
 
         [FieldDefinition(0, Label = "Username")]
         public String Username { get; set; }
@@ -22,8 +26,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
         public ValidationResult Validate()
         {
-            return new ValidationResult();
-            //return Validate(this);
+            return Validator.Validate(this);
         }
     }
 }
