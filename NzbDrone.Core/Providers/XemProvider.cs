@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -12,31 +14,37 @@ namespace NzbDrone.Core.Providers
     {
         void UpdateMappings();
         void UpdateMappings(int seriesId);
+        void UpdateMappings(Series series);
         void PerformUpdate(Series series);
     }
 
-    public class XemProvider : IXemProvider, IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent> 
+    public class XemProvider : IXemProvider, IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent>, IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IEpisodeService _episodeService;
         private readonly IXemCommunicationProvider _xemCommunicationProvider;
         private readonly ISeriesService _seriesService;
+        private readonly ICached<bool> _cache;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public XemProvider(IEpisodeService episodeService, IXemCommunicationProvider xemCommunicationProvider, ISeriesService seriesService)
+        public XemProvider(IEpisodeService episodeService,
+                           IXemCommunicationProvider xemCommunicationProvider,
+                           ISeriesService seriesService, ICacheManger cacheManger)
         {
             if (seriesService == null) throw new ArgumentNullException("seriesService");
             _episodeService = episodeService;
             _xemCommunicationProvider = xemCommunicationProvider;
             _seriesService = seriesService;
+            _cache = cacheManger.GetCache<bool>(GetType());
         }
 
         public void UpdateMappings()
         {
             _logger.Trace("Starting scene numbering update");
+
             try
             {
-                var ids = _xemCommunicationProvider.GetXemSeriesIds();
+                var ids = GetXemSeriesIds();
                 var series = _seriesService.GetAllSeries();
                 var wantedSeries = series.Where(s => ids.Contains(s.TvdbId)).ToList();
 
@@ -64,12 +72,15 @@ namespace NzbDrone.Core.Providers
                 _logger.Trace("Series could not be found: {0}", seriesId);
                 return;
             }
+            
+            UpdateMappings(series);
+        }
 
-            var xemIds = _xemCommunicationProvider.GetXemSeriesIds();
-
-            if (!xemIds.Contains(series.TvdbId))
+        public void UpdateMappings(Series series)
+        {
+            if (!_cache.Find(series.TvdbId.ToString()))
             {
-                _logger.Trace("Xem doesn't have a mapping for this series: {0}", series.TvdbId);
+                _logger.Trace("Scene numbering is not available for {0} [{1}]", series.Title, series.TvdbId);
                 return;
             }
 
@@ -125,6 +136,20 @@ namespace NzbDrone.Core.Providers
             }
         }
 
+        private List<int> GetXemSeriesIds()
+        {
+            _cache.Clear();
+
+            var ids = _xemCommunicationProvider.GetXemSeriesIds();
+
+            foreach (var id in ids)
+            {
+                _cache.Set(id.ToString(), true);
+            }
+
+            return ids;
+        }
+
         public void Execute(UpdateXemMappingsCommand message)
         {
             if (message.SeriesId.HasValue)
@@ -139,7 +164,12 @@ namespace NzbDrone.Core.Providers
 
         public void Handle(SeriesUpdatedEvent message)
         {
-            PerformUpdate(message.Series);
+            UpdateMappings(message.Series);
+        }
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            GetXemSeriesIds();
         }
     }
 }
