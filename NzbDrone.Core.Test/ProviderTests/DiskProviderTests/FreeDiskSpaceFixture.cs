@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void should_return_free_disk_space()
         {
-            var result = Subject.GetAvilableSpace(Directory.GetCurrentDirectory());
+            var result = Subject.GetAvilableSpace(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
             result.Should().BeGreaterThan(0);
         }
 

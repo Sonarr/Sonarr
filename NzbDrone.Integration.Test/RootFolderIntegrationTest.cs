@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Microsoft.AspNet.SignalR.Client;
@@ -42,7 +43,7 @@ namespace NzbDrone.Integration.Test
 
             var rootFolder = new RootFolderResource
                 {
-                    Path = Directory.GetCurrentDirectory()
+                    Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
                 };
 
             var postResponse = RootFolders.Post(rootFolder);

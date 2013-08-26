@@ -26,6 +26,14 @@ namespace NzbDrone.Integration.Test
         {
             AppDate = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
 
+            var nzbdroneConsoleExe = "NzbDrone.Console.exe";
+
+            if (OsInfo.IsMono)
+            {
+                nzbdroneConsoleExe = "NzbDrone.exe";
+            }
+
+
             if (BuildInfo.IsDebug)
             {
 
@@ -33,7 +41,7 @@ namespace NzbDrone.Integration.Test
             }
             else
             {
-                Start(Path.Combine("bin","NzbDrone.Console.exe"));
+                Start(Path.Combine("bin", nzbdroneConsoleExe));
             }
 
             while (true)
