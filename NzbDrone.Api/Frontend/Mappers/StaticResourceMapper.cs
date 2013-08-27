@@ -25,7 +25,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/Content") || resourceUrl.EndsWith(".js") || resourceUrl.EndsWith(".css");
+            return resourceUrl.StartsWith("/Content") || resourceUrl.EndsWith(".js") || resourceUrl.EndsWith(".css") || resourceUrl.EndsWith(".ico");
         }
     }
 }
