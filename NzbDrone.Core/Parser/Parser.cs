@@ -386,6 +386,12 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
+            if (normalizedName.Contains("1080p"))
+            {
+                result.Quality = Quality.HDTV1080p;
+                return result;
+            }
+
             return result;
         }
 

@@ -79,7 +79,8 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "How I Met Your Mother S01E18 Nothing Good Happens After 2 A.M. 720p HDTV DD5.1 MPEG2-TrollHD", Quality.RAWHD, false },
             new object[] { "Arrested.Development.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS", Quality.WEBDL1080p, false },
             new object[] { "Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP", Quality.WEBDL720p, false },
-            new object[] { "Sons.Of.Anarchy.S02E13.1080p.BluRay.x264-AVCDVD", Quality.Bluray1080p, false }
+            new object[] { "Sons.Of.Anarchy.S02E13.1080p.BluRay.x264-AVCDVD", Quality.Bluray1080p, false },
+            new object[] { "Under the Dome S01E10 Let the Games Begin 1080p", Quality.HDTV1080p, false }
         };
 
         public static object[] SelfQualityParserCases =
