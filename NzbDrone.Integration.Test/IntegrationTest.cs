@@ -3,6 +3,7 @@ using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
 using NzbDrone.Api.Commands;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Integration.Test.Client;
@@ -22,6 +23,8 @@ namespace NzbDrone.Integration.Test
         protected ClientBase<CommandResource> Commands;
         protected ReleaseClient Releases;
         protected IndexerClient Indexers;
+        protected EpisodeClient Episodes;
+        protected SeasonClient Seasons;
 
         private NzbDroneRunner _runner;
 
@@ -57,6 +60,8 @@ namespace NzbDrone.Integration.Test
             RootFolders = new ClientBase<RootFolderResource>(RestClient);
             Commands = new ClientBase<CommandResource>(RestClient);
             Indexers = new IndexerClient(RestClient);
+            Episodes = new EpisodeClient(RestClient);
+            Seasons = new SeasonClient(RestClient);
         }
 
         [TearDown]

@@ -42,12 +42,18 @@ namespace NzbDrone.Integration.Test.Client
             return Post<TResource>(request);
         }
 
+        public TResource Put(TResource body)
+        {
+            var request = BuildRequest();
+            request.AddBody(body);
+            return Put<TResource>(request);
+        }
+
         public TResource Get(int id, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             var request = BuildRequest(id.ToString());
             return Get<TResource>(request, statusCode);
         }
-
 
         public void Delete(int id)
         {
@@ -82,6 +88,12 @@ namespace NzbDrone.Integration.Test.Client
             return Execute<T>(request, statusCode);
         }
 
+        public T Put<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.Accepted) where T : class, new()
+        {
+            request.Method = Method.PUT;
+            return Execute<T>(request, statusCode);
+        }
+
         public void Delete(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             request.Method = Method.DELETE;
@@ -109,13 +121,11 @@ namespace NzbDrone.Integration.Test.Client
             return Json.Deserialize<T>(response.Content);
         }
 
-
         private static void AssertDisableCache(IList<Parameter> headers)
         {
             headers.Single(c => c.Name == "Cache-Control").Value.Should().Be("no-cache, no-store, must-revalidate");
             headers.Single(c => c.Name == "Pragma").Value.Should().Be("no-cache");
             headers.Single(c => c.Name == "Expires").Value.Should().Be("0");
         }
-
     }
 }
