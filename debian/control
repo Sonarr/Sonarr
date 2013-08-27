@@ -1,7 +1,7 @@
 Source: nzbdrone
 Section: web
 Priority: optional
-Maintainer: Keivan Beigi <kay.one@gmail.com>
+Maintainer: NzbDrone <contact@nzbdrone.com>
 Depends: libmono-cil-dev (>= 2.10.1)
 Homepage: http://www.nzbdrone.com
 Vcs-Git: git@github.com:NzbDrone/NzbDrone.git
