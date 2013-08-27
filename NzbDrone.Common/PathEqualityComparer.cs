@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common
 {
@@ -14,7 +15,12 @@ namespace NzbDrone.Common
 
         public int GetHashCode(string obj)
         {
-            return obj.CleanFilePath().GetHashCode();
+            if (OsInfo.IsLinux)
+            {
+                return obj.CleanFilePath().GetHashCode();
+            }
+
+            return obj.CleanFilePath().ToLower().GetHashCode();
         }
     }
 }
