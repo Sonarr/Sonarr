@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Seasons
@@ -13,6 +14,7 @@ namespace NzbDrone.Api.Seasons
             _seasonService = seasonService;
 
             GetResourceAll = GetSeasons;
+            GetResourceById = GetSeason;
             UpdateResource = Update;
 
             Post["/pass"] = x => SetSeasonPass();
@@ -28,6 +30,11 @@ namespace NzbDrone.Api.Seasons
             }
 
             return ToListResource(() => _seasonService.GetAllSeasons());
+        }
+
+        private SeasonResource GetSeason(int id)
+        {
+            return _seasonService.Get(id).InjectTo<SeasonResource>();
         }
 
         private void Update(SeasonResource seasonResource)

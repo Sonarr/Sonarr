@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Tv;
 
@@ -15,6 +16,7 @@ namespace NzbDrone.Api.Episodes
 
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;
+            GetResourceById = GetEpisode;
         }
 
         private List<EpisodeResource> GetEpisodes()
@@ -32,6 +34,11 @@ namespace NzbDrone.Api.Episodes
         private void SetMonitored(EpisodeResource episodeResource)
         {
             _episodeService.SetEpisodeMonitored(episodeResource.Id, episodeResource.Monitored);
+        }
+
+        private EpisodeResource GetEpisode(int id)
+        {
+            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
         }
     }
 }

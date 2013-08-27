@@ -93,10 +93,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\ClientBase.cs" />
+    <Compile Include="Client\SeasonClient.cs" />
+    <Compile Include="Client\EpisodeClient.cs" />
     <Compile Include="Client\IndexerClient.cs" />
     <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
+    <Compile Include="SeasonIntegrationTests.cs" />
+    <Compile Include="EpisodeIntegrationTests.cs" />
     <Compile Include="IndexerIntegrationFixture.cs" />
     <Compile Include="IntegrationTestDirectoryInfo.cs" />
     <Compile Include="NzbDroneRunner.cs" />
