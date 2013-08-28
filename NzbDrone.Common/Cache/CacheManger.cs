@@ -28,7 +28,6 @@ namespace NzbDrone.Common.Cache
             return GetCache<T>(host, host.FullName);
         }
 
-
         public void Clear()
         {
             _cache.Clear();

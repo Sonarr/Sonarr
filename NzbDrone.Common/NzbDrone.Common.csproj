@@ -92,6 +92,10 @@
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
+    <Compile Include="Messaging\Manager\CommandManager.cs" />
+    <Compile Include="Messaging\Manager\CommandManagerItem.cs" />
+    <Compile Include="Messaging\Events\CommandStartedEvent.cs" />
+    <Compile Include="Messaging\CommandEqualityComparer.cs" />
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
@@ -105,9 +109,9 @@
     <Compile Include="Instrumentation\LogglyTarget.cs" />
     <Compile Include="Instrumentation\UpdateLogLayoutRenderer.cs" />
     <Compile Include="Serializer\Json.cs" />
-    <Compile Include="Messaging\CommandCompletedEvent.cs" />
-    <Compile Include="Messaging\CommandStartedEvent.cs" />
-    <Compile Include="Messaging\CommandFailedEvent.cs" />
+    <Compile Include="Messaging\Events\CommandCompletedEvent.cs" />
+    <Compile Include="Messaging\Events\CommandExecutedEvent.cs" />
+    <Compile Include="Messaging\Events\CommandFailedEvent.cs" />
     <Compile Include="Messaging\IExecute.cs" />
     <Compile Include="Messaging\ICommand.cs" />
     <Compile Include="Messaging\IMessage.cs" />

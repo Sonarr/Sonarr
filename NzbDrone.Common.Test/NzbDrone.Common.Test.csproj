@@ -68,6 +68,7 @@
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
     <Compile Include="EventingTests\MessageAggregatorCommandTests.cs" />
     <Compile Include="EventingTests\MessageAggregatorEventTests.cs" />
+    <Compile Include="MessagingTests\CommandEqualityComparerFixture.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="PathExtensionFixture.cs" />
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />

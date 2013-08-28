@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Messaging.Events;
+using NzbDrone.Common.Messaging.Manager;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;
 
@@ -13,12 +15,14 @@ namespace NzbDrone.Common.Messaging
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
+        private readonly IManageCommands _commandManager;
         private readonly TaskFactory _taskFactory;
 
-        public MessageAggregator(Logger logger, IServiceFactory serviceFactory)
+        public MessageAggregator(Logger logger, IServiceFactory serviceFactory, IManageCommands commandManager)
         {
             _logger = logger;
             _serviceFactory = serviceFactory;
+            _commandManager = commandManager;
             var scheduler = new LimitedConcurrencyLevelTaskScheduler(2);
             _taskFactory = new TaskFactory(scheduler);
         }
@@ -86,6 +90,12 @@ namespace NzbDrone.Common.Messaging
 
             try
             {
+                if (_commandManager.ExistingItem(command))
+                {
+                    _logger.Info("Command is already in progress: {0}", command.GetType().Name);
+                    return;
+                }
+
                 PublishEvent(new CommandStartedEvent(command));
                 handler.Execute(command);
                 sw.Stop();
