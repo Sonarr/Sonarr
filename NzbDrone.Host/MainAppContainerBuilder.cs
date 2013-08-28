@@ -1,4 +1,5 @@
-﻿using Nancy.Bootstrapper;
+﻿using System;
+using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Api.SignalR;
 using NzbDrone.Common.Composition;
@@ -6,6 +7,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
+using NzbDrone.Host.Owin;
 
 namespace NzbDrone.Host
 {
@@ -24,6 +26,7 @@ namespace NzbDrone.Host
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>));
             Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>));
+            Container.Register(typeof(System.IServiceProvider), typeof(OwinServiceProvider));
 
             Container.Register<INancyBootstrapper, NancyBootstrapper>();
         }
