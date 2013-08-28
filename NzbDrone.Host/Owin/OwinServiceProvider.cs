@@ -1,25 +1,16 @@
-﻿using System;
-using Microsoft.Owin.Hosting.Services;
+﻿using Microsoft.Owin.Hosting.Services;
 using Microsoft.Owin.Hosting.Tracing;
 
 namespace NzbDrone.Host.Owin
 {
-    public class OwinServiceProvider : IServiceProvider
+    public static class OwinServiceProviderFactory
     {
-        private readonly IServiceProvider _defaultProvider;
-
-        public OwinServiceProvider()
+        public static ServiceProvider Create()
         {
-          _defaultProvider =   ServicesFactory.Create();
-        }
-        public object GetService(Type serviceType)
-        {
-            if (serviceType == typeof (ITraceOutputFactory))
-            {
-                return new OwinTraceOutputFactory();
-            }
+           var  provider = (ServiceProvider)ServicesFactory.Create();
+           provider.Add(typeof(ITraceOutputFactory), typeof(OwinTraceOutputFactory));
 
-            return _defaultProvider.GetService(serviceType);
+            return provider;
         }
     }
 }

@@ -14,15 +14,13 @@ namespace NzbDrone.Host.Owin
     {
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IEnumerable<IOwinMiddleWare> _owinMiddleWares;
-        private readonly IServiceProvider _serviceProvider;
         private readonly Logger _logger;
         private IDisposable _host;
 
-        public OwinHostController(IConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares, IServiceProvider serviceProvider, Logger logger)
+        public OwinHostController(IConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _owinMiddleWares = owinMiddleWares;
-            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
@@ -39,7 +37,7 @@ namespace NzbDrone.Host.Owin
 
             _logger.Info("starting server on {0}", url);
 
-            _host = WebApp.Start(_serviceProvider, options, BuildApp);
+            _host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
         }
 
         private void BuildApp(IAppBuilder appBuilder)

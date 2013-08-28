@@ -26,7 +26,6 @@ namespace NzbDrone.Host
 
             Container.Register(typeof(IBasicRepository<RootFolder>), typeof(BasicRepository<RootFolder>));
             Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>));
-            Container.Register(typeof(System.IServiceProvider), typeof(OwinServiceProvider));
 
             Container.Register<INancyBootstrapper, NancyBootstrapper>();
         }
