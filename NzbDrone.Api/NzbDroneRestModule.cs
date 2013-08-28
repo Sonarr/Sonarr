@@ -21,7 +21,6 @@ namespace NzbDrone.Api
             PutValidator.RuleFor(r => r.Id).ValidId();
         }
 
-
         protected int GetNewId<TModel>(Func<TModel, TModel> function, TResource resource) where TModel : ModelBase, new()
         {
             var model = resource.InjectTo<TModel>();
@@ -34,7 +33,6 @@ namespace NzbDrone.Api
             var modelList = function();
             return modelList.InjectTo<List<TResource>>();
         }
-
 
         protected PagingResource<TResource> ApplyToPage<TModel>(Func<PagingSpec<TModel>, PagingSpec<TModel>> function, PagingSpec<TModel> pagingSpec) where TModel : ModelBase, new()
         {

@@ -22,9 +22,8 @@ namespace NzbDrone.Api.Config
             _namingConfigService = namingConfigService;
             _buildFileNames = buildFileNames;
             GetResourceSingle = GetNamingConfig;
-
+            GetResourceById = GetNamingConfig;
             UpdateResource = UpdateNamingConfig;
-
 
             Get["/samples"] = x => GetExamples(this.Bind<NamingConfigResource>());
 
@@ -35,12 +34,17 @@ namespace NzbDrone.Api.Config
 
         private void UpdateNamingConfig(NamingConfigResource resource)
         {
-            GetNewId<NamingConfig>(_namingConfigService.Save, resource);
+            _namingConfigService.Save(resource.InjectTo<NamingConfig>());
         }
 
         private NamingConfigResource GetNamingConfig()
         {
             return _namingConfigService.GetConfig().InjectTo<NamingConfigResource>();
+        }
+
+        private NamingConfigResource GetNamingConfig(int id)
+        {
+            return GetNamingConfig();
         }
 
         private JsonResponse<NamingSampleResource> GetExamples(NamingConfigResource config)

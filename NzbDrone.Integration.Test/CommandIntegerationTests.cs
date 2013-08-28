@@ -11,7 +11,5 @@ namespace NzbDrone.Integration.Test
         {
             Commands.Post(new CommandResource {Command = "rsssync"});
         }
-
-       
     }
 }

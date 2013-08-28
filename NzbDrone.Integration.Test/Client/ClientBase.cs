@@ -55,6 +55,12 @@ namespace NzbDrone.Integration.Test.Client
             return Get<TResource>(request, statusCode);
         }
 
+        public TResource GetSingle(HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            var request = BuildRequest();
+            return Get<TResource>(request, statusCode);
+        }
+
         public void Delete(int id)
         {
             var request = BuildRequest(id.ToString());
