@@ -99,6 +99,7 @@
     <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
+    <Compile Include="NamingConfigTests.cs" />
     <Compile Include="SeasonIntegrationTests.cs" />
     <Compile Include="EpisodeIntegrationTests.cs" />
     <Compile Include="IndexerIntegrationFixture.cs" />

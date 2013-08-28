@@ -3,7 +3,7 @@ using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
 using NzbDrone.Api.Commands;
-using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Config;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Integration.Test.Client;
@@ -25,9 +25,9 @@ namespace NzbDrone.Integration.Test
         protected IndexerClient Indexers;
         protected EpisodeClient Episodes;
         protected SeasonClient Seasons;
+        protected ClientBase<NamingConfigResource> NamingConfig;
 
         private NzbDroneRunner _runner;
-
 
         public IntegrationTest()
         {
@@ -42,7 +42,6 @@ namespace NzbDrone.Integration.Test
         [SetUp]
         public void SmokeTestSetup()
         {
-
             _runner = new NzbDroneRunner();
             _runner.KillAll();
 
@@ -50,7 +49,6 @@ namespace NzbDrone.Integration.Test
 
             _runner.Start();
         }
-
 
         private void InitRestClients()
         {
@@ -62,6 +60,7 @@ namespace NzbDrone.Integration.Test
             Indexers = new IndexerClient(RestClient);
             Episodes = new EpisodeClient(RestClient);
             Seasons = new SeasonClient(RestClient);
+            NamingConfig = new ClientBase<NamingConfigResource>(RestClient, "config/naming");
         }
 
         [TearDown]
