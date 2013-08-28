@@ -1,10 +1,10 @@
 ﻿namespace NzbDrone.Common.Messaging
 {
-    public class CommandStartedEvent : IEvent
+    public class CommandExecutedEvent : IEvent
     {
         public ICommand Command { get; private set; }
 
-        public CommandStartedEvent(ICommand command)
+        public CommandExecutedEvent(ICommand command)
         {
             Command = command;
         }
