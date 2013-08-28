@@ -60,7 +60,6 @@ namespace NzbDrone.Common.Messaging
             }
         }
 
-
         private static string GetEventName(Type eventType)
         {
             if (!eventType.IsGenericType)
@@ -70,7 +69,6 @@ namespace NzbDrone.Common.Messaging
 
             return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
         }
-
 
         public void PublishCommand<TCommand>(TCommand command) where TCommand : class, ICommand
         {
@@ -88,6 +86,7 @@ namespace NzbDrone.Common.Messaging
 
             try
             {
+                PublishEvent(new CommandStartedEvent(command));
                 handler.Execute(command);
                 sw.Stop();
                 PublishEvent(new CommandCompletedEvent(command));
