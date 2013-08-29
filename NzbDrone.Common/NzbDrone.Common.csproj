@@ -92,8 +92,8 @@
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
-    <Compile Include="Messaging\Manager\CommandManager.cs" />
-    <Compile Include="Messaging\Manager\CommandManagerItem.cs" />
+    <Compile Include="Messaging\Tracking\CommandTrackingService.cs" />
+    <Compile Include="Messaging\Tracking\TrackedCommand.cs" />
     <Compile Include="Messaging\Events\CommandStartedEvent.cs" />
     <Compile Include="Messaging\CommandEqualityComparer.cs" />
     <Compile Include="PathEqualityComparer.cs" />

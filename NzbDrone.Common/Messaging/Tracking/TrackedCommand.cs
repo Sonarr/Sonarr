@@ -1,18 +1,22 @@
 ﻿using System;
 
-namespace NzbDrone.Common.Messaging.Manager
+namespace NzbDrone.Common.Messaging.Tracking
 {
-    public class CommandManagerItem
+    public class TrackedCommand
     {
         public String Type { get; private set; }
         public ICommand Command { get; private set; }
         public CommandState State { get; set; }
+        public DateTime StateChangeTime { get; set; }
+        public TimeSpan Runtime { get; set; }
+        public Exception Exception { get; set; }
         
-        public CommandManagerItem(ICommand command, CommandState state)
+        public TrackedCommand(ICommand command, CommandState state)
         {
             Type = command.GetType().FullName;
             Command = command;
             State = state;
+            StateChangeTime = DateTime.UtcNow;
         }
     }
 

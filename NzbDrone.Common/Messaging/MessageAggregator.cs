@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Messaging.Events;
-using NzbDrone.Common.Messaging.Manager;
+using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;
 
@@ -15,14 +15,14 @@ namespace NzbDrone.Common.Messaging
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
-        private readonly IManageCommands _commandManager;
+        private readonly ITrackCommands _trackCommands;
         private readonly TaskFactory _taskFactory;
 
-        public MessageAggregator(Logger logger, IServiceFactory serviceFactory, IManageCommands commandManager)
+        public MessageAggregator(Logger logger, IServiceFactory serviceFactory, ITrackCommands trackCommands)
         {
             _logger = logger;
             _serviceFactory = serviceFactory;
-            _commandManager = commandManager;
+            _trackCommands = trackCommands;
             var scheduler = new LimitedConcurrencyLevelTaskScheduler(2);
             _taskFactory = new TaskFactory(scheduler);
         }
@@ -87,10 +87,13 @@ namespace NzbDrone.Common.Messaging
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
 
             var sw = Stopwatch.StartNew();
+            TrackedCommand queuedCommand = null;
 
             try
             {
-                if (_commandManager.ExistingItem(command))
+                queuedCommand = _trackCommands.TrackIfNew(command);
+
+                if (queuedCommand == null)
                 {
                     _logger.Info("Command is already in progress: {0}", command.GetType().Name);
                     return;
@@ -99,10 +102,17 @@ namespace NzbDrone.Common.Messaging
                 PublishEvent(new CommandStartedEvent(command));
                 handler.Execute(command);
                 sw.Stop();
+
+                _trackCommands.Completed(queuedCommand, sw.Elapsed);
                 PublishEvent(new CommandCompletedEvent(command));
             }
             catch (Exception e)
             {
+                if (queuedCommand != null)
+                {
+                    _trackCommands.Failed(queuedCommand, e);
+                }
+
                 PublishEvent(new CommandFailedEvent(command, e));
                 throw;
             }
