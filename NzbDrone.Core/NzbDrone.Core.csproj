@@ -350,6 +350,7 @@
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />

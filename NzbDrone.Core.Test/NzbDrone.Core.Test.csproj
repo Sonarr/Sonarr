@@ -186,6 +186,7 @@
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
     <Compile Include="MediaFileTests\DropFolderImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
+    <Compile Include="TvTests\SeasonServiceTests\HandleEpisodeInfoDeletedEventFixture.cs" />
     <Compile Include="TvTests\SeasonServiceTests\SetSeasonPassFixture.cs" />
     <Compile Include="TvTests\SeasonServiceTests\SetMonitoredFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
