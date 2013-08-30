@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Common.Messaging
+﻿namespace NzbDrone.Common.Messaging.Events
 {
     public class CommandCompletedEvent : IEvent
     {

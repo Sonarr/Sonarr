@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Messaging.Events;
+using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Indexers;
@@ -47,7 +49,8 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 60, TypeName = typeof(ApplicationUpdateCommand).FullName},
-                    new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName}
+                    new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
+                    new ScheduledTask{ Interval = 5, TypeName = typeof(TrackedCommandCleanupCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Messaging.Events;
+using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;
 
@@ -13,12 +15,14 @@ namespace NzbDrone.Common.Messaging
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
+        private readonly ITrackCommands _trackCommands;
         private readonly TaskFactory _taskFactory;
 
-        public MessageAggregator(Logger logger, IServiceFactory serviceFactory)
+        public MessageAggregator(Logger logger, IServiceFactory serviceFactory, ITrackCommands trackCommands)
         {
             _logger = logger;
             _serviceFactory = serviceFactory;
+            _trackCommands = trackCommands;
             var scheduler = new LimitedConcurrencyLevelTaskScheduler(2);
             _taskFactory = new TaskFactory(scheduler);
         }
@@ -60,7 +64,6 @@ namespace NzbDrone.Common.Messaging
             }
         }
 
-
         private static string GetEventName(Type eventType)
         {
             if (!eventType.IsGenericType)
@@ -70,7 +73,6 @@ namespace NzbDrone.Common.Messaging
 
             return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
         }
-
 
         public void PublishCommand<TCommand>(TCommand command) where TCommand : class, ICommand
         {
@@ -85,15 +87,34 @@ namespace NzbDrone.Common.Messaging
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
 
             var sw = Stopwatch.StartNew();
+            TrackedCommand trackedCommand = null;
 
             try
             {
+                trackedCommand = _trackCommands.TrackIfNew(command);
+
+                if (trackedCommand == null)
+                {
+                    _logger.Info("Command is already in progress: {0}", command.GetType().Name);
+                    return;
+                }
+
+                MappedDiagnosticsContext.Set("CommandId", trackedCommand.Command.CommandId);
+
+                PublishEvent(new CommandStartedEvent(command));
                 handler.Execute(command);
                 sw.Stop();
+
+                _trackCommands.Completed(trackedCommand, sw.Elapsed);
                 PublishEvent(new CommandCompletedEvent(command));
             }
             catch (Exception e)
             {
+                if (trackedCommand != null)
+                {
+                    _trackCommands.Failed(trackedCommand, e);
+                }
+
                 PublishEvent(new CommandFailedEvent(command, e));
                 throw;
             }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NzbDrone.Common.Messaging
+namespace NzbDrone.Common.Messaging.Events
 {
     public class CommandFailedEvent : IEvent
     {

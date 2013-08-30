@@ -4,6 +4,7 @@ using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Messaging.Tracking;
 
 namespace NzbDrone.Api.Commands
 {
@@ -11,14 +12,16 @@ namespace NzbDrone.Api.Commands
     {
         private readonly IMessageAggregator _messageAggregator;
         private readonly IContainer _container;
+        private readonly ITrackCommands _trackCommands;
 
-        public CommandModule(IMessageAggregator messageAggregator, IContainer container)
+        public CommandModule(IMessageAggregator messageAggregator, IContainer container, ITrackCommands trackCommands)
         {
             _messageAggregator = messageAggregator;
             _container = container;
+            _trackCommands = trackCommands;
 
             Post["/"] = x => RunCommand(ReadResourceFromRequest());
-
+            Get["/"] = x => GetAllCommands();
         }
 
         private Response RunCommand(CommandResource resource)
@@ -32,6 +35,11 @@ namespace NzbDrone.Api.Commands
             _messageAggregator.PublishCommand(command);
 
             return resource.AsResponse(HttpStatusCode.Created);
+        }
+
+        private Response GetAllCommands()
+        {
+            return _trackCommands.AllTracked().AsResponse();
         }
     }
 }
