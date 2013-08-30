@@ -119,14 +119,13 @@ namespace NzbDrone.Core.Indexers
                 }
                 catch (WebException webException)
                 {
-                    if (webException.Message.Contains("503") || webException.Message.Contains("timed out"))
+                    if (webException.Message.Contains("502") || webException.Message.Contains("503") || webException.Message.Contains("timed out"))
                     {
                         _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer.Name, url, webException.Message);
                     }
                     else
                     {
-                        webException.Data.Add("FeedUrl", url);
-                        _logger.WarnException("An error occurred while processing feed. " + url, webException);
+                        _logger.Warn("{0} {1} {2}", indexer.Name, url, webException.Message);
                     }
                 }
                 catch (Exception feedEx)
