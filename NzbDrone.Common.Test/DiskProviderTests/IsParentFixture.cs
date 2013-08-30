@@ -34,7 +34,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             WindowsOnly();
 
-            Subject.GetAvilableSpace("J:\\").Should().NotBe(0);
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace("J:\\").Should().NotBe(0));
         }
     }
 }

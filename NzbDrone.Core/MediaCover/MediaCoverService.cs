@@ -53,7 +53,7 @@ namespace NzbDrone.Core.MediaCover
                 }
                 catch (WebException e)
                 {
-                    _logger.Warn(string.Format("Couldn't download media cover for {0}. {1}", series, e.Message);
+                    _logger.Warn(string.Format("Couldn't download media cover for {0}. {1}", series, e.Message));
                 }
                 catch (Exception e)
                 {
