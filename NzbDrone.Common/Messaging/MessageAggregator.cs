@@ -87,30 +87,32 @@ namespace NzbDrone.Common.Messaging
             _logger.Debug("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
 
             var sw = Stopwatch.StartNew();
-            TrackedCommand queuedCommand = null;
+            TrackedCommand trackedCommand = null;
 
             try
             {
-                queuedCommand = _trackCommands.TrackIfNew(command);
+                trackedCommand = _trackCommands.TrackIfNew(command);
 
-                if (queuedCommand == null)
+                if (trackedCommand == null)
                 {
                     _logger.Info("Command is already in progress: {0}", command.GetType().Name);
                     return;
                 }
 
+                MappedDiagnosticsContext.Set("CommandId", trackedCommand.Command.CommandId);
+
                 PublishEvent(new CommandStartedEvent(command));
                 handler.Execute(command);
                 sw.Stop();
 
-                _trackCommands.Completed(queuedCommand, sw.Elapsed);
+                _trackCommands.Completed(trackedCommand, sw.Elapsed);
                 PublishEvent(new CommandCompletedEvent(command));
             }
             catch (Exception e)
             {
-                if (queuedCommand != null)
+                if (trackedCommand != null)
                 {
-                    _trackCommands.Failed(queuedCommand, e);
+                    _trackCommands.Failed(trackedCommand, e);
                 }
 
                 PublishEvent(new CommandFailedEvent(command, e));

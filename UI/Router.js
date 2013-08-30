@@ -42,7 +42,7 @@ require(
                     RouterBinder.bind(App.Router);
                     App.navbarRegion.show(new NavbarView());
                     $('body').addClass('started');
-                })
+                });
         });
 
         return App.Router;

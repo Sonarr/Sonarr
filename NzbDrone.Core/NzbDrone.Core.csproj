@@ -219,6 +219,9 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="ProgressMessaging\NewProgressMessageEvent.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessage.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessagingTarget.cs" />
     <Compile Include="Instrumentation\SetLoggingLevel.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
