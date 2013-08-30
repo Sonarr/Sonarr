@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers
 
         public IEnumerable<ReportInfo> Process(string xml, string url)
         {
-            using (var xmlTextReader = new XmlTextReader(new StringReader(xml)) { DtdProcessing = DtdProcessing.Ignore })
+            using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { ProhibitDtd = false, IgnoreComments = true }))
             {
                 var document = XDocument.Load(xmlTextReader);
                 var items = document.Descendants("item");

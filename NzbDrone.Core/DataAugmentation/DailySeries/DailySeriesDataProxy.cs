@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.DataAugmentation.DailySeries
 {

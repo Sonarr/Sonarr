@@ -44,17 +44,17 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
 
         [Test]
-        [Explicit("needs newznab api key")]
         public void nzbsorg_rss()
         {
             var indexer = new Newznab();
             indexer.Settings = new NewznabSettings
                 {
-                    ApiKey = "",
+                    ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
                     Url = "http://nzbs.org"
                 };
 
             indexer.InstanceDefinition = new IndexerDefinition();
+            indexer.InstanceDefinition.Name = "nzbs.org";
 
             var result = Subject.FetchRss(indexer);
 
