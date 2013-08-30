@@ -61,17 +61,10 @@ namespace NzbDrone.Common.Cache
             return value.Object;
         }
 
-        public T Remove(string key)
+        public void Remove(string key)
         {
             CacheItem value;
             _store.TryRemove(key, out value);
-
-            if (value == null)
-            {
-                return default(T);
-            }
-
-            return value.Object;
         }
 
         public T Get(string key, Func<T> function, TimeSpan? lifeTime = null)

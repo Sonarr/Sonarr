@@ -13,7 +13,7 @@ namespace NzbDrone.Common.Cache
         void Set(string key, T value, TimeSpan? lifetime = null);
         T Get(string key, Func<T> function, TimeSpan? lifeTime = null);
         T Find(string key);
-        T Remove(string key);
+        void Remove(string key);
 
         ICollection<T> Values { get; }
     }
