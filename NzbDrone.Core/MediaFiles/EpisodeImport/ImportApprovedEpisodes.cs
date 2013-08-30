@@ -62,12 +62,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.Size = _diskProvider.GetFileSize(localEpisode.Path);
                     episodeFile.Quality = localEpisode.Quality;
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
-                    episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
                     episodeFile.Episodes = localEpisode.Episodes;
 
 
                     if (newDownload)
                     {
+                        episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
                         episodeFile.Path = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
                         _messageAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile));
                         _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
