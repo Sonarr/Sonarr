@@ -96,6 +96,7 @@
     <Compile Include="Messaging\Tracking\TrackedCommand.cs" />
     <Compile Include="Messaging\Events\CommandStartedEvent.cs" />
     <Compile Include="Messaging\CommandEqualityComparer.cs" />
+    <Compile Include="Messaging\Tracking\TrackedCommandCleanupCommand.cs" />
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />

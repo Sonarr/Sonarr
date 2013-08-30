@@ -10,11 +10,11 @@ namespace NzbDrone.Common.Messaging.Tracking
         TrackedCommand TrackIfNew(ICommand command);
         TrackedCommand Completed(TrackedCommand trackedCommand, TimeSpan runtime);
         TrackedCommand Failed(TrackedCommand trackedCommand, Exception e);
-        ICollection<TrackedCommand> AllTracked { get; }
+        List<TrackedCommand> AllTracked();
         Boolean ExistingCommand(ICommand command);
     }
 
-    public class TrackCommands : ITrackCommands
+    public class TrackCommands : ITrackCommands, IExecute<TrackedCommandCleanupCommand>
     {
         private readonly ICached<TrackedCommand> _cache;
 
@@ -31,7 +31,7 @@ namespace NzbDrone.Common.Messaging.Tracking
             }
 
             var trackedCommand = new TrackedCommand(command, CommandState.Running);
-            _cache.Set(command.CommandId, trackedCommand);
+            Store(trackedCommand);
 
             return trackedCommand;
         }
@@ -42,7 +42,7 @@ namespace NzbDrone.Common.Messaging.Tracking
             trackedCommand.State = CommandState.Completed;
             trackedCommand.Runtime = runtime;
 
-            _cache.Set(trackedCommand.Command.CommandId, trackedCommand);
+            Store(trackedCommand);
 
             return trackedCommand;
         }
@@ -53,26 +53,43 @@ namespace NzbDrone.Common.Messaging.Tracking
             trackedCommand.State = CommandState.Failed;
             trackedCommand.Exception = e;
 
-            _cache.Set(trackedCommand.Command.CommandId, trackedCommand);
+            Store(trackedCommand);
 
             return trackedCommand;
         }
 
-        public ICollection<TrackedCommand> AllTracked
+        public List<TrackedCommand> AllTracked()
         {
-            get
-            {
-                return _cache.Values;
-            }
+            return _cache.Values.ToList();
         }
 
         public bool ExistingCommand(ICommand command)
         {
-            var running = AllTracked.Where(i => i.Type == command.GetType().FullName && i.State == CommandState.Running);
+            var running = AllTracked().Where(i => i.Type == command.GetType().FullName && i.State == CommandState.Running);
 
             var result = running.Select(r => r.Command).Contains(command, new CommandEqualityComparer());
 
             return result;
+        }
+
+        private void Store(TrackedCommand trackedCommand)
+        {
+            if (trackedCommand.Command.GetType() == typeof(TrackedCommandCleanupCommand))
+            {
+                return;
+            }
+
+            _cache.Set(trackedCommand.Command.CommandId, trackedCommand);
+        }
+
+        public void Execute(TrackedCommandCleanupCommand message)
+        {
+            var old = AllTracked().Where(c => c.StateChangeTime < DateTime.UtcNow.AddMinutes(-15));
+
+            foreach (var trackedCommand in old)
+            {
+                _cache.Remove(trackedCommand.Command.CommandId);
+            }
         }
     }
 }
