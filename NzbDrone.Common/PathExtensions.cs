@@ -63,23 +63,27 @@ namespace NzbDrone.Common
 
         public static string GetActualCasing(this string path)
         {
-            var attributes = File.GetAttributes(path);
-
             if (OsInfo.IsLinux || path.StartsWith("\\"))
             {
                 return path;
             }
 
-            if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
+            if (Directory.Exists(path) && (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 return GetProperCapitalization(new DirectoryInfo(path));
             }
 
             var fileInfo = new FileInfo(path);
+            var dirInfo = fileInfo.Directory;
 
+            var fileName = fileInfo.Name;
 
-            DirectoryInfo dirInfo = fileInfo.Directory;
-            return Path.Combine(GetProperCapitalization(dirInfo), dirInfo.GetFiles(fileInfo.Name)[0].Name);
+            if (dirInfo != null && fileInfo.Exists)
+            {
+                fileName = dirInfo.GetFiles(fileInfo.Name)[0].Name;
+            }
+
+            return Path.Combine(GetProperCapitalization(dirInfo), fileName);
         }
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)
