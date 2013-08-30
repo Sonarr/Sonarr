@@ -35,14 +35,14 @@
             {{#if data}}
                 {{#with data}}
                     <dl class="dl-horizontal">
-                        {{#if filename}}
-                            <dt>Filename</dt>
-                            <dd>{{filename}}</dd>
+                        {{#if droppedPath}}
+                            <dt>Source:</dt>
+                            <dd>{{droppedPath}}</dd>
                         {{/if}}
 
-                        {{#if path}}
-                            <dt>Path</dt>
-                            <dd>{{path}}</dd>
+                        {{#if importedPath}}
+                            <dt>Imported To:</dt>
+                            <dd>{{importedPath}}</dd>
                         {{/if}}
                     </dl>
                 {{/with}}

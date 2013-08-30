@@ -158,6 +158,7 @@
     <Compile Include="Datastore\Migration\013_add_air_date_utc.cs" />
     <Compile Include="Datastore\Migration\014_drop_air_date.cs" />
     <Compile Include="Datastore\Migration\015_add_air_date_as_string.cs" />
+    <Compile Include="Datastore\Migration\016_updated_imported_history_item.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
