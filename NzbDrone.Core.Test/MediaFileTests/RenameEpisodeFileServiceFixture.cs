@@ -60,8 +60,7 @@ namespace NzbDrone.Core.Test.MediaFileTests
         private void GivenMovedFiles()
         {
             Mocker.GetMock<IMoveEpisodeFiles>()
-                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), _series))
-                  .Returns(_episodeFiles.First());
+                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), _series));
         }
 
         [Test]

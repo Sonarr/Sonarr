@@ -93,7 +93,8 @@ namespace NzbDrone.Core.History
                         EpisodeId = episode.Id
                     };
 
-                history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
+                //Won't have a value since we publish this event before saving to DB.
+                //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
                 history.Data.Add("DroppedPath", message.DroppedEpisode.Path);
                 history.Data.Add("ImportedPath", message.ImportedEpisode.Path);
 
