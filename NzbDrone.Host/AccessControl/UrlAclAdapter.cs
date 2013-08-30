@@ -9,6 +9,7 @@ namespace NzbDrone.Host.AccessControl
     public interface IUrlAclAdapter
     {
         void RefreshRegistration();
+        string UrlAcl { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
@@ -24,18 +25,25 @@ namespace NzbDrone.Host.AccessControl
             _logger = logger;
         }
 
+        public string UrlAcl
+        {
+            get
+            {
+                return "http://*:" + _configFileProvider.Port + "/";
+            }
+        }
+
         public void RefreshRegistration()
         {
             if (OsInfo.Version.Major < 6)
                 return;
 
-            RegisterUrl(_configFileProvider.Port);
+            RegisterUrl();
         }
 
-
-        private void RegisterUrl(int portNumber)
+        private void RegisterUrl()
         {
-            var arguments = String.Format("http add urlacl http://*:{0}/ sddl=D:(A;;GX;;;S-1-1-0)", portNumber);
+            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", UrlAcl);
             RunNetsh(arguments);
         }
 

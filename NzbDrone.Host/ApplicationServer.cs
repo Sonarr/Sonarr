@@ -4,7 +4,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Host.AccessControl;
 using NzbDrone.Host.Owin;
 
 namespace NzbDrone.Host
@@ -23,13 +22,10 @@ namespace NzbDrone.Host
         private readonly IProcessProvider _processProvider;
         private readonly PriorityMonitor _priorityMonitor;
         private readonly IStartupArguments _startupArguments;
-        private readonly IFirewallAdapter _firewallAdapter;
-        private readonly IUrlAclAdapter _urlAclAdapter;
         private readonly Logger _logger;
 
         public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController, IRuntimeInfo runtimeInfo,
-                           IProcessProvider processProvider, PriorityMonitor priorityMonitor, IStartupArguments startupArguments,
-                           IFirewallAdapter firewallAdapter, IUrlAclAdapter urlAclAdapter, Logger logger)
+                           IProcessProvider processProvider, PriorityMonitor priorityMonitor, IStartupArguments startupArguments, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
@@ -37,8 +33,6 @@ namespace NzbDrone.Host
             _processProvider = processProvider;
             _priorityMonitor = priorityMonitor;
             _startupArguments = startupArguments;
-            _firewallAdapter = firewallAdapter;
-            _urlAclAdapter = urlAclAdapter;
             _logger = logger;
         }
 
@@ -49,11 +43,6 @@ namespace NzbDrone.Host
 
         public void Start()
         {
-            if (OsInfo.IsWindows && _runtimeInfo.IsAdmin)
-            {
-                _urlAclAdapter.RefreshRegistration();
-                _firewallAdapter.MakeAccessible();
-            }
             _hostController.StartServer();
 
             if (!_startupArguments.Flags.Contains(StartupArguments.NO_BROWSER) &&

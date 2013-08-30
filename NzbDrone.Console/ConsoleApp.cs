@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Host;
 
@@ -7,6 +8,8 @@ namespace NzbDrone.Console
 {
     public static class ConsoleApp
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static void Main(string[] args)
         {
             try
@@ -18,7 +21,7 @@ namespace NzbDrone.Console
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.ToString());
+                Logger.FatalException(e.Message, e);
                 System.Console.ReadLine();
             }
 
