@@ -6,5 +6,4 @@ namespace NzbDrone.Core.Lifecycle
     {
 
     }
-
 }
