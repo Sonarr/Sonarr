@@ -62,6 +62,7 @@
     <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="DiskProviderTests\FreeSpaceFixture.cs" />
     <Compile Include="DiskProviderTests\IsParentFixture.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
