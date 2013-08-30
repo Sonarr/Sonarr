@@ -58,7 +58,15 @@ namespace NzbDrone.Common
                 //Drive letter
                 return dirInfo.Name.ToUpper();
             }
-            return Path.Combine(GetProperCapitalization(parentDirInfo), parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
+
+            var folderName = dirInfo.Name;
+
+            if (dirInfo.Exists)
+            {
+                folderName = parentDirInfo.GetDirectories(dirInfo.Name)[0].Name;
+            }
+
+            return Path.Combine(GetProperCapitalization(parentDirInfo), folderName);
         }
 
         public static string GetActualCasing(this string path)
