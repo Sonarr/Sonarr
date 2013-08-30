@@ -106,8 +106,16 @@ namespace NzbDrone.Core.Indexers
                 try
                 {
                     _logger.Trace("Downloading Feed " + url);
-                    var stream = _httpProvider.DownloadStream(url);
-                    result.AddRange(indexer.Parser.Process(stream, url));
+                    var xml = _httpProvider.DownloadString(url);
+                    if (!string.IsNullOrWhiteSpace(xml))
+                    {
+                        result.AddRange(indexer.Parser.Process(xml, url));
+                    }
+                    else
+                    {
+                        _logger.Warn("{0} returned empty response.", url);
+                    }
+
                 }
                 catch (WebException webException)
                 {
