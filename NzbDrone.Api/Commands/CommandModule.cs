@@ -39,7 +39,7 @@ namespace NzbDrone.Api.Commands
 
         private Response GetAllCommands()
         {
-            return _trackCommands.AllTracked.AsResponse();
+            return _trackCommands.AllTracked().AsResponse();
         }
     }
 }
