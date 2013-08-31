@@ -50,7 +50,7 @@ namespace NzbDrone.Common
 
         public static bool IsPathValid(this string path)
         {
-            if (path.ContainsInvalidPathChars())
+            if (path.ContainsInvalidPathChars() || string.IsNullOrWhiteSpace(path))
             {
                 return false;
             }

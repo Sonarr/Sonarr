@@ -12,6 +12,7 @@ namespace NzbDrone.Api.Validation
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
+            if (context.PropertyValue == null) return false;
             return context.PropertyValue.ToString().IsPathValid();
         }
     }
