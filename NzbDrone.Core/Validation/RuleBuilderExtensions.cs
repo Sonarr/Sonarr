@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Validation
 
         public static IRuleBuilderOptions<T, string> ValidRootUrl<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
+            ruleBuilder.SetValidator(new NotEmptyValidator(null));
             return ruleBuilder.SetValidator(new RegularExpressionValidator("^http(?:s)?://[a-z0-9-.]+", RegexOptions.IgnoreCase)).WithMessage("must be valid URL that");
         }
     }

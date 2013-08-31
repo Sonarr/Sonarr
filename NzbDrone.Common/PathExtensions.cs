@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -44,6 +45,32 @@ namespace NzbDrone.Common
 
             return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
         }
+
+        private static readonly Regex WindowsInvalidPathRegex = new Regex(@"[/*<>""|]", RegexOptions.Compiled);
+        private static readonly Regex WindowsPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
+
+        public static bool IsPathValid(this string path)
+        {
+            if (OsInfo.IsLinux && !path.StartsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                return false;
+            }
+            if (WindowsInvalidPathRegex.IsMatch(path))
+            {
+                return false;
+            }
+
+            //Network path
+            if (path.StartsWith(Path.DirectorySeparatorChar.ToString())) return true;
+
+            if (!WindowsPathRegex.IsMatch(path))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
 
         public static bool ContainsInvalidPathChars(this string text)
         {

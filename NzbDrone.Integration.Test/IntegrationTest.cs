@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System.Runtime.CompilerServices;
+using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
@@ -39,7 +40,7 @@ namespace NzbDrone.Integration.Test
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
         }
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void SmokeTestSetup()
         {
             _runner = new NzbDroneRunner();
@@ -63,7 +64,7 @@ namespace NzbDrone.Integration.Test
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, "config/naming");
         }
 
-        [TearDown]
+        [TestFixtureTearDown]
         public void SmokeTestTearDown()
         {
             _runner.KillAll();

@@ -10,12 +10,6 @@ namespace NzbDrone.Integration.Test
     public class SeriesIntegrationTest : IntegrationTest
     {
         [Test]
-        public void should_have_no_series_on_start_application()
-        {
-            Series.All().Should().BeEmpty();
-        }
-
-        [Test]
         public void series_lookup_on_trakt()
         {
             var series = Series.Lookup("archer");

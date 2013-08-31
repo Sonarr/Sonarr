@@ -38,7 +38,7 @@ define(
 
                 this.listenTo(App.vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
                 this.listenTo(this.model, 'change', this.render);
-                this.listenTo(RootFolders, 'change', this.render);
+                this.listenTo(RootFolders, 'all', this.render);
 
                 this.rootFolderLayout = new RootFolderLayout();
                 this.listenTo(this.rootFolderLayout, 'folderSelected', this._setRootFolder);
@@ -108,6 +108,7 @@ define(
             _setRootFolder: function (options) {
                 App.vent.trigger(App.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
+                this._rootFolderChanged();
             },
 
             _addSeries: function () {
