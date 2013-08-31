@@ -4,11 +4,11 @@ namespace NzbDrone.Common.Messaging.Events
 {
     public class CommandStartedEvent : IEvent
     {
-        public TrackedCommand Command { get; private set; }
+        public TrackedCommand TrackedCommand { get; private set; }
 
-        public CommandStartedEvent(TrackedCommand command)
+        public CommandStartedEvent(TrackedCommand trackedCommand)
         {
-            Command = command;
+            TrackedCommand = trackedCommand;
         }
     }
 }

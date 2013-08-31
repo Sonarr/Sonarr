@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Jobs
 
         public void HandleAsync(CommandExecutedEvent message)
         {
-            var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
+            var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.TrackedCommand.Command.GetType().FullName);
 
             if (scheduledTask != null)
             {

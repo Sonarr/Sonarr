@@ -5,12 +5,12 @@ namespace NzbDrone.Common.Messaging.Events
 {
     public class CommandFailedEvent : IEvent
     {
-        public TrackedCommand Command { get; private set; }
+        public TrackedCommand TrackedCommand { get; private set; }
         public Exception Exception { get; private set; }
 
-        public CommandFailedEvent(TrackedCommand command, Exception exception)
+        public CommandFailedEvent(TrackedCommand trackedCommand, Exception exception)
         {
-            Command = command;
+            TrackedCommand = trackedCommand;
             Exception = exception;
         }
     }

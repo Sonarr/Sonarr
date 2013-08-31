@@ -20,17 +20,17 @@ namespace NzbDrone.Api.Commands
 
         public void HandleAsync(CommandStartedEvent message)
         {
-            BroadcastMessage(message.Command);
+            BroadcastMessage(message.TrackedCommand);
         }
 
         public void HandleAsync(CommandCompletedEvent message)
         {
-            BroadcastMessage(message.Command);
+            BroadcastMessage(message.TrackedCommand);
         }
 
         public void Handle(CommandFailedEvent message)
         {
-            BroadcastMessage(message.Command);
+            BroadcastMessage(message.TrackedCommand);
         }
 
         private void BroadcastMessage(TrackedCommand trackedCommand)
