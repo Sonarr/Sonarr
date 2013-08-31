@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Instrumentation.Commands
 {
     public class ClearLogCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 
         public ClearLogCommand()
         {

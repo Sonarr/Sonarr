@@ -113,6 +113,8 @@ define(
             },
 
             _setMonitored: function (seasonNumber) {
+                //TODO: use Actioneer?
+
                 var self = this;
 
                 var promise = $.ajax({

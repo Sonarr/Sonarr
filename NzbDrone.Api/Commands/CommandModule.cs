@@ -2,6 +2,7 @@
 using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Messaging.Tracking;
@@ -32,9 +33,10 @@ namespace NzbDrone.Api.Commands
                           .Equals(resource.Command, StringComparison.InvariantCultureIgnoreCase));
 
             dynamic command = Request.Body.FromJson(commandType);
-            _messageAggregator.PublishCommand(command);
 
-            return resource.AsResponse(HttpStatusCode.Created);
+            var response = (TrackedCommand) _messageAggregator.PublishCommandAsync(command);
+
+            return response.AsResponse(HttpStatusCode.Created);
         }
 
         private Response GetAllCommands()

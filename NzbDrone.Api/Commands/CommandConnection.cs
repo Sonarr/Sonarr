@@ -1,0 +1,42 @@
+﻿using System;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
+using NzbDrone.Api.SignalR;
+using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Messaging.Events;
+using NzbDrone.Common.Messaging.Tracking;
+
+namespace NzbDrone.Api.Commands
+{
+    public class CommandConnection : NzbDronePersistentConnection,
+                                     IHandleAsync<CommandStartedEvent>,
+                                     IHandleAsync<CommandCompletedEvent>,
+                                     IHandle<CommandFailedEvent>
+    {
+        public override string Resource
+        {
+            get { return "/Command"; }
+        }
+
+        public void HandleAsync(CommandStartedEvent message)
+        {
+            BroadcastMessage(message.Command);
+        }
+
+        public void HandleAsync(CommandCompletedEvent message)
+        {
+            BroadcastMessage(message.Command);
+        }
+
+        public void Handle(CommandFailedEvent message)
+        {
+            BroadcastMessage(message.Command);
+        }
+
+        private void BroadcastMessage(TrackedCommand trackedCommand)
+        {
+            var context = ((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
+            context.Connection.Broadcast(trackedCommand);
+        }
+    }
+}

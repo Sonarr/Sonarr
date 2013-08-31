@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Update.Commands
 {
     public class ApplicationUpdateCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 
         public ApplicationUpdateCommand()
         {

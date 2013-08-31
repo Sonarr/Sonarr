@@ -6,7 +6,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public class UpdateSceneMappingCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 
         public UpdateSceneMappingCommand()
         {

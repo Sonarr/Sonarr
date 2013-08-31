@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Instrumentation.Commands
 {
     public class TrimLogCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 
         public TrimLogCommand()
         {

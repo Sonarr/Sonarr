@@ -83,6 +83,7 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="Commands\CommandConnection.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
     <Compile Include="Config\NamingModule.cs" />
     <Compile Include="EpisodeFiles\EpisodeFileModule.cs" />

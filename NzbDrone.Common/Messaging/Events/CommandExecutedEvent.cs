@@ -1,10 +1,12 @@
-﻿namespace NzbDrone.Common.Messaging.Events
+﻿using NzbDrone.Common.Messaging.Tracking;
+
+namespace NzbDrone.Common.Messaging.Events
 {
     public class CommandExecutedEvent : IEvent
     {
-        public ICommand Command { get; private set; }
+        public TrackedCommand Command { get; private set; }
 
-        public CommandExecutedEvent(ICommand command)
+        public CommandExecutedEvent(TrackedCommand command)
         {
             Command = command;
         }

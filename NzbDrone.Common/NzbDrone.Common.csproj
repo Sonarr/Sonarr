@@ -93,6 +93,7 @@
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Messaging\Tracking\CommandTrackingService.cs" />
+    <Compile Include="Messaging\Tracking\ExistingCommand.cs" />
     <Compile Include="Messaging\Tracking\TrackedCommand.cs" />
     <Compile Include="Messaging\Events\CommandStartedEvent.cs" />
     <Compile Include="Messaging\CommandEqualityComparer.cs" />

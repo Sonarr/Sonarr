@@ -6,8 +6,8 @@ namespace NzbDrone.Core.Tv.Commands
 {
     public class RefreshSeriesCommand : ICommand
     {
-        public String CommandId { get; set; }
-        public int? SeriesId { get; private set; }
+        public String CommandId { get; private set; }
+        public int? SeriesId { get; set; }
 
         public RefreshSeriesCommand()
         {

@@ -6,7 +6,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
 {
     public class CleanMediaFileDb : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
         public int SeriesId { get; private set; }
 
         public CleanMediaFileDb()

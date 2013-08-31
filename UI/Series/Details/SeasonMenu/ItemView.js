@@ -51,7 +51,7 @@ define(
                         seasonNumber: this.model.get('seasonNumber')
                     },
                     element     : this.ui.seasonSearch,
-                    failMessage : 'Search for season {0} failed'.format(this.model.get('seasonNumber')),
+                    errorMessage: 'Search for season {0} failed'.format(this.model.get('seasonNumber')),
                     startMessage: 'Search for season {0} started'.format(this.model.get('seasonNumber'))
                 });
             },

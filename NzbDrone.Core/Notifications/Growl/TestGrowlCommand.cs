@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Notifications.Growl
 {
     public class TestGrowlCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
         public string Host { get; set; }
         public int Port { get; set; }
         public string Password { get; set; }

@@ -76,7 +76,7 @@ namespace NzbDrone.Common.Test.EventingTests
 
     public class CommandA : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 // ReSharper disable UnusedParameter.Local
         public CommandA(int id = 0)
 // ReSharper restore UnusedParameter.Local
@@ -87,7 +87,7 @@ namespace NzbDrone.Common.Test.EventingTests
 
     public class CommandB : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 
         public CommandB()
         {

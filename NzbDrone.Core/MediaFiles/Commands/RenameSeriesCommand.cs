@@ -6,8 +6,8 @@ namespace NzbDrone.Core.MediaFiles.Commands
 {
     public class RenameSeriesCommand : ICommand
     {
-        public String CommandId { get; set; }
-        public int SeriesId { get; private set; }
+        public String CommandId { get; private set; }
+        public int SeriesId { get; set; }
 
         public RenameSeriesCommand()
         {

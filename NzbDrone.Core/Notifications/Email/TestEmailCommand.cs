@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Notifications.Email
 {
     public class TestEmailCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
         public string Server { get; set; }
         public int Port { get; set; }
         public bool Ssl { get; set; }

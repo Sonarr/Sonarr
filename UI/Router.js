@@ -5,10 +5,11 @@ require(
         'marionette',
         'Controller',
         'Series/SeriesCollection',
+        'Shared/Actioneer',
         'Navbar/NavbarView',
         'jQuery/RouteBinder',
         'jquery'
-    ], function (App, Marionette, Controller, SeriesCollection, NavbarView, RouterBinder, $) {
+    ], function (App, Marionette, Controller, SeriesCollection, Actioneer, NavbarView, RouterBinder, $) {
 
         var Router = Marionette.AppRouter.extend({
 

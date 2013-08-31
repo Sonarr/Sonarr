@@ -6,7 +6,7 @@ namespace NzbDrone.Core.IndexerSearch
 {
     public class EpisodeSearchCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
         public int EpisodeId { get; set; }
         
         public EpisodeSearchCommand()

@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public class TestPlexServerCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
         public string Host { get; set; }
         public int Port { get; set; }
 

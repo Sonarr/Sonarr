@@ -6,7 +6,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
 {
     public class CleanUpRecycleBinCommand : ICommand
     {
-        public String CommandId { get; set; }
+        public String CommandId { get; private set; }
 
         public CleanUpRecycleBinCommand()
         {

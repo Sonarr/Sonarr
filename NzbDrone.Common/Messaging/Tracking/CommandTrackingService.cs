@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Common.Messaging.Tracking
@@ -8,10 +9,12 @@ namespace NzbDrone.Common.Messaging.Tracking
     public interface ITrackCommands
     {
         TrackedCommand TrackIfNew(ICommand command);
+        ExistingCommand TrackNewOrGet(ICommand command);
         TrackedCommand Completed(TrackedCommand trackedCommand, TimeSpan runtime);
         TrackedCommand Failed(TrackedCommand trackedCommand, Exception e);
         List<TrackedCommand> AllTracked();
         Boolean ExistingCommand(ICommand command);
+        TrackedCommand FindExisting(ICommand command);
     }
 
     public class TrackCommands : ITrackCommands, IExecute<TrackedCommandCleanupCommand>
@@ -34,6 +37,21 @@ namespace NzbDrone.Common.Messaging.Tracking
             Store(trackedCommand);
 
             return trackedCommand;
+        }
+
+        public ExistingCommand TrackNewOrGet(ICommand command)
+        {
+            var trackedCommand = FindExisting(command);
+
+            if (trackedCommand == null)
+            {
+                trackedCommand = new TrackedCommand(command, CommandState.Running);
+                Store(trackedCommand);
+
+                return new ExistingCommand(false, trackedCommand);
+            }
+
+            return new ExistingCommand(true, trackedCommand);
         }
 
         public TrackedCommand Completed(TrackedCommand trackedCommand, TimeSpan runtime)
@@ -65,11 +83,25 @@ namespace NzbDrone.Common.Messaging.Tracking
 
         public bool ExistingCommand(ICommand command)
         {
-            var running = AllTracked().Where(i => i.Type == command.GetType().FullName && i.State == CommandState.Running);
+            return FindExisting(command) != null;
+        }
 
-            var result = running.Select(r => r.Command).Contains(command, new CommandEqualityComparer());
+        public TrackedCommand FindExisting(ICommand command)
+        {
+            var comparer = new CommandEqualityComparer();
+            return Running(command.GetType()).SingleOrDefault(t => comparer.Equals(t.Command, command));
+        }
 
-            return result;
+        private List<TrackedCommand> Running(Type type = null)
+        {
+            var running = AllTracked().Where(i => i.State == CommandState.Running);
+
+            if (type != null)
+            {
+                return running.Where(t => t.Type == type.FullName).ToList();
+            }
+
+            return running.ToList();
         }
 
         private void Store(TrackedCommand trackedCommand)
@@ -84,7 +116,7 @@ namespace NzbDrone.Common.Messaging.Tracking
 
         public void Execute(TrackedCommandCleanupCommand message)
         {
-            var old = AllTracked().Where(c => c.StateChangeTime < DateTime.UtcNow.AddMinutes(-15));
+            var old = AllTracked().Where(c => c.State != CommandState.Running && c.StateChangeTime < DateTime.UtcNow.AddMinutes(-5));
 
             foreach (var trackedCommand in old)
             {
