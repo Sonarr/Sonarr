@@ -46,29 +46,26 @@ namespace NzbDrone.Common
             return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private static readonly Regex WindowsInvalidPathRegex = new Regex(@"[/*<>""|]", RegexOptions.Compiled);
-        private static readonly Regex WindowsPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
+        private static readonly Regex WindowsPathWithDriveRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
 
         public static bool IsPathValid(this string path)
         {
-            if (OsInfo.IsLinux && !path.StartsWith(Path.DirectorySeparatorChar.ToString()))
-            {
-                return false;
-            }
-            if (WindowsInvalidPathRegex.IsMatch(path))
+            if (path.ContainsInvalidPathChars())
             {
                 return false;
             }
 
-            //Network path
-            if (path.StartsWith(Path.DirectorySeparatorChar.ToString())) return true;
-
-            if (!WindowsPathRegex.IsMatch(path))
+            if (OsInfo.IsLinux)
             {
-                return false;
+                return path.StartsWith(Path.DirectorySeparatorChar.ToString());
             }
 
-            return true;
+            if (path.StartsWith("\\") || WindowsPathWithDriveRegex.IsMatch(path))
+            {
+                return true;
+            }
+
+            return false;
         }
 
 
