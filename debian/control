@@ -1,12 +1,11 @@
-Source: nzbdrone
+Package: nzbdrone
 Section: web
 Priority: optional
-Maintainer: NzbDrone <contact@nzbdrone.com>
 Depends: libmono-cil-dev (>= 2.10.1)
+Architecture: all
+Maintainer: NzbDrone <contact@nzbdrone.com>
+Source: nzbdrone
 Homepage: http://www.nzbdrone.com
 Vcs-Git: git@github.com:NzbDrone/NzbDrone.git
 Vcs-Browser: https://github.com/NzbDrone/NzbDrone
-
-Package: nzbdrone
-Architecture: all
 Description: NZBDrone is a PVR for newsgroup users
