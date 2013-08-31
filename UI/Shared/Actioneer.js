@@ -67,6 +67,10 @@ define(
                     var command = CommandCollection.find({ 'id': trackedCommand.id });
 
                     if (!command) {
+                        trackedCommand.completed = true;
+
+                        self._onError(options, trackedCommand.id);
+                        self._onComplete(options);
                         return;
                     }
 
@@ -75,6 +79,7 @@ define(
 
                         self._onSuccess(options, command.get('id'));
                         self._onComplete(options);
+                        return;
                     }
 
                     if (command.get('state') === 'failed') {
