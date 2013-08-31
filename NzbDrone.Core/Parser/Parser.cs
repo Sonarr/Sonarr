@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Parser
 {
     public static class Parser
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
         private static readonly Regex[] ReportTitleRegex = new[]
             {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.NzbClub
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Indexers.NzbClub
 
         public NzbClubParser()
         {
-            logger = LogManager.GetCurrentClassLogger();
+            logger =  NzbDroneLogger.GetLogger();
         }
 
 

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common
 {
@@ -25,7 +26,7 @@ namespace NzbDrone.Common
     {
         public const string NZBDRONE_SERVICE_NAME = "NzbDrone";
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
         public virtual bool ServiceExist(string name)
         {

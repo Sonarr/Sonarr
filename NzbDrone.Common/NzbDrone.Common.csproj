@@ -92,6 +92,8 @@
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
+    <Compile Include="Instrumentation\NzbDroneLogger.cs" />
+    <Compile Include="Instrumentation\LogTargets.cs" />
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
@@ -99,11 +101,8 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="HashUtil.cs" />
-    <Compile Include="Instrumentation\ApplicationLogLayoutRenderer.cs" />
-    <Compile Include="Instrumentation\DirSeparatorLayoutRenderer.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
     <Compile Include="Instrumentation\LogglyTarget.cs" />
-    <Compile Include="Instrumentation\UpdateLogLayoutRenderer.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="Messaging\CommandCompletedEvent.cs" />
     <Compile Include="Messaging\CommandStartedEvent.cs" />

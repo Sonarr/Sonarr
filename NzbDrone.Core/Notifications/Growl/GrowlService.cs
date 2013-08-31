@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Growl.Connector;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using GrowlNotification = Growl.Connector.Notification;
 
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Notifications.Growl
 
     public class GrowlService : IGrowlService, IExecute<TestGrowlCommand>
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
         private readonly Application _growlApplication = new Application("NzbDrone");
         private GrowlConnector _growlConnector;

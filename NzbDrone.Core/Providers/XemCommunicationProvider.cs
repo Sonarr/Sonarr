@@ -5,6 +5,7 @@ using NLog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Model.Xem;
 
 namespace NzbDrone.Core.Providers
@@ -20,7 +21,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly IHttpProvider _httpProvider;
 
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger =  NzbDroneLogger.GetLogger();
 
         private const string XEM_BASE_URL = "http://thexem.de/map/";
 

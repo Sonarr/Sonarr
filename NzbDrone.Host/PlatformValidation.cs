@@ -3,12 +3,13 @@ using System.Diagnostics;
 using System.Reflection;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Host
 {
     public static class PlatformValidation
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
         public static bool IsValidate(IUserAlert userAlert)
         {

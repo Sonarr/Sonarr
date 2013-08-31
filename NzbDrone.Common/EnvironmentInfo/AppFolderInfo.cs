@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -30,7 +31,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                 DATA_SPECIAL_FOLDER = Environment.SpecialFolder.ApplicationData;
             }
 
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger =  NzbDroneLogger.GetLogger(this);
 
             if (startupArguments.Args.ContainsKey(StartupArguments.APPDATA))
             {

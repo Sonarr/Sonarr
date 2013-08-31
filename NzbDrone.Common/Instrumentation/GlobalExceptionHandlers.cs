@@ -6,12 +6,9 @@ namespace NzbDrone.Common.Instrumentation
 {
     public static class GlobalExceptionHandlers
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Global");
-
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
         public static void Register()
         {
-            ExceptronTarget.Register();
-
             AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));
             TaskScheduler.UnobservedTaskException += ((s, e) => TaskException(e.Exception));
         }

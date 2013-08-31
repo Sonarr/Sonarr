@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -26,7 +27,7 @@ namespace NzbDrone.Common
 
     public class ProcessProvider : IProcessProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
         public const string NZB_DRONE_PROCESS_NAME = "NzbDrone";
         public const string NZB_DRONE_CONSOLE_PROCESS_NAME = "NzbDrone.Console";

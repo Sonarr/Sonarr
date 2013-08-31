@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Events;
@@ -18,7 +19,7 @@ namespace NzbDrone.Api.SignalR
 
         public BasicResourceConnection()
         {
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger =  NzbDroneLogger.GetLogger(this);
         }
 
         protected override Task OnConnected(IRequest request, string connectionId)

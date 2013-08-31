@@ -16,7 +16,7 @@ namespace NzbDrone.Update
         private readonly IProcessProvider _processProvider;
         private static IContainer _container;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
         public UpdateApp(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
@@ -28,14 +28,16 @@ namespace NzbDrone.Update
         {
             try
             {
+                var startupArgument = new StartupArguments(args);
+                LogTargets.Register(startupArgument, true, true);
+
                 Console.WriteLine("Starting NzbDrone Update Client");
 
                 IgnoreCertErrorPolicy.Register();
 
                 GlobalExceptionHandlers.Register();
 
-                new LogglyTarget().Register(LogLevel.Trace);
-                _container = UpdateContainerBuilder.Build(new StartupArguments(args));
+                _container = UpdateContainerBuilder.Build(startupArgument);
 
                 logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);

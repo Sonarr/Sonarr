@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
     public class XbmcService : IXbmcService, IExecute<TestXbmcCommand>
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
         private readonly IHttpProvider _httpProvider;
         private readonly IEnumerable<IApiProvider> _apiProviders;
 

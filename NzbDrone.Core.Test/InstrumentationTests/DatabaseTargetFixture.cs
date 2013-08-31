@@ -3,6 +3,7 @@ using System.Diagnostics;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Instrumentation;
@@ -36,8 +37,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             LogManager.ReconfigExistingLoggers();
 
 
-            _logger = LogManager.GetCurrentClassLogger();
-            _loggerName = _logger.Name.Replace("NzbDrone.","");
+            _logger =  NzbDroneLogger.GetLogger();
 
             _uniqueMessage = "Unique message: " + Guid.NewGuid().ToString();
         }

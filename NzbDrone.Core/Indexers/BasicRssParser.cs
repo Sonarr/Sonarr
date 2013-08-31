@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Indexers
 
         public BasicRssParser()
         {
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger = NzbDroneLogger.GetLogger(this);
         }
 
         public IEnumerable<ReportInfo> Process(string xml, string url)

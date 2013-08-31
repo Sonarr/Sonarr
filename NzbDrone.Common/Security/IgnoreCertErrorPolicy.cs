@@ -3,12 +3,13 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Security
 {
     public static class IgnoreCertErrorPolicy
     {
-        private static readonly Logger Logger = LogManager.GetLogger("CertPolicy");
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
         public static void Register()
         {

@@ -12,7 +12,7 @@ namespace NzbDrone.Host
     {
         public static IContainer Start(StartupArguments args, IUserAlert userAlert)
         {
-            var logger = LogManager.GetLogger("AppMain");
+            var logger = NzbDroneLogger.GetLogger();
 
             GlobalExceptionHandlers.Register();
             IgnoreCertErrorPolicy.Register();

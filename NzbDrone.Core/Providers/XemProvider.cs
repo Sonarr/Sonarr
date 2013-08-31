@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Tv;
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesService _seriesService;
         private readonly ICached<bool> _cache;
 
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger =  NzbDroneLogger.GetLogger();
 
         public XemProvider(IEpisodeService episodeService,
                            IXemCommunicationProvider xemCommunicationProvider,

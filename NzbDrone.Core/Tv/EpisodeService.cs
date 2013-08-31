@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Tv
         IHandleAsync<SeriesDeletedEvent>
     {
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IConfigService _configService;

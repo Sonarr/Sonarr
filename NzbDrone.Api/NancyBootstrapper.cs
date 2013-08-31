@@ -6,6 +6,7 @@ using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
@@ -21,7 +22,7 @@ namespace NzbDrone.Api
         public NancyBootstrapper(TinyIoCContainer tinyIoCContainer)
         {
             _tinyIoCContainer = tinyIoCContainer;
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger =  NzbDroneLogger.GetLogger();
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)

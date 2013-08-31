@@ -24,17 +24,7 @@ namespace NzbDrone.Common.Instrumentation
         public IExceptronClient ExceptronClient { get; internal set; }
 
 
-        private static ExceptronTarget _instance = new ExceptronTarget();
 
-        public static void Register()
-        {
-            var rule = new LoggingRule("*", LogLevel.Warn, _instance);
-
-            LogManager.Configuration.AddTarget("ExceptronTarget", _instance);
-            LogManager.Configuration.LoggingRules.Add(rule);
-            LogManager.ConfigurationReloaded += (sender, args) => Register();
-            LogManager.ReconfigExistingLoggers();
-        }
 
         protected override void InitializeTarget()
         {
