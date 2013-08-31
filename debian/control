@@ -6,7 +6,6 @@ Homepage: http://www.nzbdrone.com
 Vcs-Git: git@github.com:NzbDrone/NzbDrone.git
 Vcs-Browser: https://github.com/NzbDrone/NzbDrone
 
-
 Package: nzbdrone
 Architecture: all
 Depends: libmono-cil-dev (>= 2.10.1)
