@@ -31,6 +31,8 @@ namespace NzbDrone.Common.Instrumentation
 
                 RegisterAppFile(appFolderInfo);
             }
+
+            LogManager.ReconfigExistingLoggers();
         }
 
         private static void RegisterConsole()
@@ -51,9 +53,6 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget("console", coloredConsoleTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
-
-            LogManager.ConfigurationReloaded += (sender, args) => RegisterConsole();
-            LogManager.ReconfigExistingLoggers();
         }
 
 
@@ -80,9 +79,6 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget("appfile", fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
-
-            LogManager.ConfigurationReloaded += (sender, args) => RegisterAppFile(appFolderInfo);
-            LogManager.ReconfigExistingLoggers();
         }
 
 
@@ -104,9 +100,6 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget("updateFile", fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
-
-            LogManager.ConfigurationReloaded += (sender, args) => RegisterUpdateFile(appFolderInfo);
-            LogManager.ReconfigExistingLoggers();
         }
 
         private static void RegisterExceptron()
@@ -117,12 +110,10 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget("ExceptronTarget", exceptronTarget);
             LogManager.Configuration.LoggingRules.Add(rule);
-            LogManager.ConfigurationReloaded += (sender, args) => RegisterExceptron();
-            LogManager.ReconfigExistingLoggers();
         }
 
 
-        public static void RegisterLoggly()
+        private static void RegisterLoggly()
         {
             var logglyTarger = new LogglyTarget();
 
@@ -130,8 +121,6 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration.AddTarget("LogglyLogger", logglyTarger);
             LogManager.Configuration.LoggingRules.Add(rule);
-            LogManager.ConfigurationReloaded += (sender, args) => RegisterLoggly();
-            LogManager.ReconfigExistingLoggers();
         }
 
     }
