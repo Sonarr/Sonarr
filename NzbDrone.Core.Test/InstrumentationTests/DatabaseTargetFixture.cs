@@ -15,8 +15,6 @@ namespace NzbDrone.Core.Test.InstrumentationTests
     [TestFixture]
     public class DatabaseTargetFixture : DbTest<DatabaseTarget, Log>
     {
-        string _loggerName;
-
         private static string _uniqueMessage;
         Logger _logger;
 
@@ -37,7 +35,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             LogManager.ReconfigExistingLoggers();
 
 
-            _logger =  NzbDroneLogger.GetLogger();
+            _logger = NzbDroneLogger.GetLogger();
 
             _uniqueMessage = "Unique message: " + Guid.NewGuid().ToString();
         }
@@ -119,7 +117,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         private void VerifyLog(Log logItem, LogLevel level)
         {
             logItem.Time.Should().BeWithin(TimeSpan.FromSeconds(2));
-            logItem.Logger.Should().Be(_loggerName);
+            logItem.Logger.Should().Be(this.GetType().Name);
             logItem.Level.Should().Be(level.Name);
             logItem.Method.Should().Be(new StackTrace().GetFrame(1).GetMethod().Name);
             _logger.Name.Should().EndWith(logItem.Logger);
