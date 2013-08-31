@@ -8,8 +8,6 @@ namespace NzbDrone.Console
 {
     public static class ConsoleApp
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         public static void Main(string[] args)
         {
             try
@@ -21,7 +19,6 @@ namespace NzbDrone.Console
             }
             catch (Exception e)
             {
-                Logger.FatalException(e.Message, e);
                 System.Console.ReadLine();
             }
 

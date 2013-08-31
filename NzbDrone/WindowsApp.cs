@@ -9,7 +9,6 @@ namespace NzbDrone
 {
     public static class WindowsApp
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static void Main(string[] args)
         {
@@ -24,7 +23,6 @@ namespace NzbDrone
             }
             catch (Exception e)
             {
-                Logger.FatalException(e.Message, e);
                 var message = string.Format("{0}: {1}", e.GetType().Name, e.Message);
                 MessageBox.Show(text: message, buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
             }
