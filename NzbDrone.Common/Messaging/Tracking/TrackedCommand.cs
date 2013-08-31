@@ -12,7 +12,11 @@ namespace NzbDrone.Common.Messaging.Tracking
         public DateTime StateChangeTime { get; set; }
         public TimeSpan Runtime { get; set; }
         public Exception Exception { get; set; }
-        
+
+        public TrackedCommand()
+        {
+        }
+
         public TrackedCommand(ICommand command, CommandState state)
         {
             Id = command.CommandId;
