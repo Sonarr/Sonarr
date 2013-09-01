@@ -98,7 +98,7 @@ define(
                             successMessage : 'Logs have been cleared',
                             errorMessage   : 'Failed to clear logs',
                             ownerContext   : this,
-                            onSuccess: this._refreshLogs
+                            onSuccess      : this._refreshLogs
                         },
 
                         {
@@ -119,6 +119,7 @@ define(
             },
 
             _refreshLogs: function () {
+                this.collection.state.currentPage = 1;
                 this.collection.fetch({ reset: true });
                 this._showTable();
             }
