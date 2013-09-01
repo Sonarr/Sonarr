@@ -34,11 +34,10 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         }
 
         [Test]
-        public void should_return_null_when_cant_get_free_space()
+        public void should_be_able_to_check_space_on_ramdrive()
         {
             LinuxOnly();
-
-           Subject.GetAvailableSpace("/run/").Should().NotBe(null);
+            Subject.GetAvailableSpace("/run/").Should().NotBe(0);
         }
     }
 }
