@@ -10,12 +10,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     public interface ISQLiteMigrationHelper
     {
         Dictionary<String, SQLiteMigrationHelper.SQLiteColumn> GetColumns(string tableName);
-        void CreateTable(string tableName, IEnumerable<SQLiteMigrationHelper.SQLiteColumn> values);
+        void CreateTable(string tableName, IEnumerable<SQLiteMigrationHelper.SQLiteColumn> values, IEnumerable<SQLiteMigrationHelper.SQLiteIndex> indexes);
         void CopyData(string sourceTable, string destinationTable, IEnumerable<SQLiteMigrationHelper.SQLiteColumn> columns);
-        int GetRowCount(string tableName);
         void DropTable(string tableName);
         void RenameTable(string tableName, string newName);
         SQLiteTransaction BeginTransaction();
+        List<SQLiteMigrationHelper.SQLiteIndex> GetIndexes(string tableName);
     }
 
     public class SQLiteMigrationHelper : ISQLiteMigrationHelper
@@ -25,7 +25,10 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         private static readonly Regex SchemaRegex = new Regex(@"['\""\[](?<name>\w+)['\""\]]\s(?<schema>[\w-\s]+)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-        public SQLiteMigrationHelper(IConnectionStringFactory connectionStringFactory,Logger logger)
+        private static readonly Regex IndexRegex = new Regex(@"\(""(?<col>.*)""\s(?<direction>ASC|DESC)\)$",
+             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
+        public SQLiteMigrationHelper(IConnectionStringFactory connectionStringFactory, Logger logger)
         {
             try
             {
@@ -34,7 +37,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             }
             catch (Exception e)
             {
-                logger.ErrorException("Couldn't open databse " + connectionStringFactory.MainDbConnectionString, e);
+                logger.ErrorException("Couldn't open database " + connectionStringFactory.MainDbConnectionString, e);
                 throw;
             }
 
@@ -47,6 +50,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                                                 tableName));
 
             command.Connection = _connection;
+
             return (string)command.ExecuteScalar();
         }
 
@@ -65,14 +69,48 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                                    });
         }
 
-        public void CreateTable(string tableName, IEnumerable<SQLiteColumn> values)
+        public List<SQLiteIndex> GetIndexes(string tableName)
+        {
+            var command = new SQLiteCommand(string.Format("SELECT sql FROM sqlite_master WHERE type='index' AND tbl_name ='{0}'", tableName));
+            command.Connection = _connection;
+
+            var reader = command.ExecuteReader();
+            var sqls = new List<string>();
+
+            while (reader.Read())
+            {
+                sqls.Add(reader[0].ToString());
+            }
+
+
+            var indexes = new List<SQLiteIndex>();
+
+            foreach (var indexSql in sqls)
+            {
+                var newIndex = new SQLiteIndex();
+                var matches = IndexRegex.Match(indexSql);
+
+                newIndex.Column = matches.Groups["col"].Value;
+                newIndex.Unique = indexSql.Contains("UNIQUE");
+                newIndex.Table = tableName;
+
+                indexes.Add(newIndex);
+            }
+
+            return indexes;
+        }
+
+        public void CreateTable(string tableName, IEnumerable<SQLiteColumn> values, IEnumerable<SQLiteIndex> indexes)
         {
             var columns = String.Join(",", values.Select(c => c.ToString()));
 
-            var command = new SQLiteCommand(string.Format("CREATE TABLE [{0}] ({1})", tableName, columns));
-            command.Connection = _connection;
+            ExecuteNonQuery("CREATE TABLE [{0}] ({1})", tableName, columns);
 
-            command.ExecuteNonQuery();
+            foreach (var index in indexes)
+            {
+                ExecuteNonQuery("DROP INDEX {0}", index.IndexName);
+                ExecuteNonQuery(index.CreateSql(tableName));
+            }
         }
 
         public void CopyData(string sourceTable, string destinationTable, IEnumerable<SQLiteColumn> columns)
@@ -128,6 +166,18 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         }
 
 
+
+        private void ExecuteNonQuery(string command, params string[] args)
+        {
+            var sqLiteCommand = new SQLiteCommand(string.Format(command, args))
+            {
+                Connection = _connection
+            };
+
+            sqLiteCommand.ExecuteNonQuery();
+        }
+
+
         public class SQLiteColumn
         {
             public string Name { get; set; }
@@ -136,6 +186,31 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             public override string ToString()
             {
                 return string.Format("[{0}] {1}", Name, Schema);
+            }
+        }
+
+        public class SQLiteIndex
+        {
+            public string Column { get; set; }
+            public string Table { get; set; }
+            public bool Unique { get; set; }
+
+            public override string ToString()
+            {
+                return string.Format("[{0}] Unique: {1}", Column, Unique);
+            }
+
+            public string IndexName
+            {
+                get
+                {
+                    return string.Format("IX_{0}_{1}", Table, Column);
+                }
+            }
+
+            public string CreateSql(string tableName)
+            {
+                return string.Format(@"CREATE UNIQUE INDEX ""{2}"" ON ""{0}"" (""{1}"" ASC)", tableName, Column, IndexName);
             }
         }
     }

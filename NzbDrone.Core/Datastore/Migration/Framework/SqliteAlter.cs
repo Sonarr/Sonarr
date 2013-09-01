@@ -22,12 +22,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             using (var transaction = _sqLiteMigrationHelper.BeginTransaction())
             {
                 var originalColumns = _sqLiteMigrationHelper.GetColumns(tableName);
+                var originalIndexes = _sqLiteMigrationHelper.GetIndexes(tableName);
 
                 var newColumns = originalColumns.Where(c => !columns.Contains(c.Key)).Select(c => c.Value).ToList();
+                var newIndexes = originalIndexes.Where(c => !columns.Contains(c.Column));
 
                 var tempTableName = tableName + "_temp";
 
-                _sqLiteMigrationHelper.CreateTable(tempTableName, newColumns);
+                _sqLiteMigrationHelper.CreateTable(tempTableName, newColumns, newIndexes);
 
                 _sqLiteMigrationHelper.CopyData(tableName, tempTableName, newColumns);
 

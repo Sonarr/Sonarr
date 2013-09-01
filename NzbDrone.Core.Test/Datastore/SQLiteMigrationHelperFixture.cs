@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+﻿using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -18,8 +19,6 @@ namespace NzbDrone.Core.Test.Datastore
             _subject = Mocker.Resolve<SQLiteMigrationHelper>();
         }
 
-
-
         [Test]
         public void should_parse_existing_columns()
         {
@@ -37,18 +36,12 @@ namespace NzbDrone.Core.Test.Datastore
             var columns = _subject.GetColumns("Series");
             columns.Remove("Title");
 
-            _subject.CreateTable("Series_New", columns.Values);
+            _subject.CreateTable("Series_New", columns.Values, new List<SQLiteMigrationHelper.SQLiteIndex>());
 
             var newColumns = _subject.GetColumns("Series_New");
 
             newColumns.Values.Should().HaveSameCount(columns.Values);
             newColumns.Should().NotContainKey("Title");
-        }
-
-        [Test]
-        public void should_get_zero_count_on_empty_table()
-        {
-            _subject.GetRowCount("Series").Should().Be(0);
         }
 
 
@@ -58,7 +51,7 @@ namespace NzbDrone.Core.Test.Datastore
             var columns = _subject.GetColumns("Series");
             columns.Remove("Title");
 
-            _subject.CreateTable("Series_New", columns.Values);
+            _subject.CreateTable("Series_New", columns.Values, new List<SQLiteMigrationHelper.SQLiteIndex>());
 
 
             _subject.CopyData("Series", "Series_New", columns.Values);
@@ -74,11 +67,40 @@ namespace NzbDrone.Core.Test.Datastore
             var columns = _subject.GetColumns("Episodes");
             columns.Remove("Title");
 
-            _subject.CreateTable("Episodes_New", columns.Values);
+            _subject.CreateTable("Episodes_New", columns.Values, new List<SQLiteMigrationHelper.SQLiteIndex>());
 
             _subject.CopyData("Episodes", "Episodes_New", columns.Values);
 
             _subject.GetRowCount("Episodes_New").Should().Be(originalEpisodes.Count);
+        }
+
+        [Test]
+        public void should_read_existing_indexes()
+        {
+            var indexes = _subject.GetIndexes("QualitySizes");
+
+            indexes.Should().NotBeEmpty();
+
+            indexes.Should().OnlyContain(c => c != null);
+            indexes.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Column));
+            indexes.Should().OnlyContain(c => c.Table == "QualitySizes");
+            indexes.Should().OnlyContain(c => c.Unique);
+        }
+
+        [Test]
+        public void should_add_indexes_when_creating_new_table()
+        {
+            var columns = _subject.GetColumns("QualitySizes");
+            var indexes = _subject.GetIndexes("QualitySizes");
+
+
+            _subject.CreateTable("QualityB", columns.Values, indexes);
+
+
+            var newIndexes = _subject.GetIndexes("QualityB");
+
+            newIndexes.Should().HaveSameCount(indexes);
+            newIndexes.Should().BeEquivalentTo(columns);
         }
     }
 }
