@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Series;
 using System.Linq;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Integration.Test
 {
@@ -31,7 +32,7 @@ namespace NzbDrone.Integration.Test
             var series = Series.Lookup("archer").First();
 
             series.QualityProfileId = 1;
-            series.Path = @"C:\Test\Archer";
+            series.Path = @"C:\Test\Archer".AsOsAgnostic();
 
             series = Series.Post(series);
 
@@ -51,7 +52,7 @@ namespace NzbDrone.Integration.Test
             var series = Series.Lookup("90210").First();
 
             series.QualityProfileId = 1;
-            series.Path = @"C:\Test\90210";
+            series.Path = @"C:\Test\90210".AsOsAgnostic();
 
             series = Series.Post(series);
 
