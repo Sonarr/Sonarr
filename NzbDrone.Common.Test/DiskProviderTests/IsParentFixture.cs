@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -17,7 +13,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             var path = @"C:\".AsOsAgnostic();
 
-            Subject.GetAvilableSpace(path).Should().NotBe(0);
+            Subject.GetAvailableSpace(path).Should().NotBe(0);
         }
 
         [Test]
@@ -25,7 +21,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             var path = @"C:\".AsOsAgnostic();
 
-            Subject.GetAvilableSpace(Path.Combine(path, "invalidFolder")).Should().NotBe(0);
+            Subject.GetAvailableSpace(Path.Combine(path, "invalidFolder")).Should().NotBe(0);
         }
 
 
@@ -34,7 +30,15 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             WindowsOnly();
 
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace("J:\\").Should().NotBe(0));
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvailableSpace("J:\\").Should().NotBe(0));
+        }
+
+        [Test]
+        public void should_return_null_when_cant_get_free_space()
+        {
+            LinuxOnly();
+
+           Subject.GetAvailableSpace("/run/").Should().NotBe(null);
         }
     }
 }

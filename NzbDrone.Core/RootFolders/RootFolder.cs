@@ -8,7 +8,7 @@ namespace NzbDrone.Core.RootFolders
     {
         public string Path { get; set; }
 
-        public long FreeSpace { get; set; }
+        public long? FreeSpace { get; set; }
 
         public List<UnmappedFolder> UnmappedFolders { get; set; }
     }
