@@ -58,6 +58,7 @@ namespace NzbDrone.Integration.Test
 
                 if (statusCall.ResponseStatus == ResponseStatus.Completed)
                 {
+                    Console.WriteLine("NzbDrone is started. Running Tests");
                     return;
                 }
 

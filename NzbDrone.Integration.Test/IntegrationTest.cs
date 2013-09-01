@@ -40,7 +40,8 @@ namespace NzbDrone.Integration.Test
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
         }
 
-        [TestFixtureSetUp]
+        //[TestFixtureSetUp]
+        [SetUp]
         public void SmokeTestSetup()
         {
             _runner = new NzbDroneRunner();
@@ -64,7 +65,8 @@ namespace NzbDrone.Integration.Test
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, "config/naming");
         }
 
-        [TestFixtureTearDown]
+        //[TestFixtureTearDown]
+        [TearDown]
         public void SmokeTestTearDown()
         {
             _runner.KillAll();
