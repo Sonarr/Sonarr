@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", false },
             new object[] { "The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", false },
             new object[] { "The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", false },
+            new object[] { "the.shield.1x13.circles.ws.xvidvd-tns", false}
         };
 
         public static object[] Webdl480pCases =

@@ -74,7 +74,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)(?:\W|_)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)FR)(?:\W|_)",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -311,6 +312,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["greek"].Captures.Cast<Capture>().Any())
                 return Language.Greek;
+
+            if (match.Groups["french"].Success)
+                return Language.French;
 
             return Language.English;
         }
