@@ -43,6 +43,7 @@ namespace NzbDrone.Core.MediaFiles
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            MoveFile(episodeFile, filePath);
 
             return filePath;
         }
@@ -51,7 +52,8 @@ namespace NzbDrone.Core.MediaFiles
         {
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-             MoveFile(episodeFile, filePath);
+            MoveFile(episodeFile, filePath);
+
             return filePath;
         }
 
