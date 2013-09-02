@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Messaging.Tracking
         public String Name { get; private set; }
         public String Type { get; private set; }
         public ICommand Command { get; private set; }
-        public CommandState State { get; set; }
+        public ProcessState State { get; set; }
         public DateTime StateChangeTime { get; set; }
         public TimeSpan Runtime { get; set; }
         public Exception Exception { get; set; }
@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Messaging.Tracking
         {
         }
 
-        public TrackedCommand(ICommand command, CommandState state)
+        public TrackedCommand(ICommand command, ProcessState state)
         {
             Id = command.CommandId;
             Name = command.GetType().Name;
@@ -26,12 +26,5 @@ namespace NzbDrone.Common.Messaging.Tracking
             State = state;
             StateChangeTime = DateTime.UtcNow;
         }
-    }
-
-    public enum CommandState
-    {
-        Running = 0,
-        Completed = 1,
-        Failed = 2
     }
 }

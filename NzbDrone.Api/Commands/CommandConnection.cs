@@ -11,7 +11,7 @@ namespace NzbDrone.Api.Commands
     public class CommandConnection : NzbDronePersistentConnection,
                                      IHandleAsync<CommandStartedEvent>,
                                      IHandleAsync<CommandCompletedEvent>,
-                                     IHandle<CommandFailedEvent>
+                                     IHandleAsync<CommandFailedEvent>
     {
         public override string Resource
         {
@@ -28,7 +28,7 @@ namespace NzbDrone.Api.Commands
             BroadcastMessage(message.TrackedCommand);
         }
 
-        public void Handle(CommandFailedEvent message)
+        public void HandleAsync(CommandFailedEvent message)
         {
             BroadcastMessage(message.TrackedCommand);
         }

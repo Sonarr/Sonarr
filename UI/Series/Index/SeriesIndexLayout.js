@@ -105,7 +105,6 @@ define(
                             title         : 'RSS Sync',
                             icon          : 'icon-rss',
                             command       : 'rsssync',
-                            successMessage: 'RSS Sync Completed',
                             errorMessage  : 'RSS Sync Failed!'
                         },
                         {

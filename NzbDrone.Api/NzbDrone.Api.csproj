@@ -86,6 +86,9 @@
     <Compile Include="Commands\CommandConnection.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
     <Compile Include="Config\NamingModule.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessageConnection.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessageModule.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessageResource.cs" />
     <Compile Include="EpisodeFiles\EpisodeFileModule.cs" />
     <Compile Include="EpisodeFiles\EpisodeFileResource.cs" />
     <Compile Include="Directories\DirectoryLookupService.cs" />

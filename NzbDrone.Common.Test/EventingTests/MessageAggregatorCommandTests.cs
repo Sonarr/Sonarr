@@ -30,11 +30,11 @@ namespace NzbDrone.Common.Test.EventingTests
 
             Mocker.GetMock<ITrackCommands>()
                   .Setup(c => c.TrackIfNew(It.IsAny<CommandA>()))
-                  .Returns(new TrackedCommand(new CommandA(), CommandState.Running));
+                  .Returns(new TrackedCommand(new CommandA(), ProcessState.Running));
 
             Mocker.GetMock<ITrackCommands>()
                   .Setup(c => c.TrackIfNew(It.IsAny<CommandB>()))
-                  .Returns(new TrackedCommand(new CommandB(), CommandState.Running));
+                  .Returns(new TrackedCommand(new CommandB(), ProcessState.Running));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace NzbDrone.Common.Test.EventingTests
 
             Mocker.GetMock<ITrackCommands>()
                   .Setup(c => c.TrackIfNew(commandA))
-                  .Returns(new TrackedCommand(commandA, CommandState.Running));
+                  .Returns(new TrackedCommand(commandA, ProcessState.Running));
 
             Subject.PublishCommand(commandA);
 
@@ -69,7 +69,7 @@ namespace NzbDrone.Common.Test.EventingTests
 
             Mocker.GetMock<ITrackCommands>()
                   .Setup(c => c.TrackIfNew(commandA))
-                  .Returns(new TrackedCommand(commandA, CommandState.Running));
+                  .Returns(new TrackedCommand(commandA, ProcessState.Running));
 
             Subject.PublishCommand(commandA);
 

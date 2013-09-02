@@ -33,7 +33,7 @@ namespace NzbDrone.Common.Messaging.Tracking
                 return null;
             }
 
-            var trackedCommand = new TrackedCommand(command, CommandState.Running);
+            var trackedCommand = new TrackedCommand(command, ProcessState.Running);
             Store(trackedCommand);
 
             return trackedCommand;
@@ -45,7 +45,7 @@ namespace NzbDrone.Common.Messaging.Tracking
 
             if (trackedCommand == null)
             {
-                trackedCommand = new TrackedCommand(command, CommandState.Running);
+                trackedCommand = new TrackedCommand(command, ProcessState.Running);
                 Store(trackedCommand);
 
                 return new ExistingCommand(false, trackedCommand);
@@ -57,7 +57,7 @@ namespace NzbDrone.Common.Messaging.Tracking
         public TrackedCommand Completed(TrackedCommand trackedCommand, TimeSpan runtime)
         {
             trackedCommand.StateChangeTime = DateTime.UtcNow;
-            trackedCommand.State = CommandState.Completed;
+            trackedCommand.State = ProcessState.Completed;
             trackedCommand.Runtime = runtime;
 
             Store(trackedCommand);
@@ -68,7 +68,7 @@ namespace NzbDrone.Common.Messaging.Tracking
         public TrackedCommand Failed(TrackedCommand trackedCommand, Exception e)
         {
             trackedCommand.StateChangeTime = DateTime.UtcNow;
-            trackedCommand.State = CommandState.Failed;
+            trackedCommand.State = ProcessState.Failed;
             trackedCommand.Exception = e;
 
             Store(trackedCommand);
@@ -94,7 +94,7 @@ namespace NzbDrone.Common.Messaging.Tracking
 
         private List<TrackedCommand> Running(Type type = null)
         {
-            var running = AllTracked().Where(i => i.State == CommandState.Running);
+            var running = AllTracked().Where(i => i.State == ProcessState.Running);
 
             if (type != null)
             {
@@ -116,7 +116,7 @@ namespace NzbDrone.Common.Messaging.Tracking
 
         public void Execute(TrackedCommandCleanupCommand message)
         {
-            var old = AllTracked().Where(c => c.State != CommandState.Running && c.StateChangeTime < DateTime.UtcNow.AddMinutes(-5));
+            var old = AllTracked().Where(c => c.State != ProcessState.Running && c.StateChangeTime < DateTime.UtcNow.AddMinutes(-5));
 
             foreach (var trackedCommand in old)
             {

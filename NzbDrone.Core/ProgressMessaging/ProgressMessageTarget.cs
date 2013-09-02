@@ -4,17 +4,18 @@ using NLog;
 using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Core.Lifecycle;
 
 namespace NzbDrone.Core.ProgressMessaging
 {
 
-    public class ProgressMessagingTarget : TargetWithLayout, IHandle<ApplicationStartedEvent>, IHandle<ApplicationShutdownRequested>
+    public class ProgressMessageTarget : TargetWithLayout, IHandle<ApplicationStartedEvent>, IHandle<ApplicationShutdownRequested>
     {
         private readonly IMessageAggregator _messageAggregator;
         public LoggingRule Rule { get; set; }
 
-        public ProgressMessagingTarget(IMessageAggregator messageAggregator)
+        public ProgressMessageTarget(IMessageAggregator messageAggregator)
         {
             _messageAggregator = messageAggregator;
         }
@@ -55,10 +56,13 @@ namespace NzbDrone.Core.ProgressMessaging
                 return;
             }
 
+            var status = logEvent.Properties.ContainsKey("Status") ? (ProcessState)logEvent.Properties["Status"] : ProcessState.Running;
+
             var message = new ProgressMessage();
             message.Time = logEvent.TimeStamp;
             message.CommandId = commandId;
             message.Message = logEvent.FormattedMessage;
+            message.Status = status;
 
             _messageAggregator.PublishEvent(new NewProgressMessageEvent(message));
         }
