@@ -154,10 +154,10 @@ define(
                     properties : {
                         seriesId: this.model.get('id')
                     },
-                    element    : this.ui.rename,
-                    context   : this,
-                    onSuccess : this._refetchEpisodeFiles,
-                    failMessage: 'Series search failed'
+                    element     : this.ui.rename,
+                    context     : this,
+                    onSuccess   : this._refetchEpisodeFiles,
+                    errorMessage: 'Series search failed'
                 });
             },
 
@@ -168,7 +168,7 @@ define(
                         seriesId: this.model.get('id')
                     },
                     element     : this.ui.search,
-                    failMessage : 'Series search failed',
+                    errorMessage: 'Series search failed',
                     startMessage: 'Search for {0} started'.format(this.model.get('title'))
                 });
             },

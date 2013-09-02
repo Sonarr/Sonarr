@@ -13,7 +13,6 @@ namespace NzbDrone.Common.Instrumentation
             return HashUtil.CalculateCrc(hashSeed);
         }
 
-
         public static string GetFormattedMessage(this LogEventInfo logEvent)
         {
             var message = logEvent.FormattedMessage;

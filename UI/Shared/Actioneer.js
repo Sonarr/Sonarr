@@ -1,15 +1,30 @@
 'use strict';
-define(['Commands/CommandController', 'Shared/Messenger'],
-    function(CommandController, Messenger) {
-        return {
+define(
+    [
+        'Commands/CommandController',
+        'Commands/CommandCollection',
+        'Shared/Messenger'],
+    function(CommandController, CommandCollection, Messenger) {
+
+        var actioneer = Marionette.AppRouter.extend({
+
+            initialize: function () {
+                this.trackedCommands = [];
+                CommandCollection.fetch();
+                this.listenTo(CommandCollection, 'sync', this._handleCommands);
+            },
+
             ExecuteCommand: function (options) {
                 options.iconClass = this._getIconClass(options.element);
 
-                this._showStartMessage(options);
+                if (options.button) {
+                    options.button.addClass('disable');
+                }
+
                 this._setSpinnerOnElement(options);
 
                 var promise = CommandController.Execute(options.command, options.properties);
-                this._handlePromise(promise, options);
+                this._showStartMessage(options, promise);
             },
 
             SaveModel: function (options) {
@@ -24,15 +39,7 @@ define(['Commands/CommandController', 'Shared/Messenger'],
 
             _handlePromise: function (promise, options) {
                 promise.done(function () {
-                    if (options.successMessage) {
-                        Messenger.show({
-                            message: options.successMessage
-                        });
-                    }
-
-                    if (options.onSuccess) {
-                        options.onSuccess.call(options.context);
-                    }
+                    self._onSuccess(options);
                 });
 
                 promise.fail(function (ajaxOptions) {
@@ -40,31 +47,46 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                         return;
                     }
 
-                    if (options.failMessage) {
-                        Messenger.show({
-                            message: options.failMessage,
-                            type   : 'error'
-                        });
-                    }
-
-                    if (options.onError) {
-                        options.onError.call(options.context);
-                    }
+                    self._onError(options);
                 });
 
                 promise.always(function () {
+                    self._onComplete(options);
+                });
+            },
 
-                    if (options.leaveIcon) {
-                        options.element.removeClass('icon-spin');
+            _handleCommands: function () {
+                var self = this;
+
+                _.each(this.trackedCommands, function (trackedCommand){
+                    if (trackedCommand.completed === true) {
+                        return;
                     }
 
-                    else {
-                        options.element.addClass(options.iconClass);
-                        options.element.removeClass('icon-nd-spinner');
+                    var options = trackedCommand.options;
+                    var command = CommandCollection.find({ 'id': trackedCommand.id });
+
+                    if (!command) {
+                        trackedCommand.completed = true;
+
+                        self._onError(options, trackedCommand.id);
+                        self._onComplete(options);
+                        return;
                     }
 
-                    if (options.always) {
-                        options.always.call(options.context);
+                    if (command.get('state') === 'completed') {
+                        trackedCommand.completed = true;
+
+                        self._onSuccess(options, command.get('id'));
+                        self._onComplete(options);
+                        return;
+                    }
+
+                    if (command.get('state') === 'failed') {
+                        trackedCommand.completed = true;
+
+                        self._onError(options, command.get('id'));
+                        self._onComplete(options);
                     }
                 });
             },
@@ -74,6 +96,10 @@ define(['Commands/CommandController', 'Shared/Messenger'],
             },
 
             _setSpinnerOnElement: function (options) {
+                if (!options.element) {
+                    return;
+                }
+
                 if (options.leaveIcon) {
                     options.element.addClass('icon-spin');
                 }
@@ -84,12 +110,79 @@ define(['Commands/CommandController', 'Shared/Messenger'],
                 }
             },
 
-            _showStartMessage: function (options) {
-                if (options.startMessage) {
+            _onSuccess: function (options, id) {
+                if (options.successMessage) {
                     Messenger.show({
-                        message: options.startMessage
+                        id     : id,
+                        message: options.successMessage,
+                        type   : 'success'
                     });
                 }
+
+                if (options.onSuccess) {
+                    options.onSuccess.call(options.context);
+                }
+            },
+
+            _onError: function (options, id) {
+                if (options.errorMessage) {
+                    Messenger.show({
+                        id     : id,
+                        message: options.errorMessage,
+                        type   : 'error'
+                    });
+                }
+
+                if (options.onError) {
+                    options.onError.call(options.context);
+                }
+            },
+
+            _onComplete: function (options) {
+                if (options.button) {
+                    options.button.removeClass('disable');
+                }
+
+                if (options.leaveIcon) {
+                    options.element.removeClass('icon-spin');
+                }
+
+                else {
+                    options.element.addClass(options.iconClass);
+                    options.element.removeClass('icon-nd-spinner');
+                    options.element.removeClass('icon-spin');
+                }
+
+                if (options.always) {
+                    options.always.call(options.context);
+                }
+            },
+
+            _showStartMessage: function (options, promise) {
+                var self = this;
+
+                if (!promise) {
+                    if (options.startMessage) {
+                        Messenger.show({
+                            message: options.startMessage
+                        });
+                    }
+
+                    return;
+                }
+
+                promise.done(function (data) {
+                    self.trackedCommands.push({ id: data.id, options: options });
+
+                    if (options.startMessage) {
+                        Messenger.show({
+                            id     : data.id,
+                            message: options.startMessage
+                        });
+                    }
+                });
             }
-        }
+        });
+
+        return new actioneer();
 });

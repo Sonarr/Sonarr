@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Indexers
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
             var qualifiedReports = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.Info("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, qualifiedReports.Count());
+            _logger.Complete("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, qualifiedReports.Count());
         }
 
         public void Execute(RssSyncCommand message)

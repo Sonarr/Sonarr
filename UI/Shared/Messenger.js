@@ -13,6 +13,10 @@ define(function () {
                         options.hideAfter = 5;
                         break;
 
+                    case 'success':
+                        options.hideAfter = 5;
+                        break;
+
                     default :
                         options.hideAfter = 0;
                 }
@@ -22,10 +26,10 @@ define(function () {
                 message        : options.message,
                 type           : options.type,
                 showCloseButton: true,
-                hideAfter      : options.hideAfter
+                hideAfter      : options.hideAfter,
+                id             : options.id
             });
         },
-
 
         monitor: function (options) {
 

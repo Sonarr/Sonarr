@@ -48,6 +48,23 @@ namespace NzbDrone.Common.Test.CacheTests
             _cachedString.Find("Key").Should().Be("New");
         }
 
+
+        [Test]
+        public void should_be_able_to_remove_key()
+        {
+            _cachedString.Set("Key", "Value");
+
+            _cachedString.Remove("Key");
+
+            _cachedString.Find("Key").Should().BeNull();
+        }
+
+        [Test]
+        public void should_be_able_to_remove_non_existing_key()
+        {
+            _cachedString.Remove("Key");
+        }
+
         [Test]
         public void should_store_null()
         {

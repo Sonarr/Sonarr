@@ -105,7 +105,6 @@ define(
                             title         : 'RSS Sync',
                             icon          : 'icon-rss',
                             command       : 'rsssync',
-                            successMessage: 'RSS Sync Completed',
                             errorMessage  : 'RSS Sync Failed!'
                         },
                         {
@@ -140,14 +139,12 @@ define(
                 this._fetchCollection();
             },
 
-
             initialize: function () {
                 this.seriesCollection = SeriesCollection;
 
                 this.listenTo(SeriesCollection, 'sync', this._renderView);
                 this.listenTo(SeriesCollection, 'remove', this._renderView);
             },
-
 
             _renderView: function () {
 
@@ -163,7 +160,6 @@ define(
                     this._showFooter();
                 }
             },
-
 
             onShow: function () {
                 this._showToolbar();

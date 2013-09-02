@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Common.Messaging
+﻿using NzbDrone.Common.Messaging.Tracking;
+
+namespace NzbDrone.Common.Messaging
 {
     /// <summary>
     ///   Enables loosely-coupled publication of events.
@@ -7,6 +9,8 @@
     {
         void PublishEvent<TEvent>(TEvent @event) where TEvent : class,  IEvent;
         void PublishCommand<TCommand>(TCommand command) where TCommand : class, ICommand;
-        void PublishCommand(string commandType);
+        void PublishCommand(string commandTypeName);
+        TrackedCommand PublishCommandAsync<TCommand>(TCommand command) where TCommand : class, ICommand;
+        TrackedCommand PublishCommandAsync(string commandTypeName);
     }
 }
