@@ -34,7 +34,7 @@ define(
                 default:
                     return 'info';
             }
-        }
+        };
 
         return collection;
     });
