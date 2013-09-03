@@ -1,6 +1,7 @@
 ﻿'use strict';
 define(
     [
+        'app',
         'marionette',
         'backgrid',
         'Cells/ToggleCell',
@@ -9,7 +10,7 @@ define(
         'Cells/EpisodeStatusCell',
         'Commands/CommandController',
         'Shared/Actioneer'
-    ], function ( Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, CommandController, Actioneer) {
+    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, CommandController, Actioneer) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -74,6 +75,7 @@ define(
                 }
 
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
+                this.series = options.series;
 
                 this.listenTo(this.model, 'sync', function () {
                     this._afterSeasonMonitored();
@@ -149,8 +151,14 @@ define(
                         seasonNumber: this.model.get('seasonNumber')
                     },
                     element    : this.ui.seasonRename,
-                    failMessage: 'Season rename failed'
+                    failMessage: 'Season rename failed',
+                    context    : this,
+                    onSuccess  : this._afterRename
                 });
+            },
+
+            _afterRename: function () {
+                App.vent.trigger(App.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
             }
         });
     });

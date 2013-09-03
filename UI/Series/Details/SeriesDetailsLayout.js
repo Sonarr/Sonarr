@@ -60,6 +60,7 @@ define(
                 }, this);
 
                 this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
+                this.listenTo(App.vent, App.Events.SeasonRenamed, this._onSeasonRenamed);
             },
 
             onShow: function () {
@@ -213,6 +214,12 @@ define(
 
             _refetchEpisodeFiles: function () {
                 this.episodeFileCollection.fetch();
+            },
+
+            _onSeasonRenamed: function(event) {
+                if (this.model.get('id') === event.series.get('id')) {
+                    this._refetchEpisodeFiles();
+                }
             }
         });
     });

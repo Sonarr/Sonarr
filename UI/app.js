@@ -188,7 +188,8 @@ define(
 
         app.Events = {
             SeriesAdded  : 'series:added',
-            SeriesDeleted: 'series:deleted'
+            SeriesDeleted: 'series:deleted',
+            SeasonRenamed: 'season:renamed'
         };
 
         app.Commands = {
