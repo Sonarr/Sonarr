@@ -297,7 +297,7 @@
     <Compile Include="MetadataSource\Trakt\Episode.cs" />
     <Compile Include="MetadataSource\Trakt\Images.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
-    <Compile Include="MetadataSource\Trakt\Show.cs" />
+    <Compile Include="MetadataSource\Trakt\FullShow.cs" />
     <Compile Include="Notifications\INotifcationSettings.cs" />
     <Compile Include="Notifications\Plex\TestPlexServerCommand.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
