@@ -61,6 +61,12 @@ namespace NzbDrone.Common.Cache
             return value.Object;
         }
 
+        public void Remove(string key)
+        {
+            CacheItem value;
+            _store.TryRemove(key, out value);
+        }
+
         public T Get(string key, Func<T> function, TimeSpan? lifeTime = null)
         {
             Ensure.That(() => key).IsNotNullOrWhiteSpace();
@@ -80,7 +86,6 @@ namespace NzbDrone.Common.Cache
 
             return value;
         }
-
 
         public void Clear()
         {

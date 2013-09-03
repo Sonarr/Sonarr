@@ -30,9 +30,7 @@ define(
                 this.left = options.left;
                 this.right = options.right;
                 this.toolbarContext = options.context;
-
             },
-
 
             onShow: function () {
                 if (this.left) {
@@ -50,7 +48,6 @@ define(
             _showToolbarRight: function (element, index) {
                 this._showToolbar(element, index, 'right');
             },
-
 
             _showToolbar: function (buttonGroup, index, position) {
 

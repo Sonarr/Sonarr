@@ -3,9 +3,9 @@ define(
     [
         'app',
         'marionette',
-        'Commands/CommandController',
+        'Shared/Actioneer',
         'Shared/Messenger'
-    ], function (App, Marionette, CommandController, Messenger) {
+    ], function (App, Marionette, Actioneer, Messenger) {
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
@@ -18,7 +18,6 @@ define(
             ui: {
                 icon: '.x-icon'
             },
-
 
             initialize: function () {
                 this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
@@ -45,68 +44,19 @@ define(
             },
 
             invokeCommand: function () {
-                //TODO: Use Actioneer to handle icon swapping
-
                 var command = this.model.get('command');
                 if (command) {
                     this.idle = false;
-                    this.$el.addClass('disabled');
-                    this.ui.icon.addClass('icon-spinner icon-spin');
 
-                    var self = this;
-                    var commandPromise = CommandController.Execute(command);
-                    commandPromise.done(function () {
-                        if (self.model.get('successMessage')) {
-                            Messenger.show({
-                                message: self.model.get('successMessage')
-                            });
-                        }
-
-                        if (self.model.get('onSuccess')) {
-                            if (!self.model.ownerContext) {
-                                throw 'ownerContext must be set.';
-                            }
-
-                            self.model.get('onSuccess').call(self.model.ownerContext);
-                        }
+                    Actioneer.ExecuteCommand({
+                        command       : command,
+                        button        : this.$el,
+                        element       : this.ui.icon,
+                        errorMessage  : this.model.get('errorMessage'),
+                        successMessage: this.model.get('successMessage'),
+                        always        : this._commandAlways,
+                        context       : this
                     });
-
-                    commandPromise.fail(function (options) {
-                        if (options.readyState === 0 || options.status === 0) {
-                            return;
-                        }
-
-                        if (self.model.get('errorMessage')) {
-                            Messenger.show({
-                                message: self.model.get('errorMessage'),
-                                type   : 'error'
-                            });
-                        }
-
-                        if (self.model.get('onError')) {
-                            if (!self.model.ownerContext) {
-                                throw 'ownerContext must be set.';
-                            }
-
-                            self.model.get('onError').call(self.model.ownerContext);
-                        }
-                    });
-
-                    commandPromise.always(function () {
-                        if (!self.isClosed) {
-                            self.$el.removeClass('disabled');
-                            self.ui.icon.removeClass('icon-spinner icon-spin');
-                            self.idle = true;
-                        }
-                    });
-
-                    if (self.model.get('always')) {
-                        if (!self.model.ownerContext) {
-                            throw 'ownerContext must be set.';
-                        }
-
-                        self.model.get('always').call(self.model.ownerContext);
-                    }
                 }
             },
 
@@ -133,8 +83,13 @@ define(
                 if (callback) {
                     callback.call(this.model.ownerContext);
                 }
-            }
+            },
 
+            _commandAlways: function () {
+                if (!this.isClosed) {
+                    this.idle = true;
+                }
+            }
         });
     });
 

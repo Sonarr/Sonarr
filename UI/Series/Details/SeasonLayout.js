@@ -8,9 +8,8 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
-        'Commands/CommandController',
         'Shared/Actioneer'
-    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, CommandController, Actioneer) {
+    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, Actioneer) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -103,9 +102,10 @@ define(
                         seriesId    : this.model.get('seriesId'),
                         seasonNumber: this.model.get('seasonNumber')
                     },
-                    element     : this.ui.seasonSearch,
-                    failMessage : 'Search for season {0} failed'.format(this.model.get('seasonNumber')),
-                    startMessage: 'Search for season {0} started'.format(this.model.get('seasonNumber'))
+                    element       : this.ui.seasonSearch,
+                    errorMessage  : 'Search for season {0} failed'.format(this.model.get('seasonNumber')),
+                    startMessage  : 'Search for season {0} started'.format(this.model.get('seasonNumber')),
+                    successMessage: 'Search for season {0} completed'.format(this.model.get('seasonNumber'))
                 });
             },
 
@@ -145,15 +145,15 @@ define(
 
             _seasonRename: function () {
                 Actioneer.ExecuteCommand({
-                    command    : 'renameSeason',
-                    properties : {
+                    command     : 'renameSeason',
+                    properties  : {
                         seriesId    : this.model.get('seriesId'),
                         seasonNumber: this.model.get('seasonNumber')
                     },
-                    element    : this.ui.seasonRename,
-                    failMessage: 'Season rename failed',
-                    context    : this,
-                    onSuccess  : this._afterRename
+                    element     : this.ui.seasonRename,
+                    errorMessage: 'Season rename failed',
+                    context     : this,
+                    onSuccess   : this._afterRename
                 });
             },
 

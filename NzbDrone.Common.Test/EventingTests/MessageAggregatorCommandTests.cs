@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.EventingTests
@@ -27,12 +28,23 @@ namespace NzbDrone.Common.Test.EventingTests
                   .Setup(c => c.Build(typeof(IExecute<CommandB>)))
                   .Returns(_executorB.Object);
 
+            Mocker.GetMock<ITrackCommands>()
+                  .Setup(c => c.TrackIfNew(It.IsAny<CommandA>()))
+                  .Returns(new TrackedCommand(new CommandA(), ProcessState.Running));
+
+            Mocker.GetMock<ITrackCommands>()
+                  .Setup(c => c.TrackIfNew(It.IsAny<CommandB>()))
+                  .Returns(new TrackedCommand(new CommandB(), ProcessState.Running));
         }
 
         [Test]
         public void should_publish_command_to_executor()
         {
             var commandA = new CommandA();
+
+            Mocker.GetMock<ITrackCommands>()
+                  .Setup(c => c.TrackIfNew(commandA))
+                  .Returns(new TrackedCommand(commandA, ProcessState.Running));
 
             Subject.PublishCommand(commandA);
 
@@ -55,6 +67,9 @@ namespace NzbDrone.Common.Test.EventingTests
         {
             var commandA = new CommandA();
 
+            Mocker.GetMock<ITrackCommands>()
+                  .Setup(c => c.TrackIfNew(commandA))
+                  .Returns(new TrackedCommand(commandA, ProcessState.Running));
 
             Subject.PublishCommand(commandA);
 
@@ -76,17 +91,23 @@ namespace NzbDrone.Common.Test.EventingTests
 
     public class CommandA : ICommand
     {
+        public String CommandId { get; private set; }
 // ReSharper disable UnusedParameter.Local
         public CommandA(int id = 0)
 // ReSharper restore UnusedParameter.Local
         {
-
+            CommandId = HashUtil.GenerateCommandId();
         }
     }
 
     public class CommandB : ICommand
     {
+        public String CommandId { get; private set; }
 
+        public CommandB()
+        {
+            CommandId = HashUtil.GenerateCommandId();
+        }
     }
 
 }

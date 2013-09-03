@@ -5,10 +5,12 @@ require(
         'marionette',
         'Controller',
         'Series/SeriesCollection',
+        'ProgressMessaging/ProgressMessageCollection',
+        'Shared/Actioneer',
         'Navbar/NavbarView',
         'jQuery/RouteBinder',
         'jquery'
-    ], function (App, Marionette, Controller, SeriesCollection, NavbarView, RouterBinder, $) {
+    ], function (App, Marionette, Controller, SeriesCollection, ProgressMessageCollection, Actioneer, NavbarView, RouterBinder, $) {
 
         var Router = Marionette.AppRouter.extend({
 
@@ -42,7 +44,7 @@ require(
                     RouterBinder.bind(App.Router);
                     App.navbarRegion.show(new NavbarView());
                     $('body').addClass('started');
-                })
+                });
         });
 
         return App.Router;

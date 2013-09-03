@@ -6,11 +6,11 @@ define([
     'Settings/Notifications/Model',
     'Settings/Notifications/DeleteView',
     'Shared/Messenger',
-    'Commands/CommandController',
+    'Shared/Actioneer',
     'Mixins/AsModelBoundView',
     'Form/FormBuilder'
 
-], function (App, Marionette, NotificationModel, DeleteView, Messenger, CommandController, AsModelBoundView) {
+], function (App, Marionette, NotificationModel, DeleteView, Messenger, Actioneer, AsModelBoundView) {
 
     var model = Marionette.ItemView.extend({
         template: 'Settings/Notifications/EditTemplate',
@@ -70,41 +70,28 @@ define([
             var testCommand = this.model.get('testCommand');
             if (testCommand) {
                 this.idle = false;
-                this.ui.testButton.addClass('disabled');
-                this.ui.testIcon.addClass('icon-spinner icon-spin');
-
                 var properties = {};
 
                 _.each(this.model.get('fields'), function (field) {
                     properties[field.name] = field.value;
                 });
 
-                var self = this;
-                var commandPromise = CommandController.Execute(testCommand, properties);
-                commandPromise.done(function () {
-                    Messenger.show({
-                        message: 'Notification settings tested successfully'
-                    });
+                Actioneer.ExecuteCommand({
+                    command       : testCommand,
+                    properties    : properties,
+                    button        : this.ui.testButton,
+                    element       : this.ui.testIcon,
+                    errorMessage  : 'Failed to test notification settings',
+                    successMessage: 'Notification settings tested successfully',
+                    always        : this._testOnAlways,
+                    context       : this
                 });
+            }
+        },
 
-                commandPromise.fail(function (options) {
-                    if (options.readyState === 0 || options.status === 0) {
-                        return;
-                    }
-
-                    Messenger.show({
-                        message: 'Failed to test notification settings',
-                        type   : 'error'
-                    });
-                });
-
-                commandPromise.always(function () {
-                    if (!self.isClosed) {
-                        self.ui.testButton.removeClass('disabled');
-                        self.ui.testIcon.removeClass('icon-spinner icon-spin');
-                        self.idle = true;
-                    }
-                });
+        _testOnAlways: function () {
+            if (!this.isClosed) {
+                this.idle = true;
             }
         }
     });
