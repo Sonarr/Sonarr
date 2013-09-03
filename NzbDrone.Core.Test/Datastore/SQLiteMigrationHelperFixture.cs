@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using System.Linq;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -49,9 +50,10 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_transfer_empty_tables()
         {
             var columns = _subject.GetColumns("Series");
+            var indexes = _subject.GetIndexes("Series");
             columns.Remove("Title");
 
-            _subject.CreateTable("Series_New", columns.Values, new List<SQLiteMigrationHelper.SQLiteIndex>());
+            _subject.CreateTable("Series_New", columns.Values, indexes);
 
 
             _subject.CopyData("Series", "Series_New", columns.Values);
@@ -65,9 +67,11 @@ namespace NzbDrone.Core.Test.Datastore
             Mocker.Resolve<EpisodeRepository>().InsertMany(originalEpisodes);
 
             var columns = _subject.GetColumns("Episodes");
+            var indexes = _subject.GetIndexes("Episodes");
+
             columns.Remove("Title");
 
-            _subject.CreateTable("Episodes_New", columns.Values, new List<SQLiteMigrationHelper.SQLiteIndex>());
+            _subject.CreateTable("Episodes_New", columns.Values, indexes);
 
             _subject.CopyData("Episodes", "Episodes_New", columns.Values);
 
@@ -100,7 +104,7 @@ namespace NzbDrone.Core.Test.Datastore
             var newIndexes = _subject.GetIndexes("QualityB");
 
             newIndexes.Should().HaveSameCount(indexes);
-            newIndexes.Should().BeEquivalentTo(columns);
+            newIndexes.Select(c=>c.Column).Should().BeEquivalentTo(indexes.Select(c=>c.Column));
         }
     }
 }
