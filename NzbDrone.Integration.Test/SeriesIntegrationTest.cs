@@ -3,18 +3,13 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Series;
 using System.Linq;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Integration.Test
 {
     [TestFixture]
     public class SeriesIntegrationTest : IntegrationTest
     {
-        [Test]
-        public void should_have_no_series_on_start_application()
-        {
-            Series.All().Should().BeEmpty();
-        }
-
         [Test]
         public void series_lookup_on_trakt()
         {
@@ -37,7 +32,7 @@ namespace NzbDrone.Integration.Test
             var series = Series.Lookup("archer").First();
 
             series.QualityProfileId = 1;
-            series.Path = @"C:\Test\Archer";
+            series.Path = @"C:\Test\Archer".AsOsAgnostic();
 
             series = Series.Post(series);
 
@@ -57,7 +52,7 @@ namespace NzbDrone.Integration.Test
             var series = Series.Lookup("90210").First();
 
             series.QualityProfileId = 1;
-            series.Path = @"C:\Test\90210";
+            series.Path = @"C:\Test\90210".AsOsAgnostic();
 
             series = Series.Post(series);
 

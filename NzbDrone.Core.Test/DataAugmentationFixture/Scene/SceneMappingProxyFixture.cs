@@ -15,14 +15,6 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
     {
         private const string SCENE_MAPPING_URL = "http://services.nzbdrone.com/SceneMapping/Active";
 
-        [SetUp]
-        public void Setup()
-        {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.ServiceRootUrl)
-                    .Returns("http://services.nzbdrone.com");
-
-        }
-
         [Test]
         public void fetch_should_return_list_of_mappings()
         {

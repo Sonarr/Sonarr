@@ -7,7 +7,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        EpisodeFile UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        string UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public EpisodeFile UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        public string UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var existingFiles = localEpisode.Episodes
                                             .Where(e => e.EpisodeFileId > 0)

@@ -17,7 +17,6 @@ namespace NzbDrone.Common
         DateTime GetLastFolderWrite(string path);
         DateTime GetLastFileWrite(string path);
         void EnsureFolder(string path);
-        bool FolderExists(string path, bool caseSensitive);
         bool FolderExists(string path);
         bool FileExists(string path);
         bool FileExists(string path, bool caseSensitive);
@@ -32,7 +31,7 @@ namespace NzbDrone.Common
         void MoveFile(string source, string destination);
         void DeleteFolder(string path, bool recursive);
         void InheritFolderPermissions(string filename);
-        long GetAvilableSpace(string path);
+        long? GetAvailableSpace(string path);
         string ReadAllText(string filePath);
         void WriteAllText(string filename, string contents);
         void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
@@ -111,16 +110,6 @@ namespace NzbDrone.Common
         {
             Ensure.That(() => path).IsValidPath();
             return Directory.Exists(path);
-        }
-
-        public bool FolderExists(string path, bool caseSensitive)
-        {
-            if (caseSensitive)
-            {
-                return FolderExists(path) && path == path.GetActualCasing();
-            }
-
-            return FolderExists(path);
         }
 
         public bool FileExists(string path)
@@ -289,26 +278,37 @@ namespace NzbDrone.Common
             File.SetAccessControl(filename, fs);
         }
 
-        public long GetAvilableSpace(string path)
+        public long? GetAvailableSpace(string path)
         {
             Ensure.That(() => path).IsValidPath();
-
-            if (OsInfo.IsLinux)
-            {
-                var driveInfo = DriveInfo.GetDrives().SingleOrDefault(c => c.IsReady && path.StartsWith(c.Name, StringComparison.CurrentCultureIgnoreCase));
-
-                if (driveInfo == null)
-                {
-                    throw new DirectoryNotFoundException(path);
-                }
-
-                return driveInfo.AvailableFreeSpace;
-            }
 
             var root = GetPathRoot(path);
 
             if (!FolderExists(root))
                 throw new DirectoryNotFoundException(root);
+
+            if (OsInfo.IsLinux)
+            {
+                var drives = DriveInfo.GetDrives();
+
+                foreach (var drive in drives)
+                {
+                    try
+                    {
+                        if (drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            return drive.AvailableFreeSpace;
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Logger.ErrorException("Couldn't get free space for " + path, e);
+                    }
+                }
+
+                return null;
+            }
+
 
             return DriveFreeSpaceEx(root);
         }

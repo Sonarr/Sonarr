@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -9,32 +6,38 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.DiskProviderTests
 {
     [TestFixture]
-    public class IsParentFixture : TestBase<DiskProvider>
+    public class FreeSpaceFixture : TestBase<DiskProvider>
     {
-        private string _parent = @"C:\Test".AsOsAgnostic();
-
         [Test]
-        public void should_return_false_when_not_a_child()
+        public void should_get_free_space_for_folder()
         {
-            var path = @"C:\Another Folder".AsOsAgnostic();
+            var path = @"C:\".AsOsAgnostic();
 
-            Subject.IsParent(_parent, path).Should().BeFalse();
+            Subject.GetAvailableSpace(path).Should().NotBe(0);
         }
 
         [Test]
-        public void should_return_true_when_folder_is_parent_of_another_folder()
+        public void should_get_free_space_for_folder_that_doesnt_exist()
         {
-            var path = @"C:\Test\TV".AsOsAgnostic();
+            var path = @"C:\".AsOsAgnostic();
 
-            Subject.IsParent(_parent, path).Should().BeTrue();
+            Subject.GetAvailableSpace(Path.Combine(path, "invalidFolder")).Should().NotBe(0);
+        }
+
+
+        [Test]
+        public void should_get_free_space_for_drive_that_doesnt_exist()
+        {
+            WindowsOnly();
+
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvailableSpace("J:\\").Should().NotBe(0));
         }
 
         [Test]
-        public void should_return_true_when_folder_is_parent_of_a_file()
+        public void should_be_able_to_check_space_on_ramdrive()
         {
-            var path = @"C:\Test\30.Rock.S01E01.Pilot.avi".AsOsAgnostic();
-
-            Subject.IsParent(_parent, path).Should().BeTrue();
+            LinuxOnly();
+            Subject.GetAvailableSpace("/run/").Should().NotBe(0);
         }
     }
 }

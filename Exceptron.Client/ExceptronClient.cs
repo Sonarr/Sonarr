@@ -149,7 +149,11 @@ namespace Exceptron.Client
                 SetHttpInfo(exceptionData, report);
                 SetEnviromentInfo(report);
 
-                return RestClient.Put<ExceptionResponse>(Configuration.Host, report);
+                var exceptionResponse = RestClient.Put<ExceptionResponse>(Configuration.Host, report);
+
+                exceptionData.Exception.Data["et"] = exceptionResponse.RefId;
+
+                return exceptionResponse;
             }
             catch (Exception e)
             {

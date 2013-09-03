@@ -1,6 +1,7 @@
 using System;
 using NetFwTypeLib;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Host.AccessControl
@@ -31,9 +32,6 @@ namespace NzbDrone.Host.AccessControl
                     return;
                 }
 
-                CloseFirewallPort();
-
-                //Open the new port
                 OpenFirewallPort(_configFileProvider.Port);
             }
         }
@@ -91,38 +89,10 @@ namespace NzbDrone.Host.AccessControl
             }
         }
 
-        private void CloseFirewallPort()
-        {
-            try
-            {
-                var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
-                var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-                var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
-
-                var portNumber = 8989;
-
-                foreach (INetFwOpenPort p in ports)
-                {
-                    if (p.Name == "NzbDrone")
-                    {
-                        portNumber = p.Port;
-                        break;
-                    }
-                }
-
-                if (portNumber != _configFileProvider.Port)
-                {
-                    ports.Remove(portNumber, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.WarnException("Failed to close port in firewall for NzbDrone", ex);
-            }
-        }
-
         private bool IsFirewallEnabled()
         {
+            if (OsInfo.IsLinux) return false;
+
             try
             {
                 var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
@@ -135,7 +105,5 @@ namespace NzbDrone.Host.AccessControl
                 return false;
             }
         }
-
-
     }
 }

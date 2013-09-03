@@ -40,7 +40,6 @@ namespace NzbDrone.Common.Serializer
             return JsonConvert.SerializeObject(obj);
         }
 
-
         public static void Serialize<TModel>(TModel model, TextWriter outputStream)
         {
             var jsonTextWriter = new JsonTextWriter(outputStream);
@@ -52,7 +51,5 @@ namespace NzbDrone.Common.Serializer
         {
             Serialize(model, new StreamWriter(outputStream));
         }
-
-
     }
 }

@@ -12,35 +12,47 @@ define(
             var originalOnClose = this.prototype.onClose;
             var originalBeforeClose = this.prototype.onBeforeClose;
 
+            var errorHandler = function (response) {
+
+                if (response.status === 400) {
+
+                    var view = this;
+                    var validationErrors = JSON.parse(response.responseText);
+                    _.each(validationErrors, function (error) {
+                        view.$el.processServerError(error);
+                    });
+                }
+            };
+
+
+            var validatedSync = function (method, model,options) {
+                this.$el.removeAllErrors();
+                arguments[2].isValidatedCall = true;
+                return model._originalSync.apply(this, arguments).fail(errorHandler.bind(this));
+            };
+
+            var bindToModel = function (model) {
+
+                if (!model._originalSync) {
+                    model._originalSync = model.sync;
+                    model.sync = validatedSync.bind(this);
+                }
+            };
 
             this.prototype.onRender = function () {
 
                 Validation.bind(this);
-
-
-                if (!this.originalSync && this.model) {
-
-                    var self = this;
-                    this.originalSync = this.model.sync;
-
-
-                    var boundHandler = errorHandler.bind(this);
-
-                    this.model.sync = function () {
-                        self.$el.removeAllErrors();
-
-                        arguments[2].isValidatedCall = true;
-
-                        return self.originalSync.apply(this, arguments).fail(boundHandler);
-                    };
-                }
+                this.bindToModelValidation = bindToModel.bind(this);
 
                 if (this.model) {
-                    if (originalOnRender) {
-                        originalOnRender.call(this);
-                    }
+                    this.bindToModelValidation(this.model);
+                }
+
+                if (originalOnRender) {
+                    originalOnRender.call(this);
                 }
             };
+
 
             this.prototype.onBeforeClose = function () {
 
@@ -63,22 +75,6 @@ define(
                     originalBeforeClose.call(this);
                 }
             };
-
-
-            var errorHandler = function (response) {
-
-                if (response.status === 400) {
-
-                    var view = this;
-
-                    var validationErrors = JSON.parse(response.responseText);
-
-                    _.each(validationErrors, function (error) {
-                        view.$el.processServerError(error);
-                    });
-                }
-            };
-
 
 
             return this;

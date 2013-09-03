@@ -58,5 +58,17 @@ namespace NzbDrone.Integration.Test
 
             RootFolders.All().Should().BeEmpty();
         }
+
+        [Test]
+        public void invalid_path_should_return_bad_request()
+        {
+            var rootFolder = new RootFolderResource
+            {
+                Path = "invalid_path"
+            };
+
+            var postResponse = RootFolders.InvalidPost(rootFolder);
+            postResponse.Should().NotBeEmpty();
+        }
     }
 }

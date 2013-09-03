@@ -29,7 +29,7 @@ define(
                         name    : 'title',
                         label   : 'Title',
                         sortable: true,
-                        cell    : Backgrid.StringCell
+                        cell    : Backgrid.StringCell.extend({ className: 'nzb-title-cell' })
                     },
                     {
                         name    : 'indexer',

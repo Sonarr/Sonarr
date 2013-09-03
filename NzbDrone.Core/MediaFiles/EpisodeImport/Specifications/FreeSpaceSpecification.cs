@@ -24,7 +24,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             try
             {
                 var path = Directory.GetParent(localEpisode.Series.Path);
-                var freeSpace = _diskProvider.GetAvilableSpace(path.FullName);
+                var freeSpace = _diskProvider.GetAvailableSpace(path.FullName);
 
                 if (freeSpace < localEpisode.Size + 100.Megabytes())
                 {

@@ -353,6 +353,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("H.Polukatoikia.S03E13.Greek.PDTV.XviD-Ouzo", Language.Greek)]
         [TestCase("Burn.Notice.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP", Language.German)]
         [TestCase("Ray Donovan - S01E01.720p.HDtv.x264-Evolve (NLsub)", Language.Norwegian)]
+        [TestCase("Shield,.The.1x13.Tueurs.De.Flics.FR.DVDRip.XviD", Language.French)]
         public void parse_language(string postTitle, Language language)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

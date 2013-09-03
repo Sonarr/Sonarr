@@ -16,13 +16,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.Branch).Returns("master");
 
-            var updates = Subject.GetAvailablePackages().ToList();
-
-            updates.Should().NotBeEmpty();
-            updates.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.FileName));
-            updates.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Url));
-            updates.Should().OnlyContain(c => c.Version != null);
-            updates.Should().OnlyContain(c => c.Version.Major == 2);
+            Subject.GetLatestUpdate().Should().BeNull();
         }
     }
 }

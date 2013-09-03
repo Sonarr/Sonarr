@@ -31,10 +31,10 @@ namespace NzbDrone.Api.Series
 
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
-            PutValidator.RuleFor(s => s.Path).NotEmpty();
+            PutValidator.RuleFor(s => s.Path).IsValidPath();
 
-            PostValidator.RuleFor(s => s.Path).NotEmpty().When(s => String.IsNullOrEmpty(s.RootFolderPath));
-            PostValidator.RuleFor(s => s.RootFolderPath).NotEmpty().When(s => String.IsNullOrEmpty(s.Path));
+            PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => String.IsNullOrEmpty(s.RootFolderPath));
+            PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => String.IsNullOrEmpty(s.Path));
             PostValidator.RuleFor(s => s.Title).NotEmpty();
         }
 

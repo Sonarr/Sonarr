@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Core.Parser.Model;
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IParseFeed
     {
-        IEnumerable<ReportInfo> Process(Stream source, string url);
+        IEnumerable<ReportInfo> Process(string xml, string url);
     }
 
     public class BasicRssParser : IParseFeed
@@ -24,34 +25,37 @@ namespace NzbDrone.Core.Indexers
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public IEnumerable<ReportInfo> Process(Stream source, string url)
+        public IEnumerable<ReportInfo> Process(string xml, string url)
         {
-            var document = XDocument.Load(source);
-            var items = document.Descendants("item");
-
-            var result = new List<ReportInfo>();
-
-            foreach (var item in items)
+            using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { ProhibitDtd = false, IgnoreComments = true }))
             {
-                try
-                {
-                    var reportInfo = ParseFeedItem(item);
-                    if (reportInfo != null)
-                    {
-                        reportInfo.NzbUrl = GetNzbUrl(item);
-                        reportInfo.NzbInfoUrl = GetNzbInfoUrl(item);
+                var document = XDocument.Load(xmlTextReader);
+                var items = document.Descendants("item");
 
-                        result.Add(reportInfo);
+                var result = new List<ReportInfo>();
+
+                foreach (var item in items)
+                {
+                    try
+                    {
+                        var reportInfo = ParseFeedItem(item);
+                        if (reportInfo != null)
+                        {
+                            reportInfo.NzbUrl = GetNzbUrl(item);
+                            reportInfo.NzbInfoUrl = GetNzbInfoUrl(item);
+
+                            result.Add(reportInfo);
+                        }
+                    }
+                    catch (Exception itemEx)
+                    {
+                        itemEx.Data.Add("Item", item.Title());
+                        _logger.ErrorException("An error occurred while processing feed item from " + url, itemEx);
                     }
                 }
-                catch (Exception itemEx)
-                {
-                    itemEx.Data.Add("Item", item.Title());
-                    _logger.ErrorException("An error occurred while processing feed item from " + url, itemEx);
-                }
-            }
 
-            return result;
+                return result;
+            }
         }
 
 

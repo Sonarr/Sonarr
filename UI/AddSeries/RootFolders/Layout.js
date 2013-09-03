@@ -7,10 +7,11 @@ define(
         'AddSeries/RootFolders/Collection',
         'AddSeries/RootFolders/Model',
         'Shared/LoadingView',
+        'Mixins/AsValidatedView',
         'Mixins/AutoComplete'
-    ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel, LoadingView) {
+    ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel, LoadingView, AsValidatedView) {
 
-        return Marionette.Layout.extend({
+        var layout = Marionette.Layout.extend({
             template: 'AddSeries/RootFolders/LayoutTemplate',
 
             ui: {
@@ -55,12 +56,16 @@ define(
                     Path: this.ui.pathInput.val()
                 });
 
-                RootFolderCollection.add(newDir);
+                this.bindToModelValidation(newDir);
 
                 newDir.save().done(function () {
+                    RootFolderCollection.add(newDir);
                     self.trigger('folderSelected', {model: newDir});
                 });
             }
         });
+
+
+        return AsValidatedView.apply(layout);
 
     });

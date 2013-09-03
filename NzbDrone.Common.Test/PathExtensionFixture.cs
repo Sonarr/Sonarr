@@ -102,10 +102,18 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void get_actual_casing_for_none_existing_file_should_throw()
+        public void get_actual_casing_for_none_existing_file_return_partially_fixed_result()
         {
             WindowsOnly();
-            Assert.Throws<DirectoryNotFoundException>(() => "C:\\InValidFolder\\invalidfile.exe".GetActualCasing());
+           "C:\\WINDOWS\\invalidfile.exe".GetActualCasing().Should().Be("C:\\Windows\\invalidfile.exe");
+        }
+
+
+        [Test]
+        public void get_actual_casing_for_none_existing_folder_return_partially_fixed_result()
+        {
+            WindowsOnly();
+            "C:\\WINDOWS\\SYSTEM32\\FAKEFOLDER\\invalidfile.exe".GetActualCasing().Should().Be("C:\\Windows\\System32\\FAKEFOLDER\\invalidfile.exe");
         }
 
         [Test]
@@ -117,14 +125,7 @@ namespace NzbDrone.Common.Test
             path.ToLower().GetActualCasing().Should().Be(path);
         }
 
-        [Test]
-        public void get_actual_casing_should_return_origibal_value_in_linux()
-        {
-            LinuxOnly();
-            var path = Process.GetCurrentProcess().MainModule.FileName;
-            path.GetActualCasing().Should().Be(path);
-            path.GetActualCasing().Should().Be(path);
-        }
+
 
         [Test]
         public void get_actual_casing_should_return_actual_casing_for_local_dir_in_windows()

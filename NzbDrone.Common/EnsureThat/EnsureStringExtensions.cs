@@ -95,8 +95,7 @@ namespace NzbDrone.Common.EnsureThat
             return param;
         }
 
-        private static readonly Regex windowsInvalidPathRegex = new Regex(@"[/*<>""|]", RegexOptions.Compiled);
-        private static readonly Regex windowsPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
+
 
         [DebuggerStepThrough]
         public static Param<string> IsValidPath(this Param<string> param)
@@ -104,31 +103,14 @@ namespace NzbDrone.Common.EnsureThat
             if (string.IsNullOrWhiteSpace(param.Value))
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
 
+            if (param.Value.IsPathValid()) return param;
+
             if (OsInfo.IsLinux)
             {
-                if (!param.Value.StartsWith(Path.DirectorySeparatorChar.ToString()))
-                {
-                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with /", param.Value));
-                }
+                throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid *nix path. paths must start with /", param.Value));
             }
-            else
-            {
-                if (windowsInvalidPathRegex.IsMatch(param.Value))
-                {
-                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. It contains invalid characters", param.Value));
-                }
-
-                //Network path
-                if (param.Value.StartsWith(Path.DirectorySeparatorChar.ToString())) return param;
-
-                if (!windowsPathRegex.IsMatch(param.Value))
-                {
-                    throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. paths must be a full path eg. C:\\Windows", param.Value));
-                }
-            }
-
-
-            return param;
+         
+            throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid Windows path. paths must be a full path eg. C:\\Windows", param.Value));
         }
     }
 }

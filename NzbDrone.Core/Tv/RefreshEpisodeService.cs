@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Tv
             var successCount = 0;
             var failCount = 0;
 
-            var existinEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
+            var existingEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
             var seasons = _seasonService.GetSeasonsBySeries(series.Id);
 
             var updateList = new List<Episode>();
@@ -44,11 +44,11 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = existinEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    var episodeToUpdate = existingEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
                     if (episodeToUpdate != null)
                     {
-                        existinEpisodes.Remove(episodeToUpdate);
+                        existingEpisodes.Remove(episodeToUpdate);
                         updateList.Add(episodeToUpdate);
                     }
                     else
@@ -82,10 +82,9 @@ namespace NzbDrone.Core.Tv
 
             AdjustMultiEpisodeAirTime(series, allEpisodes);
 
-            _episodeService.DeleteMany(existinEpisodes);
+            _episodeService.DeleteMany(existingEpisodes);
             _episodeService.UpdateMany(updateList);
             _episodeService.InsertMany(newList);
-
 
             if (newList.Any())
             {
@@ -95,6 +94,11 @@ namespace NzbDrone.Core.Tv
             if (updateList.Any())
             {
                 _messageAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
+            }
+
+            if (existingEpisodes.Any())
+            {
+                _messageAggregator.PublishEvent(new EpisodeInfoDeletedEvent(updateList));
             }
 
             if (failCount != 0)

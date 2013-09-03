@@ -53,10 +53,16 @@ namespace NzbDrone.Integration.Test
                     Assert.Fail("Process has exited");
                 }
 
-                if (_restClient.Get(new RestRequest("system/status")).ResponseStatus == ResponseStatus.Completed)
+
+                var statusCall = _restClient.Get(new RestRequest("system/status"));
+
+                if (statusCall.ResponseStatus == ResponseStatus.Completed)
                 {
+                    Console.WriteLine("NzbDrone is started. Running Tests");
                     return;
                 }
+
+                Console.WriteLine("Waiting for NzbDrone to start. Response Status : {0}  [{1}] {2}", statusCall.ResponseStatus, statusCall.StatusDescription, statusCall.ErrorException);
 
                 Thread.Sleep(500);
             }

@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
         private void GivenFreeSpace(long size)
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvilableSpace(It.IsAny<String>()))
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
                   .Returns(size);
         }
 
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
 
             Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.GetAvilableSpace(_rootFolder), Times.Once());
+                .Verify(v => v.GetAvailableSpace(_rootFolder), Times.Once());
         }
     }
 }

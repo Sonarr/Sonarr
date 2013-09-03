@@ -17,7 +17,7 @@ namespace NzbDrone.Core.RootFolders
         RootFolder Add(RootFolder rootDir);
         void Remove(int id);
         List<UnmappedFolder> GetUnmappedFolders(string path);
-        Dictionary<string, long> FreeSpaceOnDrives();
+        Dictionary<string, long?> FreeSpaceOnDrives();
         RootFolder Get(int id);
     }
 
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.RootFolders
             {
                 if (_diskProvider.FolderExists(folder.Path))
                 {
-                    folder.FreeSpace = _diskProvider.GetAvilableSpace(folder.Path);
+                    folder.FreeSpace = _diskProvider.GetAvailableSpace(folder.Path);
                     folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
                 }
             });
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.RootFolders
 
             _rootFolderRepository.Insert(rootFolder);
 
-            rootFolder.FreeSpace = _diskProvider.GetAvilableSpace(rootFolder.Path);
+            rootFolder.FreeSpace = _diskProvider.GetAvailableSpace(rootFolder.Path);
             rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
             return rootFolder;
         }
@@ -126,9 +126,9 @@ namespace NzbDrone.Core.RootFolders
             return results;
         }
 
-        public Dictionary<string, long> FreeSpaceOnDrives()
+        public Dictionary<string, long?> FreeSpaceOnDrives()
         {
-            var freeSpace = new Dictionary<string, long>();
+            var freeSpace = new Dictionary<string, long?>();
 
             var rootDirs = All();
 
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.RootFolders
                 {
                     try
                     {
-                        freeSpace.Add(pathRoot, _diskProvider.GetAvilableSpace(rootDir.Path));
+                        freeSpace.Add(pathRoot, _diskProvider.GetAvailableSpace(rootDir.Path));
                     }
                     catch (Exception ex)
                     {
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.RootFolders
         public RootFolder Get(int id)
         {
             var rootFolder = _rootFolderRepository.Get(id);
-            rootFolder.FreeSpace = _diskProvider.GetAvilableSpace(rootFolder.Path);
+            rootFolder.FreeSpace = _diskProvider.GetAvailableSpace(rootFolder.Path);
             rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path);
             return rootFolder;
         }

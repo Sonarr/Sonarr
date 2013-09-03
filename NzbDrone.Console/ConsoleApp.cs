@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Host;
 
@@ -18,7 +19,6 @@ namespace NzbDrone.Console
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e.ToString());
                 System.Console.ReadLine();
             }
 

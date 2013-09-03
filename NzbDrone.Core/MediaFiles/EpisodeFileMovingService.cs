@@ -13,8 +13,8 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IMoveEpisodeFiles
     {
-        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
-        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        string MoveEpisodeFile(EpisodeFile episodeFile, Series series);
+        string MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class MoveEpisodeFiles : IMoveEpisodeFiles
@@ -38,27 +38,26 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series)
+        public string MoveEpisodeFile(EpisodeFile episodeFile, Series series)
         {
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
-            var destinationFilename = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            MoveFile(episodeFile, filePath);
 
-            return MoveFile(episodeFile, destinationFilename);
+            return filePath;
         }
 
-        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        public string MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
-            var destinationFilename = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-            episodeFile = MoveFile(episodeFile, destinationFilename);
+            var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            MoveFile(episodeFile, filePath);
 
-            _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
-
-            return episodeFile;
+            return filePath;
         }
 
-        private EpisodeFile MoveFile(EpisodeFile episodeFile, string destinationFilename)
+        private void MoveFile(EpisodeFile episodeFile, string destinationFilename)
         {
             if (!_diskProvider.FileExists(episodeFile.Path))
             {
@@ -85,10 +84,6 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
                 _logger.TraceException(ex.Message, ex);
             }
-
-            episodeFile.Path = destinationFilename;
-            
-            return episodeFile;
         }
     }
 }

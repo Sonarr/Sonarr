@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void should_return_free_disk_space()
         {
-            var result = Subject.GetAvilableSpace(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            var result = Subject.GetAvailableSpace(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
             result.Should().BeGreaterThan(0);
         }
 
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         {
             WindowsOnly();
 
-            var result = Subject.GetAvilableSpace(@"\\localhost\c$\Windows");
+            var result = Subject.GetAvailableSpace(@"\\localhost\c$\Windows");
             result.Should().BeGreaterThan(0);
         }
 
@@ -32,13 +32,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         {
             WindowsOnly();
 
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvilableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
+            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvailableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
         }
 
         [Test]
         public void should_be_able_to_get_space_on_folder_that_doesnt_exist()
         {
-            var result = Subject.GetAvilableSpace(@"C:\I_DO_NOT_EXIST".AsOsAgnostic());
+            var result = Subject.GetAvailableSpace(@"C:\I_DO_NOT_EXIST".AsOsAgnostic());
             result.Should().BeGreaterThan(0);
         }
     }

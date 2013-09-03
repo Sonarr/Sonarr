@@ -158,6 +158,8 @@
     <Compile Include="Datastore\Migration\013_add_air_date_utc.cs" />
     <Compile Include="Datastore\Migration\014_drop_air_date.cs" />
     <Compile Include="Datastore\Migration\015_add_air_date_as_string.cs" />
+    <Compile Include="Datastore\Migration\016_updated_imported_history_item.cs" />
+    <Compile Include="Datastore\Migration\017_reset_scene_names.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -342,6 +344,7 @@
     <Compile Include="Parser\Model\ReportInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
+    <Compile Include="Parser\QualityParser.cs" />
     <Compile Include="Providers\UpdateXemMappingsCommand.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
@@ -350,6 +353,7 @@
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
@@ -493,6 +497,7 @@
     <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
     <Compile Include="Update\InstallUpdateService.cs" />
+    <Compile Include="Update\UpdatePackageAvailable.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
     <Compile Include="Update\UpdateCheckService.cs" />

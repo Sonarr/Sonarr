@@ -3,10 +3,13 @@
     <h3>Select Folder</h3>
 </div>
 <div class="modal-body root-folders-modal">
-    <div class="input-prepend input-append x-path">
+    <div class="validation-errors"></div>
+    <div class="input-prepend input-append x-path control-group">
         <span class="add-on">&nbsp;<i class="icon-folder-open"></i></span>
-        <input class="span9" type="text" placeholder="Start Typing Folder Path...">
-        <button class="btn btn-success x-add"><i class="icon-ok"/></button>
+        <input class="span9" type="text" validation-name="path" placeholder="Start Typing Folder Path...">
+        <button class="btn btn-success x-add">
+            <i class="icon-ok"/>
+        </button>
     </div>
     {{#if items}}
     <h4>Recent Folders</h4>

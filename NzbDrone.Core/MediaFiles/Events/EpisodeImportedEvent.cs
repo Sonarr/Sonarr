@@ -1,14 +1,17 @@
 ﻿using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.Events
 {
     public class EpisodeImportedEvent : IEvent
     {
-        public EpisodeFile EpisodeFile { get; private set; }
+        public LocalEpisode DroppedEpisode { get; private set; }
+        public EpisodeFile ImportedEpisode { get; private set; }
 
-        public EpisodeImportedEvent(EpisodeFile episodeFile)
+        public EpisodeImportedEvent(LocalEpisode droppedEpisode, EpisodeFile importedEpisode)
         {
-            EpisodeFile = episodeFile;
+            DroppedEpisode = droppedEpisode;
+            ImportedEpisode = importedEpisode;
         }
     }
 }

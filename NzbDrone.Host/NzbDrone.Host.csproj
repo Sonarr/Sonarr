@@ -122,6 +122,9 @@
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
     <Compile Include="IUserAlert.cs" />
+    <Compile Include="Owin\NlogTextWriter.cs" />
+    <Compile Include="Owin\OwinServiceProvider.cs" />
+    <Compile Include="Owin\OwinTraceOutputFactory.cs" />
     <Compile Include="PlatformValidation.cs" />
     <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationModes.cs" />

@@ -44,30 +44,31 @@ namespace NzbDrone.Core.MediaCover
             foreach (var cover in series.Images)
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
-                if (!_coverExistsSpecification.AlreadyExists(cover.Url, fileName))
+                try
                 {
-                    DownloadCover(series, cover);
+                    if (!_coverExistsSpecification.AlreadyExists(cover.Url, fileName))
+                    {
+                        DownloadCover(series, cover);
+                    }
+                }
+                catch (WebException e)
+                {
+                    _logger.Warn(string.Format("Couldn't download media cover for {0}. {1}", series, e.Message));
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("Couldn't download media cover for " + series, e);
                 }
             }
         }
 
         private void DownloadCover(Series series, MediaCover cover)
         {
-            try
-            {
-                var fileName = GetCoverPath(series.Id, cover.CoverType);
+            var fileName = GetCoverPath(series.Id, cover.CoverType);
 
-                _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.Url);
-                _httpProvider.DownloadFile(cover.Url, fileName);
-            }
-            catch (WebException e)
-            {
-                _logger.Warn("Couldn't download media cover for " + series);
-            }
-            catch (Exception e)
-            {
-                _logger.ErrorException("Couldn't download media cover for " + series, e);
-            }
+            _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.Url);
+            _httpProvider.DownloadFile(cover.Url, fileName);
+
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

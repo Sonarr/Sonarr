@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -45,6 +46,29 @@ namespace NzbDrone.Common
             return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
         }
 
+        private static readonly Regex WindowsPathWithDriveRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
+
+        public static bool IsPathValid(this string path)
+        {
+            if (path.ContainsInvalidPathChars() || string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            if (OsInfo.IsLinux)
+            {
+                return path.StartsWith(Path.DirectorySeparatorChar.ToString());
+            }
+
+            if (path.StartsWith("\\") || WindowsPathWithDriveRegex.IsMatch(path))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
         public static bool ContainsInvalidPathChars(this string text)
         {
             return text.IndexOfAny(Path.GetInvalidPathChars()) >= 0;
@@ -58,28 +82,40 @@ namespace NzbDrone.Common
                 //Drive letter
                 return dirInfo.Name.ToUpper();
             }
-            return Path.Combine(GetProperCapitalization(parentDirInfo), parentDirInfo.GetDirectories(dirInfo.Name)[0].Name);
+
+            var folderName = dirInfo.Name;
+
+            if (dirInfo.Exists)
+            {
+                folderName = parentDirInfo.GetDirectories(dirInfo.Name)[0].Name;
+            }
+
+            return Path.Combine(GetProperCapitalization(parentDirInfo), folderName);
         }
 
         public static string GetActualCasing(this string path)
         {
-            var attributes = File.GetAttributes(path);
-
             if (OsInfo.IsLinux || path.StartsWith("\\"))
             {
                 return path;
             }
 
-            if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
+            if (Directory.Exists(path) && (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 return GetProperCapitalization(new DirectoryInfo(path));
             }
 
             var fileInfo = new FileInfo(path);
+            var dirInfo = fileInfo.Directory;
 
+            var fileName = fileInfo.Name;
 
-            DirectoryInfo dirInfo = fileInfo.Directory;
-            return Path.Combine(GetProperCapitalization(dirInfo), dirInfo.GetFiles(fileInfo.Name)[0].Name);
+            if (dirInfo != null && fileInfo.Exists)
+            {
+                fileName = dirInfo.GetFiles(fileInfo.Name)[0].Name;
+            }
+
+            return Path.Combine(GetProperCapitalization(dirInfo), fileName);
         }
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)

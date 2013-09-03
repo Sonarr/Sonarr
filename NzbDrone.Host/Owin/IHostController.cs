@@ -4,7 +4,6 @@
     {
         string AppUrl { get; }
         void StartServer();
-        void RestartServer();
         void StopServer();
     }
 }

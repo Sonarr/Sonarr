@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Api.Validation;
 
 namespace NzbDrone.Api.RootFolders
 {
@@ -17,6 +18,8 @@ namespace NzbDrone.Api.RootFolders
             GetResourceById = GetRootFolder;
             CreateResource = CreateRootFolder;
             DeleteResource = DeleteFolder;
+
+            SharedValidator.RuleFor(c=>c.Path).IsValidPath();
         }
 
         private RootFolderResource GetRootFolder(int id)

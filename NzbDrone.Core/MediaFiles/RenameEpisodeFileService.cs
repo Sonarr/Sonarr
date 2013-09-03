@@ -34,14 +34,12 @@ namespace NzbDrone.Core.MediaFiles
         {
             var renamed = new List<EpisodeFile>();
 
-            foreach (var file in episodeFiles)
+            foreach (var episodeFile in episodeFiles)
             {
                 try
                 {
-                    var episodeFile = file;
-
                     _logger.Trace("Renaming episode file: {0}", episodeFile);
-                    episodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, series);
+                    episodeFile.Path = _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
                     renamed.Add(episodeFile);
@@ -54,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Failed to rename file: " + file.Path, ex);
+                    _logger.ErrorException("Failed to rename file: " + episodeFile.Path, ex);
                 }
             }
 

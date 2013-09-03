@@ -3,8 +3,7 @@ Upstream-Name: nzbdrone
 Source: https://github.com/NzbDrone/NzbDrone
 
 Files: *
-Copyright: 2010-2013 Keivan Beigi <kay.one@gmail.com>
-		   2010-2013 Mark McDowall <mark@exceptron.com>
+Copyright: 2010-2013 NzbDrone <contact@nzbdrone.com>
 
 License: GPL-3.0+
 

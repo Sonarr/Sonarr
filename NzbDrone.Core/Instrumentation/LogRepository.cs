@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Trim()
         {
-            var trimDate = DateTime.UtcNow.AddDays(-15).Date;
+            var trimDate = DateTime.UtcNow.AddDays(-7).Date;
             Delete(c => c.Time <= trimDate);
         }
     }

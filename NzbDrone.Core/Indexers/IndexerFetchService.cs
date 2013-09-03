@@ -106,19 +106,26 @@ namespace NzbDrone.Core.Indexers
                 try
                 {
                     _logger.Trace("Downloading Feed " + url);
-                    var stream = _httpProvider.DownloadStream(url);
-                    result.AddRange(indexer.Parser.Process(stream, url));
+                    var xml = _httpProvider.DownloadString(url);
+                    if (!string.IsNullOrWhiteSpace(xml))
+                    {
+                        result.AddRange(indexer.Parser.Process(xml, url));
+                    }
+                    else
+                    {
+                        _logger.Warn("{0} returned empty response.", url);
+                    }
+
                 }
                 catch (WebException webException)
                 {
-                    if (webException.Message.Contains("503") || webException.Message.Contains("timed out"))
+                    if (webException.Message.Contains("502") || webException.Message.Contains("503") || webException.Message.Contains("timed out"))
                     {
                         _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer.Name, url, webException.Message);
                     }
                     else
                     {
-                        webException.Data.Add("FeedUrl", url);
-                        _logger.WarnException("An error occurred while processing feed. " + url, webException);
+                        _logger.Warn("{0} {1} {2}", indexer.Name, url, webException.Message);
                     }
                 }
                 catch (Exception feedEx)

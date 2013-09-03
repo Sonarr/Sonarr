@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Parser.Model
 
         public bool IsRecentEpisode()
         {
-            return Episodes.Any(e => e.AirDateUtc >= DateTime.Today.AddDays(-14));
+            return Episodes.Any(e => e.AirDateUtc >= DateTime.UtcNow.Date.AddDays(-14));
         }
 
         public override string ToString()

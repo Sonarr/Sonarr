@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Host;
 using NzbDrone.SysTray;
@@ -8,6 +9,7 @@ namespace NzbDrone
 {
     public static class WindowsApp
     {
+
         public static void Main(string[] args)
         {
             try

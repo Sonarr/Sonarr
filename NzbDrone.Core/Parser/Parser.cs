@@ -74,7 +74,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)(?:\W|_)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)FR)(?:\W|_)",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -119,7 +120,7 @@ namespace NzbDrone.Core.Parser
                                 break;
 
                             result.Language = ParseLanguage(title);
-                            result.Quality = ParseQuality(title);
+                            result.Quality = QualityParser.ParseQuality(title);
                             return result;
                         }
                     }
@@ -240,155 +241,6 @@ namespace NzbDrone.Core.Parser
             return parseResult.SeriesTitle;
         }
 
-        private static QualityModel ParseQuality(string name)
-        {
-            Logger.Trace("Trying to parse quality for {0}", name);
-
-            name = name.Trim();
-            var normalizedName = CleanSeriesTitle(name);
-            var result = new QualityModel { Quality = Quality.Unknown };
-            result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
-
-            if ((normalizedName.Contains("dvd") && !normalizedName.Contains("avcdvd")) || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
-            {
-                result.Quality = Quality.DVD;
-                return result;
-            }
-
-            if (normalizedName.Contains("xvid") || normalizedName.Contains("divx") || normalizedName.Contains("dsr"))
-            {
-                if (normalizedName.Contains("bluray"))
-                {
-                    result.Quality = Quality.DVD;
-                    return result;
-                }
-
-                result.Quality = Quality.SDTV;
-                return result;
-            }
-
-            if (normalizedName.Contains("bluray"))
-            {
-                if (normalizedName.Contains("720p"))
-                {
-                    result.Quality = Quality.Bluray720p;
-                    return result;
-                }
-
-                if (normalizedName.Contains("1080p"))
-                {
-                    result.Quality = Quality.Bluray1080p;
-                    return result;
-                }
-
-                result.Quality = Quality.Bluray720p;
-                return result;
-            }
-            if (normalizedName.Contains("webdl") || normalizedName.Contains("webrip"))
-            {
-                if (normalizedName.Contains("1080p"))
-                {
-                    result.Quality = Quality.WEBDL1080p;
-                    return result;
-                }
-
-                if (normalizedName.Contains("720p"))
-                {
-                    result.Quality = Quality.WEBDL720p;
-                    return result;
-                }
-
-                if (name.Contains("[WEBDL]"))
-                {
-                    result.Quality = Quality.WEBDL720p;
-                    return result;
-                }
-
-                result.Quality = Quality.WEBDL480p;
-                return result;
-            }
-
-            if (normalizedName.Contains("trollhd") || normalizedName.Contains("rawhd"))
-            {
-                result.Quality = Quality.RAWHD;
-                return result;
-            }
-
-            if (normalizedName.Contains("x264") || normalizedName.Contains("h264") || normalizedName.Contains("720p"))
-            {
-                if (normalizedName.Contains("1080p"))
-                {
-                    result.Quality = Quality.HDTV1080p;
-                    return result;
-                }
-
-                result.Quality = Quality.HDTV720p;
-                return result;
-            }
-
-            //Based on extension
-            if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
-            {
-                try
-                {
-                    switch (Path.GetExtension(name).ToLower())
-                    {
-                        case ".avi":
-                        case ".xvid":
-                        case ".divx":
-                        case ".wmv":
-                        case ".mp4":
-                        case ".mpg":
-                        case ".mpeg":
-                        case ".mov":
-                        case ".rm":
-                        case ".rmvb":
-                        case ".flv":
-                        case ".dvr-ms":
-                        case ".ogm":
-                        case ".strm":
-                            {
-                                result.Quality = Quality.SDTV;
-                                break;
-                            }
-                        case ".mkv":
-                        case ".ts":
-                            {
-                                result.Quality = Quality.HDTV720p;
-                                break;
-                            }
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    //Swallow exception for cases where string contains illegal 
-                    //path characters.
-                }
-            }
-
-            if (name.Contains("[HDTV]"))
-            {
-                result.Quality = Quality.HDTV720p;
-                return result;
-            }
-
-            if (normalizedName.Contains("hdtv") && normalizedName.Contains("1080p"))
-            {
-                result.Quality = Quality.HDTV1080p;
-                return result;
-            }
-
-            if ((normalizedName.Contains("sdtv") || normalizedName.Contains("pdtv") ||
-                 (result.Quality == Quality.Unknown && normalizedName.Contains("hdtv"))) &&
-                !normalizedName.Contains("mpeg"))
-            {
-                result.Quality = Quality.SDTV;
-                return result;
-            }
-
-            return result;
-        }
-
         private static Language ParseLanguage(string title)
         {
             var lowerTitle = title.ToLower();
@@ -460,6 +312,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["greek"].Captures.Cast<Capture>().Any())
                 return Language.Greek;
+
+            if (match.Groups["french"].Success)
+                return Language.French;
 
             return Language.English;
         }

@@ -13,19 +13,15 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     public class SceneMappingProxy : ISceneMappingProxy
     {
         private readonly IHttpProvider _httpProvider;
-        private readonly IConfigService _configService;
-        
 
-        public SceneMappingProxy(IHttpProvider httpProvider, IConfigService configService)
+        public SceneMappingProxy(IHttpProvider httpProvider)
         {
             _httpProvider = httpProvider;
-            _configService = configService;
-            
         }
 
         public List<SceneMapping> Fetch()
         {
-            var mappingsJson = _httpProvider.DownloadString(_configService.ServiceRootUrl + "/SceneMapping/Active");
+            var mappingsJson = _httpProvider.DownloadString(Services.RootUrl + "/SceneMapping/Active");
             return Json.Deserialize<List<SceneMapping>>(mappingsJson);
         }
     }

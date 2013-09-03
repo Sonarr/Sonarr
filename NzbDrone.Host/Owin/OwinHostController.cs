@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Owin.Hosting;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Host.AccessControl;
 using NzbDrone.Host.Owin.MiddleWare;
 using Owin;
 
@@ -14,13 +16,20 @@ namespace NzbDrone.Host.Owin
     {
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IEnumerable<IOwinMiddleWare> _owinMiddleWares;
+        private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IUrlAclAdapter _urlAclAdapter;
+        private readonly IFirewallAdapter _firewallAdapter;
         private readonly Logger _logger;
         private IDisposable _host;
 
-        public OwinHostController(IConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares, Logger logger)
+        public OwinHostController(IConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares,
+            IRuntimeInfo runtimeInfo, IUrlAclAdapter urlAclAdapter, IFirewallAdapter firewallAdapter, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _owinMiddleWares = owinMiddleWares;
+            _runtimeInfo = runtimeInfo;
+            _urlAclAdapter = urlAclAdapter;
+            _firewallAdapter = firewallAdapter;
             _logger = logger;
         }
 
@@ -28,16 +37,20 @@ namespace NzbDrone.Host.Owin
         {
             IgnoreCertErrorPolicy.Register();
 
-            var url = "http://*:" + _configFileProvider.Port;
+            if (OsInfo.IsWindows && _runtimeInfo.IsAdmin)
+            {
+                _urlAclAdapter.RefreshRegistration();
+                _firewallAdapter.MakeAccessible();
+            }
 
-            var options = new StartOptions(url)
+            var options = new StartOptions(_urlAclAdapter.UrlAcl)
                 {
                     ServerFactory = "Microsoft.Owin.Host.HttpListener"
                 };
 
-            _logger.Info("starting server on {0}", url);
+            _logger.Info("starting server on {0}", _urlAclAdapter.UrlAcl);
 
-            _host = WebApp.Start(options, BuildApp);
+            _host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
         }
 
         private void BuildApp(IAppBuilder appBuilder)
@@ -54,14 +67,6 @@ namespace NzbDrone.Host.Owin
         public string AppUrl
         {
             get { return string.Format("http://localhost:{0}", _configFileProvider.Port); }
-        }
-
-        public void RestartServer()
-        {
-            _logger.Warn("Attempting to restart server.");
-
-            StopServer();
-            StartServer();
         }
 
         public void StopServer()

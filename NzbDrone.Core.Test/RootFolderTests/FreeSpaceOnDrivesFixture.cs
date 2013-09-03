@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(@"C:\");
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvilableSpace(@"C:\"))
+                  .Setup(s => s.GetAvailableSpace(@"C:\"))
                   .Returns(123456);
 
             var result = Subject.FreeSpaceOnDrives();
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(@"C:\");
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvilableSpace(@"C:\"))
+                  .Setup(s => s.GetAvailableSpace(@"C:\"))
                   .Returns(123456);
 
             var result = Subject.FreeSpaceOnDrives();
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(@"D:\");
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvilableSpace(It.IsAny<string>()))
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Returns(123456);
 
             var result = Subject.FreeSpaceOnDrives();
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(@"C:\");
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvilableSpace(It.IsAny<string>()))
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Throws(new DirectoryNotFoundException());
 
             var result = Subject.FreeSpaceOnDrives();
