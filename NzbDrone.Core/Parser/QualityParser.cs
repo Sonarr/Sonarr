@@ -168,12 +168,14 @@ namespace NzbDrone.Core.Parser
                         case ".dvr-ms":
                         case ".ogm":
                         case ".strm":
+                        
                             {
                                 result.Quality = Quality.SDTV;
                                 break;
                             }
                         case ".mkv":
                         case ".ts":
+                        case ".m2ts":
                             {
                                 result.Quality = Quality.HDTV720p;
                                 break;
