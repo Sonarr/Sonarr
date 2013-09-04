@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             }
         }
 
-        public ISQLiteAlter SQLiteAlter { get; private set; }
+        protected ISQLiteAlter SQLiteAlter { get; private set; }
 
         public override void Down()
         {

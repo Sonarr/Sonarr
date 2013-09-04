@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using FluentAssertions;
 using Moq;
 using NLog;
@@ -42,6 +43,9 @@ namespace NzbDrone.Test.Common
 
     public abstract class TestBase : LoggingTest
     {
+
+        private static readonly Random _random = new Random();
+
         private AutoMoqer _mocker;
         protected AutoMoqer Mocker
         {
@@ -57,6 +61,15 @@ namespace NzbDrone.Test.Common
         }
 
         protected Mock<RestProvider> MockedRestProvider { get; private set; }
+
+        protected int RandomNumber
+        {
+            get
+            {
+                Thread.Sleep(1);
+                return _random.Next(0, int.MaxValue);
+            }
+        }
 
         private string VirtualPath
         {
