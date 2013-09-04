@@ -145,7 +145,10 @@ namespace NzbDrone.Common.Messaging
 
             try
             {
-                MappedDiagnosticsContext.Set("CommandId", trackedCommand.Command.CommandId);
+                if (!MappedDiagnosticsContext.Contains("CommandId"))
+                {
+                    MappedDiagnosticsContext.Set("CommandId", trackedCommand.Command.CommandId);
+                }
 
                 PublishEvent(new CommandStartedEvent(trackedCommand));
                 handler.Execute(command);
