@@ -46,12 +46,11 @@ define(
                 var message = seriesTitle + ' - ' + season + 'x' + FormatHelpers.pad(episode, 2);
 
                 Actioneer.ExecuteCommand({
-                    command     : 'episodeSearch',
-                    properties  : {
+                    command   : 'episodeSearch',
+                    properties: {
                         episodeId: this.model.get('id')
                     },
-                    errorMessage: 'Search failed for: ' + message,
-                    startMessage: 'Search started for: ' + message
+                    errorMessage: 'Search failed for: ' + message
                 });
 
                 App.vent.trigger(App.Commands.CloseModalCommand);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -129,9 +130,10 @@ namespace NzbDrone.Core.IndexerSearch
         private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReportInfo>> searchAction, SearchCriteriaBase criteriaBase)
         {
             var indexers = _indexerService.GetAvailableIndexers().ToList();
+
+            _logger.Progress("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
+
             var reports = new List<ReportInfo>();
-
-
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
 
@@ -159,7 +161,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             Task.WaitAll(taskList.ToArray());
 
-            _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", reports.Count, criteriaBase, indexers.Count);
+            _logger.Debug("Total of {0} reports were found for {1} from {2} indexers", reports.Count, criteriaBase, indexers.Count);
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
         }

@@ -33,13 +33,13 @@ namespace NzbDrone.Core.Indexers
 
         public void Sync()
         {
-            _logger.Info("Starting RSS Sync");
+            _logger.Progress("Starting RSS Sync");
 
             var reports = _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
-            var qualifiedReports = _downloadApprovedReports.DownloadApproved(decisions);
+            var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.Complete("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, qualifiedReports.Count());
+            _logger.Complete("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, downloaded.Count());
         }
 
         public void Execute(RssSyncCommand message)

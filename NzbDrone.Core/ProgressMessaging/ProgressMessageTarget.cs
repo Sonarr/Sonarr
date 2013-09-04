@@ -56,7 +56,12 @@ namespace NzbDrone.Core.ProgressMessaging
                 return;
             }
 
-            var status = logEvent.Properties.ContainsKey("Status") ? (ProcessState)logEvent.Properties["Status"] : ProcessState.Running;
+            if (!logEvent.Properties.ContainsKey("Status"))
+            {
+                return;
+            }
+
+            var status = (ProcessState)logEvent.Properties["Status"];
 
             var message = new ProgressMessage();
             message.Time = logEvent.TimeStamp;

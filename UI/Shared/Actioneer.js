@@ -92,6 +92,10 @@ define(
             },
 
             _getIconClass: function(element) {
+                if (!element) {
+                    return '';
+                }
+
                 return element.attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/)[0];
             },
 
@@ -143,14 +147,16 @@ define(
                     options.button.removeClass('disable');
                 }
 
-                if (options.leaveIcon) {
-                    options.element.removeClass('icon-spin');
-                }
+                if (options.element) {
+                    if (options.leaveIcon) {
+                        options.element.removeClass('icon-spin');
+                    }
 
-                else {
-                    options.element.addClass(options.iconClass);
-                    options.element.removeClass('icon-nd-spinner');
-                    options.element.removeClass('icon-spin');
+                    else {
+                        options.element.addClass(options.iconClass);
+                        options.element.removeClass('icon-nd-spinner');
+                        options.element.removeClass('icon-spin');
+                    }
                 }
 
                 if (options.always) {

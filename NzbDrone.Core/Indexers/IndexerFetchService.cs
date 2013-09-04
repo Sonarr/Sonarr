@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Indexers
 
             var result = Fetch(indexer, searchCriteria, 0).DistinctBy(c => c.NzbUrl).ToList();
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
 
             return result;
         }
@@ -80,11 +80,9 @@ namespace NzbDrone.Core.Indexers
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
             return result;
-
         }
-
 
         public IList<ReportInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria)
         {
@@ -93,7 +91,7 @@ namespace NzbDrone.Core.Indexers
             var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.SeriesTvRageId, searchCriteria.Airtime);
             var result = Fetch(indexer, searchUrls);
 
-            _logger.Info("Finished searching {0} on {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
             return result;
         }
 

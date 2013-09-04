@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.MetadataSource;
@@ -30,39 +31,9 @@ namespace NzbDrone.Core.Tv
             _logger = logger;
         }
 
-
-        public void Execute(RefreshSeriesCommand message)
-        {
-            if (message.SeriesId.HasValue)
-            {
-                var series = _seriesService.GetSeries(message.SeriesId.Value);
-                RefreshSeriesInfo(series);
-            }
-            else
-            {
-                var allSeries = _seriesService.GetAllSeries().OrderBy(c => c.LastInfoSync).ToList();
-
-                foreach (var series in allSeries)
-                {
-                    try
-                    {
-                        RefreshSeriesInfo(series);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.ErrorException("Couldn't refresh info for {0}".Inject(series), e);
-                    }
-                }
-            }
-        }
-
-        public void HandleAsync(SeriesAddedEvent message)
-        {
-            RefreshSeriesInfo(message.Series);
-        }
-
         private void RefreshSeriesInfo(Series series)
         {
+            _logger.Progress("Starting Series Refresh for {0}", series.Title);
             var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
 
             var seriesInfo = tuple.Item1;
@@ -96,7 +67,38 @@ namespace NzbDrone.Core.Tv
             _seriesService.UpdateSeries(series);
             _refreshEpisodeService.RefreshEpisodeInfo(series, tuple.Item2);
 
+            _logger.Complete("Finished series refresh for {0}", series.Title);
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
+        }
+
+        public void Execute(RefreshSeriesCommand message)
+        {
+            if (message.SeriesId.HasValue)
+            {
+                var series = _seriesService.GetSeries(message.SeriesId.Value);
+                RefreshSeriesInfo(series);
+            }
+            else
+            {
+                var allSeries = _seriesService.GetAllSeries().OrderBy(c => c.LastInfoSync).ToList();
+
+                foreach (var series in allSeries)
+                {
+                    try
+                    {
+                        RefreshSeriesInfo(series);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.ErrorException("Couldn't refresh info for {0}".Inject(series), e);
+                    }
+                }
+            }
+        }
+
+        public void HandleAsync(SeriesAddedEvent message)
+        {
+            RefreshSeriesInfo(message.Series);
         }
     }
 }

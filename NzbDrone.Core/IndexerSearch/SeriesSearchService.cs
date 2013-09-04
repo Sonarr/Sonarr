@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
@@ -10,14 +12,17 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly ISeasonService _seasonService;
         private readonly ISearchForNzb _nzbSearchService;
         private readonly IDownloadApprovedReports _downloadApprovedReports;
+        private readonly Logger _logger;
 
         public SeriesSearchService(ISeasonService seasonService,
                                    ISearchForNzb nzbSearchService,
-                                   IDownloadApprovedReports downloadApprovedReports)
+                                   IDownloadApprovedReports downloadApprovedReports,
+                                   Logger logger)
         {
             _seasonService = seasonService;
             _nzbSearchService = nzbSearchService;
             _downloadApprovedReports = downloadApprovedReports;
+            _logger = logger;
         }
 
         public void Execute(SeriesSearchCommand message)
@@ -27,11 +32,15 @@ namespace NzbDrone.Core.IndexerSearch
                                         .OrderBy(s => s.SeasonNumber)
                                         .ToList();
 
+            var downloadedCount = 0;
+
             foreach (var season in seasons)
             {
                 var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber);
-                _downloadApprovedReports.DownloadApproved(decisions);
+                downloadedCount += _downloadApprovedReports.DownloadApproved(decisions).Count;
             }
+
+            _logger.Complete("Series search completed. {0} reports downloaded.", downloadedCount);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Nancy;
+using NLog;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch;
@@ -21,18 +23,21 @@ namespace NzbDrone.Api.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IDownloadService _downloadService;
         private readonly IParsingService _parsingService;
+        private readonly Logger _logger;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
-            ISearchForNzb nzbSearchService,
-            IMakeDownloadDecision downloadDecisionMaker,
-            IDownloadService downloadService,
-            IParsingService parsingService)
+                             ISearchForNzb nzbSearchService,
+                             IMakeDownloadDecision downloadDecisionMaker,
+                             IDownloadService downloadService,
+                             IParsingService parsingService,
+                             Logger logger)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _nzbSearchService = nzbSearchService;
             _downloadDecisionMaker = downloadDecisionMaker;
             _downloadService = downloadService;
             _parsingService = parsingService;
+            _logger = logger;
             GetResourceAll = GetReleases;
             Post["/"] = x=> DownloadRelease(this.Bind<ReleaseResource>());
         }
@@ -60,6 +65,7 @@ namespace NzbDrone.Api.Indexers
         private List<ReleaseResource> GetEpisodeReleases(int episodeId)
         {
             var decisions = _nzbSearchService.EpisodeSearch(episodeId);
+
             return MapDecisions(decisions);
         }
 

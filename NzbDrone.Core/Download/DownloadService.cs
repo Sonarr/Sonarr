@@ -1,4 +1,5 @@
 ﻿using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Parser.Model;
 
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Download
 
             downloadClient.DownloadNzb(remoteEpisode);
 
-            _logger.Info("Report sent to download client. {0}", downloadTitle);
+            _logger.Progress("Report sent to download client. {0}", downloadTitle);
             _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
         }
     }

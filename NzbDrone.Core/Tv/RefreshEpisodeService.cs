@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
 
         public void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
-            _logger.Info("Starting series info refresh for: {0}", series);
+            _logger.Info("Starting episode info refresh for: {0}", series);
             var successCount = 0;
             var failCount = 0;
 

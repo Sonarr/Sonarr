@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Tv
             var episode = _episodeRepository.Get(episodeId);
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
-            logger.Info("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+            logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)

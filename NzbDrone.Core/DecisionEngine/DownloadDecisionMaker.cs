@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DecisionEngine.Specifications.Search;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
@@ -12,8 +13,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IMakeDownloadDecision
     {
-        List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports);
-        List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase);
+        List<DownloadDecision> GetRssDecision(List<ReportInfo> reports);
+        List<DownloadDecision> GetSearchDecision(List<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -29,18 +30,28 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports)
+        public List<DownloadDecision> GetRssDecision(List<ReportInfo> reports)
         {
             return GetDecisions(reports).ToList();
         }
 
-        public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase)
+        public List<DownloadDecision> GetSearchDecision(List<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase)
         {
             return GetDecisions(reports, searchCriteriaBase).ToList();
         }
 
-        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteria = null)
+        private IEnumerable<DownloadDecision> GetDecisions(List<ReportInfo> reports, SearchCriteriaBase searchCriteria = null)
         {
+            if (reports.Any())
+            {
+                _logger.Progress("Processing {0} reports", reports.Count());
+            }
+
+            else
+            {
+                _logger.Progress("No reports found");
+            }
+                
             foreach (var report in reports)
             {
                 DownloadDecision decision = null;

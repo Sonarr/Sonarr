@@ -17,11 +17,13 @@ define(
         collection.signalRconnection.received(function (message) {
 
             var type = getMessengerType(message.status);
+            var hideAfter = type === 'info' ? 60 : 5;
 
             Messenger.show({
-                id     : message.commandId,
-                message: message.message,
-                type   : type
+                id       : message.commandId,
+                message  : message.message,
+                type     : type,
+                hideAfter: hideAfter
             });
         });
 
