@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.SignalR;
 using NzbDrone.Api.SignalR;
@@ -17,6 +18,8 @@ namespace NzbDrone.Host.Owin.MiddleWare
             _persistentConnections = persistentConnections;
 
             SignalrDependencyResolver.Register(container);
+
+            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(300000);
         }
 
         public void Attach(IAppBuilder appBuilder)
