@@ -8,6 +8,16 @@
             Specials
         {{/if}}
 
+        {{#if_eq episodeCount compare=0}}
+            <i class="icon-nd-status season-status status-primary" title="No aired episodes"/>
+        {{else}}
+            {{#if_eq percentOfEpisodes compare=100}}
+                <i class="icon-nd-status season-status status-success" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded"/>
+            {{else}}
+                <i class="icon-nd-status season-status status-danger" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded"/>
+            {{/if_eq}}
+        {{/if_eq}}
+
         <span class="season-actions pull-right">
             <i class="icon-nd-rename x-season-rename" title="Rename  all episodes in season {{seasonNumber}}"/>
             <i class="icon-search x-season-search" title="Search for all episodes in season {{seasonNumber}}"/>

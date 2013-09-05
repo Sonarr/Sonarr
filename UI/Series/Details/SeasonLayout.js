@@ -82,7 +82,7 @@ define(
                 this.series = options.series;
 
                 this.showingEpisodes = this._shouldShowEpisodes();
-                this.templateHelpers.showingEpisodes = this.showingEpisodes;
+                this._generateTemplateHelpers();
 
                 this.listenTo(this.model, 'sync', function () {
                     this._afterSeasonMonitored();
@@ -196,6 +196,25 @@ define(
                 });
 
                 return result;
+            },
+
+            _generateTemplateHelpers: function () {
+                this.templateHelpers.showingEpisodes = this.showingEpisodes;
+
+                var episodeCount = this.episodeCollection.filter(function (episode) {
+                    return (episode.get('monitored')  && Moment(episode.get('airDateUtc')).isBefore(Moment())) || episode.get('hasFile');
+                }).length;
+
+                var episodeFileCount = this.episodeCollection.where({ hasFile: true }).length;
+                var percentOfEpisodes = 100;
+
+                if (episodeCount > 0) {
+                    percentOfEpisodes = episodeFileCount / episodeCount * 100;
+                }
+
+                this.templateHelpers.episodeCount = episodeCount;
+                this.templateHelpers.episodeFileCount = episodeFileCount;
+                this.templateHelpers.percentOfEpisodes = percentOfEpisodes;
             },
 
             _showHideEpisodes: function () {
