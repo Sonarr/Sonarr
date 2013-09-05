@@ -29,7 +29,11 @@ namespace NzbDrone.Core.Datastore
 
         public static void RegisterDatabase(IContainer container)
         {
+            container.Resolve<IDbFactory>().Create();
+
             container.Register(c => c.Resolve<IDbFactory>().Create());
+
+            container.Resolve<IDbFactory>().Create(MigrationType.Log);
 
             container.Register<ILogRepository>(c =>
             {

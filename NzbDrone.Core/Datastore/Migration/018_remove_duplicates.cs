@@ -11,8 +11,8 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             using (var transaction = MigrationHelper.BeginTransaction())
             {
-                RemoveDuplicateSeries("TvdbId");
-                RemoveDuplicateSeries("TitleSlug");
+                RemoveDuplicateSeries<int>("TvdbId");
+                RemoveDuplicateSeries<string>("TitleSlug");
 
                 var duplicatedEpisodes = MigrationHelper.GetDuplicates<int>("Episodes", "TvDbEpisodeId");
 
@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
 
-        private void RemoveDuplicateSeries(string field)
+        private void RemoveDuplicateSeries<T>(string field)
         {
-            var duplicatedSeries = MigrationHelper.GetDuplicates<int>("Series", field);
+            var duplicatedSeries = MigrationHelper.GetDuplicates<T>("Series", field);
 
             foreach (var duplicate in duplicatedSeries)
             {

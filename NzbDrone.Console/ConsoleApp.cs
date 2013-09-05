@@ -24,6 +24,7 @@ namespace NzbDrone.Console
             }
             catch (Exception e)
             {
+                Logger.FatalException("EPIC FAIL!", e);
                 System.Console.ReadLine();
             }
 

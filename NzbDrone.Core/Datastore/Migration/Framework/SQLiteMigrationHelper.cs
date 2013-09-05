@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -54,7 +55,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             command.Connection = _connection;
 
-            return (string)command.ExecuteScalar();
+            var sql = (string)command.ExecuteScalar();
+
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                throw new TableNotFoundException(tableName);
+            }
+
+            return sql;
         }
 
         public Dictionary<String, SQLiteColumn> GetColumns(string tableName)
@@ -163,7 +171,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             {
                 while (reader.Read())
                 {
-                    result.Add(new KeyValuePair<int, T>(reader.GetInt16(0), (T)Convert.ChangeType(reader[1], typeof(T))));
+                    result.Add(new KeyValuePair<int, T>(reader.GetInt32(0), (T)Convert.ChangeType(reader[1], typeof(T))));
                 }
             }
 
@@ -207,10 +215,18 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 Connection = _connection
             };
 
-           return (int)sqLiteCommand.ExecuteScalar();
+            return (int)sqLiteCommand.ExecuteScalar();
+        }
+
+        private class TableNotFoundException : NzbDroneException
+        {
+            public TableNotFoundException(string tableName)
+                : base("Table [{0}] not found", tableName)
+            {
+
+            }
         }
 
 
-       
     }
 }
