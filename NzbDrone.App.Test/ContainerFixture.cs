@@ -45,7 +45,6 @@ namespace NzbDrone.App.Test
         {
             var genericExecutor = typeof(IExecute<>).MakeGenericType(typeof(RssSyncCommand));
             var container = MainAppContainerBuilder.BuildContainer(args);
-            DbFactory.RegisterDatabase(container);
 
             var executor = container.Resolve(genericExecutor);
 
