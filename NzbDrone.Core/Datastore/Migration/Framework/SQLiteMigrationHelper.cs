@@ -7,18 +7,21 @@ using NLog;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-    public interface ISQLiteMigrationHelper
+    public interface ISqLiteMigrationHelper
     {
-        Dictionary<String, SQLiteMigrationHelper.SQLiteColumn> GetColumns(string tableName);
-        void CreateTable(string tableName, IEnumerable<SQLiteMigrationHelper.SQLiteColumn> values, IEnumerable<SQLiteMigrationHelper.SQLiteIndex> indexes);
-        void CopyData(string sourceTable, string destinationTable, IEnumerable<SQLiteMigrationHelper.SQLiteColumn> columns);
+        Dictionary<String, SQLiteColumn> GetColumns(string tableName);
+        void CreateTable(string tableName, IEnumerable<SQLiteColumn> values, IEnumerable<SQLiteIndex> indexes);
+        void CopyData(string sourceTable, string destinationTable, IEnumerable<SQLiteColumn> columns);
         void DropTable(string tableName);
         void RenameTable(string tableName, string newName);
+        IEnumerable<IGrouping<T, KeyValuePair<int, T>>> GetDuplicates<T>(string tableName, string columnName);
         SQLiteTransaction BeginTransaction();
-        List<SQLiteMigrationHelper.SQLiteIndex> GetIndexes(string tableName);
+        List<SQLiteIndex> GetIndexes(string tableName);
+        int ExecuteScalar(string command, params string[] args);
+        void ExecuteNonQuery(string command, params string[] args);
     }
 
-    public class SQLiteMigrationHelper : ISQLiteMigrationHelper
+    public class SqLiteMigrationHelper : ISqLiteMigrationHelper
     {
         private readonly SQLiteConnection _connection;
 
@@ -28,7 +31,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         private static readonly Regex IndexRegex = new Regex(@"\(""(?<col>.*)""\s(?<direction>ASC|DESC)\)$",
              RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-        public SQLiteMigrationHelper(IConnectionStringFactory connectionStringFactory, Logger logger)
+        public SqLiteMigrationHelper(IConnectionStringFactory connectionStringFactory, Logger logger)
         {
             try
             {
@@ -69,18 +72,22 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                                    });
         }
 
+
+        private static IEnumerable<T> ReadArray<T>(SQLiteDataReader reader)
+        {
+            while (reader.Read())
+            {
+                yield return (T)Convert.ChangeType(reader[0], typeof(T));
+            }
+        }
+
         public List<SQLiteIndex> GetIndexes(string tableName)
         {
             var command = new SQLiteCommand(string.Format("SELECT sql FROM sqlite_master WHERE type='index' AND tbl_name ='{0}'", tableName));
             command.Connection = _connection;
 
             var reader = command.ExecuteReader();
-            var sqls = new List<string>();
-
-            while (reader.Read())
-            {
-                sqls.Add(reader[0].ToString());
-            }
+            var sqls = ReadArray<string>(reader).ToList();
 
 
             var indexes = new List<SQLiteIndex>();
@@ -108,7 +115,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             foreach (var index in indexes)
             {
-                ExecuteNonQuery("DROP INDEX {0}", index.IndexName);
+                ExecuteNonQuery("DROP INDEX IF EXISTS {0}", index.IndexName);
                 ExecuteNonQuery(index.CreateSql(tableName));
             }
         }
@@ -146,6 +153,23 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             renameCommand.ExecuteNonQuery();
         }
 
+        public IEnumerable<IGrouping<T, KeyValuePair<int, T>>> GetDuplicates<T>(string tableName, string columnName)
+        {
+            var getDuplicates = BuildCommand("select id, {0} from {1}", columnName, tableName);
+
+            var result = new List<KeyValuePair<int, T>>();
+
+            using (var reader = getDuplicates.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    result.Add(new KeyValuePair<int, T>(reader.GetInt16(0), (T)Convert.ChangeType(reader[1], typeof(T))));
+                }
+            }
+
+            return result.GroupBy(c => c.Value).Where(g => g.Count() > 1);
+        }
+
         public int GetRowCount(string tableName)
         {
             var countCommand = BuildCommand("SELECT COUNT(*) FROM {0};", tableName);
@@ -166,8 +190,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         }
 
 
-
-        private void ExecuteNonQuery(string command, params string[] args)
+        public void ExecuteNonQuery(string command, params string[] args)
         {
             var sqLiteCommand = new SQLiteCommand(string.Format(command, args))
             {
@@ -177,43 +200,17 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             sqLiteCommand.ExecuteNonQuery();
         }
 
-
-        public class SQLiteColumn
+        public int ExecuteScalar(string command, params string[] args)
         {
-            public string Name { get; set; }
-            public string Schema { get; set; }
-
-            public override string ToString()
+            var sqLiteCommand = new SQLiteCommand(string.Format(command, args))
             {
-                return string.Format("[{0}] {1}", Name, Schema);
-            }
+                Connection = _connection
+            };
+
+           return (int)sqLiteCommand.ExecuteScalar();
         }
 
-        public class SQLiteIndex
-        {
-            public string Column { get; set; }
-            public string Table { get; set; }
-            public bool Unique { get; set; }
 
-            public override string ToString()
-            {
-                return string.Format("[{0}] Unique: {1}", Column, Unique);
-            }
-
-            public string IndexName
-            {
-                get
-                {
-                    return string.Format("IX_{0}_{1}", Table, Column);
-                }
-            }
-
-            public string CreateSql(string tableName)
-            {
-                return string.Format(@"CREATE UNIQUE INDEX ""{2}"" ON ""{0}"" (""{1}"" ASC)", tableName, Column, IndexName);
-            }
-        }
+       
     }
-
-
 }

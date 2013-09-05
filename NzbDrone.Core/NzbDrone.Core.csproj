@@ -160,6 +160,8 @@
     <Compile Include="Datastore\Migration\015_add_air_date_as_string.cs" />
     <Compile Include="Datastore\Migration\016_updated_imported_history_item.cs" />
     <Compile Include="Datastore\Migration\017_reset_scene_names.cs" />
+    <Compile Include="Datastore\Migration\018_remove_duplicates.cs" />
+    <Compile Include="Datastore\Migration\019_restore_unique_constraints.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -169,6 +171,8 @@
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
     <Compile Include="Datastore\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
+    <Compile Include="Datastore\Migration\Framework\SQLiteColumn.cs" />
+    <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteMigrationHelper.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />

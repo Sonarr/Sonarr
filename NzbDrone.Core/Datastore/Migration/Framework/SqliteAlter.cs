@@ -6,13 +6,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     public interface ISQLiteAlter
     {
         void DropColumns(string tableName, IEnumerable<string> columns);
+        void AddIndexes(string tableName, params SQLiteIndex[] indexes);
     }
 
     public class SQLiteAlter : ISQLiteAlter
     {
-        private readonly ISQLiteMigrationHelper _sqLiteMigrationHelper;
+        private readonly ISqLiteMigrationHelper _sqLiteMigrationHelper;
 
-        public SQLiteAlter(ISQLiteMigrationHelper sqLiteMigrationHelper)
+        public SQLiteAlter(ISqLiteMigrationHelper sqLiteMigrationHelper)
         {
             _sqLiteMigrationHelper = sqLiteMigrationHelper;
         }
@@ -27,18 +28,39 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 var newColumns = originalColumns.Where(c => !columns.Contains(c.Key)).Select(c => c.Value).ToList();
                 var newIndexes = originalIndexes.Where(c => !columns.Contains(c.Column));
 
-                var tempTableName = tableName + "_temp";
-
-                _sqLiteMigrationHelper.CreateTable(tempTableName, newColumns, newIndexes);
-
-                _sqLiteMigrationHelper.CopyData(tableName, tempTableName, newColumns);
-
-                _sqLiteMigrationHelper.DropTable(tableName);
-
-                _sqLiteMigrationHelper.RenameTable(tempTableName, tableName);
+                CreateTable(tableName, newColumns, newIndexes);
 
                 transaction.Commit();
             }
+        }
+
+        public void AddIndexes(string tableName, params SQLiteIndex[] indexes)
+        {
+            using (var transaction = _sqLiteMigrationHelper.BeginTransaction())
+            {
+                var columns = _sqLiteMigrationHelper.GetColumns(tableName).Select(c => c.Value).ToList();
+                var originalIndexes = _sqLiteMigrationHelper.GetIndexes(tableName);
+
+                var newIndexes = originalIndexes.Union(indexes);
+
+
+                CreateTable(tableName, columns, newIndexes);
+
+                transaction.Commit();
+            }
+        }
+
+        private void CreateTable(string tableName, List<SQLiteColumn> newColumns, IEnumerable<SQLiteIndex> newIndexes)
+        {
+            var tempTableName = tableName + "_temp";
+
+            _sqLiteMigrationHelper.CreateTable(tempTableName, newColumns, newIndexes);
+
+            _sqLiteMigrationHelper.CopyData(tableName, tempTableName, newColumns);
+
+            _sqLiteMigrationHelper.DropTable(tableName);
+
+            _sqLiteMigrationHelper.RenameTable(tempTableName, tableName);
         }
     }
 }

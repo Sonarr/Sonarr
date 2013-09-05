@@ -7,17 +7,17 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using System.Linq;
 
-namespace NzbDrone.Core.Test.Datastore
+namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
 {
     [TestFixture]
-    public class SQLiteMigrationHelperFixture : DbTest
+    public class AlterFixture : DbTest
     {
-        private SQLiteMigrationHelper _subject;
+        private SqLiteMigrationHelper _subject;
 
         [SetUp]
         public void SetUp()
         {
-            _subject = Mocker.Resolve<SQLiteMigrationHelper>();
+            _subject = Mocker.Resolve<SqLiteMigrationHelper>();
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.Datastore
             var columns = _subject.GetColumns("Series");
             columns.Remove("Title");
 
-            _subject.CreateTable("Series_New", columns.Values, new List<SQLiteMigrationHelper.SQLiteIndex>());
+            _subject.CreateTable("Series_New", columns.Values, new List<SQLiteIndex>());
 
             var newColumns = _subject.GetColumns("Series_New");
 
@@ -106,5 +106,22 @@ namespace NzbDrone.Core.Test.Datastore
             newIndexes.Should().HaveSameCount(indexes);
             newIndexes.Select(c=>c.Column).Should().BeEquivalentTo(indexes.Select(c=>c.Column));
         }
+
+
+        [Test]
+        public void should_be_able_to_create_table_with_new_indexes()
+        {
+            var columns = _subject.GetColumns("Series");
+            columns.Remove("Title");
+
+            _subject.CreateTable("Series_New", columns.Values, new List<SQLiteIndex>{new SQLiteIndex{Column = "AirTime", Table = "Series_New", Unique = true}});
+
+            var newColumns = _subject.GetColumns("Series_New");
+            var newIndexes = _subject.GetIndexes("Series_New");
+
+            newColumns.Values.Should().HaveSameCount(columns.Values);
+            newIndexes.Should().Contain(i=>i.Column == "AirTime");
+        }
+
     }
 }

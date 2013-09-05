@@ -15,13 +15,15 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     {
         private readonly IAnnouncer _announcer;
         private readonly ISQLiteAlter _sqLiteAlter;
+        private readonly ISqLiteMigrationHelper _migrationHelper;
 
         private static readonly HashSet<string> MigrationCache = new HashSet<string>();
 
-        public MigrationController(IAnnouncer announcer, ISQLiteAlter sqLiteAlter)
+        public MigrationController(IAnnouncer announcer, ISQLiteAlter sqLiteAlter, ISqLiteMigrationHelper migrationHelper)
         {
             _announcer = announcer;
             _sqLiteAlter = sqLiteAlter;
+            _migrationHelper = migrationHelper;
         }
 
         public void MigrateToLatest(string connectionString, MigrationType migrationType)
@@ -40,7 +42,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                         ApplicationContext = new MigrationContext
                             {
                                 MigrationType = migrationType,
-                                SQLiteAlter = _sqLiteAlter
+                                SQLiteAlter = _sqLiteAlter,
+                                MigrationHelper = _migrationHelper,
                             }
                     };
 

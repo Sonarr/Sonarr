@@ -108,7 +108,8 @@
     <Compile Include="Datastore\PagingSpecExtenstionsTests\ToSortDirectionFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtenstionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
-    <Compile Include="Datastore\SQLiteMigrationHelperFixture.cs" />
+    <Compile Include="Datastore\SQLiteMigrationHelperTests\AlterFixture.cs" />
+    <Compile Include="Datastore\SQLiteMigrationHelperTests\DuplicateFixture.cs" />
     <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />

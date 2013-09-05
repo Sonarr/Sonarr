@@ -1,9 +1,18 @@
 ﻿using System;
+using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
     public abstract class NzbDroneMigrationBase : FluentMigrator.Migration
     {
+        private Logger _logger;
+
+        protected NzbDroneMigrationBase()
+        {
+            _logger = NzbDroneLogger.GetLogger();
+        }
+
         protected virtual void MainDbUpgrade()
         {
         }
@@ -16,7 +25,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             var context = (MigrationContext)ApplicationContext;
 
-            SQLiteAlter = context.SQLiteAlter;
+            SqLiteAlter = context.SQLiteAlter;
+            MigrationHelper = context.MigrationHelper;
 
             switch (context.MigrationType)
             {
@@ -33,7 +43,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             }
         }
 
-        protected ISQLiteAlter SQLiteAlter { get; private set; }
+        protected ISQLiteAlter SqLiteAlter { get; private set; }
+        protected ISqLiteMigrationHelper MigrationHelper { get; private set; }
 
         public override void Down()
         {

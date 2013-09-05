@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SQLiteAlter.DropColumns("Episodes", new []{ "AirDate" });
+            SqLiteAlter.DropColumns("Episodes", new []{ "AirDate" });
         }
     }
 }
