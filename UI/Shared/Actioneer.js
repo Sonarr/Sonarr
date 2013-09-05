@@ -38,6 +38,8 @@ define(
             },
 
             _handlePromise: function (promise, options) {
+                var self = this;
+
                 promise.done(function () {
                     self._onSuccess(options);
                 });
