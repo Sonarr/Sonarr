@@ -44,17 +44,20 @@ namespace NzbDrone.Core.DecisionEngine
         {
             if (reports.Any())
             {
-                _logger.Progress("Processing {0} reports", reports.Count());
+                _logger.Progress("Processing {0} reports", reports.Count);
             }
 
             else
             {
                 _logger.Progress("No reports found");
             }
-                
+
+            var reportNumber = 1;
+
             foreach (var report in reports)
             {
                 DownloadDecision decision = null;
+                _logger.Progress("Processing report {0}/{1}", reportNumber, reports.Count);
 
                 try
                 {
@@ -79,6 +82,8 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     _logger.ErrorException("Couldn't process report.", e);
                 }
+
+                reportNumber++;
 
                 if (decision != null)
                 {
