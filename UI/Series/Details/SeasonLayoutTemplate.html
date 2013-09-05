@@ -1,15 +1,26 @@
 ﻿<div class="series-season" id="season-{{seasonNumber}}">
     <h2>
         <i class="x-season-monitored clickable" title="Toggle season monitored status"/>
+        
         {{#if seasonNumber}}
             Season {{seasonNumber}}
         {{else}}
             Specials
         {{/if}}
+
         <span class="season-actions pull-right">
             <i class="icon-nd-rename x-season-rename" title="Rename  all episodes in season {{seasonNumber}}"/>
             <i class="icon-search x-season-search" title="Search for all episodes in season {{seasonNumber}}"/>
         </span>
     </h2>
-    <div id="x-episode-grid"/>
+    <div class="x-episode-grid"></div>
+    <div class="show-hide-episodes x-show-hide-episodes">
+        <h4>
+            {{#if showingEpisodes}}
+                <i class="icon-chevron-sign-up"/> Hide Episodes
+            {{else}}
+            <i class="icon-chevron-sign-down"/> Show Episodes
+            {{/if}}
+        </h4>
+    </div>
 </div>

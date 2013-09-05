@@ -7,7 +7,6 @@ define(
         'Series/EpisodeFileCollection',
         'Series/SeasonCollection',
         'Series/Details/SeasonCollectionView',
-        'Series/Details/SeasonMenu/CollectionView',
         'Series/Details/InfoView',
         'Shared/LoadingView',
         'Shared/Actioneer',
@@ -19,7 +18,6 @@ define(
                  EpisodeFileCollection,
                  SeasonCollection,
                  SeasonCollectionView,
-                 SeasonMenuCollectionView,
                  InfoView,
                  LoadingView,
                  Actioneer) {
@@ -29,7 +27,6 @@ define(
             template         : 'Series/Details/SeriesDetailsTemplate',
 
             regions: {
-                seasonMenu: '#season-menu',
                 seasons   : '#seasons',
                 info      : '#info'
             },
@@ -200,11 +197,6 @@ define(
                     });*/
 
                     self.seasons.show(seasonCollectionView);
-
-                    self.seasonMenu.show(new SeasonMenuCollectionView({
-                        collection       : self.seasonCollection,
-                        episodeCollection: self.episodeCollection
-                    }));
                 });
             },
 

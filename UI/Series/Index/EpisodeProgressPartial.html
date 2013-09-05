@@ -1,12 +1,12 @@
 ﻿{{#if_eq episodeFileCount compare=episodeCount}}
     {{#if_eq status compare="continuing"}}
-        <div class="progress">
+        <div class="progress episode-progress">
     {{else}}
-        <div class="progress progress-success">
+        <div class="progress progress-success episode-progress">
     {{/if_eq}}
 
 {{else}}
-    <div class="progress progress-danger">
+    <div class="progress progress-danger episode-progress">
 {{/if_eq}}
 
     <span class="progressbar-back-text">{{episodeFileCount}} / {{episodeCount}}</span>

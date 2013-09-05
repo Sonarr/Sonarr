@@ -8,8 +8,9 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
-        'Shared/Actioneer'
-    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, Actioneer) {
+        'Shared/Actioneer',
+        'moment'
+    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, Actioneer, Moment) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -20,13 +21,15 @@ define(
             },
 
             events: {
-                'click .x-season-search'   : '_seasonSearch',
-                'click .x-season-monitored': '_seasonMonitored',
-                'click .x-season-rename'   : '_seasonRename'
+                'click .x-season-search'      : '_seasonSearch',
+                'click .x-season-monitored'   : '_seasonMonitored',
+                'click .x-season-rename'      : '_seasonRename',
+                'click .x-show-hide-episodes' : '_showHideEpisodes',
+                'dblclick .series-season h2'  : '_showHideEpisodes'
             },
 
             regions: {
-                episodeGrid: '#x-episode-grid'
+                episodeGrid: '.x-episode-grid'
             },
 
             columns:
@@ -67,6 +70,8 @@ define(
                     }
                 ],
 
+            templateHelpers: {},
+
             initialize: function (options) {
 
                 if (!options.episodeCollection) {
@@ -75,6 +80,9 @@ define(
 
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
                 this.series = options.series;
+
+                this.showingEpisodes = this._shouldShowEpisodes();
+                this.templateHelpers.showingEpisodes = this.showingEpisodes;
 
                 this.listenTo(this.model, 'sync', function () {
                     this._afterSeasonMonitored();
@@ -86,11 +94,9 @@ define(
             },
 
             onRender: function () {
-                this.episodeGrid.show(new Backgrid.Grid({
-                    columns   : this.columns,
-                    collection: this.episodeCollection,
-                    className : 'table table-hover season-grid'
-                }));
+                if (this.showingEpisodes) {
+                    this._showEpisodes();
+                }
 
                 this._setSeasonMonitoredState();
             },
@@ -159,6 +165,54 @@ define(
 
             _afterRename: function () {
                 App.vent.trigger(App.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
+            },
+
+            _showEpisodes: function () {
+                this.episodeGrid.show(new Backgrid.Grid({
+                    columns   : this.columns,
+                    collection: this.episodeCollection,
+                    className : 'table table-hover season-grid'
+                }));
+            },
+
+            _shouldShowEpisodes: function () {
+                var startDate = Moment().add('month', -1);
+                var endDate = Moment().add('year', 1);
+
+                var result = this.episodeCollection.some(function(episode) {
+
+                    var airDate = episode.get('airDateUtc');
+
+                    if (airDate)
+                    {
+                        var airDateMoment = Moment(airDate);
+
+                        if (airDateMoment.isAfter(startDate) && airDateMoment.isBefore(endDate)) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                });
+
+                return result;
+            },
+
+            _showHideEpisodes: function () {
+                if (this.showingEpisodes) {
+                    this.showingEpisodes = false;
+                    this.episodeGrid.$el.slideUp();
+                    this.episodeGrid.close();
+                }
+
+                else {
+                    this.showingEpisodes = true;
+                    this._showEpisodes();
+                    this.episodeGrid.$el.slideDown();
+                }
+
+                this.templateHelpers.showingEpisodes = this.showingEpisodes;
+                this.render();
             }
         });
     });
