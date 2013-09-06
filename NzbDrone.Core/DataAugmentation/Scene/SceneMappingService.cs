@@ -44,7 +44,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mapping.SearchTerm;
         }
 
-
         public Nullable<Int32> GetTvDbId(string cleanName)
         {
             var mapping = _gettvdbIdCache.Find(cleanName.CleanSeriesTitle());
@@ -54,7 +53,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             return mapping.TvdbId;
         }
-
 
         private void UpdateMappings()
         {
@@ -74,7 +72,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                     }
 
                     _repository.InsertMany(mappings);
-
                 }
                 else
                 {

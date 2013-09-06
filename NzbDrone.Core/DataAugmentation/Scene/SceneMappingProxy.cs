@@ -21,7 +21,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public List<SceneMapping> Fetch()
         {
-            var mappingsJson = _httpProvider.DownloadString(Services.RootUrl + "/SceneMapping/Active");
+            var mappingsJson = _httpProvider.DownloadString(Services.RootUrl + "/v1/SceneMapping");
             return Json.Deserialize<List<SceneMapping>>(mappingsJson);
         }
     }
