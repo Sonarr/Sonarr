@@ -70,14 +70,13 @@ define(
                     }
                 ],
 
-            templateHelpers: {},
-
             initialize: function (options) {
 
                 if (!options.episodeCollection) {
                     throw 'episodeCollection is needed';
                 }
 
+                this.templateHelpers = {};
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
                 this.series = options.series;
 
