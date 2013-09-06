@@ -112,10 +112,10 @@ namespace NzbDrone.Core.Providers
 
         public TimeSpan GetRunTime(string filename)
         {
-            var mediaInfo = new MediaInfo();
-
+            MediaInfo mediaInfo = null;
             try
             {
+                mediaInfo = new MediaInfo();
                 _logger.Trace("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
@@ -133,7 +133,13 @@ namespace NzbDrone.Core.Providers
             catch (Exception ex)
             {
                 _logger.ErrorException("Unable to parse media info from file: " + filename, ex);
-                mediaInfo.Close();
+            }
+            finally
+            {
+                if (mediaInfo != null)
+                {
+                    mediaInfo.Close();
+                }
             }
 
             return new TimeSpan();
