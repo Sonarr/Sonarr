@@ -90,4 +90,18 @@
             </div>
         </div>
     </fieldset>
+
+    {{#unless_eq branch compare="master"}}
+        <fieldset>
+            <legend>Updating</legend>
+
+            <div class="control-group">
+                <label class="control-label">Branch</label>
+
+                <div class="controls">
+                    <input type="text" placeholder="master" name="branch"/>
+                </div>
+            </div>
+        </fieldset>
+    {{/unless_eq}}
 </div>
