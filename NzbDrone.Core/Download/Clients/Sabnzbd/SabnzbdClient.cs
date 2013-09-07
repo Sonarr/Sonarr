@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 using RestSharp;
@@ -53,12 +54,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
+        private readonly ICached<IEnumerable<QueueItem>> _queueCache;
         private readonly Logger _logger;
 
-        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider, Logger logger)
+        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider, ICacheManger cacheManger, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _queueCache = cacheManger.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
             _logger = logger;
         }
 
@@ -97,24 +100,31 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public IEnumerable<QueueItem> GetQueue()
         {
-            string action = String.Format("mode=queue&output=json&start={0}&limit={1}", 0, 0);
-            string request = GetSabRequest(action);
-            string response = _httpProvider.DownloadString(request);
-
-            CheckForError(response);
-
-            var sabQueue = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
-
-            foreach (var sabQueueItem in sabQueue)
+            return _queueCache.Get("queue", () =>
             {
-                var queueItem = new QueueItem();
-                queueItem.Id = sabQueueItem.Id;
-                queueItem.Title = sabQueueItem.Title;
-                queueItem.Size = sabQueueItem.Size;
-                queueItem.SizeLeft = sabQueueItem.Size;
+                string action = String.Format("mode=queue&output=json&start={0}&limit={1}", 0, 0);
+                string request = GetSabRequest(action);
+                string response = _httpProvider.DownloadString(request);
 
-                yield return queueItem;
-            }
+                CheckForError(response);
+
+                var sabQueue = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
+
+                var queueItems = new List<QueueItem>();
+
+                foreach (var sabQueueItem in sabQueue)
+                {
+                    var queueItem = new QueueItem();
+                    queueItem.Id = sabQueueItem.Id;
+                    queueItem.Title = sabQueueItem.Title;
+                    queueItem.Size = sabQueueItem.Size;
+                    queueItem.SizeLeft = sabQueueItem.Size;
+
+                    queueItems.Add( queueItem);
+                }
+
+                return queueItems;
+            }, TimeSpan.FromSeconds(10));
         }
 
         public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)

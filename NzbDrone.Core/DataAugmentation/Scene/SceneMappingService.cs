@@ -18,7 +18,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         IHandleAsync<ApplicationStartedEvent>,
         IExecute<UpdateSceneMappingCommand>
     {
-
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
         private readonly Logger _logger;
