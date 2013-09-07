@@ -104,6 +104,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"/TV Drop/King of the Hill - 10x12 - 24 Hour Propane People [SDTV]/1012 - 24 Hour Propane People.avi", 10, 12)]
         [TestCase(@"S:\TV Drop\King of the Hill - 10x12 - 24 Hour Propane People [SDTV]\Hour Propane People.avi", 10, 12)]
         [TestCase(@"/TV Drop/King of the Hill - 10x12 - 24 Hour Propane People [SDTV]/Hour Propane People.avi", 10, 12)]
+        [TestCase(@"E:\Downloads\tv\The.Big.Bang.Theory.S01E01.720p.HDTV\ajifajjjeaeaeqwer_eppj.avi", 1, 1)]
+        [TestCase(@"C:\Test\Unsorted\The.Big.Bang.Theory.S01E01.720p.HDTV\tbbt101.avi", 1, 1)]
         public void PathParse_tests(string path, int season, int episode)
         {
             var result = Parser.Parser.ParsePath(path);
