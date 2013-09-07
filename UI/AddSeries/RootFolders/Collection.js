@@ -11,7 +11,7 @@ define(
             model: RootFolderModel
         });
 
-        var collection = new RootFolderCollection().bindSignalR();
+        //var collection = new RootFolderCollection().bindSignalR();
 
-        return collection;
+        return RootFolderCollection;
     });
