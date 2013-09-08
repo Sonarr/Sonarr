@@ -142,7 +142,7 @@ namespace NzbDrone.Core.MetadataSource
             DateTime result;
 
             //Todo: Remove this when DST ends and/or trakt fixes DST airings in EST/EDT
-            if (iso.EndsWith("-05:00"))
+            if (iso != null && iso.EndsWith("-05:00"))
             {
                 iso = iso.Replace("-05:00", "-04:00");
             }
