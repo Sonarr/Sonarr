@@ -13,5 +13,5 @@ define(
 
         //var collection = new RootFolderCollection().bindSignalR();
 
-        return RootFolderCollection;
+        return new RootFolderCollection();
     });
