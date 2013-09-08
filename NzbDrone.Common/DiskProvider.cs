@@ -42,6 +42,7 @@ namespace NzbDrone.Common
         void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentPath, string childPath);
         FileAttributes GetFileAttributes(string path);
+        void EmptyFolder(string path);
     }
 
     public class DiskProvider : IDiskProvider
@@ -352,7 +353,6 @@ namespace NzbDrone.Common
             File.WriteAllText(filename, contents);
         }
 
-
         public void FileSetLastWriteTimeUtc(string path, DateTime dateTime)
         {
             Ensure.That(() => path).IsValidPath();
@@ -445,6 +445,21 @@ namespace NzbDrone.Common
         public FileAttributes GetFileAttributes(string path)
         {
             return File.GetAttributes(path);
+        }
+
+        public void EmptyFolder(string path)
+        {
+            Ensure.That(() => path).IsValidPath();
+
+            foreach (var file in GetFiles(path, SearchOption.TopDirectoryOnly))
+            {
+                DeleteFile(file);
+            }
+
+            foreach (var directory in GetDirectories(path))
+            {
+                DeleteFolder(directory, true);
+            }
         }
     }
 }

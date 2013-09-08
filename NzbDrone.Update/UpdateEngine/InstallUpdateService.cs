@@ -64,7 +64,7 @@ namespace NzbDrone.Update.UpdateEngine
 
                 try
                 {
-                    _diskProvider.DeleteFolder(installationFolder, true);
+                    _diskProvider.EmptyFolder(installationFolder);
                     _diskProvider.CopyFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
                 }
                 catch (Exception e)
