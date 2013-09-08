@@ -47,7 +47,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             ValidateEpisodes(details.Item2);
         }
 
-
         [Test]
         public void getting_details_of_invalid_series()
         {
