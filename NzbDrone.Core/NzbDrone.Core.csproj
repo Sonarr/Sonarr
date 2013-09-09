@@ -542,9 +542,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NzbDrone.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
       <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
       <Name>Marr.Data</Name>

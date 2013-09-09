@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Notifications.Growl
         public GrowlService()
         {
             _notificationTypes = GetNotificationTypes();
-            _growlApplication.Icon = "https://github.com/NzbDrone/NzbDrone/raw/master/NzbDrone.Core/NzbDrone.jpg";
+            _growlApplication.Icon = "https://raw.github.com/NzbDrone/NzbDrone/master/Logo/64.png";
         }
 
         public void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password)
