@@ -102,6 +102,11 @@ define(
                             route: 'addseries'
                         },
                         {
+                            title  : 'Season Pass',
+                            icon   : 'icon-bookmark',
+                            route  : 'seasonpass'
+                        },
+                        {
                             title         : 'RSS Sync',
                             icon          : 'icon-rss',
                             command       : 'rsssync',
