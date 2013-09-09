@@ -1,6 +1,7 @@
 ﻿using System.Net;
+using NzbDrone.Common.Exceptions;
 
-namespace NzbDrone.Common.Exceptions
+namespace NzbDrone.Core
 {
     public class NzbDroneClientException : NzbDroneException
     {

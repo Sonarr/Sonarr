@@ -3,7 +3,7 @@ using FluentValidation;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common.Exceptions;
+using NzbDrone.Core;
 using HttpStatusCode = Nancy.HttpStatusCode;
 
 namespace NzbDrone.Api.ErrorManagement
