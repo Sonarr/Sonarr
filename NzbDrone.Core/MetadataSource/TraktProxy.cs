@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
@@ -15,26 +17,33 @@ namespace NzbDrone.Core.MetadataSource
 {
     public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo
     {
-        public List<Series> SearchForNewSeries(string title)
-        {
-            var client = BuildClient("search", "shows");
-            var restRequest = new RestRequest(GetSearchTerm(title));
-            var response = client.ExecuteAndValidate<List<SearchShow>>(restRequest);
-
-            return response.Select(MapSearchSeries).ToList();
-        }
-
-
+        private readonly Logger _logger;
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-zA-Z0-9\s-\.]", RegexOptions.Compiled);
 
-        private static string GetSearchTerm(string phrase)
+        public TraktProxy(Logger logger)
         {
-            phrase = phrase.RemoveAccent().ToLower();
-            phrase = phrase.Replace("&", "and");
-            phrase = InvalidSearchCharRegex.Replace(phrase, string.Empty);
-            phrase = phrase.CleanSpaces().Replace(" ", "+");
+            _logger = logger;
+        }
 
-            return phrase;
+        public List<Series> SearchForNewSeries(string title)
+        {
+            try
+            {
+                var client = BuildClient("search", "shows");
+                var restRequest = new RestRequest(GetSearchTerm(title));
+                var response = client.ExecuteAndValidate<List<SearchShow>>(restRequest);
+
+                return response.Select(MapSearchSeries).ToList();
+            }
+            catch (WebException ex)
+            {
+                throw new TraktException("Search for '{0}' failed. Unable to communicate with Trakt.", title);
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException(ex.Message, ex);
+                throw new TraktException("Search for '{0}' failed. Invalid response received from Trakt.", title);
+            }
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId)
@@ -42,7 +51,6 @@ namespace NzbDrone.Core.MetadataSource
             var client = BuildClient("show", "summary");
             var restRequest = new RestRequest(tvDbSeriesId.ToString() + "/extended");
             var response = client.ExecuteAndValidate<Show>(restRequest);
-
 
             var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
             var series = MapSeries(response);
@@ -164,6 +172,14 @@ namespace NzbDrone.Core.MetadataSource
             return match.Captures[0].Value;
         }
 
+        private static string GetSearchTerm(string phrase)
+        {
+            phrase = phrase.RemoveAccent().ToLower();
+            phrase = phrase.Replace("&", "and");
+            phrase = InvalidSearchCharRegex.Replace(phrase, string.Empty);
+            phrase = phrase.CleanSpaces().Replace(" ", "+");
 
+            return phrase;
+        }
     }
 }

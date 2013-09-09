@@ -88,6 +88,7 @@
     <Compile Include="EnvironmentInfo\StartupArguments.cs" />
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
+    <Compile Include="Exceptions\NzbDroneClientException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
