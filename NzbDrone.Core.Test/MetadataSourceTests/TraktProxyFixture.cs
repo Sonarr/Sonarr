@@ -88,13 +88,15 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             foreach (var episode in episodes)
             {
                 ValidateEpisode(episode);
+
+                //if atleast one episdoe has title it means parse it working.
+                episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Title));
             }
         }
 
         private void ValidateEpisode(Episode episode)
         {
             episode.Should().NotBeNull();
-            episode.Title.Should().NotBeBlank();
             episode.EpisodeNumber.Should().NotBe(0);
             episode.TvDbEpisodeId.Should().BeGreaterThan(0);
 
