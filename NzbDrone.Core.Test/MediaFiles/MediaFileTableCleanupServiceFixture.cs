@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -8,9 +9,8 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using System.Linq;
 
-namespace NzbDrone.Core.Test.MediaFileTests
+namespace NzbDrone.Core.Test.MediaFiles
 {
     public class MediaFileTableCleanupServiceFixture : CoreTest<MediaFileTableCleanupService>
     {

@@ -11,7 +11,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
+namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 {
     [TestFixture]
     public class NotSampleSpecificationFixture : CoreTest<NotSampleSpecification>

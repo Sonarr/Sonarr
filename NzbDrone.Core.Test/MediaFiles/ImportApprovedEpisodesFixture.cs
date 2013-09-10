@@ -10,11 +10,11 @@ using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests
+namespace NzbDrone.Core.Test.MediaFiles
 {
     [TestFixture]
     public class ImportApprovedEpisodesFixture : CoreTest<ImportApprovedEpisodes>

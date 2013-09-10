@@ -13,12 +13,12 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
+namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
     [TestFixture]
     public class ImportDecisionMakerFixture : CoreTest<ImportDecisionMaker>
     {
-        private List<String> _videoFiles;
+        private List<string> _videoFiles;
         private LocalEpisode _localEpisode;
         private Series _series;
 
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>())).Returns(false);
             _fail3.Setup(c => c.RejectionReason).Returns("_fail3");
 
-            _videoFiles = new List<String> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
+            _videoFiles = new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
             _series = new Series();
             _localEpisode = new LocalEpisode { Series = _series, Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
 

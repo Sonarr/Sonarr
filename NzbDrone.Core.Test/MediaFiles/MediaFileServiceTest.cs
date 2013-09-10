@@ -8,7 +8,7 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests
+namespace NzbDrone.Core.Test.MediaFiles
 {
     [TestFixture]
     public class MediaFileServiceTest : CoreTest<MediaFileService>

@@ -8,12 +8,11 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
+namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 {
     [TestFixture]
     public class FreeSpaceSpecificationFixture : CoreTest<FreeSpaceSpecification>
@@ -109,8 +108,6 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
         }
 
-
-
         [Test]
         public void should_pass_if_exception_is_thrown()
         {
@@ -121,7 +118,7 @@ namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
                    .Throws(new TestException());
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-            ExceptionVerification.ExpectedWarns(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

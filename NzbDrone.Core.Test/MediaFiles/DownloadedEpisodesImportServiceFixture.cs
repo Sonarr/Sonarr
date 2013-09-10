@@ -15,10 +15,10 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests
+namespace NzbDrone.Core.Test.MediaFiles
 {
     [TestFixture]
-    public class DropFolderImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
+    public class DownloadedEpisodesImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
     {
         private string[] _subFolders = new[] { "c:\\root\\foldername".AsOsAgnostic() };
         private string[] _videoFiles = new[] { "c:\\root\\foldername\\video.ext".AsOsAgnostic() };

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FizzWare.NBuilder;
 using Marr.Data;
 using Moq;
@@ -10,7 +9,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.MediaFileTests
+namespace NzbDrone.Core.Test.MediaFiles
 {
     public class UpgradeMediaFileServiceFixture : CoreTest<UpgradeMediaFileService>
     {

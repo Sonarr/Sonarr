@@ -1,22 +1,17 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Marr.Data;
 using Moq;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFileTests.EpisodeImportTests
+namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 {
     [TestFixture]
     public class NotUnpackingSpecificationFixture : CoreTest<NotUnpackingSpecification>
