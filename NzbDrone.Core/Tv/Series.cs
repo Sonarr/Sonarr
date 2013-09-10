@@ -34,11 +34,14 @@ namespace NzbDrone.Core.Tv
         public bool UseSceneNumbering { get; set; }
         public string TitleSlug { get; set; }
         public string Path { get; set; }
+        public int Year { get; set; }
 
         public string RootFolderPath { get; set; }
 
         public DateTime? FirstAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
+
+        public List<Season> Seasons { get; set; }
 
         public override string ToString()
         {

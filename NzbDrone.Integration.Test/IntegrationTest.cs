@@ -27,7 +27,6 @@ namespace NzbDrone.Integration.Test
         protected ClientBase<HistoryResource> History;
         protected IndexerClient Indexers;
         protected EpisodeClient Episodes;
-        protected SeasonClient Seasons;
         protected ClientBase<NamingConfigResource> NamingConfig;
 
         private NzbDroneRunner _runner;
@@ -64,7 +63,6 @@ namespace NzbDrone.Integration.Test
             History = new ClientBase<HistoryResource>(RestClient);
             Indexers = new IndexerClient(RestClient);
             Episodes = new EpisodeClient(RestClient);
-            Seasons = new SeasonClient(RestClient);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, "config/naming");
         }
 
@@ -75,5 +73,4 @@ namespace NzbDrone.Integration.Test
             _runner.KillAll();
         }
     }
-
 }

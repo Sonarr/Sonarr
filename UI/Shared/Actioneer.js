@@ -33,7 +33,9 @@ define(
                 this._showStartMessage(options);
                 this._setSpinnerOnElement(options);
 
-                var promise = options.context.model.save();
+                var model = options.model ? options.model : options.context.model;
+
+                var promise = model.save();
                 this._handlePromise(promise, options);
             },
 
