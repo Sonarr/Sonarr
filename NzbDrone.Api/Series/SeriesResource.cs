@@ -37,6 +37,7 @@ namespace NzbDrone.Api.Series
 
         public String RemotePoster { get; set; }
         public List<Season> Seasons { get; set; }
+        public Int32 Year { get; set; }
 
         //View & Edit
         public String Path { get; set; }
