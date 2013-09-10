@@ -2,6 +2,7 @@
 using System.Net;
 using FluentAssertions;
 using NLog;
+using NzbDrone.Api;
 using NzbDrone.Api.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;
@@ -33,6 +34,17 @@ namespace NzbDrone.Integration.Test.Client
         {
             var request = BuildRequest();
             return Get<List<TResource>>(request);
+        }
+
+        public PagingResource<TResource> GetPaged(int pageNumber, int pageSize, string sortKey, string sortDir)
+        {
+            var request = BuildRequest();
+            request.AddParameter("page", pageNumber);
+            request.AddParameter("pageSize", pageSize);
+            request.AddParameter("sortKey", sortKey);
+            request.AddParameter("sortDir", sortDir);
+            return Get<PagingResource<TResource>>(request);
+
         }
 
         public TResource Post(TResource body)

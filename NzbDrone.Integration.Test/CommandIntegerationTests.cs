@@ -9,6 +9,7 @@ using RestSharp;
 namespace NzbDrone.Integration.Test
 {
     [TestFixture]
+    [Ignore]
     public class CommandIntegrationTest : IntegrationTest
     {
         [Test]
