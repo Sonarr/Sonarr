@@ -114,11 +114,6 @@ namespace NzbDrone.Core.Tv
 
         private static bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons)
         {
-            if (episode.SeasonNumber == 0)
-            {
-                return false;
-            }
-
             if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
             {
                 return false;
