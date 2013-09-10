@@ -31,14 +31,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     _logger.Warn("Not enough free space to import: {0}", localEpisode);
                     return false;
                 }
-
-                return true;
             }
             catch (Exception ex)
             {
                 _logger.ErrorException("Unable to check free disk space while importing: " + localEpisode.Path, ex);
-                throw;
             }
+
+            return true;
         }
     }
 }
