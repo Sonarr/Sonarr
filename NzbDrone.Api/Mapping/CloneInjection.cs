@@ -17,8 +17,9 @@ namespace NzbDrone.Api.Mapping
 
         protected override object SetValue(ConventionInfo conventionInfo)
         {
-            if (conventionInfo.SourceProp.Type.IsValueType || conventionInfo.SourceProp.Type == typeof(string))
+            if (conventionInfo.SourceProp.Type == conventionInfo.TargetProp.Type)
                 return conventionInfo.SourceProp.Value;
+
 
             if (conventionInfo.SourceProp.Type.IsArray)
             {

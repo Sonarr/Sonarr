@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Api.History;
 
 namespace NzbDrone.Integration.Test
 {
@@ -9,7 +11,7 @@ namespace NzbDrone.Integration.Test
         [Test]
         public void history_should_be_empty()
         {
-            var history = History.GetPaged(1,15,"date","desc");
+            var history = History.GetPaged(1, 15, "date", "desc");
 
             history.Records.Count.Should().Be(0);
             history.Page.Should().Be(1);

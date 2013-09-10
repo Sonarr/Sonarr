@@ -86,7 +86,7 @@ namespace NzbDrone.Integration.Test.Client
             return Post<List<dynamic>>(request, HttpStatusCode.BadRequest);
         }
 
-        protected RestRequest BuildRequest(string command = "")
+        public RestRequest BuildRequest(string command = "")
         {
             return new RestRequest(_resource + "/" + command.Trim('/'))
                 {
@@ -94,7 +94,7 @@ namespace NzbDrone.Integration.Test.Client
                 };
         }
 
-        protected T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()
+        public T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()
         {
             request.Method = Method.GET;
             return Execute<T>(request, statusCode);
