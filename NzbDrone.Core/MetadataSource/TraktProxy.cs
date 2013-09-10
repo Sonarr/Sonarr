@@ -83,7 +83,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Seasons = show.seasons.Select(s => new Tv.Season
             {
                 SeasonNumber = s.season
-            }).ToList();
+            }).OrderByDescending(s => s.SeasonNumber).ToList();
 
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });
