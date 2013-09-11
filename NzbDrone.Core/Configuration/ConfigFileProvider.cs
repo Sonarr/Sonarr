@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Configuration
                 {
                     EnsureDefaultConfigFile();
 
-                    var xDoc = XDocument.Load(_configFile);
+                    var xDoc = LoadConfigFile();
                     var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
                     var parentContainer = config;
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
 
-            var xDoc = XDocument.Load(_configFile);
+            var xDoc = LoadConfigFile();
             var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
             var parentContainer = config;
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
 
-            var xDoc = XDocument.Load(_configFile);
+            var xDoc = LoadConfigFile();
             var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
             var type = GetType();
@@ -220,6 +220,19 @@ namespace NzbDrone.Core.Configuration
             }
 
             xDoc.Save(_configFile);
+        }
+
+        private XDocument LoadConfigFile()
+        {
+            try
+            {
+                return XDocument.Load(_configFile);
+            }
+
+            catch (Exception ex)
+            {
+                throw new InvalidConfigFileException("config.xml is invalid, please see the wiki for steps to resolve this issue.", ex);
+            }
         }
 
         public void HandleAsync(ApplicationStartedEvent message)
