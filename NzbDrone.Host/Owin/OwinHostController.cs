@@ -60,17 +60,18 @@ namespace NzbDrone.Host.Owin
             {
                 if (ex.InnerException == null)
                 {
-                    throw ex;
+                    throw;
                 }
 
-                if (ex.InnerException as HttpListenerException == null)
+                if (ex.InnerException is HttpListenerException)
                 {
-                    throw ex;
+                    throw new PortInUseException("Port {0} is already in use, please ensure NzbDrone is not already running.",
+                             ex,
+                             _configFileProvider.Port);
                 }
 
-                throw new PortInUseException("Port {0} is already in use, please ensure NzbDrone is not already running.",
-                                             ex,
-                                             _configFileProvider.Port);
+                throw ex.InnerException;
+
             }
         }
 
