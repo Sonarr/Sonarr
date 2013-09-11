@@ -110,6 +110,7 @@
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperTests\AlterFixture.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperTests\DuplicateFixture.cs" />
+    <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
@@ -181,7 +182,6 @@
     <Compile Include="DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\QualityUpgradableSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />

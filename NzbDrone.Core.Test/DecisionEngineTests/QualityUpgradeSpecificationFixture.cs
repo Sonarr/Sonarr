@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.SDTV, false, Quality.SDTV, true, Quality.SDTV, true },
             new object[] { Quality.WEBDL720p, false, Quality.WEBDL720p, true, Quality.WEBDL720p, true },
             new object[] { Quality.SDTV, false, Quality.SDTV, false, Quality.SDTV, false },
-            new object[] { Quality.SDTV, false, Quality.DVD, true, Quality.SDTV, false },
             new object[] { Quality.WEBDL720p, false, Quality.HDTV720p, true, Quality.Bluray720p, false },
             new object[] { Quality.WEBDL720p, false, Quality.HDTV720p, true, Quality.WEBDL720p, false },
             new object[] { Quality.WEBDL720p, false, Quality.WEBDL720p, false, Quality.WEBDL720p, false },
@@ -37,7 +36,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(true);
 
-            Subject.IsUpgradable(new QualityProfile() { Cutoff = cutoff }, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
+            Subject.IsUpgradable(new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
                     .Should().Be(expected);
         }
 
@@ -46,8 +45,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(false);
 
-            Subject.IsUpgradable(new QualityProfile { Cutoff = Quality.Bluray1080p },
-                                 new QualityModel(Quality.DVD, true),
+            Subject.IsUpgradable(new QualityModel(Quality.DVD, true),
                                  new QualityModel(Quality.DVD, false)).Should().BeFalse();
         }
     }

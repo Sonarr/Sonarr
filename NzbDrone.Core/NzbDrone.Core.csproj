@@ -182,9 +182,10 @@
     <Compile Include="Datastore\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
-    <Compile Include="DecisionEngine\DownloadDecision.cs" />
+    <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
     <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotRestrictedReleaseSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />

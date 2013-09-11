@@ -6,12 +6,12 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class UpgradeDiskSpecification : IDecisionEngineSpecification
+    public class CutoffSpecification : IDecisionEngineSpecification
     {
         private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;
 
-        public UpgradeDiskSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        public CutoffSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
         {
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
             _logger = logger;
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             get
             {
-                return "Existing file on disk is of equal or higher quality";
+                return "Cutoff has already been met";
             }
         }
 
@@ -31,17 +31,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
 
-                if (!_qualityUpgradableSpecification.IsUpgradable(file.Quality, subject.ParsedEpisodeInfo.Quality))
+                
+                if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.QualityProfile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
-                    return false;
-                }
-
-                if (searchCriteria == null &&
-                    subject.ParsedEpisodeInfo.Quality.Quality == file.Quality.Quality &&
-                    subject.ParsedEpisodeInfo.Quality.Proper &&
-                    file.DateAdded < DateTime.Today.AddDays(-7))
-                {
-                    _logger.Trace("Proper for old file, skipping: {0}", subject);
                     return false;
                 }
             }

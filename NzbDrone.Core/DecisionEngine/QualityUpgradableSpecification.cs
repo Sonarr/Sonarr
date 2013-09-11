@@ -1,3 +1,4 @@
+using System;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Qualities;
@@ -7,7 +8,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IQualityUpgradableSpecification
     {
-        bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
+        bool IsUpgradable(QualityModel currentQuality, QualityModel newQuality = null);
+        bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
     }
 
     public class QualityUpgradableSpecification : IQualityUpgradableSpecification
@@ -21,7 +23,7 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
+        public bool IsUpgradable(QualityModel currentQuality, QualityModel newQuality = null)
         {
             if (newQuality != null)
             {
@@ -38,6 +40,11 @@ namespace NzbDrone.Core.DecisionEngine
                 }
             }
 
+            return true;
+        }
+
+        public bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
+        {
             if (currentQuality.Quality >= profile.Cutoff)
             {
                 _logger.Trace("Existing item meets cut-off. skipping.");
