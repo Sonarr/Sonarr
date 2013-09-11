@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
@@ -229,7 +230,7 @@ namespace NzbDrone.Core.Configuration
                 return XDocument.Load(_configFile);
             }
 
-            catch (Exception ex)
+            catch (XmlException ex)
             {
                 throw new InvalidConfigFileException("config.xml is invalid, please see the wiki for steps to resolve this issue.", ex);
             }
