@@ -6,7 +6,7 @@ using NzbDrone.Common.Exceptions;
 
 namespace NzbDrone.Core.Configuration
 {
-    public class InvalidConfigFileException : Exception
+    public class InvalidConfigFileException : NzbDroneException
     {
         public InvalidConfigFileException(string message, Exception innerException) : base(message, innerException)
         {

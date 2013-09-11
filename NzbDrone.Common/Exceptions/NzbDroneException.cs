@@ -15,5 +15,16 @@ namespace NzbDrone.Common.Exceptions
         {
 
         }
+
+        protected NzbDroneException(string message, Exception innerException, params object[] args)
+            : base(string.Format(message, args), innerException)
+        {
+
+        }
+
+        protected NzbDroneException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }
