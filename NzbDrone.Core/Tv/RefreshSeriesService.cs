@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.DataAugmentation.DailySeries;
+using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Tv
 
         private void RefreshSeriesInfo(Series series)
         {
-            _logger.Progress("Starting Series Refresh for {0}", series.Title);
+            _logger.ProgressInfo("Updating Info for {0}", series.Title);
             var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
 
             var seriesInfo = tuple.Item1;
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Tv
             _seriesService.UpdateSeries(series);
             _refreshEpisodeService.RefreshEpisodeInfo(series, tuple.Item2);
 
-            _logger.Complete("Finished series refresh for {0}", series.Title);
+            _logger.Debug("Finished series refresh for {0}", series.Title);
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
         }
 

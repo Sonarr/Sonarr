@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Common.Test.MessagingTests
 {
@@ -18,9 +15,8 @@ namespace NzbDrone.Common.Test.MessagingTests
         {
             var command1 = new DownloadedEpisodesScanCommand();
             var command2 = new DownloadedEpisodesScanCommand();
-            var comparer = new CommandEqualityComparer();
 
-            comparer.Equals(command1, command2).Should().BeTrue();
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
         }
 
         [Test]
@@ -28,9 +24,8 @@ namespace NzbDrone.Common.Test.MessagingTests
         {
             var command1 = new EpisodeSearchCommand { EpisodeId = 1 };
             var command2 = new EpisodeSearchCommand { EpisodeId = 1 };
-            var comparer = new CommandEqualityComparer();
 
-            comparer.Equals(command1, command2).Should().BeTrue();
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
         }
 
         [Test]
@@ -38,9 +33,8 @@ namespace NzbDrone.Common.Test.MessagingTests
         {
             var command1 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
             var command2 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
-            var comparer = new CommandEqualityComparer();
 
-            comparer.Equals(command1, command2).Should().BeTrue();
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeTrue();
         }
 
         [Test]
@@ -48,9 +42,8 @@ namespace NzbDrone.Common.Test.MessagingTests
         {
             var command1 = new EpisodeSearchCommand { EpisodeId = 1 };
             var command2 = new EpisodeSearchCommand { EpisodeId = 2 };
-            var comparer = new CommandEqualityComparer();
 
-            comparer.Equals(command1, command2).Should().BeFalse();
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
 
         [Test]
@@ -58,9 +51,8 @@ namespace NzbDrone.Common.Test.MessagingTests
         {
             var command1 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
             var command2 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 2 };
-            var comparer = new CommandEqualityComparer();
 
-            comparer.Equals(command1, command2).Should().BeFalse();
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
 
         [Test]
@@ -68,9 +60,8 @@ namespace NzbDrone.Common.Test.MessagingTests
         {
             var command1 = new SeasonSearchCommand { SeriesId = 1, SeasonNumber = 1 };
             var command2 = new SeasonSearchCommand { SeriesId = 2, SeasonNumber = 2 };
-            var comparer = new CommandEqualityComparer();
 
-            comparer.Equals(command1, command2).Should().BeFalse();
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
     }
 }

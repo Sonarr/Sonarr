@@ -1,18 +1,13 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
-    public class TestPushoverCommand : ICommand
+    public class TestPushoverCommand : Command
     {
-        public String CommandId { get; private set; }
         public string UserKey { get; set; }
         public int Priority { get; set; }
-
-        public TestPushoverCommand()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
     }
 }

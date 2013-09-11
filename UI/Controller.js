@@ -10,7 +10,6 @@ define(
         'Series/Details/SeriesDetailsLayout',
         'Series/SeriesCollection',
         'Missing/MissingLayout',
-        'Series/SeriesModel',
         'Calendar/CalendarLayout',
         'Logs/Layout',
         'Logs/Files/Layout',
@@ -19,7 +18,7 @@ define(
         'SeasonPass/Layout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
-    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, SeriesModel, CalendarLayout,
+    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, CalendarLayout,
         LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, SeasonPassLayout, NotFoundView) {
         return Marionette.Controller.extend({
 

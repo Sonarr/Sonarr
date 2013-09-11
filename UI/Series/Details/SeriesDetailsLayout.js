@@ -8,27 +8,20 @@ define(
         'Series/SeasonCollection',
         'Series/Details/SeasonCollectionView',
         'Series/Details/InfoView',
+        'Commands/CommandController',
         'Shared/LoadingView',
         'Shared/Actioneer',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (App,
-                 Marionette,
-                 EpisodeCollection,
-                 EpisodeFileCollection,
-                 SeasonCollection,
-                 SeasonCollectionView,
-                 InfoView,
-                 LoadingView,
-                 Actioneer) {
+    ], function (App, Marionette, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView, Actioneer) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
             template         : 'Series/Details/SeriesDetailsTemplate',
 
             regions: {
-                seasons   : '#seasons',
-                info      : '#info'
+                seasons: '#seasons',
+                info   : '#info'
             },
 
             ui: {
@@ -73,6 +66,32 @@ define(
                 this._showSeasons();
                 this._setMonitoredState();
                 this._showInfo();
+
+
+
+            },
+
+            onRender: function(){
+                Actioneer.bindToCommand({
+                    element: this.ui.refresh,
+                    command: {
+                        name    : 'refreshSeries'
+                    }
+                });
+
+                Actioneer.bindToCommand({
+                    element: this.ui.search,
+                    command: {
+                        name    : 'seriesSearch'
+                    }
+                });
+
+                Actioneer.bindToCommand({
+                    element: this.ui.rename,
+                    command: {
+                        name    : 'renameSeries'
+                    }
+                });
             },
 
             _getFanArt: function () {
@@ -127,15 +146,9 @@ define(
             },
 
             _refreshSeries: function () {
-                Actioneer.ExecuteCommand({
-                    command   : 'refreshSeries',
-                    properties: {
-                        seriesId: this.model.get('id')
-                    },
-                    element   : this.ui.refresh,
-                    leaveIcon : true,
-                    context   : this,
-                    onSuccess : this._showSeasons
+                CommandController.Execute('refreshSeries', {
+                    name    : 'refreshSeries',
+                    seriesId: this.model.id
                 });
             },
 
@@ -147,27 +160,18 @@ define(
             },
 
             _renameSeries: function () {
-                Actioneer.ExecuteCommand({
-                    command    : 'renameSeries',
-                    properties : {
-                        seriesId: this.model.get('id')
-                    },
-                    element     : this.ui.rename,
-                    context     : this,
-                    onSuccess   : this._refetchEpisodeFiles,
-                    errorMessage: 'Series search failed'
+
+                CommandController.Execute('renameSeries', {
+                    name    : 'renameSeries',
+                    seriesId: this.model.id
                 });
+
             },
 
             _seriesSearch: function () {
-                Actioneer.ExecuteCommand({
-                    command     : 'seriesSearch',
-                    properties  : {
-                        seriesId: this.model.get('id')
-                    },
-                    element     : this.ui.search,
-                    errorMessage: 'Series search failed',
-                    startMessage: 'Search for {0} started'.format(this.model.get('title'))
+                CommandController.Execute('seriesSearch', {
+                    name    : 'seriesSearch',
+                    seriesId: this.model.id
                 });
             },
 
@@ -187,14 +191,9 @@ define(
                         series           : self.model
                     });
 
-                    App.reqres.setHandler(App.Reqres.GetEpisodeFileById, function(episodeFileId){
+                    App.reqres.setHandler(App.Reqres.GetEpisodeFileById, function (episodeFileId) {
                         return self.episodeFileCollection.get(episodeFileId);
                     });
-
- /*                   self.episodeCollection.bindSignalR({
-                        onReceived: seasonCollectionView.onEpisodeGrabbed,
-                        context   : seasonCollectionView
-                    });*/
 
                     self.seasons.show(seasonCollectionView);
                 });
@@ -208,7 +207,7 @@ define(
                 this.episodeFileCollection.fetch();
             },
 
-            _onSeasonRenamed: function(event) {
+            _onSeasonRenamed: function (event) {
                 if (this.model.get('id') === event.series.get('id')) {
                     this._refetchEpisodeFiles();
                 }

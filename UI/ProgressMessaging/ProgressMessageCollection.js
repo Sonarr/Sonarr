@@ -1,31 +1,36 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
+        'app',
         'backbone',
-        'ProgressMessaging/ProgressMessageModel',
         'Shared/Messenger',
         'Mixins/backbone.signalr.mixin'
-    ], function (Backbone, ProgressMessageModel, Messenger) {
+    ], function (App, Backbone, Messenger) {
 
         var ProgressMessageCollection = Backbone.Collection.extend({
             url  : window.ApiRoot + '/progressmessage',
-            model: ProgressMessageModel
+            model: Backbone.Model,
+
+            initialize: function(){
+
+            }
+
         });
 
-        var collection = new ProgressMessageCollection().bindSignalR();
+        var collection = new ProgressMessageCollection();//.bindSignalR();
 
-        collection.signalRconnection.received(function (message) {
+        /*        collection.signalRconnection.received(function (message) {
 
-            var type = getMessengerType(message.status);
-            var hideAfter = type === 'info' ? 60 : 5;
+         var type = getMessengerType(message.status);
+         var hideAfter = type === 'info' ? 60 :5;
 
-            Messenger.show({
-                id       : message.commandId,
-                message  : message.message,
-                type     : type,
-                hideAfter: hideAfter
-            });
-        });
+         Messenger.show({
+         id       : message.commandId,
+         message  : message.message,
+         type     : type,
+         hideAfter: hideAfter
+         });
+         });*/
 
         var getMessengerType = function (status) {
             switch (status) {

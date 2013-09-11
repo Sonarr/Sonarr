@@ -1,7 +1,8 @@
 ﻿using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
 
 namespace NzbDrone.Core.IndexerSearch
 {
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.IndexerSearch
             var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, message.SeasonNumber);
             var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.Complete("Season search completed. {0} reports downloaded.", downloaded.Count);
+            _logger.ProgressInfo("Season search completed. {0} reports downloaded.", downloaded.Count);
         }
     }
 }

@@ -1,16 +1,21 @@
 'use strict';
-define({
-        Execute: function (name, properties) {
-            var data = { command: name };
+define(
+    [
+        'Commands/CommandModel',
+        'Commands/CommandCollection',
+        'underscore'
+    ], function (CommandModel, CommandCollection, _) {
 
-            if (properties) {
-                $.extend(data, properties);
+        return{
+            Execute: function (name, properties) {
+
+                var attr = _.extend({name: name.toLocaleLowerCase()}, properties);
+
+                var commandModel = new CommandModel(attr);
+
+                return commandModel.save().success(function () {
+                    CommandCollection.add(commandModel);
+                });
             }
-
-            return $.ajax({
-                type: 'POST',
-                url : window.ApiRoot + '/command',
-                data: JSON.stringify(data)
-            });
         }
     });

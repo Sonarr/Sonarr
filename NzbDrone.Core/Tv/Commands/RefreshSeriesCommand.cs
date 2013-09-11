@@ -1,24 +1,29 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Tv.Commands
 {
-    public class RefreshSeriesCommand : ICommand
+    public class RefreshSeriesCommand : Command
     {
-        public String CommandId { get; private set; }
         public int? SeriesId { get; set; }
 
         public RefreshSeriesCommand()
         {
-            CommandId = HashUtil.GenerateCommandId();
         }
 
         public RefreshSeriesCommand(int? seriesId)
         {
-            CommandId = HashUtil.GenerateCommandId();
-
             SeriesId = seriesId;
+        }
+
+        public override bool SendUpdatesToClient
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }

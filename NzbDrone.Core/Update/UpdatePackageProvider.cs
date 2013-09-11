@@ -1,37 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
+using RestSharp;
+using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.Update
 {
     public interface IUpdatePackageProvider
     {
-        UpdatePackage GetLatestUpdate();
+        UpdatePackage GetLatestUpdate(string branch, Version currentVersion);
     }
 
     public class UpdatePackageProvider : IUpdatePackageProvider
     {
-        private readonly IConfigFileProvider _configFileProvider;
-        private readonly IHttpProvider _httpProvider;
-        private readonly Logger _logger;
-
-        public UpdatePackageProvider(IConfigFileProvider configFileProvider, IHttpProvider httpProvider, Logger logger)
+        public UpdatePackage GetLatestUpdate(string branch, Version currentVersion)
         {
-            _configFileProvider = configFileProvider;
-            _httpProvider = httpProvider;
-            _logger = logger;
-        }
+            var restClient = new RestClient(Services.RootUrl);
 
-        public UpdatePackage GetLatestUpdate()
-        {
-            var url = String.Format("{0}/v1/update/{1}?version={2}", Services.RootUrl, _configFileProvider.Branch, BuildInfo.Version);
-            var update = JsonConvert.DeserializeObject<UpdatePackageAvailable>(_httpProvider.DownloadString(url));
+            var request = new RestRequest("/v1/update/{branch}");
+
+            request.AddParameter("version", currentVersion);
+            request.AddUrlSegment("branch", branch);
+
+            var update = restClient.ExecuteAndValidate<UpdatePackageAvailable>(request);
 
             if (!update.Available) return null;
 

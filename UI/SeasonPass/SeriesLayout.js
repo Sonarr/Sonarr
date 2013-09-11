@@ -3,8 +3,8 @@ define(
     [
         'marionette',
         'Series/SeasonCollection',
-        'Shared/Actioneer'
-    ], function (Marionette, SeasonCollection, Actioneer) {
+        'Cells/ToggleCell'
+    ], function (Marionette, Backgrid, SeasonCollection, ToggleCell) {
         return Marionette.Layout.extend({
             template: 'SeasonPass/SeriesLayoutTemplate',
 

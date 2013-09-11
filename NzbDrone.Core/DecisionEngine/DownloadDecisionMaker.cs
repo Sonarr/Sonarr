@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.DecisionEngine.Specifications.Search;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.Serializer;
@@ -44,12 +43,12 @@ namespace NzbDrone.Core.DecisionEngine
         {
             if (reports.Any())
             {
-                _logger.Progress("Processing {0} reports", reports.Count);
+                _logger.ProgressInfo("Processing {0} reports", reports.Count);
             }
 
             else
             {
-                _logger.Progress("No reports found");
+                _logger.ProgressInfo("No reports found");
             }
 
             var reportNumber = 1;
@@ -57,7 +56,7 @@ namespace NzbDrone.Core.DecisionEngine
             foreach (var report in reports)
             {
                 DownloadDecision decision = null;
-                _logger.Progress("Processing report {0}/{1}", reportNumber, reports.Count);
+                _logger.ProgressTrace("Processing report {0}/{1}", reportNumber, reports.Count);
 
                 try
                 {

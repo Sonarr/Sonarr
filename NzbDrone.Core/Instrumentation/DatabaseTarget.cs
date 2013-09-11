@@ -3,8 +3,8 @@ using NLog.Config;
 using NLog;
 using NLog.Layouts;
 using NLog.Targets;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
 
 namespace NzbDrone.Core.Instrumentation
 {

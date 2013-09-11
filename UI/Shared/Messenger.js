@@ -1,13 +1,14 @@
 'use strict';
 define(function () {
     return {
+
         show: function (options) {
 
             if (!options.type) {
                 options.type = 'info';
             }
 
-            if (!options.hideAfter) {
+            if (options.hideAfter === undefined) {
                 switch (options.type) {
                     case 'info':
                         options.hideAfter = 5;
@@ -18,7 +19,7 @@ define(function () {
                         break;
 
                     default :
-                        options.hideAfter = 0;
+                        options.hideAfter = 5;
                 }
             }
 
@@ -30,6 +31,7 @@ define(function () {
                 id             : options.id
             });
         },
+
 
         monitor: function (options) {
 

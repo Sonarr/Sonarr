@@ -1,16 +1,20 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Indexers
 {
-    public class RssSyncCommand : ICommand
+    public class RssSyncCommand : Command
     {
-        public String CommandId { get; private set; }
 
-        public RssSyncCommand()
+        public override bool SendUpdatesToClient
         {
-            CommandId = HashUtil.GenerateCommandId();
+            get
+            {
+                return true;
+            }
         }
+
     }
 }

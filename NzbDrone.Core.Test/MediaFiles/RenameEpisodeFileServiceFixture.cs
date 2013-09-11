@@ -3,11 +3,11 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles

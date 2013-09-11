@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -33,13 +34,13 @@ namespace NzbDrone.Core.Indexers
 
         public void Sync()
         {
-            _logger.Progress("Starting RSS Sync");
+            _logger.ProgressInfo("Starting RSS Sync");
 
             var reports = _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
             var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.Complete("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, downloaded.Count());
+            _logger.ProgressInfo("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, downloaded.Count());
         }
 
         public void Execute(RssSyncCommand message)

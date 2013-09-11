@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Common.Messaging.Events;
-using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Messaging.Tracking;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Update.Commands;
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Jobs
 
         public void HandleAsync(CommandExecutedEvent message)
         {
-            var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.TrackedCommand.Command.GetType().FullName);
+            var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
 
             if (scheduledTask != null)
             {

@@ -8,6 +8,7 @@ using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;
@@ -131,7 +132,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var indexers = _indexerService.GetAvailableIndexers().ToList();
 
-            _logger.Progress("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
+            _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
 
             var reports = new List<ReportInfo>();
             var taskList = new List<Task>();

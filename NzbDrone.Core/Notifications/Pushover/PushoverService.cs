@@ -1,4 +1,4 @@
-﻿using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Core.Messaging;
 using RestSharp;
 using NzbDrone.Core.Rest;
 

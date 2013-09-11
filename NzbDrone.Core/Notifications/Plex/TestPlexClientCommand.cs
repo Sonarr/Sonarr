@@ -1,20 +1,15 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
-    public class TestPlexClientCommand : ICommand
+    public class TestPlexClientCommand : Command
     {
-        public String CommandId { get; private set; }
         public string Host { get; set; }
         public int Port { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        
-        public TestPlexClientCommand()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
     }
 }

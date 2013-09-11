@@ -1,24 +1,23 @@
-using System;
-using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.MediaFiles.Commands
 {
-    public class RenameSeasonCommand : ICommand
+    public class RenameSeasonCommand : Command
     {
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
 
-        public String CommandId { get; private set; }
-
-        public RenameSeasonCommand()
+        public override bool SendUpdatesToClient
         {
-            CommandId = HashUtil.GenerateCommandId();
+            get
+            {
+                return true;
+            }
         }
 
         public RenameSeasonCommand(int seriesId, int seasonNumber)
         {
-            CommandId = HashUtil.GenerateCommandId();
             SeriesId = seriesId;
             SeasonNumber = seasonNumber;
         }

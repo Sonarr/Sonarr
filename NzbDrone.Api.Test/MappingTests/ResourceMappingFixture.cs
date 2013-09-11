@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Marr.Data;
 using NUnit.Framework;
+using NzbDrone.Api.Commands;
 using NzbDrone.Api.Config;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.History;
@@ -17,12 +18,15 @@ using NzbDrone.Api.Update;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Update;
+using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
 using System.Linq;
 
@@ -40,9 +44,9 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
         [TestCase(typeof(Core.History.History), typeof(HistoryResource))]
-        [TestCase(typeof(UpdatePackage), typeof(UpdateResource))]
         [TestCase(typeof(Quality), typeof(QualityResource))]
         [TestCase(typeof(Log), typeof(LogResource))]
+        [TestCase(typeof(Command), typeof(CommandResource))]
         public void matching_fields(Type modelType, Type resourceType)
         {
             MappingValidation.ValidateMapping(modelType, resourceType);
@@ -115,6 +119,15 @@ namespace NzbDrone.Api.Test.MappingTests
 
             profileResource.InjectTo<QualityProfile>();
 
+        }
+
+
+
+        [Test]
+        public void should_map_tracked_command()
+        {
+            var profileResource = new ApplicationUpdateCommand();
+            profileResource.InjectTo<CommandResource>();
         }
     }
 

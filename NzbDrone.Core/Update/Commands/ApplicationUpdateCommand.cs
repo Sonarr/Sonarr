@@ -1,16 +1,18 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Update.Commands
 {
-    public class ApplicationUpdateCommand : ICommand
+    public class ApplicationUpdateCommand : Command
     {
-        public String CommandId { get; private set; }
-
-        public ApplicationUpdateCommand()
+        public override bool SendUpdatesToClient
         {
-            CommandId = HashUtil.GenerateCommandId();
+            get
+            {
+                return true;
+            }
         }
     }
 }

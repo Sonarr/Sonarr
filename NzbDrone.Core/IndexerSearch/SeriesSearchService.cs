@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadedCount += _downloadApprovedReports.DownloadApproved(decisions).Count;
             }
 
-            _logger.Complete("Series search completed. {0} reports downloaded.", downloadedCount);
+            _logger.ProgressInfo("Series search completed. {0} reports downloaded.", downloadedCount);
         }
     }
 }

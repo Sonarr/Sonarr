@@ -3,15 +3,53 @@ define(
     [
         'Commands/CommandController',
         'Commands/CommandCollection',
-        'Shared/Messenger'],
-    function(CommandController, CommandCollection, Messenger) {
+        'Shared/Messenger',
+        'jQuery/jquery.spin'
+    ], function (CommandController, CommandCollection, Messenger) {
 
         var actioneer = Marionette.AppRouter.extend({
 
             initialize: function () {
-                this.trackedCommands = [];
+                this.trackedCommands =
+                    [
+                    ];
                 CommandCollection.fetch();
                 this.listenTo(CommandCollection, 'sync', this._handleCommands);
+            },
+
+
+            bindToCommand: function (options) {
+
+                var self = this;
+                options.idleIcon = this._getIconClass(options.element);
+
+                var existingCommand = CommandCollection.findCommand(options.command);
+
+                if (existingCommand) {
+                    this._bindToCommandModel.call(this, existingCommand, options);
+                }
+
+                this.listenTo(CommandCollection, 'add sync', function (model) {
+                    if (model.isSameCommand(options.command)) {
+                        self._bindToCommandModel.call(self, model, options);
+                    }
+                });
+            },
+
+            _bindToCommandModel: function bindToCommand(model, options) {
+
+                if (!model.isActive()) {
+                    options.element.stopSpin();
+                    return;
+                }
+
+                this.listenTo(model, 'change:state', function (model) {
+                    if (!model.isActive()) {
+                        options.element.stopSpin();
+                    }
+                });
+
+                options.element.startSpin();
             },
 
             ExecuteCommand: function (options) {
@@ -62,7 +100,7 @@ define(
             _handleCommands: function () {
                 var self = this;
 
-                _.each(this.trackedCommands, function (trackedCommand){
+                _.each(this.trackedCommands, function (trackedCommand) {
                     if (trackedCommand.completed === true) {
                         return;
                     }
@@ -95,12 +133,12 @@ define(
                 });
             },
 
-            _getIconClass: function(element) {
+            _getIconClass: function (element) {
                 if (!element) {
                     return '';
                 }
 
-                return element.attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/)[0];
+                return element.find('i').attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/)[0];
             },
 
             _setSpinnerOnElement: function (options) {
@@ -195,4 +233,4 @@ define(
         });
 
         return new actioneer();
-});
+    });

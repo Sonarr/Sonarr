@@ -1,22 +1,16 @@
 using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.MediaFiles.Commands
 {
-    public class CleanMediaFileDb : ICommand
+    public class CleanMediaFileDb : Command
     {
-        public String CommandId { get; private set; }
         public int SeriesId { get; private set; }
-
-        public CleanMediaFileDb()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
 
         public CleanMediaFileDb(int seriesId)
         {
-            CommandId = HashUtil.GenerateCommandId();
             SeriesId = seriesId;
         }
     }
