@@ -125,6 +125,7 @@
     <Compile Include="Owin\NlogTextWriter.cs" />
     <Compile Include="Owin\OwinServiceProvider.cs" />
     <Compile Include="Owin\OwinTraceOutputFactory.cs" />
+    <Compile Include="Owin\PortInUseException.cs" />
     <Compile Include="PlatformValidation.cs" />
     <Compile Include="MainAppContainerBuilder.cs" />
     <Compile Include="ApplicationModes.cs" />
