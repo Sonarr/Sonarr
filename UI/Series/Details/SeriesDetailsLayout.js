@@ -44,11 +44,7 @@ define(
             initialize: function () {
                 $('body').addClass('backdrop');
 
-                this.listenTo(this.model, 'sync', function () {
-                    this._setMonitoredState();
-                    this._showInfo();
-                }, this);
-
+                this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
                 this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
                 this.listenTo(App.vent, App.Events.SeasonRenamed, this._onSeasonRenamed);
             },
@@ -68,28 +64,27 @@ define(
                 this._showInfo();
 
 
-
             },
 
-            onRender: function(){
+            onRender: function () {
                 Actioneer.bindToCommand({
                     element: this.ui.refresh,
                     command: {
-                        name    : 'refreshSeries'
+                        name: 'refreshSeries'
                     }
                 });
 
                 Actioneer.bindToCommand({
                     element: this.ui.search,
                     command: {
-                        name    : 'seriesSearch'
+                        name: 'seriesSearch'
                     }
                 });
 
                 Actioneer.bindToCommand({
                     element: this.ui.rename,
                     command: {
-                        name    : 'renameSeries'
+                        name: 'renameSeries'
                     }
                 });
             },
@@ -116,22 +111,19 @@ define(
             },
 
             _toggleMonitored: function () {
-                var name = 'monitored';
-                this.model.set(name, !this.model.get(name), { silent: true });
-
-                Actioneer.SaveModel({
-                    context: this,
-                    element: this.ui.monitored,
-                    always : this._setMonitoredState()
+                var savePromise = this.model.save('monitored', !this.model.get('monitored'), {
+                    wait: true
                 });
+
+                this.ui.monitored.spinForPromise(savePromise);
             },
 
             _setMonitoredState: function () {
                 var monitored = this.model.get('monitored');
 
-                this.ui.monitored.removeClass('icon-spin icon-spinner');
+                this.ui.monitored.removeAttr('data-idle-icon');
 
-                if (this.model.get('monitored')) {
+                if (monitored) {
                     this.ui.monitored.addClass('icon-nd-monitored');
                     this.ui.monitored.removeClass('icon-nd-unmonitored');
                 }
