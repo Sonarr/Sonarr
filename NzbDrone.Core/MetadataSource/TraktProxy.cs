@@ -30,10 +30,10 @@ namespace NzbDrone.Core.MetadataSource
             try
             {
                 var client = BuildClient("search", "shows");
-                var restRequest = new RestRequest(GetSearchTerm(title));
-                var response = client.ExecuteAndValidate<List<SearchShow>>(restRequest);
+                var restRequest = new RestRequest(GetSearchTerm(title) +"/30/seasons");
+                var response = client.ExecuteAndValidate<List<Show>>(restRequest);
 
-                return response.Select(MapSearchSeries).ToList();
+                return response.Select(MapSeries).ToList();
             }
             catch (WebException ex)
             {
@@ -71,6 +71,7 @@ namespace NzbDrone.Core.MetadataSource
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
+            series.Year = show.year;
             series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
             series.Runtime = show.runtime;
@@ -79,27 +80,10 @@ namespace NzbDrone.Core.MetadataSource
             series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
             series.Status = GetSeriesStatus(show.status);
 
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.images.fanart });
-            return series;
-        }
-
-        private static Series MapSearchSeries(SearchShow show)
-        {
-            var series = new Series();
-            series.TvdbId = show.tvdb_id;
-            series.TvRageId = show.tvrage_id;
-            series.ImdbId = show.imdb_id;
-            series.Title = show.title;
-            series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
-            series.FirstAired = FromIso(show.first_aired_iso);
-            series.Overview = show.overview;
-            series.Runtime = show.runtime;
-            series.Network = show.network;
-            series.AirTime = show.air_time_utc;
-            series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
-            series.Status = GetSeriesStatus(show.status);
+            series.Seasons = show.seasons.Select(s => new Tv.Season
+            {
+                SeasonNumber = s.season
+            }).OrderByDescending(s => s.SeasonNumber).ToList();
 
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });

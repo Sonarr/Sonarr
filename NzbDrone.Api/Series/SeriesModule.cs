@@ -117,7 +117,6 @@ namespace NzbDrone.Api.Series
         {
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
-            resource.SeasonCount = seriesStatistics.SeasonCount;
             resource.NextAiring = seriesStatistics.NextAiring;
         }
     }

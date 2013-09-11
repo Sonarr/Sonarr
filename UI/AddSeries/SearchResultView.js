@@ -3,7 +3,6 @@ define(
     [
         'app',
         'marionette',
-
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
         'AddSeries/RootFolders/Layout',
@@ -15,13 +14,14 @@ define(
 
         return Marionette.ItemView.extend({
 
-            template: 'AddSeries/SearchResultTemplate',
+            template: 'AddSeries/SearchResultViewTemplate',
 
             ui: {
                 qualityProfile: '.x-quality-profile',
                 rootFolder    : '.x-root-folder',
                 addButton     : '.x-add',
-                overview      : '.x-overview'
+                overview      : '.x-overview',
+                startingSeason: '.x-starting-season'
             },
 
             events: {
@@ -55,6 +55,12 @@ define(
 
                 if (RootFolders.get(defaultRoot)) {
                     this.ui.rootFolder.val(defaultRoot);
+                }
+
+                var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
+
+                if (minSeasonNotZero) {
+                    this.ui.startingSeason.val(minSeasonNotZero.seasonNumber);
                 }
 
                 //TODO: make this work via onRender, FM?
@@ -117,14 +123,15 @@ define(
 
                 var quality = this.ui.qualityProfile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
+                var startingSeason = this.ui.startingSeason.val();
 
                 this.model.set('qualityProfileId', quality);
                 this.model.set('rootFolderPath', rootFolderPath);
+                this.model.setSeasonPass(startingSeason);
 
                 var self = this;
 
                 SeriesCollection.add(this.model);
-
 
                 this.model.save().done(function () {
                     self.close();

@@ -62,4 +62,12 @@ define(
 
             return new Handlebars.SafeString('<span class="label label-info">{0} Seasons</span>'.format(seasonCount))
         });
+
+        Handlebars.registerHelper('titleWithYear', function () {
+            if (this.title.endsWith(' ({0})'.format(this.year))) {
+                return this.title;
+            }
+
+            return '{0} ({1})'.format(this.title, this.year);
+        });
     });

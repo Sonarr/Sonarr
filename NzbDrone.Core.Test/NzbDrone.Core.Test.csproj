@@ -177,7 +177,6 @@
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesRepositoryReadFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithoutFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesBetweenDatesFixture.cs" />
-    <Compile Include="TvTests\SeasonProviderTest.cs" />
     <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
@@ -188,9 +187,6 @@
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
-    <Compile Include="TvTests\SeasonServiceTests\HandleEpisodeInfoDeletedEventFixture.cs" />
-    <Compile Include="TvTests\SeasonServiceTests\SetSeasonPassFixture.cs" />
-    <Compile Include="TvTests\SeasonServiceTests\SetMonitoredFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />

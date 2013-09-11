@@ -24,16 +24,10 @@ define(
                 this.series.show(new LoadingView());
 
                 this.seriesCollection = SeriesCollection;
-                this.seasonCollection = new SeasonCollection();
 
-                var promise = this.seasonCollection.fetch();
-
-                promise.done(function () {
-                    self.series.show(new SeriesCollectionView({
-                        collection: self.seriesCollection,
-                        seasonCollection: self.seasonCollection
-                    }));
-                });
+                self.series.show(new SeriesCollectionView({
+                    collection: self.seriesCollection
+                }));
             }
         });
     });

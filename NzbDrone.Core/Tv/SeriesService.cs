@@ -37,18 +37,21 @@ namespace NzbDrone.Core.Tv
         private readonly IConfigService _configService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly ISceneMappingService _sceneMappingService;
+        private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
                              IConfigService configServiceService,
                              IMessageAggregator messageAggregator,
                              ISceneMappingService sceneMappingService,
+                             IEpisodeService episodeService,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
             _messageAggregator = messageAggregator;
             _sceneMappingService = sceneMappingService;
+            _episodeService = episodeService;
             _logger = logger;
         }
 
@@ -155,6 +158,11 @@ namespace NzbDrone.Core.Tv
 
         public Series UpdateSeries(Series series)
         {
+            foreach (var season in series.Seasons)
+            {
+                _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
+            }
+
             return _seriesRepository.Update(series);
         }
 

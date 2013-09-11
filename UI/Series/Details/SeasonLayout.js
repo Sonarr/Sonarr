@@ -117,8 +117,10 @@ define(
             _seasonMonitored: function () {
                 var name = 'monitored';
                 this.model.set(name, !this.model.get(name));
+                this.series.setSeasonMonitored(this.model.get('seasonNumber'));
 
                 Actioneer.SaveModel({
+                    model  : this.series,
                     context: this,
                     element: this.ui.seasonMonitored,
                     always : this._afterSeasonMonitored

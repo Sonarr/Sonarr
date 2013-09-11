@@ -113,12 +113,12 @@ define(
                 this.ui.monitored.removeClass('icon-spin icon-spinner');
 
                 if (this.model.get('monitored')) {
-                    this.ui.monitored.addClass('icon-bookmark');
-                    this.ui.monitored.removeClass('icon-bookmark-empty');
+                    this.ui.monitored.addClass('icon-nd-monitored');
+                    this.ui.monitored.removeClass('icon-nd-unmonitored');
                 }
                 else {
-                    this.ui.monitored.addClass('icon-bookmark-empty');
-                    this.ui.monitored.removeClass('icon-bookmark');
+                    this.ui.monitored.addClass('icon-nd-unmonitored');
+                    this.ui.monitored.removeClass('icon-nd-monitored');
                 }
             },
 
@@ -176,11 +176,11 @@ define(
 
                 this.seasons.show(new LoadingView());
 
-                this.seasonCollection = new SeasonCollection();
+                this.seasonCollection = new SeasonCollection(this.model.get('seasons'));
                 this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id });
                 this.episodeFileCollection = new EpisodeFileCollection({ seriesId: this.model.id });
 
-                $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch(), this.seasonCollection.fetch({data: { seriesId: this.model.id }})).done(function () {
+                $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function () {
                     var seasonCollectionView = new SeasonCollectionView({
                         collection       : self.seasonCollection,
                         episodeCollection: self.episodeCollection,

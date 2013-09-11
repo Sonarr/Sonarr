@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -64,11 +65,28 @@ namespace NzbDrone.Core.Tv
                 _logger.WarnException("Couldn't update series path for " + series.Path, e);
             }
 
+            series.Seasons = UpdateSeasons(series, seriesInfo);
+
             _seriesService.UpdateSeries(series);
             _refreshEpisodeService.RefreshEpisodeInfo(series, tuple.Item2);
 
             _logger.Complete("Finished series refresh for {0}", series.Title);
             _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
+        }
+
+        private List<Season> UpdateSeasons(Series series, Series seriesInfo)
+        {
+            foreach (var season in seriesInfo.Seasons)
+            {
+                var existingSeason = series.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
+                
+                if (existingSeason != null)
+                {
+                    season.Monitored = existingSeason.Monitored;
+                }
+            }
+
+            return seriesInfo.Seasons;
         }
 
         public void Execute(RefreshSeriesCommand message)
