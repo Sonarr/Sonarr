@@ -64,7 +64,7 @@ define(
         });
 
         Handlebars.registerHelper('titleWithYear', function () {
-            if (this.title.endsWith(' ({0})'.format(this.year))) {
+            if (this.title.match(/\s\(\d{4}\)$/)) {
                 return this.title;
             }
 
