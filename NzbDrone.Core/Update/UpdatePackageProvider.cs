@@ -1,7 +1,5 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
 using RestSharp;
 using NzbDrone.Core.Rest;
 

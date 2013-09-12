@@ -1,5 +1,4 @@
-﻿using System.IO;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Parser.Model;
 

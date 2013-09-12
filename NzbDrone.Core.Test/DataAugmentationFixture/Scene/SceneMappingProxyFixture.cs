@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;
 

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
-using NLog;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Newznab

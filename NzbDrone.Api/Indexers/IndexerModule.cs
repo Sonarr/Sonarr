@@ -6,7 +6,6 @@ using NzbDrone.Api.REST;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
 using FluentValidation;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Indexers

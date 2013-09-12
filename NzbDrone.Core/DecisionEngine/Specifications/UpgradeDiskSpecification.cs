@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;

@@ -1,16 +1,13 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging;
-using NzbDrone.Core.ProgressMessaging;
 using TinyIoC;
 
 namespace NzbDrone.Api

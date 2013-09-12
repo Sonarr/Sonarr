@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;

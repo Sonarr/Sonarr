@@ -11,7 +11,6 @@ using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 {

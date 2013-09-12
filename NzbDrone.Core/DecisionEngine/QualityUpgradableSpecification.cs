@@ -1,6 +1,4 @@
-using System;
 using NLog;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 

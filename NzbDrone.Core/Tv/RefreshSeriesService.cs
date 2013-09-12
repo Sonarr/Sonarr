@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging;

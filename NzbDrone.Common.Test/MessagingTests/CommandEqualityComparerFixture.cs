@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Common.Test.MessagingTests

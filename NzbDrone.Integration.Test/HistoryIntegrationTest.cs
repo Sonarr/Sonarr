@@ -1,7 +1,5 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Api.History;
 
 namespace NzbDrone.Integration.Test
 {

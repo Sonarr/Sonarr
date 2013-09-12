@@ -2,7 +2,6 @@
 using Nancy;
 using NLog;
 using NzbDrone.Api.Mapping;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using NLog;
-using NzbDrone.Common.Instrumentation;
+﻿using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging;

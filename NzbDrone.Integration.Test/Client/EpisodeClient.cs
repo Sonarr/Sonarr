@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Series;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test.Client

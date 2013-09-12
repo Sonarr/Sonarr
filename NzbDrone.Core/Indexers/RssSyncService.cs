@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Instrumentation;

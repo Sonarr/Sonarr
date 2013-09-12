@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using NLog;
+﻿using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
