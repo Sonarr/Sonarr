@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv.Events;
 

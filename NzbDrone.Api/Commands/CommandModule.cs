@@ -1,47 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Api.Validation;
 using NzbDrone.Common.Composition;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Common.Messaging.Tracking;
+using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Tracking;
+using NzbDrone.Core.ProgressMessaging;
+
 
 namespace NzbDrone.Api.Commands
 {
-    public class CommandModule : NzbDroneRestModule<CommandResource>
+    public class CommandModule : NzbDroneRestModuleWithSignalR<CommandResource, Command>, IHandle<CommandUpdatedEvent>
     {
         private readonly IMessageAggregator _messageAggregator;
         private readonly IContainer _container;
         private readonly ITrackCommands _trackCommands;
 
         public CommandModule(IMessageAggregator messageAggregator, IContainer container, ITrackCommands trackCommands)
+            : base(messageAggregator)
         {
             _messageAggregator = messageAggregator;
             _container = container;
             _trackCommands = trackCommands;
 
-            Post["/"] = x => RunCommand(ReadResourceFromRequest());
-            Get["/"] = x => GetAllCommands();
+            GetResourceById = GetCommand;
+            CreateResource = StartCommand;
+            GetResourceAll = GetAllCommands;
+
+            PostValidator.RuleFor(c => c.Name).NotBlank();
         }
 
-        private Response RunCommand(CommandResource resource)
+        private CommandResource GetCommand(int id)
+        {
+            return _trackCommands.GetById(id).InjectTo<CommandResource>();
+        }
+
+        private int StartCommand(CommandResource commandResource)
         {
             var commandType =
-                _container.GetImplementations(typeof(ICommand))
-                          .Single(c => c.Name.Replace("Command", "")
-                          .Equals(resource.Command, StringComparison.InvariantCultureIgnoreCase));
+              _container.GetImplementations(typeof(Command))
+                        .Single(c => c.Name.Replace("Command", "")
+                        .Equals(commandResource.Name, StringComparison.InvariantCultureIgnoreCase));
 
             dynamic command = Request.Body.FromJson(commandType);
 
-            var response = (TrackedCommand) _messageAggregator.PublishCommandAsync(command);
-
-            return response.AsResponse(HttpStatusCode.Created);
+            var trackedCommand = (Command)_messageAggregator.PublishCommandAsync(command);
+            return trackedCommand.Id;
         }
 
-        private Response GetAllCommands()
+        private List<CommandResource> GetAllCommands()
         {
-            return _trackCommands.AllTracked().AsResponse();
+            return ToListResource(_trackCommands.RunningCommands);
+        }
+
+        public void Handle(CommandUpdatedEvent message)
+        {
+            if (message.Command.SendUpdatesToClient)
+            {
+                BroadcastResourceChange(ModelAction.Updated, message.Command.Id);
+            }
         }
     }
 }

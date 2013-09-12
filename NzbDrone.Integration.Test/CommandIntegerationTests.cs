@@ -2,7 +2,6 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Commands;
-using NzbDrone.Common.Messaging.Tracking;
 using NzbDrone.Common.Serializer;
 using RestSharp;
 
@@ -21,7 +20,7 @@ namespace NzbDrone.Integration.Test
                 Method = Method.POST
             };
 
-            request.AddBody(new CommandResource {Command = "rsssync"});
+            request.AddBody(new CommandResource { Name = "rsssync" });
 
             var restClient = new RestClient("http://localhost:8989/api");
             var response = restClient.Execute(request);
@@ -34,8 +33,8 @@ namespace NzbDrone.Integration.Test
             response.ErrorMessage.Should().BeBlank();
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var trackedCommand = Json.Deserialize<TrackedCommand>(response.Content);
-            trackedCommand.Id.Should().NotBeNullOrEmpty();
+            var trackedCommand = Json.Deserialize<CommandResource>(response.Content);
+            trackedCommand.Id.Should().NotBe(0);
         }
     }
 }

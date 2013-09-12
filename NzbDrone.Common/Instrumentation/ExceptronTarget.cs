@@ -4,7 +4,6 @@ using Exceptron.Client;
 using Exceptron.Client.Configuration;
 using NLog;
 using NLog.Common;
-using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
@@ -22,9 +21,6 @@ namespace NzbDrone.Common.Instrumentation
         /// <see cref="ExceptronClient"/> instance that Nlog Target uses to report the exceptions.
         /// </summary>
         public IExceptronClient ExceptronClient { get; internal set; }
-
-
-
 
         protected override void InitializeTarget()
         {

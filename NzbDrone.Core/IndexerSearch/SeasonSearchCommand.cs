@@ -1,18 +1,21 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public class SeasonSearchCommand : ICommand
+    public class SeasonSearchCommand : Command
     {
-        public String CommandId { get; private set; }
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
 
-        public SeasonSearchCommand()
+        public override bool SendUpdatesToClient
         {
-            CommandId = HashUtil.GenerateCommandId();
+            get
+            {
+                return true;
+            }
         }
     }
 }

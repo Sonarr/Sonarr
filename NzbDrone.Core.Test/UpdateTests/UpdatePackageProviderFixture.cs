@@ -1,22 +1,26 @@
+using System;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
-using System.Linq;
 
 namespace NzbDrone.Core.Test.UpdateTests
 {
     public class UpdatePackageProviderFixture : CoreTest<UpdatePackageProvider>
     {
         [Test]
-        public void should_get_list_of_available_updates()
+        public void no_update_when_version_higher()
         {
             UseRealHttp();
+            Subject.GetLatestUpdate("master", new Version(10,0)).Should().BeNull();
+        }
 
-            Mocker.GetMock<IConfigFileProvider>().SetupGet(c => c.Branch).Returns("master");
-
-            Subject.GetLatestUpdate().Should().BeNull();
+        [Test]
+        public void finds_update_when_version_lower()
+        {
+            UseRealHttp();
+            Subject.GetLatestUpdate("master", new Version(1, 0)).Should().NotBeNull();
         }
     }
 }

@@ -5,8 +5,8 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Instrumentation.Commands;
+using NzbDrone.Core.Messaging;
 
 namespace NzbDrone.Core.Instrumentation
 {

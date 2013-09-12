@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Indexers

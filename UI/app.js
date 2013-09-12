@@ -181,8 +181,9 @@ require.config({
 define(
     [
         'marionette',
+        'Shared/SignalRBroadcaster',
         'Instrumentation/StringFormat'
-    ], function (Marionette) {
+    ], function (Marionette, SignalRBroadcaster) {
 
         var app = new Marionette.Application();
 
@@ -209,6 +210,8 @@ define(
         app.addInitializer(function () {
             console.log('starting application');
         });
+
+        app.addInitializer(SignalRBroadcaster.appInitializer, {app: app});
 
         app.addRegions({
             navbarRegion: '#nav-region',

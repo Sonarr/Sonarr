@@ -3,9 +3,8 @@ define(
     [
         'app',
         'marionette',
-        'Shared/Actioneer',
-        'Shared/Messenger'
-    ], function (App, Marionette, Actioneer, Messenger) {
+        'Commands/CommandController'
+    ], function (App, Marionette, CommandController) {
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
@@ -15,13 +14,8 @@ define(
                 'click': 'onClick'
             },
 
-            ui: {
-                icon: '.x-icon'
-            },
-
             initialize: function () {
                 this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
-                this.idle = true;
             },
 
             onRender: function () {
@@ -30,33 +24,34 @@ define(
                     this.invokeCallback();
                 }
 
-                if(!this.model.get('title')){
+                if (!this.model.get('title')) {
                     this.$el.addClass('btn-icon-only');
+                }
+
+                var command = this.model.get('command');
+                if (command) {
+                    CommandController.bindToCommand({
+                        command: {name: command},
+                        element: this.$el
+                    });
                 }
             },
 
             onClick: function () {
-                if (this.idle) {
-                    this.invokeCallback();
-                    this.invokeRoute();
-                    this.invokeCommand();
+
+                if (this.$el.hasClass('disabled')) {
+                    return;
                 }
+
+                this.invokeCallback();
+                this.invokeRoute();
+                this.invokeCommand();
             },
 
             invokeCommand: function () {
                 var command = this.model.get('command');
                 if (command) {
-                    this.idle = false;
-
-                    Actioneer.ExecuteCommand({
-                        command       : command,
-                        button        : this.$el,
-                        element       : this.ui.icon,
-                        errorMessage  : this.model.get('errorMessage'),
-                        successMessage: this.model.get('successMessage'),
-                        always        : this._commandAlways,
-                        context       : this
-                    });
+                    CommandController.Execute(command);
                 }
             },
 
@@ -82,12 +77,6 @@ define(
                 var callback = this.model.get('callback');
                 if (callback) {
                     callback.call(this.model.ownerContext);
-                }
-            },
-
-            _commandAlways: function () {
-                if (!this.isClosed) {
-                    this.idle = true;
                 }
             }
         });

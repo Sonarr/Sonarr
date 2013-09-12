@@ -27,5 +27,10 @@ namespace NzbDrone.Api.Validation
         {
             return ruleBuilder.SetValidator(new PathValidator());
         }
+
+        public static IRuleBuilderOptions<T, string> NotBlank<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new NotNullValidator()).SetValidator(new NotEmptyValidator(""));
+        }
     }
 }

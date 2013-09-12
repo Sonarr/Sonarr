@@ -5,6 +5,10 @@ define(
     ], function (Marionette) {
 
         return  Marionette.ItemView.extend({
-            template: 'Series/Details/InfoViewTemplate'
+            template: 'Series/Details/InfoViewTemplate',
+
+            initialize: function () {
+                this.listenTo(this.model, 'change', this.render);
+            }
         });
     });

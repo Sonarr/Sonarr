@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging;
+
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {

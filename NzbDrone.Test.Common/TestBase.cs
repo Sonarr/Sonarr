@@ -9,6 +9,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common

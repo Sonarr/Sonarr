@@ -6,11 +6,11 @@ define([
     'Settings/Notifications/Model',
     'Settings/Notifications/DeleteView',
     'Shared/Messenger',
-    'Shared/Actioneer',
+    'Commands/CommandController',
     'Mixins/AsModelBoundView',
     'Form/FormBuilder'
 
-], function (App, Marionette, NotificationModel, DeleteView, Messenger, Actioneer, AsModelBoundView) {
+], function (App, Marionette, NotificationModel, DeleteView, Messenger, CommandController,  AsModelBoundView) {
 
     var model = Marionette.ItemView.extend({
         template: 'Settings/Notifications/EditTemplate',
@@ -76,16 +76,8 @@ define([
                     properties[field.name] = field.value;
                 });
 
-                Actioneer.ExecuteCommand({
-                    command       : testCommand,
-                    properties    : properties,
-                    button        : this.ui.testButton,
-                    element       : this.ui.testIcon,
-                    errorMessage  : 'Failed to test notification settings',
-                    successMessage: 'Notification settings tested successfully',
-                    always        : this._testOnAlways,
-                    context       : this
-                });
+
+                CommandController.Execute(testCommand, properties);
             }
         },
 

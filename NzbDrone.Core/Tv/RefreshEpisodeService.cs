@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = existingEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    var episodeToUpdate = existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
                     if (episodeToUpdate != null)
                     {

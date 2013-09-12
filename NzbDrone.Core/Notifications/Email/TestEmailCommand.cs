@@ -1,12 +1,18 @@
-﻿using System;
-using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Notifications.Email
 {
-    public class TestEmailCommand : ICommand
+    public class TestEmailCommand : Command
     {
-        public String CommandId { get; private set; }
+        public override bool SendUpdatesToClient
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public string Server { get; set; }
         public int Port { get; set; }
         public bool Ssl { get; set; }
@@ -14,10 +20,5 @@ namespace NzbDrone.Core.Notifications.Email
         public string Password { get; set; }
         public string From { get; set; }
         public string To { get; set; }
-        
-        public TestEmailCommand()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
     }
 }

@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_skip_if_file_is_in_use_by_another_process()
         {
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<FileInfo>()))
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<string>()))
                   .Returns(true);
 
             Subject.Execute(new DownloadedEpisodesScanCommand());

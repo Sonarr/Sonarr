@@ -33,8 +33,6 @@ namespace NzbDrone.Api.Update
 
     public class UpdateResource : RestResource
     {
-        public String Id { get; set; }
-
         [JsonConverter(typeof(Newtonsoft.Json.Converters.VersionConverter))]
         public Version Version { get; set; }
 

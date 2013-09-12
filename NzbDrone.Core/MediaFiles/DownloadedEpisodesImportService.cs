@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
+            if (_diskProvider.IsFileLocked(videoFile))
             {
                 _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
                 return;

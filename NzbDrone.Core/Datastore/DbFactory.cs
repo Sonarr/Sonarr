@@ -3,9 +3,9 @@ using System.Data.SQLite;
 using Marr.Data;
 using Marr.Data.Reflection;
 using NzbDrone.Common.Composition;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
 
 
 namespace NzbDrone.Core.Datastore

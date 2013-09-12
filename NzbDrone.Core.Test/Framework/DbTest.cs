@@ -6,9 +6,10 @@ using FluentMigrator.Runner;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
+using NzbDrone.Core.Messaging;
+
 
 namespace NzbDrone.Core.Test.Framework
 {

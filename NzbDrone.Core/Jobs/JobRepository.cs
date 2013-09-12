@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+
 
 namespace NzbDrone.Core.Jobs
 {

@@ -1,16 +1,11 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Instrumentation.Commands
 {
-    public class TrimLogCommand : ICommand
+    public class TrimLogCommand : Command
     {
-        public String CommandId { get; private set; }
-
-        public TrimLogCommand()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
     }
 }

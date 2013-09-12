@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.QGen;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Common;
+using NzbDrone.Core.Messaging;
 
 
 namespace NzbDrone.Core.Datastore
@@ -115,7 +115,6 @@ namespace NzbDrone.Core.Datastore
             }
 
             DataMapper.Insert(model);
-            PublishModelEvent(model, RepositoryAction.Created);
 
             return model;
         }
@@ -222,22 +221,27 @@ namespace NzbDrone.Core.Datastore
             DataMapper.Delete<TModel>(c => c.Id > 0);
         }
 
-        private void PublishModelEvent(TModel model, RepositoryAction action)
+        protected void ModelCreated(TModel model)
+        {
+            PublishModelEvent(model, ModelAction.Created);
+        }
+
+        protected void ModelUpdated(TModel model)
+        {
+            PublishModelEvent(model, ModelAction.Updated);
+        }
+
+        protected void ModelDeleted(TModel model)
+        {
+            PublishModelEvent(model, ModelAction.Deleted);
+        }
+
+        private void PublishModelEvent(TModel model, ModelAction action)
         {
             if (PublishModelEvents)
             {
                 _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
             }
-        }
-
-        protected virtual void OnModelChanged(IEnumerable<TModel> models)
-        {
-
-        }
-
-        protected virtual void OnModelDeleted(IEnumerable<TModel> models)
-        {
-
         }
 
         protected virtual bool PublishModelEvents

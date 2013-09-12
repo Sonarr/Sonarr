@@ -1,16 +1,18 @@
 ﻿using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Instrumentation.Commands
 {
-    public class ClearLogCommand : ICommand
+    public class ClearLogCommand : Command
     {
-        public String CommandId { get; private set; }
-
-        public ClearLogCommand()
+        public override bool SendUpdatesToClient
         {
-            CommandId = HashUtil.GenerateCommandId();
+            get
+            {
+                return true;
+            }
         }
     }
 }

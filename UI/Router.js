@@ -6,11 +6,11 @@ require(
         'Controller',
         'Series/SeriesCollection',
         'ProgressMessaging/ProgressMessageCollection',
-        'Shared/Actioneer',
+        'Commands/CommandMessengerCollectionView',
         'Navbar/NavbarView',
         'jQuery/RouteBinder',
         'jquery'
-    ], function (App, Marionette, Controller, SeriesCollection, ProgressMessageCollection, Actioneer, NavbarView, RouterBinder, $) {
+    ], function (App, Marionette, Controller, SeriesCollection, ProgressMessageCollection, CommandMessengerCollectionView, NavbarView, RouterBinder, $) {
 
         var Router = Marionette.AppRouter.extend({
 
@@ -40,11 +40,11 @@ require(
             App.Router = new Router();
 
             SeriesCollection.fetch().done(function () {
-                    Backbone.history.start({ pushState: true });
-                    RouterBinder.bind(App.Router);
-                    App.navbarRegion.show(new NavbarView());
-                    $('body').addClass('started');
-                });
+                Backbone.history.start({ pushState: true });
+                RouterBinder.bind(App.Router);
+                App.navbarRegion.show(new NavbarView());
+                $('body').addClass('started');
+            });
         });
 
         return App.Router;

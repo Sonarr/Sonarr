@@ -1,13 +1,11 @@
-﻿using System;
-using Nancy.Bootstrapper;
+﻿using Nancy.Bootstrapper;
 using NzbDrone.Api;
-using NzbDrone.Api.SignalR;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.RootFolders;
-using NzbDrone.Host.Owin;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Host
 {
@@ -19,7 +17,7 @@ namespace NzbDrone.Host
         }
 
         private MainAppContainerBuilder(StartupArguments args)
-            : base(args, "NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api")
+            : base(args, "NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api", "NzbDrone.SignalR")
         {
 
             AutoRegisterImplementations<NzbDronePersistentConnection>();

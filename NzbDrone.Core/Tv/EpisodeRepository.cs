@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
 
 
 namespace NzbDrone.Core.Tv

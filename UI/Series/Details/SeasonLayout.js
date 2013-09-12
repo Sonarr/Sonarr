@@ -8,9 +8,9 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
-        'Shared/Actioneer',
+        'Commands/CommandController',
         'moment'
-    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, Actioneer, Moment) {
+    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, CommandController, Moment) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -21,11 +21,11 @@ define(
             },
 
             events: {
-                'click .x-season-search'      : '_seasonSearch',
-                'click .x-season-monitored'   : '_seasonMonitored',
-                'click .x-season-rename'      : '_seasonRename',
-                'click .x-show-hide-episodes' : '_showHideEpisodes',
-                'dblclick .series-season h2'  : '_showHideEpisodes'
+                'click .x-season-monitored'  : '_seasonMonitored',
+                'click .x-season-search'     : '_seasonSearch',
+                'click .x-season-rename'     : '_seasonRename',
+                'click .x-show-hide-episodes': '_showHideEpisodes',
+                'dblclick .series-season h2' : '_showHideEpisodes'
             },
 
             regions: {
@@ -51,11 +51,11 @@ define(
                         })
                     },
                     {
-                        name    : 'this',
-                        label   : 'Title',
-                        hideSeriesLink : true,
-                        cell    : EpisodeTitleCell,
-                        sortable: false
+                        name          : 'this',
+                        label         : 'Title',
+                        hideSeriesLink: true,
+                        cell          : EpisodeTitleCell,
+                        sortable      : false
                     },
                     {
                         name : 'airDateUtc',
@@ -76,41 +76,58 @@ define(
                     throw 'episodeCollection is needed';
                 }
 
-                this.templateHelpers = {};
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
                 this.series = options.series;
 
                 this.showingEpisodes = this._shouldShowEpisodes();
-                this._generateTemplateHelpers();
 
-                this.listenTo(this.model, 'sync', function () {
-                    this._afterSeasonMonitored();
-                }, this);
-
-                this.listenTo(this.episodeCollection, 'sync', function () {
-                    this.render();
-                }, this);
+                this.listenTo(this.model, 'sync', this._afterSeasonMonitored);
+                this.listenTo(this.episodeCollection, 'sync', this.render);
             },
 
             onRender: function () {
+
+
                 if (this.showingEpisodes) {
                     this._showEpisodes();
                 }
 
                 this._setSeasonMonitoredState();
+
+                CommandController.bindToCommand({
+                    element: this.ui.seasonSearch,
+                    command: {
+                        name        : 'seasonSearch',
+                        seriesId    : this.series.id,
+                        seasonNumber: this.model.get('seasonNumber')
+                    }
+                });
+
+                CommandController.bindToCommand({
+                    element: this.ui.seasonRename,
+                    command: {
+                        name        : 'renameSeason',
+                        seriesId    : this.series.id,
+                        seasonNumber: this.model.get('seasonNumber')
+                    }
+                });
             },
 
             _seasonSearch: function () {
-                Actioneer.ExecuteCommand({
-                    command     : 'seasonSearch',
-                    properties  : {
-                        seriesId    : this.model.get('seriesId'),
-                        seasonNumber: this.model.get('seasonNumber')
-                    },
-                    element       : this.ui.seasonSearch,
-                    errorMessage  : 'Search for season {0} failed'.format(this.model.get('seasonNumber')),
-                    startMessage  : 'Search for season {0} started'.format(this.model.get('seasonNumber')),
-                    successMessage: 'Search for season {0} completed'.format(this.model.get('seasonNumber'))
+
+                CommandController.Execute('seasonSearch', {
+                    name        : 'seasonSearch',
+                    seriesId    : this.series.id,
+                    seasonNumber: this.model.get('seasonNumber')
+                });
+            },
+
+            _seasonRename: function () {
+
+                CommandController.Execute('renameSeason', {
+                    name        : 'renameSeason',
+                    seriesId    : this.series.id,
+                    seasonNumber: this.model.get('seasonNumber')
                 });
             },
 
@@ -119,12 +136,9 @@ define(
                 this.model.set(name, !this.model.get(name));
                 this.series.setSeasonMonitored(this.model.get('seasonNumber'));
 
-                Actioneer.SaveModel({
-                    model  : this.series,
-                    context: this,
-                    element: this.ui.seasonMonitored,
-                    always : this._afterSeasonMonitored
-                });
+                var savePromise = this.series.save().always(this._afterSeasonMonitored.bind(this));
+
+                this.ui.seasonMonitored.spinForPromise(savePromise);
             },
 
             _afterSeasonMonitored: function () {
@@ -150,19 +164,6 @@ define(
                 }
             },
 
-            _seasonRename: function () {
-                Actioneer.ExecuteCommand({
-                    command     : 'renameSeason',
-                    properties  : {
-                        seriesId    : this.model.get('seriesId'),
-                        seasonNumber: this.model.get('seasonNumber')
-                    },
-                    element     : this.ui.seasonRename,
-                    errorMessage: 'Season rename failed',
-                    context     : this,
-                    onSuccess   : this._afterRename
-                });
-            },
 
             _afterRename: function () {
                 App.vent.trigger(App.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
@@ -180,12 +181,11 @@ define(
                 var startDate = Moment().add('month', -1);
                 var endDate = Moment().add('year', 1);
 
-                var result = this.episodeCollection.some(function(episode) {
+                return this.episodeCollection.some(function (episode) {
 
                     var airDate = episode.get('airDateUtc');
 
-                    if (airDate)
-                    {
+                    if (airDate) {
                         var airDateMoment = Moment(airDate);
 
                         if (airDateMoment.isAfter(startDate) && airDateMoment.isBefore(endDate)) {
@@ -195,15 +195,12 @@ define(
 
                     return false;
                 });
-
-                return result;
             },
 
-            _generateTemplateHelpers: function () {
-                this.templateHelpers.showingEpisodes = this.showingEpisodes;
+            templateHelpers: function () {
 
                 var episodeCount = this.episodeCollection.filter(function (episode) {
-                    return (episode.get('monitored')  && Moment(episode.get('airDateUtc')).isBefore(Moment())) || episode.get('hasFile');
+                    return episode.get('hasFile') || (episode.get('monitored') && Moment(episode.get('airDateUtc')).isBefore(Moment()));
                 }).length;
 
                 var episodeFileCount = this.episodeCollection.where({ hasFile: true }).length;
@@ -213,22 +210,22 @@ define(
                     percentOfEpisodes = episodeFileCount / episodeCount * 100;
                 }
 
-                this.templateHelpers.episodeCount = episodeCount;
-                this.templateHelpers.episodeFileCount = episodeFileCount;
-                this.templateHelpers.percentOfEpisodes = percentOfEpisodes;
+                return {
+                    showingEpisodes  : this.showingEpisodes,
+                    episodeCount     : episodeCount,
+                    episodeFileCount : episodeFileCount,
+                    percentOfEpisodes: percentOfEpisodes
+                };
             },
 
             _showHideEpisodes: function () {
                 if (this.showingEpisodes) {
                     this.showingEpisodes = false;
-                    this.episodeGrid.$el.slideUp();
                     this.episodeGrid.close();
                 }
-
                 else {
                     this.showingEpisodes = true;
                     this._showEpisodes();
-                    this.episodeGrid.$el.slideDown();
                 }
 
                 this.templateHelpers.showingEpisodes = this.showingEpisodes;

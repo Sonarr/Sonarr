@@ -1,16 +1,12 @@
 using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
-    public class UpdateSceneMappingCommand : ICommand
+    public class UpdateSceneMappingCommand : Command
     {
-        public String CommandId { get; private set; }
 
-        public UpdateSceneMappingCommand()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
     }
 }

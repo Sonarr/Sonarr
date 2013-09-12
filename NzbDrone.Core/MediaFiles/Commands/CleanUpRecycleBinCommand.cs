@@ -1,16 +1,11 @@
 using System;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.MediaFiles.Commands
 {
-    public class CleanUpRecycleBinCommand : ICommand
+    public class CleanUpRecycleBinCommand : Command
     {
-        public String CommandId { get; private set; }
-
-        public CleanUpRecycleBinCommand()
-        {
-            CommandId = HashUtil.GenerateCommandId();
-        }
     }
 }

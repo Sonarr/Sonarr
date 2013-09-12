@@ -2,23 +2,25 @@
 
 namespace NzbDrone.Core.Datastore.Events
 {
-    public class ModelEvent<T> : IEvent where T : ModelBase
+    public class ModelEvent <TModel> : IEvent
     {
-        public T Model { get; set; }
-        public RepositoryAction Action { get; set; }
+        public TModel Model { get; set; }
+        public ModelAction Action { get; set; }
 
-        public ModelEvent(T model, RepositoryAction action)
+        public ModelEvent(TModel model, ModelAction action)
         {
             Model = model;
             Action = action;
         }
     }
 
-    public enum RepositoryAction
+    public enum ModelAction
     {
+        Unknow = 0,
         Created = 1,
         Updated = 2,
-        Deleted = 3
+        Deleted = 3,
+        Sync = 4
     }
 
 

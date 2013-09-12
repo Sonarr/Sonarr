@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'backbone',
@@ -8,10 +8,19 @@ define(
 
         var CommandCollection = Backbone.Collection.extend({
             url  : window.ApiRoot + '/command',
-            model: CommandModel
+            model: CommandModel,
+
+            findCommand: function (command) {
+                return this.find(function (model) {
+                    return model.isSameCommand(command);
+                });
+            }
+
         });
 
         var collection = new CommandCollection().bindSignalR();
+
+        collection.fetch();
 
         return collection;
     });

@@ -7,9 +7,9 @@ using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.ProgressMessaging;
 using TinyIoC;
 

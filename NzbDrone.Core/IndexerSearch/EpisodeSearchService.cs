@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
 
 namespace NzbDrone.Core.IndexerSearch
 {
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.IndexerSearch
             var decisions = _nzbSearchService.EpisodeSearch(message.EpisodeId);
             var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.Complete("Episode search completed. {0} reports downloaded.", downloaded.Count);
+            _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", downloaded.Count);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
-            if (_diskProvider.IsFileLocked(new FileInfo(localEpisode.Path)))
+            if (_diskProvider.IsFileLocked(localEpisode.Path))
             {
                 _logger.Trace("{0} is in use");
                 return false;

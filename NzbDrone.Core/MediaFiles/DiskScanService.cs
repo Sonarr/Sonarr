@@ -4,9 +4,10 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private void Scan(Series series)
         {
-            _logger.Progress("Starting disk scan for {0}", series.Title);
+            _logger.ProgressInfo("Scanning disk for {0}", series.Title);
             _messageAggregator.PublishCommand(new CleanMediaFileDb(series.Id));
 
             if (!_diskProvider.FolderExists(series.Path))
@@ -54,8 +55,6 @@ namespace NzbDrone.Core.MediaFiles
 
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
             _importApprovedEpisodes.Import(decisions);
-
-            _logger.Complete("Completed disk scan for {0}", series.Title);
         }
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)
