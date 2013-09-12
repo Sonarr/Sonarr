@@ -30,7 +30,6 @@ namespace NzbDrone.Core.MediaFiles
                 { ".divx", Quality.SDTV },
                 { ".xvid", Quality.SDTV },
                 { ".bivx", Quality.SDTV },
-                { ".vob", Quality.SDTV },
                 { ".nrg", Quality.SDTV },
                 { ".pva", Quality.SDTV },
                 { ".wmv", Quality.SDTV },
@@ -58,11 +57,14 @@ namespace NzbDrone.Core.MediaFiles
                 //DVD
                 { ".img", Quality.DVD },
                 { ".iso", Quality.DVD },
+                { ".vob", Quality.DVD },
 
                 //HD
                 { ".mkv", Quality.HDTV720p },
                 { ".ts", Quality.HDTV720p },
-                { ".m2ts", Quality.HDTV720p }
+
+                //Bluray
+                { ".m2ts", Quality.Bluray720p }
             };
         }
 
@@ -71,7 +73,7 @@ namespace NzbDrone.Core.MediaFiles
             get { return new HashSet<String>(_fileExtensions.Keys); }
         }
 
-        public static Quality FindQuality(string extension)
+        public static Quality GetQualityForExtension(string extension)
         {
             if (_fileExtensions.ContainsKey(extension))
             {
