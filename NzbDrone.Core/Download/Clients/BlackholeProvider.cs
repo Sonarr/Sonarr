@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -13,23 +12,14 @@ namespace NzbDrone.Core.Download.Clients
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
-        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
 
-        public BlackholeProvider(IConfigService configService, IHttpProvider httpProvider,
-                                    IDiskProvider diskProvider, Logger logger)
+        public BlackholeProvider(IConfigService configService, IHttpProvider httpProvider, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
-            _diskProvider = diskProvider;
             _logger = logger;
-        }
-
-
-        public bool IsInQueue(RemoteEpisode newEpisode)
-        {
-            throw new NotImplementedException();
         }
 
         public void DownloadNzb(RemoteEpisode remoteEpisode)
