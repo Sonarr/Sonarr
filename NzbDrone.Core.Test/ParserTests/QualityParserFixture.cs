@@ -76,7 +76,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S07E23.mkv ", false)]
         [TestCase("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", false)]
         [TestCase("Sonny.With.a.Chance.S02E15.mkv", false)]
-        [TestCase("The Big Bang Theory.S03E01.The Electric Can Opener Fluctuation.m2ts", false)]
         [TestCase(@"E:\Downloads\tv\The.Big.Bang.Theory.S01E01.720p.HDTV\ajifajjjeaeaeqwer_eppj.avi", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
@@ -121,6 +120,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", false)]
+        [TestCase("The Big Bang Theory.S03E01.The Electric Can Opener Fluctuation.m2ts", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);

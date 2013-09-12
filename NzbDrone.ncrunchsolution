@@ -1,12 +1,13 @@
 <SolutionConfiguration>
   <FileVersion>1</FileVersion>
-  <AutoEnableOnStartup>False</AutoEnableOnStartup>
+  <AutoEnableOnStartup>True</AutoEnableOnStartup>
   <AllowParallelTestExecution>true</AllowParallelTestExecution>
+  <AllowTestsToRunInParallelWithThemselves>true</AllowTestsToRunInParallelWithThemselves>
   <FrameworkUtilisationTypeForNUnit>UseDynamicAnalysis</FrameworkUtilisationTypeForNUnit>
   <FrameworkUtilisationTypeForGallio>Disabled</FrameworkUtilisationTypeForGallio>
   <FrameworkUtilisationTypeForMSpec>Disabled</FrameworkUtilisationTypeForMSpec>
   <FrameworkUtilisationTypeForMSTest>Disabled</FrameworkUtilisationTypeForMSTest>
-  <EngineModes>Run all tests automatically:BFRydWU=;Run all tests manually:BUZhbHNl;Run impacted tests automatically, others manually (experimental!):CklzSW1wYWN0ZWQ=;Run pinned tests automatically, others manually:CElzUGlubmVk</EngineModes>
+  <EngineModes>Run all tests automatically:BFRydWU=;Run all tests manually:BUZhbHNl;Run impacted tests automatically, others manually (experimental!):CklzSW1wYWN0ZWQ=;Run pinned tests automatically, others manually:CElzUGlubmVk;Fast:DlN0cnVjdHVyYWxOb2RlBAAAABNEb2VzTm90SGF2ZUNhdGVnb3J5D0ludGVncmF0aW9uVGVzdBNEb2VzTm90SGF2ZUNhdGVnb3J5BkRiVGVzdApJc0ltcGFjdGVkCUlzRmFpbGluZwAAAAAAAAAAAQAAAA==</EngineModes>
   <MetricsExclusionList>
 </MetricsExclusionList>
 </SolutionConfiguration>

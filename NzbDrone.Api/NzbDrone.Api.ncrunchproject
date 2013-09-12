@@ -1,8 +1,8 @@
 <ProjectConfiguration>
   <CopyReferencedAssembliesToWorkspace>false</CopyReferencedAssembliesToWorkspace>
-  <ConsiderInconclusiveTestsAsPassing>false</ConsiderInconclusiveTestsAsPassing>
+  <ConsiderInconclusiveTestsAsPassing>true</ConsiderInconclusiveTestsAsPassing>
   <PreloadReferencedAssemblies>false</PreloadReferencedAssemblies>
-  <AllowDynamicCodeContractChecking>true</AllowDynamicCodeContractChecking>
+  <AllowDynamicCodeContractChecking>false</AllowDynamicCodeContractChecking>
   <AllowStaticCodeContractChecking>false</AllowStaticCodeContractChecking>
   <IgnoreThisComponentCompletely>false</IgnoreThisComponentCompletely>
   <RunPreBuildEvents>false</RunPreBuildEvents>
@@ -12,9 +12,11 @@
   <PreventSigningOfAssembly>false</PreventSigningOfAssembly>
   <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
-  <DefaultTestTimeout>60000</DefaultTestTimeout>
-  <UseBuildConfiguration />
-  <UseBuildPlatform />
-  <ProxyProcessPath />
-  <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
+  <DefaultTestTimeout>500</DefaultTestTimeout>
+  <UseBuildConfiguration>Debug</UseBuildConfiguration>
+  <UseBuildPlatform>x86</UseBuildPlatform>
+  <ProxyProcessPath></ProxyProcessPath>
+  <UseCPUArchitecture>x86</UseCPUArchitecture>
+  <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
+  <BuildProcessArchitecture>x86</BuildProcessArchitecture>
 </ProjectConfiguration>

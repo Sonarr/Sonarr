@@ -13,7 +13,7 @@ using NzbDrone.Core.Messaging;
 
 namespace NzbDrone.Core.Test.Framework
 {
-    [Category("DbTest")]
+
     public abstract class DbTest<TSubject, TModel> : DbTest
         where TSubject : class
         where TModel : ModelBase, new()
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.Framework
 
 
 
-
+    [Category("DbTest")]
     public abstract class DbTest : CoreTest
     {
         private ITestDatabase _db;
