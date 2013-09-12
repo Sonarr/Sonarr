@@ -228,6 +228,7 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="MediaFiles\MediaFileExtensions.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="NzbDroneClientException.cs" />
     <Compile Include="ProgressMessaging\NewProgressMessageEvent.cs" />

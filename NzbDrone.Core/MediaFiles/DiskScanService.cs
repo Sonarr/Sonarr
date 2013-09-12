@@ -21,16 +21,6 @@ namespace NzbDrone.Core.MediaFiles
         IDiskScanService,
         IHandle<SeriesUpdatedEvent>
     {
-        private readonly HashSet<string> _mediaExtensions;
-
-        private const string EXTENSIONS =
-            //XBMC
-            ".m4v .3gp .nsv .ts .ty .strm .rm .rmvb .m3u .ifo .mov .qt .divx .xvid .bivx .vob .nrg .img " +
-            ".iso .pva .wmv .asf .asx .ogm .m2v .avi .bin .dat .dvr-ms .mpg .mpeg .mp4 .mkv .avc .vp3 " +
-            ".svq3 .nuv .viv .dv .fli .flv .wpl " +
-            //Other
-            ".m2ts";
-
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
@@ -47,8 +37,6 @@ namespace NzbDrone.Core.MediaFiles
             _importApprovedEpisodes = importApprovedEpisodes;
             _messageAggregator = messageAggregator;
             _logger = logger;
-
-            _mediaExtensions = new HashSet<string>(EXTENSIONS.Split(' ').Select(c => c.ToLower()));
         }
 
         private void Scan(Series series)
@@ -77,7 +65,7 @@ namespace NzbDrone.Core.MediaFiles
             var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
 
-            var mediaFileList = filesOnDisk.Where(c => _mediaExtensions.Contains(Path.GetExtension(c).ToLower())).ToList();
+            var mediaFileList = filesOnDisk.Where(c => MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
             _logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();

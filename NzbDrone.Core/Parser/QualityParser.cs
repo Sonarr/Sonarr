@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -152,35 +153,7 @@ namespace NzbDrone.Core.Parser
             {
                 try
                 {
-                    switch (Path.GetExtension(name).ToLower())
-                    {
-                        case ".avi":
-                        case ".xvid":
-                        case ".divx":
-                        case ".wmv":
-                        case ".mp4":
-                        case ".mpg":
-                        case ".mpeg":
-                        case ".mov":
-                        case ".rm":
-                        case ".rmvb":
-                        case ".flv":
-                        case ".dvr-ms":
-                        case ".ogm":
-                        case ".strm":
-                        
-                            {
-                                result.Quality = Quality.SDTV;
-                                break;
-                            }
-                        case ".mkv":
-                        case ".ts":
-                        case ".m2ts":
-                            {
-                                result.Quality = Quality.HDTV720p;
-                                break;
-                            }
-                    }
+                    result.Quality = MediaFileExtensions.FindQuality(Path.GetExtension(name));
                 }
                 catch (ArgumentException)
                 {
