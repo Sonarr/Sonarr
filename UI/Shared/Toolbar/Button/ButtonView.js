@@ -3,9 +3,8 @@ define(
     [
         'app',
         'marionette',
-        'Commands/CommandController',
-        'Shared/Actioneer'
-    ], function (App, Marionette, CommandController, Actioneer) {
+        'Commands/CommandController'
+    ], function (App, Marionette, CommandController) {
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
@@ -31,7 +30,7 @@ define(
 
                 var command = this.model.get('command');
                 if (command) {
-                    Actioneer.bindToCommand({
+                    CommandController.bindToCommand({
                         command: {name: command},
                         element: this.$el
                     });

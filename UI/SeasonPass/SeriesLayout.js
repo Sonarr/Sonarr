@@ -2,9 +2,9 @@
 define(
     [
         'marionette',
-        'Series/SeasonCollection',
-        'Cells/ToggleCell'
-    ], function (Marionette, Backgrid, SeasonCollection, ToggleCell) {
+        'backgrid',
+        'Series/SeasonCollection'
+    ], function (Marionette, Backgrid, SeasonCollection) {
         return Marionette.Layout.extend({
             template: 'SeasonPass/SeriesLayoutTemplate',
 
@@ -111,11 +111,9 @@ define(
 
                 this.model.setSeasonMonitored(seasonNumber);
 
-                Actioneer.SaveModel({
-                    element: element,
-                    context: this,
-                    always : this._afterToggleSeasonMonitored
-                });
+                var savePromise =this.model.save()
+                    .always(this.render.bind(this));
+                element.spinForPromise(savePromise);
             },
 
             _afterToggleSeasonMonitored: function () {

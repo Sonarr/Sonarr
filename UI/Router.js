@@ -7,11 +7,10 @@ require(
         'Series/SeriesCollection',
         'ProgressMessaging/ProgressMessageCollection',
         'Commands/CommandMessengerCollectionView',
-        'Shared/Actioneer',
         'Navbar/NavbarView',
         'jQuery/RouteBinder',
         'jquery'
-    ], function (App, Marionette, Controller, SeriesCollection, ProgressMessageCollection, CommandMessengerCollectionView, Actioneer, NavbarView, RouterBinder, $) {
+    ], function (App, Marionette, Controller, SeriesCollection, ProgressMessageCollection, CommandMessengerCollectionView, NavbarView, RouterBinder, $) {
 
         var Router = Marionette.AppRouter.extend({
 

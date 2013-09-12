@@ -10,10 +10,9 @@ define(
         'Series/Details/InfoView',
         'Commands/CommandController',
         'Shared/LoadingView',
-        'Shared/Actioneer',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (App, Marionette, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView, Actioneer) {
+    ], function (App, Marionette, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -67,21 +66,21 @@ define(
             },
 
             onRender: function () {
-                Actioneer.bindToCommand({
+                CommandController.bindToCommand({
                     element: this.ui.refresh,
                     command: {
                         name: 'refreshSeries'
                     }
                 });
 
-                Actioneer.bindToCommand({
+                CommandController.bindToCommand({
                     element: this.ui.search,
                     command: {
                         name: 'seriesSearch'
                     }
                 });
 
-                Actioneer.bindToCommand({
+                CommandController.bindToCommand({
                     element: this.ui.rename,
                     command: {
                         name: 'renameSeries'
@@ -195,13 +194,9 @@ define(
                 this.info.show(new InfoView({ model: this.model }));
             },
 
-            _refetchEpisodeFiles: function () {
-                this.episodeFileCollection.fetch();
-            },
-
             _onSeasonRenamed: function (event) {
                 if (this.model.get('id') === event.series.get('id')) {
-                    this._refetchEpisodeFiles();
+                    this.episodeFileCollection.fetch();
                 }
             }
         });
