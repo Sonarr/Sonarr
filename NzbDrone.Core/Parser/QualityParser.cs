@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Parser
             {
                 try
                 {
-                    result.Quality = MediaFileExtensions.FindQuality(Path.GetExtension(name));
+                    result.Quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
                 }
                 catch (ArgumentException)
                 {
