@@ -10,89 +10,75 @@ namespace NzbDrone.Core.MediaFiles
 {
     public static class MediaFileExtensions
     {
-        private static HashSet<MediaFileExtension> _fileExtensions;
+        private static Dictionary<String, Quality> _fileExtensions;
 
         static MediaFileExtensions()
         {
-            _fileExtensions = new HashSet<MediaFileExtension>
+            _fileExtensions = new Dictionary<String, Quality>
             {
-                new MediaFileExtension(".m4v", Quality.SDTV),
-                new MediaFileExtension(".3gp", Quality.SDTV),
-                new MediaFileExtension(".nsv", Quality.SDTV),
-                new MediaFileExtension(".ty", Quality.SDTV),
-                new MediaFileExtension(".strm", Quality.SDTV),
-                new MediaFileExtension(".rm", Quality.SDTV),
-                new MediaFileExtension(".rmvb", Quality.SDTV),
-                new MediaFileExtension(".m3u", Quality.SDTV),
-                new MediaFileExtension(".ifo", Quality.SDTV),
-                new MediaFileExtension(".mov", Quality.SDTV),
-                new MediaFileExtension(".qt", Quality.SDTV),
-                new MediaFileExtension(".divx", Quality.SDTV),
-                new MediaFileExtension(".xvid", Quality.SDTV),
-                new MediaFileExtension(".bivx", Quality.SDTV),
-                new MediaFileExtension(".vob", Quality.SDTV),
-                new MediaFileExtension(".nrg", Quality.SDTV),
-                new MediaFileExtension(".pva", Quality.SDTV),
-                new MediaFileExtension(".wmv", Quality.SDTV),
-                new MediaFileExtension(".asf", Quality.SDTV),
-                new MediaFileExtension(".asx", Quality.SDTV),
-                new MediaFileExtension(".ogm", Quality.SDTV),
-                new MediaFileExtension(".m2v", Quality.SDTV),
-                new MediaFileExtension(".avi", Quality.SDTV),
-                new MediaFileExtension(".bin", Quality.SDTV),
-                new MediaFileExtension(".dat", Quality.SDTV),
-                new MediaFileExtension(".dvr-ms", Quality.SDTV),
-                new MediaFileExtension(".mpg", Quality.SDTV),
-                new MediaFileExtension(".mpeg", Quality.SDTV),
-                new MediaFileExtension(".mp4", Quality.SDTV),
-                new MediaFileExtension(".avc", Quality.SDTV),
-                new MediaFileExtension(".vp3", Quality.SDTV),
-                new MediaFileExtension(".svq3", Quality.SDTV),
-                new MediaFileExtension(".nuv", Quality.SDTV),
-                new MediaFileExtension(".viv", Quality.SDTV),
-                new MediaFileExtension(".dv", Quality.SDTV),
-                new MediaFileExtension(".fli", Quality.SDTV),
-                new MediaFileExtension(".flv", Quality.SDTV),
-                new MediaFileExtension(".wpl", Quality.SDTV),
+                { ".m4v", Quality.SDTV },
+                { ".3gp", Quality.SDTV },
+                { ".nsv", Quality.SDTV },
+                { ".ty", Quality.SDTV },
+                { ".strm", Quality.SDTV },
+                { ".rm", Quality.SDTV },
+                { ".rmvb", Quality.SDTV },
+                { ".m3u", Quality.SDTV },
+                { ".ifo", Quality.SDTV },
+                { ".mov", Quality.SDTV },
+                { ".qt", Quality.SDTV },
+                { ".divx", Quality.SDTV },
+                { ".xvid", Quality.SDTV },
+                { ".bivx", Quality.SDTV },
+                { ".vob", Quality.SDTV },
+                { ".nrg", Quality.SDTV },
+                { ".pva", Quality.SDTV },
+                { ".wmv", Quality.SDTV },
+                { ".asf", Quality.SDTV },
+                { ".asx", Quality.SDTV },
+                { ".ogm", Quality.SDTV },
+                { ".m2v", Quality.SDTV },
+                { ".avi", Quality.SDTV },
+                { ".bin", Quality.SDTV },
+                { ".dat", Quality.SDTV },
+                { ".dvr-ms", Quality.SDTV },
+                { ".mpg", Quality.SDTV },
+                { ".mpeg", Quality.SDTV },
+                { ".mp4", Quality.SDTV },
+                { ".avc", Quality.SDTV },
+                { ".vp3", Quality.SDTV },
+                { ".svq3", Quality.SDTV },
+                { ".nuv", Quality.SDTV },
+                { ".viv", Quality.SDTV },
+                { ".dv", Quality.SDTV },
+                { ".fli", Quality.SDTV },
+                { ".flv", Quality.SDTV },
+                { ".wpl", Quality.SDTV },
 
                 //DVD
-                new MediaFileExtension(".img", Quality.DVD),
-                new MediaFileExtension(".iso", Quality.DVD),
+                { ".img", Quality.DVD },
+                { ".iso", Quality.DVD },
 
                 //HD
-                new MediaFileExtension(".mkv", Quality.HDTV720p),
-                new MediaFileExtension(".ts", Quality.HDTV720p),
-                new MediaFileExtension(".m2ts", Quality.HDTV720p)
+                { ".mkv", Quality.HDTV720p },
+                { ".ts", Quality.HDTV720p },
+                { ".m2ts", Quality.HDTV720p }
             };
         }
 
         public static HashSet<String> Extensions
         {
-            get { return new HashSet<String>(_fileExtensions.Select(e => e.Extension.ToLower())); }
+            get { return new HashSet<String>(_fileExtensions.Keys); }
         }
 
         public static Quality FindQuality(string extension)
         {
-            var mediaFileExtension = _fileExtensions.SingleOrDefault(e => e.Extension.Equals(extension, StringComparison.InvariantCultureIgnoreCase));
-
-            if (mediaFileExtension == null)
+            if (_fileExtensions.ContainsKey(extension))
             {
-                return Quality.Unknown;
+                return _fileExtensions[extension];
             }
 
-            return mediaFileExtension.Quality;
-        }
-    }
-
-    public class MediaFileExtension
-    {
-        public string Extension { get; set; }
-        public Quality Quality { get; set; }
-
-        public MediaFileExtension(string extension, Quality quality)
-        {
-            Extension = extension;
-            Quality = quality;
+            return Quality.Unknown;
         }
     }
 }
