@@ -14,10 +14,8 @@ namespace NzbDrone.Core.Tv
 {
     public interface ISeriesService
     {
-        bool IsMonitored(int id);
         Series GetSeries(int seriesId);
         Series AddSeries(Series newSeries);
-        void UpdateFromSeriesEditor(IList<Series> editedSeries);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
@@ -26,9 +24,6 @@ namespace NzbDrone.Core.Tv
         List<Series> GetAllSeries();
         Series UpdateSeries(Series series);
         bool SeriesPathExists(string folder);
-        List<Series> GetSeriesInList(IEnumerable<int> seriesIds);
-        Series FindBySlug(string slug);
-        List<String> GetSeriesPaths();
     }
 
     public class SeriesService : ISeriesService
@@ -53,11 +48,6 @@ namespace NzbDrone.Core.Tv
             _sceneMappingService = sceneMappingService;
             _episodeService = episodeService;
             _logger = logger;
-        }
-
-        public bool IsMonitored(int id)
-        {
-            return _seriesRepository.Get(id).Monitored;
         }
 
         public Series GetSeries(int seriesId)
@@ -88,24 +78,6 @@ namespace NzbDrone.Core.Tv
             return newSeries;
         }
 
-        public void UpdateFromSeriesEditor(IList<Series> editedSeries)
-        {
-            var allSeries = _seriesRepository.All();
-
-            foreach (var series in allSeries)
-            {
-                //Only update parameters that can be changed in MassEdit
-                var edited = editedSeries.Single(s => s.Id == series.Id);
-                series.QualityProfileId = edited.QualityProfileId;
-                series.Monitored = edited.Monitored;
-                series.SeasonFolder = edited.SeasonFolder;
-                series.Path = edited.Path;
-
-                _seriesRepository.Update(series);
-            }
-
-        }
-
         public Series FindByTvdbId(int tvdbId)
         {
             return _seriesRepository.FindByTvdbId(tvdbId);
@@ -114,17 +86,6 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvRageId(int tvRageId)
         {
             return _seriesRepository.FindByTvRageId(tvRageId);
-        }
-
-        public Series FindBySlug(string slug)
-        {
-            var series = _seriesRepository.FindBySlug(slug);
-            return series;
-        }
-
-        public List<string> GetSeriesPaths()
-        {
-            return _seriesRepository.GetSeriesPaths();
         }
 
         public Series FindByTitle(string title)
@@ -169,11 +130,6 @@ namespace NzbDrone.Core.Tv
         public bool SeriesPathExists(string folder)
         {
             return _seriesRepository.SeriesPathExists(folder);
-        }
-
-        public List<Series> GetSeriesInList(IEnumerable<int> seriesIds)
-        {
-            return _seriesRepository.Get(seriesIds).ToList();
         }
     }
 }

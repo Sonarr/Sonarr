@@ -112,7 +112,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
 
-            return ProcessFiles(videoFiles, series);
+            return ProcessFiles(series, videoFiles);
         }
 
         private void ProcessVideoFile(string videoFile)
@@ -131,10 +131,10 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            ProcessFiles(new[] { videoFile }, series);
+            ProcessFiles(series, videoFile);
         }
 
-        private List<ImportDecision> ProcessFiles(IEnumerable<string> videoFiles, Series series)
+        private List<ImportDecision> ProcessFiles(Series series, params string[] videoFiles)
         {
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series, true);
             return _importApprovedEpisodes.Import(decisions, true);
