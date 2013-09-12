@@ -15,7 +15,7 @@ define(
 
 
             render: function () {
-                if (!this.model.get('message')) {
+                if (!this.model.get('message') || !this.model.get('sendUpdatesToClient')) {
                     return;
                 }
 
