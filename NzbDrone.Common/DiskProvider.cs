@@ -25,8 +25,8 @@ namespace NzbDrone.Common
         string[] GetFiles(string path, SearchOption searchOption);
         long GetFolderSize(string path);
         long GetFileSize(string path);
-        String CreateFolder(string path);
-        void CopyFolder(string source, string target);
+        void CreateFolder(string path);
+        void CopyFolder(string source, string destination);
         void MoveFolder(string source, string destination);
         void DeleteFile(string path);
         void MoveFile(string source, string destination);
@@ -37,7 +37,7 @@ namespace NzbDrone.Common
         void WriteAllText(string filename, string contents);
         void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
         void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
-        bool IsFileLocked(FileInfo file);
+        bool IsFileLocked(string path);
         string GetPathRoot(string path);
         void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentPath, string childPath);
@@ -60,7 +60,7 @@ namespace NzbDrone.Common
         out ulong lpTotalNumberOfBytes,
         out ulong lpTotalNumberOfFreeBytes);
 
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
         public HashSet<string> SpecialFolders
         {
@@ -162,19 +162,18 @@ namespace NzbDrone.Common
             return fi.Length;
         }
 
-        public String CreateFolder(string path)
+        public void CreateFolder(string path)
         {
             Ensure.That(() => path).IsValidPath();
-
-            return Directory.CreateDirectory(path).FullName;
+            Directory.CreateDirectory(path);
         }
 
-        public void CopyFolder(string source, string target)
+        public void CopyFolder(string source, string destination)
         {
             Ensure.That(() => source).IsValidPath();
-            Ensure.That(() => target).IsValidPath();
+            Ensure.That(() => destination).IsValidPath();
 
-            TransferFolder(source, target, TransferAction.Copy);
+            TransferFolder(source, destination, TransferAction.Copy);
         }
 
         public void MoveFolder(string source, string destination)
@@ -367,13 +366,17 @@ namespace NzbDrone.Common
             Directory.SetLastWriteTimeUtc(path, dateTime);
         }
 
-        public bool IsFileLocked(FileInfo file)
+        public bool IsFileLocked(string file)
         {
+
+            //TOOD: Needs test
+            //TODO: move to using instead of trycatch
+            //TODO: prob should use OpenWrite to check for lock.
             FileStream stream = null;
 
             try
             {
-                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+                stream = File.OpenRead(file);
             }
             catch (IOException)
             {

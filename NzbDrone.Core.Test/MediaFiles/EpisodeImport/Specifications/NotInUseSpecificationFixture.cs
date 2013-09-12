@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             Subject.IsSatisfiedBy(_localEpisode);
 
             Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.IsFileLocked(It.IsAny<FileInfo>()), Times.Never());
+                .Verify(v => v.IsFileLocked(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenNewFile();
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.IsFileLocked(It.IsAny<FileInfo>()))
+                .Setup(s => s.IsFileLocked(It.IsAny<string>()))
                 .Returns(true);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenNewFile();
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.IsFileLocked(It.IsAny<FileInfo>()))
+                .Setup(s => s.IsFileLocked(It.IsAny<string>()))
                 .Returns(false);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();

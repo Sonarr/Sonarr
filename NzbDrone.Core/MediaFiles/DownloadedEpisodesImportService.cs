@@ -125,7 +125,7 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
+            if (_diskProvider.IsFileLocked(videoFile))
             {
                 _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
                 return;
