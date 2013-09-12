@@ -75,7 +75,7 @@ define(
                 if (!options.episodeCollection) {
                     throw 'episodeCollection is needed';
                 }
-                this.templateHelpers = this.templateHelpers || {};
+
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
                 this.series = options.series;
 
@@ -87,7 +87,6 @@ define(
 
             onRender: function () {
 
-                this._generateTemplateHelpers();
 
                 if (this.showingEpisodes) {
                     this._showEpisodes();
@@ -98,7 +97,7 @@ define(
                 CommandController.bindToCommand({
                     element: this.ui.seasonSearch,
                     command: {
-                        name: 'seasonSearch',
+                        name        : 'seasonSearch',
                         seriesId    : this.series.id,
                         seasonNumber: this.model.get('seasonNumber')
                     }
@@ -107,7 +106,7 @@ define(
                 CommandController.bindToCommand({
                     element: this.ui.seasonRename,
                     command: {
-                        name: 'renameSeason',
+                        name        : 'renameSeason',
                         seriesId    : this.series.id,
                         seasonNumber: this.model.get('seasonNumber')
                     }
@@ -117,7 +116,7 @@ define(
             _seasonSearch: function () {
 
                 CommandController.Execute('seasonSearch', {
-                    name: 'seasonSearch',
+                    name        : 'seasonSearch',
                     seriesId    : this.series.id,
                     seasonNumber: this.model.get('seasonNumber')
                 });
@@ -126,7 +125,7 @@ define(
             _seasonRename: function () {
 
                 CommandController.Execute('renameSeason', {
-                    name: 'renameSeason',
+                    name        : 'renameSeason',
                     seriesId    : this.series.id,
                     seasonNumber: this.model.get('seasonNumber')
                 });
@@ -137,8 +136,7 @@ define(
                 this.model.set(name, !this.model.get(name));
                 this.series.setSeasonMonitored(this.model.get('seasonNumber'));
 
-                var savePromise = this.series.save()
-                    .always(this._afterSeasonMonitored.bind(this));
+                var savePromise = this.series.save().always(this._afterSeasonMonitored.bind(this));
 
                 this.ui.seasonMonitored.spinForPromise(savePromise);
             },
@@ -167,7 +165,6 @@ define(
             },
 
 
-
             _afterRename: function () {
                 App.vent.trigger(App.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
             },
@@ -184,7 +181,7 @@ define(
                 var startDate = Moment().add('month', -1);
                 var endDate = Moment().add('year', 1);
 
-                var result = this.episodeCollection.some(function (episode) {
+                return this.episodeCollection.some(function (episode) {
 
                     var airDate = episode.get('airDateUtc');
 
@@ -198,15 +195,12 @@ define(
 
                     return false;
                 });
-
-                return result;
             },
 
-            _generateTemplateHelpers: function () {
-                this.templateHelpers.showingEpisodes = this.showingEpisodes;
+            templateHelpers: function () {
 
                 var episodeCount = this.episodeCollection.filter(function (episode) {
-                    return (episode.get('monitored') && Moment(episode.get('airDateUtc')).isBefore(Moment())) || episode.get('hasFile');
+                    return episode.get('hasFile') || (episode.get('monitored') && Moment(episode.get('airDateUtc')).isBefore(Moment()));
                 }).length;
 
                 var episodeFileCount = this.episodeCollection.where({ hasFile: true }).length;
@@ -216,9 +210,12 @@ define(
                     percentOfEpisodes = episodeFileCount / episodeCount * 100;
                 }
 
-                this.templateHelpers.episodeCount = episodeCount;
-                this.templateHelpers.episodeFileCount = episodeFileCount;
-                this.templateHelpers.percentOfEpisodes = percentOfEpisodes;
+                return {
+                    showingEpisodes  : this.showingEpisodes,
+                    episodeCount     : episodeCount,
+                    episodeFileCount : episodeFileCount,
+                    percentOfEpisodes: percentOfEpisodes
+                };
             },
 
             _showHideEpisodes: function () {
