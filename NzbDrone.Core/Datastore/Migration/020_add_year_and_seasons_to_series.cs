@@ -43,6 +43,11 @@ namespace NzbDrone.Core.Datastore.Migration
                                     int seasonNumber = seasonReader.GetInt32(0);
                                     bool monitored = seasonReader.GetBoolean(1);
 
+                                    if (seasonNumber == 0)
+                                    {
+                                        monitored = false;
+                                    }
+
                                     seasons.Add(new { seasonNumber, monitored });
                                 }
                             }

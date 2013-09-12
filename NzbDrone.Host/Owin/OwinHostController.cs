@@ -71,7 +71,6 @@ namespace NzbDrone.Host.Owin
                 }
 
                 throw ex.InnerException;
-
             }
         }
 
