@@ -153,10 +153,16 @@ namespace NzbDrone.Core.Indexers
 
             RemoveMissingImplementations();
 
-            if (!All().Any())
+            var definitions = _indexers.SelectMany(indexer => indexer.DefaultDefinitions);
+
+            var currentIndexer = All();
+
+            var newIndexers = definitions.Where(def => currentIndexer.All(c => c.Implementation != def.Implementation)).ToList();
+
+
+            if (newIndexers.Any())
             {
-                var definitions = _indexers.SelectMany(indexer => indexer.DefaultDefinitions);
-                _indexerRepository.InsertMany(definitions.ToList());
+                _indexerRepository.InsertMany(newIndexers);
             }
         }
 

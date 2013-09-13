@@ -25,13 +25,7 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        public virtual IParseFeed Parser
-        {
-            get
-            {
-                return new BasicRssParser();
-            }
-        }
+        public virtual IParseFeed Parser { get; private set; }
 
         public abstract IEnumerable<string> RecentFeed { get; }
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);

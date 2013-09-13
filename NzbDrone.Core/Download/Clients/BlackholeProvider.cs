@@ -24,8 +24,8 @@ namespace NzbDrone.Core.Download.Clients
 
         public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
-            var url = remoteEpisode.Report.NzbUrl;
-            var title = remoteEpisode.Report.Title;
+            var url = remoteEpisode.Release.DownloadUrl;
+            var title = remoteEpisode.Release.Title;
 
             title = FileNameBuilder.CleanFilename(title);
 

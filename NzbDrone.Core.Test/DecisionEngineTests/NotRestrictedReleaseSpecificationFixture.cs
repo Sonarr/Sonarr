@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _parseResult = new RemoteEpisode
                 {
-                    Report = new ReportInfo
+                    Release = new ReleaseInfo
                         {
                             Title = "Dexter.S08E01.EDITED.WEBRip.x264-KYR"
                         }

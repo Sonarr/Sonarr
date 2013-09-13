@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     [TestFixture]
     public class DownloadDecisionMakerFixture : CoreTest<DownloadDecisionMaker>
     {
-        private List<ReportInfo> _reports;
+        private List<ReleaseInfo> _reports;
         private RemoteEpisode _remoteEpisode;
 
         private Mock<IDecisionEngineSpecification> _pass1;
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(false);
             _fail3.Setup(c => c.RejectionReason).Returns("_fail3");
 
-            _reports = new List<ReportInfo> { new ReportInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
+            _reports = new List<ReleaseInfo> { new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
             _remoteEpisode = new RemoteEpisode { Series = new Series() };
 
             Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>()))
@@ -177,11 +177,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>()))
                      .Throws<TestException>();
 
-            _reports = new List<ReportInfo>
+            _reports = new List<ReleaseInfo>
                 {
-                    new ReportInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
-                    new ReportInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
-                    new ReportInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"}
+                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
+                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
+                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"}
                 };
 
             Subject.GetRssDecision(_reports);

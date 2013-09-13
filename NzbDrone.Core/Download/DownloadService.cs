@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Download
 
         public void DownloadReport(RemoteEpisode remoteEpisode)
         {
-            var downloadTitle = remoteEpisode.Report.Title;
+            var downloadTitle = remoteEpisode.Release.Title;
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
             if (!downloadClient.IsConfigured)

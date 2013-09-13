@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Indexers
     public interface IIndexer
     {
         string Name { get; }
-
+       
         bool EnableByDefault { get; }
 
         IEnumerable<IndexerDefinition> DefaultDefinitions { get; }

@@ -66,7 +66,7 @@ namespace NzbDrone.Core.DecisionEngine
                     if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvRageId);
-                        remoteEpisode.Report = report;
+                        remoteEpisode.Release = report;
 
                         if (remoteEpisode.Series != null)
                         {
@@ -118,9 +118,9 @@ namespace NzbDrone.Core.DecisionEngine
             }
             catch (Exception e)
             {
-                e.Data.Add("report", remoteEpisode.Report.ToJson());
+                e.Data.Add("report", remoteEpisode.Release.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Report.Title, e);
+                _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Release.Title, e);
                 return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
             }
 

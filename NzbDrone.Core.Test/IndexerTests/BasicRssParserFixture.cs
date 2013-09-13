@@ -5,7 +5,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {
-    public class BasicRssParserFixture : CoreTest<BasicRssParser>
+    public class BasicRssParserFixture : CoreTest<RssParserBase>
     {
 
         [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", "LOL")]
@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [TestCase("The.Office.S03E115.DVDRip.XviD-OSiTV", "OSiTV")]
         public void parse_releaseGroup(string title, string expected)
         {
-            BasicRssParser.ParseReleaseGroup(title).Should().Be(expected);
+            RssParserBase.ParseReleaseGroup(title).Should().Be(expected);
         }
 
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [TestCase("845 MB", 886046720)]
         public void parse_size(string sizeString, long expectedSize)
         {
-            var result = BasicRssParser.GetReportSize(sizeString);
+            var result = RssParserBase.ParseSize(sizeString);
 
             result.Should().Be(expectedSize);
         }

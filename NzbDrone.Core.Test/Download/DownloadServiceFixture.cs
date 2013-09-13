@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.Download
 
             _parseResult = Builder<RemoteEpisode>.CreateNew()
                    .With(c => c.Series = Builder<Series>.CreateNew().Build())
-                   .With(c => c.Report = Builder<ReportInfo>.CreateNew().Build())
+                   .With(c => c.Release = Builder<ReleaseInfo>.CreateNew().Build())
                    .With(c => c.Episodes = episodes)
                    .Build();
 

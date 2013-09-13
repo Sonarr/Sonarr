@@ -123,6 +123,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+
         private static string NewsnabifyTitle(string title)
         {
             return title.Replace("+", "%20");
