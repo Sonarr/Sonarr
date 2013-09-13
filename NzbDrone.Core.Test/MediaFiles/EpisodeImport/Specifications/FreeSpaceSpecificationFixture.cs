@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
             _localEpisode = new LocalEpisode
                                 {
-                                    Path = @"C:\Test\30 Rock\30.rock.s01e01.avi",
+                                    Path = @"C:\Test\Unsorted\30 Rock\30.rock.s01e01.avi".AsOsAgnostic(),
                                     Episodes = episodes,
                                     Series = _series
                                 };
@@ -98,7 +98,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                 .Verify(v => v.GetAvailableSpace(_rootFolder), Times.Once());
         }
 
-
         [Test]
         public void should_pass_if_free_space_is_null()
         {
@@ -114,11 +113,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
 
             Mocker.GetMock<IDiskProvider>()
-                   .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
-                   .Throws(new TestException());
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
+                  .Throws(new TestException());
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_skip_check_for_files_under_series_folder()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.IsParent(It.IsAny<String>(), It.IsAny<String>()))
+                  .Returns(true);
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(s => s.GetAvailableSpace(It.IsAny<String>()), Times.Never());
         }
     }
 }

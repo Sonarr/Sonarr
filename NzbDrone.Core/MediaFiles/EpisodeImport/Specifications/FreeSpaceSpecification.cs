@@ -23,6 +23,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             try
             {
+                if (_diskProvider.IsParent(localEpisode.Series.Path, localEpisode.Path))
+                {
+                    _logger.Trace("Skipping free space check for existing episode");
+                    return true;
+                }
+
                 var path = Directory.GetParent(localEpisode.Series.Path);
                 var freeSpace = _diskProvider.GetAvailableSpace(path.FullName);
 
