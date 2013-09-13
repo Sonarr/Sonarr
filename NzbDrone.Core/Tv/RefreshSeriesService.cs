@@ -79,8 +79,15 @@ namespace NzbDrone.Core.Tv
             foreach (var season in seriesInfo.Seasons)
             {
                 var existingSeason = series.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
-                
-                if (existingSeason != null)
+
+                //Todo: Should this should use the previous season's monitored state?
+                if (existingSeason == null)
+                {
+                    _logger.Trace("New season ({0}) for series: [{1}] {2}, setting monitored to true", season.SeasonNumber, series.TvdbId, series.Title);
+                    season.Monitored = true;
+                }
+
+                else
                 {
                     season.Monitored = existingSeason.Monitored;
                 }

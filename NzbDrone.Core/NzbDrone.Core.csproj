@@ -419,7 +419,6 @@
     <Compile Include="Providers\VideoFileInfoReader.cs" />
     <Compile Include="Download\Clients\PneumaticClient.cs" />
     <Compile Include="MediaFiles\RecycleBinProvider.cs" />
-    <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="Tv\SeriesTypes.cs" />

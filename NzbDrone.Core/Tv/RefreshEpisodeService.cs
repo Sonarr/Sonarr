@@ -15,15 +15,12 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
-        private readonly ISeasonService _seasonService;
         private readonly IMessageAggregator _messageAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService,
-            ISeasonService seasonService, IMessageAggregator messageAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, IMessageAggregator messageAggregator, Logger logger)
         {
             _episodeService = episodeService;
-            _seasonService = seasonService;
             _messageAggregator = messageAggregator;
             _logger = logger;
         }
@@ -35,7 +32,7 @@ namespace NzbDrone.Core.Tv
             var failCount = 0;
 
             var existingEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
-            var seasons = _seasonService.GetSeasonsBySeries(series.Id);
+            var seasons = series.Seasons;
 
             var updateList = new List<Episode>();
             var newList = new List<Episode>();

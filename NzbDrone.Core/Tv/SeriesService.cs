@@ -119,11 +119,6 @@ namespace NzbDrone.Core.Tv
 
         public Series UpdateSeries(Series series)
         {
-            foreach (var season in series.Seasons)
-            {
-                _episodeService.SetEpisodeMonitoredBySeason(series.Id, season.SeasonNumber, season.Monitored);
-            }
-
             return _seriesRepository.Update(series);
         }
 
