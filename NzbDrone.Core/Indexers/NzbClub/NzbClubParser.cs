@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using NLog;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.NzbClub
 {
@@ -15,8 +13,8 @@ namespace NzbDrone.Core.Indexers.NzbClub
 
         protected override long GetSize(XElement item)
         {
-            logger = LogManager.GetCurrentClassLogger();
-        
+            var match = SizeRegex.Match(item.Description());
+
             if (match.Success && match.Groups["size"].Success)
             {
                 return ParseSize(match.Groups["size"].Value);

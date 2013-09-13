@@ -13,8 +13,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IMakeDownloadDecision
     {
-        List<DownloadDecision> GetRssDecision(List<ReportInfo> reports);
-        List<DownloadDecision> GetSearchDecision(List<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase);
+        List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports);
+        List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -30,17 +30,17 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public List<DownloadDecision> GetRssDecision(List<ReportInfo> reports)
+        public List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports)
         {
             return GetDecisions(reports).ToList();
         }
 
-        public List<DownloadDecision> GetSearchDecision(List<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase)
+        public List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase)
         {
             return GetDecisions(reports, searchCriteriaBase).ToList();
         }
 
-        private IEnumerable<DownloadDecision> GetDecisions(List<ReportInfo> reports, SearchCriteriaBase searchCriteria = null)
+        private IEnumerable<DownloadDecision> GetDecisions(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteria = null)
         {
             if (reports.Any())
             {
