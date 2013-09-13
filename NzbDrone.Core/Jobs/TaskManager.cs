@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
@@ -47,7 +48,8 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 60, TypeName = typeof(ApplicationUpdateCommand).FullName},
-                    new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName}
+                    new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
+                    new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();
@@ -86,7 +88,7 @@ namespace NzbDrone.Core.Jobs
 
         public void HandleAsync(ConfigSavedEvent message)
         {
-            var rss = _scheduledTaskRepository.GetDefinition(typeof (RssSyncCommand));
+            var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
             rss.Interval = _configService.RssSyncInterval;
             _scheduledTaskRepository.Update(rss);
         }
