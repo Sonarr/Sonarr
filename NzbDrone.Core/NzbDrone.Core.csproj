@@ -228,6 +228,7 @@
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
+    <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="NzbDroneClientException.cs" />
     <Compile Include="Instrumentation\LoggerExtensions.cs" />
@@ -416,7 +417,6 @@
     <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetClient.cs" />
-    <Compile Include="Providers\VideoFileInfoReader.cs" />
     <Compile Include="Download\Clients\PneumaticClient.cs" />
     <Compile Include="MediaFiles\RecycleBinProvider.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NLog;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv;

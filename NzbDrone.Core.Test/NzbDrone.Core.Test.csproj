@@ -141,6 +141,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReaderFixture.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFileServiceFixture.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileServiceFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
@@ -238,6 +239,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Media\H264_sample.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Nzbget\JsonError.txt">

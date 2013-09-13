@@ -5,7 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public interface IVideoFileInfoReader
     {
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers
             if (!_diskProvider.FileExists(filename))
                 throw new FileNotFoundException("Media file does not exist: " + filename);
 
-            var mediaInfo = new MediaInfo();
+            var mediaInfo = new MediaInfoLib.MediaInfo();
 
             try
             {
@@ -112,10 +112,10 @@ namespace NzbDrone.Core.Providers
 
         public TimeSpan GetRunTime(string filename)
         {
-            MediaInfo mediaInfo = null;
+            MediaInfoLib.MediaInfo mediaInfo = null;
             try
             {
-                mediaInfo = new MediaInfo();
+                mediaInfo = new MediaInfoLib.MediaInfo();
                 _logger.Trace("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
