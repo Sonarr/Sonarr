@@ -189,6 +189,7 @@
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
+    <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
@@ -211,7 +212,7 @@
     <Compile Include="ParserTests\ParserFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qualities\QualityProfileServiceFixture.cs" />
-    <Compile Include="TvTests\SeriesServiceFixture.cs" />
+    <Compile Include="TvTests\SeriesServiceTests\AddSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
   </ItemGroup>
