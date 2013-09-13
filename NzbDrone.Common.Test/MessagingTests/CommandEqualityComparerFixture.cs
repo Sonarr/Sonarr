@@ -62,5 +62,14 @@ namespace NzbDrone.Common.Test.MessagingTests
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_false_when_only_one_has_properties()
+        {
+            var command1 = new SeasonSearchCommand();
+            var command2 = new SeasonSearchCommand { SeriesId = 2, SeasonNumber = 2 };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
+        }
     }
 }
