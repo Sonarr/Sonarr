@@ -126,16 +126,15 @@ namespace NzbDrone.Common.Test
         }
 
 
-
         [Test]
         public void get_actual_casing_should_return_actual_casing_for_local_dir_in_windows()
         {
             WindowsOnly();
-            var path = Directory.GetCurrentDirectory();
+            var path = Directory.GetCurrentDirectory().Replace("c:\\","C:\\");
+
             path.ToUpper().GetActualCasing().Should().Be(path);
             path.ToLower().GetActualCasing().Should().Be(path);
         }
-
 
         [Test]
         public void get_actual_casing_should_return_original_value_in_linux()

@@ -157,6 +157,11 @@ namespace NzbDrone.Test.Common
             return Path.Combine(SandboxFolder, fileName);
         }
 
+        protected string GetTestFilePath()
+        {
+            return GetTestFilePath(Path.GetTempFileName());
+        }
+
         protected string SandboxFolder
         {
             get

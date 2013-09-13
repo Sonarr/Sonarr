@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -14,7 +13,6 @@ namespace NzbDrone.Common
 {
     public interface IDiskProvider
     {
-        HashSet<string> SpecialFolders { get; }
         DateTime GetLastFolderWrite(string path);
         DateTime GetLastFileWrite(string path);
         void EnsureFolder(string path);
@@ -62,14 +60,6 @@ namespace NzbDrone.Common
 
         private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
-        public HashSet<string> SpecialFolders
-        {
-            get
-            {
-                return new HashSet<string> { "$recycle.bin", "system volume information", "recycler" };
-            }
-        }
-
         public DateTime GetLastFolderWrite(string path)
         {
             Ensure.That(() => path).IsValidPath();
@@ -95,7 +85,9 @@ namespace NzbDrone.Common
             Ensure.That(() => path).IsValidPath();
 
             if (!FileExists(path))
+            {
                 throw new FileNotFoundException("File doesn't exist: " + path);
+            }
 
             return new FileInfo(path).LastWriteTimeUtc;
         }
@@ -156,7 +148,9 @@ namespace NzbDrone.Common
             Ensure.That(() => path).IsValidPath();
 
             if (!FileExists(path))
+            {
                 throw new FileNotFoundException("File doesn't exist: " + path);
+            }
 
             var fi = new FileInfo(path);
             return fi.Length;
@@ -184,7 +178,7 @@ namespace NzbDrone.Common
             try
             {
                 TransferFolder(source, destination, TransferAction.Move);
-                Directory.Delete(source, true);
+                DeleteFolder(source, true);
             }
             catch (Exception e)
             {
@@ -239,8 +233,10 @@ namespace NzbDrone.Common
         public void DeleteFile(string path)
         {
             Ensure.That(() => path).IsValidPath();
-
             Logger.Trace("Deleting file: {0}", path);
+
+            RemoveReadOnly(path);
+
             File.Delete(path);
         }
 
@@ -260,6 +256,7 @@ namespace NzbDrone.Common
                 DeleteFile(destination);
             }
 
+            RemoveReadOnly(source);
             File.Move(source, destination);
         }
 
@@ -348,7 +345,7 @@ namespace NzbDrone.Common
         public void WriteAllText(string filename, string contents)
         {
             Ensure.That(() => filename).IsValidPath();
-
+            RemoveReadOnly(filename);
             File.WriteAllText(filename, contents);
         }
 
@@ -368,28 +365,17 @@ namespace NzbDrone.Common
 
         public bool IsFileLocked(string file)
         {
-
-            //TOOD: Needs test
-            //TODO: move to using instead of trycatch
-            //TODO: prob should use OpenWrite to check for lock.
-            FileStream stream = null;
-
             try
             {
-                stream = File.OpenRead(file);
+                using (File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    return false;
+                }
             }
             catch (IOException)
             {
                 return true;
             }
-            finally
-            {
-                if (stream != null)
-                    stream.Close();
-            }
-
-            //file is not locked
-            return false;
         }
 
         public string GetPathRoot(string path)
@@ -443,6 +429,16 @@ namespace NzbDrone.Common
             }
 
             return false;
+        }
+
+
+        private static void RemoveReadOnly(string path)
+        {
+            if (File.Exists(path))
+            {
+                var newAttributes = File.GetAttributes(path) & ~(FileAttributes.ReadOnly);
+                File.SetAttributes(path, newAttributes);
+            }
         }
 
         public FileAttributes GetFileAttributes(string path)
