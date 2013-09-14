@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Messaging.Commands
             try
             {
                 _trackCommands.Start(command);
-                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                BroadcastCommandUpdate(command);
 
                 if (!MappedDiagnosticsContext.Contains("CommandId") && command.SendUpdatesToClient)
                 {
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             finally
             {
-                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                BroadcastCommandUpdate(command);
                 _eventAggregator.PublishEvent(new CommandExecutedEvent(command));
 
                 if (MappedDiagnosticsContext.Get("CommandId") == command.Id.ToString())
@@ -128,6 +128,15 @@ namespace NzbDrone.Core.Messaging.Commands
             }
 
             _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, command.Runtime.ToString(""));
+        }
+
+
+        private void BroadcastCommandUpdate(Command command)
+        {
+            if (command.SendUpdatesToClient)
+            {
+                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+            }
         }
     }
 }
