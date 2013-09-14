@@ -1,7 +1,7 @@
 ﻿﻿'use strict';
 define(['backbone.pageable', 'Logs/Model', ], function (PagableCollection, LogsModel) {
     return PagableCollection.extend({
-        url  : window.ApiRoot + '/log',
+        url  : window.NzbDrone.ApiRoot + '/log',
         model: LogsModel,
 
         state: {

@@ -5,6 +5,6 @@ define(
     ], function (QualitySizeModel) {
         return Backbone.Collection.extend({
             model: QualitySizeModel,
-            url  : window.ApiRoot + '/qualitysize'
+            url  : window.NzbDrone.ApiRoot + '/qualitysize'
         });
     });

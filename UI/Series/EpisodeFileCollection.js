@@ -5,7 +5,7 @@ define(
         'Series/EpisodeFileModel'
     ], function (Backbone, EpisodeFileModel) {
         return Backbone.Collection.extend({
-            url  : window.ApiRoot + '/episodefile',
+            url  : window.NzbDrone.ApiRoot + '/episodefile',
             model: EpisodeFileModel,
 
             originalFetch: Backbone.Collection.prototype.fetch,

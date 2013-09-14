@@ -8,7 +8,7 @@ define(
     ], function (App, Backbone, Messenger) {
 
         var ProgressMessageCollection = Backbone.Collection.extend({
-            url  : window.ApiRoot + '/progressmessage',
+            url  : window.NzbDrone.ApiRoot + '/progressmessage',
             model: Backbone.Model,
 
             initialize: function(){

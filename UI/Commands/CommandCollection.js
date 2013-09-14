@@ -7,7 +7,7 @@ define(
     ], function (Backbone, CommandModel) {
 
         var CommandCollection = Backbone.Collection.extend({
-            url  : window.ApiRoot + '/command',
+            url  : window.NzbDrone.ApiRoot + '/command',
             model: CommandModel,
 
             findCommand: function (command) {

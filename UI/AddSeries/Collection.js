@@ -5,7 +5,7 @@ define(
         'Series/SeriesModel'
     ], function (Backbone, SeriesModel) {
         return Backbone.Collection.extend({
-            url  : window.ApiRoot + '/series/lookup',
+            url  : window.NzbDrone.ApiRoot + '/series/lookup',
             model: SeriesModel,
 
             initialize: function (options) {

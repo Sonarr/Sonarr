@@ -5,7 +5,7 @@ define(
     ], function (Backbone) {
 
         var model = Backbone.Model.extend({
-            url: window.ApiRoot + '/system/status'
+            url: window.NzbDrone.ApiRoot + '/system/status'
         });
 
 

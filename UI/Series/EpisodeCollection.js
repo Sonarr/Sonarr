@@ -5,7 +5,7 @@ define(
         'Series/EpisodeModel'
     ], function (Backbone, EpisodeModel) {
         return Backbone.Collection.extend({
-            url  : window.ApiRoot + '/episodes',
+            url  : window.NzbDrone.ApiRoot + '/episodes',
             model: EpisodeModel,
 
             state: {

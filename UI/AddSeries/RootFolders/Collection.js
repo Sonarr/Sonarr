@@ -7,7 +7,7 @@ define(
     ], function (Backbone, RootFolderModel) {
 
         var RootFolderCollection = Backbone.Collection.extend({
-            url  : window.ApiRoot + '/rootfolder',
+            url  : window.NzbDrone.ApiRoot + '/rootfolder',
             model: RootFolderModel
         });
 

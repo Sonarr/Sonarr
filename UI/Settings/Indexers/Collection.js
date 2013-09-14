@@ -5,7 +5,7 @@ define(
         'Form/FormBuilder'
     ], function (IndexerModel) {
         return Backbone.Collection.extend({
-            url  : window.ApiRoot + '/indexer',
+            url  : window.NzbDrone.ApiRoot + '/indexer',
             model: IndexerModel
         });
     });

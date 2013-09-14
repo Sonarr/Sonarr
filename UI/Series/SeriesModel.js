@@ -7,7 +7,7 @@ define(
     ], function (Backbone, _) {
         return Backbone.Model.extend({
 
-            urlRoot: ApiRoot + '/series',
+            urlRoot: window.NzbDrone.ApiRoot + '/series',
 
             defaults: {
                 episodeFileCount: 0,

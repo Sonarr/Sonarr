@@ -5,7 +5,7 @@ define(
         'Series/EpisodeModel'
     ], function (Backbone, EpisodeModel) {
         return  Backbone.Collection.extend({
-            url  : window.ApiRoot + '/calendar',
+            url  : window.NzbDrone.ApiRoot + '/calendar',
             model: EpisodeModel,
 
             comparator: function (model) {

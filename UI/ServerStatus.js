@@ -1,18 +1,19 @@
-window.ApiRoot = '/api';
+window.NzbDrone = {};
+window.NzbDrone.ApiRoot = '/api';
 
 var statusText = $.ajax({
     type : 'GET',
-    url  : window.ApiRoot + '/system/status',
+    url  : window.NzbDrone.ApiRoot + '/system/status',
     async: false
 }).responseText;
 
-window.ServerStatus = JSON.parse(statusText);
+window.NzbDrone.ServerStatus = JSON.parse(statusText);
 
-var footerText = window.ServerStatus.version;
+var footerText = window.NzbDrone.ServerStatus.version;
 
 $(document).ready(function () {
-    if (window.ServerStatus.branch != 'master') {
-        footerText += '</br>' + window.ServerStatus.branch;
+    if (window.NzbDrone.ServerStatus.branch != 'master') {
+        footerText += '</br>' + window.NzbDrone.ServerStatus.branch;
     }
     $('#footer-region .version').html(footerText);
 });

@@ -1,7 +1,7 @@
 ﻿'use strict';
 require.config({
 
-    urlArgs: 'v=' + window.ServerStatus.version,
+    urlArgs: 'v=' + window.NzbDrone.ServerStatus.version,
 
     paths: {
         'backbone'            : 'JsLibraries/backbone',

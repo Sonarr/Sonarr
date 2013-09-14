@@ -5,7 +5,7 @@ define(
         'backbone.pageable'
     ], function (ReleaseModel, PagableCollection) {
         return PagableCollection.extend({
-            url  : window.ApiRoot + '/release',
+            url  : window.NzbDrone.ApiRoot + '/release',
             model: ReleaseModel,
 
             mode: 'client',

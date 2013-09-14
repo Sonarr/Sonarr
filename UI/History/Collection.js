@@ -5,7 +5,7 @@ define(
         'backbone.pageable'
     ], function (HistoryModel, PageableCollection) {
         return PageableCollection.extend({
-            url  : window.ApiRoot + '/history',
+            url  : window.NzbDrone.ApiRoot + '/history',
             model: HistoryModel,
 
             state: {

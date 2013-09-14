@@ -4,7 +4,7 @@ define(
         'backbone'
     ], function (Backbone) {
         return Backbone.Model.extend({
-            url: window.ApiRoot + '/command',
+            url: window.NzbDrone.ApiRoot + '/command',
 
             parse: function (response) {
                 response.name = response.name.toLocaleLowerCase();

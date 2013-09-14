@@ -5,7 +5,7 @@ define(
         'Series/SeriesModel'
     ], function (Backbone, SeriesModel) {
         var Collection = Backbone.Collection.extend({
-            url  : window.ApiRoot + '/series',
+            url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
 
             comparator: function (model) {
