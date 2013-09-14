@@ -123,6 +123,14 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        public override IndexerKind Kind
+        {
+            get
+            {
+                return IndexerKind.Usenet;
+            }
+        }
+
 
         private static string NewsnabifyTitle(string title)
         {

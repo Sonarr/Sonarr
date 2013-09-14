@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Indexers.Wombles
             get { return "WomblesIndex"; }
         }
 
+        public override IndexerKind Kind
+        {
+            get
+            {
+                return IndexerKind.Usenet;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get

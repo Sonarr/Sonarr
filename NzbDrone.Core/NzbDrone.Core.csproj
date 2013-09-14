@@ -307,8 +307,6 @@
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
-    <Compile Include="Indexers\NzbClub\NzbClub.cs" />
-    <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
     <Compile Include="Indexers\IIndexerSetting.cs" />

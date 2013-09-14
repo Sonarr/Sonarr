@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Indexers.Eztv
             get { return "Eztv"; }
         }
 
+        public override IndexerKind Kind
+        {
+            get
+            {
+                return IndexerKind.Torrent;
+            }
+        }
+
         public override bool EnableByDefault
         {
             get { return false; }

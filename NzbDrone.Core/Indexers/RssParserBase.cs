@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Indexers
 {
     public abstract class RssParserBase : IParseFeed
     {
-        private Logger _logger;
+        private readonly Logger _logger;
 
         protected virtual ReleaseInfo CreateNewReleaseInfo()
         {
