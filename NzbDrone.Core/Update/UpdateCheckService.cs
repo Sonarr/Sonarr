@@ -34,7 +34,6 @@ namespace NzbDrone.Core.Update
             if (latestAvailable == null)
             {
                 _logger.ProgressDebug("No update available.");
-                return null;
             }
 
             return latestAvailable;

@@ -11,6 +11,7 @@ define(
             if (!img.src.contains(placeHolder)) {
                 img.src = placeHolder;
             }
+            img.onerror = null;
         };
 
         Handlebars.registerHelper('defaultImg', function () {
