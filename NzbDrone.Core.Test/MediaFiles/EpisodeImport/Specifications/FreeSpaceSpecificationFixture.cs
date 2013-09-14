@@ -123,14 +123,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_skip_check_for_files_under_series_folder()
         {
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.IsParent(It.IsAny<String>(), It.IsAny<String>()))
-                  .Returns(true);
+            _localEpisode.ExistingFile = true;
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(s => s.GetAvailableSpace(It.IsAny<String>()), Times.Never());
+        }
+
+        [Test]
+        public void should_return_true_if_free_space_is_null()
+        {
+            long? freeSpace = null;
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
+                  .Returns(freeSpace);
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
         }
     }
 }

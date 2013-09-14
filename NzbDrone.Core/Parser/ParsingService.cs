@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -18,12 +19,17 @@ namespace NzbDrone.Core.Parser
     {
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesService _seriesService;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public ParsingService(IEpisodeService episodeService, ISeriesService seriesService, Logger logger)
+        public ParsingService(IEpisodeService episodeService,
+                              ISeriesService seriesService,
+                              IDiskProvider diskProvider,
+                              Logger logger)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
+            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -54,7 +60,8 @@ namespace NzbDrone.Core.Parser
                 Quality = parsedEpisodeInfo.Quality,
                 Episodes = episodes,
                 Path = filename,
-                ParsedEpisodeInfo = parsedEpisodeInfo
+                ParsedEpisodeInfo = parsedEpisodeInfo,
+                ExistingFile = _diskProvider.IsParent(series.Path, filename)
             };
         }
 

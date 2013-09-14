@@ -19,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
-            if (_diskProvider.IsParent(localEpisode.Series.Path, localEpisode.Path))
+            if (localEpisode.ExistingFile)
             {
                 _logger.Trace("{0} is in series folder, skipping in use check", localEpisode.Path);
                 return true;

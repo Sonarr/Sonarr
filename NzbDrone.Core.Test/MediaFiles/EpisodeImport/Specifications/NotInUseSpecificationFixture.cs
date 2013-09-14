@@ -29,9 +29,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         private void GivenChildOfSeries()
         {
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.IsParent(_localEpisode.Series.Path, _localEpisode.Path))
-                .Returns(true);
+            _localEpisode.ExistingFile = true;
         }
 
         private void GivenNewFile()

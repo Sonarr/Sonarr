@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             try
             {
-                if (_diskProvider.IsParent(localEpisode.Series.Path, localEpisode.Path))
+                if (localEpisode.ExistingFile)
                 {
                     _logger.Trace("Skipping free space check for existing episode");
                     return true;
@@ -31,6 +31,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 var path = Directory.GetParent(localEpisode.Series.Path);
                 var freeSpace = _diskProvider.GetAvailableSpace(path.FullName);
+
+                if (!freeSpace.HasValue)
+                {
+                    _logger.Trace("Free space check returned an invalid result for: {0}", path);
+                    return true;
+                }
 
                 if (freeSpace < localEpisode.Size + 100.Megabytes())
                 {
