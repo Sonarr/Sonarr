@@ -67,10 +67,7 @@
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
-    <Compile Include="MessagingTests\CommandBaseFixture.cs" />
-    <Compile Include="MessagingTests\CommandExecutorFixture.cs" />
     <Compile Include="MessagingTests\MessageAggregatorEventTests.cs" />
-    <Compile Include="MessagingTests\CommandEqualityComparerFixture.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="PathExtensionFixture.cs" />
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />

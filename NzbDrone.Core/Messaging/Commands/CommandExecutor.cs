@@ -118,12 +118,13 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             finally
             {
+                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                _eventAggregator.PublishEvent(new CommandExecutedEvent(command));
+
                 if (MappedDiagnosticsContext.Get("CommandId") == command.Id.ToString())
                 {
                     MappedDiagnosticsContext.Remove("CommandId");
                 }
-                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
-                _eventAggregator.PublishEvent(new CommandExecutedEvent(command));
             }
 
             _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, command.Runtime.ToString(""));

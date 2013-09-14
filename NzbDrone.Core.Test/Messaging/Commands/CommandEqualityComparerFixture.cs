@@ -4,7 +4,7 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 
-namespace NzbDrone.Common.Test.MessagingTests
+namespace NzbDrone.Core.Test.Messaging.Commands
 {
     [TestFixture]
     public class CommandEqualityComparerFixture

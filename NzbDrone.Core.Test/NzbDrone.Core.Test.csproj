@@ -147,6 +147,9 @@
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
+    <Compile Include="Messaging\Commands\CommandEqualityComparerFixture.cs" />
+    <Compile Include="Messaging\Commands\CommandExecutorFixture.cs" />
+    <Compile Include="Messaging\Commands\CommandFixture.cs" />
     <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
     <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />

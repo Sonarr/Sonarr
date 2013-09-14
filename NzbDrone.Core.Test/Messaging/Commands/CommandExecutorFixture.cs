@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Messaging;
+using NzbDrone.Common;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Commands.Tracking;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Common.Test.MessagingTests
+namespace NzbDrone.Core.Test.Messaging.Commands
 {
     [TestFixture]
     public class CommandExecutorFixture : TestBase<CommandExecutor>
@@ -76,6 +77,29 @@ namespace NzbDrone.Common.Test.MessagingTests
                        .Throws(new NotImplementedException());
 
             Assert.Throws<NotImplementedException>(() => Subject.PublishCommand(commandA));
+        }
+
+
+        [Test]
+        public void broken_executor_should_publish_executed_event()
+        {
+            var commandA = new CommandA();
+
+            _executorA.Setup(c => c.Execute(It.IsAny<CommandA>()))
+                       .Throws(new NotImplementedException());
+
+            Assert.Throws<NotImplementedException>(() => Subject.PublishCommand(commandA));
+
+            VerifyEventPublished<CommandExecutedEvent>();
+        }
+
+        [Test]
+        public void should_publish_executed_event_on_success()
+        {
+            var commandA = new CommandA();
+            Subject.PublishCommand(commandA);
+
+            VerifyEventPublished<CommandExecutedEvent>();
         }
     }
 

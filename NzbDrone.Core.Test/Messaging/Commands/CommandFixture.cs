@@ -2,10 +2,10 @@
 using NUnit.Framework;
 using NzbDrone.Core.Update.Commands;
 
-namespace NzbDrone.Common.Test.MessagingTests
+namespace NzbDrone.Core.Test.Messaging.Commands
 {
     [TestFixture]
-    public class CommandBaseFixture
+    public class CommandFixture
     {
         [Test]
         public void default_values()
@@ -15,6 +15,5 @@ namespace NzbDrone.Common.Test.MessagingTests
             command.Id.Should().NotBe(0);
             command.Name.Should().Be("ApplicationUpdate");
         }
-
     }
 }
