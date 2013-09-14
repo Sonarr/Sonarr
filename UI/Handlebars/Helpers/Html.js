@@ -4,7 +4,16 @@ define(
     [
         'handlebars'
     ], function (Handlebars) {
+
+        var placeHolder = '/Content/Images/poster-dark.jpg';
+
+        window.NzbDrone.imageError = function (img) {
+            if (!img.src.contains(placeHolder)) {
+                img.src = placeHolder;
+            }
+        };
+
         Handlebars.registerHelper('defaultImg', function () {
-            return new Handlebars.SafeString('onerror=this.src=\'/Content/Images/poster-dark.jpg\';');
+            return new Handlebars.SafeString('onerror=window.NzbDrone.imageError(this)');
         });
     });
