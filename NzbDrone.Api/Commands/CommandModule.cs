@@ -16,14 +16,14 @@ namespace NzbDrone.Api.Commands
 {
     public class CommandModule : NzbDroneRestModuleWithSignalR<CommandResource, Command>, IHandle<CommandUpdatedEvent>
     {
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly ICommandExecutor _commandExecutor;
         private readonly IContainer _container;
         private readonly ITrackCommands _trackCommands;
 
-        public CommandModule(IMessageAggregator messageAggregator, IContainer container, ITrackCommands trackCommands)
-            : base(messageAggregator)
+        public CommandModule(ICommandExecutor commandExecutor, IContainer container, ITrackCommands trackCommands)
+            : base(commandExecutor)
         {
-            _messageAggregator = messageAggregator;
+            _commandExecutor = commandExecutor;
             _container = container;
             _trackCommands = trackCommands;
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Api.Commands
 
             dynamic command = Request.Body.FromJson(commandType);
 
-            var trackedCommand = (Command)_messageAggregator.PublishCommandAsync(command);
+            var trackedCommand = (Command)_commandExecutor.PublishCommandAsync(command);
             return trackedCommand.Id;
         }
 

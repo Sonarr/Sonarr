@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Tv
     {
         private readonly IDatabase _database;
 
-        public EpisodeRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public EpisodeRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
             _database = database;
         }

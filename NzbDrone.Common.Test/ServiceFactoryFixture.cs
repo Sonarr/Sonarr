@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;
 using NzbDrone.Test.Common;
 

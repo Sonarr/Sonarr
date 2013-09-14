@@ -1,6 +1,6 @@
 using NzbDrone.Common.Messaging;
 
-namespace NzbDrone.Core.Messaging
+namespace NzbDrone.Core.Messaging.Events
 {
     public interface IHandle<TEvent> : IProcessMessage<TEvent> where TEvent : IEvent
     {

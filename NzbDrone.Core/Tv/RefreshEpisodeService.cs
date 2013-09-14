@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -15,13 +16,13 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService, IMessageAggregator messageAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeService = episodeService;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -85,17 +86,17 @@ namespace NzbDrone.Core.Tv
 
             if (newList.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
+                _eventAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
             }
 
             if (updateList.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
+                _eventAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
             }
 
             if (existingEpisodes.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoDeletedEvent(updateList));
+                _eventAggregator.PublishEvent(new EpisodeInfoDeletedEvent(updateList));
             }
 
             if (failCount != 0)

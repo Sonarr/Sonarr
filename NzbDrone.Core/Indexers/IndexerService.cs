@@ -7,6 +7,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Indexers

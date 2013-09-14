@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles

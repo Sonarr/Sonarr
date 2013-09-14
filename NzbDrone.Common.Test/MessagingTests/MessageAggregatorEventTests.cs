@@ -6,12 +6,13 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.MessagingTests
 {
     [TestFixture]
-    public class MessageAggregatorEventTests : TestBase<MessageAggregator>
+    public class MessageAggregatorEventTests : TestBase<EventAggregator>
     {
         private Mock<IHandle<EventA>> HandlerA1;
         private Mock<IHandle<EventA>> HandlerA2;

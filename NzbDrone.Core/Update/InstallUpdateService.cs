@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
 using NzbDrone.Core.Instrumentation;
 

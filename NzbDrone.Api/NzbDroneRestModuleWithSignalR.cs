@@ -10,11 +10,11 @@ namespace NzbDrone.Api
         where TResource : RestResource, new()
         where TModel : ModelBase
     {
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly ICommandExecutor _commandExecutor;
 
-        protected NzbDroneRestModuleWithSignalR(IMessageAggregator messageAggregator)
+        protected NzbDroneRestModuleWithSignalR(ICommandExecutor commandExecutor)
         {
-            _messageAggregator = messageAggregator;
+            _commandExecutor = commandExecutor;
         }
 
         public void Handle(ModelEvent<TModel> message)
@@ -37,7 +37,7 @@ namespace NzbDrone.Api
                 Body = new ResourceChangeMessage<TResource>(resource, action)
             };
 
-            _messageAggregator.PublishCommand(new BroadcastSignalRMessage(signalRMessage));
+            _commandExecutor.PublishCommand(new BroadcastSignalRMessage(signalRMessage));
         }
 
         protected void BroadcastResourceChange(ModelAction action)
@@ -48,7 +48,7 @@ namespace NzbDrone.Api
                 Body = new ResourceChangeMessage<TResource>(action)
             };
 
-            _messageAggregator.PublishCommand(new BroadcastSignalRMessage(signalRMessage));
+            _commandExecutor.PublishCommand(new BroadcastSignalRMessage(signalRMessage));
         }
     }
 }

@@ -6,6 +6,8 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
@@ -15,19 +17,19 @@ namespace NzbDrone.Core.MediaFiles
         private readonly ISeriesService _seriesService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IMoveEpisodeFiles _episodeFileMover;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public RenameEpisodeFileService(ISeriesService seriesService,
                                         IMediaFileService mediaFileService,
                                         IMoveEpisodeFiles episodeFileMover,
-                                        IMessageAggregator messageAggregator,
+                                        IEventAggregator eventAggregator,
                                         Logger logger)
         {
             _seriesService = seriesService;
             _mediaFileService = mediaFileService;
             _episodeFileMover = episodeFileMover;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -59,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (renamed.Any())
             {
-                _messageAggregator.PublishEvent(new SeriesRenamedEvent(series));
+                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
             }
         }
 

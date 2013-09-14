@@ -8,6 +8,7 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using TinyIoC;
 
 namespace NzbDrone.Api
@@ -31,7 +32,7 @@ namespace NzbDrone.Api
 
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
-            container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
+            container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }

@@ -7,6 +7,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv.Events;
 
@@ -30,21 +31,21 @@ namespace NzbDrone.Core.Tv
     {
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
                              IConfigService configServiceService,
-                             IMessageAggregator messageAggregator,
+                             IEventAggregator eventAggregator,
                              ISceneMappingService sceneMappingService,
                              IEpisodeService episodeService,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
             _configService = configServiceService;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _sceneMappingService = sceneMappingService;
             _episodeService = episodeService;
             _logger = logger;
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Tv
             newSeries.SeasonFolder = _configService.UseSeasonFolder;
 
             _seriesRepository.Insert(newSeries);
-            _messageAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
+            _eventAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
 
             return newSeries;
         }
@@ -109,7 +110,7 @@ namespace NzbDrone.Core.Tv
         {
             var series = _seriesRepository.Get(seriesId);
             _seriesRepository.Delete(seriesId);
-            _messageAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles));
+            _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles));
         }
 
         public List<Series> GetAllSeries()

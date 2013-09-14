@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Tv
@@ -13,8 +14,8 @@ namespace NzbDrone.Core.Tv
 
     public class SeasonRepository : BasicRepository<Series>, ISeasonRepository
     {
-        public SeasonRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public SeasonRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

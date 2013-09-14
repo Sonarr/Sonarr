@@ -4,6 +4,7 @@ using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.History
@@ -16,8 +17,8 @@ namespace NzbDrone.Core.History
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
     {
-        public HistoryRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public HistoryRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

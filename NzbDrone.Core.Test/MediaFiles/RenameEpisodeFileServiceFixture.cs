@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Tv;
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.Execute(new RenameSeriesCommand(_series.Id));
 
-            Mocker.GetMock<IMessageAggregator>()
+            Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Never());
         }
 
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.Execute(new RenameSeriesCommand(_series.Id));
 
-            Mocker.GetMock<IMessageAggregator>()
+            Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Never());
         }
 
@@ -97,7 +98,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.Execute(new RenameSeriesCommand(_series.Id));
 
-            Mocker.GetMock<IMessageAggregator>()
+            Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Once());
         }
 

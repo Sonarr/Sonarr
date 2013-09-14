@@ -23,25 +23,25 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly ICommandExecutor _commandExecutor;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
                                 IMakeImportDecision importDecisionMaker,
                                 IImportApprovedEpisodes importApprovedEpisodes,
-                                IMessageAggregator messageAggregator, Logger logger)
+                                ICommandExecutor commandExecutor, Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
-            _messageAggregator = messageAggregator;
+            _commandExecutor = commandExecutor;
             _logger = logger;
         }
 
         private void Scan(Series series)
         {
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
-            _messageAggregator.PublishCommand(new CleanMediaFileDb(series.Id));
+            _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
 
             if (!_diskProvider.FolderExists(series.Path))
             {

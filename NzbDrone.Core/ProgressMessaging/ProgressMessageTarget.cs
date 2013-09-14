@@ -4,20 +4,21 @@ using NLog.Targets;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Tracking;
+using NzbDrone.Core.Messaging.Commands.Tracking;
+using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.ProgressMessaging
 {
 
     public class ProgressMessageTarget : Target, IHandle<ApplicationStartedEvent>
     {
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ITrackCommands _trackCommands;
         private static LoggingRule _rule;
 
-        public ProgressMessageTarget(IMessageAggregator messageAggregator, ITrackCommands trackCommands)
+        public ProgressMessageTarget(IEventAggregator eventAggregator, ITrackCommands trackCommands)
         {
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _trackCommands = trackCommands;
         }
 
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.ProgressMessaging
             if (IsClientMessage(logEvent, command))
             {
                 command.SetMessage(logEvent.FormattedMessage);
-                _messageAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
             }
         }
 

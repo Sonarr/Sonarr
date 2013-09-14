@@ -18,16 +18,16 @@ namespace NzbDrone.Core.Tv
         private readonly IProvideSeriesInfo _seriesInfo;
         private readonly ISeriesService _seriesService;
         private readonly IRefreshEpisodeService _refreshEpisodeService;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IDailySeriesService _dailySeriesService;
         private readonly Logger _logger;
 
-        public RefreshSeriesService(IProvideSeriesInfo seriesInfo, ISeriesService seriesService, IRefreshEpisodeService refreshEpisodeService, IMessageAggregator messageAggregator, IDailySeriesService dailySeriesService, Logger logger)
+        public RefreshSeriesService(IProvideSeriesInfo seriesInfo, ISeriesService seriesService, IRefreshEpisodeService refreshEpisodeService, IEventAggregator eventAggregator, IDailySeriesService dailySeriesService, Logger logger)
         {
             _seriesInfo = seriesInfo;
             _seriesService = seriesService;
             _refreshEpisodeService = refreshEpisodeService;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _dailySeriesService = dailySeriesService;
             _logger = logger;
         }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Tv
             _refreshEpisodeService.RefreshEpisodeInfo(series, tuple.Item2);
 
             _logger.Debug("Finished series refresh for {0}", series.Title);
-            _messageAggregator.PublishEvent(new SeriesUpdatedEvent(series));
+            _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
         }
 
         private List<Season> UpdateSeasons(Series series, Series seriesInfo)

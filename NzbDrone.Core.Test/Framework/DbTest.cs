@@ -9,6 +9,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Test.Framework
@@ -148,27 +149,27 @@ namespace NzbDrone.Core.Test.Framework
     public class TestDatabase : ITestDatabase
     {
         private readonly IDatabase _dbConnection;
-        private IMessageAggregator _messageAggregator;
+        private IEventAggregator _eventAggregator;
 
         public TestDatabase(IDatabase dbConnection)
         {
-            _messageAggregator = new Mock<IMessageAggregator>().Object;
+            _eventAggregator = new Mock<IEventAggregator>().Object;
             _dbConnection = dbConnection;
         }
 
         public void InsertMany<T>(IEnumerable<T> items) where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection, _messageAggregator).InsertMany(items.ToList());
+            new BasicRepository<T>(_dbConnection, _eventAggregator).InsertMany(items.ToList());
         }
 
         public T Insert<T>(T item) where T : ModelBase, new()
         {
-            return new BasicRepository<T>(_dbConnection, _messageAggregator).Insert(item);
+            return new BasicRepository<T>(_dbConnection, _eventAggregator).Insert(item);
         }
 
         public List<T> All<T>() where T : ModelBase, new()
         {
-            return new BasicRepository<T>(_dbConnection, _messageAggregator).All().ToList();
+            return new BasicRepository<T>(_dbConnection, _eventAggregator).All().ToList();
         }
 
         public T Single<T>() where T : ModelBase, new()
@@ -178,12 +179,12 @@ namespace NzbDrone.Core.Test.Framework
 
         public void Update<T>(T childModel) where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection, _messageAggregator).Update(childModel);
+            new BasicRepository<T>(_dbConnection, _eventAggregator).Update(childModel);
         }
 
         public void Delete<T>(T childModel) where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection, _messageAggregator).Delete(childModel);
+            new BasicRepository<T>(_dbConnection, _eventAggregator).Delete(childModel);
         }
     }
 }

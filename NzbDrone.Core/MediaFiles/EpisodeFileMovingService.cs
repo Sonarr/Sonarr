@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -20,19 +21,19 @@ namespace NzbDrone.Core.MediaFiles
     {
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public MoveEpisodeFiles(IEpisodeService episodeService,
                                 IBuildFileNames buildFileNames,
-                                IMessageAggregator messageAggregator,
+                                IEventAggregator eventAggregator,
                                 IDiskProvider diskProvider,
                                 Logger logger)
         {
             _episodeService = episodeService;
             _buildFileNames = buildFileNames;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _diskProvider = diskProvider;
             _logger = logger;
         }

@@ -4,78 +4,31 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;
-using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Messaging.Tracking;
 using NzbDrone.Core.ProgressMessaging;
 
-namespace NzbDrone.Core.Messaging
+namespace NzbDrone.Core.Messaging.Commands
 {
-    public class MessageAggregator : IMessageAggregator
+    public class CommandExecutor : ICommandExecutor
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
         private readonly ITrackCommands _trackCommands;
+        private readonly IEventAggregator _eventAggregator;
         private readonly TaskFactory _taskFactory;
 
-        public MessageAggregator(Logger logger, IServiceFactory serviceFactory, ITrackCommands trackCommands)
+        public CommandExecutor(Logger logger, IServiceFactory serviceFactory, ITrackCommands trackCommands, IEventAggregator eventAggregator)
         {
             var scheduler = new LimitedConcurrencyLevelTaskScheduler(3);
 
             _logger = logger;
             _serviceFactory = serviceFactory;
             _trackCommands = trackCommands;
+            _eventAggregator = eventAggregator;
             _taskFactory = new TaskFactory(scheduler);
-        }
-
-        public void PublishEvent<TEvent>(TEvent @event) where TEvent : class ,IEvent
-        {
-            Ensure.That(() => @event).IsNotNull();
-
-            var eventName = GetEventName(@event.GetType());
-
-            _logger.Trace("Publishing {0}", eventName);
-
-            //call synchronous handlers first.
-            foreach (var handler in _serviceFactory.BuildAll<IHandle<TEvent>>())
-            {
-                try
-                {
-                    _logger.Trace("{0} -> {1}", eventName, handler.GetType().Name);
-                    handler.Handle(@event);
-                    _logger.Trace("{0} <- {1}", eventName, handler.GetType().Name);
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException(string.Format("{0} failed while processing [{1}]", handler.GetType().Name, eventName), e);
-                }
-            }
-
-            foreach (var handler in _serviceFactory.BuildAll<IHandleAsync<TEvent>>())
-            {
-                var handlerLocal = handler;
-
-                _taskFactory.StartNew(() =>
-                {
-                    _logger.Trace("{0} ~> {1}", eventName, handlerLocal.GetType().Name);
-                    handlerLocal.HandleAsync(@event);
-                    _logger.Trace("{0} <~ {1}", eventName, handlerLocal.GetType().Name);
-                }, TaskCreationOptions.PreferFairness)
-                .LogExceptions();
-            }
-        }
-
-        private static string GetEventName(Type eventType)
-        {
-            if (!eventType.IsGenericType)
-            {
-                return eventType.Name;
-            }
-
-            return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
         }
 
         public void PublishCommand<TCommand>(TCommand command) where TCommand : Command
@@ -148,7 +101,7 @@ namespace NzbDrone.Core.Messaging
             try
             {
                 _trackCommands.Start(command);
-                PublishEvent(new CommandUpdatedEvent(command));
+                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
 
                 if (!MappedDiagnosticsContext.Contains("CommandId") && command.SendUpdatesToClient)
                 {
@@ -157,13 +110,10 @@ namespace NzbDrone.Core.Messaging
 
                 handler.Execute((TCommand)command);
                 _trackCommands.Completed(command);
-                PublishEvent(new CommandUpdatedEvent(command));
-
             }
             catch (Exception e)
             {
                 _trackCommands.Failed(command, e);
-                PublishEvent(new CommandUpdatedEvent(command));
                 throw;
             }
             finally
@@ -172,10 +122,9 @@ namespace NzbDrone.Core.Messaging
                 {
                     MappedDiagnosticsContext.Remove("CommandId");
                 }
+                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                _eventAggregator.PublishEvent(new CommandExecutedEvent(command));
             }
-
-            PublishEvent(new CommandExecutedEvent(command));
-            PublishEvent(new CommandUpdatedEvent(command));
 
             _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, command.Runtime.ToString(""));
         }

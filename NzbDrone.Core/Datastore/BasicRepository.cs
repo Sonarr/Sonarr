@@ -7,6 +7,7 @@ using Marr.Data.QGen;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Common;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Datastore
@@ -38,17 +39,17 @@ namespace NzbDrone.Core.Datastore
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
         private readonly IDatabase _database;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
 
         private IDataMapper DataMapper
         {
             get { return _database.GetDataMapper(); }
         }
 
-        public BasicRepository(IDatabase database, IMessageAggregator messageAggregator)
+        public BasicRepository(IDatabase database, IEventAggregator eventAggregator)
         {
             _database = database;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
         }
 
         protected QueryBuilder<TModel> Query
@@ -240,7 +241,7 @@ namespace NzbDrone.Core.Datastore
         {
             if (PublishModelEvents)
             {
-                _messageAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
+                _eventAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
             }
         }
 

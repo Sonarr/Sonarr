@@ -6,6 +6,7 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Datastore
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Datastore
             container.Register<ILogRepository>(c =>
             {
                 var db = c.Resolve<IDbFactory>().Create(MigrationType.Log);
-                return new LogRepository(db, c.Resolve<IMessageAggregator>());
+                return new LogRepository(db, c.Resolve<IEventAggregator>());
             });
         }
 

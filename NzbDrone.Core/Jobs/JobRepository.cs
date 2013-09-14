@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Jobs
@@ -16,8 +17,8 @@ namespace NzbDrone.Core.Jobs
     public class ScheduledTaskRepository : BasicRepository<ScheduledTask>, IScheduledTaskRepository
     {
 
-        public ScheduledTaskRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public ScheduledTaskRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

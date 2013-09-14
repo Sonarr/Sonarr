@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.Messaging.Commands;
 
-namespace NzbDrone.Core.Messaging.Tracking
+namespace NzbDrone.Core.Messaging.Commands.Tracking
 {
     public interface ITrackCommands
     {

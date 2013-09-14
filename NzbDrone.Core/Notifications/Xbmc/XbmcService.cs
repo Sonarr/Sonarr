@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
 

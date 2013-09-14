@@ -1,7 +1,6 @@
 using System;
-using NzbDrone.Core.Messaging.Commands;
 
-namespace NzbDrone.Core.Messaging.Tracking
+namespace NzbDrone.Core.Messaging.Commands.Tracking
 {
     public class ExistingCommand
     {

@@ -10,6 +10,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Configuration
@@ -33,15 +34,15 @@ namespace NzbDrone.Core.Configuration
     {
         private const string CONFIG_ELEMENT_NAME = "Config";
 
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IMessageAggregator messageAggregator)
+        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IEventAggregator eventAggregator)
         {
             _cache = cacheManger.GetCache<string>(GetType());
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _configFile = appFolderInfo.GetConfigPath();
         }
 
@@ -82,7 +83,7 @@ namespace NzbDrone.Core.Configuration
                 }
             }
 
-            _messageAggregator.PublishEvent(new ConfigFileSavedEvent());
+            _eventAggregator.PublishEvent(new ConfigFileSavedEvent());
         }
 
         public int Port

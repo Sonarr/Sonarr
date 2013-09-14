@@ -2,6 +2,7 @@
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Notifications
@@ -14,8 +15,8 @@ namespace NzbDrone.Core.Notifications
 
     public class NotificationRepository : BasicRepository<NotificationDefinition>, INotificationRepository
     {
-        public NotificationRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public NotificationRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

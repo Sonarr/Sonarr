@@ -10,7 +10,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.MessagingTests
 {
     [TestFixture]
-    public class MessageAggregatorCommandTests : TestBase<MessageAggregator>
+    public class CommandExecutorFixture : TestBase<CommandExecutor>
     {
         private Mock<IExecute<CommandA>> _executorA;
         private Mock<IExecute<CommandB>> _executorB;

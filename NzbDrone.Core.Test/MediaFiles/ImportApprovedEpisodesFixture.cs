@@ -8,6 +8,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -103,7 +104,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
-            Mocker.GetMock<IMessageAggregator>()
+            Mocker.GetMock<IEventAggregator>()
                 .Verify(v => v.PublishEvent(It.IsAny<EpisodeImportedEvent>()), Times.Once());
         }
 
@@ -122,7 +123,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() });
 
-            Mocker.GetMock<IMessageAggregator>()
+            Mocker.GetMock<IEventAggregator>()
                 .Verify(v => v.PublishEvent(It.IsAny<EpisodeImportedEvent>()), Times.Never());
         }
     }

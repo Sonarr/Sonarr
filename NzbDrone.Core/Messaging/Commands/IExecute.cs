@@ -1,6 +1,4 @@
-using NzbDrone.Core.Messaging.Commands;
-
-namespace NzbDrone.Core.Messaging
+namespace NzbDrone.Core.Messaging.Commands
 {
     public interface IExecute<TCommand> : IProcessMessage<TCommand> where TCommand : Command
     {
