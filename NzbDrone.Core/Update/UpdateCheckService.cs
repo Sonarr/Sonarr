@@ -10,7 +10,6 @@ namespace NzbDrone.Core.Update
         UpdatePackage AvailableUpdate();
     }
 
-
     public class CheckUpdateService : ICheckUpdateService
     {
         private readonly IUpdatePackageProvider _updatePackageProvider;
@@ -28,6 +27,8 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
+            if (OsInfo.IsLinux) return null;
+
             var latestAvailable = _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
 
             if (latestAvailable == null)
