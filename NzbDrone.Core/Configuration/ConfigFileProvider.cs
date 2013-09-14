@@ -26,13 +26,13 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
+        bool Torrent { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
     {
         private const string CONFIG_ELEMENT_NAME = "Config";
 
-        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IMessageAggregator _messageAggregator;
         private readonly ICached<string> _cache;
 
@@ -40,10 +40,9 @@ namespace NzbDrone.Core.Configuration
 
         public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IMessageAggregator messageAggregator)
         {
-            _appFolderInfo = appFolderInfo;
             _cache = cacheManger.GetCache<string>(GetType());
             _messageAggregator = messageAggregator;
-            _configFile = _appFolderInfo.GetConfigPath();
+            _configFile = appFolderInfo.GetConfigPath();
         }
 
         public Dictionary<string, object> GetConfigDictionary()
@@ -96,6 +95,11 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("LaunchBrowser", true); }
         }
 
+        public bool Torrent
+        {
+            get { return GetValueBoolean("Torrent", false, persist: false); }
+        }
+
         public bool AuthenticationEnabled
         {
             get { return GetValueBoolean("AuthenticationEnabled", false); }
@@ -126,9 +130,9 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
-        public bool GetValueBoolean(string key, bool defaultValue)
+        public bool GetValueBoolean(string key, bool defaultValue, bool persist = true)
         {
-            return Convert.ToBoolean(GetValue(key, defaultValue));
+            return Convert.ToBoolean(GetValue(key, defaultValue, persist));
         }
 
         public T GetValueEnum<T>(string key, T defaultValue)
@@ -136,7 +140,7 @@ namespace NzbDrone.Core.Configuration
             return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
 
-        public string GetValue(string key, object defaultValue)
+        public string GetValue(string key, object defaultValue, bool persist = true)
         {
             return _cache.Get(key, () =>
                 {
@@ -153,7 +157,10 @@ namespace NzbDrone.Core.Configuration
                         return valueHolder.First().Value;
 
                     //Save the value
-                    SetValue(key, defaultValue);
+                    if (persist)
+                    {
+                        SetValue(key, defaultValue);
+                    }
 
                     //return the default value
                     return defaultValue.ToString();
@@ -233,7 +240,7 @@ namespace NzbDrone.Core.Configuration
 
             catch (XmlException ex)
             {
-                throw new InvalidConfigFileException("config.xml is invalid, please see the wiki for steps to resolve this issue.", ex);
+                throw new InvalidConfigFileException(_configFile + " is invalid, please see the http://wiki.nzbdrone.com for steps to resolve this issue.", ex);
             }
         }
 

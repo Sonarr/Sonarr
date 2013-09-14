@@ -30,9 +30,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
             fakeConfig.SetupGet(c => c.NzbgetRecentTvPriority).Returns(PriorityType.High);
 
             _remoteEpisode = new RemoteEpisode();
-            _remoteEpisode.Report = new ReportInfo();
-            _remoteEpisode.Report.Title = _title;
-            _remoteEpisode.Report.NzbUrl = _url;
+            _remoteEpisode.Release = new ReleaseInfo();
+            _remoteEpisode.Release.Title = _title;
+            _remoteEpisode.Release.DownloadUrl = _url;
 
             _remoteEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
                                                       .All()

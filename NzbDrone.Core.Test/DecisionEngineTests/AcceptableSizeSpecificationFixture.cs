@@ -26,14 +26,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             parseResultMulti = new RemoteEpisode
                                    {
-                                       Report = new ReportInfo(),
+                                       Release = new ReleaseInfo(),
                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, true) },
                                        Episodes = new List<Episode> { new Episode(), new Episode() }
                                    };
 
             parseResultSingle = new RemoteEpisode
                                     {
-                                        Report = new ReportInfo(),
+                                        Release = new ReleaseInfo(),
                                         ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, true) },
                                         Episodes = new List<Episode> { new Episode() }
 
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_true_single_episode_not_first_or_last_30_minute()
         {
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Report.Size = 184572800;
+            parseResultSingle.Release.Size = 184572800;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_true_single_episode_not_first_or_last_60_minute()
         {
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Report.Size = 368572800;
+            parseResultSingle.Release.Size = 368572800;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_false_single_episode_not_first_or_last_30_minute()
         {
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Report.Size = 1.Gigabytes();
+            parseResultSingle.Release.Size = 1.Gigabytes();
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_false_single_episode_not_first_or_last_60_minute()
         {
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Report.Size = 1.Gigabytes();
+            parseResultSingle.Release.Size = 1.Gigabytes();
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_30_minute()
         {
             parseResultMulti.Series = series30minutes;
-            parseResultMulti.Report.Size = 184572800;
+            parseResultMulti.Release.Size = 184572800;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_60_minute()
         {
             parseResultMulti.Series = series60minutes;
-            parseResultMulti.Report.Size = 368572800;
+            parseResultMulti.Release.Size = 368572800;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_30_minute()
         {
             parseResultMulti.Series = series30minutes;
-            parseResultMulti.Report.Size = 1.Gigabytes();
+            parseResultMulti.Release.Size = 1.Gigabytes();
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_60_minute()
         {
             parseResultMulti.Series = series60minutes;
-            parseResultMulti.Report.Size = 10.Gigabytes();
+            parseResultMulti.Release.Size = 10.Gigabytes();
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_true_single_episode_first_30_minute()
         {
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Report.Size = 184572800;
+            parseResultSingle.Release.Size = 184572800;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_true_single_episode_first_60_minute()
         {
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Report.Size = 368572800;
+            parseResultSingle.Release.Size = 368572800;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void IsAcceptableSize_false_single_episode_first_30_minute()
         {
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Report.Size = 1.Gigabytes();
+            parseResultSingle.Release.Size = 1.Gigabytes();
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -268,7 +268,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Report.Size = 10.Gigabytes();
+            parseResultSingle.Release.Size = 10.Gigabytes();
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -289,7 +289,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Report.Size = 18457280000;
+            parseResultSingle.Release.Size = 18457280000;
             qualityType.MaxSize = 0;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
 
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Report.Size = 36857280000;
+            parseResultSingle.Release.Size = 36857280000;
             qualityType.MaxSize = 0;
 
             Mocker.GetMock<IQualitySizeService>().Setup(s => s.Get(1)).Returns(qualityType);
@@ -334,7 +334,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Series.SeriesType = SeriesTypes.Daily;
 
-            parseResultSingle.Report.Size = 300.Megabytes();
+            parseResultSingle.Release.Size = 300.Megabytes();
 
             qualityType.MaxSize = (int)600.Megabytes();
 

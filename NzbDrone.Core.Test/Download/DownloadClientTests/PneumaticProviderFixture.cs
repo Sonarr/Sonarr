@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder).Returns(_sabDrop);
 
             _remoteEpisode = new RemoteEpisode();
-            _remoteEpisode.Report = new ReportInfo();
-            _remoteEpisode.Report.Title = _title;
-            _remoteEpisode.Report.NzbUrl = _nzbUrl;
+            _remoteEpisode.Release = new ReleaseInfo();
+            _remoteEpisode.Release.Title = _title;
+            _remoteEpisode.Release.DownloadUrl = _nzbUrl;
 
             _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void should_throw_if_full_season_download()
         {
-            _remoteEpisode.Report.Title = "30 Rock - Season 1";
+            _remoteEpisode.Release.Title = "30 Rock - Season 1";
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
 
             Assert.Throws<NotImplementedException>(() => Subject.DownloadNzb(_remoteEpisode));
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
             var expectedFilename = Path.Combine(_pneumaticFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
-            _remoteEpisode.Report.Title = illegalTitle;
+            _remoteEpisode.Release.Title = illegalTitle;
 
             Subject.DownloadNzb(_remoteEpisode);
 

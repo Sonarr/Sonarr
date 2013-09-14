@@ -17,11 +17,11 @@ define(
                 var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
                 var episodeField = this.column.get('episodes') || 'episodeNumber';
 
-                if (this.cellValue) {
+                if (this.model) {
 
-                    var airDate = this.cellValue.get(airDateField);
-                    var seasonNumber = this.cellValue.get(seasonField);
-                    var episodes = this.cellValue.get(episodeField);
+                    var airDate = this.model.get(airDateField);
+                    var seasonNumber = this.model.get(seasonField);
+                    var episodes = this.model.get(episodeField);
 
                     var result = 'Unknown';
 

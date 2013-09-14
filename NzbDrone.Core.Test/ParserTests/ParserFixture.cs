@@ -400,14 +400,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().BeNull();
         }
 
-        [TestCase("[112461]-[FULL]-[#a.b.teevee@EFNet]-[ 666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION ]-[02/31] - \"the.devils.address.103.720p-dimension.par2\" yEnc", "666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION")]
-        [TestCase("[112438]-[FULL]-[#a.b.teevee@EFNet]-[ Downton_Abbey.3x05.HDTV_x264-FoV ]-[01/26] - \"downton_abbey.3x05.hdtv_x264-fov.nfo\" yEnc", "Downton_Abbey.3x05.HDTV_x264-FoV")]
-        [TestCase("[ 21154 ] - [ TrollHD ] - [ 00/73 ] - \"MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb\" yEnc", "MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb")]
-        public void parse_header(string title, string expected)
-        {
-            BasicRssParser.ParseHeader(title).Should().Be(expected);
-        }
-
         [TestCase("76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe")]
         [TestCase("Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8")]
         [TestCase("TDAsqTea7k4o6iofVx3MQGuDK116FSjPobMuh8oB")]

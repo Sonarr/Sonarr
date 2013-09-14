@@ -27,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            var age = subject.Report.Age;
+            var age = subject.Release.Age;
 
             _logger.Trace("Checking if report meets retention requirements. {0}", age);
             if (_configService.Retention > 0 && age > _configService.Retention)

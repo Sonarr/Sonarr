@@ -30,9 +30,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             Mocker.GetMock<IConfigService>().SetupGet(c => c.BlackholeFolder).Returns(_blackHoleFolder);
 
             _remoteEpisode = new RemoteEpisode();
-            _remoteEpisode.Report = new ReportInfo();
-            _remoteEpisode.Report.Title = _title;
-            _remoteEpisode.Report.NzbUrl = _nzbUrl;
+            _remoteEpisode.Release = new ReleaseInfo();
+            _remoteEpisode.Release.Title = _title;
+            _remoteEpisode.Release.DownloadUrl = _nzbUrl;
         }
 
         private void WithExistingFile()
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
             var expectedFilename = Path.Combine(_blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
-            _remoteEpisode.Report.Title = illegalTitle;
+            _remoteEpisode.Release.Title = illegalTitle;
 
             Subject.DownloadNzb(_remoteEpisode);
 

@@ -26,8 +26,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             string cat = _configService.SabTvCategory;
             int priority = (int)_configService.SabRecentTvPriority;
 
-            string name = remoteEpisode.Report.NzbUrl.Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Report.Title);
+            string name = remoteEpisode.Release.DownloadUrl.Replace("&", "%26");
+            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Release.Title);
 
             string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
                 name, priority, cat, nzbName);
@@ -66,8 +66,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
-            var url = remoteEpisode.Report.NzbUrl;
-            var title = remoteEpisode.Report.Title;
+            var url = remoteEpisode.Release.DownloadUrl;
+            var title = remoteEpisode.Release.Title;
 
             string cat = _configService.SabTvCategory;
             int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;

@@ -215,10 +215,14 @@
     <Compile Include="IndexerSearch\EpisodeSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
+    <Compile Include="Indexers\BasicTorrentRssParser.cs" />
+    <Compile Include="Indexers\DownloadProtocols.cs" />
+    <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
+    <Compile Include="Indexers\IParseFeed.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
     <Compile Include="Indexers\NullSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
@@ -294,7 +298,7 @@
     <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\NzbSearchService.cs" />
     <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
-    <Compile Include="Indexers\BasicRssParser.cs" />
+    <Compile Include="Indexers\RssParserBase.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
@@ -303,8 +307,6 @@
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
-    <Compile Include="Indexers\NzbClub\NzbClub.cs" />
-    <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
     <Compile Include="Indexers\IIndexerSetting.cs" />
@@ -373,7 +375,8 @@
     <Compile Include="Parser\Model\LocalEpisode.cs" />
     <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />
     <Compile Include="Parser\Model\RemoteEpisode.cs" />
-    <Compile Include="Parser\Model\ReportInfo.cs" />
+    <Compile Include="Parser\Model\ReleaseInfo.cs" />
+    <Compile Include="Parser\Model\TorrentInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />

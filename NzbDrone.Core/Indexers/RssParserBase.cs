@@ -8,43 +8,44 @@ using System.Xml;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
-    public interface IParseFeed
-    {
-        IEnumerable<ReportInfo> Process(string xml, string url);
-    }
-
-    public class BasicRssParser : IParseFeed
+    public abstract class RssParserBase : IParseFeed
     {
         private readonly Logger _logger;
 
-        public BasicRssParser()
+        protected virtual ReleaseInfo CreateNewReleaseInfo()
+        {
+            return new ReleaseInfo();
+        }
+
+        protected RssParserBase()
         {
             _logger = NzbDroneLogger.GetLogger(this);
         }
 
-        public IEnumerable<ReportInfo> Process(string xml, string url)
+        public IEnumerable<ReleaseInfo> Process(string xml, string url)
         {
             using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { ProhibitDtd = false, IgnoreComments = true }))
             {
+
                 var document = XDocument.Load(xmlTextReader);
                 var items = document.Descendants("item");
 
-                var result = new List<ReportInfo>();
+                var result = new List<ReleaseInfo>();
 
                 foreach (var item in items)
                 {
                     try
                     {
-                        var reportInfo = ParseFeedItem(item);
+                        var reportInfo = ParseFeedItem(item.StripNameSpace(), url);
                         if (reportInfo != null)
                         {
-                            reportInfo.NzbUrl = GetNzbUrl(item);
-                            reportInfo.NzbInfoUrl = GetNzbInfoUrl(item);
-
+                            reportInfo.DownloadUrl = GetNzbUrl(item);
+                            reportInfo.InfoUrl = GetNzbInfoUrl(item);
                             result.Add(reportInfo);
                         }
                     }
@@ -59,6 +60,31 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
+        private ReleaseInfo ParseFeedItem(XElement item, string url)
+        {
+            var title = GetTitle(item);
+
+            var reportInfo = CreateNewReleaseInfo();
+
+            reportInfo.Title = title;
+            reportInfo.PublishDate = item.PublishDate();
+            reportInfo.ReleaseGroup = ParseReleaseGroup(title);
+            reportInfo.DownloadUrl = GetNzbUrl(item);
+            reportInfo.InfoUrl = GetNzbInfoUrl(item);
+
+            try
+            {
+                reportInfo.Size = GetSize(item);
+            }
+            catch (Exception)
+            {
+                throw new SizeParsingException("Unable to parse size from: {0} [{1}]", reportInfo.Title, url);
+            }
+
+            _logger.Trace("Parsed: {0} from: {1}", reportInfo, item.Title());
+
+            return PostProcessor(item, reportInfo);
+        }
 
         protected virtual string GetTitle(XElement item)
         {
@@ -75,25 +101,14 @@ namespace NzbDrone.Core.Indexers
             return String.Empty;
         }
 
-        protected virtual ReportInfo PostProcessor(XElement item, ReportInfo currentResult)
+        protected abstract long GetSize(XElement item);
+
+        protected virtual ReleaseInfo PostProcessor(XElement item, ReleaseInfo currentResult)
         {
             return currentResult;
         }
 
-        private ReportInfo ParseFeedItem(XElement item)
-        {
-            var title = GetTitle(item);
 
-            var reportInfo = new ReportInfo();
-
-            reportInfo.Title = title;
-            reportInfo.Age = DateTime.Now.Date.Subtract(item.PublishDate().Date).Days;
-            reportInfo.ReleaseGroup = ParseReleaseGroup(title);
-
-            _logger.Trace("Parsed: {0} from: {1}", reportInfo, item.Title());
-
-            return PostProcessor(item, reportInfo);
-        }
 
         public static string ParseReleaseGroup(string title)
         {
@@ -111,39 +126,15 @@ namespace NzbDrone.Core.Indexers
             if (@group.Length == title.Length)
                 return String.Empty;
 
-            return @group;
-        }
-
-        private static readonly Regex[] HeaderRegex = new[]
-                                                          {
-                                                                new Regex(@"(?:\[.+\]\-\[.+\]\-\[.+\]\-\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                        RegexOptions.IgnoreCase),
-                                                                
-                                                                new Regex(@"(?:\[.+\]\W+\[.+\]\W+\[.+\]\W+\"")(?<nzbTitle>.+)(?:\"".+)",
-                                                                        RegexOptions.IgnoreCase),
-                                                                    
-                                                                new Regex(@"(?:\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                        RegexOptions.IgnoreCase),
-                                                          };
-
-        public static string ParseHeader(string header)
-        {
-            foreach (var regex in HeaderRegex)
-            {
-                var match = regex.Matches(header);
-
-                if (match.Count != 0)
-                    return match[0].Groups["nzbTitle"].Value.Trim();
-            }
-
-            return header;
+            return @group.Trim('-', ' ', '[', ']');
         }
 
         private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 
-        public static long GetReportSize(string sizeString)
+
+        public static long ParseSize(string sizeString)
         {
             var match = ReportSizeRegex.Matches(sizeString);
 

@@ -64,15 +64,15 @@ namespace NzbDrone.Core.History
                     EventType = HistoryEventType.Grabbed,
                     Date = DateTime.UtcNow,
                     Quality = message.Episode.ParsedEpisodeInfo.Quality,
-                    SourceTitle = message.Episode.Report.Title,
+                    SourceTitle = message.Episode.Release.Title,
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
                 };
 
-                history.Data.Add("Indexer", message.Episode.Report.Indexer);
-                history.Data.Add("NzbInfoUrl", message.Episode.Report.NzbInfoUrl);
-                history.Data.Add("ReleaseGroup", message.Episode.Report.ReleaseGroup);
-                history.Data.Add("Age", message.Episode.Report.Age.ToString());
+                history.Data.Add("Indexer", message.Episode.Release.Indexer);
+                history.Data.Add("NzbInfoUrl", message.Episode.Release.InfoUrl);
+                history.Data.Add("ReleaseGroup", message.Episode.Release.ReleaseGroup);
+                history.Data.Add("Age", message.Episode.Release.Age.ToString());
 
                 _historyRepository.Insert(history);
             }

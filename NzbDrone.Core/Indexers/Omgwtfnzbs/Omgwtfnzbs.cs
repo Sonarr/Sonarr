@@ -10,6 +10,14 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             get { return "omgwtfnzbs"; }
         }
 
+        public override IndexerKind Kind
+        {
+            get
+            {
+                return IndexerKind.Usenet;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get

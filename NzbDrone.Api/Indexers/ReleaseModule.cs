@@ -42,7 +42,7 @@ namespace NzbDrone.Api.Indexers
         private Response DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), 0);
-            remoteEpisode.Report = release.InjectTo<ReportInfo>();
+            remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
 
             _downloadService.DownloadReport(remoteEpisode);
 
@@ -82,7 +82,7 @@ namespace NzbDrone.Api.Indexers
             {
                 var release = new ReleaseResource();
 
-                release.InjectFrom(downloadDecision.RemoteEpisode.Report);
+                release.InjectFrom(downloadDecision.RemoteEpisode.Release);
                 release.InjectFrom(downloadDecision.RemoteEpisode.ParsedEpisodeInfo);
                 release.InjectFrom(downloadDecision);
                 release.Rejections = downloadDecision.Rejections.ToList();

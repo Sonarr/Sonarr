@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IFetchAndParseRss
     {
-        List<ReportInfo> Fetch();
+        List<ReleaseInfo> Fetch();
     }
 
     public class FetchAndParseRssService : IFetchAndParseRss
@@ -25,9 +25,9 @@ namespace NzbDrone.Core.Indexers
             _logger = logger;
         }
 
-        public List<ReportInfo> Fetch()
+        public List<ReleaseInfo> Fetch()
         {
-            var result = new List<ReportInfo>();
+            var result = new List<ReleaseInfo>();
 
             var indexers = _indexerService.GetAvailableIndexers().ToList();
 

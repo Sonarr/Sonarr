@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Parser.Model
 {
     public class RemoteEpisode
     {
-        public ReportInfo Report { get; set; }
+        public ReleaseInfo Release { get; set; }
 
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
 
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Parser.Model
 
         public override string ToString()
         {
-            return Report.Title;
+            return Release.Title;
         }
     }
 }
