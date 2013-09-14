@@ -166,6 +166,13 @@ namespace NzbDrone.Core.Messaging
                 PublishEvent(new CommandUpdatedEvent(command));
                 throw;
             }
+            finally
+            {
+                if (MappedDiagnosticsContext.Get("CommandId") == command.Id.ToString())
+                {
+                    MappedDiagnosticsContext.Remove("CommandId");
+                }
+            }
 
             PublishEvent(new CommandExecutedEvent(command));
             PublishEvent(new CommandUpdatedEvent(command));
