@@ -159,7 +159,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 
             TestLogger.Info("Path is: {0}", testFile);
 
-            Subject.WriteAllText(testFile, "");
+            Subject.WriteAllText(testFile, "Test");
 
             Subject.GetLastFolderWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
             Subject.GetLastFolderWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow);

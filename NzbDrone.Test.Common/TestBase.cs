@@ -159,7 +159,7 @@ namespace NzbDrone.Test.Common
 
         protected string GetTestFilePath()
         {
-            return GetTestFilePath(Path.GetTempFileName());
+            return GetTestFilePath(Path.GetRandomFileName());
         }
 
         protected string SandboxFolder
