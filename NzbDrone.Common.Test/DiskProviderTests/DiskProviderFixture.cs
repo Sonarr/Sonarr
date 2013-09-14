@@ -198,6 +198,17 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             }
         }
 
+
+        [Test]
+        public void should_be_able_to_set_permission_from_parrent()
+        {
+            var testFile = GetTestFilePath();
+            Subject.WriteAllText(testFile, new Guid().ToString());
+
+            Subject.InheritFolderPermissions(testFile);
+        }
+
+
         [Test]
         [Explicit]
         public void check_last_write()
