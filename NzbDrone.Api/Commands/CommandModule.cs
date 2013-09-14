@@ -8,7 +8,8 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Tracking;
+using NzbDrone.Core.Messaging.Commands.Tracking;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
 
 

@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Tracking;
+using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.MessagingTests

@@ -4,6 +4,7 @@ using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Tv
