@@ -4,11 +4,10 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Contract;
-using NzbDrone.Core.Indexers;
+using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Common.Expansive;
 
 namespace NzbDrone.Core.Test.ParserTests
 {

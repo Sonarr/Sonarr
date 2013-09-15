@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Parser
         LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null);
+        List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null);
     }
 
     public class ParsingService : IParsingService
@@ -99,52 +100,7 @@ namespace NzbDrone.Core.Parser
             return remoteEpisode;
         }
 
-        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria)
-        {           
-            var tvdbId = _sceneMappingService.GetTvDbId(parsedEpisodeInfo.SeriesTitle);
-
-            if (tvdbId.HasValue)
-            {
-                if (searchCriteria.Series.TvdbId == tvdbId)
-                {
-                    return searchCriteria.Series;
-                }
-            }
-
-            if (parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle() == searchCriteria.Series.CleanTitle)
-            {
-                return searchCriteria.Series;
-            }
-
-            if (tvRageId == searchCriteria.Series.TvRageId)
-            {
-                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
-                return searchCriteria.Series;
-            }
-
-            return GetSeries(parsedEpisodeInfo, tvRageId);
-        }
-
-        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
-        {
-            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
-
-            if (series == null && tvRageId > 0)
-            {
-                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
-                series = _seriesService.FindByTvRageId(tvRageId);
-            }
-
-            if (series == null)
-            {
-                _logger.Trace("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
-                return null;
-            }
-
-            return series;
-        }
-
-        private List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null)
+        public List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null)
         {
             var result = new List<Episode>();
 
@@ -205,7 +161,7 @@ namespace NzbDrone.Core.Parser
 
                 if (episodeInfo == null)
                 {
-                    episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
+                    episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
                 }
 
                 if (episodeInfo != null)
@@ -222,6 +178,51 @@ namespace NzbDrone.Core.Parser
             return result;
         }
 
+        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria)
+        {           
+            var tvdbId = _sceneMappingService.GetTvDbId(parsedEpisodeInfo.SeriesTitle);
+
+            if (tvdbId.HasValue)
+            {
+                if (searchCriteria.Series.TvdbId == tvdbId)
+                {
+                    return searchCriteria.Series;
+                }
+            }
+
+            if (parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle() == searchCriteria.Series.CleanTitle)
+            {
+                return searchCriteria.Series;
+            }
+
+            if (tvRageId == searchCriteria.Series.TvRageId)
+            {
+                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
+                return searchCriteria.Series;
+            }
+
+            return GetSeries(parsedEpisodeInfo, tvRageId);
+        }
+
+        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
+        {
+            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+
+            if (series == null && tvRageId > 0)
+            {
+                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
+                series = _seriesService.FindByTvRageId(tvRageId);
+            }
+
+            if (series == null)
+            {
+                _logger.Trace("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
+                return null;
+            }
+
+            return series;
+        }
+
         private Episode GetDailyEpisode(Series series, DateTime airDate, SearchCriteriaBase searchCriteria)
         {
             Episode episodeInfo = null;
@@ -234,7 +235,7 @@ namespace NzbDrone.Core.Parser
 
             if (episodeInfo == null)
             {
-                episodeInfo = _episodeService.GetEpisode(series.Id, airDate);
+                episodeInfo = _episodeService.FindEpisode(series.Id, airDate);
             }
 
             return episodeInfo;

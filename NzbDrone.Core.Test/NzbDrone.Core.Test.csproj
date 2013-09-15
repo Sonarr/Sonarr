@@ -162,6 +162,8 @@
     <Compile Include="NotificationTests\Xbmc\Json\GetSeriesPathFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
+    <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
+    <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
     <Compile Include="Qualities\QualitySizeRepositoryFixture.cs" />
     <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
     <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
