@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -9,10 +12,9 @@ namespace NzbDrone.Core.Parser
 {
     public interface IParsingService
     {
-        LocalEpisode GetEpisodes(string filename, Series series);
         LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
-        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId);
+        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null);
     }
 
     public class ParsingService : IParsingService
@@ -20,22 +22,20 @@ namespace NzbDrone.Core.Parser
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesService _seriesService;
         private readonly IDiskProvider _diskProvider;
+        private readonly ISceneMappingService _sceneMappingService;
         private readonly Logger _logger;
 
         public ParsingService(IEpisodeService episodeService,
                               ISeriesService seriesService,
                               IDiskProvider diskProvider,
+                              ISceneMappingService sceneMappingService,
                               Logger logger)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
             _diskProvider = diskProvider;
+            _sceneMappingService = sceneMappingService;
             _logger = logger;
-        }
-
-        public LocalEpisode GetEpisodes(string filename, Series series)
-        {
-            return GetEpisodes(filename, series, false);
         }
 
         public LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource)
@@ -68,7 +68,6 @@ namespace NzbDrone.Core.Parser
         public Series GetSeries(string title)
         {
             var searchTitle = title;
-
             var parsedEpisodeInfo = Parser.ParseTitle(title);
 
             if (parsedEpisodeInfo != null)
@@ -79,34 +78,73 @@ namespace NzbDrone.Core.Parser
             return _seriesService.FindByTitle(searchTitle);
         }
 
-        public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
+        public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null)
         {
             var remoteEpisode = new RemoteEpisode
                 {
                     ParsedEpisodeInfo = parsedEpisodeInfo,
                 };
 
+            var series = searchCriteria == null ? GetSeries(parsedEpisodeInfo, tvRageId) :
+                                                  GetSeries(parsedEpisodeInfo, tvRageId, searchCriteria);
+
+            if (series == null)
+            {
+                return remoteEpisode;
+            }
+
+            remoteEpisode.Series = series;
+            remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, true, searchCriteria);
+
+            return remoteEpisode;
+        }
+
+        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria)
+        {           
+            var tvdbId = _sceneMappingService.GetTvDbId(parsedEpisodeInfo.SeriesTitle);
+
+            if (tvdbId.HasValue)
+            {
+                if (searchCriteria.Series.TvdbId == tvdbId)
+                {
+                    return searchCriteria.Series;
+                }
+            }
+
+            if (parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle() == searchCriteria.Series.CleanTitle)
+            {
+                return searchCriteria.Series;
+            }
+
+            if (tvRageId == searchCriteria.Series.TvRageId)
+            {
+                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
+                return searchCriteria.Series;
+            }
+
+            return GetSeries(parsedEpisodeInfo, tvRageId);
+        }
+
+        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
+        {
             var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
 
             if (series == null && tvRageId > 0)
             {
-                series = _seriesService.FindByTvRageId(tvRageId);
                 //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
+                series = _seriesService.FindByTvRageId(tvRageId);
             }
 
             if (series == null)
             {
                 _logger.Trace("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
-                return remoteEpisode;
+                return null;
             }
 
-            remoteEpisode.Series = series;
-            remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, true);
-
-            return remoteEpisode;
+            return series;
         }
 
-        private List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource)
+        private List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null)
         {
             var result = new List<Episode>();
 
@@ -115,10 +153,10 @@ namespace NzbDrone.Core.Parser
                 if (series.SeriesType == SeriesTypes.Standard)
                 {
                     _logger.Warn("Found daily-style episode for non-daily series: {0}.", series);
-                    return new List<Episode>();
+                    return null;
                 }
-                
-                var episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.AirDate.Value);
+
+                var episodeInfo = GetDailyEpisode(series, parsedEpisodeInfo.AirDate.Value, searchCriteria);
 
                 if (episodeInfo != null)
                 {
@@ -137,7 +175,16 @@ namespace NzbDrone.Core.Parser
 
                 if (series.UseSceneNumbering && sceneSource)
                 {
-                    episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber, true);
+                    if (searchCriteria != null)
+                    {
+                        episodeInfo = searchCriteria.Episodes.SingleOrDefault(e => e.SceneSeasonNumber == parsedEpisodeInfo.SeasonNumber &&
+                                                                          e.SceneEpisodeNumber == episodeNumber);
+                    }
+
+                    if (episodeInfo == null)
+                    {
+                        episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber, true);
+                    }
 
                     if (episodeInfo != null)
                     {
@@ -150,6 +197,12 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
+                if (episodeInfo == null && searchCriteria != null)
+                {
+                    episodeInfo = searchCriteria.Episodes.SingleOrDefault(e => e.SeasonNumber == parsedEpisodeInfo.SeasonNumber &&
+                                                                          e.EpisodeNumber == episodeNumber);
+                }
+
                 if (episodeInfo == null)
                 {
                     episodeInfo = _episodeService.GetEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
@@ -159,6 +212,7 @@ namespace NzbDrone.Core.Parser
                 {
                     result.Add(episodeInfo);
                 }
+
                 else
                 {
                     _logger.Debug("Unable to find {0}", parsedEpisodeInfo);
@@ -166,6 +220,24 @@ namespace NzbDrone.Core.Parser
             }
 
             return result;
+        }
+
+        private Episode GetDailyEpisode(Series series, DateTime airDate, SearchCriteriaBase searchCriteria)
+        {
+            Episode episodeInfo = null;
+
+            if (searchCriteria != null)
+            {
+                episodeInfo = searchCriteria.Episodes.SingleOrDefault(
+                    e => e.AirDate == airDate.ToString(Episode.AIR_DATE_FORMAT));
+            }
+
+            if (episodeInfo == null)
+            {
+                episodeInfo = _episodeService.GetEpisode(series.Id, airDate);
+            }
+
+            return episodeInfo;
         }
     }
 }

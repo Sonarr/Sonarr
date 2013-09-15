@@ -34,7 +34,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (dailySearchSpec == null) return true;
 
-            var episode = _episodeService.GetEpisode(dailySearchSpec.SeriesId, dailySearchSpec.Airtime);
+            var episode = _episodeService.GetEpisode(dailySearchSpec.Series.Id, dailySearchSpec.Airtime);
 
             if (!remoteEpisode.ParsedEpisodeInfo.AirDate.HasValue || remoteEpisode.ParsedEpisodeInfo.AirDate.Value.ToString(Episode.AIR_DATE_FORMAT) != episode.AirDate)
             {

@@ -61,7 +61,7 @@ namespace NzbDrone.Core.IndexerSearch
                     throw new InvalidOperationException("Daily episode is missing AirDate. Try to refresh series info.");
                 }
 
-                return SearchDaily(series, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
+                return SearchDaily(series, episode);
             }
 
             return SearchSingle(series, episode);
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> SearchSingle(Series series, Episode episode)
         {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, episode.SeasonNumber);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode>{episode});
 
             if (series.UseSceneNumbering)
             {
@@ -94,9 +94,10 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchDaily(Series series, DateTime airDate)
+        private List<DownloadDecision> SearchDaily(Series series, Episode episode)
         {
-            var searchSpec = Get<DailyEpisodeSearchCriteria>(series);
+            var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
             searchSpec.Airtime = airDate;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
@@ -105,20 +106,21 @@ namespace NzbDrone.Core.IndexerSearch
         public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
             var series = _seriesService.GetSeries(seriesId);
+            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
 
-            var searchSpec = Get<SeasonSearchCriteria>(series, seasonNumber);
+            var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
             searchSpec.SeasonNumber = seasonNumber;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private TSpec Get<TSpec>(Series series, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(Series series, List<Episode> episodes) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
-            spec.SeriesId = series.Id;
-            spec.SeriesTvRageId = series.TvRageId;
+            spec.Series = series;
             spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId);
+            spec.Episodes = episodes;
 
             if (string.IsNullOrWhiteSpace(spec.SceneTitle))
             {
