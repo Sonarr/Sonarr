@@ -73,7 +73,7 @@ namespace NzbDrone.Common.Test
             var dummy1 = StartDummyProcess();
             var dummy2 = StartDummyProcess();
 
-            Subject.KillAll(dummy1.ProcessName);
+            Subject.KillAll(DummyApp.DUMMY_PROCCESS_NAME);
 
             dummy1.HasExited.Should().BeTrue();
             dummy2.HasExited.Should().BeTrue();
