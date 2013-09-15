@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public bool Equals(Command x, Command y)
         {
+            if(x.GetType() != y.GetType()) return false;
+
             var xProperties = x.GetType().GetProperties();
             var yProperties = y.GetType().GetProperties();
 
@@ -24,12 +26,7 @@ namespace NzbDrone.Core.Messaging.Commands
                     continue;
                 }
 
-                var yProperty = yProperties.SingleOrDefault(p => p.Name == xProperty.Name);
-
-                if (yProperty == null)
-                {
-                    continue;
-                }
+                var yProperty = yProperties.Single(p => p.Name == xProperty.Name);
 
                 var xValue = xProperty.GetValue(x, null);
                 var yValue = yProperty.GetValue(y, null);

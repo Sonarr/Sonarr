@@ -1,6 +1,8 @@
+using NzbDrone.Core.Messaging.Commands;
+
 namespace NzbDrone.SignalR
 {
-    public class BroadcastSignalRMessage : Core.Messaging.Commands.Command
+    public class BroadcastSignalRMessage : Command
     {
         public SignalRMessage Body { get; private set; }
 
