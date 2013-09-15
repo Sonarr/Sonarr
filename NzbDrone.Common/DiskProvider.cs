@@ -271,9 +271,19 @@ namespace NzbDrone.Common
         {
             Ensure.That(() => filename).IsValidPath();
 
-            var fs = File.GetAccessControl(filename);
-            fs.SetAccessRuleProtection(false, false);
-            File.SetAccessControl(filename, fs);
+            try
+            {
+                var fs = File.GetAccessControl(filename);
+                fs.SetAccessRuleProtection(false, false);
+                File.SetAccessControl(filename, fs);
+            }
+            catch (NotImplementedException)
+            {
+                if (!OsInfo.IsLinux)
+                {
+                    throw;
+                }
+            }
         }
 
         public long? GetAvailableSpace(string path)
