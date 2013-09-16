@@ -210,6 +210,10 @@
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\SabQueueItem.cs" />
+    <Compile Include="Exceptions\BadRequestException.cs" />
+    <Compile Include="Exceptions\DownstreamException.cs" />
+    <Compile Include="Exceptions\NzbDroneClientException.cs" />
+    <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
     <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
     <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
@@ -245,7 +249,11 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
-    <Compile Include="NzbDroneClientException.cs" />
+    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroid.cs" />
+    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidPriority.cs" />
+    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
+    <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
+    <Compile Include="Notifications\NotifyMyAndroid\TestNotifyMyAndroidCommand.cs" />
     <Compile Include="Instrumentation\LoggerExtensions.cs" />
     <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
