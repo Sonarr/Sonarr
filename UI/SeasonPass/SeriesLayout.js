@@ -3,10 +3,8 @@ define(
     [
         'marionette',
         'backgrid',
-        'Series/SeasonCollection',
-        'Cells/ToggleCell',
-        'Shared/Actioneer'
-    ], function (Marionette, Backgrid, SeasonCollection, ToggleCell, Actioneer) {
+        'Series/SeasonCollection'
+    ], function (Marionette, Backgrid, SeasonCollection) {
         return Marionette.Layout.extend({
             template: 'SeasonPass/SeriesLayoutTemplate',
 
@@ -19,48 +17,22 @@ define(
             events: {
                 'change .x-season-select': '_seasonSelected',
                 'click .x-expander'      : '_expand',
-                'click .x-latest'        : '_latest'
+                'click .x-latest'        : '_latest',
+                'click .x-monitored'     : '_toggleSeasonMonitored'
             },
 
             regions: {
                 seasonGrid: '.x-season-grid'
             },
 
-            columns:
-                [
-                    {
-                        name      : 'monitored',
-                        label     : '',
-                        cell      : ToggleCell,
-                        trueClass : 'icon-bookmark',
-                        falseClass: 'icon-bookmark-empty',
-                        tooltip   : 'Toggle monitored status',
-                        sortable  : false
-                    },
-                    {
-                        name : 'seasonNumber',
-                        label: 'Season',
-                        cell : Backgrid.IntegerCell.extend({
-                            className: 'season-number-cell'
-                        })
-                    }
-                ],
-
-            initialize: function (options) {
-                this.seasonCollection = options.seasonCollection.bySeries(this.model.get('id'));
-                this.model.set('seasons', this.seasonCollection);
+            initialize: function () {
+                this.seasonCollection = new SeasonCollection(this.model.get('seasons'));
                 this.expanded = false;
             },
 
             onRender: function () {
-                this.seasonGrid.show(new Backgrid.Grid({
-                    columns   : this.columns,
-                    collection: this.seasonCollection,
-                    className : 'table table-condensed season-grid span5'
-                }));
-
                 if (!this.expanded) {
-                    this.seasonGrid.$el.hide();
+                    this.ui.seasonGrid.hide();
                 }
 
                 this._setExpanderIcon();
@@ -103,31 +75,49 @@ define(
             },
 
             _latest: function () {
-                var season = _.max(this.seasonCollection.models, function (model) {
-                    return model.get('seasonNumber');
+                var season = _.max(this.model.get('seasons'), function (s) {
+                    return s.seasonNumber;
                 });
 
-                //var seasonNumber = season.get('seasonNumber');
-
-                this._setMonitored(season.get('seasonNumber'))
+                this._setMonitored(season.seasonNumber);
             },
 
             _setMonitored: function (seasonNumber) {
                 var self = this;
 
-                var promise = $.ajax({
-                    url: this.seasonCollection.url + '/pass',
-                    type: 'POST',
-                    data: {
-                        seriesId: this.model.get('id'),
-                        seasonNumber: seasonNumber
-                    }
-                });
+                this.model.setSeasonPass(seasonNumber);
+
+                var promise = this.model.save();
 
                 promise.done(function (data) {
                     self.seasonCollection = new SeasonCollection(data);
                     self.render();
                 });
+            },
+
+            _toggleSeasonMonitored: function (e) {
+                var seasonNumber = 0;
+                var element;
+
+                if (e.target.localName === 'i') {
+                    seasonNumber = parseInt($(e.target).parent('td').attr('data-season-number'));
+                    element = $(e.target);
+                }
+
+                else {
+                    seasonNumber = parseInt($(e.target).attr('data-season-number'));
+                    element = $(e.target).children('i');
+                }
+
+                this.model.setSeasonMonitored(seasonNumber);
+
+                var savePromise =this.model.save()
+                    .always(this.render.bind(this));
+                element.spinForPromise(savePromise);
+            },
+
+            _afterToggleSeasonMonitored: function () {
+                this.render();
             }
         });
     });

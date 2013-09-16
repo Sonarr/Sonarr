@@ -8,6 +8,6 @@ define(
 
         return Backbone.Collection.extend({
             model: QualityProfileModel,
-            url  : window.ApiRoot + '/qualityprofiles/schema'
+            url  : window.NzbDrone.ApiRoot + '/qualityprofiles/schema'
         });
     });

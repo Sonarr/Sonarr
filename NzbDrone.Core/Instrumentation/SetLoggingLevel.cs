@@ -2,10 +2,12 @@
 using System.Linq;
 using NLog;
 using NLog.Config;
-using NzbDrone.Common.Messaging;
+using NLog.Targets;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation
 {
@@ -28,10 +30,12 @@ namespace NzbDrone.Core.Instrumentation
             var minimumLogLevel = LogLevel.FromString(_configFileProvider.LogLevel);
 
             var rules = LogManager.Configuration.LoggingRules;
-            var rollingFileLogger = rules.Single(s => s.Targets.Any(t => t.Name == "rollingFileLogger"));
+            var rollingFileLogger = rules.Single(s => s.Targets.Any(t => t is FileTarget));
             rollingFileLogger.EnableLoggingForLevel(LogLevel.Trace);
 
             SetMinimumLogLevel(rollingFileLogger, minimumLogLevel);
+
+            LogManager.ReconfigExistingLoggers();
         }
 
         private void SetMinimumLogLevel(LoggingRule rule, LogLevel minimumLogLevel)

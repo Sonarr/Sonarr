@@ -11,7 +11,6 @@ using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 {
@@ -36,9 +35,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
             fakeConfig.SetupGet(c => c.SabTvCategory).Returns("tv");
 
             _remoteEpisode = new RemoteEpisode();
-            _remoteEpisode.Report = new ReportInfo();
-            _remoteEpisode.Report.Title = TITLE;
-            _remoteEpisode.Report.NzbUrl = URL;
+            _remoteEpisode.Release = new ReleaseInfo();
+            _remoteEpisode.Release.Title = TITLE;
+            _remoteEpisode.Release.DownloadUrl = URL;
 
             _remoteEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
                                                       .All()

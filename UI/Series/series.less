@@ -6,18 +6,18 @@
   overflow : visible;
 
   .series-poster {
-    padding-left: 20px;
-    width : 168px;
+    padding-left : 20px;
+    width        : 168px;
   }
 
   .form-horizontal {
-    margin-top: 10px;
+    margin-top : 10px;
   }
 }
 
 .delete-series-modal {
   .path {
-    margin-left: 30px;
+    margin-left : 30px;
   }
 }
 
@@ -48,26 +48,16 @@
 
 .series-season {
   .card;
-  margin  : 80px 10px;
-  padding : 20px 40px;
+  margin  : 30px 10px;
+  padding : 10px 25px;
   .opacity(0.9);
-}
 
-.season-menu {
-  margin-top: 5px;
+  .show-hide-episodes {
+    .clickable();
+    text-align : center;
 
-  .season-menu-item {
-
-    .text {
-      .clickable;
-    }
-
-    a:hover {
-      text-decoration: none;
-    }
-
-    i:before {
-      width: 10px;
+    i {
+      .clickable();
     }
   }
 }
@@ -94,24 +84,24 @@
       text-align   : center;
 
       .progress {
-        text-align: left;
+        text-align : left;
         margin-top : 5px;
-        left: 0px;
-        width: 170px;
+        left       : 0px;
+        width      : 170px;
 
         .progressbar-front-text {
-          width: 170px;
+          width : 170px;
         }
       }
     }
 
     .title-container {
-      position: relative;
+      position : relative;
 
       .title {
         position : absolute;
-        top        : -100px;
-        opacity: 0.0;
+        top      : -100px;
+        opacity  : 0.0;
       }
     }
 
@@ -198,7 +188,7 @@
 .episode-detail-modal {
 
   .episode-info {
-    margin-bottom: 10px;
+    margin-bottom : 10px;
   }
 
   .episode-overview {
@@ -231,44 +221,56 @@
 }
 
 .season-actions, .series-actions {
-  font-size      : 24px;
+
+  div {
+    display : inline-block
+  }
+
   text-transform : none;
 
   i {
     .clickable;
+    font-size    : 24px;
+    padding-left : 5px;
   }
 }
 
 .series-stats {
-  font-size: 11px;
+  font-size : 11px;
 }
 
 .series-legend {
-  padding-top: 5px;
+  padding-top : 5px;
 }
 
 .seasonpass-series {
   .card;
-  margin  : 20px 0px;
+  margin : 20px 0px;
 
   .title {
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 30px;
-    margin-left: 5px;
+    font-weight : 300;
+    font-size   : 24px;
+    line-height : 30px;
+    margin-left : 5px;
   }
 
   .season-select {
-    margin-bottom: 0px;
+    margin-bottom : 0px;
   }
 
   .expander {
     .clickable;
     line-height: 30px;
     margin-left: 8px;
+    width: 16px;
   }
 
   .season-grid {
-    margin-top: 10px;
+    margin-top : 10px;
   }
+}
+
+.season-status {
+  font-size      : 16px;
+  vertical-align : middle !important;
 }

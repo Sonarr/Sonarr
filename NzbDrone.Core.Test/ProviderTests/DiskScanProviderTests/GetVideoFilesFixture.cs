@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void should_return_video_files_only()
         {
             var path = @"C:\Test\";
-
+            var test = Subject.GetVideoFiles(path);
             Subject.GetVideoFiles(path).Should().HaveCount(4);
         }
     }

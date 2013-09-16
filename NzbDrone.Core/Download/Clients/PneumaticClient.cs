@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Download.Clients
         private readonly IHttpProvider _httpProvider;
         private readonly IDiskProvider _diskProvider;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
         public PneumaticClient(IConfigService configService, IHttpProvider httpProvider,
                                     IDiskProvider diskProvider)
@@ -27,8 +28,8 @@ namespace NzbDrone.Core.Download.Clients
 
         public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
-            var url = remoteEpisode.Report.NzbUrl;
-            var title = remoteEpisode.Report.Title;
+            var url = remoteEpisode.Release.DownloadUrl;
+            var title = remoteEpisode.Release.Title;
 
             if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
             {

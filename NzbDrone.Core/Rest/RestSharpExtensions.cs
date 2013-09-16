@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
 using RestSharp;
 
@@ -8,7 +9,7 @@ namespace NzbDrone.Core.Rest
 {
     public static class RestSharpExtensions
     {
-        private static readonly Logger Logger = LogManager.GetLogger("RestExtensions");
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
         public static IRestResponse ValidateResponse(this IRestResponse response, IRestClient restClient)
         {
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Rest
             Ensure.That(() => response.Request).IsNotNull();
             Ensure.That(() => restClient).IsNotNull();
 
-            Logger.Trace("Validating Responses from [{0}] [{1}] status: [{2}] body:[{3}]", response.Request.Method, restClient.BuildUri(response.Request), response.StatusCode, response.Content);
+            Logger.Trace("Validating Responses from [{0}] [{1}] status: [{2}]", response.Request.Method, restClient.BuildUri(response.Request), response.StatusCode);
 
             if (response.ResponseUri == null)
             {

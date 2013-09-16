@@ -1,10 +1,22 @@
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.MediaFiles.Commands
 {
-    public class RenameSeriesCommand : ICommand
+    public class RenameSeriesCommand : Command
     {
-        public int SeriesId { get; private set; }
+        public int SeriesId { get; set; }
+
+        public override bool SendUpdatesToClient
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public RenameSeriesCommand()
+        {
+        }
 
         public RenameSeriesCommand(int seriesId)
         {

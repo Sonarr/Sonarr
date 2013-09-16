@@ -7,11 +7,9 @@ define(
         'Episode/Search/ManualLayout',
         'Release/Collection',
         'Series/SeriesCollection',
-        'Shared/LoadingView',
-        'Shared/Messenger',
         'Commands/CommandController',
-        'Shared/FormatHelpers'
-    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SeriesCollection, LoadingView, Messenger, CommandController, FormatHelpers) {
+        'Shared/LoadingView'
+    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SeriesCollection,CommandController, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/LayoutTemplate',
@@ -39,16 +37,8 @@ define(
                     e.preventDefault();
                 }
 
-                CommandController.Execute('episodeSearch', { episodeId: this.model.get('id') });
-
-                var series = SeriesCollection.get(this.model.get('seriesId'));
-                var seriesTitle = series.get('title');
-                var season = this.model.get('seasonNumber');
-                var episode = this.model.get('episodeNumber');
-                var message = seriesTitle + ' - ' + season + 'x' + FormatHelpers.pad(episode, 2);
-
-                Messenger.show({
-                    message: 'Search started for: ' + message
+                CommandController.Execute('episodeSearch', {
+                    episodeId: this.model.get('id')
                 });
 
                 App.vent.trigger(App.Commands.CloseModalCommand);

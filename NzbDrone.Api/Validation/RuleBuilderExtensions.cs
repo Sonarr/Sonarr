@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -26,6 +24,11 @@ namespace NzbDrone.Api.Validation
         public static IRuleBuilderOptions<T, string> IsValidPath<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder.SetValidator(new PathValidator());
+        }
+
+        public static IRuleBuilderOptions<T, string> NotBlank<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new NotNullValidator()).SetValidator(new NotEmptyValidator(""));
         }
     }
 }

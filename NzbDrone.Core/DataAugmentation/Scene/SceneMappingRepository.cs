@@ -1,5 +1,7 @@
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
@@ -10,8 +12,8 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
     public class SceneMappingRepository : BasicRepository<SceneMapping>, ISceneMappingRepository
     {
-        public SceneMappingRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public SceneMappingRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

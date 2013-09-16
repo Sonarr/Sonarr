@@ -123,6 +123,7 @@
     <Compile Include="Configuration\Events\ConfigFileSavedEvent.cs" />
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
+    <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
     <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
-    <Compile Include="Datastore\CachedBasicRepository.cs" />
     <Compile Include="Datastore\ConnectionStringFactory.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
@@ -160,6 +160,10 @@
     <Compile Include="Datastore\Migration\015_add_air_date_as_string.cs" />
     <Compile Include="Datastore\Migration\016_updated_imported_history_item.cs" />
     <Compile Include="Datastore\Migration\017_reset_scene_names.cs" />
+    <Compile Include="Datastore\Migration\018_remove_duplicates.cs" />
+    <Compile Include="Datastore\Migration\019_restore_unique_constraints.cs" />
+    <Compile Include="Datastore\Migration\020_add_year_and_seasons_to_series.cs" />
+    <Compile Include="Datastore\Migration\021_drop_seasons_table.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -169,6 +173,8 @@
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
     <Compile Include="Datastore\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
+    <Compile Include="Datastore\Migration\Framework\SQLiteColumn.cs" />
+    <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteMigrationHelper.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\BasicRepository.cs" />
@@ -177,10 +183,13 @@
     <Compile Include="Datastore\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
-    <Compile Include="DecisionEngine\DownloadDecision.cs" />
+    <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
     <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotRestrictedReleaseSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
@@ -207,10 +216,14 @@
     <Compile Include="IndexerSearch\EpisodeSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
+    <Compile Include="Indexers\BasicTorrentRssParser.cs" />
+    <Compile Include="Indexers\DownloadProtocols.cs" />
+    <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
+    <Compile Include="Indexers\IParseFeed.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
     <Compile Include="Indexers\NullSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
@@ -219,6 +232,32 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="MediaFiles\MediaFileExtensions.cs" />
+    <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
+    <Compile Include="Messaging\Commands\CommandExecutor.cs" />
+    <Compile Include="Messaging\Commands\ICommandExecutor.cs" />
+    <Compile Include="Messaging\Commands\IExecute.cs" />
+    <Compile Include="Messaging\Commands\Tracking\CommandStatus.cs" />
+    <Compile Include="Messaging\Commands\Tracking\CommandTrackingService.cs" />
+    <Compile Include="Messaging\Commands\Tracking\ExistingCommand.cs" />
+    <Compile Include="Messaging\Commands\Tracking\TrackedCommandCleanupCommand.cs" />
+    <Compile Include="Messaging\Events\EventAggregator.cs" />
+    <Compile Include="Messaging\Events\IEventAggregator.cs" />
+    <Compile Include="Messaging\Events\IHandle.cs" />
+    <Compile Include="MetadataSource\Trakt\TraktException.cs" />
+    <Compile Include="NzbDroneClientException.cs" />
+    <Compile Include="Instrumentation\LoggerExtensions.cs" />
+    <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
+    <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
+    <Compile Include="Messaging\Commands\Command.cs" />
+    <Compile Include="Messaging\Commands\CommandEqualityComparer.cs" />
+    <Compile Include="Messaging\Commands\TestCommand.cs" />
+    <Compile Include="Messaging\Commands\TestCommandExecutor.cs" />
+    <Compile Include="Messaging\Events\CommandCreatedEvent.cs" />
+    <Compile Include="Messaging\Events\CommandExecutedEvent.cs" />
+    <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />
     <Compile Include="Instrumentation\SetLoggingLevel.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
@@ -244,7 +283,6 @@
     <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
     <Compile Include="MediaFiles\SameFilenameException.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
-    <Compile Include="MetadataSource\Trakt\TraktCommunicationException.cs" />
     <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />
@@ -262,7 +300,7 @@
     <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\NzbSearchService.cs" />
     <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
-    <Compile Include="Indexers\BasicRssParser.cs" />
+    <Compile Include="Indexers\RssParserBase.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
@@ -271,8 +309,6 @@
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
-    <Compile Include="Indexers\NzbClub\NzbClub.cs" />
-    <Compile Include="Indexers\NzbClub\NzbClubParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
     <Compile Include="Indexers\IIndexerSetting.cs" />
@@ -341,7 +377,8 @@
     <Compile Include="Parser\Model\LocalEpisode.cs" />
     <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />
     <Compile Include="Parser\Model\RemoteEpisode.cs" />
-    <Compile Include="Parser\Model\ReportInfo.cs" />
+    <Compile Include="Parser\Model\ReleaseInfo.cs" />
+    <Compile Include="Parser\Model\TorrentInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
@@ -385,10 +422,8 @@
     <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetClient.cs" />
-    <Compile Include="Providers\VideoFileInfoReader.cs" />
     <Compile Include="Download\Clients\PneumaticClient.cs" />
     <Compile Include="MediaFiles\RecycleBinProvider.cs" />
-    <Compile Include="Tv\SeasonService.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="Tv\SeriesTypes.cs" />
@@ -532,9 +567,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="NzbDrone.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">

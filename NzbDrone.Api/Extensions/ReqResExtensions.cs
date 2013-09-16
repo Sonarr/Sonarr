@@ -12,7 +12,6 @@ namespace NzbDrone.Api.Extensions
     {
         private static readonly NancyJsonSerializer NancySerializer = new NancyJsonSerializer();
 
-
         public static readonly string LastModified = BuildInfo.BuildDateTime.ToString("r");
 
         public static T FromJson<T>(this Stream body) where T : class, new()
@@ -24,7 +23,6 @@ namespace NzbDrone.Api.Extensions
         {
             return (T)FromJson(body, type);
         }
-
 
         public static object FromJson(this Stream body, Type type)
         {

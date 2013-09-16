@@ -4,7 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -34,8 +34,8 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             remoteEpisode.Episodes = new List<Episode>();
             remoteEpisode.Episodes.AddRange(episodes);
 
-            remoteEpisode.Report = new ReportInfo();
-            remoteEpisode.Report.Age = 0;
+            remoteEpisode.Release = new ReleaseInfo();
+            remoteEpisode.Release.PublishDate = DateTime.UtcNow;
 
             return remoteEpisode;
         }

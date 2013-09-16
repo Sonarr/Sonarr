@@ -1,23 +1,17 @@
 ﻿using System.Xml.Linq;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class WomblesParser : BasicRssParser
+    public class WomblesParser : RssParserBase
     {
         protected override string GetNzbInfoUrl(XElement item)
         {
             return null;
         }
 
-        protected override ReportInfo PostProcessor(XElement item, ReportInfo currentResult)
+        protected override long GetSize(XElement item)
         {
-            if (currentResult != null)
-            {
-                currentResult.Size = 0;
-            }
-
-            return currentResult;
+            return 0;
         }
     }
 }

@@ -73,8 +73,14 @@
             return false;
         }
 
+        else if (xmlHttpRequest.status === 503) {
+            message.message = xmlHttpRequest.responseJSON.message;
+        }
 
-        message.message = '[{0}] {1} : {2}'.format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
+        else
+        {
+            message.message = '[{0}] {1} : {2}'.format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
+        }
 
         window.Messenger().post(message);
         return false;

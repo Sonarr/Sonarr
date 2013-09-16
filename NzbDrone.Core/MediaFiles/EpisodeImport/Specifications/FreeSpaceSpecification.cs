@@ -23,22 +23,33 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             try
             {
+                if (localEpisode.ExistingFile)
+                {
+                    _logger.Trace("Skipping free space check for existing episode");
+                    return true;
+                }
+
                 var path = Directory.GetParent(localEpisode.Series.Path);
                 var freeSpace = _diskProvider.GetAvailableSpace(path.FullName);
+
+                if (!freeSpace.HasValue)
+                {
+                    _logger.Trace("Free space check returned an invalid result for: {0}", path);
+                    return true;
+                }
 
                 if (freeSpace < localEpisode.Size + 100.Megabytes())
                 {
                     _logger.Warn("Not enough free space to import: {0}", localEpisode);
                     return false;
                 }
-
-                return true;
             }
             catch (Exception ex)
             {
                 _logger.ErrorException("Unable to check free disk space while importing: " + localEpisode.Path, ex);
-                throw;
             }
+
+            return true;
         }
     }
 }

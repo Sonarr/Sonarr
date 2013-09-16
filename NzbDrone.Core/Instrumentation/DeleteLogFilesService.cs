@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Instrumentation.Commands;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Instrumentation
 {

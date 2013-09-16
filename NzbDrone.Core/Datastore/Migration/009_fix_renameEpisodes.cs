@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SQLiteAlter.DropColumns("NamingConfig", new[] { "SeasonFolderFormat" });
+            SqLiteAlter.DropColumns("NamingConfig", new[] { "SeasonFolderFormat" });
 
             Execute.Sql("UPDATE NamingConfig SET RenameEpisodes = 1 WHERE RenameEpisodes = -1");
             Execute.Sql("UPDATE NamingConfig SET RenameEpisodes = 0 WHERE RenameEpisodes = -2");

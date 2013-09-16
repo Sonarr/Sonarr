@@ -4,5 +4,6 @@
     {
         public MigrationType MigrationType { get; set; }
         public ISQLiteAlter SQLiteAlter { get; set; }
+        public ISqLiteMigrationHelper MigrationHelper { get; set; }
     }
 }

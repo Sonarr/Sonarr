@@ -22,7 +22,7 @@ namespace NzbDrone.Integration.Test
         {
             releaseResource.Age.Should().BeGreaterOrEqualTo(-1);
             releaseResource.Title.Should().NotBeBlank();
-            releaseResource.NzbUrl.Should().NotBeBlank();
+            releaseResource.DownloadUrl.Should().NotBeBlank();
             releaseResource.SeriesTitle.Should().NotBeBlank();
             //TODO: uncomment these after moving to restsharp for rss
             //releaseResource.NzbInfoUrl.Should().NotBeBlank();

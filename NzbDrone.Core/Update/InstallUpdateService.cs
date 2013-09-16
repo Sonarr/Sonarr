@@ -3,8 +3,10 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
+using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Core.Update
 {
@@ -36,6 +38,7 @@ namespace NzbDrone.Core.Update
 
         public void Execute(ApplicationUpdateCommand message)
         {
+            _logger.ProgressDebug("Checking for updates");
             var latestAvailable = _checkUpdateService.AvailableUpdate();
 
             if (latestAvailable != null)
@@ -58,11 +61,11 @@ namespace NzbDrone.Core.Update
                     _diskProvider.DeleteFolder(updateSandboxFolder, true);
                 }
 
-                _logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
+                _logger.ProgressInfo("Downloading Updated {0} [{1}]", updatePackage.Version, updatePackage.Branch);
+                _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
                 _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
-                _logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
-                _logger.Info("Extracting Update package");
+                _logger.ProgressInfo("Extracting Update package");
                 _archiveService.Extract(packageDestination, updateSandboxFolder);
                 _logger.Info("Update package extracted successfully");
 
@@ -71,6 +74,8 @@ namespace NzbDrone.Core.Update
                                             updateSandboxFolder);
 
                 _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
+
+                _logger.ProgressInfo("NzbDrone will restart shortly.");
 
                 _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), _processProvider.GetCurrentProcess().Id.ToString());
             }

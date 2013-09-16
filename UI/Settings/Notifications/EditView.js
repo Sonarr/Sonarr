@@ -10,7 +10,7 @@ define([
     'Mixins/AsModelBoundView',
     'Form/FormBuilder'
 
-], function (App, Marionette, NotificationModel, DeleteView, Messenger, CommandController, AsModelBoundView) {
+], function (App, Marionette, NotificationModel, DeleteView, Messenger, CommandController,  AsModelBoundView) {
 
     var model = Marionette.ItemView.extend({
         template: 'Settings/Notifications/EditTemplate',
@@ -70,41 +70,20 @@ define([
             var testCommand = this.model.get('testCommand');
             if (testCommand) {
                 this.idle = false;
-                this.ui.testButton.addClass('disabled');
-                this.ui.testIcon.addClass('icon-spinner icon-spin');
-
                 var properties = {};
 
                 _.each(this.model.get('fields'), function (field) {
                     properties[field.name] = field.value;
                 });
 
-                var self = this;
-                var commandPromise = CommandController.Execute(testCommand, properties);
-                commandPromise.done(function () {
-                    Messenger.show({
-                        message: 'Notification settings tested successfully'
-                    });
-                });
 
-                commandPromise.fail(function (options) {
-                    if (options.readyState === 0 || options.status === 0) {
-                        return;
-                    }
+                CommandController.Execute(testCommand, properties);
+            }
+        },
 
-                    Messenger.show({
-                        message: 'Failed to test notification settings',
-                        type   : 'error'
-                    });
-                });
-
-                commandPromise.always(function () {
-                    if (!self.isClosed) {
-                        self.ui.testButton.removeClass('disabled');
-                        self.ui.testIcon.removeClass('icon-spinner icon-spin');
-                        self.idle = true;
-                    }
-                });
+        _testOnAlways: function () {
+            if (!this.isClosed) {
+                this.idle = true;
             }
         }
     });

@@ -1,11 +1,9 @@
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.MediaFiles.Commands
 {
-    public class DownloadedEpisodesScanCommand : ICommand
+    public class DownloadedEpisodesScanCommand : Command
     {
-        public DownloadedEpisodesScanCommand()
-        {
-        }
+
     }
 }

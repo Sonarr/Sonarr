@@ -1,5 +1,4 @@
-﻿using System;
-using Nancy;
+﻿using Nancy;
 using Nancy.Bootstrapper;
 using NzbDrone.Api.Frontend;
 

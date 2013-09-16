@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Eztv;
 using NzbDrone.Core.Indexers.Newznab;
-using NzbDrone.Core.Indexers.NzbClub;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NUnit.Framework;
 using NzbDrone.Test.Common.Categories;
+using System.Linq;
 
 namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 {
@@ -22,17 +23,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         }
 
         [Test]
-        [Explicit]
-        public void nzbclub_rss()
-        {
-            var indexer = new NzbClub();
-
-            var result = Subject.FetchRss(indexer);
-
-            ValidateResult(result);
-        }
-
-        [Test]
         public void wombles_rss()
         {
             var indexer = new Wombles();
@@ -40,6 +30,17 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             var result = Subject.FetchRss(indexer);
 
             ValidateResult(result, skipSize: true, skipInfo: true);
+        }
+
+
+        [Test]
+        public void extv_rss()
+        {
+            var indexer = new Eztv();
+
+            var result = Subject.FetchRss(indexer);
+
+            ValidateTorrentResult(result, skipSize: false, skipInfo: true);
         }
 
 
@@ -63,21 +64,36 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
 
 
-        private void ValidateResult(IList<ReportInfo> reports, bool skipSize = false, bool skipInfo = false)
+        private void ValidateResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
         {
             reports.Should().NotBeEmpty();
-            reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title));
-            reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbUrl));
+            reports.Should().NotContain(c => string.IsNullOrWhiteSpace(c.Title));
+            reports.Should().NotContain(c => string.IsNullOrWhiteSpace(c.DownloadUrl));
+            reports.Should().OnlyContain(c => c.PublishDate.Year > 2000);
+            reports.Should().OnlyContain(c => c.DownloadUrl.StartsWith("http"));
 
             if (!skipInfo)
             {
-                reports.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.NzbInfoUrl));
+                reports.Should().NotContain(c => string.IsNullOrWhiteSpace(c.InfoUrl));
             }
 
             if (!skipSize)
             {
                 reports.Should().OnlyContain(c => c.Size > 0);
             }
+        }
+
+        private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
+        {
+
+            reports.Should().OnlyContain(c => c.GetType() == typeof(TorrentInfo));
+
+            ValidateResult(reports, skipSize, skipInfo);
+
+            reports.Should().OnlyContain(c => c.DownloadUrl.EndsWith(".torrent"));
+
+            reports.Cast<TorrentInfo>().Should().OnlyContain(c => c.MagnetUrl.StartsWith("magnet:"));
+            reports.Cast<TorrentInfo>().Should().NotContain(c => string.IsNullOrWhiteSpace(c.InfoHash));
         }
 
     }

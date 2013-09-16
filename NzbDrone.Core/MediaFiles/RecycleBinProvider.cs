@@ -3,9 +3,12 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaFiles
@@ -23,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
         public RecycleBinProvider(IDiskProvider diskProvider, IConfigService configService)
         {

@@ -2,8 +2,6 @@
 
 namespace NzbDrone.Common.Exceptions
 {
-
-
     public abstract class NzbDroneException : ApplicationException
     {
         protected NzbDroneException(string message, params object[] args)
@@ -16,6 +14,17 @@ namespace NzbDrone.Common.Exceptions
             : base(message)
         {
 
+        }
+
+        protected NzbDroneException(string message, Exception innerException, params object[] args)
+            : base(string.Format(message, args), innerException)
+        {
+
+        }
+
+        protected NzbDroneException(string message, Exception innerException)
+            : base(message, innerException)
+        {
         }
     }
 }

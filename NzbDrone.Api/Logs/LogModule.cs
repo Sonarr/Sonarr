@@ -17,6 +17,12 @@ namespace NzbDrone.Api.Logs
         private PagingResource<LogResource> GetLogs(PagingResource<LogResource> pagingResource)
         {
             var pageSpec = pagingResource.InjectTo<PagingSpec<Log>>();
+
+            if (pageSpec.SortKey == "time")
+            {
+                pageSpec.SortKey = "id";
+            }
+
             return ApplyToPage(_logService.Paged, pageSpec);
         }
     }

@@ -1,10 +1,10 @@
-﻿using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Providers
 {
-    public class UpdateXemMappingsCommand : ICommand
+    public class UpdateXemMappingsCommand : Command
     {
-        public int? SeriesId { get; private set; }
+        public int? SeriesId { get; set; }
 
         public UpdateXemMappingsCommand(int? seriesId)
         {

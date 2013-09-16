@@ -1,7 +1,7 @@
-﻿using System;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Datastore;
+﻿using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation.Commands;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Instrumentation
 {

@@ -6,7 +6,7 @@ define(function () {
         $(this).typeahead({
             source   : function (filter, callback) {
                 $.ajax({
-                    url     : window.ApiRoot + resource,
+                    url     : window.NzbDrone.ApiRoot + resource,
                     dataType: 'json',
                     type    : 'GET',
                     data    : { query: filter },

@@ -5,7 +5,7 @@ define(
         'backbone.pageable'
     ], function (EpisodeModel, PagableCollection) {
         return PagableCollection.extend({
-            url  : window.ApiRoot + '/missing',
+            url  : window.NzbDrone.ApiRoot + '/missing',
             model: EpisodeModel,
 
             state: {

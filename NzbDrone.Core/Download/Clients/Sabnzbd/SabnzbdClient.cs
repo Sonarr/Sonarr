@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 using RestSharp;
@@ -26,8 +26,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             string cat = _configService.SabTvCategory;
             int priority = (int)_configService.SabRecentTvPriority;
 
-            string name = remoteEpisode.Report.NzbUrl.Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Report.Title);
+            string name = remoteEpisode.Release.DownloadUrl.Replace("&", "%26");
+            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Release.Title);
 
             string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
                 name, priority, cat, nzbName);
@@ -53,19 +53,21 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
+        private readonly ICached<IEnumerable<QueueItem>> _queueCache;
         private readonly Logger _logger;
 
-        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider, Logger logger)
+        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider, ICacheManger cacheManger, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _queueCache = cacheManger.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
             _logger = logger;
         }
 
         public void DownloadNzb(RemoteEpisode remoteEpisode)
         {
-            var url = remoteEpisode.Report.NzbUrl;
-            var title = remoteEpisode.Report.Title;
+            var url = remoteEpisode.Release.DownloadUrl;
+            var title = remoteEpisode.Release.Title;
 
             string cat = _configService.SabTvCategory;
             int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
@@ -97,24 +99,31 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public IEnumerable<QueueItem> GetQueue()
         {
-            string action = String.Format("mode=queue&output=json&start={0}&limit={1}", 0, 0);
-            string request = GetSabRequest(action);
-            string response = _httpProvider.DownloadString(request);
-
-            CheckForError(response);
-
-            var sabQueue = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
-
-            foreach (var sabQueueItem in sabQueue)
+            return _queueCache.Get("queue", () =>
             {
-                var queueItem = new QueueItem();
-                queueItem.Id = sabQueueItem.Id;
-                queueItem.Title = sabQueueItem.Title;
-                queueItem.Size = sabQueueItem.Size;
-                queueItem.SizeLeft = sabQueueItem.Size;
+                string action = String.Format("mode=queue&output=json&start={0}&limit={1}", 0, 0);
+                string request = GetSabRequest(action);
+                string response = _httpProvider.DownloadString(request);
 
-                yield return queueItem;
-            }
+                CheckForError(response);
+
+                var sabQueue = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
+
+                var queueItems = new List<QueueItem>();
+
+                foreach (var sabQueueItem in sabQueue)
+                {
+                    var queueItem = new QueueItem();
+                    queueItem.Id = sabQueueItem.Id;
+                    queueItem.Title = sabQueueItem.Title;
+                    queueItem.Size = sabQueueItem.Size;
+                    queueItem.SizeLeft = sabQueueItem.Size;
+
+                    queueItems.Add( queueItem);
+                }
+
+                return queueItems;
+            }, TimeSpan.FromSeconds(10));
         }
 
         public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)

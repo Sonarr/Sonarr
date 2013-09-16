@@ -3,9 +3,8 @@ define(
     [
         'app',
         'marionette',
-        'Commands/CommandController',
-        'Shared/Messenger'
-    ], function (App, Marionette, CommandController, Messenger) {
+        'Commands/CommandController'
+    ], function (App, Marionette, CommandController) {
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
@@ -15,14 +14,8 @@ define(
                 'click': 'onClick'
             },
 
-            ui: {
-                icon: '.x-icon'
-            },
-
-
             initialize: function () {
                 this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
-                this.idle = true;
             },
 
             onRender: function () {
@@ -31,82 +24,34 @@ define(
                     this.invokeCallback();
                 }
 
-                if(!this.model.get('title')){
+                if (!this.model.get('title')) {
                     this.$el.addClass('btn-icon-only');
+                }
+
+                var command = this.model.get('command');
+                if (command) {
+                    CommandController.bindToCommand({
+                        command: {name: command},
+                        element: this.$el
+                    });
                 }
             },
 
             onClick: function () {
-                if (this.idle) {
-                    this.invokeCallback();
-                    this.invokeRoute();
-                    this.invokeCommand();
+
+                if (this.$el.hasClass('disabled')) {
+                    return;
                 }
+
+                this.invokeCallback();
+                this.invokeRoute();
+                this.invokeCommand();
             },
 
             invokeCommand: function () {
-                //TODO: Use Actioneer to handle icon swapping
-
                 var command = this.model.get('command');
                 if (command) {
-                    this.idle = false;
-                    this.$el.addClass('disabled');
-                    this.ui.icon.addClass('icon-spinner icon-spin');
-
-                    var self = this;
-                    var commandPromise = CommandController.Execute(command);
-                    commandPromise.done(function () {
-                        if (self.model.get('successMessage')) {
-                            Messenger.show({
-                                message: self.model.get('successMessage')
-                            });
-                        }
-
-                        if (self.model.get('onSuccess')) {
-                            if (!self.model.ownerContext) {
-                                throw 'ownerContext must be set.';
-                            }
-
-                            self.model.get('onSuccess').call(self.model.ownerContext);
-                        }
-                    });
-
-                    commandPromise.fail(function (options) {
-                        if (options.readyState === 0 || options.status === 0) {
-                            return;
-                        }
-
-                        if (self.model.get('errorMessage')) {
-                            Messenger.show({
-                                message: self.model.get('errorMessage'),
-                                type   : 'error'
-                            });
-                        }
-
-                        if (self.model.get('onError')) {
-                            if (!self.model.ownerContext) {
-                                throw 'ownerContext must be set.';
-                            }
-
-                            self.model.get('onError').call(self.model.ownerContext);
-                        }
-                    });
-
-                    commandPromise.always(function () {
-                        if (!self.isClosed) {
-                            self.$el.removeClass('disabled');
-                            self.ui.icon.removeClass('icon-spinner icon-spin');
-                            self.idle = true;
-                        }
-                    });
-
-                    if (self.model.get('always')) {
-                        if (!self.model.ownerContext) {
-                            throw 'ownerContext must be set.';
-                        }
-
-                        self.model.get('always').call(self.model.ownerContext);
-                    }
+                    CommandController.Execute(command);
                 }
             },
 
@@ -134,7 +79,6 @@ define(
                     callback.call(this.model.ownerContext);
                 }
             }
-
         });
     });
 

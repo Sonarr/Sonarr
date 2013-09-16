@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;
 
@@ -13,7 +12,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
     public class SceneMappingProxyFixture : CoreTest<SceneMappingProxy>
     {
-        private const string SCENE_MAPPING_URL = "http://services.nzbdrone.com/SceneMapping/Active";
+        private const string SCENE_MAPPING_URL = "http://services.nzbdrone.com/v1/SceneMapping";
 
         [Test]
         public void fetch_should_return_list_of_mappings()
@@ -30,7 +29,6 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.ParseTerm));
             mappings.Should().NotContain(c => c.TvdbId == 0);
         }
-
 
         [Test]
         public void should_throw_on_server_error()

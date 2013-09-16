@@ -1,0 +1,36 @@
+﻿<div class="search-item  {{#unless isExisting}}search-item-new{{/unless}}">
+    <div class="row">
+        <div class="span2">
+            <a href="{{traktUrl}}" target="_blank">
+                <img class="new-series-poster" src="{{remotePoster}}" {{defaultImg}} >
+            </a>
+        </div>
+        <div class="span9">
+
+            <div class="row">
+                <h2>{{titleWithYear}}</h2>
+            </div>
+            <div class="row new-series-overview x-overview">
+                {{overview}}
+            </div>
+            <div class="row">
+                {{#if existing}}
+                    <div class="btn add-series disabled pull-right">
+                        Already Exists
+                    </div>
+                {{else}}
+                    {{#unless path}}
+                        {{> RootFolderSelectionPartial rootFolders}}
+                    {{/unless}}
+
+                    {{> StartingSeasonSelectionPartial seasons}}
+                    {{> QualityProfileSelectionPartial qualityProfiles}}
+
+                    <div class="span1 btn btn-success x-add add-series pull-right">
+                        Add <i class="icon-plus"></i>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>

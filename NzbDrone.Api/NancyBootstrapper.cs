@@ -1,14 +1,14 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using TinyIoC;
 
 namespace NzbDrone.Api
@@ -21,20 +21,18 @@ namespace NzbDrone.Api
         public NancyBootstrapper(TinyIoCContainer tinyIoCContainer)
         {
             _tinyIoCContainer = tinyIoCContainer;
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger =  NzbDroneLogger.GetLogger();
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             _logger.Info("Starting NzbDrone API");
 
-
             RegisterPipelines(pipelines);
 
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
-            container.Resolve<IMessageAggregator>().PublishEvent(new ApplicationStartedEvent());
-
+            container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }
@@ -47,9 +45,7 @@ namespace NzbDrone.Api
             {
                 registerNancyPipeline.Register(pipelines);
             }
-
         }
-
 
         protected override TinyIoCContainer GetApplicationContainer()
         {

@@ -22,7 +22,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         {
             get
             {
-                return "Higher quality report exists in history";
+                return "Existing file in history is of equal or higher quality";
             }
         }
 
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 if (bestQualityInHistory != null)
                 {
                     _logger.Trace("Comparing history quality with report. History is {0}", bestQualityInHistory);
-                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
+                    if (!_qualityUpgradableSpecification.IsUpgradable(bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
                         return false;
                 }
             }

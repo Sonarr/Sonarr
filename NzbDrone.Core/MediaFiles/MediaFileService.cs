@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Common;
 
@@ -24,21 +24,21 @@ namespace NzbDrone.Core.MediaFiles
 
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
     {
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IMediaFileRepository _mediaFileRepository;
         private readonly Logger _logger;
 
-        public MediaFileService(IMediaFileRepository mediaFileRepository, IMessageAggregator messageAggregator, Logger logger)
+        public MediaFileService(IMediaFileRepository mediaFileRepository, IEventAggregator eventAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
         public EpisodeFile Add(EpisodeFile episodeFile)
         {
             var addedFile = _mediaFileRepository.Insert(episodeFile);
-            _messageAggregator.PublishEvent(new EpisodeFileAddedEvent(addedFile));
+            _eventAggregator.PublishEvent(new EpisodeFileAddedEvent(addedFile));
             return addedFile;
         }
 
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             _mediaFileRepository.Delete(episodeFile);
 
-            _messageAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile, forUpgrade));
+            _eventAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile, forUpgrade));
         }
 
         public bool Exists(string path)

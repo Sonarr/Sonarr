@@ -14,7 +14,17 @@ namespace NzbDrone.Api.Series
 
         //View Only
         public String Title { get; set; }
-        public Int32 SeasonCount { get; set; }
+
+        public Int32 SeasonCount
+        {
+            get
+            {
+                if (Seasons != null) return Seasons.Count;
+
+                return 0;
+            }
+        }
+
         public Int32 EpisodeCount { get; set; }
         public Int32 EpisodeFileCount { get; set; }
         public SeriesStatusType Status { get; set; }
@@ -26,7 +36,8 @@ namespace NzbDrone.Api.Series
         public List<MediaCover> Images { get; set; }
 
         public String RemotePoster { get; set; }
-
+        public List<Season> Seasons { get; set; }
+        public Int32 Year { get; set; }
 
         //View & Edit
         public String Path { get; set; }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -15,27 +16,24 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
-        private readonly ISeasonService _seasonService;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService,
-            ISeasonService seasonService, IMessageAggregator messageAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeService = episodeService;
-            _seasonService = seasonService;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
         public void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
-            _logger.Info("Starting series info refresh for: {0}", series);
+            _logger.Info("Starting episode info refresh for: {0}", series);
             var successCount = 0;
             var failCount = 0;
 
             var existingEpisodes = _episodeService.GetEpisodeBySeries(series.Id);
-            var seasons = _seasonService.GetSeasonsBySeries(series.Id);
+            var seasons = series.Seasons;
 
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
@@ -44,7 +42,7 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = existingEpisodes.SingleOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    var episodeToUpdate = existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
                     if (episodeToUpdate != null)
                     {
@@ -88,17 +86,17 @@ namespace NzbDrone.Core.Tv
 
             if (newList.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
+                _eventAggregator.PublishEvent(new EpisodeInfoAddedEvent(newList, series));
             }
 
             if (updateList.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
+                _eventAggregator.PublishEvent(new EpisodeInfoUpdatedEvent(updateList));
             }
 
             if (existingEpisodes.Any())
             {
-                _messageAggregator.PublishEvent(new EpisodeInfoDeletedEvent(updateList));
+                _eventAggregator.PublishEvent(new EpisodeInfoDeletedEvent(updateList));
             }
 
             if (failCount != 0)
@@ -114,11 +112,6 @@ namespace NzbDrone.Core.Tv
 
         private static bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons)
         {
-            if (episode.SeasonNumber == 0)
-            {
-                return false;
-            }
-
             if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
             {
                 return false;
@@ -132,7 +125,7 @@ namespace NzbDrone.Core.Tv
         {
             var groups =
                 allEpisodes.Where(c => c.AirDateUtc.HasValue)
-                    .GroupBy(e => new { e.SeriesId, e.AirDate })
+                    .GroupBy(e => new { e.SeasonNumber, e.AirDate })
                     .Where(g => g.Count() > 1)
                     .ToList();
 

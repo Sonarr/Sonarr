@@ -54,10 +54,9 @@ namespace NzbDrone.Core.SeriesStats
         {
             return @"SELECT
                      SeriesId,
-                     SUM(CASE WHEN (Monitored = 1 AND AirdateUtc <= @currentDate) OR Episodes.EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
-                     SUM(CASE WHEN Episodes.EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
-                     MAX(Episodes.SeasonNumber) as SeasonCount,
-                     MIN(CASE WHEN AirDateUtc < @currentDate THEN NULL ELSE AirDateUtc END) AS NextAiringString
+                     SUM(CASE WHEN (Monitored = 1 AND AirdateUtc <= @currentDate) OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
+                     SUM(CASE WHEN EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
+                     MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString
                      FROM Episodes";
         }
 

@@ -40,6 +40,7 @@ namespace NzbDrone.Api.System
                     OsVersion = OsInfo.Version.ToString(),
                     IsMono = OsInfo.IsMono,
                     IsLinux = OsInfo.IsLinux,
+                    IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled
                 }.AsResponse();

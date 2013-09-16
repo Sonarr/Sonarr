@@ -3,7 +3,9 @@
         <h3>{{name}}</h3>
         {{#if_eq implementation compare="Newznab"}}
             <span class="btn-group pull-right">
-                <button class="btn btn-mini btn-icon-only x-delete"><i class="icon-nd-delete"/></button>
+                <button class="btn btn-mini btn-icon-only x-delete">
+                    <i class="icon-nd-delete"/>
+                </button>
             </span>
         {{/if_eq}}
     </div>
@@ -27,8 +29,9 @@
     {{formBuilder}}
 
     {{#if_eq name compare="WomblesIndex"}}
-        <div class="alert">
-            <strong>Warning!</strong> Does not support searching
-        </div>
+    <div class="alert">
+        <i class="icon-nd-warning"></i>
+        Does not support searching
+    </div>
     {{/if_eq}}
 </div>

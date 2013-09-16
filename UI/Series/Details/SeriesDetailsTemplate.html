@@ -2,14 +2,23 @@
     <div class="span11">
         <div class="row">
             <h1>
-                <i class="icon-bookmark x-monitored clickable" title="Toggle monitored state for entire series"/>
+                <i class="x-monitored clickable series-monitor-toggle" title="Toggle monitored state for entire series"/>
                 {{title}}
-                <span class="series-actions pull-right">
-                    <i class="icon-refresh x-refresh" title="Update series info and scan disk"/>
-                    <i class="icon-nd-rename x-rename" title="Rename all episodes in this series"/>
-                    <i class="icon-search x-search" title="Search for all episodes in this series"/>
-                    <i class="icon-nd-edit x-edit" title="Edit series"/>
-                </span>
+                <div class="series-actions pull-right">
+                    <div class="x-refresh">
+                        <i class="icon-refresh icon-can-spin" title="Update series info and scan disk"/>
+                    </div>
+                    <div class="x-rename">
+                        <i class="icon-nd-rename" title="Rename all episodes in this series"/>
+                    </div>
+                    <div class="x-search">
+                        <i class="icon-search" title="Search for all episodes in this series"/>
+                    </div>
+                    <div class="x-edit">
+                        <i class="icon-nd-edit" title="Edit series"/>
+                    </div>
+
+                </div>
             </h1>
         </div>
         <div class="row series-detail-overview">
@@ -17,9 +26,6 @@
         </div>
         <div id="info" class="row">
 
-        </div>
-        <div class="row">
-            <div id="season-menu" class="season-menu"></div>
         </div>
     </div>
 </div>

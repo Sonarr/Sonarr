@@ -9,6 +9,8 @@ namespace NzbDrone.Api
 {
     public abstract class NzbDroneRestModule<TResource> : RestModule<TResource> where TResource : RestResource, new()
     {
+        protected string Resource { get; private set; }
+
         protected NzbDroneRestModule()
             : this(new TResource().ResourceName)
         {
@@ -17,6 +19,7 @@ namespace NzbDrone.Api
         protected NzbDroneRestModule(string resource)
             : base("/api/" + resource.Trim('/'))
         {
+            Resource = resource;
             PostValidator.RuleFor(r => r.Id).IsZero();
             PutValidator.RuleFor(r => r.Id).ValidId();
         }
@@ -28,7 +31,7 @@ namespace NzbDrone.Api
             return model.Id;
         }
 
-        protected List<TResource> ToListResource<TModel>(Func<IEnumerable<TModel>> function) where TModel : ModelBase, new()
+        protected List<TResource> ToListResource<TModel>(Func<IEnumerable<TModel>> function) where TModel : class
         {
             var modelList = function();
             return modelList.InjectTo<List<TResource>>();

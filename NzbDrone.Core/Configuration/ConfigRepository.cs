@@ -1,6 +1,8 @@
 using System.Linq;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.Configuration
 {
@@ -12,8 +14,8 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigRepository : BasicRepository<Config>, IConfigRepository
     {
-        public ConfigRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public ConfigRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

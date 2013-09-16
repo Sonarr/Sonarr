@@ -4,7 +4,6 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -123,53 +122,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _firstFile.Quality = new QualityModel(Quality.WEBDL1080p);
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_false_when_episodeFile_was_added_more_than_7_days_ago()
-        {
-            _firstFile.Quality.Quality = Quality.DVD;
-
-            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_false_when_first_episodeFile_was_added_more_than_7_days_ago()
-        {
-            _firstFile.Quality.Quality = Quality.DVD;
-            _secondFile.Quality.Quality = Quality.DVD;
-
-            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_false_when_second_episodeFile_was_added_more_than_7_days_ago()
-        {
-            _firstFile.Quality.Quality = Quality.DVD;
-            _secondFile.Quality.Quality = Quality.DVD;
-
-            _secondFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_true_when_episodeFile_was_added_more_than_7_days_ago_but_proper_is_for_better_quality()
-        {
-            WithFirstFileUpgradable();
-
-            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
-        }
-
-        [Test]
-        public void should_return_true_when_episodeFile_was_added_more_than_7_days_ago_but_is_for_search()
-        {
-            WithFirstFileUpgradable();
-
-            _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            _upgradeDisk.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Should().BeTrue();
         }
     }
 }

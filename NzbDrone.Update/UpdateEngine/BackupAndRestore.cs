@@ -31,7 +31,6 @@ namespace NzbDrone.Update.UpdateEngine
 
         public void Restore(string target)
         {
-            //TODO:this should ignore single file failures.
             _logger.Info("Attempting to rollback upgrade");
             _diskProvider.CopyFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
         }

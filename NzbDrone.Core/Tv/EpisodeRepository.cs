@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Tv
@@ -31,8 +32,8 @@ namespace NzbDrone.Core.Tv
     {
         private readonly IDatabase _database;
 
-        public EpisodeRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public EpisodeRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
             _database = database;
         }

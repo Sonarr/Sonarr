@@ -5,7 +5,8 @@ using System.Net;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -25,7 +28,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesService _seriesService;
         private readonly ICached<bool> _cache;
 
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger =  NzbDroneLogger.GetLogger();
 
         public XemProvider(IEpisodeService episodeService,
                            IXemCommunicationProvider xemCommunicationProvider,
@@ -131,8 +134,7 @@ namespace NzbDrone.Core.Providers
 
             catch (Exception ex)
             {
-                //TODO: We should increase this back to warn when caching is in place
-                _logger.TraceException("Error updating scene numbering mappings for: " + series, ex);
+                _logger.ErrorException("Error updating scene numbering mappings for: " + series, ex);
             }
         }
 

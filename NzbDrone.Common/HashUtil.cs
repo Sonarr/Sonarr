@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -34,31 +33,9 @@ namespace NzbDrone.Common
             return String.Format("{0:x8}", mCrc);
         }
 
-        public static string GenerateUserId()
+        public static string GenerateCommandId()
         {
-            return GenerateId("u");
-        }
-
-        public static string GenerateAppId()
-        {
-            return GenerateId("a");
-        }
-
-        public static string GenerateApiToken()
-        {
-            return Guid.NewGuid().ToString().Replace("-", "");
-        }
-
-        public static string GenerateSecurityToken(int length)
-        {
-            var byteSize = (length / 4) * 3;
-
-            var linkBytes = new byte[byteSize];
-            var rngCrypto = new RNGCryptoServiceProvider();
-            rngCrypto.GetBytes(linkBytes);
-            var base64String = Convert.ToBase64String(linkBytes);
-
-            return base64String;
+            return GenerateId("c");
         }
 
         private static string GenerateId(string prefix)

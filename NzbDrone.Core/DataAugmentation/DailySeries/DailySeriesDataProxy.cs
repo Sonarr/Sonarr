@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
         {
             try
             {
-                var dailySeriesIds = _httpProvider.DownloadString(Services.RootUrl + "/DailySeries/AllIds");
+                var dailySeriesIds = _httpProvider.DownloadString(Services.RootUrl + "/v1/DailySeries");
 
                 var seriesIds = Json.Deserialize<List<int>>(dailySeriesIds);
 
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
         {
             try
             {
-                var result = _httpProvider.DownloadString(Services.RootUrl + "/DailySeries/Check?seriesId=" + tvdbid);
+                var result = _httpProvider.DownloadString(Services.RootUrl + "/v1/DailySeries?seriesId=" + tvdbid);
                 return Convert.ToBoolean(result);
             }
             catch (Exception ex)

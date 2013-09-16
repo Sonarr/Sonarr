@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using FluentAssertions;
 using Moq;
 using NLog;
@@ -8,6 +9,8 @@ using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
@@ -42,6 +45,9 @@ namespace NzbDrone.Test.Common
 
     public abstract class TestBase : LoggingTest
     {
+
+        private static readonly Random _random = new Random();
+
         private AutoMoqer _mocker;
         protected AutoMoqer Mocker
         {
@@ -57,6 +63,15 @@ namespace NzbDrone.Test.Common
         }
 
         protected Mock<RestProvider> MockedRestProvider { get; private set; }
+
+        protected int RandomNumber
+        {
+            get
+            {
+                Thread.Sleep(1);
+                return _random.Next(0, int.MaxValue);
+            }
+        }
 
         private string VirtualPath
         {
@@ -143,6 +158,11 @@ namespace NzbDrone.Test.Common
             return Path.Combine(SandboxFolder, fileName);
         }
 
+        protected string GetTestFilePath()
+        {
+            return GetTestFilePath(Path.GetRandomFileName());
+        }
+
         protected string SandboxFolder
         {
             get
@@ -160,12 +180,12 @@ namespace NzbDrone.Test.Common
 
         protected void VerifyEventPublished<TEvent>(Times times) where TEvent : class, IEvent
         {
-            Mocker.GetMock<IMessageAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), times);
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), times);
         }
 
         protected void VerifyEventNotPublished<TEvent>() where TEvent : class, IEvent
         {
-            Mocker.GetMock<IMessageAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), Times.Never());
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), Times.Never());
         }
     }
 }

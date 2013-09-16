@@ -1,5 +1,5 @@
 'use strict';
-define(['Shared/StringHelpers'],function (StringHelpers) {
+define(function () {
     //This module will automatically route all relative links through backbone router rather than
     //causing links to reload pages.
 
@@ -40,7 +40,7 @@ define(['Shared/StringHelpers'],function (StringHelpers) {
             }
 
 
-            if (!StringHelpers.startsWith(href, 'http')) {
+            if (!href.startsWith('http')) {
                 router.navigate(href, { trigger: true });
             }
 

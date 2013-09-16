@@ -1,5 +1,7 @@
 ﻿using NLog;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
@@ -12,21 +14,21 @@ namespace NzbDrone.Core.Download
     public class DownloadService : IDownloadService
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
-            IMessageAggregator messageAggregator, Logger logger)
+            IEventAggregator eventAggregator, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
         public void DownloadReport(RemoteEpisode remoteEpisode)
         {
-            var downloadTitle = remoteEpisode.Report.Title;
+            var downloadTitle = remoteEpisode.Release.Title;
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
             if (!downloadClient.IsConfigured)
@@ -37,8 +39,8 @@ namespace NzbDrone.Core.Download
 
             downloadClient.DownloadNzb(remoteEpisode);
 
-            _logger.Info("Report sent to download client. {0}", downloadTitle);
-            _messageAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
+            _logger.ProgressInfo("Report sent to download client. {0}", downloadTitle);
+            _eventAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
         }
     }
 }

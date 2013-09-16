@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.Indexers
 {
@@ -13,8 +15,8 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerRepository : BasicRepository<IndexerDefinition>, IIndexerRepository
     {
-        public IndexerRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public IndexerRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

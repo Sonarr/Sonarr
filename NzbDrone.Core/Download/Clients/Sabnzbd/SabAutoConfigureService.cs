@@ -6,12 +6,13 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class SabAutoConfigureService
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
         public SabModel AutoConfigureSab()
         {

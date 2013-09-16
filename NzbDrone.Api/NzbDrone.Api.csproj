@@ -91,7 +91,6 @@
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
-    <Compile Include="Episodes\EpisodeConnection.cs" />
     <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
@@ -123,6 +122,8 @@
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="Config\NamingSampleResource.cs" />
+    <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
+    <Compile Include="ResourceChangeMessage.cs" />
     <Compile Include="Notifications\NotificationSchemaModule.cs" />
     <Compile Include="Notifications\NotificationModule.cs" />
     <Compile Include="Notifications\NotificationResource.cs" />
@@ -135,10 +136,6 @@
     <Compile Include="REST\RestResource.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
     <Compile Include="RootFolders\RootFolderResource.cs" />
-    <Compile Include="RootFolders\RootFolderConnection.cs" />
-    <Compile Include="Seasons\SeasonModule.cs" />
-    <Compile Include="Seasons\SeasonResource.cs" />
-    <Compile Include="Series\SeriesConnection.cs" />
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />
@@ -156,11 +153,6 @@
     <Compile Include="Qualities\QualitySizeModule.cs" />
     <Compile Include="Extensions\ReqResExtensions.cs" />
     <Compile Include="Config\SettingsModule.cs" />
-    <Compile Include="SignalR\BasicResourceConnection.cs" />
-    <Compile Include="SignalR\NoOpPerformanceCounterManager.cs" />
-    <Compile Include="SignalR\Serializer.cs" />
-    <Compile Include="SignalR\SignalrDependencyResolver.cs" />
-    <Compile Include="SignalR\NzbDronePersistentConnection.cs" />
     <Compile Include="System\SystemModule.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
@@ -182,6 +174,10 @@
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
       <Project>{ff5ee3b6-913b-47ce-9ceb-11c51b4e1205}</Project>
       <Name>NzbDrone.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
+      <Project>{7c2cc69f-5ca0-4e5c-85cb-983f9f6c3b36}</Project>
+      <Name>NzbDrone.SignalR</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

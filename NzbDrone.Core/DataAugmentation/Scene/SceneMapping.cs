@@ -5,15 +5,15 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public class SceneMapping : ModelBase
     {
-        [JsonProperty("CleanTitle")]
+        [JsonProperty("title")]
         public string ParseTerm { get; set; }
 
-        [JsonProperty("Title")]
+        [JsonProperty("searchTitle")]
         public string SearchTerm { get; set; }
 
-        [JsonProperty("Id")]
         public int TvdbId { get; set; }
 
+        [JsonProperty("season")]
         public int SeasonNumber { get; set; }
     }
 }

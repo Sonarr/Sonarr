@@ -1,17 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
     public abstract class SearchCriteriaBase
     {
-        private static readonly Regex NoneWord = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex NonWord = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex BeginningThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public int SeriesId { get; set; }
-        public int SeriesTvRageId { get; set; }
+        public Series Series { get; set; }
         public string SceneTitle { get; set; }
+        public List<Episode> Episodes { get; set; }
 
         public string QueryTitle
         {
@@ -32,7 +34,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
                 .Replace("`", "")
                 .Replace("'", "");
 
-            cleanTitle = NoneWord.Replace(cleanTitle, "+");
+            cleanTitle = NonWord.Replace(cleanTitle, "+");
 
             //remove any repeating +s
             cleanTitle = Regex.Replace(cleanTitle, @"\+{2,}", "+");

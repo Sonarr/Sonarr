@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
-using NzbDrone.Core.Indexers.NzbClub;
 using NzbDrone.Core.Indexers.Omgwtfnzbs;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Lifecycle;
@@ -24,7 +23,6 @@ namespace NzbDrone.Core.Test.IndexerTests
             _indexers = new List<IIndexer>();
 
             _indexers.Add(new Newznab());
-            _indexers.Add(new NzbClub());
             _indexers.Add(new Omgwtfnzbs());
             _indexers.Add(new Wombles());
 

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
-using System.ServiceProcess;
 using NLog;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -65,7 +64,9 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (lowerProcessName.Contains("jetbrain")) return false;
             if (lowerProcessName.Contains("resharper")) return false;
 
-            if (Directory.GetCurrentDirectory().ToLower().Contains("teamcity")) return false;
+            string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
+            if (lowerCurrentDir.Contains("teamcity")) return false;
+            if (lowerCurrentDir.StartsWith("/run/")) return false;
 
             return true;
         }

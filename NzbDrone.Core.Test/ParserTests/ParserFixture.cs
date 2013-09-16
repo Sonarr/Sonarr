@@ -4,11 +4,10 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Contract;
-using NzbDrone.Core.Indexers;
+using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Common.Expansive;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -80,6 +79,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Top_Gear.19x06.720p_HDTV_x264-FoV", "Top Gear", 19, 6)]
         [TestCase("Portlandia.S03E10.Alexandra.720p.WEB-DL.AAC2.0.H.264-CROM.mkv", "Portlandia", 3, 10)]
         [TestCase("(Game of Thrones s03 e - \"Game of Thrones Season 3 Episode 10\"", "Game of Thrones", 3, 10)]
+        [TestCase("House.Hunters.International.S05E607.720p.hdtv.x264", "House.Hunters.International", 5, 607)]
+        [TestCase("Adventure.Time.With.Finn.And.Jake.S01E20.720p.BluRay.x264-DEiMOS", "Adventure.Time.With.Finn.And.Jake", 1, 20)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -103,6 +104,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"/TV Drop/King of the Hill - 10x12 - 24 Hour Propane People [SDTV]/1012 - 24 Hour Propane People.avi", 10, 12)]
         [TestCase(@"S:\TV Drop\King of the Hill - 10x12 - 24 Hour Propane People [SDTV]\Hour Propane People.avi", 10, 12)]
         [TestCase(@"/TV Drop/King of the Hill - 10x12 - 24 Hour Propane People [SDTV]/Hour Propane People.avi", 10, 12)]
+        [TestCase(@"E:\Downloads\tv\The.Big.Bang.Theory.S01E01.720p.HDTV\ajifajjjeaeaeqwer_eppj.avi", 1, 1)]
+        [TestCase(@"C:\Test\Unsorted\The.Big.Bang.Theory.S01E01.720p.HDTV\tbbt101.avi", 1, 1)]
         public void PathParse_tests(string path, int season, int episode)
         {
             var result = Parser.Parser.ParsePath(path);
@@ -394,14 +397,6 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
-        }
-
-        [TestCase("[112461]-[FULL]-[#a.b.teevee@EFNet]-[ 666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION ]-[02/31] - \"the.devils.address.103.720p-dimension.par2\" yEnc", "666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION")]
-        [TestCase("[112438]-[FULL]-[#a.b.teevee@EFNet]-[ Downton_Abbey.3x05.HDTV_x264-FoV ]-[01/26] - \"downton_abbey.3x05.hdtv_x264-fov.nfo\" yEnc", "Downton_Abbey.3x05.HDTV_x264-FoV")]
-        [TestCase("[ 21154 ] - [ TrollHD ] - [ 00/73 ] - \"MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb\" yEnc", "MythBusters S03E20 Escape Slide Parachute 1080i HDTV-UPSCALE DD5.1 MPEG2-TrollHD.nzb")]
-        public void parse_header(string title, string expected)
-        {
-            BasicRssParser.ParseHeader(title).Should().Be(expected);
         }
 
         [TestCase("76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe")]

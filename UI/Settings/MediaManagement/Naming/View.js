@@ -45,7 +45,7 @@ define(
 
                 var promise = $.ajax({
                     type: 'GET',
-                    url : window.ApiRoot + '/config/naming/samples',
+                    url : window.NzbDrone.ApiRoot + '/config/naming/samples',
                     data: this.model.toJSON()
                 });
 

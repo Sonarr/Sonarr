@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Validation;

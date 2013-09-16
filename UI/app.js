@@ -1,7 +1,7 @@
 ﻿'use strict';
 require.config({
 
-    urlArgs: 'v=' + window.ServerStatus.version,
+    urlArgs: 'v=' + window.NzbDrone.ServerStatus.version,
 
     paths: {
         'backbone'            : 'JsLibraries/backbone',
@@ -181,14 +181,16 @@ require.config({
 define(
     [
         'marionette',
+        'Shared/SignalRBroadcaster',
         'Instrumentation/StringFormat'
-    ], function (Marionette) {
+    ], function (Marionette, SignalRBroadcaster) {
 
         var app = new Marionette.Application();
 
         app.Events = {
             SeriesAdded  : 'series:added',
-            SeriesDeleted: 'series:deleted'
+            SeriesDeleted: 'series:deleted',
+            SeasonRenamed: 'season:renamed'
         };
 
         app.Commands = {
@@ -208,6 +210,8 @@ define(
         app.addInitializer(function () {
             console.log('starting application');
         });
+
+        app.addInitializer(SignalRBroadcaster.appInitializer, {app: app});
 
         app.addRegions({
             navbarRegion: '#nav-region',

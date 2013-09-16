@@ -2,12 +2,13 @@
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;
 using NzbDrone.Test.Common;
 using FluentAssertions;
@@ -45,7 +46,6 @@ namespace NzbDrone.App.Test
         {
             var genericExecutor = typeof(IExecute<>).MakeGenericType(typeof(RssSyncCommand));
             var container = MainAppContainerBuilder.BuildContainer(args);
-            DbFactory.RegisterDatabase(container);
 
             var executor = container.Resolve(genericExecutor);
 

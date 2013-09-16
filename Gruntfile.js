@@ -52,9 +52,10 @@ module.exports = function (grunt) {
 
             options:{
                 dumpLineNumbers : 'false',
-                compress        : false,
+                compress        : true,
                 yuicompress     : false,
-                ieCompat        : false
+                ieCompat        : true,
+                strictImports   : true
             },
 
             bootstrap: {

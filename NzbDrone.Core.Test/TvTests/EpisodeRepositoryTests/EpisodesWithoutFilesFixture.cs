@@ -14,20 +14,24 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         private Series _monitoredSeries;
         private Series _unmonitoredSeries;
         private PagingSpec<Episode> _pagingSpec;
-            
+
         [SetUp]
         public void Setup()
         {
             _monitoredSeries = Builder<Series>.CreateNew()
                                         .With(s => s.Id = 0)
+                                        .With(s => s.TvRageId = RandomNumber)
                                         .With(s => s.Runtime = 30)
                                         .With(s => s.Monitored = true)
+                                        .With(s => s.TitleSlug = "Title3")
                                         .Build();
 
             _unmonitoredSeries = Builder<Series>.CreateNew()
                                         .With(s => s.Id = 0)
+                                        .With(s => s.TvdbId = RandomNumber)
                                         .With(s => s.Runtime = 30)
                                         .With(s => s.Monitored = false)
+                                        .With(s => s.TitleSlug = "Title2")
                                         .Build();
 
             _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
@@ -44,6 +48,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var monitoredSeriesEpisodes = Builder<Episode>.CreateListOfSize(3)
                                            .All()
                                            .With(e => e.Id = 0)
+                                           .With(e => e.TvDbEpisodeId = RandomNumber)
                                            .With(e => e.SeriesId = _monitoredSeries.Id)
                                            .With(e => e.EpisodeFileId = 0)
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(-5))
@@ -57,6 +62,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var unmonitoredSeriesEpisodes = Builder<Episode>.CreateListOfSize(3)
                                            .All()
                                            .With(e => e.Id = 0)
+                                            .With(e => e.TvDbEpisodeId = RandomNumber)
                                            .With(e => e.SeriesId = _unmonitoredSeries.Id)
                                            .With(e => e.EpisodeFileId = 0)
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(-5))
@@ -66,6 +72,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .TheLast(1)
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
+
 
             Db.InsertMany(monitoredSeriesEpisodes);
             Db.InsertMany(unmonitoredSeriesEpisodes);

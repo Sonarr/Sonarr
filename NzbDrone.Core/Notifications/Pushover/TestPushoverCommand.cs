@@ -1,9 +1,17 @@
-﻿using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
-    public class TestPushoverCommand : ICommand
+    public class TestPushoverCommand : Command
     {
+
+        public override bool SendUpdatesToClient
+        {
+            get
+            {
+                return true;
+            }
+        }
         public string UserKey { get; set; }
         public int Priority { get; set; }
     }

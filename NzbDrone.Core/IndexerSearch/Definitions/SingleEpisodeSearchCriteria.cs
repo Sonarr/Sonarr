@@ -7,7 +7,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            return string.Format("[{0} : S{1:00}E{2:00} ]", SceneTitle, SeasonNumber, EpisodeNumber);
+            return string.Format("[{0} : S{1:00}E{2:00}]", SceneTitle, SeasonNumber, EpisodeNumber);
         }
     }
 }

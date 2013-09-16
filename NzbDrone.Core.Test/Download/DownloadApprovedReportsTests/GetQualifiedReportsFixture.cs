@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -32,9 +33,9 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             remoteEpisode.Episodes = new List<Episode>();
             remoteEpisode.Episodes.AddRange(episodes);
 
-            remoteEpisode.Report = new ReportInfo();
-            remoteEpisode.Report.Age = Age;
-            remoteEpisode.Report.Size = size;
+            remoteEpisode.Release = new ReleaseInfo();
+            remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-Age);
+            remoteEpisode.Release.Size = size;
 
             return remoteEpisode;
         }
@@ -110,9 +111,9 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         public void should_order_by_smallest_rounded_to_200mb_then_age()
         {
             var remoteEpisodeSd = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.SDTV), size: 100.Megabytes(), Age: 1);
-            var remoteEpisodeHdSmallOld = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size:1200.Megabytes(), Age:1000);
-            var remoteEpisodeHdSmallYounge = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size:1250.Megabytes(), Age:10);
-            var remoteEpisodeHdLargeYounge = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size:3000.Megabytes(), Age:1);
+            var remoteEpisodeHdSmallOld = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 1200.Megabytes(), Age: 1000);
+            var remoteEpisodeHdSmallYounge = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 1250.Megabytes(), Age: 10);
+            var remoteEpisodeHdLargeYounge = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 3000.Megabytes(), Age: 1);
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisodeSd));

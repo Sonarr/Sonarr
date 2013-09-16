@@ -9,7 +9,6 @@ namespace NzbDrone.Api.ErrorManagement
     {
         public object Content { get; private set; }
 
-
         public HttpStatusCode StatusCode { get; private set; }
 
         protected ApiException(HttpStatusCode statusCode, object content = null)

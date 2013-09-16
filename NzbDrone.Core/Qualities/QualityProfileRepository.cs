@@ -1,5 +1,7 @@
-﻿using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Datastore;
+﻿using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.Qualities
 {
@@ -10,8 +12,8 @@ namespace NzbDrone.Core.Qualities
 
     public class QualityProfileRepository : BasicRepository<QualityProfile>, IQualityProfileRepository
     {
-        public QualityProfileRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public QualityProfileRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
     }

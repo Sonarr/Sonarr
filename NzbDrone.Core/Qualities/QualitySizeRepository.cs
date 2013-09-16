@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.Qualities
 {
@@ -12,8 +14,8 @@ namespace NzbDrone.Core.Qualities
 
     public class QualitySizeRepository : BasicRepository<QualitySize>, IQualitySizeRepository
     {
-        public QualitySizeRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public QualitySizeRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

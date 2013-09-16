@@ -2,7 +2,7 @@
   <CopyReferencedAssembliesToWorkspace>false</CopyReferencedAssembliesToWorkspace>
   <ConsiderInconclusiveTestsAsPassing>true</ConsiderInconclusiveTestsAsPassing>
   <PreloadReferencedAssemblies>false</PreloadReferencedAssemblies>
-  <AllowDynamicCodeContractChecking>true</AllowDynamicCodeContractChecking>
+  <AllowDynamicCodeContractChecking>false</AllowDynamicCodeContractChecking>
   <AllowStaticCodeContractChecking>false</AllowStaticCodeContractChecking>
   <IgnoreThisComponentCompletely>false</IgnoreThisComponentCompletely>
   <RunPreBuildEvents>false</RunPreBuildEvents>
@@ -12,11 +12,11 @@
   <PreventSigningOfAssembly>false</PreventSigningOfAssembly>
   <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
-  <DefaultTestTimeout>60000</DefaultTestTimeout>
-  <UseBuildConfiguration></UseBuildConfiguration>
-  <UseBuildPlatform></UseBuildPlatform>
+  <DefaultTestTimeout>5000</DefaultTestTimeout>
+  <UseBuildConfiguration>Debug</UseBuildConfiguration>
+  <UseBuildPlatform>x86</UseBuildPlatform>
   <ProxyProcessPath></ProxyProcessPath>
-  <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
+  <UseCPUArchitecture>x86</UseCPUArchitecture>
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
   <IgnoredTests>
@@ -27,10 +27,34 @@
       <RegularExpression>NzbDrone\.Common\.Test\.EventingTests\.ServiceNameFixture\..*</RegularExpression>
     </RegexTestSelector>
     <RegexTestSelector>
-      <RegularExpression>NzbDrone\.Common\.Test\.ProcessProviderTests\..*</RegularExpression>
-    </RegexTestSelector>
-    <RegexTestSelector>
       <RegularExpression>NzbDrone\.Common\.Test\.ServiceFactoryFixture\..*</RegularExpression>
+    </RegexTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.ProcessProviderTests.ToString_on_new_processInfo</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.ProcessProviderTests.Should_be_able_to_start_process</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.ProcessProviderTests.kill_all_should_kill_all_process_with_name</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.ProcessProviderTests.GetProcessById_should_return_null_for_invalid_process(9999)</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.ProcessProviderTests.GetProcessById_should_return_null_for_invalid_process(-1)</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.ProcessProviderTests.GetProcessById_should_return_null_for_invalid_process(0)</TestName>
+    </NamedTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Common\.Test\.ServiceProviderTests\..*</RegularExpression>
+    </RegexTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Common.Test.DiskProviderTests.DiskProviderFixture.folder_should_return_correct_value_for_last_write</TestName>
+    </NamedTestSelector>
+    <RegexTestSelector>
+      <RegularExpression>NzbDrone\.Common\.Test\.DiskProviderTests\.DiskProviderFixture\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>

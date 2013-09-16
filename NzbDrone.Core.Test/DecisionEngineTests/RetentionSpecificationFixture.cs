@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -19,9 +20,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             parseResult = new RemoteEpisode
             {
-                Report = new ReportInfo
+                Release = new ReleaseInfo
                     {
-                        Age = 100
+                        PublishDate = DateTime.Now.AddDays(-100)
                     }
             };
         }

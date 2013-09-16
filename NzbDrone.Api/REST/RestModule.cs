@@ -61,7 +61,7 @@ namespace NzbDrone.Api.REST
 
         protected Func<int, TResource> GetResourceById
         {
-            private get { return _getResourceById; }
+            get { return _getResourceById; }
             set
             {
                 _getResourceById = value;

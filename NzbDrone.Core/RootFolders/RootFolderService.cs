@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
@@ -23,11 +24,14 @@ namespace NzbDrone.Core.RootFolders
 
     public class RootFolderService : IRootFolderService
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
         private readonly IBasicRepository<RootFolder> _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
+
+        private static readonly HashSet<string> SpecialFolders = new HashSet<string> { "$recycle.bin", "system volume information", "recycler" };
+
 
         public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository,
                                  IDiskProvider diskProvider,
@@ -118,7 +122,7 @@ namespace NzbDrone.Core.RootFolders
 
             if (Path.GetPathRoot(path).Equals(path, StringComparison.InvariantCultureIgnoreCase))
             {
-                var setToRemove = _diskProvider.SpecialFolders;
+                var setToRemove = SpecialFolders;
                 results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
             }
 

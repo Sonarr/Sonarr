@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat.Resources;
 using NzbDrone.Common.EnvironmentInfo;

@@ -23,6 +23,10 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 
             if (_binFolderCopy.Exists)
             {
+                foreach (var file in _binFolderCopy.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    file.Attributes = FileAttributes.Normal;
+                }
                 _binFolderCopy.Delete(true);
             }
 
@@ -83,11 +87,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void CopyFolder_should_copy_folder()
         {
-
-
             Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
-
-
             VerifyCopy();
         }
 
@@ -127,6 +127,22 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         }
 
 
+        [Test]
+        public void move_read_only_file()
+        {
+            var source = GetTestFilePath();
+            var destination = GetTestFilePath();
+
+            Subject.WriteAllText(source, "SourceFile");
+            Subject.WriteAllText(destination, "DestinationFile");
+
+            File.SetAttributes(source, FileAttributes.ReadOnly);
+            File.SetAttributes(destination, FileAttributes.ReadOnly);
+
+            Subject.MoveFile(source, destination);
+        }
+
+
 
 
         [Test]
@@ -139,15 +155,59 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var testFile = Path.Combine(SandboxFolder, "newfile.txt");
+            var testFile = GetTestFilePath();
 
             TestLogger.Info("Path is: {0}", testFile);
 
-            Subject.WriteAllText(testFile, "");
+            Subject.WriteAllText(testFile, "Test");
 
             Subject.GetLastFolderWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
             Subject.GetLastFolderWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow);
         }
+
+        [Test]
+        public void should_return_false_for_unlocked_file()
+        {
+            var testFile = GetTestFilePath();
+            Subject.WriteAllText(testFile, new Guid().ToString());
+
+            Subject.IsFileLocked(testFile).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_for_unlocked_and_readonly_file()
+        {
+            var testFile = GetTestFilePath();
+            Subject.WriteAllText(testFile, new Guid().ToString());
+
+            File.SetAttributes(testFile, FileAttributes.ReadOnly);
+
+            Subject.IsFileLocked(testFile).Should().BeFalse();
+        }
+
+
+        [Test]
+        public void should_return_true_for_unlocked_file()
+        {
+            var testFile = GetTestFilePath();
+            Subject.WriteAllText(testFile, new Guid().ToString());
+
+            using (var file = File.OpenWrite(testFile))
+            {
+                Subject.IsFileLocked(testFile).Should().BeTrue();
+            }
+        }
+
+
+        [Test]
+        public void should_be_able_to_set_permission_from_parrent()
+        {
+            var testFile = GetTestFilePath();
+            Subject.WriteAllText(testFile, new Guid().ToString());
+
+            Subject.InheritFolderPermissions(testFile);
+        }
+
 
         [Test]
         [Explicit]

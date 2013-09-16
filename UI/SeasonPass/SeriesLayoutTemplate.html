@@ -12,12 +12,12 @@
             <span class="span3">
                 <select class="x-season-select season-select">
                     <option value="-1">Select season...</option>
-                    {{#each seasons.models}}
-                    {{#if_eq attributes.seasonNumber compare="0"}}
-                    <option value="{{attributes.seasonNumber}}">Specials</option>
-                    {{else}}
-                    <option value="{{attributes.seasonNumber}}">Season {{attributes.seasonNumber}}</option>
-                    {{/if_eq}}
+                    {{#each seasons}}
+                        {{#if_eq seasonNumber compare="0"}}
+                            <option value="{{seasonNumber}}">Specials</option>
+                        {{else}}
+                            <option value="{{seasonNumber}}">Season {{seasonNumber}}</option>
+                        {{/if_eq}}
                     {{/each}}
                 </select>
 
@@ -36,7 +36,36 @@
 
     <div class="row">
         <div class="span11">
-            <div class="x-season-grid season-grid"></div>
+            <div class="x-season-grid season-grid">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="sortable">Season</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each seasons}}
+                            <tr>
+                                <td class="toggle-cell x-monitored" data-season-number="{{seasonNumber}}">
+                                    {{#if monitored}}
+                                        <i class="icon-nd-monitored"></i>
+                                    {{else}}
+                                        <i class="icon-nd-unmonitored"></i>
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    {{#if_eq seasonNumber compare="0"}}
+                                        Specials
+                                    {{else}}
+                                        Season {{seasonNumber}}
+                                    {{/if_eq}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

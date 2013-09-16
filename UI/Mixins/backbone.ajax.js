@@ -11,7 +11,7 @@ define(function () {
 
             //check if ajax call was made with data option
             if (xhr && xhr.data && xhr.type === 'DELETE') {
-                if (xhr.url.indexOf('?') === -1) {
+                if (!xhr.url.contains('?')) {
                     xhr.url = xhr.url + '?' + $.param(xhr.data);
                 }
                 else {

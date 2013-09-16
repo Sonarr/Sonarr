@@ -1,8 +1,8 @@
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.MediaFiles.Commands
 {
-    public class CleanMediaFileDb : ICommand
+    public class CleanMediaFileDb : Command
     {
         public int SeriesId { get; private set; }
 

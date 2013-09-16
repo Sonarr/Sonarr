@@ -17,13 +17,26 @@ define(
                 var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
                 var episodeField = this.column.get('episodes') || 'episodeNumber';
 
-                if (this.cellValue) {
-
-                    var airDate = this.cellValue.get(airDateField);
-                    var seasonNumber = this.cellValue.get(seasonField);
-                    var episodes = this.cellValue.get(episodeField);
-
+                if (this.model) {
                     var result = 'Unknown';
+
+                    var airDate = this.model.get(airDateField);
+                    var seasonNumber = this.model.get(seasonField);
+                    var episodes = this.model.get(episodeField);
+
+                    if (this.cellValue) {
+                        if (!seasonNumber) {
+                            seasonNumber = this.cellValue.get(seasonField);
+                        }
+
+                        if (!episodes) {
+                            episodes = this.cellValue.get(episodeField);
+                        }
+
+                        if (!airDate) {
+                            this.model.get(airDateField);
+                        }
+                    }
 
                     if (episodes) {
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -16,14 +15,6 @@ namespace NzbDrone.Common.EnvironmentInfo
         public const string INSTALL_SERVICE = "i";
         public const string UNINSTALL_SERVICE = "u";
         public const string HELP = "?";
-
-        static StartupArguments()
-        {
-            if (RuntimeInfo.IsProduction)
-            {
-                Instance = new StartupArguments("");
-            }
-        }
 
         public StartupArguments(params string[] args)
         {
@@ -45,13 +36,9 @@ namespace NzbDrone.Common.EnvironmentInfo
                     Flags.Add(flag);
                 }
             }
-
-            Instance = this;
         }
 
         public HashSet<string> Flags { get; private set; }
         public Dictionary<string, string> Args { get; private set; }
-
-        public static IStartupArguments Instance { get; private set; }
     }
 }

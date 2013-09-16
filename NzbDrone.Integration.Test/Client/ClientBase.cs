@@ -2,6 +2,7 @@
 using System.Net;
 using FluentAssertions;
 using NLog;
+using NzbDrone.Api;
 using NzbDrone.Api.REST;
 using NzbDrone.Common.Serializer;
 using RestSharp;
@@ -33,6 +34,17 @@ namespace NzbDrone.Integration.Test.Client
         {
             var request = BuildRequest();
             return Get<List<TResource>>(request);
+        }
+
+        public PagingResource<TResource> GetPaged(int pageNumber, int pageSize, string sortKey, string sortDir)
+        {
+            var request = BuildRequest();
+            request.AddParameter("page", pageNumber);
+            request.AddParameter("pageSize", pageSize);
+            request.AddParameter("sortKey", sortKey);
+            request.AddParameter("sortDir", sortDir);
+            return Get<PagingResource<TResource>>(request);
+
         }
 
         public TResource Post(TResource body)
@@ -74,7 +86,7 @@ namespace NzbDrone.Integration.Test.Client
             return Post<List<dynamic>>(request, HttpStatusCode.BadRequest);
         }
 
-        protected RestRequest BuildRequest(string command = "")
+        public RestRequest BuildRequest(string command = "")
         {
             return new RestRequest(_resource + "/" + command.Trim('/'))
                 {
@@ -82,7 +94,7 @@ namespace NzbDrone.Integration.Test.Client
                 };
         }
 
-        protected T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()
+        public T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()
         {
             request.Method = Method.GET;
             return Execute<T>(request, statusCode);

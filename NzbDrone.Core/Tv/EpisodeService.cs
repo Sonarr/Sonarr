@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -40,7 +42,7 @@ namespace NzbDrone.Core.Tv
         IHandleAsync<SeriesDeletedEvent>
     {
 
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IConfigService _configService;
@@ -128,7 +130,7 @@ namespace NzbDrone.Core.Tv
             var episode = _episodeRepository.Get(episodeId);
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
-            logger.Info("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+            logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)

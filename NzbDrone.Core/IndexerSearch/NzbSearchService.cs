@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;
@@ -59,7 +61,7 @@ namespace NzbDrone.Core.IndexerSearch
                     throw new InvalidOperationException("Daily episode is missing AirDate. Try to refresh series info.");
                 }
 
-                return SearchDaily(series, DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture));
+                return SearchDaily(series, episode);
             }
 
             return SearchSingle(series, episode);
@@ -67,7 +69,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> SearchSingle(Series series, Episode episode)
         {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, episode.SeasonNumber);
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode>{episode});
 
             if (series.UseSceneNumbering)
             {
@@ -92,9 +94,10 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchDaily(Series series, DateTime airDate)
+        private List<DownloadDecision> SearchDaily(Series series, Episode episode)
         {
-            var searchSpec = Get<DailyEpisodeSearchCriteria>(series);
+            var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
             searchSpec.Airtime = airDate;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
@@ -103,20 +106,21 @@ namespace NzbDrone.Core.IndexerSearch
         public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
             var series = _seriesService.GetSeries(seriesId);
+            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
 
-            var searchSpec = Get<SeasonSearchCriteria>(series, seasonNumber);
+            var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
             searchSpec.SeasonNumber = seasonNumber;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
-        private TSpec Get<TSpec>(Series series, int seasonNumber = -1) where TSpec : SearchCriteriaBase, new()
+        private TSpec Get<TSpec>(Series series, List<Episode> episodes) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
-            spec.SeriesId = series.Id;
-            spec.SeriesTvRageId = series.TvRageId;
+            spec.Series = series;
             spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId);
+            spec.Episodes = episodes;
 
             if (string.IsNullOrWhiteSpace(spec.SceneTitle))
             {
@@ -126,11 +130,12 @@ namespace NzbDrone.Core.IndexerSearch
             return spec;
         }
 
-        private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReportInfo>> searchAction, SearchCriteriaBase criteriaBase)
+        private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReleaseInfo>> searchAction, SearchCriteriaBase criteriaBase)
         {
             var indexers = _indexerService.GetAvailableIndexers().ToList();
-            var reports = new List<ReportInfo>();
+            var reports = new List<ReleaseInfo>();
 
+            _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
 
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
@@ -159,7 +164,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             Task.WaitAll(taskList.ToArray());
 
-            _logger.Debug("Total of {0} reports were found for {1} in {2} indexers", reports.Count, criteriaBase, indexers.Count);
+            _logger.Debug("Total of {0} reports were found for {1} from {2} indexers", reports.Count, criteriaBase, indexers.Count);
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
         }

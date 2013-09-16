@@ -37,9 +37,6 @@ namespace NzbDrone.Api.Test
                 "Windows"
             };
 
-            Mocker.GetMock<IDiskProvider>()
-                .SetupGet(s => s.SpecialFolders)
-                .Returns(new HashSet<string> { "$recycle.bin", "system volume information", "recycler" });
         }
 
         private void SetupFolders(string root)

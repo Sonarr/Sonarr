@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.Configuration
 {
@@ -24,24 +27,23 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
+        bool Torrent { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
     {
         private const string CONFIG_ELEMENT_NAME = "Config";
 
-        private readonly IAppFolderInfo _appFolderInfo;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IMessageAggregator messageAggregator)
+        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IEventAggregator eventAggregator)
         {
-            _appFolderInfo = appFolderInfo;
             _cache = cacheManger.GetCache<string>(GetType());
-            _messageAggregator = messageAggregator;
-            _configFile = _appFolderInfo.GetConfigPath();
+            _eventAggregator = eventAggregator;
+            _configFile = appFolderInfo.GetConfigPath();
         }
 
         public Dictionary<string, object> GetConfigDictionary()
@@ -81,7 +83,7 @@ namespace NzbDrone.Core.Configuration
                 }
             }
 
-            _messageAggregator.PublishEvent(new ConfigFileSavedEvent());
+            _eventAggregator.PublishEvent(new ConfigFileSavedEvent());
         }
 
         public int Port
@@ -92,6 +94,11 @@ namespace NzbDrone.Core.Configuration
         public bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser", true); }
+        }
+
+        public bool Torrent
+        {
+            get { return GetValueBoolean("Torrent", false, persist: false); }
         }
 
         public bool AuthenticationEnabled
@@ -124,9 +131,9 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
-        public bool GetValueBoolean(string key, bool defaultValue)
+        public bool GetValueBoolean(string key, bool defaultValue, bool persist = true)
         {
-            return Convert.ToBoolean(GetValue(key, defaultValue));
+            return Convert.ToBoolean(GetValue(key, defaultValue, persist));
         }
 
         public T GetValueEnum<T>(string key, T defaultValue)
@@ -134,13 +141,13 @@ namespace NzbDrone.Core.Configuration
             return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
 
-        public string GetValue(string key, object defaultValue)
+        public string GetValue(string key, object defaultValue, bool persist = true)
         {
             return _cache.Get(key, () =>
                 {
                     EnsureDefaultConfigFile();
 
-                    var xDoc = XDocument.Load(_configFile);
+                    var xDoc = LoadConfigFile();
                     var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
                     var parentContainer = config;
@@ -151,7 +158,10 @@ namespace NzbDrone.Core.Configuration
                         return valueHolder.First().Value;
 
                     //Save the value
-                    SetValue(key, defaultValue);
+                    if (persist)
+                    {
+                        SetValue(key, defaultValue);
+                    }
 
                     //return the default value
                     return defaultValue.ToString();
@@ -162,7 +172,7 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
 
-            var xDoc = XDocument.Load(_configFile);
+            var xDoc = LoadConfigFile();
             var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
             var parentContainer = config;
@@ -203,7 +213,7 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
 
-            var xDoc = XDocument.Load(_configFile);
+            var xDoc = LoadConfigFile();
             var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
             var type = GetType();
@@ -220,6 +230,19 @@ namespace NzbDrone.Core.Configuration
             }
 
             xDoc.Save(_configFile);
+        }
+
+        private XDocument LoadConfigFile()
+        {
+            try
+            {
+                return XDocument.Load(_configFile);
+            }
+
+            catch (XmlException ex)
+            {
+                throw new InvalidConfigFileException(_configFile + " is invalid, please see the http://wiki.nzbdrone.com for steps to resolve this issue.", ex);
+            }
         }
 
         public void HandleAsync(ApplicationStartedEvent message)

@@ -3,9 +3,10 @@ using System.Data.SQLite;
 using Marr.Data;
 using Marr.Data.Reflection;
 using NzbDrone.Common.Composition;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Datastore
@@ -29,12 +30,16 @@ namespace NzbDrone.Core.Datastore
 
         public static void RegisterDatabase(IContainer container)
         {
+            container.Resolve<IDbFactory>().Create();
+
             container.Register(c => c.Resolve<IDbFactory>().Create());
+
+            container.Resolve<IDbFactory>().Create(MigrationType.Log);
 
             container.Register<ILogRepository>(c =>
             {
                 var db = c.Resolve<IDbFactory>().Create(MigrationType.Log);
-                return new LogRepository(db, c.Resolve<IMessageAggregator>());
+                return new LogRepository(db, c.Resolve<IEventAggregator>());
             });
         }
 

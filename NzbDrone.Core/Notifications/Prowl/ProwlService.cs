@@ -1,6 +1,7 @@
 ﻿using System;
 using NLog;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl

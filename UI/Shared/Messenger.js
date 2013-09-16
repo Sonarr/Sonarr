@@ -1,20 +1,25 @@
 'use strict';
 define(function () {
     return {
+
         show: function (options) {
 
             if (!options.type) {
                 options.type = 'info';
             }
 
-            if (!options.hideAfter) {
+            if (options.hideAfter === undefined) {
                 switch (options.type) {
                     case 'info':
                         options.hideAfter = 5;
                         break;
 
+                    case 'success':
+                        options.hideAfter = 5;
+                        break;
+
                     default :
-                        options.hideAfter = 0;
+                        options.hideAfter = 5;
                 }
             }
 
@@ -22,7 +27,8 @@ define(function () {
                 message        : options.message,
                 type           : options.type,
                 showCloseButton: true,
-                hideAfter      : options.hideAfter
+                hideAfter      : options.hideAfter,
+                id             : options.id
             });
         },
 

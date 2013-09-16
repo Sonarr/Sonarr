@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.DecisionEngine.Specifications.Search;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.Serializer;
@@ -12,8 +13,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IMakeDownloadDecision
     {
-        List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports);
-        List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase);
+        List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports);
+        List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -29,21 +30,34 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public List<DownloadDecision> GetRssDecision(IEnumerable<ReportInfo> reports)
+        public List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports)
         {
             return GetDecisions(reports).ToList();
         }
 
-        public List<DownloadDecision> GetSearchDecision(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteriaBase)
+        public List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase)
         {
             return GetDecisions(reports, searchCriteriaBase).ToList();
         }
 
-        private IEnumerable<DownloadDecision> GetDecisions(IEnumerable<ReportInfo> reports, SearchCriteriaBase searchCriteria = null)
+        private IEnumerable<DownloadDecision> GetDecisions(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteria = null)
         {
+            if (reports.Any())
+            {
+                _logger.ProgressInfo("Processing {0} reports", reports.Count);
+            }
+
+            else
+            {
+                _logger.ProgressInfo("No reports found");
+            }
+
+            var reportNumber = 1;
+
             foreach (var report in reports)
             {
                 DownloadDecision decision = null;
+                _logger.ProgressTrace("Processing report {0}/{1}", reportNumber, reports.Count);
 
                 try
                 {
@@ -51,8 +65,8 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {
-                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvRageId);
-                        remoteEpisode.Report = report;
+                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvRageId, searchCriteria);
+                        remoteEpisode.Release = report;
 
                         if (remoteEpisode.Series != null)
                         {
@@ -68,6 +82,8 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     _logger.ErrorException("Couldn't process report.", e);
                 }
+
+                reportNumber++;
 
                 if (decision != null)
                 {
@@ -102,9 +118,9 @@ namespace NzbDrone.Core.DecisionEngine
             }
             catch (Exception e)
             {
-                e.Data.Add("report", remoteEpisode.Report.ToJson());
+                e.Data.Add("report", remoteEpisode.Release.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Report.Title, e);
+                _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Release.Title, e);
                 return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
             }
 

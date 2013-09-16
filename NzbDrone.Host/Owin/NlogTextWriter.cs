@@ -1,12 +1,13 @@
 ﻿using System.IO;
 using System.Text;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Host.Owin
 {
     public class NlogTextWriter : TextWriter
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = NzbDroneLogger.GetLogger();
 
 
         public override Encoding Encoding
@@ -17,25 +18,23 @@ namespace NzbDrone.Host.Owin
             }
         }
 
-        public override void Write(char value)
+        public override void Write(char[] buffer, int index, int count)
         {
-            logger.Trace(value);
+            Write(buffer);
         }
-
         public override void Write(char[] buffer)
         {
-            logger.Trace(buffer);
+            Write(new string(buffer));
         }
 
         public override void Write(string value)
         {
-            logger.Trace(value);
+            _logger.Trace(value);
         }
 
-        public override void Write(char[] buffer, int index, int count)
+        public override void Write(char value)
         {
-            logger.Trace(buffer);
+            _logger.Trace(value);
         }
-
     }
 }

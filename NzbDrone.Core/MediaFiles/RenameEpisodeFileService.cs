@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
@@ -14,19 +17,19 @@ namespace NzbDrone.Core.MediaFiles
         private readonly ISeriesService _seriesService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IMoveEpisodeFiles _episodeFileMover;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public RenameEpisodeFileService(ISeriesService seriesService,
                                         IMediaFileService mediaFileService,
                                         IMoveEpisodeFiles episodeFileMover,
-                                        IMessageAggregator messageAggregator,
+                                        IEventAggregator eventAggregator,
                                         Logger logger)
         {
             _seriesService = seriesService;
             _mediaFileService = mediaFileService;
             _episodeFileMover = episodeFileMover;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -58,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (renamed.Any())
             {
-                _messageAggregator.PublishEvent(new SeriesRenamedEvent(series));
+                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
             }
         }
 
@@ -67,9 +70,9 @@ namespace NzbDrone.Core.MediaFiles
             var series = _seriesService.GetSeries(message.SeriesId);
             var episodeFiles = _mediaFileService.GetFilesBySeason(message.SeriesId, message.SeasonNumber);
 
-            _logger.Info("Renaming {0} files for {1} season {2}", episodeFiles.Count, series.Title, message.SeasonNumber);
+            _logger.ProgressInfo("Renaming {0} files for {1} season {2}", episodeFiles.Count, series.Title, message.SeasonNumber);
             RenameFiles(episodeFiles, series);
-            _logger.Debug("Episode Fies renamed for {0} season {1}", series.Title, message.SeasonNumber);
+            _logger.ProgressInfo("Episode Fies renamed for {0} season {1}", series.Title, message.SeasonNumber);
         }
 
         public void Execute(RenameSeriesCommand message)
@@ -77,9 +80,9 @@ namespace NzbDrone.Core.MediaFiles
             var series = _seriesService.GetSeries(message.SeriesId);
             var episodeFiles = _mediaFileService.GetFilesBySeries(message.SeriesId);
 
-            _logger.Info("Renaming {0} files for {1}", episodeFiles.Count, series.Title);
+            _logger.ProgressInfo("Renaming {0} files for {1}", episodeFiles.Count, series.Title);
             RenameFiles(episodeFiles, series);
-            _logger.Debug("Episode Fies renamed for {0}", series.Title);
+            _logger.ProgressInfo("Episode Fies renamed for {0}", series.Title);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'app',
@@ -6,15 +6,13 @@ define(
         'System/StatusModel',
         'System/About/View',
         'Logs/Layout',
-        'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView'
+        'Shared/Toolbar/ToolbarLayout'
     ], function (App,
                  Marionette,
                  StatusModel,
                  AboutView,
                  LogsLayout,
-                 ToolbarLayout,
-                 LoadingView) {
+                 ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'System/LayoutTemplate',
 
@@ -38,21 +36,7 @@ define(
                             title  : 'Check for Update',
                             icon   : 'icon-nd-update',
                             command: 'applicationUpdate'
-                        },
-//                        {
-//                            title         : 'Restart',
-//                            icon          : 'icon-repeat',
-//                            command       : 'restart',
-//                            successMessage: 'NzbDrone restart has been triggered',
-//                            errorMessage  : 'Failed to restart NzbDrone'
-//                        },
-//                        {
-//                            title         : 'Shutdown',
-//                            icon          : 'icon-power-off',
-//                            command       : 'shutdown',
-//                            successMessage: 'NzbDrone shutdown has started',
-//                            errorMessage  : 'Failed to shutdown NzbDrone'
-//                        }
+                        }
                     ]
             },
 

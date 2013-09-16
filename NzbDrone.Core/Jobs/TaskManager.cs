@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -10,6 +9,9 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands.Tracking;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Update.Commands;
@@ -49,7 +51,8 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 60, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
-                    new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName}
+                    new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},
+                    new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();
@@ -82,6 +85,7 @@ namespace NzbDrone.Core.Jobs
 
             if (scheduledTask != null)
             {
+                _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
                 _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, DateTime.UtcNow);
             }
         }

@@ -1,27 +1,32 @@
 [
 	{
-		"CleanTitle": "csinewyork",
-		"Id": "73696",
-		"Title": "CSI"
+		"title": "Adventure Time",
+		"searchTitle": "Adventure Time",
+		"season": -1,
+		"tvdbId": 152831
 	},
 	{
-		"CleanTitle": "csiny",
-		"Id": "73696",
-		"Title": "CSI"
+		"title": "Americas Funniest Home Videos",
+		"searchTitle": "Americas Funniest Home Videos",
+		"season": -1,
+		"tvdbId": 76235
 	},
 	{
-		"CleanTitle": "csi",
-		"Id": "72546",
-		"Title": "CSI"
+		"title": "Antiques Roadshow UK",
+		"searchTitle": "Antiques Roadshow UK",
+		"season": -1,
+		"tvdbId": 83774
 	},
 	{
-		"CleanTitle": "csilasvegas",
-		"Id": "72546",
-		"Title": "CSI"
+		"title": "Aqua Something You Know Whatever",
+		"searchTitle": "Aqua Something You Know Whatever",
+		"season": 9,
+		"tvdbId": 77120
 	},
 	{
-		"CleanTitle": "archer",
-		"Id": "110381",
-		"Title": "Archer"
+		"title": "Aqua Teen Hunger Force",
+		"searchTitle": "Aqua Teen Hunger Force",
+		"season": -1,
+		"tvdbId": 77120
 	}
 ]

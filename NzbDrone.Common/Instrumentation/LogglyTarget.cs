@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NLog;
-using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
@@ -13,16 +12,10 @@ namespace NzbDrone.Common.Instrumentation
     {
         private Logger _logger;
 
-        public void Register(LogLevel minLevel)
+        public LogglyTarget()
         {
             Layout = new SimpleLayout("${callsite:className=false:fileName=false:includeSourcePath=false:methodName=true}");
-
-            var rule = new LoggingRule("*", minLevel, this);
-
-            LogManager.Configuration.AddTarget("LogglyLogger", this);
-            LogManager.Configuration.LoggingRules.Add(rule);
-            LogManager.ConfigurationReloaded += (sender, args) => Register(minLevel);
-            LogManager.ReconfigExistingLoggers();
+            
         }
 
         protected override void InitializeTarget()

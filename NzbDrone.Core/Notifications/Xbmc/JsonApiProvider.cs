@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             var parameters = new JObject(
                                         new JProperty("title", title),
                                         new JProperty("message", message),
-                                        new JProperty("image", "https://raw.github.com/NzbDrone/NzbDrone/develop/Logo/64.png"),
+                                        new JProperty("image", "https://raw.github.com/NzbDrone/NzbDrone/master/Logo/64.png"),
                                         new JProperty("displaytime", settings.DisplayTime * 1000));
 
             var postJson = BuildJsonRequest("GUI.ShowNotification", parameters);

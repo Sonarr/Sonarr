@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -16,8 +18,8 @@ namespace NzbDrone.Core.MediaFiles
 
     public class MediaFileRepository : BasicRepository<EpisodeFile>, IMediaFileRepository
     {
-        public MediaFileRepository(IDatabase database, IMessageAggregator messageAggregator)
-            : base(database, messageAggregator)
+        public MediaFileRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
         }
 

@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -51,13 +52,13 @@ namespace NzbDrone.Core.MediaFiles
 
             if (String.IsNullOrEmpty(downloadedEpisodesFolder))
             {
-                _logger.Warn("Downloaded Episodes Folder is not configured");
+                _logger.Warn("Drone Factory folder is not configured");
                 return;
             }
 
             if (!_diskProvider.FolderExists(downloadedEpisodesFolder))
             {
-                _logger.Warn("Downloaded Episodes Folder [{0}] doesn't exist.", downloadedEpisodesFolder);
+                _logger.Warn("Drone Factory folder [{0}] doesn't exist.", downloadedEpisodesFolder);
                 return;
             }
 
@@ -112,7 +113,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
 
-            return ProcessFiles(videoFiles, series);
+            return ProcessFiles(series, videoFiles);
         }
 
         private void ProcessVideoFile(string videoFile)
@@ -125,16 +126,16 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
+            if (_diskProvider.IsFileLocked(videoFile))
             {
                 _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
                 return;
             }
 
-            ProcessFiles(new[] { videoFile }, series);
+            ProcessFiles(series, videoFile);
         }
 
-        private List<ImportDecision> ProcessFiles(IEnumerable<string> videoFiles, Series series)
+        private List<ImportDecision> ProcessFiles(Series series, params string[] videoFiles)
         {
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series, true);
             return _importApprovedEpisodes.Import(decisions, true);

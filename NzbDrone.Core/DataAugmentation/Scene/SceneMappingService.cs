@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
@@ -18,7 +20,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         IHandleAsync<ApplicationStartedEvent>,
         IExecute<UpdateSceneMappingCommand>
     {
-
         private readonly ISceneMappingRepository _repository;
         private readonly ISceneMappingProxy _sceneMappingProxy;
         private readonly Logger _logger;
@@ -44,7 +45,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mapping.SearchTerm;
         }
 
-
         public Nullable<Int32> GetTvDbId(string cleanName)
         {
             var mapping = _gettvdbIdCache.Find(cleanName.CleanSeriesTitle());
@@ -54,7 +54,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             return mapping.TvdbId;
         }
-
 
         private void UpdateMappings()
         {
@@ -74,7 +73,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                     }
 
                     _repository.InsertMany(mappings);
-
                 }
                 else
                 {

@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using Timer = System.Timers.Timer;
 using NzbDrone.Common.TPL;
 
@@ -14,15 +16,15 @@ namespace NzbDrone.Core.Jobs
         IHandle<ApplicationShutdownRequested>
     {
         private readonly ITaskManager _taskManager;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly ICommandExecutor _commandExecutor;
         private readonly Logger _logger;
         private static readonly Timer Timer = new Timer();
         private static CancellationTokenSource _cancellationTokenSource;
 
-        public Scheduler(ITaskManager taskManager, IMessageAggregator messageAggregator, Logger logger)
+        public Scheduler(ITaskManager taskManager, ICommandExecutor commandExecutor, Logger logger)
         {
             _taskManager = taskManager;
-            _messageAggregator = messageAggregator;
+            _commandExecutor = commandExecutor;
             _logger = logger;
         }
 
@@ -52,7 +54,7 @@ namespace NzbDrone.Core.Jobs
 
                     try
                     {
-                        _messageAggregator.PublishCommand(task.TypeName);
+                        _commandExecutor.PublishCommand(task.TypeName);
                     }
                     catch (Exception e)
                     {

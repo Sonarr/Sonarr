@@ -3,6 +3,7 @@ using FluentValidation;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Core;
 using HttpStatusCode = Nancy.HttpStatusCode;
 
 namespace NzbDrone.Api.ErrorManagement
@@ -35,9 +36,20 @@ namespace NzbDrone.Api.ErrorManagement
                 return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
             }
 
+            var clientException = exception as NzbDroneClientException;
+
+            if (clientException != null)
+            {
+                return new ErrorModel
+                {
+                    Message = exception.Message,
+                    Description = exception.ToString()
+                }.AsResponse((HttpStatusCode)clientException.StatusCode);
+            }
+
             _logger.FatalException("Request Failed", exception);
 
-            return new ErrorModel()
+            return new ErrorModel
                 {
                     Message = exception.Message,
                     Description = exception.ToString()

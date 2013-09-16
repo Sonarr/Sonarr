@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Nancy;
+using NLog;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
@@ -23,10 +25,10 @@ namespace NzbDrone.Api.Indexers
         private readonly IParsingService _parsingService;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
-            ISearchForNzb nzbSearchService,
-            IMakeDownloadDecision downloadDecisionMaker,
-            IDownloadService downloadService,
-            IParsingService parsingService)
+                             ISearchForNzb nzbSearchService,
+                             IMakeDownloadDecision downloadDecisionMaker,
+                             IDownloadService downloadService,
+                             IParsingService parsingService)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
             _nzbSearchService = nzbSearchService;
@@ -40,7 +42,7 @@ namespace NzbDrone.Api.Indexers
         private Response DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), 0);
-            remoteEpisode.Report = release.InjectTo<ReportInfo>();
+            remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
 
             _downloadService.DownloadReport(remoteEpisode);
 
@@ -60,6 +62,7 @@ namespace NzbDrone.Api.Indexers
         private List<ReleaseResource> GetEpisodeReleases(int episodeId)
         {
             var decisions = _nzbSearchService.EpisodeSearch(episodeId);
+
             return MapDecisions(decisions);
         }
 
@@ -79,7 +82,7 @@ namespace NzbDrone.Api.Indexers
             {
                 var release = new ReleaseResource();
 
-                release.InjectFrom(downloadDecision.RemoteEpisode.Report);
+                release.InjectFrom(downloadDecision.RemoteEpisode.Release);
                 release.InjectFrom(downloadDecision.RemoteEpisode.ParsedEpisodeInfo);
                 release.InjectFrom(downloadDecision);
                 release.Rejections = downloadDecision.Rejections.ToList();

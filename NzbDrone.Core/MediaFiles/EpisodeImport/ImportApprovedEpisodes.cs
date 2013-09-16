@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -19,19 +21,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IUpgradeMediaFiles _episodeFileUpgrader;
         private readonly IMediaFileService _mediaFileService;
         private readonly IDiskProvider _diskProvider;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
                                       IMediaFileService mediaFileService,
                                       IDiskProvider diskProvider,
-                                      IMessageAggregator messageAggregator,
+                                      IEventAggregator eventAggregator,
                                       Logger logger)
         {
             _episodeFileUpgrader = episodeFileUpgrader;
             _mediaFileService = mediaFileService;
             _diskProvider = diskProvider;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -69,8 +71,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
                         episodeFile.Path = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
-                        _messageAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile));
-                        _messageAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile));
+                        _eventAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
                     }
 
                     _mediaFileService.Add(episodeFile);

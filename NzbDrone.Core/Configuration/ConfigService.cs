@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
+
 
 namespace NzbDrone.Core.Configuration
 {
@@ -18,14 +20,14 @@ namespace NzbDrone.Core.Configuration
     public class ConfigService : IConfigService
     {
         private readonly IConfigRepository _repository;
-        private readonly IMessageAggregator _messageAggregator;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
         private static Dictionary<string, string> _cache;
 
-        public ConfigService(IConfigRepository repository, IMessageAggregator messageAggregator, Logger logger)
+        public ConfigService(IConfigRepository repository, IEventAggregator eventAggregator, Logger logger)
         {
             _repository = repository;
-            _messageAggregator = messageAggregator;
+            _eventAggregator = eventAggregator;
             _logger = logger;
             _cache = new Dictionary<string, string>();
         }
@@ -68,7 +70,7 @@ namespace NzbDrone.Core.Configuration
                     SetValue(configValue.Key, configValue.Value.ToString());
             }
 
-            _messageAggregator.PublishEvent(new ConfigSavedEvent());
+            _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
         public String SabHost

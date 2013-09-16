@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using Microsoft.Owin.Hosting;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -50,7 +52,26 @@ namespace NzbDrone.Host.Owin
 
             _logger.Info("starting server on {0}", _urlAclAdapter.UrlAcl);
 
-            _host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
+            try
+            {
+                _host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException == null)
+                {
+                    throw;
+                }
+
+                if (ex.InnerException is HttpListenerException)
+                {
+                    throw new PortInUseException("Port {0} is already in use, please ensure NzbDrone is not already running.",
+                             ex,
+                             _configFileProvider.Port);
+                }
+
+                throw ex.InnerException;
+            }
         }
 
         private void BuildApp(IAppBuilder appBuilder)

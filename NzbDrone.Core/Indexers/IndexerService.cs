@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Messaging;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging;
+using NzbDrone.Core.Messaging.Events;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Indexers
@@ -35,15 +37,26 @@ namespace NzbDrone.Core.Indexers
     public class IndexerService : IIndexerService, IHandle<ApplicationStartedEvent>
     {
         private readonly IIndexerRepository _indexerRepository;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
 
         private readonly List<IIndexer> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexer> indexers, Logger logger)
+        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexer> indexers, IConfigFileProvider configFileProvider, Logger logger)
         {
             _indexerRepository = indexerRepository;
+            _configFileProvider = configFileProvider;
             _logger = logger;
-            _indexers = indexers.ToList();
+
+
+            if (!configFileProvider.Torrent)
+            {
+                _indexers = indexers.Where(c => c.Kind != IndexerKind.Torrent).ToList();
+            }
+            else
+            {
+                _indexers = indexers.ToList();
+            }
         }
 
         public List<Indexer> All()
@@ -153,10 +166,16 @@ namespace NzbDrone.Core.Indexers
 
             RemoveMissingImplementations();
 
-            if (!All().Any())
+            var definitions = _indexers.SelectMany(indexer => indexer.DefaultDefinitions);
+
+            var currentIndexer = All();
+
+            var newIndexers = definitions.Where(def => currentIndexer.All(c => c.Implementation != def.Implementation)).ToList();
+
+
+            if (newIndexers.Any())
             {
-                var definitions = _indexers.SelectMany(indexer => indexer.DefaultDefinitions);
-                _indexerRepository.InsertMany(definitions.ToList());
+                _indexerRepository.InsertMany(newIndexers);
             }
         }
 

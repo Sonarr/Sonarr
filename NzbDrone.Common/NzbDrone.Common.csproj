@@ -41,7 +41,7 @@
     </Reference>
     <Reference Include="Loggly, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\loggly-csharp.2.2\lib\Loggly.dll</HintPath>
+      <HintPath>..\packages\loggly-csharp.2.3\lib\net35\Loggly.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -92,6 +92,11 @@
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
+    <Compile Include="Instrumentation\LogEventExtensions.cs" />
+    <Compile Include="Instrumentation\NzbDroneLogger.cs" />
+    <Compile Include="Instrumentation\LogTargets.cs" />
+    <Compile Include="Messaging\IEvent.cs" />
+    <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
@@ -99,23 +104,8 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="HashUtil.cs" />
-    <Compile Include="Instrumentation\ApplicationLogLayoutRenderer.cs" />
-    <Compile Include="Instrumentation\DirSeparatorLayoutRenderer.cs" />
-    <Compile Include="Instrumentation\LogEventExtensions.cs" />
     <Compile Include="Instrumentation\LogglyTarget.cs" />
-    <Compile Include="Instrumentation\UpdateLogLayoutRenderer.cs" />
     <Compile Include="Serializer\Json.cs" />
-    <Compile Include="Messaging\CommandCompletedEvent.cs" />
-    <Compile Include="Messaging\CommandStartedEvent.cs" />
-    <Compile Include="Messaging\CommandFailedEvent.cs" />
-    <Compile Include="Messaging\IExecute.cs" />
-    <Compile Include="Messaging\ICommand.cs" />
-    <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="Messaging\IProcessMessage.cs" />
-    <Compile Include="Messaging\MessageAggregator.cs" />
-    <Compile Include="Messaging\IEvent.cs" />
-    <Compile Include="Messaging\IMessageAggregator.cs" />
-    <Compile Include="Messaging\IHandle.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />
@@ -123,9 +113,6 @@
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
-    <Compile Include="Messaging\MessageExtensions.cs" />
-    <Compile Include="Messaging\TestCommand.cs" />
-    <Compile Include="Messaging\TestCommandExecutor.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="HttpProvider.cs" />

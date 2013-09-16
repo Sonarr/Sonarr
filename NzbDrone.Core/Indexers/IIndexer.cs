@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Indexers
     public interface IIndexer
     {
         string Name { get; }
-
+       
         bool EnableByDefault { get; }
 
         IEnumerable<IndexerDefinition> DefaultDefinitions { get; }
@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Indexers
         IEnumerable<string> RecentFeed { get; }
 
         IParseFeed Parser { get; }
+        IndexerKind Kind { get; }
 
         IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);

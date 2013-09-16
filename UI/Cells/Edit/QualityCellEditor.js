@@ -28,7 +28,10 @@ define(
                     self.schema = qualityProfileSchemaCollection.first();
 
                     var selected = _.find(self.schema.get('available'), { 'id': self.model.get(self.column.get("name")).quality.id });
-                    selected.selected = true;
+
+                    if (selected) {
+                        selected.selected = true;
+                    }
 
                     self.templateFunction = Marionette.TemplateCache.get(templateName);
                     var data = self.schema.toJSON();
