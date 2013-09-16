@@ -97,8 +97,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         private void ValidateEpisode(Episode episode)
         {
             episode.Should().NotBeNull();
-            episode.Title.Should().NotBeBlank();
-            //episode.Title.Should().NotBeBlank();
             episode.EpisodeNumber.Should().NotBe(0);
             episode.TvDbEpisodeId.Should().BeGreaterThan(0);
 
