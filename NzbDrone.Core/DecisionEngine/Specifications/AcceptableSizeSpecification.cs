@@ -57,9 +57,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             //Multiply maxSize by Series.Runtime
             maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
 
-            //Check if there was only one episode parsed
-            //and it is the first or last episode of the season
-            if (subject.Episodes.Count == 1 && _episodeService.IsFirstOrLastEpisodeOfSeason(subject.Episodes.Single().Id))
+            //Check if there was only one episode parsed and it is the first
+            if (subject.Episodes.Count == 1 && subject.Episodes.First().EpisodeNumber == 1)
             {
                 maxSize = maxSize * 2;
             }

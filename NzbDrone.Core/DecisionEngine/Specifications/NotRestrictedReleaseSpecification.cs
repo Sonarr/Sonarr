@@ -21,7 +21,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             get
             {
-                return "Contrains restricted term.";
+                return "Contains restricted term.";
             }
         }
 
