@@ -92,16 +92,19 @@
     </fieldset>
 
     {{#unless_eq branch compare="master"}}
-        <fieldset>
-            <legend>Updating</legend>
+    <fieldset>
+        <legend>Development</legend>
+        <div class="alert">
+            <i class="icon-nd-warning"></i>
+            Don't change anything here unless you know what you are doing.
+        </div>
+        <div class="control-group">
+            <label class="control-label">Branch</label>
 
-            <div class="control-group">
-                <label class="control-label">Branch</label>
-
-                <div class="controls">
-                    <input type="text" placeholder="master" name="branch"/>
-                </div>
+            <div class="controls">
+                <input type="text" placeholder="master" name="branch"/>
             </div>
-        </fieldset>
+        </div>
+    </fieldset>
     {{/unless_eq}}
 </div>
