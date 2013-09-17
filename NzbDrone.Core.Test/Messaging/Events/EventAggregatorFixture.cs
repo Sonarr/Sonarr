@@ -4,15 +4,15 @@ using System.Threading;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Common.Test.MessagingTests
+namespace NzbDrone.Core.Test.Messaging.Events
 {
     [TestFixture]
-    public class MessageAggregatorEventTests : TestBase<EventAggregator>
+    public class EventAggregatorFixture : TestBase<EventAggregator>
     {
         private Mock<IHandle<EventA>> HandlerA1;
         private Mock<IHandle<EventA>> HandlerA2;
@@ -119,11 +119,11 @@ namespace NzbDrone.Common.Test.MessagingTests
 
             AsyncHandlerA1.Setup(c => c.HandleAsync(It.IsAny<EventA>()))
                 .Callback<EventA>(c =>
-                    {
-                        var id = counter.Start();
-                        Thread.Sleep(1000);
-                        counter.Stop(id);
-                    });
+                {
+                    var id = counter.Start();
+                    Thread.Sleep(1000);
+                    counter.Stop(id);
+                });
 
             Subject.PublishEvent(eventA);
 
@@ -143,5 +143,4 @@ namespace NzbDrone.Common.Test.MessagingTests
     {
 
     }
-
 }

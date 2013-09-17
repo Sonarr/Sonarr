@@ -67,7 +67,6 @@
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
-    <Compile Include="MessagingTests\MessageAggregatorEventTests.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="PathExtensionFixture.cs" />
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
