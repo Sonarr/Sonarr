@@ -40,9 +40,9 @@ namespace NzbDrone.Core.Test.Providers
         }
 
         [Test]
-        public void should_throw_when_failure_is_found()
+        public void should_return_empty_when_series_is_not_found()
         {
-            Assert.Throws<Exception>(() => Subject.GetSceneTvdbMappings(12345));
+            Subject.GetSceneTvdbMappings(12345).Should().BeEmpty();
         }
 
 
