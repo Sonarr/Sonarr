@@ -198,7 +198,6 @@
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
-    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
     <Compile Include="HelperTests\SortHelperTest.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
