@@ -33,37 +33,5 @@ namespace NzbDrone.Core.Test.MediaFiles
             seriesFiles.Should().OnlyContain(c => c.SeriesId == 12);
 
         }
-
-
-        [Test]
-        public void GetFileByPath_should_return_null_if_file_does_not_exist_in_database()
-        {
-            Subject.GetFileByPath(@"C:\Test\EpisodeFile.avi").Should().BeNull();
-        }
-
-        [Test]
-        public void exists_should_return_false_if_file_doesnt_exist()
-        {
-            Subject.Exists(@"C:\Test\EpisodeFile.avi").Should().BeFalse();
-        }
-
-        [Test]
-        public void GetFileByPath_should_return_EpisodeFile_if_file_exists_in_database()
-        {
-            var path = @"C:\Test\EpisodeFile.avi".AsOsAgnostic();
-
-            var episodeFile = Builder<EpisodeFile>.CreateNew()
-                    .With(f => f.Id = 0)
-                    .With(f => f.Path = path.CleanFilePath())
-                    .Build();
-
-            Subject.Insert(episodeFile);
-
-            var file = Subject.GetFileByPath(path);
-
-            //Resolve
-            file.Should().NotBeNull();
-            file.Path.Should().Be(path.CleanFilePath());
-        }
     }
 }
