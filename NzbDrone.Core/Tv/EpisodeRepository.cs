@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.Tv
 {
     public interface IEpisodeRepository : IBasicRepository<Episode>
     {
-        Episode Get(int seriesId, int season, int episodeNumber);
         Episode Find(int seriesId, int season, int episodeNumber);
         Episode Get(int seriesId, DateTime date);
         Episode Find(int seriesId, DateTime date);
@@ -19,9 +17,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
-        Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
-        List<Episode> EpisodesWithFiles();
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
@@ -36,11 +32,6 @@ namespace NzbDrone.Core.Tv
             : base(database, eventAggregator)
         {
             _database = database;
-        }
-
-        public Episode Get(int seriesId, int season, int episodeNumber)
-        {
-            return Query.Single(s => s.SeriesId == seriesId && s.SeasonNumber == season && s.EpisodeNumber == episodeNumber);
         }
 
         public Episode Find(int seriesId, int season, int episodeNumber)
@@ -89,20 +80,11 @@ namespace NzbDrone.Core.Tv
             return pagingSpec;
         }
 
-        public Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
-        {
-            return Query.Single(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
-        }
-
         public Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
             return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
         }
 
-        public List<Episode> EpisodesWithFiles()
-        {
-            return Query.Where(s => s.EpisodeFileId != 0).ToList();
-        }
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
         {

@@ -407,7 +407,6 @@
     <Compile Include="Datastore\ResultSet.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\RefreshEpisodeService.cs" />
-    <Compile Include="Tv\SeasonRepository.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\QualityModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAddResponse.cs" />

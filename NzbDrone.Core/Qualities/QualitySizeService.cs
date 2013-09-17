@@ -2,7 +2,6 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Qualities
@@ -10,7 +9,6 @@ namespace NzbDrone.Core.Qualities
     public interface IQualitySizeService
     {
         void Update(QualitySize qualitySize);
-        void UpdateAll(List<QualitySize> qualitySizes);
         List<QualitySize> All();
         QualitySize Get(int qualityId);
     }
@@ -31,10 +29,6 @@ namespace NzbDrone.Core.Qualities
             _qualitySizeRepository.Update(qualitySize);
         }
 
-        public virtual void UpdateAll(List<QualitySize> qualitySizes)
-        {
-            _qualitySizeRepository.UpdateMany(qualitySizes);
-        }
 
         public virtual List<QualitySize> All()
         {

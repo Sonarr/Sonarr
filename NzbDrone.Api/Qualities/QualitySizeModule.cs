@@ -6,9 +6,9 @@ namespace NzbDrone.Api.Qualities
 {
     public class QualitySizeModule : NzbDroneRestModule<QualitySizeResource>
     {
-        private readonly QualitySizeService _qualityTypeProvider;
+        private readonly IQualitySizeService _qualityTypeProvider;
 
-        public QualitySizeModule(QualitySizeService qualityTypeProvider)
+        public QualitySizeModule(IQualitySizeService qualityTypeProvider)
         {
             _qualityTypeProvider = qualityTypeProvider;
 

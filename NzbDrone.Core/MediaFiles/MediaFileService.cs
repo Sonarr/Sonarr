@@ -14,8 +14,6 @@ namespace NzbDrone.Core.MediaFiles
         EpisodeFile Add(EpisodeFile episodeFile);
         void Update(EpisodeFile episodeFile);
         void Delete(EpisodeFile episodeFile, bool forUpgrade = false);
-        bool Exists(string path);
-        EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
         List<string> FilterExistingFiles(List<string> files, int seriesId);
@@ -52,16 +50,6 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileRepository.Delete(episodeFile);
 
             _eventAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile, forUpgrade));
-        }
-
-        public bool Exists(string path)
-        {
-            return _mediaFileRepository.Exists(path);
-        }
-
-        public EpisodeFile GetFileByPath(string path)
-        {
-            return _mediaFileRepository.GetFileByPath(path.Normalize());
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
