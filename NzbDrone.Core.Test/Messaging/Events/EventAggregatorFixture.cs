@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.Messaging.Events
         }
 
 
-        [Test]
+       /* [Test]
         public void should_queue_multiple_async_events()
         {
             var eventA = new EventA();
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.Messaging.Events
             counter.WaitForAllItems();
 
             counter.MaxThreads.Should().Be(3);
-        }
+        }*/
     }
 
 

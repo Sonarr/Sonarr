@@ -16,11 +16,9 @@ namespace NzbDrone.Core.Messaging.Events
 
         public EventAggregator(Logger logger, IServiceFactory serviceFactory)
         {
-            var scheduler = new LimitedConcurrencyLevelTaskScheduler(3);
-
             _logger = logger;
             _serviceFactory = serviceFactory;
-            _taskFactory = new TaskFactory(scheduler);
+            _taskFactory = new TaskFactory();
         }
 
         public void PublishEvent<TEvent>(TEvent @event) where TEvent : class ,IEvent
@@ -29,7 +27,25 @@ namespace NzbDrone.Core.Messaging.Events
 
             var eventName = GetEventName(@event.GetType());
 
+/*
+            int workerThreads;
+            int completionPortThreads;
+            ThreadPool.GetAvailableThreads(out workerThreads, out completionPortThreads);
+
+            int maxCompletionPortThreads;
+            int maxWorkerThreads;
+            ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
+
+
+            int minCompletionPortThreads;
+            int minWorkerThreads;
+            ThreadPool.GetMinThreads(out minWorkerThreads, out minCompletionPortThreads);
+
+            _logger.Warn("Thread pool state WT:{0} PT:{1}  MAXWT:{2} MAXPT:{3} MINWT:{4} MINPT:{5}", workerThreads, completionPortThreads, maxWorkerThreads, maxCompletionPortThreads, minWorkerThreads, minCompletionPortThreads);
+*/
+
             _logger.Trace("Publishing {0}", eventName);
+
 
             //call synchronous handlers first.
             foreach (var handler in _serviceFactory.BuildAll<IHandle<TEvent>>())
