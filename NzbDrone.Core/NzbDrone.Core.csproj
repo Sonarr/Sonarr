@@ -437,8 +437,8 @@
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />
     <Compile Include="Model\Xbmc\VersionResult.cs" />
-    <Compile Include="Providers\XemCommunicationProvider.cs" />
-    <Compile Include="Providers\XemProvider.cs" />
+    <Compile Include="Providers\XemProxy.cs" />
+    <Compile Include="Providers\XemService.cs" />
     <Compile Include="Qualities\Quality.cs" />
     <Compile Include="Tv\Season.cs" />
     <Compile Include="Configuration\ConfigService.cs">

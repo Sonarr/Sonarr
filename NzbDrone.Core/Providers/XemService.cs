@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -13,35 +11,44 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Providers
 {
-    public interface IXemProvider
-    {
-        void UpdateMappings();
-        void UpdateMappings(int seriesId);
-        void UpdateMappings(Series series);
-        void PerformUpdate(Series series);
-    }
-
-    public class XemProvider : IXemProvider, IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent>, IHandleAsync<ApplicationStartedEvent>
+    public class XemService : IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent>, IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IEpisodeService _episodeService;
-        private readonly IXemCommunicationProvider _xemCommunicationProvider;
+        private readonly IXemProxy _xemProxy;
         private readonly ISeriesService _seriesService;
+        private readonly Logger _logger;
         private readonly ICached<bool> _cache;
 
-        private static readonly Logger _logger =  NzbDroneLogger.GetLogger();
-
-        public XemProvider(IEpisodeService episodeService,
-                           IXemCommunicationProvider xemCommunicationProvider,
-                           ISeriesService seriesService, ICacheManger cacheManger)
+        public XemService(IEpisodeService episodeService,
+                           IXemProxy xemProxy,
+                           ISeriesService seriesService, ICacheManger cacheManger, Logger logger)
         {
             if (seriesService == null) throw new ArgumentNullException("seriesService");
             _episodeService = episodeService;
-            _xemCommunicationProvider = xemCommunicationProvider;
+            _xemProxy = xemProxy;
             _seriesService = seriesService;
+            _logger = logger;
+            _logger = logger;
             _cache = cacheManger.GetCache<bool>(GetType());
         }
 
-        public void UpdateMappings()
+
+        public void Execute(UpdateXemMappingsCommand message)
+        {
+            UpdateMappings();
+        }
+
+        public void Handle(SeriesUpdatedEvent message)
+        {
+            UpdateMappings(message.Series);
+        }
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            GetXemSeriesIds();
+        }
+
+        private void UpdateMappings()
         {
             _logger.Trace("Starting scene numbering update");
 
@@ -66,20 +73,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void UpdateMappings(int seriesId)
-        {
-            var series = _seriesService.GetSeries(seriesId);
-
-            if (series == null)
-            {
-                _logger.Trace("Series could not be found: {0}", seriesId);
-                return;
-            }
-            
-            UpdateMappings(series);
-        }
-
-        public void UpdateMappings(Series series)
+        private void UpdateMappings(Series series)
         {
             if (!_cache.Find(series.TvdbId.ToString()))
             {
@@ -90,17 +84,18 @@ namespace NzbDrone.Core.Providers
             PerformUpdate(series);
         }
 
-        public void PerformUpdate(Series series)
+        private void PerformUpdate(Series series)
         {
             _logger.Trace("Updating scene numbering mapping for: {0}", series);
             try
             {
                 var episodesToUpdate = new List<Episode>();
-                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.TvdbId);
+                var mappings = _xemProxy.GetSceneTvdbMappings(series.TvdbId);
 
-                if (mappings == null)
+                if (!mappings.Any())
                 {
-                    _logger.Trace("Mappings for: {0} are null, skipping", series);
+                    _logger.Trace("Mappings for: {0} are empty, skipping", series);
+                    _cache.Remove(series.TvdbId.ToString());
                     return;
                 }
 
@@ -142,7 +137,7 @@ namespace NzbDrone.Core.Providers
         {
             _cache.Clear();
 
-            var ids = _xemCommunicationProvider.GetXemSeriesIds();
+            var ids = _xemProxy.GetXemSeriesIds();
 
             foreach (var id in ids)
             {
@@ -150,28 +145,6 @@ namespace NzbDrone.Core.Providers
             }
 
             return ids;
-        }
-
-        public void Execute(UpdateXemMappingsCommand message)
-        {
-            if (message.SeriesId.HasValue)
-            {
-                UpdateMappings(message.SeriesId.Value);
-            }
-            else
-            {
-                UpdateMappings();
-            }
-        }
-
-        public void Handle(SeriesUpdatedEvent message)
-        {
-            UpdateMappings(message.Series);
-        }
-
-        public void HandleAsync(ApplicationStartedEvent message)
-        {
-            GetXemSeriesIds();
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NLog;
+using NzbDrone.Core.Model.Xem;
+using NzbDrone.Core.Rest;
+using RestSharp;
+
+namespace NzbDrone.Core.Providers
+{
+    public interface IXemProxy
+    {
+        List<Int32> GetXemSeriesIds();
+        List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id);
+    }
+
+    public class XemProxy : IXemProxy
+    {
+        private readonly Logger _logger;
+
+        private const string XEM_BASE_URL = "http://thexem.de/map/";
+
+        public XemProxy(Logger logger)
+        {
+            _logger = logger;
+        }
+
+
+        private static RestRequest BuildRequest(string resource)
+        {
+            var req = new RestRequest(resource, Method.GET);
+            req.AddParameter("origin", "tvdb");
+            return req;
+        }
+
+        public List<Int32> GetXemSeriesIds()
+        {
+            _logger.Trace("Fetching Series IDs from");
+
+            var restClient = new RestClient(XEM_BASE_URL);
+
+            var request = BuildRequest("havemap");
+
+            var response = restClient.ExecuteAndValidate<XemResult<List<Int32>>>(request);
+            CheckForFailureResult(response);
+
+            return response.Data.ToList();
+        }
+
+        public List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id)
+        {
+            _logger.Trace("Fetching Mappings for: {0}", id);
+            var url = String.Format("{0}all?id={1}&origin=tvdb", XEM_BASE_URL, id);
+
+
+            var restClient = new RestClient(XEM_BASE_URL);
+
+            var request = BuildRequest("all");
+            request.AddParameter("id", id);
+
+            var response = restClient.ExecuteAndValidate<XemResult<List<XemSceneTvdbMapping>>>(request);
+            CheckForFailureResult(response);
+
+            return response.Data;
+        }
+
+        private static void CheckForFailureResult<T>(XemResult<T> response)
+        {
+            if (response.Result.Equals("failure", StringComparison.InvariantCultureIgnoreCase) &&
+                !response.Message.Contains("no show with the tvdb_id"))
+            {
+                throw new Exception("Error response received from Xem: " + response.Message);
+            }
+        }
+    }
+}
