@@ -9,7 +9,6 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Providers;
@@ -23,7 +22,7 @@ namespace NzbDrone.Core.Jobs
         IList<ScheduledTask> GetPending();
     }
 
-    public class TaskManager : ITaskManager, IHandle<ApplicationStartedEvent>, IHandleAsync<CommandExecutedEvent>, IHandleAsync<ConfigSavedEvent>
+    public class TaskManager : ITaskManager, IHandle<ApplicationStartedEvent>, IHandle<CommandExecutedEvent>, IHandleAsync<ConfigSavedEvent>
     {
         private readonly IScheduledTaskRepository _scheduledTaskRepository;
         private readonly IConfigService _configService;
@@ -79,7 +78,7 @@ namespace NzbDrone.Core.Jobs
             }
         }
 
-        public void HandleAsync(CommandExecutedEvent message)
+        public void Handle(CommandExecutedEvent message)
         {
             var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
 
