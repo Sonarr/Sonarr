@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Nancy;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
@@ -8,6 +9,7 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 using Omu.ValueInjecter;
 using System.Linq;
 using Nancy.ModelBinding;
@@ -42,6 +44,11 @@ namespace NzbDrone.Api.Indexers
         {
             var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), 0);
             remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
+
+            if (remoteEpisode.Series == null || remoteEpisode.Episodes == null || !remoteEpisode.Episodes.Any())
+            {
+                throw new BadRequestException(release);
+            }
 
             _downloadService.DownloadReport(remoteEpisode);
 
@@ -85,6 +92,7 @@ namespace NzbDrone.Api.Indexers
                 release.InjectFrom(downloadDecision.RemoteEpisode.ParsedEpisodeInfo);
                 release.InjectFrom(downloadDecision);
                 release.Rejections = downloadDecision.Rejections.ToList();
+                release.DownloadAllowed = downloadDecision.RemoteEpisode.Series != null;
 
                 result.Add(release);
             }

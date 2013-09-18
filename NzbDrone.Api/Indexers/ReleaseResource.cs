@@ -28,5 +28,6 @@ namespace NzbDrone.Api.Indexers
         public String CommentUrl { get; set; }
         public String DownloadUrl { get; set; }
         public String InfoUrl { get; set; }
+        public Boolean DownloadAllowed { get; set; }
     }
 }

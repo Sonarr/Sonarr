@@ -29,10 +29,14 @@ define(
             },
 
             render: function () {
+                this.$el.html('');
 
-                this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
+                if (this.model.get('downloadAllowed'))
+                {
+                    this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
+                }
+
                 return this;
-
             }
         });
     });
