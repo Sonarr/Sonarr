@@ -36,7 +36,8 @@ require.config({
             init: function () {
                 require(
                     [
-                        'jQuery/ToTheTop'
+                        'jQuery/ToTheTop',
+                        'Instrumentation/ErrorHandler'
                     ]);
             }
 

@@ -5,8 +5,9 @@ define(
         'marionette',
         'AddSeries/Collection',
         'AddSeries/SearchResultCollectionView',
-        'Shared/LoadingView'
-    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, LoadingView) {
+        'AddSeries/NotFoundView',
+        'Shared/LoadingView',
+    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, NotFoundView, LoadingView) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesTemplate',
 
@@ -44,6 +45,8 @@ define(
                 else {
                     this.className = 'new-series';
                 }
+
+                this.listenTo(this.collection, 'sync', this._showResults);
             },
 
             _onSeriesAdded: function (options) {
@@ -78,8 +81,6 @@ define(
 
             search: function (options) {
 
-                var self = this;
-
                 this.abortExistingSearch();
 
                 this.collection.reset();
@@ -89,18 +90,27 @@ define(
                 }
                 else {
                     this.searchResult.show(new LoadingView());
+                    this.collection.term = options.term;
                     this.currentSearchPromise = this.collection.fetch({
                         data: { term: options.term }
-                    }).done(function () {
-                            if (!self.isClosed) {
-                                self.searchResult.show(self.resultCollectionView);
-                                if (!self.showingAll && self.isExisting) {
-                                    self.ui.loadMore.show();
-                                }
-                            }
-                        });
+                    });
                 }
                 return this.currentSearchPromise;
+            },
+
+            _showResults: function () {
+                if (!this.isClosed) {
+
+                    if (this.collection.length === 0) {
+                        this.searchResult.show(new NotFoundView({term: this.collection.term}));
+                    }
+                    else {
+                        this.searchResult.show(this.resultCollectionView);
+                        if (!this.showingAll && this.isExisting) {
+                            this.ui.loadMore.show();
+                        }
+                    }
+                }
             },
 
             abortExistingSearch: function () {
