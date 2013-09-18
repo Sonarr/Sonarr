@@ -49,7 +49,7 @@ define(
                     isExisting: this.isExisting
                 });
 
-                this.throttledSearch = _.throttle(this.search, 1000, {trailing: true}).bind(this);
+                this.throttledSearch = _.debounce(this.search, 1000, {trailing: true}).bind(this);
             },
 
             _onSeriesAdded: function (options) {
