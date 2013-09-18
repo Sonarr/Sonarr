@@ -108,8 +108,6 @@ namespace NzbDrone.Core.Indexers
             return currentResult;
         }
 
-
-
         public static string ParseReleaseGroup(string title)
         {
             title = title.Trim();
@@ -131,8 +129,6 @@ namespace NzbDrone.Core.Indexers
 
         private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-
 
         public static long ParseSize(string sizeString)
         {
