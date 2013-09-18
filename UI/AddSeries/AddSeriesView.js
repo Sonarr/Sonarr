@@ -60,10 +60,10 @@ define(
 
             _onLoadMore: function () {
                 var showingAll = this.resultCollectionView.showMore();
+                this.ui.searchBar.show();
 
                 if (showingAll) {
                     this.ui.loadMore.hide();
-                    this.ui.searchBar.show();
                 }
             },
 
@@ -94,7 +94,7 @@ define(
                 this.collection.reset();
 
                 if (!options.term || options.term === this.collection.term) {
-                    return;
+                    return $.Deferred().resolve();
                 }
 
                 this.searchResult.show(new LoadingView());
@@ -102,6 +102,8 @@ define(
                 this.currentSearchPromise = this.collection.fetch({
                     data: { term: options.term }
                 });
+
+                return this.currentSearchPromise;
             },
 
             _showResults: function () {

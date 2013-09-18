@@ -20,17 +20,18 @@ define(
             },
 
             _showAndSearch: function (index) {
-
+                var self = this;
                 var model = this.collection.at(index);
 
                 if (model) {
-                    var self = this;
                     var currentIndex = index;
                     var folderName = model.get('folder').name;
                     this.addItemView(model, this.getItemView(), index);
-                    $.when(this.children.findByModel(model).search({term: folderName})).then(function () {
-                        self._showAndSearch(currentIndex + 1);
-                    });
+                    this.children.findByModel(model)
+                        .search({term: folderName})
+                        .always((function () {
+                            self._showAndSearch(currentIndex + 1);
+                        }));
                 }
             },
 

@@ -1,14 +1,17 @@
 ﻿{{#if folder.path}}
-<div class="row well unmapped-folder-path">
+<div class="row unmapped-folder-path">
     <div class="span11">
         {{folder.path}}
     </div>
-</div>
-{{/if}}
+</div>{{/if}}
 <div class="row x-search-bar">
     <div class="input-prepend nz-input-large add-series-search span11">
         <i class="add-on icon-search"/>
+        {{#if folder}}
+        <input type="text" class="input-block-level x-series-search" value="{{folder.name}}">
+        {{else}}
         <input type="text" class="input-block-level x-series-search" placeholder="Start typing the name of series you want to add ...">
+        {{/if}}
     </div>
 </div>
 <div class="row">
@@ -17,4 +20,4 @@
 <div class="btn btn-block text-center new-series-loadmore x-load-more" style="display: none;">
     <i class="icon-angle-down"/>
     more
-</div>
+</div>{{debug}}
