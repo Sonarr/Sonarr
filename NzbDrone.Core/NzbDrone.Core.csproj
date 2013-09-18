@@ -254,6 +254,10 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
+    <Compile Include="Notifications\PushBullet\PushBullet.cs" />
+    <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
+    <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
+    <Compile Include="Notifications\PushBullet\TestPushBulletCommand.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroid.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidPriority.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
