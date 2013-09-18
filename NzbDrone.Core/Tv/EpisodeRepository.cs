@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Tv
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetFileId(int episodeId, int fileId);
+        void CleanupOrphanedEpisodes();
     }
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
@@ -121,6 +122,18 @@ namespace NzbDrone.Core.Tv
         public void SetFileId(int episodeId, int fileId)
         {
             SetFields(new Episode { Id = episodeId, EpisodeFileId = fileId }, episode => episode.EpisodeFileId);
+        }
+
+        public void CleanupOrphanedEpisodes()
+        {
+            var mapper = _database.GetDataMapper();
+
+            mapper.ExecuteNonQuery(@"DELETE FROM Episodes
+                                     WHERE Id IN (
+                                     SELECT Episodes.Id FROM Episodes
+                                     LEFT OUTER JOIN Series
+                                     ON Episodes.SeriesId = Series.Id
+                                     WHERE Series.Id IS NULL)");
         }
 
         private SortBuilder<Episode> GetEpisodesWithoutFilesQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, int startingSeasonNumber)

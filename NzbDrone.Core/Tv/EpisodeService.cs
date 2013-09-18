@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Tv
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
         void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
+        void CleanupOrphanedEpisodes();
     }
 
     public class EpisodeService : IEpisodeService,
@@ -111,6 +112,11 @@ namespace NzbDrone.Core.Tv
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
             _episodeRepository.SetMonitoredBySeason(seriesId, seasonNumber, monitored);
+        }
+
+        public void CleanupOrphanedEpisodes()
+        {
+            _episodeRepository.CleanupOrphanedEpisodes();
         }
 
         public bool IsFirstOrLastEpisodeOfSeason(int episodeId)

@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Housekeeping;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Lifecycle;
@@ -51,7 +52,8 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 60, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},
-                    new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName}
+                    new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName},
+                    new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();

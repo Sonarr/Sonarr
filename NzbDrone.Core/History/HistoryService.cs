@@ -18,6 +18,7 @@ namespace NzbDrone.Core.History
         void Trim();
         QualityModel GetBestQualityInHistory(int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
+        void CleanupOrphaned();
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>
@@ -39,6 +40,12 @@ namespace NzbDrone.Core.History
         public PagingSpec<History> Paged(PagingSpec<History> pagingSpec)
         {
             return _historyRepository.GetPaged(pagingSpec);
+        }
+
+        public void CleanupOrphaned()
+        {
+            _historyRepository.CleanupOrphanedBySeries();
+            _historyRepository.CleanupOrphanedByEpisode();
         }
 
         public void Purge()

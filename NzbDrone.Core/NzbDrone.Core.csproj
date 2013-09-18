@@ -214,6 +214,11 @@
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
+    <Compile Include="Housekeeping\HousekeepingCommand.cs" />
+    <Compile Include="Housekeeping\HousekeepingService.cs" />
+    <Compile Include="Housekeeping\IHousekeepingTask.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
     <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
     <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
