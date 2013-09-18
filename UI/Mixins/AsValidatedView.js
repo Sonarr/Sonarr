@@ -9,7 +9,6 @@ define(
         return function () {
 
             var originalOnRender = this.prototype.onRender;
-            var originalOnClose = this.prototype.onClose;
             var originalBeforeClose = this.prototype.onBeforeClose;
 
             var errorHandler = function (response) {
@@ -64,18 +63,6 @@ define(
                     originalBeforeClose.call(this);
                 }
             };
-
-            this.prototype.onClose = function () {
-
-                if (this.model && this.model.isNew()) {
-                    this.model.destroy();
-                }
-
-                if (originalOnClose) {
-                    originalBeforeClose.call(this);
-                }
-            };
-
 
             return this;
         };
