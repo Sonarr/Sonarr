@@ -8,11 +8,6 @@ define(
             url  : window.NzbDrone.ApiRoot + '/series/lookup',
             model: SeriesModel,
 
-            initialize: function (options) {
-                this.unmappedFolderModel = options.unmappedFolderModel;
-            },
-
-
             parse: function (response) {
 
                 var self = this;
