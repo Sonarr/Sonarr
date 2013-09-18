@@ -5,12 +5,7 @@ using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Housekeeping
 {
-    public interface IHousekeepingService
-    {
-        
-    }
-
-    public class HousekeepingService : IHousekeepingService, IExecute<HousekeepingCommand>
+ public class HousekeepingService : IExecute<HousekeepingCommand>
     {
         private readonly IEnumerable<IHousekeepingTask> _housekeepers;
         private readonly Logger _logger;
