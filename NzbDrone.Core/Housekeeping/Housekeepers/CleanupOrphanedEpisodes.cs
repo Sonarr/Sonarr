@@ -1,23 +1,32 @@
 ﻿using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class CleanupOrphanedEpisodes : IHousekeepingTask
     {
-        private readonly IEpisodeService _episodeService;
+        private readonly IDatabase _database;
         private readonly Logger _logger;
 
-        public CleanupOrphanedEpisodes(IEpisodeService episodeService, Logger logger)
+        public CleanupOrphanedEpisodes(IDatabase database, Logger logger)
         {
-            _episodeService = episodeService;
+            _database = database;
             _logger = logger;
         }
 
         public void Clean()
         {
             _logger.Trace("Running orphaned episodes cleanup");
-            _episodeService.CleanupOrphanedEpisodes();
+
+            var mapper = _database.GetDataMapper();
+
+            mapper.ExecuteNonQuery(@"DELETE FROM Episodes
+                                     WHERE Id IN (
+                                     SELECT Episodes.Id FROM Episodes
+                                     LEFT OUTER JOIN Series
+                                     ON Episodes.SeriesId = Series.Id
+                                     WHERE Series.Id IS NULL)");
         }
     }
 }

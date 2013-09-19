@@ -12,8 +12,6 @@ namespace NzbDrone.Core.History
     {
         void Trim();
         List<QualityModel> GetEpisodeHistory(int episodeId);
-        void CleanupOrphanedBySeries();
-        void CleanupOrphanedByEpisode();
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -37,30 +35,6 @@ namespace NzbDrone.Core.History
             var history = Query.Where(c => c.EpisodeId == episodeId);
 
             return history.Select(h => h.Quality).ToList();
-        }
-
-        public void CleanupOrphanedBySeries()
-        {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM History
-                                     WHERE Id IN (
-                                     SELECT History.Id FROM History
-                                     LEFT OUTER JOIN Series
-                                     ON History.SeriesId = Series.Id
-                                     WHERE Series.Id IS NULL)");
-        }
-
-        public void CleanupOrphanedByEpisode()
-        {
-            var mapper = _database.GetDataMapper();
-
-            mapper.ExecuteNonQuery(@"DELETE FROM History
-                                     WHERE Id IN (
-                                     SELECT History.Id FROM History
-                                     LEFT OUTER JOIN Episodes
-                                     ON History.EpisodeId = Episodes.Id
-                                     WHERE Episodes.Id IS NULL)");
         }
 
         public override PagingSpec<History> GetPaged(PagingSpec<History> pagingSpec)

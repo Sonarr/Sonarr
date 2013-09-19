@@ -125,6 +125,7 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
@@ -179,7 +180,7 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
-    <Compile Include="TvTests\EpisodeRepositoryTests\CleanupOrphanedEpisodesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />

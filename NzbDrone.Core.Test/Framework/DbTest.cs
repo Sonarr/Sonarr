@@ -60,8 +60,6 @@ namespace NzbDrone.Core.Test.Framework
         }
     }
 
-
-
     [Category("DbTest")]
     public abstract class DbTest : CoreTest
     {

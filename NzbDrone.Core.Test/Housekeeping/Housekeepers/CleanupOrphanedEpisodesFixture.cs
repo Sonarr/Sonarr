@@ -1,13 +1,14 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
+namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
     [TestFixture]
-    public class CleanupOrphanedEpisodesFixture : DbTest<EpisodeRepository, Episode>
+    public class CleanupOrphanedEpisodesFixture : DbTest<CleanupOrphanedEpisodes, Episode>
     {
         [Test]
         public void should_delete_orphaned_episodes()
@@ -15,9 +16,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var episode = Builder<Episode>.CreateNew()
                                           .BuildNew();
 
-            Subject.Insert(episode);
-            Subject.CleanupOrphanedEpisodes();
-            Subject.All().Should().BeEmpty();
+            Db.Insert(episode);
+            Subject.Clean();
+            AllStoredModels.Should().BeEmpty();
         }
 
         [Test]
@@ -29,16 +30,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             Db.Insert(series);
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                                          .All()
-                                          .With(e => e.Id = 0)
                                           .TheFirst(1)
                                           .With(e => e.SeriesId = series.Id)
-                                          .Build();
+                                          .BuildListOfNew();
 
-            Subject.InsertMany(episodes);
-            Subject.CleanupOrphanedEpisodes();
-            Subject.All().Should().HaveCount(1);
-            Subject.All().Should().Contain(e => e.SeriesId == series.Id);
+            Db.InsertMany(episodes);
+            Subject.Clean();
+            AllStoredModels.Should().HaveCount(1);
+            AllStoredModels.Should().Contain(e => e.SeriesId == series.Id);
         }
     }
 }
