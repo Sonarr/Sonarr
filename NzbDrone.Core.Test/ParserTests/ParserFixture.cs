@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Contract;
 using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
@@ -112,17 +111,6 @@ namespace NzbDrone.Core.Test.ParserTests
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
-
-            ExceptionVerification.IgnoreWarns();
-        }
-
-        [Test]
-        [Ignore]
-        public void unparsable_path_should_report_the_path()
-        {
-            Parser.Parser.ParsePath("C:\\SOMETHING 12345.avi").Should().BeNull();
-
-            MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.IsAny<ParseErrorReport>()), Times.Exactly(2));
 
             ExceptionVerification.IgnoreWarns();
         }
