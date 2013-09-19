@@ -3,12 +3,12 @@ define(
     [
         'marionette',
         'Episode/Summary/EpisodeSummaryLayout',
-        'Episode/Search/Layout',
+        'Episode/Search/EpisodeSearchLayout',
         'Series/SeriesCollection'
     ], function (Marionette, SummaryLayout, SearchLayout, SeriesCollection) {
 
         return Marionette.Layout.extend({
-            template: 'Episode/LayoutTemplate',
+            template: 'Episode/EpisodeDetailsLayoutTemplate',
 
             regions: {
                 summary : '#episode-summary',
@@ -38,11 +38,21 @@ define(
 
                 this.series = SeriesCollection.find({ id: this.model.get('seriesId') });
                 this.templateHelpers.series = this.series.toJSON();
+                this.openingTab = options.openingTab || 'summary'
             },
 
             onShow: function () {
-                this._showSummary();
                 this.searchLayout = new SearchLayout({ model: this.model });
+
+                if (this.openingTab === 'search') {
+                    this.searchLayout.startManualSearch = true;
+                    this._showSearch();
+                }
+
+                else {
+                    this._showSummary();
+                }
+
                 this._setMonitoredState();
             },
 

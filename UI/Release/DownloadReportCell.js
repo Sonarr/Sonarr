@@ -29,7 +29,7 @@ define(
             },
 
             render: function () {
-                this.$el.html('');
+                this.$el.empty();
 
                 if (this.model.get('downloadAllowed'))
                 {

@@ -12,7 +12,7 @@ define(
     ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SeriesCollection,CommandController, LoadingView) {
 
         return Marionette.Layout.extend({
-            template: 'Episode/Search/LayoutTemplate',
+            template: 'Episode/Search/EpisodeSearchLayoutTemplate',
 
             regions: {
                 main: '#episode-search-region'
@@ -29,7 +29,13 @@ define(
             },
 
             onShow: function () {
-                this._showMainView();
+                if (this.startManualSearch) {
+                    this._searchManual();
+                }
+
+                else {
+                    this._showMainView();
+                }
             },
 
             _searchAuto: function (e) {
