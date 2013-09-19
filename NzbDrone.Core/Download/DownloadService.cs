@@ -1,6 +1,5 @@
 ﻿using NLog;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 

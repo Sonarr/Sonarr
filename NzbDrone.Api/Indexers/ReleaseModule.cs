@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Nancy;
-using NLog;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;

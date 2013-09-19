@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using NzbDrone.Common.Exceptions;
+﻿using System.Net;
 
 namespace NzbDrone.Core.Exceptions
 {

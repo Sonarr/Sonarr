@@ -1,6 +1,5 @@
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.SignalR

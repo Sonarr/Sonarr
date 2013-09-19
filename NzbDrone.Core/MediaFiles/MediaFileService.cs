@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Common;

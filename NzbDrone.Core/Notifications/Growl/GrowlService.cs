@@ -4,7 +4,6 @@ using System.Linq;
 using Growl.Connector;
 using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using GrowlNotification = Growl.Connector.Notification;
 
