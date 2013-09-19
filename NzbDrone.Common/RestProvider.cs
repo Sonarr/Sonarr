@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
 using NzbDrone.Common.Contract;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common
 {
@@ -27,7 +27,7 @@ namespace NzbDrone.Common
         {
             try
             {
-                var json = JsonConvert.SerializeObject(message);
+                var json = message.ToJson();
 
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = TIMEOUT;

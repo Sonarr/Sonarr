@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Messaging;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Model.Xbmc;
@@ -63,7 +62,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
 
                 Logger.Trace("Getting version from response");
-                var result = JsonConvert.DeserializeObject<XbmcJsonResult<JObject>>(response);
+                var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
 
                 var versionObject = result.Result.Property("version");
 
@@ -71,7 +70,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                     return new XbmcVersion((int)versionObject.Value);
 
                 if (versionObject.Value.Type == JTokenType.Object)
-                    return JsonConvert.DeserializeObject<XbmcVersion>(versionObject.Value.ToString());
+                    return Json.Deserialize<XbmcVersion>(versionObject.Value.ToString());
 
                 throw new InvalidCastException("Unknown Version structure!: " + versionObject);
             }

@@ -8,42 +8,47 @@ namespace NzbDrone.Common.Serializer
 {
     public static class Json
     {
-        private static readonly JsonSerializer JsonNetSerializer;
-
+        private static readonly JsonSerializer Serializer;
+        private static readonly JsonSerializerSettings SerializerSetting;
 
         static Json()
         {
-            JsonNetSerializer = new JsonSerializer()
-                {
-                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Formatting.Indented,
-                    DefaultValueHandling = DefaultValueHandling.Include,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                };
+            SerializerSetting = new JsonSerializerSettings
+                        {
+                            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            Formatting = Formatting.Indented,
+                            DefaultValueHandling = DefaultValueHandling.Include,
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        };
 
-            JsonNetSerializer.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+
+            SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            SerializerSetting.Converters.Add(new IntConverter());
+
+            Serializer = JsonSerializer.Create(SerializerSetting);
+
         }
 
-        public static T Deserialize<T>(string json) where T : class, new()
+        public static T Deserialize<T>(string json) where T : new()
         {
-            return JsonConvert.DeserializeObject<T>(json);
+            return JsonConvert.DeserializeObject<T>(json, SerializerSetting);
         }
 
         public static object Deserialize(string json, Type type)
         {
-            return JsonConvert.DeserializeObject(json, type);
+            return JsonConvert.DeserializeObject(json, type, SerializerSetting);
         }
 
         public static string ToJson(this object obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            return JsonConvert.SerializeObject(obj, SerializerSetting);
         }
 
         public static void Serialize<TModel>(TModel model, TextWriter outputStream)
         {
             var jsonTextWriter = new JsonTextWriter(outputStream);
-            JsonNetSerializer.Serialize(jsonTextWriter, model);
+            Serializer.Serialize(jsonTextWriter, model);
             jsonTextWriter.Flush();
         }
 

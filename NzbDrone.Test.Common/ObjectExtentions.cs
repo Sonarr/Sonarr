@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Test.Common
 {
     public static class ObjectExtentions
     {
-        public static T JsonClone<T>(this T source)
+        public static T JsonClone<T>(this T source) where T : new()
         {
-            var json = JsonConvert.SerializeObject(source);
-            return JsonConvert.DeserializeObject<T>(json);
+            var json = source.ToJson();
+            return Json.Deserialize<T>(json);
         }
     }
 }
