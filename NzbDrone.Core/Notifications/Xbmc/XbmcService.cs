@@ -7,8 +7,8 @@ using NzbDrone.Common;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Model.Xbmc;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {

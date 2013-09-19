@@ -2,7 +2,8 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Providers;
+using NzbDrone.Core.DataAugmentation;
+using NzbDrone.Core.DataAugmentation.Xem;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.Categories;
 

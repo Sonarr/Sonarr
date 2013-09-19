@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Model.Xbmc
+﻿namespace NzbDrone.Core.Notifications.Xbmc.Model
 {
     public class TvShow
     {

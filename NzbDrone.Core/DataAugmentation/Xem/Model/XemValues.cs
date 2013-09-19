@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Model.Xem
+﻿namespace NzbDrone.Core.DataAugmentation.Xem.Model
 {
     public class XemValues
     {

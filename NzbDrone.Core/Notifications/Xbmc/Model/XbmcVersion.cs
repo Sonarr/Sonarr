@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NzbDrone.Core.Model.Xbmc
+namespace NzbDrone.Core.Notifications.Xbmc.Model
 {
     public class XbmcVersion : IComparable<XbmcVersion>
     {

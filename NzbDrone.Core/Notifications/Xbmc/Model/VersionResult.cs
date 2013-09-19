@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NzbDrone.Core.Model.Xbmc
+namespace NzbDrone.Core.Notifications.Xbmc.Model
 {
     public class VersionResult
     {

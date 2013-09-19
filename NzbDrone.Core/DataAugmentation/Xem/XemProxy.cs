@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Model.Xem;
+using NzbDrone.Core.DataAugmentation.Xem.Model;
 using NzbDrone.Core.Rest;
 using RestSharp;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.DataAugmentation.Xem
 {
     public interface IXemProxy
     {
-        List<Int32> GetXemSeriesIds();
+        List<int> GetXemSeriesIds();
         List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id);
     }
 
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers
             return req;
         }
 
-        public List<Int32> GetXemSeriesIds()
+        public List<int> GetXemSeriesIds()
         {
             _logger.Trace("Fetching Series IDs from");
 
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Providers
 
             var request = BuildRequest("havemap");
 
-            var response = restClient.ExecuteAndValidate<XemResult<List<Int32>>>(request);
+            var response = restClient.ExecuteAndValidate<XemResult<List<int>>>(request);
             CheckForFailureResult(response);
 
             return response.Data.ToList();

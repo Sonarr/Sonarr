@@ -9,7 +9,7 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.DataAugmentation.Xem
 {
     public class XemService : IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent>, IHandleAsync<ApplicationStartedEvent>
     {
