@@ -25,7 +25,7 @@ namespace NzbDrone.Common.Serializer
 
 
             SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-            SerializerSetting.Converters.Add(new IntConverter());
+            //SerializerSetting.Converters.Add(new IntConverter());
             SerializerSetting.Converters.Add(new VersionConverter());
 
             Serializer = JsonSerializer.Create(SerializerSetting);

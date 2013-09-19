@@ -84,8 +84,8 @@ Function PackageMono()
 
 Function AddJsonNet()
 {
-    #get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
-    #Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder
+    get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
+    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder
 }
 
 Function PackageTests()
