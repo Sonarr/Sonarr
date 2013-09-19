@@ -77,6 +77,13 @@ define(
                     }
                 ],
 
+
+            initialize: function () {
+                this.collection = new HistoryCollection();
+                this.listenTo(this.collection, 'sync', this._showTable);
+            },
+
+
             _showTable: function (collection) {
 
                 this.history.show(new Backgrid.Grid({
@@ -92,14 +99,8 @@ define(
             },
 
             onShow: function () {
-                var self = this;
-
                 this.history.show(new LoadingView());
-
-                var collection = new HistoryCollection();
-                collection.fetch().done(function () {
-                    self._showTable(collection);
-                });
+                this.collection.fetch();
             }
 
         });
