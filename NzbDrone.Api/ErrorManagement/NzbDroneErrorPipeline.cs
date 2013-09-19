@@ -17,9 +17,11 @@ namespace NzbDrone.Api.ErrorManagement
             _logger = logger;
         }
 
-        public Response HandleException(NancyContext context, Exception exception)
+        public Response HandleException(NancyContext context, Exception aggregateException)
         {
-            var apiException = exception as ApiException;
+            var innerException = (aggregateException.InnerException).InnerException;
+
+            var apiException = innerException as ApiException;
 
             if (apiException != null)
             {
@@ -27,7 +29,7 @@ namespace NzbDrone.Api.ErrorManagement
                 return apiException.ToErrorResponse();
             }
 
-            var validationException = exception as ValidationException;
+            var validationException = innerException as ValidationException;
 
             if (validationException != null)
             {
@@ -36,23 +38,23 @@ namespace NzbDrone.Api.ErrorManagement
                 return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
             }
 
-            var clientException = exception as NzbDroneClientException;
+            var clientException = innerException as NzbDroneClientException;
 
             if (clientException != null)
             {
                 return new ErrorModel
                 {
-                    Message = exception.Message,
-                    Description = exception.ToString()
+                    Message = innerException.Message,
+                    Description = innerException.ToString()
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
             }
 
-            _logger.FatalException("Request Failed", exception);
+            _logger.FatalException("Request Failed", innerException);
 
             return new ErrorModel
                 {
-                    Message = exception.Message,
-                    Description = exception.ToString()
+                    Message = innerException.Message,
+                    Description = innerException.ToString()
                 }.AsResponse(HttpStatusCode.InternalServerError);
         }
     }
