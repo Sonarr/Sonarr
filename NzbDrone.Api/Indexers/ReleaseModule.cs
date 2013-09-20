@@ -40,7 +40,7 @@ namespace NzbDrone.Api.Indexers
             GetResourceAll = GetReleases;
             Post["/"] = x=> DownloadRelease(this.Bind<ReleaseResource>());
 
-            PostValidator.RuleFor(s => s.DownloadAllowed);
+            PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
         }
 
         private Response DownloadRelease(ReleaseResource release)

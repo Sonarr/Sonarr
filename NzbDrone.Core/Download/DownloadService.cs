@@ -29,7 +29,6 @@ namespace NzbDrone.Core.Download
         public void DownloadReport(RemoteEpisode remoteEpisode)
         {
             Ensure.That(() => remoteEpisode.Series).IsNotNull();
-            Ensure.That(() => remoteEpisode.Episodes).IsNotNull();
             Ensure.That(() => remoteEpisode.Episodes).HasItems();
 
             var downloadTitle = remoteEpisode.Release.Title;
