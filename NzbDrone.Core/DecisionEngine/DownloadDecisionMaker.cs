@@ -74,6 +74,7 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                         else
                         {
+                            remoteEpisode.DownloadAllowed = false;
                             decision = new DownloadDecision(remoteEpisode, "Unknown Series");
                         }
                     }

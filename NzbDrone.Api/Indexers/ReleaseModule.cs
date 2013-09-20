@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
@@ -38,18 +39,14 @@ namespace NzbDrone.Api.Indexers
             _parsingService = parsingService;
             GetResourceAll = GetReleases;
             Post["/"] = x=> DownloadRelease(this.Bind<ReleaseResource>());
+
+            PostValidator.RuleFor(s => s.DownloadAllowed);
         }
 
         private Response DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), 0);
             remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
-
-            if (remoteEpisode.Series == null || remoteEpisode.Episodes == null || !remoteEpisode.Episodes.Any())
-            {
-                throw new BadRequestException(release);
-            }
-
             _downloadService.DownloadReport(remoteEpisode);
 
             return release.AsResponse();
@@ -92,7 +89,6 @@ namespace NzbDrone.Api.Indexers
                 release.InjectFrom(downloadDecision.RemoteEpisode.ParsedEpisodeInfo);
                 release.InjectFrom(downloadDecision);
                 release.Rejections = downloadDecision.Rejections.ToList();
-                release.DownloadAllowed = downloadDecision.RemoteEpisode.Series != null;
 
                 result.Add(release);
             }

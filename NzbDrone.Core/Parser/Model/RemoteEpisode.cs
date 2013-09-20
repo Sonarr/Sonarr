@@ -8,12 +8,10 @@ namespace NzbDrone.Core.Parser.Model
     public class RemoteEpisode
     {
         public ReleaseInfo Release { get; set; }
-
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
-
         public Series Series { get; set; }
-
         public List<Episode> Episodes { get; set; }
+        public Boolean DownloadAllowed { get; set; }
 
         public bool IsRecentEpisode()
         {

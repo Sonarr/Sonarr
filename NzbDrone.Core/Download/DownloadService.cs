@@ -1,4 +1,5 @@
 ﻿using NLog;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
@@ -27,6 +28,10 @@ namespace NzbDrone.Core.Download
 
         public void DownloadReport(RemoteEpisode remoteEpisode)
         {
+            Ensure.That(() => remoteEpisode.Series).IsNotNull();
+            Ensure.That(() => remoteEpisode.Episodes).IsNotNull();
+            Ensure.That(() => remoteEpisode.Episodes).HasItems();
+
             var downloadTitle = remoteEpisode.Release.Title;
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
