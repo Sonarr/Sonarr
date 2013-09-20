@@ -38,21 +38,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override Response GetResponse(string resourceUrl)
         {
-            string content;
             var response = base.GetResponse(resourceUrl);
-            var stream = new MemoryStream();
-            
-            response.Contents.Invoke(stream);
-            stream.Position = 0;
-
-            using (var reader = new StreamReader(stream))
-            {
-                content = reader.ReadToEnd();
-            }
-
-            content = content.Replace("API_KEY", _configFileProvider.ApiKey);
-
-            response = new StreamResponse(() => StringToStream(content), response.ContentType);
             response.Headers["X-UA-Compatible"] = "IE=edge";
 
             return response;
@@ -70,6 +56,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
             text = text.Replace(".css", ".css?v=" + BuildInfo.Version);
             text = text.Replace(".js", ".js?v=" + BuildInfo.Version);
+            text = text.Replace("API_KEY", _configFileProvider.ApiKey);
 
             return text;
         }

@@ -1,15 +1,12 @@
 ﻿using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Bootstrapper;
+using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Extensions.Pipelines;
 
 namespace NzbDrone.Api.Authentication
 {
-    public interface IEnableBasicAuthInNancy
-    {
-        void Register(IPipelines pipelines);
-    }
-
-    public class EnableBasicAuthInNancy : IEnableBasicAuthInNancy
+    public class EnableBasicAuthInNancy : IRegisterNancyPipeline
     {
         private readonly IAuthenticationService _authenticationService;
 
@@ -28,7 +25,7 @@ namespace NzbDrone.Api.Authentication
         {
             Response response = null;
 
-            if (!context.Request.Path.StartsWith("/api/") &&
+            if (!context.Request.IsApiRequest() &&
                 context.CurrentUser == null &&
                 _authenticationService.Enabled)
             {

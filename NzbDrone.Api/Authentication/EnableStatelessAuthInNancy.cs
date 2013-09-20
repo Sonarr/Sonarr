@@ -1,17 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
+using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication
 {
-    public interface IEnableStatelessAuthInNancy
-    {
-        void Register(IPipelines pipelines);
-    }
-
-    public class EnableStatelessAuthInNancy : IEnableStatelessAuthInNancy
+    public class EnableStatelessAuthInNancy : IRegisterNancyPipeline
     {
         private readonly IConfigFileProvider _configFileProvider;
 
@@ -28,18 +26,16 @@ namespace NzbDrone.Api.Authentication
         public Response ValidateApiKey(NancyContext context)
         {
             Response response = null;
-            var apiKey = context.Request.Headers["ApiKey"].FirstOrDefault();
-
-            if (!RuntimeInfo.IsProduction &&
-                (context.Request.UserHostAddress.Equals("localhost") ||
-                context.Request.UserHostAddress.Equals("127.0.0.1") ||
-                context.Request.UserHostAddress.Equals("::1")))
+            
+            if (!RuntimeInfo.IsProduction && context.Request.IsLocalRequest())
             {
                 return response;
             }
+
+            var apiKey = context.Request.Headers.Authorization;
             
-            if (context.Request.Path.StartsWith("/api/") && 
-                (apiKey == null || !apiKey.Equals(_configFileProvider.ApiKey)))
+            if (context.Request.IsApiRequest() && 
+                (String.IsNullOrWhiteSpace(apiKey) || !apiKey.Equals(_configFileProvider.ApiKey)))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }

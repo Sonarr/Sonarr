@@ -21,11 +21,8 @@ define(function () {
                 delete xhr.data;
             }
             if (xhr) {
-                if (!xhr.headers) {
-                    xhr.headers = {};
-                }
-
-                xhr.headers["ApiKey"] = window.NzbDrone.ApiKey;
+                xhr.headers = xhr.headers || {};
+                xhr.headers['Authorization'] = window.NzbDrone.ApiKey;
             }
 
             return original.apply(this, arguments);

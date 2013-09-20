@@ -5,7 +5,7 @@ var statusText = $.ajax({
     url  : window.NzbDrone.ApiRoot + '/system/status',
     async: false,
     headers: {
-        ApiKey: window.NzbDrone.ApiKey
+        Authorization: window.NzbDrone.ApiKey
     }
 }).responseText;
 
