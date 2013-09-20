@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Host.AccessControl
@@ -9,11 +11,15 @@ namespace NzbDrone.Host.AccessControl
     public interface IUrlAclAdapter
     {
         void RefreshRegistration();
+        bool IsRegistered();
         string UrlAcl { get; }
+        string LocalUrlAcl { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
     {
+        private const string URL_ACL = "http://{0}:{1}/";
+
         private readonly IProcessProvider _processProvider;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
@@ -25,11 +31,29 @@ namespace NzbDrone.Host.AccessControl
             _logger = logger;
         }
 
+        public bool IsRegistered()
+        {
+            var arguments = String.Format("http show urlacl {0}", UrlAcl);
+            var output = RunNetsh(arguments);
+
+            if (output == null || !output.Standard.Any()) return false;
+
+            return output.Standard.Any(line => line.Contains(UrlAcl));
+        }
+
         public string UrlAcl
         {
             get
             {
-                return "http://*:" + _configFileProvider.Port + "/";
+                return String.Format(URL_ACL, "*", _configFileProvider.Port);
+            }
+        }
+
+        public string LocalUrlAcl
+        {
+            get
+            {
+                return String.Format(URL_ACL, "localhost", _configFileProvider.Port);
             }
         }
 
@@ -47,17 +71,20 @@ namespace NzbDrone.Host.AccessControl
             RunNetsh(arguments);
         }
 
-        private void RunNetsh(string arguments)
+        private ProcessOutput RunNetsh(string arguments)
         {
             try
             {
-                var process = _processProvider.Start("netsh.exe", arguments);
-                process.WaitForExit(5000);
+                var output = _processProvider.StartAndCapture("netsh.exe", arguments);
+
+                return output;
             }
             catch (Exception ex)
             {
                 _logger.WarnException("Error executing netsh with arguments: " + arguments, ex);
             }
+
+            return null;
         }
     }
 }

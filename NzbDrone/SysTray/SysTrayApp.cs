@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Host.Owin;
 
 namespace NzbDrone.SysTray

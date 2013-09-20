@@ -3,6 +3,7 @@ using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Host.Owin;
 

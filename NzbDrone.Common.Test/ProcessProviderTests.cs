@@ -6,6 +6,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Model;
+using NzbDrone.Common.Processes;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Dummy;
 

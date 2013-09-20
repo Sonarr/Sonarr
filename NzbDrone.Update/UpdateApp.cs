@@ -5,6 +5,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
 using NzbDrone.Update.UpdateEngine;
 

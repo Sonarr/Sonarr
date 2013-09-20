@@ -9,7 +9,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Model;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Processes
 {
     public interface IProcessProvider
     {
@@ -23,6 +23,7 @@ namespace NzbDrone.Common
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
         Process SpawnNewProcess(string path, string args = null);
+        ProcessOutput StartAndCapture(string path, string args = null);
     }
 
     public class ProcessProvider : IProcessProvider
@@ -88,11 +89,8 @@ namespace NzbDrone.Common
             process.Start();
         }
 
-
-
         public Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
         {
-
             if (OsInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
             {
                 args = path + " " + args;
@@ -147,7 +145,6 @@ namespace NzbDrone.Common
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
 
-
             return process;
         }
 
@@ -170,6 +167,16 @@ namespace NzbDrone.Common
             process.Start();
 
             return process;
+        }
+
+        public ProcessOutput StartAndCapture(string path, string args = null)
+        {
+            var output = new ProcessOutput();
+            var process = Start(path, args, s => output.Standard.Add(s), error => output.Error.Add(error));
+
+            WaitForExit(process);
+
+            return output;
         }
 
         public void WaitForExit(Process process)
@@ -224,7 +231,6 @@ namespace NzbDrone.Common
 
             return null;
         }
-
 
         private static string GetExeFileName(Process process)
         {
