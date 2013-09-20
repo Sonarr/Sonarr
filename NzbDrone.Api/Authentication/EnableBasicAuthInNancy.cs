@@ -27,7 +27,10 @@ namespace NzbDrone.Api.Authentication
         private Response RequiresAuthentication(NancyContext context)
         {
             Response response = null;
-            if (context.CurrentUser == null && _authenticationService.Enabled)
+
+            if (!context.Request.Path.StartsWith("/api/") &&
+                context.CurrentUser == null &&
+                _authenticationService.Enabled)
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }

@@ -31,6 +31,7 @@ namespace NzbDrone.Api
 
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEnableBasicAuthInNancy>().Register(pipelines);
+            container.Resolve<IEnableStatelessAuthInNancy>().Register(pipelines);
             container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
 
             ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);

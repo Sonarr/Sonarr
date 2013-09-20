@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
+        string ApiKey { get; }
         bool Torrent { get; }
     }
 
@@ -93,6 +94,14 @@ namespace NzbDrone.Core.Configuration
         public bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser", true); }
+        }
+
+        public string ApiKey
+        {
+            get
+            {
+                return GetValue("ApiKey", Guid.NewGuid().ToString().Replace("-", ""));
+            }
         }
 
         public bool Torrent
