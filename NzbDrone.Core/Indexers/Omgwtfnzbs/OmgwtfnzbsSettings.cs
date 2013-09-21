@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         }
     }
 
-    public class OmgwtfnzbsSettings : IIndexerSetting
+    public class OmgwtfnzbsSettings : IProviderConfig
     {
         private static readonly OmgwtfnzbsSettingsValidator Validator = new OmgwtfnzbsSettingsValidator();
 

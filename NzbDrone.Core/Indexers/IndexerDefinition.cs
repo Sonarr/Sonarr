@@ -1,13 +1,11 @@
 ﻿using System;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public class IndexerDefinition : ModelBase
+    public class IndexerDefinition : ProviderDefinition
     {
         public Boolean Enable { get; set; }
-        public String Name { get; set; }
-        public String Settings { get; set; }
-        public String Implementation { get; set; }
     }
 }

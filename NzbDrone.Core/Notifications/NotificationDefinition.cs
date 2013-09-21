@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications
     }
 
 
-    public class NotificationProviderModel : Provider
+    public class NotificationProviderModel : ProviderDefinition
     {
         public Boolean OnGrab { get; set; }
         public Boolean OnDownload { get; set; }

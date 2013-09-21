@@ -8,11 +8,11 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 namespace NzbDrone.Core.Datastore.Migration
 {
     [Migration(22)]
-    public class move_notification_to_generic_provider : NzbDroneMigrationBase
+    public class move_indexer_to_generic_provider : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
         {
-            Alter.Table("Notifications").AddColumn("ConfigContract").AsString().Nullable();
+            Alter.Table("Indexers").AddColumn("ConfigContract").AsString().Nullable();
 
             //Execute.WithConnection(ConvertSeasons);
         }
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
-                            var text = String.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson() , seriesId);
+                            var text = String.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson(), seriesId);
 
                             updateCmd.Transaction = tran;
                             updateCmd.CommandText = text;

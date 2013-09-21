@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
@@ -29,6 +30,11 @@ namespace NzbDrone.Core.Notifications.Plex
             {
                 return !string.IsNullOrWhiteSpace(Host);
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

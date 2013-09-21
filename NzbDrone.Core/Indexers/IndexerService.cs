@@ -7,6 +7,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.ThingiProvider;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Indexers
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Indexers
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Enable { get; set; }
-        public IIndexerSetting Settings { get; set; }
+        public IProviderConfig Settings { get; set; }
         public IIndexer Instance { get; set; }
         public string Implementation { get; set; }
     }
@@ -107,7 +108,7 @@ namespace NzbDrone.Core.Indexers
                                      Name = indexer.Name,
                                      Enable = indexer.Enable,
                                      Implementation = indexer.Implementation,
-                                     Settings = indexer.Settings.ToJson()
+                                     Settings = indexer.Settings
                                  };
 
             var instance = ToIndexer(definition).Instance;
@@ -123,7 +124,7 @@ namespace NzbDrone.Core.Indexers
         {
             var definition = _indexerRepository.Get(indexer.Id);
             definition.InjectFrom(indexer);
-            definition.Settings = indexer.Settings.ToJson();
+            definition.Settings = indexer.Settings;
             _indexerRepository.Update(definition);
 
             return indexer;

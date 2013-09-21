@@ -1,22 +1,13 @@
 ﻿
+using FluentValidation.Results;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Notifications;
 
 namespace NzbDrone.Core.ThingiProvider
 {
-
-
-    public class DownloadProviderRepository : BasicRepository<DownloadProviderModel>
-    {
-        public DownloadProviderRepository(IDatabase database, IEventAggregator eventAggregator)
-            : base(database, eventAggregator)
-        {
-        }
-    }
-
-
-    public class NotificationProviderRepository : BasicRepository<NotificationProviderModel>
+    public class NotificationProviderRepository : BasicRepository<NotificationDefinition>
     {
         public NotificationProviderRepository(IDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
@@ -24,13 +15,21 @@ namespace NzbDrone.Core.ThingiProvider
         }
     }
 
-    public class DownloadProviderModel : Provider
-    {
 
+    public class IndexerProviderRepository : BasicRepository<IndexerDefinition>
+    {
+        public IndexerProviderRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
+        {
+        }
     }
 
+    public abstract class ProviderBase
+    {
+        public ProviderDefinition Definition { get; set; }
+    }
 
-    public abstract class Provider : ModelBase
+    public abstract class ProviderDefinition : ModelBase
     {
         public string Name { get; set; }
         public string Implementation { get; set; }
@@ -44,7 +43,7 @@ namespace NzbDrone.Core.ThingiProvider
             }
             set
             {
-                
+
             }
         }
 
@@ -53,6 +52,16 @@ namespace NzbDrone.Core.ThingiProvider
 
     public interface IProviderConfig
     {
-        bool IsValid { get; }
+        ValidationResult Validate();
+    }
+
+    public class NullSetting : IProviderConfig
+    {
+        public static readonly NullSetting Instance = new NullSetting();
+
+        public ValidationResult Validate()
+        {
+            return new ValidationResult();
+        }
     }
 }

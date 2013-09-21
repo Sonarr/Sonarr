@@ -246,7 +246,6 @@
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
     <Compile Include="Indexers\Newznab\NewznabPreProcessor.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
-    <Compile Include="Indexers\NullSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
     <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
@@ -343,13 +342,11 @@
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
-    <Compile Include="Indexers\IndexerSettingProvider.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
-    <Compile Include="Indexers\IIndexerSetting.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
     <Compile Include="Indexers\Wombles\WomblesParser.cs" />

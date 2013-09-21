@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        private string GetSettings(string url, List<int> categories)
+        private NewznabSettings GetSettings(string url, List<int> categories)
         {
             var settings = new NewznabSettings { Url = url };
 
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 settings.Categories = categories;
             }
 
-            return settings.ToJson();
+            return settings;
         }
 
         public override IEnumerable<string> RecentFeed

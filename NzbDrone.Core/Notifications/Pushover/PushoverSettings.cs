@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
@@ -18,6 +19,11 @@ namespace NzbDrone.Core.Notifications.Pushover
             {
                 return !string.IsNullOrWhiteSpace(UserKey) && Priority != null & Priority >= -1 && Priority <= 2;
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

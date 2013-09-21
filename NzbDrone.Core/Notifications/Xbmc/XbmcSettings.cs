@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using FluentValidation.Results;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -51,6 +52,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             {
                 return !string.IsNullOrWhiteSpace(Host) && Port > 0;
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

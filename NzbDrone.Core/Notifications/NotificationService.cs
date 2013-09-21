@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Notifications
         Notification Get(int id);
         List<Notification> Schema();
         Notification Create(Notification notification);
-        Notification Update(Notification notification);
+        void Update(Notification notification);
         void Delete(int id);
     }
 
@@ -94,15 +94,13 @@ namespace NzbDrone.Core.Notifications
             return notification;
         }
 
-        public Notification Update(Notification notification)
+        public void Update(Notification notification)
         {
             var definition = _notificationRepository.Get(notification.Id);
             definition.InjectFrom(notification);
             definition.Settings = notification.Settings.ToJson();
 
             _notificationRepository.Update(definition);
-
-            return notification;
         }
 
         public void Delete(int id)

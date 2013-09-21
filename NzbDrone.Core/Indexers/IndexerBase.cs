@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Indexers
                     Name = Name,
                     Enable = EnableByDefault,
                     Implementation = GetType().Name,
-                    Settings = String.Empty
+                    Settings = NullSetting.Instance
                 };
             }
         }

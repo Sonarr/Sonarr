@@ -36,7 +36,6 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers");
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
             Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
-            Mapper.Entity<NotificationProviderModel>().RegisterModel("Notifications");
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
