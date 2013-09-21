@@ -10,10 +10,8 @@ namespace NzbDrone.Host.AccessControl
 {
     public interface IUrlAclAdapter
     {
-        void RefreshRegistration();
-        bool IsRegistered();
+        void ConfigureUrl();
         string UrlAcl { get; }
-        string LocalUrlAcl { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
@@ -22,47 +20,61 @@ namespace NzbDrone.Host.AccessControl
 
         private readonly IProcessProvider _processProvider;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public UrlAclAdapter(IProcessProvider processProvider, IConfigFileProvider configFileProvider, Logger logger)
+        public string UrlAcl { get; private set; }
+        private string _localUrl;
+        private string _wildcardUrl;
+
+        public UrlAclAdapter(IProcessProvider processProvider,
+                             IConfigFileProvider configFileProvider,
+                             IRuntimeInfo runtimeInfo,
+                             Logger logger)
         {
             _processProvider = processProvider;
             _configFileProvider = configFileProvider;
+            _runtimeInfo = runtimeInfo;
             _logger = logger;
+
+             _localUrl = String.Format(URL_ACL, "localhost", _configFileProvider.Port);
+             _wildcardUrl = String.Format(URL_ACL, "*", _configFileProvider.Port);
+
+            UrlAcl = _wildcardUrl;
         }
 
-        public bool IsRegistered()
+        public void ConfigureUrl()
         {
-            var arguments = String.Format("http show urlacl {0}", UrlAcl);
-            var output = RunNetsh(arguments);
-
-            if (output == null || !output.Standard.Any()) return false;
-
-            return output.Standard.Any(line => line.Contains(UrlAcl));
-        }
-
-        public string UrlAcl
-        {
-            get
+            if (!_runtimeInfo.IsAdmin && !IsRegistered)
             {
-                return String.Format(URL_ACL, "*", _configFileProvider.Port);
+                UrlAcl = _localUrl;
+            }
+
+            if (_runtimeInfo.IsAdmin)
+            {
+                RefreshRegistration();
             }
         }
 
-        public string LocalUrlAcl
-        {
-            get
-            {
-                return String.Format(URL_ACL, "localhost", _configFileProvider.Port);
-            }
-        }
-
-        public void RefreshRegistration()
+        private void RefreshRegistration()
         {
             if (OsInfo.Version.Major < 6)
                 return;
 
             RegisterUrl();
+        }
+
+        private bool IsRegistered
+        {
+            get
+            {
+                var arguments = String.Format("http show urlacl {0}", _wildcardUrl);
+                var output = RunNetsh(arguments);
+
+                if (output == null || !output.Standard.Any()) return false;
+
+                return output.Standard.Any(line => line.Contains(_wildcardUrl));
+            }
         }
 
         private void RegisterUrl()

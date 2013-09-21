@@ -38,14 +38,23 @@ namespace NzbDrone.Host.Owin
         public void StartServer()
         {
             IgnoreCertErrorPolicy.Register();
-            var urlAcl = DetermineUrlAcl();
 
-            var options = new StartOptions(urlAcl)
+            if (OsInfo.IsWindows)
+            {
+                if (_runtimeInfo.IsAdmin)
+                {
+                    _firewallAdapter.MakeAccessible();
+                }
+
+                _urlAclAdapter.ConfigureUrl();
+            }
+
+            var options = new StartOptions(_urlAclAdapter.UrlAcl)
                 {
                     ServerFactory = "Microsoft.Owin.Host.HttpListener"
                 };
 
-            _logger.Info("starting server on {0}", urlAcl);
+            _logger.Info("starting server on {0}", _urlAclAdapter.UrlAcl);
 
             try
             {
@@ -93,28 +102,6 @@ namespace NzbDrone.Host.Owin
             _host.Dispose();
             _host = null;
             _logger.Info("Host has stopped");
-        }
-
-        private string DetermineUrlAcl()
-        {
-            if (OsInfo.IsWindows && _runtimeInfo.IsAdmin)
-            {
-                if (_runtimeInfo.IsAdmin)
-                {
-                    _urlAclAdapter.RefreshRegistration();
-                    _firewallAdapter.MakeAccessible();
-                }
-
-                else
-                {
-                    if (!_urlAclAdapter.IsRegistered())
-                    {
-                        return _urlAclAdapter.LocalUrlAcl;
-                    }
-                }
-            }
-
-            return _urlAclAdapter.UrlAcl;
         }
     }
 }
