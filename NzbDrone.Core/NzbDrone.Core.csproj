@@ -416,6 +416,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="ThingiProvider\ProviderBase.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
