@@ -5,24 +5,57 @@ using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
-    public class EmbeddedDocumentConverter : IConverter
-    {
 
-        public object FromDB(ColumnMap map, object dbValue)
+    public class ProviderSettingConverter : EmbeddedDocumentConverter
+    {
+        public override object FromDB(ConverterContext context)
         {
-            if (dbValue == DBNull.Value)
+            if (context.DbValue == DBNull.Value)
             {
                 return DBNull.Value;
             }
 
-            var stringValue = (string)dbValue;
+            var stringValue = (string)context.DbValue;
 
             if (string.IsNullOrWhiteSpace(stringValue))
             {
                 return null;
             }
 
-            return Json.Deserialize(stringValue, map.FieldType);
+            var ordinal = context.DataRecord.GetOrdinal("ConfigContract");
+
+            var implementation = context.DataRecord.GetString(ordinal);
+
+            var impType = Type.GetType(implementation, true, true);
+
+            return Json.Deserialize(stringValue, impType);
+        }
+
+    }
+
+
+    public class EmbeddedDocumentConverter : IConverter
+    {
+        public virtual object FromDB(ConverterContext context)
+        {
+            if (context.DbValue == DBNull.Value)
+            {
+                return DBNull.Value;
+            }
+
+            var stringValue = (string)context.DbValue;
+
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                return null;
+            }
+
+            return Json.Deserialize(stringValue, context.ColumnMap.FieldType);
+        }
+
+        public object FromDB(ColumnMap map, object dbValue)
+        {
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

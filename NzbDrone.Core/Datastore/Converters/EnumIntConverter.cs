@@ -14,14 +14,19 @@ namespace NzbDrone.Core.Datastore.Converters
             }
         }
 
-        public object FromDB(ColumnMap map, object dbValue)
+        public object FromDB(ConverterContext context)
         {
-            if (dbValue != null && dbValue != DBNull.Value)
+            if (context.DbValue != null && context.DbValue != DBNull.Value)
             {
-                return Enum.ToObject(map.FieldType, (Int64)dbValue);
+                return Enum.ToObject(context.ColumnMap.FieldType, (Int64)context.DbValue);
             }
 
             return null;
+        }
+
+        public object FromDB(ColumnMap map, object dbValue)
+        {
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

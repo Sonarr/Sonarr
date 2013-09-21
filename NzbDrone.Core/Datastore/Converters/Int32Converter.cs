@@ -6,6 +6,21 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class Int32Converter : IConverter
     {
+        public object FromDB(ConverterContext context)
+        {
+            if (context.DbValue == DBNull.Value)
+            {
+                return DBNull.Value;
+            }
+
+            if (context.DbValue is Int32)
+            {
+                return context.DbValue;
+            }
+
+            return Convert.ToInt32(context.DbValue);
+        }
+
         public object FromDB(ColumnMap map, object dbValue)
         {
             if (dbValue == DBNull.Value)

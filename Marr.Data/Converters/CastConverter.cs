@@ -30,10 +30,15 @@ namespace Marr.Data.Converters
             get { return typeof(TDb); }
         }
 
+        public object FromDB(ConverterContext context)
+        {
+            TDb val = (TDb)context.DbValue;
+            return val.ToType(typeof(TClr), CultureInfo.InvariantCulture);
+        }
+
         public object FromDB(ColumnMap map, object dbValue)
         {
-            TDb val = (TDb)dbValue;
-            return val.ToType(typeof(TClr), CultureInfo.InvariantCulture);
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

@@ -20,6 +20,9 @@ namespace Marr.Data.Converters
 {
     public interface IConverter
     {
+        object FromDB(ConverterContext context);
+
+        [Obsolete("use FromDB(ConverterContext context) instead")]
         object FromDB(ColumnMap map, object dbValue);
         object ToDB(object clrValue);
         Type DbType { get; }

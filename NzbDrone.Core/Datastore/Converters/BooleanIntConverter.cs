@@ -6,14 +6,14 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class BooleanIntConverter : IConverter
     {
-        public object FromDB(ColumnMap map, object dbValue)
+        public object FromDB(ConverterContext context)
         {
-            if (dbValue == DBNull.Value)
+            if (context.DbValue == DBNull.Value)
             {
                 return DBNull.Value;
             }
 
-            var val = (Int64)dbValue;
+            var val = (Int64)context.DbValue;
 
             switch (val)
             {
@@ -22,8 +22,13 @@ namespace NzbDrone.Core.Datastore.Converters
                 case 0:
                     return false;
                 default:
-                    throw new ConversionException(string.Format("The BooleanCharConverter could not convert the value '{0}' to a Boolean.", dbValue));
+                    throw new ConversionException(string.Format("The BooleanCharConverter could not convert the value '{0}' to a Boolean.", context.DbValue));
             }
+        }
+
+        public object FromDB(ColumnMap map, object dbValue)
+        {
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

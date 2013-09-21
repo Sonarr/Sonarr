@@ -20,11 +20,16 @@ namespace Marr.Data.Converters
 {
     public class EnumStringConverter : IConverter
     {
+        public object FromDB(ConverterContext context)
+        {
+            if (context.DbValue == null || context.DbValue == DBNull.Value)
+                return null;
+            return Enum.Parse(context.ColumnMap.FieldType, (string)context.DbValue);
+        }
+
         public object FromDB(ColumnMap map, object dbValue)
         {
-            if (dbValue == null || dbValue == DBNull.Value)
-                return null;
-            return Enum.Parse(map.FieldType, (string)dbValue);
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)
