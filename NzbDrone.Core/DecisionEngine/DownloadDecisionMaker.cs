@@ -70,11 +70,11 @@ namespace NzbDrone.Core.DecisionEngine
 
                         if (remoteEpisode.Series != null)
                         {
+                            remoteEpisode.DownloadAllowed = true;
                             decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
                         else
                         {
-                            remoteEpisode.DownloadAllowed = false;
                             decision = new DownloadDecision(remoteEpisode, "Unknown Series");
                         }
                     }
