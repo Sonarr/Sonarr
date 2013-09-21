@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
-    public class PushBulletSettings : INotifcationSettings
+    public class PushBulletSettings : IProviderConfig
     {
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.pushbullet.com/")]
         public String ApiKey { get; set; }

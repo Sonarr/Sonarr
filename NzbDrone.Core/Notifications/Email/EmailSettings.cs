@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Email
 {
-    public class EmailSettings : INotifcationSettings
+    public class EmailSettings : IProviderConfig
     {
         public EmailSettings()
         {

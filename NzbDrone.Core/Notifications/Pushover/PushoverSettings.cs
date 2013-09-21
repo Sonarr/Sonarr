@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
-    public class PushoverSettings : INotifcationSettings
+    public class PushoverSettings : IProviderConfig
     {
         [FieldDefinition(0, Label = "User Key", HelpLink = "https://pushover.net/")]
         public String UserKey { get; set; }

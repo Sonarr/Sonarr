@@ -1,6 +1,7 @@
 ﻿
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Notifications;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -14,36 +15,44 @@ namespace NzbDrone.Core.ThingiProvider
         }
     }
 
-    public class DownloadProviderModel : Provider<DownloadProviderConfig>
+
+    public class NotificationProviderRepository : BasicRepository<NotificationProviderModel>
     {
-
-    }
-
-    public class DownloadProviderConfig : ProviderSetting
-    {
-
-    }
-
-
-    public abstract class Provider<TSettings> : ModelBase
-        where TSettings : ProviderSetting
-    {
-        public string Implementation { get; set; }
-        public TSettings Config { get; set; }
-    }
-
-    public abstract class ProviderSetting : IEmbeddedDocument
-    {
-
-    }
-
-    public abstract class ProviderBase<TSettings> where TSettings : ProviderSetting
-    {
-        public TSettings Settings { get; private set; }
-
-        public void LoadSettings(TSettings setting)
+        public NotificationProviderRepository(IDatabase database, IEventAggregator eventAggregator)
+            : base(database, eventAggregator)
         {
-            Settings = setting;
         }
+    }
+
+    public class DownloadProviderModel : Provider
+    {
+
+    }
+
+
+    public abstract class Provider : ModelBase
+    {
+        public string Name { get; set; }
+        public string Implementation { get; set; }
+
+        public string ConfigContract
+        {
+            get
+            {
+                if (Settings == null) return null;
+                return Settings.GetType().Name;
+            }
+            set
+            {
+                
+            }
+        }
+
+        public IProviderConfig Settings { get; set; }
+    }
+
+    public interface IProviderConfig
+    {
+        bool IsValid { get; }
     }
 }

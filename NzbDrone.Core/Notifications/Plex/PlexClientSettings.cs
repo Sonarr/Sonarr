@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
-    public class PlexClientSettings : INotifcationSettings
+    public class PlexClientSettings : IProviderConfig
     {
         public PlexClientSettings()
         {

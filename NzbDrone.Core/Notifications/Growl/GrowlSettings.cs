@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
-    public class GrowlSettings : INotifcationSettings
+    public class GrowlSettings : IProviderConfig
     {
         public GrowlSettings()
         {

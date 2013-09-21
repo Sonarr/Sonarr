@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
-    public class ProwlSettings : INotifcationSettings
+    public class ProwlSettings : IProviderConfig
     {
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.prowlapp.com/api_settings.php")]
         public String ApiKey { get; set; }

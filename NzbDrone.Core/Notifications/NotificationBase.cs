@@ -1,9 +1,10 @@
 ﻿using NzbDrone.Common.Serializer;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
 {
-    public abstract class NotificationBase<TSetting> : INotification where TSetting : class, INotifcationSettings, new()
+    public abstract class NotificationBase<TSetting> : INotification where TSetting : class, IProviderConfig, new()
     {
         public abstract string Name { get; }
         public abstract string ImplementationName { get; }

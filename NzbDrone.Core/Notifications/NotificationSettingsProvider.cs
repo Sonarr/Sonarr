@@ -1,10 +1,11 @@
 ﻿using NzbDrone.Common.Serializer;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications
 {
     public interface INotificationSettingsProvider
     {
-        TSetting Get<TSetting>(INotification indexer) where TSetting : INotifcationSettings, new();
+        TSetting Get<TSetting>(INotification indexer) where TSetting : IProviderConfig, new();
     }
 
     public class NotificationSettingsProvider : INotificationSettingsProvider
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Notifications
             _notificationRepository = notificationRepository;
         }
 
-        public TSetting Get<TSetting>(INotification indexer) where TSetting : INotifcationSettings, new()
+        public TSetting Get<TSetting>(INotification indexer) where TSetting : IProviderConfig, new()
         {
             var indexerDef = _notificationRepository.Find(indexer.Name);
 

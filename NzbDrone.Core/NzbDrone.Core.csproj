@@ -171,6 +171,7 @@
     <Compile Include="Datastore\Migration\019_restore_unique_constraints.cs" />
     <Compile Include="Datastore\Migration\020_add_year_and_seasons_to_series.cs" />
     <Compile Include="Datastore\Migration\021_drop_seasons_table.cs" />
+    <Compile Include="Datastore\Migration\022_move_notification_to_generic_provider.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -370,7 +371,6 @@
     <Compile Include="MetadataSource\Trakt\Images.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\FullShow.cs" />
-    <Compile Include="Notifications\INotifcationSettings.cs" />
     <Compile Include="Notifications\Plex\TestPlexServerCommand.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />

@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
-    public class XbmcSettings : INotifcationSettings
+    public class XbmcSettings : IProviderConfig
     {
         public XbmcSettings()
         {

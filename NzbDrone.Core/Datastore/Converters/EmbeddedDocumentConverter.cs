@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
@@ -26,7 +28,8 @@ namespace NzbDrone.Core.Datastore.Converters
 
             var implementation = context.DataRecord.GetString(ordinal);
 
-            var impType = Type.GetType(implementation, true, true);
+
+            var impType = typeof(IProviderConfig).Assembly.GetTypes().Single(c => c.Name == implementation);
 
             return Json.Deserialize(stringValue, impType);
         }

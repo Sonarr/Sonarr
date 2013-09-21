@@ -1,9 +1,10 @@
 ﻿using System;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 {
-    public class NotifyMyAndroidSettings : INotifcationSettings
+    public class NotifyMyAndroidSettings : IProviderConfig
     {
         [FieldDefinition(0, Label = "API Key", HelpLink = "http://www.notifymyandroid.com/")]
         public String ApiKey { get; set; }
