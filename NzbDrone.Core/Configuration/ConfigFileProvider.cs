@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigFileProvider : IConfigFileProvider
     {
-        private const string CONFIG_ELEMENT_NAME = "Config";
+        public const string CONFIG_ELEMENT_NAME = "Config";
 
         private readonly IEventAggregator _eventAggregator;
         private readonly ICached<string> _cache;
@@ -214,6 +214,8 @@ namespace NzbDrone.Core.Configuration
                 var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
                 xDoc.Add(new XElement(CONFIG_ELEMENT_NAME));
                 xDoc.Save(_configFile);
+
+                SaveConfigDictionary(GetConfigDictionary());
             }
         }
 
