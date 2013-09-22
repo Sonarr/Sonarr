@@ -1,38 +1,46 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Notifications;
 
 namespace NzbDrone.Core.ThingiProvider
 {
-    public class NotificationProviderRepository : BasicRepository<NotificationDefinition>
+    public interface IProviderRepository<TProvider> : IBasicRepository<TProvider> where TProvider : ModelBase, new()
     {
-        public NotificationProviderRepository(IDatabase database, IEventAggregator eventAggregator)
-            : base(database, eventAggregator)
-        {
-        }
+        TProvider GetByName(string name);
     }
 
 
-    public class IndexerProviderRepository : BasicRepository<IndexerDefinition>
+    public class ProviderRepository<TProviderDefinition> : BasicRepository<TProviderDefinition>, IProviderRepository<TProviderDefinition>
+        where TProviderDefinition : ModelBase,
+        new()
     {
-        public IndexerProviderRepository(IDatabase database, IEventAggregator eventAggregator)
+        protected ProviderRepository(IDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }
+
+        public TProviderDefinition GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public abstract class ProviderBase
+    public interface IProvider
     {
-        public ProviderDefinition Definition { get; set; }
+        string Name { get; }
+
+        IEnumerable<ProviderDefinition> DefaultDefinitions { get; }
+        ProviderDefinition Definition { get; set; }
     }
 
     public abstract class ProviderDefinition : ModelBase
     {
         public string Name { get; set; }
         public string Implementation { get; set; }
+        public bool Enable { get; set; }
 
         public string ConfigContract
         {

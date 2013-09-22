@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class Wombles : IndexerBase
+    public class Wombles : IndexerBase<NullSetting>
     {
         public override string Name
         {

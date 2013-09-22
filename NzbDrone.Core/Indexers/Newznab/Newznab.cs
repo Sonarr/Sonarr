@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class Newznab : IndexerWithSetting<NewznabSettings>
+    public class Newznab : IndexerBase<NewznabSettings>
     {
         public override IParseFeed Parser
         {
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public override IEnumerable<IndexerDefinition> DefaultDefinitions
+        public override IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get
             {
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             get
             {
-                return InstanceDefinition.Name;
+                return Definition.Name;
             }
         }
 

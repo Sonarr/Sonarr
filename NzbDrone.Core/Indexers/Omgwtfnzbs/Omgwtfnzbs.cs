@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
-    public class Omgwtfnzbs : IndexerWithSetting<OmgwtfnzbsSettings>
+    public class Omgwtfnzbs : IndexerBase<OmgwtfnzbsSettings>
     {
         public override string Name
         {

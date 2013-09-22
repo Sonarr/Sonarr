@@ -18,20 +18,22 @@ namespace NzbDrone.Api.Indexers
 
         private List<IndexerResource> GetSchema()
         {
-            var indexers = _indexerService.Schema();
+            /*         var indexers = _indexerService.Schema();
 
-            var result = new List<IndexerResource>(indexers.Count);
+                     var result = new List<IndexerResource>(indexers.Count);
 
-            foreach (var indexer in indexers)
-            {
-                var indexerResource = new IndexerResource();
-                indexerResource.InjectFrom(indexer);
-                indexerResource.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
+                     foreach (var indexer in indexers)
+                     {
+                         var indexerResource = new IndexerResource();
+                         indexerResource.InjectFrom(indexer);
+                         indexerResource.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
 
-                result.Add(indexerResource);
-            }
+                         result.Add(indexerResource);
+                     }
 
-            return result;
+                     return result;*/
+
+            return null;
         }
     }
 }

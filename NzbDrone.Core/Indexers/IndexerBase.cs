@@ -4,27 +4,35 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class IndexerBase : IIndexer
+    public abstract class IndexerBase<TSettings> : IIndexer
     {
         public abstract string Name { get; }
 
-        public abstract IndexerKind Kind { get; }
-
-        public virtual bool EnableByDefault { get { return true; } }
-
-        public IndexerDefinition InstanceDefinition { get; set; }
-
-        public virtual IEnumerable<IndexerDefinition> DefaultDefinitions
+        public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get
             {
                 yield return new IndexerDefinition
                 {
                     Name = Name,
-                    Enable = EnableByDefault,
+                    Enable = false,
                     Implementation = GetType().Name,
                     Settings = NullSetting.Instance
                 };
+            }
+        }
+
+        public ProviderDefinition Definition { get; set; }
+
+        public abstract IndexerKind Kind { get; }
+
+        public virtual bool EnableByDefault { get { return true; } }
+
+        protected TSettings Settings
+        {
+            get
+            {
+                return (TSettings)Definition.Settings;
             }
         }
 

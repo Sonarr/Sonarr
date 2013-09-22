@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Eztv
 {
-    public class Eztv : IndexerBase
+    public class Eztv : IndexerBase<NullSetting>
     {
         public override string Name
         {

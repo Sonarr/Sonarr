@@ -48,14 +48,14 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void nzbsorg_rss()
         {
             var indexer = new Newznab();
-            indexer.Settings = new NewznabSettings
-                {
-                    ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
-                    Url = "http://nzbs.org"
-                };
 
-            indexer.InstanceDefinition = new IndexerDefinition();
-            indexer.InstanceDefinition.Name = "nzbs.org";
+            indexer.Definition = new IndexerDefinition();
+            indexer.Definition.Name = "nzbs.org";
+            indexer.Definition.Settings = new NewznabSettings
+            {
+                ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
+                Url = "http://nzbs.org"
+            };
 
             var result = Subject.FetchRss(indexer);
 

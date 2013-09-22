@@ -132,7 +132,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReleaseInfo>> searchAction, SearchCriteriaBase criteriaBase)
         {
-            var indexers = _indexerService.GetAvailableIndexers().ToList();
+            var indexers = _indexerService.GetAvailableProviders().ToList();
             var reports = new List<ReleaseInfo>();
 
             _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);

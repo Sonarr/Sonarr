@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NzbDrone.Api.ClientSchema;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.ThingiProvider;
 using Omu.ValueInjecter;
 using FluentValidation;
 using NzbDrone.Api.Mapping;
@@ -62,47 +60,36 @@ namespace NzbDrone.Api.Indexers
 
         private void UpdateIndexer(IndexerResource indexerResource)
         {
-            var indexer = _indexerService.Get(indexerResource.Id);
-            indexer.InjectFrom(indexerResource);
-            indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
+            var indexer = GetIndexer(indexerResource);
 
-            ValidateIndexer(indexer);
+            ValidateIndexer(indexer.Settings);
 
             _indexerService.Update(indexer);
         }
 
 
-        private static void ValidateIndexer(Indexer indexer)
+        private static void ValidateIndexer(IProviderConfig config)
         {
-            if (indexer.Enable)
-            {
-                var validationResult = indexer.Settings.Validate();
+            var validationResult = config.Validate();
 
-                if (!validationResult.IsValid)
-                {
-                    throw new ValidationException(validationResult.Errors);
-                }
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
             }
         }
 
-        private Indexer GetIndexer(IndexerResource indexerResource)
+        private IndexerDefinition GetIndexer(IndexerResource indexerResource)
         {
-            var indexer = _indexerService.Schema()
-                               .SingleOrDefault(i =>
-                                        i.Implementation.Equals(indexerResource.Implementation,
-                                        StringComparison.InvariantCultureIgnoreCase));
 
-            if (indexer == null)
+            var definition = new IndexerDefinition();
+
+            definition.InjectFrom(indexerResource);
+            if (indexerResource.Enable)
             {
-                throw new BadRequestException("Invalid Indexer Implementation");
+                ValidateIndexer(definition.Settings);
             }
 
-            indexer.InjectFrom(indexerResource);
-            indexer.Settings = SchemaDeserializer.DeserializeSchema(indexer.Settings, indexerResource.Fields);
-
-            ValidateIndexer(indexer);
-
-            return indexer;
+            return definition;
         }
 
         private void DeleteIndexer(int id)

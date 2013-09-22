@@ -57,10 +57,8 @@ namespace NzbDrone.Core.Test.IndexerTests
             var indexers = Subject.All().ToList();
             indexers.Should().NotBeEmpty();
             indexers.Should().NotContain(c => c.Settings == null);
-            indexers.Should().NotContain(c => c.Instance == null);
             indexers.Should().NotContain(c => c.Name == null);
             indexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
-            indexers.Select(c => c.Instance).Should().OnlyHaveUniqueItems();
         }
 
 

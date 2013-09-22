@@ -241,7 +241,6 @@
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\NewznabTestService.cs" />
-    <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\IParseFeed.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
     <Compile Include="Indexers\Newznab\NewznabPreProcessor.cs" />
@@ -413,13 +412,14 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
-    <Compile Include="ThingiProvider\ProviderBase.cs" />
+    <Compile Include="ThingiProvider\IProvider.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
     <Compile Include="Rest\RestSharpExtensions.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="ThingiProvider\ProviderService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
