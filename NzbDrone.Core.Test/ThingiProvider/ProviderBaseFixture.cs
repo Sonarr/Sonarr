@@ -9,7 +9,7 @@ using NzbDrone.Core.ThingiProvider;
 namespace NzbDrone.Core.Test.ThingiProvider
 {
 
-    public class ProviderRepositoryFixture : DbTest<ProviderRepository<IndexerDefinition>, IndexerDefinition>
+    public class ProviderRepositoryFixture : DbTest<IndexerRepository, IndexerDefinition>
     {
         [Test]
         public void should_read_write_download_provider()

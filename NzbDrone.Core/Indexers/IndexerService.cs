@@ -12,10 +12,10 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerService : ProviderFactory<IIndexer, IndexerDefinition>
     {
-        private readonly IProviderRepository<IndexerDefinition> _providerRepository;
+        private readonly IIndexerRepository _providerRepository;
         private readonly IEnumerable<IIndexer> _providers;
 
-        public IndexerService(IProviderRepository<IndexerDefinition> providerRepository, IEnumerable<IIndexer> providers, Logger logger)
+        public IndexerService(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, Logger logger)
             : base(providerRepository, providers, logger)
         {
             _providerRepository = providerRepository;
