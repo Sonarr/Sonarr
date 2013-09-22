@@ -1,14 +1,23 @@
 ﻿'use strict';
 define(
     [
-        'marionette'
+        'marionette',
+        'Navbar/Search'
     ], function (Marionette) {
         return Marionette.ItemView.extend({
+            template : 'Navbar/NavbarTemplate',
+
+            ui: {
+                search: '.x-series-search'
+            },
+
             events: {
                 'click a': 'onClick'
             },
 
-            template : 'Navbar/NavbarTemplate',
+            onRender: function (){
+                this.ui.search.bindSearch();
+            },
 
             onClick: function (event) {
 
