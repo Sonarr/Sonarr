@@ -4,18 +4,13 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class Wombles : IndexerBase<NullSetting>
+    public class Wombles : IndexerBase<NullConfig>
     {
-        public override string Name
-        {
-            get { return "WomblesIndex"; }
-        }
-
-        public override IndexerKind Kind
+        public override DownloadProtocol Protocol
         {
             get
             {
-                return IndexerKind.Usenet;
+                return DownloadProtocol.Usenet;
             }
         }
 

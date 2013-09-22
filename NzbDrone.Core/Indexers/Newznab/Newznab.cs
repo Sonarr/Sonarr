@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             get
             {
                 //Todo: We should be able to update settings on start
-                if (Name.Equals("nzbs.org", StringComparison.InvariantCultureIgnoreCase))
+                if (Settings.Url.Contains("nzbs.org"))
                 {
                     Settings.Categories = new List<int> { 5000 };
                 }
@@ -115,19 +115,11 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&offset={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, offset));
         }
 
-        public override string Name
+        public override DownloadProtocol Protocol
         {
             get
             {
-                return Definition.Name;
-            }
-        }
-
-        public override IndexerKind Kind
-        {
-            get
-            {
-                return IndexerKind.Usenet;
+                return DownloadProtocol.Usenet;
             }
         }
 

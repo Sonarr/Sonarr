@@ -30,7 +30,7 @@ namespace NzbDrone.Core.ThingiProvider
 
     public interface IProvider
     {
-        string Name { get; }
+        Type ConfigContract { get; }
 
         IEnumerable<ProviderDefinition> DefaultDefinitions { get; }
         ProviderDefinition Definition { get; set; }
@@ -51,7 +51,6 @@ namespace NzbDrone.Core.ThingiProvider
             }
             set
             {
-
             }
         }
 
@@ -63,9 +62,9 @@ namespace NzbDrone.Core.ThingiProvider
         ValidationResult Validate();
     }
 
-    public class NullSetting : IProviderConfig
+    public class NullConfig : IProviderConfig
     {
-        public static readonly NullSetting Instance = new NullSetting();
+        public static readonly NullConfig Instance = new NullConfig();
 
         public ValidationResult Validate()
         {

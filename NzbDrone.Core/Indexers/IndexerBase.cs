@@ -6,7 +6,13 @@ namespace NzbDrone.Core.Indexers
 {
     public abstract class IndexerBase<TSettings> : IIndexer
     {
-        public abstract string Name { get; }
+        public Type ConfigContract
+        {
+            get
+            {
+                return typeof(TSettings);
+            }
+        }
 
         public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
         {
@@ -14,19 +20,17 @@ namespace NzbDrone.Core.Indexers
             {
                 yield return new IndexerDefinition
                 {
-                    Name = Name,
+                    Name = this.GetType().Name,
                     Enable = false,
                     Implementation = GetType().Name,
-                    Settings = NullSetting.Instance
+                    Settings = NullConfig.Instance
                 };
             }
         }
 
         public ProviderDefinition Definition { get; set; }
 
-        public abstract IndexerKind Kind { get; }
-
-        public virtual bool EnableByDefault { get { return true; } }
+        public abstract DownloadProtocol Protocol { get; }
 
         protected TSettings Settings
         {
@@ -42,9 +46,15 @@ namespace NzbDrone.Core.Indexers
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
         public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
+
+
+        public override string ToString()
+        {
+            return GetType().Name;
+        }
     }
 
-    public enum IndexerKind
+    public enum DownloadProtocol
     {
         Usenet,
         Torrent

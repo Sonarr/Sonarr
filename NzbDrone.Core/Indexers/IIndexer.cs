@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Indexers
     public interface IIndexer : IProvider
     {
         IParseFeed Parser { get; }
-        IndexerKind Kind { get; }
+        DownloadProtocol Protocol { get; }
 
         IEnumerable<string> RecentFeed { get; }
         IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);

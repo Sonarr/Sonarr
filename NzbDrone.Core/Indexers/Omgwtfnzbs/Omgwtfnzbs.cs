@@ -5,16 +5,11 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
     public class Omgwtfnzbs : IndexerBase<OmgwtfnzbsSettings>
     {
-        public override string Name
-        {
-            get { return "omgwtfnzbs"; }
-        }
-
-        public override IndexerKind Kind
+        public override DownloadProtocol Protocol
         {
             get
             {
-                return IndexerKind.Usenet;
+                return DownloadProtocol.Usenet;
             }
         }
 

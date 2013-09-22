@@ -52,21 +52,21 @@ namespace NzbDrone.Core.ThingiProvider
             return _providerRepository.Get(id);
         }
 
- /*       public List<TProvider> Schema()
-        {
-            var indexers = new List<Indexer>();
+        /*       public List<TProvider> Schema()
+               {
+                   var indexers = new List<Indexer>();
 
-            var newznab = new Indexer();
-            newznab.Instance = new Newznab.Newznab();
-            newznab.Id = 1;
-            newznab.Name = "Newznab";
-            newznab.Settings = new NewznabSettings();
-            newznab.Implementation = "Newznab";
+                   var newznab = new Indexer();
+                   newznab.Instance = new Newznab.Newznab();
+                   newznab.Id = 1;
+                   newznab.Name = "Newznab";
+                   newznab.Settings = new NewznabSettings();
+                   newznab.Implementation = "Newznab";
 
-            indexers.Add(newznab);
+                   indexers.Add(newznab);
 
-            return indexers;
-        }*/
+                   return indexers;
+               }*/
 
         public TProviderDefinition Create(TProviderDefinition provider)
         {
@@ -102,17 +102,11 @@ namespace NzbDrone.Core.ThingiProvider
 
             RemoveMissingImplementations();
 
-            var definitions = _providers.SelectMany(indexer => indexer.DefaultDefinitions);
+            InitializeProviders();
+        }
 
-            var currentProviders = All();
-
-            var newProviders = definitions.Where(def => currentProviders.All(c => c.Implementation != def.Implementation)).ToList();
-
-
-            if (newProviders.Any())
-            {
-                _providerRepository.InsertMany(newProviders.Cast<TProviderDefinition>().ToList());
-            }
+        protected virtual void InitializeProviders()
+        {
         }
 
         private void RemoveMissingImplementations()

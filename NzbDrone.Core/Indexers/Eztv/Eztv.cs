@@ -4,24 +4,14 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Eztv
 {
-    public class Eztv : IndexerBase<NullSetting>
+    public class Eztv : IndexerBase<NullConfig>
     {
-        public override string Name
-        {
-            get { return "Eztv"; }
-        }
-
-        public override IndexerKind Kind
+        public override DownloadProtocol Protocol
         {
             get
             {
-                return IndexerKind.Torrent;
+                return DownloadProtocol.Torrent;
             }
-        }
-
-        public override bool EnableByDefault
-        {
-            get { return false; }
         }
 
         public override IParseFeed Parser
@@ -36,10 +26,7 @@ namespace NzbDrone.Core.Indexers.Eztv
         {
             get
             {
-                return new[]
-                           {
-                              "http://www.ezrss.it/feed/"
-                           };
+                yield return "http://www.ezrss.it/feed/";
             }
         }
 
@@ -56,7 +43,7 @@ namespace NzbDrone.Core.Indexers.Eztv
 
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
         {
-            //EZTV doesn't support searching based on actual epidose airdate. they only support release date.
+            //EZTV doesn't support searching based on actual episode airdate. they only support release date.
             return new string[0];
         }
     }
