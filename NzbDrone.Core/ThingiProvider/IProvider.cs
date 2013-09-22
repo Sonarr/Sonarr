@@ -38,23 +38,28 @@ namespace NzbDrone.Core.ThingiProvider
 
     public abstract class ProviderDefinition : ModelBase
     {
+        private IProviderConfig _settings;
         public string Name { get; set; }
         public string Implementation { get; set; }
         public bool Enable { get; set; }
 
-        public string ConfigContract
+        public string ConfigContract { get; set; }
+
+        public IProviderConfig Settings
         {
             get
             {
-                if (Settings == null) return null;
-                return Settings.GetType().Name;
+                return _settings;
             }
             set
             {
+                _settings = value;
+                if (value != null)
+                {
+                    ConfigContract = value.GetType().Name;
+                }
             }
         }
-
-        public IProviderConfig Settings { get; set; }
     }
 
     public interface IProviderConfig

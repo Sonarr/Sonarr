@@ -7,6 +7,8 @@ namespace NzbDrone.Common.Reflection
 {
     public static class ReflectionExtensions
     {
+        public static readonly Assembly CoreAssembly = Assembly.Load("NzbDrone.Core");
+
         public static List<PropertyInfo> GetSimpleProperties(this Type type)
         {
             var properties = type.GetProperties();
@@ -56,6 +58,11 @@ namespace NzbDrone.Common.Reflection
             }
 
             return (T)attribute;
+        }
+
+        public static Type FindTypeByName(this Assembly assembly, string name)
+        {
+            return assembly.GetTypes().Single(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static bool HasAttribute<TAttribute>(this Type type)

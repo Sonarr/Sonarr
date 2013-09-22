@@ -28,7 +28,7 @@ namespace NzbDrone.Api.Notifications
             {
                 var notificationResource = new NotificationResource();
                 notificationResource.InjectFrom(notification);
-                notificationResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+                notificationResource.Fields = SchemaBuilder.ToSchema(notification.Settings);
                 notificationResource.TestCommand = String.Format("test{0}", notification.Implementation.ToLowerInvariant());
 
                 result.Add(notificationResource);

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Indexers
 
     }
 
-    public class IndexerService : ProviderFactory<IIndexer, IndexerDefinition>
+    public class IndexerService : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerService
     {
         private readonly IIndexerRepository _providerRepository;
         private readonly IEnumerable<IIndexer> _providers;

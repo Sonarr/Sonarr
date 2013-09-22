@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
+using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Notifications;
 using Omu.ValueInjecter;
 
@@ -39,7 +40,7 @@ namespace NzbDrone.Api.Notifications
             {
                 var notificationResource = new NotificationResource();
                 notificationResource.InjectFrom(notification);
-                notificationResource.Fields = SchemaBuilder.GenerateSchema(notification.Settings);
+                notificationResource.Fields = SchemaBuilder.ToSchema(notification.Settings);
                 notificationResource.TestCommand = String.Format("test{0}", notification.Implementation.ToLowerInvariant());
 
                 result.Add(notificationResource);
@@ -79,7 +80,10 @@ namespace NzbDrone.Api.Notifications
             }
 
             notification.InjectFrom(notificationResource);
-            notification.Settings = SchemaDeserializer.DeserializeSchema(notification.Settings, notificationResource.Fields);
+
+            //var configType = ReflectionExtensions.CoreAssembly.FindTypeByName(notification)
+
+            //notification.Settings = SchemaBuilder.ReadFormSchema(notification.Settings, notificationResource.Fields);
 
             return notification;
         }

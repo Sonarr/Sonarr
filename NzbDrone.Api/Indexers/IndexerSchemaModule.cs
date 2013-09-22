@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.ClientSchema;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Indexers;
 using Omu.ValueInjecter;
 
@@ -18,6 +19,9 @@ namespace NzbDrone.Api.Indexers
 
         private List<IndexerResource> GetSchema()
         {
+
+            var indexers = _indexerService.All().InjectTo<List<IndexerResource>>();
+
             /*         var indexers = _indexerService.Schema();
 
                      var result = new List<IndexerResource>(indexers.Count);
@@ -33,7 +37,7 @@ namespace NzbDrone.Api.Indexers
 
                      return result;*/
 
-            return null;
+            return indexers;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
         [Test]
         public void should_return_field_for_every_property()
         {
-            var schema = SchemaBuilder.GenerateSchema(new TestModel());
+            var schema = SchemaBuilder.ToSchema(new TestModel());
             schema.Should().HaveCount(2);
         }
 
@@ -26,7 +26,7 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
                     LastName = "Poop"
                 };
 
-            var schema = SchemaBuilder.GenerateSchema(model);
+            var schema = SchemaBuilder.ToSchema(model);
 
             schema.Should().Contain(c => c.Order == 1 && c.Name == "LastName" && c.Label == "Last Name" && c.HelpText == "Your Last Name" && (string) c.Value == "Poop");
             schema.Should().Contain(c => c.Order == 0 && c.Name == "FirstName" && c.Label == "First Name" && c.HelpText == "Your First Name" && (string) c.Value == "Bob");

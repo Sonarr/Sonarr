@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.ClientSchema;
+using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.ThingiProvider;
 using Omu.ValueInjecter;
@@ -35,15 +36,15 @@ namespace NzbDrone.Api.Indexers
 
         private List<IndexerResource> GetAll()
         {
-            var indexers = _indexerService.All();
+            var indexerDefinitions = _indexerService.All();
 
-            var result = new List<IndexerResource>(indexers.Count);
+            var result = new List<IndexerResource>(indexerDefinitions.Count);
 
-            foreach (var indexer in indexers)
+            foreach (var definition in indexerDefinitions)
             {
                 var indexerResource = new IndexerResource();
-                indexerResource.InjectFrom(indexer);
-                indexerResource.Fields = SchemaBuilder.GenerateSchema(indexer.Settings);
+                indexerResource.InjectFrom(definition);
+                indexerResource.Fields = SchemaBuilder.ToSchema(definition.Settings);
 
                 result.Add(indexerResource);
             }
@@ -53,14 +54,14 @@ namespace NzbDrone.Api.Indexers
 
         private int CreateIndexer(IndexerResource indexerResource)
         {
-            var indexer = GetIndexer(indexerResource);
+            var indexer = GetDefinition(indexerResource);
             indexer = _indexerService.Create(indexer);
             return indexer.Id;
         }
 
         private void UpdateIndexer(IndexerResource indexerResource)
         {
-            var indexer = GetIndexer(indexerResource);
+            var indexer = GetDefinition(indexerResource);
 
             ValidateIndexer(indexer.Settings);
 
@@ -78,12 +79,16 @@ namespace NzbDrone.Api.Indexers
             }
         }
 
-        private IndexerDefinition GetIndexer(IndexerResource indexerResource)
+        private IndexerDefinition GetDefinition(IndexerResource indexerResource)
         {
 
             var definition = new IndexerDefinition();
 
             definition.InjectFrom(indexerResource);
+
+            var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
+            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(indexerResource.Fields, configContract);
+
             if (indexerResource.Enable)
             {
                 ValidateIndexer(definition.Settings);

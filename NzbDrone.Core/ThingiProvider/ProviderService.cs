@@ -14,7 +14,6 @@ namespace NzbDrone.Core.ThingiProvider
         List<TProviderDefinition> All();
         List<TProvider> GetAvailableProviders();
         TProviderDefinition Get(int id);
-        //List<TProvider> Schema();
         TProviderDefinition Create(TProviderDefinition indexer);
         void Update(TProviderDefinition indexer);
         void Delete(int id);
@@ -51,22 +50,6 @@ namespace NzbDrone.Core.ThingiProvider
         {
             return _providerRepository.Get(id);
         }
-
-        /*       public List<TProvider> Schema()
-               {
-                   var indexers = new List<Indexer>();
-
-                   var newznab = new Indexer();
-                   newznab.Instance = new Newznab.Newznab();
-                   newznab.Id = 1;
-                   newznab.Name = "Newznab";
-                   newznab.Settings = new NewznabSettings();
-                   newznab.Implementation = "Newznab";
-
-                   indexers.Add(newznab);
-
-                   return indexers;
-               }*/
 
         public TProviderDefinition Create(TProviderDefinition provider)
         {
@@ -113,10 +96,10 @@ namespace NzbDrone.Core.ThingiProvider
         {
             var storedProvider = _providerRepository.All();
 
-            foreach (var providerDefinition in storedProvider.Where(i => GetImplementation(i) == null))
+            foreach (var invalidDefinition in storedProvider.Where(def => GetImplementation(def) == null))
             {
-                _logger.Debug("Removing {0} ", providerDefinition.Name);
-                _providerRepository.Delete(providerDefinition);
+                _logger.Debug("Removing {0} ", invalidDefinition.Name);
+                _providerRepository.Delete(invalidDefinition);
             }
         }
     }
