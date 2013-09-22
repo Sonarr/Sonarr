@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Host.AccessControl
@@ -11,43 +9,50 @@ namespace NzbDrone.Host.AccessControl
     public interface IUrlAclAdapter
     {
         void ConfigureUrl();
-        string UrlAcl { get; }
+        string Url { get; }
+        string HttpsUrl { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
     {
-        private const string URL_ACL = "http://{0}:{1}/";
-
-        private readonly IProcessProvider _processProvider;
+        private readonly INetshProvider _netshProvider;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public string UrlAcl { get; private set; }
+        public string Url { get; private set; }
+        public string HttpsUrl { get; private set; }
+
         private string _localUrl;
         private string _wildcardUrl;
+        private string _localHttpsUrl;
+        private string _wildcardHttpsUrl;
 
-        public UrlAclAdapter(IProcessProvider processProvider,
+        public UrlAclAdapter(INetshProvider netshProvider,
                              IConfigFileProvider configFileProvider,
                              IRuntimeInfo runtimeInfo,
                              Logger logger)
         {
-            _processProvider = processProvider;
+            _netshProvider = netshProvider;
             _configFileProvider = configFileProvider;
             _runtimeInfo = runtimeInfo;
             _logger = logger;
 
-             _localUrl = String.Format(URL_ACL, "localhost", _configFileProvider.Port);
-             _wildcardUrl = String.Format(URL_ACL, "*", _configFileProvider.Port);
+            _localUrl = String.Format("http://localhost:{0}/", _configFileProvider.Port);
+            _wildcardUrl = String.Format("http://*:{0}/", _configFileProvider.Port);
+            _localHttpsUrl = String.Format("https://localhost:{0}/", _configFileProvider.SslPort);
+            _wildcardHttpsUrl = String.Format("https://*:{0}/", _configFileProvider.SslPort);
 
-            UrlAcl = _wildcardUrl;
+            Url = _wildcardUrl;
+            HttpsUrl = _wildcardHttpsUrl;
         }
 
         public void ConfigureUrl()
         {
-            if (!_runtimeInfo.IsAdmin && !IsRegistered)
+            if (!_runtimeInfo.IsAdmin)
             {
-                UrlAcl = _localUrl;
+                if (!IsRegistered(_wildcardUrl)) Url = _localUrl;
+                if (!IsRegistered(_wildcardHttpsUrl)) HttpsUrl = _localHttpsUrl;                
             }
 
             if (_runtimeInfo.IsAdmin)
@@ -61,42 +66,24 @@ namespace NzbDrone.Host.AccessControl
             if (OsInfo.Version.Major < 6)
                 return;
 
-            RegisterUrl();
+            RegisterUrl(Url);
+            RegisterUrl(HttpsUrl);
+        }
+        
+        private bool IsRegistered(string urlAcl)
+        {
+            var arguments = String.Format("http show urlacl {0}", urlAcl);
+            var output = _netshProvider.Run(arguments);
+
+            if (output == null || !output.Standard.Any()) return false;
+
+            return output.Standard.Any(line => line.Contains(urlAcl));
         }
 
-        private bool IsRegistered
+        private void RegisterUrl(string urlAcl)
         {
-            get
-            {
-                var arguments = String.Format("http show urlacl {0}", _wildcardUrl);
-                var output = RunNetsh(arguments);
-
-                if (output == null || !output.Standard.Any()) return false;
-
-                return output.Standard.Any(line => line.Contains(_wildcardUrl));
-            }
-        }
-
-        private void RegisterUrl()
-        {
-            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", UrlAcl);
-            RunNetsh(arguments);
-        }
-
-        private ProcessOutput RunNetsh(string arguments)
-        {
-            try
-            {
-                var output = _processProvider.StartAndCapture("netsh.exe", arguments);
-
-                return output;
-            }
-            catch (Exception ex)
-            {
-                _logger.WarnException("Error executing netsh with arguments: " + arguments, ex);
-            }
-
-            return null;
+            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl);
+            _netshProvider.Run(arguments);
         }
     }
 }

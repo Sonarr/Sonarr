@@ -21,17 +21,24 @@ namespace NzbDrone.Host.Owin
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IUrlAclAdapter _urlAclAdapter;
         private readonly IFirewallAdapter _firewallAdapter;
+        private readonly ISslAdapter _sslAdapter;
         private readonly Logger _logger;
         private IDisposable _host;
 
-        public OwinHostController(IConfigFileProvider configFileProvider, IEnumerable<IOwinMiddleWare> owinMiddleWares,
-            IRuntimeInfo runtimeInfo, IUrlAclAdapter urlAclAdapter, IFirewallAdapter firewallAdapter, Logger logger)
+        public OwinHostController(IConfigFileProvider configFileProvider,
+                                  IEnumerable<IOwinMiddleWare> owinMiddleWares,
+                                  IRuntimeInfo runtimeInfo,
+                                  IUrlAclAdapter urlAclAdapter,
+                                  IFirewallAdapter firewallAdapter,
+                                  ISslAdapter sslAdapter,
+                                  Logger logger)
         {
             _configFileProvider = configFileProvider;
             _owinMiddleWares = owinMiddleWares;
             _runtimeInfo = runtimeInfo;
             _urlAclAdapter = urlAclAdapter;
             _firewallAdapter = firewallAdapter;
+            _sslAdapter = sslAdapter;
             _logger = logger;
         }
 
@@ -44,17 +51,24 @@ namespace NzbDrone.Host.Owin
                 if (_runtimeInfo.IsAdmin)
                 {
                     _firewallAdapter.MakeAccessible();
+                    _sslAdapter.Register();
                 }
 
                 _urlAclAdapter.ConfigureUrl();
             }
 
-            var options = new StartOptions(_urlAclAdapter.UrlAcl)
+            var options = new StartOptions(_urlAclAdapter.Url)
                 {
                     ServerFactory = "Microsoft.Owin.Host.HttpListener"
                 };
 
-            _logger.Info("starting server on {0}", _urlAclAdapter.UrlAcl);
+            if (_configFileProvider.EnableSsl)
+            {
+                _logger.Trace("SSL enabled, listening on: {0}", _urlAclAdapter.HttpsUrl);
+                options.Urls.Add(_urlAclAdapter.HttpsUrl);
+            }
+
+            _logger.Info("starting server on {0}", _urlAclAdapter.Url);
 
             try
             {

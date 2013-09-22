@@ -117,6 +117,8 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AccessControl\NetshProvider.cs" />
+    <Compile Include="AccessControl\SslAdapter.cs" />
     <Compile Include="ApplicationServer.cs">
       <SubType>Component</SubType>
     </Compile>

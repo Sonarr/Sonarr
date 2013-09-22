@@ -20,6 +20,8 @@ namespace NzbDrone.Core.Configuration
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
         int Port { get; }
+        int SslPort { get; }
+        bool EnableSsl { get; }
         bool LaunchBrowser { get; }
         bool AuthenticationEnabled { get; }
         string Username { get; }
@@ -27,6 +29,7 @@ namespace NzbDrone.Core.Configuration
         string LogLevel { get; }
         string Branch { get; }
         bool Torrent { get; }
+        string SslCertHash { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -90,6 +93,16 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("Port", 8989); }
         }
 
+        public int SslPort
+        {
+            get { return GetValueInt("SslPort", 9898); }
+        }
+
+        public bool EnableSsl
+        {
+            get { return GetValueBoolean("EnableSsl", false); }
+        }
+
         public bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser", true); }
@@ -123,6 +136,11 @@ namespace NzbDrone.Core.Configuration
         public string LogLevel
         {
             get { return GetValue("LogLevel", "Info"); }
+        }
+
+        public string SslCertHash
+        {
+            get { return GetValue("SslCertHash", ""); }
         }
 
         public int GetValueInt(string key, int defaultValue)
