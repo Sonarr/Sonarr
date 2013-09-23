@@ -1,20 +1,28 @@
+using System;
 using System.IO;
 using Nancy;
+using Nancy.Responses;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Frontend.Mappers
 {
     public class IndexHtmlMapper : StaticResourceMapperBase
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly string _indexPath;
 
-        public IndexHtmlMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+        public IndexHtmlMapper(IAppFolderInfo appFolderInfo,
+                               IDiskProvider diskProvider,
+                               IConfigFileProvider configFileProvider,
+                               Logger logger)
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
+            _configFileProvider = configFileProvider;
             _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "index.html");
         }
 
@@ -48,9 +56,9 @@ namespace NzbDrone.Api.Frontend.Mappers
 
             text = text.Replace(".css", ".css?v=" + BuildInfo.Version);
             text = text.Replace(".js", ".js?v=" + BuildInfo.Version);
+            text = text.Replace("API_KEY", _configFileProvider.ApiKey);
 
             return text;
         }
-
     }
 }

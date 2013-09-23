@@ -28,13 +28,14 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
+        string ApiKey { get; }
         bool Torrent { get; }
         string SslCertHash { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
     {
-        private const string CONFIG_ELEMENT_NAME = "Config";
+        public const string CONFIG_ELEMENT_NAME = "Config";
 
         private readonly IEventAggregator _eventAggregator;
         private readonly ICached<string> _cache;
@@ -106,6 +107,14 @@ namespace NzbDrone.Core.Configuration
         public bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser", true); }
+        }
+
+        public string ApiKey
+        {
+            get
+            {
+                return GetValue("ApiKey", Guid.NewGuid().ToString().Replace("-", ""));
+            }
         }
 
         public bool Torrent
@@ -223,6 +232,8 @@ namespace NzbDrone.Core.Configuration
                 var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
                 xDoc.Add(new XElement(CONFIG_ELEMENT_NAME));
                 xDoc.Save(_configFile);
+
+                SaveConfigDictionary(GetConfigDictionary());
             }
         }
 

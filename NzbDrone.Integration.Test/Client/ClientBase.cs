@@ -14,10 +14,10 @@ namespace NzbDrone.Integration.Test.Client
     {
         private readonly IRestClient _restClient;
         private readonly string _resource;
-
+        private readonly string _apiKey;
         private readonly Logger _logger;
 
-        public ClientBase(IRestClient restClient, string resource = null)
+        public ClientBase(IRestClient restClient, string apiKey, string resource = null)
         {
             if (resource == null)
             {
@@ -26,6 +26,7 @@ namespace NzbDrone.Integration.Test.Client
 
             _restClient = restClient;
             _resource = resource;
+            _apiKey = apiKey;
 
             _logger = LogManager.GetLogger("REST");
         }
@@ -88,10 +89,14 @@ namespace NzbDrone.Integration.Test.Client
 
         public RestRequest BuildRequest(string command = "")
         {
-            return new RestRequest(_resource + "/" + command.Trim('/'))
+            var request = new RestRequest(_resource + "/" + command.Trim('/'))
                 {
-                    RequestFormat = DataFormat.Json
+                    RequestFormat = DataFormat.Json,
                 };
+
+            request.AddHeader("Authorization", _apiKey);
+
+            return request;
         }
 
         public T Get<T>(IRestRequest request, HttpStatusCode statusCode = HttpStatusCode.OK) where T : class, new()

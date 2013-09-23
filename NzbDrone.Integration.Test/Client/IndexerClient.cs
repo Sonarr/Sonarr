@@ -5,12 +5,9 @@ namespace NzbDrone.Integration.Test.Client
 {
     public class IndexerClient : ClientBase<IndexerResource>
     {
-        public IndexerClient(IRestClient restClient)
-            : base(restClient)
+        public IndexerClient(IRestClient restClient, string apiKey)
+            : base(restClient, apiKey)
         {
         }
-
-
-
     }
 }

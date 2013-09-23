@@ -24,12 +24,9 @@ namespace NzbDrone.Api.Frontend.Mappers
             {
                 _caseSensitive = true;
             }
-
-
         }
 
         protected abstract string Map(string resourceUrl);
-
 
         public abstract bool CanHandle(string resourceUrl);
 

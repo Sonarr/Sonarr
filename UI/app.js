@@ -33,12 +33,19 @@ require.config({
         $: {
             exports: '$',
 
-            init: function () {
+            deps   :
+                [
+                    'Mixins/jquery.ajax'
+                ],
+
+            init: function (AjaxMixin) {
                 require(
                     [
                         'jQuery/ToTheTop',
                         'Instrumentation/ErrorHandler'
                     ]);
+
+                AjaxMixin.apply($);
             }
 
         },
@@ -75,14 +82,10 @@ require.config({
         backbone: {
             deps   :
                 [
-                    'Mixins/backbone.ajax',
                     'underscore',
                     '$'
                 ],
-            exports: 'Backbone',
-            init   : function (AjaxMixin) {
-                AjaxMixin.apply(Backbone);
-            }
+            exports: 'Backbone'
         },
 
 
