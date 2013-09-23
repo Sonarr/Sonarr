@@ -5,7 +5,6 @@ using Marr.Data.Reflection;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 

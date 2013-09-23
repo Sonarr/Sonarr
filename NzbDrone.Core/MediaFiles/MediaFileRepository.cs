@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 
@@ -9,10 +7,8 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IMediaFileRepository : IBasicRepository<EpisodeFile>
     {
-        EpisodeFile GetFileByPath(string path);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
-        bool Exists(string path);
     }
 
 
@@ -21,11 +17,6 @@ namespace NzbDrone.Core.MediaFiles
         public MediaFileRepository(IDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-        public EpisodeFile GetFileByPath(string path)
-        {
-            return Query.SingleOrDefault(c => c.Path == path);
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
@@ -40,9 +31,5 @@ namespace NzbDrone.Core.MediaFiles
                         .ToList();
         }
 
-        public bool Exists(string path)
-        {
-            return Query.Any(c => c.Path == path);
-        }
     }
 }

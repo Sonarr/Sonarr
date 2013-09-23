@@ -62,7 +62,6 @@ namespace NzbDrone.Core.Rest
             return client.Execute(request).ValidateResponse(client);
         }
 
-
         public static void AddQueryString(this IRestRequest request, string name, object value)
         {
             request.AddParameter(name, value.ToString(), ParameterType.GetOrPost);

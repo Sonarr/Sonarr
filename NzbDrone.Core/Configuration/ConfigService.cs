@@ -6,7 +6,6 @@ using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 

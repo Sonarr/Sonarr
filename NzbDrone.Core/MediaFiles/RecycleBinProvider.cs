@@ -6,7 +6,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;

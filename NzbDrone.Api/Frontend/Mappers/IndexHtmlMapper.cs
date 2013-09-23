@@ -1,4 +1,5 @@
 using System.IO;
+using Nancy;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -25,6 +26,14 @@ namespace NzbDrone.Api.Frontend.Mappers
         public override bool CanHandle(string resourceUrl)
         {
             return !resourceUrl.Contains(".");
+        }
+
+        public override Response GetResponse(string resourceUrl)
+        {
+            var response = base.GetResponse(resourceUrl);
+            response.Headers["X-UA-Compatible"] = "IE=edge";
+
+            return response;
         }
 
         protected override Stream GetContentStream(string filePath)

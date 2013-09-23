@@ -58,8 +58,7 @@ namespace NzbDrone.Core.Messaging.Commands.Tracking
 
         public Command FindExisting(Command command)
         {
-            return RunningCommands().Where(c => c.GetType() == command.GetType())
-                .SingleOrDefault(t => CommandEqualityComparer.Instance.Equals(t, command));
+            return RunningCommands().SingleOrDefault(t => CommandEqualityComparer.Instance.Equals(t, command));
         }
 
         public void Store(Command command)

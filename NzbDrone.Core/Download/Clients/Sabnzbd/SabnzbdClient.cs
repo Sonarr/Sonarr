@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 using RestSharp;
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 CheckForError(response);
 
-                var sabQueue = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
+                var sabQueue = Json.Deserialize<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
 
                 var queueItems = new List<QueueItem>();
 
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             CheckForError(response);
 
-            var items = JsonConvert.DeserializeObject<SabHistory>(JObject.Parse(response).SelectToken("history").ToString()).Items;
+            var items = Json.Deserialize<SabHistory>(JObject.Parse(response).SelectToken("history").ToString()).Items;
             return items ?? new List<SabHistoryItem>();
         }
 
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             if (String.IsNullOrWhiteSpace(response))
                 return new SabCategoryModel { categories = new List<string>() };
 
-            var categories = JsonConvert.DeserializeObject<SabCategoryModel>(response);
+            var categories = Json.Deserialize<SabCategoryModel>(response);
 
             return categories;
         }
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             if (String.IsNullOrWhiteSpace(response))
                 return null;
 
-            var version = JsonConvert.DeserializeObject<SabVersionModel>(response);
+            var version = Json.Deserialize<SabVersionModel>(response);
 
             return version;
         }
@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private void CheckForError(string response)
         {
-            var result = JsonConvert.DeserializeObject<SabJsonError>(response);
+            var result = Json.Deserialize<SabJsonError>(response);
 
             if (result.Status != null && result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
                 throw new ApplicationException(result.Error);

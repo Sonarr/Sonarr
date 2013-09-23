@@ -17,12 +17,12 @@ namespace NzbDrone.Core.Indexers.Newznab
             var attributes = item.Elements("attr").ToList();
             var sizeElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("size", StringComparison.CurrentCultureIgnoreCase));
 
-            if (sizeElement == null)
+            if (sizeElement != null)
             {
-
+                return Convert.ToInt64(sizeElement.Attribute("value").Value);
             }
 
-            return Convert.ToInt64(sizeElement.Attribute("value").Value);
+            return ParseSize(item.Description());
         }
 
         protected override ReleaseInfo PostProcessor(XElement item, ReleaseInfo currentResult)

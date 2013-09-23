@@ -6,7 +6,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;

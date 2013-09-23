@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 
@@ -36,11 +36,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             };
 
             _logger.Info("Adding report [{0}] to the queue.", title);
-            var response = PostCommand(JsonConvert.SerializeObject(command));
+            var response = PostCommand(command.ToJson());
 
             CheckForError(response);
 
-            var success = JsonConvert.DeserializeObject<EnqueueResponse>(response).Result;
+            var success = Json.Deserialize<EnqueueResponse>(response).Result;
             _logger.Debug("Queue Response: [{0}]", success);
 
         }
@@ -61,11 +61,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                     Params = null
                 };
 
-            var response = PostCommand(JsonConvert.SerializeObject(command));
+            var response = PostCommand(command.ToJson());
 
             CheckForError(response);
 
-            var itmes = JsonConvert.DeserializeObject<NzbGetQueue>(response).QueueItems;
+            var itmes = Json.Deserialize<NzbGetQueue>(response).QueueItems;
 
             foreach (var nzbGetQueueItem in itmes)
             {
@@ -101,11 +101,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             };
 
             var address = String.Format(@"{0}:{1}", host, port);
-            var response = _httpProvider.PostCommand(address, username, password, JsonConvert.SerializeObject(command));
+            var response = _httpProvider.PostCommand(address, username, password, command.ToJson());
 
             CheckForError(response);
 
-            return JsonConvert.DeserializeObject<VersionModel>(response);
+            return Json.Deserialize<VersionModel>(response);
         }
 
         public virtual string Test(string host, int port, string username, string password)
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private void CheckForError(string response)
         {
-            var result = JsonConvert.DeserializeObject<JsonError>(response);
+            var result = Json.Deserialize<JsonError>(response);
 
             if (result.Error != null)
                 throw new ApplicationException(result.Error.ToString());

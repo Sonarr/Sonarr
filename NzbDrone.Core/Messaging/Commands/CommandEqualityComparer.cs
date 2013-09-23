@@ -26,6 +26,11 @@ namespace NzbDrone.Core.Messaging.Commands
                     continue;
                 }
 
+                if (xProperty.DeclaringType == typeof (Command))
+                {
+                    continue;
+                }
+
                 var yProperty = yProperties.Single(p => p.Name == xProperty.Name);
 
                 var xValue = xProperty.GetValue(x, null);

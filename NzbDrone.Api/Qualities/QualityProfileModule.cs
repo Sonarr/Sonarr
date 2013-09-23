@@ -8,9 +8,9 @@ namespace NzbDrone.Api.Qualities
 {
     public class QualityProfileModule : NzbDroneRestModule<QualityProfileResource>
     {
-        private readonly QualityProfileService _qualityProfileService;
+        private readonly IQualityProfileService _qualityProfileService;
 
-        public QualityProfileModule(QualityProfileService qualityProfileService)
+        public QualityProfileModule(IQualityProfileService qualityProfileService)
             : base("/qualityprofiles")
         {
             _qualityProfileService = qualityProfileService;

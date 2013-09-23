@@ -4,7 +4,6 @@ using NLog;
 using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation

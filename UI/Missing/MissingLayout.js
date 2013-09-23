@@ -74,16 +74,17 @@ define(
                 }));
             },
 
-            onShow: function () {
-                var self = this;
 
-                this.missing.show(new LoadingView());
-
+            initialize: function () {
                 this.missingCollection = new MissingCollection();
-                this.missingCollection.fetch().done(function () {
-                    self._showTable();
-                });
 
+                this.listenTo(this.missingCollection, 'sync', this._showTable);
+            },
+
+
+            onShow: function () {
+                this.missing.show(new LoadingView());
+                this.missingCollection.fetch();
                 this._showToolbar();
             },
 

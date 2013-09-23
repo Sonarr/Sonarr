@@ -19,5 +19,4 @@ define(function () {
             items    : 20
         });
     };
-
 });

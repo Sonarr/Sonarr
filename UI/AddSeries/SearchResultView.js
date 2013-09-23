@@ -9,10 +9,11 @@ define(
         'Series/SeriesCollection',
         'Config',
         'Shared/Messenger',
+        'Mixins/AsValidatedView',
         'jquery.dotdotdot'
-    ], function (App, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger) {
+    ], function (App, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
 
-        return Marionette.ItemView.extend({
+        var view = Marionette.ItemView.extend({
 
             template: 'AddSeries/SearchResultViewTemplate',
 
@@ -146,4 +147,9 @@ define(
                     });
             }
         });
+
+
+        AsValidatedView.apply(view);
+
+        return view;
     });

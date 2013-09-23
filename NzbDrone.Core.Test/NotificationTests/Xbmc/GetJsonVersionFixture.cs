@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Notifications.Xbmc;
-using NzbDrone.Core.Model.Xbmc;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.NotificationTests.Xbmc

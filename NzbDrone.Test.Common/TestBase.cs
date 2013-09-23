@@ -9,7 +9,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common.AutoMoq;
 
@@ -62,7 +61,6 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        protected Mock<RestProvider> MockedRestProvider { get; private set; }
 
         protected int RandomNumber
         {
@@ -101,8 +99,6 @@ namespace NzbDrone.Test.Common
             LogManager.ReconfigExistingLoggers();
 
             TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
-
-            MockedRestProvider = new Mock<RestProvider>();
 
             Directory.CreateDirectory(TempFolder);
         }

@@ -5,8 +5,10 @@ define(
         'marionette',
         'AddSeries/Collection',
         'AddSeries/SearchResultCollectionView',
-        'Shared/LoadingView'
-    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, LoadingView) {
+        'AddSeries/NotFoundView',
+        'Shared/LoadingView',
+        'underscore'
+    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, NotFoundView, LoadingView, _) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesTemplate',
 
@@ -24,18 +26,13 @@ define(
                 'click .x-load-more': '_onLoadMore'
             },
 
-            _onLoadMore: function () {
-                var showingAll = this.resultCollectionView.showMore();
-
-                if (showingAll) {
-                    this.ui.loadMore.hide();
-                    this.ui.searchBar.show();
-                }
-            },
-
             initialize: function (options) {
-                this.collection = new AddSeriesCollection({unmappedFolderModel: this.model});
                 this.isExisting = options.isExisting;
+                this.collection = new AddSeriesCollection();
+
+                if (this.isExisting) {
+                    this.collection.unmappedFolderModel = this.model;
+                }
 
                 if (this.isExisting) {
                     this.className = 'existing-series';
@@ -44,11 +41,29 @@ define(
                 else {
                     this.className = 'new-series';
                 }
+
+                this.listenTo(this.collection, 'sync', this._showResults);
+
+                this.resultCollectionView = new SearchResultCollectionView({
+                    collection: this.collection,
+                    isExisting: this.isExisting
+                });
+
+                this.throttledSearch = _.debounce(this.search, 1000, {trailing: true}).bind(this);
             },
 
             _onSeriesAdded: function (options) {
-                if (options.series.get('path') === this.model.get('folder').path) {
+                if (this.isExisting && options.series.get('path') === this.model.get('folder').path) {
                     this.close();
+                }
+            },
+
+            _onLoadMore: function () {
+                var showingAll = this.resultCollectionView.showMore();
+                this.ui.searchBar.show();
+
+                if (showingAll) {
+                    this.ui.loadMore.hide();
                 }
             },
 
@@ -57,53 +72,56 @@ define(
 
                 this.$el.addClass(this.className);
 
-                this.ui.seriesSearch.data('timeout', null).keyup(function () {
-                    window.clearTimeout(self.$el.data('timeout'));
-                    self.$el.data('timeout', window.setTimeout(function () {
-                        self.search.call(self, {
-                            term: self.ui.seriesSearch.val()
-                        });
-                    }, 500));
+                this.ui.seriesSearch.keyup(function () {
+                    self.searchResult.close();
+                    self._abortExistingSearch();
+                    self.throttledSearch({
+                        term: self.ui.seriesSearch.val()
+                    })
                 });
 
                 if (this.isExisting) {
                     this.ui.searchBar.hide();
                 }
+            },
 
-                this.resultCollectionView = new SearchResultCollectionView({
-                    collection: this.collection,
-                    isExisting: this.isExisting
-                });
+            onShow: function () {
+                this.searchResult.show(this.resultCollectionView);
             },
 
             search: function (options) {
 
-                var self = this;
-
-                this.abortExistingSearch();
-
                 this.collection.reset();
 
-                if (!options || options.term === '') {
-                    this.searchResult.close();
+                if (!options.term || options.term === this.collection.term) {
+                    return $.Deferred().resolve();
                 }
-                else {
-                    this.searchResult.show(new LoadingView());
-                    this.currentSearchPromise = this.collection.fetch({
-                        data: { term: options.term }
-                    }).done(function () {
-                            if (!self.isClosed) {
-                                self.searchResult.show(self.resultCollectionView);
-                                if (!self.showingAll && self.isExisting) {
-                                    self.ui.loadMore.show();
-                                }
-                            }
-                        });
-                }
+
+                this.searchResult.show(new LoadingView());
+                this.collection.term = options.term;
+                this.currentSearchPromise = this.collection.fetch({
+                    data: { term: options.term }
+                });
+
                 return this.currentSearchPromise;
             },
 
-            abortExistingSearch: function () {
+            _showResults: function () {
+                if (!this.isClosed) {
+
+                    if (this.collection.length === 0) {
+                        this.searchResult.show(new NotFoundView({term: this.collection.term}));
+                    }
+                    else {
+                        this.searchResult.show(this.resultCollectionView);
+                        if (!this.showingAll && this.isExisting) {
+                            this.ui.loadMore.show();
+                        }
+                    }
+                }
+            },
+
+            _abortExistingSearch: function () {
                 if (this.currentSearchPromise && this.currentSearchPromise.readyState > 0 && this.currentSearchPromise.readyState < 4) {
                     console.log('aborting previous pending search request.');
                     this.currentSearchPromise.abort();

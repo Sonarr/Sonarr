@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Test.Common;
 using NzbDrone.Update.UpdateEngine;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;

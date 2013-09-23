@@ -5,7 +5,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;

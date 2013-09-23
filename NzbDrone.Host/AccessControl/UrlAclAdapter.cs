@@ -1,6 +1,6 @@
 using System;
+using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
@@ -8,56 +8,82 @@ namespace NzbDrone.Host.AccessControl
 {
     public interface IUrlAclAdapter
     {
-        void RefreshRegistration();
-        string UrlAcl { get; }
+        void ConfigureUrl();
+        string Url { get; }
+        string HttpsUrl { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
     {
-        private readonly IProcessProvider _processProvider;
+        private readonly INetshProvider _netshProvider;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public UrlAclAdapter(IProcessProvider processProvider, IConfigFileProvider configFileProvider, Logger logger)
+        public string Url { get; private set; }
+        public string HttpsUrl { get; private set; }
+
+        private string _localUrl;
+        private string _wildcardUrl;
+        private string _localHttpsUrl;
+        private string _wildcardHttpsUrl;
+
+        public UrlAclAdapter(INetshProvider netshProvider,
+                             IConfigFileProvider configFileProvider,
+                             IRuntimeInfo runtimeInfo,
+                             Logger logger)
         {
-            _processProvider = processProvider;
+            _netshProvider = netshProvider;
             _configFileProvider = configFileProvider;
+            _runtimeInfo = runtimeInfo;
             _logger = logger;
+
+            _localUrl = String.Format("http://localhost:{0}/", _configFileProvider.Port);
+            _wildcardUrl = String.Format("http://*:{0}/", _configFileProvider.Port);
+            _localHttpsUrl = String.Format("https://localhost:{0}/", _configFileProvider.SslPort);
+            _wildcardHttpsUrl = String.Format("https://*:{0}/", _configFileProvider.SslPort);
+
+            Url = _wildcardUrl;
+            HttpsUrl = _wildcardHttpsUrl;
         }
 
-        public string UrlAcl
+        public void ConfigureUrl()
         {
-            get
+            if (!_runtimeInfo.IsAdmin)
             {
-                return "http://*:" + _configFileProvider.Port + "/";
+                if (!IsRegistered(_wildcardUrl)) Url = _localUrl;
+                if (!IsRegistered(_wildcardHttpsUrl)) HttpsUrl = _localHttpsUrl;                
+            }
+
+            if (_runtimeInfo.IsAdmin)
+            {
+                RefreshRegistration();
             }
         }
 
-        public void RefreshRegistration()
+        private void RefreshRegistration()
         {
             if (OsInfo.Version.Major < 6)
                 return;
 
-            RegisterUrl();
+            RegisterUrl(Url);
+            RegisterUrl(HttpsUrl);
+        }
+        
+        private bool IsRegistered(string urlAcl)
+        {
+            var arguments = String.Format("http show urlacl {0}", urlAcl);
+            var output = _netshProvider.Run(arguments);
+
+            if (output == null || !output.Standard.Any()) return false;
+
+            return output.Standard.Any(line => line.Contains(urlAcl));
         }
 
-        private void RegisterUrl()
+        private void RegisterUrl(string urlAcl)
         {
-            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", UrlAcl);
-            RunNetsh(arguments);
-        }
-
-        private void RunNetsh(string arguments)
-        {
-            try
-            {
-                var process = _processProvider.Start("netsh.exe", arguments);
-                process.WaitForExit(5000);
-            }
-            catch (Exception ex)
-            {
-                _logger.WarnException("Error executing netsh with arguments: " + arguments, ex);
-            }
+            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl);
+            _netshProvider.Run(arguments);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public abstract bool CanHandle(string resourceUrl);
 
-        public Response GetResponse(string resourceUrl)
+        public virtual Response GetResponse(string resourceUrl)
         {
             var filePath = Map(resourceUrl);
 

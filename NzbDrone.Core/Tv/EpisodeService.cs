@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 
@@ -15,7 +13,6 @@ namespace NzbDrone.Core.Tv
     public interface IEpisodeService
     {
         Episode GetEpisode(int id);
-        Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
         Episode GetEpisode(int seriesId, DateTime date);
         Episode FindEpisode(int seriesId, DateTime date);
@@ -23,9 +20,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
-        List<Episode> EpisodesWithFiles();
         void UpdateEpisode(Episode episode);
-        List<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber);
         void SetEpisodeMonitored(int episodeId, bool monitored);
         bool IsFirstOrLastEpisodeOfSeason(int episodeId);
         void UpdateEpisodes(List<Episode> episodes);
@@ -42,8 +37,6 @@ namespace NzbDrone.Core.Tv
         IHandleAsync<SeriesDeletedEvent>
     {
 
-        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
-
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
@@ -58,15 +51,6 @@ namespace NzbDrone.Core.Tv
         public Episode GetEpisode(int id)
         {
             return _episodeRepository.Get(id);
-        }
-
-        public Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useSceneNumbering = false)
-        {
-            if (useSceneNumbering)
-            {
-                return _episodeRepository.GetEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
-            }
-            return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
         }
 
         public Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useSceneNumbering = false)
@@ -110,19 +94,9 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodeByFileId(episodeFileId);
         }
 
-        public List<Episode> EpisodesWithFiles()
-        {
-            return _episodeRepository.EpisodesWithFiles();
-        }
-
         public void UpdateEpisode(Episode episode)
         {
             _episodeRepository.Update(episode);
-        }
-
-        public List<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber)
-        {
-            return GetEpisodesBySeason(seriesId, seasonNumber).Select(c => c.Id).ToList();
         }
 
         public void SetEpisodeMonitored(int episodeId, bool monitored)
@@ -130,7 +104,7 @@ namespace NzbDrone.Core.Tv
             var episode = _episodeRepository.Get(episodeId);
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
-            logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+            _logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)

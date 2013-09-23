@@ -8,7 +8,6 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 
 
@@ -60,8 +59,6 @@ namespace NzbDrone.Core.Test.Framework
 
         }
     }
-
-
 
     [Category("DbTest")]
     public abstract class DbTest : CoreTest

@@ -7,7 +7,6 @@ using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using TinyIoC;
 

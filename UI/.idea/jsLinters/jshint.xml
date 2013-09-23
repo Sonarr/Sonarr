@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JSHintConfiguration" version="2.1.3" use-config-file="false">
+  <component name="JSHintConfiguration" version="2.1.10" use-config-file="false">
     <option bitwise="true" />
     <option camelcase="true" />
     <option curly="true" />

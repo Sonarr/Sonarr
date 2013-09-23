@@ -8,9 +8,10 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
+        'Cells/EpisodeActionsCell',
         'Commands/CommandController',
         'moment'
-    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, CommandController, Moment) {
+    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, EpisodeActionsCell, CommandController, Moment) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -66,6 +67,12 @@ define(
                         name    : 'status',
                         label   : 'Status',
                         cell    : EpisodeStatusCell,
+                        sortable: false
+                    },
+                    {
+                        name    : 'this',
+                        label   : '',
+                        cell    : EpisodeActionsCell,
                         sortable: false
                     }
                 ],

@@ -2,7 +2,8 @@
     <div class="row">
         <div class="span2">
             <a href="{{traktUrl}}" target="_blank">
-                <img class="new-series-poster" src="{{remotePoster}}" {{defaultImg}} >
+                <img class="new-series-poster" src="{{remotePoster}}"
+                {{defaultImg}} >
             </a>
         </div>
         <div class="span9">
@@ -14,22 +15,23 @@
                 {{overview}}
             </div>
             <div class="row">
-                {{#if existing}}
+                <form class="form-inline">
+                    {{#if existing}}
                     <div class="btn add-series disabled pull-right">
                         Already Exists
                     </div>
-                {{else}}
+                    {{else}}
                     {{#unless path}}
-                        {{> RootFolderSelectionPartial rootFolders}}
+                    {{> RootFolderSelectionPartial rootFolders}}
                     {{/unless}}
 
                     {{> StartingSeasonSelectionPartial seasons}}
                     {{> QualityProfileSelectionPartial qualityProfiles}}
-
-                    <div class="span1 btn btn-success x-add add-series pull-right">
-                        Add <i class="icon-plus"></i>
-                    </div>
-                {{/if}}
+                    <span class="btn btn-success x-add add-series pull-right"> Add
+                        <i class="icon-plus"></i>
+                    </span>
+                    {{/if}}
+                </form>
             </div>
         </div>
     </div>

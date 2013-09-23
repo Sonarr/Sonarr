@@ -3,7 +3,7 @@ using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Messaging;
+using NzbDrone.Common.Processes;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
 using NzbDrone.Core.Instrumentation;
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Update
                     _diskProvider.DeleteFolder(updateSandboxFolder, true);
                 }
 
-                _logger.ProgressInfo("Downloading Updated {0} [{1}]", updatePackage.Version, updatePackage.Branch);
+                _logger.ProgressInfo("Downloading update {0} [{1}]", updatePackage.Version, updatePackage.Branch);
                 _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
                 _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
 

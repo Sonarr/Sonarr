@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
+using NzbDrone.Common.Processes;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.Commands;

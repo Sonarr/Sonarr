@@ -41,14 +41,13 @@ define(
             },
 
             initialize: function () {
-                $('body').addClass('backdrop');
-
                 this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
                 this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
                 this.listenTo(App.vent, App.Events.SeasonRenamed, this._onSeasonRenamed);
             },
 
             onShow: function () {
+                $('body').addClass('backdrop');
                 var fanArt = this._getFanArt();
 
                 if (fanArt) {
@@ -61,8 +60,6 @@ define(
                 this._showSeasons();
                 this._setMonitoredState();
                 this._showInfo();
-
-
             },
 
             onRender: function () {

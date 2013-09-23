@@ -1,6 +1,9 @@
 ﻿@import "prefixer";
 
 #main-menu-region {
+  text-align    : center;
+  margin-bottom : 10px;
+
   i:before {
     font-size : 35px;
   }
@@ -8,27 +11,6 @@
   i {
     width : 40px;
   }
-}
-
-.backdrop #nav-region {
-  background-color : #000000;
-  .opacity(0.85);
-}
-
-#nav-region li a:hover, #in-sub-nav li a.active {
-  background-color : #555555;
-  text-decoration  : none;
-}
-
-#nav-region {
-
-  margin-bottom : 80px;
-  height        : 120px;
-
-  .span12 {
-    margin-left : 0px;
-  }
-
 
   .logo {
     margin-top     : 25px;
@@ -37,10 +19,6 @@
     width          : 70px;
   }
 
-  ul {
-    text-align    : center;
-    margin-bottom : 10px;
-  }
   li {
     list-style-type : none;
     display         : inline-block;
@@ -55,7 +33,7 @@
       padding       : 15px 10px 5px;
       min-height    : 56px;
       min-width     : 64px;
-      margin        : 20px 10px 10px;
+      margin        : 20px 10px 5px;
       color         : #b9b9b9;
       font-weight   : 100;
     }
@@ -63,6 +41,48 @@
       position : relative;
       top      : 24px;
       right    : 14px;
+    }
+  }
+}
+
+.backdrop #nav-region {
+  background-color : #000000;
+  .opacity(0.85);
+}
+
+#nav-region li a:hover, #in-sub-nav li a.active {
+  background-color : #555555;
+  text-decoration  : none;
+}
+
+#nav-region {
+  margin-bottom : 80px;
+  height        : 150px;
+
+  .span12 {
+    margin-left : 0px;
+  }
+}
+
+.search {
+  text-align: center;
+
+  input, .add-on {
+    background-color: #333333;
+    border-color: #333333;
+    color: #cccccc;
+  }
+
+  ul {
+    text-align: left;
+  }
+
+  .dropdown-menu {
+    background-color: #333333;
+    color: #cccccc;
+
+    > li > a {
+      color: #cccccc;
     }
   }
 }

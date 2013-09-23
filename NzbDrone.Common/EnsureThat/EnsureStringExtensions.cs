@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat.Resources;
 using NzbDrone.Common.EnvironmentInfo;
@@ -73,7 +76,6 @@ namespace NzbDrone.Common.EnsureThat
             return param;
         }
 
-
         [DebuggerStepThrough]
         public static Param<string> IsRelativePath(this Param<string> param)
         {
@@ -93,8 +95,6 @@ namespace NzbDrone.Common.EnsureThat
 
             return param;
         }
-
-
 
         [DebuggerStepThrough]
         public static Param<string> IsValidPath(this Param<string> param)

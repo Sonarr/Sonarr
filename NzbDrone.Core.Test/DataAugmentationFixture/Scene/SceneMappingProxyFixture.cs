@@ -1,7 +1,7 @@
 using System.Net;
 using FluentAssertions;
-using NUnit.Framework;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;

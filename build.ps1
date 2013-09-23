@@ -86,6 +86,7 @@ Function AddJsonNet()
 {
     get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
     Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder
+    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder\NzbDrone.Update
 }
 
 Function PackageTests()

@@ -5,6 +5,7 @@ using System.Threading;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test

@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv.Events;

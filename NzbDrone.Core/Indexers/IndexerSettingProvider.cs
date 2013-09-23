@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Indexers
                 return new TSetting();
             }
 
-            return JsonConvert.DeserializeObject<TSetting>(indexerDef.Settings);
+            return Json.Deserialize<TSetting>(indexerDef.Settings);
         }
     }
 }

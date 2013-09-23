@@ -31,7 +31,13 @@ define(
             }
 
             var controlGroup = input.parents('.control-group');
-            controlGroup.find('.controls').append('<span class="help-inline error-message">' + error.errorMessage + '</span>');
+
+            if(controlGroup.length ===0){
+                controlGroup = input.parent();
+            }
+            else{
+                controlGroup.find('.controls').append('<span class="help-inline error-message">' + error.errorMessage + '</span>');
+            }
 
             controlGroup.addClass('error');
 

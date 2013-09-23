@@ -1,6 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+
 
 namespace NzbDrone.Core.Update
 {
@@ -8,7 +7,6 @@ namespace NzbDrone.Core.Update
     {
         public string Id { get; set; }
 
-        [JsonConverter(typeof(VersionConverter))]
         public Version Version { get; set; }
 
         public String Branch { get; set; }

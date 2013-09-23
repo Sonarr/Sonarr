@@ -14,6 +14,11 @@ define(
 
             _onClick: function () {
 
+                if (!this.model.get('downloadAllowed'))
+                {
+                    return;
+                }
+
                 var self = this;
 
                 this.$el.html('<i class="icon-spinner icon-spin" />');
@@ -29,10 +34,18 @@ define(
             },
 
             render: function () {
+                this.$el.empty();
 
-                this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
+                if (this.model.get('downloadAllowed'))
+                {
+                    this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
+                }
+
+                else {
+                    this.className = 'no-download-report-cell';
+                }
+
                 return this;
-
             }
         });
     });

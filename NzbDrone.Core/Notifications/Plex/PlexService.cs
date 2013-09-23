@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Notifications.Plex

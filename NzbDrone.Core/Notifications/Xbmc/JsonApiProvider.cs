@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common;
-using NzbDrone.Core.Model.Xbmc;
+using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 if (CheckForError(response))
                     return new List<ActivePlayer>();
 
-                var result = JsonConvert.DeserializeObject<ActivePlayersEdenResult>(response);
+                var result = Json.Deserialize<ActivePlayersEdenResult>(response);
 
                 return result.Result;
             }
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             if (response.StartsWith("{\"error\""))
             {
-                var error = JsonConvert.DeserializeObject<ErrorResult>(response);
+                var error = Json.Deserialize<ErrorResult>(response);
                 var code = error.Error["code"];
                 var message = error.Error["message"];
 
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 if (CheckForError(response)) return;
 
                 _logger.Trace(" from response");
-                var result = JsonConvert.DeserializeObject<XbmcJsonResult<String>>(response);
+                var result = Json.Deserialize<XbmcJsonResult<String>>(response);
 
                 if (!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 if (CheckForError(response))
                     return new List<TvShow>();
 
-                var result = JsonConvert.DeserializeObject<TvShowResponse>(response);
+                var result = Json.Deserialize<TvShowResponse>(response);
                 var shows = result.Result.TvShows;
 
                 return shows;

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Mail;
 using NLog;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using Omu.ValueInjecter;
 

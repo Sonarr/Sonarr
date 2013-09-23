@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Nancy.Bootstrapper;
+﻿using Nancy.Bootstrapper;
 using Nancy.Owin;
 using Owin;
 
@@ -20,8 +17,13 @@ namespace NzbDrone.Host.Owin.MiddleWare
 
         public void Attach(IAppBuilder appBuilder)
         {
-            var nancyOwinHost = new NancyOwinHost(null, _nancyBootstrapper, new HostConfiguration());
-            appBuilder.Use((Func<Func<IDictionary<string, object>, Task>, Func<IDictionary<string, object>, Task>>)(next => (Func<IDictionary<string, object>, Task>)nancyOwinHost.Invoke), new object[0]);
+            var options = new NancyOptions
+            {
+                Bootstrapper = _nancyBootstrapper,
+                PerformPassThrough = context => context.Request.Path.StartsWith("/signalr")
+            };
+
+            appBuilder.UseNancy(options);
         }
     }
 }

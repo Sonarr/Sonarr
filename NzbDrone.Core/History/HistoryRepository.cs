@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
@@ -17,9 +16,12 @@ namespace NzbDrone.Core.History
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
     {
+        private readonly IDatabase _database;
+
         public HistoryRepository(IDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
+            _database = database;
         }
 
         public void Trim()

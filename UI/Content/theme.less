@@ -46,6 +46,10 @@
   margin-bottom : 30px;
 }
 
+.page-container {
+  min-height : 500px;
+}
+
 #scroll-up {
   .clickable;
 
@@ -151,13 +155,23 @@ footer {
 }
 
 .status-primary {
-  color: @linkColor;
+  color : @linkColor;
 }
 
 .status-success {
-  color: @successText;
+  color : @successText;
 }
 
 .status-danger {
-  color: @errorText;
+  color : @errorText;
+}
+
+.form-inline {
+  div {
+    display : inline-block;
+  }
+}
+
+.error {
+  .formFieldState(@errorText, @errorText, @errorBackground);
 }

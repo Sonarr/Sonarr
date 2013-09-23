@@ -68,6 +68,7 @@
       <option name="m_limit" value="3" />
     </inspection_tool>
     <inspection_tool class="JSDuplicatedDeclaration" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JSLastCommaInArrayLiteral" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="JSPotentiallyInvalidUsageOfThis" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
     <inspection_tool class="JSUndeclaredVariable" enabled="true" level="ERROR" enabled_by_default="true" />

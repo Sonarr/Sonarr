@@ -1,4 +1,5 @@
 using NzbDrone.Common;
+using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Update.UpdateEngine
 {

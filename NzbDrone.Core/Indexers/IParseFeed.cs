@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers

@@ -125,6 +125,7 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
+    <Compile Include="Providers\XemProxyFixture.cs" />
     <Compile Include="Qualities\QualitySizeRepositoryFixture.cs" />
     <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
     <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />
@@ -197,9 +200,6 @@
     <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
-    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
-    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
-    <Compile Include="HelperTests\SortHelperTest.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />

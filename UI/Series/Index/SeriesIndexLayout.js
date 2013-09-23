@@ -11,9 +11,9 @@ define(
         'Cells/TemplatedCell',
         'Cells/QualityProfileCell',
         'Cells/EpisodeProgressCell',
+        'Cells/SeriesActionsCell',
         'Shared/Grid/DateHeaderCell',
-        'Series/Index/Table/SeriesStatusCell',
-        'Series/Index/Table/Row',
+        'Cells/SeriesStatusCell',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
         'Shared/Toolbar/ToolbarLayout'
@@ -27,9 +27,9 @@ define(
                  TemplatedCell,
                  QualityProfileCell,
                  EpisodeProgressCell,
+                 SeriesActionsCell,
                  DateHeaderCell,
                  SeriesStatusCell,
-                 SeriesIndexRow,
                  FooterView,
                  FooterModel,
                  ToolbarLayout) {
@@ -86,8 +86,7 @@ define(
                         name    : 'this',
                         label   : '',
                         sortable: false,
-                        template: 'Series/Index/Table/ControlsColumnTemplate',
-                        cell    : TemplatedCell
+                        cell    : SeriesActionsCell
                     }
                 ],
 
@@ -124,7 +123,6 @@ define(
 
             _showTable: function () {
                 this.currentView = new Backgrid.Grid({
-                    row       : SeriesIndexRow,
                     collection: SeriesCollection,
                     columns   : this.columns,
                     className : 'table table-hover'

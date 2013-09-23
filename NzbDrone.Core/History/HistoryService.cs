@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 

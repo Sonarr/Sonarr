@@ -5,7 +5,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;

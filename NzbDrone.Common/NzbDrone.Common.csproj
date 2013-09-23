@@ -98,6 +98,8 @@
     <Compile Include="Messaging\IEvent.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="PathEqualityComparer.cs" />
+    <Compile Include="Processes\ProcessOutput.cs" />
+    <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
@@ -117,16 +119,13 @@
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConsoleService.cs" />
-    <Compile Include="Contract\ReportBase.cs" />
-    <Compile Include="Contract\ParseErrorReport.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
-    <Compile Include="ProcessProvider.cs" />
+    <Compile Include="Processes\ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
-    <Compile Include="RestProvider.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />

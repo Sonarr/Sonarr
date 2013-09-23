@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Model.Xbmc;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc

@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;

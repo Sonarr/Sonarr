@@ -1,6 +1,5 @@
 using System;
 using System.Xml.Linq;
-using NLog;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers

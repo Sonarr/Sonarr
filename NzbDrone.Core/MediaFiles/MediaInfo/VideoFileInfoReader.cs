@@ -3,7 +3,6 @@ using System.IO;
 using MediaInfoLib;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
