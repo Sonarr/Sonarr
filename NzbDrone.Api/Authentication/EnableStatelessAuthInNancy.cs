@@ -11,10 +11,12 @@ namespace NzbDrone.Api.Authentication
 {
     public class EnableStatelessAuthInNancy : IRegisterNancyPipeline
     {
+        private readonly IAuthenticationService _authenticationService;
         private readonly IConfigFileProvider _configFileProvider;
 
-        public EnableStatelessAuthInNancy(IConfigFileProvider configFileProvider)
+        public EnableStatelessAuthInNancy(IAuthenticationService authenticationService, IConfigFileProvider configFileProvider)
         {
+            _authenticationService = authenticationService;
             _configFileProvider = configFileProvider;
         }
 
@@ -27,20 +29,27 @@ namespace NzbDrone.Api.Authentication
         {
             Response response = null;
             
-            if (!RuntimeInfo.IsProduction && context.Request.IsLocalRequest())
-            {
-                return response;
-            }
+//            if (!RuntimeInfo.IsProduction && context.Request.IsLocalRequest())
+//            {
+//                return response;
+//            }
 
             var apiKey = context.Request.Headers.Authorization;
             
-            if (context.Request.IsApiRequest() && 
-                (String.IsNullOrWhiteSpace(apiKey) || !apiKey.Equals(_configFileProvider.ApiKey)))
+            if (context.Request.IsApiRequest() && !ValidApiKey(apiKey) && !_authenticationService.IsAuthenticated(context))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }
 
             return response;
+        }
+
+        private bool ValidApiKey(string apiKey)
+        {
+            if (String.IsNullOrWhiteSpace(apiKey)) return false;
+            if (!apiKey.Equals(_configFileProvider.ApiKey)) return false;
+
+            return true;
         }
     }
 }

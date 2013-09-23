@@ -25,9 +25,7 @@ namespace NzbDrone.Api.Authentication
         {
             Response response = null;
 
-            if (!context.Request.IsApiRequest() &&
-                context.CurrentUser == null &&
-                _authenticationService.Enabled)
+            if (!context.Request.IsApiRequest() && !_authenticationService.IsAuthenticated(context))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }
