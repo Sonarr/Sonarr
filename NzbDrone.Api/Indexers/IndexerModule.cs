@@ -63,15 +63,17 @@ namespace NzbDrone.Api.Indexers
         {
             var indexer = GetDefinition(indexerResource);
 
-            ValidateIndexer(indexer.Settings);
+            ValidateIndexer(indexer);
 
             _indexerService.Update(indexer);
         }
 
 
-        private static void ValidateIndexer(IProviderConfig config)
+        private static void ValidateIndexer(ProviderDefinition definition)
         {
-            var validationResult = config.Validate();
+            if (!definition.Enable) return;
+
+            var validationResult = definition.Settings.Validate();
 
             if (!validationResult.IsValid)
             {
@@ -89,10 +91,7 @@ namespace NzbDrone.Api.Indexers
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
             definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(indexerResource.Fields, configContract);
 
-            if (indexerResource.Enable)
-            {
-                ValidateIndexer(definition.Settings);
-            }
+            ValidateIndexer(definition);
 
             return definition;
         }

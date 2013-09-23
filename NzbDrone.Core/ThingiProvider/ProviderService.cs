@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.ThingiProvider
         TProviderDefinition Create(TProviderDefinition indexer);
         void Update(TProviderDefinition indexer);
         void Delete(int id);
+        List<TProviderDefinition> Templates();
     }
 
     public abstract class ProviderFactory<TProvider, TProviderDefinition> : IProviderFactory<TProvider, TProviderDefinition>, IHandle<ApplicationStartedEvent>
@@ -38,6 +40,16 @@ namespace NzbDrone.Core.ThingiProvider
         public List<TProviderDefinition> All()
         {
             return _providerRepository.All().ToList();
+        }
+
+        public List<TProviderDefinition> Templates()
+        {
+            return _providers.Select(p => new TProviderDefinition()
+            {
+                ConfigContract = p.ConfigContract.Name,
+                Implementation = p.GetType().Name,
+                Settings = (IProviderConfig)Activator.CreateInstance(ReflectionExtensions.CoreAssembly.FindTypeByName(p.ConfigContract.Name))
+            }).ToList();
         }
 
         public List<TProvider> GetAvailableProviders()
