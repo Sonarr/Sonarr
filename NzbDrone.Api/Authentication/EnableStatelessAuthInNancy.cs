@@ -29,10 +29,10 @@ namespace NzbDrone.Api.Authentication
         {
             Response response = null;
             
-//            if (!RuntimeInfo.IsProduction && context.Request.IsLocalRequest())
-//            {
-//                return response;
-//            }
+            if (!RuntimeInfo.IsProduction && context.Request.IsLocalRequest())
+            {
+                return response;
+            }
 
             var apiKey = context.Request.Headers.Authorization;
             
