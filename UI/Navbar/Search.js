@@ -4,6 +4,17 @@ define(
         'app',
         'Series/SeriesCollection'
     ], function (App, SeriesCollection) {
+        $(document).on('keydown', function (e){
+            if ($(e.target).is('input')) {
+                return;
+            }
+
+            if (e.keyCode === 84) {
+                $('.x-series-search').focus();
+                e.preventDefault();
+            }
+        });
+
         $.fn.bindSearch = function () {
             $(this).typeahead({
                 source   : function () {

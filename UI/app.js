@@ -230,16 +230,5 @@ define(
                 'jQuery/TooltipBinder'
             ]);
 
-        $(document).on('keydown', function (e){
-            if ($(e.target).is('input')) {
-                return;
-            }
-
-            if (e.keyCode === 84) {
-                $('.x-series-search').focus();
-                e.preventDefault();
-            }
-        });
-
         return app;
     });
