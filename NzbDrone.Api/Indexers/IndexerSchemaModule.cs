@@ -8,19 +8,19 @@ namespace NzbDrone.Api.Indexers
 {
     public class IndexerSchemaModule : NzbDroneRestModule<IndexerResource>
     {
-        private readonly IIndexerService _indexerService;
+        private readonly IIndexerFactory _indexerFactory;
 
-        public IndexerSchemaModule(IIndexerService indexerService)
+        public IndexerSchemaModule(IIndexerFactory indexerFactory)
             : base("indexer/schema")
         {
-            _indexerService = indexerService;
+            _indexerFactory = indexerFactory;
             GetResourceAll = GetSchema;
         }
 
         private List<IndexerResource> GetSchema()
         {
 
-            var indexers = _indexerService.Templates().Where(c => c.Implementation =="Newznab");
+            var indexers = _indexerFactory.Templates().Where(c => c.Implementation =="Newznab");
 
 
             var result = new List<IndexerResource>(indexers.Count());

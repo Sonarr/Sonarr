@@ -5,17 +5,17 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public interface IIndexerService : IProviderFactory<IIndexer, IndexerDefinition>
+    public interface IIndexerFactory : IProviderFactory<IIndexer, IndexerDefinition>
     {
 
     }
 
-    public class IndexerService : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerService
+    public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
         private readonly IIndexerRepository _providerRepository;
         private readonly IEnumerable<IIndexer> _providers;
 
-        public IndexerService(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, Logger logger)
+        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, Logger logger)
             : base(providerRepository, providers, logger)
         {
             _providerRepository = providerRepository;

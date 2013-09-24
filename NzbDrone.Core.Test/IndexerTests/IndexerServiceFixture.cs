@@ -13,7 +13,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {
-    public class IndexerServiceFixture : DbTest<IndexerService, IndexerDefinition>
+    public class IndexerServiceFixture : DbTest<IndexerFactory, IndexerDefinition>
     {
         private List<IIndexer> _indexers;
 

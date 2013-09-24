@@ -14,13 +14,13 @@ namespace NzbDrone.Core.Indexers
 
     public class FetchAndParseRssService : IFetchAndParseRss
     {
-        private readonly IIndexerService _indexerService;
+        private readonly IIndexerFactory _indexerFactory;
         private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly Logger _logger;
 
-        public FetchAndParseRssService(IIndexerService indexerService, IFetchFeedFromIndexers feedFetcher, Logger logger)
+        public FetchAndParseRssService(IIndexerFactory indexerFactory, IFetchFeedFromIndexers feedFetcher, Logger logger)
         {
-            _indexerService = indexerService;
+            _indexerFactory = indexerFactory;
             _feedFetcher = feedFetcher;
             _logger = logger;
         }
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers
         {
             var result = new List<ReleaseInfo>();
 
-            var indexers = _indexerService.GetAvailableProviders().ToList();
+            var indexers = _indexerFactory.GetAvailableProviders().ToList();
 
             if (!indexers.Any())
             {

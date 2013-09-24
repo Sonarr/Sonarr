@@ -500,7 +500,7 @@
     <Compile Include="History\HistoryService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\IndexerService.cs">
+    <Compile Include="Indexers\IndexerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\IndexerFetchService.cs">
