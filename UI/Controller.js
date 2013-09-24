@@ -15,7 +15,7 @@ define(
         'Logs/Files/Layout',
         'Release/Layout',
         'System/Layout',
-        'SeasonPass/Layout',
+        'SeasonPass/SeasonPassLayout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
     ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, CalendarLayout,

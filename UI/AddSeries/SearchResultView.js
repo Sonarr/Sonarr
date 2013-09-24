@@ -2,6 +2,7 @@
 define(
     [
         'app',
+        'underscore',
         'marionette',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
@@ -11,7 +12,7 @@ define(
         'Shared/Messenger',
         'Mixins/AsValidatedView',
         'jquery.dotdotdot'
-    ], function (App, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
+    ], function (App, _, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
 
