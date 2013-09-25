@@ -12,6 +12,10 @@ define(
                 DefaultRootFolderId: 'DefaultRootFolderId'
             },
 
+            getValueBoolean: function (key, defaultValue) {
+                return this.getValue(key, defaultValue) === 'true';
+            },
+
             getValue: function (key, defaultValue) {
 
                 var storeValue = localStorage.getItem(key);
@@ -35,6 +39,5 @@ define(
                 App.vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
 
             }
-
         };
     });

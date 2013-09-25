@@ -5,7 +5,7 @@
   .slide-button {
     .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
 
-    &.btn-danger {
+    &.btn-danger, &.btn-warning {
       .buttonBackground(@btnInverseBackground, @btnInverseBackgroundHighlight);
     }
   }
@@ -15,6 +15,10 @@
 
     &.btn-danger {
       .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+    }
+
+    &.btn-warning {
+      .buttonBackground(@btnWarningBackground, @btnWarningBackgroundHighlight);
     }
   }
 }
