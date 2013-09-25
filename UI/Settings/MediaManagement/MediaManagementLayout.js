@@ -5,10 +5,10 @@ define(
         'marionette',
         'Settings/MediaManagement/Naming/View',
         'Settings/MediaManagement/Sorting/View',
-        'Settings/MediaManagement/FileManagement/View'
+        'Settings/MediaManagement/FileManagement/FileManagementView'
     ], function (Marionette, NamingView, SortingView, FileManagementView) {
         return Marionette.Layout.extend({
-            template: 'Settings/MediaManagement/LayoutTemplate',
+            template: 'Settings/MediaManagement/MediaManagementLayoutTemplate',
 
             regions: {
                 episodeNaming  : '#episode-naming',
