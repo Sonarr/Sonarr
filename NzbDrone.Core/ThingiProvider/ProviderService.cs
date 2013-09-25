@@ -48,7 +48,7 @@ namespace NzbDrone.Core.ThingiProvider
             {
                 ConfigContract = p.ConfigContract.Name,
                 Implementation = p.GetType().Name,
-                Settings = (IProviderConfig)Activator.CreateInstance(ReflectionExtensions.CoreAssembly.FindTypeByName(p.ConfigContract.Name))
+                Settings = (IProviderConfig)Activator.CreateInstance(p.ConfigContract)
             }).ToList();
         }
 

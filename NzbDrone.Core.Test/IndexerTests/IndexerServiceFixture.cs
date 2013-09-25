@@ -71,6 +71,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
 
             var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
+            existingIndexers.ConfigContract = typeof (NewznabSettings).Name;
 
             repo.Insert(existingIndexers);
 

@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Reflection
 
         public static Type FindTypeByName(this Assembly assembly, string name)
         {
-            return assembly.GetTypes().Single(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return assembly.GetTypes().SingleOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static bool HasAttribute<TAttribute>(this Type type)

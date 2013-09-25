@@ -57,6 +57,8 @@ namespace NzbDrone.Api.ClientSchema
 
         public static object ReadFormSchema(List<Field> fields, Type targetType)
         {
+            Ensure.That(() => targetType).IsNotNull();
+
             var properties = targetType.GetSimpleProperties();
 
             var target = Activator.CreateInstance(targetType);
