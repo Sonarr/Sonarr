@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NUnit.Framework;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Test.Common.Categories;
 using System.Linq;
 
@@ -27,6 +28,12 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         {
             var indexer = new Wombles();
 
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "Wombles",
+                Settings = NullConfig.Instance
+            };
+
             var result = Subject.FetchRss(indexer);
 
             ValidateResult(result, skipSize: true, skipInfo: true);
@@ -37,6 +44,11 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void extv_rss()
         {
             var indexer = new Eztv();
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "Eztv",
+                Settings = NullConfig.Instance
+            };
 
             var result = Subject.FetchRss(indexer);
 
