@@ -238,6 +238,7 @@
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
+    <Compile Include="Indexers\NewznabTestService.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\IParseFeed.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />

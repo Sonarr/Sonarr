@@ -11,6 +11,10 @@ define(
         var view = Marionette.ItemView.extend({
             template: 'Settings/Indexers/EditTemplate',
 
+            ui : {
+                activity: '.x-activity'
+            },
+
             events: {
                 'click .x-save'        : '_save',
                 'click .x-save-and-add': '_saveAndAdd'
@@ -21,6 +25,8 @@ define(
             },
 
             _save: function () {
+                this.ui.activity.html('<i class="icon-nd-spinner"></i>');
+
                 var self = this;
                 var promise = this.model.saveSettings();
 
@@ -29,10 +35,16 @@ define(
                         self.indexerCollection.add(self.model, { merge: true });
                         App.vent.trigger(App.Commands.CloseModalCommand);
                     });
+
+                    promise.always(function () {
+                        self.ui.activity.empty();
+                    });
                 }
             },
 
             _saveAndAdd: function () {
+                this.ui.activity.html('<i class="icon-nd-spinner"></i>');
+
                 var self = this;
                 var promise = this.model.saveSettings();
 
@@ -49,6 +61,10 @@ define(
                         _.each(self.model.get('fields'), function (value, key, list) {
                             self.model.set('fields.' + key + '.value', '');
                         });
+                    });
+
+                    promise.always(function () {
+                        self.ui.activity.empty();
                     });
                 }
             }

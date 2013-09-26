@@ -4,11 +4,11 @@ namespace NzbDrone.Core.Exceptions
 {
     public class BadRequestException : DownstreamException
     {
-        public BadRequestException(HttpStatusCode statusCode, string message) : base(statusCode, message)
+        public BadRequestException(string message) : base(HttpStatusCode.BadRequest, message)
         {
         }
 
-        public BadRequestException(HttpStatusCode statusCode, string message, params object[] args) : base(statusCode, message, args)
+        public BadRequestException(string message, params object[] args) : base(HttpStatusCode.BadRequest, message, args)
         {
         }
     }
