@@ -60,9 +60,10 @@ define(
                         cell    : EpisodeTitleCell
                     },
                     {
-                        name : 'quality',
-                        label: 'Quality',
-                        cell : QualityCell
+                        name    : 'quality',
+                        label   : 'Quality',
+                        cell    : QualityCell,
+                        sortable: false
                     },
                     {
                         name : 'date',
