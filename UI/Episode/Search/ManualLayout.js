@@ -6,9 +6,10 @@ define(
         'Cells/FileSizeCell',
         'Cells/QualityCell',
         'Cells/ApprovalStatusCell',
-        'Release/DownloadReportCell'
+        'Release/DownloadReportCell',
+        'Cells/Header/QualityHeaderCell'
 
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell) {
+    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, QualityHeaderCell) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/ManualLayoutTemplate',
@@ -44,10 +45,11 @@ define(
                         cell    : FileSizeCell
                     },
                     {
-                        name    : 'quality',
-                        label   : 'Quality',
-                        sortable: true,
-                        cell    : QualityCell
+                        name      : 'quality',
+                        label     : 'Quality',
+                        sortable  : true,
+                        cell      : QualityCell,
+                        headerCell: QualityHeaderCell
                     },
 
                     {

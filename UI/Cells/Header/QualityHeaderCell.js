@@ -6,7 +6,7 @@ define(
         'Shared/Grid/HeaderCell'
     ], function (Backgrid, NzbDroneHeaderCell) {
 
-        Backgrid.DateHeaderCell = NzbDroneHeaderCell.extend({
+        Backgrid.QualityHeaderCell = NzbDroneHeaderCell.extend({
             events: {
                 'click': 'onClick'
             },
@@ -38,23 +38,26 @@ define(
             },
 
             _comparator: function (leftVal, rightVal) {
-                if (!leftVal && !rightVal) {
+                var leftWeight = leftVal.quality.weight;
+                var rightWeight = rightVal.quality.weight;
+
+                if (!leftWeight && !rightWeight) {
                     return 0;
                 }
 
-                if (!leftVal) {
+                if (!leftWeight) {
                     return -1;
                 }
 
-                if (!rightVal) {
+                if (!rightWeight) {
                     return 1;
                 }
 
-                if (leftVal === rightVal) {
+                if (leftWeight === rightWeight) {
                     return 0;
                 }
 
-                if (leftVal > rightVal) {
+                if (leftWeight > rightWeight) {
                     return -1;
                 }
 
@@ -62,5 +65,5 @@ define(
             }
         });
 
-        return Backgrid.DateHeaderCell;
+        return Backgrid.QualityHeaderCell;
     });

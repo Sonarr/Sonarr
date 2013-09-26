@@ -1,14 +1,12 @@
 ﻿﻿'use strict';
 define(
     [
-        'Release/Model',
-        'backbone.pageable'
-    ], function (ReleaseModel, PagableCollection) {
-        return PagableCollection.extend({
+        'backbone',
+        'Release/Model'
+    ], function (Backbone, ReleaseModel) {
+        return Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/release',
             model: ReleaseModel,
-
-            mode: 'client',
 
             state: {
                 pageSize: 2000
