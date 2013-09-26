@@ -36,7 +36,7 @@ namespace NzbDrone.Host.AccessControl
                 return;
             }
 
-            var arguments = String.Format("netsh http add sslcert ipport=0.0.0.0:{0} certhash={1} appid={{{2}}", _configFileProvider.SslPort, _configFileProvider.SslCertHash, APP_ID);
+            var arguments = String.Format("netsh http add sslcert ipport=0.0.0.0:{0} certhash={1} appid={{{2}}}", _configFileProvider.SslPort, _configFileProvider.SslCertHash, APP_ID);
             _netshProvider.Run(arguments);
         }
 
