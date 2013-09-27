@@ -5,6 +5,8 @@ using FluentValidation;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Indexers.Exceptions;
+using NzbDrone.Core.Indexers.Newznab;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -34,21 +36,25 @@ namespace NzbDrone.Core.Indexers
 
             try
             {
-                _httpProvider.DownloadString(indexer.RecentFeed.First());
-            }
+                var url = indexer.RecentFeed.First();
+                var xml = _httpProvider.DownloadString(url);
 
-            catch (Exception)
+                NewznabPreProcessor.Process(xml, url);
+            }
+            catch (ApiKeyException apiKeyException)
             {
-                _logger.Warn("No result returned from RSS Feed, please confirm you're using a newznab indexer");
+                _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
+
+                var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
+                throw new ValidationException(new List<ValidationFailure> { apiKeyFailure }.ToArray());
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn("Indexer doesn't appear to be Newznab based");
 
                 var failure = new ValidationFailure("Url", "Invalid Newznab URL entered");
                 throw new ValidationException(new List<ValidationFailure> { failure }.ToArray());
             }
-
-            _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
-
-            var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
-            throw new ValidationException(new List<ValidationFailure> { apiKeyFailure }.ToArray());
         }
     }
 }

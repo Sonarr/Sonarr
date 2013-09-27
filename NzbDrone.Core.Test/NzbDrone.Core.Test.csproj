@@ -252,6 +252,7 @@
     <Content Include="App_Data\Config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\Newznab\error.xml" />
     <Content Include="Files\Media\H264_sample.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -351,7 +352,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Files\Indexers\" />
     <Folder Include="ProviderTests\UpdateProviderTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

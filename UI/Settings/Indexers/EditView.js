@@ -36,7 +36,7 @@ define(
                         App.vent.trigger(App.Commands.CloseModalCommand);
                     });
 
-                    promise.always(function () {
+                    promise.fail(function () {
                         self.ui.activity.empty();
                     });
                 }
@@ -63,7 +63,7 @@ define(
                         });
                     });
 
-                    promise.always(function () {
+                    promise.fail(function () {
                         self.ui.activity.empty();
                     });
                 }
