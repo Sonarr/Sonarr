@@ -16,10 +16,11 @@ define(
         'Release/Layout',
         'System/Layout',
         'SeasonPass/SeasonPassLayout',
+        'Update/UpdateLayout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
     ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, CalendarLayout,
-        LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, SeasonPassLayout, NotFoundView) {
+        LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, SeasonPassLayout, UpdateLayout, NotFoundView) {
         return Marionette.Controller.extend({
 
             series: function () {
@@ -92,6 +93,11 @@ define(
             seasonPass: function () {
                 this._setTitle('Season Pass');
                 App.mainRegion.show(new SeasonPassLayout());
+            },
+
+            update: function () {
+                this._setTitle('Updates');
+                App.mainRegion.show(new UpdateLayout());
             },
 
             notFound: function () {
