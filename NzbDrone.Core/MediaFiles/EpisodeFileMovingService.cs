@@ -43,6 +43,8 @@ namespace NzbDrone.Core.MediaFiles
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
             MoveFile(episodeFile, filePath);
+            _diskProvider.SetFolderAccessTime( Path.GetDirectoryName(filePath), episodeFile.DateAdded);
+            _diskProvider.SetFolderAccessTime( series.Path, episodeFile.DateAdded);
 
             return filePath;
         }
@@ -52,6 +54,8 @@ namespace NzbDrone.Core.MediaFiles
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
             MoveFile(episodeFile, filePath);
+            _diskProvider.SetFolderAccessTime( Path.GetDirectoryName(filePath), episodeFile.DateAdded);
+            _diskProvider.SetFolderAccessTime( localEpisode.Series.Path, episodeFile.DateAdded);
 
             return filePath;
         }
