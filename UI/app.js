@@ -25,7 +25,6 @@ require.config({
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
         'libs'                : 'JsLibraries/'
-
     },
 
     shim: {
@@ -191,9 +190,10 @@ define(
         var app = new Marionette.Application();
 
         app.Events = {
-            SeriesAdded  : 'series:added',
-            SeriesDeleted: 'series:deleted',
-            SeasonRenamed: 'season:renamed'
+            SeriesAdded    : 'series:added',
+            SeriesDeleted  : 'series:deleted',
+            SeasonRenamed  : 'season:renamed',
+            CommandComplete: 'command:complete'
         };
 
         app.Commands = {

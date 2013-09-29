@@ -1,56 +1,66 @@
 'use strict';
 define(
     [
+        'app',
         'Commands/CommandModel',
         'Commands/CommandCollection',
         'underscore',
         'jQuery/jquery.spin'
-    ], function (CommandModel, CommandCollection, _) {
+    ], function (App, CommandModel, CommandCollection, _) {
 
-        return{
+        var singleton = function () {
 
-            Execute: function (name, properties) {
+            return {
 
-                var attr = _.extend({name: name.toLocaleLowerCase()}, properties);
+                Execute: function (name, properties) {
 
-                var commandModel = new CommandModel(attr);
+                    var attr = _.extend({name: name.toLocaleLowerCase()}, properties);
 
-                return commandModel.save().success(function () {
-                    CommandCollection.add(commandModel);
-                });
-            },
+                    var commandModel = new CommandModel(attr);
 
-            bindToCommand: function (options) {
+                    return commandModel.save().success(function () {
+                        CommandCollection.add(commandModel);
+                    });
+                },
 
-                var self = this;
+                bindToCommand: function (options) {
 
-                var existingCommand = CommandCollection.findCommand(options.command);
+                    var self = this;
 
-                if (existingCommand) {
-                    this._bindToCommandModel.call(this, existingCommand, options);
-                }
+                    var existingCommand = CommandCollection.findCommand(options.command);
 
-                CommandCollection.bind('add sync', function (model) {
-                    if (model.isSameCommand(options.command)) {
-                        self._bindToCommandModel.call(self, model, options);
+                    if (existingCommand) {
+                        this._bindToCommandModel.call(this, existingCommand, options);
                     }
-                });
-            },
 
-            _bindToCommandModel: function bindToCommand(model, options) {
+                    CommandCollection.bind('add sync', function (model) {
+                        if (model.isSameCommand(options.command)) {
+                            self._bindToCommandModel.call(self, model, options);
+                        }
+                    });
+                },
 
-                if (!model.isActive()) {
-                    options.element.stopSpin();
-                    return;
-                }
+                _bindToCommandModel: function bindToCommand(model, options) {
 
-                model.bind('change:state', function (model) {
                     if (!model.isActive()) {
                         options.element.stopSpin();
+                        return;
                     }
-                });
 
-                options.element.startSpin();
-            }
+                    model.bind('change:state', function (model) {
+                        if (!model.isActive()) {
+                            options.element.stopSpin();
+
+                            if (model.isComplete()) {
+                                App.vent.trigger(App.Events.CommandComplete, { command: model, model: options.model });
+                            }
+                        }
+                    });
+
+                    options.element.startSpin();
+                }
+            };
         };
+
+        return singleton();
     });
