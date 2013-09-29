@@ -15,8 +15,7 @@ define(
                  ExistingSeriesCollectionView,
                  AddSeriesView,
                  QualityProfileCollection,
-                 RootFolderCollection,
-                 SeriesCollection) {
+                 RootFolderCollection) {
 
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesLayoutTemplate',
@@ -35,8 +34,6 @@ define(
             },
 
             initialize: function () {
-
-                SeriesCollection.fetch();
                 QualityProfileCollection.fetch();
                 RootFolderCollection.promise = RootFolderCollection.fetch();
             },

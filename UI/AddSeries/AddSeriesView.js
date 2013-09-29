@@ -3,14 +3,14 @@ define(
     [
         'app',
         'marionette',
-        'AddSeries/Collection',
+        'AddSeries/AddSeriesCollection',
         'AddSeries/SearchResultCollectionView',
         'AddSeries/NotFoundView',
         'Shared/LoadingView',
         'underscore'
     ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, NotFoundView, LoadingView, _) {
         return Marionette.Layout.extend({
-            template: 'AddSeries/AddSeriesTemplate',
+            template: 'AddSeries/AddSeriesViewTemplate',
 
             regions: {
                 searchResult: '#search-result'
@@ -36,12 +36,12 @@ define(
 
                 if (this.isExisting) {
                     this.className = 'existing-series';
-                    this.listenTo(App.vent, App.Events.SeriesAdded, this._onSeriesAdded);
                 }
                 else {
                     this.className = 'new-series';
                 }
 
+                this.listenTo(App.vent, App.Events.SeriesAdded, this._onSeriesAdded);
                 this.listenTo(this.collection, 'sync', this._showResults);
 
                 this.resultCollectionView = new SearchResultCollectionView({
@@ -50,21 +50,6 @@ define(
                 });
 
                 this.throttledSearch = _.debounce(this.search, 1000, {trailing: true}).bind(this);
-            },
-
-            _onSeriesAdded: function (options) {
-                if (this.isExisting && options.series.get('path') === this.model.get('folder').path) {
-                    this.close();
-                }
-            },
-
-            _onLoadMore: function () {
-                var showingAll = this.resultCollectionView.showMore();
-                this.ui.searchBar.show();
-
-                if (showingAll) {
-                    this.ui.loadMore.hide();
-                }
             },
 
             onRender: function () {
@@ -77,7 +62,7 @@ define(
                     self._abortExistingSearch();
                     self.throttledSearch({
                         term: self.ui.seriesSearch.val()
-                    })
+                    });
                 });
 
                 if (this.isExisting) {
@@ -87,6 +72,7 @@ define(
 
             onShow: function () {
                 this.searchResult.show(this.resultCollectionView);
+                this.ui.seriesSearch.focus();
             },
 
             search: function (options) {
@@ -104,6 +90,28 @@ define(
                 });
 
                 return this.currentSearchPromise;
+            },
+
+            _onSeriesAdded: function (options) {
+                if (this.isExisting && options.series.get('path') === this.model.get('folder').path) {
+                    this.close();
+                }
+
+                else if (!this.isExisting) {
+                    this.collection.reset();
+                    this.searchResult.show(this.resultCollectionView);
+                    this.ui.seriesSearch.val('');
+                    this.ui.seriesSearch.focus();
+                }
+            },
+
+            _onLoadMore: function () {
+                var showingAll = this.resultCollectionView.showMore();
+                this.ui.searchBar.show();
+
+                if (showingAll) {
+                    this.ui.loadMore.hide();
+                }
             },
 
             _showResults: function () {

@@ -29,9 +29,9 @@ define(
                     this.addItemView(model, this.getItemView(), index);
                     this.children.findByModel(model)
                         .search({term: folderName})
-                        .always((function () {
+                        .always(function () {
                             self._showAndSearch(currentIndex + 1);
-                        }));
+                        });
                 }
             },
 
