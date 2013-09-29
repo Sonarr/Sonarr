@@ -4,7 +4,7 @@ define(
         'app',
         'marionette',
         'AddSeries/RootFolders/Layout',
-        'AddSeries/Existing/CollectionView',
+        'AddSeries/Existing/AddExistingSeriesCollectionView',
         'AddSeries/AddSeriesView',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',

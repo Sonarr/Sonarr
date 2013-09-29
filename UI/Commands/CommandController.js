@@ -52,5 +52,5 @@ define(
 
                 options.element.startSpin();
             }
-        }
+        };
     });

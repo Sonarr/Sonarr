@@ -30,7 +30,9 @@ define(
                     this.children.findByModel(model)
                         .search({term: folderName})
                         .always(function () {
-                            self._showAndSearch(currentIndex + 1);
+                            if (!self.isClosed) {
+                                self._showAndSearch(currentIndex + 1);
+                            }
                         });
                 }
             },
