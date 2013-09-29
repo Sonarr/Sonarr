@@ -78,7 +78,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (series.SeasonFolder)
             {
-                var seasonFolder = Path.GetDirectoryName(episodeFile.Path);
+                var seasonFolder = Path.GetDirectoryName(destinationFilename);
 
                 _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
                 _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
