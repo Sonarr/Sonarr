@@ -57,10 +57,10 @@ define(
             }
 
             if (seasonCount === 1) {
-                return new Handlebars.SafeString('<span class="label label-info">{0} Season</span>'.format(seasonCount))
+                return new Handlebars.SafeString('<span class="label label-info">{0} Season</span>'.format(seasonCount));
             }
 
-            return new Handlebars.SafeString('<span class="label label-info">{0} Seasons</span>'.format(seasonCount))
+            return new Handlebars.SafeString('<span class="label label-info">{0} Seasons</span>'.format(seasonCount));
         });
 
         Handlebars.registerHelper('titleWithYear', function () {

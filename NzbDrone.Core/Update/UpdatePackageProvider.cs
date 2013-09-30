@@ -34,10 +34,9 @@ namespace NzbDrone.Core.Update
         {
             var restClient = new RestClient(Services.RootUrl);
 
-            var request = new RestRequest("/v1/update/{branch}/all");
+            var request = new RestRequest("/v1/update/{branch}/changes");
 
             request.AddUrlSegment("branch", branch);
-            request.AddParameter("limit", 5);
 
             var updates = restClient.ExecuteAndValidate<List<UpdatePackage>>(request);
 
