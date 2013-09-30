@@ -18,6 +18,12 @@ namespace NzbDrone.Api
             _commandExecutor = commandExecutor;
         }
 
+        protected NzbDroneRestModuleWithSignalR(ICommandExecutor commandExecutor, string resource)
+            : base(resource)
+        {
+            _commandExecutor = commandExecutor;
+        }
+
         public void Handle(ModelEvent<TModel> message)
         {
             if (message.Action == ModelAction.Deleted || message.Action == ModelAction.Sync)

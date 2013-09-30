@@ -171,7 +171,7 @@ define(
                 this.seasons.show(new LoadingView());
 
                 this.seasonCollection = new SeasonCollection(this.model.get('seasons'));
-                this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id });
+                this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id }).bindSignalR();
                 this.episodeFileCollection = new EpisodeFileCollection({ seriesId: this.model.id });
 
                 $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function () {

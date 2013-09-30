@@ -24,7 +24,7 @@ define(
                     }
                 };
 
-                this.signalRconnection = $.connection("/signalr");
+                this.signalRconnection = $.connection('/signalr');
 
                 this.signalRconnection.stateChanged(function (change) {
                     console.debug('SignalR: [{0}]'.format(getStatus(change.newState)));
@@ -36,7 +36,7 @@ define(
                             'app'
                         ], function (app) {
                             app.vent.trigger('server:' + message.name, message.body);
-                        })
+                        });
                 });
 
                 this.signalRconnection.start({ transport:

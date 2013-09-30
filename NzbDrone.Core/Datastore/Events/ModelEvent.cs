@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Datastore.Events
 
     public enum ModelAction
     {
-        Unknow = 0,
+        Unknown = 0,
         Created = 1,
         Updated = 2,
         Deleted = 3,

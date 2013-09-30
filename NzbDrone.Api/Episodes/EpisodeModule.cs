@@ -1,16 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
-    public class EpisodeModule : NzbDroneRestModule<EpisodeResource>
+    public class EpisodeModule : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
+                                 IHandle<EpisodeGrabbedEvent>,                         
+                                 IHandle<EpisodeDownloadedEvent>
+                                 
     {
         private readonly IEpisodeService _episodeService;
 
-        public EpisodeModule(IEpisodeService episodeService)
-            : base("/episodes")
+        public EpisodeModule(ICommandExecutor commandExecutor, IEpisodeService episodeService)
+            : base(commandExecutor, "episodes")
         {
             _episodeService = episodeService;
 
@@ -39,6 +48,22 @@ namespace NzbDrone.Api.Episodes
         private EpisodeResource GetEpisode(int id)
         {
             return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            foreach (var episode in message.Episode.Episodes)
+            {
+                BroadcastResourceChange(ModelAction.Updated, episode.Id);
+            }
+        }
+
+        public void Handle(EpisodeDownloadedEvent message)
+        {
+            foreach (var episode in message.Episode.Episodes)
+            {
+                BroadcastResourceChange(ModelAction.Updated, episode.Id);
+            }
         }
     }
 }
