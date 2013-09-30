@@ -13,7 +13,7 @@
             var filename = a.pathname.split('/').pop();
 
             //Suppress Firefox debug errors when console window is closed
-            if (filename.toLowerCase() === 'markupview.jsm') {
+            if (filename.toLowerCase() === 'markupview.jsm' || filename.toLowerCase() === 'markup-view.js') {
                 return false;
             }
 

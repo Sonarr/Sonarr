@@ -2,6 +2,7 @@
 define(
     [
         'app',
+        'underscore',
         'marionette',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
@@ -11,7 +12,7 @@ define(
         'Shared/Messenger',
         'Mixins/AsValidatedView',
         'jquery.dotdotdot'
-    ], function (App, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
+    ], function (App, _, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
 
@@ -36,6 +37,9 @@ define(
                 if (!this.model) {
                     throw 'model is required';
                 }
+
+                this.templateHelpers = {};
+                this._configureTemplateHelpers();
 
                 this.listenTo(App.vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
                 this.listenTo(this.model, 'change', this.render);
@@ -71,22 +75,18 @@ define(
                 });
             },
 
-            serializeData: function () {
-                var data = this.model.toJSON();
-
+            _configureTemplateHelpers: function () {
                 var existingSeries = SeriesCollection.where({tvdbId: this.model.get('tvdbId')});
 
                 if (existingSeries.length > 0) {
-                    data.existing = existingSeries[0].toJSON();
+                    this.templateHelpers.existing = existingSeries[0].toJSON();
                 }
 
-                data.qualityProfiles = QualityProfiles.toJSON();
+                this.templateHelpers.qualityProfiles = QualityProfiles.toJSON();
 
-                if (!data.isExisting) {
-                    data.rootFolders = RootFolders.toJSON();
+                if (!this.model.get('isExisting')) {
+                    this.templateHelpers.rootFolders = RootFolders.toJSON();
                 }
-
-                return data;
             },
 
             _onConfigUpdated: function (options) {
@@ -134,17 +134,23 @@ define(
 
                 SeriesCollection.add(this.model);
 
-                this.model.save().done(function () {
+
+                var promise = this.model.save();
+
+                promise.done(function () {
                     self.close();
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+
                     Messenger.show({
                         message: 'Added: ' + self.model.get('title')
                     });
 
                     App.vent.trigger(App.Events.SeriesAdded, { series: self.model });
-                }).fail(function () {
-                        icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-                    });
+                });
+
+                promise.fail(function () {
+                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
+                });
             }
         });
 

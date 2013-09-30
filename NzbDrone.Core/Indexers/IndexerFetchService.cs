@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using System.Linq;
@@ -30,7 +31,6 @@ namespace NzbDrone.Core.Indexers
             _logger = logger;
         }
 
-
         public virtual IList<ReleaseInfo> FetchRss(IIndexer indexer)
         {
             _logger.Debug("Fetching feeds from " + indexer.Name);
@@ -52,7 +52,6 @@ namespace NzbDrone.Core.Indexers
 
             return result;
         }
-
 
         private IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria, int offset)
         {
@@ -117,14 +116,20 @@ namespace NzbDrone.Core.Indexers
                 }
                 catch (WebException webException)
                 {
-                    if (webException.Message.Contains("502") || webException.Message.Contains("503") || webException.Message.Contains("timed out"))
+                    if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
+                        webException.Message.Contains("timed out"))
                     {
-                        _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer.Name, url, webException.Message);
+                        _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer.Name, url,
+                            webException.Message);
                     }
                     else
                     {
                         _logger.Warn("{0} {1} {2}", indexer.Name, url, webException.Message);
                     }
+                }
+                catch (ApiKeyException)
+                {
+                    _logger.Warn("Invalid API Key for {0} {1}", indexer.Name, url);
                 }
                 catch (Exception feedEx)
                 {

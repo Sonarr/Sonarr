@@ -1,5 +1,5 @@
+@import "../Content/Bootstrap/variables";
 @import "../Shared/Styles/clickable.less";
-
 @import "Indexers/indexers";
 @import "Quality/quality";
 @import "Notifications/notifications";
@@ -43,4 +43,38 @@ li.save-and-add:hover {
 .naming-example {
   display: inline-block;
   margin-top: 5px;
+}
+
+.advanced-settings-toggle {
+  margin-right: 40px;
+
+  .checkbox {
+    width         : 100px;
+    margin-left   : 0px;
+    display       : inline-block;
+    padding-top   : 0px;
+    margin-bottom : 0px;
+    margin-top    : -1px;
+  }
+
+  .help-inline-checkbox {
+    display        : inline-block;
+    margin-top     : -23px;
+    margin-bottom  : 0;
+    vertical-align : middle;
+  }
+}
+
+.advanced-setting {
+  display: none;
+
+  .control-label {
+    color: @warningText;
+  }
+}
+
+.show-advanced-settings {
+  .advanced-setting {
+    display: block;
+  }
 }

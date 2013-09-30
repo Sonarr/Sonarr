@@ -10,24 +10,32 @@ namespace NzbDrone.Api.Update
     public class UpdateModule : NzbDroneRestModule<UpdateResource>
     {
         private readonly ICheckUpdateService _checkUpdateService;
+        private readonly IRecentUpdateProvider _recentUpdateProvider;
 
-        public UpdateModule(ICheckUpdateService checkUpdateService)
+        public UpdateModule(ICheckUpdateService checkUpdateService,
+                            IRecentUpdateProvider recentUpdateProvider)
         {
             _checkUpdateService = checkUpdateService;
-            GetResourceAll = GetAvailableUpdate;
+            _recentUpdateProvider = recentUpdateProvider;
+            GetResourceAll = GetRecentUpdates;
         }
 
-        private List<UpdateResource> GetAvailableUpdate()
+        private UpdateResource GetAvailableUpdate()
         {
             var update = _checkUpdateService.AvailableUpdate();
-            var response = new List<UpdateResource>();
+            var response = new UpdateResource();
 
             if (update != null)
             {
-                response.Add(update.InjectTo<UpdateResource>());
+                return update.InjectTo<UpdateResource>();
             }
 
             return response;
+        }
+
+        private List<UpdateResource> GetRecentUpdates()
+        {
+            return ToListResource(_recentUpdateProvider.GetRecentUpdatePackages);
         }
     }
 
@@ -40,5 +48,7 @@ namespace NzbDrone.Api.Update
         public DateTime ReleaseDate { get; set; }
         public String FileName { get; set; }
         public String Url { get; set; }
+
+        public UpdateChanges Changes { get; set; }
     }
 }

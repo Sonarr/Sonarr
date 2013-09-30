@@ -71,7 +71,7 @@ namespace NzbDrone.Core.MetadataSource
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
-            series.Year = show.year;
+            series.Year = GetYear(show.year, show.first_aired);
             series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
             series.Runtime = show.runtime;
@@ -179,6 +179,15 @@ namespace NzbDrone.Core.MetadataSource
             phrase = phrase.CleanSpaces().Replace(" ", "+");
 
             return phrase;
+        }
+
+        private static int GetYear(int year, int firstAired)
+        {
+            if (year > 1969) return year;
+
+            if (firstAired == 0) return DateTime.Today.Year;
+
+            return year;
         }
     }
 }

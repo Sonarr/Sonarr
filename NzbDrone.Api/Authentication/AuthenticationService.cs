@@ -1,4 +1,6 @@
-﻿using Nancy.Authentication.Basic;
+﻿using System;
+using Nancy;
+using Nancy.Authentication.Basic;
 using Nancy.Security;
 using NzbDrone.Core.Configuration;
 
@@ -7,6 +9,7 @@ namespace NzbDrone.Api.Authentication
     public interface IAuthenticationService : IUserValidator
     {
         bool Enabled { get; }
+        bool IsAuthenticated(NancyContext context);
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -43,6 +46,13 @@ namespace NzbDrone.Api.Authentication
             {
                 return _configFileProvider.AuthenticationEnabled;
             }
+        }
+
+        public bool IsAuthenticated(NancyContext context)
+        {
+            if (context.CurrentUser == null && _configFileProvider.AuthenticationEnabled) return false;
+
+            return true;
         }
     }
 }

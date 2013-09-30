@@ -1,24 +1,28 @@
 ﻿'use strict';
 define(
     [
+        'underscore',
         'marionette',
         'backgrid',
         'Series/SeasonCollection'
-    ], function (Marionette, Backgrid, SeasonCollection) {
+    ], function (_, Marionette, Backgrid, SeasonCollection) {
         return Marionette.Layout.extend({
             template: 'SeasonPass/SeriesLayoutTemplate',
 
             ui: {
-                seasonSelect: '.x-season-select',
-                expander    : '.x-expander',
-                seasonGrid  : '.x-season-grid'
+                seasonSelect   : '.x-season-select',
+                expander       : '.x-expander',
+                seasonGrid     : '.x-season-grid',
+                seriesMonitored: '.x-series-monitored'
             },
 
             events: {
-                'change .x-season-select': '_seasonSelected',
-                'click .x-expander'      : '_expand',
-                'click .x-latest'        : '_latest',
-                'click .x-monitored'     : '_toggleSeasonMonitored'
+                'change .x-season-select'  : '_seasonSelected',
+                'click .x-expander'        : '_expand',
+                'click .x-latest'          : '_latest',
+                'click .x-all'             : '_all',
+                'click .x-monitored'       : '_toggleSeasonMonitored',
+                'click .x-series-monitored': '_toggleSeriesMonitored'
             },
 
             regions: {
@@ -26,6 +30,7 @@ define(
             },
 
             initialize: function () {
+                this.listenTo(this.model, 'sync', this._setSeriesMonitoredState);
                 this.seasonCollection = new SeasonCollection(this.model.get('seasons'));
                 this.expanded = false;
             },
@@ -36,16 +41,17 @@ define(
                 }
 
                 this._setExpanderIcon();
+                this._setSeriesMonitoredState();
             },
 
             _seasonSelected: function () {
                 var seasonNumber = parseInt(this.ui.seasonSelect.val());
 
-                if (seasonNumber == -1 || isNaN(seasonNumber)) {
+                if (seasonNumber === -1 || isNaN(seasonNumber)) {
                     return;
                 }
 
-                this._setMonitored(seasonNumber)
+                this._setSeasonMonitored(seasonNumber);
             },
 
             _expand: function () {
@@ -79,10 +85,16 @@ define(
                     return s.seasonNumber;
                 });
 
-                this._setMonitored(season.seasonNumber);
+                this._setSeasonMonitored(season.seasonNumber);
             },
 
-            _setMonitored: function (seasonNumber) {
+            _all: function () {
+                var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
+
+                this._setSeasonMonitored(minSeasonNotZero.seasonNumber);
+            },
+
+            _setSeasonMonitored: function (seasonNumber) {
                 var self = this;
 
                 this.model.setSeasonPass(seasonNumber);
@@ -118,6 +130,29 @@ define(
 
             _afterToggleSeasonMonitored: function () {
                 this.render();
+            },
+
+            _setSeriesMonitoredState: function () {
+                var monitored = this.model.get('monitored');
+
+                this.ui.seriesMonitored.removeAttr('data-idle-icon');
+
+                if (monitored) {
+                    this.ui.seriesMonitored.addClass('icon-nd-monitored');
+                    this.ui.seriesMonitored.removeClass('icon-nd-unmonitored');
+                }
+                else {
+                    this.ui.seriesMonitored.addClass('icon-nd-unmonitored');
+                    this.ui.seriesMonitored.removeClass('icon-nd-monitored');
+                }
+            },
+
+            _toggleSeriesMonitored: function (e) {
+                var savePromise = this.model.save('monitored', !this.model.get('monitored'), {
+                    wait: true
+                });
+
+                this.ui.seriesMonitored.spinForPromise(savePromise);
             }
         });
     });

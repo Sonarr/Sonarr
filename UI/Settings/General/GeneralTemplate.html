@@ -7,11 +7,49 @@
 
             <div class="controls">
                 <input type="number" placeholder="8989" name="port"/>
-                    <span>
-                <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
-            </span>
+                <span>
+                    <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
+                </span>
+            </div>
+        </div>
+
+        <div class="control-group advanced-setting">
+            <label class="control-label">Enable SSL</label>
+
+            <div class="controls">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="enableSsl" class="x-ssl"/>
+
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-nd-form-warning" title="Requires restart running as administrator to take effect"/>
+                </span>
+            </div>
+        </div>
+
+        <div class="x-ssl-options">
+            <div class="control-group advanced-setting">
+                <label class="control-label">SSL Port Number</label>
+
+                <div class="controls">
+                    <input type="number" placeholder="8989" name="sslPort"/>
+                </div>
             </div>
 
+            <div class="control-group advanced-setting">
+                <label class="control-label">SSL Cert Hash</label>
+
+                <div class="controls">
+                    <input type="text" name="sslCertHash"/>
+                </div>
+            </div>
         </div>
 
         <div class="control-group">
@@ -29,9 +67,9 @@
                     <div class="btn btn-primary slide-button"/>
                 </label>
 
-            <span class="help-inline-checkbox">
-                <i class="icon-question-sign" title="Open a web browser and navigate to NzbDrone homepage on app start. Has no effect if installed as a windows service"/>
-            </span>
+                <span class="help-inline-checkbox">
+                    <i class="icon-nd-form-info" title="Open a web browser and navigate to NzbDrone homepage on app start. Has no effect if installed as a windows service"/>
+                </span>
             </div>
         </div>
     </fieldset>
@@ -51,7 +89,7 @@
                 </label>
 
             <span class="help-inline-checkbox">
-                <i class="icon-question-sign" title="Require Username and Password to access Nzbdrone"/>
+                <i class="icon-nd-form-info" title="Require Username and Password to access Nzbdrone"/>
             </span>
             </div>
         </div>
@@ -91,8 +129,7 @@
         </div>
     </fieldset>
 
-    {{#unless_eq branch compare="master"}}
-    <fieldset>
+    <fieldset class="advanced-setting">
         <legend>Development</legend>
         <div class="alert">
             <i class="icon-nd-warning"></i>
@@ -106,5 +143,4 @@
             </div>
         </div>
     </fieldset>
-    {{/unless_eq}}
 </div>

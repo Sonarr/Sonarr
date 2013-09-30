@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Indexers
 
         public IEnumerable<ReleaseInfo> Process(string xml, string url)
         {
+            PreProcess(xml, url);
+
             using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { ProhibitDtd = false, IgnoreComments = true }))
             {
 
@@ -102,6 +104,10 @@ namespace NzbDrone.Core.Indexers
         }
 
         protected abstract long GetSize(XElement item);
+
+        protected virtual void PreProcess(string source, string url)
+        {
+        }
 
         protected virtual ReleaseInfo PostProcessor(XElement item, ReleaseInfo currentResult)
         {

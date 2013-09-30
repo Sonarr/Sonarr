@@ -6,7 +6,7 @@ define(
     ], function (Marionette, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/MediaManagement/FileManagement/ViewTemplate'
+            template: 'Settings/Indexers/Options/IndexerOptionsViewTemplate'
         });
 
         return AsModelBoundView.call(view);

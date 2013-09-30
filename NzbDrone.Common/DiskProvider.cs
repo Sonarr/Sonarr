@@ -39,6 +39,7 @@ namespace NzbDrone.Common
         string GetPathRoot(string path);
         void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentPath, string childPath);
+        void SetFolderWriteTime(string path, DateTime time);
         FileAttributes GetFileAttributes(string path);
         void EmptyFolder(string path);
     }
@@ -441,6 +442,10 @@ namespace NzbDrone.Common
             return false;
         }
 
+        public void SetFolderWriteTime(string path, DateTime time)
+        {
+            Directory.SetLastWriteTimeUtc(path, time);
+        }
 
         private static void RemoveReadOnly(string path)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
@@ -19,9 +20,9 @@ namespace NzbDrone.Api.Series
         {
             get
             {
-                if (Seasons != null) return Seasons.Count;
+                if (Seasons == null) return 0;
 
-                return 0;
+                return Seasons.Where(s => s.SeasonNumber > 0).Count();
             }
         }
 

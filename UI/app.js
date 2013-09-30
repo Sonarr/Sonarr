@@ -25,7 +25,6 @@ require.config({
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
         'libs'                : 'JsLibraries/'
-
     },
 
     shim: {
@@ -33,11 +32,18 @@ require.config({
         $: {
             exports: '$',
 
-            init: function () {
+            deps   :
+                [
+                    'Mixins/jquery.ajax'
+                ],
+
+            init: function (AjaxMixin) {
                 require(
                     [
                         'jQuery/ToTheTop'
                     ]);
+
+                AjaxMixin.apply($);
             }
 
         },
@@ -74,14 +80,10 @@ require.config({
         backbone: {
             deps   :
                 [
-                    'Mixins/backbone.ajax',
                     'underscore',
                     '$'
                 ],
-            exports: 'Backbone',
-            init   : function (AjaxMixin) {
-                AjaxMixin.apply(Backbone);
-            }
+            exports: 'Backbone'
         },
 
 
@@ -187,9 +189,10 @@ define(
         var app = new Marionette.Application();
 
         app.Events = {
-            SeriesAdded  : 'series:added',
-            SeriesDeleted: 'series:deleted',
-            SeasonRenamed: 'season:renamed'
+            SeriesAdded    : 'series:added',
+            SeriesDeleted  : 'series:deleted',
+            SeasonRenamed  : 'season:renamed',
+            CommandComplete: 'command:complete'
         };
 
         app.Commands = {

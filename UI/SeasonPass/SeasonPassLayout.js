@@ -12,7 +12,7 @@ define(
                  SeriesCollectionView,
                  LoadingView) {
         return Marionette.Layout.extend({
-            template: 'SeasonPass/LayoutTemplate',
+            template: 'SeasonPass/SeasonPassLayoutTemplate',
 
             regions: {
                 series: '#x-series'

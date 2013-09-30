@@ -42,7 +42,7 @@ namespace NzbDrone.Core.MediaFiles
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-            MoveFile(episodeFile, filePath);
+            MoveFile(episodeFile, series, filePath);
 
             return filePath;
         }
@@ -51,12 +51,12 @@ namespace NzbDrone.Core.MediaFiles
         {
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
-            MoveFile(episodeFile, filePath);
-
+            MoveFile(episodeFile, localEpisode.Series, filePath);
+            
             return filePath;
         }
 
-        private void MoveFile(EpisodeFile episodeFile, string destinationFilename)
+        private void MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
         {
             if (!_diskProvider.FileExists(episodeFile.Path))
             {
@@ -72,6 +72,17 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+
+            _logger.Trace("Setting last write time on series folder: {0}", series.Path);
+            _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
+
+            if (series.SeasonFolder)
+            {
+                var seasonFolder = Path.GetDirectoryName(destinationFilename);
+
+                _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
+                _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
+            }
 
             //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
             try

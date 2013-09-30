@@ -44,6 +44,8 @@ define(
                 this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
                 this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
                 this.listenTo(App.vent, App.Events.SeasonRenamed, this._onSeasonRenamed);
+
+                App.vent.on(App.Events.CommandComplete, this._commandComplete, this);
             },
 
             onShow: function () {
@@ -194,6 +196,16 @@ define(
             _onSeasonRenamed: function (event) {
                 if (this.model.get('id') === event.series.get('id')) {
                     this.episodeFileCollection.fetch();
+                }
+            },
+
+            _commandComplete: function (options) {
+                if (options.command.get('name') === 'refreshseries' || options.command.get('name') === 'renameseries') {
+                    if (options.command.get('seriesId') === this.model.get('id')) {
+                        this._showSeasons();
+                        this._setMonitoredState();
+                        this._showInfo();
+                    }
                 }
             }
         });

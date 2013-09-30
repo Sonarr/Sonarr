@@ -114,7 +114,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&offset={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, offset));
         }
 
-
         public override string Name
         {
             get
@@ -130,7 +129,6 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return IndexerKind.Usenet;
             }
         }
-
 
         private static string NewsnabifyTitle(string title)
         {

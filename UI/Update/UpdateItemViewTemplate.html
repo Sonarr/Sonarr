@@ -1,0 +1,23 @@
+﻿<div class="update">
+    <fieldset>
+        <legend>{{version}} <span class="date">- {{ShortDate releaseDate}} {{currentVersion version}}</span></legend>
+
+        {{#with changes}}
+            {{#each new}}
+                <div class="change">
+                    <span class="label label-success">New</span> {{this}}
+                </div>
+            {{/each}}
+
+            {{#each fixed}}
+                <div class="change">
+                    <span class="label label-info">Fixed</span> {{this}}
+                </div>
+            {{/each}}
+        {{/with}}
+
+        {{#unless changes}}
+            No notable changes
+        {{/unless}}
+    </fieldset>
+</div>

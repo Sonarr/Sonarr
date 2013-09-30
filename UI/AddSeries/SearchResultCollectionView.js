@@ -2,8 +2,7 @@
 define(
     [
         'marionette',
-        'AddSeries/SearchResultView',
-
+        'AddSeries/SearchResultView'
     ], function (Marionette, SearchResultView) {
 
         return Marionette.CollectionView.extend({

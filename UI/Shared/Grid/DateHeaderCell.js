@@ -23,7 +23,7 @@ define(
                             var leftVal = left.get(columnName);
                             var rightVal = right.get(columnName);
 
-                            return self._comparator(leftVal, rightVal)
+                            return self._comparator(leftVal, rightVal);
                         });
                     }
                     else {
@@ -31,7 +31,7 @@ define(
                             var leftVal = left.get(columnName);
                             var rightVal = right.get(columnName);
 
-                            return self._comparator(rightVal, leftVal)
+                            return self._comparator(rightVal, leftVal);
                         });
                     }
                 }
@@ -39,7 +39,7 @@ define(
 
             _comparator: function (leftVal, rightVal) {
                 if (!leftVal && !rightVal) {
-                    return 0
+                    return 0;
                 }
 
                 if (!leftVal) {
@@ -47,7 +47,7 @@ define(
                 }
 
                 if (!rightVal) {
-                    return 1
+                    return 1;
                 }
 
                 if (leftVal === rightVal) {

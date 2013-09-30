@@ -11,13 +11,9 @@ define(
                 return response;
             },
 
-            isActive: function () {
-                return this.get('state') !== 'completed' && this.get('state') !== 'failed';
-            },
-
             isSameCommand: function (command) {
 
-                if (command.name.toLocaleLowerCase() != this.get('name').toLocaleLowerCase()) {
+                if (command.name.toLocaleLowerCase() !== this.get('name').toLocaleLowerCase()) {
                     return false;
                 }
 
@@ -28,6 +24,14 @@ define(
                 }
 
                 return true;
+            },
+
+            isActive: function () {
+                return this.get('state') !== 'completed' && this.get('state') !== 'failed';
+            },
+
+            isComplete: function () {
+                return this.get('state') === 'completed';
             }
         });
     });

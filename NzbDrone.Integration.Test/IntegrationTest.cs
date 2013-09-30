@@ -47,22 +47,21 @@ namespace NzbDrone.Integration.Test
             _runner = new NzbDroneRunner();
             _runner.KillAll();
 
-            InitRestClients();
-
             _runner.Start();
+            InitRestClients();
         }
 
         private void InitRestClients()
         {
             RestClient = new RestClient("http://localhost:8989/api");
-            Series = new SeriesClient(RestClient);
-            Releases = new ReleaseClient(RestClient);
-            RootFolders = new ClientBase<RootFolderResource>(RestClient);
-            Commands = new ClientBase<CommandResource>(RestClient);
-            History = new ClientBase<HistoryResource>(RestClient);
-            Indexers = new IndexerClient(RestClient);
-            Episodes = new EpisodeClient(RestClient);
-            NamingConfig = new ClientBase<NamingConfigResource>(RestClient, "config/naming");
+            Series = new SeriesClient(RestClient, _runner.ApiKey);
+            Releases = new ReleaseClient(RestClient, _runner.ApiKey);
+            RootFolders = new ClientBase<RootFolderResource>(RestClient, _runner.ApiKey);
+            Commands = new ClientBase<CommandResource>(RestClient, _runner.ApiKey);
+            History = new ClientBase<HistoryResource>(RestClient, _runner.ApiKey);
+            Indexers = new IndexerClient(RestClient, _runner.ApiKey);
+            Episodes = new EpisodeClient(RestClient, _runner.ApiKey);
+            NamingConfig = new ClientBase<NamingConfigResource>(RestClient, _runner.ApiKey, "config/naming");
         }
 
         //[TestFixtureTearDown]

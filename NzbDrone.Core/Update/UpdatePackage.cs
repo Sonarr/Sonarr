@@ -13,5 +13,7 @@ namespace NzbDrone.Core.Update
         public DateTime ReleaseDate { get; set; }
         public String FileName { get; set; }
         public String Url { get; set; }
+
+        public UpdateChanges Changes { get; set; }
     }
 }

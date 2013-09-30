@@ -73,6 +73,7 @@ module.exports = function (grunt) {
                             'UI/Cells/cells.less',
                             'UI/Logs/logs.less',
                             'UI/Settings/settings.less',
+                            'UI/Update/update.less'
                         ],
                 dest  : outputRoot,
                 ext: '.css'

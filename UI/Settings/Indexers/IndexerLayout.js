@@ -4,10 +4,10 @@ define(
     [
         'marionette',
         'Settings/Indexers/CollectionView',
-        'Settings/Indexers/Options/View'
+        'Settings/Indexers/Options/IndexerOptionsView'
     ], function (Marionette, CollectionView, OptionsView) {
         return Marionette.Layout.extend({
-            template: 'Settings/Indexers/LayoutTemplate',
+            template: 'Settings/Indexers/IndexerLayoutTemplate',
 
             regions: {
                 indexersRegion : '#indexers-collection',

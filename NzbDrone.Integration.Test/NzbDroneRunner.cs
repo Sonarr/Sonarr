@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Xml.Linq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Configuration;
 using RestSharp;
 
 namespace NzbDrone.Integration.Test
@@ -16,16 +19,18 @@ namespace NzbDrone.Integration.Test
         private readonly IRestClient _restClient;
         private Process _nzbDroneProcess;
 
+        public string AppData { get; private set; }
+        public string ApiKey { get; private set; }
+
         public NzbDroneRunner(int port = 8989)
         {
             _processProvider = new ProcessProvider();
             _restClient = new RestClient("http://localhost:8989/api");
         }
 
-
         public void Start()
         {
-            AppDate = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
+            AppData = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
 
             var nzbdroneConsoleExe = "NzbDrone.Console.exe";
 
@@ -33,7 +38,6 @@ namespace NzbDrone.Integration.Test
             {
                 nzbdroneConsoleExe = "NzbDrone.exe";
             }
-
 
             if (BuildInfo.IsDebug)
             {
@@ -54,8 +58,12 @@ namespace NzbDrone.Integration.Test
                     Assert.Fail("Process has exited");
                 }
 
+                SetApiKey();
 
-                var statusCall = _restClient.Get(new RestRequest("system/status"));
+                var request = new RestRequest("system/status");
+                request.AddHeader("Authorization", ApiKey);
+
+                var statusCall = _restClient.Get(request);
 
                 if (statusCall.ResponseStatus == ResponseStatus.Completed)
                 {
@@ -77,7 +85,7 @@ namespace NzbDrone.Integration.Test
 
         private void Start(string outputNzbdroneConsoleExe)
         {
-            var args = "-nobrowser -data=\"" + AppDate + "\"";
+            var args = "-nobrowser -data=\"" + AppData + "\"";
             _nzbDroneProcess = _processProvider.Start(outputNzbdroneConsoleExe, args, OnOutputDataReceived, OnOutputDataReceived);
 
         }
@@ -92,7 +100,16 @@ namespace NzbDrone.Integration.Test
             }
         }
 
+        private void SetApiKey()
+        {
+            var configFile = Path.Combine(AppData, "config.xml");
 
-        public string AppDate { get; private set; }
+            if (!String.IsNullOrWhiteSpace(ApiKey)) return;
+            if (!File.Exists(configFile)) return;
+
+            var xDoc = XDocument.Load(configFile);
+            var config = xDoc.Descendants(ConfigFileProvider.CONFIG_ELEMENT_NAME).Single();
+            ApiKey = config.Descendants("ApiKey").Single().Value;
+        }
     }
 }

@@ -37,14 +37,20 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly IIndexerRepository _indexerRepository;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly INewznabTestService _newznabTestService;
         private readonly Logger _logger;
 
         private readonly List<IIndexer> _indexers;
 
-        public IndexerService(IIndexerRepository indexerRepository, IEnumerable<IIndexer> indexers, IConfigFileProvider configFileProvider, Logger logger)
+        public IndexerService(IIndexerRepository indexerRepository,
+                              IEnumerable<IIndexer> indexers,
+            IConfigFileProvider configFileProvider,
+            INewznabTestService newznabTestService,
+            Logger logger)
         {
             _indexerRepository = indexerRepository;
             _configFileProvider = configFileProvider;
+            _newznabTestService = newznabTestService;
             _logger = logger;
 
 
@@ -103,6 +109,9 @@ namespace NzbDrone.Core.Indexers
                                      Implementation = indexer.Implementation,
                                      Settings = indexer.Settings.ToJson()
                                  };
+
+            var instance = ToIndexer(definition).Instance;
+            _newznabTestService.Test(instance);
 
             definition = _indexerRepository.Insert(definition);
             indexer.Id = definition.Id;

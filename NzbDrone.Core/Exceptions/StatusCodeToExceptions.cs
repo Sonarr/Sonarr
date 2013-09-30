@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Exceptions
             switch (statusCode)
             {
                 case HttpStatusCode.BadRequest:
-                    throw new BadRequestException(statusCode, message);
+                    throw new BadRequestException(message);
 
                 case HttpStatusCode.Unauthorized:
                     throw new UnauthorizedAccessException(message);

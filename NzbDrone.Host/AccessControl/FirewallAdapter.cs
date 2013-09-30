@@ -26,18 +26,21 @@ namespace NzbDrone.Host.AccessControl
         {
             if (IsFirewallEnabled())
             {
-                if (IsNzbDronePortOpen())
+                if (!IsNzbDronePortOpen(_configFileProvider.Port))
                 {
-                    _logger.Trace("NzbDrone port is already open, skipping.");
-                    return;
+                    _logger.Trace("Opening Port for NzbDrone: {0}", _configFileProvider.Port);
+                    OpenFirewallPort(_configFileProvider.Port);
                 }
 
-                OpenFirewallPort(_configFileProvider.Port);
+                if (_configFileProvider.EnableSsl && !IsNzbDronePortOpen(_configFileProvider.SslPort))
+                {
+                    _logger.Trace("Opening SSL Port for NzbDrone: {0}", _configFileProvider.SslPort);
+                    OpenFirewallPort(_configFileProvider.SslPort);
+                }
             }
         }
 
-
-        private bool IsNzbDronePortOpen()
+        private bool IsNzbDronePortOpen(int port)
         {
             try
             {
@@ -52,7 +55,7 @@ namespace NzbDrone.Host.AccessControl
 
                 foreach (INetFwOpenPort p in ports)
                 {
-                    if (p.Port == _configFileProvider.Port)
+                    if (p.Port == port)
                         return true;
                 }
             }
@@ -62,8 +65,6 @@ namespace NzbDrone.Host.AccessControl
             }
             return false;
         }
-
-
 
         private void OpenFirewallPort(int portNumber)
         {

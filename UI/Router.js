@@ -31,6 +31,7 @@ require(
                 'rss'                       : 'rss',
                 'system'                    : 'system',
                 'seasonpass'                : 'seasonPass',
+                'update'                    : 'update',
                 ':whatever'                 : 'notFound'
             }
         });

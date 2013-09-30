@@ -234,12 +234,16 @@
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
     <Compile Include="Indexers\BasicTorrentRssParser.cs" />
     <Compile Include="Indexers\DownloadProtocols.cs" />
+    <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
+    <Compile Include="Indexers\NewznabTestService.cs" />
     <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\IParseFeed.cs" />
+    <Compile Include="Indexers\Newznab\NewznabException.cs" />
+    <Compile Include="Indexers\Newznab\NewznabPreProcessor.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
     <Compile Include="Indexers\NullSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
@@ -546,6 +550,8 @@
     <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
     <Compile Include="Update\InstallUpdateService.cs" />
+    <Compile Include="Update\RecentUpdateProvider.cs" />
+    <Compile Include="Update\UpdateChanges.cs" />
     <Compile Include="Update\UpdatePackageAvailable.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
