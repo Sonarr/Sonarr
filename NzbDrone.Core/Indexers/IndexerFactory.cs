@@ -24,7 +24,8 @@ namespace NzbDrone.Core.Indexers
 
         protected override void InitializeProviders()
         {
-            var definitions = _providers.SelectMany(indexer => indexer.DefaultDefinitions);
+            var definitions = _providers.Where(c => c.Protocol == DownloadProtocol.Usenet)
+                .SelectMany(indexer => indexer.DefaultDefinitions);
 
             var currentProviders = All();
 
