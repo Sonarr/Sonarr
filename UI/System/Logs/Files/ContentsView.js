@@ -6,6 +6,6 @@ define(
         'marionette'
     ], function (App, Marionette) {
         return Marionette.ItemView.extend({
-            template: 'Update/UpdateItemViewTemplate'
+            template: 'System/Logs/Files/ContentsViewTemplate'
         });
     });

@@ -71,9 +71,9 @@ module.exports = function (grunt) {
                             'UI/AddSeries/addSeries.less',
                             'UI/Calendar/calendar.less',
                             'UI/Cells/cells.less',
-                            'UI/Logs/logs.less',
                             'UI/Settings/settings.less',
-                            'UI/Update/update.less'
+                            'UI/System/Logs/logs.less',
+                            'UI/System/Update/update.less'
                         ],
                 dest  : outputRoot,
                 ext: '.css'

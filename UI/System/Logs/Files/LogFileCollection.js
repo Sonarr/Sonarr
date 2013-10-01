@@ -1,5 +1,6 @@
 ﻿﻿'use strict';
-define(['Logs/Files/Model' ],
+
+define(['System/Logs/Files/LogFileModel' ],
 function (LogFileModel) {
     return Backbone.Collection.extend({
         url  : window.NzbDrone.ApiRoot + '/log/files',

@@ -3,14 +3,15 @@ define(
     [
         'marionette',
         'backgrid',
-        'Logs/LogTimeCell',
-        'Logs/LogLevelCell',
+        'System/Logs/Table/LogTimeCell',
+        'System/Logs/Table/LogLevelCell',
         'Shared/Grid/Pager',
-        'Logs/Collection',
-        'Shared/Toolbar/ToolbarLayout'
-    ], function (Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout) {
+        'System/Logs/LogsCollection',
+        'Shared/Toolbar/ToolbarLayout',
+        'Shared/LoadingView'
+    ], function (Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
-            template: 'Logs/LayoutTemplate',
+            template: 'System/Logs/Table/LogsTableLayoutTemplate',
 
             regions: {
                 grid   : '#x-grid',
@@ -55,16 +56,25 @@ define(
 
             initialize: function () {
                 this.collection = new LogCollection();
-                this.collection.fetch();
+                this.collectionPromise = this.collection.fetch();
+            },
+
+            onRender: function () {
+                this.grid.show(new LoadingView());
             },
 
             onShow: function () {
+                var self = this;
                 this._showToolbar();
-                this._showTable();
+
+                this.collectionPromise.done(function () {
+                    self._showTable();
+                });
             },
 
-            _showTable: function () {
 
+
+            _showTable: function () {
                 this.grid.show(new Backgrid.Grid({
                     row       : Backgrid.Row,
                     columns   : this.columns,
@@ -79,7 +89,7 @@ define(
             },
 
             _showToolbar: function () {
-                var leftSideButtons = {
+                var rightSideButtons = {
                     type      : 'default',
                         storeState: false,
                         items     :
@@ -99,20 +109,14 @@ define(
                             errorMessage   : 'Failed to clear logs',
                             ownerContext   : this,
                             onSuccess      : this._refreshLogs
-                        },
-
-                        {
-                            title: 'Files',
-                            icon : 'icon-file',
-                            route: 'logs/files'
                         }
                     ]
                 };
 
                 this.toolbar.show(new ToolbarLayout({
-                    left   :
+                    right   :
                         [
-                            leftSideButtons
+                            rightSideButtons
                         ],
                     context: this
                 }));

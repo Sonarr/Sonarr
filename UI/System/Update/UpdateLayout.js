@@ -3,13 +3,13 @@ define(
     [
         'marionette',
         'backgrid',
-        'Update/UpdateCollection',
-        'Update/UpdateCollectionView',
+        'System/Update/UpdateCollection',
+        'System/Update/UpdateCollectionView',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
     ], function (Marionette, Backgrid, UpdateCollection, UpdateCollectionView, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
-            template: 'Update/UpdateLayoutTemplate',
+            template: 'System/Update/UpdateLayoutTemplate',
 
             regions: {
                 updates: '#x-updates',

@@ -4,12 +4,12 @@ define(
         'backbone'
     ], function (Backbone) {
 
-        var model = Backbone.Model.extend({
+        var StatusModel = Backbone.Model.extend({
             url: window.NzbDrone.ApiRoot + '/system/status'
         });
 
 
-        var instance = new model();
+        var instance = new StatusModel();
         instance.fetch();
         return instance;
     });

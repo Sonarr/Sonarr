@@ -11,16 +11,27 @@ define(
         'Series/SeriesCollection',
         'Missing/MissingLayout',
         'Calendar/CalendarLayout',
-        'Logs/Layout',
-        'Logs/Files/Layout',
         'Release/Layout',
-        'System/Layout',
+        'System/SystemLayout',
         'SeasonPass/SeasonPassLayout',
-        'Update/UpdateLayout',
+        'System/Update/UpdateLayout',
         'Shared/NotFoundView',
         'Shared/Modal/Region'
-    ], function (App, Marionette, HistoryLayout, SettingsLayout, AddSeriesLayout, SeriesIndexLayout, SeriesDetailsLayout, SeriesCollection, MissingLayout, CalendarLayout,
-        LogsLayout, LogFileLayout, ReleaseLayout, SystemLayout, SeasonPassLayout, UpdateLayout, NotFoundView) {
+    ], function (App,
+                 Marionette,
+                 HistoryLayout,
+                 SettingsLayout,
+                 AddSeriesLayout,
+                 SeriesIndexLayout,
+                 SeriesDetailsLayout,
+                 SeriesCollection,
+                 MissingLayout,
+                 CalendarLayout,
+                 ReleaseLayout,
+                 SystemLayout,
+                 SeasonPassLayout,
+                 UpdateLayout,
+                 NotFoundView) {
         return Marionette.Controller.extend({
 
             series: function () {
@@ -31,7 +42,7 @@ define(
             seriesDetails: function (query) {
                 var series = SeriesCollection.where({titleSlug: query});
 
-                if (series.length != 0) {
+                if (series.length !== 0) {
                     var targetSeries = series[0];
                     this._setTitle(targetSeries.get('title'));
                     App.mainRegion.show(new SeriesDetailsLayout({ model: targetSeries }));
@@ -53,7 +64,7 @@ define(
 
             settings: function (action) {
                 this._setTitle('Settings');
-                App.mainRegion.show(new SettingsLayout({action: action}));
+                App.mainRegion.show(new SettingsLayout({ action: action }));
             },
 
             missing: function () {
@@ -73,21 +84,9 @@ define(
                 App.mainRegion.show(new ReleaseLayout());
             },
 
-            logs: function (action) {
-                if (action) {
-                    this._setTitle('log files');
-                    App.mainRegion.show(new LogFileLayout());
-                }
-
-                else {
-                    this._setTitle('logs');
-                    App.mainRegion.show(new LogsLayout());
-                }
-            },
-
-            system: function () {
-                this._setTitle('system');
-                App.mainRegion.show(new SystemLayout());
+            system: function (action) {
+                this._setTitle('System');
+                App.mainRegion.show(new SystemLayout({ action: action }));
             },
 
             seasonPass: function () {

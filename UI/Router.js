@@ -2,6 +2,7 @@
 require(
     [
         'app',
+        'backbone',
         'marionette',
         'Controller',
         'Series/SeriesCollection',
@@ -10,7 +11,16 @@ require(
         'Navbar/NavbarView',
         'jQuery/RouteBinder',
         'jquery'
-    ], function (App, Marionette, Controller, SeriesCollection, ProgressMessageCollection, CommandMessengerCollectionView, NavbarView, RouterBinder, $) {
+    ], function (App,
+                 Backbone,
+                 Marionette,
+                 Controller,
+                 SeriesCollection,
+                 ProgressMessageCollection,
+                 CommandMessengerCollectionView,
+                 NavbarView,
+                 RouterBinder,
+                 $) {
 
         var Router = Marionette.AppRouter.extend({
 
@@ -26,12 +36,10 @@ require(
                 'settings/:action(/:query)' : 'settings',
                 'missing'                   : 'missing',
                 'history'                   : 'history',
-                'logs'                      : 'logs',
-                'logs/:action'              : 'logs',
                 'rss'                       : 'rss',
                 'system'                    : 'system',
+                'system/:action'            : 'system',
                 'seasonpass'                : 'seasonPass',
-                'update'                    : 'update',
                 ':whatever'                 : 'notFound'
             }
         });
