@@ -182,6 +182,7 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
+    <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
     <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />

@@ -4,7 +4,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class IndexerBase<TSettings> : IIndexer
+    public abstract class IndexerBase<TSettings> : IIndexer where TSettings : IProviderConfig, new()
     {
         public Type ConfigContract
         {
@@ -18,12 +18,14 @@ namespace NzbDrone.Core.Indexers
         {
             get
             {
+                var config = (IProviderConfig)new TSettings();
+
                 yield return new IndexerDefinition
                 {
-                    Name = this.GetType().Name,
-                    Enable = false,
+                    Name = GetType().Name,
+                    Enable = config.Validate().IsValid,
                     Implementation = GetType().Name,
-                    Settings = NullConfig.Instance
+                    Settings = config
                 };
             }
         }
