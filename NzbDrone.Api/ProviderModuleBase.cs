@@ -19,7 +19,8 @@ namespace NzbDrone.Api
     {
         private readonly IProviderFactory<TProvider, TProviderDefinition> _providerFactory;
 
-        protected ProviderModuleBase(IProviderFactory<TProvider, TProviderDefinition> providerFactory)
+        protected ProviderModuleBase(IProviderFactory<TProvider, TProviderDefinition> providerFactory, string resource)
+            : base(resource)
         {
             _providerFactory = providerFactory;
             Get["templates"] = x => GetTemplates();
