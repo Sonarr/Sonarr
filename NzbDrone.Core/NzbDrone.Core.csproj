@@ -422,7 +422,13 @@
     <Compile Include="Rest\RestSharpExtensions.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
-    <Compile Include="ThingiProvider\ProviderService.cs" />
+    <Compile Include="ThingiProvider\IProviderConfig.cs" />
+    <Compile Include="ThingiProvider\IProviderFactory.cs" />
+    <Compile Include="ThingiProvider\IProviderRepository.cs" />
+    <Compile Include="ThingiProvider\NullConfig.cs" />
+    <Compile Include="ThingiProvider\ProviderDefinition.cs" />
+    <Compile Include="ThingiProvider\ProviderRepository.cs" />
+    <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />

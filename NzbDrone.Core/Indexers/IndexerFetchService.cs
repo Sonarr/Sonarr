@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Indexers
                 }
                 catch (ApiKeyException)
                 {
-                    _logger.Warn("Invalid API Key for {0} {1}", indexer.Name, url);
+                    _logger.Warn("Invalid API Key for {0} {1}", indexer, url);
                 }
                 catch (Exception feedEx)
                 {

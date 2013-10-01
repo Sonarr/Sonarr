@@ -13,7 +13,7 @@
   <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
   <DefaultTestTimeout>5000</DefaultTestTimeout>
-  <UseBuildConfiguration>Debug</UseBuildConfiguration>
+  <UseBuildConfiguration>RELEASE</UseBuildConfiguration>
   <UseBuildPlatform>x86</UseBuildPlatform>
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>x86</UseCPUArchitecture>
