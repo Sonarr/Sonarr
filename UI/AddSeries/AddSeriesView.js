@@ -99,7 +99,7 @@ define(
 
                 else if (!this.isExisting) {
                     this.collection.reset();
-                    this.searchResult.show(this.resultCollectionView);
+                    this.searchResult.close();
                     this.ui.seriesSearch.val('');
                     this.ui.seriesSearch.focus();
                 }
