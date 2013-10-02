@@ -21,6 +21,7 @@ define(
                     allDayDefault : false,
                     ignoreTimezone: false,
                     weekMode      : 'variable',
+                    firstDay      : window.NzbDrone.ServerStatus.startOfWeek,
                     timeFormat    : 'h(:mm)tt',
                     header        : {
                         left  : 'prev,next today',

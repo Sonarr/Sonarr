@@ -28,5 +28,13 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return !IsLinux;
             }
         }
+
+        public static DayOfWeek FirstDayOfWeek
+        {
+            get
+            {
+                return DateTime.Today.GetFirstDayOfWeek().DayOfWeek;
+            }
+        }
     }
 }
