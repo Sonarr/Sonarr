@@ -73,10 +73,10 @@ define(
                 App.mainRegion.show(new MissingLayout());
             },
 
-            history: function () {
+            history: function (action) {
                 this._setTitle('History');
 
-                App.mainRegion.show(new HistoryLayout());
+                App.mainRegion.show(new HistoryLayout({ action: action }));
             },
 
             rss: function () {

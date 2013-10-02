@@ -1,108 +1,74 @@
 'use strict';
 define(
     [
+        'app',
         'marionette',
         'backgrid',
-        'History/Collection',
-        'History/EventTypeCell',
-        'Cells/SeriesTitleCell',
-        'Cells/EpisodeNumberCell',
-        'Cells/EpisodeTitleCell',
-        'Cells/QualityCell',
-        'Cells/RelativeDateCell',
-        'History/HistoryDetailsCell',
-        'Shared/Grid/Pager',
-        'Shared/LoadingView'
-    ], function (Marionette,
+        'History/Table/HistoryTableLayout',
+        'History/Queue/QueueLayout'
+    ], function (App,
+                 Marionette,
                  Backgrid,
-                 HistoryCollection,
-                 EventTypeCell,
-                 SeriesTitleCell,
-                 EpisodeNumberCell,
-                 EpisodeTitleCell,
-                 QualityCell,
-                 RelativeDateCell,
-                 HistoryDetailsCell,
-                 GridPager,
-                 LoadingView) {
+                 HistoryTableLayout,
+                 QueueLayout) {
         return Marionette.Layout.extend({
             template: 'History/HistoryLayoutTemplate',
 
             regions: {
-                history: '#x-history',
-                toolbar: '#x-toolbar',
-                pager  : '#x-pager'
+                history: '#history',
+                queueRegion  : '#queue'
             },
 
-            columns:
-                [
-                    {
-                        name     : 'eventType',
-                        label    : '',
-                        cell     : EventTypeCell,
-                        cellValue: 'this'
-                    },
-                    {
-                        name : 'series',
-                        label: 'Series',
-                        cell : SeriesTitleCell
-                    },
-                    {
-                        name    : 'episode',
-                        label   : 'Episode',
-                        sortable: false,
-                        cell    : EpisodeNumberCell
-                    },
-                    {
-                        name    : 'episode',
-                        label   : 'Episode Title',
-                        sortable: false,
-                        cell    : EpisodeTitleCell
-                    },
-                    {
-                        name    : 'quality',
-                        label   : 'Quality',
-                        cell    : QualityCell,
-                        sortable: false
-                    },
-                    {
-                        name : 'date',
-                        label: 'Date',
-                        cell : RelativeDateCell
-                    },
-                    {
-                        name    : 'this',
-                        label   : '',
-                        cell    : HistoryDetailsCell,
-                        sortable: false
-                    }
-                ],
-
-
-            initialize: function () {
-                this.collection = new HistoryCollection();
-                this.listenTo(this.collection, 'sync', this._showTable);
+            ui: {
+                historyTab: '.x-history-tab',
+                queueTab  : '.x-queue-tab'
             },
 
+            events: {
+                'click .x-history-tab'  : '_showHistory',
+                'click .x-queue-tab'   : '_showQueue'
+            },
 
-            _showTable: function (collection) {
-
-                this.history.show(new Backgrid.Grid({
-                    columns   : this.columns,
-                    collection: collection,
-                    className : 'table table-hover'
-                }));
-
-                this.pager.show(new GridPager({
-                    columns   : this.columns,
-                    collection: collection
-                }));
+            initialize: function (options) {
+                if (options.action) {
+                    this.action = options.action.toLowerCase();
+                }
             },
 
             onShow: function () {
-                this.history.show(new LoadingView());
-                this.collection.fetch();
-            }
+                switch (this.action) {
+                    case 'queue':
+                        this._showQueue();
+                        break;
+                    default:
+                        this._showHistory();
+                }
+            },
 
+            _navigate:function(route){
+                require(['Router'], function(){
+                    App.Router.navigate(route);
+                });
+            },
+
+            _showHistory: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.history.show(new HistoryTableLayout());
+                this.ui.historyTab.tab('show');
+                this._navigate('/history');
+            },
+
+            _showQueue: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.queueRegion.show(new QueueLayout());
+                this.ui.queueTab.tab('show');
+                this._navigate('/history/queue');
+            }
         });
     });

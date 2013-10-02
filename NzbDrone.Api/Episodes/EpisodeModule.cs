@@ -54,7 +54,10 @@ namespace NzbDrone.Api.Episodes
         {
             foreach (var episode in message.Episode.Episodes)
             {
-                BroadcastResourceChange(ModelAction.Updated, episode.Id);
+                var resource = episode.InjectTo<EpisodeResource>();
+                resource.Downloading = true;
+
+                BroadcastResourceChange(ModelAction.Updated, resource);
             }
         }
 

@@ -34,6 +34,17 @@ namespace NzbDrone.Api
             BroadcastResourceChange(message.Action, message.Model.Id);
         }
 
+        protected void BroadcastResourceChange(ModelAction action, TResource resource)
+        {
+            var signalRMessage = new SignalRMessage
+            {
+                Name = Resource,
+                Body = new ResourceChangeMessage<TResource>(resource, action)
+            };
+
+            _commandExecutor.PublishCommand(new BroadcastSignalRMessage(signalRMessage));
+        }
+
         protected void BroadcastResourceChange(ModelAction action, int id)
         {
             var resource = GetResourceById(id);

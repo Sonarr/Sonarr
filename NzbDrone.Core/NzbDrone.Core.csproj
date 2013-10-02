@@ -110,6 +110,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -216,7 +217,7 @@
     <Compile Include="Download\DownloadApprovedReports.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
-    <Compile Include="Download\SabQueueItem.cs" />
+    <Compile Include="Download\QueueItem.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
@@ -419,6 +420,10 @@
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
+    <Compile Include="Queue\Queue.cs" />
+    <Compile Include="Queue\UpdateQueueEvent.cs" />
+    <Compile Include="Queue\QueueScheduler.cs" />
+    <Compile Include="Queue\QueueService.cs" />
     <Compile Include="Rest\RestSharpExtensions.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />

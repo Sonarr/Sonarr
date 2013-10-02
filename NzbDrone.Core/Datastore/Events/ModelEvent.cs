@@ -22,6 +22,4 @@ namespace NzbDrone.Core.Datastore.Events
         Deleted = 3,
         Sync = 4
     }
-
-
 }

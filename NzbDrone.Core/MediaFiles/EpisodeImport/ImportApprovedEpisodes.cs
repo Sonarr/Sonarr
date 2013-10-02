@@ -70,12 +70,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
                         episodeFile.Path = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile));
-                        _eventAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
                     }
 
                     _mediaFileService.Add(episodeFile);
                     imported.Add(importDecision);
+
+                    if (newDownload)
+                    {
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile));
+                        _eventAggregator.PublishEvent(new EpisodeDownloadedEvent(localEpisode));
+                    }
                 }
                 catch (Exception e)
                 {

@@ -126,6 +126,8 @@
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="Config\NamingSampleResource.cs" />
     <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
+    <Compile Include="Queue\QueueModule.cs" />
+    <Compile Include="Queue\QueueResource.cs" />
     <Compile Include="ResourceChangeMessage.cs" />
     <Compile Include="Notifications\NotificationSchemaModule.cs" />
     <Compile Include="Notifications\NotificationModule.cs" />

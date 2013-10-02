@@ -3,15 +3,25 @@
 define(
     [
         'app',
+        'underscore',
         'Cells/NzbDroneCell',
+        'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (App, NzbDroneCell, Moment, FormatHelpers) {
+    ], function (App, _, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
 
             render: function () {
+                this.listenTo(QueueCollection, 'sync', this._renderCell);
+
+                this._renderCell();
+
+                return this;
+            },
+
+            _renderCell: function () {
                 this.$el.empty();
 
                 if (this.model) {
@@ -41,10 +51,17 @@ define(
                             this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
                         }
 
-                        return this;
+                        return;
                     }
+
                     else {
-                        if (this.model.get('downloading')) {
+                        var model = this.model;
+
+                        var downloading = _.find(QueueCollection.models, function (queueModel) {
+                            return queueModel.get('episode').id === model.get('id');
+                        });
+
+                        if (downloading || this.model.get('downloading')) {
                             icon = 'icon-nd-downloading';
                             tooltip = 'Episode is downloading';
                         }
@@ -66,8 +83,6 @@ define(
 
                     this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, tooltip));
                 }
-
-                return this;
             }
         });
     });

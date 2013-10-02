@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
-    public class EpisodeModule : NzbDroneRestModule<EpisodeFileResource>
+    public class EpisodeModule : NzbDroneRestModuleWithSignalR<EpisodeFileResource, EpisodeFile>,
+                                 IHandle<EpisodeFileAddedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
 
-        public EpisodeModule(IMediaFileService mediaFileService)
-            : base("/episodefile")
+        public EpisodeModule(ICommandExecutor commandExecutor, IMediaFileService mediaFileService)
+            : base(commandExecutor)
         {
             _mediaFileService = mediaFileService;
             GetResourceById = GetEpisodeFile;
@@ -40,6 +46,11 @@ namespace NzbDrone.Api.EpisodeFiles
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
             _mediaFileService.Update(episodeFile);
+        }
+
+        public void Handle(EpisodeFileAddedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Updated, message.EpisodeFile.Id);
         }
     }
 }

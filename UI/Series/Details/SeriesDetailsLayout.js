@@ -150,7 +150,6 @@ define(
             },
 
             _renameSeries: function () {
-
                 CommandController.Execute('renameSeries', {
                     name    : 'renameSeries',
                     seriesId: this.model.id
@@ -172,7 +171,7 @@ define(
 
                 this.seasonCollection = new SeasonCollection(this.model.get('seasons'));
                 this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id }).bindSignalR();
-                this.episodeFileCollection = new EpisodeFileCollection({ seriesId: this.model.id });
+                this.episodeFileCollection = new EpisodeFileCollection({ seriesId: this.model.id }).bindSignalR();
 
                 $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function () {
                     var seasonCollectionView = new SeasonCollectionView({

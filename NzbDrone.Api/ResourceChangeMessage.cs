@@ -11,7 +11,7 @@ namespace NzbDrone.Api
 
         public ResourceChangeMessage(ModelAction action)
         {
-            if (action != ModelAction.Deleted || action != ModelAction.Sync)
+            if (action != ModelAction.Deleted && action != ModelAction.Sync)
             {
                 throw new InvalidOperationException("Resource message without a resource needs to have Delete or Sync as action");
             }

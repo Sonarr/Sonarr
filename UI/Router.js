@@ -8,6 +8,7 @@ require(
         'Series/SeriesCollection',
         'ProgressMessaging/ProgressMessageCollection',
         'Commands/CommandMessengerCollectionView',
+        'History/Queue/QueueCollection',
         'Navbar/NavbarView',
         'jQuery/RouteBinder',
         'jquery'
@@ -18,6 +19,7 @@ require(
                  SeriesCollection,
                  ProgressMessageCollection,
                  CommandMessengerCollectionView,
+                 QueueCollection,
                  NavbarView,
                  RouterBinder,
                  $) {
@@ -36,6 +38,7 @@ require(
                 'settings/:action(/:query)' : 'settings',
                 'missing'                   : 'missing',
                 'history'                   : 'history',
+                'history/:action'           : 'history',
                 'rss'                       : 'rss',
                 'system'                    : 'system',
                 'system/:action'            : 'system',

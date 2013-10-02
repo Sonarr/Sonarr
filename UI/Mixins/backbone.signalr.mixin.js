@@ -13,6 +13,13 @@ define(
 
                 var processMessage = function (options) {
 
+                    if (options.action === 'sync') {
+                        console.log('sync received, refetching collection');
+                        collection.fetch();
+
+                        return;
+                    }
+
                     var model = new collection.model(options.resource, {parse: true});
                     collection.add(model, {merge: true});
                     console.log(options.action + ': {0}}'.format(options.resource));

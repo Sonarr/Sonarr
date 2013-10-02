@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(
     [
-        'History/Model',
+        'History/HistoryModel',
         'backbone.pageable'
     ], function (HistoryModel, PageableCollection) {
         return PageableCollection.extend({
