@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Core.Notifications
+﻿using NzbDrone.Core.ThingiProvider;
+
+namespace NzbDrone.Core.Notifications
 {
     public class Notification
     {
@@ -8,7 +10,7 @@
         public string Link { get; set; }
         public bool OnGrab { get; set; }
         public bool OnDownload { get; set; }
-        public INotifcationSettings Settings { get; set; }
+        public IProviderConfig Settings { get; set; }
         public INotification Instance { get; set; }
         public string Implementation { get; set; }
     }

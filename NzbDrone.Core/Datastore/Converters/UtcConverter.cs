@@ -6,9 +6,14 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class UtcConverter : IConverter
     {
+        public object FromDB(ConverterContext context)
+        {
+            return context.DbValue;
+        }
+
         public object FromDB(ColumnMap map, object dbValue)
         {
-            return dbValue;
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

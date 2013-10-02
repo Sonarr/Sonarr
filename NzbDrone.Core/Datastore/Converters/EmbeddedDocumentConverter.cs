@@ -7,22 +7,26 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class EmbeddedDocumentConverter : IConverter
     {
-
-        public object FromDB(ColumnMap map, object dbValue)
+        public virtual object FromDB(ConverterContext context)
         {
-            if (dbValue == DBNull.Value)
+            if (context.DbValue == DBNull.Value)
             {
                 return DBNull.Value;
             }
 
-            var stringValue = (string)dbValue;
+            var stringValue = (string)context.DbValue;
 
             if (string.IsNullOrWhiteSpace(stringValue))
             {
                 return null;
             }
 
-            return Json.Deserialize(stringValue, map.FieldType);
+            return Json.Deserialize(stringValue, context.ColumnMap.FieldType);
+        }
+
+        public object FromDB(ColumnMap map, object dbValue)
+        {
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

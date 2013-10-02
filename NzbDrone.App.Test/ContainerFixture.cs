@@ -37,7 +37,7 @@ namespace NzbDrone.App.Test
         {
             var factory = MainAppContainerBuilder.BuildContainer(args).Resolve<IServiceFactory>();
 
-            factory.Build<IIndexerService>().Should().NotBeNull();
+            factory.Build<IIndexerFactory>().Should().NotBeNull();
         }
 
         [Test]

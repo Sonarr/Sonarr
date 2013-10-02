@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Threading;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Indexers;
 
@@ -10,10 +11,13 @@ namespace NzbDrone.Integration.Test
         [Test]
         public void should_only_have_unknown_series_releases()
         {
+
             var releases = Releases.All();
+            var indexers = Indexers.All();
+
 
             releases.Should().OnlyContain(c => c.Rejections.Contains("Unknown Series"));
-            releases.Should().OnlyContain(c=>BeValidRelease(c));
+            releases.Should().OnlyContain(c => BeValidRelease(c));
         }
 
 

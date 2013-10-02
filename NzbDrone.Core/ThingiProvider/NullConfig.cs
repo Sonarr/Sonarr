@@ -1,10 +1,10 @@
 ﻿using FluentValidation.Results;
 
-namespace NzbDrone.Core.Indexers
+namespace NzbDrone.Core.ThingiProvider
 {
-    public class NullSetting : IIndexerSetting
+    public class NullConfig : IProviderConfig
     {
-        public static readonly NullSetting Instance = new NullSetting();
+        public static readonly NullConfig Instance = new NullConfig();
 
         public ValidationResult Validate()
         {

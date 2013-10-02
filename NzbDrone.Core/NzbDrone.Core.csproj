@@ -141,6 +141,7 @@
     <Compile Include="DataAugmentation\Xem\XemService.cs" />
     <Compile Include="Datastore\ConnectionStringFactory.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
+    <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
@@ -172,6 +173,8 @@
     <Compile Include="Datastore\Migration\019_restore_unique_constraints.cs" />
     <Compile Include="Datastore\Migration\020_add_year_and_seasons_to_series.cs" />
     <Compile Include="Datastore\Migration\021_drop_seasons_table.cs" />
+    <Compile Include="Datastore\Migration\022_move_notification_to_generic_provider.cs" />
+    <Compile Include="Datastore\Migration\023_add_config_contract_to_indexers.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -241,12 +244,10 @@
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\NewznabTestService.cs" />
-    <Compile Include="Indexers\IndexerWithSetting.cs" />
     <Compile Include="Indexers\IParseFeed.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
     <Compile Include="Indexers\Newznab\NewznabPreProcessor.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
-    <Compile Include="Indexers\NullSetting.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
     <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
@@ -343,13 +344,11 @@
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
-    <Compile Include="Indexers\IndexerSettingProvider.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\NewznabParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
-    <Compile Include="Indexers\IIndexerSetting.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
     <Compile Include="Indexers\Wombles\WomblesParser.cs" />
@@ -371,7 +370,6 @@
     <Compile Include="MetadataSource\Trakt\Images.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\FullShow.cs" />
-    <Compile Include="Notifications\INotifcationSettings.cs" />
     <Compile Include="Notifications\Plex\TestPlexServerCommand.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
@@ -417,6 +415,8 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
+    <Compile Include="ThingiProvider\IProvider.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualitySizeRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
@@ -427,6 +427,13 @@
     <Compile Include="Rest\RestSharpExtensions.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="ThingiProvider\IProviderConfig.cs" />
+    <Compile Include="ThingiProvider\IProviderFactory.cs" />
+    <Compile Include="ThingiProvider\IProviderRepository.cs" />
+    <Compile Include="ThingiProvider\NullConfig.cs" />
+    <Compile Include="ThingiProvider\ProviderDefinition.cs" />
+    <Compile Include="ThingiProvider\ProviderRepository.cs" />
+    <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
@@ -505,7 +512,7 @@
     <Compile Include="History\HistoryService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\IndexerService.cs">
+    <Compile Include="Indexers\IndexerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\IndexerFetchService.cs">

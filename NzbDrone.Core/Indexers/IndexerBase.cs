@@ -1,29 +1,44 @@
 using System;
 using System.Collections.Generic;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class IndexerBase : IIndexer
+    public abstract class IndexerBase<TSettings> : IIndexer where TSettings : IProviderConfig, new()
     {
-        public abstract string Name { get; }
-
-        public abstract IndexerKind Kind { get; }
-
-        public virtual bool EnableByDefault { get { return true; } }
-
-        public IndexerDefinition InstanceDefinition { get; set; }
-
-        public virtual IEnumerable<IndexerDefinition> DefaultDefinitions
+        public Type ConfigContract
         {
             get
             {
+                return typeof(TSettings);
+            }
+        }
+
+        public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
+        {
+            get
+            {
+                var config = (IProviderConfig)new TSettings();
+
                 yield return new IndexerDefinition
                 {
-                    Name = Name,
-                    Enable = EnableByDefault,
+                    Name = GetType().Name,
+                    Enable = config.Validate().IsValid,
                     Implementation = GetType().Name,
-                    Settings = String.Empty
+                    Settings = config
                 };
+            }
+        }
+
+        public ProviderDefinition Definition { get; set; }
+
+        public abstract DownloadProtocol Protocol { get; }
+
+        protected TSettings Settings
+        {
+            get
+            {
+                return (TSettings)Definition.Settings;
             }
         }
 
@@ -33,9 +48,15 @@ namespace NzbDrone.Core.Indexers
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
         public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
+
+
+        public override string ToString()
+        {
+            return GetType().Name;
+        }
     }
 
-    public enum IndexerKind
+    public enum DownloadProtocol
     {
         Usenet,
         Torrent

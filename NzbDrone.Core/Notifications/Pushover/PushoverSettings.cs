@@ -1,9 +1,11 @@
 ﻿using System;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
-    public class PushoverSettings : INotifcationSettings
+    public class PushoverSettings : IProviderConfig
     {
         [FieldDefinition(0, Label = "User Key", HelpLink = "https://pushover.net/")]
         public String UserKey { get; set; }
@@ -17,6 +19,11 @@ namespace NzbDrone.Core.Notifications.Pushover
             {
                 return !string.IsNullOrWhiteSpace(UserKey) && Priority != null & Priority >= -1 && Priority <= 2;
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

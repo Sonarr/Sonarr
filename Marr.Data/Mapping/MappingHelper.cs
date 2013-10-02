@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Common;
+using Marr.Data.Converters;
 
 namespace Marr.Data.Mapping
 {
@@ -53,7 +54,15 @@ namespace Marr.Data.Mapping
                     // Handle conversions
                     if (dataMap.Converter != null)
                     {
-                        dbValue = dataMap.Converter.FromDB(dataMap, dbValue);
+                        var convertContext = new ConverterContext
+                        {
+                            DbValue = dbValue,
+                            ColumnMap = dataMap,
+                            MapCollection = mappings,
+                            DataRecord = reader
+                        };
+
+                        dbValue = dataMap.Converter.FromDB(convertContext);
                     }
 
                     if (dbValue != DBNull.Value && dbValue != null)

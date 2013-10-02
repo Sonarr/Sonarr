@@ -52,6 +52,7 @@
     <Compile Include="Converters\BooleanYNConverter.cs" />
     <Compile Include="Converters\CastConverter.cs" />
     <Compile Include="Converters\ConversionException.cs" />
+    <Compile Include="Converters\ConverterContext.cs" />
     <Compile Include="Converters\EnumIntConverter.cs" />
     <Compile Include="Converters\EnumStringConverter.cs" />
     <Compile Include="Converters\IConverter.cs" />

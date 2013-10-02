@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Newznab
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Indexers.Newznab
     }
 
 
-    public class NewznabSettings : IIndexerSetting
+    public class NewznabSettings : IProviderConfig
     {
         private static readonly NewznabSettingsValidator Validator = new NewznabSettingsValidator();
 

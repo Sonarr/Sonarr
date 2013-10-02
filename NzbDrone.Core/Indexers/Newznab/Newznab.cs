@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class Newznab : IndexerWithSetting<NewznabSettings>
+    public class Newznab : IndexerBase<NewznabSettings>
     {
         public override IParseFeed Parser
         {
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public override IEnumerable<IndexerDefinition> DefaultDefinitions
+        public override IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get
             {
@@ -51,7 +52,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        private string GetSettings(string url, List<int> categories)
+        private NewznabSettings GetSettings(string url, List<int> categories)
         {
             var settings = new NewznabSettings { Url = url };
 
@@ -60,7 +61,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 settings.Categories = categories;
             }
 
-            return settings.ToJson();
+            return settings;
         }
 
         public override IEnumerable<string> RecentFeed
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             get
             {
                 //Todo: We should be able to update settings on start
-                if (Name.Equals("nzbs.org", StringComparison.InvariantCultureIgnoreCase))
+                if (Settings.Url.Contains("nzbs.org"))
                 {
                     Settings.Categories = new List<int> { 5000 };
                 }
@@ -114,19 +115,11 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&offset={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, offset));
         }
 
-        public override string Name
+        public override DownloadProtocol Protocol
         {
             get
             {
-                return InstanceDefinition.Name;
-            }
-        }
-
-        public override IndexerKind Kind
-        {
-            get
-            {
-                return IndexerKind.Usenet;
+                return DownloadProtocol.Usenet;
             }
         }
 

@@ -1,9 +1,11 @@
 ﻿using System;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Email
 {
-    public class EmailSettings : INotifcationSettings
+    public class EmailSettings : IProviderConfig
     {
         public EmailSettings()
         {
@@ -37,6 +39,11 @@ namespace NzbDrone.Core.Notifications.Email
             {
                 return !string.IsNullOrWhiteSpace(Server) && Port > 0 && !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(To);
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

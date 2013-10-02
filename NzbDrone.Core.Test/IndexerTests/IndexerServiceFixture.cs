@@ -13,7 +13,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {
-    public class IndexerServiceFixture : DbTest<IndexerService, IndexerDefinition>
+    public class IndexerServiceFixture : DbTest<IndexerFactory, IndexerDefinition>
     {
         private List<IIndexer> _indexers;
 
@@ -57,10 +57,8 @@ namespace NzbDrone.Core.Test.IndexerTests
             var indexers = Subject.All().ToList();
             indexers.Should().NotBeEmpty();
             indexers.Should().NotContain(c => c.Settings == null);
-            indexers.Should().NotContain(c => c.Instance == null);
             indexers.Should().NotContain(c => c.Name == null);
             indexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
-            indexers.Select(c => c.Instance).Should().OnlyHaveUniqueItems();
         }
 
 
@@ -73,6 +71,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
 
             var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
+            existingIndexers.ConfigContract = typeof (NewznabSettings).Name;
 
             repo.Insert(existingIndexers);
 

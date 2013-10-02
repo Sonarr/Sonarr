@@ -7,16 +7,21 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class QualityIntConverter : IConverter
     {
-        public object FromDB(ColumnMap map, object dbValue)
+        public object FromDB(ConverterContext context)
         {
-            if (dbValue == DBNull.Value)
+            if (context.DbValue == DBNull.Value)
             {
                 return Quality.Unknown;
             }
 
-            var val = Convert.ToInt32(dbValue);
+            var val = Convert.ToInt32(context.DbValue);
 
             return (Quality)val;
+        }
+
+        public object FromDB(ColumnMap map, object dbValue)
+        {
+            return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
         public object ToDB(object clrValue)

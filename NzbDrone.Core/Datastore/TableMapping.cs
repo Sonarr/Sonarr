@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data;
 using Marr.Data.Mapping;
+using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
@@ -15,6 +16,7 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Datastore
@@ -69,6 +71,7 @@ namespace NzbDrone.Core.Datastore
         private static void RegisterMappers()
         {
             RegisterEmbeddedConverter();
+            RegisterProviderSettingConverter();
 
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
             MapRepository.Instance.RegisterTypeConverter(typeof(DateTime), new UtcConverter());
@@ -78,10 +81,20 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
         }
 
+        private static void RegisterProviderSettingConverter()
+        {
+            var settingTypes = typeof(IProviderConfig).Assembly.ImplementationsOf<IProviderConfig>();
+
+            var providerSettingConverter = new ProviderSettingConverter();
+            foreach (var embeddedType in settingTypes)
+            {
+                MapRepository.Instance.RegisterTypeConverter(embeddedType, providerSettingConverter);
+            }
+        }
+
         private static void RegisterEmbeddedConverter()
         {
-            var embeddedTypes = typeof(IEmbeddedDocument).Assembly.GetTypes()
-                                                          .Where(c => c.GetInterfaces().Any(i => i == typeof(IEmbeddedDocument)));
+            var embeddedTypes = typeof(IEmbeddedDocument).Assembly.ImplementationsOf<IEmbeddedDocument>();
 
 
             var embeddedConvertor = new EmbeddedDocumentConverter();

@@ -33,11 +33,11 @@ namespace NzbDrone.Core.Indexers
 
         public virtual IList<ReleaseInfo> FetchRss(IIndexer indexer)
         {
-            _logger.Debug("Fetching feeds from " + indexer.Name);
+            _logger.Debug("Fetching feeds from " + indexer);
 
             var result = Fetch(indexer, indexer.RecentFeed);
 
-            _logger.Debug("Finished processing feeds from " + indexer.Name);
+            _logger.Debug("Finished processing feeds from " + indexer);
 
             return result;
         }
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Indexers
 
             var result = Fetch(indexer, searchCriteria, 0).DistinctBy(c => c.DownloadUrl).ToList();
 
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
 
             return result;
         }
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Indexers
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("{0} offset {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("{0} offset {1}. Found {2}", indexer, searchCriteria, result.Count);
 
             if (result.Count > 90)
             {
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Indexers
             var result = Fetch(indexer, searchUrls);
 
 
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
             return result;
         }
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Indexers
             var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.Airtime);
             var result = Fetch(indexer, searchUrls);
 
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer.Name, searchCriteria, result.Count);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
             return result;
         }
 
@@ -119,17 +119,16 @@ namespace NzbDrone.Core.Indexers
                     if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
                         webException.Message.Contains("timed out"))
                     {
-                        _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer.Name, url,
-                            webException.Message);
+                        _logger.Warn("{0} server is currently unavailable. {1} {2}", indexer, url, webException.Message);
                     }
                     else
                     {
-                        _logger.Warn("{0} {1} {2}", indexer.Name, url, webException.Message);
+                        _logger.Warn("{0} {1} {2}", indexer, url, webException.Message);
                     }
                 }
                 catch (ApiKeyException)
                 {
-                    _logger.Warn("Invalid API Key for {0} {1}", indexer.Name, url);
+                    _logger.Warn("Invalid API Key for {0} {1}", indexer, url);
                 }
                 catch (Exception feedEx)
                 {
@@ -138,7 +137,7 @@ namespace NzbDrone.Core.Indexers
                 }
             }
 
-            result.ForEach(c => c.Indexer = indexer.Name);
+            result.ForEach(c => c.Indexer = indexer.Definition.Name);
 
             return result;
         }

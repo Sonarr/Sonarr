@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NUnit.Framework;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Test.Common.Categories;
 using System.Linq;
 
@@ -27,6 +28,12 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         {
             var indexer = new Wombles();
 
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "Wombles",
+                Settings = NullConfig.Instance
+            };
+
             var result = Subject.FetchRss(indexer);
 
             ValidateResult(result, skipSize: true, skipInfo: true);
@@ -37,6 +44,11 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void extv_rss()
         {
             var indexer = new Eztv();
+            indexer.Definition = new IndexerDefinition
+            {
+                Name = "Eztv",
+                Settings = NullConfig.Instance
+            };
 
             var result = Subject.FetchRss(indexer);
 
@@ -48,14 +60,14 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void nzbsorg_rss()
         {
             var indexer = new Newznab();
-            indexer.Settings = new NewznabSettings
-                {
-                    ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
-                    Url = "http://nzbs.org"
-                };
 
-            indexer.InstanceDefinition = new IndexerDefinition();
-            indexer.InstanceDefinition.Name = "nzbs.org";
+            indexer.Definition = new IndexerDefinition();
+            indexer.Definition.Name = "nzbs.org";
+            indexer.Definition.Settings = new NewznabSettings
+            {
+                ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
+                Url = "http://nzbs.org"
+            };
 
             var result = Subject.FetchRss(indexer);
 

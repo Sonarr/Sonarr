@@ -1,9 +1,11 @@
 ﻿using System;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
-    public class GrowlSettings : INotifcationSettings
+    public class GrowlSettings : IProviderConfig
     {
         public GrowlSettings()
         {
@@ -25,6 +27,11 @@ namespace NzbDrone.Core.Notifications.Growl
             {
                 return !string.IsNullOrWhiteSpace(Host) && !string.IsNullOrWhiteSpace(Password) && Port > 0;
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

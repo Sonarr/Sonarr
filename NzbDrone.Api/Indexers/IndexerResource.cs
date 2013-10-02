@@ -11,5 +11,6 @@ namespace NzbDrone.Api.Indexers
         public String Name { get; set; }
         public List<Field> Fields { get; set; }
         public String Implementation { get; set; }
+        public String ConfigContract { get; set; }
     }
 }

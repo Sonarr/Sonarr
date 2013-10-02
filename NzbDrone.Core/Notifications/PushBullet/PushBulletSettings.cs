@@ -1,9 +1,11 @@
 ﻿using System;
+using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
-    public class PushBulletSettings : INotifcationSettings
+    public class PushBulletSettings : IProviderConfig
     {
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.pushbullet.com/")]
         public String ApiKey { get; set; }
@@ -17,6 +19,11 @@ namespace NzbDrone.Core.Notifications.PushBullet
             {
                 return !String.IsNullOrWhiteSpace(ApiKey) && DeviceId > 0;
             }
+        }
+
+        public ValidationResult Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using FluentValidation.Results;
 
-namespace NzbDrone.Core.Indexers
+namespace NzbDrone.Core.ThingiProvider
 {
-    public interface IIndexerSetting
+    public interface IProviderConfig
     {
         ValidationResult Validate();
     }

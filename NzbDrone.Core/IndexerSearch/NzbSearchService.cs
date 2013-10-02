@@ -24,7 +24,7 @@ namespace NzbDrone.Core.IndexerSearch
 
     public class NzbSearchService : ISearchForNzb
     {
-        private readonly IIndexerService _indexerService;
+        private readonly IIndexerFactory _indexerFactory;
         private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly ISceneMappingService _sceneMapping;
         private readonly ISeriesService _seriesService;
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly IMakeDownloadDecision _makeDownloadDecision;
         private readonly Logger _logger;
 
-        public NzbSearchService(IIndexerService indexerService,
+        public NzbSearchService(IIndexerFactory indexerFactory,
                                 IFetchFeedFromIndexers feedFetcher,
                                 ISceneMappingService sceneMapping,
                                 ISeriesService seriesService,
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.IndexerSearch
                                 IMakeDownloadDecision makeDownloadDecision,
                                 Logger logger)
         {
-            _indexerService = indexerService;
+            _indexerFactory = indexerFactory;
             _feedFetcher = feedFetcher;
             _sceneMapping = sceneMapping;
             _seriesService = seriesService;
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReleaseInfo>> searchAction, SearchCriteriaBase criteriaBase)
         {
-            var indexers = _indexerService.GetAvailableIndexers().ToList();
+            var indexers = _indexerFactory.GetAvailableProviders().ToList();
             var reports = new List<ReleaseInfo>();
 
             _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);

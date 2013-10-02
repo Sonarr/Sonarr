@@ -7,6 +7,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using Omu.ValueInjecter;
 
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Notifications
         Notification Get(int id);
         List<Notification> Schema();
         Notification Create(Notification notification);
-        Notification Update(Notification notification);
+        void Update(Notification notification);
         void Delete(int id);
     }
 
@@ -71,7 +72,7 @@ namespace NzbDrone.Core.Notifications
 
                 var instanceType = newNotification.Instance.GetType();
                 var baseGenArgs = instanceType.BaseType.GetGenericArguments();
-                newNotification.Settings = (INotifcationSettings)Activator.CreateInstance(baseGenArgs[0]);
+                newNotification.Settings = (IProviderConfig)Activator.CreateInstance(baseGenArgs[0]);
                 newNotification.Implementation = type.Name;
 
                 notifications.Add(newNotification);
@@ -93,15 +94,13 @@ namespace NzbDrone.Core.Notifications
             return notification;
         }
 
-        public Notification Update(Notification notification)
+        public void Update(Notification notification)
         {
             var definition = _notificationRepository.Get(notification.Id);
             definition.InjectFrom(notification);
             definition.Settings = notification.Settings.ToJson();
 
             _notificationRepository.Update(definition);
-
-            return notification;
         }
 
         public void Delete(int id)
