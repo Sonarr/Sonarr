@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Queue
                         queue.Quality = remoteEpisode.ParsedEpisodeInfo.Quality;
                         queue.Title = queueItem.Title;
                         queue.Size = queueItem.Size;
-                        queue.SizeLeft = queueItem.SizeLeft;
+                        queue.Sizeleft = queueItem.SizeLeft;
                         queue.Timeleft = queueItem.Timeleft;
                         queued.Add(queue);
                     }

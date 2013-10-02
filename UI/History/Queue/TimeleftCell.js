@@ -6,7 +6,7 @@ define(
     ], function (NzbDroneCell) {
         return NzbDroneCell.extend({
 
-            className: 'history-event-type-cell',
+            className: 'timeleft-cell',
 
             render: function () {
                 this.$el.empty();
@@ -15,10 +15,10 @@ define(
 
                     var timeleft = this.cellValue.get('timeleft');
                     var size = this.cellValue.get('size');
-                    var sizeLeft = this.cellValue.get('sizeLeft');
+                    var sizeleft = this.cellValue.get('sizeleft');
 
                     this.$el.html(timeleft);
-                    this.$el.attr('title', '{0} MB / {1} MB'.format(sizeLeft, size));
+                    this.$el.attr('title', '{0} MB / {1} MB'.format(sizeleft, size));
                 }
 
                 return this;

@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Queue
         public QualityModel Quality { get; set; }
         public Decimal Size { get; set; }
         public String Title { get; set; }
-        public Decimal SizeLeft { get; set; }
+        public Decimal Sizeleft { get; set; }
         public TimeSpan Timeleft { get; set; }
     }
 }
