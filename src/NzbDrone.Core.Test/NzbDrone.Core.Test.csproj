@@ -252,9 +252,7 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Config.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="App_Data\Config.xml" />
     <Content Include="Files\Indexers\Newznab\unauthorized.xml" />
     <Content Include="Files\Media\H264_sample.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
