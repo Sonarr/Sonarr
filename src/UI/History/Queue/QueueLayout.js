@@ -8,6 +8,7 @@ define(
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
         'Cells/QualityCell',
+        'History/Queue/QueueStatusCell',
         'History/Queue/TimeleftCell'
     ], function (Marionette,
                  Backgrid,
@@ -16,6 +17,7 @@ define(
                  EpisodeNumberCell,
                  EpisodeTitleCell,
                  QualityCell,
+                 QueueStatusCell,
                  TimeleftCell) {
         return Marionette.Layout.extend({
             template: 'History/Queue/QueueLayoutTemplate',
@@ -26,6 +28,12 @@ define(
 
             columns:
                 [
+                    {
+                        name : 'status',
+                        label: '',
+                        cell : QueueStatusCell,
+                        cellValue: 'this'
+                    },
                     {
                         name : 'series',
                         label: 'Series',

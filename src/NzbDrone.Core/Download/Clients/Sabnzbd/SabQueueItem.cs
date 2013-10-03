@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string Category { get; set; }
 
         [JsonProperty(PropertyName = "mbleft")]
-        public decimal SizeLeft { get; set; }
+        public decimal Sizeleft { get; set; }
 
         public int Percentage { get; set; }
 

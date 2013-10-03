@@ -117,9 +117,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     queueItem.Id = sabQueueItem.Id;
                     queueItem.Title = sabQueueItem.Title;
                     queueItem.Size = sabQueueItem.Size;
-                    queueItem.SizeLeft = sabQueueItem.Size;
+                    queueItem.Sizeleft = sabQueueItem.Sizeleft;
+                    queueItem.Timeleft = sabQueueItem.Timeleft;
+                    queueItem.Status = sabQueueItem.Status;
 
-                    queueItems.Add( queueItem);
+                    queueItems.Add(queueItem);
                 }
 
                 return queueItems;

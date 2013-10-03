@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.Id = nzbGetQueueItem.NzbId.ToString();
                 queueItem.Title = nzbGetQueueItem.NzbName;
                 queueItem.Size = nzbGetQueueItem.FileSizeMb;
-                queueItem.SizeLeft = nzbGetQueueItem.RemainingSizeMb;
+                queueItem.Sizeleft = nzbGetQueueItem.RemainingSizeMb;
 
                 yield return queueItem;
             }

@@ -14,5 +14,6 @@ namespace NzbDrone.Api.Queue
         public String Title { get; set; }
         public Decimal Sizeleft { get; set; }
         public TimeSpan Timeleft { get; set; }
+        public String Status { get; set; }
     }
 }

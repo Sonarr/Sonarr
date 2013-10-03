@@ -22,7 +22,7 @@ define(function () {
             }
             if (xhr) {
                 xhr.headers = xhr.headers || {};
-                xhr.headers['Authorization'] = window.NzbDrone.ApiKey;
+//                xhr.headers.Authorization = window.NzbDrone.ApiKey;
             }
 
             return original.apply(this, arguments);
