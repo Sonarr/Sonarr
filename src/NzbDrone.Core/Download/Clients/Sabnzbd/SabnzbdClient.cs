@@ -221,7 +221,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private string GetSabRequest(string action)
         {
-            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
+            var protocol = _configService.SabUseSsl ? "https" : "http";
+
+            return string.Format(@"{0}://{1}:{2}/api?{3}&apikey={4}&ma_username={5}&ma_password={6}",
+                                 protocol,
                                  _configService.SabHost,
                                  _configService.SabPort,
                                  action,

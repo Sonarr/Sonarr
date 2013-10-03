@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Configuration
         String SabTvCategory { get; set; }
         SabPriorityType SabRecentTvPriority { get; set; }
         SabPriorityType SabOlderTvPriority { get; set; }
+        Boolean SabUseSsl { get; set; }
         String DownloadedEpisodesFolder { get; set; }
         bool UseSeasonFolder { get; set; }
         string SeasonFolderFormat { get; set; }

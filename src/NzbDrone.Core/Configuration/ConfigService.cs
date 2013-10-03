@@ -128,6 +128,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SabOlderTvPriority", value); }
         }
 
+        public bool SabUseSsl
+        {
+            get { return GetValueBoolean("SabUseSsl", false); }
+
+            set { SetValue("SabUseSsl", value); }
+        }
+
         public String DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
@@ -162,7 +169,7 @@ namespace NzbDrone.Core.Configuration
 
         public DownloadClientType DownloadClient
         {
-            get { return GetValueEnum("DownloadClient", DownloadClientType.Sabnzbd); }
+            get { return GetValueEnum("DownloadClient", DownloadClientType.Blackhole); }
 
             set { SetValue("DownloadClient", value); }
         }
