@@ -23,8 +23,8 @@ namespace NzbDrone.Api.Calendar
 
         private List<EpisodeResource> GetPaged()
         {
-            var start = DateTime.Today.AddDays(-1);
-            var end = DateTime.Today.AddDays(7);
+            var start = DateTime.Today;
+            var end = DateTime.Today.AddDays(2);
 
             var queryStart = Request.Query.Start;
             var queryEnd = Request.Query.End;
