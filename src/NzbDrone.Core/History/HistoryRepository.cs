@@ -12,6 +12,7 @@ namespace NzbDrone.Core.History
     {
         void Trim();
         List<QualityModel> GetEpisodeHistory(int episodeId);
+        List<History> ByEpisode(int episodeId);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -35,6 +36,11 @@ namespace NzbDrone.Core.History
             var history = Query.Where(c => c.EpisodeId == episodeId);
 
             return history.Select(h => h.Quality).ToList();
+        }
+
+        public List<History> ByEpisode(int episodeId)
+        {
+            return Query.Where(h => h.EpisodeId == episodeId).ToList();
         }
 
         public override PagingSpec<History> GetPaged(PagingSpec<History> pagingSpec)

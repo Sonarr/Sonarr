@@ -4,7 +4,7 @@ define(
         'marionette',
         'backgrid',
         'History/HistoryCollection',
-        'History/Table/EventTypeCell',
+        'Cells/EventTypeCell',
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',

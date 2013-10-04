@@ -169,35 +169,35 @@ module.exports = function (grunt) {
                 tasks: ['handlebars']
             },
             copyIndex  : {
-                files: '<%= copy.index.src %>',
+                files: '<%= copy.index.cwd %><%= copy.index.src %>',
                 tasks: ['copy:index']
             },
             copyScripts: {
-                files: '<%= copy.scripts.src %>',
+                files: '<%= copy.scripts.cwd %><%= copy.scripts.src %>',
                 tasks: ['copy:scripts']
             },
             copyStyles : {
-                files: '<%= copy.styles.src %>',
+                files: '<%= copy.styles.cwd %><%= copy.styles.src %>',
                 tasks: ['copy:styles']
             },
             copyImages : {
-                files: '<%= copy.images.src %>',
+                files: '<%= copy.images.cwd %><%= copy.images.src %>',
                 tasks: ['copy:images']
             },
             copyJpg : {
-                files: '<%= copy.jpg.src %>',
+                files: '<%= copy.jpg.cwd %><%= copy.jpg.src %>',
                 tasks: ['copy:jpg']
             },
             copyIcon : {
-                files: '<%= copy.icon.src %>',
+                files: '<%= copy.icon.cwd %><%= copy.icon.src %>',
                 tasks: ['copy:icon']
             },
             copyFontAwesome  : {
-                files: '<%= copy.fontAwesome.src %>',
+                files: '<%= copy.fontAwesome.cwd %><%= copy.fontAwesome.src %>',
                 tasks: ['copy:fontAwesome']
             },
             copyFonts  : {
-                files: '<%= copy.fonts.src %>',
+                files: '<%= copy.fonts.cwd %><%= copy.fonts.src %>',
                 tasks: ['copy:fonts']
             }
         }

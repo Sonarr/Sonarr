@@ -35,7 +35,7 @@ define(
 
                     }
 
-                    this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, toolTip));
+                    this.$el.html('<i class="{0}" title="{1}" data-placement="right"/>'.format(icon, toolTip));
                 }
 
                 return this;

@@ -4,8 +4,9 @@ define(
         'marionette',
         'Episode/Summary/EpisodeSummaryLayout',
         'Episode/Search/EpisodeSearchLayout',
+        'Episode/Activity/EpisodeActivityLayout',
         'Series/SeriesCollection'
-    ], function (Marionette, SummaryLayout, SearchLayout, SeriesCollection) {
+    ], function (Marionette, SummaryLayout, SearchLayout, EpisodeActivityLayout, SeriesCollection) {
 
         return Marionette.Layout.extend({
             template: 'Episode/EpisodeDetailsLayoutTemplate',
@@ -38,7 +39,7 @@ define(
 
                 this.series = SeriesCollection.find({ id: this.model.get('seriesId') });
                 this.templateHelpers.series = this.series.toJSON();
-                this.openingTab = options.openingTab || 'summary'
+                this.openingTab = options.openingTab || 'summary';
             },
 
             onShow: function () {
@@ -71,6 +72,7 @@ define(
                 }
 
                 this.ui.activity.tab('show');
+                this.activity.show(new EpisodeActivityLayout({model: this.model, series: this.series}));
             },
 
             _showSearch: function (e) {

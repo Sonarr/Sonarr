@@ -58,7 +58,7 @@ define(
                     if (App.reqres.hasHandler(App.Reqres.GetEpisodeFileById)) {
                         var episodeFile = App.request(App.Reqres.GetEpisodeFileById, episodeFileId);
                         var episodeFileCollection = new EpisodeFileCollection(episodeFile, { seriesId: this.model.get('seriesId') });
-                        this._showTable(episodeFileCollection)
+                        this._showTable(episodeFileCollection);
                     }
 
                     else {
