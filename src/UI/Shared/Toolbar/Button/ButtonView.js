@@ -3,8 +3,9 @@ define(
     [
         'app',
         'marionette',
+        'underscore',
         'Commands/CommandController'
-    ], function (App, Marionette, CommandController) {
+    ], function (App, Marionette, _, CommandController) {
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
@@ -30,8 +31,10 @@ define(
 
                 var command = this.model.get('command');
                 if (command) {
+                    var properties = _.extend({ name: command }, this.model.get('properties'));
+
                     CommandController.bindToCommand({
-                        command: {name: command},
+                        command: properties,
                         element: this.$el
                     });
                 }
@@ -51,7 +54,7 @@ define(
             invokeCommand: function () {
                 var command = this.model.get('command');
                 if (command) {
-                    CommandController.Execute(command);
+                    CommandController.Execute(command, this.model.get('properties'));
                 }
             },
 
