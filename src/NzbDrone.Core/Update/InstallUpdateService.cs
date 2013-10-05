@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -10,7 +11,12 @@ using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Core.Update
 {
-    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>
+    public interface IInstallUpdates
+    {
+        void InstallUpdate(UpdatePackage updatePackage);
+    }
+
+    public class InstallUpdateService : IInstallUpdates, IExecute<ApplicationUpdateCommand>
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
@@ -35,19 +41,7 @@ namespace NzbDrone.Core.Update
             _logger = logger;
         }
 
-
-        public void Execute(ApplicationUpdateCommand message)
-        {
-            _logger.ProgressDebug("Checking for updates");
-            var latestAvailable = _checkUpdateService.AvailableUpdate();
-
-            if (latestAvailable != null)
-            {
-                InstallUpdate(latestAvailable);
-            }
-        }
-
-        private void InstallUpdate(UpdatePackage updatePackage)
+        public void InstallUpdate(UpdatePackage updatePackage)
         {
             try
             {
@@ -82,6 +76,17 @@ namespace NzbDrone.Core.Update
             catch (Exception ex)
             {
                 _logger.ErrorException("Update process failed", ex);
+            }
+        }
+
+        public void Execute(ApplicationUpdateCommand message)
+        {
+            _logger.ProgressDebug("Checking for updates");
+            var latestAvailable = _checkUpdateService.AvailableUpdate();
+
+            if (latestAvailable != null)
+            {
+                InstallUpdate(latestAvailable);
             }
         }
     }

@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNet.SignalR.Hosting;
+using Nancy;
+using Nancy.ModelBinding;
 using Newtonsoft.Json;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Update;
 using NzbDrone.Api.Mapping;
@@ -9,33 +14,40 @@ namespace NzbDrone.Api.Update
 {
     public class UpdateModule : NzbDroneRestModule<UpdateResource>
     {
-        private readonly ICheckUpdateService _checkUpdateService;
         private readonly IRecentUpdateProvider _recentUpdateProvider;
+        private readonly IInstallUpdates _installUpdateService;
 
-        public UpdateModule(ICheckUpdateService checkUpdateService,
-                            IRecentUpdateProvider recentUpdateProvider)
+        public UpdateModule(IRecentUpdateProvider recentUpdateProvider,
+                            IInstallUpdates installUpdateService)
         {
-            _checkUpdateService = checkUpdateService;
             _recentUpdateProvider = recentUpdateProvider;
+            _installUpdateService = installUpdateService;
             GetResourceAll = GetRecentUpdates;
-        }
-
-        private UpdateResource GetAvailableUpdate()
-        {
-            var update = _checkUpdateService.AvailableUpdate();
-            var response = new UpdateResource();
-
-            if (update != null)
-            {
-                return update.InjectTo<UpdateResource>();
-            }
-
-            return response;
+            Post["/"] = x=> InstallUpdate();
         }
 
         private List<UpdateResource> GetRecentUpdates()
         {
-            return ToListResource(_recentUpdateProvider.GetRecentUpdatePackages);
+            var resources = _recentUpdateProvider.GetRecentUpdatePackages()
+                                                 .OrderByDescending(u => u.Version)
+                                                 .InjectTo<List<UpdateResource>>();
+
+            if (resources.Any())
+            {
+                resources.First().Latest = true;
+            }
+
+            return resources;
+        }
+
+        private Response InstallUpdate()
+        {
+            var updateResource = Request.Body.FromJson<UpdateResource>();
+
+            var updatePackage = updateResource.InjectTo<UpdatePackage>();
+            _installUpdateService.InstallUpdate(updatePackage);
+
+            return updateResource.AsResponse();
         }
     }
 
@@ -48,7 +60,7 @@ namespace NzbDrone.Api.Update
         public DateTime ReleaseDate { get; set; }
         public String FileName { get; set; }
         public String Url { get; set; }
-
+        public Boolean Latest { get; set; }
         public UpdateChanges Changes { get; set; }
     }
 }
