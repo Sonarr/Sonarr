@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.SignalR.Hosting;
 using Nancy;
-using Nancy.ModelBinding;
 using Newtonsoft.Json;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.REST;

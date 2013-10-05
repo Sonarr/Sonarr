@@ -76,7 +76,6 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
 
-
         [Test]
         public void should_return_false_when_only_one_has_null_property()
         {
@@ -86,13 +85,28 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
         }
 
-
         [Test]
         public void should_return_false_when_commands_are_diffrent_types()
         {
             CommandEqualityComparer.Instance.Equals(new RssSyncCommand(), new ApplicationUpdateCommand()).Should().BeFalse();
         }
 
-  
+        [Test]
+        public void should_return_false_when_commands_list_are_different_lengths()
+        {
+            var command1 = new EpisodeSearchCommand { EpisodeIds = new List<int> { 1 } };
+            var command2 = new EpisodeSearchCommand { EpisodeIds = new List<int> { 1, 2 } };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_when_commands_list_dont_match()
+        {
+            var command1 = new EpisodeSearchCommand { EpisodeIds = new List<int> { 1 } };
+            var command2 = new EpisodeSearchCommand { EpisodeIds = new List<int> { 2 } };
+
+            CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
+        }
     }
 }
