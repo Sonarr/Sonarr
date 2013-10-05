@@ -48,17 +48,12 @@ define(
                 this.series = options.series;
 
                 this.collection = new EpisodeActivityCollection({ episodeId: this.model.id });
+                this.collection.fetch();
+                this.listenTo(this.collection, 'sync', this._showTable);
             },
 
-            onShow: function () {
-                var self = this;
+            onRender: function () {
                 this.activityTable.show(new LoadingView());
-
-                var promise = this.collection.fetch();
-
-                promise.done(function () {
-                    self._showTable();
-                });
             },
 
             _showTable: function () {

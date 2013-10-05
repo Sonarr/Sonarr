@@ -11,18 +11,15 @@ define(
             originalFetch: Backbone.Collection.prototype.fetch,
 
             initialize: function (options) {
+                if (!options.episodeId) {
+                    throw 'episodeId is required';
+                }
+
                 this.episodeId = options.episodeId;
             },
 
             fetch: function (options) {
-                if (!this.episodeId) {
-                    throw 'episodeId is required';
-                }
-
-                if (!options) {
-                    options = {};
-                }
-
+                options = options || {};
                 options.data = { episodeId: this.episodeId };
 
                 return this.originalFetch.call(this, options);
