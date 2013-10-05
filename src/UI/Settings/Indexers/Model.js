@@ -8,8 +8,15 @@ define([
         initialize: function () {
             var name = this.get('name');
 
-            this.successMessage = 'Saved indexer: ' + name;
-            this.errorMessage = 'Couldn\'t save indexer: ' + name;
+            if (name) {
+                this.successMessage = 'Saved indexer: ' + name;
+                this.errorMessage = 'Couldn\'t save indexer: ' + name;
+            }
+
+            else {
+                this.successMessage = 'Saved indexer';
+                this.errorMessage = 'Couldn\'t save indexer';
+            }
 
             this.baseInitialize.call(this);
         }
