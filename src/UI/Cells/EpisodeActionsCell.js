@@ -43,7 +43,7 @@ define(
             _automaticSearch: function () {
                 CommandController.Execute('episodeSearch', {
                     name        : 'episodeSearch',
-                    episodeId: this.model.get('id')
+                    episodeIds: [ this.model.get('id') ]
                 });
             },
 

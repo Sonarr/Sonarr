@@ -16,6 +16,7 @@ require.config({
         'backbone.modelbinder': 'JsLibraries/backbone.modelbinder',
         'backgrid'            : 'JsLibraries/backbone.backgrid',
         'backgrid.paginator'  : 'JsLibraries/backbone.backgrid.paginator',
+        'backgrid.selectall' : 'JsLibraries/backbone.backgrid.selectall',
         'fullcalendar'        : 'JsLibraries/fullcalendar',
         'backstrech'          : 'JsLibraries/jquery.backstretch',
         '$'                   : 'JsLibraries/jquery',
@@ -176,6 +177,15 @@ require.config({
                 [
                     'backgrid'
                 ]
+        },
+        'backgrid.selectall': {
+
+            exports: 'Backgrid.Extension.SelectAll',
+
+            deps:
+                [
+                    'backgrid'
+                ]
         }
     }
 });
@@ -197,13 +207,13 @@ define(
         };
 
         app.Commands = {
-            EditSeriesCommand  : 'EditSeriesCommand',
-            DeleteSeriesCommand: 'DeleteSeriesCommand',
-            CloseModalCommand  : 'CloseModalCommand',
-            ShowEpisodeDetails : 'ShowEpisodeDetails',
-            ShowHistoryDetails : 'ShowHistryDetails',
-            SaveSettings       : 'saveSettings',
-            ShowLogFile        : 'showLogFile'
+            EditSeriesCommand    : 'EditSeriesCommand',
+            DeleteSeriesCommand  : 'DeleteSeriesCommand',
+            CloseModalCommand    : 'CloseModalCommand',
+            ShowEpisodeDetails   : 'ShowEpisodeDetails',
+            ShowHistoryDetails   : 'ShowHistoryDetails',
+            SaveSettings         : 'saveSettings',
+            ShowLogFile          : 'showLogFile'
         };
 
         app.Reqres = {
@@ -214,7 +224,7 @@ define(
             console.log('starting application');
         });
 
-        app.addInitializer(SignalRBroadcaster.appInitializer, {app: app});
+        app.addInitializer(SignalRBroadcaster.appInitializer, { app: app });
 
         app.addRegions({
             navbarRegion: '#nav-region',

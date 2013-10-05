@@ -10,7 +10,7 @@ define(
     ], function (App, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Series/Edit/EditSeriesTemplate',
+            template: 'Series/Edit/EditSeriesViewTemplate',
 
             ui: {
                 qualityProfile: '.x-quality-profile',

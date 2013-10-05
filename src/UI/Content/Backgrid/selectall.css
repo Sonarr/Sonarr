@@ -1,0 +1,12 @@
+/*
+  backgrid-select-all
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+*/
+
+.backgrid .select-row-cell,
+.backgrid .select-all-header-cell {
+  text-align: center;
+}

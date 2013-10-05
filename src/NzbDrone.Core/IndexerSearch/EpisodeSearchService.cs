@@ -22,10 +22,13 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void Execute(EpisodeSearchCommand message)
         {
-            var decisions = _nzbSearchService.EpisodeSearch(message.EpisodeId);
-            var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
+            foreach (var episodeId in message.EpisodeIds)
+            {
+                var decisions = _nzbSearchService.EpisodeSearch(episodeId);
+                var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
-            _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", downloaded.Count);
+                _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", downloaded.Count);
+            }
         }
     }
 }

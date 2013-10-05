@@ -44,7 +44,7 @@ define(
                 }
 
                 CommandController.Execute('episodeSearch', {
-                    episodeId: this.model.get('id')
+                    episodeIds: [ this.model.get('id') ]
                 });
 
                 App.vent.trigger(App.Commands.CloseModalCommand);

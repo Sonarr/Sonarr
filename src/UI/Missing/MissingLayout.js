@@ -1,6 +1,7 @@
 'use strict';
 define(
     [
+        'underscore',
         'marionette',
         'backgrid',
         'Missing/Collection',
@@ -10,8 +11,23 @@ define(
         'Cells/RelativeDateCell',
         'Shared/Grid/Pager',
         'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView'
-    ], function (Marionette, Backgrid, MissingCollection, SeriesTitleCell, EpisodeNumberCell, EpisodeTitleCell, RelativeDateCell, GridPager, ToolbarLayout, LoadingView) {
+        'Shared/LoadingView',
+        'Shared/Messenger',
+        'Commands/CommandController',
+        'backgrid.selectall'
+    ], function (_,
+                 Marionette,
+                 Backgrid,
+                 MissingCollection,
+                 SeriesTitleCell,
+                 EpisodeNumberCell,
+                 EpisodeTitleCell,
+                 RelativeDateCell,
+                 GridPager,
+                 ToolbarLayout,
+                 LoadingView,
+                 Messenger,
+                 CommandController) {
         return Marionette.Layout.extend({
             template: 'Missing/MissingLayoutTemplate',
 
@@ -21,8 +37,18 @@ define(
                 pager  : '#x-pager'
             },
 
+            ui: {
+                searchSelectedButton: '.btn i.icon-search'
+            },
+
             columns:
                 [
+                    {
+                        name      : '',
+                        cell      : 'select-row',
+                        headerCell: 'select-all',
+                        sortable  : false
+                    },
                     {
                         name    : 'series',
                         label   : 'Series Title',
@@ -48,54 +74,88 @@ define(
                     }
                 ],
 
-            leftSideButtons: {
-                type      : 'default',
-                storeState: false,
-                items     :
-                    [
-                        {
-                            title  : 'Season Pass',
-                            icon   : 'icon-bookmark',
-                            route  : 'seasonpass'
-                        }
-                    ]
-            },
-
-            _showTable: function () {
-                this.missing.show(new Backgrid.Grid({
-                    columns   : this.columns,
-                    collection: this.missingCollection,
-                    className : 'table table-hover'
-                }));
-
-                this.pager.show(new GridPager({
-                    columns   : this.columns,
-                    collection: this.missingCollection
-                }));
-            },
-
-
             initialize: function () {
-                this.missingCollection = new MissingCollection();
+                this.collection = new MissingCollection();
 
-                this.listenTo(this.missingCollection, 'sync', this._showTable);
+                this.listenTo(this.collection, 'sync', this._showTable);
             },
-
 
             onShow: function () {
                 this.missing.show(new LoadingView());
-                this.missingCollection.fetch();
+                this.collection.fetch();
                 this._showToolbar();
             },
 
+            _showTable: function () {
+                this.missingGrid = new Backgrid.Grid({
+                    columns   : this.columns,
+                    collection: this.collection,
+                    className : 'table table-hover'
+                });
+
+                this.missing.show(this.missingGrid);
+
+                this.pager.show(new GridPager({
+                    columns   : this.columns,
+                    collection: this.collection
+                }));
+            },
+
             _showToolbar: function () {
+                var leftSideButtons = {
+                    type      : 'default',
+                        storeState: false,
+                        items     :
+                    [
+                        {
+                            title: 'Search Selected',
+                            icon : 'icon-search',
+                            callback: this._searchSelected,
+                            ownerContext: this
+                        },
+                        {
+                            title: 'Season Pass',
+                            icon : 'icon-bookmark',
+                            route: 'seasonpass'
+                        }
+                    ]
+                };
+
+
                 this.toolbar.show(new ToolbarLayout({
                     left   :
                         [
-                            this.leftSideButtons
+                            leftSideButtons
                         ],
                     context: this
                 }));
+
+                CommandController.bindToCommand({
+                    element: this.$('.x-toolbar-left-1 .btn i.icon-search'),
+                    command: {
+                        name: 'episodeSearch'
+                    }
+                });
+            },
+
+            _searchSelected: function () {
+                var selected = this.missingGrid.getSelectedModels();
+
+                if (selected.length === 0) {
+                    Messenger.show({
+                        type: 'error',
+                        message: 'No episodes selected'
+                    });
+
+                    return;
+                }
+
+                var ids = _.pluck(selected, 'id');
+
+                CommandController.Execute('episodeSearch', {
+                    name    : 'episodeSearch',
+                    episodeIds: ids
+                });
             }
         });
     });

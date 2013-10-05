@@ -22,6 +22,9 @@ module.exports = function (grunt) {
             'src/UI/JsLibraries/backbone.backgrid.paginator.js'  : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
             'src/UI/JsLibraries/backbone.backgrid.filter.js'     : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
 
+            'src/UI/JsLibraries/backbone.backgrid.selectall.js' : 'http://raw.github.com/wyuenho/backgrid-select-all/master/backgrid-select-all.js',
+            'src/UI/Content/Backgrid/selectall.css'             : 'http://raw.github.com/wyuenho/backgrid-select-all/master/backgrid-select-all.css',
+
             'src/UI/JsLibraries/backbone.validation.js'          : 'https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js',
 
             'src/UI/JsLibraries/handlebars.runtime.js'           : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
