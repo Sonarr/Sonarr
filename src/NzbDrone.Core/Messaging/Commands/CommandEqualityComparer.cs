@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,7 +48,18 @@ namespace NzbDrone.Core.Messaging.Commands
                     return false;
                 }
 
-                if (!xValue.Equals(yValue))
+                if (typeof(IEnumerable).IsAssignableFrom(xProperty.PropertyType))
+                {
+                    var xValueCollection = ((IEnumerable)xValue).Cast<object>().OrderBy(t => t);
+                    var yValueCollection = ((IEnumerable)yValue).Cast<object>().OrderBy(t => t);
+
+                    if (!xValueCollection.SequenceEqual(yValueCollection))
+                    {
+                        return false;
+                    }
+                }
+
+                else if (!xValue.Equals(yValue))
                 {
                     return false;
                 }
