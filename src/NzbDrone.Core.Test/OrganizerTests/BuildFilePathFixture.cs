@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("30 Rock - S01E05 - Episode Title", 1, false, "Season %0s", @"C:\Test\30 Rock\30 Rock - S01E05 - Episode Title.mkv")]
         [TestCase("30 Rock - S01E05 - Episode Title", 1, false, "Season %s", @"C:\Test\30 Rock\30 Rock - S01E05 - Episode Title.mkv")]
         [TestCase("30 Rock - S01E05 - Episode Title", 1, true, "ReallyUglySeasonFolder %s", @"C:\Test\30 Rock\ReallyUglySeasonFolder 1\30 Rock - S01E05 - Episode Title.mkv")]
+        [TestCase("30 Rock - S00E05 - Episode Title", 0, true, "Season %s", @"C:\Test\30 Rock\Specials\30 Rock - S00E05 - Episode Title.mkv")]
         public void CalculateFilePath_SeasonFolder_SingleNumber(string filename, int seasonNumber, bool useSeasonFolder, string seasonFolderFormat, string expectedPath)
         {
             var fakeSeries = Builder<Series>.CreateNew()
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Mocker.GetMock<IConfigService>().Setup(e => e.SeasonFolderFormat).Returns(seasonFolderFormat);
 
-            Subject.BuildFilePath(fakeSeries, 1, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
+            Subject.BuildFilePath(fakeSeries, seasonNumber, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
     }
 }

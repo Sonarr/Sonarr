@@ -170,12 +170,22 @@ namespace NzbDrone.Core.Organizer
             string path = series.Path;
             if (series.SeasonFolder)
             {
-                var seasonFolder = _configService.SeasonFolderFormat
+                string seasonFolder;
+
+                if (seasonNumber == 0)
+                {
+                    seasonFolder = "Specials";
+                }
+
+                else
+                {
+                    seasonFolder = _configService.SeasonFolderFormat
                                                  .Replace("%sn", series.Title)
                                                  .Replace("%s.n", series.Title.Replace(' ', '.'))
                                                  .Replace("%s_n", series.Title.Replace(' ', '_'))
                                                  .Replace("%0s", seasonNumber.ToString("00"))
                                                  .Replace("%s", seasonNumber.ToString());
+                }
 
                 path = Path.Combine(path, seasonFolder);
             }
