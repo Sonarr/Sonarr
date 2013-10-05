@@ -85,6 +85,8 @@
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
     <Compile Include="EnvironmentInfo\BuildInfo.cs" />
+    <Compile Include="EnvironmentInfo\DiskInfo.cs" />
+    <Compile Include="Model\DiskSpace.cs" />
     <Compile Include="EnvironmentInfo\StartupArguments.cs" />
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />

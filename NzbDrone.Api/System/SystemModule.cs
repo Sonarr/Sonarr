@@ -42,7 +42,8 @@ namespace NzbDrone.Api.System
                     IsLinux = OsInfo.IsLinux,
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
-                    Authentication = _configFileProvider.AuthenticationEnabled
+                    Authentication = _configFileProvider.AuthenticationEnabled,
+                    FreeSpace = DiskInfo.AllDrivesFreeSpace()
                 }.AsResponse();
 
         }
