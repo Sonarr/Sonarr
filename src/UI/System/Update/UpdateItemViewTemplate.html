@@ -1,6 +1,15 @@
 ﻿<div class="update">
     <fieldset>
-        <legend>{{version}} <span class="date">- {{ShortDate releaseDate}} {{currentVersion version latest}}</span></legend>
+        <legend>{{version}}
+            <span class="date">
+                - {{ShortDate releaseDate}}
+                {{#if installed}}<i class="icon-ok" title="Installed"></i>{{/if}}
+
+                {{#if_windows}}
+                    {{#if isUpgrade}}<span class="label label-inverse install-update x-install-update">Install</span>{{/if}}
+                {{/if_windows}}
+            </span>
+        </legend>
 
         {{#with changes}}
             {{#each new}}

@@ -9,7 +9,7 @@ define(
         'Handlebars/Helpers/Episode',
         'Handlebars/Helpers/Series',
         'Handlebars/Helpers/Quality',
-        'Handlebars/Helpers/Version',
+        'Handlebars/Helpers/System',
         'Handlebars/Handlebars.Debug'
     ], function (Templates) {
         return function () {
