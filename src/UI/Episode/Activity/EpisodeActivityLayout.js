@@ -8,8 +8,9 @@ define(
         'Cells/EventTypeCell',
         'Cells/QualityCell',
         'Cells/RelativeDateCell',
+        'Episode/Activity/NoActivityView',
         'Shared/LoadingView'
-    ], function (App, Marionette, Backgrid, HistoryCollection, EventTypeCell, QualityCell, RelativeDateCell, LoadingView) {
+    ], function (App, Marionette, Backgrid, HistoryCollection, EventTypeCell, QualityCell, RelativeDateCell, NoActivityView, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Activity/EpisodeActivityLayoutTemplate',
@@ -57,11 +58,17 @@ define(
             },
 
             _showTable: function () {
-                this.activityTable.show(new Backgrid.Grid({
-                    collection: this.collection,
-                    columns   : this.columns,
-                    className : 'table table-hover table-condensed'
-                }));
+                if (this.collection.any()) {
+                    this.activityTable.show(new Backgrid.Grid({
+                        collection: this.collection,
+                        columns   : this.columns,
+                        className : 'table table-hover table-condensed'
+                    }));
+                }
+
+                else {
+                    this.activityTable.show(new NoActivityView());
+                }
             }
         });
     });
