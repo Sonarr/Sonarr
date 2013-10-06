@@ -26,8 +26,18 @@ define(
                 }
             },
 
+            initialize: function (options) {
+                delete this.queryParams.episodeId;
+
+                if (options) {
+                    if (options.episodeId) {
+                        this.queryParams.episodeId = options.episodeId;
+                    }
+                }
+            },
+
             parseState: function (resp) {
-                return {totalRecords: resp.totalRecords};
+                return { totalRecords: resp.totalRecords };
             },
 
             parseRecords: function (resp) {

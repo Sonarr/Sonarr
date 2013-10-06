@@ -201,7 +201,6 @@ namespace NzbDrone.Core.Datastore
                 .Execute();
         }
 
-
         public virtual PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec)
         {
             var pagingQuery = Query.OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())

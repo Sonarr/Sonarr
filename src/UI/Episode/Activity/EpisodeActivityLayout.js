@@ -4,12 +4,12 @@ define(
         'app',
         'marionette',
         'backgrid',
-        'Episode/Activity/EpisodeActivityCollection',
+        'History/HistoryCollection',
         'Cells/EventTypeCell',
         'Cells/QualityCell',
         'Cells/RelativeDateCell',
         'Shared/LoadingView'
-    ], function (App, Marionette, Backgrid, EpisodeActivityCollection, EventTypeCell, QualityCell, RelativeDateCell, LoadingView) {
+    ], function (App, Marionette, Backgrid, HistoryCollection, EventTypeCell, QualityCell, RelativeDateCell, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Activity/EpisodeActivityLayoutTemplate',
@@ -47,7 +47,7 @@ define(
                 this.model = options.model;
                 this.series = options.series;
 
-                this.collection = new EpisodeActivityCollection({ episodeId: this.model.id });
+                this.collection = new HistoryCollection({ episodeId: this.model.id });
                 this.collection.fetch();
                 this.listenTo(this.collection, 'sync', this._showTable);
             },

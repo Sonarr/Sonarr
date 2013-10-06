@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
@@ -17,7 +18,6 @@ namespace NzbDrone.Core.History
         void Trim();
         QualityModel GetBestQualityInHistory(int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
-        List<History> ByEpisode(int episodeId);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>
@@ -41,11 +41,6 @@ namespace NzbDrone.Core.History
             return _historyRepository.GetPaged(pagingSpec);
         }
 
-        public List<History> ByEpisode(int episodeId)
-        {
-            return _historyRepository.ByEpisode(episodeId);
-        }
-
         public void Purge()
         {
             _historyRepository.Purge();
@@ -58,7 +53,7 @@ namespace NzbDrone.Core.History
 
         public virtual QualityModel GetBestQualityInHistory(int episodeId)
         {
-            return _historyRepository.GetEpisodeHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
+            return _historyRepository.GetBestQualityInHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
         }
 
         public void Handle(EpisodeGrabbedEvent message)

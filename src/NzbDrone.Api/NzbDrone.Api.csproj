@@ -91,7 +91,6 @@
     <Compile Include="EpisodeFiles\EpisodeFileResource.cs" />
     <Compile Include="Directories\DirectoryLookupService.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
-    <Compile Include="Episodes\EpisodeActivityModule.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />

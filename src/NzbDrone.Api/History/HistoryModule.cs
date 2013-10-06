@@ -1,4 +1,7 @@
-﻿using NzbDrone.Core.Datastore;
+﻿using System;
+using System.Collections.Generic;
+using NzbDrone.Api.Mapping;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.History;
 
 namespace NzbDrone.Api.History
@@ -15,6 +18,8 @@ namespace NzbDrone.Api.History
 
         private PagingResource<HistoryResource> GetHistory(PagingResource<HistoryResource> pagingResource)
         {
+            var episodeId = Request.Query.EpisodeId;
+
             var pagingSpec = new PagingSpec<Core.History.History>
                                  {
                                      Page = pagingResource.Page,
@@ -22,6 +27,12 @@ namespace NzbDrone.Api.History
                                      SortKey = pagingResource.SortKey,
                                      SortDirection = pagingResource.SortDirection
                                  };
+
+            if (episodeId.HasValue)
+            {
+                int i = (int)episodeId;
+                pagingSpec.FilterExpression = h => h.EpisodeId == i;
+            }
 
             return ApplyToPage(_historyService.Paged, pagingSpec);
         }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -10,6 +12,7 @@ namespace NzbDrone.Core.Datastore
         public string SortKey { get; set; }
         public SortDirection SortDirection { get; set; }
         public List<TModel> Records { get; set; }
+        public Expression<Func<TModel, bool>> FilterExpression { get; set; }
     }
 
     public enum SortDirection
