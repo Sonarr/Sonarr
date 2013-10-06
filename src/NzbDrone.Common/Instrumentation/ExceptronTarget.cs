@@ -47,7 +47,6 @@ namespace NzbDrone.Common.Instrumentation
         protected override void Write(LogEventInfo logEvent)
         {
             if (logEvent == null || logEvent.Exception == null) return;
-            if (OsInfo.IsLinux) return;
 
             InternalLogger.Trace("Sending Exception to api.exceptron.com. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
 
