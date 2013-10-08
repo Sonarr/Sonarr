@@ -26,6 +26,9 @@ define(
 
             initialize: function () {
                 this.mainView = new ButtonsView();
+                this.releaseCollection = new ReleaseCollection();
+
+                this.listenTo(this.releaseCollection, 'sync', this._showSearchResults);
             },
 
             onShow: function () {
@@ -55,20 +58,9 @@ define(
                     e.preventDefault();
                 }
 
-                var self = this;
-
                 this.mainView = new LoadingView();
                 this._showMainView();
-
-                var releases = new ReleaseCollection();
-                var promise = releases.fetchEpisodeReleases(this.model.id);
-
-                promise.done(function () {
-                    if (!self.isClosed) {
-                        self.mainView = new ManualSearchLayout({collection: releases});
-                        self._showMainView();
-                    }
-                });
+                this.releaseCollection.fetchEpisodeReleases(this.model.id);
             },
 
             _showMainView: function () {
@@ -78,7 +70,11 @@ define(
             _showButtons: function () {
                 this.mainView = new ButtonsView();
                 this._showMainView();
+            },
+
+            _showSearchResults: function () {
+                this.mainView = new ManualSearchLayout({ collection: this.releaseCollection });
+                this._showMainView();
             }
         });
-
     });

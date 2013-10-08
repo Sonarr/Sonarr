@@ -40,6 +40,8 @@ define(
                 this.series = SeriesCollection.find({ id: this.model.get('seriesId') });
                 this.templateHelpers.series = this.series.toJSON();
                 this.openingTab = options.openingTab || 'summary';
+
+                this.listenTo(this.model, 'sync', this._setMonitoredState);
             },
 
             onShow: function () {
@@ -85,17 +87,11 @@ define(
             },
 
             _toggleMonitored: function () {
-                var self = this;
                 var name = 'monitored';
                 this.model.set(name, !this.model.get(name), { silent: true });
 
                 this.ui.monitored.addClass('icon-spinner icon-spin');
-
-                var promise = this.model.save();
-
-                promise.always(function () {
-                    self._setMonitoredState();
-                });
+                this.model.save();
             },
 
             _setMonitoredState: function () {
