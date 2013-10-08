@@ -14,7 +14,7 @@ define(
                 var date = this.model.get(this.column.get('name'));
 
                 if (date) {
-                    this.$el.html("<span title='" + Moment(date).format('LLLL') + "' >" + FormatHelpers.dateHelper(date) + "</span");
+                    this.$el.html('<span title="' + Moment(date).format('LLLL') + '" >' + FormatHelpers.dateHelper(date) + '</span>');
                 }
 
                 return this;

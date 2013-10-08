@@ -40,7 +40,7 @@ define(
             },
 
             _updateExamples: function () {
-
+                //TODO: make this use events/listeners
                 var self = this;
 
                 var promise = $.ajax({

@@ -24,6 +24,12 @@ namespace NzbDrone.Api.Frontend
             if (context.Request.Path.StartsWith("/signalr", StringComparison.CurrentCultureIgnoreCase)) return false;
             if (context.Request.Path.EndsWith("app.js")) return false;
 
+            if (context.Request.Path.StartsWith("/log", StringComparison.CurrentCultureIgnoreCase) &&
+                context.Request.Path.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+
             if (context.Response != null)
             {
                 if (context.Response.ContentType.Contains("text/html")) return false;
