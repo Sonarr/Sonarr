@@ -1,0 +1,15 @@
+﻿<ul>
+    {{#each handles}}
+        <li {{#if className}}class="{{className}}"{{/if}} >
+            {{#if pageNumber}}
+                <span>{{pageNumber}} / {{lastPage}}</span>
+            {{else}}
+            <i class="pager-btn clickable {{label}}" data-action="{{action}}"/>
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>
+
+<span class="total-records">
+    Total Records: {{Number state.totalRecords}}
+</span>

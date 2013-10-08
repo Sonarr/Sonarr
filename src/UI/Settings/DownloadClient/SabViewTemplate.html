@@ -1,0 +1,120 @@
+﻿<fieldset>
+    <legend>SABnzbd</legend>
+
+    {{!<div class="control-group">
+        <label class="control-label">Auto-Configure</label>
+
+        <div class="controls">
+            <input type="button" value="Auto-Configure" class="btn btn-inverse"/>
+            <span class="help-inline">
+                <i class="icon-question-sign"
+                        title="(Windows only) If access to SABnzbd doesn't require a username & password and it is on the same system as NzbDrone, you can auto-configure it"/>
+            </span>
+        </div>
+    </div>}}
+
+    <div class="control-group">
+        <label class="control-label">Host</label>
+
+        <div class="controls">
+            <input type="text" name="sabHost"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Port</label>
+
+        <div class="controls">
+            <input type="text" name="sabPort"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">API Key</label>
+
+        <div class="controls">
+            <input type="text" name="sabApiKey"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Username</label>
+
+        <div class="controls">
+            <input type="text" name="sabUsername"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Password</label>
+
+        <div class="controls">
+            <input type="password" name="sabPassword"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">TV Category</label>
+
+        <div class="controls">
+            <input type="text" name="sabTvCategory" placeholder="This is not the dropdownlist you're looking for"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Download Priority</label>
+
+        <div class="controls">
+            <select name="sabRecentTvPriority">
+                <option value="default">Default</option>
+                <option value="paused">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                </option> <option value="high">High</option>
+                <option value="force">Force</option>
+            </select>
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Priority to use when sending episodes that aired within the last 14 days"/>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Older Download Priority</label>
+
+        <div class="controls">
+            <select name="sabOlderTvPriority">
+                <option value="default">Default</option>
+                <option value="paused">Paused</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="force">Force</option>
+            </select>
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Priority to use when sending episodes that aired over 14 days ago"/>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Use SSL</label>
+
+        <div class="controls">
+            <label class="checkbox toggle well">
+                <input type="checkbox" name="sabUseSsl" class="x-ssl"/>
+
+                <p>
+                    <span>Yes</span>
+                    <span>No</span>
+                </p>
+
+                <div class="btn btn-primary slide-button"/>
+            </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-nd-form-info" title="Connect to SABnzbd over SSL"/>
+                </span>
+        </div>
+    </div>
+</fieldset>

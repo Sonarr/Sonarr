@@ -1,0 +1,292 @@
+@import "../Shared/Styles/card.less";
+@import "../Shared/Styles/clickable.less";
+@import "../Content/prefixer";
+
+.edit-series-modal, .delete-series-modal {
+  overflow : visible;
+
+  .series-poster {
+    padding-left : 20px;
+    width        : 168px;
+  }
+
+  .form-horizontal {
+    margin-top : 10px;
+  }
+}
+
+.delete-series-modal {
+  .path {
+    margin-left : 30px;
+  }
+}
+
+.series-item {
+  padding-bottom : 30px;
+
+  :hover {
+    text-decoration : none;
+  }
+
+  h2 {
+    margin-top : 0px;
+  }
+
+  a {
+    color : #000000;
+  }
+}
+
+.series-page-header {
+  .card(black);
+  background : #000000;
+  color      : #ffffff;
+  .opacity(0.9);
+  padding    : 30px 30px;
+  margin     : 50px 10px;
+}
+
+.series-season {
+  .card;
+  margin  : 30px 10px;
+  padding : 10px 25px;
+  .opacity(0.9);
+
+  .show-hide-episodes {
+    .clickable();
+    text-align : center;
+
+    i {
+      .clickable();
+    }
+  }
+}
+
+.series-posters {
+  list-style-type : none;
+
+  li {
+    display        : inline-block;
+    vertical-align : top;
+  }
+
+  .series-posters-item {
+
+    .card;
+    .clickable;
+    margin-bottom : 20px;
+    height        : 295px;
+
+    .center {
+      display      : block;
+      margin-left  : auto;
+      margin-right : auto;
+      text-align   : center;
+
+      .progress {
+        text-align : left;
+        margin-top : 5px;
+        left       : 0px;
+        width      : 170px;
+
+        .progressbar-front-text {
+          width : 170px;
+        }
+      }
+    }
+
+    .title-container {
+      position : relative;
+
+      .title {
+        position : absolute;
+        top      : -100px;
+        opacity  : 0.0;
+      }
+    }
+
+    .labels {
+      display : inline-block;
+      .opacity(0.75);
+      width   : 170px;
+
+      :hover {
+        cursor : default;
+      }
+
+      .label {
+        margin-top : 3px;
+        display    : block;
+      }
+
+      .tooltip {
+        .opacity(1);
+      }
+    }
+  }
+
+  .series-poster-container {
+    position : relative;
+    overflow : hidden;
+    display  : inline-block;
+
+    .ended-banner {
+      color                    : #eeeeee;
+      background-color         : #b94a48;
+      .box-shadow(2px 2px 20px #888888);
+      -moz-transform-origin    : 50% 50%;
+      -webkit-transform-origin : 50% 50%;
+      position                 : absolute;
+      width                    : 300px;
+      top                      : 175px;
+      left                     : -122px;
+      text-align               : center;
+      .opacity(0.9);
+
+      .transform(rotate(45deg));
+    }
+
+    .series-controls {
+      position         : absolute;;
+      top              : 0px;
+      overflow         : hidden;
+      background-color : #eeeeee;
+      width            : 100%;
+      text-align       : right;
+      padding-right    : 20px;
+      .opacity(0.8);
+      display          : none;
+    }
+
+    .series-poster {
+      width       : 168px;
+      height      : 247px;
+      display     : block;
+      font-size   : 34px;
+      line-height : 34px;
+    }
+  }
+}
+
+.series-detail-overview {
+  margin-bottom : 50px;
+}
+
+.series-season {
+  .episode-number-cell {
+    width : 22px;
+  }
+  .episode-air-date-cell {
+    width : 150px;
+  }
+
+  .episode-status-cell {
+    width : 100px;
+  }
+
+  .episode-title-cell {
+    cursor : pointer;
+  }
+}
+
+.episode-detail-modal {
+
+  .episode-info {
+    margin-bottom : 10px;
+  }
+
+  .episode-overview {
+    font-style : italic;
+  }
+
+  .episode-file-info {
+    margin-top : 30px;
+    font-size  : 12px;
+  }
+
+  .search-buttons {
+    width        : 400px;
+    margin-left  : auto;
+    margin-right : auto;
+  }
+}
+
+.season-grid {
+  .toggle-cell {
+    width      : 12px;
+    text-align : center;
+  }
+
+  .toggle-cell {
+    i {
+      .clickable;
+    }
+  }
+}
+
+.season-actions, .series-actions {
+
+  div {
+    display : inline-block
+  }
+
+  text-transform : none;
+
+  i {
+    .clickable;
+    font-size    : 24px;
+    padding-left : 5px;
+  }
+}
+
+.series-stats {
+  font-size : 11px;
+}
+
+.series-legend {
+  padding-top : 5px;
+}
+
+.seasonpass-series {
+  .card;
+  margin : 20px 0px;
+
+  .title {
+    font-weight : 300;
+    font-size   : 24px;
+    line-height : 30px;
+    margin-left : 5px;
+  }
+
+  .season-select {
+    margin-bottom : 0px;
+  }
+
+  .expander {
+    .clickable;
+    line-height : 30px;
+    margin-left : 8px;
+    width       : 16px;
+  }
+
+  .season-grid {
+    margin-top : 10px;
+  }
+}
+
+.season-status {
+  font-size      : 16px;
+  vertical-align : middle !important;
+}
+
+.seasonpass-series {
+  .season-pass-button {
+    display : inline-block;
+    width   : 120px;
+  }
+
+  .series-monitor-toggle {
+    font-size  : 24px;
+    margin-top : 3px;
+  }
+}

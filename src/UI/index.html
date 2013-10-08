@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>NzbDrone</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link href="/Content/bootstrap.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/bootstrap.toggle-switch.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/Messenger/messenger.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/Messenger/messenger.future.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/fullcalendar.css" rel='stylesheet' type='text/css'>
+    <link href="/Content/theme.css" rel='stylesheet' type='text/css'/>
+    <link href="/Cells/cells.css" rel='stylesheet' type='text/css'>
+    <link href="/Series/series.css" rel='stylesheet' type='text/css'/>
+    <link href="/System/Logs/logs.css" rel='stylesheet' type='text/css'/>
+    <link href="/Settings/settings.css" rel='stylesheet' type='text/css'/>
+    <link href="/AddSeries/addSeries.css" rel='stylesheet' type='text/css'/>
+    <link href="/Calendar/calendar.css" rel='stylesheet' type='text/css'/>
+    <link href="/System/Update/update.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/overrides.css" rel='stylesheet' type='text/css'/>
+
+    <link rel="apple-touch-icon" href="/Content/Images/touch/57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/Images/touch/72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/Images/touch/114.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="/Content/Images/touch/144.png"/>
+</head>
+<body>
+<div id="nav-region"></div>
+<div id="page">
+    <div class="page-container">
+        <div class="container">
+            <div class="row">
+                <div class="span12" id="notification-region"/>
+            </div>
+            <div class="span12" id="main-region">
+                <div class="row">
+                    <div id="followingBalls">
+                        <div id="ball-1" class="ball"></div>
+                        <div id="ball-2" class="ball"></div>
+                        <div id="ball-3" class="ball"></div>
+                        <div id="ball-4" class="ball"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="modal-region"></div>
+        </div>
+    </div>
+    <a id="scroll-up" title="Back to the top!">
+        <i class="icon-circle-arrow-up"></i>
+    </a>
+</div>
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div id="footer-region">
+                    NzbDrone Ver.
+                    <span class="version"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+
+<script type="text/javascript">
+    window.NzbDrone = window.NzbDrone || {};
+    window.NzbDrone.ApiKey = 'API_KEY';
+</script>
+
+<script src="/polyfills.js"></script>
+<script src="/JsLibraries/jquery.js"></script>
+<script src="/JsLibraries/messenger.js"></script>
+<script src="/Instrumentation/ErrorHandler.js"></script>
+<script src="/ServerStatus.js"></script>
+
+<script data-main="/app" src="/JsLibraries/require.js"></script>
+</html>

@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{193ADD3B-792B-4173-8E4C-5A3F8F0237F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NzbDrone.Core.Test</RootNamespace>
+    <AssemblyName>NzbDrone.Core.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMoq">
+      <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator, Version=1.1.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner, Version=1.1.0.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.4.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="NCrunch.Framework, Version=1.46.0.9, Culture=neutral, PublicKeyToken=01d101bf6f3e0aea, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NCrunch.Framework.1.46.0.9\lib\net35\NCrunch.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Prowlin, Version=0.9.4456.26422, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
+    <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
+    <Compile Include="Datastore\BasicRepositoryFixture.cs" />
+    <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
+    <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
+    <Compile Include="Datastore\MappingExtentionFixture.cs" />
+    <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
+    <Compile Include="Datastore\PagingSpecExtenstionsTests\ToSortDirectionFixture.cs" />
+    <Compile Include="Datastore\PagingSpecExtenstionsTests\PagingOffsetFixture.cs" />
+    <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
+    <Compile Include="Datastore\SQLiteMigrationHelperTests\AlterFixture.cs" />
+    <Compile Include="Datastore\SQLiteMigrationHelperTests\DuplicateFixture.cs" />
+    <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
+    <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
+    <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\SabProviderTests\QueueFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
+    <Compile Include="Download\DownloadServiceFixture.cs" />
+    <Compile Include="Framework\CoreTest.cs" />
+    <Compile Include="Framework\DbTest.cs" />
+    <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
+    <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
+    <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
+    <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
+    <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
+    <Compile Include="IndexerTests\XElementExtensionsFixture.cs" />
+    <Compile Include="JobTests\JobRepositoryFixture.cs" />
+    <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
+    <Compile Include="JobTests\TestJobs.cs" />
+    <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
+    <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMakerFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotInUseSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReaderFixture.cs" />
+    <Compile Include="MediaFiles\RenameEpisodeFileServiceFixture.cs" />
+    <Compile Include="MediaFiles\UpgradeMediaFileServiceFixture.cs" />
+    <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
+    <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />
+    <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
+    <Compile Include="Messaging\Commands\CommandEqualityComparerFixture.cs" />
+    <Compile Include="Messaging\Commands\CommandExecutorFixture.cs" />
+    <Compile Include="Messaging\Commands\CommandFixture.cs" />
+    <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
+    <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
+    <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Http\CheckForErrorFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Http\GetSeriesPathFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Http\UpdateFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Json\ActivePlayersFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Json\CheckForErrorFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Json\GetSeriesPathFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
+    <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
+    <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
+    <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
+    <Compile Include="Providers\XemProxyFixture.cs" />
+    <Compile Include="Qualities\QualitySizeRepositoryFixture.cs" />
+    <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
+    <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
+    <Compile Include="Qualities\QualityFixture.cs" />
+    <Compile Include="EpisodeParseResultTest.cs" />
+    <Compile Include="ParserTests\QualityParserFixture.cs" />
+    <Compile Include="Configuration\ConfigCachingFixture.cs" />
+    <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
+    <Compile Include="ProviderTests\RecycleBinProviderTests\CleanupFixture.cs" />
+    <Compile Include="ProviderTests\RecycleBinProviderTests\EmptyFixture.cs" />
+    <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
+    <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
+    <Compile Include="NotificationTests\PlexProviderTest.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
+    <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
+    <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />
+    <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
+    <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesRepositoryReadFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithoutFilesFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesBetweenDatesFixture.cs" />
+    <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
+    <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />
+    <Compile Include="NotificationTests\ProwlProviderTest.cs" />
+    <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
+    <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
+    <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
+    <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
+    <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
+    <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
+    <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
+    <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
+    <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
+    <Compile Include="FluentTest.cs" />
+    <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
+    <Compile Include="OrganizerTests\GetNewFilenameFixture.cs" />
+    <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
+    <Compile Include="TvTests\QualityModelFixture.cs" />
+    <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
+    <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
+    <Compile Include="MediaFiles\MediaFileServiceTest.cs" />
+    <Compile Include="Configuration\ConfigServiceFixture.cs" />
+    <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
+    <Compile Include="Framework\TestDbHelper.cs" />
+    <Compile Include="ParserTests\ParserFixture.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Qualities\QualityProfileServiceFixture.cs" />
+    <Compile Include="TvTests\SeriesServiceTests\AddSeriesFixture.cs" />
+    <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
+    <Compile Include="XbmcVersionTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
+      <Project>{f6fc6be7-0847-4817-a1ed-223dc647c3d7}</Project>
+      <Name>Marr.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
+      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
+      <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
+      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
+      <Name>NzbDrone.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.SignalR\NzbDrone.SignalR.csproj">
+      <Project>{7C2CC69F-5CA0-4E5C-85CB-983F9F6C3B36}</Project>
+      <Name>NzbDrone.SignalR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
+      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
+      <Name>NzbDrone.Test.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Libraries\Sqlite\sqlite3.dll">
+      <Link>sqlite3.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Indexers\Newznab\unauthorized.xml" />
+    <Content Include="Files\Media\H264_sample.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Nzbget\JsonError.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Nzbget\Queue_empty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Nzbget\Queue.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\QueueUnknownPriority.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\LongOverview.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\HistoryEmpty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Queue.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\History.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\JsonError.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\NzbDrone.Test.Common\App.config">
+      <Link>App.config</Link>
+    </None>
+    <Content Include="Files\RSS\omgwtfnzbs.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\nzbclub.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\nzbindex.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\omgwtfnzbs.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\nzbclub.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\nzbindex.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\wombles.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Files\RSS\filesharingtalk.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\newznab.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Categories_json.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\newznab.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\nzbsrus.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\nzbsrus.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\QueueEmpty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Files\Xem\Ids.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Failure.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Names.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Mappings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Files\SceneMappings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\TestArchive.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ProviderTests\UpdateProviderTests\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

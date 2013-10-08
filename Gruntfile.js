@@ -1,9 +1,10 @@
 module.exports = function (grunt) {
     'use strict';  
 
-    var outputRoot = '_output/';
-    var outputDir =  outputRoot +'UI/';
-    var srcContent = 'UI/Content/';
+    var outputRoot  = '_output/';
+    var outputDir   =  outputRoot +'UI/';
+    var srcRoot     = 'src/UI/'
+    var srcContent  = srcRoot + 'Content/';
     var destContent = outputDir + 'Content/';
 
     grunt.initConfig({
@@ -11,36 +12,39 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         curl: {
-            'UI/JsLibraries/backbone.js'                     : 'http://documentcloud.github.io/backbone/backbone.js',
-            'UI/JsLibraries/backbone.marionette.js'          : 'http://marionettejs.com/downloads/backbone.marionette.js',
-            'UI/JsLibraries/backbone.modelbinder.js'         : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
-            'UI/JsLibraries/backbone.shortcuts.js'           : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
+            'src/UI/JsLibraries/backbone.js'                     : 'http://documentcloud.github.io/backbone/backbone.js',
+            'src/UI/JsLibraries/backbone.marionette.js'          : 'http://marionettejs.com/downloads/backbone.marionette.js',
+            'src/UI/JsLibraries/backbone.modelbinder.js'         : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
+            'src/UI/JsLibraries/backbone.shortcuts.js'           : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
 
-            'UI/JsLibraries/backbone.pageable.js'            : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
-            'UI/JsLibraries/backbone.backgrid.js'            : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
-            'UI/JsLibraries/backbone.backgrid.paginator.js'  : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
-            'UI/JsLibraries/backbone.backgrid.filter.js'     : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
+            'src/UI/JsLibraries/backbone.pageable.js'            : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
+            'src/UI/JsLibraries/backbone.backgrid.js'            : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
+            'src/UI/JsLibraries/backbone.backgrid.paginator.js'  : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
+            'src/UI/JsLibraries/backbone.backgrid.filter.js'     : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
 
-            'UI/JsLibraries/backbone.validation.js'          : 'https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js',
+            'src/UI/JsLibraries/backbone.backgrid.selectall.js'  : 'http://raw.github.com/wyuenho/backgrid-select-all/master/backgrid-select-all.js',
+            'src/UI/Content/Backgrid/selectall.css'              : 'http://raw.github.com/wyuenho/backgrid-select-all/master/backgrid-select-all.css',
 
-            'UI/JsLibraries/handlebars.runtime.js'           : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
-            'UI/JsLibraries/handlebars.helpers.js'           : 'http://raw.github.com/danharper/Handlebars-Helpers/master/helpers.js',
+            'src/UI/JsLibraries/backbone.validation.js'          : 'https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js',
 
-            'UI/JsLibraries/jquery.js'                       : 'http://code.jquery.com/jquery.js',
-            'UI/JsLibraries/jquery.backstretch.js'           : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
-            'UI/JsLibraries/jquery.signalR.js'               : 'http://raw.github.com/SignalR/SignalR/master/samples/Microsoft.AspNet.SignalR.Hosting.AspNet.Samples/Scripts/jquery.signalR.js',
-            'UI/JsLibraries/jquery.knob.js'                  : 'http://raw.github.com/aterrien/jQuery-Knob/master/js/jquery.knob.js',
+            'src/UI/JsLibraries/handlebars.runtime.js'           : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
+            'src/UI/JsLibraries/handlebars.helpers.js'           : 'http://raw.github.com/danharper/Handlebars-Helpers/master/helpers.js',
 
-            'UI/JsLibraries/require.js'                      : 'http://raw.github.com/jrburke/requirejs/master/require.js',
-            'UI/JsLibraries/filesize.js'                     : 'http://cdn.filesizejs.com/filesize.js',
-            'UI/JsLibraries/lodash.underscore.js'            : 'http://raw.github.com/bestiejs/lodash/master/dist/lodash.underscore.js',
+            'src/UI/JsLibraries/jquery.js'                       : 'http://code.jquery.com/jquery.js',
+            'src/UI/JsLibraries/jquery.backstretch.js'           : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
+            'src/UI/JsLibraries/jquery.signalR.js'               : 'http://raw.github.com/SignalR/SignalR/master/samples/Microsoft.AspNet.SignalR.Hosting.AspNet.Samples/Scripts/jquery.signalR.js',
+            'src/UI/JsLibraries/jquery.knob.js'                  : 'http://raw.github.com/aterrien/jQuery-Knob/master/js/jquery.knob.js',
+
+            'src/UI/JsLibraries/require.js'                      : 'http://raw.github.com/jrburke/requirejs/master/require.js',
+            'src/UI/JsLibraries/filesize.js'                     : 'http://cdn.filesizejs.com/filesize.js',
+            'src/UI/JsLibraries/lodash.underscore.js'            : 'http://raw.github.com/bestiejs/lodash/master/dist/lodash.underscore.js',
          
-            'UI/JsLibraries/messenger.js'                    : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
-            'UI/Content/Messenger/messenger.css'             : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
-            'UI/Content/Messenger/messenger.future.css'      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css',
+            'src/UI/JsLibraries/messenger.js'                    : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
+            'src/UI/Content/Messenger/messenger.css'             : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
+            'src/UI/Content/Messenger/messenger.future.css'      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css',
             
-            'UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',          
-            'UI/Content/prefixer.less'                       : 'http://raw.github.com/JoelSutherland/LESS-Prefixer/master/prefixer.less'          
+            'src/UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',          
+            'src/UI/Content/prefixer.less'                       : 'http://raw.github.com/JoelSutherland/LESS-Prefixer/master/prefixer.less'          
         },
 
         clean: {
@@ -63,19 +67,20 @@ module.exports = function (grunt) {
                 dest: destContent + 'bootstrap.css'
             },
             general  : {
-                expand :true,
-                src   : [
-                            'UI/Content/theme.less',
-                            'UI/Content/overrides.less',
-                            'UI/Series/series.less',
-                            'UI/AddSeries/addSeries.less',
-                            'UI/Calendar/calendar.less',
-                            'UI/Cells/cells.less',
-                            'UI/Logs/logs.less',
-                            'UI/Settings/settings.less',
-                            'UI/Update/update.less'
+                cwd    : srcRoot,
+                expand : true,
+                src    :[
+                            'Content/theme.less',
+                            'Content/overrides.less',
+                            'Series/series.less',
+                            'AddSeries/addSeries.less',
+                            'Calendar/calendar.less',
+                            'Cells/cells.less',
+                            'Settings/settings.less',
+                            'System/Logs/logs.less',
+                            'System/Update/update.less'
                         ],
-                dest  : outputRoot,
+                dest  : outputDir,
                 ext: '.css'
             }
         },
@@ -88,49 +93,65 @@ module.exports = function (grunt) {
                 amd         : true,
                 processName: function (fileName) {
                     return fileName
-                        .replace('UI/', '')
+                        .replace(srcRoot, '')
                         .replace('.html', '')
                         .toLowerCase();
                 }
             },
             files  : {
-                src : ['UI/**/*Template.html','UI/**/*Partial.html'],
+                src : [ srcRoot + '**/*Template.html', srcRoot + '**/*Partial.html'],
                 dest: outputDir + 'templates.js'
             }
         },
 
         copy: {
             index  : {
-                src : 'UI/*ndex.html',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '*ndex.html',
+                dest  : outputDir
             },
             scripts: {
-                src : 'UI/**/*.js',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/*.js',
+                dest  : outputDir
             },
             styles : {
-                src : 'UI/**/*.css',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/*.css',
+                dest  : outputDir
             },
             images : {
-                src : 'UI/**/*.png',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/*.png',
+                dest  : outputDir
             },
             jpg : {
-                src : 'UI/**/*.jpg',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/*.jpg',
+                dest  : outputDir
             },
             icon : {
-                src : 'UI/**/*.ico',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/*.ico',
+                dest  : outputDir
             },
             fontAwesome  : {
-                src : 'UI/**/FontAwesome/*.*',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/FontAwesome/*.*',
+                dest  : outputDir
             },
             fonts  : {
-                src : 'UI/**/fonts/*.*',
-                dest: outputRoot
+                cwd   : srcRoot,
+                expand: true,
+                src   : '**/fonts/*.*',
+                dest  : outputDir
             }
         },
 
@@ -143,7 +164,7 @@ module.exports = function (grunt) {
                 tasks: ['less:bootstrap','less:general']
             },
             generalLess: {
-                files: ['UI/**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
+                files: [ srcRoot + '**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
                 tasks: ['less:general']
             },
             handlebars : {
@@ -151,35 +172,35 @@ module.exports = function (grunt) {
                 tasks: ['handlebars']
             },
             copyIndex  : {
-                files: '<%= copy.index.src %>',
+                files: '<%= copy.index.cwd %><%= copy.index.src %>',
                 tasks: ['copy:index']
             },
             copyScripts: {
-                files: '<%= copy.scripts.src %>',
+                files: '<%= copy.scripts.cwd %><%= copy.scripts.src %>',
                 tasks: ['copy:scripts']
             },
             copyStyles : {
-                files: '<%= copy.styles.src %>',
+                files: '<%= copy.styles.cwd %><%= copy.styles.src %>',
                 tasks: ['copy:styles']
             },
             copyImages : {
-                files: '<%= copy.images.src %>',
+                files: '<%= copy.images.cwd %><%= copy.images.src %>',
                 tasks: ['copy:images']
             },
             copyJpg : {
-                files: '<%= copy.jpg.src %>',
+                files: '<%= copy.jpg.cwd %><%= copy.jpg.src %>',
                 tasks: ['copy:jpg']
             },
             copyIcon : {
-                files: '<%= copy.icon.src %>',
+                files: '<%= copy.icon.cwd %><%= copy.icon.src %>',
                 tasks: ['copy:icon']
             },
             copyFontAwesome  : {
-                files: '<%= copy.fontAwesome.src %>',
+                files: '<%= copy.fontAwesome.cwd %><%= copy.fontAwesome.src %>',
                 tasks: ['copy:fontAwesome']
             },
             copyFonts  : {
-                files: '<%= copy.fonts.src %>',
+                files: '<%= copy.fonts.cwd %><%= copy.fonts.src %>',
                 tasks: ['copy:fonts']
             }
         }

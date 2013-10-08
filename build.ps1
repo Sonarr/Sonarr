@@ -6,11 +6,9 @@ $testSearchPattern = '*.Test\bin\x86\Release'
 
 Function Build()
 {
-    $clean = $msbuild + " nzbdrone.sln /t:Clean /m"
-    $build = $msbuild + " nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
+    $clean = $msbuild + " src\nzbdrone.sln /t:Clean /m"
+    $build = $msbuild + " src\nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
     
-
-
     if(Test-Path $outputFolder)
     {
         Remove-Item -Recurse -Force $outputFolder -ErrorAction Continue
@@ -72,7 +70,7 @@ Function PackageMono()
     get-childitem $outputFolderMono -File -Filter ServiceUninstall.* -Recurse  | foreach ($_) {remove-item $_.fullname}
     get-childitem $outputFolderMono -File -Filter ServiceInstall.* -Recurse  | foreach ($_) {remove-item $_.fullname}
     
-    Write-Host Removing native windows binaries Sqlite, MedianInfo
+    Write-Host Removing native windows binaries Sqlite, MediaInfo
     get-childitem $outputFolderMono -File -Filter sqlite3.* -Recurse  | foreach ($_) {remove-item $_.fullname}
     get-childitem $outputFolderMono -File -Filter MediaInfo.* -Recurse  | foreach ($_) {remove-item $_.fullname}
 
@@ -85,8 +83,8 @@ Function PackageMono()
 Function AddJsonNet()
 {
     get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse  | foreach ($_) {remove-item $_.fullname}
-    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder
-    Copy-Item .\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder\NzbDrone.Update
+    Copy-Item .\src\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder
+    Copy-Item .\src\packages\Newtonsoft.Json.5.*\lib\net35\*.dll  -Destination $outputFolder\NzbDrone.Update
 }
 
 Function PackageTests()
@@ -103,9 +101,7 @@ Function PackageTests()
         Copy-Item -Recurse ($_.FullName + "\*")  $testPackageFolder -ErrorAction Ignore
     }
 
-    .\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder 
-
-   
+    .\src\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder   
 
     Copy-Item $outputFolder\*.dll  -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb  -Destination $testPackageFolder -Force
@@ -141,4 +137,3 @@ Build
 RunGrunt
 PackageMono
 PackageTests
-
