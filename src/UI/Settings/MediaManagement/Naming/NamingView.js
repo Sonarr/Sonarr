@@ -2,11 +2,12 @@
 define(
     [
         'marionette',
+        'Settings/MediaManagement/Naming/NamingSampleModel',
         'Mixins/AsModelBoundView'
-    ], function (Marionette, AsModelBoundView) {
+    ], function (Marionette, NamingSampleModel, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/MediaManagement/Naming/ViewTemplate',
+            template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
 
             ui: {
                 namingOptions         : '.x-naming-options',
@@ -24,8 +25,11 @@ define(
                     this.ui.namingOptions.hide();
                 }
 
-                this.listenTo(this.model, 'change', this._updateExamples);
-                this._updateExamples();
+                this.namingSampleModel = new NamingSampleModel();
+
+                this.listenTo(this.model, 'change', this._updateSamples);
+                this.listenTo(this.namingSampleModel, 'sync', this._showSamples);
+                this._updateSamples();
             },
 
             _setNamingOptionsVisibility: function () {
@@ -39,20 +43,13 @@ define(
                 }
             },
 
-            _updateExamples: function () {
-                //TODO: make this use events/listeners
-                var self = this;
+            _updateSamples: function () {
+                this.namingSampleModel.fetch({ data: this.model.toJSON() });
+            },
 
-                var promise = $.ajax({
-                    type: 'GET',
-                    url : window.NzbDrone.ApiRoot + '/config/naming/samples',
-                    data: this.model.toJSON()
-                });
-
-                promise.done(function (result) {
-                    self.ui.singleEpisodeExample.html(result.singleEpisodeExample);
-                    self.ui.multiEpisodeExample.html(result.multiEpisodeExample);
-                });
+            _showSamples: function () {
+                this.ui.singleEpisodeExample.html(this.namingSampleModel.get('singleEpisodeExample'));
+                this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
             }
         });
 
