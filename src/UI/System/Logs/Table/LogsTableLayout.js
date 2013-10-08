@@ -1,6 +1,7 @@
 'use strict';
 define(
     [
+        'app',
         'marionette',
         'backgrid',
         'System/Logs/Table/LogTimeCell',
@@ -9,7 +10,7 @@ define(
         'System/Logs/LogsCollection',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
-    ], function (Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout, LoadingView) {
+    ], function (App, Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
             template: 'System/Logs/Table/LogsTableLayoutTemplate',
 
@@ -57,6 +58,8 @@ define(
             initialize: function () {
                 this.collection = new LogCollection();
                 this.collectionPromise = this.collection.fetch();
+
+                App.vent.on(App.Events.CommandComplete, this._commandComplete, this);
             },
 
             onRender: function () {
@@ -71,8 +74,6 @@ define(
                     self._showTable();
                 });
             },
-
-
 
             _showTable: function () {
                 this.grid.show(new Backgrid.Grid({
@@ -104,11 +105,7 @@ define(
                         {
                             title          : 'Clear Logs',
                             icon           : 'icon-trash',
-                            command        : 'clearLog',
-                            successMessage : 'Logs have been cleared',
-                            errorMessage   : 'Failed to clear logs',
-                            ownerContext   : this,
-                            onSuccess      : this._refreshLogs
+                            command        : 'clearLog'
                         }
                     ]
                 };
@@ -126,6 +123,12 @@ define(
                 this.collection.state.currentPage = 1;
                 this.collection.fetch({ reset: true });
                 this._showTable();
+            },
+
+            _commandComplete: function (options) {
+                if (options.command.get('name') === 'clearlog') {
+                    this._refreshLogs();
+                }
             }
         });
     });
