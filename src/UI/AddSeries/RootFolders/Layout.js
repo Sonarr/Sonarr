@@ -31,15 +31,15 @@ define(
                 this.rootfolderListView = new RootFolderCollectionView({ collection: RootFolderCollection });
 
                 this.listenTo(this.rootfolderListView, 'itemview:folderSelected', this._onFolderSelected);
+                this.listenTo(RootFolderCollection, 'sync', this._showCurrentDirs);
             },
 
             onRender: function () {
-                var self = this;
                 this.currentDirs.show(new LoadingView());
 
-                RootFolderCollection.promise.done(function () {
-                    self.currentDirs.show(self.rootfolderListView);
-                });
+                if (RootFolderCollection.any()) {
+                    this._showCurrentDirs();
+                }
 
                 this.ui.pathInput.autoComplete('/directories');
             },
@@ -49,7 +49,6 @@ define(
             },
 
             _addFolder: function () {
-
                 var self = this;
 
                 var newDir = new RootFolderModel({
@@ -62,10 +61,12 @@ define(
                     RootFolderCollection.add(newDir);
                     self.trigger('folderSelected', {model: newDir});
                 });
+            },
+
+            _showCurrentDirs: function () {
+                this.currentDirs.show(this.rootfolderListView);
             }
         });
 
-
         return AsValidatedView.apply(layout);
-
     });

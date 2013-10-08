@@ -35,7 +35,7 @@ define(
 
             initialize: function () {
                 QualityProfileCollection.fetch();
-                RootFolderCollection.promise = RootFolderCollection.fetch();
+                RootFolderCollection.fetch();
             },
 
             onShow: function () {
