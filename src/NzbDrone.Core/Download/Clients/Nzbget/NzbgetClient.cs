@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
@@ -12,12 +13,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
+        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
-        public NzbgetClient(IConfigService configService, IHttpProvider httpProvider, Logger logger)
+        public NzbgetClient(IConfigService configService, IHttpProvider httpProvider, IParsingService parsingService, Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _parsingService = parsingService;
             _logger = logger;
         }
 
@@ -74,6 +77,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.Title = nzbGetQueueItem.NzbName;
                 queueItem.Size = nzbGetQueueItem.FileSizeMb;
                 queueItem.Sizeleft = nzbGetQueueItem.RemainingSizeMb;
+
+                var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
+                if (parsedEpisodeInfo == null) continue;
+
+                var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
+                if (remoteEpisode.Series == null) continue;
+
+                queueItem.RemoteEpisode = remoteEpisode;
 
                 yield return queueItem;
             }

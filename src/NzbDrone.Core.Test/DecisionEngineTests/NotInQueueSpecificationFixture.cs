@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private Series _series;
         private Episode _episode;
         private RemoteEpisode _remoteEpisode;
+        private Mock<IDownloadClient> _downloadClient;
 
         private Series _otherSeries;
         private Episode _otherEpisode;
@@ -46,27 +48,60 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                    .With(r => r.Episodes = new List<Episode> { _episode })
                                                    .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD)})
                                                    .Build();
+
+            _downloadClient = Mocker.GetMock<IDownloadClient>();
+
+            Mocker.GetMock<IProvideDownloadClient>()
+                  .Setup(s => s.GetDownloadClient())
+                  .Returns(_downloadClient.Object);
+
+            _downloadClient.SetupGet(s => s.IsConfigured)
+                           .Returns(true);
         }
 
-        [Test]
-        public void should_return_false_when_queue_is_empty()
+        private void GivenEmptyQueue()
         {
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode>()).Should().BeFalse();
+            _downloadClient.Setup(s => s.GetQueue())
+                           .Returns(new List<QueueItem>());
+        }
+
+        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes)
+        {
+            var queue = new List<QueueItem>();
+
+            foreach (var remoteEpisode in remoteEpisodes)
+            {
+                queue.Add(new QueueItem
+                          {
+                              RemoteEpisode = remoteEpisode
+                          });
+            }
+
+            _downloadClient.Setup(s => s.GetQueue())
+                           .Returns(queue);
         }
 
         [Test]
-        public void should_return_false_when_series_doesnt_match()
+        public void should_return_true_when_queue_is_empty()
+        {
+            GivenEmptyQueue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_series_doesnt_match()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                        .With(r => r.Series = _otherSeries)
                                                        .With(r => r.Episodes = new List<Episode> { _episode })
                                                        .Build();
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeFalse();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
         }
 
         [Test]
-        public void should_return_false_when_quality_in_queue_is_lower()
+        public void should_return_true_when_quality_in_queue_is_lower()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -77,11 +112,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                        })
                                                       .Build();
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeFalse();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
         }
 
         [Test]
-        public void should_return_false_when_episode_doesnt_match()
+        public void should_return_true_when_episode_doesnt_match()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -92,11 +128,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                        })
                                                       .Build();
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeFalse();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
         }
 
         [Test]
-        public void should_return_true_when_qualities_are_the_same()
+        public void should_return_false_when_qualities_are_the_same()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -107,11 +144,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                        })
                                                       .Build();
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeTrue();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
         }
 
         [Test]
-        public void should_return_true_when_quality_in_queue_is_better()
+        public void should_return_false_when_quality_in_queue_is_better()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -122,11 +160,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                        })
                                                       .Build();
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeTrue();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
         }
 
         [Test]
-        public void should_return_true_if_matching_multi_episode_is_in_queue()
+        public void should_return_false_if_matching_multi_episode_is_in_queue()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -137,11 +176,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       })
                                                       .Build();
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeTrue();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
         }
 
         [Test]
-        public void should_return_true_if_multi_episode_has_one_episode_in_queue()
+        public void should_return_false_if_multi_episode_has_one_episode_in_queue()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -154,11 +194,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _remoteEpisode.Episodes.Add(_otherEpisode);
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeTrue();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
         }
 
         [Test]
-        public void should_return_true_if_multi_part_episode_is_already_in_queue()
+        public void should_return_false_if_multi_part_episode_is_already_in_queue()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
@@ -171,11 +212,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _remoteEpisode.Episodes.Add(_otherEpisode);
 
-            Subject.IsInQueue(_remoteEpisode, new List<RemoteEpisode> { remoteEpisode }).Should().BeTrue();
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
         }
 
         [Test]
-        public void should_return_true_if_multi_part_episode_has_two_episodes_in_queue()
+        public void should_return_false_if_multi_part_episode_has_two_episodes_in_queue()
         {
             var remoteEpisodes = Builder<RemoteEpisode>.CreateListOfSize(2)
                                                        .All()
@@ -193,8 +235,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                        .Build();
 
             _remoteEpisode.Episodes.Add(_otherEpisode);
-
-            Subject.IsInQueue(_remoteEpisode, remoteEpisodes ).Should().BeTrue();
+            GivenQueue(remoteEpisodes);
+            Subject.IsSatisfiedBy(_remoteEpisode, null ).Should().BeFalse();
         }
     }
 }
