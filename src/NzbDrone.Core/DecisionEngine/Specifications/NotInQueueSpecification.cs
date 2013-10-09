@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -38,31 +39,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            var queue = downloadClient.GetQueue().Select(queueItem => Parser.Parser.ParseTitle(queueItem.Title)).Where(episodeInfo => episodeInfo != null);
+            var queue = downloadClient.GetQueue().Select(q => q.RemoteEpisode);
 
             return !IsInQueue(subject, queue);
         }
 
-        private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<ParsedEpisodeInfo> queue)
+        private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)
         {
-            var matchingTitle = queue.Where(q => String.Equals(q.SeriesTitle, newEpisode.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
+            var matchingSeries = queue.Where(q => q.Series.Id == newEpisode.Series.Id);
+            var matchingSeriesAndQuality = matchingSeries.Where(q => q.ParsedEpisodeInfo.Quality >= newEpisode.ParsedEpisodeInfo.Quality);
 
-            var matchingTitleWithQuality = matchingTitle.Where(q => q.Quality >= newEpisode.ParsedEpisodeInfo.Quality);
-
-            if (newEpisode.Series.SeriesType == SeriesTypes.Daily)
-            {
-                return matchingTitleWithQuality.Any(q => q.AirDate.Value.Date == newEpisode.ParsedEpisodeInfo.AirDate.Value.Date);
-            }
-
-            var matchingSeason = matchingTitleWithQuality.Where(q => q.SeasonNumber == newEpisode.ParsedEpisodeInfo.SeasonNumber);
-
-            if (newEpisode.ParsedEpisodeInfo.FullSeason)
-            {
-                return matchingSeason.Any();
-            }
-
-            return matchingSeason.Any(q => q.EpisodeNumbers != null && q.EpisodeNumbers.Any(e => newEpisode.ParsedEpisodeInfo.EpisodeNumbers.Contains(e)));
+            return matchingSeriesAndQuality.Any(q => q.Episodes.Select(e => e.Id).Intersect(newEpisode.Episodes.Select(e => e.Id)).Any());
         }
-
     }
 }
