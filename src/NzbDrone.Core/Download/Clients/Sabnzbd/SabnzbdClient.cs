@@ -7,6 +7,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using RestSharp;
 
@@ -53,13 +54,19 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
+        private readonly IParsingService _parsingService;
         private readonly ICached<IEnumerable<QueueItem>> _queueCache;
         private readonly Logger _logger;
 
-        public SabnzbdClient(IConfigService configService, IHttpProvider httpProvider, ICacheManger cacheManger, Logger logger)
+        public SabnzbdClient(IConfigService configService,
+                             IHttpProvider httpProvider,
+                             ICacheManger cacheManger,
+                             IParsingService parsingService,
+                             Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _parsingService = parsingService;
             _queueCache = cacheManger.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
             _logger = logger;
         }
@@ -120,6 +127,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     queueItem.Sizeleft = sabQueueItem.Sizeleft;
                     queueItem.Timeleft = sabQueueItem.Timeleft;
                     queueItem.Status = sabQueueItem.Status;
+
+                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
+                    if (parsedEpisodeInfo == null) continue;
+
+                    var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
+                    if (remoteEpisode.Series == null) continue;
+
+                    queueItem.RemoteEpisode = remoteEpisode;
 
                     queueItems.Add(queueItem);
                 }
