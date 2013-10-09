@@ -8,7 +8,7 @@ define(
         'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (Reqres,  _, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
+    ], function (reqres,  _, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -33,7 +33,7 @@ define(
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {
-                        var episodeFile = Reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
+                        var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
 
                         this.listenTo(episodeFile, 'change', this._refresh);
 

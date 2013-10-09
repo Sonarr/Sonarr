@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(
     [
-        'Backbone',
+        'backbone',
         'Settings/Notifications/Model'
     ], function (Backbone, NotificationModel) {
         return Backbone.Collection.extend({
