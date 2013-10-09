@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -12,11 +13,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class NotInQueueSpecification : IDecisionEngineSpecification
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
-        public NotInQueueSpecification(IProvideDownloadClient downloadClientProvider, Logger logger)
+        public NotInQueueSpecification(IProvideDownloadClient downloadClientProvider, IParsingService parsingService, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
+            _parsingService = parsingService;
             _logger = logger;
         }
 
@@ -40,29 +43,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var queue = downloadClient.GetQueue().Select(queueItem => Parser.Parser.ParseTitle(queueItem.Title)).Where(episodeInfo => episodeInfo != null);
 
-            return !IsInQueue(subject, queue);
+            var mappedQueue = queue.Select(queueItem => _parsingService.Map(queueItem, 0))
+                                   .Where(remoteEpisode => remoteEpisode.Series != null);
+
+            return !IsInQueue(subject, mappedQueue);
         }
 
-        private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<ParsedEpisodeInfo> queue)
+        public bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)
         {
-            var matchingTitle = queue.Where(q => String.Equals(q.SeriesTitle, newEpisode.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
+            var matchingSeries = queue.Where(q => q.Series.Id == newEpisode.Series.Id);
+            var matchingTitleWithQuality = matchingSeries.Where(q => q.ParsedEpisodeInfo.Quality >= newEpisode.ParsedEpisodeInfo.Quality);
 
-            var matchingTitleWithQuality = matchingTitle.Where(q => q.Quality >= newEpisode.ParsedEpisodeInfo.Quality);
-
-            if (newEpisode.Series.SeriesType == SeriesTypes.Daily)
-            {
-                return matchingTitleWithQuality.Any(q => q.AirDate.Value.Date == newEpisode.ParsedEpisodeInfo.AirDate.Value.Date);
-            }
-
-            var matchingSeason = matchingTitleWithQuality.Where(q => q.SeasonNumber == newEpisode.ParsedEpisodeInfo.SeasonNumber);
-
-            if (newEpisode.ParsedEpisodeInfo.FullSeason)
-            {
-                return matchingSeason.Any();
-            }
-
-            return matchingSeason.Any(q => q.EpisodeNumbers != null && q.EpisodeNumbers.Any(e => newEpisode.ParsedEpisodeInfo.EpisodeNumbers.Contains(e)));
+            return matchingTitleWithQuality.Any(q => q.Episodes.Select(e => e.Id).Intersect(newEpisode.Episodes.Select(e => e.Id)).Any());
         }
-
     }
 }
