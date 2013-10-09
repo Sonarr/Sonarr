@@ -5,11 +5,14 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Nzbget;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
 {
-    public class QueueFixture : CoreTest
+    public class QueueFixture : CoreTest<NzbgetClient>
     {
         [SetUp]
         public void Setup()
@@ -49,10 +52,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithEmptyQueue();
 
-            Mocker.Resolve<NzbgetClient>()
-                  .GetQueue()
-                  .Should()
-                  .BeEmpty();
+            Subject.GetQueue()
+                   .Should()
+                   .BeEmpty();
         }
 
         [Test]
@@ -60,10 +62,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
         {
             WithFullQueue();
 
-            Mocker.Resolve<NzbgetClient>()
-                  .GetQueue()
-                  .Should()
-                  .HaveCount(1);
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), 0, null))
+                  .Returns(new RemoteEpisode {Series = new Series()});
+
+            Subject.GetQueue()
+                   .Should()
+                   .HaveCount(1);
         }
     }
 }
