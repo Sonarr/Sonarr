@@ -95,8 +95,6 @@ define(
             },
 
             _setMonitoredState: function () {
-                var monitored = this.model.get('monitored');
-
                 this.ui.monitored.removeClass('icon-spin icon-spinner');
 
                 if (this.model.get('monitored')) {

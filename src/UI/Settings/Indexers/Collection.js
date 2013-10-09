@@ -1,9 +1,10 @@
-﻿﻿'use strict';
+﻿﻿
+'use strict';
 define(
     [
+        'backbone',
         'Settings/Indexers/Model',
-        'Form/FormBuilder'
-    ], function (IndexerModel) {
+    ], function (Backbone, IndexerModel) {
         return Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/indexer',
             model: IndexerModel

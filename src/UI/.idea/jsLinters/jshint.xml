@@ -5,6 +5,7 @@
     <option camelcase="true" />
     <option curly="true" />
     <option eqeqeq="true" />
+    <option es3="false" />
     <option forin="true" />
     <option immed="true" />
     <option latedef="true" />
@@ -15,7 +16,7 @@
     <option plusplus="false" />
     <option regexp="false" />
     <option undef="true" />
-    <option unused="false" />
+    <option unused="true" />
     <option strict="true" />
     <option trailing="false" />
     <option quotmark="single" />
@@ -49,7 +50,7 @@
     <option couch="false" />
     <option devel="true" />
     <option dojo="false" />
-    <option jquery="true" />
+    <option jquery="false" />
     <option mootools="false" />
     <option node="false" />
     <option nonstandard="false" />
@@ -63,7 +64,7 @@
     <option passfail="false" />
     <option white="false" />
     <option maxerr="50" />
-    <option predef="window, define, require ,$" />
+    <option predef="window, define, require" />
   </component>
 </project>
 

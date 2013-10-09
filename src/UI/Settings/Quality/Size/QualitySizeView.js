@@ -6,7 +6,7 @@ define(
         'Mixins/AsModelBoundView',
         'filesize',
         'jquery.knob'
-    ], function (Marionette, AsModelBoundView, Filesize) {
+    ], function (Marionette, AsModelBoundView, fileSize) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Quality/Size/QualitySizeTemplate',
@@ -24,7 +24,7 @@ define(
 
             initialize: function (options) {
                 this.qualityProfileCollection = options.qualityProfiles;
-                this.filesize = Filesize;
+                this.filesize = fileSize;
             },
 
             onRender: function () {
@@ -44,8 +44,8 @@ define(
             _changeMaxSize: function () {
                 var maxSize = this.model.get('maxSize');
                 var bytes = maxSize * 1024 * 1024;
-                var thirty = Filesize(bytes * 30, 1, false);
-                var sixty = Filesize(bytes * 60, 1, false);
+                var thirty = fileSize(bytes * 30, 1, false);
+                var sixty = fileSize(bytes * 60, 1, false);
 
                 if (parseInt(maxSize, 10) === 0) {
                     thirty = 'No Limit';

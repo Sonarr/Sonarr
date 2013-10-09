@@ -2,9 +2,10 @@
 define(
     [
         'backbone',
+        'jquery',
         'Series/SeriesCollection'
-    ], function (Backbone, SeriesCollection) {
-        $(document).on('keydown', function (e){
+    ], function (Backbone, $, SeriesCollection) {
+        $(document).on('keydown', function (e) {
             if ($(e.target).is('input')) {
                 return;
             }
@@ -17,7 +18,7 @@ define(
 
         $.fn.bindSearch = function () {
             $(this).typeahead({
-                source   : function () {
+                source: function () {
                     return SeriesCollection.pluck('title');
                 },
 

@@ -19,7 +19,7 @@ define([
         },
 
         addNotification: function (e) {
-            if ($(e.target).hasClass('icon-info-sign')) {
+            if (this.$(e.target).hasClass('icon-info-sign')) {
                 return;
             }
 
