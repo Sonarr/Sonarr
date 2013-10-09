@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'backgrid',
         'Cells/ToggleCell',
@@ -10,8 +10,9 @@ define(
         'Cells/EpisodeStatusCell',
         'Cells/EpisodeActionsCell',
         'Commands/CommandController',
-        'moment'
-    ], function (App, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, EpisodeActionsCell, CommandController, Moment) {
+        'moment',
+        'underscore'
+    ], function (vent, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, EpisodeActionsCell, CommandController, Moment,_) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -173,7 +174,7 @@ define(
 
 
             _afterRename: function () {
-                App.vent.trigger(App.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
+                vent.trigger(vent.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
             },
 
             _showEpisodes: function () {

@@ -1,7 +1,7 @@
 'use strict';
 define(
     [
-        'app',
+        'reqres',
         'marionette',
         'backgrid',
         'Series/EpisodeFileModel',
@@ -10,7 +10,7 @@ define(
         'Cells/QualityCell',
         'Episode/Summary/NoFileView',
         'Shared/LoadingView'
-    ], function (App, Marionette, Backgrid, EpisodeFileModel, EpisodeFileCollection, FileSizeCell, QualityCell, NoFileView, LoadingView) {
+    ], function (reqres, Marionette, Backgrid, EpisodeFileModel, EpisodeFileCollection, FileSizeCell, QualityCell, NoFileView, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Summary/EpisodeSummaryLayoutTemplate',
@@ -55,8 +55,8 @@ define(
                 if (this.model.get('hasFile')) {
                     var episodeFileId = this.model.get('episodeFileId');
 
-                    if (App.reqres.hasHandler(App.Reqres.GetEpisodeFileById)) {
-                        var episodeFile = App.request(App.Reqres.GetEpisodeFileById, episodeFileId);
+                    if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
+                        var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, episodeFileId);
                         var episodeFileCollection = new EpisodeFileCollection(episodeFile, { seriesId: this.model.get('seriesId') });
                         this._showTable(episodeFileCollection);
                     }

@@ -2,16 +2,15 @@
 
 define(
     [
-        'app',
+        'AppLayout',
         'marionette',
         'Settings/Quality/Profile/EditQualityProfileView',
         'Settings/Quality/Profile/DeleteView',
         'Series/SeriesCollection',
         'Mixins/AsModelBoundView',
         'Settings/Quality/Profile/AllowedLabeler',
-        'bootstrap',
-
-    ], function (App, Marionette, EditProfileView, DeleteProfileView, SeriesCollection, AsModelBoundView) {
+        'bootstrap'
+    ], function (AppLayout, Marionette, EditProfileView, DeleteProfileView, SeriesCollection, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Quality/Profile/QualityProfileTemplate',
@@ -29,12 +28,12 @@ define(
 
             initialize: function () {
                 this.listenTo(this.model, 'sync', this.render);
-                this.listenTo(SeriesCollection, 'all', this._updateDisableStatus)
+                this.listenTo(SeriesCollection, 'all', this._updateDisableStatus);
             },
 
             _editProfile: function () {
                 var view = new EditProfileView({ model: this.model, profileCollection: this.model.collection });
-                App.modalRegion.show(view);
+                AppLayout.modalRegion.show(view);
             },
 
             _deleteProfile: function () {
@@ -43,7 +42,7 @@ define(
                 }
 
                 var view = new DeleteProfileView({ model: this.model });
-                App.modalRegion.show(view);
+                AppLayout.modalRegion.show(view);
             },
 
             onRender: function () {

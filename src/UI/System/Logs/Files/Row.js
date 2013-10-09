@@ -1,9 +1,9 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'backgrid'
-    ], function (App, Backgrid) {
+    ], function (vent, Backgrid) {
 
         return Backgrid.Row.extend({
             className: 'log-file-row',
@@ -13,7 +13,7 @@ define(
             },
 
             _showContents: function () {
-                App.vent.trigger(App.Commands.ShowLogFile, { model: this.model });
+                vent.trigger(vent.Commands.ShowLogFile, { model: this.model });
             }
         });
     });

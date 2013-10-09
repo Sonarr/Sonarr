@@ -2,9 +2,9 @@
 
 define(
     [
-        'app',
+        'vent',
         'Cells/NzbDroneCell'
-    ], function (App, NzbDroneCell) {
+    ], function (vent, NzbDroneCell) {
         return NzbDroneCell.extend({
 
             className: 'history-details-cell',
@@ -21,7 +21,7 @@ define(
             },
 
             _showDetails: function () {
-                App.vent.trigger(App.Commands.ShowHistoryDetails, { history: this.model });
+                vent.trigger(vent.Commands.ShowHistoryDetails, { history: this.model });
             }
         });
     });

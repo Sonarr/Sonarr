@@ -12,8 +12,8 @@ define(
             tagName  : 'select',
 
             events: {
-                'change': 'save',
-                'blur': 'close',
+                'change' : 'save',
+                'blur'   : 'close',
                 'keydown': 'close'
             },
 
@@ -45,12 +45,12 @@ define(
             save: function (e) {
                 var model = this.model;
                 var column = this.column;
-                var selected = parseInt(this.$el.val());
+                var selected = parseInt(this.$el.val(), 10);
 
                 var quality = _.find(this.schema.get('available'), { 'id': selected });
 
                 var newQuality = {
-                    proper: false,
+                    proper : false,
                     quality: quality
                 };
 

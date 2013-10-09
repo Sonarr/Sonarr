@@ -1,34 +1,36 @@
 ﻿'use strict';
-define(['app',
-    'backbone.deepmodel',
-    'Mixins/AsChangeTrackingModel',
-    'Shared/Messenger'], function (App, DeepModel, AsChangeTrackingModel, Messenger) {
-    var model = DeepModel.DeepModel.extend({
+define(
+    [
+        'vent',
+        'backbone.deepmodel',
+        'Mixins/AsChangeTrackingModel',
+        'Shared/Messenger'
+    ], function (vent, DeepModel, AsChangeTrackingModel, Messenger) {
+        var model = DeepModel.DeepModel.extend({
 
-        initialize: function () {
-            this.listenTo(App.vent, App.Commands.SaveSettings, this.saveSettings);
-        },
+            initialize: function () {
+                this.listenTo(vent, vent.Commands.SaveSettings, this.saveSettings);
+            },
 
-        saveSettings: function () {
+            saveSettings: function () {
 
-            if (!this.isSaved) {
+                if (!this.isSaved) {
 
-                var savePromise = this.save();
+                    var savePromise = this.save();
 
-                Messenger.monitor(
-                    {
-                        promise       : savePromise,
-                        successMessage: this.successMessage,
-                        errorMessage  : this.errorMessage
-                    });
+                    Messenger.monitor({
+                            promise       : savePromise,
+                            successMessage: this.successMessage,
+                            errorMessage  : this.errorMessage
+                        });
 
-                return savePromise;
+                    return savePromise;
+                }
+
+                return undefined;
             }
 
-            return undefined;
-        }
+        });
 
+        return AsChangeTrackingModel.call(model);
     });
-
-    return AsChangeTrackingModel.call(model);
-});

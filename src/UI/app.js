@@ -1,8 +1,5 @@
 ﻿'use strict';
 require.config({
-
-    urlArgs: 'v=' + window.NzbDrone.ServerStatus.version,
-
     paths: {
         'backbone'            : 'JsLibraries/backbone',
         'moment'              : 'JsLibraries/moment',
@@ -16,23 +13,24 @@ require.config({
         'backbone.modelbinder': 'JsLibraries/backbone.modelbinder',
         'backgrid'            : 'JsLibraries/backbone.backgrid',
         'backgrid.paginator'  : 'JsLibraries/backbone.backgrid.paginator',
-        'backgrid.selectall' : 'JsLibraries/backbone.backgrid.selectall',
+        'backgrid.selectall'  : 'JsLibraries/backbone.backgrid.selectall',
         'fullcalendar'        : 'JsLibraries/fullcalendar',
         'backstrech'          : 'JsLibraries/jquery.backstretch',
-        '$'                   : 'JsLibraries/jquery',
         'underscore'          : 'JsLibraries/lodash.underscore',
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
-        'libs'                : 'JsLibraries/'
+        'jquery'              : 'JsLibraries/jquery',
+        'libs'                : 'JsLibraries/',
+
+        'api': 'Require/require.api'
     },
 
     shim: {
 
-        $: {
-            exports: '$',
-
+        jquery: {
+            exports: 'jQuery',
             deps   :
                 [
                     'Mixins/jquery.ajax'
@@ -53,28 +51,33 @@ require.config({
         signalR: {
             deps:
                 [
-                    '$'
+                    'jquery'
                 ]
         },
 
         bootstrap: {
             deps:
                 [
-                    '$'
-                ]
+                    'jquery'
+                ],
+            init: function ($) {
+                $('body').tooltip({
+                    selector: '[title]'
+                });
+            }
         },
 
         backstrech: {
             deps:
                 [
-                    '$'
+                    'jquery'
                 ]
         },
 
         underscore: {
             deps   :
                 [
-                    '$'
+                    'jquery'
                 ],
             exports: '_'
         },
@@ -83,7 +86,7 @@ require.config({
             deps   :
                 [
                     'underscore',
-                    '$'
+                    'jquery'
                 ],
             exports: 'Backbone'
         },
@@ -123,14 +126,14 @@ require.config({
         'jquery.knob': {
             deps:
                 [
-                    '$'
+                    'jquery'
                 ]
         },
 
         'jquery.dotdotdot': {
             deps:
                 [
-                    '$'
+                    'jquery'
                 ]
         },
 
@@ -190,55 +193,44 @@ require.config({
     }
 });
 
+require.config({
+    urlArgs: 'v=' + window.NzbDrone.ServerStatus.version
+});
+
 define(
     [
+        'backbone',
         'marionette',
+        'jQuery/RouteBinder',
         'Shared/SignalRBroadcaster',
+        'Navbar/NavbarView',
+        'AppLayout',
+        'Series/SeriesController',
+        'Router',
+        'Shared/Modal/Controller',
         'Instrumentation/StringFormat'
-    ], function (Marionette, SignalRBroadcaster) {
+    ], function (Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController) {
+
+        new SeriesController();
+        new ModalController();
+        new Router();
 
         var app = new Marionette.Application();
-
-        app.Events = {
-            SeriesAdded    : 'series:added',
-            SeriesDeleted  : 'series:deleted',
-            SeasonRenamed  : 'season:renamed',
-            CommandComplete: 'command:complete'
-        };
-
-        app.Commands = {
-            EditSeriesCommand    : 'EditSeriesCommand',
-            DeleteSeriesCommand  : 'DeleteSeriesCommand',
-            CloseModalCommand    : 'CloseModalCommand',
-            ShowEpisodeDetails   : 'ShowEpisodeDetails',
-            ShowHistoryDetails   : 'ShowHistoryDetails',
-            SaveSettings         : 'saveSettings',
-            ShowLogFile          : 'showLogFile'
-        };
-
-        app.Reqres = {
-            GetEpisodeFileById: 'GetEpisodeFileById'
-        };
 
         app.addInitializer(function () {
             console.log('starting application');
         });
 
-        app.addInitializer(SignalRBroadcaster.appInitializer, { app: app });
+        app.addInitializer(SignalRBroadcaster.appInitializer, {
+            app: app
+        });
 
-        app.addRegions({
-            navbarRegion: '#nav-region',
-            mainRegion  : '#main-region',
-            footerRegion: '#footer-region'
+        app.addInitializer(function () {
+            Backbone.history.start({ pushState: true });
+            RouteBinder.bind();
+            AppLayout.navbarRegion.show(new NavbarView());
+            $('body').addClass('started');
         });
 
         app.start();
-
-        window.require(
-            [
-                'Router',
-                'jQuery/TooltipBinder'
-            ]);
-
-        return app;
     });

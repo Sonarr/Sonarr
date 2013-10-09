@@ -1,11 +1,12 @@
 ﻿'use strict';
 
-define(['app',
+define(['AppLayout',
         'marionette',
         'Settings/Quality/Profile/QualityProfileView',
         'Settings/Quality/Profile/EditQualityProfileView',
-        'Settings/Quality/Profile/QualityProfileSchemaCollection'
-], function (App, Marionette, QualityProfileView, EditProfileView, ProfileCollection) {
+        'Settings/Quality/Profile/QualityProfileSchemaCollection',
+        'underscore'
+], function (AppLayout, Marionette, QualityProfileView, EditProfileView, ProfileCollection, _) {
 
     return Marionette.CompositeView.extend({
         itemView         : QualityProfileView,
@@ -35,7 +36,7 @@ define(['app',
                     model.collection = self.collection;
 
                     var view = new EditProfileView({ model: model, profileCollection: self.collection});
-                    App.modalRegion.show(view);
+                    AppLayout.modalRegion.show(view);
                 }
             });
         }

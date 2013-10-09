@@ -1,8 +1,8 @@
 'use strict';
 define(
     [
-        'app'
-    ], function (App) {
+        'vent'
+    ], function (vent) {
         return {
             Events: {
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
@@ -36,7 +36,7 @@ define(
                 }
 
                 localStorage.setItem(key, value);
-                App.vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
+                vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
 
             }
         };

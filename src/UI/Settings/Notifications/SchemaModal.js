@@ -1,9 +1,9 @@
 ﻿'use strict';
 define([
-    'app',
+    'AppLayout',
     'Settings/Notifications/Collection',
     'Settings/Notifications/AddView'
-], function (App, NotificationCollection, AddSelectionNotificationView) {
+], function (AppLayout, NotificationCollection, AddSelectionNotificationView) {
     return ({
 
         open: function (collection) {
@@ -13,7 +13,7 @@ define([
             schemaCollection.url = '/api/notification';
 
             var view = new AddSelectionNotificationView({ collection: schemaCollection, notificationCollection: collection});
-            App.modalRegion.show(view);
+            AppLayout.modalRegion.show(view);
         }
     });
 });

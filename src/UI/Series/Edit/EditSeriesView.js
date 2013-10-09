@@ -1,13 +1,13 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'Quality/QualityProfileCollection',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
         'Mixins/AutoComplete'
-    ], function (App, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
+    ], function (vent, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Series/Edit/EditSeriesViewTemplate',
@@ -36,7 +36,7 @@ define(
 
                 this.model.save().done(function () {
                     self.trigger('saved');
-                    App.vent.trigger(App.Commands.CloseModalCommand);
+                    vent.trigger(vent.Commands.CloseModalCommand);
                 });
             },
 
@@ -45,7 +45,7 @@ define(
             },
 
             _removeSeries: function () {
-                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series:this.model});
+                vent.trigger(vent.Commands.DeleteSeriesCommand, {series:this.model});
             }
         });
 

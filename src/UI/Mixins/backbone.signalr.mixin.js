@@ -1,10 +1,11 @@
 'use strict';
 define(
     [
+        'vent',
         'underscore',
         'backbone',
         'signalR'
-    ], function (_, Backbone) {
+    ], function (vent, _, Backbone) {
 
         _.extend(Backbone.Collection.prototype, {
             bindSignalR: function () {
@@ -25,12 +26,7 @@ define(
                     console.log(options.action + ': {0}}'.format(options.resource));
                 };
 
-                require(
-                    [
-                        'app'
-                    ], function (app) {
-                        collection.listenTo(app.vent, 'server:' + collection.url.replace('/api/', ''), processMessage);
-                    });
+                collection.listenTo(vent, 'server:' + collection.url.replace('/api/', ''), processMessage);
 
                 return this;
             },

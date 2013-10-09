@@ -1,12 +1,12 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'backbone',
         'marionette',
         'System/About/AboutView',
         'System/Logs/LogsLayout',
         'System/Update/UpdateLayout'
-    ], function (App,
+    ], function (Backbone,
                  Marionette,
                  AboutView,
                  LogsLayout,
@@ -52,9 +52,7 @@ define(
             },
 
             _navigate:function(route){
-                require(['Router'], function(){
-                    App.Router.navigate(route);
-                });
+                Backbone.history.navigate(route);
             },
 
             _showAbout: function (e) {

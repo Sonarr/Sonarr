@@ -1,9 +1,9 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette'
-    ], function (App, Marionette) {
+    ], function (vent, Marionette) {
 
         return  Marionette.ItemView.extend({
             template: 'Series/Delete/DeleteSeriesTemplate',
@@ -24,8 +24,8 @@ define(
                     data: { 'deleteFiles': deleteFiles },
                     wait: true
                 }).done(function () {
-                        App.vent.trigger(App.Events.SeriesDeleted, { series: self.model });
-                        App.vent.trigger(App.Commands.CloseModalCommand);
+                        vent.trigger(vent.Events.SeriesDeleted, { series: self.model });
+                        vent.trigger(vent.Commands.CloseModalCommand);
                     });
             }
         });

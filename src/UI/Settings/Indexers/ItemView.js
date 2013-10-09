@@ -2,12 +2,12 @@
 
 define(
     [
-        'app',
+        'AppLayout',
         'marionette',
         'Settings/Notifications/DeleteView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView'
-    ], function (App, Marionette, DeleteView, AsModelBoundView, AsValidatedView) {
+    ], function (AppLayout, Marionette, DeleteView, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Indexers/ItemTemplate',
@@ -19,7 +19,7 @@ define(
 
             _deleteIndexer: function () {
                 var view = new DeleteView({ model: this.model});
-                App.modalRegion.show(view);
+                AppLayout.modalRegion.show(view);
             }
         });
 

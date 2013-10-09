@@ -1,7 +1,6 @@
 'use strict';
 define(
     [
-        'app',
         'marionette',
         'backgrid',
         'History/HistoryCollection',
@@ -10,7 +9,7 @@ define(
         'Cells/RelativeDateCell',
         'Episode/Activity/NoActivityView',
         'Shared/LoadingView'
-    ], function (App, Marionette, Backgrid, HistoryCollection, EventTypeCell, QualityCell, RelativeDateCell, NoActivityView, LoadingView) {
+    ], function (Marionette, Backgrid, HistoryCollection, EventTypeCell, QualityCell, RelativeDateCell, NoActivityView, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Activity/EpisodeActivityLayoutTemplate',

@@ -2,10 +2,11 @@
 
 define(
     [
-        'app',
+        'vent',
+        'marionette',
         'Cells/NzbDroneCell',
         'Commands/CommandController'
-    ], function (App, NzbDroneCell, CommandController) {
+    ], function (vent, Marionette, NzbDroneCell, CommandController) {
         return NzbDroneCell.extend({
 
             className: 'episode-actions-cell',
@@ -48,7 +49,7 @@ define(
             },
 
             _manualSearch: function () {
-                App.vent.trigger(App.Commands.ShowEpisodeDetails, { episode: this.cellValue, hideSeriesLink: true, openingTab: 'search' });
+                vent.trigger(vent.Commands.ShowEpisodeDetails, { episode: this.cellValue, hideSeriesLink: true, openingTab: 'search' });
             }
         });
     });

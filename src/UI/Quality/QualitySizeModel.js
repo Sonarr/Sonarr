@@ -2,9 +2,8 @@
 
 define(
     [
-        'app',
         'Settings/SettingsModelBase'
-    ], function (App, ModelBase) {
+    ], function (ModelBase) {
         return ModelBase.extend({
 
             baseInitialize: ModelBase.prototype.initialize,

@@ -1,11 +1,13 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
+        'backbone',
         'Mixins/AsModelBoundView',
-        'Mixins/AsValidatedView'
-    ], function (App, Marionette, AsModelBoundView, AsValidatedView) {
+        'Mixins/AsValidatedView',
+        'underscore'
+    ], function (vent, Marionette, Backbone, AsModelBoundView, AsValidatedView, _) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Quality/Profile/EditQualityProfileTemplate',
@@ -61,7 +63,7 @@ define(
 
             _saveQualityProfile: function () {
                 var self = this;
-                var cutoff = _.findWhere(this.model.get('allowed'), { id: parseInt(this.ui.cutoff.val())});
+                var cutoff = _.findWhere(this.model.get('allowed'), { id: parseInt(this.ui.cutoff.val(), 10)});
                 this.model.set('cutoff', cutoff);
 
                 var promise = this.model.save();
@@ -69,7 +71,7 @@ define(
                 if (promise) {
                     promise.done(function () {
                         self.profileCollection.add(self.model, { merge: true });
-                        App.vent.trigger(App.Commands.CloseModalCommand);
+                        vent.trigger(vent.Commands.CloseModalCommand);
                     });
                 }
             }

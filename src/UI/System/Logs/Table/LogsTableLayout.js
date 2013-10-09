@@ -1,7 +1,7 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'backgrid',
         'System/Logs/Table/LogTimeCell',
@@ -10,7 +10,7 @@ define(
         'System/Logs/LogsCollection',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
-    ], function (App, Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout, LoadingView) {
+    ], function (vent, Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
             template: 'System/Logs/Table/LogsTableLayoutTemplate',
 
@@ -59,7 +59,7 @@ define(
                 this.collection = new LogCollection();
                 this.collectionPromise = this.collection.fetch();
 
-                App.vent.on(App.Events.CommandComplete, this._commandComplete, this);
+                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
             },
 
             onRender: function () {

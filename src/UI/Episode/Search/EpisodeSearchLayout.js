@@ -1,7 +1,7 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'Episode/Search/ButtonsView',
         'Episode/Search/ManualLayout',
@@ -9,7 +9,7 @@ define(
         'Series/SeriesCollection',
         'Commands/CommandController',
         'Shared/LoadingView'
-    ], function (App, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SeriesCollection,CommandController, LoadingView) {
+    ], function (vent, Marionette, ButtonsView, ManualSearchLayout, ReleaseCollection, SeriesCollection,CommandController, LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/EpisodeSearchLayoutTemplate',
@@ -50,7 +50,7 @@ define(
                     episodeIds: [ this.model.get('id') ]
                 });
 
-                App.vent.trigger(App.Commands.CloseModalCommand);
+                vent.trigger(vent.Commands.CloseModalCommand);
             },
 
             _searchManual: function (e) {

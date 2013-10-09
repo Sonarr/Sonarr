@@ -155,6 +155,25 @@ module.exports = function (grunt) {
             }
         },
 
+        requirejs: {
+            compile:{
+                options: {
+                    mainConfigFile: "_output/UI/app.js",
+                    fileExclusionRegExp: /^.*\.(?!js$)[^.]+$/,
+                    preserveLicenseComments: true,
+                    dir: "rjs/",
+                    optimize: 'none',
+                    removeCombined: true,
+                    inlineText: false,
+                    modules: [{
+                        name: 'app',
+                        exclude: ['JsLibraries/jquery']
+                    }],
+
+                }
+            }
+        },
+
         watch: {
             options: {
                 nospawn: false,
@@ -213,6 +232,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-curl');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     grunt.registerTask('package', ['clean:output', 'copy', 'less', 'handlebars']);
     grunt.registerTask('default', ['package', 'watch']); 

@@ -2,16 +2,17 @@
 
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'Mixins/AsModelBoundView',
-        'Mixins/AsValidatedView'
-    ], function (App, Marionette, AsModelBoundView, AsValidatedView) {
+        'Mixins/AsValidatedView',
+        'underscore'
+    ], function (vent, Marionette, AsModelBoundView, AsValidatedView, _) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Indexers/EditTemplate',
 
-            ui : {
+            ui: {
                 activity: '.x-activity'
             },
 
@@ -33,7 +34,7 @@ define(
                 if (promise) {
                     promise.done(function () {
                         self.indexerCollection.add(self.model, { merge: true });
-                        App.vent.trigger(App.Commands.CloseModalCommand);
+                        vent.trigger(vent.Commands.CloseModalCommand);
                     });
 
                     promise.fail(function () {

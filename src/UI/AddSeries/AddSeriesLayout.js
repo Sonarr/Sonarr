@@ -1,7 +1,8 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'vent',
+        'AppLayout',
         'marionette',
         'AddSeries/RootFolders/Layout',
         'AddSeries/Existing/AddExistingSeriesCollectionView',
@@ -9,7 +10,8 @@ define(
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/Collection',
         'Series/SeriesCollection'
-    ], function (App,
+    ], function (vent,
+                 AppLayout,
                  Marionette,
                  RootFolderLayout,
                  ExistingSeriesCollectionView,
@@ -43,7 +45,7 @@ define(
             },
 
             _folderSelected: function (options) {
-                App.vent.trigger(App.Commands.CloseModalCommand);
+                vent.trigger(vent.Commands.CloseModalCommand);
 
                 this.workspace.show(new ExistingSeriesCollectionView({model: options.model}));
             },
@@ -51,7 +53,7 @@ define(
             _importSeries: function () {
                 this.rootFolderLayout = new RootFolderLayout();
                 this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
-                App.modalRegion.show(this.rootFolderLayout);
+                AppLayout.modalRegion.show(this.rootFolderLayout);
             },
 
             _addSeries: function () {

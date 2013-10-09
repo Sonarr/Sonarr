@@ -1,10 +1,10 @@
 ﻿'use strict';
 
 define([
-    'app',
+    'AppLayout',
     'marionette',
     'Settings/Notifications/EditView'
-], function (App, Marionette, EditView) {
+], function (AppLayout, Marionette, EditView) {
 
     return Marionette.ItemView.extend({
         template: 'Settings/Notifications/AddItemTemplate',
@@ -31,7 +31,7 @@ define([
             });
 
             var editView = new EditView({ model: this.model, notificationCollection: this.notificationCollection });
-            App.modalRegion.show(editView);
+            AppLayout.modalRegion.show(editView);
         }
     });
 });
