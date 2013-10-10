@@ -22,6 +22,10 @@ define(
 
                 delete xhr.data;
             }
+s            if (xhr) {
+                xhr.headers = xhr.headers || {};
+                xhr.headers.Authorization = window.NzbDrone.ApiKey;
+            }
 
             return original.apply(this, arguments);
         };
