@@ -11,7 +11,6 @@ namespace NzbDrone.Core.Tv
     {
         public const string AIR_DATE_FORMAT = "yyyy-MM-dd";
 
-        public int TvDbEpisodeId { get; set; }
         public int SeriesId { get; set; }
         public int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
@@ -39,7 +38,7 @@ namespace NzbDrone.Core.Tv
 
         public override string ToString()
         {
-            return string.Format("[{0}]{1}", TvDbEpisodeId, Title.NullSafe());
+            return string.Format("[{0}]{1}", Id, Title.NullSafe());
         }
     }
 }

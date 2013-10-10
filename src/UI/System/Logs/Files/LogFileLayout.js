@@ -57,12 +57,11 @@ define(
             initialize: function () {
                 this.collection = new LogFileCollection();
 
-            vent.on(vent.Commands.ShowLogFile, this._fetchLogFileContents, this);
+                vent.on(vent.Commands.ShowLogFile, this._fetchLogFileContents, this);
                 vent.on(vent.Events.CommandComplete, this._commandComplete, this);
                 this.listenTo(this.collection, 'sync', this._collectionSynced);
 
                 this.collection.fetch();
-
             },
 
             onShow: function () {

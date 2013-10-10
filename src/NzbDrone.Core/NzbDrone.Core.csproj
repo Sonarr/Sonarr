@@ -175,6 +175,7 @@
     <Compile Include="Datastore\Migration\021_drop_seasons_table.cs" />
     <Compile Include="Datastore\Migration\022_move_notification_to_generic_provider.cs" />
     <Compile Include="Datastore\Migration\023_add_config_contract_to_indexers.cs" />
+    <Compile Include="Datastore\Migration\024_drop_tvdb_episodeid.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />

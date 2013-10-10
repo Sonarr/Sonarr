@@ -98,7 +98,6 @@ namespace NzbDrone.Core.MetadataSource
             episode.SeasonNumber = traktEpisode.season;
             episode.EpisodeNumber = traktEpisode.episode;
             episode.EpisodeNumber = traktEpisode.number;
-            episode.TvDbEpisodeId = traktEpisode.tvdb_id;
             episode.Title = traktEpisode.title;
             episode.AirDate = FromIsoToString(traktEpisode.first_aired_iso);
             episode.AirDateUtc = FromIso(traktEpisode.first_aired_iso);

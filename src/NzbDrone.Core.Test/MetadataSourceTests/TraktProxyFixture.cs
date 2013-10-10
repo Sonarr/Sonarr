@@ -80,8 +80,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
                 .Max(e => e.Count()).Should().Be(1);
 
-            episodes.Select(c => c.TvDbEpisodeId).Should().OnlyHaveUniqueItems();
-
             episodes.Should().Contain(c => c.SeasonNumber > 0);
             episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
 
@@ -98,7 +96,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         {
             episode.Should().NotBeNull();
             episode.EpisodeNumber.Should().NotBe(0);
-            episode.TvDbEpisodeId.Should().BeGreaterThan(0);
 
             episode.Should().NotBeNull();
 
