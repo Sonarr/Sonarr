@@ -5,7 +5,7 @@ define(
         'System/StatusModel'
     ], function (Marionette, StatusModel) {
         return Marionette.ItemView.extend({
-            template: 'System/About/AboutViewTemplate',
+            template: 'System/Info/About/AboutViewTemplate',
 
             initialize: function () {
                 this.model = StatusModel;

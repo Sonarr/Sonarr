@@ -3,38 +3,33 @@ define(
     [
         'backbone',
         'marionette',
-        'System/About/AboutView',
+        'System/Info/SystemInfoLayout',
         'System/Logs/LogsLayout',
-        'System/Update/UpdateLayout',
-        'System/DiskSpace/DiskSpaceLayout'
+        'System/Update/UpdateLayout'
     ], function (Backbone,
                  Marionette,
-                 AboutView,
+                 SystemInfoLayout,
                  LogsLayout,
-                 UpdateLayout,
-                 DiskSpaceLayout) {
+                 UpdateLayout) {
         return Marionette.Layout.extend({
             template: 'System/SystemLayoutTemplate',
 
             regions: {
-                about   : '#about',
+                info   : '#info',
                 logs    : '#logs',
-                updates: '#updates',
-                diskSpace: '#diskspace'
+                updates: '#updates'
             },
 
             ui: {
-                aboutTab  : '.x-about-tab',
+                infoTab  : '.x-info-tab',
                 logsTab   : '.x-logs-tab',
-                updatesTab: '.x-updates-tab',
-                diskSpaceTab: '.x-diskspace-tab'
+                updatesTab: '.x-updates-tab'
             },
 
             events: {
-                'click .x-about-tab'  : '_showAbout',
+                'click .x-info-tab'  : '_showInfo',
                 'click .x-logs-tab'   : '_showLogs',
-                'click .x-updates-tab': '_showUpdates',
-                'click .x-diskspace-tab':'_showDiskSpace'
+                'click .x-updates-tab': '_showUpdates'
             },
 
             initialize: function (options) {
@@ -51,10 +46,8 @@ define(
                     case 'updates':
                         this._showUpdates();
                         break;
-                    case 'diskspace':
-                        this._showDiskSpace();
                     default:
-                        this._showAbout();
+                        this._showInfo();
                 }
             },
 
@@ -62,14 +55,14 @@ define(
                 Backbone.history.navigate(route);
             },
 
-            _showAbout: function (e) {
+            _showInfo: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
 
-                this.about.show(new AboutView());
-                this.ui.aboutTab.tab('show');
-                this._navigate('system/about');
+                this.info.show(new SystemInfoLayout());
+                this.ui.infoTab.tab('show');
+                this._navigate('system/info');
             },
 
             _showLogs: function (e) {
@@ -90,14 +83,6 @@ define(
                 this.updates.show(new UpdateLayout());
                 this.ui.updatesTab.tab('show');
                 this._navigate('system/updates');
-            },
-            _showDiskSpace: function (e) {
-                if (e) {
-                    e.preventDefault();
-                }
-                this.diskSpace.show(new DiskSpaceLayout());
-                this.ui.diskSpaceTab.tab('show');
-                this._navigate("system/diskspace");
             }
         });
     });

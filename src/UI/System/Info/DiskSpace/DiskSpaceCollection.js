@@ -1,5 +1,5 @@
 ﻿'use strict';
-define(['backbone', 'System/DiskSpace/DiskSpaceModel'],
+define(['backbone', 'System/Info/DiskSpace/DiskSpaceModel'],
 function(Backbone, DiskSpaceModel) {
     return Backbone.Collection.extend({
         url:window.NzbDrone.ApiRoot +'/diskspace',

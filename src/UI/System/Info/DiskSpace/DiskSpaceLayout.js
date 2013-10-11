@@ -3,12 +3,12 @@ define([
     'vent',
     'marionette',
         'backgrid',
-        'System/DiskSpace/DiskSpaceCollection',
+        'System/Info/DiskSpace/DiskSpaceCollection',
         'Shared/LoadingView',
         'Cells/FileSizeCell'
 ], function (vent,Marionette,Backgrid,DiskSpaceCollection,LoadingView,FileSizeCell) {
     return Marionette.Layout.extend({
-        template: 'System/DiskSpace/DiskSpaceTemplate',
+        template: 'System/Info/DiskSpace/DiskSpaceLayoutTemplate',
 
         regions: {
             grid: '#x-grid'
