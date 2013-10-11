@@ -42,6 +42,8 @@ namespace NzbDrone.Common
         void SetFolderWriteTime(string path, DateTime time);
         FileAttributes GetFileAttributes(string path);
         void EmptyFolder(string path);
+        string[] GetFixedDrives();
+        long? GetTotalSize(string path);
     }
 
     public class DiskProvider : IDiskProvider
@@ -474,6 +476,16 @@ namespace NzbDrone.Common
             {
                 DeleteFolder(directory, true);
             }
+        }
+
+        public string[] GetFixedDrives()
+        {
+            return (DriveInfo.GetDrives().Where(x => x.DriveType == DriveType.Fixed).Select(x => x.Name)).ToArray();
+        }
+
+        public long? GetTotalSize(string path)
+        {
+            return (DriveInfo.GetDrives().Single(x => x.Name == path)).TotalSize;
         }
     }
 }

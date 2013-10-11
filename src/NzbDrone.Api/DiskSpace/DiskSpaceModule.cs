@@ -3,26 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common;
 
 namespace NzbDrone.Api.DiskSpace
 {
     public class DiskSpaceModule :NzbDroneRestModule<DiskSpaceResource>
     {
-        public DiskSpaceModule():base("diskspace")
+        private readonly IDiskProvider _diskProvider;
+
+        public DiskSpaceModule(IDiskProvider diskProvider):base("diskspace")
         {
+            _diskProvider = diskProvider;
             GetResourceAll = GetFreeSpace;
         }
+
         public List<DiskSpaceResource> GetFreeSpace()
         {
-            return (DriveInfo.GetDrives()
-                .Where(driveInfo => driveInfo.DriveType == DriveType.Fixed)
+            return (_diskProvider.GetFixedDrives()
                 .Select(
-                    driveInfo =>
+                    x =>
                         new DiskSpaceResource()
                         {
-                            DriveLetter = driveInfo.Name,
-                            FreeSpace = SizeSuffix(driveInfo.TotalFreeSpace),
-                            TotalSpace = SizeSuffix(driveInfo.TotalSize)
+                            DriveLetter = x,
+                            FreeSpace = _diskProvider.GetAvailableSpace(x).Value,
+                            TotalSpace = _diskProvider.GetTotalSize(x).Value
                         })).ToList();
         }
 

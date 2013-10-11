@@ -9,7 +9,7 @@ namespace NzbDrone.Api.DiskSpace
     public class DiskSpaceResource : RestResource
     {
         public string DriveLetter { get; set; }
-        public string FreeSpace { get; set; }
-        public string TotalSpace { get; set; }
+        public Int64 FreeSpace { get; set; }
+        public Int64 TotalSpace { get; set; }
     }
 }

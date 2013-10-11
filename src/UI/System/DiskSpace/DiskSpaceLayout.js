@@ -4,8 +4,9 @@ define([
     'marionette',
         'backgrid',
         'System/DiskSpace/DiskSpaceCollection',
-        'Shared/LoadingView'
-], function (vent,Marionette,Backgrid,DiskSpaceCollection,LoadingView) {
+        'Shared/LoadingView',
+        'Cells/FileSizeCell'
+], function (vent,Marionette,Backgrid,DiskSpaceCollection,LoadingView,FileSizeCell) {
     return Marionette.Layout.extend({
         template: 'System/DiskSpace/DiskSpaceTemplate',
 
@@ -17,35 +18,32 @@ define([
                 {
                     name: 'driveLetter',
                     label: 'Drive',
-                    cell: Backgrid.StringCell
+                    cell: 'string'
                 },
                 {
                     name: 'freeSpace',
                     label: 'Free Space',
-                    cell: Backgrid.StringCell
+                    cell: FileSizeCell,
+                    sortable:true
                 },
                 {
                     name: 'totalSpace',
                     label: 'Total Space',
-                    cell: Backgrid.StringCell
+                    cell: FileSizeCell,
+                    sortable:true
                 }
             ],
 
         initialize: function () {
             this.collection = new DiskSpaceCollection();
-            this.collectionPromise = this.collection.fetch();
-
-            vent.on(vent.Events.CommandComplete, this._commandComplete, this);
+            this.listenTo(this.collection, 'sync', this._showTable);
         },
         onRender : function() {
             this.grid.show(new LoadingView());
         },
         
         onShow: function() {
-            var self = this;
-            this.collectionPromise.done(function() {
-                self._showTable();
-            });
+            this.collection.fetch();
         },
         _showTable: function() {
             this.grid.show(new Backgrid.Grid({
