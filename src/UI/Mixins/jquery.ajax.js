@@ -22,7 +22,8 @@ define(
 
                 delete xhr.data;
             }
-s            if (xhr) {
+            
+            if (xhr) {
                 xhr.headers = xhr.headers || {};
                 xhr.headers.Authorization = window.NzbDrone.ApiKey;
             }
