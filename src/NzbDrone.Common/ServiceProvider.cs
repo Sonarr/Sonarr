@@ -71,6 +71,7 @@ namespace NzbDrone.Common
             serviceInstaller.ServiceName = serviceName;
             serviceInstaller.Description = "NzbDrone Application Server";
             serviceInstaller.StartType = ServiceStartMode.Automatic;
+            serviceInstaller.ServicesDependedOn = new[] { "Tcpip" };
 
             serviceInstaller.Parent = installer;
 
