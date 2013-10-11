@@ -29,25 +29,6 @@ require.config({
 
     shim: {
 
-        jquery: {
-            exports: 'jQuery',
-            deps   :
-                [
-                    'Mixins/jquery.ajax'
-                ],
-
-            init: function (AjaxMixin) {
-                require(
-                    [
-                        'jQuery/ToTheTop',
-                        'Instrumentation/ErrorHandler'
-                    ]);
-
-                AjaxMixin.apply($);
-            }
-
-        },
-
         signalR: {
             deps:
                 [
@@ -83,11 +64,15 @@ require.config({
         },
 
         backbone: {
-            deps   :
+            deps:
                 [
+                    'jquery',
                     'underscore',
-                    'jquery'
+                    'Mixins/jquery.ajax',
+                    'jQuery/ToTheTop'
+
                 ],
+
             exports: 'Backbone'
         },
 
@@ -199,6 +184,7 @@ require.config({
 
 define(
     [
+        'jquery',
         'backbone',
         'marionette',
         'jQuery/RouteBinder',
@@ -209,7 +195,7 @@ define(
         'Router',
         'Shared/Modal/Controller',
         'Instrumentation/StringFormat'
-    ], function (Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController) {
+    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController) {
 
         new SeriesController();
         new ModalController();
