@@ -173,9 +173,11 @@
     <Compile Include="Datastore\Migration\019_restore_unique_constraints.cs" />
     <Compile Include="Datastore\Migration\020_add_year_and_seasons_to_series.cs" />
     <Compile Include="Datastore\Migration\021_drop_seasons_table.cs" />
-    <Compile Include="Datastore\Migration\022_move_notification_to_generic_provider.cs" />
+    <Compile Include="Datastore\Migration\022_move_indexer_to_generic_provider.cs" />
     <Compile Include="Datastore\Migration\023_add_config_contract_to_indexers.cs" />
     <Compile Include="Datastore\Migration\024_drop_tvdb_episodeid.cs" />
+    <Compile Include="Datastore\Migration\026_add_config_contract_to_notifications.cs" />
+    <Compile Include="Datastore\Migration\025_move_notification_to_generic_provider.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -269,6 +271,7 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
+    <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
@@ -328,10 +331,8 @@
     <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />
-    <Compile Include="Notifications\NotificationSettingsProvider.cs" />
     <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\Notification.cs" />
-    <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\NotificationRepository.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="History\HistoryRepository.cs" />

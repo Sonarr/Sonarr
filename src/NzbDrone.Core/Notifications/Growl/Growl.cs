@@ -11,16 +11,6 @@ namespace NzbDrone.Core.Notifications.Growl
             _growlProvider = growlProvider;
         }
 
-        public override string Name
-        {
-            get { return "Growl"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "Growl"; }
-        }
-
         public override string Link
         {
             get { return "http://growl.info/"; }

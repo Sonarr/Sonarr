@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using FluentValidation;
 using FluentValidation.Results;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
@@ -7,8 +8,19 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
+    public class XbmcSettingsValidator : AbstractValidator<XbmcSettings>
+    {
+        public XbmcSettingsValidator()
+        {
+            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.DisplayTime).GreaterThan(0);
+        }
+    }
+
     public class XbmcSettings : IProviderConfig
     {
+        private static readonly XbmcSettingsValidator Validator = new XbmcSettingsValidator();
+
         public XbmcSettings()
         {
             DisplayTime = 5;
@@ -56,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public ValidationResult Validate()
         {
-            throw new NotImplementedException();
+            return Validator.Validate(this);
         }
     }
 }

@@ -1,12 +1,24 @@
 ﻿using System;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
+    public class GrowlSettingsValidator : AbstractValidator<GrowlSettings>
+    {
+        public GrowlSettingsValidator()
+        {
+            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Port).GreaterThan(0);
+        }
+    }
+
     public class GrowlSettings : IProviderConfig
     {
+        private static readonly GrowlSettingsValidator Validator = new GrowlSettingsValidator();
+
         public GrowlSettings()
         {
             Port = 23053;
@@ -31,7 +43,7 @@ namespace NzbDrone.Core.Notifications.Growl
 
         public ValidationResult Validate()
         {
-            throw new NotImplementedException();
+            return Validator.Validate(this);
         }
     }
 }

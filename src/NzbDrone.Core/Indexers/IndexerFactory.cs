@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Indexers
 
             var newProviders = definitions.Where(def => currentProviders.All(c => c.Implementation != def.Implementation)).ToList();
 
-
             if (newProviders.Any())
             {
                 _providerRepository.InsertMany(newProviders.Cast<IndexerDefinition>().ToList());

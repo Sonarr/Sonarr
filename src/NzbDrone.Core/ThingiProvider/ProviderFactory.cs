@@ -40,7 +40,7 @@ namespace NzbDrone.Core.ThingiProvider
 
         public List<TProvider> GetAvailableProviders()
         {
-            return All().Where(c => c.Enable && c.Settings.Validate().IsValid)
+            return All().Where(c => c.Settings.Validate().IsValid)
                 .Select(GetInstance).ToList();
         }
 

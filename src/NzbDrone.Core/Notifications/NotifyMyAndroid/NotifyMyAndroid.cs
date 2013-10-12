@@ -11,16 +11,6 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             _notifyMyAndroidProxy = notifyMyAndroidProxy;
         }
 
-        public override string Name
-        {
-            get { return "NotifyMyAndroid"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "NotifyMyAndroid"; }
-        }
-
         public override string Link
         {
             get { return "http://www.notifymyandroid.com/"; }

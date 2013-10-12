@@ -3,7 +3,7 @@
 define([
     'AppLayout',
     'marionette',
-    'Settings/Notifications/EditView'
+    'Settings/Notifications/NotificationEditView'
 ], function (AppLayout, Marionette, EditView) {
 
     return Marionette.ItemView.extend({

@@ -11,16 +11,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
             _xbmcProvider = xbmcProvider;
         }
 
-        public override string Name
-        {
-            get { return "XBMC"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "XBMC"; }
-        }
-
         public override string Link
         {
             get { return "http://xbmc.org/"; }

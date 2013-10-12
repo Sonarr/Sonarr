@@ -11,16 +11,6 @@ namespace NzbDrone.Core.Notifications.Plex
             _plexProvider = plexProvider;
         }
 
-        public override string Name
-        {
-            get { return "Plex Client"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "Plex Client"; }
-        }
-
         public override string Link
         {
             get { return "http://www.plexapp.com/"; }

@@ -1,12 +1,23 @@
 ﻿using System;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
+    public class ProwlSettingsValidator : AbstractValidator<ProwlSettings>
+    {
+        public ProwlSettingsValidator()
+        {
+            RuleFor(c => c.ApiKey).NotEmpty();
+        }
+    }
+
     public class ProwlSettings : IProviderConfig
     {
+        private static readonly ProwlSettingsValidator Validator = new ProwlSettingsValidator();
+
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.prowlapp.com/api_settings.php")]
         public String ApiKey { get; set; }
 
@@ -23,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
         public ValidationResult Validate()
         {
-            throw new NotImplementedException();
+            return Validator.Validate(this);
         }
     }
 }

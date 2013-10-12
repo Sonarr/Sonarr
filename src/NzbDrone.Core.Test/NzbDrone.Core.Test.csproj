@@ -156,7 +156,6 @@
     <Compile Include="Messaging\Commands\CommandFixture.cs" />
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
     <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
-    <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\CheckForErrorFixture.cs" />

@@ -11,16 +11,6 @@ namespace NzbDrone.Core.Notifications.Pushover
             _pushoverProxy = pushoverProxy;
         }
 
-        public override string Name
-        {
-            get { return "Pushover"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "Pushover"; }
-        }
-
         public override string Link
         {
             get { return "https://pushover.net/"; }

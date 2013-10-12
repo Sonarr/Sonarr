@@ -1,14 +1,11 @@
-﻿using NzbDrone.Core.Tv;
+﻿using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
 {
-    public interface INotification
+    public interface INotification : IProvider
     {
-        string Name { get; }
-        string ImplementationName { get; }
         string Link { get; }
-
-        NotificationDefinition InstanceDefinition { get; set; }
 
         void OnGrab(string message);
         void OnDownload(string message, Series series);

@@ -1,12 +1,23 @@
 ﻿using System;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
+    public class PushoverSettingsValidator : AbstractValidator<PushoverSettings>
+    {
+        public PushoverSettingsValidator()
+        {
+            RuleFor(c => c.UserKey).NotEmpty();
+        }
+    }
+
     public class PushoverSettings : IProviderConfig
     {
+        private static readonly PushoverSettingsValidator Validator = new PushoverSettingsValidator();
+
         [FieldDefinition(0, Label = "User Key", HelpLink = "https://pushover.net/")]
         public String UserKey { get; set; }
 
@@ -23,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Pushover
 
         public ValidationResult Validate()
         {
-            throw new NotImplementedException();
+            return Validator.Validate(this);
         }
     }
 }

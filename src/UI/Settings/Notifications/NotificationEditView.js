@@ -8,13 +8,13 @@ define(
         'Settings/Notifications/DeleteView',
         'Commands/CommandController',
         'Mixins/AsModelBoundView',
-        'Form/FormBuilder',
-        'underscore'
+        'underscore',
+        'Form/FormBuilder'
 
     ], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, _) {
 
         var model = Marionette.ItemView.extend({
-            template: 'Settings/Notifications/EditTemplate',
+            template: 'Settings/Notifications/NotificationEditViewTemplate',
 
             events: {
                 'click .x-save'        : '_saveNotification',
@@ -22,11 +22,6 @@ define(
                 'click .x-delete'      : '_deleteNotification',
                 'click .x-back'        : '_back',
                 'click .x-test'        : '_test'
-            },
-
-            ui: {
-                testButton: '.x-test',
-                testIcon  : '.x-test-icon'
             },
 
             initialize: function (options) {
@@ -68,24 +63,14 @@ define(
             },
 
             _test: function () {
-                var testCommand = this.model.get('testCommand');
-                if (testCommand) {
-                    this.idle = false;
-                    var properties = {};
+                var testCommand = 'test{0}'.format(this.model.get('implementation'));
+                var properties = {};
 
-                    _.each(this.model.get('fields'), function (field) {
-                        properties[field.name] = field.value;
-                    });
+                _.each(this.model.get('fields'), function (field) {
+                    properties[field.name] = field.value;
+                });
 
-
-                    CommandController.Execute(testCommand, properties);
-                }
-            },
-
-            _testOnAlways: function () {
-                if (!this.isClosed) {
-                    this.idle = true;
-                }
+                CommandController.Execute(testCommand, properties);
             }
         });
 

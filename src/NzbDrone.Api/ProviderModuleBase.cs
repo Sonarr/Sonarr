@@ -4,7 +4,6 @@ using FluentValidation;
 using Nancy;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Indexers;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
@@ -29,8 +28,6 @@ namespace NzbDrone.Api
             CreateResource = CreateProvider;
             UpdateResource = UpdateProvider;
             DeleteResource = DeleteProvider;
-
-
 
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Implementation).NotEmpty();
@@ -69,39 +66,25 @@ namespace NzbDrone.Api
             return indexer.Id;
         }
 
-        private void UpdateProvider(TProviderResource indexerResource)
+        private void UpdateProvider(TProviderResource providerResource)
         {
-            var indexer = GetDefinition(indexerResource);
+            var providerDefinition = GetDefinition(providerResource);
 
-            ValidateIndexer(indexer);
+            Validate(providerDefinition);
 
-            _providerFactory.Update(indexer);
+            _providerFactory.Update(providerDefinition);
         }
 
-
-        private static void ValidateIndexer(ProviderDefinition definition)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource)
         {
-            if (!definition.Enable) return;
-
-            var validationResult = definition.Settings.Validate();
-
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
-        }
-
-        private TProviderDefinition GetDefinition(TProviderResource indexerResource)
-        {
-
             var definition = new TProviderDefinition();
 
-            definition.InjectFrom(indexerResource);
+            definition.InjectFrom(providerResource);
 
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
-            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(indexerResource.Fields, configContract);
+            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(providerResource.Fields, configContract);
 
-            ValidateIndexer(definition);
+            Validate(definition);
 
             return definition;
         }
@@ -113,22 +96,30 @@ namespace NzbDrone.Api
 
         private Response GetTemplates()
         {
+            var templates = _providerFactory.Templates();
 
-            var indexers = _providerFactory.Templates();
+            var result = new List<TProviderResource>(templates.Count());
 
-
-            var result = new List<IndexerResource>(indexers.Count());
-
-            foreach (var indexer in indexers)
+            foreach (var providerDefinition in templates)
             {
-                var indexerResource = new IndexerResource();
-                indexerResource.InjectFrom(indexer);
-                indexerResource.Fields = SchemaBuilder.ToSchema(indexer.Settings);
+                var providerResource = new TProviderResource();
+                providerResource.InjectFrom(providerDefinition);
+                providerResource.Fields = SchemaBuilder.ToSchema(providerDefinition.Settings);
 
-                result.Add(indexerResource);
+                result.Add(providerResource);
             }
 
             return result.AsResponse();
+        }
+
+        protected virtual void Validate(TProviderDefinition definition)
+        {
+            var validationResult = definition.Settings.Validate();
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
         }
     }
 }
