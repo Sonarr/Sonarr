@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Composition;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
@@ -15,8 +17,8 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _providerRepository;
         private readonly IEnumerable<IIndexer> _providers;
 
-        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, Logger logger)
-            : base(providerRepository, providers, logger)
+        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, IContainer container, Logger logger)
+            : base(providerRepository, providers, container, logger)
         {
             _providerRepository = providerRepository;
             _providers = providers;
@@ -35,6 +37,11 @@ namespace NzbDrone.Core.Indexers
             {
                 _providerRepository.InsertMany(newProviders.Cast<IndexerDefinition>().ToList());
             }
+        }
+
+        protected override List<IndexerDefinition> Active()
+        {
+            return base.Active().Where(c => c.Enable).ToList();
         }
     }
 }

@@ -272,6 +272,7 @@
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="Notifications\NotificationFactory.cs" />
+    <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />

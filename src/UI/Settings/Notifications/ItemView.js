@@ -3,7 +3,7 @@
 define([
     'AppLayout',
     'marionette',
-    'Settings/Notifications/EditView',
+    'Settings/Notifications/NotificationEditView',
     'Settings/Notifications/DeleteView'
 
 ], function (AppLayout, Marionette, EditView, DeleteView) {
