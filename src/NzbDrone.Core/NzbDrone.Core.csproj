@@ -178,6 +178,9 @@
     <Compile Include="Datastore\Migration\024_drop_tvdb_episodeid.cs" />
     <Compile Include="Datastore\Migration\026_add_config_contract_to_notifications.cs" />
     <Compile Include="Datastore\Migration\025_move_notification_to_generic_provider.cs" />
+    <Compile Include="Datastore\Migration\027_fix_omgwtfnzbs.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
