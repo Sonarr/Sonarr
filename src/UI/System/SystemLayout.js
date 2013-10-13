@@ -3,31 +3,31 @@ define(
     [
         'backbone',
         'marionette',
-        'System/About/AboutView',
+        'System/Info/SystemInfoLayout',
         'System/Logs/LogsLayout',
         'System/Update/UpdateLayout'
     ], function (Backbone,
                  Marionette,
-                 AboutView,
+                 SystemInfoLayout,
                  LogsLayout,
                  UpdateLayout) {
         return Marionette.Layout.extend({
             template: 'System/SystemLayoutTemplate',
 
             regions: {
-                about   : '#about',
+                info   : '#info',
                 logs    : '#logs',
-                updates : '#updates'
+                updates: '#updates'
             },
 
             ui: {
-                aboutTab  : '.x-about-tab',
+                infoTab  : '.x-info-tab',
                 logsTab   : '.x-logs-tab',
                 updatesTab: '.x-updates-tab'
             },
 
             events: {
-                'click .x-about-tab'  : '_showAbout',
+                'click .x-info-tab'  : '_showInfo',
                 'click .x-logs-tab'   : '_showLogs',
                 'click .x-updates-tab': '_showUpdates'
             },
@@ -47,7 +47,7 @@ define(
                         this._showUpdates();
                         break;
                     default:
-                        this._showAbout();
+                        this._showInfo();
                 }
             },
 
@@ -55,14 +55,14 @@ define(
                 Backbone.history.navigate(route);
             },
 
-            _showAbout: function (e) {
+            _showInfo: function (e) {
                 if (e) {
                     e.preventDefault();
                 }
 
-                this.about.show(new AboutView());
-                this.ui.aboutTab.tab('show');
-                this._navigate('system/about');
+                this.info.show(new SystemInfoLayout());
+                this.ui.infoTab.tab('show');
+                this._navigate('system/info');
             },
 
             _showLogs: function (e) {
