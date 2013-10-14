@@ -54,12 +54,12 @@ namespace NzbDrone.Core.ThingiProvider
             return _providerRepository.Get(id);
         }
 
-        public TProviderDefinition Create(TProviderDefinition provider)
+        public virtual TProviderDefinition Create(TProviderDefinition definition)
         {
-            return _providerRepository.Insert(provider);
+            return _providerRepository.Insert(definition);
         }
 
-        public void Update(TProviderDefinition definition)
+        public virtual void Update(TProviderDefinition definition)
         {
             _providerRepository.Update(definition);
         }
@@ -69,11 +69,9 @@ namespace NzbDrone.Core.ThingiProvider
             _providerRepository.Delete(id);
         }
 
-        private TProvider GetInstance(TProviderDefinition definition)
+        protected TProvider GetInstance(TProviderDefinition definition)
         {
             var type = GetImplementation(definition);
-
-            //TODO: This doesn't work for things that have non-parameterless constructors
             var instance = (TProvider)_container.Resolve(type);
             instance.Definition = definition;
             return instance;
