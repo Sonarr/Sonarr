@@ -48,7 +48,6 @@ namespace NzbDrone.Core.Test.MediaFiles
                                                    Episodes = new List<Episode> {episode},
                                                    Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilit.avi".AsOsAgnostic(),
                                                    Quality = new QualityModel(Quality.Bluray720p)
-
                                                }));
             }
 
@@ -124,6 +123,33 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IEventAggregator>()
                 .Verify(v => v.PublishEvent(It.IsAny<EpisodeImportedEvent>()), Times.Never());
+        }
+
+        [Test]
+        public void should_import_larger_files_first()
+        {
+            var fileDecision = _approvedDecisions.First();
+            fileDecision.LocalEpisode.Size = 1.Gigabytes();
+
+            var sampleDecision = new ImportDecision
+                (new LocalEpisode
+                 {
+                     Series = fileDecision.LocalEpisode.Series,
+                     Episodes = new List<Episode> {fileDecision.LocalEpisode.Episodes.First()},
+                     Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilit.avi".AsOsAgnostic(),
+                     Quality = new QualityModel(Quality.Bluray720p),
+                     Size = 80.Megabytes()
+                 });
+
+
+            var all = new List<ImportDecision>();
+            all.Add(fileDecision);
+            all.Add(sampleDecision);
+
+            var results = Subject.Import(all);
+
+            results.Should().HaveCount(1);
+            results.Should().ContainSingle(d => d.LocalEpisode.Size == fileDecision.LocalEpisode.Size);
         }
     }
 }
