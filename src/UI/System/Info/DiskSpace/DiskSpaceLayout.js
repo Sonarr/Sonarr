@@ -5,8 +5,9 @@ define([
         'backgrid',
         'System/Info/DiskSpace/DiskSpaceCollection',
         'Shared/LoadingView',
+        'System/Info/DiskSpace/DiskSpacePathCell',
         'Cells/FileSizeCell'
-], function (vent,Marionette,Backgrid,DiskSpaceCollection,LoadingView,FileSizeCell) {
+], function (vent,Marionette,Backgrid,DiskSpaceCollection,LoadingView, DiskSpacePathCell, FileSizeCell) {
     return Marionette.Layout.extend({
         template: 'System/Info/DiskSpace/DiskSpaceLayoutTemplate',
 
@@ -16,21 +17,19 @@ define([
         columns:
             [
                 {
-                    name: 'driveLetter',
-                    label: 'Drive',
-                    cell: 'string'
+                    name: 'path',
+                    label: 'Location',
+                    cell: DiskSpacePathCell
                 },
                 {
                     name: 'freeSpace',
                     label: 'Free Space',
-                    cell: FileSizeCell,
-                    sortable:true
+                    cell: FileSizeCell
                 },
                 {
                     name: 'totalSpace',
                     label: 'Total Space',
-                    cell: FileSizeCell,
-                    sortable:true
+                    cell: FileSizeCell
                 }
             ],
 
