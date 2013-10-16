@@ -44,10 +44,7 @@ define(
 
                 this.listenTo(vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
                 this.listenTo(this.model, 'change', this.render);
-                this.listenTo(RootFolders, 'all', this.render);
-
-                this.rootFolderLayout = new RootFolderLayout();
-                this.listenTo(this.rootFolderLayout, 'folderSelected', this._setRootFolder);
+                this.listenTo(RootFolders, 'all', this._rootFoldersUpdated);
             },
 
             onRender: function () {
@@ -106,7 +103,9 @@ define(
             _rootFolderChanged: function () {
                 var rootFolderValue = this.ui.rootFolder.val();
                 if (rootFolderValue === 'addNew') {
-                    AppLayout.modalRegion.show(this.rootFolderLayout);
+                    var rootFolderLayout = new RootFolderLayout();
+                    this.listenToOnce(rootFolderLayout, 'folderSelected', this._setRootFolder);
+                    AppLayout.modalRegion.show(rootFolderLayout);
                 }
                 else {
                     Config.setValue(Config.Keys.DefaultRootFolderId, rootFolderValue);
@@ -152,6 +151,11 @@ define(
                 promise.fail(function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                 });
+            },
+
+            _rootFoldersUpdated: function () {
+                this._configureTemplateHelpers();
+                this.render();
             }
         });
 
