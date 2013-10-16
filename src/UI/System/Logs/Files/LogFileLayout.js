@@ -1,7 +1,7 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'backgrid',
         'System/Logs/Files/FilenameCell',
@@ -13,7 +13,7 @@ define(
         'System/Logs/Files/ContentsModel',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
-    ], function (App,
+    ], function (vent,
         Marionette,
         Backgrid,
         FilenameCell,
@@ -57,8 +57,8 @@ define(
             initialize: function () {
                 this.collection = new LogFileCollection();
 
-                App.vent.on(App.Commands.ShowLogFile, this._fetchLogFileContents, this);
-                App.vent.on(App.Events.CommandComplete, this._commandComplete, this);
+                vent.on(vent.Commands.ShowLogFile, this._fetchLogFileContents, this);
+                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
                 this.listenTo(this.collection, 'sync', this._collectionSynced);
 
                 this.collection.fetch();

@@ -111,6 +111,7 @@
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperTests\AlterFixture.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperTests\DuplicateFixture.cs" />
+    <Compile Include="DecisionEngineTests\NotInQueueSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
@@ -154,7 +156,6 @@
     <Compile Include="Messaging\Commands\CommandFixture.cs" />
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
     <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
-    <Compile Include="NotificationTests\NotificationServiceFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\CheckForErrorFixture.cs" />

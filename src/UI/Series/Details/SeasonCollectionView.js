@@ -2,8 +2,9 @@
 define(
     [
         'marionette',
-        'Series/Details/SeasonLayout'
-    ], function (Marionette, SeasonLayout) {
+        'Series/Details/SeasonLayout',
+        'underscore'
+    ], function (Marionette, SeasonLayout, _) {
         return Marionette.CollectionView.extend({
 
             itemView: SeasonLayout,
@@ -26,16 +27,15 @@ define(
             },
 
             onEpisodeGrabbed: function (message) {
-                if (message.episode.series.id != this.episodeCollection.seriesId) {
+                if (message.episode.series.id !== this.episodeCollection.seriesId) {
                     return;
                 }
 
                 var self = this;
 
-                _.each(message.episode.episodes, function (episode){
+                _.each(message.episode.episodes, function (episode) {
                     var ep = self.episodeCollection.get(episode.id);
                     ep.set('downloading', true);
-                    console.debug(episode.title);
                 });
 
                 this.render();

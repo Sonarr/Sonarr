@@ -1,8 +1,9 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
+        'backbone',
         'Settings/SettingsModel',
         'Settings/General/GeneralSettingsModel',
         'Settings/MediaManagement/Naming/Model',
@@ -16,8 +17,9 @@ define(
         'Settings/General/GeneralView',
         'Shared/LoadingView',
         'Config'
-    ], function (App,
+    ], function (vent,
                  Marionette,
+                 Backbone,
                  SettingsModel,
                  GeneralSettingsModel,
                  NamingModel,
@@ -87,6 +89,8 @@ define(
                         this.indexerSettings.fetch(),
                         this.notificationSettings.fetch()
                     ).done(function () {
+                        if(!self.isClosed)
+                        {
                         self.loading.$el.hide();
                         self.mediaManagement.show(new MediaManagementLayout({ settings: self.settings, namingSettings: self.namingSettings }));
                         self.quality.show(new QualityLayout({ settings: self.settings }));
@@ -94,6 +98,7 @@ define(
                         self.downloadClient.show(new DownloadClientLayout({ model: self.settings }));
                         self.notifications.show(new NotificationCollectionView({ collection: self.notificationSettings }));
                         self.general.show(new GeneralView({ model: self.generalSettings }));
+                        }
                     });
 
                 this._setAdvancedSettingsState();
@@ -179,13 +184,11 @@ define(
             },
 
             _navigate:function(route){
-                require(['Router'], function(){
-                   App.Router.navigate(route);
-                });
+                Backbone.history.navigate(route, {trigger:true});
             },
 
             _save: function () {
-                App.vent.trigger(App.Commands.SaveSettings);
+                vent.trigger(vent.Commands.SaveSettings);
             },
 
             _setAdvancedSettingsState: function () {

@@ -2,9 +2,9 @@
 
 define(
     [
-        'app',
-        'marionette',
-    ], function (App, Marionette) {
+        'vent',
+        'marionette'
+    ], function (vent, Marionette) {
         return Marionette.ItemView.extend({
             template: 'Series/Index/List/ItemTemplate',
 
@@ -18,11 +18,11 @@ define(
             },
 
             editSeries: function () {
-                App.vent.trigger(App.Commands.EditSeriesCommand, {series: this.model});
+                vent.trigger(vent.Commands.EditSeriesCommand, {series: this.model});
             },
 
             removeSeries: function () {
-                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series: this.model});
+                vent.trigger(vent.Commands.DeleteSeriesCommand, {series: this.model});
             }
         });
     });

@@ -12,16 +12,6 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlProvider = prowlProvider;
         }
 
-        public override string Name
-        {
-            get { return "Prowl"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "Prowl"; }
-        }
-
         public override string Link
         {
             get { return "http://www.prowlapp.com/"; }

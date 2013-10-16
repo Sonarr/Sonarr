@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Composition;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
@@ -14,12 +16,14 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly IIndexerRepository _providerRepository;
         private readonly IEnumerable<IIndexer> _providers;
+        private readonly INewznabTestService _newznabTestService;
 
-        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, Logger logger)
-            : base(providerRepository, providers, logger)
+        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, IContainer container, INewznabTestService newznabTestService, Logger logger)
+            : base(providerRepository, providers, container, logger)
         {
             _providerRepository = providerRepository;
             _providers = providers;
+            _newznabTestService = newznabTestService;
         }
 
         protected override void InitializeProviders()
@@ -31,11 +35,26 @@ namespace NzbDrone.Core.Indexers
 
             var newProviders = definitions.Where(def => currentProviders.All(c => c.Implementation != def.Implementation)).ToList();
 
-
             if (newProviders.Any())
             {
                 _providerRepository.InsertMany(newProviders.Cast<IndexerDefinition>().ToList());
             }
+        }
+
+        protected override List<IndexerDefinition> Active()
+        {
+            return base.Active().Where(c => c.Enable).ToList();
+        }
+
+        public override IndexerDefinition Create(IndexerDefinition definition)
+        {
+            if (definition.Implementation == typeof(Newznab.Newznab).Name)
+            {
+                var indexer = GetInstance(definition);
+                _newznabTestService.Test(indexer);
+            }
+
+            return base.Create(definition);
         }
     }
 }

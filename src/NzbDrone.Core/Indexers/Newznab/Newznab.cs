@@ -52,6 +52,8 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        public override ProviderDefinition Definition { get; set; }
+
         private NewznabSettings GetSettings(string url, List<int> categories)
         {
             var settings = new NewznabSettings { Url = url };

@@ -2,8 +2,9 @@
 define(
     [
         'backbone',
-        'Series/SeriesModel'
-    ], function (Backbone, SeriesModel) {
+        'Series/SeriesModel',
+        'api!series'
+    ], function (Backbone, SeriesModel, SeriesData) {
         var Collection = Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
@@ -18,6 +19,6 @@ define(
             }
         });
 
-        var collection = new Collection();
+        var collection = new Collection(SeriesData);
         return collection;
     });

@@ -2,9 +2,10 @@
 define(
     [
         'backgrid',
+        'marionette',
+        'underscore',
         'Settings/Quality/Profile/QualityProfileSchemaCollection',
-        'Series/EpisodeFileModel'
-    ], function (Backgrid, QualityProfileSchemaCollection, EpisodeFileModel) {
+    ], function (Backgrid, Marionette, _, QualityProfileSchemaCollection) {
         return Backgrid.CellEditor.extend({
 
             className: 'quality-cell-editor',
@@ -12,8 +13,8 @@ define(
             tagName  : 'select',
 
             events: {
-                'change': 'save',
-                'blur': 'close',
+                'change' : 'save',
+                'blur'   : 'close',
                 'keydown': 'close'
             },
 
@@ -27,7 +28,7 @@ define(
                     var templateName = self.template;
                     self.schema = qualityProfileSchemaCollection.first();
 
-                    var selected = _.find(self.schema.get('available'), { 'id': self.model.get(self.column.get("name")).quality.id });
+                    var selected = _.find(self.schema.get('available'), { 'id': self.model.get(self.column.get('name')).quality.id });
 
                     if (selected) {
                         selected.selected = true;
@@ -45,18 +46,18 @@ define(
             save: function (e) {
                 var model = this.model;
                 var column = this.column;
-                var selected = parseInt(this.$el.val());
+                var selected = parseInt(this.$el.val(), 10);
 
                 var quality = _.find(this.schema.get('available'), { 'id': selected });
 
                 var newQuality = {
-                    proper: false,
+                    proper : false,
                     quality: quality
                 };
 
-                model.set(column.get("name"), newQuality);
+                model.set(column.get('name'), newQuality);
                 model.save();
-                model.trigger("backgrid:edited", model, column, new Backgrid.Command(e));
+                model.trigger('backgrid:edited', model, column, new Backgrid.Command(e));
             },
 
             close: function (e) {
@@ -64,7 +65,7 @@ define(
                 var column = this.column;
                 var command = new Backgrid.Command(e);
 
-                model.trigger("backgrid:edited", model, column, command);
+                model.trigger('backgrid:edited', model, column, command);
             }
         });
     });

@@ -1,8 +1,9 @@
 'use strict';
 define(
     [
+        'jquery',
         'bootstrap'
-    ], function () {
+    ], function ($) {
         $(document).ready(function () {
 
             var _window = $(window);
@@ -18,7 +19,7 @@ define(
             });
 
             _scrollButton.click(function () {
-                $("html, body").animate({ scrollTop: 0 }, 600);
+                $('html, body').animate({ scrollTop: 0 }, 600);
                 return false;
             });
         });

@@ -2,9 +2,9 @@
 
 define(
     [
-        'app',
+        'vent',
         'marionette'
-    ], function (App, Marionette) {
+    ], function (vent, Marionette) {
 
         return Marionette.ItemView.extend({
             tagName : 'li',
@@ -25,11 +25,11 @@ define(
 
 
             editSeries: function () {
-                App.vent.trigger(App.Commands.EditSeriesCommand, {series:this.model});
+                vent.trigger(vent.Commands.EditSeriesCommand, {series:this.model});
             },
 
             removeSeries: function () {
-                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series:this.model});
+                vent.trigger(vent.Commands.DeleteSeriesCommand, {series:this.model});
             },
 
             posterHoverAction: function () {

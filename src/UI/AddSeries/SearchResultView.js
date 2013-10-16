@@ -1,7 +1,8 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'vent',
+        'AppLayout',
         'underscore',
         'marionette',
         'Quality/QualityProfileCollection',
@@ -12,7 +13,7 @@ define(
         'Shared/Messenger',
         'Mixins/AsValidatedView',
         'jquery.dotdotdot'
-    ], function (App, _, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
+    ], function (vent, AppLayout, _, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
 
@@ -41,12 +42,9 @@ define(
                 this.templateHelpers = {};
                 this._configureTemplateHelpers();
 
-                this.listenTo(App.vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
+                this.listenTo(vent, Config.Events.ConfigUpdatedEvent, this._onConfigUpdated);
                 this.listenTo(this.model, 'change', this.render);
-                this.listenTo(RootFolders, 'all', this.render);
-
-                this.rootFolderLayout = new RootFolderLayout();
-                this.listenTo(this.rootFolderLayout, 'folderSelected', this._setRootFolder);
+                this.listenTo(RootFolders, 'all', this._rootFoldersUpdated);
             },
 
             onRender: function () {
@@ -105,7 +103,9 @@ define(
             _rootFolderChanged: function () {
                 var rootFolderValue = this.ui.rootFolder.val();
                 if (rootFolderValue === 'addNew') {
-                    App.modalRegion.show(this.rootFolderLayout);
+                    var rootFolderLayout = new RootFolderLayout();
+                    this.listenToOnce(rootFolderLayout, 'folderSelected', this._setRootFolder);
+                    AppLayout.modalRegion.show(rootFolderLayout);
                 }
                 else {
                     Config.setValue(Config.Keys.DefaultRootFolderId, rootFolderValue);
@@ -113,7 +113,7 @@ define(
             },
 
             _setRootFolder: function (options) {
-                App.vent.trigger(App.Commands.CloseModalCommand);
+                vent.trigger(vent.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
                 this._rootFolderChanged();
             },
@@ -145,12 +145,17 @@ define(
                         message: 'Added: ' + self.model.get('title')
                     });
 
-                    App.vent.trigger(App.Events.SeriesAdded, { series: self.model });
+                    vent.trigger(vent.Events.SeriesAdded, { series: self.model });
                 });
 
                 promise.fail(function () {
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
                 });
+            },
+
+            _rootFoldersUpdated: function () {
+                this._configureTemplateHelpers();
+                this.render();
             }
         });
 

@@ -7,7 +7,6 @@ namespace NzbDrone.Api
 {
     public class ProviderResource : RestResource
     {
-        public Boolean Enable { get; set; }
         public String Name { get; set; }
         public List<Field> Fields { get; set; }
         public String Implementation { get; set; }

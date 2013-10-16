@@ -1,18 +1,18 @@
 'use strict';
-define(function () {
+define(['backbone'],function (Backbone) {
     //This module will automatically route all relative links through backbone router rather than
     //causing links to reload pages.
 
     var routeBinder = {
 
-        bind: function (router) {
+        bind: function () {
             var self = this;
             $(document).on('click', 'a[href]', function (event) {
-                self._handleClick(event, router);
+                self._handleClick(event);
             });
         },
 
-        _handleClick: function (event, router) {
+        _handleClick: function (event) {
             var $target = $(event.target);
 
             //check if tab nav
@@ -41,7 +41,7 @@ define(function () {
 
 
             if (!href.startsWith('http')) {
-                router.navigate(href, { trigger: true });
+                Backbone.history.navigate(href, { trigger: true });
             }
 
             else {

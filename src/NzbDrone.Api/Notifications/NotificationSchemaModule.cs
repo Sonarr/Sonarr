@@ -7,20 +7,19 @@ using Omu.ValueInjecter;
 namespace NzbDrone.Api.Notifications
 {
     public class NotificationSchemaModule : NzbDroneRestModule<NotificationResource>
-        {
-        private readonly INotificationService _notificationService;
+    {
+        private readonly INotificationFactory _notificationFactory;
 
-        public NotificationSchemaModule(INotificationService notificationService)
+        public NotificationSchemaModule(INotificationFactory notificationFactory)
             : base("notification/schema")
         {
-            _notificationService = notificationService;
-
+            _notificationFactory = notificationFactory;
             GetResourceAll = GetSchema;
         }
 
         private List<NotificationResource> GetSchema()
         {
-            var notifications = _notificationService.Schema();
+            var notifications = _notificationFactory.Templates();
 
             var result = new List<NotificationResource>(notifications.Count);
 
@@ -29,7 +28,6 @@ namespace NzbDrone.Api.Notifications
                 var notificationResource = new NotificationResource();
                 notificationResource.InjectFrom(notification);
                 notificationResource.Fields = SchemaBuilder.ToSchema(notification.Settings);
-                notificationResource.TestCommand = String.Format("test{0}", notification.Implementation.ToLowerInvariant());
 
                 result.Add(notificationResource);
             }

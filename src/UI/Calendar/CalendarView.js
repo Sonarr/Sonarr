@@ -2,12 +2,12 @@
 
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'moment',
         'Calendar/Collection',
         'fullcalendar'
-    ], function (App, Marionette, Moment, CalendarCollection) {
+    ], function (vent, Marionette, Moment, CalendarCollection) {
 
         var _instance;
 
@@ -38,7 +38,7 @@ define(
                         $(element).children('.fc-event-inner').addClass(event.statusLevel);
                     },
                     eventClick    : function (event) {
-                        App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: event.model});
+                        vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
                     }
                 });
 
@@ -108,7 +108,7 @@ define(
                 var test = currentTime.startOf('day').format('LLLL');
 
                 if (end.isBefore(currentTime.startOf('day'))) {
-                    statusLevel += ' past'
+                    statusLevel += ' past';
                 }
 
                 return statusLevel;

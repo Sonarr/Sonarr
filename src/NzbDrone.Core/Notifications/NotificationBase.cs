@@ -1,28 +1,47 @@
-﻿using NzbDrone.Common.Serializer;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
 {
-    public abstract class NotificationBase<TSetting> : INotification where TSetting : class, IProviderConfig, new()
+    public abstract class NotificationBase<TSettings> : INotification where TSettings : IProviderConfig, new()
     {
-        public abstract string Name { get; }
-        public abstract string ImplementationName { get; }
-        public abstract string Link { get; }
+        public Type ConfigContract
+        {
+            get
+            {
+                return typeof(TSettings);
+            }
+        }
 
-        public NotificationDefinition InstanceDefinition { get; set; }
+        public IEnumerable<ProviderDefinition> DefaultDefinitions
+        {
+            get
+            {
+                return new List<ProviderDefinition>();
+            }
+        }
+
+        public ProviderDefinition Definition { get; set; }
+
+        public abstract string Link { get; }
 
         public abstract void OnGrab(string message);
         public abstract void OnDownload(string message, Series series);
         public abstract void AfterRename(Series series);
 
-        public TSetting Settings { get; private set; }
-
-        public TSetting ImportSettingsFromJson(string json)
+        protected TSettings Settings
         {
-            Settings = Json.Deserialize<TSetting>(json) ?? new TSetting();
+            get
+            {
+                return (TSettings)Definition.Settings;
+            }
+        }
 
-            return Settings;
+        public override string ToString()
+        {
+            return GetType().Name;
         }
     }
 }

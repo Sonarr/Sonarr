@@ -1,10 +1,9 @@
 'use strict';
 define(
     [
-        'app',
         'marionette',
         'Shared/Messenger'
-    ], function (App, Marionette, Messenger) {
+    ], function ( Marionette, Messenger) {
 
         return Marionette.ItemView.extend({
 

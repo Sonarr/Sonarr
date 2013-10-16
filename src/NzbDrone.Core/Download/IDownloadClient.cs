@@ -9,5 +9,4 @@ namespace NzbDrone.Core.Download
         bool IsConfigured { get; }
         IEnumerable<QueueItem> GetQueue();
     }
-
 }

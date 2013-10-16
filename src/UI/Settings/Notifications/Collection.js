@@ -1,8 +1,9 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
+        'backbone',
         'Settings/Notifications/Model'
-    ], function (NotificationModel) {
+    ], function (Backbone, NotificationModel) {
         return Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/notification',
             model: NotificationModel

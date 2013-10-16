@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Composition;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 
@@ -12,13 +13,18 @@ namespace NzbDrone.Core.ThingiProvider
         where TProvider : IProvider
     {
         private readonly IProviderRepository<TProviderDefinition> _providerRepository;
+        private readonly IContainer _container;
         private readonly Logger _logger;
 
         private readonly List<TProvider> _providers;
 
-        protected ProviderFactory(IProviderRepository<TProviderDefinition> providerRepository, IEnumerable<TProvider> providers, Logger logger)
+        protected ProviderFactory(IProviderRepository<TProviderDefinition> providerRepository,
+                                  IEnumerable<TProvider> providers,
+                                  IContainer container,
+                                  Logger logger)
         {
             _providerRepository = providerRepository;
+            _container = container;
             _providers = providers.ToList();
             _logger = logger;
         }
@@ -40,8 +46,7 @@ namespace NzbDrone.Core.ThingiProvider
 
         public List<TProvider> GetAvailableProviders()
         {
-            return All().Where(c => c.Enable && c.Settings.Validate().IsValid)
-                .Select(GetInstance).ToList();
+            return Active().Select(GetInstance).ToList();
         }
 
         public TProviderDefinition Get(int id)
@@ -49,12 +54,12 @@ namespace NzbDrone.Core.ThingiProvider
             return _providerRepository.Get(id);
         }
 
-        public TProviderDefinition Create(TProviderDefinition provider)
+        public virtual TProviderDefinition Create(TProviderDefinition definition)
         {
-            return _providerRepository.Insert(provider);
+            return _providerRepository.Insert(definition);
         }
 
-        public void Update(TProviderDefinition definition)
+        public virtual void Update(TProviderDefinition definition)
         {
             _providerRepository.Update(definition);
         }
@@ -64,10 +69,10 @@ namespace NzbDrone.Core.ThingiProvider
             _providerRepository.Delete(id);
         }
 
-        private TProvider GetInstance(TProviderDefinition definition)
+        protected TProvider GetInstance(TProviderDefinition definition)
         {
             var type = GetImplementation(definition);
-            var instance = (TProvider)Activator.CreateInstance(type);
+            var instance = (TProvider)_container.Resolve(type);
             instance.Definition = definition;
             return instance;
         }
@@ -88,6 +93,11 @@ namespace NzbDrone.Core.ThingiProvider
 
         protected virtual void InitializeProviders()
         {
+        }
+
+        protected virtual List<TProviderDefinition> Active()
+        {
+            return All().Where(c => c.Settings.Validate().IsValid).ToList();
         }
 
         private void RemoveMissingImplementations()

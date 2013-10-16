@@ -1,9 +1,8 @@
 'use strict';
 define(
     [
-        'app',
         'marionette'
-    ], function (App, Marionette) {
+    ], function (Marionette) {
 
         return Marionette.ItemView.extend({
             template: 'Episode/Search/ButtonsViewTemplate'

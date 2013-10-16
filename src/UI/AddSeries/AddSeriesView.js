@@ -1,14 +1,14 @@
 ﻿'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'AddSeries/AddSeriesCollection',
         'AddSeries/SearchResultCollectionView',
         'AddSeries/NotFoundView',
         'Shared/LoadingView',
         'underscore'
-    ], function (App, Marionette, AddSeriesCollection, SearchResultCollectionView, NotFoundView, LoadingView, _) {
+    ], function (vent, Marionette, AddSeriesCollection, SearchResultCollectionView, NotFoundView, LoadingView, _) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesViewTemplate',
 
@@ -41,7 +41,7 @@ define(
                     this.className = 'new-series';
                 }
 
-                this.listenTo(App.vent, App.Events.SeriesAdded, this._onSeriesAdded);
+                this.listenTo(vent, vent.Events.SeriesAdded, this._onSeriesAdded);
                 this.listenTo(this.collection, 'sync', this._showResults);
 
                 this.resultCollectionView = new SearchResultCollectionView({

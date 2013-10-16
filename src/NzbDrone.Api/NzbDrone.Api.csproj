@@ -87,6 +87,8 @@
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
     <Compile Include="Config\NamingModule.cs" />
+    <Compile Include="DiskSpace\DiskSpaceModule.cs" />
+    <Compile Include="DiskSpace\DiskSpaceResource.cs" />
     <Compile Include="EpisodeFiles\EpisodeFileModule.cs" />
     <Compile Include="EpisodeFiles\EpisodeFileResource.cs" />
     <Compile Include="Directories\DirectoryLookupService.cs" />
@@ -109,7 +111,7 @@
     <Compile Include="Frontend\StaticResourceModule.cs" />
     <Compile Include="History\HistoryResource.cs" />
     <Compile Include="History\HistoryModule.cs" />
-    <Compile Include="IndexerResource.cs" />
+    <Compile Include="ProviderResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="Indexers\IndexerSchemaModule.cs" />
     <Compile Include="Indexers\IndexerModule.cs" />

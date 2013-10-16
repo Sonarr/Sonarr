@@ -2,9 +2,9 @@
 
 define(
     [
-        'app',
+        'vent',
         'Cells/NzbDroneCell'
-    ], function (App, NzbDroneCell) {
+    ], function (vent, NzbDroneCell) {
         return NzbDroneCell.extend({
 
             className: 'episode-title-cell',
@@ -27,7 +27,7 @@ define(
             _showDetails: function () {
                 var hideSeriesLink = this.column.get('hideSeriesLink');
 
-                App.vent.trigger(App.Commands.ShowEpisodeDetails, { episode: this.cellValue, hideSeriesLink: hideSeriesLink });
+                vent.trigger(vent.Commands.ShowEpisodeDetails, { episode: this.cellValue, hideSeriesLink: hideSeriesLink });
             }
         });
     });

@@ -1,10 +1,11 @@
 'use strict';
 define(
     [
-        'app',
+        'backbone',
+        'jquery',
         'Series/SeriesCollection'
-    ], function (App, SeriesCollection) {
-        $(document).on('keydown', function (e){
+    ], function (Backbone, $, SeriesCollection) {
+        $(document).on('keydown', function (e) {
             if ($(e.target).is('input')) {
                 return;
             }
@@ -17,7 +18,7 @@ define(
 
         $.fn.bindSearch = function () {
             $(this).typeahead({
-                source   : function () {
+                source: function () {
                     return SeriesCollection.pluck('title');
                 },
 
@@ -29,7 +30,7 @@ define(
                     var series = SeriesCollection.findWhere({ title: item });
 
                     this.$element.blur();
-                    App.Router.navigate('/series/{0}'.format(series.get('titleSlug')), { trigger: true });
+                    Backbone.history.navigate('/series/{0}'.format(series.get('titleSlug')), { trigger: true });
                 }
             });
         };

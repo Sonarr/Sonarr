@@ -11,16 +11,6 @@ namespace NzbDrone.Core.Notifications.PushBullet
             _pushBulletProxy = pushBulletProxy;
         }
 
-        public override string Name
-        {
-            get { return "PushBullet"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "PushBullet"; }
-        }
-
         public override string Link
         {
             get { return "https://www.pushbullet.com/"; }

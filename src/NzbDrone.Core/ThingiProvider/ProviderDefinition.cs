@@ -7,7 +7,6 @@ namespace NzbDrone.Core.ThingiProvider
         private IProviderConfig _settings;
         public string Name { get; set; }
         public string Implementation { get; set; }
-        public bool Enable { get; set; }
 
         public string ConfigContract { get; set; }
 

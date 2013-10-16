@@ -2,9 +2,8 @@
 
 define(
     [
-        'app',
         'marionette'
-    ], function (App, Marionette) {
+    ], function (Marionette) {
         return Marionette.ItemView.extend({
             template: 'System/Update/UpdateItemViewTemplate',
 

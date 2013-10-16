@@ -1,15 +1,14 @@
 'use strict';
 define(
     [
-        'app',
         'marionette',
         'Commands/CommandCollection',
         'Commands/CommandMessengerItemView'
-    ], function (App, Marionette, commandCollection, CommandMessengerItemView) {
+    ], function (Marionette, commandCollection, CommandMessengerItemView) {
 
         var CollectionView = Marionette.CollectionView.extend({
-            itemView : CommandMessengerItemView
+            itemView: CommandMessengerItemView
         });
 
-        new CollectionView({collection: commandCollection});
+        return new CollectionView({collection: commandCollection});
     });

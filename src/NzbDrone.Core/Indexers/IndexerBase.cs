@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        public ProviderDefinition Definition { get; set; }
+        public virtual ProviderDefinition Definition { get; set; }
 
         public abstract DownloadProtocol Protocol { get; }
 
@@ -48,7 +48,6 @@ namespace NzbDrone.Core.Indexers
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
         public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
-
 
         public override string ToString()
         {

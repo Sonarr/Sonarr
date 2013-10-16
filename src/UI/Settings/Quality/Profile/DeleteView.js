@@ -1,9 +1,9 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'marionette'
-    ], function (App, Marionette) {
+    ], function (vent, Marionette) {
 
         return  Marionette.ItemView.extend({
             template: 'Settings/Quality/Profile/DeleteTemplate',
@@ -17,7 +17,7 @@ define(
                 this.model.destroy({
                     wait: true
                 }).done(function () {
-                        App.vent.trigger(App.Commands.CloseModalCommand);
+                        vent.trigger(vent.Commands.CloseModalCommand);
                     });
             }
         });

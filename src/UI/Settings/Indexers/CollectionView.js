@@ -1,10 +1,13 @@
 ﻿'use strict';
-define(['app',
-    'marionette',
-    'Settings/Indexers/ItemView',
-    'Settings/Indexers/EditView',
-    'Settings/Indexers/Collection'],
-    function (App, Marionette, IndexerItemView, IndexerEditView, IndexerCollection) {
+define(
+    [
+        'AppLayout',
+        'marionette',
+        'Settings/Indexers/ItemView',
+        'Settings/Indexers/EditView',
+        'Settings/Indexers/Collection',
+        'underscore'
+    ], function (AppLayout, Marionette, IndexerItemView, IndexerEditView, IndexerCollection, _) {
         return Marionette.CompositeView.extend({
             itemView         : IndexerItemView,
             itemViewContainer: '#x-indexers',
@@ -18,7 +21,7 @@ define(['app',
                 'click .x-add-card': '_openSchemaModal'
             },
 
-            appendHtml: function(collectionView, itemView, index){
+            appendHtml: function (collectionView, itemView, index) {
                 collectionView.ui.addCard.parent('li').before(itemView.el);
             },
 
@@ -33,13 +36,13 @@ define(['app',
                         var model = _.first(collection.models);
 
                         model.set({
-                            id: undefined,
-                            name: '',
+                            id    : undefined,
+                            name  : '',
                             enable: true
                         });
 
                         var view = new IndexerEditView({ model: model, indexerCollection: self.collection});
-                        App.modalRegion.show(view);
+                        AppLayout.modalRegion.show(view);
                     }
                 });
             }

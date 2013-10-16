@@ -35,12 +35,13 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers");
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
-            Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
+            Mapper.Entity<NotificationDefinition>()
+                  .RegisterModel("Notifications");
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
             Mapper.Entity<History.History>().RegisterModel("History")
-                .AutoMapChildModels();
+                  .AutoMapChildModels();
 
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.RootFolderPath)
@@ -95,7 +96,6 @@ namespace NzbDrone.Core.Datastore
         private static void RegisterEmbeddedConverter()
         {
             var embeddedTypes = typeof(IEmbeddedDocument).Assembly.ImplementationsOf<IEmbeddedDocument>();
-
 
             var embeddedConvertor = new EmbeddedDocumentConverter();
             var genericListDefinition = typeof(List<>).GetGenericTypeDefinition();

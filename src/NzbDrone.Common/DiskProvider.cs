@@ -42,6 +42,9 @@ namespace NzbDrone.Common
         void SetFolderWriteTime(string path, DateTime time);
         FileAttributes GetFileAttributes(string path);
         void EmptyFolder(string path);
+        string[] GetFixedDrives();
+        long? GetTotalSize(string path);
+        string GetVolumeLabel(string path);
     }
 
     public class DiskProvider : IDiskProvider
@@ -322,30 +325,6 @@ namespace NzbDrone.Common
             return DriveFreeSpaceEx(root);
         }
 
-        private static long DriveFreeSpaceEx(string folderName)
-        {
-            if (string.IsNullOrEmpty(folderName))
-            {
-                throw new ArgumentNullException("folderName");
-            }
-
-            if (!folderName.EndsWith("\\"))
-            {
-                folderName += '\\';
-            }
-
-            ulong free = 0;
-            ulong dummy1 = 0;
-            ulong dummy2 = 0;
-
-            if (GetDiskFreeSpaceEx(folderName, out free, out dummy1, out dummy2))
-            {
-                return (long)free;
-            }
-
-            return 0;
-        }
-
         public string ReadAllText(string filePath)
         {
             Ensure.That(() => filePath).IsValidPath();
@@ -474,6 +453,106 @@ namespace NzbDrone.Common
             {
                 DeleteFolder(directory, true);
             }
+        }
+
+        public string[] GetFixedDrives()
+        {
+            return (DriveInfo.GetDrives().Where(x => x.DriveType == DriveType.Fixed).Select(x => x.Name)).ToArray();
+        }
+
+        public long? GetTotalSize(string path)
+        {
+            Ensure.That(() => path).IsValidPath();
+
+            var root = GetPathRoot(path);
+
+            if (!FolderExists(root))
+                throw new DirectoryNotFoundException(root);
+
+            if (OsInfo.IsLinux)
+            {
+                var drives = DriveInfo.GetDrives();
+
+                foreach (var drive in drives)
+                {
+                    try
+                    {
+                        if (drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            return drive.TotalSize;
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Logger.ErrorException("Couldn't get total space for " + path, e);
+                    }
+                }
+
+                return null;
+            }
+
+
+            return DriveTotalSizeEx(root);
+        }
+
+        public string GetVolumeLabel(string path)
+        {
+            var driveInfo = DriveInfo.GetDrives().SingleOrDefault(d => d.Name == path);
+
+            if (driveInfo == null)
+            {
+                return null;
+            }
+
+            return driveInfo.VolumeLabel;
+        }
+
+        private static long DriveFreeSpaceEx(string folderName)
+        {
+            if (string.IsNullOrEmpty(folderName))
+            {
+                throw new ArgumentNullException("folderName");
+            }
+
+            if (!folderName.EndsWith("\\"))
+            {
+                folderName += '\\';
+            }
+
+            ulong free = 0;
+            ulong dummy1 = 0;
+            ulong dummy2 = 0;
+
+            if (GetDiskFreeSpaceEx(folderName, out free, out dummy1, out dummy2))
+            {
+                return (long)free;
+            }
+
+            return 0;
+        }
+
+        private static long DriveTotalSizeEx(string folderName)
+        {
+            if (string.IsNullOrEmpty(folderName))
+            {
+                throw new ArgumentNullException("folderName");
+            }
+
+            if (!folderName.EndsWith("\\"))
+            {
+                folderName += '\\';
+            }
+
+            ulong total = 0;
+            ulong dummy1 = 0;
+            ulong dummy2 = 0;
+
+            if (GetDiskFreeSpaceEx(folderName, out dummy1, out total, out dummy2))
+            {
+                return (long)total;
+            }
+
+            return 0;
         }
     }
 }

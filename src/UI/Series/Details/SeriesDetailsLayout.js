@@ -1,8 +1,10 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
+        'reqres',
         'marionette',
+        'backbone',
         'Series/EpisodeCollection',
         'Series/EpisodeFileCollection',
         'Series/SeasonCollection',
@@ -10,9 +12,10 @@ define(
         'Series/Details/InfoView',
         'Commands/CommandController',
         'Shared/LoadingView',
+        'underscore',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (App, Marionette, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView) {
+    ], function (vent,reqres, Marionette, Backbone, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView, _) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -42,10 +45,10 @@ define(
 
             initialize: function () {
                 this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
-                this.listenTo(App.vent, App.Events.SeriesDeleted, this._onSeriesDeleted);
-                this.listenTo(App.vent, App.Events.SeasonRenamed, this._onSeasonRenamed);
+                this.listenTo(vent, vent.Events.SeriesDeleted, this._onSeriesDeleted);
+                this.listenTo(vent, vent.Events.SeasonRenamed, this._onSeasonRenamed);
 
-                App.vent.on(App.Events.CommandComplete, this._commandComplete, this);
+                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
             },
 
             onShow: function () {
@@ -105,7 +108,7 @@ define(
                 }
 
                 $('body').removeClass('backdrop');
-                App.reqres.removeHandler(App.Reqres.GetEpisodeFileById);
+                reqres.removeHandler(reqres.Requests.GetEpisodeFileById);
             },
 
             _toggleMonitored: function () {
@@ -132,7 +135,7 @@ define(
             },
 
             _editSeries: function () {
-                App.vent.trigger(App.Commands.EditSeriesCommand, {series: this.model});
+                vent.trigger(vent.Commands.EditSeriesCommand, {series: this.model});
             },
 
             _refreshSeries: function () {
@@ -145,7 +148,7 @@ define(
             _onSeriesDeleted: function (event) {
 
                 if (this.model.get('id') === event.series.get('id')) {
-                    App.Router.navigate('/', { trigger: true });
+                    Backbone.history.navigate('/', { trigger: true });
                 }
             },
 
@@ -180,7 +183,7 @@ define(
                         series           : self.model
                     });
 
-                    App.reqres.setHandler(App.Reqres.GetEpisodeFileById, function (episodeFileId) {
+                    reqres.setHandler(reqres.Requests.GetEpisodeFileById, function (episodeFileId) {
                         return self.episodeFileCollection.get(episodeFileId);
                     });
 

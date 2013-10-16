@@ -1,12 +1,24 @@
 ﻿using System;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
+    public class PlexServerSettingsValidator : AbstractValidator<PlexServerSettings>
+    {
+        public PlexServerSettingsValidator()
+        {
+            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Port).GreaterThan(0);
+        }
+    }
+
     public class PlexServerSettings : IProviderConfig
     {
+        private static readonly PlexServerSettingsValidator Validator = new PlexServerSettingsValidator();
+
         public PlexServerSettings()
         {
             Port = 32400;
@@ -31,7 +43,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public ValidationResult Validate()
         {
-            throw new NotImplementedException();
+            return Validator.Validate(this);
         }
     }
 }

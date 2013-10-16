@@ -1,11 +1,11 @@
 'use strict';
 define(
     [
-        'app',
+        'backbone',
         'marionette',
         'underscore',
         'Commands/CommandController'
-    ], function (App, Marionette, _, CommandController) {
+    ], function (Backbone, Marionette, _, CommandController) {
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
@@ -61,13 +61,7 @@ define(
             invokeRoute: function () {
                 var route = this.model.get('route');
                 if (route) {
-
-                    require(
-                        [
-                            'Router'
-                        ], function () {
-                            App.Router.navigate(route, {trigger: true});
-                        });
+                    Backbone.history.navigate(route, {trigger: true});
                 }
             },
 

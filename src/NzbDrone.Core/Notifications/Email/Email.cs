@@ -12,16 +12,6 @@ namespace NzbDrone.Core.Notifications.Email
             _smtpProvider = smtpProvider;
         }
 
-        public override string Name
-        {
-            get { return "Email"; }
-        }
-
-        public override string ImplementationName
-        {
-            get { return "Email"; }
-        }
-
         public override string Link
         {
             get { return null; }

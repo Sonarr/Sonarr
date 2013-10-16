@@ -2,8 +2,9 @@
 define(
     [
         'backbone',
-        'Series/SeriesModel'
-    ], function (Backbone, SeriesModel) {
+        'Series/SeriesModel',
+        'underscore'
+    ], function (Backbone, SeriesModel, _) {
         return Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/series/lookup',
             model: SeriesModel,

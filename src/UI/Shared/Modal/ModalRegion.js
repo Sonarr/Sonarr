@@ -1,11 +1,11 @@
 'use strict';
 define(
     [
-        'app',
-        '$',
+        'jquery',
+        'backbone',
         'marionette',
         'bootstrap'
-    ], function (app, $, Marionette) {
+    ], function ($,Backbone, Marionette) {
         var region = Marionette.Region.extend({
             el: '#modal-region',
 
@@ -38,18 +38,6 @@ define(
             }
 
         });
-
-        require(
-            [
-                'Shared/Modal/Controller'
-            ], function () {
-
-                app.addInitializer(function () {
-                    app.addRegions({
-                        modalRegion: region
-                    });
-                });
-            });
 
         return region;
     });

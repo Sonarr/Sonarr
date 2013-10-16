@@ -1,12 +1,26 @@
 ﻿using System;
+using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications.Email
 {
+    public class EmailSettingsValidator : AbstractValidator<EmailSettings>
+    {
+        public EmailSettingsValidator()
+        {
+            RuleFor(c => c.Server).NotEmpty();
+            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.From).NotEmpty();
+            RuleFor(c => c.To).NotEmpty();
+        }
+    }
+
     public class EmailSettings : IProviderConfig
     {
+        private static readonly EmailSettingsValidator Validator = new EmailSettingsValidator();
+
         public EmailSettings()
         {
             Port = 25;
@@ -43,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Email
 
         public ValidationResult Validate()
         {
-            throw new NotImplementedException();
+            return Validator.Validate(this);
         }
     }
 }

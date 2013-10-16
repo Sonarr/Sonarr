@@ -15,13 +15,11 @@ namespace NzbDrone.Core.Queue
     public class QueueService : IQueueService
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
-        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
-        public QueueService(IProvideDownloadClient downloadClientProvider, IParsingService parsingService, Logger logger)
+        public QueueService(IProvideDownloadClient downloadClientProvider, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
-            _parsingService = parsingService;
             _logger = logger;
         }
 
@@ -39,31 +37,19 @@ namespace NzbDrone.Core.Queue
 
             foreach (var queueItem in queueItems)
             {
-                var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
-
-                if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
+                foreach (var episode in queueItem.RemoteEpisode.Episodes)
                 {
-                    var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
-
-                    if (remoteEpisode.Series == null)
-                    {
-                        continue;
-                    }
-
-                    foreach (var episode in remoteEpisode.Episodes)
-                    {
-                        var queue = new Queue();
-                        queue.Id = queueItem.Id.GetHashCode();
-                        queue.Series = remoteEpisode.Series;
-                        queue.Episode = episode;
-                        queue.Quality = remoteEpisode.ParsedEpisodeInfo.Quality;
-                        queue.Title = queueItem.Title;
-                        queue.Size = queueItem.Size;
-                        queue.Sizeleft = queueItem.Sizeleft;
-                        queue.Timeleft = queueItem.Timeleft;
-                        queue.Status = queueItem.Status;
-                        queued.Add(queue);
-                    }
+                    var queue = new Queue();
+                    queue.Id = queueItem.Id.GetHashCode();
+                    queue.Series = queueItem.RemoteEpisode.Series;
+                    queue.Episode = episode;
+                    queue.Quality = queueItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
+                    queue.Title = queueItem.Title;
+                    queue.Size = queueItem.Size;
+                    queue.Sizeleft = queueItem.Sizeleft;
+                    queue.Timeleft = queueItem.Timeleft;
+                    queue.Status = queueItem.Status;
+                    queued.Add(queue);
                 }
             }
 

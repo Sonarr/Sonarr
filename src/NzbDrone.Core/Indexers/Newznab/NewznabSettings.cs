@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Indexers.Newznab
         }
     }
 
-
     public class NewznabSettings : IProviderConfig
     {
         private static readonly NewznabSettingsValidator Validator = new NewznabSettingsValidator();

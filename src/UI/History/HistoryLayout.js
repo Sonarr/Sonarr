@@ -1,22 +1,18 @@
 'use strict';
 define(
     [
-        'app',
         'marionette',
+        'backbone',
         'backgrid',
         'History/Table/HistoryTableLayout',
         'History/Queue/QueueLayout'
-    ], function (App,
-                 Marionette,
-                 Backgrid,
-                 HistoryTableLayout,
-                 QueueLayout) {
+    ], function (Marionette, Backbone, Backgrid, HistoryTableLayout, QueueLayout) {
         return Marionette.Layout.extend({
             template: 'History/HistoryLayoutTemplate',
 
             regions: {
-                history: '#history',
-                queueRegion  : '#queue'
+                history    : '#history',
+                queueRegion: '#queue'
             },
 
             ui: {
@@ -25,8 +21,8 @@ define(
             },
 
             events: {
-                'click .x-history-tab'  : '_showHistory',
-                'click .x-queue-tab'   : '_showQueue'
+                'click .x-history-tab': '_showHistory',
+                'click .x-queue-tab'  : '_showQueue'
             },
 
             initialize: function (options) {
@@ -45,10 +41,8 @@ define(
                 }
             },
 
-            _navigate:function(route){
-                require(['Router'], function(){
-                    App.Router.navigate(route);
-                });
+            _navigate: function (route) {
+                Backbone.history.navigate(route);
             },
 
             _showHistory: function (e) {

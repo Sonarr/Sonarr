@@ -1,9 +1,9 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'signalR'
-    ], function () {
+    ], function (vent) {
         return {
 
             appInitializer: function () {
@@ -31,12 +31,7 @@ define(
                 });
 
                 this.signalRconnection.received(function (message) {
-                    require(
-                        [
-                            'app'
-                        ], function (app) {
-                            app.vent.trigger('server:' + message.name, message.body);
-                        });
+                    vent.trigger('server:' + message.name, message.body);
                 });
 
                 this.signalRconnection.start({ transport:

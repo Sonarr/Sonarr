@@ -45,7 +45,7 @@ define(
             },
 
             _seasonSelected: function () {
-                var seasonNumber = parseInt(this.ui.seasonSelect.val());
+                var seasonNumber = parseInt(this.ui.seasonSelect.val(), 10);
 
                 if (seasonNumber === -1 || isNaN(seasonNumber)) {
                     return;
@@ -112,19 +112,18 @@ define(
                 var element;
 
                 if (e.target.localName === 'i') {
-                    seasonNumber = parseInt($(e.target).parent('td').attr('data-season-number'));
+                    seasonNumber = parseInt($(e.target).parent('td').attr('data-season-number'), 10);
                     element = $(e.target);
                 }
 
                 else {
-                    seasonNumber = parseInt($(e.target).attr('data-season-number'));
+                    seasonNumber = parseInt($(e.target).attr('data-season-number'), 10);
                     element = $(e.target).children('i');
                 }
 
                 this.model.setSeasonMonitored(seasonNumber);
 
-                var savePromise =this.model.save()
-                    .always(this.render.bind(this));
+                var savePromise = this.model.save().always(this.render.bind(this));
                 element.spinForPromise(savePromise);
             },
 

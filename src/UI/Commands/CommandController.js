@@ -1,12 +1,16 @@
 'use strict';
 define(
     [
-        'app',
+        'vent',
         'Commands/CommandModel',
         'Commands/CommandCollection',
+        'Commands/CommandMessengerCollectionView',
         'underscore',
         'jQuery/jquery.spin'
-    ], function (App, CommandModel, CommandCollection, _) {
+    ], function (vent, CommandModel, CommandCollection, CommandMessengerCollectionView, _) {
+
+
+        CommandMessengerCollectionView.render();
 
         var singleton = function () {
 
@@ -33,9 +37,16 @@ define(
                         this._bindToCommandModel.call(this, existingCommand, options);
                     }
 
-                    CommandCollection.bind('add sync', function (model) {
+                    CommandCollection.bind('add', function (model) {
                         if (model.isSameCommand(options.command)) {
                             self._bindToCommandModel.call(self, model, options);
+                        }
+                    });
+
+                    CommandCollection.bind('add sync', function () {
+                        var command = CommandCollection.findCommand(options.command);
+                        if (command) {
+                            self._bindToCommandModel.call(self, command, options);
                         }
                     });
                 },
@@ -52,7 +63,7 @@ define(
                             options.element.stopSpin();
 
                             if (model.isComplete()) {
-                                App.vent.trigger(App.Events.CommandComplete, { command: model, model: options.model });
+                                vent.trigger(vent.Events.CommandComplete, { command: model, model: options.model });
                             }
                         }
                     });

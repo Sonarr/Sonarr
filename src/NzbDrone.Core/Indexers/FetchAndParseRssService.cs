@@ -39,7 +39,6 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Debug("Available indexers {0}", indexers.Count);
 
-
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
 

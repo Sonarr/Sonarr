@@ -2,10 +2,10 @@
 
 define(
     [
-        'app',
+        'vent',
         'marionette',
         'moment'
-    ], function (App, Marionette, Moment) {
+    ], function (vent, Marionette, Moment) {
         return Marionette.ItemView.extend({
             template: 'Calendar/UpcomingItemViewTemplate',
             tagName : 'div',
@@ -21,11 +21,11 @@ define(
 
                 this.model.set({
                     end: end.toISOString()
-                })
+                });
             },
 
             _showEpisodeDetails: function () {
-                App.vent.trigger(App.Commands.ShowEpisodeDetails, {episode: this.model});
+                vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: this.model});
             }
         });
     });

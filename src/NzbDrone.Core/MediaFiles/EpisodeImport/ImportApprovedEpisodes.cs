@@ -94,6 +94,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             return decisions.Where(c => c.Approved)
                             .OrderByDescending(c => c.LocalEpisode.Quality)
+                            .ThenByDescending(c => c.LocalEpisode.Size)
                             .ToList();
         }
     }

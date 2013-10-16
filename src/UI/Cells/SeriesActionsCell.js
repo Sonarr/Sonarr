@@ -2,9 +2,9 @@
 
 define(
     [
-        'app',
+        'vent',
         'Cells/NzbDroneCell'
-    ], function (App, NzbDroneCell) {
+    ], function (vent, NzbDroneCell) {
         return NzbDroneCell.extend({
 
             className: 'series-actions-cell',
@@ -27,11 +27,11 @@ define(
             },
 
             _editSeries: function () {
-                App.vent.trigger(App.Commands.EditSeriesCommand, {series:this.model});
+                vent.trigger(vent.Commands.EditSeriesCommand, {series:this.model});
             },
 
             _removeSeries: function () {
-                App.vent.trigger(App.Commands.DeleteSeriesCommand, {series:this.model});
+                vent.trigger(vent.Commands.DeleteSeriesCommand, {series:this.model});
             }
         });
     });
