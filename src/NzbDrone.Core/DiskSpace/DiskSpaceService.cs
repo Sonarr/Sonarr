@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DiskSpace
         {
             if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder))
             {
-                return GetDiskSpace(new[] { _configService.DownloadedEpisodesFolder });
+                return GetDiskSpace(new[] { _diskProvider.GetPathRoot(_configService.DownloadedEpisodesFolder) });
             }
 
             return new List<DiskSpace>();
