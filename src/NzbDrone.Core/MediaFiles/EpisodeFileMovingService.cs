@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -84,15 +85,19 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
             }
 
-            //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
-            try
+            //We should only run this on Windows
+            if (OsInfo.IsWindows)
             {
-                _diskProvider.InheritFolderPermissions(destinationFilename);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
-                _logger.TraceException(ex.Message, ex);
+                //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
+                try
+                {
+                    _diskProvider.InheritFolderPermissions(destinationFilename);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
+                    _logger.TraceException(ex.Message, ex);
+                }
             }
         }
     }
