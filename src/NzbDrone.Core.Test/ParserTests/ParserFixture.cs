@@ -80,6 +80,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("(Game of Thrones s03 e - \"Game of Thrones Season 3 Episode 10\"", "Game of Thrones", 3, 10)]
         [TestCase("House.Hunters.International.S05E607.720p.hdtv.x264", "House.Hunters.International", 5, 607)]
         [TestCase("Adventure.Time.With.Finn.And.Jake.S01E20.720p.BluRay.x264-DEiMOS", "Adventure.Time.With.Finn.And.Jake", 1, 20)]
+        [TestCase("Hostages.S01E04.2-45.PM.[HDTV-720p].mkv", "Hostages", 1, 4)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -230,6 +231,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Daily.Show", "dailyshow")]
         [TestCase("Castle (2009)", "castle2009")]
         [TestCase("Parenthood.2010", "parenthood2010")]
+        [TestCase("Law_and_Order_SVU", "lawordersvu")]
         public void series_name_normalize(string parsedSeriesName, string seriesName)
         {
             var result = parsedSeriesName.CleanSeriesTitle();
