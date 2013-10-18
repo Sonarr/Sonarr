@@ -81,13 +81,13 @@ namespace NzbDrone.Core.History
 
         public void Handle(EpisodeImportedEvent message)
         {
-            foreach (var episode in message.DroppedEpisode.Episodes)
+            foreach (var episode in message.EpisodeInfo.Episodes)
             {
                 var history = new History
                     {
                         EventType = HistoryEventType.DownloadFolderImported,
                         Date = DateTime.UtcNow,
-                        Quality = message.DroppedEpisode.Quality,
+                        Quality = message.EpisodeInfo.Quality,
                         SourceTitle = message.ImportedEpisode.SceneName,
                         SeriesId = message.ImportedEpisode.SeriesId,
                         EpisodeId = episode.Id
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.History
 
                 //Won't have a value since we publish this event before saving to DB.
                 //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
-                history.Data.Add("DroppedPath", message.DroppedEpisode.Path);
+                history.Data.Add("DroppedPath", message.EpisodeInfo.Path);
                 history.Data.Add("ImportedPath", message.ImportedEpisode.Path);
 
                 _historyRepository.Insert(history);
