@@ -2,8 +2,9 @@
 
 define(
     [
-        'marionette'
-    ], function (Marionette) {
+        'marionette',
+        'Commands/CommandController'
+    ], function (Marionette, CommandController) {
         return Marionette.ItemView.extend({
             template: 'System/Update/UpdateItemViewTemplate',
 
@@ -12,7 +13,7 @@ define(
             },
 
             _installUpdate: function () {
-                this.model.save();
+                CommandController.Execute('installUpdate', { updatePackage: this.model.toJSON() });
             }
         });
     });

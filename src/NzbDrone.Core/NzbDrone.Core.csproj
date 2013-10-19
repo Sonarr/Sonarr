@@ -570,6 +570,7 @@
     <Compile Include="Tv\SeriesStatusType.cs" />
     <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
+    <Compile Include="Update\Commands\InstallUpdateCommand.cs" />
     <Compile Include="Update\InstallUpdateService.cs" />
     <Compile Include="Update\RecentUpdateProvider.cs" />
     <Compile Include="Update\UpdateChanges.cs" />
