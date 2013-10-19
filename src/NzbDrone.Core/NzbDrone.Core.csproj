@@ -225,6 +225,7 @@
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabCommunicationProxy.cs" />
     <Compile Include="Download\DownloadApprovedReports.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
@@ -627,7 +628,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Download\Clients\Sabnzbd\Api\" />
     <Folder Include="Download\Clients\uTorrent\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

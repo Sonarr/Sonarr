@@ -55,6 +55,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly IParsingService _parsingService;
+        private readonly ISabCommunicationProxy _sabCommunicationProxy;
         private readonly ICached<IEnumerable<QueueItem>> _queueCache;
         private readonly Logger _logger;
 
@@ -62,11 +63,13 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                              IHttpProvider httpProvider,
                              ICacheManger cacheManger,
                              IParsingService parsingService,
+                             ISabCommunicationProxy sabCommunicationProxy,
                              Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
             _parsingService = parsingService;
+            _sabCommunicationProxy = sabCommunicationProxy;
             _queueCache = cacheManger.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
             _logger = logger;
         }
@@ -75,24 +78,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
+            var category = _configService.SabTvCategory;
+            var priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
 
-            string cat = _configService.SabTvCategory;
-            int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
+            using (var nzb = _httpProvider.DownloadStream(url))
+            {
+                _logger.Info("Adding report [{0}] to the queue.", title);
+                var response = _sabCommunicationProxy.DownloadNzb(nzb, title, category, priority);
 
-            string name = url.Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(title);
-
-            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
-                name, priority, cat, nzbName);
-
-            string request = GetSabRequest(action);
-            _logger.Info("Adding report [{0}] to the queue.", title);
-
-            var response = _httpProvider.DownloadString(request);
-
-            _logger.Debug("Queue Response: [{0}]", response);
-
-            CheckForError(response);
+                _logger.Debug("Queue Response: [{0}]", response);
+            }
         }
 
         public bool IsConfigured
