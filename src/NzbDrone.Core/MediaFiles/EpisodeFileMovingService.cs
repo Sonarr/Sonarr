@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Growl.Connector;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -74,15 +75,23 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
 
-            _logger.Trace("Setting last write time on series folder: {0}", series.Path);
-            _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
-
-            if (series.SeasonFolder)
+            try
             {
-                var seasonFolder = Path.GetDirectoryName(destinationFilename);
+                _logger.Trace("Setting last write time on series folder: {0}", series.Path);
+                _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
 
-                _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
-                _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
+                if (series.SeasonFolder)
+                {
+                    var seasonFolder = Path.GetDirectoryName(destinationFilename);
+
+                    _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
+                    _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                _logger.WarnException("Unable to set last write time", ex);
             }
 
             //We should only run this on Windows
