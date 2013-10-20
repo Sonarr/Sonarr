@@ -37,7 +37,10 @@ define(
 
             initialize: function () {
                 QualityProfileCollection.fetch();
-                RootFolderCollection.fetch();
+                RootFolderCollection.fetch()
+                    .done(function () {
+                        RootFolderCollection.synced = true;
+                    });
             },
 
             onShow: function () {

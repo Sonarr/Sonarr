@@ -43,7 +43,7 @@ define(
                         }
                     });
 
-                    CommandCollection.bind('add sync', function () {
+                    CommandCollection.bind('sync', function () {
                         var command = CommandCollection.findCommand(options.command);
                         if (command) {
                             self._bindToCommandModel.call(self, command, options);

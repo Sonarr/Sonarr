@@ -37,7 +37,7 @@ define(
             onRender: function () {
                 this.currentDirs.show(new LoadingView());
 
-                if (RootFolderCollection.any()) {
+                if (RootFolderCollection.synced) {
                     this._showCurrentDirs();
                 }
 
