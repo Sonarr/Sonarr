@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Download.Clients
             _diskProvider = diskProvider;
         }
 
-        public void DownloadNzb(RemoteEpisode remoteEpisode)
+        public string DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
@@ -41,8 +41,6 @@ namespace NzbDrone.Core.Download.Clients
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
             var filename = Path.Combine(_configService.PneumaticFolder, title + ".nzb");
 
- 
-
             logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
             _httpProvider.DownloadFile(url, filename);
 
@@ -50,6 +48,8 @@ namespace NzbDrone.Core.Download.Clients
 
             var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
             _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
+
+            return null;
         }
 
         public bool IsConfigured

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public void DownloadNzb(RemoteEpisode remoteEpisode)
+        public string DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title + ".nzb";
@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var success = Json.Deserialize<EnqueueResponse>(response).Result;
             _logger.Debug("Queue Response: [{0}]", success);
 
+            return null;
         }
 
         public bool IsConfigured

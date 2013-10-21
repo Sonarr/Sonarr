@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -13,43 +14,6 @@ using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class SabRequestBuilder
-    {
-        private readonly IConfigService _configService;
-
-        public SabRequestBuilder(IConfigService configService)
-        {
-            _configService = configService;
-        }
-
-        public IRestRequest AddToQueueRequest(RemoteEpisode remoteEpisode)
-        {
-            string cat = _configService.SabTvCategory;
-            int priority = (int)_configService.SabRecentTvPriority;
-
-            string name = remoteEpisode.Release.DownloadUrl.Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Release.Title);
-
-            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
-                name, priority, cat, nzbName);
-
-            string request = GetSabRequest(action);
-
-            return new RestRequest(request);
-        }
-
-        private string GetSabRequest(string action)
-        {
-            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
-                                 _configService.SabHost,
-                                 _configService.SabPort,
-                                 action,
-                                 _configService.SabApiKey,
-                                 _configService.SabUsername,
-                                 _configService.SabPassword);
-        }
-    }
-
     public class SabnzbdClient : IDownloadClient
     {
         private readonly IConfigService _configService;
@@ -74,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public void DownloadNzb(RemoteEpisode remoteEpisode)
+        public string DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
@@ -84,9 +48,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             using (var nzb = _httpProvider.DownloadStream(url))
             {
                 _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = _sabCommunicationProxy.DownloadNzb(nzb, title, category, priority);
+                var response = Json.Deserialize<SabAddResponse>(_sabCommunicationProxy.DownloadNzb(nzb, title, category, priority));
 
-                _logger.Debug("Queue Response: [{0}]", response);
+                _logger.Debug("Queue Response: [{0}]", response.Status);
+
+                return response.Ids.First();
             }
         }
 

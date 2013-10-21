@@ -75,6 +75,12 @@ namespace NzbDrone.Core.History
                 history.Data.Add("ReleaseGroup", message.Episode.Release.ReleaseGroup);
                 history.Data.Add("Age", message.Episode.Release.Age.ToString());
 
+                if (!String.IsNullOrWhiteSpace(message.DownloadClientId))
+                {
+                    history.Data.Add("DownloadClient", message.DownloadClient);
+                    history.Data.Add("DownloadClientId", message.DownloadClientId);
+                }
+
                 _historyRepository.Insert(history);
             }
         }
