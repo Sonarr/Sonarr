@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -50,6 +51,11 @@ namespace NzbDrone.Core.Download.Clients
         public IEnumerable<QueueItem> GetQueue()
         {
             return new QueueItem[0];
+        }
+
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        {
+            return new HistoryItem[0];
         }
     }
 }

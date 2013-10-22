@@ -29,6 +29,10 @@ define(
                             icon = 'icon-nd-imported';
                             toolTip = 'Episode downloaded successfully and picked up from download client';
                             break;
+                        case 'downloadFailed':
+                            icon = 'icon-nd-download-failed';
+                            toolTip = 'Episode download failed';
+                            break;
                         default :
                             icon = 'icon-question';
                             toolTip = 'unknown event';

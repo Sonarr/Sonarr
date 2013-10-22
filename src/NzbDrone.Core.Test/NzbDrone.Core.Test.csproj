@@ -124,6 +124,7 @@
     <Compile Include="Download\DownloadClientTests\SabProviderTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
+    <Compile Include="Download\FailedDownloadServiceFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />

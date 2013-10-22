@@ -38,6 +38,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
+        public bool IsConfigured
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_configService.SabHost)
+                    && _configService.SabPort != 0;
+            }
+        }
+
         public string DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
@@ -53,15 +62,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 _logger.Debug("Queue Response: [{0}]", response.Status);
 
                 return response.Ids.First();
-            }
-        }
-
-        public bool IsConfigured
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(_configService.SabHost)
-                    && _configService.SabPort != 0;
             }
         }
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }, TimeSpan.FromSeconds(10));
         }
 
-        public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
         {
             string action = String.Format("mode=history&output=json&start={0}&limit={1}", start, limit);
             string request = GetSabRequest(action);
@@ -113,7 +113,23 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             CheckForError(response);
 
             var items = Json.Deserialize<SabHistory>(JObject.Parse(response).SelectToken("history").ToString()).Items;
-            return items ?? new List<SabHistoryItem>();
+            var historyItems = new List<HistoryItem>();
+
+            foreach (var sabHistoryItem in items)
+            {
+                var historyItem = new HistoryItem();
+                historyItem.Id = sabHistoryItem.Id;
+                historyItem.Title = sabHistoryItem.Title;
+                historyItem.Size = sabHistoryItem.Size;
+                historyItem.DownloadTime = sabHistoryItem.DownloadTime;
+                historyItem.Storage = sabHistoryItem.Storage;
+                historyItem.Category = sabHistoryItem.Category;
+                historyItem.Status = sabHistoryItem.Status == "Failed" ? HistoryStatus.Failed : HistoryStatus.Completed;
+
+                historyItems.Add(historyItem);
+            }
+
+            return historyItems;
         }
 
         public virtual SabCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)

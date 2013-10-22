@@ -226,9 +226,13 @@
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabCommunicationProxy.cs" />
+    <Compile Include="Download\FailedDownloadCommand.cs" />
+    <Compile Include="Download\HistoryItem.cs" />
+    <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadApprovedReports.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
+    <Compile Include="Download\FailedDownloadService.cs" />
     <Compile Include="Download\QueueItem.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />

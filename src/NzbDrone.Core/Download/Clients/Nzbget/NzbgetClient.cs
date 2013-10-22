@@ -91,6 +91,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
         }
 
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        {
+            return new HistoryItem[0];
+        }
+
         public virtual VersionModel GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
             //Get saved values if any of these are defaults

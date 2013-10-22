@@ -65,6 +65,11 @@ namespace NzbDrone.Core.Download.Clients
             return new QueueItem[0];
         }
 
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        {
+            return new HistoryItem[0];
+        }
+
         public virtual bool IsInQueue(RemoteEpisode newEpisode)
         {
             return false;

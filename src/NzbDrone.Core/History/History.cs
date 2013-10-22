@@ -17,12 +17,9 @@ namespace NzbDrone.Core.History
         public string SourceTitle { get; set; }
         public QualityModel Quality { get; set; }
         public DateTime Date { get; set; }
-
         public Episode Episode { get; set; }
         public Series Series { get; set; }
-
         public HistoryEventType EventType { get; set; }
-
         public Dictionary<string, string> Data { get; set; }
     }
 
@@ -32,7 +29,8 @@ namespace NzbDrone.Core.History
         Unknown = 0,
         Grabbed = 1,
         SeriesFolderImported = 2,
-        DownloadFolderImported = 3
+        DownloadFolderImported = 3,
+        DownloadFailed = 4
     }
 
 }

@@ -8,5 +8,6 @@ namespace NzbDrone.Core.Download
         string DownloadNzb(RemoteEpisode remoteEpisode);
         bool IsConfigured { get; }
         IEnumerable<QueueItem> GetQueue();
+        IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0);
     }
 }
