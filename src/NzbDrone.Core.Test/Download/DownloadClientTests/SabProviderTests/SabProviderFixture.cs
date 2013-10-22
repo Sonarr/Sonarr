@@ -179,10 +179,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                   .SetupGet(s => s.SabRecentTvPriority)
                   .Returns(SabPriorityType.High);
 
+            Mocker.GetMock<ISabCommunicationProxy>()
+                    .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabPriorityType.High))
+                    .Returns("{ \"status\": \"true\", \"nzo_ids\": [ \"sab_id_goes_here\" ] }");
+
             Subject.DownloadNzb(_remoteEpisode);
 
             Mocker.GetMock<ISabCommunicationProxy>()
-                    .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabPriorityType.High), Times.Once());
+                  .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabPriorityType.High), Times.Once());
         }
     }
 }
