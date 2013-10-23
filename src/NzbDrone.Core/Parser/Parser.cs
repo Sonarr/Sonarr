@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser
 {
@@ -110,16 +111,20 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
-                        var result = ParseMatchCollection(match);
-                        if (result != null)
+                        try
                         {
-                            //Check if episode is in the future (most likely a parse error)
-                            if (result.AirDate > DateTime.Now.AddDays(1).Date || result.AirDate < new DateTime(1970, 1, 1))
-                                break;
-
-                            result.Language = ParseLanguage(title);
-                            result.Quality = QualityParser.ParseQuality(title);
-                            return result;
+                            var result = ParseMatchCollection(match);
+                            if (result != null)
+                            {
+                                result.Language = ParseLanguage(title);
+                                result.Quality = QualityParser.ParseQuality(title);
+                                return result;
+                            }
+                        }
+                        catch (InvalidDateException ex)
+                        {
+                            Logger.TraceException(ex.Message, ex);
+                            break;
                         }
                     }
                 }
@@ -212,9 +217,17 @@ namespace NzbDrone.Core.Parser
                     airmonth = tempDay;
                 }
 
+                var airDate = new DateTime(airYear, airmonth, airday);
+
+                //Check if episode is in the future (most likely a parse error)
+                if (airDate > DateTime.Now.AddDays(1).Date || airDate < new DateTime(1970, 1, 1))
+                {
+                    throw new InvalidDateException("Invalid date found: {0}", airDate);
+                }
+
                 result = new ParsedEpisodeInfo
                     {
-                        AirDate = new DateTime(airYear, airmonth, airday).Date,
+                        AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
                     };
             }
 

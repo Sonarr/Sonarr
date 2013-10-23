@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Parser
         {
             var result = new List<Episode>();
 
-            if (parsedEpisodeInfo.AirDate.HasValue)
+            if (parsedEpisodeInfo.IsDaily())
             {
                 if (series.SeriesType == SeriesTypes.Standard)
                 {
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Parser
                     return null;
                 }
 
-                var episodeInfo = GetDailyEpisode(series, parsedEpisodeInfo.AirDate.Value, searchCriteria);
+                var episodeInfo = GetDailyEpisode(series, parsedEpisodeInfo.AirDate, searchCriteria);
 
                 if (episodeInfo != null)
                 {
@@ -223,14 +223,14 @@ namespace NzbDrone.Core.Parser
             return series;
         }
 
-        private Episode GetDailyEpisode(Series series, DateTime airDate, SearchCriteriaBase searchCriteria)
+        private Episode GetDailyEpisode(Series series, String airDate, SearchCriteriaBase searchCriteria)
         {
             Episode episodeInfo = null;
 
             if (searchCriteria != null)
             {
                 episodeInfo = searchCriteria.Episodes.SingleOrDefault(
-                    e => e.AirDate == airDate.ToString(Episode.AIR_DATE_FORMAT));
+                    e => e.AirDate == airDate);
             }
 
             if (episodeInfo == null)

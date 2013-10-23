@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
@@ -169,7 +170,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
-            result.AirDate.Should().Be(airDate);
+            result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
             result.EpisodeNumbers.Should().BeNull();
         }
 

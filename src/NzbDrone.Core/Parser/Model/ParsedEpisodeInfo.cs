@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Parser.Model
         public QualityModel Quality { get; set; }
         public int SeasonNumber { get; set; }
         public int[] EpisodeNumbers { get; set; }
-        public DateTime? AirDate { get; set; }
+        public String AirDate { get; set; }
         public Language Language { get; set; }
         
         public bool FullSeason { get; set; }
@@ -19,9 +19,9 @@ namespace NzbDrone.Core.Parser.Model
         {
             string episodeString = "[Unknown Episode]";
 
-            if (AirDate != null && EpisodeNumbers == null)
+            if (IsDaily() && EpisodeNumbers == null)
             {
-                episodeString = string.Format("{0}", AirDate.Value.ToString("yyyy-MM-dd"));
+                episodeString = string.Format("{0}", AirDate);
             }
             else if (FullSeason)
             {
@@ -33,6 +33,11 @@ namespace NzbDrone.Core.Parser.Model
             }
 
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
+        }
+
+        public bool IsDaily()
+        {
+            return !String.IsNullOrWhiteSpace(AirDate);
         }
     }
 }

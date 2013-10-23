@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
         private void GivenDailyParseResult()
         {
-            _parsedEpisodeInfo.AirDate = DateTime.Today;
+            _parsedEpisodeInfo.AirDate = DateTime.Today.ToString(Episode.AIR_DATE_FORMAT);
         }
 
         private void GivenSceneNumberingSeries()
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvRageId);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<DateTime>()), Times.Once());
+                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<String>()), Times.Once());
         }
 
         [Test]
@@ -90,19 +90,19 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.Map(_parsedEpisodeInfo, _series.TvRageId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<DateTime>()), Times.Never());
+                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<String>()), Times.Never());
         }
 
         [Test]
         public void should_fallback_to_daily_episode_lookup_when_search_criteria_episode_doesnt_match()
         {
             GivenDailySeries();
-            _parsedEpisodeInfo.AirDate = DateTime.Today.AddDays(-5);
+            _parsedEpisodeInfo.AirDate = DateTime.Today.AddDays(-5).ToString(Episode.AIR_DATE_FORMAT); ;
 
             Subject.Map(_parsedEpisodeInfo, _series.TvRageId, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<IEpisodeService>()
-                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<DateTime>()), Times.Once());
+                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<String>()), Times.Once());
         }
 
         [Test]
