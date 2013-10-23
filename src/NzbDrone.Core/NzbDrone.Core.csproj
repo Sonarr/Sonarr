@@ -119,6 +119,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
+    <Compile Include="Blacklisting\Blacklist.cs" />
+    <Compile Include="Blacklisting\BlacklistRepository.cs" />
+    <Compile Include="Blacklisting\BlacklistService.cs" />
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
@@ -181,6 +184,7 @@
     <Compile Include="Datastore\Migration\027_fix_omgwtfnzbs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -200,6 +204,7 @@
     <Compile Include="Datastore\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
+    <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
     <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />

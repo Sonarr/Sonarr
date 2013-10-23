@@ -23,7 +23,6 @@ namespace NzbDrone.Core.History
         public Dictionary<string, string> Data { get; set; }
     }
 
-
     public enum HistoryEventType
     {
         Unknown = 0,
@@ -32,5 +31,4 @@ namespace NzbDrone.Core.History
         DownloadFolderImported = 3,
         DownloadFailed = 4
     }
-
 }

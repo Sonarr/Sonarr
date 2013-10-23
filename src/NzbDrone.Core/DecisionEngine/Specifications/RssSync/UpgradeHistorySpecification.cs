@@ -1,4 +1,6 @@
 using NLog;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -9,12 +11,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
     {
         private readonly IHistoryService _historyService;
         private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly Logger _logger;
 
-        public UpgradeHistorySpecification(IHistoryService historyService, QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        public UpgradeHistorySpecification(IHistoryService historyService,
+                                           QualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IProvideDownloadClient downloadClientProvider,
+                                           Logger logger)
         {
             _historyService = historyService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _downloadClientProvider = downloadClientProvider;
             _logger = logger;
         }
 
@@ -31,6 +38,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             if (searchCriteria != null)
             {
                 _logger.Trace("Skipping history check during search");
+                return true;
+            }
+
+            if (_downloadClientProvider.GetDownloadClient().GetType() == typeof (SabnzbdClient))
+            {
+                _logger.Trace("Skipping history check in favour of blacklist");
                 return true;
             }
 

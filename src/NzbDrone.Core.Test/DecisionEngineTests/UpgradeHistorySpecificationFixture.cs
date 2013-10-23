@@ -3,6 +3,8 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -64,6 +66,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_notupgradableQuality);
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(2)).Returns(_notupgradableQuality);
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(3)).Returns<QualityModel>(null);
+
+            Mocker.GetMock<IProvideDownloadClient>()
+                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
         }
 
         private void WithFirstReportUpgradable()
@@ -75,7 +80,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(2)).Returns(_upgradableQuality);
         }
-
 
         [Test]
         public void should_be_upgradable_if_only_episode_is_upgradable()
@@ -127,6 +131,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_it_is_a_search()
         {
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_using_sabnzbd()
+        {
+            Mocker.GetMock<IProvideDownloadClient>()
+                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.Resolve<SabnzbdClient>());
+
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
         }
     }
