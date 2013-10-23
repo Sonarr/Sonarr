@@ -68,5 +68,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_false_if_unopacking_on_linux()
+        {
+            LinuxOnly();
+
+            GivenInWorkingFolder();
+            GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 
@@ -34,6 +35,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             {
                 if (Directory.GetParent(localEpisode.Path).Name.StartsWith(workingFolder))
                 {
+                    if (OsInfo.IsLinux)
+                    {
+                        _logger.Trace("{0} is still being unpacked", localEpisode.Path);
+                        return false;
+                    }
+
                     if (_diskProvider.GetLastFileWrite(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
                     {
                         _logger.Trace("{0} appears to be unpacking still", localEpisode.Path);
