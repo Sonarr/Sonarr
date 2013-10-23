@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Datastore;
+﻿using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Blacklisting
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Blacklisting
 
         public bool Blacklisted(string sourceTitle)
         {
-            return Query.Any(e => e.SourceTitle == sourceTitle);
+            return Query.Any(e => e.SourceTitle.Contains(sourceTitle));
         }
     }
 }
