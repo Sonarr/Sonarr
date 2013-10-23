@@ -54,6 +54,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_true_when_in_old_working_folder()
         {
+            WindowsOnly();
+
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddHours(-1));
 
