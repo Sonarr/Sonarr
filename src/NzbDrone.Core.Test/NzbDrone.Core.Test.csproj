@@ -121,7 +121,6 @@
     <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\SabProviderTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
@@ -194,7 +193,7 @@
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesBetweenDatesFixture.cs" />
     <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\HistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />

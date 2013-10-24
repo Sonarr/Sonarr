@@ -15,10 +15,12 @@ namespace NzbDrone.Core.Blacklisting
     public class BlacklistService : IBlacklistService, IHandle<DownloadFailedEvent>
     {
         private readonly IBlacklistRepository _blacklistRepository;
+        private readonly IRedownloadFailedDownloads _redownloadFailedDownloadService;
 
-        public BlacklistService(IBlacklistRepository blacklistRepository)
+        public BlacklistService(IBlacklistRepository blacklistRepository, IRedownloadFailedDownloads redownloadFailedDownloadService)
         {
             _blacklistRepository = blacklistRepository;
+            _redownloadFailedDownloadService = redownloadFailedDownloadService;
         }
 
         public bool Blacklisted(string sourceTitle)
@@ -30,14 +32,16 @@ namespace NzbDrone.Core.Blacklisting
         {
             var blacklist = new Blacklist
                             {
-                                SeriesId = message.Series.Id,
-                                EpisodeId = message.Episode.Id,
+                                SeriesId = message.SeriesId,
+                                EpisodeIds = message.EpisodeIds,
                                 SourceTitle = message.SourceTitle,
                                 Quality = message.Quality,
                                 Date = DateTime.UtcNow
                             };
 
             _blacklistRepository.Insert(blacklist);
+
+            _redownloadFailedDownloadService.Redownload(message.SeriesId, message.EpisodeIds);
         }
     }
 }

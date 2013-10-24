@@ -223,7 +223,7 @@
     <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RssSync\UpgradeHistorySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
     <Compile Include="Download\Clients\Sabnzbd\ConnectionInfoModel.cs" />
@@ -239,6 +239,7 @@
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\FailedDownloadService.cs" />
     <Compile Include="Download\QueueItem.cs" />
+    <Compile Include="Download\RedownloadFailedDownloadService.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
@@ -358,7 +359,6 @@
     <Compile Include="IndexerSearch\Definitions\SeasonSearchCriteria.cs" />
     <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\NzbSearchService.cs" />
-    <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
     <Compile Include="Indexers\RssParserBase.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />

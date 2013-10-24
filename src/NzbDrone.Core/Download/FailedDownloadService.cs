@@ -41,15 +41,15 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var recentHistory = _historyService.BetweenDates(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, HistoryEventType.Grabbed);
+            var grabbedHistory = _historyService.Grabbed();
             var failedHistory = _historyService.Failed();
 
             foreach (var failedItem in failedItems)
             {
                 var failedLocal = failedItem;
-                var historyItems = recentHistory.Where(h => h.Data.ContainsKey(DOWNLOAD_CLIENT) &&
-                                                            h.Data[DOWNLOAD_CLIENT_ID].Equals(failedLocal.Id))
-                                                .ToList();
+                var historyItems = grabbedHistory.Where(h => h.Data.ContainsKey(DOWNLOAD_CLIENT) &&
+                                                             h.Data[DOWNLOAD_CLIENT_ID].Equals(failedLocal.Id))
+                                                 .ToList();
 
                 if (!historyItems.Any())
                 {
@@ -64,18 +64,17 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
-                foreach (var historyItem in historyItems)
+                var historyItem = historyItems.First();
+
+                _eventAggregator.PublishEvent(new DownloadFailedEvent
                 {
-                    _eventAggregator.PublishEvent(new DownloadFailedEvent
-                    {
-                        Series = historyItem.Series,
-                        Episode = historyItem.Episode,
-                        Quality = historyItem.Quality,
-                        SourceTitle = historyItem.SourceTitle,
-                        DownloadClient = historyItem.Data[DOWNLOAD_CLIENT],
-                        DownloadClientId = historyItem.Data[DOWNLOAD_CLIENT_ID]
-                    });
-                }
+                    SeriesId = historyItem.SeriesId,
+                    EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
+                    Quality = historyItem.Quality,
+                    SourceTitle = historyItem.SourceTitle,
+                    DownloadClient = historyItem.Data[DOWNLOAD_CLIENT],
+                    DownloadClientId = historyItem.Data[DOWNLOAD_CLIENT_ID]
+                });
             }
         }
 

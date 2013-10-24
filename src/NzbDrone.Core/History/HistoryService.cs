@@ -20,6 +20,8 @@ namespace NzbDrone.Core.History
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
         List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
         List<History> Failed();
+        List<History> Grabbed();
+        History MostRecentForEpisode(int episodeId);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
@@ -51,6 +53,16 @@ namespace NzbDrone.Core.History
         public List<History> Failed()
         {
             return _historyRepository.Failed();
+        }
+
+        public List<History> Grabbed()
+        {
+            return _historyRepository.Grabbed();
+        }
+
+        public History MostRecentForEpisode(int episodeId)
+        {
+            return _historyRepository.MostRecentForEpisode(episodeId);
         }
 
         public void Purge()
@@ -122,20 +134,23 @@ namespace NzbDrone.Core.History
 
         public void Handle(DownloadFailedEvent message)
         {
-            var history = new History
+            foreach (var episodeId in message.EpisodeIds)
             {
-                EventType = HistoryEventType.DownloadFailed,
-                Date = DateTime.UtcNow,
-                Quality = message.Quality,
-                SourceTitle = message.SourceTitle,
-                SeriesId = message.Series.Id,
-                EpisodeId = message.Episode.Id,
-            };
+                var history = new History
+                {
+                    EventType = HistoryEventType.DownloadFailed,
+                    Date = DateTime.UtcNow,
+                    Quality = message.Quality,
+                    SourceTitle = message.SourceTitle,
+                    SeriesId = message.SeriesId,
+                    EpisodeId = episodeId,
+                };
 
-            history.Data.Add("DownloadClient", message.DownloadClient);
-            history.Data.Add("DownloadClientId", message.DownloadClientId);
+                history.Data.Add("DownloadClient", message.DownloadClient);
+                history.Data.Add("DownloadClientId", message.DownloadClientId);
 
-            _historyRepository.Insert(history);
+                _historyRepository.Insert(history);
+            }
         }
     }
 }

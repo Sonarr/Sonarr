@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Create.TableForModel("Blacklist")
                 .WithColumn("SeriesId").AsInt32()
-                .WithColumn("EpisodeId").AsInt32()
+                .WithColumn("EpisodeIds").AsString()
                 .WithColumn("SourceTitle").AsString()
                 .WithColumn("Quality").AsString()
                 .WithColumn("Date").AsDateTime();
