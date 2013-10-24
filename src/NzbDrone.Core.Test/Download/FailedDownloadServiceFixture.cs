@@ -8,24 +8,18 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Download
 {
     [TestFixture]
     public class FailedDownloadServiceFixture : CoreTest<FailedDownloadService>
     {
-        private Series _series;
-        private Episode _episode;
         private List<HistoryItem> _completed;
         private List<HistoryItem> _failed;
 
         [SetUp]
         public void Setup()
         {
-            _series = Builder<Series>.CreateNew().Build();
-            _episode = Builder<Episode>.CreateNew().Build();
-
             _completed = Builder<HistoryItem>.CreateListOfSize(5)
                                              .All()
                                              .With(h => h.Status = HistoryStatus.Completed)
@@ -42,17 +36,17 @@ namespace NzbDrone.Core.Test.Download
                   .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
         }
 
-        private void GivenNoRecentHistory()
+        private void GivenNoGrabbedHistory()
         {
             Mocker.GetMock<IHistoryService>()
-                  .Setup(s => s.BetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), HistoryEventType.Grabbed))
+                  .Setup(s => s.Grabbed())
                   .Returns(new List<History.History>());
         }
 
-        private void GivenRecentHistory(List<History.History> history)
+        private void GivenGrabbedHistory(List<History.History> history)
         {
             Mocker.GetMock<IHistoryService>()
-                  .Setup(s => s.BetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), HistoryEventType.Grabbed))
+                  .Setup(s => s.Grabbed())
                   .Returns(history);
         }
 
@@ -86,7 +80,7 @@ namespace NzbDrone.Core.Test.Download
         private void VerifyFailedDownloads(int count = 1)
         {
             Mocker.GetMock<IEventAggregator>()
-                .Verify(v => v.PublishEvent(It.IsAny<DownloadFailedEvent>()), Times.Exactly(count));
+                .Verify(v => v.PublishEvent(It.Is<DownloadFailedEvent>(d => d.EpisodeIds.Count == count)), Times.Once());
         }
 
         [Test]
@@ -124,7 +118,7 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_process_if_matching_history_is_not_found()
         {
-            GivenNoRecentHistory();
+            GivenNoGrabbedHistory();
             GivenFailedDownloadClientHistory();
 
             Subject.Execute(new FailedDownloadCommand());
@@ -141,7 +135,7 @@ namespace NzbDrone.Core.Test.Download
                                                   .Build()
                                                   .ToList();
             
-            GivenRecentHistory(history);
+            GivenGrabbedHistory(history);
             GivenFailedHistory(history);
 
             history.First().Data.Add("downloadClient", "SabnzbdClient");
@@ -161,7 +155,7 @@ namespace NzbDrone.Core.Test.Download
                                                   .Build()
                                                   .ToList();
 
-            GivenRecentHistory(history);
+            GivenGrabbedHistory(history);
             GivenNoFailedHistory();
 
             history.First().Data.Add("downloadClient", "SabnzbdClient");
@@ -173,7 +167,7 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
-        public void should_process_for_each_failed_episode()
+        public void should_have_multiple_episode_ids_when_multi_episode_release_fails()
         {
             GivenFailedDownloadClientHistory();
 
@@ -181,7 +175,7 @@ namespace NzbDrone.Core.Test.Download
                                                   .Build()
                                                   .ToList();
 
-            GivenRecentHistory(history);
+            GivenGrabbedHistory(history);
             GivenNoFailedHistory();
 
             history.ForEach(h =>
