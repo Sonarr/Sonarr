@@ -99,6 +99,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blacklisting\BlacklistServiceFixture.cs" />
+    <Compile Include="Blacklisting\BlacklistRepositoryFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
