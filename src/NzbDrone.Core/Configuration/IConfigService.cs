@@ -39,6 +39,7 @@ namespace NzbDrone.Core.Configuration
         Int32 RssSyncInterval { get; set; }
         Boolean AutoDownloadPropers { get; set; }
         String DownloadClientWorkingFolders { get; set; }
+        Boolean AutoRedownloadFailed { get; set; }
         void SaveValues(Dictionary<string, object> configValues);
     }
 }

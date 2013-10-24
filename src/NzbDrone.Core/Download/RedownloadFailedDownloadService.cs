@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
@@ -15,12 +16,14 @@ namespace NzbDrone.Core.Download
 
     public class RedownloadFailedDownloadService : IRedownloadFailedDownloads
     {
+        private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
         private readonly ICommandExecutor _commandExecutor;
         private readonly Logger _logger;
 
-        public RedownloadFailedDownloadService(IEpisodeService episodeService, ICommandExecutor commandExecutor, Logger logger)
+        public RedownloadFailedDownloadService(IConfigService configService, IEpisodeService episodeService, ICommandExecutor commandExecutor, Logger logger)
         {
+            _configService = configService;
             _episodeService = episodeService;
             _commandExecutor = commandExecutor;
             _logger = logger;
@@ -28,6 +31,12 @@ namespace NzbDrone.Core.Download
 
         public void Redownload(int seriesId, List<int> episodeIds)
         {
+            if (!_configService.AutoRedownloadFailed)
+            {
+                _logger.Trace("Auto redownloading failed episodes is disabled");
+                return;
+            }
+
             if (episodeIds.Count == 1)
             {
                 _logger.Trace("Failed download only contains one episode, searching again");
