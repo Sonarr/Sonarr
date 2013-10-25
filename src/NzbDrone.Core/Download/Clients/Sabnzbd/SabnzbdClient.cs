@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     queueItem.Timeleft = sabQueueItem.Timeleft;
                     queueItem.Status = sabQueueItem.Status;
 
-                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
+                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title.Replace("ENCRYPTED / ", ""));
                     if (parsedEpisodeInfo == null) continue;
 
                     var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
@@ -131,6 +131,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
 
             return historyItems;
+        }
+
+        public void RemoveFromQueue(string id)
+        {
+            _sabCommunicationProxy.RemoveFrom("queue", id);
+        }
+
+        public void RemoveFromHistory(string id)
+        {
+            _sabCommunicationProxy.RemoveFrom("history", id);
         }
 
         public virtual SabCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)

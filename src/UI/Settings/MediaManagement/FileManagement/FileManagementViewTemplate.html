@@ -42,7 +42,22 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label">Redownload Failed</label>
+        <label class="control-label">Recycling Bin</label>
+
+        <div class="controls">
+            <input type="text" name="recycleBin" class="x-path"/>
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Episode files will go here when deleted instead of being permanently deleted"/>
+            </span>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="advanced-setting">
+    <legend>Failed Download Handling</legend>
+
+    <div class="control-group">
+        <label class="control-label">Redownload</label>
 
         <div class="controls">
             <label class="checkbox toggle well">
@@ -56,18 +71,27 @@
             </label>
 
             <span class="help-inline-checkbox">
-                <i class="icon-question-sign" title="Should NzbDrone automatically search for and attempt to download another release when a download fails?"/>
+                <i class="icon-question-sign" title="Automatically search for and attempt to download another release when a download fails?"/>
             </span>
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label">Recycling Bin</label>
+        <label class="control-label">Remove</label>
 
         <div class="controls">
-            <input type="text" name="recycleBin" class="x-path"/>
-            <span class="help-inline">
-                <i class="icon-nd-form-info" title="Episode files will go here when deleted instead of being permanently deleted"/>
+            <label class="checkbox toggle well">
+                <input type="checkbox" name="removeFailedDownloads"/>
+                <p>
+                    <span>Yes</span>
+                    <span>No</span>
+                </p>
+
+                <div class="btn btn-primary slide-button"/>
+            </label>
+
+            <span class="help-inline-checkbox">
+                <i class="icon-question-sign" title="Automatically remove failed downloads from history and encrypted downloads from queue?"/>
             </span>
         </div>
     </div>

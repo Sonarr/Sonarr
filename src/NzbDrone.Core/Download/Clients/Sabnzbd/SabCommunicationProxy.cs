@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     public interface ISabCommunicationProxy
     {
         string DownloadNzb(Stream nzb, string name, string category, int priority);
+        void RemoveFrom(string source, string id);
         string ProcessRequest(IRestRequest restRequest, string action);
     }
 
@@ -29,6 +30,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             request.AddFile("name", ReadFully(nzb), title, "application/x-nzb");
             
             return ProcessRequest(request, action);
+        }
+
+        public void RemoveFrom(string source, string id)
+        {
+            var request = new RestRequest();
+            var action = String.Format("mode={0}&name=delete&del_files=1&value={1}", source, id);
+
+            ProcessRequest(request, action);
         }
 
         public string ProcessRequest(IRestRequest restRequest, string action)

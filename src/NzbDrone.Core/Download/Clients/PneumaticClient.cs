@@ -70,6 +70,14 @@ namespace NzbDrone.Core.Download.Clients
             return new HistoryItem[0];
         }
 
+        public void RemoveFromQueue(string id)
+        {
+        }
+
+        public void RemoveFromHistory(string id)
+        {
+        }
+
         public virtual bool IsInQueue(RemoteEpisode newEpisode)
         {
             return false;

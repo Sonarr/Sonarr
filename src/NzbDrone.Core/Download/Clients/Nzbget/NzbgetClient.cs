@@ -96,6 +96,16 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return new HistoryItem[0];
         }
 
+        public void RemoveFromQueue(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveFromHistory(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual VersionModel GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
             //Get saved values if any of these are defaults

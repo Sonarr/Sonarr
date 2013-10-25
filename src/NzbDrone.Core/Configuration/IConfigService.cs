@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Configuration
         Boolean AutoDownloadPropers { get; set; }
         String DownloadClientWorkingFolders { get; set; }
         Boolean AutoRedownloadFailed { get; set; }
+        Boolean RemoveFailedDownloads { get; set; }
         void SaveValues(Dictionary<string, object> configValues);
     }
 }
