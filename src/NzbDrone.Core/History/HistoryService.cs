@@ -148,6 +148,7 @@ namespace NzbDrone.Core.History
 
                 history.Data.Add("DownloadClient", message.DownloadClient);
                 history.Data.Add("DownloadClientId", message.DownloadClientId);
+                history.Data.Add("Message", message.Message);
 
                 _historyRepository.Insert(history);
             }

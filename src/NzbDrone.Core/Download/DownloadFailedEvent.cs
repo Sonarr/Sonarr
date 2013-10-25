@@ -13,5 +13,6 @@ namespace NzbDrone.Core.Download
         public String SourceTitle { get; set; }
         public String DownloadClient { get; set; }
         public String DownloadClientId { get; set; }
+        public String Message { get; set; }
     }
 }

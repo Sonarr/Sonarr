@@ -124,6 +124,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 historyItem.DownloadTime = sabHistoryItem.DownloadTime;
                 historyItem.Storage = sabHistoryItem.Storage;
                 historyItem.Category = sabHistoryItem.Category;
+                historyItem.Message = sabHistoryItem.FailMessage;
                 historyItem.Status = sabHistoryItem.Status == "Failed" ? HistoryStatus.Failed : HistoryStatus.Completed;
 
                 historyItems.Add(historyItem);

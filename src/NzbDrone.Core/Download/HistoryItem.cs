@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Download
         public String Category { get; set; }
         public Int32 DownloadTime { get; set; }
         public String Storage { get; set; }
+        public String Message { get; set; }
         public HistoryStatus Status { get; set; }
     }
 

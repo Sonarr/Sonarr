@@ -73,7 +73,8 @@ namespace NzbDrone.Core.Download
                     Quality = historyItem.Quality,
                     SourceTitle = historyItem.SourceTitle,
                     DownloadClient = historyItem.Data[DOWNLOAD_CLIENT],
-                    DownloadClientId = historyItem.Data[DOWNLOAD_CLIENT_ID]
+                    DownloadClientId = historyItem.Data[DOWNLOAD_CLIENT_ID],
+                    Message = failedItem.Message
                 });
             }
         }
