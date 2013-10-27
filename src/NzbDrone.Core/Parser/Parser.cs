@@ -16,6 +16,26 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex[] ReportTitleRegex = new[]
             {
+                //Anime - Absolute Episode Number + Title + Season+Episode
+                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - [SubGroup] Title Absolute Episode Number + Season+Episode
+                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))?(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - [SubGroup] Title Season+Episode + Absolute Episode Number
+                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))?(?<title>.+?)(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)(?:_|\s|\.)(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.|$)+)+",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - [SubGroup] Title Absolute Episode Number
+                new Regex(@"^\[(?<subgroup>.+?)\](?:_|-|\s|\.)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,}))+",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - Title Absolute Episode Number [SubGroup] 
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:.+?)\[(?<subgroup>.+?)\](?:\.|$)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Episodes with airdate
                 new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -171,25 +191,45 @@ namespace NzbDrone.Core.Parser
                     {
                         SeasonNumber = seasons.First(),
                         EpisodeNumbers = new int[0],
+                        AbsoluteEpisodeNumbers = new int[0]
                     };
 
                 foreach (Match matchGroup in matchCollection)
                 {
                     var episodeCaptures = matchGroup.Groups["episode"].Captures.Cast<Capture>().ToList();
+                    var absoluteEpisodeCaptures = matchGroup.Groups["absoluteepisode"].Captures.Cast<Capture>().ToList();
 
                     //Allows use to return a list of 0 episodes (We can handle that as a full season release)
-                    if (episodeCaptures.Any())
+                    var eps = episodeCaptures.Any();
+                    var epsAbs = absoluteEpisodeCaptures.Any();
+                    if (eps || epsAbs)
                     {
-                        var first = Convert.ToInt32(episodeCaptures.First().Value);
-                        var last = Convert.ToInt32(episodeCaptures.Last().Value);
-
-                        if (first > last)
+                        if (eps)
                         {
-                            return null;
-                        }
+                            var first = Convert.ToInt32(episodeCaptures.First().Value);
+                            var last = Convert.ToInt32(episodeCaptures.Last().Value);
 
-                        var count = last - first + 1;
-                        result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
+                            if (first > last)
+                            {
+                                return null;
+                            }
+
+                            var count = last - first + 1;
+                            result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
+                        }
+                        if (epsAbs)
+                        {
+                            var first = Convert.ToInt32(absoluteEpisodeCaptures.First().Value);
+                            var last = Convert.ToInt32(absoluteEpisodeCaptures.Last().Value);
+
+                            if (first > last)
+                            {
+                                return null;
+                            }
+
+                            var count = last - first + 1;
+                            result.AbsoluteEpisodeNumbers = Enumerable.Range(first, count).ToArray();
+                        }
                     }
                     else
                     {
@@ -200,6 +240,10 @@ namespace NzbDrone.Core.Parser
 
                         result.FullSeason = true;
                     }
+                }
+                if (result.AbsoluteEpisodeNumbers.Any() && !result.EpisodeNumbers.Any())
+                {
+                    result.SeasonNumber = 0;
                 }
             }
 
