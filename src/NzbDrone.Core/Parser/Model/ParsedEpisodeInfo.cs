@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Parser.Model
         public QualityModel Quality { get; set; }
         public int SeasonNumber { get; set; }
         public int[] EpisodeNumbers { get; set; }
+        public int[] AbsoluteEpisodeNumbers { get; set; }
         public String AirDate { get; set; }
         public Language Language { get; set; }
         
