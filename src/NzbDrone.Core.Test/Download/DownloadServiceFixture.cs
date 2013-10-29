@@ -82,7 +82,6 @@ namespace NzbDrone.Core.Test.Download
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
         }
 
-
         [Test]
         public void should_not_attempt_download_if_client_isnt_configure()
         {

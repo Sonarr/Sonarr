@@ -4,6 +4,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
@@ -34,6 +35,10 @@ namespace NzbDrone.Core.Test.Download
 
             Mocker.GetMock<IProvideDownloadClient>()
                   .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.EnableFailedDownloadHandling)
+                  .Returns(true);
         }
 
         private void GivenNoGrabbedHistory()
@@ -187,6 +192,18 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new FailedDownloadCommand());
 
             VerifyFailedDownloads(2);
+        }
+
+        [Test]
+        public void should_skip_if_enable_failed_download_handling_is_off()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.EnableFailedDownloadHandling)
+                  .Returns(false);
+
+            Subject.Execute(new FailedDownloadCommand());
+
+            VerifyNoFailedDownloads();
         }
     }
 }
