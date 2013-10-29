@@ -17,7 +17,7 @@ define(
             },
 
             events: {
-                'change .x-rename-episodes': '_setNamingOptionsVisibility'
+                'change .x-rename-episodes': '_setFailedDownloadOptionsVisibility'
             },
 
             onRender: function () {
@@ -32,7 +32,7 @@ define(
                 this._updateSamples();
             },
 
-            _setNamingOptionsVisibility: function () {
+            _setFailedDownloadOptionsVisibility: function () {
                 var checked = this.ui.renameEpisodesCheckbox.prop('checked');
                 if (checked) {
                     this.ui.namingOptions.slideDown();

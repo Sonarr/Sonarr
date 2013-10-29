@@ -39,6 +39,12 @@ namespace NzbDrone.Core.Download
 
         private void CheckForFailedDownloads()
         {
+            if (!_configService.EnableFailedDownloadHandling)
+            {
+                _logger.Trace("Failed Download Handling is not enabled");
+                return;
+            }
+
             var grabbedHistory = _historyService.Grabbed();
             var failedHistory = _historyService.Failed();
 

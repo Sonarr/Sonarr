@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Configuration
         String DownloadClientWorkingFolders { get; set; }
         Boolean AutoRedownloadFailed { get; set; }
         Boolean RemoveFailedDownloads { get; set; }
+        Boolean EnableFailedDownloadHandling { get; set; }
         void SaveValues(Dictionary<string, object> configValues);
     }
 }
