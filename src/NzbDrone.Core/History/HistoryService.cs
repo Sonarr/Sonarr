@@ -22,6 +22,7 @@ namespace NzbDrone.Core.History
         List<History> Failed();
         List<History> Grabbed();
         History MostRecentForEpisode(int episodeId);
+        History Get(int id);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
@@ -63,6 +64,11 @@ namespace NzbDrone.Core.History
         public History MostRecentForEpisode(int episodeId)
         {
             return _historyRepository.MostRecentForEpisode(episodeId);
+        }
+
+        public History Get(int id)
+        {
+            return _historyRepository.Get(id);
         }
 
         public void Purge()

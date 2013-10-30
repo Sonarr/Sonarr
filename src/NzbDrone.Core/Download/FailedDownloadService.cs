@@ -9,7 +9,12 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Download
 {
-    public class FailedDownloadService : IExecute<FailedDownloadCommand>
+    public interface IFailedDownloadService
+    {
+        void MarkAsFailed(int historyId);
+    }
+
+    public class FailedDownloadService : IFailedDownloadService, IExecute<FailedDownloadCommand>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IHistoryService _historyService;
@@ -35,6 +40,12 @@ namespace NzbDrone.Core.Download
             _logger = logger;
 
             _downloadClient = _downloadClientProvider.GetDownloadClient();
+        }
+
+        public void MarkAsFailed(int historyId)
+        {
+            var item = _historyService.Get(historyId);
+            PublishDownloadFailedEvent(new List<History.History> {item}, "Manually marked as failed");
         }
 
         private void CheckForFailedDownloads()
