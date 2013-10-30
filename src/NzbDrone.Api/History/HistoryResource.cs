@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
+using NzbDrone.Api.Series;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Tv;
 
@@ -21,7 +23,7 @@ namespace NzbDrone.Api.History
 
         public Dictionary<string, string> Data { get; set; }
 
-        public Episode Episode { get; set; }
-        public Core.Tv.Series Series { get; set; }
+        public EpisodeResource Episode { get; set; }
+        public SeriesResource Series { get; set; }
     }
 }
