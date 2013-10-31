@@ -169,7 +169,9 @@
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
+    <Compile Include="ParserTests\ParsingServiceTests\GetSeriesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
+    <Compile Include="ParserTests\SeriesTitleInfoFixture.cs" />
     <Compile Include="Providers\XemProxyFixture.cs" />
     <Compile Include="Qualities\QualitySizeRepositoryFixture.cs" />
     <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />

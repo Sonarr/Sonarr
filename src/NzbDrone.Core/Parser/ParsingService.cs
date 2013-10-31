@@ -68,15 +68,22 @@ namespace NzbDrone.Core.Parser
 
         public Series GetSeries(string title)
         {
-            var searchTitle = title;
             var parsedEpisodeInfo = Parser.ParseTitle(title);
 
-            if (parsedEpisodeInfo != null)
+            if (parsedEpisodeInfo == null)
             {
-                searchTitle = parsedEpisodeInfo.SeriesTitle;
+                return _seriesService.FindByTitle(title);
             }
 
-            return _seriesService.FindByTitle(searchTitle);
+            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+
+            if (series == null)
+            {
+                series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
+                                                    parsedEpisodeInfo.SeriesTitleInfo.Year);
+            }
+
+            return series;
         }
 
         public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null)

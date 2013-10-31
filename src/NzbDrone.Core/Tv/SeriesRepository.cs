@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Tv
     {
         bool SeriesPathExists(string path);
         Series FindByTitle(string cleanTitle);
+        Series FindByTitle(string cleanTitle, int year);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
@@ -30,6 +31,12 @@ namespace NzbDrone.Core.Tv
         public Series FindByTitle(string cleanTitle)
         {
             return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public Series FindByTitle(string cleanTitle, int year)
+        {
+            return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle, StringComparison.InvariantCultureIgnoreCase) &&
+                                              s.Year == year);
         }
 
         public Series FindByTvdbId(int tvdbId)

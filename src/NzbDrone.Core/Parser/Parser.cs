@@ -76,6 +76,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)FR)(?:\W|_)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
@@ -139,6 +142,58 @@ namespace NzbDrone.Core.Parser
             return null;
         }
 
+        public static string ParseSeriesName(string title)
+        {
+            Logger.Trace("Parsing string '{0}'", title);
+
+            var parseResult = ParseTitle(title);
+
+            if (parseResult == null)
+            {
+                return CleanSeriesTitle(title);
+            }
+
+            return parseResult.SeriesTitle;
+        }
+
+        public static string CleanSeriesTitle(this string title)
+        {
+            long number = 0;
+
+            //If Title only contains numbers return it as is.
+            if (Int64.TryParse(title, out number))
+                return title;
+
+            return NormalizeRegex.Replace(title, String.Empty).ToLower();
+        }
+
+        public static string CleanupEpisodeTitle(string title)
+        {
+            //this will remove (1),(2) from the end of multi part episodes.
+            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
+        }
+
+        private static SeriesTitleInfo GetSeriesTitleInfo(string title)
+        {
+            var seriesTitleInfo = new SeriesTitleInfo();
+            seriesTitleInfo.Title = title;
+
+            var match = YearInTitleRegex.Match(title);
+
+            if (!match.Success)
+            {
+                seriesTitleInfo.TitleWithoutYear = title;
+            }
+
+            else
+            {
+                seriesTitleInfo.TitleWithoutYear = match.Groups["title"].Value;
+                seriesTitleInfo.Year = Convert.ToInt32(match.Groups["year"].Value);
+            }
+
+            return seriesTitleInfo;
+        }
+
         private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection)
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
@@ -168,10 +223,10 @@ namespace NzbDrone.Core.Parser
                     return null;
 
                 result = new ParsedEpisodeInfo
-                    {
-                        SeasonNumber = seasons.First(),
-                        EpisodeNumbers = new int[0],
-                    };
+                {
+                    SeasonNumber = seasons.First(),
+                    EpisodeNumbers = new int[0],
+                };
 
                 foreach (Match matchGroup in matchCollection)
                 {
@@ -226,30 +281,17 @@ namespace NzbDrone.Core.Parser
                 }
 
                 result = new ParsedEpisodeInfo
-                    {
-                        AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
-                    };
+                {
+                    AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
+                };
             }
 
             result.SeriesTitle = CleanSeriesTitle(seriesName);
+            result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
 
             Logger.Trace("Episode Parsed. {0}", result);
 
             return result;
-        }
-
-        public static string ParseSeriesName(string title)
-        {
-            Logger.Trace("Parsing string '{0}'", title);
-
-            var parseResult = ParseTitle(title);
-
-            if (parseResult == null)
-            {
-                return CleanSeriesTitle(title);
-            }
-
-            return parseResult.SeriesTitle;
         }
 
         private static Language ParseLanguage(string title)
@@ -344,23 +386,6 @@ namespace NzbDrone.Core.Parser
             }
 
             return true;
-        }
-
-        public static string CleanSeriesTitle(this string title)
-        {
-            long number = 0;
-
-            //If Title only contains numbers return it as is.
-            if (Int64.TryParse(title, out number))
-                return title;
-
-            return NormalizeRegex.Replace(title, String.Empty).ToLower();
-        }
-
-        public static string CleanupEpisodeTitle(string title)
-        {
-            //this will remove (1),(2) from the end of multi part episodes.
-            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
     }
 }

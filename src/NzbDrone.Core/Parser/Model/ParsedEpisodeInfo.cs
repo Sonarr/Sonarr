@@ -7,6 +7,7 @@ namespace NzbDrone.Core.Parser.Model
     public class ParsedEpisodeInfo
     {
         public string SeriesTitle { get; set; }
+        public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
         public int SeasonNumber { get; set; }
         public int[] EpisodeNumbers { get; set; }
