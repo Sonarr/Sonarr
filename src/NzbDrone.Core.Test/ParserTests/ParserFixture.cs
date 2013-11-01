@@ -22,6 +22,9 @@ namespace NzbDrone.Core.Test.ParserTests
          * [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
          * [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "", 7, new[] { 22, 23 }, 2)]
          * (Game of Thrones s03 e - "Game of Thrones Season 3 Episode 10"
+         * The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
+         * Superman.-.The.Man.of.Steel.1994-06.34.hybrid.DreamGirl-Novus-HD
+         * Superman.-.The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
          */
 
         [TestCase("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]

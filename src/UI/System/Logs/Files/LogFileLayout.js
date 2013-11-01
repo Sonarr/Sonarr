@@ -130,12 +130,12 @@ define(
                     filename: filename
                 });
 
-                this.listenToOnce(contentsModel, 'sync', this._showContents);
+                this.listenToOnce(contentsModel, 'sync', this._showDetails);
 
                 contentsModel.fetch({ dataType: 'text' });
             },
 
-            _showContents: function (model) {
+            _showDetails: function (model) {
                 this.contents.show(new ContentsView({ model: model }));
             },
 

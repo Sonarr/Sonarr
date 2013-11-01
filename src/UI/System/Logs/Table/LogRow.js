@@ -6,14 +6,14 @@ define(
     ], function (vent, Backgrid) {
 
         return Backgrid.Row.extend({
-            className: 'log-file-row',
+            className: 'log-row',
 
             events: {
                 'click': '_showDetails'
             },
 
             _showDetails: function () {
-                vent.trigger(vent.Commands.ShowLogFile, { model: this.model });
+                vent.trigger(vent.Commands.ShowLogDetails, { model: this.model });
             }
         });
     });
