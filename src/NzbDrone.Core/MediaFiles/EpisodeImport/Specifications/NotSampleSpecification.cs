@@ -49,11 +49,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
-            if (localEpisode.Size > SampleSizeLimit)
-            {
-                return true;
-            }
-
             var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
 
             if (runTime.TotalMinutes.Equals(0))
@@ -66,6 +61,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             {
                 _logger.Trace("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
                 return false;
+            }
+
+            if (localEpisode.Size > SampleSizeLimit)
+            {
+                return true;
             }
 
             return true;
