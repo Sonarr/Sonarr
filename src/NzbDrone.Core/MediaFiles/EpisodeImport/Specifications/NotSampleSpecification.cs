@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -11,6 +14,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
     {
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly Logger _logger;
+        private static List<Quality> _largeSampleSizeQualities = new List<Quality> { Quality.HDTV1080p, Quality.WEBDL1080p, Quality.Bluray1080p };
 
         public NotSampleSpecification(IVideoFileInfoReader videoFileInfoReader,
                                       Logger logger)
@@ -31,6 +35,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
+            if (localEpisode.ExistingFile)
+            {
+                _logger.Trace("Existing file, skipping sample check");
+                return true;
+            }
+
             if (localEpisode.Series.SeriesType == SeriesTypes.Daily)
             {
                 _logger.Trace("Daily Series, skipping sample check");
@@ -43,28 +53,49 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
-            if (Path.GetExtension(localEpisode.Path).Equals(".flv", StringComparison.InvariantCultureIgnoreCase))
+            var extension = Path.GetExtension(localEpisode.Path);
+
+            if (extension != null && extension.Equals(".flv", StringComparison.InvariantCultureIgnoreCase))
             {
-                _logger.Trace("Skipping smaple check for .flv file");
+                _logger.Trace("Skipping sample check for .flv file");
                 return true;
             }
 
-            if (localEpisode.Size > SampleSizeLimit)
+            if (OsInfo.IsWindows)
             {
+                var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
+
+                if (runTime.TotalMinutes.Equals(0))
+                {
+                    _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", localEpisode);
+                    return false;
+                }
+
+                if (runTime.TotalSeconds < 90)
+                {
+                    _logger.Trace("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
+                    return false;
+                }
+
+                _logger.Trace("Runtime is over 2 minutes, skipping file size check");
                 return true;
             }
 
-            var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
+            return CheckSize(localEpisode);
+        }
 
-            if (runTime.TotalMinutes.Equals(0))
+        private bool CheckSize(LocalEpisode localEpisode)
+        {
+            if (_largeSampleSizeQualities.Contains(localEpisode.Quality.Quality))
             {
-                _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", localEpisode);
-                return false;
+                if (localEpisode.Size < SampleSizeLimit * 2)
+                {
+                    return false;
+                }
             }
 
-            if (runTime.TotalMinutes < 3)
+            if (localEpisode.Size < SampleSizeLimit)
             {
-                _logger.Trace("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
                 return false;
             }
 
