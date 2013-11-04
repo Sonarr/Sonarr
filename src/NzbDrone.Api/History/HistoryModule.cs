@@ -1,7 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using NzbDrone.Api.Mapping;
+using Nancy;
+using Nancy.ModelBinding;
+using NzbDrone.Api.Extensions;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
 
 namespace NzbDrone.Api.History
@@ -9,11 +12,15 @@ namespace NzbDrone.Api.History
     public class HistoryModule : NzbDroneRestModule<HistoryResource>
     {
         private readonly IHistoryService _historyService;
+        private readonly IFailedDownloadService _failedDownloadService;
 
-        public HistoryModule(IHistoryService historyService)
+        public HistoryModule(IHistoryService historyService, IFailedDownloadService failedDownloadService)
         {
             _historyService = historyService;
+            _failedDownloadService = failedDownloadService;
             GetResourcePaged = GetHistory;
+
+            Post["/failed"] = x => MarkAsFailed();
         }
 
         private PagingResource<HistoryResource> GetHistory(PagingResource<HistoryResource> pagingResource)
@@ -35,6 +42,13 @@ namespace NzbDrone.Api.History
             }
 
             return ApplyToPage(_historyService.Paged, pagingSpec);
+        }
+
+        private Response MarkAsFailed()
+        {
+            var id = (int)Request.Form.Id;
+            _failedDownloadService.MarkAsFailed(id);
+            return new Object().AsResponse();
         }
     }
 }

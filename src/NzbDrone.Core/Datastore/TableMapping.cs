@@ -4,6 +4,7 @@ using System.Linq;
 using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Reflection;
+using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
@@ -67,6 +68,8 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
 
             Mapper.Entity<SeriesStatistics>().MapResultSet();
+
+            Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
         }
 
         private static void RegisterMappers()
@@ -80,6 +83,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<int>), new EmbeddedDocumentConverter());
         }
 
         private static void RegisterProviderSettingConverter()

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using FizzWare.NBuilder;
@@ -44,30 +45,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
                                                       .With(e => e.AirDate = DateTime.Today.ToString(Episode.AIR_DATE_FORMAT))
                                                       .Build()
                                                       .ToList();
-        }
-
-        private void WithFailResponse()
-        {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.DownloadString(It.IsAny<String>())).Returns("{ \"status\": false, \"error\": \"API Key Required\" }");
-        }
-
-        [Test]
-        public void add_url_should_format_request_properly()
-        {
-            Mocker.GetMock<IHttpProvider>(MockBehavior.Strict)
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns("{ \"status\": true }");
-
-
-            Subject.DownloadNzb(_remoteEpisode);
-        }
-
-        [Test]
-        public void add_by_url_should_detect_and_handle_sab_errors()
-        {
-            WithFailResponse();
-            Assert.Throws<ApplicationException>(() => Subject.DownloadNzb(_remoteEpisode));
         }
 
         [Test]
@@ -196,31 +173,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
         }
 
         [Test]
-        public void should_throw_when_WebException_is_thrown()
-        {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.DownloadString(It.IsAny<String>())).Throws(new WebException());
-
-            Assert.Throws<WebException>(() => Subject.DownloadNzb(_remoteEpisode));
-        }
-
-        [Test]
         public void downloadNzb_should_use_sabRecentTvPriority_when_recentEpisode_is_true()
         {
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.SabRecentTvPriority)
                   .Returns(SabPriorityType.High);
 
-
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns("{ \"status\": true }");
-
+            Mocker.GetMock<ISabCommunicationProxy>()
+                    .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabPriorityType.High))
+                    .Returns("{ \"status\": \"true\", \"nzo_ids\": [ \"sab_id_goes_here\" ] }");
 
             Subject.DownloadNzb(_remoteEpisode);
 
-            Mocker.GetMock<IHttpProvider>()
-                    .Verify(v => v.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=1&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"), Times.Once());
+            Mocker.GetMock<ISabCommunicationProxy>()
+                  .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabPriorityType.High), Times.Once());
         }
     }
 }

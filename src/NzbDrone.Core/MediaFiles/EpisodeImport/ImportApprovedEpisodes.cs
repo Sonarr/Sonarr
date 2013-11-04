@@ -41,7 +41,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             var qualifiedImports = GetQualifiedImports(decisions);
             var imported = new List<ImportDecision>();
 
-            foreach (var importDecision in qualifiedImports)
+            foreach (var importDecision in qualifiedImports.OrderByDescending(e => e.LocalEpisode.Size))
             {
                 var localEpisode = importDecision.LocalEpisode;
 

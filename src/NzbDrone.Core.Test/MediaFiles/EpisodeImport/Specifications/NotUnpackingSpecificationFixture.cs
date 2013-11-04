@@ -54,6 +54,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_true_when_in_old_working_folder()
         {
+            WindowsOnly();
+
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddHours(-1));
 
@@ -65,6 +67,17 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow);
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_unopacking_on_linux()
+        {
+            LinuxOnly();
+
+            GivenInWorkingFolder();
+            GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
         }

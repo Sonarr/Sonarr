@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -13,6 +12,10 @@ namespace NzbDrone.Core.History
     {
         void Trim();
         List<QualityModel> GetBestQualityInHistory(int episodeId);
+        List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
+        List<History> Failed();
+        List<History> Grabbed();
+        History MostRecentForEpisode(int episodeId);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -36,6 +39,32 @@ namespace NzbDrone.Core.History
             var history = Query.Where(c => c.EpisodeId == episodeId);
 
             return history.Select(h => h.Quality).ToList();
+        }
+
+        public List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType)
+        {
+            return Query.Join<History, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
+                        .Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
+                        .Where(h => h.Date >= startDate)
+                        .AndWhere(h => h.Date <= endDate)
+                        .AndWhere(h => h.EventType == eventType);
+        }
+
+        public List<History> Failed()
+        {
+            return Query.Where(h => h.EventType == HistoryEventType.DownloadFailed);
+        }
+
+        public List<History> Grabbed()
+        {
+            return Query.Where(h => h.EventType == HistoryEventType.Grabbed);
+        }
+
+        public History MostRecentForEpisode(int episodeId)
+        {
+            return Query.Where(h => h.EpisodeId == episodeId)
+                        .OrderByDescending(h => h.Date)
+                        .FirstOrDefault();
         }
 
         public override PagingSpec<History> GetPaged(PagingSpec<History> pagingSpec)

@@ -21,7 +21,7 @@ define(
             },
 
             _showDetails: function () {
-                vent.trigger(vent.Commands.ShowHistoryDetails, { history: this.model });
+                vent.trigger(vent.Commands.ShowHistoryDetails, { model: this.model });
             }
         });
     });

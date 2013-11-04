@@ -7,7 +7,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
@@ -74,10 +73,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     if (importedFiles.Any())
                     {
-                        if (_diskProvider.GetFolderSize(subFolder) < NotSampleSpecification.SampleSizeLimit)
-                        {
-                            _diskProvider.DeleteFolder(subFolder, true);
-                        }
+                        _diskProvider.DeleteFolder(subFolder, true);
                     }
                 }
                 catch (Exception e)

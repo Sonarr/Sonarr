@@ -6,11 +6,12 @@ define(
         'backgrid',
         'System/Logs/Table/LogTimeCell',
         'System/Logs/Table/LogLevelCell',
+        'System/Logs/Table/LogRow',
         'Shared/Grid/Pager',
         'System/Logs/LogsCollection',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
-    ], function (vent, Marionette, Backgrid, LogTimeCell, LogLevelCell, GridPager, LogCollection, ToolbarLayout, LoadingView) {
+    ], function (vent, Marionette, Backgrid, LogTimeCell, LogLevelCell, LogRow, GridPager, LogCollection, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
             template: 'System/Logs/Table/LogsTableLayoutTemplate',
 
@@ -77,7 +78,7 @@ define(
 
             _showTable: function () {
                 this.grid.show(new Backgrid.Grid({
-                    row       : Backgrid.Row,
+                    row       : LogRow,
                     columns   : this.columns,
                     collection: this.collection,
                     className : 'table table-hover'

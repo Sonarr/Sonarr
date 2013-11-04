@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser
 {
@@ -64,7 +65,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W|_))|\W|_|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
+        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W|_)(a|an|the|and|or|of)($|\W|_))|\W|_|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\|",
@@ -74,6 +75,9 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>ita|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)FR)(?:\W|_)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -110,16 +114,20 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
-                        var result = ParseMatchCollection(match);
-                        if (result != null)
+                        try
                         {
-                            //Check if episode is in the future (most likely a parse error)
-                            if (result.AirDate > DateTime.Now.AddDays(1).Date || result.AirDate < new DateTime(1970, 1, 1))
-                                break;
-
-                            result.Language = ParseLanguage(title);
-                            result.Quality = QualityParser.ParseQuality(title);
-                            return result;
+                            var result = ParseMatchCollection(match);
+                            if (result != null)
+                            {
+                                result.Language = ParseLanguage(title);
+                                result.Quality = QualityParser.ParseQuality(title);
+                                return result;
+                            }
+                        }
+                        catch (InvalidDateException ex)
+                        {
+                            Logger.TraceException(ex.Message, ex);
+                            break;
                         }
                     }
                 }
@@ -132,6 +140,58 @@ namespace NzbDrone.Core.Parser
 
             Logger.Trace("Unable to parse {0}", title);
             return null;
+        }
+
+        public static string ParseSeriesName(string title)
+        {
+            Logger.Trace("Parsing string '{0}'", title);
+
+            var parseResult = ParseTitle(title);
+
+            if (parseResult == null)
+            {
+                return CleanSeriesTitle(title);
+            }
+
+            return parseResult.SeriesTitle;
+        }
+
+        public static string CleanSeriesTitle(this string title)
+        {
+            long number = 0;
+
+            //If Title only contains numbers return it as is.
+            if (Int64.TryParse(title, out number))
+                return title;
+
+            return NormalizeRegex.Replace(title, String.Empty).ToLower();
+        }
+
+        public static string CleanupEpisodeTitle(string title)
+        {
+            //this will remove (1),(2) from the end of multi part episodes.
+            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
+        }
+
+        private static SeriesTitleInfo GetSeriesTitleInfo(string title)
+        {
+            var seriesTitleInfo = new SeriesTitleInfo();
+            seriesTitleInfo.Title = title;
+
+            var match = YearInTitleRegex.Match(title);
+
+            if (!match.Success)
+            {
+                seriesTitleInfo.TitleWithoutYear = title;
+            }
+
+            else
+            {
+                seriesTitleInfo.TitleWithoutYear = match.Groups["title"].Value;
+                seriesTitleInfo.Year = Convert.ToInt32(match.Groups["year"].Value);
+            }
+
+            return seriesTitleInfo;
         }
 
         private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection)
@@ -163,10 +223,10 @@ namespace NzbDrone.Core.Parser
                     return null;
 
                 result = new ParsedEpisodeInfo
-                    {
-                        SeasonNumber = seasons.First(),
-                        EpisodeNumbers = new int[0],
-                    };
+                {
+                    SeasonNumber = seasons.First(),
+                    EpisodeNumbers = new int[0],
+                };
 
                 foreach (Match matchGroup in matchCollection)
                 {
@@ -212,31 +272,26 @@ namespace NzbDrone.Core.Parser
                     airmonth = tempDay;
                 }
 
+                var airDate = new DateTime(airYear, airmonth, airday);
+
+                //Check if episode is in the future (most likely a parse error)
+                if (airDate > DateTime.Now.AddDays(1).Date || airDate < new DateTime(1970, 1, 1))
+                {
+                    throw new InvalidDateException("Invalid date found: {0}", airDate);
+                }
+
                 result = new ParsedEpisodeInfo
-                    {
-                        AirDate = new DateTime(airYear, airmonth, airday).Date,
-                    };
+                {
+                    AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
+                };
             }
 
             result.SeriesTitle = CleanSeriesTitle(seriesName);
+            result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
 
             Logger.Trace("Episode Parsed. {0}", result);
 
             return result;
-        }
-
-        public static string ParseSeriesName(string title)
-        {
-            Logger.Trace("Parsing string '{0}'", title);
-
-            var parseResult = ParseTitle(title);
-
-            if (parseResult == null)
-            {
-                return CleanSeriesTitle(title);
-            }
-
-            return parseResult.SeriesTitle;
         }
 
         private static Language ParseLanguage(string title)
@@ -331,23 +386,6 @@ namespace NzbDrone.Core.Parser
             }
 
             return true;
-        }
-
-        public static string CleanSeriesTitle(this string title)
-        {
-            long number = 0;
-
-            //If Title only contains numbers return it as is.
-            if (Int64.TryParse(title, out number))
-                return title;
-
-            return NormalizeRegex.Replace(title, String.Empty).ToLower();
-        }
-
-        public static string CleanupEpisodeTitle(string title)
-        {
-            //this will remove (1),(2) from the end of multi part episodes.
-            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
     }
 }

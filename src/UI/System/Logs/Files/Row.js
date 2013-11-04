@@ -9,10 +9,10 @@ define(
             className: 'log-file-row',
 
             events: {
-                'click': '_showContents'
+                'click': '_showDetails'
             },
 
-            _showContents: function () {
+            _showDetails: function () {
                 vent.trigger(vent.Commands.ShowLogFile, { model: this.model });
             }
         });

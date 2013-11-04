@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Growl.Connector;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -73,26 +75,38 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
 
-            _logger.Trace("Setting last write time on series folder: {0}", series.Path);
-            _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
-
-            if (series.SeasonFolder)
-            {
-                var seasonFolder = Path.GetDirectoryName(destinationFilename);
-
-                _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
-                _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
-            }
-
-            //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
             try
             {
-                _diskProvider.InheritFolderPermissions(destinationFilename);
+                _logger.Trace("Setting last write time on series folder: {0}", series.Path);
+                _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
+
+                if (series.SeasonFolder)
+                {
+                    var seasonFolder = Path.GetDirectoryName(destinationFilename);
+
+                    _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
+                    _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
+                }
             }
-            catch (UnauthorizedAccessException ex)
+
+            catch (Exception ex)
             {
-                _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
-                _logger.TraceException(ex.Message, ex);
+                _logger.WarnException("Unable to set last write time", ex);
+            }
+
+            //We should only run this on Windows
+            if (OsInfo.IsWindows)
+            {
+                //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
+                try
+                {
+                    _diskProvider.InheritFolderPermissions(destinationFilename);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
+                    _logger.TraceException(ex.Message, ex);
+                }
             }
         }
     }

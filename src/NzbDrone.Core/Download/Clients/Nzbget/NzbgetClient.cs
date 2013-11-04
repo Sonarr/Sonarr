@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public void DownloadNzb(RemoteEpisode remoteEpisode)
+        public string DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title + ".nzb";
@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var success = Json.Deserialize<EnqueueResponse>(response).Result;
             _logger.Debug("Queue Response: [{0}]", success);
 
+            return null;
         }
 
         public bool IsConfigured
@@ -88,6 +89,21 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 yield return queueItem;
             }
+        }
+
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        {
+            return new HistoryItem[0];
+        }
+
+        public void RemoveFromQueue(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveFromHistory(string id)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual VersionModel GetVersion(string host = null, int port = 0, string username = null, string password = null)

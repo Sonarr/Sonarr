@@ -99,6 +99,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blacklisting\BlacklistServiceFixture.cs" />
+    <Compile Include="Blacklisting\BlacklistRepositoryFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
@@ -121,9 +123,9 @@
     <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\SabProviderTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
+    <Compile Include="Download\FailedDownloadServiceFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
@@ -167,7 +169,9 @@
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
+    <Compile Include="ParserTests\ParsingServiceTests\GetSeriesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
+    <Compile Include="ParserTests\SeriesTitleInfoFixture.cs" />
     <Compile Include="Providers\XemProxyFixture.cs" />
     <Compile Include="Qualities\QualitySizeRepositoryFixture.cs" />
     <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
@@ -193,7 +197,7 @@
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesBetweenDatesFixture.cs" />
     <Compile Include="DecisionEngineTests\RetentionSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\UpgradeHistorySpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\HistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />

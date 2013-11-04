@@ -34,9 +34,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (dailySearchSpec == null) return true;
 
-            var episode = _episodeService.GetEpisode(dailySearchSpec.Series.Id, dailySearchSpec.Airtime);
+            var episode = _episodeService.GetEpisode(dailySearchSpec.Series.Id, dailySearchSpec.AirDate.ToString(Episode.AIR_DATE_FORMAT));
 
-            if (!remoteEpisode.ParsedEpisodeInfo.AirDate.HasValue || remoteEpisode.ParsedEpisodeInfo.AirDate.Value.ToString(Episode.AIR_DATE_FORMAT) != episode.AirDate)
+            if (!remoteEpisode.ParsedEpisodeInfo.IsDaily() || remoteEpisode.ParsedEpisodeInfo.AirDate != episode.AirDate)
             {
                 _logger.Trace("Episode AirDate does not match searched episode number, skipping.");
                 return false;

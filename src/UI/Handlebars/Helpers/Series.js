@@ -68,6 +68,6 @@ define(
                 return this.title;
             }
 
-            return '{0} ({1})'.format(this.title, this.year);
+            return new Handlebars.SafeString('{0} <em>({1})</em>'.format(this.title, this.year));
         });
     });

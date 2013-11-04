@@ -3,7 +3,9 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
         <h3>
-            Details
+            {{#if_eq eventType compare="grabbed"}}Grabbed{{/if_eq}}
+            {{#if_eq eventType compare="downloadFailed"}}Download Failed{{/if_eq}}
+            {{#if_eq eventType compare="downloadFolderImported"}}Episode Imported{{/if_eq}}
         </h3>
 
     </div>
@@ -27,24 +29,33 @@
 
                     {{#if nzbInfoUrl}}
                         <dt>Info</dt>
-                        <dd><a href="{{infoUrl}}">{{infoUrl}}o</a></dd>
+                        <dd><a href="{{nzbInfoUrl}}">{{nzbInfoUrl}}</a></dd>
                     {{/if}}
                 {{/with}}
             </dl>
-        {{else}}
+        {{/if_eq}}
+        {{#if_eq eventType compare="downloadFailed"}}
+            <dl class="dl-horizontal">
+                {{#with data}}
+                    <dt>Message</dt>
+                    <dd>{{message}}</dd>
+                {{/with}}
+            </dl>
+        {{/if_eq}}
+        {{#if_eq eventType compare="downloadFolderImported"}}
             {{#if data}}
                 {{#with data}}
-                    <dl class="dl-horizontal">
-                        {{#if droppedPath}}
-                            <dt>Source:</dt>
-                            <dd>{{droppedPath}}</dd>
-                        {{/if}}
+                <dl class="dl-horizontal">
+                    {{#if droppedPath}}
+                        <dt>Source:</dt>
+                        <dd>{{droppedPath}}</dd>
+                    {{/if}}
 
-                        {{#if importedPath}}
-                            <dt>Imported To:</dt>
-                            <dd>{{importedPath}}</dd>
-                        {{/if}}
-                    </dl>
+                    {{#if importedPath}}
+                        <dt>Imported To:</dt>
+                        <dd>{{importedPath}}</dd>
+                    {{/if}}
+                </dl>
                 {{/with}}
             {{else}}
                 No details available
@@ -52,6 +63,7 @@
         {{/if_eq}}
     </div>
     <div class="modal-footer">
+        {{#if_eq eventType compare="grabbed"}}<button class="btn btn-danger x-mark-as-failed">mark as failed</button>{{/if_eq}}
         <button class="btn" data-dismiss="modal">close</button>
     </div>
 </div>

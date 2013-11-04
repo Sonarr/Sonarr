@@ -98,7 +98,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
             var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
-            searchSpec.Airtime = airDate;
+            searchSpec.AirDate = airDate;
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }

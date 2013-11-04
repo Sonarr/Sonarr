@@ -22,7 +22,6 @@ namespace NzbDrone.Api.Update
             _recentUpdateProvider = recentUpdateProvider;
             _installUpdateService = installUpdateService;
             GetResourceAll = GetRecentUpdates;
-            Post["/"] = x=> InstallUpdate();
         }
 
         private List<UpdateResource> GetRecentUpdates()
@@ -45,16 +44,6 @@ namespace NzbDrone.Api.Update
             }
 
             return resources;
-        }
-
-        private Response InstallUpdate()
-        {
-            var updateResource = Request.Body.FromJson<UpdateResource>();
-
-            var updatePackage = updateResource.InjectTo<UpdatePackage>();
-            _installUpdateService.InstallUpdate(updatePackage);
-
-            return updateResource.AsResponse();
         }
     }
 

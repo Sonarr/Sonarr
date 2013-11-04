@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
+        Series FindByTitle(string title, int year);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
@@ -98,6 +99,11 @@ namespace NzbDrone.Core.Tv
             }
 
             return _seriesRepository.FindByTitle(Parser.Parser.CleanSeriesTitle(title));
+        }
+
+        public Series FindByTitle(string title, int year)
+        {
+            return _seriesRepository.FindByTitle(title, year);
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesTypes)

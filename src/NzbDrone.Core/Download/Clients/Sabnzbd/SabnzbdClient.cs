@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -13,48 +14,12 @@ using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class SabRequestBuilder
-    {
-        private readonly IConfigService _configService;
-
-        public SabRequestBuilder(IConfigService configService)
-        {
-            _configService = configService;
-        }
-
-        public IRestRequest AddToQueueRequest(RemoteEpisode remoteEpisode)
-        {
-            string cat = _configService.SabTvCategory;
-            int priority = (int)_configService.SabRecentTvPriority;
-
-            string name = remoteEpisode.Release.DownloadUrl.Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(remoteEpisode.Release.Title);
-
-            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
-                name, priority, cat, nzbName);
-
-            string request = GetSabRequest(action);
-
-            return new RestRequest(request);
-        }
-
-        private string GetSabRequest(string action)
-        {
-            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
-                                 _configService.SabHost,
-                                 _configService.SabPort,
-                                 action,
-                                 _configService.SabApiKey,
-                                 _configService.SabUsername,
-                                 _configService.SabPassword);
-        }
-    }
-
     public class SabnzbdClient : IDownloadClient
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly IParsingService _parsingService;
+        private readonly ISabCommunicationProxy _sabCommunicationProxy;
         private readonly ICached<IEnumerable<QueueItem>> _queueCache;
         private readonly Logger _logger;
 
@@ -62,37 +27,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                              IHttpProvider httpProvider,
                              ICacheManger cacheManger,
                              IParsingService parsingService,
+                             ISabCommunicationProxy sabCommunicationProxy,
                              Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
             _parsingService = parsingService;
+            _sabCommunicationProxy = sabCommunicationProxy;
             _queueCache = cacheManger.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
             _logger = logger;
-        }
-
-        public void DownloadNzb(RemoteEpisode remoteEpisode)
-        {
-            var url = remoteEpisode.Release.DownloadUrl;
-            var title = remoteEpisode.Release.Title;
-
-            string cat = _configService.SabTvCategory;
-            int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
-
-            string name = url.Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(title);
-
-            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
-                name, priority, cat, nzbName);
-
-            string request = GetSabRequest(action);
-            _logger.Info("Adding report [{0}] to the queue.", title);
-
-            var response = _httpProvider.DownloadString(request);
-
-            _logger.Debug("Queue Response: [{0}]", response);
-
-            CheckForError(response);
         }
 
         public bool IsConfigured
@@ -101,6 +44,24 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 return !string.IsNullOrWhiteSpace(_configService.SabHost)
                     && _configService.SabPort != 0;
+            }
+        }
+
+        public string DownloadNzb(RemoteEpisode remoteEpisode)
+        {
+            var url = remoteEpisode.Release.DownloadUrl;
+            var title = remoteEpisode.Release.Title;
+            var category = _configService.SabTvCategory;
+            var priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.SabRecentTvPriority : (int)_configService.SabOlderTvPriority;
+
+            using (var nzb = _httpProvider.DownloadStream(url))
+            {
+                _logger.Info("Adding report [{0}] to the queue.", title);
+                var response = Json.Deserialize<SabAddResponse>(_sabCommunicationProxy.DownloadNzb(nzb, title, category, priority));
+
+                _logger.Debug("Queue Response: [{0}]", response.Status);
+
+                return response.Ids.First();
             }
         }
 
@@ -128,7 +89,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     queueItem.Timeleft = sabQueueItem.Timeleft;
                     queueItem.Status = sabQueueItem.Status;
 
-                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
+                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title.Replace("ENCRYPTED / ", ""));
                     if (parsedEpisodeInfo == null) continue;
 
                     var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
@@ -143,7 +104,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }, TimeSpan.FromSeconds(10));
         }
 
-        public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
         {
             string action = String.Format("mode=history&output=json&start={0}&limit={1}", start, limit);
             string request = GetSabRequest(action);
@@ -152,7 +113,34 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             CheckForError(response);
 
             var items = Json.Deserialize<SabHistory>(JObject.Parse(response).SelectToken("history").ToString()).Items;
-            return items ?? new List<SabHistoryItem>();
+            var historyItems = new List<HistoryItem>();
+
+            foreach (var sabHistoryItem in items)
+            {
+                var historyItem = new HistoryItem();
+                historyItem.Id = sabHistoryItem.Id;
+                historyItem.Title = sabHistoryItem.Title;
+                historyItem.Size = sabHistoryItem.Size;
+                historyItem.DownloadTime = sabHistoryItem.DownloadTime;
+                historyItem.Storage = sabHistoryItem.Storage;
+                historyItem.Category = sabHistoryItem.Category;
+                historyItem.Message = sabHistoryItem.FailMessage;
+                historyItem.Status = sabHistoryItem.Status == "Failed" ? HistoryStatus.Failed : HistoryStatus.Completed;
+
+                historyItems.Add(historyItem);
+            }
+
+            return historyItems;
+        }
+
+        public void RemoveFromQueue(string id)
+        {
+            _sabCommunicationProxy.RemoveFrom("queue", id);
+        }
+
+        public void RemoveFromHistory(string id)
+        {
+            _sabCommunicationProxy.RemoveFrom("history", id);
         }
 
         public virtual SabCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)

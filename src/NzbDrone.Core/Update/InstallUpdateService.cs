@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Update
         void InstallUpdate(UpdatePackage updatePackage);
     }
 
-    public class InstallUpdateService : IInstallUpdates, IExecute<ApplicationUpdateCommand>
+    public class InstallUpdateService : IInstallUpdates, IExecute<ApplicationUpdateCommand>, IExecute<InstallUpdateCommand>
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
@@ -88,6 +88,11 @@ namespace NzbDrone.Core.Update
             {
                 InstallUpdate(latestAvailable);
             }
+        }
+
+        public void Execute(InstallUpdateCommand message)
+        {
+            InstallUpdate(message.UpdatePackage);
         }
     }
 }

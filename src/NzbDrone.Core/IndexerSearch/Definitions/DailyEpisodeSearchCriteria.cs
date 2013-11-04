@@ -4,11 +4,11 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 {
     public class DailyEpisodeSearchCriteria : SearchCriteriaBase
     {
-        public DateTime Airtime { get; set; }
+        public DateTime AirDate { get; set; }
 
         public override string ToString()
         {
-            return string.Format("[{0} : {1}", SceneTitle, Airtime);
+            return string.Format("[{0} : {1}", SceneTitle, AirDate);
         }
     }
 }

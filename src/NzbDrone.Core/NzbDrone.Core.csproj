@@ -119,6 +119,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
+    <Compile Include="Blacklisting\Blacklist.cs" />
+    <Compile Include="Blacklisting\BlacklistRepository.cs" />
+    <Compile Include="Blacklisting\BlacklistService.cs" />
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
@@ -181,6 +184,7 @@
     <Compile Include="Datastore\Migration\027_fix_omgwtfnzbs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -200,6 +204,7 @@
     <Compile Include="Datastore\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
+    <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
     <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
@@ -218,17 +223,23 @@
     <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RssSync\UpgradeHistorySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
     <Compile Include="Download\Clients\Sabnzbd\ConnectionInfoModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabCommunicationProxy.cs" />
+    <Compile Include="Download\FailedDownloadCommand.cs" />
+    <Compile Include="Download\HistoryItem.cs" />
+    <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadApprovedReports.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
+    <Compile Include="Download\FailedDownloadService.cs" />
     <Compile Include="Download\QueueItem.cs" />
+    <Compile Include="Download\RedownloadFailedDownloadService.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
@@ -307,6 +318,8 @@
     <Compile Include="Notifications\Xbmc\Model\VersionResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcJsonResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcVersion.cs" />
+    <Compile Include="Parser\InvalidDateException.cs" />
+    <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />
     <Compile Include="Instrumentation\SetLoggingLevel.cs" />
@@ -347,7 +360,6 @@
     <Compile Include="IndexerSearch\Definitions\SeasonSearchCriteria.cs" />
     <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\NzbSearchService.cs" />
-    <Compile Include="IndexerSearch\SearchAndDownloadService.cs" />
     <Compile Include="Indexers\RssParserBase.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
@@ -570,6 +582,7 @@
     <Compile Include="Tv\SeriesStatusType.cs" />
     <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
+    <Compile Include="Update\Commands\InstallUpdateCommand.cs" />
     <Compile Include="Update\InstallUpdateService.cs" />
     <Compile Include="Update\RecentUpdateProvider.cs" />
     <Compile Include="Update\UpdateChanges.cs" />
@@ -625,7 +638,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Download\Clients\Sabnzbd\Api\" />
     <Folder Include="Download\Clients\uTorrent\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

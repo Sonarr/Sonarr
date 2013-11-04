@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Download.Clients
             _logger = logger;
         }
 
-        public void DownloadNzb(RemoteEpisode remoteEpisode)
+        public string DownloadNzb(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
@@ -34,8 +35,9 @@ namespace NzbDrone.Core.Download.Clients
 
             _logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
             _httpProvider.DownloadFile(url, filename);
-
             _logger.Trace("NZB Download succeeded, saved to: {0}", filename);
+
+            return null;
         }
 
         public bool IsConfigured
@@ -49,6 +51,19 @@ namespace NzbDrone.Core.Download.Clients
         public IEnumerable<QueueItem> GetQueue()
         {
             return new QueueItem[0];
+        }
+
+        public IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        {
+            return new HistoryItem[0];
+        }
+
+        public void RemoveFromQueue(string id)
+        {
+        }
+
+        public void RemoveFromHistory(string id)
+        {
         }
     }
 }

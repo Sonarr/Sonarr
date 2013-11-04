@@ -261,6 +261,27 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoDownloadPropers", value); }
         }
 
+        public Boolean AutoRedownloadFailed
+        {
+            get { return GetValueBoolean("AutoRedownloadFailed", true); }
+
+            set { SetValue("AutoRedownloadFailed", value); }
+        }
+
+        public Boolean RemoveFailedDownloads
+        {
+            get { return GetValueBoolean("RemoveFailedDownloads", true); }
+
+            set { SetValue("RemoveFailedDownloads", value); }
+        }
+
+        public Boolean EnableFailedDownloadHandling
+        {
+            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
+
+            set { SetValue("EnableFailedDownloadHandling", value); }
+        }
+
         public string DownloadClientWorkingFolders
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }

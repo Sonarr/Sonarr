@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
@@ -21,6 +22,9 @@ namespace NzbDrone.Core.Test.ParserTests
          * [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
          * [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "", 7, new[] { 22, 23 }, 2)]
          * (Game of Thrones s03 e - "Game of Thrones Season 3 Episode 10"
+         * The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
+         * Superman.-.The.Man.of.Steel.1994-06.34.hybrid.DreamGirl-Novus-HD
+         * Superman.-.The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
          */
 
         [TestCase("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]
@@ -80,6 +84,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("(Game of Thrones s03 e - \"Game of Thrones Season 3 Episode 10\"", "Game of Thrones", 3, 10)]
         [TestCase("House.Hunters.International.S05E607.720p.hdtv.x264", "House.Hunters.International", 5, 607)]
         [TestCase("Adventure.Time.With.Finn.And.Jake.S01E20.720p.BluRay.x264-DEiMOS", "Adventure.Time.With.Finn.And.Jake", 1, 20)]
+        [TestCase("Hostages.S01E04.2-45.PM.[HDTV-720p].mkv", "Hostages", 1, 4)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -168,7 +173,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
-            result.AirDate.Should().Be(airDate);
+            result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
             result.EpisodeNumbers.Should().BeNull();
         }
 
@@ -230,6 +235,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Daily.Show", "dailyshow")]
         [TestCase("Castle (2009)", "castle2009")]
         [TestCase("Parenthood.2010", "parenthood2010")]
+        [TestCase("Law_and_Order_SVU", "lawordersvu")]
         public void series_name_normalize(string parsedSeriesName, string seriesName)
         {
             var result = parsedSeriesName.CleanSeriesTitle();

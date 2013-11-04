@@ -18,9 +18,14 @@ namespace NzbDrone.Core.History
         void Trim();
         QualityModel GetBestQualityInHistory(int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
+        List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
+        List<History> Failed();
+        List<History> Grabbed();
+        History MostRecentForEpisode(int episodeId);
+        History Get(int id);
     }
 
-    public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>
+    public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -41,6 +46,31 @@ namespace NzbDrone.Core.History
             return _historyRepository.GetPaged(pagingSpec);
         }
 
+        public List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType)
+        {
+            return _historyRepository.BetweenDates(startDate, endDate, eventType);
+        }
+
+        public List<History> Failed()
+        {
+            return _historyRepository.Failed();
+        }
+
+        public List<History> Grabbed()
+        {
+            return _historyRepository.Grabbed();
+        }
+
+        public History MostRecentForEpisode(int episodeId)
+        {
+            return _historyRepository.MostRecentForEpisode(episodeId);
+        }
+
+        public History Get(int id)
+        {
+            return _historyRepository.Get(id);
+        }
+
         public void Purge()
         {
             _historyRepository.Purge();
@@ -51,7 +81,7 @@ namespace NzbDrone.Core.History
             _historyRepository.Trim();
         }
 
-        public virtual QualityModel GetBestQualityInHistory(int episodeId)
+        public QualityModel GetBestQualityInHistory(int episodeId)
         {
             return _historyRepository.GetBestQualityInHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
         }
@@ -75,19 +105,25 @@ namespace NzbDrone.Core.History
                 history.Data.Add("ReleaseGroup", message.Episode.Release.ReleaseGroup);
                 history.Data.Add("Age", message.Episode.Release.Age.ToString());
 
+                if (!String.IsNullOrWhiteSpace(message.DownloadClientId))
+                {
+                    history.Data.Add("DownloadClient", message.DownloadClient);
+                    history.Data.Add("DownloadClientId", message.DownloadClientId);
+                }
+
                 _historyRepository.Insert(history);
             }
         }
 
         public void Handle(EpisodeImportedEvent message)
         {
-            foreach (var episode in message.DroppedEpisode.Episodes)
+            foreach (var episode in message.EpisodeInfo.Episodes)
             {
                 var history = new History
                     {
                         EventType = HistoryEventType.DownloadFolderImported,
                         Date = DateTime.UtcNow,
-                        Quality = message.DroppedEpisode.Quality,
+                        Quality = message.EpisodeInfo.Quality,
                         SourceTitle = message.ImportedEpisode.SceneName,
                         SeriesId = message.ImportedEpisode.SeriesId,
                         EpisodeId = episode.Id
@@ -95,8 +131,30 @@ namespace NzbDrone.Core.History
 
                 //Won't have a value since we publish this event before saving to DB.
                 //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
-                history.Data.Add("DroppedPath", message.DroppedEpisode.Path);
+                history.Data.Add("DroppedPath", message.EpisodeInfo.Path);
                 history.Data.Add("ImportedPath", message.ImportedEpisode.Path);
+
+                _historyRepository.Insert(history);
+            }
+        }
+
+        public void Handle(DownloadFailedEvent message)
+        {
+            foreach (var episodeId in message.EpisodeIds)
+            {
+                var history = new History
+                {
+                    EventType = HistoryEventType.DownloadFailed,
+                    Date = DateTime.UtcNow,
+                    Quality = message.Quality,
+                    SourceTitle = message.SourceTitle,
+                    SeriesId = message.SeriesId,
+                    EpisodeId = episodeId,
+                };
+
+                history.Data.Add("DownloadClient", message.DownloadClient);
+                history.Data.Add("DownloadClientId", message.DownloadClientId);
+                history.Data.Add("Message", message.Message);
 
                 _historyRepository.Insert(history);
             }

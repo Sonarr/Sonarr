@@ -14,8 +14,8 @@ namespace NzbDrone.Core.Tv
     {
         Episode GetEpisode(int id);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
-        Episode GetEpisode(int seriesId, DateTime date);
-        Episode FindEpisode(int seriesId, DateTime date);
+        Episode GetEpisode(int seriesId, String date);
+        Episode FindEpisode(int seriesId, String date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
@@ -62,12 +62,12 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
         }
 
-        public Episode GetEpisode(int seriesId, DateTime date)
+        public Episode GetEpisode(int seriesId, String date)
         {
             return _episodeRepository.Get(seriesId, date);
         }
 
-        public Episode FindEpisode(int seriesId, DateTime date)
+        public Episode FindEpisode(int seriesId, String date)
         {
             return _episodeRepository.Find(seriesId, date);
         }

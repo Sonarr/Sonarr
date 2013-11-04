@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging.Events;
@@ -40,10 +41,17 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            downloadClient.DownloadNzb(remoteEpisode);
+            var downloadClientId = downloadClient.DownloadNzb(remoteEpisode);
+            var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
+
+            if (!String.IsNullOrWhiteSpace(downloadClientId))
+            {
+                episodeGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
+                episodeGrabbedEvent.DownloadClientId = downloadClientId;
+            }
 
             _logger.ProgressInfo("Report sent to download client. {0}", downloadTitle);
-            _eventAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
+            _eventAggregator.PublishEvent(episodeGrabbedEvent);
         }
     }
 }

@@ -20,6 +20,7 @@ define(
             CloseModalCommand  : 'CloseModalCommand',
             ShowEpisodeDetails : 'ShowEpisodeDetails',
             ShowHistoryDetails : 'ShowHistoryDetails',
+            ShowLogDetails     : 'ShowLogDetails',
             SaveSettings       : 'saveSettings',
             ShowLogFile        : 'showLogFile'
         };
