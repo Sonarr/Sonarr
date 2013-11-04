@@ -99,6 +99,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_run_runtime_check_on_windows()
         {
+            WindowsOnly();
+
             GivenRuntime(120);
             GivenFileSize(1000.Megabytes());
 
@@ -110,6 +112,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_runtime_is_less_than_minimum()
         {
+            WindowsOnly();
             GivenRuntime(60);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
@@ -118,6 +121,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_true_if_runtime_greater_than_than_minimum()
         {
+            WindowsOnly();
             GivenRuntime(120);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
