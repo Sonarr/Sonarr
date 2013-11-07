@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Configuration
 
         public string SeasonFolderFormat
         {
-            get { return GetValue("SeasonFolderFormat", "Season %s"); }
+            get { return GetValue("SeasonFolderFormat", "Season {season}"); }
             set { SetValue("SeasonFolderFormat", value); }
         }
 

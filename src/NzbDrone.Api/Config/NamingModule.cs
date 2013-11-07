@@ -28,8 +28,6 @@ namespace NzbDrone.Api.Config
             Get["/samples"] = x => GetExamples(this.Bind<NamingConfigResource>());
 
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.NumberStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.Separator).Matches(@"\s|\s\-\s|\.");
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
