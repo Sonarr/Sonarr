@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using NLog;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using RestSharp;
@@ -16,10 +17,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     public class SabCommunicationProxy : ISabCommunicationProxy
     {
         private readonly IConfigService _configService;
+        private readonly Logger _logger;
 
-        public SabCommunicationProxy(IConfigService configService)
+        public SabCommunicationProxy(IConfigService configService, Logger logger)
         {
             _configService = configService;
+            _logger = logger;
         }
 
         public string DownloadNzb(Stream nzb, string title, string category, int priority)
@@ -44,7 +47,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var client = BuildClient(action);
             var response = client.Execute(restRequest);
-            
+            _logger.Trace("Response: {0}", response);
+
             CheckForError(response);
 
             return response.Content;
