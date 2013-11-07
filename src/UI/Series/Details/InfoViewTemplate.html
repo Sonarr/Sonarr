@@ -2,6 +2,12 @@
 <span class="label label-info">{{network}}</span>
 <span class="label label-info">{{runtime}} minutes</span>
 <span class="label label-info">{{path}}</span>
+{{#if_eq status compare="continuing"}}
+    <span class="label label-info">Continuing</span>
+{{else}}
+    <span class="label">Ended</span>
+{{/if_eq}}
+
 <span class="pull-right">
     <a href="{{traktUrl}}" class="label label-info">Trakt</a>
 
