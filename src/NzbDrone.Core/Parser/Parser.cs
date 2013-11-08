@@ -246,7 +246,7 @@ namespace NzbDrone.Core.Parser
                 {
                     SeasonNumber = seasons.First(),
                     EpisodeNumbers = new int[0],
-                        AbsoluteEpisodeNumbers = new int[0]
+                    AbsoluteEpisodeNumbers = new int[0]
                 };
 
                 foreach (Match matchGroup in matchCollection)
@@ -255,36 +255,31 @@ namespace NzbDrone.Core.Parser
                     var absoluteEpisodeCaptures = matchGroup.Groups["absoluteepisode"].Captures.Cast<Capture>().ToList();
 
                     //Allows use to return a list of 0 episodes (We can handle that as a full season release)
-                    var eps = episodeCaptures.Any();
-                    var epsAbs = absoluteEpisodeCaptures.Any();
-                    if (eps || epsAbs)
+                    if (episodeCaptures.Any())
                     {
-                        if (eps)
+                        var first = Convert.ToInt32(episodeCaptures.First().Value);
+                        var last = Convert.ToInt32(episodeCaptures.Last().Value);
+
+                        if (first > last)
                         {
-                            var first = Convert.ToInt32(episodeCaptures.First().Value);
-                            var last = Convert.ToInt32(episodeCaptures.Last().Value);
-
-                            if (first > last)
-                            {
-                                return null;
-                            }
-
-                            var count = last - first + 1;
-                            result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
+                            return null;
                         }
-                        if (epsAbs)
+
+                        var count = last - first + 1;
+                        result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
+                    }
+                    else if (absoluteEpisodeCaptures.Any())
+                    {
+                        var first = Convert.ToInt32(absoluteEpisodeCaptures.First().Value);
+                        var last = Convert.ToInt32(absoluteEpisodeCaptures.Last().Value);
+
+                        if (first > last)
                         {
-                            var first = Convert.ToInt32(absoluteEpisodeCaptures.First().Value);
-                            var last = Convert.ToInt32(absoluteEpisodeCaptures.Last().Value);
-
-                            if (first > last)
-                            {
-                                return null;
-                            }
-
-                            var count = last - first + 1;
-                            result.AbsoluteEpisodeNumbers = Enumerable.Range(first, count).ToArray();
+                            return null;
                         }
+
+                        var count = last - first + 1;
+                        result.AbsoluteEpisodeNumbers = Enumerable.Range(first, count).ToArray();
                     }
                     else
                     {

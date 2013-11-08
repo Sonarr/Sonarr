@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Parser.Model
 
         public bool IsAbsoluteNumbering()
         {
-            return AbsoluteEpisodeNumbers.Length > 0;
+            return AbsoluteEpisodeNumbers.Any();
         }
     }
 }
