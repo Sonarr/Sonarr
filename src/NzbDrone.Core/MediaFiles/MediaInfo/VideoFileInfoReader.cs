@@ -61,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         aBitRate = aBitRate.Remove(ABindex);
 
                     Int32.TryParse(aBitRate, out audioBitRate);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out runTime);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
 
                     string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
