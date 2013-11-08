@@ -54,6 +54,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
             _importApprovedEpisodes.Import(decisions);
+            _logger.Info("Completed scanning disk for {0}", series.Title);
         }
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var mediaFileList = filesOnDisk.Where(c => MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
-            _logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
+            _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();
         }
 
