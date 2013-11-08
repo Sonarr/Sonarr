@@ -137,11 +137,9 @@ namespace NzbDrone.Core.Parser
 
                     if (episodeInfo != null)
                     {
-                        _logger.Info("Using absolute episode number {0} for: {1} - Scene: {2}x{3:00} - TVDB: {4}x{5:00}",
+                        _logger.Info("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
                                     absoluteEpisodeNumber,
                                     series.Title,
-                                    episodeInfo.SceneSeasonNumber,
-                                    episodeInfo.SceneEpisodeNumber,
                                     episodeInfo.SeasonNumber,
                                     episodeInfo.EpisodeNumber);
                         result.Add(episodeInfo);
