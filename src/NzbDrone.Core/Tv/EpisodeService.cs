@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Tv
     {
         Episode GetEpisode(int id);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
+        Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
         Episode GetEpisode(int seriesId, String date);
         Episode FindEpisode(int seriesId, String date);
         List<Episode> GetEpisodeBySeries(int seriesId);
@@ -60,6 +61,11 @@ namespace NzbDrone.Core.Tv
                 return _episodeRepository.FindEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
             }
             return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
+        }
+
+        public Episode FindEpisode(int seriesId, int absoluteEpisodeNumber)
+        {
+            return _episodeRepository.Find(seriesId, absoluteEpisodeNumber);
         }
 
         public Episode GetEpisode(int seriesId, String date)
