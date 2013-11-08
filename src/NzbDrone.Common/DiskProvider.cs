@@ -303,24 +303,22 @@ namespace NzbDrone.Common
             {
                 var drives = DriveInfo.GetDrives();
 
-                foreach (var drive in drives)
+                try
                 {
-                    try
-                    {
-                        if (drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            return drive.AvailableFreeSpace;
-                        }
-                    }
-                    catch (InvalidOperationException e)
-                    {
-                        Logger.ErrorException("Couldn't get free space for " + path, e);
-                    }
+                    return
+                        drives.Where(drive =>
+                            drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
+                              .OrderByDescending(drive => drive.Name.Length)
+                              .First()
+                              .AvailableFreeSpace;
+                }
+                catch (InvalidOperationException e)
+                {
+                    Logger.ErrorException("Couldn't get free space for " + path, e);
                 }
 
                 return null;
             }
-
 
             return DriveFreeSpaceEx(root);
         }
