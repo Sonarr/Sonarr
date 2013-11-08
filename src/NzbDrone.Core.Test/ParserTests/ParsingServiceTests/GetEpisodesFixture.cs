@@ -38,7 +38,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             {
                 SeriesTitle = _series.Title,
                 SeasonNumber = 1,
-                EpisodeNumbers = new[] { 1 }
+                EpisodeNumbers = new[] { 1 },
+                AbsoluteEpisodeNumbers = new int[0]
             };
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
@@ -67,6 +68,11 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         private void GivenSceneNumberingSeries()
         {
             _series.UseSceneNumbering = true;
+        }
+
+        private void GivenAbsoluteNumberingSeries()
+        {
+            _parsedEpisodeInfo.AbsoluteEpisodeNumbers = new[] { 1 };
         }
 
         [Test]
@@ -103,6 +109,17 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<IEpisodeService>()
                 .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<String>()), Times.Once());
+        }
+
+        [Test]
+        public void should_use_search_criteria_episode_when_it_matches_absolute()
+        {
+            GivenAbsoluteNumberingSeries();
+
+            Subject.Map(_parsedEpisodeInfo, _series.TvRageId, _singleEpisodeSearchCriteria);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<String>()), Times.Never());
         }
 
         [Test]

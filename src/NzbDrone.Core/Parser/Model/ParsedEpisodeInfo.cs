@@ -40,5 +40,10 @@ namespace NzbDrone.Core.Parser.Model
         {
             return !String.IsNullOrWhiteSpace(AirDate);
         }
+
+        public bool IsAbsoluteNumbering()
+        {
+            return AbsoluteEpisodeNumbers.Length > 0;
+        }
     }
 }
