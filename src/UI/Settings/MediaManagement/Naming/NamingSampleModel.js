@@ -6,5 +6,4 @@ define(
         return  Backbone.Model.extend({
             url: window.NzbDrone.ApiRoot + '/config/naming/samples'
         });
-
     });

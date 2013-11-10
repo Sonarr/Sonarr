@@ -1,10 +1,11 @@
 ﻿'use strict';
 define(
     [
+        'vent',
         'marionette',
         'Settings/MediaManagement/Naming/NamingSampleModel',
         'Mixins/AsModelBoundView'
-    ], function (Marionette, NamingSampleModel, AsModelBoundView) {
+    ], function (vent, Marionette, NamingSampleModel, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
@@ -13,11 +14,13 @@ define(
                 namingOptions         : '.x-naming-options',
                 renameEpisodesCheckbox: '.x-rename-episodes',
                 singleEpisodeExample  : '.x-single-episode-example',
-                multiEpisodeExample   : '.x-multi-episode-example'
+                multiEpisodeExample   : '.x-multi-episode-example',
+                dailyEpisodeExample   : '.x-daily-episode-example'
             },
 
             events: {
-                'change .x-rename-episodes': '_setFailedDownloadOptionsVisibility'
+                'change .x-rename-episodes': '_setFailedDownloadOptionsVisibility',
+                'click .x-show-wizard'     : '_showWizard'
             },
 
             onRender: function () {
@@ -50,6 +53,11 @@ define(
             _showSamples: function () {
                 this.ui.singleEpisodeExample.html(this.namingSampleModel.get('singleEpisodeExample'));
                 this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
+                this.ui.dailyEpisodeExample.html(this.namingSampleModel.get('dailyEpisodeExample'));
+            },
+
+            _showWizard: function () {
+                vent.trigger(vent.Commands.ShowNamingWizard, { model: this.model });
             }
         });
 

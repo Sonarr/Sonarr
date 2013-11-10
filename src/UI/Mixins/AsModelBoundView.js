@@ -19,7 +19,11 @@ define(
                     this._modelBinder = new ModelBinder();
                 }
 
-                this._modelBinder.bind(this.model, this.el);
+                var options = {
+                    changeTriggers: {'': 'change', '[contenteditable]': 'blur', '[data-onkeyup]': 'keyup'}
+                };
+
+                this._modelBinder.bind(this.model, this.el, null, options);
 
                 if (originalOnRender) {
                     originalOnRender.call(this);

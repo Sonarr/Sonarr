@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         //Output settings
                         var seriesTitlePattern = "";
                         var episodeTitlePattern = "";
-                        var dailyEpisodePattern = "{Air Date}";
+                        var dailyEpisodePattern = "{Air-Date}";
                         var qualityFormat = " [{Quality Title}]";
 
                         if (includeSeriesTitle)
@@ -59,11 +59,6 @@ namespace NzbDrone.Core.Datastore.Migration
                             {
                                 episodeTitlePattern = separator + "{Episode.Title}";
                             }
-                        }
-
-                        if (replaceSpaces)
-                        {
-                            dailyEpisodePattern = "{Air.Date}";
                         }
 
                         var standardEpisodeFormat = String.Format("{0}{1}{2}", seriesTitlePattern,

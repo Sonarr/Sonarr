@@ -96,6 +96,16 @@ namespace NzbDrone.Core.Organizer
                 return episodeFile.SceneName;
             }
 
+            if (String.IsNullOrWhiteSpace(nameSpec.StandardEpisodeFormat) && series.SeriesType == SeriesTypes.Standard)
+            {
+                throw new NamingFormatException("Standard episode format cannot be null");
+            }
+
+            if (String.IsNullOrWhiteSpace(nameSpec.DailyEpisodeFormat) && series.SeriesType == SeriesTypes.Daily)
+            {
+                throw new NamingFormatException("Daily episode format cannot be null");
+            }
+
             var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber).ToList();
             var pattern = nameSpec.StandardEpisodeFormat;
             var episodeTitles = new List<string>
@@ -112,7 +122,7 @@ namespace NzbDrone.Core.Organizer
 
                 if (!String.IsNullOrWhiteSpace(episodes.First().AirDate))
                 {
-                    tokenValues.Add("{Air Date}", episodes.First().AirDate);
+                    tokenValues.Add("{Air Date}", episodes.First().AirDate.Replace('-', ' '));
                 }
 
                 else {
@@ -218,8 +228,9 @@ namespace NzbDrone.Core.Organizer
         {
             var separator = match.Groups["separator"].Value;
             var token = match.Groups["token"].Value;
-            var replacementText = tokenValues[token];
+            var replacementText = "";
             var patternTokenArray = token.ToCharArray();
+            if (!tokenValues.TryGetValue(token, out replacementText)) return null;
 
             if (patternTokenArray.All(t => !char.IsLetter(t) || char.IsLower(t)))
             {

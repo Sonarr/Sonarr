@@ -10,10 +10,10 @@ namespace NzbDrone.Core.Organizer
             {
                 return new NamingConfig
                     {
-                        RenameEpisodes = true,
+                        RenameEpisodes = false,
                         MultiEpisodeStyle = 0,
-                        StandardEpisodeFormat = "{Series Title} - {season}x{0episode} - {Episode Title} {Quality Title}",
-                        DailyEpisodeFormat = "{Series Title} - {Air Date} - {Episode Title} {Quality Title}"
+                        StandardEpisodeFormat = "",
+                        DailyEpisodeFormat = ""
                     };
             }
         }

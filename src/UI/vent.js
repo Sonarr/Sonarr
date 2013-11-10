@@ -23,7 +23,8 @@ define(
             ShowHistoryDetails : 'ShowHistoryDetails',
             ShowLogDetails     : 'ShowLogDetails',
             SaveSettings       : 'saveSettings',
-            ShowLogFile        : 'showLogFile'
+            ShowLogFile        : 'showLogFile',
+            ShowNamingWizard   : 'showNamingWizard'
         };
 
         return vent;

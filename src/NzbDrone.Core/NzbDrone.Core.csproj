@@ -325,6 +325,7 @@
     <Compile Include="Notifications\Xbmc\Model\XbmcJsonResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcVersion.cs" />
     <Compile Include="Organizer\EpisodeFormat.cs" />
+    <Compile Include="Organizer\Exception.cs" />
     <Compile Include="Organizer\FilenameBuilderTokenEqualityComparer.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
     <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
