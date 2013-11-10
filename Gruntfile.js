@@ -105,52 +105,26 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            index  : {
+            content: {
                 cwd   : srcRoot,
                 expand: true,
-                src   : '*ndex.html',
+                src   : [
+                            'index.html',
+                            '**/*.css',
+                            '**/*.png',
+                            '**/*.jpg',
+                            '**/*.ico',
+                            '**/FontAwesome/*.*',
+                            '**/fonts/*.*'
+                        ],
                 dest  : outputDir
             },
             scripts: {
                 cwd   : srcRoot,
                 expand: true,
-                src   : '**/*.js',
-                dest  : outputDir
-            },
-            styles : {
-                cwd   : srcRoot,
-                expand: true,
-                src   : '**/*.css',
-                dest  : outputDir
-            },
-            images : {
-                cwd   : srcRoot,
-                expand: true,
-                src   : '**/*.png',
-                dest  : outputDir
-            },
-            jpg : {
-                cwd   : srcRoot,
-                expand: true,
-                src   : '**/*.jpg',
-                dest  : outputDir
-            },
-            icon : {
-                cwd   : srcRoot,
-                expand: true,
-                src   : '**/*.ico',
-                dest  : outputDir
-            },
-            fontAwesome  : {
-                cwd   : srcRoot,
-                expand: true,
-                src   : '**/FontAwesome/*.*',
-                dest  : outputDir
-            },
-            fonts  : {
-                cwd   : srcRoot,
-                expand: true,
-                src   : '**/fonts/*.*',
+                src   : [
+                            '**/*.js',
+                        ],
                 dest  : outputDir
             }
         },
@@ -158,16 +132,17 @@ module.exports = function (grunt) {
         requirejs: {
             compile:{
                 options: {
-                    mainConfigFile: "_output/UI/app.js",
+                    mainConfigFile: "src/UI/app.js",
                     fileExclusionRegExp: /^.*\.(?!js$)[^.]+$/,
-                    preserveLicenseComments: true,
-                    dir: "rjs/",
+                    preserveLicenseComments: false,
+                    dir: outputDir,
                     optimize: 'none',
                     removeCombined: true,
                     inlineText: false,
+                    keepBuildDir : true,
                     modules: [{
                         name: 'app',
-                        exclude: ['JsLibraries/jquery']
+                        exclude: ['JsLibraries/jquery', 'templates.js']
                     }],
 
                 }
@@ -190,37 +165,13 @@ module.exports = function (grunt) {
                 files: '<%= handlebars.files.src %>',
                 tasks: ['handlebars']
             },
-            copyIndex  : {
-                files: '<%= copy.index.cwd %><%= copy.index.src %>',
-                tasks: ['copy:index']
+            copyContent  : {
+                files: '<%= copy.content.cwd %><%= copy.content.src %>',
+                tasks: ['copy:content']
             },
             copyScripts: {
                 files: '<%= copy.scripts.cwd %><%= copy.scripts.src %>',
                 tasks: ['copy:scripts']
-            },
-            copyStyles : {
-                files: '<%= copy.styles.cwd %><%= copy.styles.src %>',
-                tasks: ['copy:styles']
-            },
-            copyImages : {
-                files: '<%= copy.images.cwd %><%= copy.images.src %>',
-                tasks: ['copy:images']
-            },
-            copyJpg : {
-                files: '<%= copy.jpg.cwd %><%= copy.jpg.src %>',
-                tasks: ['copy:jpg']
-            },
-            copyIcon : {
-                files: '<%= copy.icon.cwd %><%= copy.icon.src %>',
-                tasks: ['copy:icon']
-            },
-            copyFontAwesome  : {
-                files: '<%= copy.fontAwesome.cwd %><%= copy.fontAwesome.src %>',
-                tasks: ['copy:fontAwesome']
-            },
-            copyFonts  : {
-                files: '<%= copy.fonts.cwd %><%= copy.fonts.src %>',
-                tasks: ['copy:fonts']
             }
         }
     });
@@ -234,7 +185,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-curl');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    grunt.registerTask('package', ['clean:output', 'copy', 'less', 'handlebars']);
+    grunt.registerTask('package', ['clean:output','handlebars', 'copy', 'less']);
+    grunt.registerTask('packagerjs', ['clean:output','handlebars', 'requirejs', 'copy:content', 'less']);
     grunt.registerTask('default', ['package', 'watch']); 
     grunt.registerTask('update', ['curl']);
 

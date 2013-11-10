@@ -21,13 +21,18 @@ require.config({
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
-        'jquery'              : 'JsLibraries/jquery',
+        'jquery'              : 'jquery/jquery.shim',
         'libs'                : 'JsLibraries/',
 
         'api': 'Require/require.api'
     },
 
     shim: {
+
+
+        jquery :{
+          exports: '$'
+        },
 
         signalR: {
             deps:
@@ -74,14 +79,6 @@ require.config({
                 ],
 
             exports: 'Backbone'
-        },
-
-
-        'backbone.deepmodel': {
-            deps:
-                [
-                    'Mixins/underscore.mixin.deepExtend'
-                ]
         },
 
         'backbone.validation': {
