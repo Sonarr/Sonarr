@@ -39,7 +39,25 @@
             <label class="control-label">Standard Episode Format</label>
 
             <div class="controls">
-                <input type="text" class="naming-format" name="standardEpisodeFormat" data-onkeyup="true" />
+                <div class="input-append x-helper-input">
+                    <input type="text" class="naming-format" name="standardEpisodeFormat" data-onkeyup="true" />
+                    <div class="btn-group x-naming-token-helper">
+                        <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-plus"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{> SeriesTitleNamingPartial}}
+                            {{> SeasonNamingPartial}}
+                            {{> EpisodeNamingPartial}}
+                            {{> EpisodeTitleNamingPartial}}
+                            {{> QualityTitleNamingPartial}}
+                            {{> SeparatorNamingPartial}}
+                        </ul>
+                    </div>
+                </div>
+                <span class="help-inline">
+                    <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
+                </span>
             </div>
         </div>
 
@@ -47,7 +65,26 @@
             <label class="control-label">Daily Episode Format</label>
 
             <div class="controls">
-                <input type="text" class="naming-format" name="dailyEpisodeFormat" data-onkeyup="true" />
+                <div class="input-append x-helper-input">
+                    <input type="text" class="naming-format" name="dailyEpisodeFormat" data-onkeyup="true" />
+                    <div class="btn-group x-naming-token-helper">
+                        <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-plus"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{> SeriesTitleNamingPartial}}
+                            {{> AirDateNamingPartial}}
+                            {{> SeasonNamingPartial}}
+                            {{> EpisodeNamingPartial}}
+                            {{> EpisodeTitleNamingPartial}}
+                            {{> QualityTitleNamingPartial}}
+                            {{> SeparatorNamingPartial}}
+                        </ul>
+                    </div>
+                </div>
+                <span class="help-inline">
+                    <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
+                </span>
             </div>
         </div>
     </div>
