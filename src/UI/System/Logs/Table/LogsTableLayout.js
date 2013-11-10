@@ -58,8 +58,8 @@ define(
 
             initialize: function () {
                 this.collection = new LogCollection();
-                this.collectionPromise = this.collection.fetch();
 
+                this.listenTo(this.collection, 'sync', this._showTable);
                 vent.on(vent.Events.CommandComplete, this._commandComplete, this);
             },
 
@@ -68,12 +68,7 @@ define(
             },
 
             onShow: function () {
-                var self = this;
                 this._showToolbar();
-
-                this.collectionPromise.done(function () {
-                    self._showTable();
-                });
             },
 
             _showTable: function () {
