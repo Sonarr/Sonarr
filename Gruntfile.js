@@ -207,8 +207,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('package', ['clean:output','handlebars', 'copy', 'less']);
-    grunt.registerTask('packagerjs', ['clean:output','handlebars', 'requirejs', 'copy:content', 'less']);
+    grunt.registerTask('package', ['clean:output', 'jshint', 'handlebars', 'copy', 'less']);
+    grunt.registerTask('packagerjs', ['clean:output','jshint', 'handlebars', 'requirejs', 'copy:content', 'less']);
     grunt.registerTask('default', ['package', 'watch']); 
     grunt.registerTask('update', ['curl']);
 
