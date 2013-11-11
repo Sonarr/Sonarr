@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,29 +17,25 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex[] ReportTitleRegex = new[]
             {
-                //Anime - Absolute Episode Number + Title + Season+Episode
-                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                //Anime - [SubGroup] Title Absolute Episode Number + Season+Episode
-                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))?(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                //Anime - [SubGroup] Title Season+Episode + Absolute Episode Number
-                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))?(?<title>.+?)(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)(?:_|\s|\.)(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.|$)+)+",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                //Anime - [SubGroup] Title Absolute Episode Number
-                new Regex(@"^\[(?<subgroup>.+?)\](?:_|-|\s|\.)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,}))+",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                //Anime - Title Absolute Episode Number [SubGroup] 
-                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:.+?)\[(?<subgroup>.+?)\](?:\.|$)",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                 //Episodes with airdate
                 new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - Absolute Episode Number + Title + Season+Episode
+                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - [SubGroup] Title Absolute Episode Number + Season+Episode
+                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))?(?<title>.+?)(?:(?:\W|_)+(?<absoluteepisode>\d{2,3}))+(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - [SubGroup] Title Season+Episode + Absolute Episode Number
+                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))?(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)(?:\s|\.)(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.|$)+)+",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - [SubGroup] Title Absolute Episode Number
+                new Regex(@"^\[(?<subgroup>.+?)\](?:_|-|\s|\.)?(?<title>.+?)(?:(?:\W|_)+(?<absoluteepisode>\d{2,}))+",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-Part episodes without a title (S01E05.S01E06)
                 new Regex(@"^(?:\W*S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}(\W+|_|$)(?!\\)",
@@ -64,6 +61,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{1}))+)+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Anime - Title Absolute Episode Number [SubGroup] 
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:.+?)\[(?<subgroup>.+?)\](?:\.|$)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Supports 103/113 naming
                 new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)\d{1})(?<episode>\d{2}(?!p|i|\d+)))+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -82,7 +83,11 @@ namespace NzbDrone.Core.Parser
 
                 //Supports Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - Title Absolute Episode Number
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+e(?<absoluteepisode>\d{2,3}))+",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
             };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((^|\W|_)(a|an|the|and|or|of)($|\W|_))|\W|_|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
@@ -134,6 +139,7 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
+                        Debug.WriteLine(regex);
                         try
                         {
                             var result = ParseMatchCollection(match);
@@ -268,7 +274,8 @@ namespace NzbDrone.Core.Parser
                         var count = last - first + 1;
                         result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
                     }
-                    else if (absoluteEpisodeCaptures.Any())
+
+                    if (absoluteEpisodeCaptures.Any())
                     {
                         var first = Convert.ToInt32(absoluteEpisodeCaptures.First().Value);
                         var last = Convert.ToInt32(absoluteEpisodeCaptures.Last().Value);
