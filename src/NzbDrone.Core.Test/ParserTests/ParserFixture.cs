@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
-            result.EpisodeNumbers.Should().BeNull();
+            result.EpisodeNumbers.Should().BeEmpty();
         }
 
         [TestCase("[SubDESU]_High_School_DxD_07_(1280x720_x264-AAC)_[6B7FD717]", "High School DxD", 7, 0, 0)]
