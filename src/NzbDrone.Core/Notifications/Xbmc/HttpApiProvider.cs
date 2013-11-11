@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 return String.Empty;
 
             var xDoc = XDocument.Load(new StringReader(response.Replace("&", "&amp;")));
-            var xml = (from x in xDoc.Descendants("xml") select x).FirstOrDefault();
+            var xml = xDoc.Descendants("xml").Select(x => x).FirstOrDefault();
 
             if (xml == null)
                 return null;

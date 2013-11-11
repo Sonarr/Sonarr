@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
@@ -56,7 +57,7 @@ namespace NzbDrone.Integration.Test
                     Assert.Fail("Process has exited");
                 }
 
-                ApiKey = GetApiKey();
+                SetApiKey();
 
                 var request = new RestRequest("system/status");
                 request.AddHeader("Authorization", ApiKey);
@@ -98,16 +99,23 @@ namespace NzbDrone.Integration.Test
             }
         }
 
-        private string GetApiKey()
+        private void SetApiKey()
         {
             var configFile = Path.Combine(AppData, "config.xml");
 
-            if (!String.IsNullOrWhiteSpace(ApiKey)) return ApiKey;
-            if (!File.Exists(configFile)) return null;
-
-            var xDoc = XDocument.Load(configFile);
-            var config = xDoc.Descendants(ConfigFileProvider.CONFIG_ELEMENT_NAME).Single();
-            return config.Descendants("ApiKey").Single().Value;
+            while (ApiKey == null)
+            {
+                if (File.Exists(configFile))
+                {
+                    var apiKeyElement =  XDocument.Load(configFile)
+                        .XPathSelectElement("Config/ApiKey");
+                    if (apiKeyElement != null)
+                    {
+                        ApiKey = apiKeyElement.Value;
+                    }
+                }
+                Thread.Sleep(1000);
+            }
         }
     }
 }
