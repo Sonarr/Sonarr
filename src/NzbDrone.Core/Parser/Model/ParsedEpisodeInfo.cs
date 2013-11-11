@@ -14,8 +14,23 @@ namespace NzbDrone.Core.Parser.Model
         public int[] AbsoluteEpisodeNumbers { get; set; }
         public String AirDate { get; set; }
         public Language Language { get; set; }
-        
         public bool FullSeason { get; set; }
+
+        public ParsedEpisodeInfo()
+        {
+            EpisodeNumbers = new int[0];
+            AbsoluteEpisodeNumbers = new int[0];
+        }
+
+        public bool IsDaily()
+        {
+            return !String.IsNullOrWhiteSpace(AirDate);
+        }
+
+        public bool IsAbsoluteNumbering()
+        {
+            return AbsoluteEpisodeNumbers.Any();
+        }
 
         public override string ToString()
         {
@@ -35,16 +50,6 @@ namespace NzbDrone.Core.Parser.Model
             }
 
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
-        }
-
-        public bool IsDaily()
-        {
-            return !String.IsNullOrWhiteSpace(AirDate);
-        }
-
-        public bool IsAbsoluteNumbering()
-        {
-            return AbsoluteEpisodeNumbers.Any();
         }
     }
 }
