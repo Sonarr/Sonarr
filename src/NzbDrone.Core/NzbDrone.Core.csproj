@@ -186,7 +186,7 @@
     </Compile>
     <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\029_add_formats_to_naming_config.cs" />
-    <Compile Include="Datastore\Migration\030_update_series_folder_format.cs" />
+    <Compile Include="Datastore\Migration\030_update_season_folder_format.cs" />
     <Compile Include="Datastore\Migration\031_delete_old_naming_config_columns.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />

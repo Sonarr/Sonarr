@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (IDbCommand namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
-                namingConfigCmd.CommandText = @"SELECT * FROM Config WHERE [Key] = 'SeasonFolderFormat'";
+                namingConfigCmd.CommandText = @"SELECT * FROM Config WHERE [Key] = 'seasonfolderformat'";
                 using (IDataReader namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
                     while (namingConfigReader.Read())
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             var text = String.Format("UPDATE Config " +
                                                      "SET [VALUE] = '{0}'" +
-                                                     "WHERE [Key] = 'SeasonFolderFormat'",
+                                                     "WHERE [Key] = 'seasonfolderformat'",
                                                      value);
 
                             updateCmd.Transaction = tran;
