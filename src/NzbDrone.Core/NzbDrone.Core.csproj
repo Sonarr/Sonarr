@@ -67,9 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation, Version=4.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentValidation.4.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
