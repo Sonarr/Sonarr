@@ -140,7 +140,7 @@ define(
                 this.contents.show(new ContentsView({ model: model }));
             },
 
-            _refreshLogs: function () {
+            _refreshLogs: function (buttonContext) {
                 this.contents.close();
                 var promise = this.collection.fetch();
                 buttonContext.ui.icon.spinForPromise(promise);
