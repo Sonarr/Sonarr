@@ -10,7 +10,8 @@ define(
         'Shared/Grid/Pager',
         'System/Logs/LogsCollection',
         'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView'
+        'Shared/LoadingView',
+        'jQuery/jquery.spin'
     ], function (vent, Marionette, Backgrid, LogTimeCell, LogLevelCell, LogRow, GridPager, LogCollection, ToolbarLayout, LoadingView) {
         return Marionette.Layout.extend({
             template: 'System/Logs/Table/LogsTableLayoutTemplate',
@@ -65,6 +66,7 @@ define(
 
             onRender: function () {
                 this.grid.show(new LoadingView());
+                this.collection.fetch();
             },
 
             onShow: function () {
@@ -115,10 +117,10 @@ define(
                 }));
             },
 
-            _refreshLogs: function () {
+            _refreshLogs: function (buttonContext) {
                 this.collection.state.currentPage = 1;
-                this.collection.fetch({ reset: true });
-                this._showTable();
+                var promise = this.collection.fetch({ reset: true });
+                buttonContext.ui.icon.spinForPromise(promise);
             },
 
             _commandComplete: function (options) {
