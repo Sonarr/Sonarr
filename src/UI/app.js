@@ -21,7 +21,7 @@ require.config({
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
-        'jquery'              : 'jquery/jquery.shim',
+        'jquery'              : 'jQuery/jquery.shim',
         'libs'                : 'JsLibraries/',
 
         'api': 'Require/require.api'
