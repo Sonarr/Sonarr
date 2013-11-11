@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
@@ -41,8 +40,7 @@ namespace NzbDrone.Integration.Test
 
             if (BuildInfo.IsDebug)
             {
-
-                Start("..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+                Start("..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
             }
             else
             {
@@ -58,7 +56,7 @@ namespace NzbDrone.Integration.Test
                     Assert.Fail("Process has exited");
                 }
 
-                SetApiKey();
+                ApiKey = GetApiKey();
 
                 var request = new RestRequest("system/status");
                 request.AddHeader("Authorization", ApiKey);
@@ -100,16 +98,16 @@ namespace NzbDrone.Integration.Test
             }
         }
 
-        private void SetApiKey()
+        private string GetApiKey()
         {
             var configFile = Path.Combine(AppData, "config.xml");
 
-            if (!String.IsNullOrWhiteSpace(ApiKey)) return;
-            if (!File.Exists(configFile)) return;
+            if (!String.IsNullOrWhiteSpace(ApiKey)) return ApiKey;
+            if (!File.Exists(configFile)) return null;
 
             var xDoc = XDocument.Load(configFile);
             var config = xDoc.Descendants(ConfigFileProvider.CONFIG_ELEMENT_NAME).Single();
-            ApiKey = config.Descendants("ApiKey").Single().Value;
+            return config.Descendants("ApiKey").Single().Value;
         }
     }
 }

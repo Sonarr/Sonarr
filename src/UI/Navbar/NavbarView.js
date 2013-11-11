@@ -2,7 +2,6 @@
 define(
     [
         'marionette',
-        'Navbar/Search',
         'jquery'
     ], function (Marionette, $) {
         return Marionette.ItemView.extend({
