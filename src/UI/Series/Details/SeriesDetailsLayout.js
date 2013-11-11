@@ -1,6 +1,7 @@
 'use strict';
 define(
     [
+        'jquery',
         'vent',
         'reqres',
         'marionette',
@@ -15,7 +16,7 @@ define(
         'underscore',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function (vent,reqres, Marionette, Backbone, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView, _) {
+    ], function ($,vent,reqres, Marionette, Backbone, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView, _) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',

@@ -2,8 +2,9 @@
 
 define(
     [
-        'backgrid'
-    ], function (Backgrid) {
+        'backgrid',
+        'backbone'
+    ], function (Backgrid, Backbone) {
         return Backgrid.Cell.extend({
 
             _originalInit: Backgrid.Cell.prototype.initialize,
@@ -15,8 +16,8 @@ define(
                 this.listenTo(this.model, 'change', this._refresh);
 
                 if (this._onEdit) {
-                    this.listenTo(this.model, "backgrid:edit", function (model, column, cell, editor) {
-                        if (column.get("name") == this.column.get("name")) {
+                    this.listenTo(this.model, 'backgrid:edit', function (model, column, cell, editor) {
+                        if (column.get('name') === this.column.get('name')) {
                             this._onEdit(model, column, cell, editor);
                         }
                     });

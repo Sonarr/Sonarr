@@ -129,6 +129,27 @@ module.exports = function (grunt) {
             }
         },
 
+        jshint: {
+            options: {
+                 '-W030': false,
+                 '-W064': false,
+                 '-W097': false,
+                 '-W100': false,
+                 'undef': true,
+                 'globals': {
+                     'require': true,
+                     'define': true,
+                     'window': true,
+                     'document': true,
+                     'console': true
+                 }
+            },
+            all: [
+                srcRoot + '**/*.js',
+                '!**/JsLibraries/*.js'
+            ]
+        },
+
         requirejs: {
             compile:{
                 options: {
@@ -184,6 +205,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-curl');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.registerTask('package', ['clean:output','handlebars', 'copy', 'less']);
     grunt.registerTask('packagerjs', ['clean:output','handlebars', 'requirejs', 'copy:content', 'less']);

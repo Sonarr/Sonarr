@@ -3,8 +3,9 @@
 define(
     [
         'Cells/NzbDroneCell',
-        'Shared/FormatHelpers'
-    ], function (NzbDroneCell, FormatHelpers) {
+        'Shared/FormatHelpers',
+        'underscore'
+    ], function (NzbDroneCell, FormatHelpers, _) {
         return NzbDroneCell.extend({
 
             className: 'episode-number-cell',

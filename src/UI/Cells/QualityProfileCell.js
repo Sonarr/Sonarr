@@ -2,8 +2,9 @@
 define(
     [
         'backgrid',
-        'Quality/QualityProfileCollection'
-    ], function (Backgrid, QualityProfileCollection) {
+        'Quality/QualityProfileCollection',
+        'underscore'
+    ], function (Backgrid, QualityProfileCollection,_) {
         return Backgrid.Cell.extend({
             className: 'quality-profile-cell',
 

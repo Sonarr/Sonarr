@@ -2,8 +2,9 @@
 define(
     [
         'vent',
+        'jquery',
         'signalR'
-    ], function (vent) {
+    ], function (vent, $) {
         return {
 
             appInitializer: function () {

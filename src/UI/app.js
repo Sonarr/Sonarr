@@ -99,8 +99,8 @@ require.config({
 
             exports: 'Marionette',
             init   : function (Backbone, TemplateMixin, AsNamedView) {
-                TemplateMixin.call(Marionette.TemplateCache);
-                AsNamedView.call(Marionette.ItemView.prototype);
+                TemplateMixin.call(window.Marionette.TemplateCache);
+                AsNamedView.call(window.Marionette.ItemView.prototype);
 
             }
         },
@@ -140,7 +140,7 @@ require.config({
                         'Shared/Grid/HeaderCell'
                     ], function () {
 
-                        Backgrid.Column.prototype.defaults = {
+                        window.Backgrid.Column.prototype.defaults = {
                             name      : undefined,
                             label     : undefined,
                             sortable  : true,

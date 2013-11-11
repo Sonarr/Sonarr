@@ -51,7 +51,7 @@ define(
                     return '';
                 }
 
-                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             }
-        }
+        };
     });

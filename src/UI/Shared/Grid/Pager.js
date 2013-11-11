@@ -1,8 +1,9 @@
 'use strict';
 define(
     [
+        'marionette',
         'backgrid.paginator'
-    ], function (Paginator) {
+    ], function (Marionette, Paginator) {
 
         return Paginator.extend({
 
@@ -24,7 +25,7 @@ define(
             changePage: function (e) {
                 e.preventDefault();
 
-                var target = $(e.target);
+                var target =this.$(e.target);
 
                 if (target.closest('li').hasClass('disabled')) {
                     return;
@@ -59,7 +60,7 @@ define(
                 }
 
                 var state = collection.state;
-                var pageIndex = $(e.target).text() * 1;
+                var pageIndex = target.text();
                 collection.getPage(state.firstPage === 0 ? pageIndex - 1 :pageIndex);
             },
 

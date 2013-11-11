@@ -2,8 +2,9 @@
 define(
     [
         'backbone',
-        'AddSeries/Existing/UnmappedFolderModel'
-    ], function (Backbone, UnmappedFolderModel) {
+        'AddSeries/Existing/UnmappedFolderModel',
+        'underscore'
+    ], function (Backbone, UnmappedFolderModel,_) {
         return Backbone.Collection.extend({
             model: UnmappedFolderModel,
 

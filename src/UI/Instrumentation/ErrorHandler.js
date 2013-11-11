@@ -38,7 +38,7 @@
         return false; //don't suppress default alerts and logs.
     };
 
-    $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
+    window.$(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
 
         //don't report 200 error codes
         if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {

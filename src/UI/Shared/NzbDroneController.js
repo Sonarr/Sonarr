@@ -14,10 +14,10 @@ define(
 
             setTitle: function (title) {
                 if (title.toLocaleLowerCase() === 'nzbdrone') {
-                    window.document.title = 'NzbDrone';
+                    document.title = 'NzbDrone';
                 }
                 else {
-                    window.document.title = title + ' - NzbDrone';
+                    document.title = title + ' - NzbDrone';
                 }
             }
         });
