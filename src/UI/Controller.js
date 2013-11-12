@@ -9,7 +9,7 @@ define(
         'AddSeries/AddSeriesLayout',
         'Missing/MissingLayout',
         'Calendar/CalendarLayout',
-        'Release/Layout',
+        'Release/ReleaseLayout',
         'System/SystemLayout',
         'SeasonPass/SeasonPassLayout',
         'System/Update/UpdateLayout'
