@@ -186,11 +186,19 @@ module.exports = function (grunt) {
                 files: '<%= handlebars.files.src %>',
                 tasks: ['handlebars']
             },
-            copyContent  : {
-                files: '<%= copy.content.cwd %><%= copy.content.src %>',
+            content  : {
+                files: [
+                            '**/index.html',
+                            '**/*.css',
+                            '**/*.png',
+                            '**/*.jpg',
+                            '**/*.ico',
+                            '**/FontAwesome/*.*',
+                            '**/fonts/*.*'
+                        ],
                 tasks: ['copy:content']
             },
-            copyScripts: {
+            scripts: {
                 files: '<%= copy.scripts.cwd %><%= copy.scripts.src %>',
                 tasks: ['copy:scripts']
             }

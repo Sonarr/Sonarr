@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
-using NzbDrone.Core.Configuration;
 using RestSharp;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Test.Common
 {
     public class NzbDroneRunner
     {

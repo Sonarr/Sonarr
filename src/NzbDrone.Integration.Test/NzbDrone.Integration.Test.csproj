@@ -108,7 +108,6 @@
     <Compile Include="EpisodeIntegrationTests.cs" />
     <Compile Include="IndexerIntegrationFixture.cs" />
     <Compile Include="IntegrationTestDirectoryInfo.cs" />
-    <Compile Include="NzbDroneRunner.cs" />
     <Compile Include="QualityProfileIntegrationTest.cs" />
     <Compile Include="ReleaseIntegrationTest.cs" />
     <Compile Include="IntegrationTest.cs" />

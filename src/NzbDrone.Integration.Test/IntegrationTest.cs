@@ -8,6 +8,7 @@ using NzbDrone.Api.History;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Integration.Test.Client;
+using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 using RestSharp;
 
