@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using NLog;
 using NLog.Config;
@@ -10,6 +11,8 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 
 namespace NzbDrone.Automation.Test
@@ -19,7 +22,7 @@ namespace NzbDrone.Automation.Test
     public abstract class AutomationTest
     {
         private NzbDroneRunner _runner;
-        protected FirefoxDriver driver;
+        protected RemoteWebDriver driver;
 
         public AutomationTest()
         {
@@ -31,7 +34,7 @@ namespace NzbDrone.Automation.Test
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
         }
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void SmokeTestSetup()
         {
             driver = new FirefoxDriver();
@@ -57,22 +60,18 @@ namespace NzbDrone.Automation.Test
                 .Select(e => e.Text);
         }
 
-        [TearDown]
+        [TestFixtureTearDown]
         public void SmokeTestTearDown()
         {
             _runner.KillAll();
-            //driver.Quit();
+            driver.Quit();
         }
-    }
 
-    [TestFixture]
-    public class MyAutoTest : AutomationTest
-    {
-        [Test]
-        public void Test1()
+        [TearDown]
+        public void AutomationTearDown()
         {
-
+            Thread.Sleep(2000);
+            GetPageErrors().Should().BeEmpty();
         }
     }
-
 }
