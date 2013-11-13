@@ -121,10 +121,17 @@ namespace NzbDrone.Integration.Test
                 }
             });
 
+            var retryCount = 0;
 
             while (_signalrConnection.State != ConnectionState.Connected)
             {
-                Console.WriteLine("Connecting to signalR" +  _signalrConnection.State);
+                if (retryCount > 25)
+                {
+                    Assert.Fail("Couldn't establish signalr connection. State: {0}", _signalrConnection.State);
+                }
+
+                retryCount++;
+                Console.WriteLine("Connecting to signalR" + _signalrConnection.State);
                 Thread.Sleep(200);
             }
 
