@@ -301,16 +301,9 @@ namespace NzbDrone.Common
 
             if (OsInfo.IsLinux)
             {
-                var drives = DriveInfo.GetDrives();
-
                 try
                 {
-                    return
-                        drives.Where(drive =>
-                            drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
-                              .OrderByDescending(drive => drive.Name.Length)
-                              .First()
-                              .AvailableFreeSpace;
+                    return GetDriveInfoLinux(path).AvailableFreeSpace;
                 }
                 catch (InvalidOperationException e)
                 {
@@ -469,26 +462,17 @@ namespace NzbDrone.Common
 
             if (OsInfo.IsLinux)
             {
-                var drives = DriveInfo.GetDrives();
-
-                foreach (var drive in drives)
+                try
                 {
-                    try
-                    {
-                        if (drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            return drive.TotalSize;
-                        }
-                    }
-                    catch (InvalidOperationException e)
-                    {
-                        Logger.ErrorException("Couldn't get total space for " + path, e);
-                    }
+                    return GetDriveInfoLinux(path).TotalFreeSpace;
+                }
+                catch (InvalidOperationException e)
+                {
+                    Logger.ErrorException("Couldn't get total space for " + path, e);
                 }
 
                 return null;
             }
-
 
             return DriveTotalSizeEx(root);
         }
@@ -551,6 +535,17 @@ namespace NzbDrone.Common
             }
 
             return 0;
+        }
+
+        private DriveInfo GetDriveInfoLinux(string path)
+        {
+            var drives = DriveInfo.GetDrives();
+
+            return
+                drives.Where(drive =>
+                    drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
+                    .OrderByDescending(drive => drive.Name.Length)
+                    .First();
         }
     }
 }
