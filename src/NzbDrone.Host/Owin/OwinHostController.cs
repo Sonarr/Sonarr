@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -72,11 +72,11 @@ namespace NzbDrone.Host.Owin
 
             try
             {
-
-                // options.ServerFactory = new 
+            	// options.ServerFactory = new 
                 //_host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
-                _host = WebApp.Start(options, BuildApp);
-
+                //_host = WebApp.Start(options, BuildApp);
+                
+                _host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
             }
             catch (TargetInvocationException ex)
             {
