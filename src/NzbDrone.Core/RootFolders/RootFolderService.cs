@@ -30,7 +30,7 @@ namespace NzbDrone.Core.RootFolders
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
 
-        private static readonly HashSet<string> SpecialFolders = new HashSet<string> { "$recycle.bin", "system volume information", "recycler" };
+        private static readonly HashSet<string> SpecialFolders = new HashSet<string> { "$recycle.bin", "system volume information", "recycler", "lost+found" };
 
 
         public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository,

@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
             Mocker.GetMock<IBasicRepository<RootFolder>>().Verify(c => c.Delete(1), Times.Once());
         }
 
+        [Test]
         public void None_existing_folder_returns_empty_list()
         {
             WithNoneExistingFolder();
