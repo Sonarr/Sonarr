@@ -39,48 +39,48 @@ define(
                     vent.trigger('server:' + message.name, message.body);
                 });
 
-                this.signalRconnection.reconnecting(function() {
-                    tryingToReconnect = true;
-
-                    Messenger.show({
-                        id        : messengerId,
-                        type      : 'info',
-                        hideAfter : 0,
-                        message   : 'Connection to backend lost, attempting to reconnect'
-                    });
-                });
-
-                this.signalRconnection.reconnected(function() {
-                    tryingToReconnect = false;
-
-                    Messenger.show({
-                        id        : messengerId,
-                        type      : 'success',
-                        hideAfter : 5,
-                        message   : 'Connection to backend restored'
-                    });
-                });
-
-                this.signalRconnection.disconnected(function () {
-                    if (tryingToReconnect) {
-                        $('<div class="modal-backdrop"></div>').appendTo(document.body);
-
-                        Messenger.show({
-                            id        : messengerId,
-                            type      : 'error',
-                            hideAfter : 0,
-                            message   : 'Connection to backend lost',
-                            actions   : {
-                                cancel: {
-                                    label: 'Reload',
-                                    action: function() {
-                                        window.location.reload();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+//                this.signalRconnection.reconnecting(function() {
+//                    tryingToReconnect = true;
+//
+//                    Messenger.show({
+//                        id        : messengerId,
+//                        type      : 'info',
+//                        hideAfter : 0,
+//                        message   : 'Connection to backend lost, attempting to reconnect'
+//                    });
+//                });
+//
+//                this.signalRconnection.reconnected(function() {
+//                    tryingToReconnect = false;
+//
+//                    Messenger.show({
+//                        id        : messengerId,
+//                        type      : 'success',
+//                        hideAfter : 5,
+//                        message   : 'Connection to backend restored'
+//                    });
+//                });
+//
+//                this.signalRconnection.disconnected(function () {
+//                    if (tryingToReconnect) {
+//                        $('<div class="modal-backdrop"></div>').appendTo(document.body);
+//
+//                        Messenger.show({
+//                            id        : messengerId,
+//                            type      : 'error',
+//                            hideAfter : 0,
+//                            message   : 'Connection to backend lost',
+//                            actions   : {
+//                                cancel: {
+//                                    label: 'Reload',
+//                                    action: function() {
+//                                        window.location.reload();
+//                                    }
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
 
                 this.signalRconnection.start({ transport:
                     [
