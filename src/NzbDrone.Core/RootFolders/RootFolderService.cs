@@ -25,7 +25,7 @@ namespace NzbDrone.Core.RootFolders
     public class RootFolderService : IRootFolderService
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger();
-        private readonly IBasicRepository<RootFolder> _rootFolderRepository;
+        private readonly IRootFolderRepository _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.RootFolders
         private static readonly HashSet<string> SpecialFolders = new HashSet<string> { "$recycle.bin", "system volume information", "recycler", "lost+found" };
 
 
-        public RootFolderService(IBasicRepository<RootFolder> rootFolderRepository,
+        public RootFolderService(IRootFolderRepository rootFolderRepository,
                                  IDiskProvider diskProvider,
                                  ISeriesRepository seriesRepository,
                                  IConfigService configService)

@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Validation;
 
 namespace NzbDrone.Api.RootFolders
 {
-    public class RootFolderModule : NzbDroneRestModule<RootFolderResource>
+    public class RootFolderModule : NzbDroneRestModuleWithSignalR<RootFolderResource, RootFolder>
     {
         private readonly IRootFolderService _rootFolderService;
 
-        public RootFolderModule(IRootFolderService rootFolderService)
+        public RootFolderModule(IRootFolderService rootFolderService, ICommandExecutor commandExecutor)
+            : base(commandExecutor)
         {
             _rootFolderService = rootFolderService;
 
@@ -18,7 +20,7 @@ namespace NzbDrone.Api.RootFolders
             CreateResource = CreateRootFolder;
             DeleteResource = DeleteFolder;
 
-            SharedValidator.RuleFor(c=>c.Path).IsValidPath();
+            SharedValidator.RuleFor(c => c.Path).IsValidPath();
         }
 
         private RootFolderResource GetRootFolder(int id)
