@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                           .With(e => e.SeasonNumber = 1)
                                           .With(e => e.SceneSeasonNumber = 2)
                                           .With(e => e.EpisodeNumber = 3)
+                                          .With(e => e.AbsoluteEpisodeNumber = 3)
                                           .With(e => e.SceneEpisodeNumber = 4)
                                           .Build();
 
@@ -50,6 +51,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             Subject.Find(_episode.SeriesId, _episode.SeasonNumber + 1, _episode.EpisodeNumber)
                    .Should()
                    .BeNull();
+        }
+
+        [Test]
+        public void should_find_episode_by_absolute_numbering()
+        {
+            Subject.Find(_episode.SeriesId, _episode.AbsoluteEpisodeNumber.Value)
+                .Id
+                .Should()
+                .Be(_episode.Id);
         }
     }
 }

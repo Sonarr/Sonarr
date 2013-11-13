@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Tv
     public interface IEpisodeRepository : IBasicRepository<Episode>
     {
         Episode Find(int seriesId, int season, int episodeNumber);
+        Episode Find(int seriesId, int absoluteEpisodeNumber);
         Episode Get(int seriesId, String date);
         Episode Find(int seriesId, String date);
         List<Episode> GetEpisodes(int seriesId);
@@ -37,6 +38,11 @@ namespace NzbDrone.Core.Tv
         public Episode Find(int seriesId, int season, int episodeNumber)
         {
             return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == season && s.EpisodeNumber == episodeNumber);
+        }
+
+        public Episode Find(int seriesId, int absoluteEpisodeNumber)
+        {
+            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.AbsoluteEpisodeNumber == absoluteEpisodeNumber);
         }
 
         public Episode Get(int seriesId, String date)
