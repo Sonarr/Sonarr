@@ -6,6 +6,8 @@ $testSearchPattern = '*.Test\bin\x86\Release'
 
 Function Build()
 {
+    Write-Host "##teamcity[progressStart 'Build']"
+
     $clean = $msbuild + " src\nzbdrone.sln /t:Clean /m"
     $build = $msbuild + " src\nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
     
@@ -23,6 +25,8 @@ Function Build()
     CleanFolder $outputFolder
 
     AddJsonNet
+
+    Write-Host "##teamcity[progressFinish 'Build']"    
 }
 
 Function CleanFolder($path)
@@ -53,6 +57,8 @@ Function CleanFolder($path)
 
 Function PackageMono()
 {
+    Write-Host "##teamcity[progressStart 'Creating Mono Package']"
+
     if(Test-Path $outputFolderMono)
     {
         Remove-Item -Recurse -Force $outputFolderMono -ErrorAction Continue
@@ -77,6 +83,8 @@ Function PackageMono()
     Write-Host Renaming NzbDrone.Console.exe to NzbDrone.exe
     get-childitem $outputFolderMono -File -Filter NzbDrone.exe -Recurse  | foreach ($_) {remove-item $_.fullname}
     Rename-Item "$outputFolderMono\NzbDrone.Console.exe" "NzbDrone.exe"
+
+    Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
 }
 
 
@@ -89,7 +97,9 @@ Function AddJsonNet()
 
 Function PackageTests()
 {
+
     Write-Host Packaging Tests
+    Write-Host "##teamcity[progressStart 'Creating Mono Package']"
   
     if(Test-Path $testPackageFolder)
     {
@@ -111,17 +121,22 @@ Function PackageTests()
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 
     CleanFolder $testPackageFolder
+
+    Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
 }
 
 
 Function RunGrunt()
 {
+   Write-Host "##teamcity[progressStart 'Running Grunt']"
    $gruntPath = [environment]::getfolderpath("applicationdata") + '\npm\node_modules\grunt-cli\bin\grunt'
    Invoke-Expression  'npm install'
    CheckExitCode
     
    Invoke-Expression  ('node ' + $gruntPath + ' package')
    CheckExitCode
+
+   Write-Host "##teamcity[progressFinish 'Running Grunt']"
 }
 
 Function CheckExitCode()
