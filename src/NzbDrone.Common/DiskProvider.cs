@@ -464,7 +464,7 @@ namespace NzbDrone.Common
             {
                 try
                 {
-                    return GetDriveInfoLinux(path).TotalFreeSpace;
+                    return GetDriveInfoLinux(path).TotalSize;
                 }
                 catch (InvalidOperationException e)
                 {
