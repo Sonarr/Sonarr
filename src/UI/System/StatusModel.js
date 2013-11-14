@@ -8,7 +8,6 @@ define(
             url: window.NzbDrone.ApiRoot + '/system/status'
         });
 
-
         var instance = new StatusModel();
         instance.fetch();
         return instance;

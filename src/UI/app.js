@@ -191,7 +191,8 @@ define(
         'Series/SeriesController',
         'Router',
         'Shared/Modal/Controller',
-        'Instrumentation/StringFormat'
+        'Instrumentation/StringFormat',
+        'LifeCycle'
     ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController) {
 
         new SeriesController();
