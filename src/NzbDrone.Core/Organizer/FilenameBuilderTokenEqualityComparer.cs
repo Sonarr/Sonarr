@@ -6,7 +6,14 @@ namespace NzbDrone.Core.Organizer
 {
     public class FilenameBuilderTokenEqualityComparer : IEqualityComparer<String>
     {
+        public static readonly FilenameBuilderTokenEqualityComparer Instance = new FilenameBuilderTokenEqualityComparer();
+
         private static readonly Regex SimpleTokenRegex = new Regex(@"\s|_|\W", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private FilenameBuilderTokenEqualityComparer()
+        {
+            
+        }
 
         public bool Equals(String s1, String s2)
         {
@@ -18,7 +25,7 @@ namespace NzbDrone.Core.Organizer
             return SimplifyToken(str).GetHashCode();
         }
 
-        private string SimplifyToken(string token)
+        private static string SimplifyToken(string token)
         {
             return SimpleTokenRegex.Replace(token, String.Empty).ToLower();
         }

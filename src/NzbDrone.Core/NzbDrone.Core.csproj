@@ -327,6 +327,7 @@
     <Compile Include="Organizer\EpisodeFormat.cs" />
     <Compile Include="Organizer\Exception.cs" />
     <Compile Include="Organizer\FilenameBuilderTokenEqualityComparer.cs" />
+    <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
     <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
