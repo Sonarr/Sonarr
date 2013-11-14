@@ -103,6 +103,15 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
+        public void should_replace_SERIES_TITLE_with_random_casing_should_keep_original_casing()
+        {
+            _namingConfig.StandardEpisodeFormat = "{sErIES-tItLE}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(_series.Title.Replace(' ', '-'));
+        }
+
+        [Test]
         public void should_replace_series_title_with_all_lower_case()
         {
             _namingConfig.StandardEpisodeFormat = "{series title}";
@@ -111,6 +120,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
                    .Should().Be("south park");
         }
 
+
+
         [Test]
         public void should_replace_episode_title()
         {
@@ -118,6 +129,15 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("City Sushi");
+        }
+
+        [Test]
+        public void should_replace_episode_title_if_pattern_has_random_casing()
+        {
+            _namingConfig.StandardEpisodeFormat = "{ePisOde-TitLe}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("City-Sushi");
         }
 
         [Test]
