@@ -17,8 +17,6 @@ namespace NzbDrone.Core.Organizer
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
     }
 
-
-
     public class FileNameBuilder : IBuildFileNames
     {
         private readonly IConfigService _configService;
@@ -34,8 +32,10 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex SeasonRegex = new Regex(@"(?<season>\{season(?:\:0+)?})",
                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SeasonEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<seasonEpisode>s?{season(?:\:0+)?}(?<episodeSeparator>e|x)?(?<episode>{episode(?:\:0+)?}))(?<separator>.+?(?={))?",
+        public static readonly Regex SeasonEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<seasonEpisode>s?{season(?:\:0+)?}(?<episodeSeparator>e|x)?(?<episode>{episode(?:\:0+)?}))(?<separator>.+?(?={))?",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService, IConfigService configService, Logger logger)
         {
@@ -201,12 +201,12 @@ namespace NzbDrone.Core.Organizer
             var patternTokenArray = token.ToCharArray();
             if (!tokenValues.TryGetValue(token, out replacementText)) return null;
 
-            if (patternTokenArray.All(t => !char.IsLetter(t) || char.IsLower(t)))
+            if (patternTokenArray.All(t => !Char.IsLetter(t) || Char.IsLower(t)))
             {
                 replacementText = replacementText.ToLowerInvariant();
             }
 
-            else if (patternTokenArray.All(t => !char.IsLetter(t) || char.IsUpper(t)))
+            else if (patternTokenArray.All(t => !Char.IsLetter(t) || Char.IsUpper(t)))
             {
                 replacementText = replacementText.ToUpper();
             }

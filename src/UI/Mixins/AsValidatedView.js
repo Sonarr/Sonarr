@@ -23,7 +23,6 @@ define(
                 }
             };
 
-
             var validatedSync = function (method, model,options) {
                 this.$el.removeAllErrors();
                 arguments[2].isValidatedCall = true;
@@ -51,7 +50,6 @@ define(
                     originalOnRender.call(this);
                 }
             };
-
 
             this.prototype.onBeforeClose = function () {
 

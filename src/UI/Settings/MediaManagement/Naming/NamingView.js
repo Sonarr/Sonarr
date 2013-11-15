@@ -5,8 +5,9 @@ define(
         'vent',
         'marionette',
         'Settings/MediaManagement/Naming/NamingSampleModel',
-        'Mixins/AsModelBoundView'
-    ], function ($, vent, Marionette, NamingSampleModel, AsModelBoundView) {
+        'Mixins/AsModelBoundView',
+        'Mixins/AsValidatedView'
+    ], function ($, vent, Marionette, NamingSampleModel, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
@@ -86,5 +87,8 @@ define(
             }
         });
 
-        return AsModelBoundView.call(view);
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+
+        return view;
     });
