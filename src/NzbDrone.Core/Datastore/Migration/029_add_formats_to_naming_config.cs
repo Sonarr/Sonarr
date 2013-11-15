@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Datastore.Migration
                                                                                     {
                                                                                         Id = 0,
                                                                                         Name = "1x05",
-                                                                                        Pattern = "{season}x{0episode}",
+                                                                                        Pattern = "{season}x{episode:00}",
                                                                                         EpisodeSeparator = "x"
 
                                                                                     },
@@ -111,21 +111,21 @@ namespace NzbDrone.Core.Datastore.Migration
                                                                                     {
                                                                                         Id = 1,
                                                                                         Name = "01x05",
-                                                                                        Pattern = "{0season}x{0episode}",
+                                                                                        Pattern = "{season:00}x{episode:00}",
                                                                                         EpisodeSeparator = "x"
                                                                                     },
                                                                                 new
                                                                                     {
                                                                                         Id = 2,
                                                                                         Name = "S01E05",
-                                                                                        Pattern = "S{0season}E{0episode}",
+                                                                                        Pattern = "S{season:00}E{episode:00}",
                                                                                         EpisodeSeparator = "E"
                                                                                     },
                                                                                 new
                                                                                     {
                                                                                         Id = 3,
                                                                                         Name = "s01e05",
-                                                                                        Pattern = "s{0season}e{0episode}",
+                                                                                        Pattern = "s{season:00}e{episode:00}",
                                                                                         EpisodeSeparator = "e"
                                                                                     }
                                                                             };

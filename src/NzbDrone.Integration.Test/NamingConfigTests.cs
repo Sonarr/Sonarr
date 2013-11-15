@@ -26,7 +26,7 @@ namespace NzbDrone.Integration.Test
         {
             var config = NamingConfig.GetSingle();
             config.RenameEpisodes = false;
-            config.StandardEpisodeFormat = "{Series Title} - {season}x{0episode} - {Episode Title}";
+            config.StandardEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
             config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
 
             var result = NamingConfig.Put(config);

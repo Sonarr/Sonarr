@@ -84,16 +84,16 @@ define(
 
                 switch (this.model.get('numberStyle')) {
                     case '0':
-                        this.standardEpisodeFormat += '{season}x{0episode}';
+                        this.standardEpisodeFormat += '{season}x{episode:00}';
                         break;
                     case '1':
-                        this.standardEpisodeFormat += '{0season}x{0episode}';
+                        this.standardEpisodeFormat += '{season:00}x{episode:00}';
                         break;
                     case '2':
-                        this.standardEpisodeFormat += 'S{0season}E{0episode}';
+                        this.standardEpisodeFormat += 'S{season:00}E{episode:00}';
                         break;
                     case '3':
-                        this.standardEpisodeFormat += 's{0season}e{0episode}';
+                        this.standardEpisodeFormat += 's{season:00}e{episode:00}';
                         break;
                     default:
                         this.standardEpisodeFormat += 'Unknown Number Pattern';

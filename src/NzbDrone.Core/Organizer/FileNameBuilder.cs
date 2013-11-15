@@ -28,13 +28,13 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex TitleRegex = new Regex(@"(?<token>\{(?:\w+)(?<separator>\s|\W|_)\w+\})",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{0*(?:episode)})",
+        private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
                                                                RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SeasonRegex = new Regex(@"(?<season>\{0*(?:season)})",
+        private static readonly Regex SeasonRegex = new Regex(@"(?<season>\{season(?:\:0+)?})",
                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SeasonEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<seasonEpisode>s?{0?season}(?<episodeSeparator>e|x)?(?<episode>{0?episode}))(?<separator>.+?(?={))?",
+        private static readonly Regex SeasonEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<seasonEpisode>s?{season(?:\:0+)?}(?<episodeSeparator>e|x)?(?<episode>{episode(?:\:0+)?}))(?<separator>.+?(?={))?",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService, IConfigService configService, Logger logger)
@@ -240,10 +240,11 @@ namespace NzbDrone.Core.Organizer
 
         private string ReplaceNumberToken(string token, int value)
         {
-            var zeroCount = token.Count(z => z == '0');
-            return value.ToString().PadLeft(zeroCount + 1, '0');
-        }
+            var split = token.Trim('{', '}').Split(':');
+            if (split.Length == 1) return value.ToString("0");
 
+            return value.ToString(split[1]);
+        }
     }
 
     public enum MultiEpisodeStyle

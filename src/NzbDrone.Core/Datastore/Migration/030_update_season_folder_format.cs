@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Datastore.Migration
                         value = value.Replace("%sn", "{Series Title}")
                                      .Replace("%s.n", "{Series.Title}")
                                      .Replace("%s", "{season}")
-                                     .Replace("%0s", "{0season}")
+                                     .Replace("%0s", "{season:00}")
                                      .Replace("%e", "{episode}")
-                                     .Replace("%0e", "{0episode}");
+                                     .Replace("%0e", "{episode:00}");
 
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
