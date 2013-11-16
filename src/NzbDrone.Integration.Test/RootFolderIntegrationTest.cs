@@ -8,9 +8,6 @@ namespace NzbDrone.Integration.Test
     [TestFixture]
     public class RootFolderIntegrationTest : IntegrationTest
     {
-
-
-
         [Test]
         public void should_have_no_root_folder_initially()
         {
@@ -20,7 +17,6 @@ namespace NzbDrone.Integration.Test
         [Test]
         public void should_add_and_delete_root_folders()
         {
-
             ConnectSignalR();
 
             var rootFolder = new RootFolderResource
@@ -42,8 +38,6 @@ namespace NzbDrone.Integration.Test
 
 
             SignalRMessages.Should().Contain(c => c.Name == "rootfolder");
-
-
         }
 
         [Test]

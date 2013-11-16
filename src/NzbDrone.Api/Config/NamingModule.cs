@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Nancy.Responses;
@@ -31,8 +32,12 @@ namespace NzbDrone.Api.Config
             Get["/samples"] = x => GetExamples(this.Bind<NamingConfigResource>());
 
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
-            SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
+
+            SharedValidator.When(spec => spec.RenameEpisodes, () =>
+            {
+                SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
+                SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
+            });
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
@@ -104,7 +109,10 @@ namespace NzbDrone.Api.Config
                 validationFailures.Add(dailyEpisodeValidationResult);
             }
 
-            throw new ValidationException(validationFailures.ToArray());
+            if (validationFailures.Any())
+            {
+                throw new ValidationException(validationFailures.ToArray());
+            }
         }
     }
 }
