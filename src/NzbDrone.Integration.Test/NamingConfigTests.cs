@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Api.Config;
 
 namespace NzbDrone.Integration.Test
 {
@@ -33,6 +35,42 @@ namespace NzbDrone.Integration.Test
             result.RenameEpisodes.Should().BeFalse();
             result.StandardEpisodeFormat.Should().Be(config.StandardEpisodeFormat);
             result.DailyEpisodeFormat.Should().Be(config.DailyEpisodeFormat);
+        }
+
+        [Test]
+        public void should_get_bad_request_if_standard_format_is_empty()
+        {
+            var config = NamingConfig.GetSingle();
+            config.RenameEpisodes = false;
+            config.StandardEpisodeFormat = "";
+            config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
+
+            var errors = NamingConfig.InvalidPut(config);
+            errors.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_get_bad_request_if_standard_format_doesnt_contain_season_and_episode()
+        {
+            var config = NamingConfig.GetSingle();
+            config.RenameEpisodes = false;
+            config.StandardEpisodeFormat = "{season}";
+            config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
+
+            var errors = NamingConfig.InvalidPut(config);
+            errors.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_get_bad_request_if_daily_format_doesnt_contain_season_and_episode_or_air_date()
+        {
+            var config = NamingConfig.GetSingle();
+            config.RenameEpisodes = false;
+            config.StandardEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
+            config.DailyEpisodeFormat = "{Series Title} - {season} - {Episode Title}";
+
+            var errors = NamingConfig.InvalidPut(config);
+            errors.Should().NotBeEmpty();
         }
     }
 }
