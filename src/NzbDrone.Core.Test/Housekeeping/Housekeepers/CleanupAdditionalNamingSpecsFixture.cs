@@ -8,7 +8,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
     [TestFixture]
-    public class CleanupAdditionalNamingSpecsFixture : DbTest<CleanupAdditionalNamingSpecs, History.History>
+    public class CleanupAdditionalNamingSpecsFixture : DbTest<CleanupAdditionalNamingSpecs, NamingConfig>
     {
         [Test]
         public void should_delete_additional_naming_configs()
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_not_delete_if_only_one_spec()
         {
             var spec = Builder<NamingConfig>.CreateNew()
-                                             .BuildNew();
+                                            .BuildNew();
 
             Db.Insert(spec);
 
