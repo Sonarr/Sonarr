@@ -1,6 +1,5 @@
 ﻿using NLog;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
