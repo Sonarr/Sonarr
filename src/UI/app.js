@@ -81,13 +81,7 @@ require.config({
             exports: 'Backbone'
         },
 
-        'backbone.validation': {
-            deps   :
-                [
-                    'backbone'
-                ],
-            exports: 'Backbone.Validation'
-        },
+
 
         marionette: {
             deps:
@@ -121,6 +115,26 @@ require.config({
 
         'backbone.pageable': {
             deps:
+                [
+                    'backbone'
+                ]
+        },
+        'backbone.deepmodel': {
+            deps:
+                [
+                    'backbone',
+                    'underscore'
+                ]
+        },
+        'backbone.validation': {
+            deps   :
+                [
+                    'backbone'
+                ],
+            exports: 'Backbone.Validation'
+        },
+        'backbone.modelbinder':{
+            deps   :
                 [
                     'backbone'
                 ]
