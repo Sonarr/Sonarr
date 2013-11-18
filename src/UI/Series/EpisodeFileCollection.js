@@ -23,7 +23,7 @@ define(
                     options = {};
                 }
 
-                options['data'] = { seriesId: this.seriesId };
+                options.data = { seriesId: this.seriesId };
 
                 return this.originalFetch.call(this, options);
             }

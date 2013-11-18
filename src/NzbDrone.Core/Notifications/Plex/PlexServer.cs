@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             UpdateIfEnabled();
         }

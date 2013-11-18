@@ -1,13 +1,10 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -25,7 +22,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Setup(m => m.FolderExists(It.IsAny<string>()))
                   .Returns(true);
 
-            Mocker.GetMock<IBasicRepository<RootFolder>>()
+            Mocker.GetMock<IRootFolderRepository>()
                   .Setup(s => s.All())
                   .Returns(new List<RootFolder>());
         }
@@ -45,7 +42,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
 
             Subject.Add(root);
 
-            Mocker.GetMock<IBasicRepository<RootFolder>>().Verify(c => c.Insert(root), Times.Once());
+            Mocker.GetMock<IRootFolderRepository>().Verify(c => c.Insert(root), Times.Once());
         }
 
         [Test]
@@ -60,14 +57,15 @@ namespace NzbDrone.Core.Test.RootFolderTests
         public void should_be_able_to_remove_root_dir()
         {
             Subject.Remove(1);
-            Mocker.GetMock<IBasicRepository<RootFolder>>().Verify(c => c.Delete(1), Times.Once());
+            Mocker.GetMock<IRootFolderRepository>().Verify(c => c.Delete(1), Times.Once());
         }
 
+        [Test]
         public void None_existing_folder_returns_empty_list()
         {
             WithNoneExistingFolder();
 
-            Mocker.GetMock<IBasicRepository<RootFolder>>().Setup(c => c.All()).Returns(new List<RootFolder>());
+            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder>());
 
             const string path = "d:\\bad folder";
 
@@ -97,7 +95,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void adding_duplicated_root_folder_should_throw()
         {
-            Mocker.GetMock<IBasicRepository<RootFolder>>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV".AsOsAgnostic() } });
+            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV".AsOsAgnostic() } });
 
             Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
         }

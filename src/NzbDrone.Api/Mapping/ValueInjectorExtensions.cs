@@ -19,7 +19,6 @@ namespace NzbDrone.Api.Mapping
                 source.GetType().GetGenericTypeDefinition() != null &&
                 source.GetType().GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
             {
-
                 var result = new TTarget();
 
                 var listSubType = targetType.GetGenericArguments()[0];

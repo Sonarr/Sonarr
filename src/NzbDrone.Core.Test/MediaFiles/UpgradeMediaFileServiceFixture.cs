@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
@@ -148,6 +149,22 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void should_return_old_episode_file_in_oldFiles()
+        {
+            GivenSingleEpisodeWithSingleEpisodeFile();
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void should_return_old_episode_files_in_oldFiles()
+        {
+            GivenMultipleEpisodesWithMultipleEpisodeFiles();
+
+            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(2);
         }
     }
 }

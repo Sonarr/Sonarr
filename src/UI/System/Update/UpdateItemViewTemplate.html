@@ -6,7 +6,15 @@
                 {{#if installed}}<i class="icon-ok" title="Installed"></i>{{/if}}
 
                 {{#if_windows}}
-                    {{#if isUpgrade}}<span class="label label-inverse install-update x-install-update">Install</span>{{/if}}
+                    {{#if isUpgrade}}
+                        <span class="label label-inverse install-update x-install-update">Install</span>
+                    {{/if}}
+                {{else}}
+                    {{#if isUpgrade}}
+                        <span class="label label-inverse install-update">
+                            <a href="https://github.com/NzbDrone/NzbDrone/wiki/Installation#linux">Install</a>
+                        </span>
+                    {{/if}}
                 {{/if_windows}}
             </span>
         </legend>

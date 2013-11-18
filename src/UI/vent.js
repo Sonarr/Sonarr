@@ -11,7 +11,8 @@ define(
             SeriesAdded    : 'series:added',
             SeriesDeleted  : 'series:deleted',
             SeasonRenamed  : 'season:renamed',
-            CommandComplete: 'command:complete'
+            CommandComplete: 'command:complete',
+            ServerUpdated  : 'server:updated'
         };
 
         vent.Commands = {

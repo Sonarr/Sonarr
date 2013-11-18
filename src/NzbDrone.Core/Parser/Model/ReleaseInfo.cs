@@ -19,6 +19,13 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return DateTime.UtcNow.Subtract(PublishDate).Days;
             }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set
+            {
+                
+            }
         }
 
         public string ReleaseGroup { get; set; }

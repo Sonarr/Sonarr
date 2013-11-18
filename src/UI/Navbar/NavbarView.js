@@ -2,10 +2,11 @@
 define(
     [
         'marionette',
+        'jquery',
         'Navbar/Search'
-    ], function (Marionette) {
+    ], function (Marionette, $) {
         return Marionette.ItemView.extend({
-            template : 'Navbar/NavbarTemplate',
+            template: 'Navbar/NavbarTemplate',
 
             ui: {
                 search: '.x-series-search'
@@ -15,7 +16,7 @@ define(
                 'click a': 'onClick'
             },
 
-            onRender: function (){
+            onRender: function () {
                 this.ui.search.bindSearch();
             },
 

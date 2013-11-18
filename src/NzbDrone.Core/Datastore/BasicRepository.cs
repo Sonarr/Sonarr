@@ -116,6 +116,8 @@ namespace NzbDrone.Core.Datastore
 
             DataMapper.Insert(model);
 
+            ModelCreated(model);
+
             return model;
         }
 
@@ -127,12 +129,15 @@ namespace NzbDrone.Core.Datastore
             }
 
             DataMapper.Update(model, c => c.Id == model.Id);
+
+            ModelUpdated(model);
+
             return model;
         }
 
         public void Delete(TModel model)
         {
-            DataMapper.Delete<TModel>(c => c.Id == model.Id);
+            Delete(model.Id);
         }
 
         public void InsertMany(IList<TModel> models)
@@ -199,6 +204,8 @@ namespace NzbDrone.Core.Datastore
                 .ColumnsIncluding(properties)
                 .Entity(model)
                 .Execute();
+
+            ModelUpdated(model);
         }
 
         public virtual PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec)

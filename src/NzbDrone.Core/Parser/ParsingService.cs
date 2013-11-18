@@ -129,6 +129,26 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
+            if (parsedEpisodeInfo.IsAbsoluteNumbering())
+            {
+                foreach (var absoluteEpisodeNumber in parsedEpisodeInfo.AbsoluteEpisodeNumbers)
+                {
+                    var episodeInfo = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
+
+                    if (episodeInfo != null)
+                    {
+                        _logger.Info("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
+                                    absoluteEpisodeNumber,
+                                    series.Title,
+                                    episodeInfo.SeasonNumber,
+                                    episodeInfo.EpisodeNumber);
+                        result.Add(episodeInfo);
+                    }
+                }
+
+                return result;
+            }
+
             if (parsedEpisodeInfo.EpisodeNumbers == null)
                 return result;
 

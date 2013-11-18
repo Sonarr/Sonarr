@@ -25,6 +25,7 @@ namespace NzbDrone.Core.MetadataSource.Trakt
         public int tvrage_id { get; set; }
         public int last_updated { get; set; }
         public string poster { get; set; }
+        public bool? ended { get; set; }
         public Images images { get; set; }
         public List<string> genres { get; set; }
         public List<Season> seasons { get; set; }

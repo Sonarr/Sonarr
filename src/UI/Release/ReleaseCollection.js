@@ -2,7 +2,7 @@
 define(
     [
         'backbone',
-        'Release/Model'
+        'Release/ReleaseModel'
     ], function (Backbone, ReleaseModel) {
         return Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/release',
@@ -13,7 +13,7 @@ define(
             },
 
             fetchEpisodeReleases: function (episodeId) {
-                return this.fetch({  data: { episodeId: episodeId  }});
+                return this.fetch({ data: { episodeId: episodeId }});
             }
         });
     });

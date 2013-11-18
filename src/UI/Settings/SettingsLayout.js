@@ -83,7 +83,7 @@ define(
                 this.indexerSettings = new IndexerCollection();
                 this.notificationSettings = new NotificationCollection();
 
-                $.when(this.settings.fetch(),
+                Backbone.$.when(this.settings.fetch(),
                         this.generalSettings.fetch(),
                         this.namingSettings.fetch(),
                         this.indexerSettings.fetch(),

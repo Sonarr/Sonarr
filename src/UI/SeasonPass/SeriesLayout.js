@@ -112,13 +112,13 @@ define(
                 var element;
 
                 if (e.target.localName === 'i') {
-                    seasonNumber = parseInt($(e.target).parent('td').attr('data-season-number'), 10);
-                    element = $(e.target);
+                    seasonNumber = parseInt(this.$(e.target).parent('td').attr('data-season-number'), 10);
+                    element = this.$(e.target);
                 }
 
                 else {
-                    seasonNumber = parseInt($(e.target).attr('data-season-number'), 10);
-                    element = $(e.target).children('i');
+                    seasonNumber = parseInt(this.$(e.target).attr('data-season-number'), 10);
+                    element = this.$(e.target).children('i');
                 }
 
                 this.model.setSeasonMonitored(seasonNumber);
@@ -146,7 +146,7 @@ define(
                 }
             },
 
-            _toggleSeriesMonitored: function (e) {
+            _toggleSeriesMonitored: function () {
                 var savePromise = this.model.save('monitored', !this.model.get('monitored'), {
                     wait: true
                 });

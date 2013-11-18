@@ -23,11 +23,11 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             _notifyMyAndroidProxy.SendNotification(title, message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _notifyMyAndroidProxy.SendNotification(title, message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _notifyMyAndroidProxy.SendNotification(title, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
         public override void AfterRename(Series series)

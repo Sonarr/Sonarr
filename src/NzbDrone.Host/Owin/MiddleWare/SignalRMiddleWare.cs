@@ -14,7 +14,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
         {
             SignalrDependencyResolver.Register(container);
 
-            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(300000);
+            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromMinutes(3);
         }
 
         public void Attach(IAppBuilder appBuilder)

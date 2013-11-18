@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
-using NzbDrone.Core.Configuration;
 using RestSharp;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Test.Common
 {
     public class NzbDroneRunner
     {
@@ -41,8 +39,7 @@ namespace NzbDrone.Integration.Test
 
             if (BuildInfo.IsDebug)
             {
-
-                Start("..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+                Start("..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
             }
             else
             {
@@ -104,12 +101,19 @@ namespace NzbDrone.Integration.Test
         {
             var configFile = Path.Combine(AppData, "config.xml");
 
-            if (!String.IsNullOrWhiteSpace(ApiKey)) return;
-            if (!File.Exists(configFile)) return;
-
-            var xDoc = XDocument.Load(configFile);
-            var config = xDoc.Descendants(ConfigFileProvider.CONFIG_ELEMENT_NAME).Single();
-            ApiKey = config.Descendants("ApiKey").Single().Value;
+            while (ApiKey == null)
+            {
+                if (File.Exists(configFile))
+                {
+                    var apiKeyElement =  XDocument.Load(configFile)
+                        .XPathSelectElement("Config/ApiKey");
+                    if (apiKeyElement != null)
+                    {
+                        ApiKey = apiKeyElement.Value;
+                    }
+                }
+                Thread.Sleep(1000);
+            }
         }
     }
 }

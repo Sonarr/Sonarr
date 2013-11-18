@@ -1,9 +1,12 @@
-define(function () {
+define(
+    [
+        'jquery'
+    ], function ($) {
         'use strict';
         return {
             load: function (name, parentRequire, onload, config) {
 
-                if(config.isBuild){
+                if (config.isBuild) {
                     return onload();
                 }
 
@@ -19,7 +22,7 @@ define(function () {
                             xhr   : xhr,
                             status: status,
                             error : error});
-                });
+                    });
             }
         };
     });

@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Linq;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
@@ -26,16 +27,16 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string header = "NzbDrone [TV] - Downloaded";
 
             if (Settings.Notify)
             {
-                _xbmcProvider.Notify(Settings, header, message);
+                _xbmcProvider.Notify(Settings, header, message.Message);
             }
 
-            UpdateAndClean(series);
+            UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
         public override void AfterRename(Series series)
@@ -43,14 +44,14 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
-        private void UpdateAndClean(Series series)
+        private void UpdateAndClean(Series series, bool clean = true)
         {
             if (Settings.UpdateLibrary)
             {
                 _xbmcProvider.Update(Settings, series);
             }
 
-            if (Settings.CleanLibrary)
+            if (clean && Settings.CleanLibrary)
             {
                 _xbmcProvider.Clean(Settings);
             }

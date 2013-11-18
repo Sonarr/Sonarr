@@ -18,7 +18,7 @@ define(
 
             getValue: function (key, defaultValue) {
 
-                var storeValue = localStorage.getItem(key);
+                var storeValue = window.localStorage.getItem(key);
 
                 if (!storeValue) {
                     return defaultValue;
@@ -35,7 +35,7 @@ define(
                     return;
                 }
 
-                localStorage.setItem(key, value);
+                window.localStorage.setItem(key, value);
                 vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
 
             }

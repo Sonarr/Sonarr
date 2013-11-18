@@ -3,7 +3,7 @@ define(
     [
         'marionette',
         'backgrid',
-        'Release/Collection',
+        'Release/ReleaseCollection',
         'Cells/IndexerCell',
         'Cells/EpisodeNumberCell',
         'Cells/FileSizeCell',
@@ -12,7 +12,7 @@ define(
         'Shared/LoadingView'
     ], function (Marionette, Backgrid, ReleaseCollection, IndexerCell, EpisodeNumberCell, FileSizeCell, QualityCell, ApprovalStatusCell, LoadingView) {
         return Marionette.Layout.extend({
-            template: 'Release/LayoutTemplate',
+            template: 'Release/ReleaseLayoutTemplate',
 
             regions: {
                 grid   : '#x-grid',
@@ -27,7 +27,6 @@ define(
                         sortable: true,
                         cell    : IndexerCell
                     },
-
                     {
                         name    : 'title',
                         label   : 'Title',
@@ -52,7 +51,6 @@ define(
                         sortable: true,
                         cell    : QualityCell
                     },
-
                     {
                         name : 'rejections',
                         label: '',
@@ -60,7 +58,17 @@ define(
                     }
                 ],
 
-            showTable: function () {
+            initialize: function () {
+                this.collection = new ReleaseCollection();
+                this.listenTo(this.collection, 'sync', this._showTable);
+            },
+
+            onRender: function () {
+                this.grid.show(new LoadingView());
+                this.collection.fetch();
+            },
+
+            _showTable: function () {
                 if (!this.isClosed) {
                     this.grid.show(new Backgrid.Grid({
                         row       : Backgrid.Row,
@@ -69,23 +77,6 @@ define(
                         className : 'table table-hover'
                     }));
                 }
-            },
-
-            initialize: function () {
-                this.collection = new ReleaseCollection();
-                this.fetchPromise = this.collection.fetch();
-            },
-
-            onShow: function () {
-
-                var self = this;
-
-                this.grid.show(new LoadingView());
-
-                this.fetchPromise.done(function () {
-                    self.showTable();
-                });
             }
-
         });
     });

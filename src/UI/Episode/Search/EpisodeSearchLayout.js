@@ -5,7 +5,7 @@ define(
         'marionette',
         'Episode/Search/ButtonsView',
         'Episode/Search/ManualLayout',
-        'Release/Collection',
+        'Release/ReleaseCollection',
         'Series/SeriesCollection',
         'Commands/CommandController',
         'Shared/LoadingView'

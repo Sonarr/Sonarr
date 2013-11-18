@@ -73,13 +73,17 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(EpisodeDownloadedEvent message)
         {
-            var messageBody = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
+            var downloadMessage = new DownloadMessage();
+            downloadMessage.Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
+            downloadMessage.Series = message.Episode.Series;
+            downloadMessage.EpisodeFile = message.EpisodeFile;
+            downloadMessage.OldFiles = message.OldFiles;
 
             foreach (var notification in _notificationFactory.OnDownloadEnabled())
             {
                 try
                 {
-                    notification.OnDownload(messageBody, message.Episode.Series);
+                    notification.OnDownload(downloadMessage);
                 }
 
                 catch (Exception ex)

@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Tv
             }
             else
             {
-                var allSeries = _seriesService.GetAllSeries().OrderBy(c => c.LastInfoSync).ToList();
+                var allSeries = _seriesService.GetAllSeries().OrderBy(c => c.Title).ToList();
 
                 foreach (var series in allSeries)
                 {

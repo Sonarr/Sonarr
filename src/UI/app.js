@@ -21,13 +21,18 @@ require.config({
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
-        'jquery'              : 'JsLibraries/jquery',
+        'jquery'              : 'jQuery/jquery.shim',
         'libs'                : 'JsLibraries/',
 
         'api': 'Require/require.api'
     },
 
     shim: {
+
+
+        jquery :{
+          exports: '$'
+        },
 
         signalR: {
             deps:
@@ -77,20 +82,6 @@ require.config({
         },
 
 
-        'backbone.deepmodel': {
-            deps:
-                [
-                    'Mixins/underscore.mixin.deepExtend'
-                ]
-        },
-
-        'backbone.validation': {
-            deps   :
-                [
-                    'backbone'
-                ],
-            exports: 'Backbone.Validation'
-        },
 
         marionette: {
             deps:
@@ -102,8 +93,8 @@ require.config({
 
             exports: 'Marionette',
             init   : function (Backbone, TemplateMixin, AsNamedView) {
-                TemplateMixin.call(Marionette.TemplateCache);
-                AsNamedView.call(Marionette.ItemView.prototype);
+                TemplateMixin.call(window.Marionette.TemplateCache);
+                AsNamedView.call(window.Marionette.ItemView.prototype);
 
             }
         },
@@ -128,6 +119,26 @@ require.config({
                     'backbone'
                 ]
         },
+        'backbone.deepmodel': {
+            deps:
+                [
+                    'backbone',
+                    'underscore'
+                ]
+        },
+        'backbone.validation': {
+            deps   :
+                [
+                    'backbone'
+                ],
+            exports: 'Backbone.Validation'
+        },
+        'backbone.modelbinder':{
+            deps   :
+                [
+                    'backbone'
+                ]
+        },
 
         backgrid            : {
             deps:
@@ -143,7 +154,7 @@ require.config({
                         'Shared/Grid/HeaderCell'
                     ], function () {
 
-                        Backgrid.Column.prototype.defaults = {
+                        window.Backgrid.Column.prototype.defaults = {
                             name      : undefined,
                             label     : undefined,
                             sortable  : true,
@@ -194,7 +205,8 @@ define(
         'Series/SeriesController',
         'Router',
         'Shared/Modal/Controller',
-        'Instrumentation/StringFormat'
+        'Instrumentation/StringFormat',
+        'LifeCycle'
     ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController) {
 
         new SeriesController();

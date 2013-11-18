@@ -50,7 +50,7 @@ define(
         };
 
         $.fn.addFormError = function (error) {
-            this.find('.control-group').parent().prepend('<div class="alert alert-error validation-error">' + error.errorMessage + '</div>')
+            this.find('.control-group').parent().prepend('<div class="alert alert-error validation-error">' + error.errorMessage + '</div>');
         };
 
         $.fn.removeAllErrors = function () {

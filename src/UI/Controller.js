@@ -9,7 +9,7 @@ define(
         'AddSeries/AddSeriesLayout',
         'Missing/MissingLayout',
         'Calendar/CalendarLayout',
-        'Release/Layout',
+        'Release/ReleaseLayout',
         'System/SystemLayout',
         'SeasonPass/SeasonPassLayout',
         'System/Update/UpdateLayout'
@@ -29,49 +29,49 @@ define(
 
             addSeries: function (action) {
                 this.setTitle('Add Series');
-                AppLayout.mainRegion.show(new AddSeriesLayout({action: action}));
+                this.showMainRegion(new AddSeriesLayout({action: action}));
             },
 
             calendar: function () {
                 this.setTitle('Calendar');
-                AppLayout.mainRegion.show(new CalendarLayout());
+                this.showMainRegion(new CalendarLayout());
             },
 
             settings: function (action) {
                 this.setTitle('Settings');
-                AppLayout.mainRegion.show(new SettingsLayout({ action: action }));
+                this.showMainRegion(new SettingsLayout({ action: action }));
             },
 
             missing: function () {
                 this.setTitle('Missing');
 
-                AppLayout.mainRegion.show(new MissingLayout());
+                this.showMainRegion(new MissingLayout());
             },
 
             history: function (action) {
                 this.setTitle('History');
 
-                AppLayout.mainRegion.show(new HistoryLayout({ action: action }));
+                this.showMainRegion(new HistoryLayout({ action: action }));
             },
 
             rss: function () {
                 this.setTitle('RSS');
-                AppLayout.mainRegion.show(new ReleaseLayout());
+                this.showMainRegion(new ReleaseLayout());
             },
 
             system: function (action) {
                 this.setTitle('System');
-                AppLayout.mainRegion.show(new SystemLayout({ action: action }));
+                this.showMainRegion(new SystemLayout({ action: action }));
             },
 
             seasonPass: function () {
                 this.setTitle('Season Pass');
-                AppLayout.mainRegion.show(new SeasonPassLayout());
+                this.showMainRegion(new SeasonPassLayout());
             },
 
             update: function () {
                 this.setTitle('Updates');
-                AppLayout.mainRegion.show(new UpdateLayout());
+                this.showMainRegion(new UpdateLayout());
             }
         });
     });

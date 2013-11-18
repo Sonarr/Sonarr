@@ -1,14 +1,17 @@
-﻿﻿'use strict';
+﻿'use strict';
 
-define(['System/Logs/Files/LogFileModel' ],
-function (LogFileModel) {
-    return Backbone.Collection.extend({
-        url  : window.NzbDrone.ApiRoot + '/log/files',
-        model: LogFileModel,
+define(
+    [
+        'backbone',
+        'System/Logs/Files/LogFileModel'
+    ], function (Backbone, LogFileModel) {
+        return Backbone.Collection.extend({
+            url  : window.NzbDrone.ApiRoot + '/log/files',
+            model: LogFileModel,
 
-        state: {
-            sortKey : 'lastWriteTime',
-            order   : 1
-        }
+            state: {
+                sortKey: 'lastWriteTime',
+                order  : 1
+            }
+        });
     });
-});

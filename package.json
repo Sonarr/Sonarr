@@ -23,6 +23,7 @@
     "grunt-curl": "*",
     "grunt-notify": "*",
     "grunt-contrib-clean": "*",
-    "grunt-contrib-requirejs": "*"
+    "grunt-contrib-requirejs": "*",
+    "grunt-contrib-jshint": "*"
   }
 }

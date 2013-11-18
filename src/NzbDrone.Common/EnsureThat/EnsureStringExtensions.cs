@@ -92,7 +92,6 @@ namespace NzbDrone.Common.EnsureThat
                 throw ExceptionFactory.CreateForParamValidation(param.Name, string.Format("value [{0}]  is not a valid relative path. relative paths can not start with \\", param.Value));
             }
 
-
             return param;
         }
 

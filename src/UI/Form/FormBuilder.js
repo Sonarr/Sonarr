@@ -1,8 +1,10 @@
 'use strict';
 define(
     [
-        'handlebars'
-    ], function (Handlebars) {
+        'marionette',
+        'handlebars',
+        'underscore'
+    ], function (Marionette, Handlebars, _) {
 
         var _fieldBuilder = function (field) {
             if (!field.type) {

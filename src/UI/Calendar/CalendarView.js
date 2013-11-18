@@ -7,7 +7,7 @@ define(
         'moment',
         'Calendar/Collection',
         'fullcalendar'
-    ], function (vent, Marionette, Moment, CalendarCollection) {
+    ], function (vent, Marionette, moment, CalendarCollection) {
 
         var _instance;
 
@@ -16,7 +16,10 @@ define(
                 this.collection = new CalendarCollection();
             },
             render    : function () {
-                $(this.$el).empty().fullCalendar({
+
+                var self = this;
+
+                this.$el.empty().fullCalendar({
                     defaultView   : 'basicWeek',
                     allDayDefault : false,
                     ignoreTimezone: false,
@@ -34,8 +37,8 @@ define(
                     },
                     events        : this.getEvents,
                     eventRender   : function (event, element) {
-                        $(element).addClass(event.statusLevel);
-                        $(element).children('.fc-event-inner').addClass(event.statusLevel);
+                        self.$(element).addClass(event.statusLevel);
+                        self.$(element).children('.fc-event-inner').addClass(event.statusLevel);
                     },
                     eventClick    : function (event) {
                         vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
@@ -50,8 +53,8 @@ define(
             },
 
             getEvents: function (start, end, callback) {
-                var startDate = Moment(start).toISOString();
-                var endDate = Moment(end).toISOString();
+                var startDate = moment(start).toISOString();
+                var endDate = moment(end).toISOString();
 
                 _instance.collection.fetch({
                     data   : { start: startDate, end: endDate },
@@ -61,7 +64,7 @@ define(
                             var seriesTitle = element.get('series').title;
                             var start = element.get('airDateUtc');
                             var runtime = element.get('series').runtime;
-                            var end = Moment(start).add('minutes', runtime).toISOString();
+                            var end = moment(start).add('minutes', runtime).toISOString();
 
 
                             element.set({
@@ -83,9 +86,9 @@ define(
 
             getStatusLevel: function (element) {
                 var hasFile = element.get('hasFile');
-                var currentTime = Moment();
-                var start = Moment(element.get('airDateUtc'));
-                var end = Moment(element.get('end'));
+                var currentTime = moment();
+                var start = moment(element.get('airDateUtc'));
+                var end = moment(element.get('end'));
 
                 var statusLevel = 'primary';
 
@@ -94,10 +97,6 @@ define(
                 }
 
                 else if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
-                    var s = start.toISOString();
-                    var e = end.toISOString();
-                    var c = currentTime.toISOString();
-
                     statusLevel = 'warning';
                 }
 

@@ -22,10 +22,10 @@ namespace NzbDrone.Core.Notifications.Plex
             _plexProvider.Notify(Settings, header, message);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string header = "NzbDrone [TV] - Downloaded";
-            _plexProvider.Notify(Settings, header, message);
+            _plexProvider.Notify(Settings, header, message.Message);
         }
 
         public override void AfterRename(Series series)

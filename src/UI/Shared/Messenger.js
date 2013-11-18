@@ -23,12 +23,13 @@ define(function () {
                 }
             }
 
-            return  window.Messenger().post({
+            return window.Messenger().post({
                 message        : options.message,
                 type           : options.type,
                 showCloseButton: true,
                 hideAfter      : options.hideAfter,
-                id             : options.id
+                id             : options.id,
+                actions        : options.actions
             });
         },
 

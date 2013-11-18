@@ -9,6 +9,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         private List<string> _videoFiles;
         private LocalEpisode _localEpisode;
         private Series _series;
+        private QualityModel _quality;
 
         private Mock<IImportDecisionEngineSpecification> _pass1;
         private Mock<IImportDecisionEngineSpecification> _pass2;
@@ -62,7 +64,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             _videoFiles = new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
             _series = new Series();
-            _localEpisode = new LocalEpisode { Series = _series, Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
+            _quality = new QualityModel(Quality.DVD);
+            _localEpisode = new LocalEpisode
+            { 
+                Series = _series,
+                Quality = _quality,
+                Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi"
+            };
 
             Mocker.GetMock<IParsingService>()
                   .Setup(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()))
@@ -160,6 +168,39 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                   .Verify(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
 
             ExceptionVerification.ExpectedErrors(3);
+        }
+
+        [Test]
+        public void should_use_file_quality_if_folder_quality_is_null()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            var expectedQuality = QualityParser.ParseQuality(_videoFiles.Single());
+
+            var result = Subject.GetImportDecisions(_videoFiles, new Series(), false, null);
+
+            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+        }
+
+        [Test]
+        public void should_use_file_quality_if_folder_quality_is_lower_than_file_quality()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            var expectedQuality = QualityParser.ParseQuality(_videoFiles.Single());
+
+            var result = Subject.GetImportDecisions(_videoFiles, new Series(), false, new QualityModel(Quality.SDTV));
+
+            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+        }
+
+        [Test]
+        public void should_use_folder_quality_when_it_is_greater_than_file_quality()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            var expectedQuality = new QualityModel(Quality.Bluray1080p);
+
+            var result = Subject.GetImportDecisions(_videoFiles, new Series(), false, expectedQuality);
+
+            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
         }
     }
 }

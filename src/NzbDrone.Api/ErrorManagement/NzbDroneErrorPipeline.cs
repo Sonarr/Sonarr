@@ -17,11 +17,10 @@ namespace NzbDrone.Api.ErrorManagement
             _logger = logger;
         }
 
-        public Response HandleException(NancyContext context, Exception aggregateException)
+        public Response HandleException(NancyContext context, Exception exception)
         {
-            var innerException = (aggregateException.InnerException).InnerException;
 
-            var apiException = innerException as ApiException;
+            var apiException = exception as ApiException;
 
             if (apiException != null)
             {
@@ -29,7 +28,7 @@ namespace NzbDrone.Api.ErrorManagement
                 return apiException.ToErrorResponse();
             }
 
-            var validationException = innerException as ValidationException;
+            var validationException = exception as ValidationException;
 
             if (validationException != null)
             {
@@ -38,23 +37,23 @@ namespace NzbDrone.Api.ErrorManagement
                 return validationException.Errors.AsResponse(HttpStatusCode.BadRequest);
             }
 
-            var clientException = innerException as NzbDroneClientException;
+            var clientException = exception as NzbDroneClientException;
 
             if (clientException != null)
             {
                 return new ErrorModel
                 {
-                    Message = innerException.Message,
-                    Description = innerException.ToString()
+                    Message = exception.Message,
+                    Description = exception.ToString()
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
             }
 
-            _logger.FatalException("Request Failed", innerException);
+            _logger.FatalException("Request Failed", exception);
 
             return new ErrorModel
                 {
-                    Message = innerException.Message,
-                    Description = innerException.ToString()
+                    Message = exception.Message,
+                    Description = exception.ToString()
                 }.AsResponse(HttpStatusCode.InternalServerError);
         }
     }

@@ -2,6 +2,7 @@
 define(
     [
         'marionette',
+        'backgrid',
         'Series/Index/Posters/CollectionView',
         'Series/Index/List/CollectionView',
         'Series/Index/EmptyView',
@@ -16,8 +17,10 @@ define(
         'Cells/SeriesStatusCell',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
-        'Shared/Toolbar/ToolbarLayout'
+        'Shared/Toolbar/ToolbarLayout',
+        'underscore'
     ], function (Marionette,
+                 Backgrid,
                  PosterCollectionView,
                  ListCollectionView,
                  EmptyView,
@@ -32,7 +35,8 @@ define(
                  SeriesStatusCell,
                  FooterView,
                  FooterModel,
-                 ToolbarLayout) {
+                 ToolbarLayout,
+                 _) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 

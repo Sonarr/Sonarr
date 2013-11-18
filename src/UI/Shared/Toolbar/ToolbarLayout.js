@@ -5,8 +5,9 @@ define(
         'Shared/Toolbar/ButtonCollection',
         'Shared/Toolbar/ButtonModel',
         'Shared/Toolbar/Radio/RadioButtonCollectionView',
-        'Shared/Toolbar/Button/ButtonCollectionView'
-    ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView) {
+        'Shared/Toolbar/Button/ButtonCollectionView',
+        'underscore'
+    ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView,_) {
         return Marionette.Layout.extend({
             template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 

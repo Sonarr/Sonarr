@@ -6,6 +6,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IMakeImportDecision
     {
-        List<ImportDecision> GetImportDecisions(IEnumerable<String> videoFiles, Series series, bool sceneSource);
+        List<ImportDecision> GetImportDecisions(IEnumerable<String> videoFiles, Series series, bool sceneSource, QualityModel quality = null);
     }
 
     public class ImportDecisionMaker : IMakeImportDecision
@@ -38,16 +39,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public List<ImportDecision> GetImportDecisions(IEnumerable<string> videoFiles, Series series, bool sceneSource)
+        public List<ImportDecision> GetImportDecisions(IEnumerable<string> videoFiles, Series series, bool sceneSource, QualityModel quality = null)
         {
             var newFiles = _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series.Id);
 
             _logger.Debug("Analysing {0}/{1} files.", newFiles.Count, videoFiles.Count());
 
-            return GetDecisions(newFiles, series, sceneSource).ToList();
+            return GetDecisions(newFiles, series, sceneSource, quality).ToList();
         }
 
-        private IEnumerable<ImportDecision> GetDecisions(IEnumerable<String> videoFiles, Series series, bool sceneSource)
+        private IEnumerable<ImportDecision> GetDecisions(IEnumerable<String> videoFiles, Series series, bool sceneSource, QualityModel quality = null)
         {
             foreach (var file in videoFiles)
             {
@@ -59,6 +60,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     
                     if (parsedEpisode != null)
                     {
+                        if (quality != null && quality > parsedEpisode.Quality)
+                        {
+                            parsedEpisode.Quality = quality;
+                        }
+
                         parsedEpisode.Size = _diskProvider.GetFileSize(file);
                         decision = GetDecision(parsedEpisode);
                     }

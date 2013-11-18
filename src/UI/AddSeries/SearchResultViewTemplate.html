@@ -1,4 +1,4 @@
-﻿<div class="search-item  {{#unless isExisting}}search-item-new{{/unless}}">
+﻿<div class="search-item {{#unless isExisting}}search-item-new{{/unless}}">
     <div class="row">
         <div class="span2">
             <a href="{{traktUrl}}" target="_blank">
@@ -9,7 +9,12 @@
         <div class="span9">
 
             <div class="row">
-                <h2>{{titleWithYear}}</h2>
+                <h2 class="series-title">
+                    {{titleWithYear}}
+                    {{#unless_eq status compare="continuing"}}
+                        <span class="label label-important">Ended</span>
+                    {{/unless_eq}}
+                </h2>
             </div>
             <div class="row new-series-overview x-overview">
                 {{overview}}

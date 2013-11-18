@@ -155,10 +155,14 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var testFile = GetTestFilePath();
+            var testDir = Path.Combine(SandboxFolder, "LastWrite");
+            var testFile = Path.Combine(testDir, Path.GetRandomFileName());
+
+            Directory.CreateDirectory(testDir);
 
             TestLogger.Info("Path is: {0}", testFile);
 
+            
             Subject.WriteAllText(testFile, "Test");
 
             Subject.GetLastFolderWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));

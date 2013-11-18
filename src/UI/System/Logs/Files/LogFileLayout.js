@@ -12,7 +12,8 @@ define(
         'System/Logs/Files/ContentsView',
         'System/Logs/Files/ContentsModel',
         'Shared/Toolbar/ToolbarLayout',
-        'Shared/LoadingView'
+        'Shared/LoadingView',
+        'jQuery/jquery.spin'
     ], function (vent,
         Marionette,
         Backgrid,
@@ -139,9 +140,10 @@ define(
                 this.contents.show(new ContentsView({ model: model }));
             },
 
-            _refreshLogs: function () {
+            _refreshLogs: function (buttonContext) {
                 this.contents.close();
-                this.collection.fetch();
+                var promise = this.collection.fetch();
+                buttonContext.ui.icon.spinForPromise(promise);
             },
 
             _commandComplete: function (options) {

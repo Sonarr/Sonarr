@@ -80,7 +80,7 @@ define(
                 this.collection.reset();
 
                 if (!options.term || options.term === this.collection.term) {
-                    return $.Deferred().resolve();
+                    return Marionette.$.Deferred().resolve();
                 }
 
                 this.searchResult.show(new LoadingView());

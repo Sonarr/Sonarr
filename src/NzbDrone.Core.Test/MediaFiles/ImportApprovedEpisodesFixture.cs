@@ -46,13 +46,14 @@ namespace NzbDrone.Core.Test.MediaFiles
                                                {
                                                    Series = series,
                                                    Episodes = new List<Episode> {episode},
-                                                   Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilit.avi".AsOsAgnostic(),
+                                                   Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilot.avi".AsOsAgnostic(),
                                                    Quality = new QualityModel(Quality.Bluray720p)
                                                }));
             }
 
             Mocker.GetMock<IUpgradeMediaFiles>()
-                  .Setup(s => s.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()));
+                  .Setup(s => s.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>()))
+                  .Returns(new EpisodeFileMoveResult());
         }
             
         [Test]

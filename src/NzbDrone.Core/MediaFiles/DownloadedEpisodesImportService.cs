@@ -99,6 +99,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             var cleanedUpName = GetCleanedUpFolderName(subfolderInfo.Name);
             var series = _parsingService.GetSeries(cleanedUpName);
+            var quality = QualityParser.ParseQuality(cleanedUpName);
 
             if (series == null)
             {
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
 
-            return ProcessFiles(series, videoFiles);
+            return ProcessFiles(series, quality, videoFiles);
         }
 
         private void ProcessVideoFile(string videoFile)
@@ -127,12 +128,12 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            ProcessFiles(series, videoFile);
+            ProcessFiles(series, null, videoFile);
         }
 
-        private List<ImportDecision> ProcessFiles(Series series, params string[] videoFiles)
+        private List<ImportDecision> ProcessFiles(Series series, QualityModel quality, params string[] videoFiles)
         {
-            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series, true);
+            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series, true, quality);
             return _importApprovedEpisodes.Import(decisions, true);
         }
 

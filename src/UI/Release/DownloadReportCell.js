@@ -22,21 +22,22 @@ define(
                 var self = this;
 
                 this.$el.html('<i class="icon-spinner icon-spin" />');
-                var promise = this.model.save();
 
-                promise.done(function () {
-                    self.$el.html('<i class="icon-ok" title="Added to downloaded queue" />');
-                });
-
-                promise.fail(function () {
-                    self.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
-                });
+                //Using success callback instead of promise so it
+                //gets called before the sync event is triggered
+                this.model.save(null, { success: function () {
+                    self.model.set('queued', true);
+                }});
             },
 
             render: function () {
                 this.$el.empty();
 
-                if (this.model.get('downloadAllowed'))
+                if (this.model.get('queued')) {
+                    this.$el.html('<i class="icon-nd-downloading" title="Added to downloaded queue" />');
+                }
+
+                else if (this.model.get('downloadAllowed'))
                 {
                     this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
                 }

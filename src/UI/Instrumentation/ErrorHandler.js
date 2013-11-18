@@ -4,6 +4,10 @@
         window.Messenger().post(message);
     };
 
+    var  addError = function(message){
+        window.$('#errors').append('<div>' + message + '</div>');
+    };
+
     window.onerror = function (msg, url, line) {
 
         try {
@@ -28,6 +32,8 @@
 
             window.Messenger().post(message);
 
+            addError(message.message);
+
         }
         catch (error) {
             console.log('An error occurred while reporting error. ' + error);
@@ -38,7 +44,7 @@
         return false; //don't suppress default alerts and logs.
     };
 
-    $(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
+    window.$(document).ajaxError(function (event, xmlHttpRequest, ajaxOptions) {
 
         //don't report 200 error codes
         if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {
@@ -58,22 +64,23 @@
 
         if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
             return false;
-            //message.message = 'NzbDrone Server Not Reachable. make sure NzbDrone is running.';
         }
-        else if (xmlHttpRequest.status === 400 && ajaxOptions.isValidatedCall) {
+
+        if (xmlHttpRequest.status === 400 && ajaxOptions.isValidatedCall) {
             return false;
         }
 
-        else if (xmlHttpRequest.status === 503) {
+        if (xmlHttpRequest.status === 503) {
             message.message = xmlHttpRequest.responseJSON.message;
         }
 
-        else
-        {
+        else {
             message.message = '[{0}] {1} : {2}'.format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
         }
 
         window.Messenger().post(message);
+        addError(message.message);
+
         return false;
     });
 
