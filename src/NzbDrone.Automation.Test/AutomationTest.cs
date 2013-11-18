@@ -7,6 +7,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
+using NzbDrone.Automation.Test.PageModel;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using OpenQA.Selenium;
@@ -46,9 +47,8 @@ namespace NzbDrone.Automation.Test
 
             driver.Url = "http://localhost:8989";
 
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-
-            wait.Until(d => d.FindElement(By.Id("x-toolbar")));
+            var page = new PageBase(driver);
+            page.WaitForNoSpinner();
 
             GetPageErrors().Should().BeEmpty();
 
@@ -70,7 +70,6 @@ namespace NzbDrone.Automation.Test
         [TearDown]
         public void AutomationTearDown()
         {
-            Thread.Sleep(2000);
             GetPageErrors().Should().BeEmpty();
         }
     }
