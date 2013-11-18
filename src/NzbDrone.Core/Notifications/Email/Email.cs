@@ -25,10 +25,10 @@ namespace NzbDrone.Core.Notifications.Email
             _smtpProvider.SendEmail(Settings, subject, body);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string subject = "NzbDrone [TV] - Downloaded";
-            var body = String.Format("{0} Downloaded and sorted.", message);
+            var body = String.Format("{0} Downloaded and sorted.", message.Message);
 
             _smtpProvider.SendEmail(Settings, subject, body);
         }

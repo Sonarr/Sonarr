@@ -23,11 +23,11 @@ namespace NzbDrone.Core.Notifications.Pushover
             _pushoverProxy.SendNotification(title, message, Settings.UserKey, (PushoverPriority)Settings.Priority);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _pushoverProxy.SendNotification(title, message, Settings.UserKey, (PushoverPriority)Settings.Priority);
+            _pushoverProxy.SendNotification(title, message.Message, Settings.UserKey, (PushoverPriority)Settings.Priority);
         }
 
         public override void AfterRename(Series series)

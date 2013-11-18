@@ -23,11 +23,11 @@ namespace NzbDrone.Core.Notifications.PushBullet
             _pushBulletProxy.SendNotification(title, message, Settings.ApiKey, Settings.DeviceId);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _pushBulletProxy.SendNotification(title, message, Settings.ApiKey, Settings.DeviceId);
+            _pushBulletProxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.DeviceId);
         }
 
         public override void AfterRename(Series series)

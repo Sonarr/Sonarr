@@ -7,7 +7,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        string UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -31,8 +31,9 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public string UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
+            var moveFileResult = new EpisodeFileMoveResult();
             var existingFiles = localEpisode.Episodes
                                             .Where(e => e.EpisodeFileId > 0)
                                             .Select(e => e.EpisodeFile.Value)
@@ -48,11 +49,14 @@ namespace NzbDrone.Core.MediaFiles
                     _recycleBinProvider.DeleteFile(file.Path);
                 }
 
+                moveFileResult.OldFiles.Add(file);
                 _mediaFileService.Delete(file, true);
             }
 
             _logger.Trace("Moving episode file: {0}", episodeFile);
-            return _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+            moveFileResult.Path = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+
+            return moveFileResult;
         }
     }
 }

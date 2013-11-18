@@ -169,6 +169,7 @@
     <Compile Include="NotificationTests\Xbmc\Json\CheckForErrorFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\GetSeriesPathFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
+    <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetSeriesFixture.cs" />

@@ -23,11 +23,11 @@ namespace NzbDrone.Core.Notifications.Growl
             _growlProvider.SendNotification(title, message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _growlProvider.SendNotification(title, message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
+            _growlProvider.SendNotification(title, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
         }
 
         public override void AfterRename(Series series)

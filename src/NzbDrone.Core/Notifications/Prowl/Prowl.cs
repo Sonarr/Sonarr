@@ -24,11 +24,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlProvider.SendNotification(title, message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
-        public override void OnDownload(string message, Series series)
+        public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _prowlProvider.SendNotification(title, message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlProvider.SendNotification(title, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
         public override void AfterRename(Series series)
