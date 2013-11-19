@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var client = BuildClient(action);
             var response = client.Execute(restRequest);
-            _logger.Trace("Response: {0}", response);
+            _logger.Trace("Response: {0}", response.Content);
 
             CheckForError(response);
 
