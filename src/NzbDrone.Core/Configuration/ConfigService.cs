@@ -282,6 +282,14 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("EnableFailedDownloadHandling", value); }
         }
 
+        public Boolean CreateEmptySeriesFolders
+        {
+            //TODO: only create if the parent folder exists (check first)
+            get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
+
+            set { SetValue("CreateEmptySeriesFolders", value); }
+        }
+
         public string DownloadClientWorkingFolders
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }

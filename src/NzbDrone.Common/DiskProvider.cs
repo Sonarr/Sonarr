@@ -37,6 +37,7 @@ namespace NzbDrone.Common
         void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
         bool IsFileLocked(string path);
         string GetPathRoot(string path);
+        string GetParentFolder(string path);
         void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         bool IsParent(string parentPath, string childPath);
         void SetFolderWriteTime(string path, DateTime time);
@@ -364,6 +365,20 @@ namespace NzbDrone.Common
             Ensure.That(() => path).IsValidPath();
 
             return Path.GetPathRoot(path);
+        }
+
+        public string GetParentFolder(string path)
+        {
+            Ensure.That(() => path).IsValidPath();
+
+            var parent = Directory.GetParent(path);
+
+            if (parent == null)
+            {
+                return null;
+            }
+
+            return parent.FullName;
         }
 
         public void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType)

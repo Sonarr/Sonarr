@@ -2,6 +2,7 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -25,17 +26,21 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly ICommandExecutor _commandExecutor;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
                                 IMakeImportDecision importDecisionMaker,
                                 IImportApprovedEpisodes importApprovedEpisodes,
-                                ICommandExecutor commandExecutor, Logger logger)
+                                ICommandExecutor commandExecutor,
+                                IConfigService configService,
+                                Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
             _commandExecutor = commandExecutor;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -46,6 +51,14 @@ namespace NzbDrone.Core.MediaFiles
 
             if (!_diskProvider.FolderExists(series.Path))
             {
+                if (_configService.CreateEmptySeriesFolders &&
+                    _diskProvider.FolderExists(_diskProvider.GetParentFolder(series.Path)))
+                {
+                    _logger.Debug("Creating missing series folder: {0}", series.Path);
+                    _diskProvider.CreateFolder(series.Path);
+                    return;
+                }
+
                 _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 return;
             }
