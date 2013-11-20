@@ -120,7 +120,10 @@ define(
             _refreshLogs: function (buttonContext) {
                 this.collection.state.currentPage = 1;
                 var promise = this.collection.fetch({ reset: true });
-                buttonContext.ui.icon.spinForPromise(promise);
+
+                if (buttonContext) {
+                    buttonContext.ui.icon.spinForPromise(promise);
+                }
             },
 
             _commandComplete: function (options) {

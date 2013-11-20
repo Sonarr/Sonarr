@@ -143,7 +143,11 @@ define(
             _refreshLogs: function (buttonContext) {
                 this.contents.close();
                 var promise = this.collection.fetch();
-                buttonContext.ui.icon.spinForPromise(promise);
+
+                //Would be nice to spin the icon on the refresh button
+                if (buttonContext) {
+                    buttonContext.ui.icon.spinForPromise(promise);
+                }
             },
 
             _commandComplete: function (options) {
