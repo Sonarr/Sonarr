@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabProviderTests
 
             Mocker.GetMock<ISabCommunicationProxy>()
                     .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabPriorityType.High))
-                    .Returns("{ \"status\": \"true\", \"nzo_ids\": [ \"sab_id_goes_here\" ] }");
+                    .Returns(new SabAddResponse());
 
             Subject.DownloadNzb(_remoteEpisode);
 
