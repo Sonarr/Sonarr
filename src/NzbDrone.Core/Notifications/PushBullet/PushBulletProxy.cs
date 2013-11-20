@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
     public class PushBulletProxy : IPushBulletProxy, IExecute<TestPushBulletCommand>
     {
-        private const string URL = "https://www.pushbullet.com/api/pushes";
+        private const string URL = "https://api.pushbullet.com/api/pushes";
 
         public void SendNotification(string title, string message, string apiKey, int deviceId)
         {
