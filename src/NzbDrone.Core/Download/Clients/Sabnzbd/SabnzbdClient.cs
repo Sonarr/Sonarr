@@ -55,11 +55,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             using (var nzb = _httpProvider.DownloadStream(url))
             {
                 _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = Json.Deserialize<SabAddResponse>(_sabCommunicationProxy.DownloadNzb(nzb, title, category, priority));
+                var response = _sabCommunicationProxy.DownloadNzb(nzb, title, category, priority);
 
-                _logger.Debug("Queue Response: [{0}]", response.Status);
+                if (response != null && response.Ids.Any())
+                {
+                    return response.Ids.First();
+                }
 
-                return response.Ids.First();
+                return null;
             }
         }
 
@@ -240,7 +243,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var result = Json.Deserialize<SabJsonError>(response);
 
-            if (result.Status != null && result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+            if (result.Status)
                 throw new ApplicationException(result.Error);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
@@ -9,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public interface ISabCommunicationProxy
     {
-        string DownloadNzb(Stream nzb, string name, string category, int priority);
+        SabAddResponse DownloadNzb(Stream nzb, string name, string category, int priority);
         void RemoveFrom(string source, string id);
         string ProcessRequest(IRestRequest restRequest, string action);
     }
@@ -25,14 +26,22 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public string DownloadNzb(Stream nzb, string title, string category, int priority)
+        public SabAddResponse DownloadNzb(Stream nzb, string title, string category, int priority)
         {
             var request = new RestRequest(Method.POST);
             var action = String.Format("mode=addfile&cat={0}&priority={1}", category, priority);
 
             request.AddFile("name", ReadFully(nzb), title, "application/x-nzb");
             
-            return ProcessRequest(request, action);
+            var response = Json.TryDeserialize<SabAddResponse>(ProcessRequest(request, action));
+
+            if (response == null)
+            {
+                response = new SabAddResponse();
+                response.Status = true;
+            }
+
+            return response;
         }
 
         public void RemoveFrom(string source, string id)
@@ -67,6 +76,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                                  _configService.SabUsername,
                                  _configService.SabPassword);
 
+            _logger.Trace(url);
+
             return new RestClient(url);
         }
 
@@ -77,9 +88,28 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 throw new ApplicationException("Unable to connect to SABnzbd, please check your settings");
             }
 
-            var result = Json.Deserialize<SabJsonError>(response.Content);
+            var result = Json.TryDeserialize<SabJsonError>(response.Content);
 
-            if (result.Status != null && result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+            if (result == null)
+            {
+                //Handle plain text responses from SAB
+                result = new SabJsonError();
+
+                if (response.Content.StartsWith("error", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result.Status = false;
+                    result.Error = response.Content.Replace("error: ", "");
+                }
+
+                else
+                {
+                    result.Status = true;
+                }
+
+                result.Error = response.Content.Replace("error: ", "");
+            }
+            
+            if (!result.Status)
                 throw new ApplicationException(result.Error);
         }
 

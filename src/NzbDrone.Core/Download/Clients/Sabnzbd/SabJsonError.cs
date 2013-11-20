@@ -2,7 +2,7 @@
 {
     public class SabJsonError
     {
-        public string Status { get; set; }
+        public bool Status { get; set; }
         public string Error { get; set; }
     }
 }

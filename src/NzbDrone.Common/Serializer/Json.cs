@@ -41,6 +41,18 @@ namespace NzbDrone.Common.Serializer
             return JsonConvert.DeserializeObject(json, type, SerializerSetting);
         }
 
+        public static T TryDeserialize<T>(string json) where T : new()
+        {
+            try
+            {
+                return Deserialize<T>(json);
+            }
+            catch (JsonReaderException ex)
+            {
+                return default(T);
+            }
+        }
+
         public static string ToJson(this object obj)
         {
             return JsonConvert.SerializeObject(obj, SerializerSetting);
