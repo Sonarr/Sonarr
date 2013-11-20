@@ -6,7 +6,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 

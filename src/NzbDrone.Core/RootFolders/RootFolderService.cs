@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.RootFolders

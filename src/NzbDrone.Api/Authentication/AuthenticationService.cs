@@ -1,5 +1,4 @@
-﻿using System;
-using Nancy;
+﻿using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Security;
 using NzbDrone.Core.Configuration;

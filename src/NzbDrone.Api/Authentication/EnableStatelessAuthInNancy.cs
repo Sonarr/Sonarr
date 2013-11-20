@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
 using NzbDrone.Api.Extensions;

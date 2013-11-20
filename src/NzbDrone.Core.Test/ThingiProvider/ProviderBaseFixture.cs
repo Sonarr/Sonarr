@@ -4,7 +4,6 @@ using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Test.ThingiProvider
 {

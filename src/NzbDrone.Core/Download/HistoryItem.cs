@@ -1,5 +1,4 @@
 ﻿using System;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {

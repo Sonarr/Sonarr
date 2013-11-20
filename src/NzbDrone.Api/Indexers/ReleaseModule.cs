@@ -2,7 +2,6 @@
 using FluentValidation;
 using Nancy;
 using NzbDrone.Api.Mapping;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
@@ -10,7 +9,6 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 using Omu.ValueInjecter;
 using System.Linq;
 using Nancy.ModelBinding;

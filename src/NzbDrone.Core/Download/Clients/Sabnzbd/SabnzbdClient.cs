@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -10,7 +9,6 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {

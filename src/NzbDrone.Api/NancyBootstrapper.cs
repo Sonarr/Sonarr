@@ -1,7 +1,6 @@
 ﻿using NLog;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
-using NzbDrone.Api.Authentication;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.Instrumentation;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Core.Notifications;
 using Omu.ValueInjecter;

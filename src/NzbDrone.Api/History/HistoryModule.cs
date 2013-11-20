@@ -1,8 +1,6 @@
 ﻿using System;
 using Nancy;
-using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;

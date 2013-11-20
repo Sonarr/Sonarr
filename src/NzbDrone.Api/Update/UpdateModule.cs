@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nancy;
 using Newtonsoft.Json;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.REST;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Update;

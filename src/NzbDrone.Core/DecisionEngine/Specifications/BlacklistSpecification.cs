@@ -1,4 +1,3 @@
-using System.Linq;
 using NLog;
 using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Configuration;

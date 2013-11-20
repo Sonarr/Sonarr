@@ -3,7 +3,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync

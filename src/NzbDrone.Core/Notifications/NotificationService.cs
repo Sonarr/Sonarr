@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Composition;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications
 {

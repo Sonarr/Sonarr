@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Queue;

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Host

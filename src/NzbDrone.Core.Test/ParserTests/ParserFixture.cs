@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Parser;

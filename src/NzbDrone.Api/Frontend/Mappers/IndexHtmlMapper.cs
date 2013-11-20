@@ -1,7 +1,5 @@
-using System;
 using System.IO;
 using Nancy;
-using Nancy.Responses;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;

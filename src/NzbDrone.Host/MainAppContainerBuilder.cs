@@ -4,7 +4,6 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.RootFolders;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Host
