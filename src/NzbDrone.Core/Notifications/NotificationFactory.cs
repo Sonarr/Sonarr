@@ -14,12 +14,9 @@ namespace NzbDrone.Core.Notifications
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
     {
-        private IEnumerable<INotification> _providers;
-
         public NotificationFactory(INotificationRepository providerRepository, IEnumerable<INotification> providers, IContainer container, Logger logger)
             : base(providerRepository, providers, container, logger)
         {
-            _providers = providers;
         }
 
         public List<INotification> OnGrabEnabled()

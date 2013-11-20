@@ -6,8 +6,9 @@ define(
         'marionette',
         'moment',
         'Calendar/Collection',
+        'System/StatusModel',
         'fullcalendar'
-    ], function (vent, Marionette, moment, CalendarCollection) {
+    ], function (vent, Marionette, moment, CalendarCollection, StatusModel) {
 
         var _instance;
 
@@ -24,7 +25,7 @@ define(
                     allDayDefault : false,
                     ignoreTimezone: false,
                     weekMode      : 'variable',
-                    firstDay      : window.NzbDrone.ServerStatus.startOfWeek,
+                    firstDay      : StatusModel.get('startOfWeek'),
                     timeFormat    : 'h(:mm)tt',
                     header        : {
                         left  : 'prev,next today',

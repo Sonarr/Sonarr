@@ -1,5 +1,6 @@
 ﻿'use strict';
 require.config({
+    urlArgs: 'v=' + window.NzbDrone.Version,
     paths: {
         'backbone'            : 'JsLibraries/backbone',
         'moment'              : 'JsLibraries/moment',
@@ -28,19 +29,15 @@ require.config({
     },
 
     shim: {
-
-
         jquery :{
           exports: '$'
         },
-
         signalR: {
             deps:
                 [
                     'jquery'
                 ]
         },
-
         bootstrap: {
             deps:
                 [
@@ -52,14 +49,12 @@ require.config({
                 });
             }
         },
-
         backstrech: {
             deps:
                 [
                     'jquery'
                 ]
         },
-
         underscore: {
             deps   :
                 [
@@ -67,7 +62,6 @@ require.config({
                 ],
             exports: '_'
         },
-
         backbone: {
             deps:
                 [
@@ -75,14 +69,10 @@ require.config({
                     'underscore',
                     'Mixins/jquery.ajax',
                     'jQuery/ToTheTop'
-
                 ],
 
             exports: 'Backbone'
         },
-
-
-
         marionette: {
             deps:
                 [
@@ -98,21 +88,18 @@ require.config({
 
             }
         },
-
         'jquery.knob': {
             deps:
                 [
                     'jquery'
                 ]
         },
-
         'jquery.dotdotdot': {
             deps:
                 [
                     'jquery'
                 ]
         },
-
         'backbone.pageable': {
             deps:
                 [
@@ -139,7 +126,6 @@ require.config({
                     'backbone'
                 ]
         },
-
         backgrid            : {
             deps:
                 [
@@ -189,10 +175,6 @@ require.config({
     }
 });
 
-require.config({
-    urlArgs: 'v=' + window.NzbDrone.ServerStatus.version
-});
-
 define(
     [
         'jquery',
@@ -205,9 +187,10 @@ define(
         'Series/SeriesController',
         'Router',
         'Shared/Modal/Controller',
+        'System/StatusModel',
         'Instrumentation/StringFormat',
         'LifeCycle'
-    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController) {
+    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, serverStatusModel) {
 
         new SeriesController();
         new ModalController();
@@ -228,6 +211,17 @@ define(
             RouteBinder.bind();
             AppLayout.navbarRegion.show(new NavbarView());
             $('body').addClass('started');
+        });
+
+        app.addInitializer(function () {
+
+            var footerText = serverStatusModel.get('version');
+
+            if (serverStatusModel.get('branch') !== 'master') {
+                footerText += '</br>' + serverStatusModel.get('branch');
+            }
+
+            $('#footer-region .version').html(footerText);
         });
 
         app.start();

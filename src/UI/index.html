@@ -61,18 +61,19 @@
     </div>
 </footer>
 </body>
-<div id="errors">
-</div>
+<div id="errors"></div>
 <script type="text/javascript">
-    window.NzbDrone = window.NzbDrone || {};
-    window.NzbDrone.ApiKey = 'API_KEY';
+    window.NzbDrone = {
+        ApiRoot: '/api',
+        ApiKey : 'API_KEY',
+        Version: 'APP_VERSION'
+    };
 </script>
 
 <script src="/polyfills.js"></script>
 <script src="/JsLibraries/jquery.js"></script>
 <script src="/JsLibraries/messenger.js"></script>
 <script src="/Instrumentation/ErrorHandler.js"></script>
-<script src="/ServerStatus.js"></script>
 
 <script data-main="/app" src="/JsLibraries/require.js"></script>
 <script src="/JsLibraries/xrayquire.js"></script>
