@@ -133,7 +133,7 @@ Function RunGrunt()
    Invoke-Expression  'npm install'
    CheckExitCode
     
-   Invoke-Expression  ('node ' + $gruntPath + ' package')
+   Invoke-Expression  ('node ' + $gruntPath + ' packagerjs')
    CheckExitCode
 
    Write-Host "##teamcity[progressFinish 'Running Grunt']"
