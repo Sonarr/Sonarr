@@ -18,6 +18,7 @@ define(
         vent.Commands = {
             EditSeriesCommand  : 'EditSeriesCommand',
             DeleteSeriesCommand: 'DeleteSeriesCommand',
+            OpenModalCommand   : 'OpenModalCommand',
             CloseModalCommand  : 'CloseModalCommand',
             ShowEpisodeDetails : 'ShowEpisodeDetails',
             ShowHistoryDetails : 'ShowHistoryDetails',

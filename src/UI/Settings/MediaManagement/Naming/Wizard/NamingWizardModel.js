@@ -10,7 +10,7 @@ define(
                 includeQuality     : true,
                 replaceSpaces      : false,
                 separator          : ' - ',
-                numberStyle        : '2',
+                numberStyle        : 'S{season:00}E{episode:00}',
                 multiEpisodeStyle  : 0
             }
         });

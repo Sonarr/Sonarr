@@ -22,17 +22,14 @@ define(
                 'click .x-apply': '_applyNaming'
             },
 
-            initialize: function (options) {
+            formatsUpdated: 'formatsUpdated',
+
+            initialize: function () {
                 this.model = new NamingWizardModel();
-                this.namingModel = options.model;
                 this.namingSampleModel = new NamingSampleModel();
             },
 
             onRender: function () {
-                if (!this.model.get('renameEpisodes')) {
-                    this.ui.namingOptions.hide();
-                }
-
                 this.listenTo(this.model, 'change', this._buildFormat);
                 this.listenTo(this.namingSampleModel, 'sync', this._showSamples);
                 this._buildFormat();
@@ -56,9 +53,14 @@ define(
             },
 
             _applyNaming: function () {
-                this.namingModel.set('standardEpisodeFormat', this.standardEpisodeFormat);
-                this.namingModel.set('dailyEpisodeFormat', this.dailyEpisodeFormat);
-                this.namingModel.set('multiEpisodeStyle', this.model.get('multiEpisodeStyle'));
+                var options = {
+                    standardEpisodeFormat: this.standardEpisodeFormat,
+                    dailyEpisodeFormat: this.dailyEpisodeFormat,
+                    multiEpisodeStyle: this.model.get('multiEpisodeStyle')
+                };
+
+                this.trigger(this.formatsUpdated, options);
+
 
                 vent.trigger(vent.Commands.CloseModalCommand);
             },
@@ -82,23 +84,7 @@ define(
                     this.dailyEpisodeFormat += this.model.get('separator');
                 }
 
-                switch (this.model.get('numberStyle')) {
-                    case '0':
-                        this.standardEpisodeFormat += '{season}x{episode:00}';
-                        break;
-                    case '1':
-                        this.standardEpisodeFormat += '{season:00}x{episode:00}';
-                        break;
-                    case '2':
-                        this.standardEpisodeFormat += 'S{season:00}E{episode:00}';
-                        break;
-                    case '3':
-                        this.standardEpisodeFormat += 's{season:00}e{episode:00}';
-                        break;
-                    default:
-                        this.standardEpisodeFormat += 'Unknown Number Pattern';
-                }
-
+                this.standardEpisodeFormat += this.model.get('numberStyle');
                 this.dailyEpisodeFormat += '{Air-Date}';
 
                 if (this.model.get('includeEpisodeTitle')) {

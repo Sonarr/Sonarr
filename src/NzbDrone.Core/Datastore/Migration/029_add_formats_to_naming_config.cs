@@ -26,14 +26,21 @@ namespace NzbDrone.Core.Datastore.Migration
                 namingConfigCmd.CommandText = @"SELECT * FROM NamingConfig LIMIT 1";
                 using (IDataReader namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
+                    var separatorIndex = namingConfigReader.GetOrdinal("Separator");
+                    var numberStyleIndex = namingConfigReader.GetOrdinal("NumberStyle");
+                    var includeSeriesTitleIndex = namingConfigReader.GetOrdinal("IncludeSeriesTitle");
+                    var includeEpisodeTitleIndex = namingConfigReader.GetOrdinal("IncludeEpisodeTitle");
+                    var includeQualityIndex = namingConfigReader.GetOrdinal("IncludeQuality");
+                    var replaceSpacesIndex = namingConfigReader.GetOrdinal("ReplaceSpaces");
+
                     while (namingConfigReader.Read())
                     {
-                        var separator = namingConfigReader.GetString(1);
-                        var numberStyle = namingConfigReader.GetInt32(2);
-                        var includeSeriesTitle = namingConfigReader.GetBoolean(3);
-                        var includeEpisodeTitle = namingConfigReader.GetBoolean(5);
-                        var includeQuality = namingConfigReader.GetBoolean(6);
-                        var replaceSpaces = namingConfigReader.GetBoolean(7);
+                        var separator = namingConfigReader.GetString(separatorIndex);
+                        var numberStyle = namingConfigReader.GetInt32(numberStyleIndex);
+                        var includeSeriesTitle = namingConfigReader.GetBoolean(includeSeriesTitleIndex);
+                        var includeEpisodeTitle = namingConfigReader.GetBoolean(includeEpisodeTitleIndex);
+                        var includeQuality = namingConfigReader.GetBoolean(includeQualityIndex);
+                        var replaceSpaces = namingConfigReader.GetBoolean(replaceSpacesIndex);
 
                         //Output settings
                         var seriesTitlePattern = "";
@@ -43,21 +50,31 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         if (includeSeriesTitle)
                         {
-                            seriesTitlePattern = "{Series Title}" + separator;
-
                             if (replaceSpaces)
                             {
-                                seriesTitlePattern = "{Series.Title}" + separator;
+                                seriesTitlePattern = "{Series.Title}";
                             }
+
+                            else
+                            {
+                                seriesTitlePattern = "{Series Title}";
+                            }
+
+                            seriesTitlePattern += separator;
                         }
 
                         if (includeEpisodeTitle)
                         {
-                            episodeTitlePattern = separator + "{Episode Title}";
+                            episodeTitlePattern = separator;
 
                             if (replaceSpaces)
                             {
-                                episodeTitlePattern = separator + "{Episode.Title}";
+                                episodeTitlePattern += "{Episode.Title}";
+                            }
+
+                            else
+                            {
+                                episodeTitlePattern += "{Episode Title}";
                             }
                         }
 

@@ -1,13 +1,13 @@
 ﻿'use strict';
 define(
     [
-        'jquery',
         'vent',
         'marionette',
         'Settings/MediaManagement/Naming/NamingSampleModel',
+        'Settings/MediaManagement/Naming/Wizard/NamingWizardView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView'
-    ], function ($, vent, Marionette, NamingSampleModel, AsModelBoundView, AsValidatedView) {
+    ], function (vent, Marionette, NamingSampleModel, NamingWizardView, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
@@ -28,7 +28,7 @@ define(
             },
 
             onRender: function () {
-                if (!this.model.get('renameEpisodes')) {
+                if (!this.model.has('renameEpisodes')) {
                     this.ui.namingOptions.hide();
                 }
 
@@ -61,6 +61,10 @@ define(
             },
 
             _showWizard: function () {
+                var modalView = new NamingWizardView();
+                vent.trigger(vent.Commands.OpenModalCommand, modalView);
+                this.listenTo(modalView, modalView.formatsUpdated, this._updateFormats);
+
                 vent.trigger(vent.Commands.ShowNamingWizard, { model: this.model });
             },
 
@@ -70,20 +74,26 @@ define(
 
                 var target = e.target;
                 var token = '';
-                var input = $(target).closest('.x-helper-input').children('input');
+                var input = this.$(target).closest('.x-helper-input').children('input');
 
-                if ($(target).attr('data-token')) {
-                    token = '{{0}}'.format($(target).attr('data-token'));
+                if (this.$(target).attr('data-token')) {
+                    token = '{{0}}'.format(this.$(target).attr('data-token'));
                 }
 
                 else {
-                    token = $(target).attr('data-separator');
+                    token = this.$(target).attr('data-separator');
                 }
 
                 input.val(input.val() + token);
 
                 this.ui.namingTokenHelper.removeClass('open');
                 input.focus();
+            },
+
+            _updateFormats: function (options) {
+                this.model.set('standardEpisodeFormat', options.standardEpisodeFormat);
+                this.model.set('dailyEpisodeFormat', options.dailyEpisodeFormat);
+                this.model.set('multiEpisodeStyle', options.multiEpisodeStyle);
             }
         });
 

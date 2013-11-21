@@ -89,10 +89,10 @@
 
             <div class="controls">
                 <select class="inputClass" name="numberStyle">
-                    <option value="0">1x05</option>
-                    <option value="1">01x05</option>
-                    <option value="2">S01E05</option>
-                    <option value="3">s01e05</option>
+                    <option value="{season}x{episode:00}">1x05</option>
+                    <option value="{season:00}x{episode:00}">01x05</option>
+                    <option value="S{season:00}E{episode:00}">S01E05</option>
+                    <option value="s{season:00}e{episode:00}">s01e05</option>
                 </select>
             </div>
         </div>

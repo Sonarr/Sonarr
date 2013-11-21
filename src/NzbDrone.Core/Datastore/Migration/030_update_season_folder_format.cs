@@ -21,9 +21,11 @@ namespace NzbDrone.Core.Datastore.Migration
                 namingConfigCmd.CommandText = @"SELECT * FROM Config WHERE [Key] = 'seasonfolderformat'";
                 using (IDataReader namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
+                    var valueIndex = namingConfigReader.GetOrdinal("[Value]");
+
                     while (namingConfigReader.Read())
                     {
-                        var value = namingConfigReader.GetString(2);
+                        var value = namingConfigReader.GetString(valueIndex);
 
                         value = value.Replace("%sn", "{Series Title}")
                                      .Replace("%s.n", "{Series.Title}")
