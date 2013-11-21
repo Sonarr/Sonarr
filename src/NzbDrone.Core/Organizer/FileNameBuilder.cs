@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Organizer
     {
         private readonly IConfigService _configService;
         private readonly INamingConfigService _namingConfigService;
+        private readonly ICached<EpisodeFormat> _patternCache;
         private readonly Logger _logger;
 
         private static readonly Regex TitleRegex = new Regex(@"(?<token>\{(?:\w+)(?<separator>\s|\W|_)\w+\})",
@@ -37,10 +39,14 @@ namespace NzbDrone.Core.Organizer
 
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public FileNameBuilder(INamingConfigService namingConfigService, IConfigService configService, Logger logger)
+        public FileNameBuilder(INamingConfigService namingConfigService,
+                               IConfigService configService,
+                               ICacheManger cacheManger,
+                               Logger logger)
         {
             _namingConfigService = namingConfigService;
             _configService = configService;
+            _patternCache = cacheManger.GetCache<EpisodeFormat>(GetType());
             _logger = logger;
         }
 
@@ -99,17 +105,10 @@ namespace NzbDrone.Core.Organizer
                 }
             }
 
-            var seasonEpisode = SeasonEpisodePatternRegex.Match(pattern);
-            if (seasonEpisode.Success)
-            {
-                var episodeFormat = new EpisodeFormat
-                {
-                    EpisodeSeparator = seasonEpisode.Groups["episodeSeparator"].Value,
-                    Separator = seasonEpisode.Groups["separator"].Value,
-                    EpisodePattern = seasonEpisode.Groups["episode"].Value,
-                    SeasonEpisodePattern = seasonEpisode.Groups["seasonEpisode"].Value,
-                };
+            var episodeFormat = GetSeasonEpisodePattern(pattern);
 
+            if (episodeFormat != null)
+            {
                 pattern = pattern.Replace(episodeFormat.SeasonEpisodePattern, "{Season Episode}");
                 var seasonEpisodePattern = episodeFormat.SeasonEpisodePattern;
 
@@ -245,6 +244,28 @@ namespace NzbDrone.Core.Organizer
             if (split.Length == 1) return value.ToString("0");
 
             return value.ToString(split[1]);
+        }
+
+        private EpisodeFormat GetSeasonEpisodePattern(string pattern)
+        {
+            return _patternCache.Get(pattern, () =>
+            {
+                var match = SeasonEpisodePatternRegex.Match(pattern);
+
+                if (match.Success)
+                {
+                    return new EpisodeFormat
+                    {
+                        EpisodeSeparator = match.Groups["episodeSeparator"].Value,
+                        Separator = match.Groups["separator"].Value,
+                        EpisodePattern = match.Groups["episode"].Value,
+                        SeasonEpisodePattern = match.Groups["seasonEpisode"].Value,
+                    };
+
+                }
+
+                return null;
+            });
         }
     }
 
