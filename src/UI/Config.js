@@ -17,10 +17,6 @@ define(
             },
 
             getValue: function (key, defaultValue) {
-
-
-                test = "";
-
                 var storeValue = window.localStorage.getItem(key);
 
                 if (!storeValue) {
