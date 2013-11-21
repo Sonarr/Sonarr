@@ -1,6 +1,6 @@
 ﻿'use strict';
 require.config({
-    urlArgs: 'v=' + window.NzbDrone.Version,
+
     paths: {
         'backbone'            : 'JsLibraries/backbone',
         'moment'              : 'JsLibraries/moment',
@@ -22,23 +22,39 @@ require.config({
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
-        'jquery'              : 'jQuery/jquery.shim',
+        'messenger'           : 'JsLibraries/messenger',
+        'jquery'              : 'JsLibraries/jquery',
         'libs'                : 'JsLibraries/',
 
         'api': 'Require/require.api'
     },
 
     shim: {
-        jquery :{
-          exports: '$'
-        },
-        signalR: {
+
+        api: {
             deps:
                 [
                     'jquery'
                 ]
         },
-        bootstrap: {
+
+        jquery                : {
+            exports: '$'
+        },
+        messenger             : {
+            deps   :
+                [
+                    'jquery'
+                ],
+            exports: 'Messenger'
+        },
+        signalR               : {
+            deps:
+                [
+                    'jquery'
+                ]
+        },
+        bootstrap             : {
             deps:
                 [
                     'jquery'
@@ -49,23 +65,24 @@ require.config({
                 });
             }
         },
-        backstrech: {
+        backstrech            : {
             deps:
                 [
                     'jquery'
                 ]
         },
-        underscore: {
+        underscore            : {
             deps   :
                 [
                     'jquery'
                 ],
             exports: '_'
         },
-        backbone: {
+        backbone              : {
             deps:
                 [
                     'jquery',
+                    'Instrumentation/ErrorHandler',
                     'underscore',
                     'Mixins/jquery.ajax',
                     'jQuery/ToTheTop'
@@ -73,7 +90,7 @@ require.config({
 
             exports: 'Backbone'
         },
-        marionette: {
+        marionette            : {
             deps:
                 [
                     'backbone',
@@ -88,45 +105,45 @@ require.config({
 
             }
         },
-        'jquery.knob': {
+        'jquery.knob'         : {
             deps:
                 [
                     'jquery'
                 ]
         },
-        'jquery.dotdotdot': {
+        'jquery.dotdotdot'    : {
             deps:
                 [
                     'jquery'
                 ]
         },
-        'backbone.pageable': {
+        'backbone.pageable'   : {
             deps:
                 [
                     'backbone'
                 ]
         },
-        'backbone.deepmodel': {
+        'backbone.deepmodel'  : {
             deps:
                 [
                     'backbone',
                     'underscore'
                 ]
         },
-        'backbone.validation': {
+        'backbone.validation' : {
             deps   :
                 [
                     'backbone'
                 ],
             exports: 'Backbone.Validation'
         },
-        'backbone.modelbinder':{
-            deps   :
+        'backbone.modelbinder': {
+            deps:
                 [
                     'backbone'
                 ]
         },
-        backgrid            : {
+        backgrid              : {
             deps:
                 [
                     'backbone'
@@ -154,7 +171,7 @@ require.config({
                     });
             }
         },
-        'backgrid.paginator': {
+        'backgrid.paginator'  : {
 
             exports: 'Backgrid.Extension.Paginator',
 
@@ -163,7 +180,7 @@ require.config({
                     'backgrid'
                 ]
         },
-        'backgrid.selectall': {
+        'backgrid.selectall'  : {
 
             exports: 'Backgrid.Extension.SelectAll',
 
@@ -173,6 +190,11 @@ require.config({
                 ]
         }
     }
+});
+
+
+require.config({
+    urlArgs: 'v=' + window.NzbDrone.Version
 });
 
 define(
@@ -224,5 +246,5 @@ define(
             $('#footer-region .version').html(footerText);
         });
 
-        app.start();
+        return app;
     });

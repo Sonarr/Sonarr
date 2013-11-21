@@ -354,7 +354,6 @@
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />
     <Compile Include="Notifications\INotification.cs" />
-    <Compile Include="Notifications\Notification.cs" />
     <Compile Include="Notifications\NotificationRepository.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="History\HistoryRepository.cs" />

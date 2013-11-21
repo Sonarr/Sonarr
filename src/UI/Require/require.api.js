@@ -1,7 +1,4 @@
-define(
-    [
-        'jquery'
-    ], function ($) {
+define([], function () {
         'use strict';
         return {
             load: function (name, parentRequire, onload, config) {
@@ -13,7 +10,7 @@ define(
                 var resource = name.split('!')[0];
                 var url = window.NzbDrone.ApiRoot + '/' + resource;
 
-                $.ajax({
+                window.$.ajax({
                     url: url
                 }).done(function (data) {
                         onload(data);

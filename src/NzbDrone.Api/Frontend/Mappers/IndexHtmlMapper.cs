@@ -55,6 +55,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             text = text.Replace(".css", ".css?v=" + BuildInfo.Version);
             text = text.Replace(".js", ".js?v=" + BuildInfo.Version);
             text = text.Replace("API_KEY", _configFileProvider.ApiKey);
+            text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
 
             return text;
         }

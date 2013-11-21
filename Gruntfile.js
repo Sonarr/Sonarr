@@ -163,7 +163,7 @@ module.exports = function (grunt) {
                     keepBuildDir : true,
                     modules: [{
                         name: 'app',
-                        exclude: ['JsLibraries/jquery', 'templates.js']
+                        exclude: ['templates.js']
                     }],
 
                 }
