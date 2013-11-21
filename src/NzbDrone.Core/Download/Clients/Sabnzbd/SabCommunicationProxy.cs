@@ -97,19 +97,19 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (response.Content.StartsWith("error", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    result.Status = false;
+                    result.Status = "false";
                     result.Error = response.Content.Replace("error: ", "");
                 }
 
                 else
                 {
-                    result.Status = true;
+                    result.Status = "true";
                 }
 
                 result.Error = response.Content.Replace("error: ", "");
             }
             
-            if (!result.Status)
+            if (result.Failed)
                 throw new ApplicationException(result.Error);
         }
 

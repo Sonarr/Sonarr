@@ -243,7 +243,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var result = Json.Deserialize<SabJsonError>(response);
 
-            if (result.Status)
+            if (result.Failed)
                 throw new ApplicationException(result.Error);
         }
     }
