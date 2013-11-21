@@ -163,10 +163,11 @@ namespace NzbDrone.Core.Organizer
 
                 else
                 {
+                    var nameSpec = _namingConfigService.GetConfig();
                     var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
                     tokenValues.Add("{Series Title}", series.Title);
-
-                    seasonFolder = ReplaceSeasonTokens(_configService.SeasonFolderFormat, seasonNumber);
+                    
+                    seasonFolder = ReplaceSeasonTokens(nameSpec.SeasonFolderFormat, seasonNumber);
                     seasonFolder = ReplaceTokens(seasonFolder, tokenValues);
                 }
 

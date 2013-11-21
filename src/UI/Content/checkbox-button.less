@@ -1,0 +1,28 @@
+@import "Bootstrap/variables";
+@import "Bootstrap/mixins";
+
+.checkbox-button div {
+  display: none;
+}
+
+@media only screen {
+  .checkbox-button {
+    input {
+      position: absolute;
+      opacity: 0;
+      z-index: 5;
+    }
+
+    div {
+      display: block;
+    }
+
+    .btn {
+      .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+    }
+
+    input:first-of-type:checked ~ .btn {
+      .buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
+    }
+  }
+}

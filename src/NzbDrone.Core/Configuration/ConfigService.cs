@@ -142,19 +142,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue(ConfigKey.DownloadedEpisodesFolder.ToString(), value); }
         }
 
-        public bool UseSeasonFolder
-        {
-            get { return GetValueBoolean("UseSeasonFolder", true); }
-
-            set { SetValue("UseSeasonFolder", value); }
-        }
-
-        public string SeasonFolderFormat
-        {
-            get { return GetValue("SeasonFolderFormat", "Season {season}"); }
-            set { SetValue("SeasonFolderFormat", value); }
-        }
-
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
         {
             get { return GetValueBoolean("AutoUnmonitorPreviouslyDownloadedEpisodes"); }
