@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             namingConfig = new NamingConfig();
 
-
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig()).Returns(namingConfig);
         }
@@ -40,7 +39,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                 .With(s => s.SeasonFolder = useSeasonFolder)
                 .Build();
 
-            Mocker.GetMock<IConfigService>().Setup(e => e.SeasonFolderFormat).Returns(seasonFolderFormat);
+            namingConfig.SeasonFolderFormat = seasonFolderFormat;
 
             Subject.BuildFilePath(fakeSeries, seasonNumber, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
