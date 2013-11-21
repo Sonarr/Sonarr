@@ -3,6 +3,7 @@ $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
 $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
+$sourceFolder = '.\src'
 
 Function Build()
 {
@@ -84,6 +85,9 @@ Function PackageMono()
     get-childitem $outputFolderMono -File -Filter sqlite3.* -Recurse  | foreach ($_) {remove-item $_.fullname}
     get-childitem $outputFolderMono -File -Filter MediaInfo.* -Recurse  | foreach ($_) {remove-item $_.fullname}
 
+    Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
+    Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" $outputFolderMono
+
     Write-Host Renaming NzbDrone.Console.exe to NzbDrone.exe
     get-childitem $outputFolderMono -File -Filter NzbDrone.exe -Recurse  | foreach ($_) {remove-item $_.fullname}
     Rename-Item "$outputFolderMono\NzbDrone.Console.exe" "NzbDrone.exe"
@@ -103,7 +107,7 @@ Function PackageTests()
 {
 
     Write-Host Packaging Tests
-    Write-Host "##teamcity[progressStart 'Creating Mono Package']"
+    Write-Host "##teamcity[progressStart 'Creating Test Package']"
   
     if(Test-Path $testPackageFolder)
     {
@@ -117,8 +121,8 @@ Function PackageTests()
 
     .\src\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder   
 
-    Copy-Item $outputFolder\*.dll  -Destination $testPackageFolder -Force
-    Copy-Item $outputFolder\*.pdb  -Destination $testPackageFolder -Force
+    Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
+    Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force
 
     Copy-Item .\*.sh               -Destination $testPackageFolder -Force
 
@@ -126,7 +130,10 @@ Function PackageTests()
 
     CleanFolder $testPackageFolder
 
-    Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
+    Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
+    Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" -Destination $testPackageFolder -Force
+
+    Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }
 
 

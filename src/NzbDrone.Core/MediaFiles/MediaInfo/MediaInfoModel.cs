@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Core.MediaFiles.MediaInfo
+﻿using System;
+
+namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public class MediaInfoModel
     {
@@ -8,7 +10,7 @@
         public int Height { get; set; }
         public string AudioFormat { get; set; }
         public int AudioBitrate { get; set; }
-        public int RunTime { get; set; }
+        public TimeSpan RunTime { get; set; }
         public int AudioStreamCount { get; set; }
         public int AudioChannels { get; set; }
         public string AudioProfile { get; set; }
