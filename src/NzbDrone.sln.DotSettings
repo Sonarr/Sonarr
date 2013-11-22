@@ -38,10 +38,26 @@
 	<s:String x:Key="/Default/Environment/Editor/MatchingBraceHighlighting/Style/@EntryValue">COLOR</s:String>
 	<s:Boolean x:Key="/Default/Environment/ExternalSources/Decompiler/ReorderMembers/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/Hierarchy/PsiConfigurationSettingsKey/LocationType/@EntryValue">SOLUTION_FOLDER</s:String>
+	
+	
+	
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=5C7F3FB135E52A44B9447C48B2EEEE92/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=5C7F3FB135E52A44B9447C48B2EEEE92/AbsolutePath/@EntryValue">C:\Dropbox\Git\NzbDrone\NzbDrone.sln.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=EAB6F2886783AB41B46249432F57475A/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=EAB6F2886783AB41B46249432F57475A/AbsolutePath/@EntryValue">C:\Dropbox\Git\NzbDrone\src\Microsoft.AspNet.SignalR.Core\Microsoft.AspNet.SignalR.Core.csproj.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=EAB6F2886783AB41B46249432F57475A/RelativePath/@EntryValue">..\Microsoft.AspNet.SignalR.Core\Microsoft.AspNet.SignalR.Core.csproj.DotSettings</s:String>
+	
+	
+	
+	
+	
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5C7F3FB135E52A44B9447C48B2EEEE92/RelativePriority/@EntryValue">1</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileEAB6F2886783AB41B46249432F57475A/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileEAB6F2886783AB41B46249432F57475A/RelativePriority/@EntryValue">3</s:Double>
+	
+	
+	
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003AC_003A_005CDropbox_005CGit_005CNzbDrone_005CNzbDrone_002Esln_002EDotSettings/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File_003A_003AC_003A_005CDropbox_005CGit_005CNzbDrone_005CNzbDrone_002Esln_002EDotSettings/RelativePriority/@EntryValue">2</s:Double>
 	<s:Boolean x:Key="/Default/Environment/MemoryUsageIndicator/IsVisible/@EntryValue">False</s:Boolean>
