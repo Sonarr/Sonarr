@@ -81,10 +81,8 @@ namespace NzbDrone.Integration.Test
             config.StandardEpisodeFormat = "";
             config.DailyEpisodeFormat = "";
 
-            var result = NamingConfig.Put(config);
-            result.RenameEpisodes.Should().BeFalse();
-            result.StandardEpisodeFormat.Should().Be(config.StandardEpisodeFormat);
-            result.DailyEpisodeFormat.Should().Be(config.DailyEpisodeFormat);
+            var errors = NamingConfig.InvalidPut(config);
+            errors.Should().NotBeEmpty();
         }
 
         [Test]
