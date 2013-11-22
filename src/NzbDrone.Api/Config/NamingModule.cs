@@ -8,6 +8,7 @@ using NzbDrone.Core.Organizer;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Extensions;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Config
 {
@@ -16,15 +17,18 @@ namespace NzbDrone.Api.Config
         private readonly INamingConfigService _namingConfigService;
         private readonly IFilenameSampleService _filenameSampleService;
         private readonly IFilenameValidationService _filenameValidationService;
+        private readonly IBuildFileNames _filenameBuilder;
 
         public NamingModule(INamingConfigService namingConfigService,
                             IFilenameSampleService filenameSampleService,
-                            IFilenameValidationService filenameValidationService)
+                            IFilenameValidationService filenameValidationService,
+                            IBuildFileNames filenameBuilder)
             : base("config/naming")
         {
             _namingConfigService = namingConfigService;
             _filenameSampleService = filenameSampleService;
             _filenameValidationService = filenameValidationService;
+            _filenameBuilder = filenameBuilder;
             GetResourceSingle = GetNamingConfig;
             GetResourceById = GetNamingConfig;
             UpdateResource = UpdateNamingConfig;
@@ -50,7 +54,12 @@ namespace NzbDrone.Api.Config
 
         private NamingConfigResource GetNamingConfig()
         {
-            return _namingConfigService.GetConfig().InjectTo<NamingConfigResource>();
+            var nameSpec = _namingConfigService.GetConfig();
+            var resource = nameSpec.InjectTo<NamingConfigResource>();
+            var basicConfig = _filenameBuilder.GetBasicNamingConfig(nameSpec);
+            resource.InjectFrom(basicConfig);
+
+            return resource;
         }
 
         private NamingConfigResource GetNamingConfig(int id)

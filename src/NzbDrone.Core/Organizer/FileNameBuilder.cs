@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Organizer
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile);
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig);
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
+        BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<EpisodeFormat> _patternCache;
         private readonly Logger _logger;
 
-        private static readonly Regex TitleRegex = new Regex(@"(?<token>\{(?:\w+)(?<separator>\s|\W|_)\w+\})",
+        private static readonly Regex TitleRegex = new Regex(@"(?<token>\{(?:\w+)(?<separator>\s|\.|-|_)\w+\})",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
@@ -174,6 +175,47 @@ namespace NzbDrone.Core.Organizer
             }
 
             return Path.Combine(path, fileName + extension);
+        }
+
+        public BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec)
+        {
+            var episodeFormat = GetEpisodeFormat(nameSpec.StandardEpisodeFormat);
+
+            var basicNamingConfig = new BasicNamingConfig
+                                    {
+                                        Separator = episodeFormat.Separator,
+                                        NumberStyle = episodeFormat.SeasonEpisodePattern
+                                    };
+
+            var titleTokens = TitleRegex.Matches(nameSpec.StandardEpisodeFormat);
+
+            foreach (Match match in titleTokens)
+            {
+                var separator = match.Groups["separator"].Value;
+                var token = match.Groups["token"].Value;
+
+                if (!separator.Equals(" "))
+                {
+                    basicNamingConfig.ReplaceSpaces = true;
+                }
+
+                if (token.StartsWith("{Series", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    basicNamingConfig.IncludeSeriesTitle = true;
+                }
+
+                if (token.StartsWith("{Episode", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    basicNamingConfig.IncludeEpisodeTitle = true;
+                }
+
+                if (token.StartsWith("{Quality", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    basicNamingConfig.IncludeQuality = true;
+                }
+            }
+
+            return basicNamingConfig;
         }
 
         public static string CleanFilename(string name)

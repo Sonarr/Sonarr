@@ -324,6 +324,7 @@
     <Compile Include="Notifications\Xbmc\Model\VersionResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcJsonResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcVersion.cs" />
+    <Compile Include="Organizer\BasicNamingConfig.cs" />
     <Compile Include="Organizer\FilenameValidationService.cs" />
     <Compile Include="Organizer\EpisodeFormat.cs" />
     <Compile Include="Organizer\Exception.cs" />

@@ -6,7 +6,7 @@ define(
         'backbone',
         'Settings/SettingsModel',
         'Settings/General/GeneralSettingsModel',
-        'Settings/MediaManagement/Naming/Model',
+        'Settings/MediaManagement/Naming/NamingModel',
         'Settings/MediaManagement/MediaManagementLayout',
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/IndexerLayout',

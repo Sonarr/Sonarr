@@ -23,17 +23,7 @@
     </div>
 
     <div class="x-naming-options">
-        <div class="control-group">
-            <label class="control-label">Wizard</label>
-
-            <div class="controls">
-                <button class="btn x-show-wizard">Show Wizard</button>
-
-                <span class="help-inline">
-                    <i class="icon-nd-form-info" title="Wizard to setup preferred naming style"/>
-                </span>
-            </div>
-        </div>
+        <div class="basic-setting x-basic-naming"></div>
 
         <div class="control-group advanced-setting">
             <label class="control-label">Standard Episode Format</label>
@@ -90,7 +80,7 @@
             </div>
         </div>
 
-        <div class="control-group advanced-setting">
+        <div class="control-group">
             <label class="control-label">Multi-Episode Style</label>
 
             <div class="controls">
@@ -108,10 +98,19 @@
         <label class="control-label">Season Folder Format</label>
 
         <div class="controls">
-            <input type="text" placeholder="Season {season}" name="seasonFolderFormat"/>
-            <span class="help-inline">
-                <i class="icon-question-sign" title="How should season folders be named? Please see the wiki for customization options"/>
-            </span>
+            <div class="input-append x-helper-input">
+                <input type="text" class="naming-format" name="seasonFolderFormat"/>
+                <div class="btn-group x-naming-token-helper">
+                    <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-plus"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{> SeriesTitleNamingPartial}}
+                        {{> SeasonNamingPartial}}
+                        {{> SeparatorNamingPartial}}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 

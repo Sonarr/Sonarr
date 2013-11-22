@@ -1,15 +1,16 @@
 ﻿'use strict';
 define(
     [
-        'vent',
+        'underscore',
         'marionette',
+        'Config',
         'Settings/MediaManagement/Naming/NamingSampleModel',
-        'Settings/MediaManagement/Naming/Wizard/NamingWizardView',
+        'Settings/MediaManagement/Naming/Basic/BasicNamingView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView'
-    ], function (vent, Marionette, NamingSampleModel, NamingWizardView, AsModelBoundView, AsValidatedView) {
+    ], function (_, Marionette, Config, NamingSampleModel, BasicNamingView, AsModelBoundView, AsValidatedView) {
 
-        var view = Marionette.ItemView.extend({
+        var view = Marionette.Layout.extend({
             template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
 
             ui: {
@@ -27,11 +28,17 @@ define(
                 'click .x-naming-token-helper a' : '_addToken'
             },
 
+            regions: {
+                basicNamingRegion: '.x-basic-naming'
+            },
+
             onRender: function () {
-                if (!this.model.has('renameEpisodes')) {
+                if (!this.model.get('renameEpisodes')) {
                     this.ui.namingOptions.hide();
                 }
 
+                this.basicNamingView = new BasicNamingView({ model: this.model });
+                this.basicNamingRegion.show(this.basicNamingView);
                 this.namingSampleModel = new NamingSampleModel();
 
                 this.listenTo(this.model, 'change', this._updateSamples);
@@ -51,6 +58,10 @@ define(
             },
 
             _updateSamples: function () {
+                if (!_.has(this.model.changed, 'standardEpisodeFormat') && !_.has(this.model.changed, 'dailyEpisodeFormat')) {
+                    return;
+                }
+
                 this.namingSampleModel.fetch({ data: this.model.toJSON() });
             },
 
@@ -58,14 +69,6 @@ define(
                 this.ui.singleEpisodeExample.html(this.namingSampleModel.get('singleEpisodeExample'));
                 this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
                 this.ui.dailyEpisodeExample.html(this.namingSampleModel.get('dailyEpisodeExample'));
-            },
-
-            _showWizard: function () {
-                var modalView = new NamingWizardView();
-                vent.trigger(vent.Commands.OpenModalCommand, modalView);
-                this.listenTo(modalView, modalView.formatsUpdated, this._updateFormats);
-
-                vent.trigger(vent.Commands.ShowNamingWizard, { model: this.model });
             },
 
             _addToken: function (e) {
@@ -88,12 +91,6 @@ define(
 
                 this.ui.namingTokenHelper.removeClass('open');
                 input.focus();
-            },
-
-            _updateFormats: function (options) {
-                this.model.set('standardEpisodeFormat', options.standardEpisodeFormat);
-                this.model.set('dailyEpisodeFormat', options.dailyEpisodeFormat);
-                this.model.set('multiEpisodeStyle', options.multiEpisodeStyle);
             }
         });
 
