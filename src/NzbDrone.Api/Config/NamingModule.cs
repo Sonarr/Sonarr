@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
@@ -56,6 +57,12 @@ namespace NzbDrone.Api.Config
         {
             var nameSpec = _namingConfigService.GetConfig();
             var resource = nameSpec.InjectTo<NamingConfigResource>();
+
+            if (String.IsNullOrWhiteSpace(resource.StandardEpisodeFormat))
+            {
+                return resource;
+            }
+
             var basicConfig = _filenameBuilder.GetBasicNamingConfig(nameSpec);
             resource.InjectFrom(basicConfig);
 

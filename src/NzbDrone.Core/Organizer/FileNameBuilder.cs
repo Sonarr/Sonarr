@@ -181,6 +181,11 @@ namespace NzbDrone.Core.Organizer
         {
             var episodeFormat = GetEpisodeFormat(nameSpec.StandardEpisodeFormat);
 
+            if (episodeFormat == null)
+            {
+                return new BasicNamingConfig();
+            }
+
             var basicNamingConfig = new BasicNamingConfig
                                     {
                                         Separator = episodeFormat.Separator,

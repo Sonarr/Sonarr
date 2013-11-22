@@ -5,9 +5,8 @@ define(
         'vent',
         'marionette',
         'Settings/MediaManagement/Naming/NamingSampleModel',
-        'Settings/MediaManagement/Naming/Wizard/NamingWizardModel',
         'Mixins/AsModelBoundView'
-    ], function (_, vent, Marionette, NamingSampleModel, NamingWizardModel, AsModelBoundView) {
+    ], function (_, vent, Marionette, NamingSampleModel, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Naming/Basic/BasicNamingViewTemplate',

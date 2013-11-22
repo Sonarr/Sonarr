@@ -37,8 +37,8 @@ define(
                     this.ui.namingOptions.hide();
                 }
 
-                this.basicNamingView = new BasicNamingView({ model: this.model });
-                this.basicNamingRegion.show(this.basicNamingView);
+                var basicNamingView = new BasicNamingView({ model: this.model });
+                this.basicNamingRegion.show(basicNamingView);
                 this.namingSampleModel = new NamingSampleModel();
 
                 this.listenTo(this.model, 'change', this._updateSamples);
