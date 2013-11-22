@@ -8,18 +8,23 @@ define(
         'Series/Delete/DeleteSeriesView',
         'Episode/EpisodeDetailsLayout',
         'History/Details/HistoryDetailsView',
-        'System/Logs/Table/Details/LogDetailsView'
+        'System/Logs/Table/Details/LogDetailsView',
     ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsView, LogDetailsView) {
 
         return Marionette.AppRouter.extend({
 
             initialize: function () {
+                vent.on(vent.Commands.OpenModalCommand, this._openModal, this);
                 vent.on(vent.Commands.CloseModalCommand, this._closeModal, this);
                 vent.on(vent.Commands.EditSeriesCommand, this._editSeries, this);
                 vent.on(vent.Commands.DeleteSeriesCommand, this._deleteSeries, this);
                 vent.on(vent.Commands.ShowEpisodeDetails, this._showEpisode, this);
                 vent.on(vent.Commands.ShowHistoryDetails, this._showHistory, this);
                 vent.on(vent.Commands.ShowLogDetails, this._showLogDetails, this);
+            },
+
+            _openModal: function (view) {
+                AppLayout.modalRegion.show(view);
             },
 
             _closeModal: function () {
