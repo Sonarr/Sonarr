@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Organizer
                 }
             }
 
-            var episodeFormat = GetSeasonEpisodePattern(pattern);
+            var episodeFormat = GetEpisodeFormat(pattern);
 
             if (episodeFormat != null)
             {
@@ -246,7 +246,7 @@ namespace NzbDrone.Core.Organizer
             return value.ToString(split[1]);
         }
 
-        private EpisodeFormat GetSeasonEpisodePattern(string pattern)
+        private EpisodeFormat GetEpisodeFormat(string pattern)
         {
             return _patternCache.Get(pattern, () =>
             {

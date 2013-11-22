@@ -18,8 +18,13 @@
     }
 
     .btn {
-      .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+      .buttonBackground(@btnBackground, @btnBackgroundHighlight);
+      color: #333333;
     }
+
+    .btn:hover {
+    color: #333333;
+  }
 
     input:first-of-type:checked ~ .btn {
       .buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
