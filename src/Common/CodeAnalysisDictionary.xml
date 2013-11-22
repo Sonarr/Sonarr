@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>Ack</Word>
+      <Word>Minifier</Word>
+      <Word>Jsonp</Word>
+      <Word>Linktionary</Word>
+      <Word>Scaleout</Word>
+      <Word>Redis</Word>
+      <Word>Owin</Word>
+      <Word>Stringify</Word>
+      <Word>Unminify</Word>
+      <Word>Unminified</Word>
+      <Word>Stateful</Word>
+      <Word>SignalR</Word>
+      <Word>Hubservable</Word>
+      <Word>Sse</Word>
+      <Word>GitHub</Word>
+    </Recognized>
+  </Words>
+</Dictionary>
