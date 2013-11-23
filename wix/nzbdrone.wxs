@@ -1,62 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Id="*" Name="NzbDrone" Language="1033" Version="$(env.BUILD_NUMBER)" Manufacturer="NzbDrone" UpgradeCode="56833D74-A480-4CA2-B562-5A018B3A0F99">
-        <Package Description="NzbDrone" InstallerVersion="200" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine" Platform="x86" Manufacturer="NzbDrone" />
+    <Product Id="257311fe-7c96-49df-8863-40930831d296" Name="NzbDrone" Language="1033" Version="$(env.BUILD_NUMBER)" Manufacturer="NzbDrone" UpgradeCode="56833D74-A480-4CA2-B562-5A018B3A0F99">
+        <Package Id="*" 
+          Description="NzbDrone" 
+          InstallerVersion="200" 
+          Compressed="yes" 
+          InstallPrivileges="elevated" 
+          InstallScope="perUser" 
+          Platform="x86" 
+          Manufacturer="NzbDrone" 
+          />
+        <UIRef Id="WixUI_Minimal" />
+        <UIRef Id="WixUI_ErrorProgressText" />
         <Media Id="1" Cabinet="nzbdrone.cab" EmbedCab="yes" CompressionLevel="high" />
-        <Property Id="ARPPRODUCTICON" Value="SX_ICON" />
+        <Property Id="ARPPRODUCTICON" Value="APP_ICON" />
         <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="LocalAppDataFolder" Name="AppDataFolder">
-                <Directory Name="SyntikX" Id="SX_ROOT">
-                    <Component Id="SX_APP_COMP" DiskId="1" Guid="9c3ac309-cde4-4338-be75-a914cbce2601">
-                        <File Id="CONSOLE_EXE_FILE" Name="NzbDrone.Console.exe" Source="..\_output\NzbDrone.Console.exe" />
-                        <RegistryValue Root="HKCU" Key="Software\Microsoft\SyntikX" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-                        <RemoveFolder Id="SX_ROOT" On="uninstall" />
-                    </Component>
+            <Directory Id="CommonAppDataFolder" Name="ProgramData">
+                <Directory Id="ROOT_DIR" Name="NzbDrone">
+                    <Directory Id="BIN_DIR" Name="bin">
+                      <Component Id="BIN_COMP" DiskId="1" Guid="417fd784-e2f5-435d-92d1-220c140d0042">
+                          <File Id="CONSOLE_EXE_FILE" Name="NzbDrone.Console.exe" Source="..\_output\NzbDrone.Console.exe" KeyPath="yes"/>
+                          <RemoveFolder Id="BIN_DIR" On="uninstall" />
+                      </Component>
+                    </Directory>
                 </Directory>
             </Directory>
-            <!--
-      <Directory Id="DesktopFolder">
-        <Component Id="SX_DESKTOP_SHORTCUT_COMP" Guid="1f395635-7a9d-454d-aab4-95a5a4e70be4">
-          <Shortcut Id="SX_DESKTOP_SHORTCUT" Name="SyntikX" Description="SyntikX Backup Client" Target="[SX_ROOT]SyntikX.Client.exe" WorkingDirectory="SX_ROOT" />
-          <RegistryValue Root="HKCU" Key="Software\Microsoft\SyntikX" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-        </Component>
-      </Directory>
-       <Directory Id="ProgramMenuFolder">
-        <Directory Id="SX_START_DIR" Name="SyntikX">
-          <Component Id="SX_START_SHORTCUT_COMP" Guid="8b3d54c6-712b-4bc2-b1e9-7cf40bcc1344">
-            <Shortcut Id="SX_START_SHORTCUT" Name="SyntikX" Description="SyntikX Backup Client" Target="[SX_ROOT]SyntikX.Client.exe" WorkingDirectory="SX_ROOT" />
-            <RemoveFolder Id="SX_START_DIR" On="uninstall" />
-            <RegistryValue Root="HKCU" Key="Software\Microsoft\SyntikX" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-          </Component>
         </Directory>
-        <Directory Id="StartupFolder" Name="Startup">
-          <Component Id="SX_STARTUP_SHORTCUT_COMP" Guid="0fdfe510-621e-4925-a0d4-395617fb7cbc">
-            <Shortcut Id="SX_STARTUP_SHORTCUT" Name="SyntikX" Description="SyntikX Backup Client" Target="[SX_ROOT]SyntikX.Client.exe" Arguments="/startup" WorkingDirectory="SX_ROOT" />
-            <RegistryValue Root="HKCU" Key="Software\Microsoft\SyntikX" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-          </Component>
-        </Directory>
-      </Directory> -->
-        </Directory>
-        <!--<UIRef Id="WixUI_Minimal" />-->
-        <UI />
         <MajorUpgrade AllowDowngrades="no" AllowSameVersionUpgrades="yes" MigrateFeatures="yes" Schedule="afterInstallValidate" DowngradeErrorMessage="Newer version of Nzbdrone is already installed." />
-        <Feature Id="DefaultFeature" Title="Main Feature" Level="1">
-            <ComponentRef Id="SX_APP_COMP" />
-            <!-- 
-      <ComponentRef Id="SX_START_SHORTCUT_COMP" />
-      <ComponentRef Id="SX_STARTUP_SHORTCUT_COMP" />
-      <ComponentRef Id="SX_DESKTOP_SHORTCUT_COMP" />
-
-      -->
+        <Feature Id="Core" Title="NzbDrone Core" Description="NzbDrone Core" Level="1" Display='expand'>
+            <ComponentRef Id="BIN_COMP" />
         </Feature>
         <PropertyRef Id="NETFRAMEWORK40FULL" />
+        <Property Id="INSTALL_WINDOWS_SERVICE" Value="1" />
         <Condition Message="This application requires .NET Framework 4.0 or later. Please install the .NET Framework then run this installer again.">NETFRAMEWORK40FULL</Condition>
-        <Icon Id="SX_ICON" SourceFile="..\_output\NzbDrone.exe" />
-        <InstallExecuteSequence>
-            <InstallInitialize />
-      <!--       <Custom Action="SX_START_ACTION" After="InstallFiles" /> -->
-            <InstallFinalize />
-        </InstallExecuteSequence>
-        <CustomAction Id="SX_START_ACTION" FileKey="CONSOLE_EXE_FILE" ExeCommand="" Execute="deferred" Impersonate="no" Return="asyncNoWait" />
+        <Icon Id="APP_ICON" SourceFile="..\_output\NzbDrone.exe" />
+        <CustomAction Id="START_ACTION" FileKey="CONSOLE_EXE_FILE" ExeCommand="" Execute="deferred" Impersonate="no" Return="asyncNoWait" />
     </Product>
 </Wix>
