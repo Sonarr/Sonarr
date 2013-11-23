@@ -123,7 +123,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 if (open != 0)
                 {
                     int runTime;
-                    Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out runTime);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out runTime);
 
                     mediaInfo.Close();
                     return TimeSpan.FromMilliseconds(runTime);
