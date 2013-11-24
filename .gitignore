@@ -1,6 +1,6 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-[Bb]in/
-[Oo]bj/
+src/**/[Bb]in/
+src/**/[Oo]bj/
 
 
 ## Ignore Visual Studio temporary files, build results, and

@@ -20,7 +20,6 @@
     "grunt-contrib-watch": "*",
     "grunt-contrib-less": "*",
     "grunt-contrib-copy": "*",
-    "grunt-curl": "*",
     "grunt-notify": "*",
     "grunt-contrib-clean": "*",
     "grunt-contrib-requirejs": "*",
