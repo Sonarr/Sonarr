@@ -19,7 +19,6 @@
                 <Directory Id="ROOT_DIR" Name="NzbDrone">
                     <Directory Id="BIN_DIR" Name="bin">
                       <Component Id="BIN_COMP" DiskId="1" Guid="417fd784-e2f5-435d-92d1-220c140d0042">
-                          <File Id="CONSOLE_EXE_FILE" Name="NzbDrone.Console.exe" Source="..\_output\NzbDrone.Console.exe" KeyPath="yes"/>
                           <RemoveFolder Id="BIN_DIR" On="uninstall" />
                       </Component>
                     </Directory>
@@ -35,6 +34,11 @@
         <Property Id="INSTALL_WINDOWS_SERVICE" Value="1" />
         <Condition Message="This application requires .NET Framework 4.0 or later. Please install the .NET Framework then run this installer again.">NETFRAMEWORK40FULL</Condition>
         <Icon Id="APP_ICON" SourceFile="..\_output\NzbDrone.exe" />
-        <CustomAction Id="START_ACTION" FileKey="CONSOLE_EXE_FILE" ExeCommand="" Execute="deferred" Impersonate="no" Return="asyncNoWait" />
+         <InstallExecuteSequence>
+            <InstallInitialize />
+               <!-- <Custom Action="START_ACTION" After="InstallFiles" /> -->
+            <InstallFinalize />
+        </InstallExecuteSequence>
+        <CustomAction Id="START_ACTION" FileKey="NzbDrone.Console.exe" ExeCommand="" Execute="deferred" Impersonate="no" Return="asyncNoWait" />
     </Product>
 </Wix>
