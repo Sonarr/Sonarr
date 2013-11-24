@@ -43,6 +43,10 @@ Function CleanFolder($path)
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
 
     get-childitem $path -File -Filter app.config -Recurse  | foreach ($_) {remove-item $_.fullname}
+
+
+    Write-Host Removing .less files
+    get-childitem $path -File -Filter *.less -Recurse | foreach ($_) {remove-item $_.fullname}
  
  
     Write-Host Removing NuGet

@@ -11,42 +11,6 @@ module.exports = function (grunt) {
 
         pkg: grunt.file.readJSON('package.json'),
 
-        curl: {
-            'src/UI/JsLibraries/backbone.js'                     : 'http://documentcloud.github.io/backbone/backbone.js',
-            'src/UI/JsLibraries/backbone.marionette.js'          : 'http://marionettejs.com/downloads/backbone.marionette.js',
-            'src/UI/JsLibraries/backbone.modelbinder.js'         : 'http://raw.github.com/theironcook/Backbone.ModelBinder/master/Backbone.ModelBinder.js',
-            'src/UI/JsLibraries/backbone.shortcuts.js'           : 'http://raw.github.com/bry4n/backbone-shortcuts/master/backbone.shortcuts.js',
-
-            'src/UI/JsLibraries/backbone.pageable.js'            : 'http://raw.github.com/wyuenho/backbone-pageable/master/lib/backbone-pageable.js',
-            'src/UI/JsLibraries/backbone.backgrid.js'            : 'http://raw.github.com/wyuenho/backgrid/master/lib/backgrid.js',
-            'src/UI/JsLibraries/backbone.backgrid.paginator.js'  : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/paginator/backgrid-paginator.js',
-            'src/UI/JsLibraries/backbone.backgrid.filter.js'     : 'http://raw.github.com/wyuenho/backgrid/master/lib/extensions/filter/backgrid-filter.js',
-
-            'src/UI/JsLibraries/backbone.backgrid.selectall.js'  : 'http://raw.github.com/wyuenho/backgrid-select-all/master/backgrid-select-all.js',
-            'src/UI/Content/Backgrid/selectall.css'              : 'http://raw.github.com/wyuenho/backgrid-select-all/master/backgrid-select-all.css',
-
-            'src/UI/JsLibraries/backbone.validation.js'          : 'https://raw.github.com/thedersen/backbone.validation/master/dist/backbone-validation.js',
-
-            'src/UI/JsLibraries/handlebars.runtime.js'           : 'http://raw.github.com/wycats/handlebars.js/master/dist/handlebars.runtime.js',
-            'src/UI/JsLibraries/handlebars.helpers.js'           : 'http://raw.github.com/danharper/Handlebars-Helpers/master/helpers.js',
-
-            'src/UI/JsLibraries/jquery.js'                       : 'http://code.jquery.com/jquery.js',
-            'src/UI/JsLibraries/jquery.backstretch.js'           : 'http://raw.github.com/srobbin/jquery-backstretch/master/jquery.backstretch.js',
-            'src/UI/JsLibraries/jquery.signalR.js'               : 'http://raw.github.com/SignalR/SignalR/master/samples/Microsoft.AspNet.SignalR.Hosting.AspNet.Samples/Scripts/jquery.signalR.js',
-            'src/UI/JsLibraries/jquery.knob.js'                  : 'http://raw.github.com/aterrien/jQuery-Knob/master/js/jquery.knob.js',
-
-            'src/UI/JsLibraries/require.js'                      : 'http://raw.github.com/jrburke/requirejs/master/require.js',
-            'src/UI/JsLibraries/filesize.js'                     : 'http://cdn.filesizejs.com/filesize.js',
-            'src/UI/JsLibraries/lodash.underscore.js'            : 'http://raw.github.com/bestiejs/lodash/master/dist/lodash.underscore.js',
-         
-            'src/UI/JsLibraries/messenger.js'                    : 'http://raw.github.com/HubSpot/messenger/master/build/js/messenger.js',
-            'src/UI/Content/Messenger/messenger.css'             : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger.css',
-            'src/UI/Content/Messenger/messenger.future.css'      : 'http://raw.github.com/HubSpot/messenger/master/build/css/messenger-theme-future.css',
-            
-            'src/UI/Content/bootstrap.toggle-switch.css'         : 'http://raw.github.com/ghinda/css-toggle-switch/gh-pages/toggle-switch.css',          
-            'src/UI/Content/prefixer.less'                       : 'http://raw.github.com/JoelSutherland/LESS-Prefixer/master/prefixer.less'          
-        },
-
         clean: {
             output:  outputDir,
             scripts: [ outputDir + '/**.js','!_output/UI/**/templates.js']
@@ -211,13 +175,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-notify');
-    grunt.loadNpmTasks('grunt-curl');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.registerTask('package', ['clean:output', 'jshint', 'handlebars', 'copy', 'less']);
     grunt.registerTask('packagerjs', ['clean:output','jshint', 'handlebars', 'requirejs', 'copy:content', 'less']);
     grunt.registerTask('default', ['package', 'watch']); 
-    grunt.registerTask('update', ['curl']);
-
 };
