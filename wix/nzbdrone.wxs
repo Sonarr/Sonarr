@@ -29,6 +29,7 @@
         <MajorUpgrade AllowDowngrades="no" AllowSameVersionUpgrades="yes" MigrateFeatures="yes" Schedule="afterInstallValidate" DowngradeErrorMessage="Newer version of Nzbdrone is already installed." />
         <Feature Id="Core" Title="NzbDrone Core" Description="NzbDrone Core" Level="1" Display='expand'>
             <ComponentRef Id="BIN_COMP" />
+            <ComponentGroupRef Id="OUTPUT_GROUP" />
         </Feature>
         <PropertyRef Id="NETFRAMEWORK40FULL" />
         <Property Id="INSTALL_WINDOWS_SERVICE" Value="1" />
