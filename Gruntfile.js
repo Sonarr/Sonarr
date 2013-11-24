@@ -3,7 +3,7 @@ module.exports = function (grunt) {
 
     var outputRoot  = '_output/';
     var outputDir   =  outputRoot +'UI/';
-    var srcRoot     = 'src/UI/'
+    var srcRoot     = 'src/UI/';
     var srcContent  = srcRoot + 'Content/';
     var destContent = outputDir + 'Content/';
 
@@ -87,7 +87,7 @@ module.exports = function (grunt) {
                 cwd   : srcRoot,
                 expand: true,
                 src   : [
-                            '**/*.js',
+                            '**/*.js'
                         ],
                 dest  : outputDir
             }
@@ -128,18 +128,17 @@ module.exports = function (grunt) {
                     modules: [{
                         name: 'app',
                         exclude: ['templates.js']
-                    }],
-
+                    }]
                 }
             }
         },
 
         watch: {
             options: {
-                nospawn: false,
+                nospawn: false
             },
             bootstrap  : {
-                files: [ srcContent + 'Bootstrap/**', srcContent +'FontAwesome/**'],
+                files: [ srcContent + 'Bootstrap/**', srcContent + 'FontAwesome/**'],
                 tasks: ['less:bootstrap','less:general']
             },
             generalLess: {
@@ -152,13 +151,13 @@ module.exports = function (grunt) {
             },
             content  : {
                 files: [
-                            '**/index.html',
-                            '**/*.css',
-                            '**/*.png',
-                            '**/*.jpg',
-                            '**/*.ico',
-                            '**/FontAwesome/*.*',
-                            '**/fonts/*.*'
+                            srcRoot + '**/index.html',
+                            srcRoot + '**/*.css',
+                            srcRoot + '**/*.png',
+                            srcRoot + '**/*.jpg',
+                            srcRoot + '**/*.ico',
+                            srcRoot + '**/FontAwesome/*.*',
+                            srcRoot + '**/fonts/*.*'
                         ],
                 tasks: ['copy:content']
             },
