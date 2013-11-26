@@ -1,7 +1,5 @@
-﻿using System.ServiceProcess;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Host
 {
@@ -9,26 +7,16 @@ namespace NzbDrone.Host
     {
         private readonly INzbDroneServiceFactory _nzbDroneServiceFactory;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IStartupArguments _startupArguments;
         private readonly IConsoleService _consoleService;
-        private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider, IStartupArguments startupArguments,
-                        IConsoleService consoleService, IRuntimeInfo runtimeInfo, Logger logger)
+        public Router(INzbDroneServiceFactory nzbDroneServiceFactory, IServiceProvider serviceProvider,
+                        IConsoleService consoleService, Logger logger)
         {
             _nzbDroneServiceFactory = nzbDroneServiceFactory;
             _serviceProvider = serviceProvider;
-            _startupArguments = startupArguments;
             _consoleService = consoleService;
-            _runtimeInfo = runtimeInfo;
             _logger = logger;
-        }
-
-        public void Route()
-        {
-            var appMode = GetApplicationMode();
-            Route(appMode);
         }
 
         public void Route(ApplicationModes applicationModes)
@@ -86,32 +74,6 @@ namespace NzbDrone.Host
             }
         }
 
-        private ApplicationModes GetApplicationMode()
-        {
-            if (!_runtimeInfo.IsUserInteractive &&
-               OsInfo.IsWindows &&
-               _serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
-               _serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending)
-            {
-                return ApplicationModes.Service;
-            }
 
-            if (_startupArguments.Flags.Contains(StartupArguments.HELP))
-            {
-                return ApplicationModes.Help;
-            }
-
-            if (!OsInfo.IsLinux && _startupArguments.InstallService)
-            {
-                return ApplicationModes.InstallService;
-            }
-
-            if (!OsInfo.IsLinux && _startupArguments.UninstallService)
-            {
-                return ApplicationModes.UninstallService;
-            }
-
-            return ApplicationModes.Interactive;
-        }
     }
 }

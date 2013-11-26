@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Host;
@@ -16,26 +14,9 @@ namespace NzbDrone.Console
         {
             try
             {
-                var startupArgs = new StartupArguments(args);
+                var startupArgs = new StartupContext(args);
                 LogTargets.Register(startupArgs, false, true);
-                var container = Bootstrap.Start(startupArgs, new ConsoleAlerts());
-
-                if (startupArgs.InstallService || startupArgs.UninstallService)
-                {
-                    return;
-                }
-
-                var serviceFactory = container.Resolve<INzbDroneServiceFactory>();
-                    
-                while (!serviceFactory.IsServiceStopped)
-                {
-                    Thread.Sleep(1000);
-                }
-            }
-            catch (TerminateApplicationException e)
-            {
-                Logger.Info("Application has been terminated. Reason " + e.Reason);
-                return;
+                Bootstrap.Start(startupArgs, new ConsoleAlerts());
             }
             catch (Exception e)
             {

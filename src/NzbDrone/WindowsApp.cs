@@ -16,22 +16,16 @@ namespace NzbDrone
         {
             try
             {
-                var startupArgs = new StartupArguments(args);
+                var startupArgs = new StartupContext(args);
 
                 LogTargets.Register(startupArgs, false, true);
 
-                var bootstrap = new Bootstrap(startupArgs, new MessageBoxUserAlert());
-
-                bootstrap.EnsureSingleInstance();
-
-                bootstrap.Start();
-                bootstrap.Container.Register<ISystemTrayApp, SystemTrayApp>();
-                bootstrap.Container.Resolve<ISystemTrayApp>().Start();
-
-            }
-            catch (TerminateApplicationException e)
-            {
-                Logger.Info("Application has been terminated. Reason " + e.Reason);
+                Bootstrap.Start(startupArgs, new MessageBoxUserAlert(), container =>
+                {
+                    container.Register<ISystemTrayApp, SystemTrayApp>();
+                    var trayApp = container.Resolve<ISystemTrayApp>();
+                    trayApp.Start();
+                });
             }
             catch (Exception e)
             {

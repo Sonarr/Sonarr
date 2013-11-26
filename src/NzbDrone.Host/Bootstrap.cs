@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Threading;
+using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
@@ -7,40 +10,123 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Host
 {
-    public class Bootstrap
+    public static class Bootstrap
     {
-        public IContainer Container { get; private set; }
+        private static IContainer _container;
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
-        public Bootstrap(StartupArguments args, IUserAlert userAlert)
+
+        public static void Start(StartupContext startupContext, IUserAlert userAlert, Action<IContainer> startCallback = null)
         {
-            var logger = NzbDroneLogger.GetLogger();
-
-            GlobalExceptionHandlers.Register();
-            IgnoreCertErrorPolicy.Register();
-
-            logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
-
-
-            if (!PlatformValidation.IsValidate(userAlert))
+            try
             {
-                throw new TerminateApplicationException("Missing system requirements");
+
+                GlobalExceptionHandlers.Register();
+                IgnoreCertErrorPolicy.Register();
+
+                Logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+
+
+                if (!PlatformValidation.IsValidate(userAlert))
+                {
+                    throw new TerminateApplicationException("Missing system requirements");
+                }
+
+                _container = MainAppContainerBuilder.BuildContainer(startupContext);
+
+                var appMode = GetApplicationMode(startupContext);
+
+                Start(appMode);
+
+                if (startCallback != null)
+                {
+                    startCallback(_container);
+                }
+
+                SpinToExit(appMode);
+            }
+            catch (TerminateApplicationException e)
+            {
+                Logger.Info("Application has been terminated. Reason " + e.Reason);
+            }
+        }
+
+
+        private static void Start(ApplicationModes applicationModes)
+        {
+            if (!IsInUtilityMode(applicationModes))
+            {
+                EnsureSingleInstance();
             }
 
-            Container = MainAppContainerBuilder.BuildContainer(args);
-
-
+            DbFactory.RegisterDatabase(_container);
+            _container.Resolve<Router>().Route(applicationModes);
         }
 
-        public void Start()
+        private static void SpinToExit(ApplicationModes applicationModes)
         {
-            DbFactory.RegisterDatabase(Container);
-            Container.Resolve<Router>().Route();
+            if (IsInUtilityMode(applicationModes))
+            {
+                return;
+            }
+
+            var serviceFactory = _container.Resolve<INzbDroneServiceFactory>();
+
+            while (!serviceFactory.IsServiceStopped)
+            {
+                Thread.Sleep(1000);
+            }
+        }
+
+        private static void EnsureSingleInstance()
+        {
+            _container.Resolve<ISingleInstancePolicy>().EnforceSingleInstance();
         }
 
 
-        public void EnsureSingleInstance()
+
+        private static ApplicationModes GetApplicationMode(StartupContext startupContext)
         {
-            Container.Resolve<ISingleInstancePolicy>().EnforceSingleInstance();
+            if (startupContext.Flags.Contains(StartupContext.HELP))
+            {
+                return ApplicationModes.Help;
+            }
+
+            if (!OsInfo.IsLinux && startupContext.InstallService)
+            {
+                return ApplicationModes.InstallService;
+            }
+
+            if (!OsInfo.IsLinux && startupContext.UninstallService)
+            {
+                return ApplicationModes.UninstallService;
+            }
+
+            if (_container.Resolve<IRuntimeInfo>().IsWindowsService)
+            {
+                return ApplicationModes.Service;
+            }
+
+            return ApplicationModes.Interactive;
+        }
+
+
+
+        private static bool IsInUtilityMode(ApplicationModes applicationMode)
+        {
+            switch (applicationMode)
+            {
+                case ApplicationModes.InstallService:
+                case ApplicationModes.UninstallService:
+                case ApplicationModes.Help:
+                    {
+                        return true;
+                    }
+                default:
+                    {
+                        return false;
+                    }
+            }
         }
 
     }

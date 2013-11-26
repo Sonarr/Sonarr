@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Test
         [SetUp]
         public void setup()
         {
-            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new StartupArguments()));
+            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new StartupContext()));
         }
 
         [Test]

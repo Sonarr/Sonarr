@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-    public interface IStartupArguments
+    public interface IStartupContext
     {
         HashSet<string> Flags { get; }
         Dictionary<string, string> Args { get; }
@@ -10,7 +10,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool UninstallService { get; }
     }
 
-    public class StartupArguments : IStartupArguments
+    public class StartupContext : IStartupContext
     {
         public const string APPDATA = "data";
         public const string NO_BROWSER = "nobrowser";
@@ -18,7 +18,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         internal const string UNINSTALL_SERVICE = "u";
         public const string HELP = "?";
 
-        public StartupArguments(params string[] args)
+        public StartupContext(params string[] args)
         {
             Flags = new HashSet<string>();
             Args = new Dictionary<string, string>();
@@ -58,5 +58,6 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return Flags.Contains(UNINSTALL_SERVICE);
             }
         }
+
     }
 }

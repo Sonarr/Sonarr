@@ -23,7 +23,7 @@ namespace NzbDrone.Automation.Test
 
         public AutomationTest()
         {
-            new StartupArguments();
+            new StartupContext();
 
             LogManager.Configuration = new LoggingConfiguration();
             var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };

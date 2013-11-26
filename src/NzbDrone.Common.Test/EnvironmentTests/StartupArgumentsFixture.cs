@@ -11,7 +11,7 @@ namespace NzbDrone.Common.Test.EnvironmentTests
         [Test]
         public void empty_array_should_return_empty_flags()
         {
-            var args = new StartupArguments(new string[0]);
+            var args = new StartupContext(new string[0]);
             args.Flags.Should().BeEmpty();
         }
 
@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Test.EnvironmentTests
         [TestCase(" /t  ")]
         public void should_parse_single_flag(string arg)
         {
-            var args = new StartupArguments(new[] { arg });
+            var args = new StartupContext(new[] { arg });
             args.Flags.Should().HaveCount(1);
             args.Flags.Contains("t").Should().BeTrue();
         }
@@ -32,7 +32,7 @@ namespace NzbDrone.Common.Test.EnvironmentTests
         [TestCase(" /key=\"value\"")]
         public void should_parse_args_with_alues(string arg)
         {
-            var args = new StartupArguments(new[] { arg });
+            var args = new StartupContext(new[] { arg });
             args.Args.Should().HaveCount(1);
             args.Args["key"].Should().Be("value");
         }

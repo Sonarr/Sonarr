@@ -12,7 +12,7 @@ namespace NzbDrone.Test.Common
 
         protected static void InitLogging()
         {
-            new StartupArguments();
+            new StartupContext();
 
             TestLogger = LogManager.GetLogger("TestLogger");
 

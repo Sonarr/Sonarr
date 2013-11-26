@@ -8,7 +8,7 @@ namespace NzbDrone.Host
 {
     public interface INzbDroneServiceFactory
     {
-        bool  IsServiceStopped { get; }
+        bool IsServiceStopped { get; }
         ServiceBase Build();
         void Start();
     }
@@ -19,18 +19,18 @@ namespace NzbDrone.Host
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IHostController _hostController;
         private readonly PriorityMonitor _priorityMonitor;
-        private readonly IStartupArguments _startupArguments;
+        private readonly IStartupContext _startupContext;
         private readonly IBrowserService _browserService;
         private readonly Logger _logger;
 
-        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController, 
-            IRuntimeInfo runtimeInfo, PriorityMonitor priorityMonitor, IStartupArguments startupArguments, IBrowserService browserService, Logger logger)
+        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController,
+            IRuntimeInfo runtimeInfo, PriorityMonitor priorityMonitor, IStartupContext startupContext, IBrowserService browserService, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
             _runtimeInfo = runtimeInfo;
             _priorityMonitor = priorityMonitor;
-            _startupArguments = startupArguments;
+            _startupContext = startupContext;
             _browserService = browserService;
             _logger = logger;
         }
@@ -44,9 +44,8 @@ namespace NzbDrone.Host
         {
             _hostController.StartServer();
 
-            if (!_startupArguments.Flags.Contains(StartupArguments.NO_BROWSER) &&
-                _runtimeInfo.IsUserInteractive &&
-                _configFileProvider.LaunchBrowser)
+            if (!_startupContext.Flags.Contains(StartupContext.NO_BROWSER)
+                && _configFileProvider.LaunchBrowser)
             {
                 _browserService.LaunchWebUI();
             }

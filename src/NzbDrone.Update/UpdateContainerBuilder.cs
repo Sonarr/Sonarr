@@ -5,15 +5,15 @@ namespace NzbDrone.Update
 {
     public class UpdateContainerBuilder : ContainerBuilderBase
     {
-        private UpdateContainerBuilder(IStartupArguments startupArguments)
-            : base(startupArguments, "NzbDrone.Update", "NzbDrone.Common")
+        private UpdateContainerBuilder(IStartupContext startupContext)
+            : base(startupContext, "NzbDrone.Update", "NzbDrone.Common")
         {
 
         }
 
-        public static IContainer Build(IStartupArguments startupArguments)
+        public static IContainer Build(IStartupContext startupContext)
         {
-            return new UpdateContainerBuilder(startupArguments).Container;
+            return new UpdateContainerBuilder(startupContext).Container;
         }
     }
 }

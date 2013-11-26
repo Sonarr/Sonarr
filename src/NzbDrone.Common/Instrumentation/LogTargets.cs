@@ -9,9 +9,9 @@ namespace NzbDrone.Common.Instrumentation
 {
     public static class LogTargets
     {
-        public static void Register(IStartupArguments startupArguments, bool updateApp, bool inConsole)
+        public static void Register(IStartupContext startupContext, bool updateApp, bool inConsole)
         {
-            var appFolderInfo = new AppFolderInfo(new DiskProvider(), startupArguments);
+            var appFolderInfo = new AppFolderInfo(new DiskProvider(), startupContext);
 
             LogManager.Configuration = new LoggingConfiguration();
 
@@ -24,7 +24,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             else
             {
-                if (inConsole && (OsInfo.IsLinux || new RuntimeInfo(null).IsUserInteractive))
+                if (inConsole && (OsInfo.IsLinux || new RuntimeInfo(null, new ServiceProvider()).IsUserInteractive))
                 {
                     RegisterConsole();
                 }

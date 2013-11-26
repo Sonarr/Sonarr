@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Composition
 
         public IContainer Container { get; private set; }
 
-        protected ContainerBuilderBase(IStartupArguments args, params string[] assemblies)
+        protected ContainerBuilderBase(IStartupContext args, params string[] assemblies)
         {
 
 

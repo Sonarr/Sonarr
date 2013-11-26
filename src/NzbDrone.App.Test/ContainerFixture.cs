@@ -18,7 +18,7 @@ namespace NzbDrone.App.Test
     [TestFixture]
     public class ContainerFixture : TestBase
     {
-        StartupArguments args = new StartupArguments("first", "second");
+        StartupContext args = new StartupContext("first", "second");
 
         [Test]
         public void should_be_able_to_resolve_indexers()
