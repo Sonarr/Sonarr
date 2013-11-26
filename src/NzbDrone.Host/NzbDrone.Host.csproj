@@ -116,6 +116,8 @@
     </Compile>
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
+    <Compile Include="BrowserService.cs" />
+    <Compile Include="NzbDroneProcessService.cs" />
     <Compile Include="IUserAlert.cs" />
     <Compile Include="Owin\NlogTextWriter.cs" />
     <Compile Include="Owin\OwinServiceProvider.cs" />

@@ -2,8 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
-using NzbDrone.Host.Owin;
+using NzbDrone.Host;
 
 namespace NzbDrone.SysTray
 {
@@ -14,16 +13,14 @@ namespace NzbDrone.SysTray
 
     public class SystemTrayApp : Form, ISystemTrayApp
     {
-        private readonly IProcessProvider _processProvider;
-        private readonly IHostController _hostController;
+        private readonly IBrowserService _browserService;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
-        public SystemTrayApp(IProcessProvider processProvider, IHostController hostController)
+        public SystemTrayApp(IBrowserService browserService)
         {
-            _processProvider = processProvider;
-            _hostController = hostController;
+            _browserService = browserService;
         }
 
 
@@ -84,7 +81,7 @@ namespace NzbDrone.SysTray
         {
             try
             {
-                _processProvider.OpenDefaultBrowser(_hostController.AppUrl);
+                _browserService.LaunchWebUI();
             }
             catch (Exception)
             {

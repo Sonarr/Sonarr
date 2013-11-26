@@ -1,8 +1,6 @@
-﻿using System;
-using System.ServiceProcess;
+﻿using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Host.Owin;
 
@@ -10,6 +8,7 @@ namespace NzbDrone.Host
 {
     public interface INzbDroneServiceFactory
     {
+        bool IsServiceStopped { get; }
         ServiceBase Build();
         void Start();
     }
@@ -19,20 +18,20 @@ namespace NzbDrone.Host
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IHostController _hostController;
-        private readonly IProcessProvider _processProvider;
         private readonly PriorityMonitor _priorityMonitor;
-        private readonly IStartupArguments _startupArguments;
+        private readonly IStartupContext _startupContext;
+        private readonly IBrowserService _browserService;
         private readonly Logger _logger;
 
-        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController, IRuntimeInfo runtimeInfo,
-                           IProcessProvider processProvider, PriorityMonitor priorityMonitor, IStartupArguments startupArguments, Logger logger)
+        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, IHostController hostController,
+            IRuntimeInfo runtimeInfo, PriorityMonitor priorityMonitor, IStartupContext startupContext, IBrowserService browserService, Logger logger)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
             _runtimeInfo = runtimeInfo;
-            _processProvider = processProvider;
             _priorityMonitor = priorityMonitor;
-            _startupArguments = startupArguments;
+            _startupContext = startupContext;
+            _browserService = browserService;
             _logger = logger;
         }
 
@@ -45,19 +44,10 @@ namespace NzbDrone.Host
         {
             _hostController.StartServer();
 
-            if (!_startupArguments.Flags.Contains(StartupArguments.NO_BROWSER) &&
-                _runtimeInfo.IsUserInteractive &&
-                _configFileProvider.LaunchBrowser)
+            if (!_startupContext.Flags.Contains(StartupContext.NO_BROWSER)
+                && _configFileProvider.LaunchBrowser)
             {
-                try
-                {
-                    _logger.Info("Starting default browser. {0}", _hostController.AppUrl);
-                    _processProvider.OpenDefaultBrowser(_hostController.AppUrl);
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("Failed to open URL in default browser.", e);
-                }
+                _browserService.LaunchWebUI();
             }
 
             _priorityMonitor.Start();
@@ -68,7 +58,10 @@ namespace NzbDrone.Host
             _logger.Info("Attempting to stop application.");
             _hostController.StopServer();
             _logger.Info("Application has finished stop routine.");
+            IsServiceStopped = true;
         }
+
+        public bool IsServiceStopped { get; private set; }
 
         public ServiceBase Build()
         {

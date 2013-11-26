@@ -35,9 +35,9 @@ namespace NzbDrone.Common.Test
         [Test]
         public void should_use_path_from_arg_if_provided()
         {
-            var args = new StartupArguments("-data=\"c:\\users\\test\\\"");
+            var args = new StartupContext("-data=\"c:\\users\\test\\\"");
 
-            Mocker.SetConstant<IStartupArguments>(args);
+            Mocker.SetConstant<IStartupContext>(args);
             Subject.AppDataFolder.Should().Be("c:\\users\\test\\");
         }
     }

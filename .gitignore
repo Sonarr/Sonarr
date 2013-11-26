@@ -116,3 +116,4 @@ _tests/
 wix/*.msi
 wix/*.wixobj
 wix/*.wixpdb
+setup/Output/

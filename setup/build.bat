@@ -1,0 +1,1 @@
+inno\ISCC.exe nzbdrone.iss

@@ -93,7 +93,7 @@ namespace NzbDrone.Test.Common
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
 
-            Mocker.SetConstant<IStartupArguments>(new StartupArguments(new string[0]));
+            Mocker.SetConstant<IStartupContext>(new StartupContext(new string[0]));
 
             LogManager.ReconfigExistingLoggers();
 

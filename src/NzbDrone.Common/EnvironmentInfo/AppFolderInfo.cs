@@ -22,7 +22,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         private readonly Environment.SpecialFolder DATA_SPECIAL_FOLDER = Environment.SpecialFolder.CommonApplicationData;
 
 
-        public AppFolderInfo(IDiskProvider diskProvider, IStartupArguments startupArguments)
+        public AppFolderInfo(IDiskProvider diskProvider, IStartupContext startupContext)
         {
             _diskProvider = diskProvider;
 
@@ -33,9 +33,9 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             _logger =  NzbDroneLogger.GetLogger(this);
 
-            if (startupArguments.Args.ContainsKey(StartupArguments.APPDATA))
+            if (startupContext.Args.ContainsKey(StartupContext.APPDATA))
             {
-                AppDataFolder = startupArguments.Args[StartupArguments.APPDATA];
+                AppDataFolder = startupContext.Args[StartupContext.APPDATA];
             }
             else
             {

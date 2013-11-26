@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
@@ -15,22 +14,17 @@ namespace NzbDrone.Console
         {
             try
             {
-                var startupArgs = new StartupArguments(args);
+                var startupArgs = new StartupContext(args);
                 LogTargets.Register(startupArgs, false, true);
                 Bootstrap.Start(startupArgs, new ConsoleAlerts());
             }
-            catch (TerminateApplicationException)
-            {
-            }
             catch (Exception e)
             {
+                System.Console.WriteLine("");
+                System.Console.WriteLine("");
                 Logger.FatalException("EPIC FAIL!", e);
+                System.Console.WriteLine("Press any key to exit...");
                 System.Console.ReadLine();
-            }
-
-            while (true)
-            {
-                Thread.Sleep(10 * 60);
             }
         }
     }

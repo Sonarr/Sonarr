@@ -68,7 +68,7 @@ namespace NzbDrone.App.Test
             serviceProvider.Setup(c => c.ServiceExist(It.IsAny<string>())).Returns(true);
             serviceProvider.Setup(c => c.GetStatus(It.IsAny<string>())).Returns(ServiceControllerStatus.StartPending);
 
-            Subject.Route();
+            Subject.Route(ApplicationModes.Service);
 
             serviceProvider.Verify(c => c.Run(It.IsAny<ServiceBase>()), Times.Once());
         }

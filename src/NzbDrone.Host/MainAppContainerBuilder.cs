@@ -10,12 +10,12 @@ namespace NzbDrone.Host
 {
     public class MainAppContainerBuilder : ContainerBuilderBase
     {
-        public static IContainer BuildContainer(StartupArguments args)
+        public static IContainer BuildContainer(StartupContext args)
         {
             return new MainAppContainerBuilder(args).Container;
         }
 
-        private MainAppContainerBuilder(StartupArguments args)
+        private MainAppContainerBuilder(StartupContext args)
             : base(args, "NzbDrone.Host", "NzbDrone.Common", "NzbDrone.Core", "NzbDrone.Api", "NzbDrone.SignalR")
         {
 

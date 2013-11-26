@@ -28,7 +28,7 @@ namespace NzbDrone.Update
         {
             try
             {
-                var startupArgument = new StartupArguments(args);
+                var startupArgument = new StartupContext(args);
                 LogTargets.Register(startupArgument, true, true);
 
                 Console.WriteLine("Starting NzbDrone Update Client");
