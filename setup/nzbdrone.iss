@@ -4,18 +4,19 @@
 #define AppName "NzbDrone"
 #define AppPublisher "NzbDrone"
 #define AppURL "http://www.nzbdrone.com/"
+#define ForumsURL "http://forums.nzbdrone.com/"
 #define AppExeName "NzbDrone.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{56C1065D-3523-4025-B76D-6F73F67F7F71}
+AppId={56C1065D-3523-4025-B76D-6F73F67F7F71}
 AppName={#AppName}
-AppVersion={%BUILD_NUMBER|1.0.0}
+AppVersion={%env.BUILD_NUMBER|1.0.0}
 AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
-AppSupportURL={#AppURL}
+AppSupportURL={#ForumsURL}
 AppUpdatesURL={#AppURL}
 DefaultDirName={commonprograms}\{#AppName}\bin
 DisableDirPage=yes
@@ -29,6 +30,7 @@ UninstallDisplayIcon={app}\NzbDrone.exe
 DisableReadyPage=True
 CompressionThreads=2
 Compression=lzma2/normal
+AppContact={#ForumsURL}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
