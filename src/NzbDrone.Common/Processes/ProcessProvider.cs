@@ -20,6 +20,7 @@ namespace NzbDrone.Common.Processes
         void WaitForExit(Process process);
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
+        void Kill(int processId);
         bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
@@ -254,7 +255,7 @@ namespace NzbDrone.Common.Processes
             return process.Modules.Cast<ProcessModule>().FirstOrDefault(module => module.ModuleName.ToLower().EndsWith(".exe")).FileName;
         }
 
-        private void Kill(int processId)
+        public void Kill(int processId)
         {
             var process = Process.GetProcesses().FirstOrDefault(p => p.Id == processId);
 

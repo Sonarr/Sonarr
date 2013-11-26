@@ -34,7 +34,7 @@ namespace NzbDrone.App.Test
                 });
 
 
-            Subject.EnforceSingleInstance();
+            Subject.PreventStartIfAlreadyRunning();
 
 
             Mocker.GetMock<IBrowserService>().Verify(c => c.LaunchWebUI(), Times.Never());
@@ -59,7 +59,7 @@ namespace NzbDrone.App.Test
 
 
 
-            Assert.Throws<TerminateApplicationException>(() => Subject.EnforceSingleInstance());
+            Assert.Throws<TerminateApplicationException>(() => Subject.PreventStartIfAlreadyRunning());
             Mocker.GetMock<IBrowserService>().Verify(c => c.LaunchWebUI(), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -83,7 +83,7 @@ namespace NzbDrone.App.Test
 
 
 
-            Assert.Throws<TerminateApplicationException>(() => Subject.EnforceSingleInstance());
+            Assert.Throws<TerminateApplicationException>(() => Subject.PreventStartIfAlreadyRunning());
             Mocker.GetMock<IBrowserService>().Verify(c => c.LaunchWebUI(), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }

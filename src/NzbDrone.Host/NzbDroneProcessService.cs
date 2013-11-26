@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Processes;
 
@@ -6,7 +8,8 @@ namespace NzbDrone.Host
 {
     public interface ISingleInstancePolicy
     {
-        void EnforceSingleInstance();
+        void PreventStartIfAlreadyRunning();
+        void KillAllOtherInstance();
     }
 
     public class SingleInstancePolicy : ISingleInstancePolicy
@@ -22,7 +25,7 @@ namespace NzbDrone.Host
             _logger = logger;
         }
 
-        public void EnforceSingleInstance()
+        public void PreventStartIfAlreadyRunning()
         {
             if (IsAlreadyRunning())
             {
@@ -32,16 +35,34 @@ namespace NzbDrone.Host
             }
         }
 
-        private bool IsAlreadyRunning()
+        public void KillAllOtherInstance()
         {
-            var currentId = _processProvider.GetCurrentProcess().Id;
-            var consoleIds = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME).Select(c => c.Id);
-            var guiIds = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME).Select(c => c.Id);
-
-            var otherProcesses = consoleIds.Union(guiIds).Except(new[] { currentId });
-
-            return otherProcesses.Any();
+            foreach (var processId in GetOtherNzbDroneProcessIds())
+            {
+                _processProvider.Kill(processId);
+            }
         }
 
+        private bool IsAlreadyRunning()
+        {
+            return GetOtherNzbDroneProcessIds().Any();
+        }
+
+        private List<int> GetOtherNzbDroneProcessIds()
+        {
+            var currentId = _processProvider.GetCurrentProcess().Id;
+            var consoleIds = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME)
+                .Select(c => c.Id);
+            var winformIds = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME).Select(c => c.Id);
+
+            var otherProcesses = consoleIds.Union(winformIds).Except(new[] { currentId }).ToList();
+
+            if (otherProcesses.Any())
+            {
+                _logger.Info("{0} instance(s) of NzbDrone are running", otherProcesses.Count);
+            }
+
+            return otherProcesses;
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace NzbDrone.Host
             }
             catch (TerminateApplicationException e)
             {
-                Logger.Info("Application has been terminated. Reason " + e.Reason);
+                Logger.Info(e.Message);
             }
         }
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Host
         {
             if (!IsInUtilityMode(applicationModes))
             {
-                EnsureSingleInstance();
+                EnsureSingleInstance(applicationModes == ApplicationModes.Service);
             }
 
             DbFactory.RegisterDatabase(_container);
@@ -78,9 +78,18 @@ namespace NzbDrone.Host
             }
         }
 
-        private static void EnsureSingleInstance()
+        private static void EnsureSingleInstance(bool isService)
         {
-            _container.Resolve<ISingleInstancePolicy>().EnforceSingleInstance();
+            var instancePolicy = _container.Resolve<ISingleInstancePolicy>();
+
+            if (isService)
+            {
+                instancePolicy.KillAllOtherInstance();
+            }
+            else
+            {
+                instancePolicy.PreventStartIfAlreadyRunning();
+            }
         }
 
 
