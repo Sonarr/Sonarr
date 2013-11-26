@@ -6,6 +6,7 @@
 #define AppURL "http://www.nzbdrone.com/"
 #define ForumsURL "http://forums.nzbdrone.com/"
 #define AppExeName "NzbDrone.exe"
+#define BuildNumber GetEnv('BUILD_NUMBER')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -13,7 +14,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{56C1065D-3523-4025-B76D-6F73F67F7F71}
 AppName={#AppName}
-AppVersion={%env.BUILD_NUMBER|1.0.0}
+AppVersion={#BuildNumber}
 AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
 AppSupportURL={#ForumsURL}
@@ -48,6 +49,7 @@ Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"
 Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
 
 [Run]
+Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: waituntilterminated
 Filename: "{app}\nzbdrone.console.exe"; Parameters: "/i"; Flags: waituntilterminated
 
 [UninstallRun]
