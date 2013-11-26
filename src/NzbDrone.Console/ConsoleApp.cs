@@ -32,8 +32,10 @@ namespace NzbDrone.Console
                     Thread.Sleep(1000);
                 }
             }
-            catch (TerminateApplicationException)
+            catch (TerminateApplicationException e)
             {
+                Logger.Info("Application has been terminated. Reason " + e.Reason);
+                return;
             }
             catch (Exception e)
             {

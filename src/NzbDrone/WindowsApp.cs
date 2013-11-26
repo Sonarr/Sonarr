@@ -10,7 +10,7 @@ namespace NzbDrone
 {
     public static class WindowsApp
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
         public static void Main(string[] args)
         {
@@ -20,12 +20,18 @@ namespace NzbDrone
 
                 LogTargets.Register(startupArgs, false, true);
 
-                var container = Bootstrap.Start(startupArgs, new MessageBoxUserAlert());
-                container.Register<ISystemTrayApp, SystemTrayApp>();
-                container.Resolve<ISystemTrayApp>().Start();
+                var bootstrap = new Bootstrap(startupArgs, new MessageBoxUserAlert());
+
+                bootstrap.EnsureSingleInstance();
+
+                bootstrap.Start();
+                bootstrap.Container.Register<ISystemTrayApp, SystemTrayApp>();
+                bootstrap.Container.Resolve<ISystemTrayApp>().Start();
+
             }
-            catch (TerminateApplicationException)
+            catch (TerminateApplicationException e)
             {
+                Logger.Info("Application has been terminated. Reason " + e.Reason);
             }
             catch (Exception e)
             {
@@ -34,5 +40,7 @@ namespace NzbDrone
                 MessageBox.Show(text: message, buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
             }
         }
+
+
     }
 }

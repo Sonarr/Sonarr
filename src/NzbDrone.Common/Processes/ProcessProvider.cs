@@ -15,6 +15,7 @@ namespace NzbDrone.Common.Processes
     {
         ProcessInfo GetCurrentProcess();
         ProcessInfo GetProcessById(int id);
+        List<ProcessInfo> FindProcessByName(string name);
         void OpenDefaultBrowser(string url);
         void WaitForExit(Process process);
         void SetPriority(int processId, ProcessPriorityClass priority);
@@ -72,6 +73,11 @@ namespace NzbDrone.Common.Processes
             }
 
             return processInfo;
+        }
+
+        public List<ProcessInfo> FindProcessByName(string name)
+        {
+            return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(c => c != null).ToList();
         }
 
         public void OpenDefaultBrowser(string url)
@@ -213,23 +219,29 @@ namespace NzbDrone.Common.Processes
 
             process.Refresh();
 
+            ProcessInfo processInfo = null;
+
             try
             {
-                if (process.Id <= 0 || process.HasExited) return null;
+                if (process.Id <= 0) return null;
 
-                return new ProcessInfo
+                processInfo = new ProcessInfo();
+                processInfo.Id = process.Id;
+                processInfo.Name = process.ProcessName;
+                processInfo.StartPath = GetExeFileName(process);
+
+                if (process.HasExited)
                 {
-                    Id = process.Id,
-                    StartPath = GetExeFileName(process),
-                    Name = process.ProcessName
-                };
+                    processInfo = null;
+                }
             }
-            catch (Win32Exception)
+            catch (Win32Exception e)
             {
-                Logger.Warn("Coudn't get process info for " + process.ProcessName);
+                Logger.WarnException("Couldn't get process info for " + process.ProcessName, e);
             }
 
-            return null;
+            return processInfo;
+
         }
 
         private static string GetExeFileName(Process process)

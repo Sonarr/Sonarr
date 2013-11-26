@@ -7,9 +7,11 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Host
 {
-    public static class Bootstrap
+    public class Bootstrap
     {
-        public static IContainer Start(StartupArguments args, IUserAlert userAlert)
+        public IContainer Container { get; private set; }
+
+        public Bootstrap(StartupArguments args, IUserAlert userAlert)
         {
             var logger = NzbDroneLogger.GetLogger();
 
@@ -21,15 +23,25 @@ namespace NzbDrone.Host
 
             if (!PlatformValidation.IsValidate(userAlert))
             {
-                throw new TerminateApplicationException();
+                throw new TerminateApplicationException("Missing system requirements");
             }
 
-            var container = MainAppContainerBuilder.BuildContainer(args);
+            Container = MainAppContainerBuilder.BuildContainer(args);
 
-            DbFactory.RegisterDatabase(container);
-            container.Resolve<Router>().Route();
 
-            return container;
         }
+
+        public void Start()
+        {
+            DbFactory.RegisterDatabase(Container);
+            Container.Resolve<Router>().Route();
+        }
+
+
+        public void EnsureSingleInstance()
+        {
+            Container.Resolve<ISingleInstancePolicy>().EnforceSingleInstance();
+        }
+
     }
 }

@@ -107,11 +107,6 @@ namespace NzbDrone.Host.Owin
             }
         }
 
-        public string AppUrl
-        {
-            get { return string.Format("http://localhost:{0}", _configFileProvider.Port); }
-        }
-
         public void StopServer()
         {
             if (_host == null) return;
