@@ -117,3 +117,4 @@ wix/*.msi
 wix/*.wixobj
 wix/*.wixpdb
 setup/Output/
+*.~is

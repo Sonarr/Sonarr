@@ -6,7 +6,7 @@
 #define AppURL "http://www.nzbdrone.com/"
 #define ForumsURL "http://forums.nzbdrone.com/"
 #define AppExeName "NzbDrone.exe"
-#define BuildNumber GetEnv('BUILD_NUMBER')
+#define BuildNumber "2.0"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -37,7 +37,8 @@ AppContact={#ForumsURL}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "windowsService"; Description: "Install as a Windows Service"
 
 [Files]
 Source: "..\_output\NzbDrone.exe"; DestDir: "{app}"; Flags: ignoreversion  
@@ -45,12 +46,12 @@ Source: "..\_output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cr
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"
-Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
+Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Parameters: "/icon"
+Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Parameters: "/icon"
 
 [Run]
-Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: waituntilterminated
-Filename: "{app}\nzbdrone.console.exe"; Parameters: "/i"; Flags: waituntilterminated
+Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: waituntilterminated;
+Filename: "{app}\nzbdrone.console.exe"; Parameters: "/i"; Flags: waituntilterminated; Tasks: windowsService
 
 [UninstallRun]
 Filename: "{app}\nzbdrone.console.exe"; Parameters: "/u"; Flags: waituntilterminated skipifdoesntexist
